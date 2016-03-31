@@ -20,7 +20,7 @@ class population
             /// Current decision vector (continuous part)
             decision_vector     cur_x;
             /// Current decision vector (integer part)
-            decision_vector     cur_xi;
+            decision_vector_int     cur_xi;
             /// Current constraint vector.
             constraint_vector   cur_c;
             /// Current fitness vector.
@@ -45,16 +45,16 @@ class population
         const individual_type &get_individual(const size_type &) const;
         const pagmo::problem &get_problem() const;
         void set_x(const size_type &, const decision_vector &);
-        void set_xi(const size_type &, const decision_vector &);
+        void set_xi(const size_type &, const decision_vector_int &);
         void push_back(const decision_vector &, const decision_vector_int & = decision_vector_int());
         void erase(const size_type &);
         size_type size() const;
 
     private:
         // Problem. (LO VOGLIAMO??)
-        problem              m_prob;
+        problem                         m_prob;
         // individuals.
-        container_type       m_container;
+        container_type                  m_container;
         // Double precision random number generator.
         mutable rng_double              m_drng;
         // uint32 random number generator.
