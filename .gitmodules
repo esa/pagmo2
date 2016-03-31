@@ -1,0 +1,6 @@
+[submodule "include/external/cereal"]
+	path = include/external/cereal
+	url = https://github.com/USCiLab/cereal
+[submodule "include/external/pybind11"]
+	path = include/external/pybind11
+	url = https://github.com/pybind/pybind11
