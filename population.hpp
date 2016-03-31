@@ -18,13 +18,13 @@ class population
         struct individual_type
         {
             /// Current decision vector (continuous part)
-            decision_vector     cur_x;
+            decision_vector         cur_x;
             /// Current decision vector (integer part)
             decision_vector_int     cur_xi;
             /// Current constraint vector.
-            constraint_vector   cur_c;
+            constraint_vector       cur_c;
             /// Current fitness vector.
-            fitness_vector      cur_f;
+            fitness_vector          cur_f;
         };
 
         /// Underlying container type.
@@ -44,10 +44,13 @@ class population
 
         const individual_type &get_individual(const size_type &) const;
         const pagmo::problem &get_problem() const;
-        void set_x(const size_type &, const decision_vector &);
-        void set_xi(const size_type &, const decision_vector_int &);
+        void set_ind(const size_type &, const decision_vector &, const decision_vector_int & = decision_vector_int());
+        void set_ind(const size_type &, const decision_vector_int &, const decision_vector & = decision_vector());
+
         void push_back(const decision_vector &, const decision_vector_int & = decision_vector_int());
+        void push_back(const decision_vector_int &, const decision_vector & = decision_vector());
         void erase(const size_type &);
+        
         size_type size() const;
 
     private:
