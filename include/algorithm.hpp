@@ -8,7 +8,7 @@
 
 #include "serialization.hpp"
 
-#define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE(pagmo::detail::algo_inner<algo>);
+#define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>,#algo);
 
 namespace pagmo
 {
