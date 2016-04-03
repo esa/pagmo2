@@ -3,10 +3,10 @@
 #define BOOST_TEST_MODULE pagmo_rng_test
 #include <boost/test/unit_test.hpp>
 
-#include <iostream>
-#include <vector>
 #include <algorithm>
+#include <iostream>
 #include <iterator>
+#include <vector>
 
 using namespace pagmo;
 
