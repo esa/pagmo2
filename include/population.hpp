@@ -11,9 +11,6 @@ typedef std::vector<long long> decision_vector_int
 typedef std::vector<double> constraint_vector
 typedef std::vector<double> fitness_vector
 
-// This is for all pagmo. Chnage the type here and the rng will change pagmo wide
-typedef std::mt19937_64 random_engine_type
-
 class population
 {
     public:
