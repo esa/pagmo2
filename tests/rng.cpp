@@ -14,14 +14,16 @@ using namespace pagmo;
 BOOST_AUTO_TEST_CASE(set_seed_and_next)
 {
 	// We check that the first N pseudo random numbers are identical if generated
-	// right after the seed is set
+	// right after the same seed is set and different otherwise.
 
 	// We choose two seeds 
 	details::random_engine_type::result_type seed{0u};
 	details::random_engine_type::result_type seed2{1u};
+
 	// Length of the pseudo-random sequence tested 
 	unsigned int N = 10000u;
 
+	// We generate three pseudo random sequences, two with the same seed
 	random_device::set_seed(seed);
 	std::vector<details::random_engine_type::result_type> prs1;
 	std::generate_n(std::back_inserter(prs1),N,random_device::next);	
