@@ -11,6 +11,9 @@ typedef std::vector<long long> decision_vector_int
 typedef std::vector<double> constraint_vector
 typedef std::vector<double> fitness_vector
 
+// This is for all pagmo. Chnage the type here and the rng will change pagmo wide
+typedef std::mt19937_64 random_engine_type
+
 class population
 {
     public:
@@ -30,17 +33,12 @@ class population
         /// Underlying container type.
         typedef std::vector<individual_type> container_type;
 
-        /// Constructor (MA LO VOGLIAMO IL PROBLEMA QUI?? PERCHE NON RINUNCIARE E
-        /// DEFINIRE INDIVIDUI SVINCOLATI DAL PROBLEMA?)
-        explicit population(const pagmo::problem &, unsigned int = 0, const boost::uint32_t &seed = getSeed());
+        /// Constructors
+        explicit population(const pagmo::problem &p, unsigned int size = 0, unsigned int seed = std::random_device{}()) : m_prob(p), m_e(seed), m_seed(seed);
         
         /// Copy constructor
         population(const population &);
 
-        /// TBD COME GESTIAMO IL SEED CONTROL?
-        static boost::uint32_t getSeed(){
-            return rng_generator::get<rng_uint32>()();
-        }
 
         const individual_type &get_individual(const size_type &) const;
         const pagmo::problem &get_problem() const;
@@ -55,13 +53,13 @@ class population
 
     private:
         // Problem. (LO VOGLIAMO??)
-        problem                         m_prob;
+        problem                         m_  prob;
         // individuals.
         container_type                  m_container;
-        // Double precision random number generator.
-        mutable rng_double              m_drng;
-        // uint32 random number generator.
-        mutable rng_uint32              m_urng;
+        // Random engine
+        random_engine_type              m_e;
+        // Seed 
+        unsigned int                    m_seed;
 };
 
 } // namespace pagmo
