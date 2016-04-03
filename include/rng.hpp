@@ -1,13 +1,11 @@
 #include <random>
 #include <iostream>
 
-// PaGMO makes use of the 64-bit Mersenne Twister by Matsumoto and Nishimura, 2000.
-
-
 namespace pagmo
 {
 namespace details {
 
+// PaGMO makes use of the 32-bit Mersenne Twister by Matsumoto and Nishimura, 1998.
 using random_engine_type = std::mt19937;
 
 template <typename dummy>
