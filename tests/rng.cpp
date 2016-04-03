@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_CASE(set_seed_and_next)
 	// We choose a seed
 	details::random_engine_type::result_type seed{0};
 	// Number of trials
-	unsigned int N = 10000;
+	unsigned int N = 10000u;
 	// We define two std::vectors that will contain two pseudorandom sequences
 	std::vector<details::random_engine_type::result_type> prs1{N}, prs2{N};
 

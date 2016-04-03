@@ -12,7 +12,7 @@ template <typename dummy>
 struct random_device_statics
 {
     static random_engine_type m_e;
-    static  std::mutex  m_mutex;
+    static std::mutex  m_mutex;
 };
 
 template<typename dummy>
