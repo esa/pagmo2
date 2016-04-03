@@ -26,29 +26,43 @@ std::mutex random_device_statics<dummy>::m_mutex{};
 
 } // end namespace details
 
-/// This intends to be a thread-safe substitute for std::random_device, allowing for precise
-/// global seed control in PaGMO. All classes that contain a random engine (thus that generate
-/// random numbers from variates), by default should contain something like:
-//#include "rng.hpp"
-
-///class class_using_random {
-///    explicit class_using_random(args ...... , unsigned int seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed);
-///private:
-///    // Random engine
-///    random_engine_type               m_e;
-///
-///    unsigned int                     m_seed;
-///}
-
-
+/// Thread-safe random device
+/**
+ * This intends to be a thread-safe substitute for std::random_device, allowing for precise
+ * global seed control in PaGMO. All classes that contain a random engine (thus that generate
+ * random numbers from variates), by default should contain something like:
+ * @code
+ * #include "rng.hpp"
+ * class class_using_random {
+ * explicit class_using_random(args ...... , unsigned int seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed);
+ * private:
+ *    // Random engine
+ *    random_engine_type               m_e;
+ *    // Seed
+ *    unsigned int                     m_seed;
+ * }
+ * @endcode
+ */
 class random_device : public details::random_device_statics<void>
 {
 public:
+    /// Describe!
+    /**
+     * Blah blah blah.
+     * 
+     * @returns dsdlsadslad
+     */
     static unsigned int next() 
     {
         std::lock_guard<std::mutex> lock(m_mutex);
         return static_cast<unsigned int>(m_e());
     }
+    /// Describe!
+    /**
+     * Blah blah blah.
+     * 
+     * @param[in] seed boo baa
+     */
     static void set_seed(unsigned int seed) 
     {
         std::lock_guard<std::mutex> lock(m_mutex);
