@@ -18,10 +18,10 @@ struct random_device_statics
 };
 
 template<typename dummy>
-random_engine_type random_device_statics<dummy>::m_e{std::random_device{}()};
+random_engine_type random_device_statics<dummy>::m_e{static_cast<random_engine_type::result_type>(std::random_device{}())};
 
 template<typename dummy>
-std::mutex random_device_statics<dummy>::m_mutex{std::mutex{}};
+std::mutex random_device_statics<dummy>::m_mutex{};
 
 } // end namespace details
 
@@ -51,7 +51,7 @@ public:
     static void set_seed(unsigned int seed) 
     {
         std::lock_guard<std::mutex> lock(m_mutex);
-        m_e.seed(static_cast<random_engine_type::result_type>(seed));
+        m_e.seed(static_cast<details::random_engine_type::result_type>(seed));
     }
 
 };
