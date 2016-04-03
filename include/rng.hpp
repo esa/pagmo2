@@ -30,19 +30,19 @@ namespace details {
 //#include "rng.hpp"
 
 ///class class_using_random {
-///    explicit class_using_random(args ...... , unsigned int seed = pagmo::random_device{}()) : m_e(seed), m_seed(seed);
+///    explicit class_using_random(args ...... , unsigned int seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed);
 ///private:
 ///    // Random engine
-///    pagmo_random_engine                m_e;
+///    random_engine_type               m_e;
 ///
-///    unsigned int 					m_seedl
+///    unsigned int 					m_seed;
 ///}
 
 
 class random_device : public details::random_device_statics<void>
 {
 public:
-	unsigned int operator()() {
+	static unsigned int next() {
 		std::lock_guard<std::mutex> lock(m_mutex);
 		return static_cast<unsigned int>(m_e());
 	}
