@@ -1,4 +1,6 @@
-#include <iostream>
+#ifndef PAGMO_RNG_HPP
+#define PAGMO_RNG_HPP
+
 #include <mutex>
 #include <random>
 
@@ -56,3 +58,5 @@ public:
 };
 
 } // end namespace pagmo
+
+#endif
