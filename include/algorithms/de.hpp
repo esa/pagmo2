@@ -14,6 +14,12 @@ class de
     public:
         de():m_a(42.1) {}
         void evolve() const {};
+
+        const double& get_a() const
+        {
+            return m_a;
+        }
+
         template <typename Archive>
         void serialize(Archive &ar)
         {

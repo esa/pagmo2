@@ -57,7 +57,7 @@ class algorithm
         algorithm(const algorithm &other):m_ptr(other.m_ptr->clone()) {}
         algorithm(algorithm &&other) = default;
         template <typename T>
-        const T *any_pointer() const
+        const T *extract() const
         {
             auto ptr = dynamic_cast<const detail::algo_inner<T> *>(m_ptr.get());
             if (ptr == nullptr) {

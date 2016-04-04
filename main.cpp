@@ -16,4 +16,5 @@ int main()
     cereal::JSONInputArchive iarchive(ss);
     iarchive(a);
     }    
+    std::cout << a.extract<algorithms::de>()->get_a() << std::endl;
 }
