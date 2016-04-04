@@ -57,22 +57,13 @@ class algorithm
         algorithm(const algorithm &other):m_ptr(other.m_ptr->clone()) {}
         algorithm(algorithm &&other) = default;
         template <typename T>
-        const T &any_reference() const
-        {
-            auto ptr = dynamic_cast<const detail::algo_inner<T> *>(m_ptr.get());
-            if (ptr == nullptr) {
-                throw std::bad_cast{};
-            }
-            return ptr->m_value;
-        }
-        template <typename T>
         const T *any_pointer() const
         {
             auto ptr = dynamic_cast<const detail::algo_inner<T> *>(m_ptr.get());
             if (ptr == nullptr) {
-                return ptr;
+                return nullptr;
             }
-            return ptr->m_value;
+            return &(ptr->m_value);
         }
         void evolve() const
         {
