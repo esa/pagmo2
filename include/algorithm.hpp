@@ -56,6 +56,7 @@ class algorithm
         explicit algorithm(T &&x):m_ptr(::new detail::algo_inner<std::decay_t<T>>(std::forward<T>(x))) {}
         algorithm(const algorithm &other):m_ptr(other.m_ptr->clone()) {}
         algorithm(algorithm &&other) = default;
+
         template <typename T>
         const T *extract() const
         {
@@ -65,10 +66,18 @@ class algorithm
             }
             return &(ptr->m_value);
         }
+
+        template <typename T>
+        bool is() const
+        {
+            return extract<T>();
+        }
+
         void evolve() const
         {
             return m_ptr->evolve();
         }
+        
         template <typename Archive>
         void serialize(Archive &ar)
         { 

@@ -1,5 +1,5 @@
-#ifndef PAGMO_ALGORITHM_DE_HPP
-#define PAGMO_ALGORITHM_DE_HPP
+#ifndef PAGMO_ALGORITHM_NULL_HPP
+#define PAGMO_ALGORITHM_NULL_HPP
 
 #include "../algorithm.hpp"
 
@@ -9,10 +9,10 @@ namespace pagmo
 namespace algorithms
 {
 
-class de
+class null
 {
     public:
-        de():m_a(42.1) {}
+        null():m_a(42.1) {}
         void evolve() const {};
 
         const double& get_a() const
@@ -29,10 +29,8 @@ class de
         double m_a;
 };
 
-}
+}} //namespaces
 
-}
-
-PAGMO_REGISTER_ALGORITHM(pagmo::algorithms::de);
+PAGMO_REGISTER_ALGORITHM(pagmo::algorithms::null);
 
 #endif

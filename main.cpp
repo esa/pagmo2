@@ -1,11 +1,11 @@
 #include "include/algorithm.hpp"
-#include "include/algorithms/de.hpp"
+#include "include/algorithms/null.hpp"
 
 using namespace pagmo;
 
 int main()
 {
-    algorithm a{algorithms::de{}};
+    algorithm a{algorithms::null{}};
     std::stringstream ss;
     {
     cereal::JSONOutputArchive oarchive(ss);
@@ -16,5 +16,7 @@ int main()
     cereal::JSONInputArchive iarchive(ss);
     iarchive(a);
     }    
-    std::cout << a.extract<algorithms::de>()->get_a() << std::endl;
+    std::cout << a.extract<algorithms::null>()->get_a() << std::endl;
+    a.evolve();
+
 }
