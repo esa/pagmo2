@@ -49,8 +49,8 @@ class base
 
         virtual constraint_vector constraints(const decision_vector &x, const decision_vector_int &x_i) const
         {
-            constraint_vector retval(m_c_dimension, 0.);
-            return retval;
+            m_cevals++; //overflow?
+            return constraints_impl(x, x_i);
         }
 
         template <typename Archive>
@@ -75,6 +75,11 @@ class base
         virtual fitness_vector objfun_impl(const decision_vector &x, const decision_vector_int &x_i) const
         {
             fitness_vector retval(m_f_dimension, 0.);
+            return retval;
+        }
+        virtual constraint_vector constraints_impl(const decision_vector &x, const decision_vector_int &x_i) const
+        {
+            constraint_vector retval(m_c_dimension, 0.);
             return retval;
         }
         
