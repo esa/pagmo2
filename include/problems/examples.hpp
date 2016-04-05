@@ -166,8 +166,10 @@ struct example3
     sparsity_pattern gradient_sparsity()  
     {
         sparsity_pattern retval;
-        for (auto i, i<get_n(); ++i) {
-            sparsity_pattern.push_back(std::pair<long, long>(0, i))
+        for (auto i = 0u; i < get_n(); ++i) {
+            for (auto j = 0u; j < 3; ++j) {
+                sparsity_pattern.push_back(std::pair<long, long>(j, i));
+            }
         }
         return retval;
     }
