@@ -41,10 +41,10 @@ class base
         base(base &&) = default;
         base(const base &) = default;
 
-        virtual fitness_vector objfun(const decision_vector &x, const decision_vector_int &x_i) const
+        fitness_vector objfun(const decision_vector &x, const decision_vector_int &x_i) const
         {
-            fitness_vector retval(m_f_dimension, 0.);
-            return retval;
+            m_fevals++; //overflow?
+            return objfun_impl(x, x_i);
         }
 
         virtual constraint_vector constraints(const decision_vector &x, const decision_vector_int &x_i) const
@@ -69,6 +69,13 @@ class base
             ar(m_best_c);
             ar(m_fevals);
             ar(m_cevals);
+        }
+
+    private:
+        virtual fitness_vector objfun_impl(const decision_vector &x, const decision_vector_int &x_i) const
+        {
+            fitness_vector retval(m_f_dimension, 0.);
+            return retval;
         }
         
     private:
@@ -96,8 +103,8 @@ class base
         std::vector<constraint_vector>  m_best_c = std::vector<fitness_vector>();
 
         // Number of function and constraints evaluations
-        unsigned int                    m_fevals = 0;
-        unsigned int                    m_cevals = 0;
+        mutable unsigned int                    m_fevals = 0;
+        mutable unsigned int                    m_cevals = 0;
 };
 
 }} //namespaces
