@@ -53,7 +53,7 @@ class base
             return retval;
         }
 
-        /*template <typename Archive>
+        template <typename Archive>
         void serialize(Archive &ar)
         {
             ar(m_lb);
@@ -70,7 +70,7 @@ class base
             ar(m_fevals);
             ar(m_cevals);
         }
-        */
+        
     private:
         // Data members.
         // Lower bounds.
