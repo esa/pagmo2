@@ -69,16 +69,17 @@ struct example2
         return retval;
     }
 
-    gradient_vector objfun_gradient(const decision_vector &x)
+    std::vector<gradient_vector> objfun_gradient(const decision_vector &x)
     {
         gradient_vector retval(4);
         retval[0] = x[0] * x[3] + x[3] * (x[0] + x[1] + x[2]);
         retval[1] = x[0] * x[3];
         retval[2] = x[0] * x[3] + 1;
         retval[3] = x[0] * (x[0] + x[1] + x[2]);
+        return std::vector<gradient_vector>(1, retval);
     }
 
-    sparsity_pattern sparsity()  
+    sparsity_pattern gradient_sparsity()  
     {
         sparsity_pattern retval;
         for (auto i, i<get_n(); ++i) {
