@@ -4,7 +4,7 @@ using constraint_vector = std::vector<double>;
 using fitness_vector = std::vector<double>;
 using gradient_vector = std::vector<double>;
 using index_vector = std::vector<long long>;
-using sparsity_pattern std::pair<index_vector, index_vector>;
+using sparsity_pattern std::vector<std::pair<long, long> >;
 
 
 struct example0
@@ -62,11 +62,6 @@ struct example1
 
 struct example2
 {
-    example2() : i_var(), j_fun()
-    {
-        compute_sparsity();
-    }
-
     fitness_vector objfun(const decision_vector &x)
     {
         fitness_vector retval(1);
@@ -83,12 +78,13 @@ struct example2
         retval[3] = x[0] * (x[0] + x[1] + x[2]);
     }
 
-    sparsity_pattern compute_sparsity()  
+    sparsity_pattern sparsity()  
     {
+        sparsity_pattern retval;
         for (auto i, i<get_n(); ++i) {
-            i_var.push_back(i);
-            j_fun.push_back(0);
+            sparsity_pattern.push_back(std::pair<long, long>(0, i))
         }
+        return retval;
     }
 
     decision_vector::size_type get_n()
@@ -101,6 +97,8 @@ struct example2
         return 1u;
     }
 
-    index_vector i_var;
-    index_vector j_fun;
+    decision_vector::size_type get_nf()
+    {
+        return 1u;
+    }
 };
