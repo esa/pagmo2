@@ -36,7 +36,7 @@ class population
         explicit population(const pagmo::problem &p, unsigned int size = 0, unsigned int seed = pagmo::random_device::next() : m_prob(p), m_e(seed), m_seed(seed)
         {
             // Store problem sizes temporarily.
-            const fitness_vector::size_type f_size = m_prob->get_f_dimension();
+            const fitness_vector::size_type f_size = prob->get_f_dimension();
             const constraint_vector::size_type c_size = m_prob->get_c_dimension();
             const decision_vector::size_type p_size = m_prob->get_dimension();
             for (size_type i = 0; i < size; ++i) {

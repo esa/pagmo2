@@ -145,7 +145,7 @@ class problem
         {
             return m_ptr->get_n();
         }
-        std::pair<decision_vector,decision_vector> get_bounds() const
+        box_bounds get_bounds() const
         {
             return m_ptr->get_bounds();
         }

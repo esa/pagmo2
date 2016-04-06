@@ -7,10 +7,10 @@ using namespace pagmo;
 // Problem with one objective no constraints
 struct example0
 {
-    fitness_vector fitness(const decision_vector &)
+    fitness_vector fitness(const decision_vector &x)
     {
         fitness_vector retval(1);
-        //retval[0] = x[0] * x[3] * (x[0] + x[1] + x[2]) + x[2];
+        retval[0] = x[0] * x[3] * (x[0] + x[1] + x[2]) + x[2];
         return retval;
     }
 
@@ -80,6 +80,7 @@ int main()
     problem p0{example0{}};
     std::cout << p0.get_nec() << '\n';
     std::cout << p0.get_nic() << '\n';
+    std::cout << p0.fitness(decision_vector{2,2,2,2}) << '\n';
     problem p1{example1{}};
     std::cout << p1.get_nec() << '\n';
     std::cout << p1.get_nic() << '\n';
