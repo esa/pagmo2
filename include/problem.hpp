@@ -7,6 +7,7 @@
 #include <utility>
 
 #include "serialization.hpp"
+#include "type_traits.hpp"
 
 #define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>,#prob);
 
@@ -20,6 +21,12 @@ struct prob_inner_base
 {
     virtual ~prob_inner_base() {}
     virtual prob_inner_base *clone() const = 0;
+    virtual fitness_vector fitness(const decision_vector &) = 0;
+    virtual fitness_vector::size_type get_nf() const = 0;
+    virtual decision_vector::size_type get_n() const = 0;
+    virtual std::pair<decision_vector,decision_vector> get_bounds() const = 0;
+    virtual decision_vector::size_type get_nec() const = 0;
+    virtual decision_vector::size_type get_nic() const = 0;
     template <typename Archive>
     void serialize(Archive &) {}
 };
@@ -27,6 +34,18 @@ struct prob_inner_base
 template <typename T>
 struct prob_inner: prob_inner_base
 {
+    // Static checks.
+    static_assert(
+        std::is_default_constructible<T>::value &&
+        std::is_copy_constructible<T>::value &&
+        std::is_move_constructible<T>::value &&
+        std::is_destructible<T>::value,
+        "A problem must be default-constructible, copy-constructible, move-constructible and destructible."
+    );
+    static_assert(has_fitness<T>::value,
+        "A problem must provide a fitness function and a method to query the number of objectives.");
+    static_assert(has_dimensions_bounds<T>::value,
+        "A problem must provide getters for its dimension and bounds.");
     prob_inner() = default;
     explicit prob_inner(T &&x):m_value(std::move(x)) {}
     explicit prob_inner(const T &x):m_value(x) {}
@@ -34,6 +53,52 @@ struct prob_inner: prob_inner_base
     {
         return ::new prob_inner<T>(m_value);
     }
+    // Main methods.
+    virtual fitness_vector fitness(const decision_vector &dv) override
+    {
+        return m_value.fitness(dv);
+    }
+    virtual fitness_vector::size_type get_nf() const override
+    {
+        return m_value.get_nf();
+    }
+    virtual decision_vector::size_type get_n() const override
+    {
+        return m_value.get_n();
+    }
+    virtual std::pair<decision_vector,decision_vector> get_bounds() const override
+    {
+        return m_value.get_bounds();
+    }
+    template <typename U, typename std::enable_if<has_constraints<U>::value,int>::type = 0>
+    static decision_vector::size_type get_nec_impl(const U &value)
+    {
+        return value.get_nec();
+    }
+    template <typename U, typename std::enable_if<!has_constraints<U>::value,int>::type = 0>
+    static decision_vector::size_type get_nec_impl(const U &)
+    {
+        return 0;
+    }
+    template <typename U, typename std::enable_if<has_constraints<U>::value,int>::type = 0>
+    static decision_vector::size_type get_nic_impl(const U &value)
+    {
+        return value.get_nic();
+    }
+    template <typename U, typename std::enable_if<!has_constraints<U>::value,int>::type = 0>
+    static decision_vector::size_type get_nic_impl(const U &)
+    {
+        return 0;
+    }
+    virtual decision_vector::size_type get_nec() const override
+    {
+        return get_nec_impl(m_value);
+    }
+    virtual decision_vector::size_type get_nic() const override
+    {
+        return get_nic_impl(m_value);
+    }
+    // Serialization.
     template <typename Archive>
     void serialize(Archive &ar)
     { 
@@ -66,6 +131,31 @@ class problem
         bool is() const
         {
             return extract<T>();
+        }
+
+        fitness_vector fitness(const decision_vector &dv)
+        {
+            return m_ptr->fitness(dv);
+        }
+        fitness_vector::size_type get_nf() const
+        {
+            return m_ptr->get_nf();
+        }
+        decision_vector::size_type get_n() const
+        {
+            return m_ptr->get_n();
+        }
+        std::pair<decision_vector,decision_vector> get_bounds() const
+        {
+            return m_ptr->get_bounds();
+        }
+        decision_vector::size_type get_nec() const
+        {
+            return m_ptr->get_nec();
+        }
+        decision_vector::size_type get_nic() const
+        {
+            return m_ptr->get_nic();
         }
        
         template <typename Archive>

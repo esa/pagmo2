@@ -1,0 +1,88 @@
+#include <iostream>
+
+#include "include/problem.hpp"
+
+using namespace pagmo;
+
+// Problem with one objective no constraints
+struct example0
+{
+    fitness_vector fitness(const decision_vector &)
+    {
+        fitness_vector retval(1);
+        //retval[0] = x[0] * x[3] * (x[0] + x[1] + x[2]) + x[2];
+        return retval;
+    }
+
+    decision_vector::size_type get_n() const
+    {
+        return 4u;
+    }
+
+    fitness_vector::size_type get_nf() const
+    {
+        return 1u;
+    }
+    
+    std::pair<decision_vector, decision_vector> get_bounds() const
+    {
+        decision_vector lb{1,1,1,1};
+        decision_vector ub{5,5,5,5};
+        return std::pair<decision_vector, decision_vector>(lb, ub);
+    }
+};
+
+// Problem with one objective one equality and one inequality constraint
+struct example1
+{
+    fitness_vector fitness(const decision_vector &x)
+    {
+        fitness_vector retval(3);
+        retval[0] = x[0] * x[3] * (x[0] + x[1] + x[2]) + x[2];
+        retval[1] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3] - 40;
+        retval[2] = x[0] * x[1] * x[2] * x[3] + 25;
+        return retval;
+    }
+
+    decision_vector::size_type get_n() const
+    {
+        return 4u;
+    }
+
+    fitness_vector::size_type get_nf() const
+    {
+        return 1u;
+    }
+
+    decision_vector::size_type get_nec() const
+    {
+        return 1u;
+    }
+
+    decision_vector::size_type get_nic() const
+    {
+        return 1u;
+    }
+
+    std::pair<decision_vector, decision_vector> get_bounds() const
+    {
+        decision_vector lb{1,1,1,1};
+        decision_vector ub{5,5,5,5};
+        return std::pair<decision_vector, decision_vector>(lb, ub);
+    }
+};
+
+// Invalid problem (compile time error if used to construct a pagmo::problem).
+struct example2 {};
+
+int main()
+{
+    problem p0{example0{}};
+    std::cout << p0.get_nec() << '\n';
+    std::cout << p0.get_nic() << '\n';
+    problem p1{example1{}};
+    std::cout << p1.get_nec() << '\n';
+    std::cout << p1.get_nic() << '\n';
+    // Compile time error if uncommented.
+    // problem p2{example2{}};
+}
