@@ -36,7 +36,7 @@ inline void stream_impl(std::ostream &os, const std::vector<T> &v)
         os << '[';
         for (decltype(v.size()) i = 0u; i < v.size(); ++i) {
             stream(os, v[i]);
-            if (i != v.size() - 1) {
+            if (i != v.size() - 1u) {
                 os << ", ";
             }
         }
