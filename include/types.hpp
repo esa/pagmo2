@@ -31,8 +31,7 @@ template <typename T>
 inline void stream_impl(std::ostream &os, const std::vector<T> &v)
 {
     auto len = v.size();
-    if (len < PAGMO_MAX_OUTPUT_LENGTH) 
-    {
+    if (len < PAGMO_MAX_OUTPUT_LENGTH) {
         os << '[';
         for (decltype(v.size()) i = 0u; i < v.size(); ++i) {
             stream(os, v[i]);
@@ -75,6 +74,7 @@ inline void print(const Args & ... args)
     stream(std::cout,args...);
 }
 
+#undef PAGMO_MAX_OUTPUT_LENGTH
 }} // namespaces
 
 #endif
