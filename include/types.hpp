@@ -35,7 +35,7 @@ inline void stream_impl(std::ostream &os, const std::vector<T> &v)
     {
         os << '[';
         for (auto i = 0u; i < v.size(); ++i) {
-            os << v[i];
+            stream(os, v[i]);
             if (i != v.size() - 1) {
                 os << ", ";
             }
@@ -44,7 +44,7 @@ inline void stream_impl(std::ostream &os, const std::vector<T> &v)
     } else {
         os << '[';
         for (auto i = 0u; i < PAGMO_MAX_OUTPUT_LENGTH; ++i) {
-            os << v[i] << ", ";
+            stream(os, v[i], ", ");
         }
         os << " ... ]";
     }
