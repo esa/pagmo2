@@ -1,11 +1,13 @@
 #ifndef PAGMO_PROBLEM_HPP
 #define PAGMO_PROBLEM_HPP
 
+#include <boost/lexical_cast.hpp>
 #include <memory>
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
 
+#include "exceptions.hpp"
 #include "serialization.hpp"
 #include "type_traits.hpp"
 
@@ -113,7 +115,10 @@ class problem
 {
     public:
         template <typename T>
-        explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))) {}
+        explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x)))
+        {
+            // check bounds consistency
+        }
         problem(const problem &other):m_ptr(other.m_ptr->clone()) {}
         problem(problem &&other) = default;
 
@@ -135,7 +140,21 @@ class problem
 
         fitness_vector fitness(const decision_vector &dv)
         {
-            return m_ptr->fitness(dv);
+            // 1 - check decision vector for length consistency
+            if (dv.size()!=get_n()) {
+                pagmo_throw(std::invalid_argument,"Length of decision vector is " + boost::lexical_cast<std::string>(dv.size()) + ", should be " + boost::lexical_cast<std::string>(get_n()));
+            }
+            // 2 - Here is where one could check if the decision vector
+            // is in the bounds. At the moment not implemented
+
+            // 3 - computes the fitness
+            fitness_vector retval(m_ptr->fitness(dv));
+            // 4 - checks dimension of returned fitness
+            if (retval.size()!=get_nf()) {
+                pagmo_throw(std::invalid_argument,"Returned fitness length is: " + boost::lexical_cast<std::string>(retval.size()) + ", should be " + boost::lexical_cast<std::string>(get_nf()));
+            }
+            // 3 - increments m_fevals
+            return retval;
         }
         fitness_vector::size_type get_nf() const
         {

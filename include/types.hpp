@@ -1,9 +1,9 @@
 #ifndef PAGMO_TYPES_HPP
 #define PAGMO_TYPES_HPP
 
+#include <iostream>
 #include <utility>
 #include <vector>
-#include <boost/lexical_cast.hpp>
 
 namespace pagmo
 {
@@ -14,49 +14,68 @@ using gradient_vector = std::vector<double>;
 using sparsity_pattern = std::vector<std::pair<long,long>>;
 using box_bounds = std::pair<decision_vector,decision_vector>;
 
-}
-
-// Give the possibility to disable stream overloads with appropriate #define.
-#ifndef PAGMO_NO_STD_VECTOR_STREAM_OVERLOADS
-
-#define PAGMO_MAX_OUTPUT_LENGTH 5
-namespace std
+namespace detail
 {
-    /// Overload stream insertion operator for std::vector<T>. It will only output the first
-    /// PAGMO_MAX_OUTPUT_LENGTH elements.
-    template < typename T >
-    inline ostream &operator<<(ostream &os, const vector<T> &v)
-    {
-        typename vector<T>::size_type len = v.size();
-        if (len < PAGMO_MAX_OUTPUT_LENGTH) 
-        {
-            os << '[';
-            for (typename std::vector<T>::size_type i = 0; i < v.size(); ++i) {
-                os << boost::lexical_cast<std::string>(v[i]);
-                if (i != v.size() - 1) {
-                    os << ", ";
-                }
-            }
-            os << ']';
-        } else {
-            os << '[';
-            for (typename std::vector<T>::size_type i = 0; i < PAGMO_MAX_OUTPUT_LENGTH; ++i) {
-                os << boost::lexical_cast<std::string>(v[i]) << ", ";
-            }
-            os << " ... ]";
-        }
-        return os;
-    }
+#define PAGMO_MAX_OUTPUT_LENGTH 5u
 
-    template < typename T1, typename T2 >
-    inline ostream &operator<<(ostream &os, const pair<T1,T2> &v)
+template <typename ... Args>
+void stream(std::ostream &, const Args & ...);
+
+template <typename T>
+inline void stream_impl(std::ostream &os, const T &x)
+{
+    os << x;
+}
+
+template <typename T>
+inline void stream_impl(std::ostream &os, const std::vector<T> &v)
+{
+    auto len = v.size();
+    if (len < PAGMO_MAX_OUTPUT_LENGTH) 
     {
-        os << "pair(" << v.first << ", " << v.second << ")";
-        return os;
+        os << '[';
+        for (auto i = 0u; i < v.size(); ++i) {
+            os << v[i];
+            if (i != v.size() - 1) {
+                os << ", ";
+            }
+        }
+        os << ']';
+    } else {
+        os << '[';
+        for (auto i = 0u; i < PAGMO_MAX_OUTPUT_LENGTH; ++i) {
+            os << v[i] << ", ";
+        }
+        os << " ... ]";
     }
 }
 
-#undef PAGMO_MAX_OUTPUT_LENGTH
+template <typename T, typename U>
+inline void stream_impl(std::ostream &os, const std::pair<T,U> &p)
+{
+    stream(os,'(',p.first,',',p.second,')');
+}
+
+template <typename T, typename ... Args>
+inline void stream_impl(std::ostream &os, const T &x, const Args & ... args)
+{
+    stream_impl(os,x);
+    stream_impl(os,args...);
+}
+
+template <typename ... Args>
+inline void stream(std::ostream &os, const Args & ... args)
+{
+    stream_impl(os,args...);
+}
+
+template <typename ... Args>
+inline void print(const Args & ... args)
+{
+    stream(std::cout,args...);
+}
+
+}} // namespaces
 
 #endif
-#endif
+
