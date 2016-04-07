@@ -22,35 +22,41 @@ using box_bounds = std::pair<decision_vector,decision_vector>;
 #define PAGMO_MAX_OUTPUT_LENGTH 5
 namespace std
 {
-	/// Overload stream insertion operator for std::vector<T>. It will only output the first
-	/// PAGMO_MAX_OUTPUT_LENGTH elements.
-	template < class T >
-	inline ostream &operator<<(ostream &os, const vector<T> &v)
-	{
-		typename vector<T>::size_type len = v.size();
-		if (len < PAGMO_MAX_OUTPUT_LENGTH) 
-		{
-			os << '[';
-			for (typename std::vector<T>::size_type i = 0; i < v.size(); ++i) {
-				os << boost::lexical_cast<std::string>(v[i]);
-				if (i != v.size() - 1) {
-					os << ", ";
-				}
-			}
-			os << ']';
-		} else {
-			os << '[';
-			for (typename std::vector<T>::size_type i = 0; i < PAGMO_MAX_OUTPUT_LENGTH; ++i) {
-				os << boost::lexical_cast<std::string>(v[i]) << ", ";
-			}
-			os << " ... ]";
-		}
-		return os;
-	}
+    /// Overload stream insertion operator for std::vector<T>. It will only output the first
+    /// PAGMO_MAX_OUTPUT_LENGTH elements.
+    template < typename T >
+    inline ostream &operator<<(ostream &os, const vector<T> &v)
+    {
+        typename vector<T>::size_type len = v.size();
+        if (len < PAGMO_MAX_OUTPUT_LENGTH) 
+        {
+            os << '[';
+            for (typename std::vector<T>::size_type i = 0; i < v.size(); ++i) {
+                os << boost::lexical_cast<std::string>(v[i]);
+                if (i != v.size() - 1) {
+                    os << ", ";
+                }
+            }
+            os << ']';
+        } else {
+            os << '[';
+            for (typename std::vector<T>::size_type i = 0; i < PAGMO_MAX_OUTPUT_LENGTH; ++i) {
+                os << boost::lexical_cast<std::string>(v[i]) << ", ";
+            }
+            os << " ... ]";
+        }
+        return os;
+    }
 
-	
+    template < typename T1, typename T2 >
+    inline ostream &operator<<(ostream &os, const pair<T1,T2> &v)
+    {
+        os << "pair(" << v.first << ", " << v.second << ")";
+        return os;
+    }
 }
-#undef PAGMO_MAX_OUTPUT_LENGTH
-#endif
 
+#undef PAGMO_MAX_OUTPUT_LENGTH
+
+#endif
 #endif

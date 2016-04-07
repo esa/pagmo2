@@ -80,6 +80,7 @@ int main()
     problem p0{example0{}};
     std::cout << p0.get_nec() << '\n';
     std::cout << p0.get_nic() << '\n';
+    std::cout << p0.get_bounds() << '\n';
     std::cout << p0.fitness(decision_vector{2,2,2,2}) << '\n';
     problem p1{example1{}};
     std::cout << p1.get_nec() << '\n';
