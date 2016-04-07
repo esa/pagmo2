@@ -1,8 +1,8 @@
 #ifndef PAGMO_PROBLEM_HPP
 #define PAGMO_PROBLEM_HPP
 
-#include <boost/lexical_cast.hpp>
 #include <memory>
+#include <string>
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
@@ -118,8 +118,25 @@ class problem
         explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x)))
         {
             // check bounds consistency
+            auto bounds = get_bounds();
+            auto lb = bounds.first;
+            auto ub = bounds.second;
+            // 1 - check lower bounds length
+            if (lb.size()!=get_n()) {
+                pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) + ", should be " + std::to_string(get_n()));
+            }
+            // 2 - check upper bounds length
+            if (ub.size()!=get_n()) {
+                pagmo_throw(std::invalid_argument,"Length of upper bounds vector is " + std::to_string(ub.size()) + ", should be " + std::to_string(get_n()));
+            }
+            // 3 - checks lower < upper for all values in lb, lb
+            for (decltype(lb.size()) i=0u; i < lb.size(); ++i) {
+                if (lb[i] > ub[i]) {
+                    pagmo_throw(std::invalid_argument,"The lower bound at position " + std::to_string(i) + "is " + std::to_string(lb[i]) + "while the upper bound has the smaller value" + std::to_string(ub[i]) + "");
+                }
+            }
         }
-        problem(const problem &other):m_ptr(other.m_ptr->clone()) {}
+        problem(const problem &other):m_ptr(other.m_ptr->clone()),m_fevals(0u) {}
         problem(problem &&other) = default;
 
         template <typename T>
@@ -142,7 +159,7 @@ class problem
         {
             // 1 - check decision vector for length consistency
             if (dv.size()!=get_n()) {
-                pagmo_throw(std::invalid_argument,"Length of decision vector is " + boost::lexical_cast<std::string>(dv.size()) + ", should be " + boost::lexical_cast<std::string>(get_n()));
+                pagmo_throw(std::invalid_argument,"Length of decision vector is " + std::to_string(dv.size()) + ", should be " + std::to_string(get_n()));
             }
             // 2 - Here is where one could check if the decision vector
             // is in the bounds. At the moment not implemented
@@ -151,9 +168,10 @@ class problem
             fitness_vector retval(m_ptr->fitness(dv));
             // 4 - checks dimension of returned fitness
             if (retval.size()!=get_nf()) {
-                pagmo_throw(std::invalid_argument,"Returned fitness length is: " + boost::lexical_cast<std::string>(retval.size()) + ", should be " + boost::lexical_cast<std::string>(get_nf()));
+                pagmo_throw(std::invalid_argument,"Returned fitness length is: " + std::to_string(retval.size()) + ", should be " + std::to_string(get_nf()));
             }
-            // 3 - increments m_fevals
+            // 3 - increments fevals
+            m_fevals++;
             return retval;
         }
         fitness_vector::size_type get_nf() const
@@ -164,7 +182,7 @@ class problem
         {
             return m_ptr->get_n();
         }
-        box_bounds get_bounds() const
+        std::pair<decision_vector, decision_vector> get_bounds() const
         {
             return m_ptr->get_bounds();
         }
@@ -182,8 +200,15 @@ class problem
         { 
             ar(m_ptr); 
         }
+
+        const unsigned long long &get_fevals() const
+        {
+            return m_fevals;
+        }
+
     private:
         std::unique_ptr<detail::prob_inner_base> m_ptr;
+        unsigned long long m_fevals = 0u;
 };
 
 }

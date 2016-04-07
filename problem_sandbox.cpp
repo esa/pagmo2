@@ -28,7 +28,7 @@ struct example0
     {
         decision_vector lb{1,1,1,1};
         decision_vector ub{5,5,5,5};
-        return std::pair<decision_vector, decision_vector>(lb, ub);
+        return std::pair<decision_vector, decision_vector>(std::move(lb), std::move(ub));
     }
 };
 
@@ -81,7 +81,9 @@ int main()
     std::cout << p0.get_nec() << '\n';
     std::cout << p0.get_nic() << '\n';
     pagmo::detail::print(p0.get_bounds(), "\n");
+    pagmo::detail::print("fevals: ", p0.get_fevals(), "\n");
     pagmo::detail::print(p0.fitness(decision_vector{2,2,2,2}), "\n");
+    pagmo::detail::print("fevals: ", p0.get_fevals(), "\n");
     problem p1{example1{}};
     std::cout << p1.get_nec() << '\n';
     std::cout << p1.get_nic() << '\n';
