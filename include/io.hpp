@@ -9,11 +9,11 @@
 
 namespace pagmo
 {
-namespace io
-{
 
 template <typename ... Args>
 void stream(std::ostream &, const Args & ...);
+
+namespace detail {
 
 template <typename T>
 inline void stream_impl(std::ostream &os, const T &x)
@@ -56,10 +56,12 @@ inline void stream_impl(std::ostream &os, const T &x, const Args & ... args)
     stream_impl(os,args...);
 }
 
+} // end of namespace detail
+
 template <typename ... Args>
 inline void stream(std::ostream &os, const Args & ... args)
 {
-    stream_impl(os,args...);
+    detail::stream_impl(os,args...);
 }
 
 template <typename ... Args>
@@ -68,7 +70,7 @@ inline void print(const Args & ... args)
     stream(std::cout,args...);
 }
 
-}}
+} // end of namespace pagmo
 
 #undef PAGMO_MAX_OUTPUT_LENGTH
 
