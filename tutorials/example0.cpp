@@ -1,6 +1,6 @@
 // In this tutorial we implement the simple problem of minimizing
 // f = x1^2 + x2^2 + x3^2 + x4^2 in the bounds:
-// -1 <= xi <= 1
+// -10 <= xi <= 10
 
 // All we need to do is to implement a struct (or class) having the
 // following mandatory methods: 
