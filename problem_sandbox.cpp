@@ -4,13 +4,12 @@
 
 using namespace pagmo;
 
-// Problem with one objective no constraints
 struct example0
 {
     fitness_vector fitness(const decision_vector &x)
     {
         fitness_vector retval(1);
-        retval[0] = x[0] * x[3] * (x[0] + x[1] + x[2]) + x[2];
+        retval[0] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3];
         return retval;
     }
 
@@ -35,6 +34,19 @@ struct example0
     {   
         return std::string("My Problem");
     }
+
+    std::string extra_info() const {
+        std::ostringstream s;
+        s << "This is just a simple toy problem with one fitness, " << '\n';
+        s << "no constraint and a fixed dimension of 4." << "\n";
+        return s.str();
+    }
+    
+    std::vector<decision_vector> best_known() const
+    {
+        return std::vector<decision_vector>{decision_vector{0,0,0,0}};
+    }
+
 };
 
 // Problem with one objective one equality and one inequality constraint

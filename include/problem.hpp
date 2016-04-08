@@ -34,6 +34,7 @@ struct prob_inner_base
     virtual decision_vector::size_type get_nec() const = 0;
     virtual decision_vector::size_type get_nic() const = 0;
     virtual std::string get_name() const = 0;
+    virtual std::string extra_info() const = 0;
     template <typename Archive>
     void serialize(Archive &) {}
 };
@@ -107,6 +108,17 @@ struct prob_inner: prob_inner_base
     {
         return typeid(m_value).name();
     }
+    template <typename U, typename std::enable_if<has_extra_info<U>::value,int>::type = 0>
+    static std::string extra_info_impl(const U &value)
+    {
+        return value.extra_info();
+    }
+    template <typename U, typename std::enable_if<!has_extra_info<U>::value,int>::type = 0>
+    static std::string extra_info_impl(const U &)
+    {
+        return "";
+    }
+
 
     virtual decision_vector::size_type get_nec() const override
     {
@@ -119,6 +131,10 @@ struct prob_inner: prob_inner_base
     virtual std::string get_name() const override
     {
         return get_name_impl(m_value);
+    }
+    virtual std::string extra_info() const override
+    {
+        return extra_info_impl(m_value);
     }
     // Serialization.
     template <typename Archive>
@@ -243,6 +259,11 @@ class problem
             return m_ptr->get_name();
         }
 
+        std::string extra_info() const
+        {
+            return m_ptr->extra_info();
+        } 
+
         std::string human_readable() const
         {
             std::ostringstream s;
@@ -256,9 +277,7 @@ class problem
             pagmo::io::stream(s, get_bounds().first, '\n');
             s << "\tUpper bounds: ";
             pagmo::io::stream(s, get_bounds().second, '\n');
-            //s << "\tConstraints tolerance: ";
-            //s << m_c_tol << '\n';
-            //s << human_readable_extra();
+            pagmo::io::stream(s, "\n", extra_info(), '\n');
             return s.str();
         }
 
