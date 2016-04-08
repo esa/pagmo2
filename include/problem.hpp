@@ -95,6 +95,17 @@ struct prob_inner: prob_inner_base
     {
         return 0;
     }
+    template <typename U, typename std::enable_if<has_name<U>::value,int>::type = 0>
+    static std::string get_name_impl(const U &value)
+    {
+        return value.get_name();
+    }
+    template <typename U, typename std::enable_if<!has_name<U>::value,int>::type = 0>
+    static std::string get_name_impl(const U &)
+    {
+        return typeid(m_value).name();
+    }
+
     virtual decision_vector::size_type get_nec() const override
     {
         return get_nec_impl(m_value);
@@ -105,7 +116,7 @@ struct prob_inner: prob_inner_base
     }
     virtual std::string get_name() const override
     {
-        return typeid(m_value).name();
+        return get_name_impl(m_value);
     }
     // Serialization.
     template <typename Archive>

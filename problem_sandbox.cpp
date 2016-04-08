@@ -30,6 +30,11 @@ struct example0
         decision_vector ub{5,5,5,5};
         return std::pair<decision_vector, decision_vector>(std::move(lb), std::move(ub));
     }
+
+    std::string get_name() const
+    {   
+        return std::string("My Problem");
+    }
 };
 
 // Problem with one objective one equality and one inequality constraint

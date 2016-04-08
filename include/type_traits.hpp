@@ -80,6 +80,22 @@ class has_constraints: detail::sfinae_types
 template <typename T>
 const bool has_constraints<T>::value;
 
+/// Detect get_name() availability
+template <typename T>
+class has_name: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.get_name());
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<std::string,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_name<T>::value;
+
 }
 
 #endif
