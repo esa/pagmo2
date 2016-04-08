@@ -1,34 +1,28 @@
-using decision_vector = std::vector<double>;
-using decision_vector_int = std::vector<long long>;
-using fitness_vector = std::vector<double>;
-using gradient_vector = std::vector<double>;
-using sparsity_pattern std::vector<std::pair<long, long> >;
-
 // Problem with one objective no constraints
 struct example0
 {
-    fitness_vector fitness(const decision_vector &)
+    fitness_vector fitness(const decision_vector &x)
     {
         fitness_vector retval(1);
         retval[0] = x[0] * x[3] * (x[0] + x[1] + x[2]) + x[2];
         return retval;
     }
 
-    decision_vector::size_type get_n()
+    decision_vector::size_type get_n() const
     {
         return 4u;
     }
 
-    decision_vector::size_type get_nf()
+    fitness_vector::size_type get_nf() const
     {
         return 1u;
     }
     
-    std::pair<decision_vector, decision_vector> get_bounds()
+    std::pair<decision_vector, decision_vector> get_bounds() const
     {
         decision_vector lb{1,1,1,1};
         decision_vector ub{5,5,5,5};
-        return std::pair<decision_vector, decision_vector>(lb, ub);
+        return std::pair<decision_vector, decision_vector>(std::move(lb), std::move(ub));
     }
 };
 

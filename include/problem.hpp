@@ -1,12 +1,14 @@
 #ifndef PAGMO_PROBLEM_HPP
 #define PAGMO_PROBLEM_HPP
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
 
+#include "io.hpp"
 #include "exceptions.hpp"
 #include "serialization.hpp"
 #include "type_traits.hpp"
@@ -29,6 +31,7 @@ struct prob_inner_base
     virtual std::pair<decision_vector,decision_vector> get_bounds() const = 0;
     virtual decision_vector::size_type get_nec() const = 0;
     virtual decision_vector::size_type get_nic() const = 0;
+    virtual std::string get_name() const = 0;
     template <typename Archive>
     void serialize(Archive &) {}
 };
@@ -99,6 +102,10 @@ struct prob_inner: prob_inner_base
     virtual decision_vector::size_type get_nic() const override
     {
         return get_nic_impl(m_value);
+    }
+    virtual std::string get_name() const override
+    {
+        return typeid(m_value).name();
     }
     // Serialization.
     template <typename Archive>
@@ -201,16 +208,56 @@ class problem
             ar(m_ptr); 
         }
 
-        const unsigned long long &get_fevals() const
+        const atomic_counter &get_fevals() const
         {
             return m_fevals;
         }
 
+        /// Get problem's name.
+        /**
+         * Will return the name of the user implemented problem as
+         * returned by the detail::prob_inner method get_name
+         *
+         * @return name of the user implemented problem.
+         */
+        std::string get_name() const
+        {
+            return m_ptr->get_name();
+        }
+
+        std::string human_readable() const
+        {
+            std::ostringstream s;
+            s << "Problem name: " << get_name() << '\n';
+            //const size_type size = get_dimension();
+            s << "\tGlobal dimension:\t\t\t" << get_n() << '\n';
+            s << "\tFitness dimension:\t\t\t" << get_nf() << '\n';
+            s << "\tEquality constraints dimension:\t\t" << get_nec() << '\n';
+            s << "\tInequality constraints dimension:\t" << get_nic() << '\n';
+            s << "\tLower bounds: ";
+            pagmo::io::stream(s, get_bounds().first, '\n');
+            s << "\tUpper bounds: ";
+            pagmo::io::stream(s, get_bounds().second, '\n');
+            //s << "\tConstraints tolerance: ";
+            //s << m_c_tol << '\n';
+            //s << human_readable_extra();
+            return s.str();
+        }
+
+
+
     private:
         std::unique_ptr<detail::prob_inner_base> m_ptr;
-        unsigned long long m_fevals = 0u;
+        atomic_counter m_fevals;
 };
 
+// Streaming operator for the class pagmo::problem
+std::ostream &operator<<(std::ostream &os, const problem &p)
+{
+    os << p.human_readable() << '\n';
+    return os;
 }
+
+} // namespaces
 
 #endif

@@ -78,12 +78,13 @@ struct example2 {};
 int main()
 {
     problem p0{example0{}};
+    std::cout << p0 << '\n';
     std::cout << p0.get_nec() << '\n';
     std::cout << p0.get_nic() << '\n';
-    pagmo::detail::print(p0.get_bounds(), "\n");
-    pagmo::detail::print("fevals: ", p0.get_fevals(), "\n");
-    pagmo::detail::print(p0.fitness(decision_vector{2,2,2,2}), "\n");
-    pagmo::detail::print("fevals: ", p0.get_fevals(), "\n");
+    pagmo::io::print(p0.get_bounds(), "\n");
+    pagmo::io::print("fevals: ", p0.get_fevals(), "\n");
+    pagmo::io::print(p0.fitness(decision_vector{2,2,2,2}), "\n");
+    pagmo::io::print("fevals: ", p0.get_fevals(), "\n");
     problem p1{example1{}};
     std::cout << p1.get_nec() << '\n';
     std::cout << p1.get_nic() << '\n';
