@@ -266,7 +266,7 @@ class problem
 
     private:
         std::unique_ptr<detail::prob_inner_base> m_ptr;
-        std::atomic<unsigned int long long> m_fevals;
+        std::atomic<unsigned long long> m_fevals;
 };
 
 // Streaming operator for the class pagmo::problem
