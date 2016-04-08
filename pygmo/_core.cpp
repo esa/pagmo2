@@ -85,9 +85,9 @@ struct prob_inner<py::object>: prob_inner_base
             return attr.call().cast<std::string>();
         }
 #if PY_MAJOR_VERSION < 3
-        auto m = py::module::import("builtins");
-#else
         auto m = py::module::import("__builtin__");
+#else
+        auto m = py::module::import("builtins");
 #endif
         auto type = static_cast<py::object>(m.attr("type")),
             str = static_cast<py::object>(m.attr("str"));
