@@ -274,10 +274,10 @@ class problem
             s << "\tEquality constraints dimension:\t\t" << get_nec() << '\n';
             s << "\tInequality constraints dimension:\t" << get_nic() << '\n';
             s << "\tLower bounds: ";
-            pagmo::io::stream(s, get_bounds().first, '\n');
+            io::stream(s, get_bounds().first, '\n');
             s << "\tUpper bounds: ";
-            pagmo::io::stream(s, get_bounds().second, '\n');
-            pagmo::io::stream(s, "\n", extra_info(), '\n');
+            io::stream(s, get_bounds().second, '\n');
+            io::stream(s, "\n", extra_info(), '\n');
             return s.str();
         }
 
