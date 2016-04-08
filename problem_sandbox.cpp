@@ -95,4 +95,5 @@ int main()
     std::cout << p1.get_nic() << '\n';
     // Compile time error if uncommented.
     // problem p2{example2{}};
+    problem p2{std::move(p1)};
 }

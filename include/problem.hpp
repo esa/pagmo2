@@ -131,8 +131,12 @@ struct prob_inner: prob_inner_base
 
 class problem
 {
-    public:
+        // Enable the generic ctor only if T is not a problem (after removing
+        // const/reference qualifiers).
         template <typename T>
+        using generic_ctor_enabler = std::enable_if_t<!std::is_same<problem,std::decay_t<T>>::value,int>;
+    public:
+        template <typename T, generic_ctor_enabler<T> = 0>
         explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u)
         {
             // check bounds consistency
@@ -156,7 +160,7 @@ class problem
             }
         }
         problem(const problem &other):m_ptr(other.m_ptr->clone()),m_fevals(0u) {}
-        problem(problem &&other) = default;
+        problem(problem &&other):m_ptr(std::move(other.m_ptr)),m_fevals(other.m_fevals.load()) {}
 
         template <typename T>
         const T *extract() const
