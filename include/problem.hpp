@@ -57,24 +57,24 @@ struct prob_inner: prob_inner_base
     prob_inner() = default;
     explicit prob_inner(T &&x):m_value(std::move(x)) {}
     explicit prob_inner(const T &x):m_value(x) {}
-    virtual prob_inner_base *clone() const override
+    virtual prob_inner_base *clone() const override final
     {
         return ::new prob_inner<T>(m_value);
     }
     // Main methods.
-    virtual fitness_vector fitness(const decision_vector &dv) override
+    virtual fitness_vector fitness(const decision_vector &dv) override final
     {
         return m_value.fitness(dv);
     }
-    virtual fitness_vector::size_type get_nf() const override
+    virtual fitness_vector::size_type get_nf() const override final
     {
         return m_value.get_nf();
     }
-    virtual decision_vector::size_type get_n() const override
+    virtual decision_vector::size_type get_n() const override final
     {
         return m_value.get_n();
     }
-    virtual std::pair<decision_vector,decision_vector> get_bounds() const override
+    virtual std::pair<decision_vector,decision_vector> get_bounds() const override final
     {
         return m_value.get_bounds();
     }
@@ -106,7 +106,7 @@ struct prob_inner: prob_inner_base
     template <typename U, typename std::enable_if<!has_name<U>::value,int>::type = 0>
     static std::string get_name_impl(const U &)
     {
-        return typeid(m_value).name();
+        return typeid(U).name();
     }
     template <typename U, typename std::enable_if<has_extra_info<U>::value,int>::type = 0>
     static std::string extra_info_impl(const U &value)
@@ -120,19 +120,19 @@ struct prob_inner: prob_inner_base
     }
 
 
-    virtual decision_vector::size_type get_nec() const override
+    virtual decision_vector::size_type get_nec() const override final
     {
         return get_nec_impl(m_value);
     }
-    virtual decision_vector::size_type get_nic() const override
+    virtual decision_vector::size_type get_nic() const override final
     {
         return get_nic_impl(m_value);
     }
-    virtual std::string get_name() const override
+    virtual std::string get_name() const override final
     {
         return get_name_impl(m_value);
     }
-    virtual std::string extra_info() const override
+    virtual std::string extra_info() const override final
     {
         return extra_info_impl(m_value);
     }
@@ -140,7 +140,7 @@ struct prob_inner: prob_inner_base
     template <typename Archive>
     void serialize(Archive &ar)
     { 
-        ar(cereal::base_class<prob_inner_base>(this),m_value); 
+        ar(cereal::base_class<prob_inner_base>(this),m_value);
     }
     T m_value;
 };
@@ -239,7 +239,7 @@ class problem
         template <typename Archive>
         void serialize(Archive &ar)
         { 
-            ar(m_ptr); 
+            ar(m_ptr,m_fevals);
         }
 
         unsigned long long get_fevals() const
@@ -277,7 +277,10 @@ class problem
             stream(s, get_bounds().first, '\n');
             s << "\tUpper bounds: ";
             stream(s, get_bounds().second, '\n');
-            stream(s, "\n", extra_info(), '\n');
+            const auto extra_str = extra_info();
+            if (!extra_str.empty()) {
+                stream(s, "\nExtra info:\n", extra_str, '\n');
+            }
             return s.str();
         }
 
