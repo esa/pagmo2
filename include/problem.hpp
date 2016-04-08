@@ -1,7 +1,6 @@
 #ifndef PAGMO_PROBLEM_HPP
 #define PAGMO_PROBLEM_HPP
 
-#include <atomic>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -261,7 +260,7 @@ class problem
 
     private:
         std::unique_ptr<detail::prob_inner_base> m_ptr;
-        std::atomic<unsigned long long> m_fevals;
+        atomic_counter m_fevals;
 };
 
 // Streaming operator for the class pagmo::problem
