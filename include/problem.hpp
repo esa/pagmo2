@@ -1,6 +1,7 @@
 #ifndef PAGMO_PROBLEM_HPP
 #define PAGMO_PROBLEM_HPP
 
+#include <atomic>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -8,8 +9,8 @@
 #include <typeinfo>
 #include <utility>
 
-#include "io.hpp"
 #include "exceptions.hpp"
+#include "io.hpp"
 #include "serialization.hpp"
 #include "type_traits.hpp"
 
@@ -133,12 +134,12 @@ class problem
 {
     public:
         template <typename T>
-        explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x)))
+        explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u)
         {
             // check bounds consistency
             auto bounds = get_bounds();
-            auto lb = bounds.first;
-            auto ub = bounds.second;
+            const auto &lb = bounds.first;
+            const auto &ub = bounds.second;
             // 1 - check lower bounds length
             if (lb.size()!=get_n()) {
                 pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) + ", should be " + std::to_string(get_n()));
@@ -150,7 +151,8 @@ class problem
             // 3 - checks lower < upper for all values in lb, lb
             for (decltype(lb.size()) i=0u; i < lb.size(); ++i) {
                 if (lb[i] > ub[i]) {
-                    pagmo_throw(std::invalid_argument,"The lower bound at position " + std::to_string(i) + "is " + std::to_string(lb[i]) + "while the upper bound has the smaller value" + std::to_string(ub[i]) + "");
+                    pagmo_throw(std::invalid_argument,"The lower bound at position " + std::to_string(i) + " is " + std::to_string(lb[i]) +
+                        "while the upper bound has the smaller value" + std::to_string(ub[i]) + "");
                 }
             }
         }
@@ -189,7 +191,7 @@ class problem
                 pagmo_throw(std::invalid_argument,"Returned fitness length is: " + std::to_string(retval.size()) + ", should be " + std::to_string(get_nf()));
             }
             // 3 - increments fevals
-            m_fevals++;
+            ++m_fevals;
             return retval;
         }
         fitness_vector::size_type get_nf() const
@@ -219,9 +221,9 @@ class problem
             ar(m_ptr); 
         }
 
-        const atomic_counter &get_fevals() const
+        unsigned long long get_fevals() const
         {
-            return m_fevals;
+            return m_fevals.load();
         }
 
         /// Get problem's name.
@@ -259,7 +261,7 @@ class problem
 
     private:
         std::unique_ptr<detail::prob_inner_base> m_ptr;
-        atomic_counter m_fevals;
+        std::atomic<unsigned long long> m_fevals;
 };
 
 // Streaming operator for the class pagmo::problem

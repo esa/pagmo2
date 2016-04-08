@@ -1,12 +1,16 @@
+#ifndef PAGMO_IO_HPP
+#define PAGMO_IO_HPP
+
 #include <iostream>
 #include <utility>
 #include <vector>
+
+#define PAGMO_MAX_OUTPUT_LENGTH 5u
 
 namespace pagmo
 {
 namespace io
 {
-#define PAGMO_MAX_OUTPUT_LENGTH 5u
 
 template <typename ... Args>
 void stream(std::ostream &, const Args & ...);
@@ -65,4 +69,7 @@ inline void print(const Args & ... args)
 }
 
 }}
+
 #undef PAGMO_MAX_OUTPUT_LENGTH
+
+#endif
