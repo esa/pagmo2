@@ -1,2 +1,2 @@
 # yacma
-Yet another CMake modules archive
+Yet another CMake modules archive.
