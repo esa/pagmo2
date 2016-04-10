@@ -31,7 +31,7 @@ class has_fitness: detail::sfinae_types
         static auto test1(const U &p) -> decltype(p.get_nf());
         static no test1(...);
         static const bool implementation_defined =
-            std::is_same<fitness_vector,decltype(test0(std::declval<T &>()))>::value &&
+            std::is_same<fitness_vector,decltype(test0(std::declval<const T &>()))>::value &&
             std::is_same<fitness_vector::size_type,decltype(test1(std::declval<const T &>()))>::value;
     public:
         static const bool value = implementation_defined;
@@ -120,7 +120,7 @@ class has_gradient: detail::sfinae_types
         static auto test0(const U &p) -> decltype(p.gradient(std::declval<const decision_vector &>()));
         static no test0(...);
         static const bool implementation_defined =
-            std::is_same<gradient_vector,decltype(test0(std::declval<T &>()))>::value;
+            std::is_same<gradient_vector,decltype(test0(std::declval<const T &>()))>::value;
     public:
         static const bool value = implementation_defined;
 };
@@ -136,7 +136,7 @@ class has_sparsity: detail::sfinae_types
         static auto test0(const U &p) -> decltype(p.sparsity());
         static no test0(...);
         static const bool implementation_defined =
-            std::is_same<sparsity_pattern,decltype(test0(std::declval<T &>()))>::value;
+            std::is_same<sparsity_pattern,decltype(test0(std::declval<const T &>()))>::value;
     public:
         static const bool value = implementation_defined;
 };
