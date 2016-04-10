@@ -22,7 +22,7 @@ using namespace pagmo;
 struct example0
 {
     // Mandatory, computes ... well ... the fitness
-    fitness_vector fitness(const decision_vector &x)
+    fitness_vector fitness(const decision_vector &x) const
     {
         fitness_vector retval(1);
         retval[0] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3];

@@ -25,7 +25,7 @@ template <typename T>
 class has_fitness: detail::sfinae_types
 {
         template <typename U>
-        static auto test0(U &p) -> decltype(p.fitness(std::declval<const decision_vector &>()));
+        static auto test0(const U &p) -> decltype(p.fitness(std::declval<const decision_vector &>()));
         static no test0(...);
         template <typename U>
         static auto test1(const U &p) -> decltype(p.get_nf());
@@ -117,7 +117,7 @@ template <typename T>
 class has_gradient: detail::sfinae_types
 {
         template <typename U>
-        static auto test0(U &p) -> decltype(p.gradient(std::declval<const decision_vector &>()));
+        static auto test0(const U &p) -> decltype(p.gradient(std::declval<const decision_vector &>()));
         static no test0(...);
         static const bool implementation_defined =
             std::is_same<gradient_vector,decltype(test0(std::declval<T &>()))>::value;
@@ -133,7 +133,7 @@ template <typename T>
 class has_sparsity: detail::sfinae_types
 {
         template <typename U>
-        static auto test0(U &p) -> decltype(p.sparsity());
+        static auto test0(const U &p) -> decltype(p.sparsity());
         static no test0(...);
         static const bool implementation_defined =
             std::is_same<sparsity_pattern,decltype(test0(std::declval<T &>()))>::value;

@@ -27,7 +27,7 @@ using namespace pagmo;
 struct example0_g
 {
     // Mandatory, computes ... well ... the fitness
-    fitness_vector fitness(const decision_vector &x)
+    fitness_vector fitness(const decision_vector &x) const
     {
         fitness_vector retval(1);
         retval[0] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3];
@@ -36,7 +36,7 @@ struct example0_g
 
     // Optional, computes the gradient. In this simple case
     // df/dx0, df/dx1, df/dx2, df/dx3
-    gradient_vector gradient(const decision_vector &x)
+    gradient_vector gradient(const decision_vector &x) const
     {
         gradient_vector retval(4,0.);
         retval[0] = 2 * x[0];
@@ -46,7 +46,7 @@ struct example0_g
         return retval;
     }
 
-    sparsity_pattern dsparsity()  
+    sparsity_pattern dsparsity() const
     {
         sparsity_pattern retval;
         for (auto i=0u; i<4u; ++i) {

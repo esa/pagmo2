@@ -101,12 +101,12 @@ struct prob_inner: prob_inner_base
         pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\nA function with prototype gradient_vector gradient(const decision_vector &x) was expected.");
     }
     template <typename U, typename std::enable_if<has_sparsity<U>::value,int>::type = 0>
-    void set_sparsity_impl(U &value)
+    void set_sparsity_impl(const U &value)
     {
         m_sparsity = value.sparsity();
     }
     template <typename U, typename std::enable_if<!has_sparsity<U>::value,int>::type = 0>
-    void set_sparsity_impl(U &)
+    void set_sparsity_impl(const U &)
     {
         // By default a problem is fully sparse
         auto dim = get_n(); 
