@@ -28,6 +28,7 @@ struct prob_inner_base
     virtual ~prob_inner_base() {}
     virtual prob_inner_base *clone() const = 0;
     virtual fitness_vector fitness(const decision_vector &) = 0;
+    virtual gradient_vector gradient(const decision_vector &) = 0;
     virtual fitness_vector::size_type get_nf() const = 0;
     virtual decision_vector::size_type get_n() const = 0;
     virtual std::pair<decision_vector,decision_vector> get_bounds() const = 0;
@@ -36,7 +37,11 @@ struct prob_inner_base
     virtual std::string get_name() const = 0;
     virtual std::string extra_info() const = 0;
     template <typename Archive>
-    void serialize(Archive &) {}
+    void serialize(Archive &ar)
+    {
+        ar(m_sparsity);
+    }
+    sparsity_pattern m_sparsity;
 };
 
 template <typename T>
@@ -55,13 +60,19 @@ struct prob_inner: prob_inner_base
     static_assert(has_dimensions_bounds<T>::value,
         "A problem must provide getters for its dimension and bounds.");
     prob_inner() = default;
-    explicit prob_inner(T &&x):m_value(std::move(x)) {}
-    explicit prob_inner(const T &x):m_value(x) {}
+    explicit prob_inner(T &&x):m_value(std::move(x))
+    {
+        set_sparsity();
+    }
+    explicit prob_inner(const T &x):m_value(x)
+    {
+        set_sparsity();
+    }
     virtual prob_inner_base *clone() const override final
     {
         return ::new prob_inner<T>(m_value);
     }
-    // Main methods.
+    // Mandatory methods.
     virtual fitness_vector fitness(const decision_vector &dv) override final
     {
         return m_value.fitness(dv);
@@ -77,6 +88,35 @@ struct prob_inner: prob_inner_base
     virtual std::pair<decision_vector,decision_vector> get_bounds() const override final
     {
         return m_value.get_bounds();
+    }
+    // Optional methods.
+    template <typename U, typename std::enable_if<has_gradient<U>::value,int>::type = 0>
+    static gradient_vector gradient_impl(U &value, const decision_vector &dv)
+    {
+        return value.gradient(dv);
+    }
+    template <typename U, typename std::enable_if<!has_gradient<U>::value,int>::type = 0>
+    static gradient_vector gradient_impl(U &, const decision_vector &)
+    {
+        pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\nA function with prototype gradient_vector gradient(const decision_vector &x) was expected.");
+    }
+    template <typename U, typename std::enable_if<has_sparsity<U>::value,int>::type = 0>
+    void set_sparsity_impl(U &value)
+    {
+        m_sparsity = value.sparsity();
+    }
+    template <typename U, typename std::enable_if<!has_sparsity<U>::value,int>::type = 0>
+    void set_sparsity_impl(U &)
+    {
+        // By default a problem is fully sparse
+        auto dim = get_n(); 
+        auto f_dim = get_nf() + get_nec() + get_nic();        
+        sparsity_pattern retval;
+        for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
+            for (decltype(dim) i = 0u; i<dim; ++i) {
+               m_sparsity.push_back(std::pair<long, long>(j, i));
+            }
+        }
     }
     template <typename U, typename std::enable_if<has_constraints<U>::value,int>::type = 0>
     static decision_vector::size_type get_nec_impl(const U &value)
@@ -119,7 +159,14 @@ struct prob_inner: prob_inner_base
         return "";
     }
 
-
+    virtual gradient_vector gradient(const decision_vector &dv) override final
+    {
+        return gradient_impl(m_value, dv);
+    }
+    void set_sparsity()
+    {
+        return set_sparsity_impl(m_value);
+    }
     virtual decision_vector::size_type get_nec() const override final
     {
         return get_nec_impl(m_value);
@@ -198,23 +245,24 @@ class problem
 
         fitness_vector fitness(const decision_vector &dv)
         {
-            // 1 - check decision vector for length consistency
-            if (dv.size()!=get_n()) {
-                pagmo_throw(std::invalid_argument,"Length of decision vector is " + std::to_string(dv.size()) + ", should be " + std::to_string(get_n()));
-            }
-            // 2 - Here is where one could check if the decision vector
-            // is in the bounds. At the moment not implemented
-
-            // 3 - computes the fitness
+            // 1 -  checks the decision vector
+            check_decision_vector(dv);
+            // 2 - computes the fitness
             fitness_vector retval(m_ptr->fitness(dv));
-            // 4 - checks dimension of returned fitness
-            if (retval.size()!=get_nf()) {
-                pagmo_throw(std::invalid_argument,"Returned fitness length is: " + std::to_string(retval.size()) + ", should be " + std::to_string(get_nf()));
-            }
-            // 3 - increments fevals
+            // 3 -  checks the decision vector
+            check_fitness_vector(retval);
+            // 4 - increments fevals
             ++m_fevals;
             return retval;
         }
+        gradient_vector gradient(const decision_vector &dv)
+        {
+            return m_ptr->gradient(dv);
+        }
+        const sparsity_pattern& sparsity() const
+        {
+            return m_ptr->m_sparsity;
+        } 
         fitness_vector::size_type get_nf() const
         {
             return m_ptr->get_nf();
@@ -284,7 +332,24 @@ class problem
             return s.str();
         }
 
+    private:
+        void check_decision_vector(const decision_vector &dv)
+        {
+            // 1 - check decision vector for length consistency
+            if (dv.size()!=get_n()) {
+                pagmo_throw(std::invalid_argument,"Length of decision vector is " + std::to_string(dv.size()) + ", should be " + std::to_string(get_n()));
+            }
+            // 2 - Here is where one could check if the decision vector
+            // is in the bounds. At the moment not implemented
+        }
 
+        void check_fitness_vector(const fitness_vector &f)
+        {
+            // 4 - checks dimension of returned fitness
+            if (f.size()!=get_nf()) {
+                pagmo_throw(std::invalid_argument,"Fitness length is: " + std::to_string(f.size()) + ", should be " + std::to_string(get_nf()));
+            }
+        }
 
     private:
         std::unique_ptr<detail::prob_inner_base> m_ptr;

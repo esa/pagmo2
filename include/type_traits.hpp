@@ -112,6 +112,38 @@ class has_extra_info: detail::sfinae_types
 template <typename T>
 const bool has_extra_info<T>::value;
 
+/// Detect gradient() availability
+template <typename T>
+class has_gradient: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(U &p) -> decltype(p.gradient(std::declval<const decision_vector &>()));
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<gradient_vector,decltype(test0(std::declval<T &>()))>::value;
+    public:
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_gradient<T>::value;
+
+/// Detect sparsity() availability
+template <typename T>
+class has_sparsity: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(U &p) -> decltype(p.sparsity());
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<sparsity_pattern,decltype(test0(std::declval<T &>()))>::value;
+    public:
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_sparsity<T>::value;
+
 }
 
 #endif

@@ -76,7 +76,7 @@ struct example2
         return retval;
     }
 
-    std::vector<gradient_vector> fitness_gradient(const decision_vector &x)
+    gradient_vector fitness_gradient(const decision_vector &x)
     {
         gradient_vector retval(4);
         retval[0] = x[0] * x[3] + x[3] * (x[0] + x[1] + x[2]);
