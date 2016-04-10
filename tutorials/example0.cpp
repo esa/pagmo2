@@ -5,7 +5,7 @@
 // All we need to do is to implement a struct (or class) having the
 // following mandatory methods: 
 //
-// fitness_vector fitness(const decision_vector &)
+// fitness_vector fitness(const decision_vector &) const
 // decision_vector::size_type get_n() const
 // fitness_vector::size_type get_nf() const
 // std::pair<decision_vector, decision_vector> get_bounds() const

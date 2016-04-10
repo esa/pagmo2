@@ -245,19 +245,25 @@ class problem
 
         fitness_vector fitness(const decision_vector &dv)
         {
-            // 1 -  checks the decision vector
+            // 1 - checks the decision vector
             check_decision_vector(dv);
             // 2 - computes the fitness
             fitness_vector retval(m_ptr->fitness(dv));
-            // 3 -  checks the decision vector
+            // 3 - checks the decision vector
             check_fitness_vector(retval);
             // 4 - increments fevals
             ++m_fevals;
             return retval;
         }
-        gradient_vector gradient(const decision_vector &dv)
+        gradient_vector gradient(const decision_vector &dv) const
         {
-            return m_ptr->gradient(dv);
+            // 1 - checks the decision vector
+            check_decision_vector(dv);
+            // 2 - compute the gradients
+            gradient_vector retval(m_ptr->gradient(dv));
+            // 3 - checks the decision vector
+            check_gradient_vector(retval);
+            return retval;
         }
         const sparsity_pattern& sparsity() const
         {
@@ -333,7 +339,7 @@ class problem
         }
 
     private:
-        void check_decision_vector(const decision_vector &dv)
+        void check_decision_vector(const decision_vector &dv) const
         {
             // 1 - check decision vector for length consistency
             if (dv.size()!=get_n()) {
@@ -343,11 +349,19 @@ class problem
             // is in the bounds. At the moment not implemented
         }
 
-        void check_fitness_vector(const fitness_vector &f)
+        void check_fitness_vector(const fitness_vector &f) const
         {
-            // 4 - checks dimension of returned fitness
+            // Checks dimension of returned fitness
             if (f.size()!=get_nf()) {
                 pagmo_throw(std::invalid_argument,"Fitness length is: " + std::to_string(f.size()) + ", should be " + std::to_string(get_nf()));
+            }
+        }
+
+        void check_gradient_vector(const gradient_vector &gr) const
+        {
+            // Checks that the gradient vector returned has the same dimensions of the sparsity_pattern
+            if (gr.size()!=m_ptr->m_sparsity.size()) {
+                pagmo_throw(std::invalid_argument,"Gradients returned: " + std::to_string(gr.size()) + ", should be " + std::to_string(m_ptr->m_sparsity.size()));
             }
         }
 
