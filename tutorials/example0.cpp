@@ -88,7 +88,7 @@ int main()
     // is set to zero. Checking its value is easy
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
     // Computing one fitness
-    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness(decision_vector{2,2,2,2}), "\n");
+    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
 

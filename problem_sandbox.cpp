@@ -108,7 +108,7 @@ int main()
     std::cout << "Calling the fitness dimension getter: " << p0.get_nf() << '\n';
 
     // Getting the bounds via the pagmo::print eating also std containers
-    pagmo::print("Calling the bounds getter: ", p0.get_bounds(), "\n");
+    pagmo::print("Calling the bounds getter: ", p0.get_bounds(), "\n\n");
 
     // As soon as a problem its created its function evaluation counter
     // is set to zero. Checking its value is easy
@@ -116,13 +116,18 @@ int main()
     // Computing one fitness
     pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness(vector_double{2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
-    pagmo::print("fevals: ", p0.get_fevals(), "\n");
+    pagmo::print("fevals: ", p0.get_fevals(), "\n\n");
 
+    // As soon as a problem its created its gradient evaluation counter
+    // is set to zero. Checking its value is easy
+    pagmo::print("gevals: ", p0.get_gevals(), "\n");
     // Computing one gradient
-    pagmo::print("gradient implementation detected? ", p0.has_gradient(), '\n');
+    pagmo::print("gradient implementation detected?: ", p0.has_gradient(), '\n');
     pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient(vector_double{2,2,2,2}), "\n");
+    // The evaluation counter is now ... well ... 1
+    pagmo::print("gevals: ", p0.get_gevals(), "\n\n");
 
-    pagmo::print(p0.sparsity(), "\n");
+    pagmo::print("Sparsity pattern: ", p0.sparsity(), "\n\n");
 
     // While our example0 struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface

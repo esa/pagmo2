@@ -321,6 +321,11 @@ class problem
             return m_fevals.load();
         }
 
+        unsigned long long get_gevals() const
+        {
+            return m_gevals.load();
+        }
+
         /// Get problem's name.
         /**
          * Will return the name of the user implemented problem as
