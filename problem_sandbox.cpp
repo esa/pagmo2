@@ -124,6 +124,7 @@ int main()
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
 
     // Computing one gradient
+    pagmo::print("gradient implementation detected? ", p0.has_gradient(), '\n');
     pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient(decision_vector{2,2,2,2}), "\n");
 
     pagmo::print(p0.sparsity(), "\n");

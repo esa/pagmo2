@@ -279,6 +279,10 @@ class problem
             check_gradient_vector(retval);
             return retval;
         }
+        bool has_gradient() const
+        {
+            return m_ptr->has_gradient();
+        } 
         const sparsity_pattern& sparsity() const
         {
             return m_ptr->m_sparsity;
