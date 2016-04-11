@@ -65,9 +65,7 @@ struct example0_g
     // Mandatory, returns the box-bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        vector_double lb{-10,-10,-10,-10};
-        vector_double ub{ 10, 10, 10, 10};
-        return std::pair<vector_double, vector_double>(std::move(lb), std::move(ub));
+        return {{-10,-10,-10,-10},{10,10,10,10}};
     }
 
     // Optional, provides a name for the problem overrding the default name
@@ -90,7 +88,7 @@ struct example0_g
     // the problem::extract() method
     std::vector<vector_double> best_known() const
     {
-        return std::vector<vector_double>{vector_double{0,0,0,0}};
+        return {{0,0,0,0}};
     }
 
 };
