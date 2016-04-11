@@ -6,7 +6,7 @@
 
 namespace pagmo
 {
-namespace details {
+namespace detail {
 
 // PaGMO makes use of the 32-bit Mersenne Twister by Matsumoto and Nishimura, 1998.
 using random_engine_type = std::mt19937;
@@ -24,7 +24,7 @@ random_engine_type random_device_statics<dummy>::m_e{static_cast<random_engine_t
 template<typename dummy>
 std::mutex random_device_statics<dummy>::m_mutex{};
 
-} // end namespace details
+} // end namespace detail
 
 /// Thread-safe random device
 /**
@@ -51,7 +51,7 @@ std::mutex random_device_statics<dummy>::m_mutex{};
  * }
  * @endcode
  */
-class random_device : public details::random_device_statics<void>
+class random_device : public detail::random_device_statics<void>
 {
 public:
     /// Next element of the Pseudo Random Sequence
@@ -76,7 +76,7 @@ public:
     static void set_seed(unsigned int seed) 
     {
         std::lock_guard<std::mutex> lock(m_mutex);
-        m_e.seed(static_cast<details::random_engine_type::result_type>(seed));
+        m_e.seed(static_cast<detail::random_engine_type::result_type>(seed));
     }
 
 };
