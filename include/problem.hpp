@@ -216,7 +216,7 @@ class problem
         using generic_ctor_enabler = std::enable_if_t<!std::is_same<problem,std::decay_t<T>>::value,int>;
     public:
         template <typename T, generic_ctor_enabler<T> = 0>
-        explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u)
+        explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u),m_gevals(0u)
         {
             // check bounds consistency
             auto bounds = get_bounds();
@@ -238,7 +238,7 @@ class problem
                 }
             }
         }
-        problem(const problem &other):m_ptr(other.m_ptr->clone()),m_fevals(0u) {}
+        problem(const problem &other):m_ptr(other.m_ptr->clone()),m_fevals(0u),m_gevals(0u) {}
         problem(problem &&other):m_ptr(std::move(other.m_ptr)),m_fevals(other.m_fevals.load()) {}
 
         template <typename T>
@@ -265,11 +265,11 @@ class problem
             vector_double retval(m_ptr->fitness(dv));
             // 3 - checks the fitness vector
             check_fitness_vector(retval);
-            // 4 - increments fevals
+            // 4 - increments fitness evaluation counter
             ++m_fevals;
             return retval;
         }
-        vector_double gradient(const vector_double &dv) const
+        vector_double gradient(const vector_double &dv)
         {
             // 1 - checks the decision vector
             check_decision_vector(dv);
@@ -277,6 +277,8 @@ class problem
             vector_double retval(m_ptr->gradient(dv));
             // 3 - checks the gradient vector
             check_gradient_vector(retval);
+            // 4 - increments gradient evaluation counter
+            ++m_gevals;
             return retval;
         }
         bool has_gradient() const
@@ -384,8 +386,12 @@ class problem
         }
 
     private:
+        // Pointer to the inner base problem
         std::unique_ptr<detail::prob_inner_base> m_ptr;
+        // Atomic counter for calls to the fitness 
         std::atomic<unsigned long long> m_fevals;
+        // Atomic counter for calls to the gradient 
+        std::atomic<unsigned long long> m_gevals;
 };
 
 // Streaming operator for the class pagmo::problem

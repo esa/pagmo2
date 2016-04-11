@@ -33,13 +33,17 @@ struct example0_g
     }
 
     // Optional, computes the gradient. In this simple case
-    // df/dx0, df/dx1, df/dx2, df/dx3
+    // df0/dx0, df0/dx1, df0/dx2, df0/dx3
     vector_double gradient(const vector_double &x) const
     {
         return {2 * x[0],2 * x[1], 2 * x[2], 2 * x[3]};
     }
 
-    sparsity_pattern dsparsity() const
+    // Optional. Returns the sparsity of the problem as a sparsity_pattern
+    // that is a std::vector<std::pair<long,long>> containing pairs
+    // (i,j) indicating that the j-th variable "influences" the i-th component
+    // in the fitness. When not implemented a dense problem is assumed
+    sparsity_pattern sparsity() const
     {
         sparsity_pattern retval;
         for (auto i=0u; i<4u; ++i) {
