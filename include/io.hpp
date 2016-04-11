@@ -21,6 +21,15 @@ inline void stream_impl(std::ostream &os, const T &x)
     os << x;
 }
 
+inline void stream_impl(std::ostream &os, const bool &b)
+{
+    if (b) {
+        os << "true";
+    } else {
+        os << "false";
+    }
+}
+
 template <typename T>
 inline void stream_impl(std::ostream &os, const std::vector<T> &v)
 {

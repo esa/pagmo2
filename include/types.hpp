@@ -6,9 +6,7 @@
 namespace pagmo
 {
 
-using decision_vector = std::vector<double>;
-using fitness_vector = std::vector<double>;
-using gradient_vector = std::vector<double>;
+using vector_double = std::vector<double>;
 using sparsity_pattern = std::vector<std::pair<long,long>>;
 
 } // namespaces

@@ -7,13 +7,13 @@
 // All we need to do is to implement a struct (or class) having the
 // following mandatory methods: 
 //
-// fitness_vector fitness(const decision_vector &)
-// decision_vector::size_type get_n() const
-// fitness_vector::size_type get_nf() const
-// std::pair<decision_vector, decision_vector> get_bounds() const
+// vector_double fitness(const vector_double &)
+// vector_double::size_type get_n() const
+// vector_double::size_type get_nf() const
+// std::pair<vector_double, vector_double> get_bounds() const
 //
 // And add a method:
-// gradient_vector gradient(const decision_vector &x)
+// vector_double gradient(const vector_double &x)
 
 #include <string>
 
@@ -27,18 +27,18 @@ using namespace pagmo;
 struct example0_g
 {
     // Mandatory, computes ... well ... the fitness
-    fitness_vector fitness(const decision_vector &x) const
+    vector_double fitness(const vector_double &x) const
     {
-        fitness_vector retval(1);
+        vector_double retval(1);
         retval[0] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3];
         return retval;
     }
 
     // Optional, computes the gradient. In this simple case
     // df/dx0, df/dx1, df/dx2, df/dx3
-    gradient_vector gradient(const decision_vector &x) const
+    vector_double gradient(const vector_double &x) const
     {
-        gradient_vector retval(4,0.);
+        vector_double retval(4,0.);
         retval[0] = 2 * x[0];
         retval[1] = 2 * x[1];
         retval[2] = 2 * x[2];
@@ -57,24 +57,24 @@ struct example0_g
 
     // Mandatory, returns the dimension of the decision vector,
     // in this case fixed to 4
-    decision_vector::size_type get_n() const
+    vector_double::size_type get_n() const
     {
         return 4u;
     }
 
     // Mandatory, returns the dimension of the decision vector,
     // in this case fixed to 1 (single objective)
-    fitness_vector::size_type get_nf() const
+    vector_double::size_type get_nf() const
     {
         return 1u;
     }
     
     // Mandatory, returns the box-bounds
-    std::pair<decision_vector, decision_vector> get_bounds() const
+    std::pair<vector_double, vector_double> get_bounds() const
     {
-        decision_vector lb{-10,-10,-10,-10};
-        decision_vector ub{ 10, 10, 10, 10};
-        return std::pair<decision_vector, decision_vector>(std::move(lb), std::move(ub));
+        vector_double lb{-10,-10,-10,-10};
+        vector_double ub{ 10, 10, 10, 10};
+        return std::pair<vector_double, vector_double>(std::move(lb), std::move(ub));
     }
 
     // Optional, provides a name for the problem overrding the default name
@@ -95,9 +95,9 @@ struct example0_g
     
     // Optional methods-data can also be accessed later via 
     // the problem::extract() method
-    std::vector<decision_vector> best_known() const
+    std::vector<vector_double> best_known() const
     {
-        return std::vector<decision_vector>{decision_vector{0,0,0,0}};
+        return std::vector<vector_double>{vector_double{0,0,0,0}};
     }
 
 };
@@ -119,13 +119,13 @@ int main()
     // is set to zero. Checking its value is easy
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
     // Computing one fitness
-    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness(decision_vector{2,2,2,2}), "\n");
+    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness(vector_double{2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
 
     // Computing one gradient
     pagmo::print("gradient implementation detected? ", p0.has_gradient(), '\n');
-    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient(decision_vector{2,2,2,2}), "\n");
+    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient(vector_double{2,2,2,2}), "\n");
 
     pagmo::print(p0.sparsity(), "\n");
 

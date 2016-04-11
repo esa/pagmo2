@@ -25,14 +25,14 @@ template <typename T>
 class has_fitness: detail::sfinae_types
 {
         template <typename U>
-        static auto test0(const U &p) -> decltype(p.fitness(std::declval<const decision_vector &>()));
+        static auto test0(const U &p) -> decltype(p.fitness(std::declval<const vector_double &>()));
         static no test0(...);
         template <typename U>
         static auto test1(const U &p) -> decltype(p.get_nf());
         static no test1(...);
         static const bool implementation_defined =
-            std::is_same<fitness_vector,decltype(test0(std::declval<const T &>()))>::value &&
-            std::is_same<fitness_vector::size_type,decltype(test1(std::declval<const T &>()))>::value;
+            std::is_same<vector_double,decltype(test0(std::declval<const T &>()))>::value &&
+            std::is_same<vector_double::size_type,decltype(test1(std::declval<const T &>()))>::value;
     public:
         static const bool value = implementation_defined;
 };
@@ -51,8 +51,8 @@ class has_dimensions_bounds: detail::sfinae_types
         static auto test1(const U &p) -> decltype(p.get_bounds());
         static no test1(...);
         static const bool implementation_defined =
-            std::is_same<decision_vector::size_type,decltype(test0(std::declval<const T &>()))>::value &&
-            std::is_same<std::pair<decision_vector,decision_vector>,decltype(test1(std::declval<const T &>()))>::value;
+            std::is_same<vector_double::size_type,decltype(test0(std::declval<const T &>()))>::value &&
+            std::is_same<std::pair<vector_double,vector_double>,decltype(test1(std::declval<const T &>()))>::value;
     public:
         static const bool value = implementation_defined;
 };
@@ -71,8 +71,8 @@ class has_constraints: detail::sfinae_types
         static auto test1(const U &p) -> decltype(p.get_nic());
         static no test1(...);
         static const bool implementation_defined =
-            std::is_same<decision_vector::size_type,decltype(test0(std::declval<const T &>()))>::value &&
-            std::is_same<decision_vector::size_type,decltype(test1(std::declval<const T &>()))>::value;
+            std::is_same<vector_double::size_type,decltype(test0(std::declval<const T &>()))>::value &&
+            std::is_same<vector_double::size_type,decltype(test1(std::declval<const T &>()))>::value;
     public:
         static const bool value = implementation_defined;
 };
@@ -117,10 +117,10 @@ template <typename T>
 class has_gradient: detail::sfinae_types
 {
         template <typename U>
-        static auto test0(const U &p) -> decltype(p.gradient(std::declval<const decision_vector &>()));
+        static auto test0(const U &p) -> decltype(p.gradient(std::declval<const vector_double &>()));
         static no test0(...);
         static const bool implementation_defined =
-            std::is_same<gradient_vector,decltype(test0(std::declval<const T &>()))>::value;
+            std::is_same<vector_double,decltype(test0(std::declval<const T &>()))>::value;
     public:
         static const bool value = implementation_defined;
 };

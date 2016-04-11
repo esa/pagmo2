@@ -27,14 +27,14 @@ struct prob_inner_base
 {
     virtual ~prob_inner_base() {}
     virtual prob_inner_base *clone() const = 0;
-    virtual fitness_vector fitness(const decision_vector &) const = 0;
-    virtual gradient_vector gradient(const decision_vector &) const = 0;
+    virtual vector_double fitness(const vector_double &) const = 0;
+    virtual vector_double gradient(const vector_double &) const = 0;
     virtual bool has_gradient() const = 0;
-    virtual fitness_vector::size_type get_nf() const = 0;
-    virtual decision_vector::size_type get_n() const = 0;
-    virtual std::pair<decision_vector,decision_vector> get_bounds() const = 0;
-    virtual decision_vector::size_type get_nec() const = 0;
-    virtual decision_vector::size_type get_nic() const = 0;
+    virtual vector_double::size_type get_nf() const = 0;
+    virtual vector_double::size_type get_n() const = 0;
+    virtual std::pair<vector_double,vector_double> get_bounds() const = 0;
+    virtual vector_double::size_type get_nec() const = 0;
+    virtual vector_double::size_type get_nic() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string extra_info() const = 0;
     template <typename Archive>
@@ -74,32 +74,32 @@ struct prob_inner: prob_inner_base
         return ::new prob_inner<T>(m_value);
     }
     // Mandatory methods.
-    virtual fitness_vector fitness(const decision_vector &dv) const override final
+    virtual vector_double fitness(const vector_double &dv) const override final
     {
         return m_value.fitness(dv);
     }
-    virtual fitness_vector::size_type get_nf() const override final
+    virtual vector_double::size_type get_nf() const override final
     {
         return m_value.get_nf();
     }
-    virtual decision_vector::size_type get_n() const override final
+    virtual vector_double::size_type get_n() const override final
     {
         return m_value.get_n();
     }
-    virtual std::pair<decision_vector,decision_vector> get_bounds() const override final
+    virtual std::pair<vector_double,vector_double> get_bounds() const override final
     {
         return m_value.get_bounds();
     }
     // Optional methods.
     template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value,int>::type = 0>
-    static gradient_vector gradient_impl(U &value, const decision_vector &dv)
+    static vector_double gradient_impl(U &value, const vector_double &dv)
     {
         return value.gradient(dv);
     }
     template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value,int>::type = 0>
-    static gradient_vector gradient_impl(U &, const decision_vector &)
+    static vector_double gradient_impl(U &, const vector_double &)
     {
-        pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\nA function with prototype gradient_vector gradient(const decision_vector &x) was expected.");
+        pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\nA function with prototype vector_double gradient(const vector_double &x) was expected.");
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value,int>::type = 0>
     static bool has_gradient_impl(U &)
@@ -130,22 +130,22 @@ struct prob_inner: prob_inner_base
         }
     }
     template <typename U, typename std::enable_if<has_constraints<U>::value,int>::type = 0>
-    static decision_vector::size_type get_nec_impl(const U &value)
+    static vector_double::size_type get_nec_impl(const U &value)
     {
         return value.get_nec();
     }
     template <typename U, typename std::enable_if<!has_constraints<U>::value,int>::type = 0>
-    static decision_vector::size_type get_nec_impl(const U &)
+    static vector_double::size_type get_nec_impl(const U &)
     {
         return 0;
     }
     template <typename U, typename std::enable_if<has_constraints<U>::value,int>::type = 0>
-    static decision_vector::size_type get_nic_impl(const U &value)
+    static vector_double::size_type get_nic_impl(const U &value)
     {
         return value.get_nic();
     }
     template <typename U, typename std::enable_if<!has_constraints<U>::value,int>::type = 0>
-    static decision_vector::size_type get_nic_impl(const U &)
+    static vector_double::size_type get_nic_impl(const U &)
     {
         return 0;
     }
@@ -169,7 +169,7 @@ struct prob_inner: prob_inner_base
     {
         return "";
     }
-    virtual gradient_vector gradient(const decision_vector &dv) const override final
+    virtual vector_double gradient(const vector_double &dv) const override final
     {
         return gradient_impl(m_value, dv);
     }
@@ -181,11 +181,11 @@ struct prob_inner: prob_inner_base
     {
         return set_sparsity_impl(m_value);
     }
-    virtual decision_vector::size_type get_nec() const override final
+    virtual vector_double::size_type get_nec() const override final
     {
         return get_nec_impl(m_value);
     }
-    virtual decision_vector::size_type get_nic() const override final
+    virtual vector_double::size_type get_nic() const override final
     {
         return get_nic_impl(m_value);
     }
@@ -257,25 +257,25 @@ class problem
             return extract<T>();
         }
 
-        fitness_vector fitness(const decision_vector &dv)
+        vector_double fitness(const vector_double &dv)
         {
             // 1 - checks the decision vector
             check_decision_vector(dv);
             // 2 - computes the fitness
-            fitness_vector retval(m_ptr->fitness(dv));
-            // 3 - checks the decision vector
+            vector_double retval(m_ptr->fitness(dv));
+            // 3 - checks the fitness vector
             check_fitness_vector(retval);
             // 4 - increments fevals
             ++m_fevals;
             return retval;
         }
-        gradient_vector gradient(const decision_vector &dv) const
+        vector_double gradient(const vector_double &dv) const
         {
             // 1 - checks the decision vector
             check_decision_vector(dv);
             // 2 - compute the gradients
-            gradient_vector retval(m_ptr->gradient(dv));
-            // 3 - checks the decision vector
+            vector_double retval(m_ptr->gradient(dv));
+            // 3 - checks the gradient vector
             check_gradient_vector(retval);
             return retval;
         }
@@ -287,23 +287,23 @@ class problem
         {
             return m_ptr->m_sparsity;
         } 
-        fitness_vector::size_type get_nf() const
+        vector_double::size_type get_nf() const
         {
             return m_ptr->get_nf();
         }
-        decision_vector::size_type get_n() const
+        vector_double::size_type get_n() const
         {
             return m_ptr->get_n();
         }
-        std::pair<decision_vector, decision_vector> get_bounds() const
+        std::pair<vector_double, vector_double> get_bounds() const
         {
             return m_ptr->get_bounds();
         }
-        decision_vector::size_type get_nec() const
+        vector_double::size_type get_nec() const
         {
             return m_ptr->get_nec();
         }
-        decision_vector::size_type get_nic() const
+        vector_double::size_type get_nic() const
         {
             return m_ptr->get_nic();
         }
@@ -357,7 +357,7 @@ class problem
         }
 
     private:
-        void check_decision_vector(const decision_vector &dv) const
+        void check_decision_vector(const vector_double &dv) const
         {
             // 1 - check decision vector for length consistency
             if (dv.size()!=get_n()) {
@@ -367,7 +367,7 @@ class problem
             // is in the bounds. At the moment not implemented
         }
 
-        void check_fitness_vector(const fitness_vector &f) const
+        void check_fitness_vector(const vector_double &f) const
         {
             // Checks dimension of returned fitness
             if (f.size()!=get_nf()) {
@@ -375,7 +375,7 @@ class problem
             }
         }
 
-        void check_gradient_vector(const gradient_vector &gr) const
+        void check_gradient_vector(const vector_double &gr) const
         {
             // Checks that the gradient vector returned has the same dimensions of the sparsity_pattern
             if (gr.size()!=m_ptr->m_sparsity.size()) {
