@@ -22,33 +22,29 @@ using namespace pagmo;
 struct example0
 {
     // Mandatory, computes ... well ... the fitness
-    fitness_vector fitness(const decision_vector &x) const
+    vector_double fitness(const vector_double &x) const
     {
-        fitness_vector retval(1);
-        retval[0] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3];
-        return retval;
+        return {x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3]};
     }
 
     // Mandatory, returns the dimension of the decision vector,
     // in this case fixed to 4
-    decision_vector::size_type get_n() const
+    vector_double::size_type get_n() const
     {
         return 4u;
     }
 
     // Mandatory, returns the dimension of the decision vector,
     // in this case fixed to 1 (single objective)
-    fitness_vector::size_type get_nf() const
+    vector_double::size_type get_nf() const
     {
         return 1u;
     }
     
     // Mandatory, returns the box-bounds
-    std::pair<decision_vector, decision_vector> get_bounds() const
+    std::pair<vector_double, vector_double> get_bounds() const
     {
-        decision_vector lb{-10,-10,-10,-10};
-        decision_vector ub{ 10, 10, 10, 10};
-        return std::pair<decision_vector, decision_vector>(std::move(lb), std::move(ub));
+        return {{-10,-10,-10,-10},{10,10,10,10}};
     }
 
     // Optional, provides a name for the problem overrding the default name
@@ -68,9 +64,9 @@ struct example0
     
     // Optional methods-data can also be accessed later via 
     // the problem::extract() method
-    std::vector<decision_vector> best_known() const
+    std::vector<vector_double> best_known() const
     {
-        return std::vector<decision_vector>{decision_vector{0,0,0,0}};
+        return {{0,0,0,0}};
     }
 
 };
