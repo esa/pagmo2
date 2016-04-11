@@ -71,7 +71,7 @@ struct prob_inner: prob_inner_base
     }
     virtual prob_inner_base *clone() const override final
     {
-        return ::new prob_inner<T>(m_value);
+        return ::new prob_inner(m_value);
     }
     // Mandatory methods.
     virtual vector_double fitness(const vector_double &dv) const override final
