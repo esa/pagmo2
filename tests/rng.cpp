@@ -17,23 +17,23 @@ BOOST_AUTO_TEST_CASE(set_seed_and_next)
 	// right after the same seed is set and different otherwise.
 
 	// We choose two seeds 
-	details::random_engine_type::result_type seed{0u};
-	details::random_engine_type::result_type seed2{1u};
+	detail::random_engine_type::result_type seed{0u};
+	detail::random_engine_type::result_type seed2{1u};
 
 	// Length of the pseudo-random sequence tested 
 	unsigned int N = 10000u;
 
 	// We generate three pseudo random sequences, two with the same seed
 	random_device::set_seed(seed);
-	std::vector<details::random_engine_type::result_type> prs1;
+	std::vector<detail::random_engine_type::result_type> prs1;
 	std::generate_n(std::back_inserter(prs1),N,random_device::next);	
 
 	random_device::set_seed(seed);
-	std::vector<details::random_engine_type::result_type> prs2;
+	std::vector<detail::random_engine_type::result_type> prs2;
 	std::generate_n(std::back_inserter(prs2),N,random_device::next);
 
 	random_device::set_seed(seed2);
-	std::vector<details::random_engine_type::result_type> prs3;
+	std::vector<detail::random_engine_type::result_type> prs3;
 	std::generate_n(std::back_inserter(prs3),N,random_device::next);
 
 	// We check that prs1 and prs2 are equal, since the seed was the same
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(set_seed_and_next)
 BOOST_AUTO_TEST_CASE(data_races_test)
 {
 	unsigned int N = 10000u;
-	std::vector<details::random_engine_type::result_type> prs4, prs5;
+	std::vector<detail::random_engine_type::result_type> prs4, prs5;
 	std::thread t1([&]() {std::generate_n(std::back_inserter(prs4),N,random_device::next);});
 	std::thread t2([&]() {std::generate_n(std::back_inserter(prs5),N,random_device::next);});
 	t1.join();

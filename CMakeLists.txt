@@ -23,6 +23,8 @@ option(BUILD_TUTORIALS "Build tutorials." OFF)
 
 # Compiler setup.
 include(PAGMOCompilerLinkerSettings)
+message(STATUS "Current CXX flags: ${CMAKE_CXX_FLAGS}")
+message(STATUS "Current CXX debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
 
 if(BUILD_TESTS)
     # Boost unit test library.
