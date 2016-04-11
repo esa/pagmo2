@@ -144,6 +144,6 @@ class has_sparsity: detail::sfinae_types
 template <typename T>
 const bool has_sparsity<T>::value;
 
-}
+} // namespace pagmo
 
 #endif

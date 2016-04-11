@@ -27,8 +27,9 @@ struct prob_inner_base
 {
     virtual ~prob_inner_base() {}
     virtual prob_inner_base *clone() const = 0;
-    virtual fitness_vector fitness(const decision_vector &) = 0;
-    virtual gradient_vector gradient(const decision_vector &) = 0;
+    virtual fitness_vector fitness(const decision_vector &) const = 0;
+    virtual gradient_vector gradient(const decision_vector &) const = 0;
+    virtual bool has_gradient() const = 0;
     virtual fitness_vector::size_type get_nf() const = 0;
     virtual decision_vector::size_type get_n() const = 0;
     virtual std::pair<decision_vector,decision_vector> get_bounds() const = 0;
@@ -73,7 +74,7 @@ struct prob_inner: prob_inner_base
         return ::new prob_inner<T>(m_value);
     }
     // Mandatory methods.
-    virtual fitness_vector fitness(const decision_vector &dv) override final
+    virtual fitness_vector fitness(const decision_vector &dv) const override final
     {
         return m_value.fitness(dv);
     }
@@ -90,15 +91,25 @@ struct prob_inner: prob_inner_base
         return m_value.get_bounds();
     }
     // Optional methods.
-    template <typename U, typename std::enable_if<has_gradient<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value,int>::type = 0>
     static gradient_vector gradient_impl(U &value, const decision_vector &dv)
     {
         return value.gradient(dv);
     }
-    template <typename U, typename std::enable_if<!has_gradient<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value,int>::type = 0>
     static gradient_vector gradient_impl(U &, const decision_vector &)
     {
         pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\nA function with prototype gradient_vector gradient(const decision_vector &x) was expected.");
+    }
+    template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value,int>::type = 0>
+    static bool has_gradient_impl(U &)
+    {
+       return true;
+    }
+    template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value,int>::type = 0>
+    static bool has_gradient_impl(U &)
+    {
+       return false;
     }
     template <typename U, typename std::enable_if<has_sparsity<U>::value,int>::type = 0>
     void set_sparsity_impl(const U &value)
@@ -158,10 +169,13 @@ struct prob_inner: prob_inner_base
     {
         return "";
     }
-
-    virtual gradient_vector gradient(const decision_vector &dv) override final
+    virtual gradient_vector gradient(const decision_vector &dv) const override final
     {
         return gradient_impl(m_value, dv);
+    }
+    virtual bool has_gradient() const override final
+    {
+        return has_gradient_impl(m_value);
     }
     void set_sparsity()
     {
