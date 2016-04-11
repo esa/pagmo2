@@ -130,10 +130,10 @@ const bool has_gradient<T>::value;
 
 /// Detect sparsity() availability
 template <typename T>
-class has_sparsity: detail::sfinae_types
+class has_gradient_sparsity: detail::sfinae_types
 {
         template <typename U>
-        static auto test0(const U &p) -> decltype(p.sparsity());
+        static auto test0(const U &p) -> decltype(p.gradient_sparsity());
         static no test0(...);
         static const bool implementation_defined =
             std::is_same<sparsity_pattern,decltype(test0(std::declval<const T &>()))>::value;
@@ -142,7 +142,7 @@ class has_sparsity: detail::sfinae_types
 };
 
 template <typename T>
-const bool has_sparsity<T>::value;
+const bool has_gradient_sparsity<T>::value;
 
 } // namespace pagmo
 

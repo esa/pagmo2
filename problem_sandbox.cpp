@@ -43,13 +43,33 @@ struct example0_g
     // that is a std::vector<std::pair<long,long>> containing pairs
     // (i,j) indicating that the j-th variable "influences" the i-th component
     // in the fitness. When not implemented a dense problem is assumed
-    sparsity_pattern sparsity() const
+    sparsity_pattern gradient_sparsity() const
     {
         sparsity_pattern retval;
         for (auto i=0u; i<4u; ++i) {
             retval.push_back(std::pair<long, long>(0, i));
         }
         return retval;
+    }
+
+    // Optional, computes the Hessians of the various fitness
+    // components. That is d^2fk/dxidxj. In this case we have only
+    // one fitness component, thus we only need one Hessian which is
+    // also sparse as most of its components are 0.
+    std::vector<vector_double> hessians(const vector_double &) const
+    {
+        vector_double Hf0(4);
+        Hf0[0] = 2.;
+        Hf0[1] = 2.;
+        Hf0[2] = 2.;
+        Hf0[3] = 2.;
+        return {Hf0};
+    }
+
+    // Optional, computes the sparsity of the hessians.
+    std::vector<sparsity_pattern> hessians_sparsity() const
+    {
+        return {{{0,0},{1,1},{2,2},{3,3}}};
     }
 
     // Mandatory, returns the dimension of the decision vector,
@@ -94,7 +114,6 @@ struct example0_g
     {
         return {{0,0,0,0}};
     }
-
 };
 
 int main()
@@ -127,10 +146,9 @@ int main()
     // The evaluation counter is now ... well ... 1
     pagmo::print("gevals: ", p0.get_gevals(), "\n\n");
 
-    pagmo::print("Sparsity pattern: ", p0.sparsity(), "\n\n");
+    pagmo::print("Sparsity pattern: ", p0.gradient_sparsity(), "\n\n");
 
     // While our example0 struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface
     pagmo::print("Accessing best_known: ", p0.extract<example0_g>()->best_known(), "\n");
- 
 }

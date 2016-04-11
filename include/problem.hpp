@@ -29,6 +29,7 @@ struct prob_inner_base
     virtual prob_inner_base *clone() const = 0;
     virtual vector_double fitness(const vector_double &) const = 0;
     virtual vector_double gradient(const vector_double &) const = 0;
+    virtual sparsity_pattern gradient_sparsity() const = 0;
     virtual bool has_gradient() const = 0;
     virtual vector_double::size_type get_nf() const = 0;
     virtual vector_double::size_type get_n() const = 0;
@@ -38,11 +39,7 @@ struct prob_inner_base
     virtual std::string get_name() const = 0;
     virtual std::string extra_info() const = 0;
     template <typename Archive>
-    void serialize(Archive &ar)
-    {
-        ar(m_sparsity);
-    }
-    sparsity_pattern m_sparsity;
+    void serialize(Archive &) {}
 };
 
 template <typename T>
@@ -61,14 +58,8 @@ struct prob_inner: prob_inner_base
     static_assert(has_dimensions_bounds<T>::value,
         "A problem must provide getters for its dimension and bounds.");
     prob_inner() = default;
-    explicit prob_inner(T &&x):m_value(std::move(x))
-    {
-        set_sparsity();
-    }
-    explicit prob_inner(const T &x):m_value(x)
-    {
-        set_sparsity();
-    }
+    explicit prob_inner(T &&x):m_value(std::move(x)) {}
+    explicit prob_inner(const T &x):m_value(x) {}
     virtual prob_inner_base *clone() const override final
     {
         return ::new prob_inner(m_value);
@@ -111,13 +102,13 @@ struct prob_inner: prob_inner_base
     {
        return false;
     }
-    template <typename U, typename std::enable_if<has_sparsity<U>::value,int>::type = 0>
-    void set_sparsity_impl(const U &value)
+    template <typename U, typename std::enable_if<has_gradient_sparsity<U>::value,int>::type = 0>
+    static sparsity_pattern gradient_sparsity_impl(const U &value)
     {
-        m_sparsity = value.sparsity();
+        return value.gradient_sparsity();
     }
-    template <typename U, typename std::enable_if<!has_sparsity<U>::value,int>::type = 0>
-    void set_sparsity_impl(const U &)
+    template <typename U, typename std::enable_if<!has_gradient_sparsity<U>::value,int>::type = 0>
+    sparsity_pattern gradient_sparsity_impl(const U &) const
     {
         // By default a problem is fully sparse
         auto dim = get_n(); 
@@ -125,9 +116,10 @@ struct prob_inner: prob_inner_base
         sparsity_pattern retval;
         for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
             for (decltype(dim) i = 0u; i<dim; ++i) {
-               m_sparsity.push_back(std::pair<long, long>(j, i));
+               retval.push_back(std::pair<long, long>(j, i));
             }
         }
+        return retval;
     }
     template <typename U, typename std::enable_if<has_constraints<U>::value,int>::type = 0>
     static vector_double::size_type get_nec_impl(const U &value)
@@ -177,9 +169,9 @@ struct prob_inner: prob_inner_base
     {
         return has_gradient_impl(m_value);
     }
-    void set_sparsity()
+    virtual sparsity_pattern gradient_sparsity() const override final
     {
-        return set_sparsity_impl(m_value);
+        return gradient_sparsity_impl(m_value);
     }
     virtual vector_double::size_type get_nec() const override final
     {
@@ -286,9 +278,9 @@ class problem
         {
             return m_ptr->has_gradient();
         } 
-        const sparsity_pattern& sparsity() const
+        sparsity_pattern gradient_sparsity() const
         {
-            return m_ptr->m_sparsity;
+            return m_ptr->gradient_sparsity();
         } 
         vector_double::size_type get_nf() const
         {
@@ -386,8 +378,8 @@ class problem
         void check_gradient_vector(const vector_double &gr) const
         {
             // Checks that the gradient vector returned has the same dimensions of the sparsity_pattern
-            if (gr.size()!=m_ptr->m_sparsity.size()) {
-                pagmo_throw(std::invalid_argument,"Gradients returned: " + std::to_string(gr.size()) + ", should be " + std::to_string(m_ptr->m_sparsity.size()));
+            if (gr.size()!=gradient_sparsity().size()) {
+                pagmo_throw(std::invalid_argument,"Gradients returned: " + std::to_string(gr.size()) + ", should be " + std::to_string(gradient_sparsity().size()));
             }
         }
 
