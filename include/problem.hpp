@@ -71,7 +71,7 @@ struct prob_inner: prob_inner_base
     }
     virtual prob_inner_base *clone() const override final
     {
-        return ::new prob_inner<T>(m_value);
+        return ::new prob_inner(m_value);
     }
     // Mandatory methods.
     virtual vector_double fitness(const vector_double &dv) const override final
@@ -239,7 +239,8 @@ class problem
             }
         }
         problem(const problem &other):m_ptr(other.m_ptr->clone()),m_fevals(0u),m_gevals(0u) {}
-        problem(problem &&other):m_ptr(std::move(other.m_ptr)),m_fevals(other.m_fevals.load()) {}
+        problem(problem &&other):m_ptr(std::move(other.m_ptr)),m_fevals(other.m_fevals.load()),
+            m_gevals(other.m_gevals.load()) {}
 
         template <typename T>
         const T *extract() const
