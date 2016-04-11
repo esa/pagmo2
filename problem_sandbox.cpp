@@ -29,21 +29,14 @@ struct example0_g
     // Mandatory, computes ... well ... the fitness
     vector_double fitness(const vector_double &x) const
     {
-        vector_double retval(1);
-        retval[0] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3];
-        return retval;
+        return {x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3]};
     }
 
     // Optional, computes the gradient. In this simple case
     // df/dx0, df/dx1, df/dx2, df/dx3
     vector_double gradient(const vector_double &x) const
     {
-        vector_double retval(4,0.);
-        retval[0] = 2 * x[0];
-        retval[1] = 2 * x[1];
-        retval[2] = 2 * x[2];
-        retval[3] = 2 * x[3];
-        return retval;
+        return {2 * x[0],2 * x[1], 2 * x[2], 2 * x[3]};
     }
 
     sparsity_pattern dsparsity() const
