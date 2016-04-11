@@ -239,7 +239,8 @@ class problem
             }
         }
         problem(const problem &other):m_ptr(other.m_ptr->clone()),m_fevals(0u),m_gevals(0u) {}
-        problem(problem &&other):m_ptr(std::move(other.m_ptr)),m_fevals(other.m_fevals.load()) {}
+        problem(problem &&other):m_ptr(std::move(other.m_ptr)),m_fevals(other.m_fevals.load()),
+            m_gevals(other.m_gevals.load()) {}
 
         template <typename T>
         const T *extract() const
