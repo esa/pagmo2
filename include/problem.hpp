@@ -382,14 +382,7 @@ class problem
         vector_double::size_type get_nic() const
         {
             return m_ptr->get_nic();
-        }
-       
-        template <typename Archive>
-        void serialize(Archive &ar)
-        { 
-            ar(m_ptr,m_fevals);
-        }
-
+        }       
         unsigned long long get_fevals() const
         {
             return m_fevals.load();
@@ -440,6 +433,12 @@ class problem
                 stream(s, "\nExtra info:\n", extra_str, '\n');
             }
             return s.str();
+        }
+
+        template <typename Archive>
+        void serialize(Archive &ar)
+        { 
+            ar(m_ptr,m_fevals, m_gs_dim, m_hs_dim);
         }
 
     private:
