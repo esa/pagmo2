@@ -151,9 +151,9 @@ struct example0_g
     
     // Optional methods-data can also be accessed later via 
     // the problem::extract() method
-    std::vector<vector_double> best_known() const
+    vector_double best_known() const
     {
-        return {{0,0,0,0}};
+        return {0,0,0,0};
     }
 };
 
@@ -174,7 +174,7 @@ int main()
     // is set to zero. Checking its value is easy
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
     // Computing one fitness
-    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness(vector_double{2,2,2,2}), "\n");
+    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("fevals: ", p0.get_fevals(), "\n\n");
 
@@ -183,7 +183,7 @@ int main()
     pagmo::print("gevals: ", p0.get_gevals(), "\n");
     // Computing one gradient
     pagmo::print("gradient implementation detected?: ", p0.has_gradient(), '\n');
-    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient(vector_double{2,2,2,2}), "\n");
+    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient({2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("gevals: ", p0.get_gevals(), "\n\n");
 
@@ -192,7 +192,7 @@ int main()
     pagmo::print("hevals: ", p0.get_hevals(), "\n");
     // Computing one gradient
     pagmo::print("hessians implementation detected?: ", p0.has_hessians(), '\n');
-    pagmo::print("calling hessians in x=[2,2,2,2]: ", p0.hessians(vector_double{2,2,2,2}), "\n");
+    pagmo::print("calling hessians in x=[2,2,2,2]: ", p0.hessians({2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("hevals: ", p0.get_hevals(), "\n\n");
 

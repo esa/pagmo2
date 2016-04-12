@@ -94,9 +94,9 @@ struct hock_schittkowsky_71
     }
     
     // Optimal solution 
-    std::vector<vector_double> best_known() const
+    vector_double best_known() const
     {
-        return {{1.,4.74299963,3.82114998,1.37940829}};
+        return {1.,4.74299963,3.82114998,1.37940829};
     }
 
     // Serialization

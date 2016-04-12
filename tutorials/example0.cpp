@@ -64,9 +64,9 @@ struct example0
     
     // Optional methods-data can also be accessed later via 
     // the problem::extract() method
-    std::vector<vector_double> best_known() const
+    vector_double best_known() const
     {
-        return {{0,0,0,0}};
+        return {0.,0.,0.,0.};
     }
 
 };

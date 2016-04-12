@@ -43,7 +43,7 @@ int main()
     // is set to zero. Checking its value is easy
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
     // Computing one fitness
-    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness(vector_double{2,2,2,2}), "\n");
+    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("fevals: ", p0.get_fevals(), "\n\n");
 
@@ -52,7 +52,7 @@ int main()
     pagmo::print("gevals: ", p0.get_gevals(), "\n");
     // Computing one gradient
     pagmo::print("gradient implementation detected?: ", p0.has_gradient(), '\n');
-    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient(vector_double{2,2,2,2}), "\n");
+    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient({2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("gevals: ", p0.get_gevals(), "\n\n");
 
@@ -61,7 +61,7 @@ int main()
     pagmo::print("hevals: ", p0.get_hevals(), "\n");
     // Computing one gradient
     pagmo::print("hessians implementation detected?: ", p0.has_hessians(), '\n');
-    pagmo::print("calling hessians in x=[2,2,2,2]: ", p0.hessians(vector_double{2,2,2,2}), "\n");
+    pagmo::print("calling hessians in x=[2,2,2,2]: ", p0.hessians({2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("hevals: ", p0.get_hevals(), "\n\n");
 
@@ -70,5 +70,9 @@ int main()
 
     // While our example0 struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface
-    pagmo::print("Accessing best_known: ", p0.extract<hock_schittkowsky_71>()->best_known(), "\n");
+    auto best_x = p0.extract<hock_schittkowsky_71>()->best_known();
+    pagmo::print("Accessing best_known: ", best_x, "\n");
+
+    // Evaluating fitness in best_known
+    pagmo::print("calling fitness in best_x: ", p0.fitness(best_x), "\n");
 }
