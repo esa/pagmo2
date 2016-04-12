@@ -133,7 +133,7 @@ struct prob_inner: prob_inner_base
         sparsity_pattern retval;
         for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
             for (decltype(dim) i = 0u; i<dim; ++i) {
-               retval.push_back(std::pair<long, long>(j, i));
+               retval.push_back({j, i});
             }
         }
         return retval;
@@ -578,7 +578,7 @@ std::ostream &operator<<(std::ostream &os, const problem &p)
 {
     os << p.human_readable() << '\n';
     return os;
-}
+};
 
 } // namespaces
 
