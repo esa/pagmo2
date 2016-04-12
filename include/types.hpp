@@ -7,7 +7,7 @@ namespace pagmo
 {
 
 using vector_double = std::vector<double>;
-using sparsity_pattern = std::vector<std::pair<unsigned long,unsigned long>>;
+using sparsity_pattern = std::vector<std::pair<vector_double::size_type,vector_double::size_type>>;
 
 } // namespaces
 
