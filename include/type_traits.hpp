@@ -128,7 +128,7 @@ class has_gradient: detail::sfinae_types
 template <typename T>
 const bool has_gradient<T>::value;
 
-/// Detect sparsity() availability
+/// Detect gradient_sparsity() availability
 template <typename T>
 class has_gradient_sparsity: detail::sfinae_types
 {
@@ -143,6 +143,38 @@ class has_gradient_sparsity: detail::sfinae_types
 
 template <typename T>
 const bool has_gradient_sparsity<T>::value;
+
+/// Detect hessians() availability
+template <typename T>
+class has_hessians: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.hessians(std::declval<const vector_double &>()));
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<std::vector<vector_double>,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_hessians<T>::value;
+
+/// Detect hessians_sparsity() availability
+template <typename T>
+class has_hessians_sparsity: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.hessians_sparsity());
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<std::vector<sparsity_pattern>,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_hessians_sparsity<T>::value;
 
 } // namespace pagmo
 

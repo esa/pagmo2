@@ -95,7 +95,8 @@ struct example0_g
         std::ostringstream s;
         s << "This is a simple toy problem with one fitness, " << '\n';
         s << "no constraint and a fixed dimension of 4." << "\n";
-        s << "The fitness function gradients are also implemented" << "\n";
+        s << "The fitness function gradient and hessians are also implemented" << "\n";
+        s << "The sparsity of the gradient and hessians is user provided" << "\n";
         return s.str();
     }
     
@@ -137,7 +138,17 @@ int main()
     // The evaluation counter is now ... well ... 1
     pagmo::print("gevals: ", p0.get_gevals(), "\n\n");
 
-    pagmo::print("Sparsity pattern: ", p0.gradient_sparsity(), "\n\n");
+    // As soon as a problem its created its hessian evaluation counter
+    // is set to zero. Checking its value is easy
+    pagmo::print("hevals: ", p0.get_hevals(), "\n");
+    // Computing one gradient
+    pagmo::print("hessians implementation detected?: ", p0.has_hessians(), '\n');
+    pagmo::print("calling hessians in x=[2,2,2,2]: ", p0.hessians(vector_double{2,2,2,2}), "\n");
+    // The evaluation counter is now ... well ... 1
+    pagmo::print("hevals: ", p0.get_hevals(), "\n\n");
+
+    pagmo::print("Gradient sparsity pattern: ", p0.gradient_sparsity(), "\n");
+    pagmo::print("Hessians sparsity pattern: ", p0.hessians_sparsity(), "\n\n");
 
     // While our example0 struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface

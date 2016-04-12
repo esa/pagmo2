@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#define PAGMO_MAX_OUTPUT_LENGTH 5u
+#define PAGMO_MAX_OUTPUT_LENGTH 10u
 
 namespace pagmo
 {
@@ -34,7 +34,7 @@ template <typename T>
 inline void stream_impl(std::ostream &os, const std::vector<T> &v)
 {
     auto len = v.size();
-    if (len < PAGMO_MAX_OUTPUT_LENGTH) {
+    if (len <= PAGMO_MAX_OUTPUT_LENGTH) {
         os << '[';
         for (decltype(v.size()) i = 0u; i < v.size(); ++i) {
             stream(os, v[i]);
