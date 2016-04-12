@@ -28,7 +28,7 @@ class has_fitness: detail::sfinae_types
         static auto test0(const U &p) -> decltype(p.fitness(std::declval<const vector_double &>()));
         static no test0(...);
         template <typename U>
-        static auto test1(const U &p) -> decltype(p.get_nf());
+        static auto test1(const U &p) -> decltype(p.get_nobj());
         static no test1(...);
         static const bool implementation_defined =
             std::is_same<vector_double,decltype(test0(std::declval<const T &>()))>::value &&

@@ -9,7 +9,7 @@
 //
 // vector_double fitness(const vector_double &)
 // vector_double::size_type get_n() const
-// vector_double::size_type get_nf() const
+// vector_double::size_type get_nobjz() const
 // std::pair<vector_double, vector_double> get_bounds() const
 //
 // And add a method:
@@ -20,103 +20,21 @@
 #include "include/io.hpp"
 #include "include/problem.hpp"
 #include "include/types.hpp"
-
+#include "include/problems/hock_schittkowsky_71.hpp"
 
 
 using namespace pagmo;
-struct example0_g
-{
-    // Mandatory, computes ... well ... the fitness
-    vector_double fitness(const vector_double &x) const
-    {
-        return {x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3]};
-    }
 
-    // Optional, computes the gradient. In this simple case
-    // df0/dx0, df0/dx1, df0/dx2, df0/dx3
-    vector_double gradient(const vector_double &x) const
-    {
-        return {2 * x[0],2 * x[1], 2 * x[2], 2 * x[3]};
-    }
-
-    // Optional. Returns the sparsity of the problem as a sparsity_pattern
-    // that is a std::vector<std::pair<long,long>> containing pairs
-    // (i,j) indicating that the j-th variable "influences" the i-th component
-    // in the fitness. When not implemented a dense problem is assumed
-    sparsity_pattern gradient_sparsity() const
-    {
-        return {{0,0},{0,1},{0,2},{0,3}};
-    }
-
-    // Optional, computes the Hessians of the various fitness
-    // components. That is d^2fk/dxidxj. In this case we have only
-    // one fitness component, thus we only need one Hessian which is
-    // also sparse as most of its components are 0.
-    std::vector<vector_double> hessians(const vector_double &) const
-    {
-        return {{2.,2.,2.,2.}};
-    }
-
-    // Optional, computes the sparsity of the hessians.
-    std::vector<sparsity_pattern> hessians_sparsity() const
-    {
-        return {{{0,0},{1,1},{2,2},{3,3}}};
-    }
-
-    // Mandatory, returns the dimension of the decision vector,
-    // in this case fixed to 4
-    vector_double::size_type get_n() const
-    {
-        return 4u;
-    }
-
-    // Mandatory, returns the dimension of the decision vector,
-    // in this case fixed to 1 (single objective)
-    vector_double::size_type get_nf() const
-    {
-        return 1u;
-    }
-    
-    // Mandatory, returns the box-bounds
-    std::pair<vector_double, vector_double> get_bounds() const
-    {
-        return {{-10,-10,-10,-10},{10,10,10,10}};
-    }
-
-    // Optional, provides a name for the problem overrding the default name
-    std::string get_name() const
-    {   
-        return std::string("My Problem");
-    }
-
-    // Optional, provides extra information that will be appended after
-    // the default stream operator
-    std::string extra_info() const {
-        std::ostringstream s;
-        s << "This is a simple toy problem with one fitness, " << '\n';
-        s << "no constraint and a fixed dimension of 4." << "\n";
-        s << "The fitness function gradient and hessians are also implemented" << "\n";
-        s << "The sparsity of the gradient and hessians is user provided" << "\n";
-        return s.str();
-    }
-    
-    // Optional methods-data can also be accessed later via 
-    // the problem::extract() method
-    std::vector<vector_double> best_known() const
-    {
-        return {{0,0,0,0}};
-    }
-};
 
 int main()
 {
     // Constructing a problem
-    problem p0{example0_g{}};
+    problem p0{hock_schittkowsky_71{}};
     // Streaming to screen the problem
     std::cout << p0 << '\n';
     // Getting its dimensions
     std::cout << "Calling the dimension getter: " << p0.get_n() << '\n';
-    std::cout << "Calling the fitness dimension getter: " << p0.get_nf() << '\n';
+    std::cout << "Calling the fitness dimension getter: " << p0.get_nobj() << '\n';
 
     // Getting the bounds via the pagmo::print eating also std containers
     pagmo::print("Calling the bounds getter: ", p0.get_bounds(), "\n\n");
@@ -152,5 +70,5 @@ int main()
 
     // While our example0 struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface
-    pagmo::print("Accessing best_known: ", p0.extract<example0_g>()->best_known(), "\n");
+    pagmo::print("Accessing best_known: ", p0.extract<hock_schittkowsky_71>()->best_known(), "\n");
 }

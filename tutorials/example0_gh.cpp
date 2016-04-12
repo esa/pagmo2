@@ -63,7 +63,7 @@
 // In this example we explicitly define the sparsity patterns as 
 // to clarify the above notation.
 
-
+#include <iostream>
 #include <string>
 #include <vector>
 

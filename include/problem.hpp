@@ -35,7 +35,7 @@ struct prob_inner_base
     virtual std::vector<vector_double> hessians(const vector_double &) const = 0;
     virtual std::vector<sparsity_pattern> hessians_sparsity() const = 0;
     virtual bool has_hessians() const = 0;
-    virtual vector_double::size_type get_nf() const = 0;
+    virtual vector_double::size_type get_nobj() const = 0;
     virtual vector_double::size_type get_n() const = 0;
     virtual std::pair<vector_double,vector_double> get_bounds() const = 0;
     virtual vector_double::size_type get_nec() const = 0;
@@ -73,9 +73,9 @@ struct prob_inner: prob_inner_base
     {
         return m_value.fitness(dv);
     }
-    virtual vector_double::size_type get_nf() const override final
+    virtual vector_double::size_type get_nobj() const override final
     {
-        return m_value.get_nf();
+        return m_value.get_nobj();
     }
     virtual vector_double::size_type get_n() const override final
     {
@@ -116,7 +116,7 @@ struct prob_inner: prob_inner_base
     {
         // By default a problem is dense
         auto dim = get_n(); 
-        auto f_dim = get_nf() + get_nec() + get_nic();        
+        auto f_dim = get_nobj() + get_nec() + get_nic();        
         sparsity_pattern retval;
         for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
             for (decltype(dim) i = 0u; i<dim; ++i) {
@@ -155,7 +155,7 @@ struct prob_inner: prob_inner_base
     {
         // By default a problem has dense hessians
         auto dim = get_n(); 
-        auto f_dim = get_nf() + get_nec() + get_nic();        
+        auto f_dim = get_nobj() + get_nec() + get_nic();        
         std::vector<sparsity_pattern> retval(f_dim);
         for (auto &Hs : retval) {
             for (decltype(dim) j = 0u; j<dim; ++j) {
@@ -363,9 +363,9 @@ class problem
         {
             return m_ptr->hessians_sparsity();
         } 
-        vector_double::size_type get_nf() const
+        vector_double::size_type get_nobj() const
         {
-            return m_ptr->get_nf();
+            return m_ptr->get_nobj();
         }
         vector_double::size_type get_n() const
         {
@@ -419,7 +419,7 @@ class problem
             s << "Problem name: " << get_name() << '\n';
             //const size_type size = get_dimension();
             s << "\tGlobal dimension:\t\t\t" << get_n() << '\n';
-            s << "\tFitness dimension:\t\t\t" << get_nf() << '\n';
+            s << "\tFitness dimension:\t\t\t" << get_nobj() << '\n';
             s << "\tEquality constraints dimension:\t\t" << get_nec() << '\n';
             s << "\tInequality constraints dimension:\t" << get_nic() << '\n';
             s << "\tLower bounds: ";
@@ -468,7 +468,7 @@ class problem
         {
             auto gs = gradient_sparsity();
             auto n = get_n();
-            auto nf = get_nf() + get_nec() + get_nic();
+            auto nf = get_nobj() + get_nec() + get_nic();
             // 1 - We check that the gradient sparsity pattern has
             // valid indexes.
             for (auto pair: gs) {
@@ -490,7 +490,7 @@ class problem
             auto hs = hessians_sparsity();
             // 1 - We check that a hessian sparsity is provided for each component
             // of the fitness 
-            auto nf = get_nf() + get_nec() + get_nic();
+            auto nf = get_nobj() + get_nec() + get_nic();
             if (hs.size()!=nf) {
                 pagmo_throw(std::invalid_argument,"Invalid dimension of the hessians_sparsity: " + std::to_string(hs.size()) + ", expected: " + std::to_string(nf));
             }
@@ -536,9 +536,10 @@ class problem
 
         void check_fitness_vector(const vector_double &f) const
         {
+            auto nf = get_nobj() + get_nec() + get_nic();
             // Checks dimension of returned fitness
-            if (f.size()!=get_nf()) {
-                pagmo_throw(std::invalid_argument,"Fitness length is: " + std::to_string(f.size()) + ", should be " + std::to_string(get_nf()));
+            if (f.size()!=nf) {
+                pagmo_throw(std::invalid_argument,"Fitness length is: " + std::to_string(f.size()) + ", should be " + std::to_string(nf));
             }
         }
 
