@@ -173,7 +173,7 @@ struct prob_inner: prob_inner_base
         for (auto &Hs : retval) {
             for (decltype(dim) j = 0u; j<dim; ++j) {
                 for (decltype(dim) i = 0u; i<=j; ++i) {
-                   Hs.push_back(std::pair<long, long>(j, i));
+                   Hs.push_back({j,i});
                 }
             }
         }
