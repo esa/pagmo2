@@ -273,20 +273,22 @@ class problem
             const auto &ub = bounds.second;
             // 1 - check lower bounds length
             if (lb.size()!=get_n()) {
-                pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) + ", should be " + std::to_string(get_n()));
+                pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) + ", expected " + std::to_string(get_n()));
             }
             // 2 - check upper bounds length
             if (ub.size()!=get_n()) {
-                pagmo_throw(std::invalid_argument,"Length of upper bounds vector is " + std::to_string(ub.size()) + ", should be " + std::to_string(get_n()));
+                pagmo_throw(std::invalid_argument,"Length of upper bounds vector is " + std::to_string(ub.size()) + ", expected " + std::to_string(get_n()));
             }
             // 3 - checks lower < upper for all values in lb, lb
             for (decltype(lb.size()) i=0u; i < lb.size(); ++i) {
                 if (lb[i] > ub[i]) {
                     pagmo_throw(std::invalid_argument,"The lower bound at position " + std::to_string(i) + " is " + std::to_string(lb[i]) +
-                        "while the upper bound has the smaller value" + std::to_string(ub[i]) + "");
+                        " while the upper bound has the smaller value " + std::to_string(ub[i]));
                 }
             }
+            // 4 - checks that the sparsity contains reasonable numbers
             check_gradient_sparsity(); // here m_gs_dim is initialized
+            // 5 - checks that the hessians contain reasonable numbers
             check_hessians_sparsity(); // here m_hs_dim is initialized
         }
         problem(const problem &other):m_ptr(other.m_ptr->clone()),m_fevals(0u),m_gevals(0u),m_hevals(0u) {}
@@ -482,7 +484,7 @@ class problem
             }
 
             // 2 - We store the dimensions of the gradient sparsity pattern
-            // for future quick checks.
+            // as we will check that the returned gradient has this dimension
             m_gs_dim = gs.size();
         }
         void check_hessians_sparsity()

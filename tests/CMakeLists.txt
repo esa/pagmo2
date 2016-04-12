@@ -11,3 +11,4 @@ macro(ADD_PAGMO_TESTCASE arg1)
 endmacro()
 
 ADD_PAGMO_TESTCASE(rng)
+ADD_PAGMO_TESTCASE(problem)

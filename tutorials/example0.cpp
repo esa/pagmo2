@@ -36,7 +36,7 @@ struct example0
 
     // Mandatory, returns the dimension of the decision vector,
     // in this case fixed to 1 (single objective)
-    vector_double::size_type get_nf() const
+    vector_double::size_type get_nobj() const
     {
         return 1u;
     }
@@ -79,7 +79,7 @@ int main()
     std::cout << p0 << '\n';
     // Getting its dimensions
     std::cout << "Calling the dimension getter: " << p0.get_n() << '\n';
-    std::cout << "Calling the fitness dimension getter: " << p0.get_nf() << '\n';
+    std::cout << "Calling the fitness dimension getter: " << p0.get_nobj() << '\n';
 
     // Getting the bounds via the pagmo::print eating also std containers
     pagmo::print("Calling the bounds getter: ", p0.get_bounds(), "\n");
