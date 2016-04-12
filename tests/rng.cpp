@@ -17,8 +17,7 @@ BOOST_AUTO_TEST_CASE(set_seed_and_next)
     // right after the same seed is set and different otherwise.
 
     // We choose two seeds 
-    detail::random_engine_type::result_type seed{0u};
-    detail::random_engine_type::result_type seed2{1u};
+    unsigned seed{0u}, seed2{1u};
 
     // Length of the pseudo-random sequence tested 
     unsigned int N = 10000u;
