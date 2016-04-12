@@ -35,9 +35,7 @@ if(BUILD_TESTS)
     # Boost unit test library.
     find_package(Boost 1.55.0 REQUIRED COMPONENTS "unit_test_framework")
     include_directories(${Boost_INCLUDE_DIRS})
-    # Assemble all libraries and add the tests subdirectory.
-    # set(MANDATORY_LIBRARIES ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
-    #add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
+    add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
 endif()
 
 if(BUILD_TUTORIALS)

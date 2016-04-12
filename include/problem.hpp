@@ -583,7 +583,7 @@ std::ostream &operator<<(std::ostream &os, const problem &p)
 {
     os << p.human_readable() << '\n';
     return os;
-};
+}
 
 } // namespaces
 
