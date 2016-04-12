@@ -438,7 +438,7 @@ class problem
         template <typename Archive>
         void serialize(Archive &ar)
         { 
-            ar(m_ptr,m_fevals, m_gs_dim, m_hs_dim);
+            ar(m_ptr,m_fevals, m_gevals, m_hevals, m_gs_dim, m_hs_dim);
         }
 
     private:

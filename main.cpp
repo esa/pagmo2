@@ -89,6 +89,7 @@ struct example0_g
 
 int main()
 {
+    {
     algorithm a{algorithms::null{}};
     std::stringstream ss;
     {
@@ -101,6 +102,7 @@ int main()
     iarchive(a);
     }    
     a.evolve();
+    }
 
     problem p{example0_g{}};std::stringstream ss;
     {
