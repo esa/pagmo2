@@ -85,24 +85,29 @@ struct example0_g
     {
         return {{0,0,0,0}};
     }
+    
+    template <typename Archive>
+    void serialize(Archive &) {}
 };
+
+PAGMO_REGISTER_PROBLEM(example0_g)
 
 int main()
 {
-    {
-    algorithm a{algorithms::null{}};
-    std::stringstream ss;
-    {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(a);
-    }
-    std::cout << ss.str() << '\n';
-    {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(a);
-    }    
-    a.evolve();
-    }
+//     {
+//     algorithm a{algorithms::null{}};
+//     std::stringstream ss;
+//     {
+//     cereal::JSONOutputArchive oarchive(ss);
+//     oarchive(a);
+//     }
+//     std::cout << ss.str() << '\n';
+//     {
+//     cereal::JSONInputArchive iarchive(ss);
+//     iarchive(a);
+//     }    
+//     a.evolve();
+//     }
 
     problem p{example0_g{}};std::stringstream ss;
     {

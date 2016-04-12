@@ -436,9 +436,22 @@ class problem
         }
 
         template <typename Archive>
-        void serialize(Archive &ar)
+        void save(Archive &ar) const
         { 
-            ar(m_ptr,m_fevals, m_gevals, m_hevals, m_gs_dim, m_hs_dim);
+            ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(), m_gs_dim, m_hs_dim);
+        }
+        template <typename Archive>
+        void load(Archive &ar)
+        { 
+            ar(m_ptr);
+            unsigned long long tmp;
+            ar(tmp);
+            m_fevals.store(tmp);
+            ar(tmp);
+            m_gevals.store(tmp);
+            ar(tmp);
+            m_hevals.store(tmp);
+            ar(m_gs_dim,m_hs_dim);
         }
 
     private:

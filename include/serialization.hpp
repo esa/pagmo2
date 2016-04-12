@@ -10,8 +10,10 @@
 #include "external/cereal/archives/binary.hpp"
 #include "external/cereal/archives/json.hpp"
 #include "external/cereal/archives/portable_binary.hpp"
+#include "external/cereal/types/common.hpp"
 #include "external/cereal/types/memory.hpp"
 #include "external/cereal/types/polymorphic.hpp"
+#include "external/cereal/types/vector.hpp"
 
 #if defined(__clang__) || defined(__GNUC__)
     #pragma GCC diagnostic pop
