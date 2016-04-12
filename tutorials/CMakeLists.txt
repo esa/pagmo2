@@ -5,3 +5,4 @@ macro(ADD_PAGMO_TUTORIAL arg1)
 endmacro()
 
 ADD_PAGMO_TUTORIAL(example0)
+ADD_PAGMO_TUTORIAL(example0_gh)
