@@ -1,10 +1,10 @@
 #ifndef PAGMO_PROBLEM_HPP
 #define PAGMO_PROBLEM_HPP
 
+#include <algorithm>
 #include <atomic>
 #include <iostream>
 #include <memory>
-#include <set>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -268,9 +268,11 @@ struct prob_inner: prob_inner_base
     T m_value;
 private:
     template <typename U>
-    bool all_unique(std::vector<U> X) {
-      std::set<U> Y(X.begin(), X.end());
-      return X.size() == Y.size();
+    static bool all_unique(std::vector<U> x)
+    {
+        std::sort(x.begin(),x.end());
+        auto it = std::unique(x.begin(),x.end());
+        return it == x.end();
     }
     // The gradient sparsity patter is, at this point, either the user
     // defined one or the default (dense) one.
