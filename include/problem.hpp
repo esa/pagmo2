@@ -4,6 +4,7 @@
 #include <atomic>
 #include <iostream>
 #include <memory>
+#include <set>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -39,7 +40,12 @@ struct prob_inner_base
     virtual std::string get_name() const = 0;
     virtual std::string extra_info() const = 0;
     template <typename Archive>
-    void serialize(Archive &) {}
+    void serialize(Archive &ar)
+    {
+        ar(m_gs_dim, m_hs_dim);
+    }
+    vector_double::size_type m_gs_dim;
+    std::vector<vector_double::size_type> m_hs_dim;
 };
 
 template <typename T>
@@ -58,8 +64,16 @@ struct prob_inner: prob_inner_base
     static_assert(has_dimensions_bounds<T>::value,
         "A problem must provide getters for its dimension and bounds.");
     prob_inner() = default;
-    explicit prob_inner(T &&x):m_value(std::move(x)) {}
-    explicit prob_inner(const T &x):m_value(x) {}
+    explicit prob_inner(T &&x):m_value(std::move(x))
+    {
+        check_gradient_sparsity(); // here m_gs_dim is initialized
+        //check_hessians_sparsity(); // here m_hs_dim is initialized   
+    }
+    explicit prob_inner(const T &x):m_value(x)
+    {
+        check_gradient_sparsity(); // here m_gs_dim is initialized
+        //check_hessians_sparsity(); // here m_hs_dim is initialized
+    }
     virtual prob_inner_base *clone() const override final
     {
         return ::new prob_inner(m_value);
@@ -110,7 +124,7 @@ struct prob_inner: prob_inner_base
     template <typename U, typename std::enable_if<!has_gradient_sparsity<U>::value,int>::type = 0>
     sparsity_pattern gradient_sparsity_impl(const U &) const
     {
-        // By default a problem is fully sparse
+        // By default a problem is dense
         auto dim = get_n(); 
         auto f_dim = get_nf() + get_nec() + get_nic();        
         sparsity_pattern retval;
@@ -196,6 +210,42 @@ struct prob_inner: prob_inner_base
         ar(cereal::base_class<prob_inner_base>(this),m_value);
     }
     T m_value;
+private:
+    template <typename U>
+    bool all_unique(std::vector<U> X) {
+      std::set<U> Y(X.begin(), X.end());
+      return X.size() == Y.size();
+    }
+    // The gradient sparsity patter is, at this point, either the user
+    // defined one or the default (dense) one.
+    void check_gradient_sparsity()
+    {
+        auto gs = gradient_sparsity();
+        auto n = get_n();
+        auto nf = get_nf();
+        // 1 - We check that the gradient sparsity pattern has
+        // valid indexes.
+        for (auto pair: gs) {
+            if ((pair.first >= nf) or (pair.second >= n)) {
+                pagmo_throw(std::invalid_argument,"Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nFitness dimension is: " + std::to_string(nf) + "\nDecision vector dimension is: " + std::to_string(n));
+            }
+        }
+        // 1bis We check all pairs are unique
+        if (!all_unique(gs)) {
+            pagmo_throw(std::invalid_argument, "Multiple entries of the same index pair was detected in the gradient sparsity pattern");
+        }
+
+        // 2 - We store the dimensions of the gradient sparsity pattern
+        // for future quick checks.
+        m_gs_dim = gs.size();
+std::cout << "HERE!!" << m_gs_dim << "\n";
+    }
+    //void check_hessians_sparsity()
+    //{
+    //   for (auto i: hessians_sparsity()) {
+
+        //}
+    //}
 };
 
 }
@@ -378,8 +428,8 @@ class problem
         void check_gradient_vector(const vector_double &gr) const
         {
             // Checks that the gradient vector returned has the same dimensions of the sparsity_pattern
-            if (gr.size()!=gradient_sparsity().size()) {
-                pagmo_throw(std::invalid_argument,"Gradients returned: " + std::to_string(gr.size()) + ", should be " + std::to_string(gradient_sparsity().size()));
+            if (gr.size()!=m_ptr->m_gs_dim) {
+                pagmo_throw(std::invalid_argument,"Gradients returned: " + std::to_string(gr.size()) + ", should be " + std::to_string(m_ptr->m_gs_dim));
             }
         }
 

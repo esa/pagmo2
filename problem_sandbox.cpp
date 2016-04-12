@@ -45,11 +45,7 @@ struct example0_g
     // in the fitness. When not implemented a dense problem is assumed
     sparsity_pattern gradient_sparsity() const
     {
-        sparsity_pattern retval;
-        for (auto i=0u; i<4u; ++i) {
-            retval.push_back(std::pair<long, long>(0, i));
-        }
-        return retval;
+        return {{0,0},{0,1},{0,2},{0,3}};
     }
 
     // Optional, computes the Hessians of the various fitness
@@ -58,12 +54,7 @@ struct example0_g
     // also sparse as most of its components are 0.
     std::vector<vector_double> hessians(const vector_double &) const
     {
-        vector_double Hf0(4);
-        Hf0[0] = 2.;
-        Hf0[1] = 2.;
-        Hf0[2] = 2.;
-        Hf0[3] = 2.;
-        return {Hf0};
+        return {{2.,2.,2.,2.}};
     }
 
     // Optional, computes the sparsity of the hessians.
