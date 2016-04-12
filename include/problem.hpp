@@ -442,7 +442,7 @@ class problem
         }
         template <typename Archive>
         void load(Archive &ar)
-        { 
+        {
             ar(m_ptr);
             unsigned long long tmp;
             ar(tmp);
