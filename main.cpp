@@ -100,9 +100,16 @@ int main()
     cereal::JSONInputArchive iarchive(ss);
     iarchive(a);
     }    
-    std::cout << a.extract<algorithms::null>()->get_a() << std::endl;
     a.evolve();
 
-    problem p{example0_g{}};
-    std::cout << p.extract<example0_g>()->fitness(std::vector<double>(4))[0] << std::endl;
+    problem p{example0_g{}};std::stringstream ss;
+    {
+    cereal::JSONOutputArchive oarchive(ss);
+    oarchive(p);
+    }
+    std::cout << ss.str() << '\n';
+    {
+    cereal::JSONInputArchive iarchive(ss);
+    iarchive(p);
+    }    
 }
