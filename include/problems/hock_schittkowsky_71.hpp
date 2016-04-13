@@ -1,13 +1,22 @@
+#ifndef PAGMO_PROBLEM_HOCK_SCHITTKOWSKY_71
+#define PAGMO_PROBLEM_HOCK_SCHITTKOWSKY_71
+
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "../io.hpp"
 #include "../problem.hpp"
 #include "../types.hpp"
 
+namespace pagmo
+{
 
-using namespace pagmo;
+namespace problem
+{
+
 struct hock_schittkowsky_71
 {
     // fitness
@@ -87,7 +96,8 @@ struct hock_schittkowsky_71
     }
 
     // Extra informations
-    std::string extra_info() const {
+    std::string extra_info() const
+    {
         std::ostringstream s;
         s << "\tProblem number 71 from the Hock-Schittkowsky test suite" << '\n';
         return s.str();
@@ -104,4 +114,8 @@ struct hock_schittkowsky_71
     void serialize(Archive &) {}
 };
 
-PAGMO_REGISTER_PROBLEM(hock_schittkowsky_71)
+}}
+
+PAGMO_REGISTER_PROBLEM(pagmo::problem::hock_schittkowsky_71)
+
+#endif
