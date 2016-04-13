@@ -1,8 +1,10 @@
 #ifndef PAGMO_TYPE_TRAITS_HPP
 #define PAGMO_TYPE_TRAITS_HPP
 
+#include <string>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 #include "types.hpp"
 
