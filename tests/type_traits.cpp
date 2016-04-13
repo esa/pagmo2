@@ -5,6 +5,7 @@
 
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "../include/types.hpp"
 
@@ -231,4 +232,120 @@ BOOST_AUTO_TEST_CASE(has_extra_info_test)
     BOOST_CHECK((has_extra_info<ei_01>::value));
     BOOST_CHECK((!has_extra_info<ei_02>::value));
     BOOST_CHECK((!has_extra_info<ei_03>::value));
+}
+
+struct grad_00 {};
+
+// The good one.
+struct grad_01
+{
+    vector_double gradient(const vector_double &) const;
+};
+
+struct grad_02
+{
+    vector_double gradient(const vector_double &);
+};
+
+struct grad_03
+{
+    vector_double gradient(vector_double &) const;
+};
+
+struct grad_04
+{
+    void gradient(const vector_double &) const;
+};
+
+BOOST_AUTO_TEST_CASE(has_gradient_test)
+{
+    BOOST_CHECK((!has_gradient<grad_00>::value));
+    BOOST_CHECK((has_gradient<grad_01>::value));
+    BOOST_CHECK((!has_gradient<grad_02>::value));
+    BOOST_CHECK((!has_gradient<grad_03>::value));
+    BOOST_CHECK((!has_gradient<grad_04>::value));
+}
+
+struct gs_00 {};
+
+// The good one.
+struct gs_01
+{
+    sparsity_pattern gradient_sparsity() const;
+};
+
+struct gs_02
+{
+    sparsity_pattern gradient_sparsity();
+};
+
+struct gs_03
+{
+    int gradient_sparsity() const;
+};
+
+BOOST_AUTO_TEST_CASE(has_gradient_sparsity_test)
+{
+    BOOST_CHECK((!has_gradient_sparsity<gs_00>::value));
+    BOOST_CHECK((has_gradient_sparsity<gs_01>::value));
+    BOOST_CHECK((!has_gradient_sparsity<gs_02>::value));
+    BOOST_CHECK((!has_gradient_sparsity<gs_03>::value));
+}
+
+struct hess_00 {};
+
+// The good one.
+struct hess_01
+{
+    std::vector<vector_double> hessians(const vector_double &) const;
+};
+
+struct hess_02
+{
+    std::vector<vector_double> hessians(const vector_double &);
+};
+
+struct hess_03
+{
+    std::vector<vector_double> hessians(vector_double &) const;
+};
+
+struct hess_04
+{
+    void hessians(const vector_double &) const;
+};
+
+BOOST_AUTO_TEST_CASE(has_hessians_test)
+{
+    BOOST_CHECK((!has_hessians<hess_00>::value));
+    BOOST_CHECK((has_hessians<hess_01>::value));
+    BOOST_CHECK((!has_hessians<hess_02>::value));
+    BOOST_CHECK((!has_hessians<hess_03>::value));
+    BOOST_CHECK((!has_hessians<hess_04>::value));
+}
+
+struct hs_00 {};
+
+// The good one.
+struct hs_01
+{
+    std::vector<sparsity_pattern> hessians_sparsity() const;
+};
+
+struct hs_02
+{
+    std::vector<sparsity_pattern> hessians_sparsity();
+};
+
+struct hs_03
+{
+    int hessians_sparsity() const;
+};
+
+BOOST_AUTO_TEST_CASE(has_hessians_sparsity_test)
+{
+    BOOST_CHECK((!has_hessians_sparsity<hs_00>::value));
+    BOOST_CHECK((has_hessians_sparsity<hs_01>::value));
+    BOOST_CHECK((!has_hessians_sparsity<hs_02>::value));
+    BOOST_CHECK((!has_hessians_sparsity<hs_03>::value));
 }
