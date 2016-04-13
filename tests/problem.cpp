@@ -119,8 +119,6 @@ struct hess_p : base_p
     std::vector<sparsity_pattern> m_hs;
 };
 
-using namespace pagmo;
-
 BOOST_AUTO_TEST_CASE(problem_construction_test)
 
 {
@@ -136,5 +134,5 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,{0.,0.},{1., 1.},{0,0},{0,1},{{0,0},{3,4}})}, std::invalid_argument);
     // 5 - gradient sparsity has a repeating pair 
     BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,{0.,0.},{1., 1.},{0,0},{0,1},{{0,0},{0,0}})}, std::invalid_argument);
-    problem p{grad_p(1,1,1,0,{0.,0.},{1., 1.},{0,0},{0,1},};
+    problem p{grad_p(1,1,1,0,{0.,0.},{1., 1.},{0,0},{0,1})};
 }
