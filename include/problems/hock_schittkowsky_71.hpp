@@ -92,7 +92,7 @@ struct hock_schittkowsky_71
     // Problem name
     std::string get_name() const
     {   
-        return std::string("Hock Schittkowski 71");
+        return std::string("Hock Schittkowsky 71");
     }
 
     // Extra informations

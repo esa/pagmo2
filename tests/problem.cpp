@@ -1,11 +1,12 @@
-#include <exception>
-
 #include "../include/problem.hpp"
-#include "../include/types.hpp"
 
 #define BOOST_TEST_MODULE pagmo_problem_test
 #include <boost/test/unit_test.hpp>
 
+#include <stdexcept>
+#include <utility>
+
+#include "../include/types.hpp"
 
 using namespace pagmo;
 
@@ -81,9 +82,7 @@ struct grad_p : base_p
     sparsity_pattern m_gs;
 };
 
-using namespace pagmo;
-
-BOOST_AUTO_TEST_CASE(construction)
+BOOST_AUTO_TEST_CASE(problem_construction_test)
 {
     // We check that malformed problems throw std::invalid argument
     // 1 - lb > ub
@@ -97,8 +96,3 @@ BOOST_AUTO_TEST_CASE(construction)
     // 5 - gradient sparsity has a repeating pair 
     BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,{0.,0.},{1., 1.},{0,1},{{0,0},{0,0}})}, std::invalid_argument);
 }
-
-
-
-
-
