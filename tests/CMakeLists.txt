@@ -10,5 +10,6 @@ macro(ADD_PAGMO_TESTCASE arg1)
     endif()
 endmacro()
 
-ADD_PAGMO_TESTCASE(rng)
 ADD_PAGMO_TESTCASE(problem)
+ADD_PAGMO_TESTCASE(rng)
+ADD_PAGMO_TESTCASE(type_traits)

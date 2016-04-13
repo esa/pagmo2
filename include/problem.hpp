@@ -41,7 +41,7 @@ struct prob_inner_base
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
     virtual std::string get_name() const = 0;
-    virtual std::string extra_info() const = 0;
+    virtual std::string get_extra_info() const = 0;
     template <typename Archive>
     void serialize(Archive &) {}
 };
@@ -197,12 +197,12 @@ struct prob_inner: prob_inner_base
         return typeid(U).name();
     }
     template <typename U, typename std::enable_if<has_extra_info<U>::value,int>::type = 0>
-    static std::string extra_info_impl(const U &value)
+    static std::string get_extra_info_impl(const U &value)
     {
-        return value.extra_info();
+        return value.get_extra_info();
     }
     template <typename U, typename std::enable_if<!has_extra_info<U>::value,int>::type = 0>
-    static std::string extra_info_impl(const U &)
+    static std::string get_extra_info_impl(const U &)
     {
         return "";
     }
@@ -242,9 +242,9 @@ struct prob_inner: prob_inner_base
     {
         return get_name_impl(m_value);
     }
-    virtual std::string extra_info() const override final
+    virtual std::string get_extra_info() const override final
     {
-        return extra_info_impl(m_value);
+        return get_extra_info_impl(m_value);
     }
     // Serialization.
     template <typename Archive>
@@ -410,9 +410,9 @@ class problem
             return m_ptr->get_name();
         }
 
-        std::string extra_info() const
+        std::string get_extra_info() const
         {
-            return m_ptr->extra_info();
+            return m_ptr->get_extra_info();
         } 
 
         std::string human_readable() const
@@ -430,7 +430,7 @@ class problem
             stream(s, get_bounds().second, '\n');
             stream(s, "\n\tHas gradient: ", has_gradient(), '\n');
             stream(s, "\tHas hessians: ", has_hessians(), '\n');
-            const auto extra_str = extra_info();
+            const auto extra_str = get_extra_info();
             if (!extra_str.empty()) {
                 stream(s, "\nExtra info:\n", extra_str, '\n');
             }
