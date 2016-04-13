@@ -124,17 +124,27 @@ using namespace pagmo;
 BOOST_AUTO_TEST_CASE(problem_construction_test)
 
 {
-    // We check that problems with inconsisten dimensions throw
+    // We check that problems with inconsistent dimensions throw
     // std::invalid argument
+    vector_double lb_2{0,0};
+    vector_double lb_3{0,0,0};
+    vector_double ub_2{1,1};
+    vector_double ub_3{1,1,1};
+    vector_double fit_1{1};
+    vector_double fit_2{1,1};
+    vector_double grad_2{1,1};
+    sparsity_pattern grads_2_wrong{{0,0},{3,4}};
+    sparsity_pattern grads_2_correct{{0,0},{0,1}};
+
     // 1 - lb > ub
-    BOOST_CHECK_THROW(problem{base_p(2,1,0,0,{0.,0.},{1.,-1})}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(2,1,0,0,fit_2,ub_2,lb_2)}, std::invalid_argument);
     // 2 - lb length is wrong
-    BOOST_CHECK_THROW(problem{base_p(2,1,0,0,{0.},{1., 2.})}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(2,1,0,0,fit_2,lb_3,ub_2)}, std::invalid_argument);
     // 3 - ub length is wrong
-    BOOST_CHECK_THROW(problem{base_p(2,1,0,0,{0.,0.},{1., 2., 3.})}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(2,1,0,0,fit_2,lb_2,ub_3)}, std::invalid_argument);
     // 4 - gradient sparsity has index out of bounds
-    BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,{0.,0.},{1., 1.},{0,0},{0,1},{{0,0},{3,4}})}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,fit_2,lb_2,ub_3,grad_2, grads_2_wrong)}, std::invalid_argument);
     // 5 - gradient sparsity has a repeating pair 
-    BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,{0.,0.},{1., 1.},{0,0},{0,1},{{0,0},{0,0}})}, std::invalid_argument);
-    problem p{grad_p(1,1,1,0,{0.,0.},{1., 1.},{0,0},{0,1},};
+    //BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,{0.,0.},{1., 1.},{0,0},{0,1},{{0,0},{0,0}})}, std::invalid_argument);
+    //problem p{hess_p(2,1,1,0,{0.,0.},{1., 1.},{0,0},{{2,3},{1,2,4}}, {{{0,0},{1,0}}, {{0,0},{1,0}}})};
 }
