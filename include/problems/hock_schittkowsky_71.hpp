@@ -2,7 +2,6 @@
 #define PAGMO_PROBLEM_HOCK_SCHITTKOWSKY_71
 
 #include <iostream>
-#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -92,15 +91,13 @@ struct hock_schittkowsky_71
     // Problem name
     std::string get_name() const
     {   
-        return std::string("Hock Schittkowsky 71");
+        return "Hock Schittkowsky 71";
     }
 
     // Extra informations
     std::string get_extra_info() const
     {
-        std::ostringstream s;
-        s << "\tProblem number 71 from the Hock-Schittkowsky test suite" << '\n';
-        return s.str();
+        return "\tProblem number 71 from the Hock-Schittkowsky test suite\n";
     }
     
     // Optimal solution 
