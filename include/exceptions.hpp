@@ -8,7 +8,6 @@
  * is taken "as is" from the project piranha by Francesco Biscani
  */
 
-#include <boost/lexical_cast.hpp>
 #include <exception>
 #include <string>
 
@@ -42,7 +41,7 @@ struct ex_thrower
         msg += "\nwhere: ";
         msg += m_file;
         msg += ", ";
-        msg += boost::lexical_cast<std::string>(m_line);
+        msg += std::to_string(m_line);
         msg += "\nwhat: ";
         msg += desc;
         msg += "\n";
