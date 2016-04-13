@@ -2,6 +2,7 @@
 
 #define BOOST_TEST_MODULE pagmo_problem_test
 #include <boost/test/unit_test.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <stdexcept>
 #include <utility>
@@ -119,6 +120,36 @@ struct hess_p : base_p
     std::vector<sparsity_pattern> m_hs;
 };
 
+struct full_p : grad_p 
+{
+    full_p(
+        unsigned int dim = 1, 
+        unsigned int nobj = 1, 
+        unsigned int nec = 0, 
+        unsigned int nic = 0, 
+        const vector_double &ret_fit = {1}, 
+        const vector_double &lb = {0}, 
+        const vector_double &ub = {1},
+        const vector_double &g = {1},
+        const sparsity_pattern &gs = {{0,0}},
+        const std::vector<vector_double> &h = {{1}},
+        const std::vector<sparsity_pattern> &hs = {{{0,0}}}
+     ) : grad_p(dim,nobj,nec,nic,ret_fit,lb,ub,g,gs), m_h(h), m_hs(hs) {}
+
+    std::vector<vector_double> hessians(const vector_double &) const
+    {
+        return m_h;
+    }
+
+    std::vector<sparsity_pattern> hessians_sparsity() const
+    {
+        return m_hs;
+    }
+
+    std::vector<vector_double> m_h;
+    std::vector<sparsity_pattern> m_hs;
+};
+
 BOOST_AUTO_TEST_CASE(problem_construction_test)
 
 {
@@ -184,19 +215,55 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     }
 
     // We check the move constructor
-    problem p1{base_p(2,2,0,0,fit_2,lb_2,ub_2)};
-    auto a1 = p1.extract<base_p>();
-    std::string p1_string (p1.human_readable());
+    {
+        problem p1{full_p(2,2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
 
-    problem p2(std::move(p1));
-    auto a2 = p2.extract<base_p>();
-    std::string p2_string (p2.human_readable());
+        // We increment the counters so that the default values are changed
+        p1.fitness({1,1});
+        p1.gradient({1,1});
+        p1.hessians({1,1});
 
-    // 1 - We check the resource pointed by m_ptr has been moved from p1 to p2
-    BOOST_CHECK(a1==a2);
-    // 2 - We check that the two outputs of human_readable are identical
-    BOOST_CHECK(p1_string==p2_string);
+        auto p1_string = boost::lexical_cast<std::string>(p1);
+        auto a1 = p1.extract<full_p>();
 
+        problem p2(std::move(p1));
+
+        auto a2 = p2.extract<full_p>();
+        auto p2_string = boost::lexical_cast<std::string>(p2);
+
+        // 1 - We check the resource pointed by m_ptr has been moved from p1 to p2
+        BOOST_CHECK(a1==a2);
+        // 2 - We check that the two outputs of human_readable are identical
+        BOOST_CHECK(p1_string==p2_string);
+    }
+
+    // We check the copy constructor
+    {
+        problem p1{full_p(2,2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
+
+        // We increment the counters so that the default values are changed
+        p1.fitness({1,1});
+        p1.gradient({1,1});
+        p1.hessians({1,1});
+
+        auto a1 = p1.extract<full_p>();
+
+        problem p2(p1);
+
+        auto a2 = p2.extract<full_p>();
+
+        // 1 - We check the resource pointed by m_ptr has a different addres
+        BOOST_CHECK(a1!=0);
+        BOOST_CHECK(a2!=0);
+        BOOST_CHECK(a1!=a2);
+        // 2 - We check that the counters are reset by the copy operation
+        BOOST_CHECK(p2.get_fevals() == 0);
+        BOOST_CHECK(p2.get_gevals() == 0);
+        BOOST_CHECK(p2.get_hevals() == 0);
+        // 3 - We check that the expected gradient and hessans dims are left equal
+        BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
+        BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());        
+    }
 }
 
 
