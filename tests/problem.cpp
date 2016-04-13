@@ -182,6 +182,21 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(p3.get_gs_dim() == 2u);
         BOOST_CHECK((p4.get_hs_dim() == std::vector<vector_double::size_type>{2u, 2u}));
     }
+
+    // We check the move constructor
+    problem p1{base_p(2,2,0,0,fit_2,lb_2,ub_2)};
+    auto a1 = p1.extract<base_p>();
+    std::string p1_string (p1.human_readable());
+
+    problem p2(std::move(p1));
+    auto a2 = p2.extract<base_p>();
+    std::string p2_string (p2.human_readable());
+
+    // 1 - We check the resource pointed by m_ptr has been moved from p1 to p2
+    BOOST_CHECK(a1==a2);
+    // 2 - We check that the two outputs of human_readable are identical
+    BOOST_CHECK(p1_string==p2_string);
+
 }
 
 

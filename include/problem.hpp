@@ -505,8 +505,22 @@ class problem
             stream(s, get_bounds().second, '\n');
             stream(s, "\n\tHas gradient: ", has_gradient(), '\n');
             stream(s, "\tUser implemented gradient sparsity: ", has_gradient_sparsity(), '\n');
+            if (has_gradient()) {
+                stream(s, "\tExpected gradients: ", m_gs_dim, '\n');
+            }
             stream(s, "\tHas hessians: ", has_hessians(), '\n');
-            stream(s, "\tUser implemented hessians sparsity: ", has_hessians_sparsity(), '\n');
+            stream(s, "\tUser implemented hessians sparsity: ", has_hessians_sparsity(), '\n');           
+            if (has_hessians()) {
+                stream(s, "\tExpected hessian components: ", m_hs_dim, '\n');
+            }  
+            stream(s, "\n\tFunction evaluations: ", get_fevals(), '\n');
+            if (has_gradient()) {
+                stream(s, "\tGradient evaluations: ", get_gevals(), '\n'); 
+            }
+            if (has_hessians()) {
+                stream(s, "\tHessians evaluations: ", get_hevals(), '\n');
+            }
+            
             const auto extra_str = get_extra_info();
             if (!extra_str.empty()) {
                 stream(s, "\nExtra info:\n", extra_str, '\n');
