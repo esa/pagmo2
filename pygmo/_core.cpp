@@ -93,9 +93,9 @@ struct prob_inner<py::object>: prob_inner_base
             str = static_cast<py::object>(m.attr("str"));
         return str.call(type.call(m_value)).cast<std::string>();
     }
-    virtual std::string extra_info() const override final
+    virtual std::string get_extra_info() const override final
     {
-        auto attr = static_cast<py::object>(m_value.attr("extra_info"));
+        auto attr = static_cast<py::object>(m_value.attr("get_extra_info"));
         if (attr) {
             return attr.call().cast<std::string>();
         }

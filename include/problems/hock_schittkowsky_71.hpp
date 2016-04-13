@@ -96,7 +96,7 @@ struct hock_schittkowsky_71
     }
 
     // Extra informations
-    std::string extra_info() const
+    std::string get_extra_info() const
     {
         std::ostringstream s;
         s << "\tProblem number 71 from the Hock-Schittkowsky test suite" << '\n';

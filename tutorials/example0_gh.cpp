@@ -140,7 +140,7 @@ struct example0_g
 
     // Optional, provides extra information that will be appended after
     // the default stream operator
-    std::string extra_info() const {
+    std::string get_extra_info() const {
         std::ostringstream s;
         s << "This is a simple toy problem with one fitness, " << '\n';
         s << "no constraint and a fixed dimension of 4." << "\n";
