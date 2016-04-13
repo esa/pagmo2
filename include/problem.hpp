@@ -321,11 +321,40 @@ class problem
             // 5 - checks that the hessians contain reasonable numbers
             check_hessians_sparsity(); // here m_hs_dim is initialized
         }
-        problem(const problem &other):m_ptr(other.m_ptr->clone()),m_fevals(0u),m_gevals(0u),m_hevals(0u) {}
-        problem(problem &&other):m_ptr(std::move(other.m_ptr)),
+        problem(const problem &other):
+            m_ptr(other.m_ptr->clone()),
+            m_fevals(0u),
+            m_gevals(0u),
+            m_hevals(0u),
+            m_gs_dim(other.m_gs_dim),
+            m_hs_dim(other.m_hs_dim)
+        {}
+        problem(problem &&other) noexcept :
+            m_ptr(std::move(other.m_ptr)),
             m_fevals(other.m_fevals.load()),
             m_gevals(other.m_gevals.load()),
-            m_hevals(other.m_hevals.load()) {}
+            m_hevals(other.m_hevals.load()),
+            m_gs_dim(other.m_gs_dim),
+            m_hs_dim(other.m_hs_dim)
+        {}
+
+        problem &operator=(problem &&other) noexcept
+        {
+            if (this != &other) {
+                m_ptr = std::move(other.m_ptr);
+                m_fevals.store(other.m_fevals.load());
+                m_gevals.store(other.m_gevals.load());
+                m_hevals.store(other.m_hevals.load());
+                m_gs_dim = other.m_gs_dim;
+                m_hs_dim = other.m_hs_dim;
+            }
+            return *this;
+        }
+        problem &operator=(const problem &other)
+        {
+            // Copy ctor + move assignment.
+            return *this = problem(other);
+        }
 
         template <typename T>
         const T *extract() const
