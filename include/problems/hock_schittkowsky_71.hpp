@@ -13,9 +13,6 @@
 namespace pagmo
 {
 
-namespace problem
-{
-
 struct hock_schittkowsky_71
 {
     // fitness
@@ -111,8 +108,8 @@ struct hock_schittkowsky_71
     void serialize(Archive &) {}
 };
 
-}}
+}
 
-PAGMO_REGISTER_PROBLEM(pagmo::problem::hock_schittkowsky_71)
+PAGMO_REGISTER_PROBLEM(pagmo::hock_schittkowsky_71)
 
 #endif

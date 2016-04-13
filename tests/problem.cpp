@@ -124,15 +124,26 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
 {
     // We check that problems with inconsistent dimensions throw
     // std::invalid argument
-    vector_double lb_2{0,0};
-    vector_double lb_3{0,0,0};
-    vector_double ub_2{1,1};
-    vector_double ub_3{1,1,1};
-    vector_double fit_1{1};
-    vector_double fit_2{1,1};
+    vector_double lb_2(2,0);
+    vector_double ub_2(2,1);
+    vector_double lb_3(3,1);
+    vector_double ub_3(3,1);
+    vector_double fit_1(1,1);
+    vector_double fit_2(2,1);
+    vector_double fit_12(12,11);
+    vector_double lb_11(11,0);
+    vector_double ub_11(11,0);
+
     vector_double grad_2{1,1};
-    sparsity_pattern grads_2_wrong{{0,0},{3,4}};
+    sparsity_pattern grads_2_outofbounds{{0,0},{3,4}};
+    sparsity_pattern grads_2_repeats{{0,0},{0,0}};
     sparsity_pattern grads_2_correct{{0,0},{0,1}};
+
+    std::vector<vector_double> hess_22{{1,1},{1,1}};
+    std::vector<sparsity_pattern> hesss_22_outofbounds{{{0,0},{12,13}},{{0,0},{1,0}}};
+    std::vector<sparsity_pattern> hesss_22_notlowertriangular{{{0,0},{0,1}},{{0,0},{1,0}}};
+    std::vector<sparsity_pattern> hesss_22_repeated{{{0,0},{0,0}},{{0,0},{1,0}}};
+    std::vector<sparsity_pattern> hesss_22_correct{{{0,0},{1,0}},{{0,0},{1,0}}};
 
     // 1 - lb > ub
     BOOST_CHECK_THROW(problem{base_p(2,1,0,0,fit_2,ub_2,lb_2)}, std::invalid_argument);
@@ -141,9 +152,36 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     // 3 - ub length is wrong
     BOOST_CHECK_THROW(problem{base_p(2,1,0,0,fit_2,lb_2,ub_3)}, std::invalid_argument);
     // 4 - gradient sparsity has index out of bounds
-    BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,fit_2,lb_2,ub_3,grad_2, grads_2_wrong)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_outofbounds)}, std::invalid_argument);
     // 5 - gradient sparsity has a repeating pair 
+    BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_repeats)}, std::invalid_argument);
+    // 6 - hessian sparsity has index out of bounds
+    BOOST_CHECK_THROW(problem{hess_p(2,1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_outofbounds)}, std::invalid_argument);
+    // 7 - hessian sparsity is not lower triangular
+    BOOST_CHECK_THROW(problem{hess_p(2,1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_notlowertriangular)}, std::invalid_argument);
+    // 8 - hessian sparsity has repeated indexes
+    BOOST_CHECK_THROW(problem{hess_p(2,1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_repeated)}, std::invalid_argument);
 
-    //BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,{0.,0.},{1., 1.},{0,0},{0,1},{{0,0},{0,0}})}, std::invalid_argument);
-    //problem p{hess_p(2,1,1,0,{0.,0.},{1., 1.},{0,0},{{2,3},{1,2,4}}, {{{0,0},{1,0}}, {{0,0},{1,0}}})};
+    // We check that the data members are initialized correctly (i.e. counters to zero
+    // and gradient / hessian dimensions to the right values
+    {
+        problem p1{base_p(2,2,0,0,fit_2,lb_2,ub_2)};
+        problem p2{base_p(11,3,4,5,fit_12,lb_11,ub_11)};
+        problem p3{grad_p(2,1,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct)};
+        problem p4{hess_p(2,1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_correct)};
+        BOOST_CHECK(p1.get_fevals() == 0u);
+        BOOST_CHECK(p1.get_gevals() == 0u);
+        BOOST_CHECK(p1.get_hevals() == 0u);
+        BOOST_CHECK(p1.get_hevals() == 0u);
+        // dense sparsity defined by default
+        BOOST_CHECK(p1.get_gs_dim() == 4u);
+        BOOST_CHECK((p1.get_hs_dim() == std::vector<vector_double::size_type>{3u, 3u}));
+        BOOST_CHECK(p2.get_gs_dim() == 12u*11u);
+        BOOST_CHECK((p2.get_hs_dim() == std::vector<vector_double::size_type>{66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u}));
+        // user defined sparsity
+        BOOST_CHECK(p3.get_gs_dim() == 2u);
+        BOOST_CHECK((p4.get_hs_dim() == std::vector<vector_double::size_type>{2u, 2u}));
+    }
 }
+
+

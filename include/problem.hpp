@@ -30,11 +30,13 @@ struct prob_inner_base
     virtual prob_inner_base *clone() const = 0;
     virtual vector_double fitness(const vector_double &) const = 0;
     virtual vector_double gradient(const vector_double &) const = 0;
-    virtual sparsity_pattern gradient_sparsity() const = 0;
     virtual bool has_gradient() const = 0;
+    virtual sparsity_pattern gradient_sparsity() const = 0;
+    virtual bool has_gradient_sparsity() const = 0;
     virtual std::vector<vector_double> hessians(const vector_double &) const = 0;
-    virtual std::vector<sparsity_pattern> hessians_sparsity() const = 0;
     virtual bool has_hessians() const = 0;
+    virtual std::vector<sparsity_pattern> hessians_sparsity() const = 0;
+    virtual bool has_hessians_sparsity() const = 0;
     virtual vector_double::size_type get_nobj() const = 0;
     virtual vector_double::size_type get_n() const = 0;
     virtual std::pair<vector_double,vector_double> get_bounds() const = 0;
@@ -106,12 +108,12 @@ struct prob_inner: prob_inner_base
     {
        return false;
     }
-    template <typename U, typename std::enable_if<has_gradient_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     static sparsity_pattern gradient_sparsity_impl(const U &value)
     {
         return value.gradient_sparsity();
     }
-    template <typename U, typename std::enable_if<!has_gradient_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     sparsity_pattern gradient_sparsity_impl(const U &) const
     {
         // By default a problem is dense
@@ -124,6 +126,16 @@ struct prob_inner: prob_inner_base
             }
         }
         return retval;
+    }
+    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
+    static bool has_gradient_sparsity_impl(U &)
+    {
+       return true;
+    }
+    template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
+    static bool has_gradient_sparsity_impl(U &)
+    {
+       return false;
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value,int>::type = 0>
     static std::vector<vector_double> hessians_impl(U &value, const vector_double &dv)
@@ -145,12 +157,12 @@ struct prob_inner: prob_inner_base
     {
        return false;
     }
-    template <typename U, typename std::enable_if<has_hessians_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &value)
     {
         return value.hessians_sparsity();
     }
-    template <typename U, typename std::enable_if<!has_hessians_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
     {
         // By default a problem has dense hessians
@@ -165,6 +177,16 @@ struct prob_inner: prob_inner_base
             }
         }
         return retval;
+    }
+    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
+    static bool has_hessians_sparsity_impl(U &)
+    {
+       return true;
+    }
+    template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
+    static bool has_hessians_sparsity_impl(U &)
+    {
+       return false;
     }
     template <typename U, typename std::enable_if<has_constraints<U>::value,int>::type = 0>
     static vector_double::size_type get_nec_impl(const U &value)
@@ -218,6 +240,10 @@ struct prob_inner: prob_inner_base
     {
         return gradient_sparsity_impl(m_value);
     }
+    virtual bool has_gradient_sparsity() const override final
+    {
+        return has_gradient_sparsity_impl(m_value);
+    }
     virtual std::vector<vector_double> hessians(const vector_double &dv) const override final
     {
         return hessians_impl(m_value, dv);
@@ -229,6 +255,10 @@ struct prob_inner: prob_inner_base
     virtual std::vector<sparsity_pattern> hessians_sparsity() const override final
     {
         return hessians_sparsity_impl(m_value);
+    }
+    virtual bool has_hessians_sparsity() const override final
+    {
+        return has_hessians_sparsity_impl(m_value);
     }
     virtual vector_double::size_type get_nec() const override final
     {
@@ -337,6 +367,10 @@ class problem
             ++m_gevals;
             return retval;
         }
+        bool has_gradient() const
+        {
+            return m_ptr->has_gradient();
+        }
         std::vector<vector_double> hessians(const vector_double &dv)
         {
             // 1 - checks the decision vector
@@ -349,22 +383,26 @@ class problem
             ++m_hevals;
             return retval;
         }
-        bool has_gradient() const
-        {
-            return m_ptr->has_gradient();
-        } 
         bool has_hessians() const
         {
             return m_ptr->has_hessians();
-        } 
+        }
         sparsity_pattern gradient_sparsity() const
         {
             return m_ptr->gradient_sparsity();
-        } 
+        }
+        bool has_gradient_sparsity() const
+        {
+            return m_ptr->has_gradient_sparsity();
+        }
         std::vector<sparsity_pattern> hessians_sparsity() const
         {
             return m_ptr->hessians_sparsity();
         } 
+        bool has_hessians_sparsity() const
+        {
+            return m_ptr->has_hessians_sparsity();
+        }
         vector_double::size_type get_nobj() const
         {
             return m_ptr->get_nobj();
@@ -396,6 +434,14 @@ class problem
         unsigned long long get_hevals() const
         {
             return m_hevals.load();
+        }
+        vector_double::size_type get_gs_dim() const 
+        {
+            return m_gs_dim;
+        }
+        std::vector<vector_double::size_type> get_hs_dim() const
+        {
+            return m_hs_dim;
         }
 
         /// Get problem's name.
@@ -429,7 +475,9 @@ class problem
             s << "\tUpper bounds: ";
             stream(s, get_bounds().second, '\n');
             stream(s, "\n\tHas gradient: ", has_gradient(), '\n');
+            stream(s, "\tUser implemented gradient sparsity: ", has_gradient_sparsity(), '\n');
             stream(s, "\tHas hessians: ", has_hessians(), '\n');
+            stream(s, "\tUser implemented hessians sparsity: ", has_hessians_sparsity(), '\n');
             const auto extra_str = get_extra_info();
             if (!extra_str.empty()) {
                 stream(s, "\nExtra info:\n", extra_str, '\n');
@@ -523,7 +571,7 @@ class problem
             }
             // 2 -  We check all pairs are unique
             if (!all_unique(hs)) {
-                pagmo_throw(std::invalid_argument, "Multiple entries of the same index pair was detected in the hessian sparsity pattern");
+                pagmo_throw(std::invalid_argument, "Multiple entries of the same index pair were detected in the hessian sparsity pattern");
             }
         }
         void check_decision_vector(const vector_double &dv) const
@@ -574,9 +622,9 @@ class problem
         std::atomic<unsigned long long> m_gevals;
         // Atomic counter for calls to the hessians 
         std::atomic<unsigned long long> m_hevals;
-        // Expected dimensions of the returned gradient (mathcing the sparsity pattern)
+        // Expected dimensions of the returned gradient (matching the sparsity pattern)
         vector_double::size_type m_gs_dim;
-        // Expected dimensions of the returned hessians (mathcing the sparsity patterns)
+        // Expected dimensions of the returned hessians (matching the sparsity patterns)
         std::vector<vector_double::size_type> m_hs_dim;
 };
 
