@@ -1,12 +1,13 @@
-#include <exception>
-#include <vector>
-
 #include "../include/problem.hpp"
-#include "../include/types.hpp"
 
 #define BOOST_TEST_MODULE pagmo_problem_test
 #include <boost/test/unit_test.hpp>
 
+#include <stdexcept>
+#include <utility>
+#include <vector>
+
+#include "../include/types.hpp"
 
 using namespace pagmo;
 
@@ -120,7 +121,8 @@ struct hess_p : base_p
 
 using namespace pagmo;
 
-BOOST_AUTO_TEST_CASE(construction)
+BOOST_AUTO_TEST_CASE(problem_construction_test)
+
 {
     // We check that problems with inconsisten dimensions throw
     // std::invalid argument
@@ -136,8 +138,3 @@ BOOST_AUTO_TEST_CASE(construction)
     BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,{0.,0.},{1., 1.},{0,0},{0,1},{{0,0},{0,0}})}, std::invalid_argument);
     problem p{grad_p(1,1,1,0,{0.,0.},{1., 1.},{0,0},{0,1},};
 }
-
-
-
-
-

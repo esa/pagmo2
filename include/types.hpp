@@ -1,6 +1,7 @@
 #ifndef PAGMO_TYPES_HPP
 #define PAGMO_TYPES_HPP
 
+#include <utility>
 #include <vector>
 
 namespace pagmo

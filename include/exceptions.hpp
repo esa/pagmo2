@@ -8,9 +8,10 @@
  * is taken "as is" from the project piranha by Francesco Biscani
  */
 
-#include <boost/lexical_cast.hpp>
 #include <exception>
 #include <string>
+#include <type_traits>
+#include <utility>
 
 namespace pagmo
 {
@@ -21,10 +22,10 @@ template <typename Exception>
 struct ex_thrower
 {
     // Determine the type of the __LINE__ macro.
-    typedef std::decay<decltype(__LINE__)>::type line_type;
+    using line_type = std::decay_t<decltype(__LINE__)>;
     explicit ex_thrower(const char *file, line_type line, const char *func):m_file(file),m_line(line),m_func(func)
     {}
-    template <typename ... Args, typename = typename std::enable_if<std::is_constructible<Exception,Args...>::value>::type>
+    template <typename ... Args, typename = std::enable_if_t<std::is_constructible<Exception,Args...>::value>>
     void operator()(Args && ... args) const
     {
         Exception e(std::forward<Args>(args)...);
@@ -32,9 +33,9 @@ struct ex_thrower
     }
     template <typename Str, typename ... Args, typename = typename std::enable_if<
         std::is_constructible<Exception,std::string,Args...>::value && (
-        std::is_same<typename std::decay<Str>::type,std::string>::value ||
-        std::is_same<typename std::decay<Str>::type,char *>::value ||
-        std::is_same<typename std::decay<Str>::type,const char *>::value)>::type>
+        std::is_same<std::decay_t<Str>,std::string>::value ||
+        std::is_same<std::decay_t<Str>,char *>::value ||
+        std::is_same<std::decay_t<Str>,const char *>::value)>::type>
     void operator()(Str &&desc, Args && ... args) const
     {
         std::string msg("\nfunction: ");
@@ -42,7 +43,7 @@ struct ex_thrower
         msg += "\nwhere: ";
         msg += m_file;
         msg += ", ";
-        msg += boost::lexical_cast<std::string>(m_line);
+        msg += std::to_string(m_line);
         msg += "\nwhat: ";
         msg += desc;
         msg += "\n";
