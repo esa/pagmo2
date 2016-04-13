@@ -21,6 +21,9 @@ option(BUILD_TESTS "Build test set." OFF)
 # Build option: enable tutorials.
 option(BUILD_TUTORIALS "Build tutorials." OFF)
 
+# Build option: enable PyGMO.
+option(BUILD_PYGMO "Build PyGMO." OFF)
+
 # Compiler setup.
 include(PAGMOCompilerLinkerSettings)
 message(STATUS "Current CXX flags: ${CMAKE_CXX_FLAGS}")
@@ -40,6 +43,10 @@ endif()
 
 if(BUILD_TUTORIALS)
     add_subdirectory("${CMAKE_SOURCE_DIR}/tutorials")
+endif()
+
+if(BUILD_PYGMO)
+    add_subdirectory("${CMAKE_SOURCE_DIR}/pygmo")
 endif()
 
 # Install the headers.

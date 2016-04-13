@@ -15,9 +15,19 @@
 #include <string>
 #include <utility>
 
-#include "../include/exceptions.hpp"
+#if defined(__clang__) || defined(__GNUC__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wpedantic"
+#endif
+
 #include "../include/external/pybind11/include/pybind11/pybind11.h"
 #include "../include/external/pybind11/include/pybind11/stl.h"
+
+#if defined(__clang__) || defined(__GNUC__)
+    #pragma GCC diagnostic pop
+#endif
+
+#include "../include/exceptions.hpp"
 #include "../include/problem.hpp"
 #include "../include/types.hpp"
 

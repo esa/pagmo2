@@ -1,3 +1,7 @@
+if(YACMACompilerLinkerSettingsIncluded)
+    return()
+endif()
+
 include(CheckCXXCompilerFlag)
 
 message(STATUS "The C++ compiler ID is: ${CMAKE_CXX_COMPILER_ID}")
@@ -86,3 +90,6 @@ if(YACMA_COMPILER_IS_CLANGXX OR YACMA_COMPILER_IS_GNUCXX OR YACMA_COMPILER_IS_IN
     # This became available in GCC at one point.
     YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wodr)
 endif()
+
+# Mark as included.
+set(YACMACompilerLinkerSettingsIncluded YES)

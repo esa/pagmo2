@@ -7,3 +7,9 @@ build*
 
 # .orig files from patch.
 *.orig
+
+# .so
+*.so
+
+# .out
+*.out
