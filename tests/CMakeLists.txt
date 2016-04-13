@@ -2,6 +2,9 @@
 # in the build system. This needs to be set only if the Boost libraries are dynamic.
 add_definitions(-DBOOST_TEST_DYN_LINK)
 
+# Include boost directories.
+include_directories(${Boost_INCLUDE_DIRS})
+
 macro(ADD_PAGMO_TESTCASE arg1)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         add_executable(${arg1} ${arg1}.cpp)
