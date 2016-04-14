@@ -6,7 +6,6 @@
 // following mandatory methods: 
 //
 // fitness_vector fitness(const decision_vector &) const
-// decision_vector::size_type get_n() const
 // fitness_vector::size_type get_nf() const
 // std::pair<decision_vector, decision_vector> get_bounds() const
 
@@ -25,13 +24,6 @@ struct example0
     vector_double fitness(const vector_double &x) const
     {
         return {x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3]};
-    }
-
-    // Mandatory, returns the dimension of the decision vector,
-    // in this case fixed to 4
-    vector_double::size_type get_n() const
-    {
-        return 4u;
     }
 
     // Mandatory, returns the dimension of the decision vector,
