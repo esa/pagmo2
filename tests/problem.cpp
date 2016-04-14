@@ -24,7 +24,7 @@ struct base_p
         const vector_double &lb = {0}, 
         const vector_double &ub = {1}
     ) : m_nobj(nobj), m_nec(nec), m_nic(nic), 
-        m_lb(lb), m_ub(ub), m_ret_fit(ret_fit) {}
+        m_ret_fit(ret_fit), m_lb(lb), m_ub(ub) {}
 
     vector_double fitness(const vector_double &) const
     {
@@ -49,9 +49,9 @@ struct base_p
     unsigned int m_nobj;
     unsigned int m_nec;
     unsigned int m_nic;
+    vector_double m_ret_fit;
     vector_double m_lb;
     vector_double m_ub;
-    vector_double m_ret_fit;
 };
 
 // Generates a dummy problem with arbitrary dimensions and return values
@@ -142,7 +142,6 @@ struct full_p : grad_p
 };
 
 BOOST_AUTO_TEST_CASE(problem_construction_test)
-
 {
     // We check that problems with inconsistent dimensions throw
     // std::invalid argument
@@ -226,6 +225,8 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(a1==a2);
         // 2 - We check that the two outputs of human_readable are identical
         BOOST_CHECK(p1_string==p2_string);
+        // 3 - We check that the decision vector dimension is copied
+        BOOST_CHECK(p2.get_n() == p1.get_n());     
     }
 
     // We check the copy constructor
@@ -253,8 +254,129 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(p2.get_hevals() == 0);
         // 3 - We check that the expected gradient and hessans dims are left equal
         BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
-        BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());        
+        BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
+        // 4 - We check that the decision vector dimension is copied
+        BOOST_CHECK(p2.get_n() == p1.get_n());            
     }
 }
 
+BOOST_AUTO_TEST_CASE(problem_assignment_test)
+{
+    vector_double lb_2(2,0);
+    vector_double ub_2(2,1);
+    vector_double fit_2(2,1);
+    vector_double grad_2{1,1};
+    sparsity_pattern grads_2_correct{{0,0},{0,1}};
+    std::vector<vector_double> hess_22{{1,1},{1,1}};
+    std::vector<sparsity_pattern> hesss_22_correct{{{0,0},{1,0}},{{0,0},{1,0}}};
 
+    // We check the move assignment
+    {
+        problem p1{full_p(2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
+
+        // We increment the counters so that the default values are changed
+        p1.fitness({1,1});
+        p1.gradient({1,1});
+        p1.hessians({1,1});
+
+        auto p1_string = boost::lexical_cast<std::string>(p1);
+        auto a1 = p1.extract<full_p>();
+
+        auto p2 = std::move(p1);
+
+        auto a2 = p2.extract<full_p>();
+        auto p2_string = boost::lexical_cast<std::string>(p2);
+
+        // 1 - We check the resource pointed by m_ptr has been moved from p1 to p2
+        BOOST_CHECK(a1==a2);
+        // 2 - We check that the two outputs of human_readable are identical
+        BOOST_CHECK(p1_string==p2_string);
+        // 3 - We check that the decision vector dimension is copied
+        BOOST_CHECK(p2.get_n() == p1.get_n());     
+    }
+
+    // We check the copy assignment
+    {
+        problem p1{full_p(2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
+
+        // We increment the counters so that the default values are changed
+        p1.fitness({1,1});
+        p1.gradient({1,1});
+        p1.hessians({1,1});
+
+        auto a1 = p1.extract<full_p>();
+
+        auto p2 = p1;
+
+        auto a2 = p2.extract<full_p>();
+
+        // 1 - We check the resource pointed by m_ptr has a different addres
+        BOOST_CHECK(a1!=0);
+        BOOST_CHECK(a2!=0);
+        BOOST_CHECK(a1!=a2);
+        // 2 - We check that the counters are reset by the copy operation
+        BOOST_CHECK(p2.get_fevals() == 0);
+        BOOST_CHECK(p2.get_gevals() == 0);
+        BOOST_CHECK(p2.get_hevals() == 0);
+        // 3 - We check that the expected gradient and hessans dims are left equal
+        BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
+        BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
+        // 4 - We check that the decision vector dimension is copied
+        BOOST_CHECK(p2.get_n() == p1.get_n());            
+    }
+}
+
+BOOST_AUTO_TEST_CASE(problem_extract_is_test)
+{
+    problem p1{base_p{2,2,2,{1,1},{5,5},{10,10}}};
+    auto user_problem = p1.extract<base_p>();
+
+    // We check we have access to public data members
+    BOOST_CHECK(user_problem->m_nobj == 2);
+    BOOST_CHECK(user_problem->m_nec == 2);
+    BOOST_CHECK(user_problem->m_nic == 2);
+    BOOST_CHECK((user_problem->m_ret_fit == vector_double{1,1}));
+    BOOST_CHECK((user_problem->m_lb == vector_double{5,5}));
+    BOOST_CHECK((user_problem->m_ub == vector_double{10,10}));
+
+    // We check that a non succesfull cast returns a null pointer
+    BOOST_CHECK(!p1.extract<full_p>());
+
+    // We check the is method
+    BOOST_CHECK(p1.is<base_p>());
+    BOOST_CHECK(!p1.is<full_p>());
+}
+
+BOOST_AUTO_TEST_CASE(problem_fitness_test)
+{
+    problem p1{base_p{2,2,2,{12,13,14,15,16,17},{5,5},{10,10}}};
+    problem p1_wrong_retval{base_p{2,2,2,{1,1,1},{5,5},{10,10}}};
+
+    // We check the fitness checks
+    BOOST_CHECK_THROW(p1.fitness({3,3,3,3}), std::invalid_argument);
+    BOOST_CHECK_THROW(p1_wrong_retval.fitness({3,3}), std::invalid_argument);
+    // We check the fitness returns the correct value
+    BOOST_CHECK((p1.fitness({3,3}) == vector_double{12,13,14,15,16,17}));
+}
+
+BOOST_AUTO_TEST_CASE(problem_gradient_test)
+{
+    problem p1{grad_p{1,0,0,{12},{5,5},{10,10},{12,13},{{0,0},{0,1}}}};
+    problem p1_wrong_retval{grad_p{1,0,0,{12},{5,5},{10,10},{1,2,3,4}}};
+    // We check the gradient checks
+    BOOST_CHECK_THROW(p1.gradient({3,3,3}), std::invalid_argument);
+    BOOST_CHECK_THROW(p1_wrong_retval.gradient({3,3}), std::invalid_argument);
+    // We check the fitness returns the correct value
+    BOOST_CHECK((p1.gradient({3,3}) == vector_double{12,13}));
+}
+
+BOOST_AUTO_TEST_CASE(problem_hessians_test)
+{
+    problem p1{hess_p{1,0,0,{12},{5,5},{10,10},{{12,13}},{{{0,0},{1,0}}}}};
+    problem p1_wrong_retval{hess_p{1,0,0,{12},{5,5},{10,10},{{12,13,14}},{{{0,0},{1,0}}}}};
+    // We check the gradient checks
+    BOOST_CHECK_THROW(p1.hessians({3,3,3}), std::invalid_argument);
+    BOOST_CHECK_THROW(p1_wrong_retval.hessians({3,3}), std::invalid_argument);
+    // We check the fitness returns the correct value
+    BOOST_CHECK((p1.hessians({3,3}) == std::vector<vector_double>{{12,13}}));
+}
