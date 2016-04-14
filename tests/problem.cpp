@@ -17,23 +17,18 @@ struct base_p
 {
 
     base_p(
-        unsigned int dim = 1, 
         unsigned int nobj = 1, 
         unsigned int nec = 0, 
         unsigned int nic = 0, 
         const vector_double &ret_fit = {1},         
         const vector_double &lb = {0}, 
         const vector_double &ub = {1}
-    ) : m_dim(dim), m_nobj(nobj), m_nec(nec), m_nic(nic), 
+    ) : m_nobj(nobj), m_nec(nec), m_nic(nic), 
         m_lb(lb), m_ub(ub), m_ret_fit(ret_fit) {}
 
     vector_double fitness(const vector_double &) const
     {
         return m_ret_fit;
-    }
-    vector_double::size_type get_n() const
-    {
-        return m_dim;
     }
     vector_double::size_type get_nobj() const
     {
@@ -51,7 +46,6 @@ struct base_p
     {
         return {m_lb,m_ub};
     }
-    unsigned int m_dim;
     unsigned int m_nobj;
     unsigned int m_nec;
     unsigned int m_nic;
@@ -65,7 +59,6 @@ struct base_p
 struct grad_p : base_p
 {
     grad_p(
-        unsigned int dim = 1, 
         unsigned int nobj = 1, 
         unsigned int nec = 0, 
         unsigned int nic = 0, 
@@ -74,7 +67,7 @@ struct grad_p : base_p
         const vector_double &ub = {1},
         const vector_double &g = {1},
         const sparsity_pattern &gs = {{0,0}}
-     ) : base_p(dim,nobj,nec,nic,ret_fit,lb,ub), m_g(g), m_gs(gs) {}
+     ) : base_p(nobj,nec,nic,ret_fit,lb,ub), m_g(g), m_gs(gs) {}
 
     vector_double gradient(const vector_double &) const
     {
@@ -95,7 +88,6 @@ struct grad_p : base_p
 struct hess_p : base_p
 {
     hess_p(
-        unsigned int dim = 1, 
         unsigned int nobj = 1, 
         unsigned int nec = 0, 
         unsigned int nic = 0, 
@@ -104,7 +96,7 @@ struct hess_p : base_p
         const vector_double &ub = {1},
         const std::vector<vector_double> &h = {{1}},
         const std::vector<sparsity_pattern> &hs = {{{0,0}}}
-     ) : base_p(dim,nobj,nec,nic,ret_fit,lb,ub), m_h(h), m_hs(hs) {}
+     ) : base_p(nobj,nec,nic,ret_fit,lb,ub), m_h(h), m_hs(hs) {}
 
     std::vector<vector_double> hessians(const vector_double &) const
     {
@@ -123,7 +115,6 @@ struct hess_p : base_p
 struct full_p : grad_p 
 {
     full_p(
-        unsigned int dim = 1, 
         unsigned int nobj = 1, 
         unsigned int nec = 0, 
         unsigned int nic = 0, 
@@ -134,7 +125,7 @@ struct full_p : grad_p
         const sparsity_pattern &gs = {{0,0}},
         const std::vector<vector_double> &h = {{1}},
         const std::vector<sparsity_pattern> &hs = {{{0,0}}}
-     ) : grad_p(dim,nobj,nec,nic,ret_fit,lb,ub,g,gs), m_h(h), m_hs(hs) {}
+     ) : grad_p(nobj,nec,nic,ret_fit,lb,ub,g,gs), m_h(h), m_hs(hs) {}
 
     std::vector<vector_double> hessians(const vector_double &) const
     {
@@ -177,29 +168,29 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     std::vector<sparsity_pattern> hesss_22_correct{{{0,0},{1,0}},{{0,0},{1,0}}};
 
     // 1 - lb > ub
-    BOOST_CHECK_THROW(problem{base_p(2,1,0,0,fit_2,ub_2,lb_2)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1,0,0,fit_2,ub_2,lb_2)}, std::invalid_argument);
     // 2 - lb length is wrong
-    BOOST_CHECK_THROW(problem{base_p(2,1,0,0,fit_2,lb_3,ub_2)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1,0,0,fit_2,lb_3,ub_2)}, std::invalid_argument);
     // 3 - ub length is wrong
-    BOOST_CHECK_THROW(problem{base_p(2,1,0,0,fit_2,lb_2,ub_3)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1,0,0,fit_2,lb_2,ub_3)}, std::invalid_argument);
     // 4 - gradient sparsity has index out of bounds
-    BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_outofbounds)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{grad_p(1,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_outofbounds)}, std::invalid_argument);
     // 5 - gradient sparsity has a repeating pair 
-    BOOST_CHECK_THROW(problem{grad_p(2,1,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_repeats)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{grad_p(1,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_repeats)}, std::invalid_argument);
     // 6 - hessian sparsity has index out of bounds
-    BOOST_CHECK_THROW(problem{hess_p(2,1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_outofbounds)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{hess_p(1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_outofbounds)}, std::invalid_argument);
     // 7 - hessian sparsity is not lower triangular
-    BOOST_CHECK_THROW(problem{hess_p(2,1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_notlowertriangular)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{hess_p(1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_notlowertriangular)}, std::invalid_argument);
     // 8 - hessian sparsity has repeated indexes
-    BOOST_CHECK_THROW(problem{hess_p(2,1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_repeated)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{hess_p(1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_repeated)}, std::invalid_argument);
 
     // We check that the data members are initialized correctly (i.e. counters to zero
     // and gradient / hessian dimensions to the right values
     {
-        problem p1{base_p(2,2,0,0,fit_2,lb_2,ub_2)};
-        problem p2{base_p(11,3,4,5,fit_12,lb_11,ub_11)};
-        problem p3{grad_p(2,1,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct)};
-        problem p4{hess_p(2,1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_correct)};
+        problem p1{base_p(2,0,0,fit_2,lb_2,ub_2)};
+        problem p2{base_p(3,4,5,fit_12,lb_11,ub_11)};
+        problem p3{grad_p(1,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct)};
+        problem p4{hess_p(1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_correct)};
         BOOST_CHECK(p1.get_fevals() == 0u);
         BOOST_CHECK(p1.get_gevals() == 0u);
         BOOST_CHECK(p1.get_hevals() == 0u);
@@ -216,7 +207,7 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
 
     // We check the move constructor
     {
-        problem p1{full_p(2,2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
+        problem p1{full_p(2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
 
         // We increment the counters so that the default values are changed
         p1.fitness({1,1});
@@ -239,7 +230,7 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
 
     // We check the copy constructor
     {
-        problem p1{full_p(2,2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
+        problem p1{full_p(2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
 
         // We increment the counters so that the default values are changed
         p1.fitness({1,1});
