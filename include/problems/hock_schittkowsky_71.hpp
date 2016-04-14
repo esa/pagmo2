@@ -25,12 +25,6 @@ struct hock_schittkowsky_71
         };
     }
 
-    // problem dimension
-    vector_double::size_type get_n() const
-    {
-        return 4u;
-    }
-
     // number of objectives (single objective)
     vector_double::size_type get_nobj() const
     {

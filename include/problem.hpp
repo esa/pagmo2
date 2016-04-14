@@ -38,7 +38,6 @@ struct prob_inner_base
     virtual std::vector<sparsity_pattern> hessians_sparsity() const = 0;
     virtual bool has_hessians_sparsity() const = 0;
     virtual vector_double::size_type get_nobj() const = 0;
-    virtual vector_double::size_type get_n() const = 0;
     virtual std::pair<vector_double,vector_double> get_bounds() const = 0;
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
@@ -61,8 +60,8 @@ struct prob_inner: prob_inner_base
     );
     static_assert(has_fitness<T>::value,
         "A problem must provide a fitness function and a method to query the number of objectives.");
-    static_assert(has_dimensions_bounds<T>::value,
-        "A problem must provide getters for its dimension and bounds.");
+    static_assert(has_bounds<T>::value,
+        "A problem must provide getters for its bounds.");
     prob_inner() = default;
     explicit prob_inner(T &&x):m_value(std::move(x)) {}
     explicit prob_inner(const T &x):m_value(x) {}
@@ -78,10 +77,6 @@ struct prob_inner: prob_inner_base
     virtual vector_double::size_type get_nobj() const override final
     {
         return m_value.get_nobj();
-    }
-    virtual vector_double::size_type get_n() const override final
-    {
-        return m_value.get_n();
     }
     virtual std::pair<vector_double,vector_double> get_bounds() const override final
     {
@@ -117,7 +112,7 @@ struct prob_inner: prob_inner_base
     sparsity_pattern gradient_sparsity_impl(const U &) const
     {
         // By default a problem is dense
-        auto dim = get_n(); 
+        auto dim = get_bounds().first.size();
         auto f_dim = get_nobj() + get_nec() + get_nic();        
         sparsity_pattern retval;
         for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
@@ -166,7 +161,7 @@ struct prob_inner: prob_inner_base
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
     {
         // By default a problem has dense hessians
-        auto dim = get_n(); 
+        auto dim = get_bounds().first.size();
         auto f_dim = get_nobj() + get_nec() + get_nic();        
         std::vector<sparsity_pattern> retval(f_dim);
         for (auto &Hs : retval) {
@@ -301,24 +296,23 @@ class problem
             auto bounds = get_bounds();
             const auto &lb = bounds.first;
             const auto &ub = bounds.second;
-            // 1 - check lower bounds length
-            if (lb.size()!=get_n()) {
-                pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) + ", expected " + std::to_string(get_n()));
+            // 1 - check bounds have equal length
+            if (lb.size()!=ub.size()) {
+                pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) + ", length of upper bound is " + std::to_string(ub.size()));
             }
-            // 2 - check upper bounds length
-            if (ub.size()!=get_n()) {
-                pagmo_throw(std::invalid_argument,"Length of upper bounds vector is " + std::to_string(ub.size()) + ", expected " + std::to_string(get_n()));
-            }
-            // 3 - checks lower < upper for all values in lb, lb
+            // 2 - checks lower < upper for all values in lb, lb
             for (decltype(lb.size()) i=0u; i < lb.size(); ++i) {
                 if (lb[i] > ub[i]) {
                     pagmo_throw(std::invalid_argument,"The lower bound at position " + std::to_string(i) + " is " + std::to_string(lb[i]) +
                         " while the upper bound has the smaller value " + std::to_string(ub[i]));
                 }
             }
-            // 4 - checks that the sparsity contains reasonable numbers
+            // 4 - initialize problem dimension (must be before
+            // check_gradient_sparsity and check_hessians_sparsity)
+            m_n = lb.size();
+            // 5 - checks that the sparsity contains reasonable numbers
             check_gradient_sparsity(); // here m_gs_dim is initialized
-            // 5 - checks that the hessians contain reasonable numbers
+            // 6 - checks that the hessians contain reasonable numbers
             check_hessians_sparsity(); // here m_hs_dim is initialized
         }
         problem(const problem &other):
@@ -326,6 +320,7 @@ class problem
             m_fevals(0u),
             m_gevals(0u),
             m_hevals(0u),
+            m_n(other.m_n),
             m_gs_dim(other.m_gs_dim),
             m_hs_dim(other.m_hs_dim)
         {}
@@ -334,6 +329,7 @@ class problem
             m_fevals(other.m_fevals.load()),
             m_gevals(other.m_gevals.load()),
             m_hevals(other.m_hevals.load()),
+            m_n(other.m_n),
             m_gs_dim(other.m_gs_dim),
             m_hs_dim(other.m_hs_dim)
         {}
@@ -345,6 +341,7 @@ class problem
                 m_fevals.store(other.m_fevals.load());
                 m_gevals.store(other.m_gevals.load());
                 m_hevals.store(other.m_hevals.load());
+                m_n = other.m_n;
                 m_gs_dim = other.m_gs_dim;
                 m_hs_dim = other.m_hs_dim;
             }
@@ -438,7 +435,7 @@ class problem
         }
         vector_double::size_type get_n() const
         {
-            return m_ptr->get_n();
+            return m_n;
         }
         std::pair<vector_double, vector_double> get_bounds() const
         {
@@ -531,7 +528,7 @@ class problem
         template <typename Archive>
         void save(Archive &ar) const
         { 
-            ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(), m_gs_dim, m_hs_dim);
+            ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(), m_n, m_gs_dim, m_hs_dim);
         }
         template <typename Archive>
         void load(Archive &ar)
@@ -544,7 +541,7 @@ class problem
             m_gevals.store(tmp);
             ar(tmp);
             m_hevals.store(tmp);
-            ar(m_gs_dim,m_hs_dim);
+            ar(m_n, m_gs_dim,m_hs_dim);
         }
 
     private:
@@ -665,6 +662,8 @@ class problem
         std::atomic<unsigned long long> m_gevals;
         // Atomic counter for calls to the hessians 
         std::atomic<unsigned long long> m_hevals;
+        // Problem dimension
+        vector_double::size_type m_n;
         // Expected dimensions of the returned gradient (matching the sparsity pattern)
         vector_double::size_type m_gs_dim;
         // Expected dimensions of the returned hessians (matching the sparsity patterns)

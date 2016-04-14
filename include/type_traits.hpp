@@ -44,23 +44,19 @@ const bool has_fitness<T>::value;
 
 /// Detect dimensions and bounds availability.
 template <typename T>
-class has_dimensions_bounds: detail::sfinae_types
+class has_bounds: detail::sfinae_types
 {
         template <typename U>
-        static auto test0(const U &p) -> decltype(p.get_n());
+        static auto test0(const U &p) -> decltype(p.get_bounds());
         static no test0(...);
-        template <typename U>
-        static auto test1(const U &p) -> decltype(p.get_bounds());
-        static no test1(...);
         static const bool implementation_defined =
-            std::is_same<vector_double::size_type,decltype(test0(std::declval<const T &>()))>::value &&
-            std::is_same<std::pair<vector_double,vector_double>,decltype(test1(std::declval<const T &>()))>::value;
+            std::is_same<std::pair<vector_double,vector_double>,decltype(test0(std::declval<const T &>()))>::value;
     public:
         static const bool value = implementation_defined;
 };
 
 template <typename T>
-const bool has_dimensions_bounds<T>::value;
+const bool has_bounds<T>::value;
 
 /// Detect constraints availability.
 template <typename T>

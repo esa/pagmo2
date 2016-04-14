@@ -76,54 +76,30 @@ struct db_00
 // The good one.
 struct db_01
 {
-    vector_double::size_type get_n() const;
     std::pair<vector_double,vector_double> get_bounds() const;
 };
 
 struct db_02
 {
-    vector_double::size_type get_n();
-    std::pair<vector_double,vector_double> get_bounds() const;
+    std::pair<vector_double,vector_double> get_bounds();
 };
 
 struct db_03
 {
-    int get_n() const;
-    std::pair<vector_double,vector_double> get_bounds() const;
+    vector_double get_bounds() const;
 };
 
 struct db_04
 {
-    vector_double::size_type get_n() const;
-    std::pair<vector_double,vector_double> get_bounds();
 };
 
-struct db_05
+BOOST_AUTO_TEST_CASE(has_bounds_test)
 {
-    vector_double::size_type get_n() const;
-    vector_double get_bounds() const;
-};
-
-struct db_06
-{
-    std::pair<vector_double,vector_double> get_bounds() const;
-};
-
-struct db_07
-{
-    vector_double::size_type get_n() const;
-};
-
-BOOST_AUTO_TEST_CASE(has_dimensions_bounds_test)
-{
-    BOOST_CHECK((!has_dimensions_bounds<db_00>::value));
-    BOOST_CHECK((has_dimensions_bounds<db_01>::value));
-    BOOST_CHECK((!has_dimensions_bounds<db_02>::value));
-    BOOST_CHECK((!has_dimensions_bounds<db_03>::value));
-    BOOST_CHECK((!has_dimensions_bounds<db_04>::value));
-    BOOST_CHECK((!has_dimensions_bounds<db_05>::value));
-    BOOST_CHECK((!has_dimensions_bounds<db_06>::value));
-    BOOST_CHECK((!has_dimensions_bounds<db_07>::value));
+    BOOST_CHECK((!has_bounds<db_00>::value));
+    BOOST_CHECK((has_bounds<db_01>::value));
+    BOOST_CHECK((!has_bounds<db_02>::value));
+    BOOST_CHECK((!has_bounds<db_03>::value));
+    BOOST_CHECK((!has_bounds<db_04>::value));
 }
 
 struct c_00
