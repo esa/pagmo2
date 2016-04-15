@@ -24,6 +24,30 @@ namespace pagmo
 namespace detail
 {
 
+std::vector<sparsity_pattern> dense_hessian(vector_double::size_type f_dim, vector_double::size_type dim) 
+{    
+    std::vector<sparsity_pattern> retval(f_dim);
+    for (auto &Hs : retval) {
+        for (decltype(dim) j = 0u; j<dim; ++j) {
+            for (decltype(dim) i = 0u; i<=j; ++i) {
+               Hs.push_back({j,i});
+            }
+        }
+    }
+    return retval;
+}
+
+sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim) 
+{     
+    sparsity_pattern retval;
+    for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
+        for (decltype(dim) i = 0u; i<dim; ++i) {
+           retval.push_back({j, i});
+        }
+    }
+    return retval;
+}
+
 struct prob_inner_base
 {
     virtual ~prob_inner_base() {}
@@ -114,13 +138,7 @@ struct prob_inner: prob_inner_base
         // By default a problem is dense
         auto dim = get_bounds().first.size();
         auto f_dim = get_nobj() + get_nec() + get_nic();        
-        sparsity_pattern retval;
-        for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
-            for (decltype(dim) i = 0u; i<dim; ++i) {
-               retval.push_back({j, i});
-            }
-        }
-        return retval;
+        return dense_gradient(f_dim, dim);
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(U &)
@@ -163,15 +181,7 @@ struct prob_inner: prob_inner_base
         // By default a problem has dense hessians
         auto dim = get_bounds().first.size();
         auto f_dim = get_nobj() + get_nec() + get_nic();        
-        std::vector<sparsity_pattern> retval(f_dim);
-        for (auto &Hs : retval) {
-            for (decltype(dim) j = 0u; j<dim; ++j) {
-                for (decltype(dim) i = 0u; i<=j; ++i) {
-                   Hs.push_back({j,i});
-                }
-            }
-        }
-        return retval;
+        return dense_hessian(f_dim, dim);
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(U &)
