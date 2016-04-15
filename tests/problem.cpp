@@ -192,7 +192,8 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     BOOST_CHECK_THROW(problem{hess_p(1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_notlowertriangular)}, std::invalid_argument);
     // 8 - hessian sparsity has repeated indexes
     BOOST_CHECK_THROW(problem{hess_p(1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_repeated)}, std::invalid_argument);
-
+    // 9 - hessian sparsity has the wrong length
+    BOOST_CHECK_THROW(problem{hess_p(1,1,0,fit_2,lb_2,ub_2,hess_22, {{{0,0},{1,0}},{{0,0},{1,0}},{{0,0}}})}, std::invalid_argument);
     // We check that the data members are initialized correctly (i.e. counters to zero
     // and gradient / hessian dimensions to the right values
     {
@@ -380,6 +381,12 @@ BOOST_AUTO_TEST_CASE(problem_gradient_test)
     BOOST_CHECK_THROW(p1_wrong_retval.gradient({3,3}), std::invalid_argument);
     // We check the fitness returns the correct value
     BOOST_CHECK((p1.gradient({3,3}) == vector_double{12,13}));
+
+    {
+        problem p2{base_p{2,2,2,{12,13,14,15,16,17},{5,5},{10,10}}};
+        BOOST_CHECK_THROW(p2.gradient({3,3}), std::logic_error);
+        BOOST_CHECK_THROW(p2.hessians({3,3}), std::logic_error);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(problem_hessians_test)
