@@ -24,8 +24,8 @@ namespace pagmo
 namespace detail
 {
 
-std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim) 
-{    
+std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
+{
     std::vector<sparsity_pattern> retval(f_dim);
     for (auto &Hs : retval) {
         for (decltype(dim) j = 0u; j<dim; ++j) {
@@ -37,8 +37,8 @@ std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vec
     return retval;
 }
 
-sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim) 
-{     
+sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim)
+{
     sparsity_pattern retval;
     for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
         for (decltype(dim) i = 0u; i<dim; ++i) {
@@ -137,7 +137,7 @@ struct prob_inner: prob_inner_base
     {
         // By default a problem is dense
         auto dim = get_bounds().first.size();
-        auto f_dim = get_nobj() + get_nec() + get_nic();        
+        auto f_dim = get_nobj() + get_nec() + get_nic();
         return dense_gradient(f_dim, dim);
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
@@ -180,7 +180,7 @@ struct prob_inner: prob_inner_base
     {
         // By default a problem has dense hessians
         auto dim = get_bounds().first.size();
-        auto f_dim = get_nobj() + get_nec() + get_nic();        
+        auto f_dim = get_nobj() + get_nec() + get_nic();
         return dense_hessians(f_dim, dim);
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
@@ -284,10 +284,10 @@ struct prob_inner: prob_inner_base
     // Serialization.
     template <typename Archive>
     void serialize(Archive &ar)
-    { 
+    {
         ar(cereal::base_class<prob_inner_base>(this),m_value);
     }
-    T m_value;  
+    T m_value;
 };
 
 }
@@ -434,7 +434,7 @@ class problem
         std::vector<sparsity_pattern> hessians_sparsity() const
         {
             return m_ptr->hessians_sparsity();
-        } 
+        }
         bool has_hessians_sparsity() const
         {
             return m_ptr->has_hessians_sparsity();
@@ -458,7 +458,7 @@ class problem
         vector_double::size_type get_nic() const
         {
             return m_ptr->get_nic();
-        }       
+        }
         unsigned long long get_fevals() const
         {
             return m_fevals.load();
@@ -471,7 +471,7 @@ class problem
         {
             return m_hevals.load();
         }
-        vector_double::size_type get_gs_dim() const 
+        vector_double::size_type get_gs_dim() const
         {
             return m_gs_dim;
         }
@@ -495,13 +495,12 @@ class problem
         std::string get_extra_info() const
         {
             return m_ptr->get_extra_info();
-        } 
+        }
 
         std::string human_readable() const
         {
             std::ostringstream s;
             s << "Problem name: " << get_name() << '\n';
-            //const size_type size = get_dimension();
             s << "\tGlobal dimension:\t\t\t" << get_n() << '\n';
             s << "\tFitness dimension:\t\t\t" << get_nobj() << '\n';
             s << "\tEquality constraints dimension:\t\t" << get_nec() << '\n';
@@ -516,18 +515,18 @@ class problem
                 stream(s, "\tExpected gradients: ", m_gs_dim, '\n');
             }
             stream(s, "\tHas hessians: ", has_hessians(), '\n');
-            stream(s, "\tUser implemented hessians sparsity: ", has_hessians_sparsity(), '\n');           
+            stream(s, "\tUser implemented hessians sparsity: ", has_hessians_sparsity(), '\n');
             if (has_hessians()) {
                 stream(s, "\tExpected hessian components: ", m_hs_dim, '\n');
-            }  
+            }
             stream(s, "\n\tFunction evaluations: ", get_fevals(), '\n');
             if (has_gradient()) {
-                stream(s, "\tGradient evaluations: ", get_gevals(), '\n'); 
+                stream(s, "\tGradient evaluations: ", get_gevals(), '\n');
             }
             if (has_hessians()) {
                 stream(s, "\tHessians evaluations: ", get_hevals(), '\n');
             }
-            
+
             const auto extra_str = get_extra_info();
             if (!extra_str.empty()) {
                 stream(s, "\nExtra info:\n", extra_str, '\n');
@@ -537,7 +536,7 @@ class problem
 
         template <typename Archive>
         void save(Archive &ar) const
-        { 
+        {
             ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(), m_n, m_gs_dim, m_hs_dim);
         }
         template <typename Archive>
@@ -589,7 +588,7 @@ class problem
         {
             auto hs = hessians_sparsity();
             // 1 - We check that a hessian sparsity is provided for each component
-            // of the fitness 
+            // of the fitness
             auto nf = get_nobj() + get_nec() + get_nic();
             if (hs.size()!=nf) {
                 pagmo_throw(std::invalid_argument,"Invalid dimension of the hessians_sparsity: " + std::to_string(hs.size()) + ", expected: " + std::to_string(nf));
@@ -603,11 +602,11 @@ class problem
             // for future quick checks.
             m_hs_dim.clear();
             for (auto one_hs: hs) {
-                m_hs_dim.push_back(one_hs.size());           
+                m_hs_dim.push_back(one_hs.size());
             }
 
         }
-        void check_hessian_sparsity(const sparsity_pattern& hs) 
+        void check_hessian_sparsity(const sparsity_pattern& hs)
         {
             auto n = get_n();
             // 1 - We check that the hessian sparsity pattern has
@@ -653,9 +652,9 @@ class problem
 
         void check_hessians_vector(const std::vector<vector_double> &hs) const
         {
-            // Checks that the hessians returned have the same dimensions of the 
+            // Checks that the hessians returned have the same dimensions of the
             // corresponding sparsity patterns
-            for (decltype(hs.size()) i=0u; i<hs.size(); ++i) 
+            for (decltype(hs.size()) i=0u; i<hs.size(); ++i)
             {
                 if (hs[i].size()!=m_hs_dim[i]) {
                     pagmo_throw(std::invalid_argument,"On the hessian no. " + std::to_string(i) +  ": Components returned: " + std::to_string(hs[i].size()) + ", should be " + std::to_string(m_hs_dim[i]));
@@ -666,11 +665,11 @@ class problem
     private:
         // Pointer to the inner base problem
         std::unique_ptr<detail::prob_inner_base> m_ptr;
-        // Atomic counter for calls to the fitness 
+        // Atomic counter for calls to the fitness
         std::atomic<unsigned long long> m_fevals;
-        // Atomic counter for calls to the gradient 
+        // Atomic counter for calls to the gradient
         std::atomic<unsigned long long> m_gevals;
-        // Atomic counter for calls to the hessians 
+        // Atomic counter for calls to the hessians
         std::atomic<unsigned long long> m_hevals;
         // Problem dimension
         vector_double::size_type m_n;

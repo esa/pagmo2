@@ -48,7 +48,7 @@ inline void stream_impl(std::ostream &os, const std::vector<T> &v)
         for (decltype(v.size()) i = 0u; i < PAGMO_MAX_OUTPUT_LENGTH; ++i) {
             stream(os, v[i], ", ");
         }
-        os << " ... ]";
+        os << "... ]";
     }
 }
 
