@@ -122,6 +122,8 @@ struct hess_p : base_p
     std::vector<sparsity_pattern> m_hs;
 };
 
+// Generates a dummy problem with arbitrary dimensions and return values
+// having the hessians and the gradients implemented
 struct full_p : grad_p 
 {
     full_p(
@@ -149,6 +151,30 @@ struct full_p : grad_p
 
     std::vector<vector_double> m_h;
     std::vector<sparsity_pattern> m_hs;
+};
+
+struct empty
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {1};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 1;
+    }
+    vector_double::size_type get_nec() const
+    {
+        return 0;
+    }
+    vector_double::size_type get_nic() const
+    {
+        return 0;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0},{1}};
+    }
 };
 
 BOOST_AUTO_TEST_CASE(problem_construction_test)
@@ -435,6 +461,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     
     problem p1{base_p(2,3,4,{3,4,5,6,7,8,9,0,1}, lb_2, ub_2)};
     problem p2{full_p(2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
+    problem p3{empty{}};
 
     BOOST_CHECK(p1.get_nobj() == 2);
     BOOST_CHECK(p1.get_n() == 2);
@@ -459,6 +486,10 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p2.get_gevals() == N);
     BOOST_CHECK(p2.get_hevals() == N);
 
+    // User implemented
     BOOST_CHECK(p1.get_name() == "A base toy problem");
     BOOST_CHECK(p1.get_extra_info() == "Nothing to report");
+    // Default
+    BOOST_CHECK(p3.get_name() == typeid(*p3.extract<empty>()).name());
+    BOOST_CHECK(p3.get_extra_info() == "");
 }
