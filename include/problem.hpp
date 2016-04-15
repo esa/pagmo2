@@ -24,7 +24,7 @@ namespace pagmo
 namespace detail
 {
 
-std::vector<sparsity_pattern> dense_hessian(vector_double::size_type f_dim, vector_double::size_type dim) 
+std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim) 
 {    
     std::vector<sparsity_pattern> retval(f_dim);
     for (auto &Hs : retval) {
@@ -181,7 +181,7 @@ struct prob_inner: prob_inner_base
         // By default a problem has dense hessians
         auto dim = get_bounds().first.size();
         auto f_dim = get_nobj() + get_nec() + get_nic();        
-        return dense_hessian(f_dim, dim);
+        return dense_hessians(f_dim, dim);
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(U &)
