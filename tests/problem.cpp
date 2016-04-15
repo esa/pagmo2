@@ -292,7 +292,8 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
         auto p1_string = boost::lexical_cast<std::string>(p1);
         auto a1 = p1.extract<full_p>();
 
-        auto p2 = std::move(p1);
+        problem p2{base_p{}};
+        p2 = std::move(p1);
 
         auto a2 = p2.extract<full_p>();
         auto p2_string = boost::lexical_cast<std::string>(p2);
@@ -316,7 +317,8 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
 
         auto a1 = p1.extract<full_p>();
 
-        auto p2 = p1;
+        problem p2{base_p{}};
+        p2 = p1;
 
         auto a2 = p2.extract<full_p>();
 
