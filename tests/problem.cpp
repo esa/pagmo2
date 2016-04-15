@@ -46,6 +46,16 @@ struct base_p
     {
         return {m_lb,m_ub};
     }
+    std::string get_name() const
+    {
+        return "A base toy problem";
+    }
+
+    std::string get_extra_info() const
+    {
+        return "Nothing to report";
+    }
+
     unsigned int m_nobj;
     unsigned int m_nec;
     unsigned int m_nic;
@@ -379,4 +389,67 @@ BOOST_AUTO_TEST_CASE(problem_hessians_test)
     BOOST_CHECK_THROW(p1_wrong_retval.hessians({3,3}), std::invalid_argument);
     // We check the fitness returns the correct value
     BOOST_CHECK((p1.hessians({3,3}) == std::vector<vector_double>{{12,13}}));
+}
+
+BOOST_AUTO_TEST_CASE(problem_has_test)
+{
+    problem p1{base_p{}};
+    problem p2{grad_p{}};
+    problem p3{hess_p{}};
+
+    BOOST_CHECK(!p1.has_gradient());
+    BOOST_CHECK(!p1.has_gradient_sparsity());
+    BOOST_CHECK(!p1.has_hessians());
+    BOOST_CHECK(!p1.has_hessians_sparsity());
+
+    BOOST_CHECK(p2.has_gradient());
+    BOOST_CHECK(p2.has_gradient_sparsity());
+    BOOST_CHECK(!p2.has_hessians());
+    BOOST_CHECK(!p2.has_hessians_sparsity());
+
+
+    BOOST_CHECK(!p3.has_gradient());
+    BOOST_CHECK(!p3.has_gradient_sparsity());
+    BOOST_CHECK(p3.has_hessians());
+    BOOST_CHECK(p3.has_hessians_sparsity());
+}
+
+BOOST_AUTO_TEST_CASE(problem_getters_test)
+{
+    vector_double lb_2(2,13);
+    vector_double ub_2(2,17);
+    vector_double fit_2(2,1);
+    vector_double grad_2{1,1};
+    sparsity_pattern grads_2_correct{{0,0},{0,1}};
+    std::vector<vector_double> hess_22{{1,1},{1,1}};
+    std::vector<sparsity_pattern> hesss_22_correct{{{0,0},{1,0}},{{0,0},{1,0}}};
+    
+    problem p1{base_p(2,3,4,{3,4,5,6,7,8,9,0,1}, lb_2, ub_2)};
+    problem p2{full_p(2,0,0,fit_2,lb_2,ub_2,grad_2, grads_2_correct,hess_22, hesss_22_correct)};
+
+    BOOST_CHECK(p1.get_nobj() == 2);
+    BOOST_CHECK(p1.get_n() == 2);
+    BOOST_CHECK(p1.get_nec() == 3);
+    BOOST_CHECK(p1.get_nic() == 4);
+    BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13,13},{17,17}}));
+    // dense
+    BOOST_CHECK(p1.get_gs_dim() == 18);
+    BOOST_CHECK((p1.get_hs_dim() == std::vector<vector_double::size_type>(9,3)));
+    // sparse
+    BOOST_CHECK(p2.get_gs_dim() == 2);
+    BOOST_CHECK((p2.get_hs_dim() == std::vector<vector_double::size_type>{2,2}));
+
+    // Making some evaluations
+    auto N = 1235u;
+    for (auto i=0u; i<N; ++i) {
+        p2.fitness({0,0});
+        p2.gradient({0,0});
+        p2.hessians({0,0});
+    }
+    BOOST_CHECK(p2.get_fevals() == N);
+    BOOST_CHECK(p2.get_gevals() == N);
+    BOOST_CHECK(p2.get_hevals() == N);
+
+    BOOST_CHECK(p1.get_name() == "A base toy problem");
+    BOOST_CHECK(p1.get_extra_info() == "Nothing to report");
 }
