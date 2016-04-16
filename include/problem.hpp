@@ -87,6 +87,8 @@ struct prob_inner: prob_inner_base
     static_assert(has_bounds<T>::value,
         "A problem must provide getters for its bounds.");
     prob_inner() = default;
+    prob_inner(const prob_inner &) = delete;
+    prob_inner(prob_inner &&) = delete;
     explicit prob_inner(T &&x):m_value(std::move(x)) {}
     explicit prob_inner(const T &x):m_value(x) {}
     virtual prob_inner_base *clone() const override final

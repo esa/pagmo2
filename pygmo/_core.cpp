@@ -32,9 +32,21 @@
 
 #include "../include/exceptions.hpp"
 #include "../include/problem.hpp"
+#include "../include/problems/hock_schittkowsky_71.hpp"
 #include "../include/types.hpp"
 
 namespace py = pybind11;
+
+namespace pygmo
+{
+
+// Perform a deep copy of input object o.
+inline py::object deepcopy(py::object o)
+{
+    return static_cast<py::object>(py::module::import("copy").attr("deepcopy")).call(o);
+}
+
+}
 
 namespace pagmo
 {
@@ -60,18 +72,18 @@ struct prob_inner<py::object>: prob_inner_base
             pagmo_throw(std::invalid_argument,"the 'get_bounds()' method is missing");
         }
     }
-    explicit prob_inner(py::object &&x):m_value(std::move(x))
-    {
-        check_construction_object();
-    }
-    // TODO need to understand here: do we need deepc copy? What about the generic ctor.
-    explicit prob_inner(const py::object &x):m_value(x)
+    prob_inner() = default;
+    prob_inner(const prob_inner &) = delete;
+    prob_inner(prob_inner &&) = delete;
+    explicit prob_inner(py::object o):
+        // Perform an explicit deep copy of the input object.
+        m_value(pygmo::deepcopy(o))
     {
         check_construction_object();
     }
     virtual prob_inner_base *clone() const override final
     {
-        return ::new prob_inner<py::object>(m_value);
+        return ::new prob_inner(m_value);
     }
     // Main methods.
     virtual vector_double fitness(const vector_double &dv) const override final
@@ -150,7 +162,10 @@ struct prob_inner<py::object>: prob_inner_base
         if (attr) {
             return attr.call().cast<sparsity_pattern>();
         }
-        pagmo_throw(std::logic_error,"Sparsity pattern has been requested but it is not implemented or not implemented correctly.");
+        // Use the dense default implementation.
+        auto dim = get_bounds().first.size();
+        auto f_dim = get_nobj() + get_nec() + get_nic();
+        return dense_gradient(f_dim, dim);
     }
     virtual bool has_hessians() const override final
     {
@@ -174,15 +189,11 @@ struct prob_inner<py::object>: prob_inner_base
         if (attr) {
             return attr.call().cast<std::vector<sparsity_pattern>>();
         }
-        pagmo_throw(std::logic_error,"Hessians sparsity patterns have been requested but they are not implemented or not implemented correctly.");
+        // Dense default implementation.
+        auto dim = get_bounds().first.size();
+        auto f_dim = get_nobj() + get_nec() + get_nic();
+        return dense_hessians(f_dim, dim);
     }
-
-    // Serialization.
-//     template <typename Archive>
-//     void serialize(Archive &ar)
-//     {
-//         ar(cereal::base_class<prob_inner_base>(this),m_value);
-//     }
     py::object m_value;
 };
 
@@ -191,22 +202,49 @@ struct prob_inner<py::object>: prob_inner_base
 }
 
 using namespace pagmo;
-
+using namespace std::literals;
 
 PYBIND11_PLUGIN(_core)
 {
     py::module m("_core", "PyGMO's core module");
 
-    py::class_<problem>(m,"problem")
-        .def(py::init<py::object>())
+    py::class_<problem> problem_class(m,"problem");
+
+    // Expose the generic problem interface.
+    problem_class.def(py::init<const problem &>())
         .def("fitness",&problem::fitness)
         .def("get_bounds",&problem::get_bounds)
         .def("get_fevals",&problem::get_fevals)
+        .def("hessians_sparsity",&problem::hessians_sparsity)
         .def("__repr__",[](const problem &p) {
             std::stringstream oss;
             oss << p;
             return oss.str();
         });
+
+    py::class_<hock_schittkowsky_71> hs71(m,"hock_schittkowsky_71");
+    hs71.def(py::init<>());
+
+    problem_class.def(py::init<hock_schittkowsky_71>());
+    problem_class.def("_extract",[](const problem &p, const hock_schittkowsky_71 &) {
+        auto ptr = p.extract<hock_schittkowsky_71>();
+        if (!ptr) {
+            pagmo_throw(std::runtime_error,"cannot extract an instance of type '"s +
+                typeid(hock_schittkowsky_71).name() + "'");
+        }
+        return hock_schittkowsky_71(*ptr);
+    });
+
+    // This needs to go last, as it needs to have the lowest precedence among all ctors.
+    problem_class.def(py::init<py::object>());
+    problem_class.def("_extract",[](const problem &p, py::object) {
+        auto ptr = p.extract<py::object>();
+        if (!ptr) {
+            pagmo_throw(std::runtime_error,"cannot extract an instance of type '"s +
+                typeid(py::object).name() + "'");
+        }
+        return pygmo::deepcopy(*ptr);
+    });
 
     return m.ptr();
 }
