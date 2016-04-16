@@ -16,7 +16,7 @@
 #include "serialization.hpp"
 #include "type_traits.hpp"
 
-#define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>,#prob);
+#define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>,#prob)
 
 namespace pagmo
 {

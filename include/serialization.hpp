@@ -14,6 +14,7 @@
 #include "external/cereal/types/common.hpp"
 #include "external/cereal/types/memory.hpp"
 #include "external/cereal/types/polymorphic.hpp"
+#include "external/cereal/types/utility.hpp"
 #include "external/cereal/types/vector.hpp"
 
 #if defined(__clang__) || defined(__GNUC__)

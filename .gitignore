@@ -13,3 +13,6 @@ build*
 
 # .out
 *.out
+
+# Third party submodules
+include/external/cereal/*

@@ -22,7 +22,18 @@ struct sfinae_types
 
 }
 
-/// Detect fitness availability.
+/// Type has fitness() and get_nobj()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * methods implemented:
+ *
+ * @code
+ * fitness_vector fitness(const decision_vector &) const
+ * fitness_vector::size_type get_nobj() const 
+ * @endcode
+ *
+ */
 template <typename T>
 class has_fitness: detail::sfinae_types
 {
@@ -42,7 +53,17 @@ class has_fitness: detail::sfinae_types
 template <typename T>
 const bool has_fitness<T>::value;
 
-/// Detect dimensions and bounds availability.
+/// Type has get_bounds()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * std::pair<vector_double, vector_double> get_bounds() const
+ * @endcode
+ *
+ */
 template <typename T>
 class has_bounds: detail::sfinae_types
 {
@@ -58,7 +79,18 @@ class has_bounds: detail::sfinae_types
 template <typename T>
 const bool has_bounds<T>::value;
 
-/// Detect constraints availability.
+/// Type has get_nec() and get_nic()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * methods implemented:
+ *
+ * @code
+ * vector_double::size_type get_nec() const
+ * vector_double::size_type get_nic() const
+ * @endcode
+ *
+ */
 template <typename T>
 class has_constraints: detail::sfinae_types
 {
@@ -78,7 +110,17 @@ class has_constraints: detail::sfinae_types
 template <typename T>
 const bool has_constraints<T>::value;
 
-/// Detect get_name() availability
+/// Type has get_name()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * std::string get_name() const
+ * @endcode
+ *
+ */
 template <typename T>
 class has_name: detail::sfinae_types
 {
@@ -94,7 +136,17 @@ class has_name: detail::sfinae_types
 template <typename T>
 const bool has_name<T>::value;
 
-/// Detect get_extra_info() availability
+/// Type has get_extra_info()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * std::string get_extra_info() const
+ * @endcode
+ *
+ */
 template <typename T>
 class has_extra_info: detail::sfinae_types
 {
@@ -110,7 +162,17 @@ class has_extra_info: detail::sfinae_types
 template <typename T>
 const bool has_extra_info<T>::value;
 
-/// Detect gradient() availability
+/// Type has gradient()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * vector_double gradient(const vector_double &x) const
+ * @endcode
+ *
+ */
 template <typename T>
 class has_gradient: detail::sfinae_types
 {
@@ -126,7 +188,17 @@ class has_gradient: detail::sfinae_types
 template <typename T>
 const bool has_gradient<T>::value;
 
-/// Detect gradient_sparsity() availability
+/// Type has gradient_sparsity()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * sparsity_pattern gradient_sparsity() const
+ * @endcode
+ *
+ */
 template <typename T>
 class has_gradient_sparsity: detail::sfinae_types
 {
@@ -142,7 +214,17 @@ class has_gradient_sparsity: detail::sfinae_types
 template <typename T>
 const bool has_gradient_sparsity<T>::value;
 
-/// Detect hessians() availability
+/// Type has hessians()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * std::vector<vector_double> hessians(const vector_double &x) const
+ * @endcode
+ *
+ */
 template <typename T>
 class has_hessians: detail::sfinae_types
 {
@@ -158,7 +240,17 @@ class has_hessians: detail::sfinae_types
 template <typename T>
 const bool has_hessians<T>::value;
 
-/// Detect hessians_sparsity() availability
+/// Type has hessians_sparsity()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * std::vector<sparsity_pattern> hessians_sparsity() const
+ * @endcode
+ *
+ */
 template <typename T>
 class has_hessians_sparsity: detail::sfinae_types
 {
