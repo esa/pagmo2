@@ -55,10 +55,6 @@ struct prob_inner<py::object>: prob_inner_base
         if (!attr) {
             pagmo_throw(std::invalid_argument,"the 'get_nobj()' method is missing");
         }
-        attr = static_cast<py::object>(m_value.attr("get_n"));
-        if (!attr) {
-            pagmo_throw(std::invalid_argument,"the 'get_n()' method is missing");
-        }
         attr = static_cast<py::object>(m_value.attr("get_bounds"));
         if (!attr) {
             pagmo_throw(std::invalid_argument,"the 'get_bounds()' method is missing");
@@ -85,10 +81,6 @@ struct prob_inner<py::object>: prob_inner_base
     virtual vector_double::size_type get_nobj() const override final
     {
         return static_cast<py::object>(m_value.attr("get_nobj")).call().cast<vector_double::size_type>();
-    }
-    virtual vector_double::size_type get_n() const override final
-    {
-        return static_cast<py::object>(m_value.attr("get_n")).call().cast<vector_double::size_type>();
     }
     virtual std::pair<vector_double,vector_double> get_bounds() const override final
     {
@@ -184,12 +176,12 @@ struct prob_inner<py::object>: prob_inner_base
         }
         pagmo_throw(std::logic_error,"Hessians sparsity patterns have been requested but they are not implemented or not implemented correctly.");
     }
-    
+
     // Serialization.
 //     template <typename Archive>
 //     void serialize(Archive &ar)
-//     { 
-//         ar(cereal::base_class<prob_inner_base>(this),m_value); 
+//     {
+//         ar(cereal::base_class<prob_inner_base>(this),m_value);
 //     }
     py::object m_value;
 };

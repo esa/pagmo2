@@ -115,7 +115,8 @@ struct prob_inner: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value,int>::type = 0>
     static vector_double gradient_impl(U &, const vector_double &)
     {
-        pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\nA function with prototype vector_double gradient(const vector_double &x) const was expected.");
+        pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\n"
+            "A function with prototype 'vector_double gradient(const vector_double &x)' const was expected.");
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value,int>::type = 0>
     static bool has_gradient_impl(U &)
@@ -158,7 +159,8 @@ struct prob_inner: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_hessians<U>::value,int>::type = 0>
     static std::vector<vector_double> hessians_impl(U &, const vector_double &)
     {
-        pagmo_throw(std::logic_error,"Hessians have been requested but not implemented.\nA function with prototype std::vector<vector_double> hessians(const vector_double &x) const was expected.");
+        pagmo_throw(std::logic_error,"Hessians have been requested but not implemented.\n"
+            "A function with prototype 'std::vector<vector_double> hessians(const vector_double &x)' const was expected.");
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value,int>::type = 0>
     static bool has_hessians_impl(U &)
