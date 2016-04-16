@@ -292,6 +292,7 @@ struct prob_inner: prob_inner_base
 
 }
 
+/// Pagmo problem
 class problem
 {
         // Enable the generic ctor only if T is not a problem (after removing
@@ -299,6 +300,16 @@ class problem
         template <typename T>
         using generic_ctor_enabler = std::enable_if_t<!std::is_same<problem,std::decay_t<T>>::value,int>;
     public:
+        /// Constructor from a user defined object
+        /**
+         * Construct a pagmo::problem from an object \p T. In
+         * order for the construction to be successfull \p T needs
+         * to satisfy the following requests:
+         * 
+         * 
+         *
+         *
+         */
         template <typename T, generic_ctor_enabler<T> = 0>
         explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u),m_gevals(0u),m_hevals(0u)
         {
@@ -407,6 +418,14 @@ class problem
         {
             return m_ptr->has_gradient();
         }
+        sparsity_pattern gradient_sparsity() const
+        {
+            return m_ptr->gradient_sparsity();
+        }
+        bool has_gradient_sparsity() const
+        {
+            return m_ptr->has_gradient_sparsity();
+        }
         std::vector<vector_double> hessians(const vector_double &dv)
         {
             // 1 - checks the decision vector
@@ -422,14 +441,6 @@ class problem
         bool has_hessians() const
         {
             return m_ptr->has_hessians();
-        }
-        sparsity_pattern gradient_sparsity() const
-        {
-            return m_ptr->gradient_sparsity();
-        }
-        bool has_gradient_sparsity() const
-        {
-            return m_ptr->has_gradient_sparsity();
         }
         std::vector<sparsity_pattern> hessians_sparsity() const
         {
