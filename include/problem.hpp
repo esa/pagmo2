@@ -583,7 +583,7 @@ class problem
             auto nf = get_nobj() + get_nec() + get_nic();
             // 1 - We check that the gradient sparsity pattern has
             // valid indexes.
-            for (auto pair: gs) {
+            for (const auto &pair: gs) {
                 if ((pair.first >= nf) or (pair.second >= n)) {
                     pagmo_throw(std::invalid_argument,"Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nFitness dimension is: " + std::to_string(nf) + "\nDecision vector dimension is: " + std::to_string(n));
                 }
@@ -608,13 +608,13 @@ class problem
             }
             // 2 - We check that all hessian sparsity patterns have
             // valid indexes.
-            for (auto one_hs: hs) {
+            for (const auto &one_hs: hs) {
                 check_hessian_sparsity(one_hs);
             }
             // 3 - We store the dimensions of the hessian sparsity patterns
             // for future quick checks.
             m_hs_dim.clear();
-            for (auto one_hs: hs) {
+            for (const auto &one_hs: hs) {
                 m_hs_dim.push_back(one_hs.size());
             }
 
@@ -626,7 +626,7 @@ class problem
             // valid indexes. Assuming a lower triangular representation of
             // a symmetric matrix. Example, for a 4x4 dense symmetric
             // [(0,0), (1,0), (1,1), (2,0), (2,1), (2,2), (3,0), (3,1), (3,2), (3,3)]
-            for (auto pair: hs) {
+            for (const auto &pair: hs) {
                 if ((pair.first >= n) or (pair.second > pair.first)) {
                     pagmo_throw(std::invalid_argument,"Invalid pair detected in the hessians sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nDecision vector dimension is: " + std::to_string(n) + "\nNOTE: hessian is a symmetric matrix and PaGMO represents it as lower triangular: i.e (i,j) is not valid if j>i");
                 }
