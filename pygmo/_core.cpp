@@ -74,7 +74,7 @@ namespace detail
 {
 
 template <>
-struct prob_inner<py::object>: prob_inner_base
+struct prob_inner<py::object> final: prob_inner_base
 {
     void check_construction_object() const
     {

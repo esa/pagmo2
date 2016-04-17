@@ -72,7 +72,7 @@ struct prob_inner_base
 };
 
 template <typename T>
-struct prob_inner: prob_inner_base
+struct prob_inner final: prob_inner_base
 {
     // Static checks.
     static_assert(
