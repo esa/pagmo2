@@ -46,6 +46,25 @@ inline py::object deepcopy(py::object o)
     return static_cast<py::object>(py::module::import("copy").attr("deepcopy")).call(o);
 }
 
+inline py::module builtin()
+{
+#if PY_MAJOR_VERSION < 3
+    return py::module::import("__builtin__");
+#else
+    return py::module::import("builtins");
+#endif
+}
+
+inline py::object type(py::object o)
+{
+    return static_cast<py::object>(builtin().attr("type")).call(o);
+}
+
+inline py::object str(py::object o)
+{
+    return static_cast<py::object>(builtin().attr("str")).call(o);
+}
+
 }
 
 namespace pagmo
@@ -123,14 +142,7 @@ struct prob_inner<py::object>: prob_inner_base
         if (attr) {
             return attr.call().cast<std::string>();
         }
-#if PY_MAJOR_VERSION < 3
-        auto m = py::module::import("__builtin__");
-#else
-        auto m = py::module::import("builtins");
-#endif
-        auto type = static_cast<py::object>(m.attr("type")),
-            str = static_cast<py::object>(m.attr("str"));
-        return str.call(type.call(m_value)).cast<std::string>();
+        return pygmo::str(pygmo::type(m_value)).cast<std::string>();
     }
     virtual std::string get_extra_info() const override final
     {
@@ -237,11 +249,11 @@ PYBIND11_PLUGIN(_core)
 
     // This needs to go last, as it needs to have the lowest precedence among all ctors.
     problem_class.def(py::init<py::object>());
-    problem_class.def("_extract",[](const problem &p, py::object) {
+    problem_class.def("_extract",[](const problem &p, py::object o) {
         auto ptr = p.extract<py::object>();
-        if (!ptr) {
+        if (!ptr || pygmo::type(*ptr) != pygmo::type(o)) {
             pagmo_throw(std::runtime_error,"cannot extract an instance of type '"s +
-                typeid(py::object).name() + "'");
+                pygmo::str(pygmo::type(o)).cast<std::string>() + "'");
         }
         return pygmo::deepcopy(*ptr);
     });
