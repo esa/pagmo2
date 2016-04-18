@@ -562,3 +562,81 @@ BOOST_AUTO_TEST_CASE(problem_serialization_test)
     BOOST_CHECK(p.extract<full_p>()->m_lb == p2.extract<full_p>()->m_lb);
     BOOST_CHECK(p.extract<full_p>()->m_ub == p2.extract<full_p>()->m_ub);
 }
+
+
+// Full minimal problems to test constraints number
+// Only equality
+struct c_01
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {2,2};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nec() const
+    {
+        return 1u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0},{1}};
+    }
+};
+
+// Only inequality
+struct c_02
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {2,2};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nic() const
+    {
+        return 1u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0},{1}};
+    }
+};
+
+// Both equality and inequality
+struct c_03
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {2,2,2};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nec() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nic() const
+    {
+        return 1u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0},{1}};
+    }
+};
+BOOST_AUTO_TEST_CASE(problem_constraint_dimension_test)
+{
+    BOOST_CHECK(problem{c_01{}}.get_nec() == 1u);
+    BOOST_CHECK(problem{c_01{}}.get_nic() == 0u);
+    BOOST_CHECK(problem{c_02{}}.get_nec() == 0u);
+    BOOST_CHECK(problem{c_02{}}.get_nic() == 1u);
+    BOOST_CHECK(problem{c_03{}}.get_nec() == 1u);
+    BOOST_CHECK(problem{c_03{}}.get_nic() == 1u);
+}

@@ -146,16 +146,28 @@ struct c_07
     vector_double::size_type get_nic() const;
 };
 
-BOOST_AUTO_TEST_CASE(has_constraints_test)
+BOOST_AUTO_TEST_CASE(has_e_constraints_test)
 {
-    BOOST_CHECK((!has_constraints<c_00>::value));
-    BOOST_CHECK((has_constraints<c_01>::value));
-    BOOST_CHECK((!has_constraints<c_02>::value));
-    BOOST_CHECK((!has_constraints<c_03>::value));
-    BOOST_CHECK((!has_constraints<c_04>::value));
-    BOOST_CHECK((!has_constraints<c_05>::value));
-    BOOST_CHECK((!has_constraints<c_06>::value));
-    BOOST_CHECK((!has_constraints<c_07>::value));
+    BOOST_CHECK((!has_e_constraints<c_00>::value));
+    BOOST_CHECK((has_e_constraints<c_01>::value));
+    BOOST_CHECK((!has_e_constraints<c_02>::value));
+    BOOST_CHECK((!has_e_constraints<c_03>::value));
+    BOOST_CHECK((has_e_constraints<c_04>::value));
+    BOOST_CHECK((has_e_constraints<c_05>::value));
+    BOOST_CHECK((has_e_constraints<c_06>::value));
+    BOOST_CHECK((!has_e_constraints<c_07>::value));
+}
+
+BOOST_AUTO_TEST_CASE(has_i_constraints_test)
+{
+    BOOST_CHECK((!has_i_constraints<c_00>::value));
+    BOOST_CHECK((has_i_constraints<c_01>::value));
+    BOOST_CHECK((has_i_constraints<c_02>::value));
+    BOOST_CHECK((has_i_constraints<c_03>::value));
+    BOOST_CHECK((!has_i_constraints<c_04>::value));
+    BOOST_CHECK((!has_i_constraints<c_05>::value));
+    BOOST_CHECK((!has_i_constraints<c_06>::value));
+    BOOST_CHECK((has_i_constraints<c_07>::value));
 }
 
 struct n_00 {};

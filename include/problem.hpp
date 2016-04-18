@@ -83,9 +83,9 @@ struct prob_inner final: prob_inner_base
         "A problem must be default-constructible, copy-constructible, move-constructible and destructible."
     );
     static_assert(has_fitness<T>::value,
-        "A problem must provide a fitness function and a method to query the number of objectives.");
+        "A problem must provide a fitness function [vector_double fitness(const vector_double &x) const] and a method to query the number of objectives [vector_double::size_type get_nobj() const].");
     static_assert(has_bounds<T>::value,
-        "A problem must provide getters for its bounds.");
+        "A problem must provide getters for its bounds [std::pair<vector_double, vector_double> get_bounds() const].");
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
     prob_inner(prob_inner &&) = delete;
@@ -197,22 +197,22 @@ struct prob_inner final: prob_inner_base
     {
        return false;
     }
-    template <typename U, typename std::enable_if<has_constraints<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<has_e_constraints<U>::value,int>::type = 0>
     static vector_double::size_type get_nec_impl(const U &value)
     {
         return value.get_nec();
     }
-    template <typename U, typename std::enable_if<!has_constraints<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<!has_e_constraints<U>::value,int>::type = 0>
     static vector_double::size_type get_nec_impl(const U &)
     {
         return 0;
     }
-    template <typename U, typename std::enable_if<has_constraints<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<has_i_constraints<U>::value,int>::type = 0>
     static vector_double::size_type get_nic_impl(const U &value)
     {
         return value.get_nic();
     }
-    template <typename U, typename std::enable_if<!has_constraints<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<!has_i_constraints<U>::value,int>::type = 0>
     static vector_double::size_type get_nic_impl(const U &)
     {
         return 0;
