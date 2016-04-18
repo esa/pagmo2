@@ -5,9 +5,11 @@ pages:
   - apk update && apk add doxygen
   - pip install sphinx
   - pip install sphinx_bootstrap_theme
+  - pip install breathe
   - cd doc/doxygen
   - doxygen Doxyfile
-  - mv html/ ../../public/
+  - cd ../sphinx/make html
+  - mv _build/html ../../public/
   artifacts:
     paths:
     - public
