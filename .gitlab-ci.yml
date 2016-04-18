@@ -3,6 +3,8 @@ image: alpine
 pages:
   script:
   - apk update && apk add doxygen
+  - apk update && apk add sphinx
+  - apk update && apk add python-pip
   - cd doc/doxygen
   - doxygen Doxyfile
   - mv html/ ../../public/
