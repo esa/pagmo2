@@ -8,7 +8,8 @@ pages:
   - pip install breathe
   - cd doc/doxygen
   - doxygen Doxyfile
-  - cd ../sphinx/make html
+  - cd ../sphinx
+  - make html
   - mv _build/html ../../public/
   artifacts:
     paths:
