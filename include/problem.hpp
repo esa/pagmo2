@@ -296,7 +296,78 @@ struct prob_inner final: prob_inner_base
 
 }
 
-/// Pagmo problem
+/// Problem class.
+/**
+ * This class represents a generic *mathematical programming* or *evolutionary* problem in the form:
+ * \f[
+ * \begin{array}{rl}
+ * \mbox{find:}      & \mathbf {lb} \le \mathbf x \le \mathbf{ub}\\
+ * \mbox{to minimize: } & \mathbf f(\mathbf x) \in \mathbb R^{n_f}\\
+ * \mbox{subject to:} & \mathbf {c}_e(\mathbf x) = 0 \\
+ *                    & \mathbf {c}_i(\mathbf x) \le 0 
+ * \end{array}
+ * \f]
+ *
+ * where \f$\mathbf x \in \mathbb R^{n_x}\f$ is called *decision vector* or
+ * *chromosome*, \f$\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_x}\f$ are the *box-bounds*,
+ * \f$ \mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_f}\f$ define the *objectives*,
+ * \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ce}}\f$ are non linear *equality constraints*,
+ * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ci}}\f$ are non linear *inequality constraints*.
+ *
+ * To specify the details of the above problem the user is asked to construct this
+ * object with from a separate class \p T providing at least the implementation of
+ * the following methods:
+ *
+ * @code 
+ * fitness_vector fitness(const decision_vector &) const;
+ * vector_double::size_type get_nobj() const;
+ * std::pair<vector_double, vector_double> get_bounds() const;
+ * @endcode
+ * 
+ * - The return value of \p T::fitness is expected to have a dimension of \f$n_{f} + n_{ce} + n_{ci}\f$
+ * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ (in this order).
+ * and \f$\mathbf c_i\f$. 
+ * - The return value of \p T::get_nobj is expected to be
+ * \f$n_f\f$.
+ * - The return value of \p T::get_bounds is expected to contain
+ * \f$(\mathbf{lb}, \mathbf{ub})\f$. By default, both \f$n_{ce}\f$ and \f$n_{ci}\f$ 
+ * are set to zero.
+ *
+ * The user can also implement the following methods in \p T:
+ *   @code 
+ *   vector_double::size_type get_nec() const;
+ *   vector_double::size_type get_nic() const;
+ *   vector_double gradient(const vector_double &x) const;
+ *   sparsity_pattern gradient_sparsity() const;
+ *   std::vector<vector_double> hessians(const vector_double &x) const;
+ *   std::vector<sparsity_pattern> hessians_sparsity() const;
+ *   std::string get_name() const; 
+ *   std::string get_extra_info() const;
+ *   @endcode
+ *
+ * - \p T::get_nec returns \f$n_{ec}\f$. When not implemented \f$n_{ec} = 0\f$ is assumed.
+ * - \p T::get_nic returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed.
+ * - \p T::gradient returns a sparse representation of the gradients. The \f$ k\f$-th term 
+ * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
+ * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) returned by \p T::gradient_sparsity.
+ * When not implemented, gradient based techniques will have to either determine these numerically
+ * or complain.
+ * - \p T::hessians returns a vector of sparse representations for the hessians. For
+ * the \f$l\f$-th value returned by \p T::fitness, the hessian is defined as \f$ \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
+ * and its sparse representation is in the \f$l\f$-th value returned by T::hessians. Since
+ * the hessians are symmetric, their sparse representation only contain lower triangular elements. The indexes 
+ * \f$(i,j)\f$ are stored in the \f$l\f$-th sparsity pattern (collection of index pairs) returned by \p T::hessians_sparsity
+ * When not implemented, hessians based techniques will have to either determine these numerically
+ * or complain.
+ *
+ * Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the hessians. At
+ * each construction and copy these counters are reset to zero.
+ *
+ * The only allowed operations on objects of this class after they have been moved, are assignment and destruction.
+ *
+ * @author Francesco Biscani (bluescarni@gmail.com)
+ * @author Dario Izzo (darioizzo@gmail.com)
+ */
 class problem
 {
         // Enable the generic ctor only if T is not a problem (after removing
@@ -339,7 +410,7 @@ class problem
          * \p T::get_nobj, while the decision vector dimension \f$n_x\f$ is defined 
          * by the size of the bounds as returned by \p T::get_bounds()
          *
-         * @param[in] T The user implemented problem
+         * @param[in] x The user implemented problem
          * 
          * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds() have different length.
          * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds() are not such that \f$lb_i \le ub_i, \forall i\f$
@@ -374,6 +445,8 @@ class problem
             // 6 - checks that the hessians contain reasonable numbers
             check_hessians_sparsity(); // here m_hs_dim is initialized
         }
+
+        /// Copy constructor
         problem(const problem &other):
             m_ptr(other.m_ptr->clone()),
             m_fevals(0u),
@@ -383,6 +456,8 @@ class problem
             m_gs_dim(other.m_gs_dim),
             m_hs_dim(other.m_hs_dim)
         {}
+
+        /// Move constructor
         problem(problem &&other) noexcept :
             m_ptr(std::move(other.m_ptr)),
             m_fevals(other.m_fevals.load()),
@@ -393,6 +468,7 @@ class problem
             m_hs_dim(other.m_hs_dim)
         {}
 
+        /// Move assignment operator
         problem &operator=(problem &&other) noexcept
         {
             if (this != &other) {
@@ -406,12 +482,24 @@ class problem
             }
             return *this;
         }
+
+        /// Copy assignment operator
         problem &operator=(const problem &other)
         {
             // Copy ctor + move assignment.
             return *this = problem(other);
         }
 
+        /// Extracts the user-defined problem
+        /**
+         * Extracts the original problem that was provided by the user, thus
+         * granting access to additional resources there implemented.
+         *
+         * @param[in] T The type of the orignal user-defined problem
+         *
+         * @return a const pointer to the user-defined problem
+         * 
+         */
         template <typename T>
         const T *extract() const
         {
@@ -422,12 +510,21 @@ class problem
             return &(ptr->m_value);
         }
 
+        /// Checks the user defined problem type at run-time
+        /**
+         *
+         * @param[in] T The type to be checked
+         *
+         * @return true if the user defined problem is \p T. false othewise.
+         * 
+         */
         template <typename T>
         bool is() const
         {
             return extract<T>();
         }
 
+        /// Computes the fitness
         vector_double fitness(const vector_double &dv) const
         {
             // 1 - checks the decision vector
@@ -440,6 +537,8 @@ class problem
             ++m_fevals;
             return retval;
         }
+
+        /// Computes the gradient
         vector_double gradient(const vector_double &dv) const
         {
             // 1 - checks the decision vector
@@ -452,18 +551,26 @@ class problem
             ++m_gevals;
             return retval;
         }
+
+        /// Check if the user-define problem implements a gradient
         bool has_gradient() const
         {
             return m_ptr->has_gradient();
         }
+
+        /// Returns the gradient sparsity
         sparsity_pattern gradient_sparsity() const
         {
             return m_ptr->gradient_sparsity();
         }
+
+        /// Check if the user-defined dproblem implements a gradient_sparsity
         bool has_gradient_sparsity() const
         {
             return m_ptr->has_gradient_sparsity();
         }
+
+        /// Computes the Hessians
         std::vector<vector_double> hessians(const vector_double &dv) const
         {
             // 1 - checks the decision vector
@@ -476,76 +583,99 @@ class problem
             ++m_hevals;
             return retval;
         }
+
+        /// Check if the user-defined dproblem implements the hessians
         bool has_hessians() const
         {
             return m_ptr->has_hessians();
         }
+
+        /// Returns the hessians sparsity
         std::vector<sparsity_pattern> hessians_sparsity() const
         {
             return m_ptr->hessians_sparsity();
         }
+
+
+        /// Check if the user-defined dproblem implements the hessians_sparosy
         bool has_hessians_sparsity() const
         {
             return m_ptr->has_hessians_sparsity();
         }
+
+        /// Fitness dimension
         vector_double::size_type get_nobj() const
         {
             return m_ptr->get_nobj();
         }
+
+        /// Decision vector dimension
         vector_double::size_type get_n() const
         {
             return m_n;
         }
+
+        /// Box-bounds
         std::pair<vector_double, vector_double> get_bounds() const
         {
             return m_ptr->get_bounds();
         }
+
+        /// Number of equality constraints
         vector_double::size_type get_nec() const
         {
             return m_ptr->get_nec();
         }
+
+        /// Number of inequality constraints
         vector_double::size_type get_nic() const
         {
             return m_ptr->get_nic();
         }
+
+        /// Number of fitness evaluations
         unsigned long long get_fevals() const
         {
             return m_fevals.load();
         }
+
+        /// Number of gradient evaluations
         unsigned long long get_gevals() const
         {
             return m_gevals.load();
         }
+
+        /// Number of hessians evaluations
         unsigned long long get_hevals() const
         {
             return m_hevals.load();
         }
+
+        /// Dimension of the gradient sparisy
         vector_double::size_type get_gs_dim() const
         {
             return m_gs_dim;
         }
+
+        /// Dimension of the hessians sparisy
         std::vector<vector_double::size_type> get_hs_dim() const
         {
             return m_hs_dim;
         }
 
-        /// Get problem's name.
-        /**
-         * Will return the name of the user implemented problem as
-         * returned by the detail::prob_inner method get_name
-         *
-         * @return name of the user implemented problem.
-         */
+        /// Problem's name.
         std::string get_name() const
         {
             return m_ptr->get_name();
         }
 
+        /// Extra info
         std::string get_extra_info() const
         {
             return m_ptr->get_extra_info();
         }
 
+        /// human readable representation
         std::string human_readable() const
         {
             std::ostringstream s;
