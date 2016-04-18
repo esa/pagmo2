@@ -3,6 +3,7 @@ image: python:3.4-alpine
 pages:
   script:
   - apk update && apk add doxygen
+  - apk add build-base gcc
   - pip install sphinx
   - pip install sphinx_bootstrap_theme
   - pip install breathe
