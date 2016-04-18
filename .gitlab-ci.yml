@@ -1,6 +1,8 @@
+image: alpine
+
 pages:
   script:
-  - apt-get install doxygen
+  - apk update && apk add doxygen
   - doxygen doxygen/Doxyfile
   - mv doxygen/documentation/html/ public/
   artifacts:
@@ -8,4 +10,3 @@ pages:
     - public
   only:
   - master
-
