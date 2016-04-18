@@ -298,7 +298,7 @@ struct prob_inner final: prob_inner_base
 
 /// Problem class.
 /**
- * This class represents a generic *mathematical programming* or *evolutionary* problem in the form:
+ * This class represents a generic *mathematical programming* or *evolutionary optimization* problem in the form:
  * \f[
  * \begin{array}{rl}
  * \mbox{find:}      & \mathbf {lb} \le \mathbf x \le \mathbf{ub}\\
@@ -314,7 +314,7 @@ struct prob_inner final: prob_inner_base
  * \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ce}}\f$ are non linear *equality constraints*,
  * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ci}}\f$ are non linear *inequality constraints*.
  *
- * To specify the details of the above problem the user is asked to construct a pagmo::problem
+ * To create an instance of above problem the user is asked to construct a pagmo::problem
  * from a separate class \p T where, at least, the implementation of
  * the following methods is provided:
  *
@@ -348,7 +348,8 @@ struct prob_inner final: prob_inner_base
  * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by \p T::gradient_sparsity.
  * When not implemented, a call to \p T::gradient throws a logic_error
  * - \p T::gradient_sparsity returns the gradient sparsity pattern, i.e a collection of the non-zero index pairs \f$(i,j)\f$. When 
- * not implemented a dense pattern is assumed and a call to T::gradient_sparsity returns \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$
+ * not implemented a dense pattern is assumed and a call to T::gradient_sparsity
+ * returns \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$
  * - \p T::hessians returns a vector of sparse representations for the hessians. For
  * the \f$l\f$-th value returned by \p T::fitness, the hessian is defined as \f$ \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
  * and its sparse representation is in the \f$l\f$-th value returned by T::hessians. Since
@@ -356,11 +357,16 @@ struct prob_inner final: prob_inner_base
  * \f$(i,j)\f$ are stored in the \f$l\f$-th sparsity pattern (collection of index pairs) returned by \p T::hessians_sparsity
  * When not implemented, hessians based techniques will have to either determine these numerically
  * or complain.
+ * - \p T::hessians_sparsity returns an std::vector of sparsity patterns, each one being 
+ * a collection of the non-zero index pairs \f$(i,j)\f$ of the corresponding Hessian. Since the Hessian matrix
+ * is symmetric, only lower triangular elements are allowed. When 
+ * not implemented a dense pattern is assumed and a call to T::hessians_sparsity
+ * returns \f$n_f\f$ sparsity patterns each one being \f$((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\f$.
  *
  * Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the hessians. At
  * each construction and copy these counters are reset to zero.
  *
- * The only allowed operations on objects of this class after they have been moved, are assignment and destruction.
+ * The only allowed operations on an object belongng to this class, after it has been moved, are assignment and destruction.
  *
  * @author Francesco Biscani (bluescarni@gmail.com)
  * @author Dario Izzo (darioizzo@gmail.com)
@@ -522,6 +528,19 @@ class problem
         }
 
         /// Computes the fitness
+        /**
+         *
+         * @param[in] dv The decision vector
+         *
+         * @return a vector_double of dimension \f$ n_f\f$ containing the problem fitness, that is
+         * \f$n_f\f$ objectives to minimize, \f$n_{ec}$ equality constraints and \f$n_{ic}$ 
+         * inequality constraints.
+         *
+         * @throws std::invalid_argument if the length of the decision vector is not \f$n_x\f$
+         * @throws std::invalid_argument if the length of the fitness returned (as defined tin he user defined problem)
+         * is not \f$n_f\f$
+         * 
+         */
         vector_double fitness(const vector_double &dv) const
         {
             // 1 - checks the decision vector
