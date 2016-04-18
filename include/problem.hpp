@@ -314,9 +314,9 @@ struct prob_inner final: prob_inner_base
  * \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ce}}\f$ are non linear *equality constraints*,
  * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ci}}\f$ are non linear *inequality constraints*.
  *
- * To specify the details of the above problem the user is asked to construct this
- * object with from a separate class \p T providing at least the implementation of
- * the following methods:
+ * To specify the details of the above problem the user is asked to construct a pagmo::problem
+ * from a separate class \p T where, at least, the implementation of
+ * the following methods is provided:
  *
  * @code 
  * fitness_vector fitness(const decision_vector &) const;
@@ -325,15 +325,11 @@ struct prob_inner final: prob_inner_base
  * @endcode
  * 
  * - The return value of \p T::fitness is expected to have a dimension of \f$n_{f} + n_{ce} + n_{ci}\f$
- * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ (in this order).
- * and \f$\mathbf c_i\f$. 
- * - The return value of \p T::get_nobj is expected to be
- * \f$n_f\f$.
- * - The return value of \p T::get_bounds is expected to contain
- * \f$(\mathbf{lb}, \mathbf{ub})\f$. By default, both \f$n_{ce}\f$ and \f$n_{ci}\f$ 
- * are set to zero.
+ * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order). 
+ * - The return value of \p T::get_nobj is expected to be \f$n_f\f$
+ * - The return value of \p T::get_bounds is expected to contain \f$(\mathbf{lb}, \mathbf{ub})\f$.
  *
- * The user can also implement the following methods in \p T:
+ * The user can also implement the following methods in \p T :
  *   @code 
  *   vector_double::size_type get_nec() const;
  *   vector_double::size_type get_nic() const;
@@ -349,9 +345,10 @@ struct prob_inner final: prob_inner_base
  * - \p T::get_nic returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed.
  * - \p T::gradient returns a sparse representation of the gradients. The \f$ k\f$-th term 
  * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
- * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) returned by \p T::gradient_sparsity.
- * When not implemented, gradient based techniques will have to either determine these numerically
- * or complain.
+ * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by \p T::gradient_sparsity.
+ * When not implemented, a call to \p T::gradient throws a logic_error
+ * - \p T::gradient_sparsity returns the gradient sparsity pattern, i.e a collection of the non-zero index pairs \f$(i,j)\f$. When 
+ * not implemented a dense pattern is assumed and a call to T::gradient_sparsity returns \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$
  * - \p T::hessians returns a vector of sparse representations for the hessians. For
  * the \f$l\f$-th value returned by \p T::fitness, the hessian is defined as \f$ \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
  * and its sparse representation is in the \f$l\f$-th value returned by T::hessians. Since
