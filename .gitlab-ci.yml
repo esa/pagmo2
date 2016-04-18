@@ -1,6 +1,6 @@
 pages:
   script:
-  - apt-get doxygen
+  - apt-get install doxygen
   - doxygen doxygen/Doxyfile
   - mv doxygen/documentation/html/ public/
   artifacts:
