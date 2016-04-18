@@ -310,7 +310,7 @@ class problem
          * order for the construction to be successfull \p T needs
          * to satisfy the following requests:
          *
-         *
+         * - It must implement a method with prototype @code fitness_vector fitness(const decision_vector &) const @endcode
          *
          *
          */
@@ -394,7 +394,7 @@ class problem
             return extract<T>();
         }
 
-        vector_double fitness(const vector_double &dv)
+        vector_double fitness(const vector_double &dv) const
         {
             // 1 - checks the decision vector
             check_decision_vector(dv);
@@ -406,7 +406,7 @@ class problem
             ++m_fevals;
             return retval;
         }
-        vector_double gradient(const vector_double &dv)
+        vector_double gradient(const vector_double &dv) const
         {
             // 1 - checks the decision vector
             check_decision_vector(dv);
@@ -430,7 +430,7 @@ class problem
         {
             return m_ptr->has_gradient_sparsity();
         }
-        std::vector<vector_double> hessians(const vector_double &dv)
+        std::vector<vector_double> hessians(const vector_double &dv) const
         {
             // 1 - checks the decision vector
             check_decision_vector(dv);
@@ -681,11 +681,11 @@ class problem
         // Pointer to the inner base problem
         std::unique_ptr<detail::prob_inner_base> m_ptr;
         // Atomic counter for calls to the fitness
-        std::atomic<unsigned long long> m_fevals;
+        mutable std::atomic<unsigned long long> m_fevals;
         // Atomic counter for calls to the gradient
-        std::atomic<unsigned long long> m_gevals;
+        mutable std::atomic<unsigned long long> m_gevals;
         // Atomic counter for calls to the hessians
-        std::atomic<unsigned long long> m_hevals;
+        mutable std::atomic<unsigned long long> m_hevals;
         // Problem dimension
         vector_double::size_type m_n;
         // Expected dimensions of the returned gradient (matching the sparsity pattern)

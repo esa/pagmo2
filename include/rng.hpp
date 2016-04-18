@@ -14,7 +14,9 @@ using random_engine_type = std::mt19937;
 template <typename dummy>
 struct random_device_statics
 {
+    /// PaGMO random engine
     static random_engine_type m_e;
+    /// Mutex protecting access to PaGMO random engine
     static std::mutex  m_mutex;
 };
 
