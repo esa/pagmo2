@@ -532,8 +532,8 @@ class problem
          *
          * @param[in] dv The decision vector
          *
-         * @return a vector_double of dimension \f$ n_f\f$ containing the problem fitness, that is
-         * \f$n_f\f$ objectives to minimize, \f$n_{ec}$ equality constraints and \f$n_{ic}$ 
+         * @return a vector_double of dimension \f$ n_f\f$ containing the problem fitness: the concatenation of
+         * \f$n_f\f$ objectives to minimize, \f$n_{ec}\f$ equality constraints and \f$n_{ic}\f$ 
          * inequality constraints.
          *
          * @throws std::invalid_argument if the length of the decision vector is not \f$n_x\f$
