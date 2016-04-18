@@ -1,6 +1,6 @@
 pages:
   script:
-  - apk update && apk add doxygen
+  - apt-get doxygen
   - doxygen doxygen/Doxyfile
   - mv doxygen/documentation/html/ public/
   artifacts:
