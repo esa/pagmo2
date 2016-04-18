@@ -3,8 +3,8 @@ image: alpine
 pages:
   script:
   - apk update && apk add doxygen
-  - doxygen doxygen/Doxyfile
-  - mv doxygen/documentation/html/ public/
+  - doxygen doc/doxygen/Doxyfile
+  - mv doc/doxygen/documentation/html/ public/
   artifacts:
     paths:
     - public
