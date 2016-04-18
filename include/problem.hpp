@@ -304,15 +304,49 @@ class problem
         template <typename T>
         using generic_ctor_enabler = std::enable_if_t<!std::is_same<problem,std::decay_t<T>>::value,int>;
     public:
-        /// Constructor from a user defined object
+        /// Constructor from a user defined object \p T
         /**
-         * Construct a pagmo::problem from an object \p T. In
+         * Construct a pagmo::problem with fitness dimension \f$n_f\f$ and decision vector
+         * dimension \f$n_x\f$ from an object \p T. In
          * order for the construction to be successfull \p T needs
          * to satisfy the following requests:
          *
-         * - It must implement a method with prototype @code fitness_vector fitness(const decision_vector &) const @endcode
+         * - \p T must implement the following mandatory methods:
+         *   @code 
+         *   fitness_vector fitness(const decision_vector &) const;
+         *   vector_double::size_type get_nobj() const;
+         *   std::pair<vector_double, vector_double> get_bounds() const;
+         *   @endcode
+         *   otherwise compilation will result in a static_assert failiure
+         * - \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled
+         * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
+         *   otherwise compilation will result in a static_assert failiure
          *
+         * The following methods, if implemented in \p T, will override 
+         * default choices:
+         *   @code 
+         *   vector_double::size_type get_nec() const;
+         *   vector_double::size_type get_nic() const;
+         *   vector_double gradient(const vector_double &x) const;
+         *   sparsity_pattern gradient_sparsity(const vector_double &x) const;
+         *   std::vector<vector_double> hessians(const vector_double &x) const;
+         *   std::vector<sparsity_pattern> hessians_sparsity() const;
+         *   std::string get_name() const;
+         *   std::string get_extra_info() const;
+         *   @endcode
          *
+         * @note The fitness dimension \f$n_f\f$ is defined by the return value of 
+         * \p T::get_nobj, while the decision vector dimension \f$n_x\f$ is defined 
+         * by the size of the bounds as returned by \p T::get_bounds()
+         *
+         * @param[in] T The user implemented problem
+         * 
+         * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds() have different length.
+         * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds() are not such that \f$lb_i \le ub_i, \forall i\f$
+         * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity method and this returns an invalid index pair \f$ (i,j)\f$ having \f$i \ge n_f\f$ or \f$j \ge n_x\f$
+         * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity method and this contains any repeated index pair.
+         * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity method and this returns an invalid index pair \f$ (i,j)\f$ having \f$i \ge n_x\f$ or \f$j > i\f$
+         * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity method and this contains any repeated index pair.
          */
         template <typename T, generic_ctor_enabler<T> = 0>
         explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u),m_gevals(0u),m_hevals(0u)

@@ -351,3 +351,9 @@ span.SRScope {
 .page-header .label {
   font-size: 50%;
 }
+
+/* Added by PaGMO */
+td.paramname
+{
+  padding-right:3px;
+}
