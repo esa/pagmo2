@@ -1,10 +1,10 @@
-image: alpine
+image: python:3.4-alpine
 
 pages:
   script:
   - apk update && apk add doxygen
-  - apk update && apk add sphinx
-  - apk update && apk add python-pip
+  - pip install sphinx
+  - pip install sphinx_bootstrap_theme
   - cd doc/doxygen
   - doxygen Doxyfile
   - mv html/ ../../public/
