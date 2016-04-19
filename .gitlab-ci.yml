@@ -2,8 +2,6 @@ image: python:3.4-alpine
 
 pagmo:
   script:
-    - ls -al
-    - cd PaGMO/reborn
     - mkdir build
     - cd build
     - cmake ..
