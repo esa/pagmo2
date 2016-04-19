@@ -443,7 +443,7 @@ class problem
             }
             // 4 - initialize problem dimension (must be before
             // check_gradient_sparsity and check_hessians_sparsity)
-            m_n = lb.size();
+            m_nx = lb.size();
             // 5 - checks that the sparsity contains reasonable numbers
             check_gradient_sparsity(); // here m_gs_dim is initialized
             // 6 - checks that the hessians contain reasonable numbers
@@ -456,7 +456,7 @@ class problem
             m_fevals(0u),
             m_gevals(0u),
             m_hevals(0u),
-            m_n(other.m_n),
+            m_nx(other.m_nx),
             m_gs_dim(other.m_gs_dim),
             m_hs_dim(other.m_hs_dim)
         {}
@@ -467,7 +467,7 @@ class problem
             m_fevals(other.m_fevals.load()),
             m_gevals(other.m_gevals.load()),
             m_hevals(other.m_hevals.load()),
-            m_n(other.m_n),
+            m_nx(other.m_nx),
             m_gs_dim(other.m_gs_dim),
             m_hs_dim(other.m_hs_dim)
         {}
@@ -480,7 +480,7 @@ class problem
                 m_fevals.store(other.m_fevals.load());
                 m_gevals.store(other.m_gevals.load());
                 m_hevals.store(other.m_hevals.load());
-                m_n = other.m_n;
+                m_nx = other.m_nx;
                 m_gs_dim = other.m_gs_dim;
                 m_hs_dim = other.m_hs_dim;
             }
@@ -707,7 +707,7 @@ class problem
          */
         vector_double::size_type get_n() const
         {
-            return m_n;
+            return m_nx;
         }
 
         /// Box-bounds
@@ -839,7 +839,7 @@ class problem
         template <typename Archive>
         void save(Archive &ar) const
         {
-            ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(), m_n, m_gs_dim, m_hs_dim);
+            ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(), m_nx, m_gs_dim, m_hs_dim);
         }
 
         /// Serialization: load
@@ -854,7 +854,7 @@ class problem
             m_gevals.store(tmp);
             ar(tmp);
             m_hevals.store(tmp);
-            ar(m_n, m_gs_dim,m_hs_dim);
+            ar(m_nx, m_gs_dim,m_hs_dim);
         }
 
     private:
@@ -869,24 +869,29 @@ class problem
         // defined one or the default (dense) one.
         void check_gradient_sparsity()
         {
-            auto gs = gradient_sparsity();
-            auto n = get_n();
-            auto nf = get_nobj() + get_nec() + get_nic();
-            // 1 - We check that the gradient sparsity pattern has
-            // valid indexes.
-            for (const auto &pair: gs) {
-                if ((pair.first >= nf) or (pair.second >= n)) {
-                    pagmo_throw(std::invalid_argument,"Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nFitness dimension is: " + std::to_string(nf) + "\nDecision vector dimension is: " + std::to_string(n));
+            if (has_gradient()) {
+                auto gs = gradient_sparsity();
+                auto n = get_n();
+                auto nf = get_nobj() + get_nec() + get_nic();
+                // 1 - We check that the gradient sparsity pattern has
+                // valid indexes.
+                for (const auto &pair: gs) {
+                    if ((pair.first >= nf) or (pair.second >= n)) {
+                        pagmo_throw(std::invalid_argument,"Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nFitness dimension is: " + std::to_string(nf) + "\nDecision vector dimension is: " + std::to_string(n));
+                    }
                 }
-            }
-            // 1bis We check all pairs are unique
-            if (!all_unique(gs)) {
-                pagmo_throw(std::invalid_argument, "Multiple entries of the same index pair was detected in the gradient sparsity pattern");
-            }
+                // 1bis We check all pairs are unique
+                if (!all_unique(gs)) {
+                    pagmo_throw(std::invalid_argument, "Multiple entries of the same index pair was detected in the gradient sparsity pattern");
+                }
 
-            // 2 - We store the dimensions of the gradient sparsity pattern
-            // as we will check that the returned gradient has this dimension
-            m_gs_dim = gs.size();
+                // 2 - We store the dimensions of the gradient sparsity pattern
+                // as we will check that the returned gradient has this dimension
+                m_gs_dim = gs.size();
+            }
+            else {
+                m_gs_dim = (get_nobj()+get_nec()+get_nic()) * m_nx;
+            }
         }
         void check_hessians_sparsity()
         {
@@ -976,7 +981,7 @@ class problem
         // Atomic counter for calls to the hessians
         mutable std::atomic<unsigned long long> m_hevals;
         // Problem dimension
-        vector_double::size_type m_n;
+        vector_double::size_type m_nx;
         // Expected dimensions of the returned gradient (matching the sparsity pattern)
         vector_double::size_type m_gs_dim;
         // Expected dimensions of the returned hessians (matching the sparsity patterns)
