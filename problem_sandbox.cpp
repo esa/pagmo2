@@ -20,7 +20,7 @@
 #include "include/io.hpp"
 #include "include/problem.hpp"
 #include "include/types.hpp"
-#include "include/problems/hock_schittkowsky_71.hpp"
+#include "include/problems/null.hpp"
 #include "include/problems/shifted.hpp"
 
 
@@ -30,7 +30,7 @@ using namespace pagmo;
 int main()
 {
     // Constructing a problem
-    problem p0{shifted{problem{hock_schittkowsky_71{}},{1.,1.,1.,1.}}};
+    problem p0{shifted{problem{shifted{problem{null{}},{1.}}}}};
     // Streaming to screen the problem
     std::cout << p0 << '\n';
     // Getting its dimensions
@@ -44,7 +44,7 @@ int main()
     // is set to zero. Checking its value is easy
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
     // Computing one fitness
-    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2,2,2,2}), "\n");
+    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("fevals: ", p0.get_fevals(), "\n\n");
 
@@ -53,7 +53,7 @@ int main()
     pagmo::print("gevals: ", p0.get_gevals(), "\n");
     // Computing one gradient
     pagmo::print("gradient implementation detected?: ", p0.has_gradient(), '\n');
-    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient({2,2,2,2}), "\n");
+    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient({2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("gevals: ", p0.get_gevals(), "\n\n");
 
@@ -62,7 +62,7 @@ int main()
     pagmo::print("hevals: ", p0.get_hevals(), "\n");
     // Computing one gradient
     pagmo::print("hessians implementation detected?: ", p0.has_hessians(), '\n');
-    pagmo::print("calling hessians in x=[2,2,2,2]: ", p0.hessians({2,2,2,2}), "\n");
+    pagmo::print("calling hessians in x=[2,2,2,2]: ", p0.hessians({2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("hevals: ", p0.get_hevals(), "\n\n");
 
@@ -71,7 +71,7 @@ int main()
 
     // While our example0 struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface
-    auto best_x = p0.extract<hock_schittkowsky_71>()->best_known();
+    auto best_x = p0.extract<null>()->best_known();
     pagmo::print("Accessing best_known: ", best_x, "\n");
 
     // Evaluating fitness in best_known

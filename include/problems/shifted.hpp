@@ -4,7 +4,7 @@
 #include "../io.hpp"
 #include "../problem.hpp"
 #include "../types.hpp"
-#include "hock_schittkowsky_71.hpp"
+#include "null.hpp"
 
 namespace pagmo
 {
@@ -13,7 +13,7 @@ namespace pagmo
 class shifted
 {
 public:
-    shifted(const problem &p = problem{hock_schittkowsky_71{}}, const vector_double &shift = {1,1,1,1}) : m_p(p), m_shift(shift)
+    shifted(const problem &p = problem{null{}}, const vector_double &shift = {1.}) : m_p(p), m_shift(shift)
     {
         // sanity checks on shift
     }
@@ -58,6 +58,12 @@ public:
         return m_p.gradient(x_deshifted);
     }
 
+    /// Gradient sparsity
+    sparsity_pattern gradient_sparsity() const
+    {
+        return m_p.gradient_sparsity();
+    }
+
     /// Hessians
     std::vector<vector_double> hessians(const vector_double &x) const
     {
@@ -83,7 +89,7 @@ public:
     {
         std::ostringstream oss;
         stream(oss, m_shift);
-        return "\tShift Vector: " + oss.str();
+        return m_p.get_extra_info() + "\n\tShift Vector: " + oss.str();
     }
     
     /**
@@ -126,7 +132,6 @@ public:
 private:
     problem m_p;
     vector_double m_shift;
-
 };
 
 }
