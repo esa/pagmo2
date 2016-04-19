@@ -2,7 +2,7 @@ image: python:3.4-alpine
 
 pagmo:
   script:
-    - apk add build-base gcc
+    - apk update && apk add build-base gcc
     - apk add cmake
     - mkdir build
     - cd build
