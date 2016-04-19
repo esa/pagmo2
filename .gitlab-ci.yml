@@ -3,7 +3,7 @@ image: python:3.4-alpine
 pagmo-c++:
   script:
     - apk update && apk add build-base gcc
-    - apk add cmake && apk add boost
+    - apk add cmake && apk add boost-dev
     - mkdir build
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
