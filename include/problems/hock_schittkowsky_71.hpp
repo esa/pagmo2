@@ -13,9 +13,27 @@
 namespace pagmo
 {
 
+/// Problem No.71 from the Hock Schittkowsky suite
+/**
+ * Mainly used for testing and debugging during PaGMO development, this
+ * struct implements the problem No.71 from the Hock Schittkowsky suite:
+ *
+ * \f[
+ *    \begin{array}{rl}
+ *    \mbox{find: } & 1 \le \mathbf x \le 5 \\
+ *    \mbox{to minimize: } & x_1x_4(x_1+x_2+x_3) + x_3 \\
+ *    \mbox{subject to: } & x_1^2+x_2^2+x_3^2+x_4^2 - 40 = 0 \\
+ *                        & 25 - x_1 x_2 x_3 x_4 \le 0
+ *    \end{array}
+ * \f]
+ * 
+ * @see W. Hock and K. Schittkowski. Test examples for nonlinear programming codes. 
+ * Lecture Notes in Economics and Mathematical Systems, 187, 1981. doi: 10.1007/978-3-642-48320-2.
+ *
+ */
 struct hock_schittkowsky_71
 {
-    // fitness
+    /// Fitness
     vector_double fitness(const vector_double &x) const
     {
         return {
@@ -25,31 +43,31 @@ struct hock_schittkowsky_71
         };
     }
 
-    // number of objectives (single objective)
+    /// Number of objectives (one)
     vector_double::size_type get_nobj() const
     {
         return 1u;
     }
 
-    // equality constraint dimension
+    /// Equality constraint dimension (one)
     vector_double::size_type get_nec() const
     {
         return 1u;
     }
 
-    // inequality constraint dimension
+    /// Inequality constraint dimension (one)
     vector_double::size_type get_nic() const
     {
         return 1u;
     }
     
-    // problem bounds
+    /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
         return {{1.,1.,1.,1.},{5.,5.,5.,5.}};
     }
 
-    // gradients (dense)
+    /// Gradients (dense)
     vector_double gradient(const vector_double &x) const
     {
         return {
@@ -59,7 +77,7 @@ struct hock_schittkowsky_71
         };
     }
 
-    // hessians
+    /// Hessians (sparse)
     std::vector<vector_double> hessians(const vector_double &x) const
     {
         return {
@@ -69,7 +87,7 @@ struct hock_schittkowsky_71
         };
     }
 
-    // hessian sparsity
+    /// Hessian sparsity
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
         return {
@@ -79,25 +97,25 @@ struct hock_schittkowsky_71
         };
     }
 
-    // Problem name
+    /// Problem name
     std::string get_name() const
     {   
         return "Hock Schittkowsky 71";
     }
 
-    // Extra informations
+    /// Extra informations
     std::string get_extra_info() const
     {
         return "\tProblem number 71 from the Hock-Schittkowsky test suite\n";
     }
     
-    // Optimal solution 
+    /// Optimal solution 
     vector_double best_known() const
     {
         return {1.,4.74299963,3.82114998,1.37940829};
     }
 
-    // Serialization
+    /// Serialization
     template <typename Archive>
     void serialize(Archive &) {}
 };

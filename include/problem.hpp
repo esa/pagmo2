@@ -302,7 +302,7 @@ struct prob_inner final: prob_inner_base
  * \f[
  * \begin{array}{rl}
  * \mbox{find:}      & \mathbf {lb} \le \mathbf x \le \mathbf{ub}\\
- * \mbox{to minimize: } & \mathbf f(\mathbf x) \in \mathbb R^{n_f}\\
+ * \mbox{to minimize: } & \mathbf f(\mathbf x) \in \mathbb R^{n_{obj}}\\
  * \mbox{subject to:} & \mathbf {c}_e(\mathbf x) = 0 \\
  *                    & \mathbf {c}_i(\mathbf x) \le 0 
  * \end{array}
@@ -310,9 +310,9 @@ struct prob_inner final: prob_inner_base
  *
  * where \f$\mathbf x \in \mathbb R^{n_x}\f$ is called *decision vector* or
  * *chromosome*, \f$\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_x}\f$ are the *box-bounds*,
- * \f$ \mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_f}\f$ define the *objectives*,
- * \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ce}}\f$ are non linear *equality constraints*,
- * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ci}}\f$ are non linear *inequality constraints*.
+ * \f$ \mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}\f$ define the *objectives*,
+ * \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality constraints*,
+ * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality constraints*.
  *
  * To create an instance of above problem the user is asked to construct a pagmo::problem
  * from a separate class \p T where, at least, the implementation of
@@ -324,9 +324,9 @@ struct prob_inner final: prob_inner_base
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  * 
- * - The return value of \p T::fitness is expected to have a dimension of \f$n_{f} + n_{ce} + n_{ci}\f$
+ * - The return value of \p T::fitness is expected to have a dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
  * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order). 
- * - The return value of \p T::get_nobj is expected to be \f$n_f\f$
+ * - The return value of \p T::get_nobj is expected to be \f$n_{obj}\f$
  * - The return value of \p T::get_bounds is expected to contain \f$(\mathbf{lb}, \mathbf{ub})\f$.
  *
  * The user can also implement the following methods in \p T :
@@ -409,8 +409,9 @@ class problem
          *   std::string get_extra_info() const;
          *   @endcode
          *
-         * @note The fitness dimension \f$n_f\f$ is defined by the return value of 
-         * \p T::get_nobj, while the decision vector dimension \f$n_x\f$ is defined 
+         * @note The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of 
+         * \p T::get_nobj + \p T::get_nec + \p T::get_nic, while the decision
+         * vector dimension \f$n_x\f$ is defined 
          * by the size of the bounds as returned by \p T::get_bounds()
          *
          * @param[in] x The user implemented problem
@@ -498,7 +499,7 @@ class problem
          * Extracts the original problem that was provided by the user, thus
          * granting access to additional resources there implemented.
          *
-         * @param[in] T The type of the orignal user-defined problem
+         * @tparam T The type of the orignal user-defined problem
          *
          * @return a const pointer to the user-defined problem
          * 
@@ -516,7 +517,7 @@ class problem
         /// Checks the user defined problem type at run-time
         /**
          *
-         * @param[in] T The type to be checked
+         * @tparam T The type to be checked
          *
          * @return true if the user defined problem is \p T. false othewise.
          * 
@@ -530,16 +531,19 @@ class problem
         /// Computes the fitness
         /**
          *
-         * @param[in] dv The decision vector
-         *
-         * @return a vector_double of dimension \f$ n_f\f$ containing the problem fitness: the concatenation of
-         * \f$n_f\f$ objectives to minimize, \f$n_{ec}\f$ equality constraints and \f$n_{ic}\f$ 
+         * The fitness, implemented in the user-defined problem,
+         * is expected to be a std::vector<double> of dimension \f$ n_f\f$ containing
+         * the problem fitness: the concatenation of \f$n_{obj}\f$ objectives
+         * to minimize, \f$n_{ec}\f$ equality constraints and \f$n_{ic}\f$ 
          * inequality constraints.
          *
+         * @param[in] dv The decision vector
+         *
+         * @return The user implemented fitness. 
+         *
          * @throws std::invalid_argument if the length of the decision vector is not \f$n_x\f$
-         * @throws std::invalid_argument if the length of the fitness returned (as defined tin he user defined problem)
+         * @throws std::invalid_argument if the length of the fitness returned (as defined in the user defined problem)
          * is not \f$n_f\f$
-         * 
          */
         vector_double fitness(const vector_double &dv) const
         {
@@ -555,6 +559,26 @@ class problem
         }
 
         /// Computes the gradient
+        /**
+         *
+         * The gradient, optionally implemented in the user-defined problem,
+         * is expected to be a std::vector<double> containing the problem
+         * fitness gradients \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$
+         * in the order specified by the gradient sparsity pattern returned by
+         * problem::gradient_sparsity
+         * (a vector of index pairs \f$(i,j)\f$).
+         *
+         * @param[in] dv The decision vector
+         *
+         * @return The gradient as implemented by the user.
+         * 
+         * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
+         * @throws std::invalid_argument if the length of the gradient returned (as defined in the user defined problem)
+         * does not match the gradient sparsity pattern dimension as returned by
+         * problem::get_gs_dim
+         * @throws std::logic_error if the user defined problem does not implement
+         * the gradient method
+         */
         vector_double gradient(const vector_double &dv) const
         {
             // 1 - checks the decision vector
@@ -568,25 +592,59 @@ class problem
             return retval;
         }
 
-        /// Check if the user-define problem implements a gradient
+        /// Check if the user-defined problem implements a gradient
         bool has_gradient() const
         {
             return m_ptr->has_gradient();
         }
 
-        /// Returns the gradient sparsity
+        /// Computes the gradient sparsity pattern
+        /**
+         *
+         * The gradient sparsity pattern is a collection of the indexes 
+         * \f$(i,j)\f$ of the non-zero elements of 
+         * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$. By default
+         * PaGMO assumes a dense pattern (all index pairs in the order
+         * \f$(0,0) .. (0,n_x-1), ...(1,0) .. (1,n_x-1) .. (n_f-1,n_x-1)\f$
+         * but this default is overidden if the method gradient_sparsity is
+         * implemented in the user defined problem.
+         *
+         * @return The gradient sparsity pattern.
+         * 
+         */
         sparsity_pattern gradient_sparsity() const
         {
             return m_ptr->gradient_sparsity();
         }
 
-        /// Check if the user-defined dproblem implements a gradient_sparsity
+        /// Checks if the user-defined dproblem implements a gradient_sparsity
         bool has_gradient_sparsity() const
         {
             return m_ptr->has_gradient_sparsity();
         }
 
-        /// Computes the Hessians
+        /// Computes the hessians
+        /**
+         *
+         * The hessians, optionally implemented in the user-defined problem,
+         * are expected to be a std::vector<std::vector<double>>.
+         * The element \f$ l\f$ contains the problem hessian:
+         * \f$ h^l_{ij} = \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
+         * in the order specified by the \f$ l\f$-th element of the 
+         * hessians sparsity pattern (a vector of index pairs \f$(i,j)\f$) 
+         * as returned by problem::hessians_sparsity
+         *
+         * @param[in] dv The decision vector
+         *
+         * @return The hessians as implemented by the user.
+         * 
+         * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
+         * @throws std::invalid_argument if the length of each hessian returned
+         * (as defined in the user defined problem) does not match the corresponding
+         * hessians sparsity pattern dimensions as returned by problem::get_hs_dim
+         * @throws std::logic_error if the user defined problem does not implement
+         * the hessians method
+         */
         std::vector<vector_double> hessians(const vector_double &dv) const
         {
             // 1 - checks the decision vector
@@ -606,12 +664,25 @@ class problem
             return m_ptr->has_hessians();
         }
 
-        /// Returns the hessians sparsity
+        /// Computes the hessians sparsity pattern
+        /**
+         *
+         * Each component \f$ l\f$ of the hessians sparsity pattern is a
+         * collection of the indexes \f$(i,j)\f$ of the non-zero elements of 
+         * \f$h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\f$. By default
+         * PaGMO assumes a dense pattern storing a lower triangular representation
+         * (all index pairs in the order
+         * \f$(0,0), (1,0), (1,1), (2,0) ... (n_x-1,n_x-1)\f$
+         * but this default is overidden if the method hessians_sparsity is
+         * implemented in the user defined problem.
+         *
+         * @return The hessians sparsity pattern.
+         * 
+         */
         std::vector<sparsity_pattern> hessians_sparsity() const
         {
             return m_ptr->hessians_sparsity();
         }
-
 
         /// Check if the user-defined dproblem implements the hessians_sparosy
         bool has_hessians_sparsity() const
@@ -619,31 +690,53 @@ class problem
             return m_ptr->has_hessians_sparsity();
         }
 
-        /// Fitness dimension
+        /// Number of objectives
+        /**
+         * @return Returns \f$ n_{obj}\f$, the number of objectives as returned by the
+         * corresponding user-implemented method
+         */
         vector_double::size_type get_nobj() const
         {
             return m_ptr->get_nobj();
         }
 
-        /// Decision vector dimension
+        /// Problem dimension
+        /**
+         * @return Returns \f$ n_{x}\f$, the dimension of the decision vector as implied
+         * by the length of the bounds returned by the user-implemented get_bounds method
+         */
         vector_double::size_type get_n() const
         {
             return m_n;
         }
 
         /// Box-bounds
+        /**
+         * @return Returns \f$ (\mathbf{lb}, \mathbf{ub}) \f$, the box-bounds as returned by
+         * the corresponding user-implemented method
+         */
         std::pair<vector_double, vector_double> get_bounds() const
         {
             return m_ptr->get_bounds();
         }
 
         /// Number of equality constraints
+        /**
+         * @return Returns \f$ n_{ec} \f$, the number of inequality constraints
+         * as returned by the the corresponding user-implemented method if present,
+         * zero otherwise
+         */
         vector_double::size_type get_nec() const
         {
             return m_ptr->get_nec();
         }
 
         /// Number of inequality constraints
+        /**
+         * @return Returns \f$ n_{ic} \f$, the number of inequality constraints
+         * as returned by the the corresponding user-implemented method if present,
+         * zero otherwise
+         */
         vector_double::size_type get_nic() const
         {
             return m_ptr->get_nic();
@@ -680,18 +773,31 @@ class problem
         }
 
         /// Problem's name.
+        /**
+         * @return The problem's name as returned by the corresponding 
+         * user-implemented method if present, the C++ mingled class name otherwise.
+         */
         std::string get_name() const
         {
             return m_ptr->get_name();
         }
 
         /// Extra info
+        /**
+         * @return The problem's extra info as returned by the corresponding
+         * user-implemented method if present, an empty string otehrwise. 
+         */
         std::string get_extra_info() const
         {
             return m_ptr->get_extra_info();
         }
 
-        /// human readable representation
+        /// Human readable representation
+        /**
+         * @return An std::string containing a human-readable 
+         * representation of the problem, appending the result from
+         * the user-defined method extra_info if implemented.
+         */
         std::string human_readable() const
         {
             std::ostringstream s;
@@ -729,11 +835,14 @@ class problem
             return s.str();
         }
 
+        /// Serialization: save
         template <typename Archive>
         void save(Archive &ar) const
         {
             ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(), m_n, m_gs_dim, m_hs_dim);
         }
+
+        /// Serialization: load
         template <typename Archive>
         void load(Archive &ar)
         {

@@ -137,7 +137,7 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 # documentation.
 html_theme_options = {
     # Navigation bar title. (Default: ``project`` value)
-    'navbar_title': " ",
+    'navbar_title': "PaGMO",
 
     # Tab name for entire site. (Default: "Site")
     'navbar_site_name': "Site",
@@ -151,17 +151,17 @@ html_theme_options = {
     # an arbitrary url.
     'navbar_links': [
         ("home", "index"),
-        ("docs", "docs/index"),
+        ("C++ docs", "docs/cpp"),
     ],
 
     # Render the next and previous page links in navbar. (Default: true)
     'navbar_sidebarrel': False,
 
     # Render the current pages TOC in the navbar. (Default: true)
-    'navbar_pagenav': False,
+    'navbar_pagenav': True,
 
     # Tab name for the current pages TOC. (Default: "Page")
-    #'navbar_pagenav_name': "Page",
+    'navbar_pagenav_name': "This Page",
 
     # Global TOC depth for "site" navbar tab. (Default: 1)
     # Switching to -1 shows all levels.

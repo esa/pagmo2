@@ -2,9 +2,10 @@
 
 C++ Documentation
 =================
+-----------------------------------------------
 
-Classes
-^^^^^^^
+Core classes
+^^^^^^^^^^^^
 -----------------------------------------------
 
 .. toctree::
@@ -12,10 +13,20 @@ Classes
 
   problem
 
+Implemented problems
+^^^^^^^^^^^^^^^^^^^^
 -----------------------------------------------
+
+.. toctree::
+  :maxdepth: 1
+
+  nlp_gh
+
 
 Type Traits
 ^^^^^^^^^^^
+-----------------------------------------------
+
 .. doxygenclass:: pagmo::has_fitness
    :project: PaGMOreborn
    :members:
@@ -55,6 +66,4 @@ Type Traits
 .. doxygenclass:: pagmo::has_hessians_sparsity
    :project: PaGMOreborn
    :members:
-
------------------------------------------------
 
