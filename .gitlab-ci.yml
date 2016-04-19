@@ -1,12 +1,12 @@
 image: python:3.4-alpine
 
-pagmo:
+pagmo-c++:
   script:
     - apk update && apk add build-base gcc
     - apk add cmake
     - mkdir build
     - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_BUILD_TESTS=ON -DCMAKE_BUILD_TUTORIALS=ON ..
+    - cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
     - make
     - make test
 
