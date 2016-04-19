@@ -895,23 +895,30 @@ class problem
         }
         void check_hessians_sparsity()
         {
-            auto hs = hessians_sparsity();
-            // 1 - We check that a hessian sparsity is provided for each component
-            // of the fitness
-            auto nf = get_nobj() + get_nec() + get_nic();
-            if (hs.size()!=nf) {
-                pagmo_throw(std::invalid_argument,"Invalid dimension of the hessians_sparsity: " + std::to_string(hs.size()) + ", expected: " + std::to_string(nf));
-            }
-            // 2 - We check that all hessian sparsity patterns have
-            // valid indexes.
-            for (const auto &one_hs: hs) {
-                check_hessian_sparsity(one_hs);
-            }
-            // 3 - We store the dimensions of the hessian sparsity patterns
-            // for future quick checks.
-            m_hs_dim.clear();
-            for (const auto &one_hs: hs) {
-                m_hs_dim.push_back(one_hs.size());
+            if(has_hessians()) {
+                auto hs = hessians_sparsity();
+                // 1 - We check that a hessian sparsity is provided for each component
+                // of the fitness
+                auto nf = get_nobj() + get_nec() + get_nic();
+                if (hs.size()!=nf) {
+                    pagmo_throw(std::invalid_argument,"Invalid dimension of the hessians_sparsity: " + std::to_string(hs.size()) + ", expected: " + std::to_string(nf));
+                }
+                // 2 - We check that all hessian sparsity patterns have
+                // valid indexes.
+                for (const auto &one_hs: hs) {
+                    check_hessian_sparsity(one_hs);
+                }
+                // 3 - We store the dimensions of the hessian sparsity patterns
+                // for future quick checks.
+                m_hs_dim.clear();
+                for (const auto &one_hs: hs) {
+                    m_hs_dim.push_back(one_hs.size());
+                }
+            } else {
+                m_hs_dim.clear();
+                for (auto i = 0u; i < get_nobj()+get_nic()+get_nec(); ++i) {
+                    m_hs_dim.push_back(m_nx * (m_nx - 1u) / 2u + m_nx); // lower triangular
+                }
             }
 
         }
