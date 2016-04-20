@@ -296,7 +296,7 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         // 2 - We check that the two outputs of human_readable are identical
         BOOST_CHECK(p1_string==p2_string);
         // 3 - We check that the decision vector dimension is copied
-        BOOST_CHECK(p2.get_n() == p1.get_n());
+        BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 
     // We check the copy constructor
@@ -326,7 +326,7 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
         BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
         // 4 - We check that the decision vector dimension is copied
-        BOOST_CHECK(p2.get_n() == p1.get_n());
+        BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 }
 
@@ -363,7 +363,7 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
         // 2 - We check that the two outputs of human_readable are identical
         BOOST_CHECK(p1_string==p2_string);
         // 3 - We check that the decision vector dimension is copied
-        BOOST_CHECK(p2.get_n() == p1.get_n());
+        BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 
     // We check the copy assignment
@@ -394,7 +394,7 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
         BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
         BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
         // 4 - We check that the decision vector dimension is copied
-        BOOST_CHECK(p2.get_n() == p1.get_n());
+        BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 }
 
@@ -497,7 +497,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     problem p3{empty{}};
 
     BOOST_CHECK(p1.get_nobj() == 2);
-    BOOST_CHECK(p1.get_n() == 2);
+    BOOST_CHECK(p1.get_nx() == 2);
     BOOST_CHECK(p1.get_nec() == 3);
     BOOST_CHECK(p1.get_nic() == 4);
     BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13,13},{17,17}}));

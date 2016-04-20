@@ -120,7 +120,12 @@ struct prob_inner final: prob_inner_base
         pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\n"
             "A function with prototype 'vector_double gradient(const vector_double &x)' const was expected.");
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value,int>::type = 0>
+    static bool has_gradient_impl(U &p)
+    {
+       return p.has_gradient();
+    }
+    template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value && !pagmo::override_has_gradient<U>::value,int>::type = 0>
     static bool has_gradient_impl(U &)
     {
        return true;
@@ -143,7 +148,12 @@ struct prob_inner final: prob_inner_base
         auto f_dim = get_nobj() + get_nec() + get_nic();
         return dense_gradient(f_dim, dim);
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
+    static bool has_gradient_sparsity_impl(U &p)
+    {
+       return p.has_gradient();
+    }
+    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(U &)
     {
        return true;
@@ -164,7 +174,12 @@ struct prob_inner final: prob_inner_base
         pagmo_throw(std::logic_error,"Hessians have been requested but not implemented.\n"
             "A function with prototype 'std::vector<vector_double> hessians(const vector_double &x)' const was expected.");
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value,int>::type = 0>
+    static bool has_hessians_impl(U &p)
+    {
+       return p.has_hessians();
+    }
+    template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value && !pagmo::override_has_hessians<U>::value,int>::type = 0>
     static bool has_hessians_impl(U &)
     {
        return true;
@@ -187,7 +202,12 @@ struct prob_inner final: prob_inner_base
         auto f_dim = get_nobj() + get_nec() + get_nic();
         return dense_hessians(f_dim, dim);
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
+    static bool has_hessians_sparsity_impl(U &p)
+    {
+       return p.has_hessians_sparsity();
+    }
+    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(U &)
     {
        return true;
@@ -705,7 +725,7 @@ class problem
          * @return Returns \f$ n_{x}\f$, the dimension of the decision vector as implied
          * by the length of the bounds returned by the user-implemented get_bounds method
          */
-        vector_double::size_type get_n() const
+        vector_double::size_type get_nx() const
         {
             return m_nx;
         }
@@ -802,7 +822,7 @@ class problem
         {
             std::ostringstream s;
             s << "Problem name: " << get_name() << '\n';
-            s << "\tGlobal dimension:\t\t\t" << get_n() << '\n';
+            s << "\tGlobal dimension:\t\t\t" << get_nx() << '\n';
             s << "\tFitness dimension:\t\t\t" << get_nobj() << '\n';
             s << "\tEquality constraints dimension:\t\t" << get_nec() << '\n';
             s << "\tInequality constraints dimension:\t" << get_nic() << '\n';
@@ -869,15 +889,15 @@ class problem
         // defined one or the default (dense) one.
         void check_gradient_sparsity()
         {
+            auto nx = get_nx();
+            auto nf = get_nobj() + get_nec() + get_nic();
             if (has_gradient()) {
                 auto gs = gradient_sparsity();
-                auto n = get_n();
-                auto nf = get_nobj() + get_nec() + get_nic();
                 // 1 - We check that the gradient sparsity pattern has
                 // valid indexes.
                 for (const auto &pair: gs) {
-                    if ((pair.first >= nf) or (pair.second >= n)) {
-                        pagmo_throw(std::invalid_argument,"Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nFitness dimension is: " + std::to_string(nf) + "\nDecision vector dimension is: " + std::to_string(n));
+                    if ((pair.first >= nf) or (pair.second >= nx)) {
+                        pagmo_throw(std::invalid_argument,"Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nFitness dimension is: " + std::to_string(nf) + "\nDecision vector dimension is: " + std::to_string(nx));
                     }
                 }
                 // 1bis We check all pairs are unique
@@ -890,7 +910,7 @@ class problem
                 m_gs_dim = gs.size();
             }
             else {
-                m_gs_dim = (get_nobj()+get_nec()+get_nic()) * m_nx;
+                m_gs_dim = nx * nf;
             }
         }
         void check_hessians_sparsity()
@@ -924,14 +944,14 @@ class problem
         }
         void check_hessian_sparsity(const sparsity_pattern& hs)
         {
-            auto n = get_n();
+            auto nx = get_nx();
             // 1 - We check that the hessian sparsity pattern has
             // valid indexes. Assuming a lower triangular representation of
             // a symmetric matrix. Example, for a 4x4 dense symmetric
             // [(0,0), (1,0), (1,1), (2,0), (2,1), (2,2), (3,0), (3,1), (3,2), (3,3)]
             for (const auto &pair: hs) {
-                if ((pair.first >= n) or (pair.second > pair.first)) {
-                    pagmo_throw(std::invalid_argument,"Invalid pair detected in the hessians sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nDecision vector dimension is: " + std::to_string(n) + "\nNOTE: hessian is a symmetric matrix and PaGMO represents it as lower triangular: i.e (i,j) is not valid if j>i");
+                if ((pair.first >= nx) or (pair.second > pair.first)) {
+                    pagmo_throw(std::invalid_argument,"Invalid pair detected in the hessians sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nDecision vector dimension is: " + std::to_string(nx) + "\nNOTE: hessian is a symmetric matrix and PaGMO represents it as lower triangular: i.e (i,j) is not valid if j>i");
                 }
             }
             // 2 -  We check all pairs are unique
@@ -942,8 +962,8 @@ class problem
         void check_decision_vector(const vector_double &dv) const
         {
             // 1 - check decision vector for length consistency
-            if (dv.size()!=get_n()) {
-                pagmo_throw(std::invalid_argument,"Length of decision vector is " + std::to_string(dv.size()) + ", should be " + std::to_string(get_n()));
+            if (dv.size()!=get_nx()) {
+                pagmo_throw(std::invalid_argument,"Length of decision vector is " + std::to_string(dv.size()) + ", should be " + std::to_string(get_nx()));
             }
             // 2 - Here is where one could check if the decision vector
             // is in the bounds. At the moment not implemented

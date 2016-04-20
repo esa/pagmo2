@@ -34,7 +34,7 @@ int main()
     // Streaming to screen the problem
     std::cout << p0 << '\n';
     // Getting its dimensions
-    std::cout << "Calling the dimension getter: " << p0.get_n() << '\n';
+    std::cout << "Calling the dimension getter: " << p0.get_nx() << '\n';
     std::cout << "Calling the fitness dimension getter: " << p0.get_nobj() << '\n';
 
     // Getting the bounds via the pagmo::print eating also std containers
