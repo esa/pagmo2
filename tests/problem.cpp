@@ -575,6 +575,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p1.get_nx() == 2);
     BOOST_CHECK(p1.get_nec() == 3);
     BOOST_CHECK(p1.get_nic() == 4);
+    BOOST_CHECK(p1.get_nf() == 2+3+4);
     BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13,13},{17,17}}));
     // dense
     BOOST_CHECK(p1.get_gs_dim() == 18);

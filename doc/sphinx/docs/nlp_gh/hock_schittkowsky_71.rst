@@ -1,4 +1,4 @@
-.. cpp_constrainedgh
+.. cpp_hock_schittkowsky
 
 Hock Schittkowsky No.71
 =======================

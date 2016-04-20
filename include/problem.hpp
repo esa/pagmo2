@@ -386,7 +386,7 @@ struct prob_inner final: prob_inner_base
  * Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the hessians. At
  * each construction and copy these counters are reset to zero.
  *
- * The only allowed operations on an object belongng to this class, after it has been moved, are assignment and destruction.
+ * The only allowed operations on an object belonging to this class, after it has been moved, are assignment and destruction.
  *
  * @author Francesco Biscani (bluescarni@gmail.com)
  * @author Dario Izzo (darioizzo@gmail.com)
@@ -612,7 +612,22 @@ class problem
             return retval;
         }
 
-        /// Check if the user-defined problem implements a gradient
+        /// Checks if the user-defined problem has a gradient
+        /**
+         * If the user defined problem implements a gradient, this
+         * will return true, false otherwise. The value returned can
+         * also be directly hard-coded implementing the
+         * method 
+         *
+         * @code
+         * bool has_gradient() const
+         * @endcode
+         *
+         * in the user-defined problem
+         *
+         * @return a boolean flag
+         *    
+         */
         bool has_gradient() const
         {
             return m_ptr->has_gradient();
@@ -637,7 +652,23 @@ class problem
             return m_ptr->gradient_sparsity();
         }
 
-        /// Checks if the user-defined dproblem implements a gradient_sparsity
+        /// Checks if the user-defined problem has a gradient_sparsity
+        /**
+         * If the user defined problem implements a gradient_sparsity, this
+         * will return true, false otherwise. The value returned can
+         * also be directly hard-coded implementing the
+         * method 
+         *
+         * @code
+         * bool has_gradient_sparsity() const
+         * @endcode
+         *
+         * in the user-defined problem
+         *
+         * @return a boolean flag
+         *    
+         */
+
         bool has_gradient_sparsity() const
         {
             return m_ptr->has_gradient_sparsity();
@@ -679,6 +710,21 @@ class problem
         }
 
         /// Check if the user-defined dproblem implements the hessians
+        /**
+         * If the user defined problem implements hessians, this
+         * will return true, false otherwise. The value returned can
+         * also be directly hard-coded implementing the
+         * method 
+         *
+         * @code
+         * bool has_hessians() const
+         * @endcode
+         *
+         * in the user-defined problem
+         *
+         * @return a boolean flag
+         *    
+         */
         bool has_hessians() const
         {
             return m_ptr->has_hessians();
@@ -704,7 +750,22 @@ class problem
             return m_ptr->hessians_sparsity();
         }
 
-        /// Check if the user-defined dproblem implements the hessians_sparosy
+        /// Check if the user-defined dproblem implements the hessians_sparsity
+        /**
+         * If the user defined problem implements a hessians sparsity, this
+         * will return true, false otherwise. The value returned can
+         * also be directly hard-coded implementing the
+         * method 
+         *
+         * @code
+         * bool has_hessians_sparsity() const
+         * @endcode
+         *
+         * in the user-defined problem
+         *
+         * @return a boolean flag
+         *    
+         */
         bool has_hessians_sparsity() const
         {
             return m_ptr->has_hessians_sparsity();
@@ -728,6 +789,16 @@ class problem
         vector_double::size_type get_nx() const
         {
             return m_nx;
+        }
+
+        /// Fitness dimension
+        /**
+         * @return Returns \f$ n_{f}\f$, the dimension of the fitness as the
+         * sum of \f$n_{obj}\f$, \f$n_{ec}\f$, \f$n_{ic}\f$
+         */
+        vector_double::size_type get_nf() const
+        {
+            return get_nobj()+get_nic()+get_nec();
         }
 
         /// Box-bounds
@@ -823,7 +894,8 @@ class problem
             std::ostringstream s;
             s << "Problem name: " << get_name() << '\n';
             s << "\tGlobal dimension:\t\t\t" << get_nx() << '\n';
-            s << "\tFitness dimension:\t\t\t" << get_nobj() << '\n';
+            s << "\tFitness dimension:\t\t\t" << get_nf() << '\n';
+            s << "\tNumber of objectives:\t\t\t" << get_nobj() << '\n';
             s << "\tEquality constraints dimension:\t\t" << get_nec() << '\n';
             s << "\tInequality constraints dimension:\t" << get_nic() << '\n';
             s << "\tLower bounds: ";
@@ -890,7 +962,7 @@ class problem
         void check_gradient_sparsity()
         {
             auto nx = get_nx();
-            auto nf = get_nobj() + get_nec() + get_nic();
+            auto nf = get_nf();
             if (has_gradient()) {
                 auto gs = gradient_sparsity();
                 // 1 - We check that the gradient sparsity pattern has
@@ -919,7 +991,7 @@ class problem
                 auto hs = hessians_sparsity();
                 // 1 - We check that a hessian sparsity is provided for each component
                 // of the fitness
-                auto nf = get_nobj() + get_nec() + get_nic();
+                auto nf = get_nf();
                 if (hs.size()!=nf) {
                     pagmo_throw(std::invalid_argument,"Invalid dimension of the hessians_sparsity: " + std::to_string(hs.size()) + ", expected: " + std::to_string(nf));
                 }
@@ -936,7 +1008,7 @@ class problem
                 }
             } else {
                 m_hs_dim.clear();
-                for (auto i = 0u; i < get_nobj()+get_nic()+get_nec(); ++i) {
+                for (auto i = 0u; i < get_nf(); ++i) {
                     m_hs_dim.push_back(m_nx * (m_nx - 1u) / 2u + m_nx); // lower triangular
                 }
             }
@@ -971,7 +1043,7 @@ class problem
 
         void check_fitness_vector(const vector_double &f) const
         {
-            auto nf = get_nobj() + get_nec() + get_nic();
+            auto nf = get_nf();
             // Checks dimension of returned fitness
             if (f.size()!=nf) {
                 pagmo_throw(std::invalid_argument,"Fitness length is: " + std::to_string(f.size()) + ", should be " + std::to_string(nf));

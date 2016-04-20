@@ -21,7 +21,7 @@
 #include "include/problem.hpp"
 #include "include/types.hpp"
 #include "include/problems/null.hpp"
-#include "include/problems/shifted.hpp"
+#include "include/problems/translate.hpp"
 
 
 using namespace pagmo;
@@ -30,7 +30,7 @@ using namespace pagmo;
 int main()
 {
     // Constructing a problem
-    problem p0{shifted{problem{shifted{problem{null{}},{1.}}}}};
+    problem p0{translate{translate{null{},{1.}},{1.}}};
     // Streaming to screen the problem
     std::cout << p0 << '\n';
     // Getting its dimensions
