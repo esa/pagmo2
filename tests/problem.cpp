@@ -111,6 +111,40 @@ struct grad_p : base_p
 PAGMO_REGISTER_PROBLEM(grad_p)
 
 // Generates a dummy problem with arbitrary dimensions and return values
+// having the gradient implemented but overriding the has methods
+struct grad_p_override : grad_p
+{
+    grad_p_override(
+        unsigned int nobj = 1,
+        unsigned int nec = 0,
+        unsigned int nic = 0,
+        const vector_double &ret_fit = {1},
+        const vector_double &lb = {0},
+        const vector_double &ub = {1},
+        const vector_double &g = {1},
+        const sparsity_pattern &gs = {{0,0}}
+     ) : grad_p(nobj,nec,nic,ret_fit,lb,ub,g,gs) {}
+
+    bool has_gradient() const 
+    {
+        return false;
+    }
+
+    bool has_gradient_sparsity() const 
+    {
+        return false;
+    }
+
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(cereal::base_class<grad_p>(this));
+    }
+};
+
+PAGMO_REGISTER_PROBLEM(grad_p_override)
+
+// Generates a dummy problem with arbitrary dimensions and return values
 // having the hessians implemented
 struct hess_p : base_p
 {
@@ -146,6 +180,40 @@ struct hess_p : base_p
 };
 
 PAGMO_REGISTER_PROBLEM(hess_p)
+
+// Generates a dummy problem with arbitrary dimensions and return values
+// having the hessians implemented but overriding the has methods
+struct hess_p_override : hess_p
+{
+    hess_p_override(
+        unsigned int nobj = 1,
+        unsigned int nec = 0,
+        unsigned int nic = 0,
+        const vector_double &ret_fit = {1},
+        const vector_double &lb = {0},
+        const vector_double &ub = {1},
+        const std::vector<vector_double> &h = {{1}},
+        const std::vector<sparsity_pattern> &hs = {{{0,0}}}
+     ) : hess_p(nobj,nec,nic,ret_fit,lb,ub,h,hs) {}
+
+    bool has_hessians() const 
+    {
+        return false;
+    }
+
+    bool has_hessians_sparsity() const 
+    {
+        return false;
+    }
+
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(cereal::base_class<hess_p>(this));
+    }
+};
+
+PAGMO_REGISTER_PROBLEM(hess_p_override)
 
 // Generates a dummy problem with arbitrary dimensions and return values
 // having the hessians and the gradients implemented
@@ -464,6 +532,8 @@ BOOST_AUTO_TEST_CASE(problem_has_test)
     problem p1{base_p{}};
     problem p2{grad_p{}};
     problem p3{hess_p{}};
+    problem p4{grad_p_override{}};
+    problem p5{hess_p_override{}};
 
     BOOST_CHECK(!p1.has_gradient());
     BOOST_CHECK(!p1.has_gradient_sparsity());
@@ -480,6 +550,11 @@ BOOST_AUTO_TEST_CASE(problem_has_test)
     BOOST_CHECK(!p3.has_gradient_sparsity());
     BOOST_CHECK(p3.has_hessians());
     BOOST_CHECK(p3.has_hessians_sparsity());
+
+    BOOST_CHECK(!p4.has_gradient());
+    BOOST_CHECK(!p4.has_gradient_sparsity());
+    BOOST_CHECK(!p4.has_hessians());
+    BOOST_CHECK(!p4.has_hessians_sparsity());
 }
 
 BOOST_AUTO_TEST_CASE(problem_getters_test)

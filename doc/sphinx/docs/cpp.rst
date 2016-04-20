@@ -55,7 +55,15 @@ Type Traits
    :project: PaGMOreborn
    :members:
 
+.. doxygenclass:: pagmo::override_has_gradient
+   :project: PaGMOreborn
+   :members:
+
 .. doxygenclass:: pagmo::has_gradient_sparsity
+   :project: PaGMOreborn
+   :members:
+
+.. doxygenclass:: pagmo::override_has_gradient_sparsity
    :project: PaGMOreborn
    :members:
 
@@ -63,7 +71,15 @@ Type Traits
    :project: PaGMOreborn
    :members:
 
+.. doxygenclass:: pagmo::override_has_hessians
+   :project: PaGMOreborn
+   :members:
+
 .. doxygenclass:: pagmo::has_hessians_sparsity
+   :project: PaGMOreborn
+   :members:
+
+.. doxygenclass:: pagmo::override_has_hessians_sparsity
    :project: PaGMOreborn
    :members:
 

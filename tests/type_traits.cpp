@@ -254,6 +254,32 @@ BOOST_AUTO_TEST_CASE(has_gradient_test)
     BOOST_CHECK((!has_gradient<grad_04>::value));
 }
 
+struct ov_grad_00 {};
+
+// The good one.
+struct ov_grad_01 
+{
+    bool has_gradient() const;
+};
+
+struct ov_grad_02 
+{
+    bool has_gradient();
+};
+
+struct ov_grad_03
+{
+    void has_gradient() const;
+};
+
+BOOST_AUTO_TEST_CASE(override_has_gradient_test)
+{
+    BOOST_CHECK((!override_has_gradient<ov_grad_00>::value));
+    BOOST_CHECK((override_has_gradient<ov_grad_01>::value));
+    BOOST_CHECK((!override_has_gradient<ov_grad_02>::value));
+    BOOST_CHECK((!override_has_gradient<ov_grad_03>::value));
+}
+
 struct gs_00 {};
 
 // The good one.
@@ -278,6 +304,32 @@ BOOST_AUTO_TEST_CASE(has_gradient_sparsity_test)
     BOOST_CHECK((has_gradient_sparsity<gs_01>::value));
     BOOST_CHECK((!has_gradient_sparsity<gs_02>::value));
     BOOST_CHECK((!has_gradient_sparsity<gs_03>::value));
+}
+
+struct ov_gs_00 {};
+
+// The good one.
+struct ov_gs_01 
+{
+    bool has_gradient_sparsity() const;
+};
+
+struct ov_gs_02 
+{
+    bool has_gradient_sparsity();
+};
+
+struct ov_gs_03
+{
+    void has_gradient_sparsity() const;
+};
+
+BOOST_AUTO_TEST_CASE(override_has_gradient_sparsity_test)
+{
+    BOOST_CHECK((!override_has_gradient_sparsity<ov_gs_00>::value));
+    BOOST_CHECK((override_has_gradient_sparsity<ov_gs_01>::value));
+    BOOST_CHECK((!override_has_gradient_sparsity<ov_gs_02>::value));
+    BOOST_CHECK((!override_has_gradient_sparsity<ov_gs_03>::value));
 }
 
 struct hess_00 {};
@@ -312,6 +364,32 @@ BOOST_AUTO_TEST_CASE(has_hessians_test)
     BOOST_CHECK((!has_hessians<hess_04>::value));
 }
 
+struct ov_hess_00 {};
+
+// The good one.
+struct ov_hess_01
+{
+    bool has_hessians() const;
+};
+
+struct ov_hess_02
+{
+    bool has_hessians();
+};
+
+struct ov_hess_03
+{
+    void has_hessians() const;
+};
+
+BOOST_AUTO_TEST_CASE(override_has_hessians_test)
+{
+    BOOST_CHECK((!override_has_hessians<ov_hess_00>::value));
+    BOOST_CHECK((override_has_hessians<ov_hess_01>::value));
+    BOOST_CHECK((!override_has_hessians<ov_hess_02>::value));
+    BOOST_CHECK((!override_has_hessians<ov_hess_03>::value));
+}
+
 struct hs_00 {};
 
 // The good one.
@@ -336,4 +414,30 @@ BOOST_AUTO_TEST_CASE(has_hessians_sparsity_test)
     BOOST_CHECK((has_hessians_sparsity<hs_01>::value));
     BOOST_CHECK((!has_hessians_sparsity<hs_02>::value));
     BOOST_CHECK((!has_hessians_sparsity<hs_03>::value));
+}
+
+struct ov_hs_00 {};
+
+// The good one.
+struct ov_hs_01 
+{
+    bool has_hessians_sparsity() const;
+};
+
+struct ov_hs_02 
+{
+    bool has_hessians_sparsity();
+};
+
+struct ov_hs_03
+{
+    void has_hessians_sparsity() const;
+};
+
+BOOST_AUTO_TEST_CASE(override_has_hessians_sparsity_test)
+{
+    BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_00>::value));
+    BOOST_CHECK((override_has_hessians_sparsity<ov_hs_01>::value));
+    BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_02>::value));
+    BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_03>::value));
 }

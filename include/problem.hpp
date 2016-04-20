@@ -136,9 +136,9 @@ struct prob_inner final: prob_inner_base
        return false;
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
-    static sparsity_pattern gradient_sparsity_impl(const U &value)
+    static sparsity_pattern gradient_sparsity_impl(const U &p)
     {
-        return value.gradient_sparsity();
+        return p.gradient_sparsity();
     }
     template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     sparsity_pattern gradient_sparsity_impl(const U &) const
@@ -151,7 +151,7 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(U &p)
     {
-       return p.has_gradient();
+       return p.has_gradient_sparsity();
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(U &)
