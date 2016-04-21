@@ -102,6 +102,7 @@ struct prob_inner<py::object> final: prob_inner_base
     }
     virtual prob_inner_base *clone() const override final
     {
+        // This will make a deep copy using the ctor above.
         return ::new prob_inner(m_value);
     }
     // Main methods.
