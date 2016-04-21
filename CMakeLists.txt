@@ -4,7 +4,7 @@ enable_testing()
 
 cmake_minimum_required(VERSION 2.8.10)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules" "${CMAKE_SOURCE_DIR}/cmake_modules/yacma")
 
 message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
 
