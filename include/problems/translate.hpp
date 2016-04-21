@@ -31,9 +31,9 @@ public:
      *
      * @tparam T Any type from which pagmo::problem is constructable
      * @param[in] p The user defined problem.
-     * @param[in] translation An std::vector containing the translation to apply.
+     * @param[in] translation An <tt>std::vector</tt> containing the translation to apply.
      *
-     * @throws std::invalid_argument if the length of \p translation is
+     * @throws <tt>std::invalid_argument</tt> if the length of \p translation is
      * not equal to the problem dimension \f$ n_x\f$.
      * @throws unspecified any exception thrown by the pagmo::problem constructor
      */

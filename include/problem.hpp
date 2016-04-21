@@ -375,7 +375,7 @@ struct prob_inner final: prob_inner_base
  * and its sparse representation is in the \f$l\f$-th value returned by \p T::hessians(). Since
  * the hessians are symmetric, their sparse representation only contain lower triangular elements. The indexes
  * \f$(i,j)\f$ are stored in the \f$l\f$-th sparsity pattern (collection of index pairs) returned by problem::hessians_sparsity().
- * When not implemented, a call to \p problem::hessians throws an \p std::logic_error.
+ * When not implemented, a call to \p problem::hessians() throws an \p std::logic_error.
  * - \p T::hessians_sparsity() returns an \p std::vector of sparsity patterns, each one being
  * a collection of the non-zero index pairs \f$(i,j)\f$ of the corresponding Hessian. Since the Hessian matrix
  * is symmetric, only lower triangular elements are allowed. When
