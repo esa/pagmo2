@@ -1,5 +1,5 @@
 include(YACMACompilerLinkerSettings)
-YACMA_ENABLE_CXX_FLAGS()
+YACMA_SETUP_CXX_FLAGS()
 
 # This is valid for GCC, clang and Intel. I think that MSVC has the std version hardcoded.
 # TODO version checking for MSVC?
