@@ -1,5 +1,5 @@
-#ifndef PAGMO_PROBLEM_SHIFTED
-#define PAGMO_PROBLEM_SHIFTED
+#ifndef PAGMO_PROBLEM_TRANSLATE
+#define PAGMO_PROBLEM_TRANSLATE
 
 #include <algorithm>
 #include <cassert>
@@ -8,7 +8,7 @@
 #include "../problem.hpp"
 #include "../serialization.hpp"
 #include "../types.hpp"
-#include "null.hpp"
+#include "null_problem.hpp"
 
 namespace pagmo
 {
@@ -22,7 +22,7 @@ class translate : public problem
 {
 public:
     /// Default constructor
-    translate() : problem(null{}), m_translation({1.}) {}
+    translate() : problem(null_problem{}), m_translation({1.}) {}
 
     /// Constructor from user-defined problem and translation vector
     /**
@@ -73,10 +73,10 @@ public:
         return static_cast<const problem*>(this)->hessians(x_deshifted);
     }
 
-    /// Appends "[shifted]" to the user-defined problem name
+    /// Appends "[translated]" to the user-defined problem name
     std::string get_name() const
     {
-        return static_cast<const problem*>(this)->get_name() + " [shifted]";
+        return static_cast<const problem*>(this)->get_name() + " [translated]";
     }
 
     /// Extra informations

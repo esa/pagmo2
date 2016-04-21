@@ -12,7 +12,7 @@ namespace pagmo
 /**
  * This problem is used to test, develop and provide default values to e.g. meta-problems
  */
-struct null
+struct null_problem
 {
     /// Fitness
     vector_double fitness(const vector_double &) const
@@ -93,6 +93,6 @@ struct null
 
 }
 
-PAGMO_REGISTER_PROBLEM(pagmo::null)
+PAGMO_REGISTER_PROBLEM(pagmo::null_problem)
 
 #endif
