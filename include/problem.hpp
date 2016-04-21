@@ -324,7 +324,7 @@ struct prob_inner final: prob_inner_base
  * \mbox{find:}      & \mathbf {lb} \le \mathbf x \le \mathbf{ub}\\
  * \mbox{to minimize: } & \mathbf f(\mathbf x) \in \mathbb R^{n_{obj}}\\
  * \mbox{subject to:} & \mathbf {c}_e(\mathbf x) = 0 \\
- *                    & \mathbf {c}_i(\mathbf x) \le 0 
+ *                    & \mathbf {c}_i(\mathbf x) \le 0
  * \end{array}
  * \f]
  *
@@ -338,48 +338,48 @@ struct prob_inner final: prob_inner_base
  * a separate object of type T where, at least, the implementation of
  * the following methods is provided:
  *
- * @code 
- * fitness_vector fitness(const decision_vector &) const;
+ * @code
+ * vector_double fitness(const decision_vector &) const;
  * vector_double::size_type get_nobj() const;
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
- * 
+ *
  * - The return value of \p T::fitness() is expected to have a dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
- * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order). 
+ * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
  * - The return value of \p T::get_nobj() is expected to be \f$n_{obj}\f$
  * - The return value of \p T::get_bounds() is expected to contain \f$(\mathbf{lb}, \mathbf{ub})\f$.
  *
  * The user can also implement the following methods in \p T :
- *   @code 
+ *   @code
  *   vector_double::size_type get_nec() const;
  *   vector_double::size_type get_nic() const;
  *   vector_double gradient(const vector_double &x) const;
  *   sparsity_pattern gradient_sparsity() const;
  *   std::vector<vector_double> hessians(const vector_double &x) const;
  *   std::vector<sparsity_pattern> hessians_sparsity() const;
- *   std::string get_name() const; 
+ *   std::string get_name() const;
  *   std::string get_extra_info() const;
  *   @endcode
  *
- * - \p T::get_nec returns \f$n_{ec}\f$. When not implemented \f$n_{ec} = 0\f$ is assumed, and the pagmo::problem::get_nec() method will return 0.
- * - \p T::get_nic returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed, and the pagmo::problem::get_nic() method will return 0.
- * - \p T::gradient returns a sparse representation of the gradients. The \f$ k\f$-th term 
+ * - \p T::get_nec() returns \f$n_{ec}\f$. When not implemented \f$n_{ec} = 0\f$ is assumed, and the pagmo::problem::get_nec() method will return 0.
+ * - \p T::get_nic() returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed, and the pagmo::problem::get_nic() method will return 0.
+ * - \p T::gradient() returns a sparse representation of the gradients. The \f$ k\f$-th term
  * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
- * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by problem::gradient_sparsity.
- * When not implemented, a call to \p problem::gradient throws a logic_error
- * - \p T::gradient_sparsity returns the gradient sparsity pattern, i.e a collection of the non-zero index pairs \f$(i,j)\f$. When 
- * not implemented a dense pattern is assumed and a call to problem::gradient_sparsity
+ * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by problem::gradient_sparsity().
+ * When not implemented, a call to problem::gradient() throws an \p std::logic_error.
+ * - \p T::gradient_sparsity() returns the gradient sparsity pattern, i.e a collection of the non-zero index pairs \f$(i,j)\f$. When
+ * not implemented a dense pattern is assumed and a call to problem::gradient_sparsity().
  * returns \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$
- * - \p T::hessians returns a vector of sparse representations for the hessians. For
- * the \f$l\f$-th value returned by \p T::fitness, the hessian is defined as \f$ \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
- * and its sparse representation is in the \f$l\f$-th value returned by T::hessians. Since
- * the hessians are symmetric, their sparse representation only contain lower triangular elements. The indexes 
- * \f$(i,j)\f$ are stored in the \f$l\f$-th sparsity pattern (collection of index pairs) returned by problem::hessians_sparsity
- * When not implemented, a call to \p problem::hessians throws a logic_error
- * - \p T::hessians_sparsity returns an std::vector of sparsity patterns, each one being 
+ * - \p T::hessians() returns a vector of sparse representations for the hessians. For
+ * the \f$l\f$-th value returned by \p T::fitness(), the hessian is defined as \f$ \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
+ * and its sparse representation is in the \f$l\f$-th value returned by \p T::hessians(). Since
+ * the hessians are symmetric, their sparse representation only contain lower triangular elements. The indexes
+ * \f$(i,j)\f$ are stored in the \f$l\f$-th sparsity pattern (collection of index pairs) returned by problem::hessians_sparsity().
+ * When not implemented, a call to \p problem::hessians throws an \p std::logic_error.
+ * - \p T::hessians_sparsity() returns an \p std::vector of sparsity patterns, each one being
  * a collection of the non-zero index pairs \f$(i,j)\f$ of the corresponding Hessian. Since the Hessian matrix
- * is symmetric, only lower triangular elements are allowed. When 
- * not implemented a dense pattern is assumed and a call to problem::hessians_sparsity
+ * is symmetric, only lower triangular elements are allowed. When
+ * not implemented a dense pattern is assumed and a call to problem::hessians_sparsity()
  * returns \f$n_f\f$ sparsity patterns each one being \f$((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\f$.
  *
  * Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the hessians.
@@ -398,7 +398,7 @@ class problem
         template <typename T>
         using generic_ctor_enabler = std::enable_if_t<!std::is_same<problem,std::decay_t<T>>::value,int>;
     public:
-        /// Constructor from a user defined object \p T
+        /// Constructor from a user defined object of type \p T
         /**
          * Construct a pagmo::problem with fitness dimension \f$n_f\f$ and decision vector
          * dimension \f$n_x\f$ from an object of type \p T. In
@@ -406,7 +406,7 @@ class problem
          * to satisfy the following requests:
          *
          * - \p T must implement the following mandatory methods:
-         *   @code 
+         *   @code
          *   vector_double fitness(const decision_vector &) const;
          *   vector_double::size_type get_nobj() const;
          *   std::pair<vector_double, vector_double> get_bounds() const;
@@ -416,9 +416,9 @@ class problem
          * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
          *   otherwise it will result in a compile-time failiure
          *
-         * The following methods, if implemented in \p T, will override 
+         * The following methods, if implemented in \p T, will override
          * default choices:
-         *   @code 
+         *   @code
          *   vector_double::size_type get_nec() const;
          *   vector_double::size_type get_nic() const;
          *   vector_double gradient(const vector_double &x) const;
@@ -430,17 +430,17 @@ class problem
          *   @endcode
          *
          * @note The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of problem::get_nf(),
-         * while the decision vector dimension \f$n_x\f$ is defined 
+         * while the decision vector dimension \f$n_x\f$ is defined
          * by the size of the bounds as returned by \p T::get_bounds()
          *
          * @param[in] x The user implemented problem
-         * 
+         *
          * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds() have different length.
          * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds() are not such that \f$lb_i \le ub_i, \forall i\f$
-         * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity method and this returns an invalid index pair \f$ (i,j)\f$ having \f$i \ge n_f\f$ or \f$j \ge n_x\f$
-         * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity method and this contains any repeated index pair.
-         * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity method and this returns an invalid index pair \f$ (i,j)\f$ having \f$i \ge n_x\f$ or \f$j > i\f$
-         * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity method and this contains any repeated index pair.
+         * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity() method and this returns an invalid index pair \f$ (i,j)\f$ having \f$i \ge n_f\f$ or \f$j \ge n_x\f$
+         * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity() method and this contains any repeated index pair.
+         * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity() method and this returns an invalid index pair \f$ (i,j)\f$ having \f$i \ge n_x\f$ or \f$j > i\f$
+         * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity() method and this contains any repeated index pair.
          */
         template <typename T, generic_ctor_enabler<T> = 0>
         explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u),m_gevals(0u),m_hevals(0u)
@@ -521,7 +521,7 @@ class problem
          * @tparam T The type of the orignal user-defined problem
          *
          * @return a const pointer to the user-defined problem
-         * 
+         *
          */
         template <typename T>
         const T *extract() const
@@ -539,7 +539,7 @@ class problem
          * @tparam T The type to be checked
          *
          * @return true if the user defined problem is \p T. false othewise.
-         * 
+         *
          */
         template <typename T>
         bool is() const
@@ -551,14 +551,14 @@ class problem
         /**
          *
          * The fitness, implemented in the user-defined problem,
-         * is expected to be a std::vector<double> of dimension \f$ n_f\f$ containing
+         * is expected to be a pagmo::vector_double of dimension \f$ n_f\f$ containing
          * the problem fitness: the concatenation of \f$n_{obj}\f$ objectives
-         * to minimize, \f$n_{ec}\f$ equality constraints and \f$n_{ic}\f$ 
+         * to minimize, \f$n_{ec}\f$ equality constraints and \f$n_{ic}\f$
          * inequality constraints.
          *
          * @param[in] dv The decision vector
          *
-         * @return The user implemented fitness. 
+         * @return The user implemented fitness.
          *
          * @throws std::invalid_argument if the length of the decision vector is not \f$n_x\f$
          * @throws std::invalid_argument if the length of the fitness returned (as defined in the user defined problem)
@@ -581,20 +581,20 @@ class problem
         /**
          *
          * The gradient, optionally implemented in the user-defined problem,
-         * is expected to be a std::vector<double> containing the problem
+         * is expected to be a pagmo::vector_double containing the problem
          * fitness gradients \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$
          * in the order specified by the gradient sparsity pattern returned by
-         * problem::gradient_sparsity
+         * problem::gradient_sparsity()
          * (a vector of index pairs \f$(i,j)\f$).
          *
          * @param[in] dv The decision vector
          *
          * @return The gradient as implemented by the user.
-         * 
+         *
          * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
          * @throws std::invalid_argument if the length of the gradient returned (as defined in the user defined problem)
          * does not match the gradient sparsity pattern dimension as returned by
-         * problem::get_gs_dim
+         * problem::get_gs_dim()
          * @throws std::logic_error if the user defined problem does not implement
          * the gradient method
          */
@@ -616,7 +616,7 @@ class problem
          * If the user defined problem implements a gradient, this
          * will return true, false otherwise. The value returned can
          * also be directly hard-coded implementing the
-         * method 
+         * method
          *
          * @code
          * bool has_gradient() const
@@ -625,7 +625,7 @@ class problem
          * in the user-defined problem
          *
          * @return a boolean flag
-         *    
+         *
          */
         bool has_gradient() const
         {
@@ -635,8 +635,8 @@ class problem
         /// Computes the gradient sparsity pattern
         /**
          *
-         * The gradient sparsity pattern is a collection of the indexes 
-         * \f$(i,j)\f$ of the non-zero elements of 
+         * The gradient sparsity pattern is a collection of the indexes
+         * \f$(i,j)\f$ of the non-zero elements of
          * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$. By default
          * PaGMO assumes a dense pattern (all index pairs in the order
          * \f$(0,0) .. (0,n_x-1), ...(1,0) .. (1,n_x-1) .. (n_f-1,n_x-1)\f$
@@ -644,7 +644,7 @@ class problem
          * implemented in the user defined problem.
          *
          * @return The gradient sparsity pattern.
-         * 
+         *
          */
         sparsity_pattern gradient_sparsity() const
         {
@@ -656,7 +656,7 @@ class problem
          * If the user defined problem implements a gradient_sparsity, this
          * will return true, false otherwise. The value returned can
          * also be directly hard-coded implementing the
-         * method 
+         * method
          *
          * @code
          * bool has_gradient_sparsity() const
@@ -665,7 +665,7 @@ class problem
          * in the user-defined problem
          *
          * @return a boolean flag
-         *    
+         *
          */
 
         bool has_gradient_sparsity() const
@@ -677,21 +677,21 @@ class problem
         /**
          *
          * The hessians, optionally implemented in the user-defined problem,
-         * are expected to be a std::vector<std::vector<double>>.
+         * are expected to be an <tt>std::vector</tt> of pagmo::vector_double.
          * The element \f$ l\f$ contains the problem hessian:
          * \f$ h^l_{ij} = \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
-         * in the order specified by the \f$ l\f$-th element of the 
-         * hessians sparsity pattern (a vector of index pairs \f$(i,j)\f$) 
-         * as returned by problem::hessians_sparsity
+         * in the order specified by the \f$ l\f$-th element of the
+         * hessians sparsity pattern (a vector of index pairs \f$(i,j)\f$)
+         * as returned by problem::hessians_sparsity()
          *
          * @param[in] dv The decision vector
          *
          * @return The hessians as implemented by the user.
-         * 
+         *
          * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
          * @throws std::invalid_argument if the length of each hessian returned
          * (as defined in the user defined problem) does not match the corresponding
-         * hessians sparsity pattern dimensions as returned by problem::get_hs_dim
+         * hessians sparsity pattern dimensions as returned by problem::get_hs_dim()
          * @throws std::logic_error if the user defined problem does not implement
          * the hessians method
          */
@@ -713,7 +713,7 @@ class problem
          * If the user defined problem implements hessians, this
          * will return true, false otherwise. The value returned can
          * also be directly hard-coded implementing the
-         * method 
+         * method
          *
          * @code
          * bool has_hessians() const
@@ -722,7 +722,7 @@ class problem
          * in the user-defined problem
          *
          * @return a boolean flag
-         *    
+         *
          */
         bool has_hessians() const
         {
@@ -733,7 +733,7 @@ class problem
         /**
          *
          * Each component \f$ l\f$ of the hessians sparsity pattern is a
-         * collection of the indexes \f$(i,j)\f$ of the non-zero elements of 
+         * collection of the indexes \f$(i,j)\f$ of the non-zero elements of
          * \f$h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\f$. By default
          * PaGMO assumes a dense pattern storing a lower triangular representation
          * (all index pairs in the order
@@ -742,7 +742,7 @@ class problem
          * implemented in the user defined problem.
          *
          * @return The hessians sparsity pattern.
-         * 
+         *
          */
         std::vector<sparsity_pattern> hessians_sparsity() const
         {
@@ -754,7 +754,7 @@ class problem
          * If the user defined problem implements a hessians sparsity, this
          * will return true, false otherwise. The value returned can
          * also be directly hard-coded implementing the
-         * method 
+         * method
          *
          * @code
          * bool has_hessians_sparsity() const
@@ -763,7 +763,7 @@ class problem
          * in the user-defined problem
          *
          * @return a boolean flag
-         *    
+         *
          */
         bool has_hessians_sparsity() const
         {
@@ -864,7 +864,7 @@ class problem
 
         /// Problem's name.
         /**
-         * @return The problem's name as returned by the corresponding 
+         * @return The problem's name as returned by the corresponding
          * user-implemented method if present, the C++ mingled class name otherwise.
          */
         std::string get_name() const
@@ -875,7 +875,7 @@ class problem
         /// Extra info
         /**
          * @return The problem's extra info as returned by the corresponding
-         * user-implemented method if present, an empty string otehrwise. 
+         * user-implemented method if present, an empty string otehrwise.
          */
         std::string get_extra_info() const
         {
@@ -884,7 +884,7 @@ class problem
 
         /// Human readable representation
         /**
-         * @return An std::string containing a human-readable 
+         * @return An std::string containing a human-readable
          * representation of the problem, appending the result from
          * the user-defined method extra_info if implemented.
          */
