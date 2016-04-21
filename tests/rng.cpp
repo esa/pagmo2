@@ -1,5 +1,3 @@
-#include "../include/rng.hpp"
-
 #define BOOST_TEST_MODULE pagmo_rng_test
 #include <boost/test/unit_test.hpp>
 
@@ -8,6 +6,8 @@
 #include <iterator>
 #include <thread>
 #include <vector>
+
+#include "../include/rng.hpp"
 
 using namespace pagmo;
 
