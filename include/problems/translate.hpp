@@ -100,13 +100,13 @@ public:
         ar(cereal::base_class<problem>(this), m_translation);
     }
 
+private:
     template <typename Archive>
     void save(Archive &) const = delete;
 
     template <typename Archive>
     void load(Archive &) = delete;
 
-private:
     vector_double translate_back(const vector_double& x) const
     {
         assert(x.size() == m_translation.size());
