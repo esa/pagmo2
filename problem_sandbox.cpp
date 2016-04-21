@@ -30,7 +30,7 @@ using namespace pagmo;
 int main()
 {
     // Constructing a problem
-    problem p0{translate{}};
+    problem p0{translate{null{},{1.}}};
     // Streaming to screen the problem
     std::cout << p0 << '\n';
     // Getting its dimensions

@@ -36,12 +36,12 @@ public:
      * not equal to the problem dimension \f$ n_x\f$.
      * @throws unspecified any exception thrown by the pagmo::problem constructor
      */
-    //template <typename T>
-    //explicit translate(T &&p, const vector_double &translation) : problem(p), m_translation(translation)    {
-    //    if (translation.size() != get_nx()) {
-    //        pagmo_throw(std::invalid_argument,"Length of shift vector is: " + std::to_string(translation.size()) + " while the problem dimension is: " + std::to_string(get_nx()));
-    //    }
-   // }
+    template <typename T>
+    explicit translate(T &&p, const vector_double &translation) : problem(std::forward<T>(p)), m_translation(translation)    {
+        if (translation.size() != get_nx()) {
+            pagmo_throw(std::invalid_argument,"Length of shift vector is: " + std::to_string(translation.size()) + " while the problem dimension is: " + std::to_string(get_nx()));
+        }
+    }
 
     /// Fitness of the translated problem
     vector_double fitness(const vector_double &x) const
@@ -72,7 +72,6 @@ public:
         return dynamic_cast<const problem*>(this)->hessians(x_deshifted);
     }
 
-
     /// Appends "[shifted]" to the user-defined problem name
     std::string get_name() const
     {   
@@ -94,11 +93,11 @@ public:
     }
 
     /// Serialization
-    template <typename Archive>
-    void serialize(Archive &ar) 
-    {
-        ar(m_translation);
-    }
+    //template <typename Archive>
+    //void serialize(Archive &ar) 
+    //{
+     //   ar(cereal::base_class<problem>(this), m_translation);
+   // }
 
 private:
     vector_double translate_back(const vector_double& x) const
@@ -116,7 +115,6 @@ private:
         std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::plus<>());
         return x_sh;
     }
-
     /// translation vector
     vector_double m_translation;
 };
