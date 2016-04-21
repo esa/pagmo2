@@ -33,7 +33,7 @@ public:
      * @param[in] p The user defined problem.
      * @param[in] translation An <tt>std::vector</tt> containing the translation to apply.
      *
-     * @throws <tt>std::invalid_argument</tt> if the length of \p translation is
+     * @throws std::invalid_argument if the length of \p translation is
      * not equal to the problem dimension \f$ n_x\f$.
      * @throws unspecified any exception thrown by the pagmo::problem constructor
      */

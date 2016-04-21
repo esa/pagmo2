@@ -1,11 +1,8 @@
-.. cpp_hock_schittkowsky
+.. cpp_translate
 
 Translate
 =====================
 
 .. doxygenclass:: pagmo::translate
    :project: PaGMOreborn
-   :members: 
-
-
-
+   :members:
