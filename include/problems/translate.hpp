@@ -101,6 +101,9 @@ public:
     }
 
 private:
+    // Delete the inherited serialization functions from problem, so there is no ambiguity
+    // over which serialization function to be used by cereal (the serialize() method
+    // defined above will be the only serialization function available).
     template <typename Archive>
     void save(Archive &) const = delete;
 
