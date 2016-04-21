@@ -29,11 +29,12 @@ BOOST_AUTO_TEST_CASE(translate_construction)
         // built by the explicit constructor.
         BOOST_CHECK(p0_string==p1_string);
 
-        // We check that wrong size for translation results in a problem
+        // We check that wrong size for translation results in an invalid_argument
+        // exception
         BOOST_CHECK_THROW((translate{null_problem{},{1,2}}), std::invalid_argument);
     }
 
-    // Then we check that the identity problem is translated
+    // Then we check that the hock_schittkowsky_71 problem is actually translated
     {
         problem p0{hock_schittkowsky_71{}};
         problem p1{translate{p0,{ 0.1,-0.2, 0.3, 0.4}}};
