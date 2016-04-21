@@ -15,8 +15,8 @@ namespace pagmo
 
 /// The translate meta-problem
 /**
- * This pagmo::problem translates the whole search space of an input
- * pagmo::problem by a fixed translation vector.
+ * This meta-problem translates the whole search space of an input problem
+ * by a fixed translation vector
  */
 class translate : public problem
 {

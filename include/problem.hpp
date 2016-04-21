@@ -334,8 +334,8 @@ struct prob_inner final: prob_inner_base
  * \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality constraints*,
  * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality constraints*.
  *
- * To create an instance of above problem the user is asked to construct a pagmo::problem
- * from a separate class \p T where, at least, the implementation of
+ * To create an instance of above problem the user is asked to construct a pagmo::problem from
+ * a separate object of type T where, at least, the implementation of
  * the following methods is provided:
  *
  * @code 
@@ -344,10 +344,10 @@ struct prob_inner final: prob_inner_base
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  * 
- * - The return value of \p T::fitness is expected to have a dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
+ * - The return value of \p T::fitness() is expected to have a dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
  * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order). 
- * - The return value of \p T::get_nobj is expected to be \f$n_{obj}\f$
- * - The return value of \p T::get_bounds is expected to contain \f$(\mathbf{lb}, \mathbf{ub})\f$.
+ * - The return value of \p T::get_nobj() is expected to be \f$n_{obj}\f$
+ * - The return value of \p T::get_bounds() is expected to contain \f$(\mathbf{lb}, \mathbf{ub})\f$.
  *
  * The user can also implement the following methods in \p T :
  *   @code 
@@ -361,36 +361,36 @@ struct prob_inner final: prob_inner_base
  *   std::string get_extra_info() const;
  *   @endcode
  *
- * - \p T::get_nec returns \f$n_{ec}\f$. When not implemented \f$n_{ec} = 0\f$ is assumed.
- * - \p T::get_nic returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed.
+ * - \p T::get_nec returns \f$n_{ec}\f$. When not implemented \f$n_{ec} = 0\f$ is assumed, and the pagmo::problem::get_nec() method will return 0.
+ * - \p T::get_nic returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed, and the pagmo::problem::get_nic() method will return 0.
  * - \p T::gradient returns a sparse representation of the gradients. The \f$ k\f$-th term 
  * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
- * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by \p T::gradient_sparsity.
- * When not implemented, a call to \p T::gradient throws a logic_error
+ * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by problem::gradient_sparsity.
+ * When not implemented, a call to \p problem::gradient throws a logic_error
  * - \p T::gradient_sparsity returns the gradient sparsity pattern, i.e a collection of the non-zero index pairs \f$(i,j)\f$. When 
- * not implemented a dense pattern is assumed and a call to T::gradient_sparsity
+ * not implemented a dense pattern is assumed and a call to problem::gradient_sparsity
  * returns \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$
  * - \p T::hessians returns a vector of sparse representations for the hessians. For
  * the \f$l\f$-th value returned by \p T::fitness, the hessian is defined as \f$ \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
  * and its sparse representation is in the \f$l\f$-th value returned by T::hessians. Since
  * the hessians are symmetric, their sparse representation only contain lower triangular elements. The indexes 
- * \f$(i,j)\f$ are stored in the \f$l\f$-th sparsity pattern (collection of index pairs) returned by \p T::hessians_sparsity
- * When not implemented, hessians based techniques will have to either determine these numerically
- * or complain.
+ * \f$(i,j)\f$ are stored in the \f$l\f$-th sparsity pattern (collection of index pairs) returned by problem::hessians_sparsity
+ * When not implemented, a call to \p problem::hessians throws a logic_error
  * - \p T::hessians_sparsity returns an std::vector of sparsity patterns, each one being 
  * a collection of the non-zero index pairs \f$(i,j)\f$ of the corresponding Hessian. Since the Hessian matrix
  * is symmetric, only lower triangular elements are allowed. When 
- * not implemented a dense pattern is assumed and a call to T::hessians_sparsity
+ * not implemented a dense pattern is assumed and a call to problem::hessians_sparsity
  * returns \f$n_f\f$ sparsity patterns each one being \f$((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\f$.
  *
- * Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the hessians. At
- * each construction and copy these counters are reset to zero.
+ * Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the hessians.
+ * At each copy construction and copy assignment these counters are reset to zero.
  *
  * The only allowed operations on an object belonging to this class, after it has been moved, are assignment and destruction.
  *
  * @author Francesco Biscani (bluescarni@gmail.com)
  * @author Dario Izzo (darioizzo@gmail.com)
  */
+
 class problem
 {
         // Enable the generic ctor only if T is not a problem (after removing
@@ -401,20 +401,20 @@ class problem
         /// Constructor from a user defined object \p T
         /**
          * Construct a pagmo::problem with fitness dimension \f$n_f\f$ and decision vector
-         * dimension \f$n_x\f$ from an object \p T. In
+         * dimension \f$n_x\f$ from an object of type \p T. In
          * order for the construction to be successfull \p T needs
          * to satisfy the following requests:
          *
          * - \p T must implement the following mandatory methods:
          *   @code 
-         *   fitness_vector fitness(const decision_vector &) const;
+         *   vector_double fitness(const decision_vector &) const;
          *   vector_double::size_type get_nobj() const;
          *   std::pair<vector_double, vector_double> get_bounds() const;
          *   @endcode
-         *   otherwise compilation will result in a static_assert failiure
+         *   otherwise it will result in a compile-time failiure
          * - \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled
          * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
-         *   otherwise compilation will result in a static_assert failiure
+         *   otherwise it will result in a compile-time failiure
          *
          * The following methods, if implemented in \p T, will override 
          * default choices:
@@ -429,9 +429,8 @@ class problem
          *   std::string get_extra_info() const;
          *   @endcode
          *
-         * @note The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of 
-         * \p T::get_nobj + \p T::get_nec + \p T::get_nic, while the decision
-         * vector dimension \f$n_x\f$ is defined 
+         * @note The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of problem::get_nf(),
+         * while the decision vector dimension \f$n_x\f$ is defined 
          * by the size of the bounds as returned by \p T::get_bounds()
          *
          * @param[in] x The user implemented problem
