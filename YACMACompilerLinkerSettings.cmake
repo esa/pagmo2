@@ -49,47 +49,49 @@ macro(YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG flag)
     unset(YACMA_CHECK_DEBUG_CXX_FLAG CACHE)
 endmacro()
 
-# Configuration bits specific for GCC.
-if(YACMA_COMPILER_IS_GNUCXX)
-    YACMA_CHECK_ENABLE_CXX_FLAG(-fdiagnostics-color=auto)
-endif()
+macro(YACMA_ENABLE_CXX_FLAGS)
+    # Configuration bits specific for GCC.
+    if(YACMA_COMPILER_IS_GNUCXX)
+        YACMA_CHECK_ENABLE_CXX_FLAG(-fdiagnostics-color=auto)
+    endif()
 
-# Configuration bits specific for clang.
-if(YACMA_COMPILER_IS_CLANGXX)
-    # For now it seems like -Wshadow from clang behaves better than GCC's, just enable it here
-    # for the time being.
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wshadow)
-    # Clang is better at this flag than GCC.
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Werror)
-endif()
+    # Configuration bits specific for clang.
+    if(YACMA_COMPILER_IS_CLANGXX)
+        # For now it seems like -Wshadow from clang behaves better than GCC's, just enable it here
+        # for the time being.
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wshadow)
+        # Clang is better at this flag than GCC.
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Werror)
+    endif()
 
-# Common configuration for GCC, Clang and Intel.
-if(YACMA_COMPILER_IS_CLANGXX OR YACMA_COMPILER_IS_GNUCXX OR YACMA_COMPILER_IS_INTELXX)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wall)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wextra)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnon-virtual-dtor)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnoexcept)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wlogical-op)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wconversion)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wdeprecated)
-    # This limit is supposed to be at least 1024 in C++11, but for some reason
-    # clang sets this to 256, and gcc to 900.
-    YACMA_CHECK_ENABLE_CXX_FLAG(-ftemplate-depth=1024)
-    # NOTE: this can be useful, but at the moment it triggers lots of warnings in type traits.
-    # Keep it in mind for the next time we touch type traits.
-    # YACMA_CHECK_ENABLE_CXX_FLAG(-Wold-style-cast)
-    # NOTE: disable this for now, as it results in a lot of clutter from Boost.
-    # YACMA_CHECK_ENABLE_CXX_FLAG(-Wzero-as-null-pointer-constant)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-pedantic-errors)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wdisabled-optimization)
-    YACMA_CHECK_ENABLE_CXX_FLAG(-fvisibility-inlines-hidden)
-    YACMA_CHECK_ENABLE_CXX_FLAG(-fvisibility=hidden)
-    # This is useful when the compiler decides the template backtrace is too verbose.
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-ftemplate-backtrace-limit=0)
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-fstack-protector-all)
-    # This became available in GCC at one point.
-    YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wodr)
-endif()
+    # Common configuration for GCC and Clang or Intel on Unix platforms.
+    if ((UNIX AND (YACMA_COMPILER_IS_CLANGXX OR YACMA_COMPILER_IS_INTELXX)) OR YACMA_COMPILER_IS_GNUCXX)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wall)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wextra)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnon-virtual-dtor)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnoexcept)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wlogical-op)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wconversion)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wdeprecated)
+        # This limit is supposed to be at least 1024 in C++11, but for some reason
+        # clang sets this to 256, and gcc to 900.
+        YACMA_CHECK_ENABLE_CXX_FLAG(-ftemplate-depth=1024)
+        # NOTE: this can be useful, but at the moment it triggers lots of warnings in type traits.
+        # Keep it in mind for the next time we touch type traits.
+        # YACMA_CHECK_ENABLE_CXX_FLAG(-Wold-style-cast)
+        # NOTE: disable this for now, as it results in a lot of clutter from Boost.
+        # YACMA_CHECK_ENABLE_CXX_FLAG(-Wzero-as-null-pointer-constant)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-pedantic-errors)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wdisabled-optimization)
+        YACMA_CHECK_ENABLE_CXX_FLAG(-fvisibility-inlines-hidden)
+        YACMA_CHECK_ENABLE_CXX_FLAG(-fvisibility=hidden)
+        # This is useful when the compiler decides the template backtrace is too verbose.
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-ftemplate-backtrace-limit=0)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-fstack-protector-all)
+        # This became available in GCC at one point.
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wodr)
+    endif()
+endmacro()
 
 # Mark as included.
 set(YACMACompilerLinkerSettingsIncluded YES)

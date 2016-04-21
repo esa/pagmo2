@@ -2,6 +2,7 @@ if(YACMAPythonSetupIncluded)
     return()
 endif()
 
+# Need this to detect compiler.
 include(YACMACompilerLinkerSettings)
 
 # Find Python interpreter and libraries. This is the order suggested by CMake's documentation.
