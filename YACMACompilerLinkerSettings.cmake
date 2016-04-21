@@ -49,7 +49,7 @@ macro(YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG flag)
     unset(YACMA_CHECK_DEBUG_CXX_FLAG CACHE)
 endmacro()
 
-macro(YACMA_ENABLE_CXX_FLAGS)
+macro(YACMA_SETUP_CXX_FLAGS)
     # Configuration bits specific for GCC.
     if(YACMA_COMPILER_IS_GNUCXX)
         YACMA_CHECK_ENABLE_CXX_FLAG(-fdiagnostics-color=auto)
