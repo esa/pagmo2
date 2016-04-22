@@ -47,7 +47,7 @@ std::mutex random_device_statics<dummy>::m_mutex{};
  * explicit class_using_random(args ...... , unsigned int seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed);
  * private:
  *    // Random engine
- *    random_engine_type               m_e;
+ *    detail::random_engine_type               m_e;
  *    // Seed
  *    unsigned int                     m_seed;
  * }

@@ -13,30 +13,29 @@ namespace pagmo
 
 class population
 {
-    /// Underlying container type.
-    typedef std::vector<individual_type> container_type;
 
-    public:
+    private:
         /// Individual
         struct individual
         {
+            individual() {}
             // fitness
             vector_double f;
             // decision vector
             vector_double x;
             // identity
-            //individual_identity ID;
+            detail::random_engine_type::result_type ID;
         };
 
+    public:
         /// Default constructor
-        population() : m_prob(null_problem{}), m_container(), m_e(0u), m_seed(0u);
+        population() : m_prob(null_problem{}), m_container(), m_e(0u), m_seed(0u) {}
 
         /// Constructor
-        explicit population(const pagmo::problem &p, container_type::size_type size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed);
+        explicit population(const pagmo::problem &p, std::vector<individual>::size_type size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed)
         {
             for (decltype(size) i = 0u; i < size; ++i) {
-                // creates a random decision_vector x
-                push_back(x);
+                push_back(random_decision_vector());
             }
         }
 
@@ -50,6 +49,7 @@ class population
             individual ind{};
             ind.x = x;
             ind.f = m_prob.fitness(x);
+            ind.ID = m_e();
             // We append it to the container.
             m_container.push_back(individual{});
         }
@@ -62,20 +62,33 @@ class population
             vector_double retval(dim);
             for (decltype(dim) i = 0u; i < dim; ++i) {
                 std::uniform_real_distribution<> dis(bounds.first[i], bounds.second[i]);
-                retval[i] = 
+                retval[i] = dis(m_e);
             }
+            return retval;
+        }
 
+        // Sets the seed of the population random engine
+        void set_seed(unsigned int seed) 
+        {
+            m_seed = seed;
+            m_e.seed(seed);
+        }
+
+        // Gets the the seed of the population random engine
+        const unsigned int &get_seed() const
+        {
+            return m_seed;
         }
         
     private:
         // Problem. 
-        problem             m_prob;
+        problem                     m_prob;
         // individuals.
-        container_type      m_container;
+        std::vector<individual>     m_container;
         // Random engine.
-        random_engine_type  m_e;
+        mutable detail::random_engine_type  m_e;
         // Seed.
-        unsigned int        m_seed;
+        unsigned int                m_seed;
 };
 
 } // namespace pagmo
