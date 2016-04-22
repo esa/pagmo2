@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(translate_functional_test)
         BOOST_CHECK(p0.get_bounds().first != p1.get_bounds().second);
         auto bounds0 = p0.get_bounds();
         auto bounds2 = p2.get_bounds();
-        for (auto i = 0u; i < 4; ++i) {
+        for (auto i = 0u; i < 4u; ++i) {
             BOOST_CHECK_CLOSE(bounds0.first[i], bounds2.first[i], 1e-13);
             BOOST_CHECK_CLOSE(bounds0.second[i], bounds2.second[i], 1e-13);
         }

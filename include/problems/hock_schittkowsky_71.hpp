@@ -37,7 +37,7 @@ struct hock_schittkowsky_71
     vector_double fitness(const vector_double &x) const
     {
         return {
-            x[0]*x[3]*(x[0] + x[1] + x[2]) + x[2],                 // objfun
+            x[0]*x[3]*(x[0] + x[1] + x[2]) + x[2],          // objfun
             x[0]*x[0]+x[1]*x[1]+x[2]*x[2]+x[3]*x[3] - 40.,  // equality con.
             25. - x[0]*x[1]*x[2]*x[3]                       // inequality con.
         };
@@ -83,7 +83,7 @@ struct hock_schittkowsky_71
         return {
             {2*x[3],x[3],x[3],2*x[0]+x[1]+x[2],x[0],x[0]},
             {2.,2.,2.,2.},
-            {x[2]*x[3], x[1]*x[3],x[0]*x[3],x[1]*x[2],x[0]*x[2],x[0]*x[1]}
+            {-x[2]*x[3], -x[1]*x[3],-x[0]*x[3],-x[1]*x[2],-x[0]*x[2],-x[0]*x[1]}
         };
     }
 
