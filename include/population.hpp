@@ -81,7 +81,8 @@ class population
                         "are not all finite");
                 }
                 // Bounds cannot be too large.
-                if (bounds.second[i] - bounds.first[i] > std::numeric_limits<double>::max()) {
+                const auto delta = bounds.second[i] - bounds.first[i];
+                if (!std::isfinite(delta) || delta > std::numeric_limits<double>::max()) {
                     pagmo_throw(std::invalid_argument,"Cannot generate a random individual if the problem bounds "
                         "are too large");
                 }
