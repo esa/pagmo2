@@ -64,13 +64,16 @@ class population
         // Creates a random decision_vector within the problem bounds
         vector_double random_decision_vector() const
         {
-            auto dim = m_prob.get_nx();
+            const auto dim = m_prob.get_nx();
             const auto bounds = m_prob.get_bounds();
             // This will check for consistent vector lengths, lb <= ub and
             // no NaNs.
             detail::check_problem_bounds(bounds);
+            if (bounds.first.size() != dim) {
+                pagmo_throw(std::invalid_argument,"Problem bounds are inconsistent with problem dimension");
+            }
             vector_double retval(dim);
-            for (decltype(dim) i = 0u; i < dim; ++i) {
+            for (decltype(m_prob.get_nx()) i = 0u; i < dim; ++i) {
                 // NOTE: see here for the requirements for floating-point RNGS:
                 // http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution/uniform_real_distribution
                 // Forbid random generation when bounds are infinite.
