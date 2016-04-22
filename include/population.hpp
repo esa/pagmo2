@@ -6,6 +6,7 @@
 
 #include "rng.hpp"
 #include "problems/null_problem.hpp"
+#include "serialization.hpp"
 #include "types.hpp"
 
 namespace pagmo
@@ -18,7 +19,9 @@ class population
         /// Individual
         struct individual
         {
-            individual() {}
+            individual() {};
+            individual(const vector_double &fit, const vector_double &dv, const detail::random_engine_type::result_type& ind_id) 
+            : f(fit), x(dv), ID(ind_id) {}
             // fitness
             vector_double f;
             // decision vector
@@ -44,14 +47,8 @@ class population
         void push_back(const vector_double &x)
         {
             // Do we call problem::check_decision_vector here? 
-            auto f(m_prob.fitness(x));
-            // We construct an individual, thus creating a novel ID
-            individual ind{};
-            ind.x = x;
-            ind.f = m_prob.fitness(x);
-            ind.ID = m_e();
-            // We append it to the container.
-            m_container.push_back(individual{});
+            auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
+            m_container.push_back(individual{x,m_prob.fitness(x),new_id});
         }
 
         // Creates a random decision_vector within the problem bounds
@@ -61,7 +58,7 @@ class population
             auto bounds = m_prob.get_bounds();
             vector_double retval(dim);
             for (decltype(dim) i = 0u; i < dim; ++i) {
-                std::uniform_real_distribution<> dis(bounds.first[i], bounds.second[i]);
+                std::uniform_real_distribution<double> dis(bounds.first[i], bounds.second[i]);
                 retval[i] = dis(m_e);
             }
             return retval;
@@ -75,20 +72,27 @@ class population
         }
 
         // Gets the the seed of the population random engine
-        const unsigned int &get_seed() const
+        unsigned int get_seed() const
         {
             return m_seed;
+        }
+
+        // Serialization.
+        template <typename Archive>
+        void serialize(Archive &ar)
+        {
+            ar(m_prob, m_container, m_e, m_seed);
         }
         
     private:
         // Problem. 
-        problem                     m_prob;
-        // individuals.
-        std::vector<individual>     m_container;
+        problem                             m_prob;
+        // Individuals.
+        std::vector<individual>             m_container;
         // Random engine.
         mutable detail::random_engine_type  m_e;
         // Seed.
-        unsigned int                m_seed;
+        unsigned int                        m_seed;
 };
 
 } // namespace pagmo
