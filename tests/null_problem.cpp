@@ -43,9 +43,8 @@ BOOST_AUTO_TEST_CASE(null_problem_test)
     BOOST_CHECK(p.get_name().find("Null") != std::string::npos);
     BOOST_CHECK(p.get_extra_info().find("fictitious problem") != std::string::npos);
     // Best known test
-    if p.is<null_problem>() {
-        auto x_best = p.extract<null_problem>()->best_known();
-    }
+    BOOST_CHECK(p.is<null_problem>());
+    auto x_best = p.extract<null_problem>()->best_known();
     BOOST_CHECK(x_best[0] == 0);
 }
 
