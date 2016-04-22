@@ -19,7 +19,7 @@ class population
         /// Individual
         struct individual
         {
-            individual(const vector_double &fit, const vector_double &dv, const detail::random_engine_type::result_type& ind_id)
+            individual(const vector_double &fit, const vector_double &dv, unsigned long long ind_id)
             : f(fit), x(dv), ID(ind_id) {}
             // fitness
             vector_double f;
