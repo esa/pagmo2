@@ -1,11 +1,12 @@
 #ifndef PAGMO_POPULATION_H
 #define PAGMO_POPULATION_H
 
+#include <iostream>
 #include <random>
 #include <vector>
 
-#include "rng.hpp"
 #include "problems/null_problem.hpp"
+#include "rng.hpp"
 #include "serialization.hpp"
 #include "types.hpp"
 
@@ -14,13 +15,11 @@ namespace pagmo
 
 class population
 {
-    /// population streaming friendship
-    friend std::ostream &operator<<(std::ostream &os, const population &p);
     private:
         /// Individual
         struct individual
         {
-            individual(const vector_double &fit, const vector_double &dv, const detail::random_engine_type::result_type& ind_id) 
+            individual(const vector_double &fit, const vector_double &dv, const detail::random_engine_type::result_type& ind_id)
             : f(fit), x(dv), ID(ind_id) {}
             // fitness
             vector_double f;
@@ -28,9 +27,15 @@ class population
             vector_double x;
             // identity
             unsigned long long ID;
+            // Streaming operator for the struct pagmo::problem::individual
+            friend std::ostream &operator<<(std::ostream &os, const individual &p)
+            {
+                stream(os, "\tID:\t\t\t", p.ID, '\n');
+                stream(os, "\tDecision vector:\t", p.x, '\n');
+                stream(os, "\tFitness vector:\t\t", p.f, '\n');
+                return os;
+            }
         };
-    /// individual streaming friendship
-    friend std::ostream &operator<<(std::ostream &os, const population::individual &p);
     public:
         /// Default constructor
         population() : m_prob(null_problem{}), m_container(), m_e(0u), m_seed(0u) {}
@@ -47,7 +52,7 @@ class population
         // to the population
         void push_back(const vector_double &x)
         {
-            // Do we call problem::check_decision_vector here? 
+            // Do we call problem::check_decision_vector here?
             auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
             m_container.push_back(individual{x,m_prob.fitness(x),new_id});
         }
@@ -66,7 +71,7 @@ class population
         }
 
         // Sets the seed of the population random engine
-        void set_seed(unsigned int seed) 
+        void set_seed(unsigned int seed)
         {
             m_seed = seed;
             m_e.seed(seed);
@@ -90,9 +95,22 @@ class population
         {
             ar(m_prob, m_container, m_e, m_seed);
         }
-        
+
+        // Streaming operator for the class pagmo::problem
+        friend std::ostream &operator<<(std::ostream &os, const population &p)
+        {
+            stream(os, p.m_prob, '\n');
+            stream(os, "Population size: ",p.size(),"\n\n");
+            stream(os, "List of individuals: ",'\n');
+            for (decltype(p.m_container.size()) i=0u; i<p.m_container.size(); ++i) {
+                stream(os, "#", i, ":\n");
+                stream(os, p.m_container[i], '\n');
+            }
+            return os;
+        }
+
     private:
-        // Problem. 
+        // Problem.
         problem                             m_prob;
         // Individuals.
         std::vector<individual>             m_container;
@@ -101,28 +119,6 @@ class population
         // Seed.
         unsigned int                        m_seed;
 };
-
-// Streaming operator for the class pagmo::problem
-std::ostream &operator<<(std::ostream &os, const population &p)
-{
-    stream(os, p.m_prob, '\n');
-    stream(os, "Population size: ",p.size(),"\n\n");
-    stream(os, "List of individuals: ",'\n');
-    for (decltype(p.m_container.size()) i=0u; i<p.m_container.size(); ++i) {
-        stream(os, "#", i, ":\n");
-        stream(os, p.m_container[i], '\n');
-    }
-    return os;
-}
-
-// Streaming operator for the struct pagmo::problem::individual
-std::ostream &operator<<(std::ostream &os, const population::individual &p)
-{
-    stream(os, "\tID:\t\t\t", p.ID, '\n');
-    stream(os, "\tDecision vector:\t", p.x, '\n');
-    stream(os, "\tFitness vector:\t\t", p.f, '\n');
-    return os;
-}
 
 } // namespace pagmo
 
