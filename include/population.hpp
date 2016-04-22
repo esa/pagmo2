@@ -91,7 +91,6 @@ class population
                     // behaviour.
                     retval[i] = bounds.first[i];
                 } else {
-                    std::uniform_real_distribution<double> dis(bounds.first[i], bounds.second[i]);
                     retval[i] = std::uniform_real_distribution<double>{}(m_e);
                 }
             }
