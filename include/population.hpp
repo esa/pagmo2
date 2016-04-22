@@ -14,7 +14,8 @@ namespace pagmo
 
 class population
 {
-
+    /// population streaming friendship
+    friend std::ostream &operator<<(std::ostream &os, const population &p);
     private:
         /// Individual
         struct individual
@@ -27,18 +28,9 @@ class population
             vector_double x;
             // identity
             unsigned long long ID;
-
-            // Human readable representation of an individual
-            std::string human_readable() const
-            {
-                std::ostringstream oss;
-                stream(oss, "\tID:\t\t\t", ID, '\n');
-                stream(oss, "\tDecision vector:\t", x, '\n');
-                stream(oss, "\tFitness vector:\t\t", f, '\n');
-                return oss.str();
-            }
         };
-
+    /// individual streaming friendship
+    friend std::ostream &operator<<(std::ostream &os, const population::individual &p);
     public:
         /// Default constructor
         population() : m_prob(null_problem{}), m_container(), m_e(0u), m_seed(0u) {}
@@ -86,20 +78,6 @@ class population
             return m_seed;
         }
 
-        // Human readable representation of the population
-        std::string human_readable() const
-        {
-            std::ostringstream oss;
-            print(m_prob, '\n');
-            print("Population size: ",size(),"\n\n");
-            print("List of individuals: ",'\n');
-            for (auto i=0u; i<m_container.size(); ++i) {
-                print("#", i, ":\n");
-                print(m_container[i].human_readable(), '\n');
-            }
-            return oss.str();
-        }
-
         // Number of individuals in the population
         std::vector<individual>::size_type size() const
         {
@@ -127,7 +105,22 @@ class population
 // Streaming operator for the class pagmo::problem
 std::ostream &operator<<(std::ostream &os, const population &p)
 {
-    os << p.human_readable() << '\n';
+    stream(os, p.m_prob, '\n');
+    stream(os, "Population size: ",p.size(),"\n\n");
+    stream(os, "List of individuals: ",'\n');
+    for (decltype(p.m_container.size()) i=0u; i<p.m_container.size(); ++i) {
+        stream(os, "#", i, ":\n");
+        stream(os, p.m_container[i], '\n');
+    }
+    return os;
+}
+
+// Streaming operator for the struct pagmo::problem::individual
+std::ostream &operator<<(std::ostream &os, const population::individual &p)
+{
+    stream(os, "\tID:\t\t\t", p.ID, '\n');
+    stream(os, "\tDecision vector:\t", p.x, '\n');
+    stream(os, "\tFitness vector:\t\t", p.f, '\n');
     return os;
 }
 
