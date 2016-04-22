@@ -58,7 +58,7 @@ class population
         {
             // Do we call problem::check_decision_vector here?
             auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
-            m_container.push_back(individual{x,m_prob.fitness(x),new_id});
+            m_container.push_back(individual{m_prob.fitness(x),x,new_id});
         }
 
         // Creates a random decision_vector within the problem bounds
