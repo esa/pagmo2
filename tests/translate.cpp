@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE(translate_functional_test)
 BOOST_AUTO_TEST_CASE(translate_serialization_test)
 {
     // Do the checking with the full problem.
-    problem p0{hock_schittkowsky_71{}};
+    hock_schittkowsky_71 p0{};
     problem p{translate{p0,{ 0.1,-0.2, 0.3, 0.4}}};
     // Call objfun, grad and hess to increase
     // the internal counters.

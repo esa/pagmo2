@@ -41,9 +41,11 @@ BOOST_AUTO_TEST_CASE(null_problem_test)
     BOOST_CHECK((sp[2] == sparsity_pattern{}));
     // Name and extra info tests
     BOOST_CHECK(p.get_name().find("Null") != std::string::npos);
-    BOOST_CHECK(p.get_extra_info().find("ficticious problem") != std::string::npos);
+    BOOST_CHECK(p.get_extra_info().find("fictitious problem") != std::string::npos);
     // Best known test
-    auto x_best = p.extract<null_problem>()->best_known();
+    if p.is<null_problem>() {
+        auto x_best = p.extract<null_problem>()->best_known();
+    }
     BOOST_CHECK(x_best[0] == 0);
 }
 

@@ -77,7 +77,7 @@ struct null_problem
     /// Extra informations
     std::string get_extra_info() const
     {
-        return "\tA ficticious problem useful to test, debug and initialize default constructors";
+        return "\tA fictitious problem useful to test, debug and initialize default constructors";
     }
     
     /// Optimal solution 

@@ -1,81 +1,81 @@
 #ifndef PAGMO_POPULATION_H
 #define PAGMO_POPULATION_H
 
+#include <random>
 #include <vector>
 
-#include "rng.h"
+#include "rng.hpp"
+#include "problems/null_problem.hpp"
+#include "types.hpp"
 
 namespace pagmo
 {
 
-typedef std::vector<double> decision_vector
-typedef std::vector<long long> decision_vector_int
-typedef std::vector<double> constraint_vector
-typedef std::vector<double> fitness_vector
-
 class population
 {
+    /// Underlying container type.
+    typedef std::vector<individual_type> container_type;
+
     public:
         /// Individual
-        struct individual_type
+        struct individual
         {
-            /// Current decision vector (continuous part)
-            decision_vector         cur_x;
-            /// Current decision vector (integer part)
-            decision_vector_int     cur_xi;
-            /// Current constraint vector.
-            constraint_vector       cur_c;
-            /// Current fitness vector.
-            fitness_vector          cur_f;
+            // fitness
+            vector_double f;
+            // decision vector
+            vector_double x;
+            // identity
+            //individual_identity ID;
         };
 
-        /// Underlying container type.
-        typedef std::vector<individual_type> container_type;
+        /// Default constructor
+        population() : m_prob(null_problem{}), m_container(), m_e(0u), m_seed(0u);
 
-        /// Constructors
-        explicit population(const pagmo::problem &p, unsigned int size = 0, unsigned int seed = pagmo::random_device::next() : m_prob(p), m_e(seed), m_seed(seed)
+        /// Constructor
+        explicit population(const pagmo::problem &p, container_type::size_type size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed);
         {
-            // Store problem sizes temporarily.
-            const fitness_vector::size_type f_size = prob->get_f_dimension();
-            const constraint_vector::size_type c_size = m_prob->get_c_dimension();
-            const decision_vector::size_type p_size = m_prob->get_dimension();
-            for (size_type i = 0; i < size; ++i) {
-                // Push back an empty individual.
-                m_container.push_back(individual_type());
-                // Resize individual's elements.
-                m_container.back().x.resize(p_size);
-                m_container.back().x_i.resize(p_size);
-                m_container.back().c.resize(c_size);
-                m_container.back().f.resize(f_size);
-                // Initialise randomly the individual.
-                reinit(i);
+            for (decltype(size) i = 0u; i < size; ++i) {
+                // creates a random decision_vector x
+                push_back(x);
             }
         }
+
+        // Creates an individual from a decision vector and appends it
+        // to the population
+        void push_back(const vector_double &x)
+        {
+            // Do we call problem::check_decision_vector here? 
+            auto f(m_prob.fitness(x));
+            // We construct an individual, thus creating a novel ID
+            individual ind{};
+            ind.x = x;
+            ind.f = m_prob.fitness(x);
+            // We append it to the container.
+            m_container.push_back(individual{});
+        }
+
+        // Creates a random decision_vector within the problem bounds
+        vector_double random_decision_vector() const
+        {
+            auto dim = m_prob.get_nx();
+            auto bounds = m_prob.get_bounds();
+            vector_double retval(dim);
+            for (decltype(dim) i = 0u; i < dim; ++i) {
+                std::uniform_real_distribution<> dis(bounds.first[i], bounds.second[i]);
+                retval[i] = 
+            }
+
+        }
         
-        /// Copy constructor
-        population(const population &);
-
-
-        const individual_type &get_individual(const size_type &) const;
-        const pagmo::problem &get_problem() const;
-        void set_ind(const size_type &, const decision_vector &, const decision_vector_int & = decision_vector_int());
-        void set_ind(const size_type &, const decision_vector_int &, const decision_vector & = decision_vector());
-
-        void push_back(const decision_vector &, const decision_vector_int & = decision_vector_int());
-        void push_back(const decision_vector_int &, const decision_vector & = decision_vector());
-        void erase(const size_type &);
-        
-        size_type size() const;
-
     private:
-        // Problem. (LO VOGLIAMO??)
-        problem                         m_prob;
+        // Problem. 
+        problem             m_prob;
         // individuals.
-        container_type                  m_container;
-        // Random engine
-        random_engine_type              m_e;
-        // Seed 
-        unsigned int                    m_seed;
+        container_type      m_container;
+        // Random engine.
+        random_engine_type  m_e;
+        // Seed.
+        unsigned int        m_seed;
 };
 
 } // namespace pagmo
