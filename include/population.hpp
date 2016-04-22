@@ -24,11 +24,11 @@ class population
         struct individual
         {
             individual(const vector_double &fit, const vector_double &dv, unsigned long long ind_id)
-            : f(fit), x(dv), ID(ind_id) {}
-            // fitness
-            vector_double f;
+            : x(dv), f(fit), ID(ind_id) {}
             // decision vector
             vector_double x;
+            // fitness
+            vector_double f;
             // identity
             unsigned long long ID;
             // Streaming operator for the struct pagmo::problem::individual
@@ -56,9 +56,8 @@ class population
         // to the population
         void push_back(const vector_double &x)
         {
-            // Do we call problem::check_decision_vector here?
             auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
-            m_container.push_back(individual{m_prob.fitness(x),x,new_id});
+            m_container.push_back(individual{x, m_prob.fitness(x), new_id});
         }
 
         // Creates a random decision_vector within the problem bounds
@@ -95,6 +94,27 @@ class population
                 }
             }
             return retval;
+        }
+
+        // Sets the i-th individual decision vector, causing a fitness evaluation
+        // ID is unchanged
+        void set_x(std::vector<individual>::size_type i, const vector_double &x)
+        {
+            set_xf(i, x, m_prob.fitness(x));
+        }
+
+        // Sets the i-th individual decision vector, causing a fitness evaluation
+        // ID is unchanged
+        void set_xf(std::vector<individual>::size_type i, const vector_double &x, const vector_double &f)
+        {
+            if (i >= size()) {
+                pagmo_throw(std::invalid_argument,"Trying to access individual at position: " 
+                    + std::to_string(i) 
+                    + ", while population has size: " 
+                    + std::to_string(size()));
+            }
+            m_container[i].x = x;
+            m_container[i].f = f;
         }
 
         // Sets the seed of the population random engine
