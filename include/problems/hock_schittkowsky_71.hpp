@@ -106,7 +106,7 @@ struct hock_schittkowsky_71
     /// Extra informations
     std::string get_extra_info() const
     {
-        return "\tProblem number 71 from the Hock-Schittkowsky test suite\n";
+        return "\tProblem number 71 from the Hock-Schittkowsky test suite";
     }
     
     /// Optimal solution 

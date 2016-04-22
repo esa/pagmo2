@@ -921,7 +921,7 @@ class problem
 
             const auto extra_str = get_extra_info();
             if (!extra_str.empty()) {
-                stream(s, "\nExtra info:\n", extra_str, '\n');
+                stream(s, "\nProblem's extra info:\n", extra_str);
             }
             return s.str();
         }

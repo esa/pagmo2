@@ -13,5 +13,6 @@ int main()
     // Constructing a population
     problem prob{hock_schittkowsky_71{}};
     population pop{prob, 10};
+    print(pop);
     
 }

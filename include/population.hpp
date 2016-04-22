@@ -19,7 +19,6 @@ class population
         /// Individual
         struct individual
         {
-            individual() {};
             individual(const vector_double &fit, const vector_double &dv, const detail::random_engine_type::result_type& ind_id) 
             : f(fit), x(dv), ID(ind_id) {}
             // fitness
@@ -27,7 +26,17 @@ class population
             // decision vector
             vector_double x;
             // identity
-            detail::random_engine_type::result_type ID;
+            unsigned long long ID;
+
+            // Human readable representation of an individual
+            std::string human_readable() const
+            {
+                std::ostringstream oss;
+                stream(oss, "\tID:\t\t\t", ID, '\n');
+                stream(oss, "\tDecision vector:\t", x, '\n');
+                stream(oss, "\tFitness vector:\t\t", f, '\n');
+                return oss.str();
+            }
         };
 
     public:
@@ -77,6 +86,26 @@ class population
             return m_seed;
         }
 
+        // Human readable representation of the population
+        std::string human_readable() const
+        {
+            std::ostringstream oss;
+            print(m_prob, '\n');
+            print("Population size: ",size(),"\n\n");
+            print("List of individuals: ",'\n');
+            for (auto i=0u; i<m_container.size(); ++i) {
+                print("#", i, ":\n");
+                print(m_container[i].human_readable(), '\n');
+            }
+            return oss.str();
+        }
+
+        // Number of individuals in the population
+        std::vector<individual>::size_type size() const
+        {
+            return m_container.size();
+        }
+
         // Serialization.
         template <typename Archive>
         void serialize(Archive &ar)
@@ -94,6 +123,13 @@ class population
         // Seed.
         unsigned int                        m_seed;
 };
+
+// Streaming operator for the class pagmo::problem
+std::ostream &operator<<(std::ostream &os, const population &p)
+{
+    os << p.human_readable() << '\n';
+    return os;
+}
 
 } // namespace pagmo
 
