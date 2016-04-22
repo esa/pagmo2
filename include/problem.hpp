@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cmath>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
@@ -314,6 +315,31 @@ struct prob_inner final: prob_inner_base
     T m_value;
 };
 
+// Helper to check that the problem bounds are valid. This will throw if the bounds
+// are invalid because of:
+// - inconsistent lengths of the vectors,
+// - nans in the bounds,
+// - lower bounds greater than upper bounds.
+inline void check_problem_bounds(const std::pair<vector_double,vector_double> &bounds)
+{
+    const auto &lb = bounds.first;
+    const auto &ub = bounds.second;
+    // 1 - check bounds have equal length
+    if (lb.size()!=ub.size()) {
+        pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) + ", length of upper bound is " + std::to_string(ub.size()));
+    }
+    // 2 - checks lower < upper for all values in lb, ub, and check for nans.
+    for (decltype(lb.size()) i=0u; i < lb.size(); ++i) {
+        if (std::isnan(lb[i]) || std::isnan(ub[i])) {
+            pagmo_throw(std::invalid_argument,"A NaN value was encountered in the problem bounds");
+        }
+        if (lb[i] > ub[i]) {
+            pagmo_throw(std::invalid_argument,"The lower bound at position " + std::to_string(i) + " is " + std::to_string(lb[i]) +
+                " while the upper bound has the smaller value " + std::to_string(ub[i]));
+        }
+    }
+}
+
 }
 
 /// Problem class.
@@ -445,27 +471,15 @@ class problem
         template <typename T, generic_ctor_enabler<T> = 0>
         explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u),m_gevals(0u),m_hevals(0u)
         {
-            // check bounds consistency
-            auto bounds = get_bounds();
-            const auto &lb = bounds.first;
-            const auto &ub = bounds.second;
-            // 1 - check bounds have equal length
-            if (lb.size()!=ub.size()) {
-                pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) + ", length of upper bound is " + std::to_string(ub.size()));
-            }
-            // 2 - checks lower < upper for all values in lb, lb
-            for (decltype(lb.size()) i=0u; i < lb.size(); ++i) {
-                if (lb[i] > ub[i]) {
-                    pagmo_throw(std::invalid_argument,"The lower bound at position " + std::to_string(i) + " is " + std::to_string(lb[i]) +
-                        " while the upper bound has the smaller value " + std::to_string(ub[i]));
-                }
-            }
-            // 4 - initialize problem dimension (must be before
+            // 1 - check bounds.
+            const auto bounds = get_bounds();
+            detail::check_problem_bounds(bounds);
+            // 2 - initialize problem dimension (must be before
             // check_gradient_sparsity and check_hessians_sparsity)
-            m_nx = lb.size();
-            // 5 - checks that the sparsity contains reasonable numbers
+            m_nx = bounds.first.size();
+            // 3 - checks that the sparsity contains reasonable numbers
             check_gradient_sparsity(); // here m_gs_dim is initialized
-            // 6 - checks that the hessians contain reasonable numbers
+            // 4 - checks that the hessians contain reasonable numbers
             check_hessians_sparsity(); // here m_hs_dim is initialized
         }
 
@@ -1061,8 +1075,7 @@ class problem
         {
             // Checks that the hessians returned have the same dimensions of the
             // corresponding sparsity patterns
-            for (decltype(hs.size()) i=0u; i<hs.size(); ++i)
-            {
+            for (decltype(hs.size()) i=0u; i<hs.size(); ++i) {
                 if (hs[i].size()!=m_hs_dim[i]) {
                     pagmo_throw(std::invalid_argument,"On the hessian no. " + std::to_string(i) +  ": Components returned: " + std::to_string(hs[i].size()) + ", should be " + std::to_string(m_hs_dim[i]));
                 }

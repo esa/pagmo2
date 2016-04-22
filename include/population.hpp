@@ -1,10 +1,14 @@
 #ifndef PAGMO_POPULATION_H
 #define PAGMO_POPULATION_H
 
+#include <cmath>
 #include <iostream>
+#include <limits>
 #include <random>
+#include <stdexcept>
 #include <vector>
 
+#include "problem.hpp"
 #include "problems/null_problem.hpp"
 #include "rng.hpp"
 #include "serialization.hpp"
@@ -61,11 +65,32 @@ class population
         vector_double random_decision_vector() const
         {
             auto dim = m_prob.get_nx();
-            auto bounds = m_prob.get_bounds();
+            const auto bounds = m_prob.get_bounds();
+            // This will check for consistent vector lengths, lb <= ub and
+            // no NaNs.
+            detail::check_problem_bounds(bounds);
             vector_double retval(dim);
             for (decltype(dim) i = 0u; i < dim; ++i) {
-                std::uniform_real_distribution<double> dis(bounds.first[i], bounds.second[i]);
-                retval[i] = dis(m_e);
+                // NOTE: see here for the requirements for floating-point RNGS:
+                // http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution/uniform_real_distribution
+                // Forbid random generation when bounds are infinite.
+                if (std::isinf(bounds.first[i]) || std::isinf(bounds.second[i])) {
+                    pagmo_throw(std::invalid_argument,"Cannot generate a random individual if the problem bounds "
+                        "are not all finite");
+                }
+                // Bounds cannot be too large.
+                if (bounds.second[i] - bounds.first[i] > std::numeric_limits<double>::max()) {
+                    pagmo_throw(std::invalid_argument,"Cannot generate a random individual if the problem bounds "
+                        "are too large");
+                }
+                if (bounds.first[i] == bounds.second[i]) {
+                    // If the bounds are equal we don't call the RNG, as that would be undefined
+                    // behaviour.
+                    retval[i] = bounds.first[i];
+                } else {
+                    std::uniform_real_distribution<double> dis(bounds.first[i], bounds.second[i]);
+                    retval[i] = std::uniform_real_distribution<double>{}(m_e);
+                }
             }
             return retval;
         }
