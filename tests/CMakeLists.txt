@@ -19,4 +19,5 @@ ADD_PAGMO_TESTCASE(rng)
 ADD_PAGMO_TESTCASE(type_traits)
 ADD_PAGMO_TESTCASE(translate)
 ADD_PAGMO_TESTCASE(hock_schittkowsky_71)
+ADD_PAGMO_TESTCASE(null_problem)
 

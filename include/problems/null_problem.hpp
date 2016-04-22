@@ -47,25 +47,25 @@ struct null_problem
     /// Gradients
     vector_double gradient(const vector_double &) const
     {
-        return {0.,0.,0.};
+        return {};
     }
 
     /// Gradient sparsity
-    sparsity_pattern gradient_sparsity(const vector_double &) const
+    sparsity_pattern gradient_sparsity() const
     {
-        return {{0,0}};
+        return {};
     }   
 
     /// Hessians
     std::vector<vector_double> hessians(const vector_double &) const
     {
-        return {{0.}};
+        return {{},{},{}};
     }
 
     /// Hessian sparsity
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
-        return {{{0,0}},{{0,0}},{{0,0}}};
+        return {{},{},{}};
     }
 
     /// Problem name
