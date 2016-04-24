@@ -22,33 +22,12 @@ namespace pagmo
 class population
 {
     private:
-        /// Individual
-        struct individual
-        {
-            individual(const vector_double &dv, const vector_double &fit, unsigned long long ind_id)
-            : x(dv), f(fit), ID(ind_id) {}
-            // decision vector
-            vector_double x;
-            // fitness
-            vector_double f;
-            // identity
-            unsigned long long ID;
-            // Streaming operator for the struct pagmo::problem::individual
-            friend std::ostream &operator<<(std::ostream &os, const individual &p)
-            {
-                stream(os, "\tID:\t\t\t", p.ID, '\n');
-                stream(os, "\tDecision vector:\t", p.x, '\n');
-                stream(os, "\tFitness vector:\t\t", p.f, '\n');
-                return os;
-            }
-        };
-
-    // A shortcut to std::vector<individual>::size_type
-    using size_type = std::vector<individual>::size_type;
+    // A shortcut to std::vector<vector_double>::size_type
+    using size_type = std::vector<vector_double>::size_type;
 
     public:
         /// Default constructor
-        population() : m_prob(null_problem{}), m_container(), m_e(0u), m_seed(0u) {}
+        population() : m_prob(null_problem{}), m_ID(), m_x(), m_f(), m_e(0u), m_seed(0u) {}
 
         /// Constructor
         explicit population(const pagmo::problem &p, size_type size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed)
@@ -58,12 +37,14 @@ class population
             }
         }
 
-        // Creates an individual from a decision vector and appends it
-        // to the population
+        // Appends a new decision vector to the population creating a unique
+        // ID and comuting the fitness
         void push_back(const vector_double &x)
         {
             auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
-            m_container.push_back(individual{x, m_prob.fitness(x), new_id});
+            m_ID.push_back(new_id);
+            m_x.push_back(x);
+            m_f.push_back(m_prob.fitness(x));
         }
 
         // Creates a random decision_vector within the problem bounds [lb, ub)
@@ -102,14 +83,14 @@ class population
             return retval;
         }
 
-        // Sets the i-th individual decision vector, causing a fitness evaluation
+        // Changes the i-th individual decision vector, causing a fitness evaluation
         // ID is unchanged
         void set_x(size_type i, const vector_double &x)
         {
             set_xf(i, x, m_prob.fitness(x));
         }
 
-        // Sets the i-th individual decision vector, causing a fitness evaluation
+        // Changes the i-th individual decision vector, and fitness
         // ID is unchanged
         void set_xf(size_type i, const vector_double &x, const vector_double &f)
         {
@@ -119,8 +100,30 @@ class population
                     + ", while population has size: " 
                     + std::to_string(size()));
             }
-            m_container[i].x = x;
-            m_container[i].f = f;
+            if (f.size() != m_prob.get_nf()) {
+                pagmo_throw(std::invalid_argument,"Trying to set a fitness of dimension: "  
+                    + std::to_string(f.size()) 
+                    + ", while problem get_nf returns: " 
+                    + std::to_string(m_prob.get_nf())
+                );
+            }
+            m_x[i] = x;
+            m_f[i] = f;
+        }
+
+        const std::vector<vector_double> &get_f() const
+        {
+            return m_f;
+        }
+
+        const std::vector<vector_double> &get_x() const
+        {
+            return m_x;
+        }
+
+        std::vector<unsigned long long> get_ID() const
+        {
+            return m_ID;
         }
 
         // Gets the the seed of the population random engine
@@ -132,14 +135,14 @@ class population
         // Number of individuals in the population
         size_type size() const
         {
-            return m_container.size();
+            return m_ID.size();
         }
 
         // Serialization.
         template <typename Archive>
         void serialize(Archive &ar)
         {
-            ar(m_prob, m_container, m_e, m_seed);
+            ar(m_prob, m_ID, m_x, m_f, m_e, m_seed);
         }
 
         // Streaming operator for the class pagmo::problem
@@ -148,22 +151,28 @@ class population
             stream(os, p.m_prob, '\n');
             stream(os, "Population size: ",p.size(),"\n\n");
             stream(os, "List of individuals: ",'\n');
-            for (decltype(p.m_container.size()) i=0u; i<p.m_container.size(); ++i) {
+            for (size_type i=0u; i < p.size(); ++i) {
                 stream(os, "#", i, ":\n");
-                stream(os, p.m_container[i], '\n');
+                stream(os, "\tID:\t\t\t", p.m_ID[i], '\n');
+                stream(os, "\tDecision vector:\t", p.m_x[i], '\n');
+                stream(os, "\tFitness vector:\t\t", p.m_f[i], '\n');
             }
             return os;
         }
 
     private:
         // Problem.
-        problem                             m_prob;
-        // Individuals.
-        std::vector<individual>             m_container;
+        problem                                m_prob;
+        // ID of the various decision vectors
+        std::vector<unsigned long long>        m_ID;
+        // Decision vectors.
+        std::vector<vector_double>             m_x;
+        // Fitness vectors.
+        std::vector<vector_double>             m_f;
         // Random engine.
-        mutable detail::random_engine_type  m_e;
+        mutable detail::random_engine_type     m_e;
         // Seed.
-        unsigned int                        m_seed;
+        unsigned int                           m_seed;
 };
 
 } // namespace pagmo
