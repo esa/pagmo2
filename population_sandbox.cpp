@@ -7,6 +7,10 @@
 
 using namespace pagmo;
 
+struct so_ind_comparison 
+{
+	bool operator() (vector_double a,vector_double b) { return (a[0]<b[0]);}
+};
 
 int main()
 {
@@ -14,5 +18,6 @@ int main()
     problem prob{hock_schittkowsky_71{}};
     population pop{prob, 10};
     print(pop);
+    print(pop.get_best_idx(2,so_ind_comparison()));
     
 }

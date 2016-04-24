@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <numeric>
 #include <random>
 #include <stdexcept>
 #include <vector>
@@ -40,12 +41,16 @@ class population
                 return os;
             }
         };
+
+    // A shortcut to std::vector<individual>::size_type
+    using size_type = std::vector<individual>::size_type;
+
     public:
         /// Default constructor
         population() : m_prob(null_problem{}), m_container(), m_e(0u), m_seed(0u) {}
 
         /// Constructor
-        explicit population(const pagmo::problem &p, std::vector<individual>::size_type size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed)
+        explicit population(const pagmo::problem &p, size_type size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed)
         {
             for (decltype(size) i = 0u; i < size; ++i) {
                 push_back(random_decision_vector());
@@ -98,14 +103,14 @@ class population
 
         // Sets the i-th individual decision vector, causing a fitness evaluation
         // ID is unchanged
-        void set_x(std::vector<individual>::size_type i, const vector_double &x)
+        void set_x(size_type i, const vector_double &x)
         {
             set_xf(i, x, m_prob.fitness(x));
         }
 
         // Sets the i-th individual decision vector, causing a fitness evaluation
         // ID is unchanged
-        void set_xf(std::vector<individual>::size_type i, const vector_double &x, const vector_double &f)
+        void set_xf(size_type i, const vector_double &x, const vector_double &f)
         {
             if (i >= size()) {
                 pagmo_throw(std::invalid_argument,"Trying to access individual at position: " 
@@ -124,9 +129,22 @@ class population
         }
 
         // Number of individuals in the population
-        std::vector<individual>::size_type size() const
+        size_type size() const
         {
             return m_container.size();
+        }
+
+        template <typename T>
+        std::vector<size_type> get_best_idx(size_type N, T ind_comparison_operator) const
+        {
+            if (N > size()) {
+                pagmo_throw(std::invalid_argument,"Best " + std::to_string(N) + " individuals requested, while population has size: " + std::to_string(size()) );
+            }
+            std::vector<size_type> retval(size());
+            std::iota(retval.begin(), retval.end(), 0);
+            std::sort(retval.begin(), retval.end(), [this, &ind_comparison_operator] (size_type i, size_type j) {return ind_comparison_operator(m_container[i].f,m_container[j].f);} );
+            retval.resize(N);
+            return retval;
         }
 
         // Serialization.
