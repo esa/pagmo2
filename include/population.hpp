@@ -23,7 +23,7 @@ class population
         /// Individual
         struct individual
         {
-            individual(const vector_double &fit, const vector_double &dv, unsigned long long ind_id)
+            individual(const vector_double &dv, const vector_double &fit, unsigned long long ind_id)
             : x(dv), f(fit), ID(ind_id) {}
             // decision vector
             vector_double x;
@@ -60,13 +60,12 @@ class population
             m_container.push_back(individual{x, m_prob.fitness(x), new_id});
         }
 
-        // Creates a random decision_vector within the problem bounds
+        // Creates a random decision_vector within the problem bounds [lb, ub)
         vector_double random_decision_vector() const
         {
             const auto dim = m_prob.get_nx();
             const auto bounds = m_prob.get_bounds();
-            // This will check for consistent vector lengths, lb <= ub and
-            // no NaNs.
+            // This will check for consistent vector lengths, lb <= ub and no NaNs.
             detail::check_problem_bounds(bounds);
             if (bounds.first.size() != dim) {
                 pagmo_throw(std::invalid_argument,"Problem bounds are inconsistent with problem dimension");
@@ -75,20 +74,20 @@ class population
             for (decltype(m_prob.get_nx()) i = 0u; i < dim; ++i) {
                 // NOTE: see here for the requirements for floating-point RNGS:
                 // http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution/uniform_real_distribution
-                // Forbid random generation when bounds are infinite.
+
+                // 1 - Forbid random generation when bounds are infinite.
                 if (std::isinf(bounds.first[i]) || std::isinf(bounds.second[i])) {
-                    pagmo_throw(std::invalid_argument,"Cannot generate a random individual if the problem bounds "
-                        "are not all finite");
+                    pagmo_throw(std::invalid_argument,"Cannot generate a random individual if the problem is"
+                     " unbounded (inf bounds detected)");
                 }
-                // Bounds cannot be too large.
+                // 2 - Bounds cannot be too large.
                 const auto delta = bounds.second[i] - bounds.first[i];
                 if (!std::isfinite(delta) || delta > std::numeric_limits<double>::max()) {
                     pagmo_throw(std::invalid_argument,"Cannot generate a random individual if the problem bounds "
                         "are too large");
                 }
+                // 3 - If the bounds are equal we don't call the RNG, as that would be undefined behaviour.
                 if (bounds.first[i] == bounds.second[i]) {
-                    // If the bounds are equal we don't call the RNG, as that would be undefined
-                    // behaviour.
                     retval[i] = bounds.first[i];
                 } else {
                     retval[i] = std::uniform_real_distribution<double>(bounds.first[i], bounds.second[i])(m_e);
@@ -116,13 +115,6 @@ class population
             }
             m_container[i].x = x;
             m_container[i].f = f;
-        }
-
-        // Sets the seed of the population random engine
-        void set_seed(unsigned int seed)
-        {
-            m_seed = seed;
-            m_e.seed(seed);
         }
 
         // Gets the the seed of the population random engine

@@ -331,7 +331,7 @@ inline void check_problem_bounds(const std::pair<vector_double,vector_double> &b
     // 2 - checks lower < upper for all values in lb, ub, and check for nans.
     for (decltype(lb.size()) i=0u; i < lb.size(); ++i) {
         if (std::isnan(lb[i]) || std::isnan(ub[i])) {
-            pagmo_throw(std::invalid_argument,"A NaN value was encountered in the problem bounds");
+            pagmo_throw(std::invalid_argument,"A NaN value was encountered in the problem bounds, index: " + std::to_string(i) );
         }
         if (lb[i] > ub[i]) {
             pagmo_throw(std::invalid_argument,"The lower bound at position " + std::to_string(i) + " is " + std::to_string(lb[i]) +
