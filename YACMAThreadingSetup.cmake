@@ -1,3 +1,7 @@
+# NOTE: it looks like on CMake >= 3.1 there's a thread import target that can be used:
+# https://cmake.org/cmake/help/v3.5/module/FindThreads.html
+# http://stackoverflow.com/questions/1620918/cmake-and-libpthread
+
 if(YACMAThreadingSetupIncluded)
     return()
 endif()
