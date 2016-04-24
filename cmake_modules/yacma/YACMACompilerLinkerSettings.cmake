@@ -49,6 +49,8 @@ macro(YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG flag)
     unset(YACMA_CHECK_DEBUG_CXX_FLAG CACHE)
 endmacro()
 
+# NOTE: all these flags are with a Unix-like syntax. We will need to change them
+# for MSVC and clang on windows possibly.
 macro(YACMA_SETUP_CXX_FLAGS)
     # Configuration bits specific for GCC.
     if(YACMA_COMPILER_IS_GNUCXX)
@@ -64,8 +66,8 @@ macro(YACMA_SETUP_CXX_FLAGS)
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Werror)
     endif()
 
-    # Common configuration for GCC and Clang or Intel on Unix platforms.
-    if ((UNIX AND (YACMA_COMPILER_IS_CLANGXX OR YACMA_COMPILER_IS_INTELXX)) OR YACMA_COMPILER_IS_GNUCXX)
+    # Common configuration for GCC, clang and Intel.
+    if (YACMA_COMPILER_IS_CLANGXX OR YACMA_COMPILER_IS_INTELXX OR YACMA_COMPILER_IS_GNUCXX)
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wall)
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wextra)
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnon-virtual-dtor)

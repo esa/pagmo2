@@ -26,13 +26,14 @@ option(BUILD_PYGMO "Build PyGMO." OFF)
 
 # Compiler setup.
 include(PAGMOCompilerLinkerSettings)
+
+# Threading setup.
+include(YACMAThreadingSetup)
+set(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS}")
+
 message(STATUS "Current CXX flags: ${CMAKE_CXX_FLAGS}")
 message(STATUS "Current CXX debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
-
-# Initial thread setup.
-find_package(Threads REQUIRED)
-message(STATUS "Thread library: ${CMAKE_THREAD_LIBS_INIT}")
-set(MANDATORY_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 
 if(BUILD_TESTS)
     # Boost unit test library.
