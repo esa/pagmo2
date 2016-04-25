@@ -7,13 +7,15 @@
  * This header contains utilities used to compute non-dominated fronts
  */
 
+#include <algorithm>
+#include <stdexcept>
 #include <limits>
 #include <string>
 #include <tuple>
 
- #include "../types.hpp"
- #include "../exceptions.hpp"
-  #include "../io.hpp"
+#include "../types.hpp"
+#include "../exceptions.hpp"
+#include "../io.hpp"
 
 
 namespace pagmo{
@@ -60,8 +62,12 @@ std::tuple<
     std::vector<vector_double::size_type>
 > fast_non_dominated_sorting (const std::vector<vector_double> &obj_list)
     {
-        // Initialize the return values
         auto N = obj_list.size();
+        // We make sure to have two points at least (one could also be allowed)
+        if (N < 2) {
+            pagmo_throw(std::invalid_argument, "At least two points are needed for fast_non_dominated_sorting: " + std::to_string(N) + " detected.");
+        }
+        // Initialize the return values
         std::vector<std::vector<vector_double::size_type>> non_dom_fronts(1u);
         std::vector<std::vector<vector_double::size_type>> dom_list(N);
         std::vector<vector_double::size_type> dom_count(N);
@@ -113,10 +119,21 @@ std::tuple<
 vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
 {
     auto N = non_dom_front.size();
+    // We make sure to have two points at least
+    if (N < 2) {
+        pagmo_throw(std::invalid_argument, "A non dominated front must contain at least two points: " + std::to_string(N) + " detected.");
+    }
     auto M = non_dom_front[0].size();
+    // We make sure the first point of the input non dominated front contains at least two objectives
+    if (M < 2) {
+        pagmo_throw(std::invalid_argument, "Points in the non dominated front must contain at least two objectives: " + std::to_string(M) + " detected.");
+    }
+    // We make sure all points contain the same number of objectives    
+    if (!std::all_of(non_dom_front.begin(), non_dom_front.end(), [M](const vector_double &item){return item.size() == M;})) {
+        pagmo_throw(std::invalid_argument, "A non dominated front must contain points of uniform dimensionality. Some different sizes were instead detected.");
+    }
     std::vector<vector_double::size_type> indexes(N);
     std::iota(indexes.begin(), indexes.end(), 0);
-    // TODO check size is not zero, check M are all the same
     vector_double retval(N,0);
     for (decltype(M) i=0u; i < M; ++i) {
         std::sort(indexes.begin(), indexes.end(), [i, non_dom_front] (vector_double::size_type idx1, vector_double::size_type idx2) {return non_dom_front[idx1][i] < non_dom_front[idx2][i];});
