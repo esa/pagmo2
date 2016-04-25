@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
     std::vector<std::vector<vector_double::size_type>>  dom_list;
     std::vector<vector_double::size_type>               non_dom_rank;
 
-    // And i/o values to check
+    // And the results to check
     std::vector<vector_double> example;
     std::vector<std::vector<vector_double::size_type>>  non_dom_fronts_res;
     std::vector<vector_double::size_type>               dom_count_res;

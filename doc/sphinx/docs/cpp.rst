@@ -25,10 +25,18 @@ to test your algorithms or to learn how to use PaGMO
   problems/hock_schittkowsky_71
   problems/translate
 
+Utilities
+^^^^^^^^^
+Various optimization utilities.
+
+.. toctree::
+  :maxdepth: 1
+
+  utils/pareto
+
 Miscellanea
 ^^^^^^^^^^^
-
-Various utilities.
+Various coding utilities.
 
 .. toctree::
   :maxdepth: 1

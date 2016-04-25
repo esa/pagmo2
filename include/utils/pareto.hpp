@@ -4,7 +4,8 @@
 /** \file pareto.hpp
  * \brief Pareto.
  *
- * This header contains utilities used to compute non-dominated fronts
+ * This header contains utilities used to compute non dominated fronts and other
+ * quantities relevant for multi objective optimization
  */
 
 #include <algorithm>
@@ -33,6 +34,8 @@ namespace pagmo{
  * @param[in] obj2 second vector of objectives.
  *
  * @return true if obj1 is dominating obj2, false otherwise.
+ *
+ * @throws std::invalid_argument if the dimensions of the two objectives is different
  */
 bool pareto_dominance(const vector_double &obj1, const vector_double &obj2) 
 {
@@ -55,12 +58,32 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
     return ( ( (count1+count2) == obj1.size()) && (count1 > 0u) );
 }
 
-std::tuple<
-    std::vector<std::vector<vector_double::size_type>>,
-    std::vector<std::vector<vector_double::size_type>>,
-    std::vector<vector_double::size_type>,
-    std::vector<vector_double::size_type>
-> fast_non_dominated_sorting (const std::vector<vector_double> &obj_list)
+/// Return value for the fast_non_dominated_sorting algorithm
+using fnds_return_value = std::tuple<std::vector<std::vector<vector_double::size_type>>,std::vector<std::vector<vector_double::size_type>>,std::vector<vector_double::size_type>,std::vector<vector_double::size_type>>;
+
+/// Fast non dominated sorting
+/**
+ * An implementation of the fast non dominated sorting algorithm. Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives
+ * and \f$N\f$ is the number of individuals.
+ *
+ * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
+ * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.
+ *
+ * @param[in] obj_list An std::vector containing the objectives of different individuals. Example {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
+ *
+ * @return an std::tuple containing:
+ *  - the non dominated fronts, an <tt>std::vector<std::vector<size_type>></tt> containing the non dominated fronts. Example {{1,2},{3},{0}}
+ *  - the domination list, an <tt>std::vector<std::vector<size_type>></tt> containing the domination list, i.e. the indexes of all individuals
+ * dominated by the individual at position \f$i\f$. Example {{},{},{0,3},{0}}
+ *  - the domination count, an <tt>std::vector<size_type></tt> containing the number of individuals
+ * that dominate the individual at position \f$i\f$. Example {2, 0, 0, 1}
+ *  - the non domination rank, an <tt>std::vector<size_type></tt> containing the index of the non dominated
+ * front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
+ *
+ * @throws std::invalid_argument If the size of \p obj_list is not at least 2
+ * @throws unspecified all exceptions thrown by pagmo::pareto_dominance
+ */
+fnds_return_value fast_non_dominated_sorting (const std::vector<vector_double> &obj_list)
     {
         auto N = obj_list.size();
         // We make sure to have two points at least (one could also be allowed)
@@ -116,6 +139,23 @@ std::tuple<
         return std::make_tuple(std::move(non_dom_fronts), std::move(dom_list), std::move(dom_count), std::move(non_dom_rank));
     }
 
+/// Crowding distance 
+/**
+ * An implementation of the crowding distance. Complexity is \f$ O(MNlog(N))\f$ where \f$M\f$ is the number of objectives
+ * and \f$N\f$ is the number of individuals. The function assumes the input is a non-dominated front. Failiure to rhis condition
+ * will result in an undefined behaviour  
+ *
+ * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
+ * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.
+ *
+ * @param[in] non_dom_front An <tt>std::vector<vector_double></tt> containing some non dominated front. Example {{0,0},{-1,1},{2,-2}}
+ *
+ * @returns a vector_double containing the crowding distances. Example: {2, inf, inf}
+ * 
+ * @throws std::invalid_argument If \p non_dom_front does not contain at least two points
+ * @throws std::invalid_argument If points in \p do not all have at least two objectives
+ * @throws std::invalid_argument If points in \p non_dom_front do not all have the same dimensionality
+*/
 vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
 {
     auto N = non_dom_front.size();
