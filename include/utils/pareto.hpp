@@ -52,19 +52,20 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
     return ( ( (count1+count2) == obj1.size()) && (count1 > 0u) );
 }
 
-std::vector<std::vector<vector_double::size_type>> fast_non_dominated_sorting (
-    const std::vector<vector_double>                    &obj_list, 
-    std::vector<vector_double::size_type>               &dom_count,
-    std::vector<std::vector<vector_double::size_type>>  &dom_list,
-    std::vector<vector_double::size_type>               &non_dom_rank
-    )
+std::tuple<
+    std::vector<std::vector<vector_double::size_type>>,
+    std::vector<std::vector<vector_double::size_type>>,
+    std::vector<vector_double::size_type>,
+    std::vector<vector_double::size_type>
+> 
+fast_non_dominated_sorting (const std::vector<vector_double> &obj_list)
     {
         // Initialize the return values
-        std::vector<std::vector<vector_double::size_type>> non_dom_fronts(1u);
         auto N = obj_list.size();
-        dom_list.resize(N);
-        dom_count.resize(N);
-        non_dom_rank.resize(N);
+        std::vector<std::vector<vector_double::size_type>> non_dom_fronts(1u);
+        std::vector<std::vector<vector_double::size_type>> dom_list(N);
+        std::vector<vector_double::size_type> dom_count(N);
+        std::vector<vector_double::size_type> non_dom_rank(N);
 
         // Start the fast non dominated sort algorithm
         for (decltype(N) i = 0u; i < N; ++i) {
@@ -104,7 +105,7 @@ std::vector<std::vector<vector_double::size_type>> fast_non_dominated_sorting (
                 non_dom_fronts.push_back(current_front);
             }
         }
-        return non_dom_fronts;
+        return std::make_tuple(non_dom_fronts, dom_list, dom_count, non_dom_rank);
     }
 
 } // namespace pagmo

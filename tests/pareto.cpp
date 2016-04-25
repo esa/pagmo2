@@ -4,6 +4,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <iostream>
 #include <string>
+#include <tuple>
 
 #include "../include/utils/pareto.hpp"
 #include "../include/types.hpp"
@@ -41,11 +42,11 @@ BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
     dom_list_res = {{},{6,9,10},{6,7,9,10}, {7,8,9,10}, {8,10}, {8}, {9}, {9,10},{},{},{}};
     non_dom_rank_res = {0,0,0,0,0,0,1,1,1,2,2};
 
-    auto non_dom_fronts = fast_non_dominated_sorting(example, dom_count, dom_list, non_dom_rank);
-    BOOST_CHECK(non_dom_fronts == non_dom_fronts_res);
-    BOOST_CHECK(dom_count == dom_count_res);
-    BOOST_CHECK(dom_list == dom_list_res);
-    BOOST_CHECK(non_dom_rank == non_dom_rank_res);
+    auto retval = fast_non_dominated_sorting(example);
+    BOOST_CHECK(std::get<0>(retval) == non_dom_fronts_res);
+    BOOST_CHECK(std::get<1>(retval) == dom_list_res);
+    BOOST_CHECK(std::get<2>(retval) == dom_count_res);
+    BOOST_CHECK(std::get<3>(retval) == non_dom_rank_res);
 
     // Test 2
     example = {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}};
@@ -54,10 +55,10 @@ BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
     dom_list_res = {{},{},{0,3},{0}};
     non_dom_rank_res = {2,0,0,1};
 
-    non_dom_fronts = fast_non_dominated_sorting(example, dom_count, dom_list, non_dom_rank);
-    BOOST_CHECK(non_dom_fronts == non_dom_fronts_res);
-    BOOST_CHECK(dom_count == dom_count_res);
-    BOOST_CHECK(dom_list == dom_list_res);
-    BOOST_CHECK(non_dom_rank == non_dom_rank_res);
+    retval = fast_non_dominated_sorting(example);
+    BOOST_CHECK(std::get<0>(retval) == non_dom_fronts_res);
+    BOOST_CHECK(std::get<1>(retval) == dom_list_res);
+    BOOST_CHECK(std::get<2>(retval) == dom_count_res);
+    BOOST_CHECK(std::get<3>(retval) == non_dom_rank_res);
 
 }
