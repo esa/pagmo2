@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(pareto_dominance_test)
 
 BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
 {
-    // We create various values to store
+    // We create various values to compute
     std::vector<vector_double::size_type>               dom_count;
     std::vector<std::vector<vector_double::size_type>>  dom_list;
     std::vector<vector_double::size_type>               non_dom_rank;
