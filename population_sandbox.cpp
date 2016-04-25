@@ -15,7 +15,7 @@ std::vector<vector_double::size_type> get_best_idx(vector_double::size_type N, T
         pagmo_throw(std::invalid_argument,"Best " + std::to_string(N) + " individuals requested, while population has size: " + std::to_string(fitness_comparison_operator.m_fits.size()) );
     }
     std::vector<vector_double::size_type> retval(fitness_comparison_operator.m_fits.size());
-    std::iota(retval.begin(), retval.end(), 0);
+    std::iota(retval.begin(), retval.end(), vector_double::size_type(0));
     std::sort(retval.begin(), retval.end(),  fitness_comparison_operator);
     retval.resize(N);
     return retval;

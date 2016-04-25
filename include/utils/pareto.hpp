@@ -72,7 +72,9 @@ std::tuple<
             dom_list[i].clear();
             dom_count[i]=0u;
             for (decltype(N) j = 0u; j < N; ++j) {
-                if (i==j) continue;
+                if (i==j) {
+                    continue;
+                }
                 if (pareto_dominance(obj_list[i], obj_list[j])) {
                     dom_list[i].push_back(j);
                 } else if (pareto_dominance(obj_list[j], obj_list[i])) {
@@ -105,7 +107,7 @@ std::tuple<
                 non_dom_fronts.push_back(current_front);
             }
         }
-        return std::make_tuple(non_dom_fronts, dom_list, dom_count, non_dom_rank);
+        return std::make_tuple(std::move(non_dom_fronts), std::move(dom_list), std::move(dom_count), std::move(non_dom_rank));
     }
 
 vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
