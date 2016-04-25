@@ -10,15 +10,14 @@
 #include "../include/io.hpp"
 
 using namespace pagmo;
-using namespace pagmo::utils;
 
 BOOST_AUTO_TEST_CASE(pareto_dominance_test)
 {
-    BOOST_CHECK(pareto_dominates({1,2,3},{4,5,6}));
-    BOOST_CHECK(!pareto_dominates({4,5,6},{4,5,6}));
-    BOOST_CHECK(pareto_dominates({4,5,5},{4,5,6}));
-    BOOST_CHECK(!pareto_dominates({1,2,3},{2,1,5}));
-    BOOST_CHECK(pareto_dominates({-3.4,1.5,2.9,-2.3,4.99,3.2,6.6},{1,2,3,4,5,6,7}));
+    BOOST_CHECK(pareto_dominance({1,2,3},{4,5,6}));
+    BOOST_CHECK(!pareto_dominance({4,5,6},{4,5,6}));
+    BOOST_CHECK(pareto_dominance({4,5,5},{4,5,6}));
+    BOOST_CHECK(!pareto_dominance({1,2,3},{2,1,5}));
+    BOOST_CHECK(pareto_dominance({-3.4,1.5,2.9,-2.3,4.99,3.2,6.6},{1,2,3,4,5,6,7}));
 }
 
 BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)

@@ -7,8 +7,12 @@
  * This header contains utilities used to compute non-dominated fronts
  */
 
- #include <cassert>
+#include <cassert>
+#include <string>
+#include <tuple>
+
  #include "../types.hpp"
+ #include "../exceptions.hpp"
 
 
 namespace pagmo{
@@ -27,13 +31,13 @@ namespace pagmo{
  *
  * @return true if obj1 is dominating obj2, false otherwise.
  */
-bool pareto_dominates(const vector_double &obj1, const vector_double &obj2) 
+bool pareto_dominance(const vector_double &obj1, const vector_double &obj2) 
 {
-    if (obj1.size() == obj2.size()) {
-        pagmo_throw(std::invalid_argument,"Fitness of different dimensions: " 
-            + std::to_string(obj1.size(obj2.size())) + 
-            " and " + std::to_string() +
-         " ")
+    if (obj1.size() != obj2.size()) {
+        pagmo_throw(std::invalid_argument,
+            "Fitness of different dimensions: " + std::to_string(obj1.size()) + 
+            " and " + std::to_string(obj2.size()) +
+         ": cannot determine dominance");
     }
     vector_double::size_type count1 = 0u; 
     vector_double::size_type count2 = 0u;
@@ -68,14 +72,14 @@ std::vector<std::vector<vector_double::size_type>> fast_non_dominated_sorting (
             dom_count[i]=0u;
             for (decltype(N) j = 0u; j < N; ++j) {
                 if (i==j) continue;
-                if (pareto_dominates(obj_list[i], obj_list[j])) {
+                if (pareto_dominance(obj_list[i], obj_list[j])) {
                     dom_list[i].push_back(j);
-                } else if (pareto_dominates(obj_list[j], obj_list[i])) {
+                } else if (pareto_dominance(obj_list[j], obj_list[i])) {
                     ++dom_count[i];
                 }
             }
-            if (dom_count[i] == 0) {
-                non_dom_rank[i] = 0;
+            if (dom_count[i] == 0u) {
+                non_dom_rank[i] = 0u;
                 non_dom_fronts[0].push_back(i);
             }
         }
@@ -83,20 +87,20 @@ std::vector<std::vector<vector_double::size_type>> fast_non_dominated_sorting (
         auto dom_count_copy(dom_count);
         auto current_front = non_dom_fronts[0];
         std::vector<std::vector<vector_double::size_type>>::size_type front_counter(0u);
-        while(current_front.size()!=0) {
+        while(current_front.size()!=0u) {
             std::vector<vector_double::size_type> next_front;
             for (decltype(current_front.size()) p = 0u; p < current_front.size(); ++p) {
-                for (auto q = 0u; q < dom_list[current_front[p]].size(); ++q) {
+                for (decltype(dom_list[current_front[p]].size()) q = 0u; q < dom_list[current_front[p]].size(); ++q) {
                     --dom_count_copy[dom_list[current_front[p]][q]];
-                    if (dom_count_copy[dom_list[current_front[p]][q]] == 0) {
-                        non_dom_rank[dom_list[current_front[p]][q]] = front_counter + 1;
+                    if (dom_count_copy[dom_list[current_front[p]][q]] == 0u) {
+                        non_dom_rank[dom_list[current_front[p]][q]] = front_counter + 1u;
                         next_front.push_back(dom_list[current_front[p]][q]);
                     }
                 }
             }
             ++front_counter;
             current_front = next_front;
-            if (current_front.size()!=0) {
+            if (current_front.size() != 0u) {
                 non_dom_fronts.push_back(current_front);
             }
         }
