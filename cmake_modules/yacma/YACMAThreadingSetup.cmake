@@ -32,7 +32,9 @@ if(CMAKE_USE_PTHREADS_INIT)
 		set(YACMA_THREADING_CXX_FLAGS "-pthread")
 	endif()
 	unset(YACMA_PTHREAD_COMPILER_FLAG)
-	try_compile(YACMA_HAS_PTHREAD_AFFINITY ${CMAKE_BINARY_DIR} "${CMAKE_CURRENT_LIST_DIR}/pthread_affinity_tests.cpp")
+	try_compile(YACMA_HAS_PTHREAD_AFFINITY ${CMAKE_BINARY_DIR}
+		"${CMAKE_CURRENT_LIST_DIR}/yacma_pthread_affinity_tests.cpp"
+		LINK_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 	if(YACMA_HAS_PTHREAD_AFFINITY)
 		message(STATUS "POSIX threads affinity extensions detected.")
 	else()
@@ -51,6 +53,15 @@ if(MINGW AND NOT CMAKE_USE_PTHREADS_INIT)
 endif()
 
 message(STATUS "Extra compiler flags for threading: ${YACMA_THREADING_CXX_FLAGS}")
+
+# Detect thread_local availability.
+try_compile(YACMA_HAS_THREAD_LOCAL ${CMAKE_BINARY_DIR}
+	"${CMAKE_CURRENT_LIST_DIR}/yacma_thread_local_tests.cpp")
+if(YACMA_HAS_THREAD_LOCAL)
+	message(STATUS "The 'thread_local' keyword is available.")
+else()
+	message(STATUS "The 'thread_local' keyword is not available.")
+endif()
 
 # Mark as included.
 set(YACMAThreadingSetupIncluded YES)
