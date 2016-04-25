@@ -7,12 +7,13 @@
  * This header contains utilities used to compute non-dominated fronts
  */
 
-#include <cassert>
+#include <limits>
 #include <string>
 #include <tuple>
 
  #include "../types.hpp"
  #include "../exceptions.hpp"
+  #include "../io.hpp"
 
 
 namespace pagmo{
@@ -37,7 +38,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
         pagmo_throw(std::invalid_argument,
             "Fitness of different dimensions: " + std::to_string(obj1.size()) + 
             " and " + std::to_string(obj2.size()) +
-         ": cannot determine dominance");
+         ": cannot define dominance");
     }
     vector_double::size_type count1 = 0u; 
     vector_double::size_type count2 = 0u;
@@ -57,8 +58,7 @@ std::tuple<
     std::vector<std::vector<vector_double::size_type>>,
     std::vector<vector_double::size_type>,
     std::vector<vector_double::size_type>
-> 
-fast_non_dominated_sorting (const std::vector<vector_double> &obj_list)
+> fast_non_dominated_sorting (const std::vector<vector_double> &obj_list)
     {
         // Initialize the return values
         auto N = obj_list.size();
@@ -107,6 +107,26 @@ fast_non_dominated_sorting (const std::vector<vector_double> &obj_list)
         }
         return std::make_tuple(non_dom_fronts, dom_list, dom_count, non_dom_rank);
     }
+
+vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
+{
+    auto N = non_dom_front.size();
+    auto M = non_dom_front[0].size();
+    std::vector<vector_double::size_type> indexes(N);
+    std::iota(indexes.begin(), indexes.end(), 0);
+    // TODO check size is not zero, check M are all the same
+    vector_double retval(N,0);
+    for (decltype(M) i=0u; i < M; ++i) {
+        std::sort(indexes.begin(), indexes.end(), [i, non_dom_front] (vector_double::size_type idx1, vector_double::size_type idx2) {return non_dom_front[idx1][i] < non_dom_front[idx2][i];});
+        retval[indexes[0]] = std::numeric_limits<double>::infinity();
+        retval[indexes[N-1]] =  std::numeric_limits<double>::infinity();
+        double df = non_dom_front[indexes[N-1]][i] - non_dom_front[indexes[0]][i];
+        for (decltype(N-2u) j=1u; j < N-1u; ++j) {
+            retval[indexes[j]] += (non_dom_front[indexes[j+1]][i] - non_dom_front[indexes[j-1]][i]) / df;
+        }
+    }
+    return retval;
+}
 
 } // namespace pagmo
 #endif

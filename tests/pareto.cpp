@@ -60,5 +60,25 @@ BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
     BOOST_CHECK(std::get<1>(retval) == dom_list_res);
     BOOST_CHECK(std::get<2>(retval) == dom_count_res);
     BOOST_CHECK(std::get<3>(retval) == non_dom_rank_res);
+}
 
+BOOST_AUTO_TEST_CASE(crowding_distance_test)
+{
+    std::vector<vector_double> example;
+    vector_double result;
+    // Test 1
+    result = {2, std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()};
+    example = {{0,0},{-1,1},{2,-2}};
+    BOOST_CHECK(crowding_distance(example) == result);
+    example = {{0.25,0.25},{-1,1},{2,-2}};
+    BOOST_CHECK(crowding_distance(example) == result);
+    result = {3, std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()};
+    example = {{0,0,0},{-1,1,2},{2,-2,-2}};
+    BOOST_CHECK(crowding_distance(example) == result);
+    example = {{0.25,0.25,0.25},{-1,1,2},{2,-2,-2}};
+    BOOST_CHECK(crowding_distance(example) == result);
+    // Test 2
+    example = {{0,0},{1,-1},{2,-2},{4,-4}};
+    result = {std::numeric_limits<double>::infinity(),{1.},{6./4.},std::numeric_limits<double>::infinity()};
+    BOOST_CHECK(crowding_distance(example) == result);
 }
