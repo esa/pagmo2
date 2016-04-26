@@ -9,9 +9,9 @@
  */
 
 #include <algorithm>
-#include <stdexcept>
 #include <limits>
 #include <numeric>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 
@@ -188,11 +188,12 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
     return retval;
 }
 
-std::vector<vector_double::size_type> fitness_comparison_multi_objective(const std::vector<vector_double> &input_f)
+std::vector<vector_double::size_type> sort_idx_mo(const std::vector<vector_double> &input_f)
 {
+    // Create the indexes 0....N-1
     std::vector<vector_double::size_type> retval(input_f.size());
     std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
-    // Run fast-non-dominated sorting and crowding distance for the population
+    // Run fast-non-dominated sorting and crowding distance for all input fitnesses
     auto tuple = fast_non_dominated_sorting(input_f);
     vector_double crowding(input_f.size());
     for (auto front: std::get<0>(tuple)) {
@@ -208,9 +209,9 @@ std::vector<vector_double::size_type> fitness_comparison_multi_objective(const s
     // Sort the indexes
     std::sort(retval.begin(), retval.end(), [tuple, crowding] (auto idx1, auto idx2) 
     {
-        if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) { // same non domination rank
-            return crowding[idx1] > crowding[idx2]; // crowding distance decides
-        } else {
+        if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {     // same non domination rank
+            return crowding[idx1] > crowding[idx2];                     // crowding distance decides
+        } else {                                                        // different non domination ranks
             return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2]; // non domination rank decides
         };
     });
