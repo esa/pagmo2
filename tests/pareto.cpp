@@ -19,6 +19,9 @@ BOOST_AUTO_TEST_CASE(pareto_dominance_test)
     BOOST_CHECK(pareto_dominance({4,5,5},{4,5,6}));
     BOOST_CHECK(!pareto_dominance({1,2,3},{2,1,5}));
     BOOST_CHECK(pareto_dominance({-3.4,1.5,2.9,-2.3,4.99,3.2,6.6},{1,2,3,4,5,6,7}));
+    BOOST_CHECK(!pareto_dominance({},{}));
+    BOOST_CHECK(pareto_dominance({2},{3}));
+    BOOST_CHECK_THROW(pareto_dominance({1,2},{3,4,5}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
@@ -28,7 +31,7 @@ BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
     std::vector<std::vector<vector_double::size_type>>  dom_list;
     std::vector<vector_double::size_type>               non_dom_rank;
 
-    // And i/o values to check
+    // And the results to check
     std::vector<vector_double> example;
     std::vector<std::vector<vector_double::size_type>>  non_dom_fronts_res;
     std::vector<vector_double::size_type>               dom_count_res;
@@ -61,4 +64,43 @@ BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
     BOOST_CHECK(std::get<2>(retval) == dom_count_res);
     BOOST_CHECK(std::get<3>(retval) == non_dom_rank_res);
 
+    // Test 3
+    example = {{0,0,0}};
+    BOOST_CHECK_THROW(fast_non_dominated_sorting(example), std::invalid_argument);
+    example = {{}};
+    BOOST_CHECK_THROW(fast_non_dominated_sorting(example), std::invalid_argument);
+    example = {};
+    BOOST_CHECK_THROW(fast_non_dominated_sorting(example), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(crowding_distance_test)
+{
+    std::vector<vector_double> example;
+    vector_double result;
+    // Test 1
+    result = {2, std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()};
+    example = {{0,0},{-1,1},{2,-2}};
+    BOOST_CHECK(crowding_distance(example) == result);
+    example = {{0.25,0.25},{-1,1},{2,-2}};
+    BOOST_CHECK(crowding_distance(example) == result);
+    result = {3, std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()};
+    example = {{0,0,0},{-1,1,2},{2,-2,-2}};
+    BOOST_CHECK(crowding_distance(example) == result);
+    example = {{0.25,0.25,0.25},{-1,1,2},{2,-2,-2}};
+    BOOST_CHECK(crowding_distance(example) == result);
+    // Test 2
+    example = {{0,0},{1,-1},{2,-2},{4,-4}};
+    result = {std::numeric_limits<double>::infinity(),{1.},{1.5},std::numeric_limits<double>::infinity()};
+    BOOST_CHECK(crowding_distance(example) == result);
+    // Test 3
+    example = {};
+    BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
+    example = {{},{}};
+    BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
+    example = {{1,2}};    
+    BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
+    example = {{1},{2}};
+    BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
+    example = {{2,3},{3,4},{2,4,5}};    
+    BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
 }
