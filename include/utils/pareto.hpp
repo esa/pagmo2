@@ -198,16 +198,16 @@ std::vector<vector_double::size_type> sort_idx_mo(const std::vector<vector_doubl
     vector_double crowding(input_f.size());
     for (auto front: std::get<0>(tuple)) {
         std::vector<vector_double> non_dom_fits(front.size());
-        for (auto i = 0u; i < front.size(); ++i) {
+        for (decltype(front.size()) i = 0u; i < front.size(); ++i) {
             non_dom_fits[i] = input_f[front[i]];
         }
         vector_double tmp(crowding_distance(non_dom_fits));
-        for (auto i = 0u; i < front.size(); ++i) {
+        for (decltype(front.size()) i = 0u; i < front.size(); ++i) {
             crowding[front[i]] = tmp[i];
         }
     }
     // Sort the indexes
-    std::sort(retval.begin(), retval.end(), [tuple, crowding] (auto idx1, auto idx2) 
+    std::sort(retval.begin(), retval.end(), [&tuple, &crowding] (auto idx1, auto idx2) 
     {
         if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {     // same non domination rank
             return crowding[idx1] > crowding[idx2];                     // crowding distance decides
@@ -215,6 +215,39 @@ std::vector<vector_double::size_type> sort_idx_mo(const std::vector<vector_doubl
             return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2]; // non domination rank decides
         };
     });
+    return retval;
+}
+
+std::vector<vector_double::size_type> select_best_N_idx_mo(const std::vector<vector_double> &input_f, vector_double::size_type N)
+{
+    std::vector<vector_double::size_type> retval;
+    std::vector<vector_double::size_type>::size_type front_id(0u);
+    // Run fast-non-dominated sorting
+    auto tuple = fast_non_dominated_sorting(input_f);
+    // Insert all non dominated fronts if not more than N
+    for (auto front: std::get<0>(tuple)) {
+        if (retval.size() + front.size() <= N) {
+            for (auto i: front) {
+                retval.push_back(i);
+            }
+            ++front_id;
+        } else {
+            break;
+        }
+    }
+
+    auto front = std::get<0>(tuple)[front_id];
+    std::vector<vector_double> non_dom_fits(front.size());
+    // Run crowding distance for the front
+    for (decltype(front.size()) i = 0u; i < front.size(); ++i) {
+        non_dom_fits[i] = input_f[front[i]];
+    }
+    std::vector<vector_double::size_type> idx(front.size());
+    std::iota(idx.begin(), idx.end(), vector_double::size_type(retval.size()));
+    vector_double tmp(crowding_distance(non_dom_fits));
+
+    std::sort(idx.begin(), idx.end(), [&tmp,&retval] (auto idx1, auto idx2){return (tmp[idx1-retval.size()] > tmp[idx2-retval.size()]);}); // Descending order1
+    retval.insert(retval.end(), idx.begin(), idx.begin() + N - retval.size());
     return retval;
 }
 

@@ -104,3 +104,12 @@ BOOST_AUTO_TEST_CASE(crowding_distance_test)
     example = {{2,3},{3,4},{2,4,5}};    
     BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
 }
+
+BOOST_AUTO_TEST_CASE(sort_idx_mo_test)
+{
+    std::vector<vector_double> example;
+    example = {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{2,6},{4,4},{10,2},{6,6},{9,5}};
+    print(sort_idx_mo(example),'\n');
+    for (int i =0; i<10;++i)
+    print(select_best_N_idx_mo(example, i),'\n');
+}
