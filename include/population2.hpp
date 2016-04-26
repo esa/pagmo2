@@ -15,6 +15,7 @@
 #include "rng.hpp"
 #include "serialization.hpp"
 #include "types.hpp"
+#include "utils/pareto.hpp"
 
 namespace pagmo
 {
@@ -136,6 +137,89 @@ class population
         size_type size() const
         {
             return m_ID.size();
+        }
+
+        /// Fitness Comparison
+        /**
+         *  Default comparison between two fitness vectors \f$f_1\f$ and \f$f_2\f$.
+         *  It returns true if \f$f_1\f$ is better than \f$f_2\f$, false otherwise,
+         *  that is if:
+         *   - \f$f_1\f$ is feasible and \f$f_2\f$ is not.
+         *   - \f$f_1\f$ and \f$f_2\f$ are both infeasible, but the number
+         *   of constraints violated by \f$f_1\f$ is less than the number of
+         *   constraints violated by \f$f_2\f$. In case of a tie the smallest 
+         *   \f$l_2\f$ norm of the constraint violation is used instead.
+         *   - \f$f_1\f$ and \f$f_2\f$ are both feasible, but the non domination
+         *  rank of \f$f_1\f$ is smaller than that of \f$f_2\f$. In case of a
+         *   tie the largest crowding distance is used instead.
+         *
+         * This comparison defines a strict ordering over the individuals
+         */
+        struct fitness_comparison 
+        {
+            fitness_comparison(const vector_double &tol = vector_double{}) : m_tol(tol), m_tuple(), m_crowding() 
+            {
+                // If the tolerance vector is empty (default) set tolerances to zero
+                if (m_tol.size()==0) {
+                    m_tol.resize(m_prob.get_nic() + m_prob.get_nec());
+                    std::fill(m_tol.begin(),m_tol.end(), 0.);
+                }
+                // Check that the tolerances size equals the size of the constraints
+                if (m_tol.size()!=m_prob.get_nic() + m_prob.get_nec())
+                {
+                    pagmo_throw(std::invalid_argument, "The vector of constraint tolerances has dimension: " + std::to_string(m_tol.size()) + 
+                        " while the problem constraint are " + std::string(get_nic()+get_nec()));
+                }
+                // Run fast-non-dominated sorting and crowding distance for the population
+                m_tuple = fast_non_dominated_sorting(m_f);
+                for (auto front: std::get<0>(m_tuple)) {
+                    std::vector<vector_double> non_dom_fits(front.size());
+                    for (auto i = 0u; i < front.size(); ++i) {
+                        non_dom_fits[i] = m_fit(front[i]);
+                    }
+                    auto tmp = crowding_distance(non_dom_fits);
+                    for (auto i = 0u; i < front.size(); ++i) {
+                        m_crowding[front[i]] = tmp[i];
+                    }
+                }
+            }
+
+            bool operator() (vector_double::size_type idx1,vector_double::size_type idx2)
+            { 
+                // Shortcut for unconstrained single objective (do we need it?)
+                if (m_tol.size()==0u && m_prob.get_nobj()==1u) {
+                    return m_f[idx1][0] < m_f[idx2][0]; // the only objective decides.
+                }
+
+                auto feas1 = violations(idx1, m_tol); // returns a tuple with the number of constraint violated and the total L2 norm of the violation
+                auto feas2 = violations(idx2, m_tol);
+                if (std::get<0>(feas1) == std::get<0>(feas2)) { // same number of constraint violated
+                    if (std::get<0>(feas1) > 0u) { // both unfeasible
+                        return std::get<1>(feas1) < std::get<1>(feas2);
+                    } else { // both feasible
+                        if (m_prob.get_nobj() == 1) {
+                            return m_f[idx1][0] < m_f[idx2][0];
+                        } else {
+                            if (std::get<3>(m_tuple)[idx1] == std::get<3>(m_tuple)[idx2]) { // same non domination rank
+                                return m_crowding[idx1] > m_crowding[idx2]; // crowding distance decides
+                            } else {
+                                return std::get<3>(m_tuple)[idx1] < std::get<3>(m_tuple)[idx2]; // non domination rank decides
+                            }
+                        }
+                    }
+                } else { // both unfeasible with a different number of violations
+                    return feas1 < feas2; // number of constraint violations decide
+                }
+            }
+
+            vector_double m_tol;
+            fnds_return_value m_tuple;
+            vector_double m_crowding;
+        };
+
+        std::tuple<unsigned int, double> violations(vector_double::size_type idx, const vector_double &tol) 
+        {
+            return std::make_tuple(0,0);
         }
 
         // Serialization.

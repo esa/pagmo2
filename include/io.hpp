@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#define PAGMO_MAX_OUTPUT_LENGTH 12u
+#define PAGMO_MAX_OUTPUT_LENGTH 5u
 
 namespace pagmo
 {
