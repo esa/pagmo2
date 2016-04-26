@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(crowding_distance_test)
     BOOST_CHECK(crowding_distance(example) == result);
     // Test 2
     example = {{0,0},{1,-1},{2,-2},{4,-4}};
-    result = {std::numeric_limits<double>::infinity(),{1.},{1.5},std::numeric_limits<double>::infinity()};
+    result = {std::numeric_limits<double>::infinity(),1.,1.5,std::numeric_limits<double>::infinity()};
     BOOST_CHECK(crowding_distance(example) == result);
     // Test 3
     example = {};

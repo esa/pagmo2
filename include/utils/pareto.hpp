@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <limits>
+#include <numeric>
 #include <string>
 #include <tuple>
 
