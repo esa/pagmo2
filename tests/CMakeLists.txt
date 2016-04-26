@@ -3,7 +3,7 @@
 add_definitions(-DBOOST_TEST_DYN_LINK)
 
 # Include boost directories.
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 macro(ADD_PAGMO_TESTCASE arg1)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -21,4 +21,3 @@ ADD_PAGMO_TESTCASE(translate)
 ADD_PAGMO_TESTCASE(hock_schittkowsky_71)
 ADD_PAGMO_TESTCASE(null_problem)
 ADD_PAGMO_TESTCASE(pareto)
-
