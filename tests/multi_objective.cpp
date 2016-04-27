@@ -84,6 +84,10 @@ BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
     BOOST_CHECK_THROW(fast_non_dominated_sorting(example), std::invalid_argument);
     example = {};
     BOOST_CHECK_THROW(fast_non_dominated_sorting(example), std::invalid_argument);
+    example = {{1,3},{3,42,3},{}};
+    BOOST_CHECK_THROW(fast_non_dominated_sorting(example), std::invalid_argument);
+    example = {{3,4,5},{}};
+    BOOST_CHECK_THROW(fast_non_dominated_sorting(example), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(crowding_distance_test)
@@ -221,4 +225,30 @@ BOOST_AUTO_TEST_CASE(ideal_test)
     // Test 2 - throws
     example = {{-1},{1,4},{2},{0,4,2},{6}};
     BOOST_CHECK_THROW(ideal(example), std::invalid_argument);
+    example = {{},{1}};
+    BOOST_CHECK_THROW(ideal(example), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(nadir_test)
+{
+    std::vector<vector_double> example;
+    vector_double result;
+    // Test 1
+    example = {{},{},{},{},{}};
+    result = {};
+    BOOST_CHECK(nadir(example) == result);
+    example = {{-1},{1},{2},{0},{6}};
+    result = {-1};
+    BOOST_CHECK(nadir(example) == result);
+    example = {{1,1},{2,2},{-1,-1},{1,-1},{-1,1},{0,0},{2,2},{0,0},{-2,2},{3,-2},{-10,2},{-8,4},{4,-8}};
+    result = {4,2};
+    BOOST_CHECK(nadir(example) == result);
+    example = {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{2,6},{4,4},{12,2},{6,6},{9,15}};
+    result = {10,7};
+    BOOST_CHECK(nadir(example) == result);
+    // Test 2 - throws
+    example = {{-1},{1,4},{2},{0,4,2},{6}};
+    BOOST_CHECK_THROW(nadir(example), std::invalid_argument);
+    example = {{},{1}};
+    BOOST_CHECK_THROW(nadir(example), std::invalid_argument);
 }
