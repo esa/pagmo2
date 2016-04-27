@@ -332,5 +332,42 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
 }
 
 
+/// Ideal point
+/**
+ * Computes the ideal point of an input population , (intended here as an 
+ * <tt>std::vector<vector_double></tt> of fitness points).
+ *
+ * Complexity is \f$ O(MN)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
+ *
+ * @param[in] input_f Input fitnesses. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
+ *
+ * @returns A vector_double containing the ideal point. Example: {-1,-2,231}
+ *
+ * @throws std::invalid_argument if the input fitness vectors are not all of the same size
+ */
+vector_double ideal(const std::vector<vector_double> &input_f)
+{
+    // Corner case
+    if (input_f.size() == 0) {
+        return {};
+    }
+
+    // Sanity checks
+    auto M = input_f[0].size();
+    for (auto &f: input_f) {
+        if (f.size() != M) {
+            pagmo_throw(std::invalid_argument, "Input vector of fitnesses must contain fitness vector of equal dimension "+std::to_string(M));
+        }
+    }
+
+    // Actual algorithm
+    vector_double retval(M);
+    for (decltype(M) i = 0u; i < M; ++i) {
+        retval[i] = (*std::min_element(input_f.begin(), input_f.end(), [i] (auto f1, auto f2) {return f1[i] < f2[i];}))[i];
+    }
+    return retval;
+}
+
+
 } // namespace pagmo
 #endif

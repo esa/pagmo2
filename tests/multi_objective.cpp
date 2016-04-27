@@ -200,3 +200,25 @@ BOOST_AUTO_TEST_CASE(select_best_N_mo_test)
     example = {{},{},{},{},{},{}};
     BOOST_CHECK_THROW(select_best_N_mo(example, 2), std::invalid_argument);
 }
+
+BOOST_AUTO_TEST_CASE(ideal_test)
+{
+    std::vector<vector_double> example;
+    vector_double result;
+    // Test 1
+    example = {{},{},{},{},{}};
+    result = {};
+    BOOST_CHECK(ideal(example) == result);
+    example = {{-1},{1},{2},{0},{6}};
+    result = {-1};
+    BOOST_CHECK(ideal(example) == result);
+    example = {{1,1},{2,2},{-1,-1},{1,-1},{-1,1},{0,0},{2,2},{0,0},{-2,2},{3,-2},{-10,2},{-8,4},{4,-8}};
+    result = {-10,-8};
+    BOOST_CHECK(ideal(example) == result);
+    example = {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
+    result = {-1,-2, 231};
+    BOOST_CHECK(ideal(example) == result);
+    // Test 2 - throws
+    example = {{-1},{1,4},{2},{0,4,2},{6}};
+    BOOST_CHECK_THROW(ideal(example), std::invalid_argument);
+}
