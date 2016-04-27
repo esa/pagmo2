@@ -193,7 +193,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
 
 /// Sorts a population in multi-objective optimization
 /**
- * Sorts a population (intended here as an <tt>std::vector</tt> of objective vevtors)
+ * Sorts a population (intended here as an <tt>std::vector<vector_double></tt> containing the  objective vectors)
  * with respect to the following strict ordering:
  * - \f$f_1 \prec f_2\f$ if the non domination ranks are such that \f$i_1 < i_2\f$. In case 
  * \f$i_1 = i_2\f$, then \f$f_1 \prec f_2\f$ if the crowding distances are such that \f$d_1 > d_2\f$.
@@ -260,7 +260,7 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
 /// Selects the best N individuals in multi-objective optimization
 /**
  * Selcts the best N individuals out of a population, (intended here as an 
- * <tt>std::vector</tt> of objectives vectors). The strict ordering used 
+ * <tt>std::vector<vector_double></tt> containing the  objective vectors). The strict ordering used 
  * is the same as that defined in pagmo::sort_population_mo. 
  *
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
@@ -336,7 +336,7 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
 /// Ideal point
 /**
  * Computes the ideal point of an input population, (intended here as an 
- * <tt>std::vector<vector_double></tt> of objectives).
+ * <tt>std::vector<vector_double></tt> containing the  objective vectors).
  *
  * Complexity is \f$ O(MN)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
  *
@@ -371,7 +371,7 @@ vector_double ideal(const std::vector<vector_double> &input_f)
 /// Nadir point
 /**
  * Computes the nadir point of an input population, (intended here as an 
- * <tt>std::vector<vector_double></tt> of objectives).
+ * <tt>std::vector<vector_double></tt> containing the  objective vectors).
  *
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
  *

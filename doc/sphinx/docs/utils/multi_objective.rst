@@ -1,10 +1,11 @@
-.. cpp_type_traits
+.. cpp_multi_objective_optimization
 
-Pareto utilities
-================
+Multi-objective optimization utilities
+======================================
 
 A number of utilities to compute quantities that are of relevance to 
-the determination of non dominated fronts and Pareto dominance criteria
+the determination of non dominated fronts, Pareto dominance criterias and
+more in general, to multi-objective optimization tasks.
 
 --------------------------------------------------------------------------
 
