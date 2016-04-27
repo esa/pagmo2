@@ -32,7 +32,7 @@ Various optimization utilities.
 .. toctree::
   :maxdepth: 1
 
-  utils/pareto
+  utils/multi_objective
 
 Miscellanea
 ^^^^^^^^^^^

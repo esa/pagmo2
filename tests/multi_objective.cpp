@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_pareto_utilities_test
+#define BOOST_TEST_MODULE pagmo_mo_utilities_test
 #include <boost/test/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -6,7 +6,7 @@
 #include <string>
 #include <tuple>
 
-#include "../include/utils/pareto.hpp"
+#include "../include/utils/multi_objective.hpp"
 #include "../include/types.hpp"
 #include "../include/io.hpp"
 
@@ -65,6 +65,19 @@ BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
     BOOST_CHECK(std::get<3>(retval) == non_dom_rank_res);
 
     // Test 3
+    example = {{},{},{},{}};
+    non_dom_fronts_res = {{0,1,2,3}};
+    dom_count_res = {0, 0, 0, 0};
+    dom_list_res = {{},{},{},{}};
+    non_dom_rank_res = {0,0,0,0};
+
+    retval = fast_non_dominated_sorting(example);
+    BOOST_CHECK(std::get<0>(retval) == non_dom_fronts_res);
+    BOOST_CHECK(std::get<1>(retval) == dom_list_res);
+    BOOST_CHECK(std::get<2>(retval) == dom_count_res);
+    BOOST_CHECK(std::get<3>(retval) == non_dom_rank_res);
+
+    // Test 4
     example = {{0,0,0}};
     BOOST_CHECK_THROW(fast_non_dominated_sorting(example), std::invalid_argument);
     example = {{}};
@@ -92,7 +105,11 @@ BOOST_AUTO_TEST_CASE(crowding_distance_test)
     example = {{0,0},{1,-1},{2,-2},{4,-4}};
     result = {std::numeric_limits<double>::infinity(),1.,1.5,std::numeric_limits<double>::infinity()};
     BOOST_CHECK(crowding_distance(example) == result);
-    // Test 3
+    // Test 3 - corner case
+    example = {{0,0},{0,0}};
+    result = {std::numeric_limits<double>::infinity(),std::numeric_limits<double>::infinity()};
+    BOOST_CHECK(crowding_distance(example) == result);
+    // Test 4
     example = {};
     BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
     example = {{},{}};
@@ -105,11 +122,30 @@ BOOST_AUTO_TEST_CASE(crowding_distance_test)
     BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
 }
 
-BOOST_AUTO_TEST_CASE(sort_idx_mo_test)
+BOOST_AUTO_TEST_CASE(sort_population_mo_test)
 {
     std::vector<vector_double> example;
+    std::vector<vector_double::size_type> result;
+    // Test 1 - corner cases
+    example = {};
+    result = {};
+    BOOST_CHECK(sort_population_mo(example) == result);
+    example = {{1,5,2,3}};
+    result = {0};
+    BOOST_CHECK(sort_population_mo(example) == result);
+    // Test 2 - Some more complex examples
+    example = {{0.25,0.25},{-1,1},{2,-2}};
+    result = {1,2,0};
+    BOOST_CHECK(sort_population_mo(example) == result);
     example = {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{2,6},{4,4},{10,2},{6,6},{9,5}};
-    print(sort_idx_mo(example),'\n');
-    for (int i =0; i<10;++i)
-    print(select_best_N_idx_mo(example, i),'\n');
+    result = {0,5,4,3,1,2,6,8,7,9,10};
+    BOOST_CHECK(sort_population_mo(example) == result);
+    example = {{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}};
+    result = {0,1,2,3,4,5,6,7,8,9,10};
+    BOOST_CHECK(sort_population_mo(example) == result);
+    // Test 3 - Throws
+    example = {{0},{1,2}};
+    BOOST_CHECK_THROW(sort_population_mo(example), std::invalid_argument);
+    example = {{},{}};
+    BOOST_CHECK_THROW(sort_population_mo(example), std::invalid_argument);
 }

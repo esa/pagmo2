@@ -1,11 +1,11 @@
-#ifndef PAGMO_PARETO_HPP
-#define PAGMO_PARETO_HPP
+#ifndef PAGMO_MULTI_OBJECTIVE_HPP
+#define PAGMO_MULTI_OBJECTIVE_HPP
 
-/** \file pareto.hpp
- * \brief Pareto.
+/** \file multi-objective.hpp
+ * \brief Multi objective optimization utilities.
  *
  * This header contains utilities used to compute non dominated fronts and other
- * quantities relevant for multi objective optimization
+ * quantities useful for multi objective optimization
  */
 
 #include <algorithm>
@@ -143,13 +143,13 @@ fnds_return_value fast_non_dominated_sorting (const std::vector<vector_double> &
 /// Crowding distance 
 /**
  * An implementation of the crowding distance. Complexity is \f$ O(MNlog(N))\f$ where \f$M\f$ is the number of objectives
- * and \f$N\f$ is the number of individuals. The function assumes the input is a non-dominated front. Failiure to rhis condition
+ * and \f$N\f$ is the number of individuals. The function assumes the input is a non-dominated front. Failiure to this condition
  * will result in an undefined behaviour  
  *
  * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.
  *
- * @param[in] non_dom_front An <tt>std::vector<vector_double></tt> containing some non dominated front. Example {{0,0},{-1,1},{2,-2}}
+ * @param[in] non_dom_front An <tt>std::vector<vector_double></tt> containing a non dominated front. Example {{0,0},{-1,1},{2,-2}}
  *
  * @returns a vector_double containing the crowding distances. Example: {2, inf, inf}
  * 
@@ -188,22 +188,59 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
     return retval;
 }
 
-std::vector<vector_double::size_type> sort_idx_mo(const std::vector<vector_double> &input_f)
+
+/// Sorts a population in multi-objective optimization
+/**
+ * Sorts a population (intended here as an <tt>std::vector<vector_double></tt> of fitness points)
+ * with respect to the following strict ordering:
+ * - \f$f_1 \prec f_2\f$ if the non domination ranks are such that \f$i_1 < i_2\f$. In case 
+ * \f$i_1 = i_2\f$, then \f$f_1 \prec f_2\f$ if the crowding distances are such that \f$d_1 > d_2\f$.
+ *
+ * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
+ *
+ * @note This function will also work for single objective optimization, i.e. with fitness dimensions of 1
+ * in which case, though, it is more efficient to sort using directly on of the following forms:
+ * @code
+ * std::sort(input_f.begin(), input_f.end(), [] (auto a, auto b) {return a[0] < b[0];});
+ * @endcode
+ * @code 
+ * std::vector<vector_double::size_type> idx(input_f.size());
+ * std::iota(idx.begin(), idx.end(), vector_double::size_type(0u));
+ * std::sort(idx.begin(), idx.end(), [] (auto a, auto b) {return input_f[a][0] < input_f[b][0];});
+ * @endcode
+ *
+ * @param[in] input_f Input fitnesses. Example {{0.25,0.25},{-1,1},{2,-2}};
+ *
+ * @returns an <tt>std::vector</tt> containing the indexes of the sorted fitnesses. Example {1,2,0}
+ *
+ * @throws unspecified all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
+ */
+std::vector<vector_double::size_type> sort_population_mo(const std::vector<vector_double> &input_f)
 {
+    if (input_f.size() == 0u) { // corner case
+        return {};
+    }
+    if (input_f.size() == 1u) { // corner case
+        return {0u};
+    }
     // Create the indexes 0....N-1
     std::vector<vector_double::size_type> retval(input_f.size());
     std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
-    // Run fast-non-dominated sorting and crowding distance for all input fitnesses
+    // Run fast-non-dominated sorting and compute the crowding distance for all input fitnesses
     auto tuple = fast_non_dominated_sorting(input_f);
     vector_double crowding(input_f.size());
-    for (auto front: std::get<0>(tuple)) {
-        std::vector<vector_double> non_dom_fits(front.size());
-        for (decltype(front.size()) i = 0u; i < front.size(); ++i) {
-            non_dom_fits[i] = input_f[front[i]];
-        }
-        vector_double tmp(crowding_distance(non_dom_fits));
-        for (decltype(front.size()) i = 0u; i < front.size(); ++i) {
-            crowding[front[i]] = tmp[i];
+    for (auto &front: std::get<0>(tuple)) {
+        if (front.size() == 1) {
+            crowding[front[0]] = 0u; // corner case of a non dominated front containing one individual. Crowding distance is not defined nor it will be used
+        } else {
+            std::vector<vector_double> non_dom_fits(front.size());
+            for (decltype(front.size()) i = 0u; i < front.size(); ++i) {
+                non_dom_fits[i] = input_f[front[i]];
+            }
+            vector_double tmp(crowding_distance(non_dom_fits));
+            for (decltype(front.size()) i = 0u; i < front.size(); ++i) {
+                crowding[front[i]] = tmp[i];
+            }
         }
     }
     // Sort the indexes
@@ -218,14 +255,14 @@ std::vector<vector_double::size_type> sort_idx_mo(const std::vector<vector_doubl
     return retval;
 }
 
-std::vector<vector_double::size_type> select_best_N_idx_mo(const std::vector<vector_double> &input_f, vector_double::size_type N)
+std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_double> &input_f, vector_double::size_type N)
 {
     std::vector<vector_double::size_type> retval;
     std::vector<vector_double::size_type>::size_type front_id(0u);
     // Run fast-non-dominated sorting
     auto tuple = fast_non_dominated_sorting(input_f);
     // Insert all non dominated fronts if not more than N
-    for (auto front: std::get<0>(tuple)) {
+    for (auto &front: std::get<0>(tuple)) {
         if (retval.size() + front.size() <= N) {
             for (auto i: front) {
                 retval.push_back(i);
