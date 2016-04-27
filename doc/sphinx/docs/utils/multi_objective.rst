@@ -25,3 +25,8 @@ the determination of non dominated fronts and Pareto dominance criteria
 
 .. doxygenfunction:: pagmo::sort_population_mo
    :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::select_best_N_mo
+   :project: PaGMOreborn

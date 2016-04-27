@@ -149,3 +149,54 @@ BOOST_AUTO_TEST_CASE(sort_population_mo_test)
     example = {{},{}};
     BOOST_CHECK_THROW(sort_population_mo(example), std::invalid_argument);
 }
+
+BOOST_AUTO_TEST_CASE(select_best_N_mo_test)
+{
+    std::vector<vector_double> example;
+    std::vector<vector_double::size_type> result;
+    vector_double::size_type N;
+
+    // Test 1 - corner cases
+    example = {};
+    N = 10;
+    result = {};
+    BOOST_CHECK(select_best_N_mo(example,N) == result);
+    example = {{1,2}};
+    N = 10;
+    result = {0};
+    BOOST_CHECK(select_best_N_mo(example,N) == result);
+    example = {{1,2},{2,4},{-3,2},{-3,-3}};
+    N = 10;
+    result = {0, 1, 2, 3};
+    BOOST_CHECK(select_best_N_mo(example,N) == result);
+    N = 4;
+    result = {0, 1, 2, 3};
+    BOOST_CHECK(select_best_N_mo(example,N) == result);
+
+    // Test 2 - The best N individuals will be a permutaion of the first N in the sorted index list.
+    example = {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{2,6},{4,4},{10,2},{6,6},{9,5}};
+    auto tmp2 = sort_population_mo(example);
+    for (decltype(example.size()) i = 1; i < example.size() + 3; ++i) {
+        auto tmp = select_best_N_mo(example,i);
+        BOOST_CHECK(std::is_permutation(tmp.begin(),tmp.end(),tmp2.begin()));
+    }
+    example = {{0,7,-2},{1,5,-4},{2,3,1},{4,2,2},{7,1,-10},{10,0,43}};
+    tmp2 = sort_population_mo(example);
+    for (decltype(example.size()) i = 1; i < example.size() + 3; ++i) {
+        auto tmp = select_best_N_mo(example,i);
+        BOOST_CHECK(std::is_permutation(tmp.begin(),tmp.end(),tmp2.begin()));
+    }
+    example = {{1,1},{2,2},{-1,-1},{1,-1},{-1,1},{0,0},{2,2},{0,0},{-2,2},{3,-2},{-10,2},{-8,4},{4,-8}};
+    tmp2 = sort_population_mo(example);
+    for (decltype(example.size()) i = 1; i < example.size() + 3; ++i) {
+        auto tmp = select_best_N_mo(example,i);
+        BOOST_CHECK(std::is_permutation(tmp.begin(),tmp.end(),tmp2.begin()));
+    }
+
+    // Test 3 - throws
+    N=4;
+    example = {{0},{1,2},{2},{0,0},{6}};
+    BOOST_CHECK_THROW(select_best_N_mo(example, 2), std::invalid_argument);
+    example = {{},{},{},{},{},{}};
+    BOOST_CHECK_THROW(select_best_N_mo(example, 2), std::invalid_argument);
+}

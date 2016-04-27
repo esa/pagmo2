@@ -255,8 +255,46 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
     return retval;
 }
 
+/// Selects the best N individuals in multi-objective optimization
+/**
+ * Selcts the best N individuals out of a population, (intended here as an 
+ * <tt>std::vector<vector_double></tt> of fitness points). The strict ordering used 
+ * is the same as that defined in pagmo::sort_population_mo. 
+ *
+ * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
+ * 
+ * While the complexity is the same as that of pagmo::sort_population_mo, this function returns a permutation
+ * of:
+ *
+ * @code
+ * auto ret = pagmo::sort_population_mo(input_f).resize(N);
+ * @endcode
+ *
+ * but it is faster than the above code: it avoids to compute the crowidng distance for all individuals and only computes
+ * it for the last non-dominated front that contains individuals included in the best N. 
+ *
+ * @param[in] input_f Input fitnesses. Example {{0.25,0.25},{-1,1},{2,-2}};
+ *
+ * @returns an <tt>std::vector</tt> containing the indexes of the best N fitnesses. Example {2,1}
+ *
+ * @throws unspecified all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
+ */
 std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_double> &input_f, vector_double::size_type N)
 {
+    if (N < 1) {
+        pagmo_throw(std::invalid_argument, "The best: " + std::to_string(N) + " individuals were requested, while 1 is the minimum");
+    }
+    if (input_f.size() == 0u) { // corner case
+        return {};
+    }
+    if (input_f.size() == 1u) { // corner case
+        return {0u};
+    }
+    if (N >= input_f.size()) { // corner case
+        std::vector<vector_double::size_type> retval(input_f.size());
+        std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
+        return retval;
+    }
     std::vector<vector_double::size_type> retval;
     std::vector<vector_double::size_type>::size_type front_id(0u);
     // Run fast-non-dominated sorting
@@ -267,24 +305,29 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
             for (auto i: front) {
                 retval.push_back(i);
             }
+            if (retval.size() == N) {
+                return retval;
+            }
             ++front_id;
         } else {
             break;
         }
     }
-
     auto front = std::get<0>(tuple)[front_id];
     std::vector<vector_double> non_dom_fits(front.size());
     // Run crowding distance for the front
     for (decltype(front.size()) i = 0u; i < front.size(); ++i) {
         non_dom_fits[i] = input_f[front[i]];
     }
-    std::vector<vector_double::size_type> idx(front.size());
-    std::iota(idx.begin(), idx.end(), vector_double::size_type(retval.size()));
-    vector_double tmp(crowding_distance(non_dom_fits));
-
-    std::sort(idx.begin(), idx.end(), [&tmp,&retval] (auto idx1, auto idx2){return (tmp[idx1-retval.size()] > tmp[idx2-retval.size()]);}); // Descending order1
-    retval.insert(retval.end(), idx.begin(), idx.begin() + N - retval.size());
+    vector_double cds(crowding_distance(non_dom_fits));
+    // We now have front and crowding distance, we sort the front w.r.t. the crowding
+    std::vector<vector_double::size_type> idxs(front.size());
+    std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
+    std::sort(idxs.begin(), idxs.end(), [&cds] (auto idx1, auto idx2){return (cds[idx1] > cds[idx2]);}); // Descending order1
+    auto remaining = N - retval.size();
+    for (decltype(remaining) i = 0; i < remaining; ++i) {
+        retval.push_back(front[idxs[i]]);
+    }
     return retval;
 }
 
