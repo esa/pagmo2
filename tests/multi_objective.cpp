@@ -1,9 +1,5 @@
 #define BOOST_TEST_MODULE pagmo_mo_utilities_test
 #include <boost/test/unit_test.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
-#include <iostream>
-#include <string>
 #include <tuple>
 
 #include "../include/utils/multi_objective.hpp"

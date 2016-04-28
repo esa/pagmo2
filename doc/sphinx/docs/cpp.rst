@@ -33,6 +33,7 @@ Various optimization utilities.
   :maxdepth: 1
 
   utils/multi_objective
+  utils/constrained
 
 Miscellanea
 ^^^^^^^^^^^
