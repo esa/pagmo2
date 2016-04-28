@@ -5,6 +5,7 @@
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wconversion"
     #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+    #pragma GCC diagnostic ignored "-Wdeprecated"
 #endif
 
 #include "external/cereal/archives/binary.hpp"
