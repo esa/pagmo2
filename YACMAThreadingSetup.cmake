@@ -7,6 +7,7 @@ if(YACMAThreadingSetupIncluded)
 endif()
 
 include(CheckCXXCompilerFlag)
+include(CheckCXXSymbolExists)
 
 # Initial thread setup.
 find_package(Threads REQUIRED)
@@ -32,9 +33,15 @@ if(CMAKE_USE_PTHREADS_INIT)
 		set(YACMA_THREADING_CXX_FLAGS "-pthread")
 	endif()
 	unset(YACMA_PTHREAD_COMPILER_FLAG)
-	try_compile(YACMA_HAS_PTHREAD_AFFINITY ${CMAKE_BINARY_DIR}
-		"${CMAKE_CURRENT_LIST_DIR}/yacma_pthread_affinity_tests.cpp"
-		LINK_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+	set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_THREAD_LIBS_INIT}")
+	CHECK_CXX_SYMBOL_EXISTS("pthread_setaffinity_np" "pthread.h" _YACMA_HAS_PTHREAD_SETAFFINITY)
+	CHECK_CXX_SYMBOL_EXISTS("pthread_getaffinity_np" "pthread.h" _YACMA_HAS_PTHREAD_GETAFFINITY)
+	unset(CMAKE_REQUIRED_LIBRARIES)
+	if(_YACMA_HAS_PTHREAD_SETAFFINITY AND _YACMA_HAS_PTHREAD_GETAFFINITY)
+		set(YACMA_HAS_PTHREAD_AFFINITY true)
+	else()
+		set(YACMA_HAS_PTHREAD_AFFINITY false)
+	endif()
 	if(YACMA_HAS_PTHREAD_AFFINITY)
 		message(STATUS "POSIX threads affinity extensions detected.")
 	else()
