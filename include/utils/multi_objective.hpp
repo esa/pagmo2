@@ -28,7 +28,7 @@ namespace pagmo{
  * is assumed.
  *
  * Each pair of corresponding elements in obj1 and obj2 is compared: if all
- * elements in obj1 are less or equal to the corresponding element in obj2, 
+ * elements in obj1 are less or equal to the corresponding element in obj2,
  * but at least one is different, true will be returned. Otherwise, false will be returned.
  *
  * @param[in] obj1 first vector of objectives.
@@ -38,15 +38,15 @@ namespace pagmo{
  *
  * @throws std::invalid_argument if the dimensions of the two objectives is different
  */
-bool pareto_dominance(const vector_double &obj1, const vector_double &obj2) 
+bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
 {
     if (obj1.size() != obj2.size()) {
         pagmo_throw(std::invalid_argument,
-            "Different number of objectives: " + std::to_string(obj1.size()) + 
+            "Different number of objectives: " + std::to_string(obj1.size()) +
             " and " + std::to_string(obj2.size()) +
          ": cannot define dominance");
     }
-    vector_double::size_type count1 = 0u; 
+    vector_double::size_type count1 = 0u;
     vector_double::size_type count2 = 0u;
     for (decltype(obj1.size()) i = 0u; i < obj1.size(); ++i) {
         if (obj1[i] < obj2[i]) {
@@ -73,7 +73,7 @@ using fnds_return_type = std::tuple<std::vector<std::vector<vector_double::size_
  * @param[in] obj_list An std::vector containing the objectives of different individuals. Example {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
  *
  * @return an std::tuple containing:
- *  - the non dominated fronts, an <tt>std::vector<std::vector<vector_double::size_type>></tt> 
+ *  - the non dominated fronts, an <tt>std::vector<std::vector<vector_double::size_type>></tt>
  * containing the non dominated fronts. Example {{1,2},{3},{0}}
  *  - the domination list, an <tt>std::vector<std::vector<size_type>></tt>
  * containing the domination list, i.e. the indexes of all individuals
@@ -90,7 +90,7 @@ fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &o
     {
         auto N = obj_list.size();
         // We make sure to have two points at least (one could also be allowed)
-        if (N < 2) {
+        if (N < 2u) {
             pagmo_throw(std::invalid_argument, "At least two points are needed for fast_non_dominated_sorting: " + std::to_string(N) + " detected.");
         }
         // Initialize the return values
@@ -142,11 +142,11 @@ fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &o
         return std::make_tuple(std::move(non_dom_fronts), std::move(dom_list), std::move(dom_count), std::move(non_dom_rank));
     }
 
-/// Crowding distance 
+/// Crowding distance
 /**
  * An implementation of the crowding distance. Complexity is \f$ O(MNlog(N))\f$ where \f$M\f$ is the number of objectives
  * and \f$N\f$ is the number of individuals. The function assumes the input is a non-dominated front. Failiure to this condition
- * will result in an undefined behaviour  
+ * will result in an undefined behaviour
  *
  * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.
@@ -154,7 +154,7 @@ fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &o
  * @param[in] non_dom_front An <tt>std::vector<vector_double></tt> containing a non dominated front. Example {{0,0},{-1,1},{2,-2}}
  *
  * @returns a vector_double containing the crowding distances. Example: {2, inf, inf}
- * 
+ *
  * @throws std::invalid_argument If \p non_dom_front does not contain at least two points
  * @throws std::invalid_argument If points in \p do not all have at least two objectives
  * @throws std::invalid_argument If points in \p non_dom_front do not all have the same dimensionality
@@ -171,7 +171,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
     if (M < 2u) {
         pagmo_throw(std::invalid_argument, "Points in the non dominated front must contain at least two objectives: " + std::to_string(M) + " detected.");
     }
-    // We make sure all points contain the same number of objectives    
+    // We make sure all points contain the same number of objectives
     if (!std::all_of(non_dom_front.begin(), non_dom_front.end(), [M](const vector_double &item){return item.size() == M;})) {
         pagmo_throw(std::invalid_argument, "A non dominated front must contain points of uniform dimensionality. Some different sizes were instead detected.");
     }
@@ -181,10 +181,10 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
     for (decltype(M) i=0u; i < M; ++i) {
         std::sort(indexes.begin(), indexes.end(), [i, &non_dom_front] (vector_double::size_type idx1, vector_double::size_type idx2) {return non_dom_front[idx1][i] < non_dom_front[idx2][i];});
         retval[indexes[0]] = std::numeric_limits<double>::infinity();
-        retval[indexes[N-1]] =  std::numeric_limits<double>::infinity();
-        double df = non_dom_front[indexes[N-1]][i] - non_dom_front[indexes[0]][i];
+        retval[indexes[N-1u]] =  std::numeric_limits<double>::infinity();
+        double df = non_dom_front[indexes[N-1u]][i] - non_dom_front[indexes[0]][i];
         for (decltype(N-2u) j=1u; j < N-1u; ++j) {
-            retval[indexes[j]] += (non_dom_front[indexes[j+1]][i] - non_dom_front[indexes[j-1]][i]) / df;
+            retval[indexes[j]] += (non_dom_front[indexes[j+1u]][i] - non_dom_front[indexes[j-1u]][i]) / df;
         }
     }
     return retval;
@@ -195,17 +195,17 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
 /**
  * Sorts a population (intended here as an <tt>std::vector<vector_double></tt> containing the  objective vectors)
  * with respect to the following strict ordering:
- * - \f$f_1 \prec f_2\f$ if the non domination ranks are such that \f$i_1 < i_2\f$. In case 
+ * - \f$f_1 \prec f_2\f$ if the non domination ranks are such that \f$i_1 < i_2\f$. In case
  * \f$i_1 = i_2\f$, then \f$f_1 \prec f_2\f$ if the crowding distances are such that \f$d_1 > d_2\f$.
  *
- * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
+ * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
  * @note This function will also work for single objective optimization, i.e. with 1 objective
  * in which case, though, it is more efficient to sort using directly on of the following forms:
  * @code
  * std::sort(input_f.begin(), input_f.end(), [] (auto a, auto b) {return a[0] < b[0];});
  * @endcode
- * @code 
+ * @code
  * std::vector<vector_double::size_type> idx(input_f.size());
  * std::iota(idx.begin(), idx.end(), vector_double::size_type(0u));
  * std::sort(idx.begin(), idx.end(), [] (auto a, auto b) {return input_f[a][0] < input_f[b][0];});
@@ -246,7 +246,7 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
         }
     }
     // Sort the indexes
-    std::sort(retval.begin(), retval.end(), [&tuple, &crowding] (auto idx1, auto idx2) 
+    std::sort(retval.begin(), retval.end(), [&tuple, &crowding] (auto idx1, auto idx2)
     {
         if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {     // same non domination rank
             return crowding[idx1] > crowding[idx2];                     // crowding distance decides
@@ -259,12 +259,12 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
 
 /// Selects the best N individuals in multi-objective optimization
 /**
- * Selcts the best N individuals out of a population, (intended here as an 
- * <tt>std::vector<vector_double></tt> containing the  objective vectors). The strict ordering used 
- * is the same as that defined in pagmo::sort_population_mo. 
+ * Selects the best N individuals out of a population, (intended here as an
+ * <tt>std::vector<vector_double></tt> containing the  objective vectors). The strict ordering used
+ * is the same as that defined in pagmo::sort_population_mo.
  *
- * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
- * 
+ * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
+ *
  * While the complexity is the same as that of pagmo::sort_population_mo, this function returns a permutation
  * of:
  *
@@ -273,7 +273,7 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
  * @endcode
  *
  * but it is faster than the above code: it avoids to compute the crowidng distance for all individuals and only computes
- * it for the last non-dominated front that contains individuals included in the best N. 
+ * it for the last non-dominated front that contains individuals included in the best N.
  *
  * @param[in] input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
  *
@@ -283,7 +283,7 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
  */
 std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_double> &input_f, vector_double::size_type N)
 {
-    if (N < 1) {
+    if (N < 1u) {
         pagmo_throw(std::invalid_argument, "The best: " + std::to_string(N) + " individuals were requested, while 1 is the minimum");
     }
     if (input_f.size() == 0u) { // corner case
@@ -327,7 +327,7 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
     std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
     std::sort(idxs.begin(), idxs.end(), [&cds] (auto idx1, auto idx2){return (cds[idx1] > cds[idx2]);}); // Descending order1
     auto remaining = N - retval.size();
-    for (decltype(remaining) i = 0; i < remaining; ++i) {
+    for (decltype(remaining) i = 0u; i < remaining; ++i) {
         retval.push_back(front[idxs[i]]);
     }
     return retval;
@@ -335,10 +335,10 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
 
 /// Ideal point
 /**
- * Computes the ideal point of an input population, (intended here as an 
+ * Computes the ideal point of an input population, (intended here as an
  * <tt>std::vector<vector_double></tt> containing the  objective vectors).
  *
- * Complexity is \f$ O(MN)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
+ * Complexity is \f$ O(MN)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
  * @param[in] input_f Input objectives vectors. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
  *
@@ -355,7 +355,7 @@ vector_double ideal(const std::vector<vector_double> &input_f)
 
     // Sanity checks
     auto M = input_f[0].size();
-    for (auto &f: input_f) {
+    for (const auto &f: input_f) {
         if (f.size() != M) {
             pagmo_throw(std::invalid_argument, "Input vector of objectives must contain fitness vector of equal dimension "+std::to_string(M));
         }
@@ -370,10 +370,10 @@ vector_double ideal(const std::vector<vector_double> &input_f)
 
 /// Nadir point
 /**
- * Computes the nadir point of an input population, (intended here as an 
+ * Computes the nadir point of an input population, (intended here as an
  * <tt>std::vector<vector_double></tt> containing the  objective vectors).
  *
- * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals. 
+ * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
  * @param[in] input_f Input objective vectors. Example {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{6,6},{9,15}}
  *
