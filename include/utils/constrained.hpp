@@ -18,6 +18,40 @@
 
 namespace pagmo{
 
+namespace detail {
+
+std::pair<vector_double::size_type, double> test_eq_constraints(vector_double::const_iterator ceq_first, vector_double::const_iterator ceq_last, vector_double::const_iterator tol_first) 
+{
+    // Main computation
+    double l2=0.;
+    vector_double::size_type n =0u;
+    while(ceq_first!=ceq_last) {
+        auto err = std::max(std::abs(*ceq_first++) - *tol_first++, 0.);
+        l2 += err*err;
+        if (err <= 0.) {
+            ++n;
+        }
+    }
+    return std::pair<vector_double::size_type, double>(n, std::sqrt(l2));
+} 
+
+std::pair<vector_double::size_type, double> test_ineq_constraints(vector_double::const_iterator cineq_first, vector_double::const_iterator cineq_last, vector_double::const_iterator tol_first) 
+{
+    // Main computation
+    double l2=0.;
+    vector_double::size_type n =0u;
+    while(cineq_first!=cineq_last) {
+        auto err = std::max(*cineq_first++ - *tol_first++, 0.);
+        l2 += err*err;
+        if (err <= 0.) {
+            ++n;
+        }
+    }
+    return std::pair<vector_double::size_type, double>(n, std::sqrt(l2));
+} 
+
+} // detail namespace
+
 /** Equality constraints test
  *
  * Tests an equality constraint vector, counting the number of constraints
@@ -54,16 +88,7 @@ std::pair<vector_double::size_type, double> test_eq_constraints(const vector_dou
         return {0u, 0};
     }
     // Main computation
-    double l2=0.;
-    vector_double::size_type n =0u;
-    for (decltype(ceq.size()) i = 0u; i < ceq.size(); ++i) {
-        auto err = std::max(std::abs(ceq[i]) - tol_copy[i], 0.);
-        l2 += err*err;
-        if (err <= 0.) {
-            ++n;
-        }
-    }
-    return std::pair<vector_double::size_type, double>(n, std::sqrt(l2));
+    return detail::test_eq_constraints(ceq.begin(), ceq.end(), tol_copy.begin());
 } 
 
 /** Equality constraints test (overload)
@@ -82,7 +107,7 @@ std::pair<vector_double::size_type, double> test_eq_constraints(const vector_dou
 std::pair<vector_double::size_type, double> test_eq_constraints(const vector_double &ceq, double tol)
 {
     vector_double tol_vector(ceq.size(), tol);
-    return test_eq_constraints(ceq, tol_vector);
+    return detail::test_eq_constraints(ceq.begin(), ceq.end(), tol_vector.begin());
 }
 
 /** Inequality constraints test
@@ -129,7 +154,7 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(const vector_d
             ++n;
         }
     }
-    return std::pair<vector_double::size_type, double>(n, std::sqrt(l2));
+    return detail::test_ineq_constraints(ceq.begin(), ceq.end(), tol_copy.begin());
 }
 
 /** Inequality constraints test (overload)
@@ -148,7 +173,7 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(const vector_d
 std::pair<vector_double::size_type, double> test_ineq_constraints(const vector_double &ceq, double tol)
 {
     vector_double tol_vector(ceq.size(), tol);
-    return test_ineq_constraints(ceq, tol_vector);
+    return detail::test_ineq_constraints(ceq.begin(), ceq.end(), tol_vector.begin());
 }
 
 } // namespace pagmo
