@@ -7,79 +7,64 @@
 
 using namespace pagmo;
 
-BOOST_AUTO_TEST_CASE(test_eq_constraints_test)
-{
-    // Test 1
-    vector_double example;
-    std::pair<vector_double::size_type, double> result;
-    example = {};
-    result = {0u,0.};
-    BOOST_CHECK(test_eq_constraints(example) == result);
-    example = {0., 0., 0.};
-    result = {3u,0.};
-    BOOST_CHECK(test_eq_constraints(example) == result);
-    example = {1e-4, 0., 0.};
-    result = {2u,1e-4};
-    BOOST_CHECK(test_eq_constraints(example) == result);
-    example = {.5, .5, .5, .5};
-    result = {0u,1.};
-    BOOST_CHECK(test_eq_constraints(example) == result);
-    example = {0., 0., 0.};
-    result = {3u,0.};
-    BOOST_CHECK(test_eq_constraints(example,{1e-1,1e-3,1e-5}) == result);
-    example = {1e-4, 0., 0.};
-    result = {3u,0.};
-    BOOST_CHECK(test_eq_constraints(example, {1e-2,0.,0.}) == result);
-    example = {.5, .5, .5, .5};
-    result = {3u,.5};
-    BOOST_CHECK(test_eq_constraints(example, {0,.5,3.,4.}) == result);
-    example = {0., 0., 0.};
-    result = {3u,0.};
-    BOOST_CHECK(test_eq_constraints(example,1e-2) == result);
-    example = {1e-4, 0., 0.};
-    result = {3u,0.};
-    BOOST_CHECK(test_eq_constraints(example, 1e-2) == result);
-    example = {.5, .5, .5, .5};
-    result = {4u,0.};
-    BOOST_CHECK(test_eq_constraints(example, 0.5) == result);
-    example = {1., 2., 3., 4.};
-    result = {2u,std::sqrt(5.)};
-    BOOST_CHECK(test_eq_constraints(example, 2.) == result);
-    // Test 2 - throws
-    example = {1e-4, 0., 0.};
-    BOOST_CHECK_THROW(test_eq_constraints(example, {2,3}), std::invalid_argument);
-}
 
-BOOST_AUTO_TEST_CASE(test_ineq_constraints_test)
+BOOST_AUTO_TEST_CASE(sort_population_con_test)
 {
+    std::vector<vector_double> example;
+    vector_double::size_type neq;
+    vector_double tol;
+    std::vector<vector_double::size_type> result;
     // Test 1
-    vector_double example;
-    std::pair<vector_double::size_type, double> result;
-    example = {};
-    result = {0u,0.};
-    BOOST_CHECK(test_ineq_constraints(example) == result);
-    example = {-1, 2., -3};
-    result = {2u,2.};
-    BOOST_CHECK(test_ineq_constraints(example) == result);
-    example = {-1, 2., -3};
-    result = {2u,1.};
-    BOOST_CHECK(test_ineq_constraints(example, {1.,1.,1.}) == result);
-    example = {-1, 2., -3};
-    result = {3u,0.};
-    BOOST_CHECK(test_ineq_constraints(example, {2.,2.,2.}) == result);
-    example = {-1, 2., -3, 3., -1e-4, 1e-4};
-    result = {4u, std::sqrt(5)};
-    BOOST_CHECK(test_ineq_constraints(example, {1.,1.,1.,1.,1.,1.}) == result);
-    example = {-1, 2., -3, 3., -1e-4, 1e-4};
-    result = {4u, std::sqrt(2)};
-    BOOST_CHECK(test_ineq_constraints(example, {1.,1.,1.,2.,1.,1.}) == result);
-    example = {-1, 2., -3};
-    result = {3u,0.};
-    BOOST_CHECK(test_ineq_constraints(example, 2.) == result);
-    example = {-1, 2., -3, 3., -1e-4, 1e-4};
-    result = {4u, std::sqrt(5)};
-    BOOST_CHECK(test_ineq_constraints(example, 1.) == result);
-    // Test 2 - throws
-    example = {1e-4, 0., 0.};
-    BOOST_CHECK_THROW(test_ineq_constraints(example, {2,3}), std::invalid_argument);
+    example = {{0,0,0},{1,1,0},{2,0,0}};
+    neq = 1;
+    result = {0, 2, 1};
+    tol = {0.,0.};
+    BOOST_CHECK(sort_population_con(example, neq) == result);
+    BOOST_CHECK(sort_population_con(example, neq, 0.) == result);
+    BOOST_CHECK(sort_population_con(example, neq, tol) == result);
+    example = {{0,0,0},{1,0,0},{2,0,0}};
+    neq = 1;
+    result = {0, 1, 2};
+    tol = {0.,0.};
+    BOOST_CHECK(sort_population_con(example, neq) == result);
+    BOOST_CHECK(sort_population_con(example, neq, 0.) == result);
+    BOOST_CHECK(sort_population_con(example, neq, tol) == result);
+    example = {{-1,0,-20},{0,0,-1},{1,0,-2}};
+    neq = 1;
+    result = {0, 1, 2};
+    tol = {0.,0.};
+    BOOST_CHECK(sort_population_con(example, neq) == result);
+    BOOST_CHECK(sort_population_con(example, neq, 0.) == result);
+    BOOST_CHECK(sort_population_con(example, neq, tol) == result);
+    example = {{-1,0,-20},{0,0,-1},{1,0,-2}};
+    neq = 2;
+    result = {1, 2, 0};
+    tol = {0.,0.};
+    BOOST_CHECK(sort_population_con(example, neq) == result);
+    BOOST_CHECK(sort_population_con(example, neq, 0.) == result);
+    BOOST_CHECK(sort_population_con(example, neq, tol) == result);
+    example = {{-1,0,0},{0,0,-1},{1,0,0}};
+    neq = 2;
+    result = {0, 1, 2};
+    tol = {0.,1.};
+    BOOST_CHECK(sort_population_con(example, neq) != result);
+    BOOST_CHECK(sort_population_con(example, neq, 0.) != result);
+    BOOST_CHECK(sort_population_con(example, neq, tol) == result);
+    example = {{-1,0,-20},{0,0,-1},{1,0,-2}};
+    neq = 0;
+    result = {0, 1, 2};
+    tol = {0.,0.};
+    BOOST_CHECK(sort_population_con(example, neq) == result);
+    BOOST_CHECK(sort_population_con(example, neq, 0.) == result);
+    BOOST_CHECK(sort_population_con(example, neq, tol) == result);
+    // Test throw
+    example = {{1,2,3},{1,2}};
+    BOOST_CHECK_THROW(sort_population_con(example, neq), std::invalid_argument);
+    example = {{-1,0,0},{0,0,-1},{1,0,0}};    
+    BOOST_CHECK_THROW(sort_population_con(example, 3), std::invalid_argument);
+    BOOST_CHECK_THROW(sort_population_con(example, 4), std::invalid_argument);
+    tol = {2,3,4};   
+    BOOST_CHECK_THROW(sort_population_con(example, 0, tol), std::invalid_argument);
+    tol = {2};   
+    BOOST_CHECK_THROW(sort_population_con(example, 0, tol), std::invalid_argument);
 }

@@ -8,22 +8,13 @@ constrained optimization tasks.
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::test_eq_constraints(const vector_double&, const vector_double&)
+.. doxygenfunction:: pagmo::sort_population_con(const std::vector<vector_double>&, vector_double::size_type, const vector_double&)
    :project: PaGMOreborn
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::test_eq_constraints(const vector_double&, double)
+.. doxygenfunction:: pagmo::sort_population_con(const std::vector<vector_double>&, vector_double::size_type, double)
    :project: PaGMOreborn
 
---------------------------------------------------------------------------
-
-.. doxygenfunction:: pagmo::test_ineq_constraints(const vector_double&, const vector_double&)
-   :project: PaGMOreborn
-
---------------------------------------------------------------------------
-
-.. doxygenfunction:: pagmo::test_ineq_constraints(const vector_double&, double)
-   :project: PaGMOreborn
 
 

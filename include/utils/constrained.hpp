@@ -20,7 +20,9 @@ namespace pagmo{
 
 namespace detail {
 
-std::pair<vector_double::size_type, double> test_eq_constraints(vector_double::const_iterator ceq_first, vector_double::const_iterator ceq_last, vector_double::const_iterator tol_first) 
+/// Tests equality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm of the violation
+template <typename It>
+std::pair<vector_double::size_type, double> test_eq_constraints(It ceq_first, It ceq_last, It tol_first) 
 {
     // Main computation
     double l2=0.;
@@ -35,7 +37,9 @@ std::pair<vector_double::size_type, double> test_eq_constraints(vector_double::c
     return std::pair<vector_double::size_type, double>(n, std::sqrt(l2));
 } 
 
-std::pair<vector_double::size_type, double> test_ineq_constraints(vector_double::const_iterator cineq_first, vector_double::const_iterator cineq_last, vector_double::const_iterator tol_first) 
+template <typename It>
+/// Tests inequality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm of the violation
+std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first, It cineq_last, It tol_first) 
 {
     // Main computation
     double l2=0.;
@@ -52,128 +56,105 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(vector_double:
 
 } // detail namespace
 
-/** Equality constraints test
+/** Sorts a population in a constrained optimization case
+ * 
+ * Sorts a population (intended here as an <tt>std::vector<vector_double></tt>
+ * containing single objective fitness vectors)
+ * with respect to the following strict ordering:
+ * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is feasible and \f$f_2\f$ is not.
+ * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is they are both infeasible, but \f$f_1\f$
+ * violates less constraints than \f$f_2\f$, or in case they both violate the same 
+ * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
+ is smaller.
+ * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
+ * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
+ * 
+ * @note: the fitness vectors are assumed to contain exactly one objective, \p neq equality
+ * constraints and the rest (if any) inequality constraints
  *
- * Tests an equality constraint vector, counting the number of constraints
- * violated \f$ n\f$ (allowing for a certain tolerance) and computing
- * the \f$L_2\f$ norm of the violation \f$ l\f$ (discounting the
- * tolerance for each constraint).
+ * @param[in] input_f an <tt>std::vector<\tt> of fitness vectors (containing objectives and constraints)
+ * @param[in] neq number of equality constraints
+ * @param[tol] a vector_double containing tolerances to be accouted for in the constraints
  *
- * @note Equality constraints in PaGMO are all written in the form \f$c(x) = 0\f$.
- * A given constraint is thus satisfied if \f$|c(x)| \le \epsilon \f$, where 
- * \f$\epsilon \f$ is the tolerance set for that constraint.
+ * @return an <tt>std::vector<\tt> of indexes containing the sorted population
  *
- * @param[in] ceq A vector_double containing the constraints to be tested
- * @param[in] tol A vector_double containing the tolerance to consider for each constraint
- * @returns an <tt>std::pair</tt> containing \f$ n\f$ and \f$ l\f$
+ * @throws std::invalid_argument If the input fitness vectors do not have all the same size \f$n\f$
+ * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
+ * @throws std::invalid_argument If the size of the \p tol is not exactly the size of \p input_f - 1
  *
- * @throws std::invalid_argument if the constraint vector and the tolerance vector
- * have different sizes
  */
-
-std::pair<vector_double::size_type, double> test_eq_constraints(const vector_double &ceq, const vector_double &tol = {}) 
+std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, const vector_double &tol)
 {
-    auto tol_copy(tol);
-    // By default the tolerance vector is set to zero
-    if (tol_copy.size() == 0u) {
-        tol_copy = vector_double(ceq.size(), 0.);
-    }
-    // Check that tolerance vector has the same size as the constraint vector
-    if (tol_copy.size() != ceq.size())
-    {
-        pagmo_throw(std::invalid_argument, "Tolerance vector (dimension " + std::to_string(tol_copy.size()) + ") is inconsistent with constraints vector (dimension " + std::to_string(ceq.size()) + ")");
-    }
-    // Corner case
-    if (ceq.size() == 0u) {
-        return {0u, 0};
-    }
-    // Main computation
-    return detail::test_eq_constraints(ceq.begin(), ceq.end(), tol_copy.begin());
-} 
-
-/** Equality constraints test (overload)
- *
- * Tests an equality constraint vector, counting the number of constraints
- * violated \f$ n\f$ (allowing for a certain tolerance) and computing
- * the \f$L_2\f$ norm of the violation \f$ l\f$ (discounting the
- * tolerance for each constraint).
- *
- * @note Calls pagmo::test_eq_constraints setting the tolerance vector as uniform
- *
- * @param[in] ceq A vector_double containing the constraints to be tested
- * @param[in] tol A double containing the tolerance to consider for all constraints
- * @returns an <tt>std::pair</tt> containing \f$ n\f$ and \f$ l\f$
- */
-std::pair<vector_double::size_type, double> test_eq_constraints(const vector_double &ceq, double tol)
-{
-    vector_double tol_vector(ceq.size(), tol);
-    return detail::test_eq_constraints(ceq.begin(), ceq.end(), tol_vector.begin());
-}
-
-/** Inequality constraints test
- *
- * Tests an inequality constraint vector, counting the number of constraints
- * violated \f$ n\f$ (allowing for a certain tolerance) and computing
- * the \f$L_2\f$ norm of the violation \f$ l\f$ (discounting the
- * tolerance for each constraint).
- *
- * @note Equality constraints in PaGMO are all written in the form \f$c(x) \le 0\f$.
- * A given constraint is thus satisfied if \f$c(x) \le \epsilon \f$, where 
- * \f$\epsilon \f$ is the tolerance set for that constraint.
- *
- * @param[in] ceq A vector_double containing the inequality constraints to be tested
- * @param[in] tol A vector_double containing the tolerance to consider for each inequality constraint
- * @returns an <tt>std::pair</tt> containing \f$ n\f$ and \f$ l\f$
- *
- * @throws std::invalid_argument if the inequality constraint vector and the tolerance vector
- * have different sizes
- */
-std::pair<vector_double::size_type, double> test_ineq_constraints(const vector_double &ceq, const vector_double &tol = {}) 
-{
-    auto tol_copy(tol);
-    // By default the tolerance vector is set to zero
-    if (tol_copy.size() == 0u) {
-        tol_copy = vector_double(ceq.size(), 0.);
-    }
-    // Check that tolerance vector has the same size as the constraint vector
-    if (tol_copy.size() != ceq.size())
-    {
-        pagmo_throw(std::invalid_argument, "Tolerance vector (dimension " + std::to_string(tol_copy.size()) + ") is inconsistent with constraints vector (dimension " + std::to_string(ceq.size()) + ")");
-    }
-    // Corner case
-    if (ceq.size() == 0u) {
-        return {0u, 0};
-    }
-    // Main computation
-    double l2=0.;
-    vector_double::size_type n =0u;
-    for (decltype(ceq.size()) i = 0u; i < ceq.size(); ++i) {
-        auto err = std::max(ceq[i] - tol_copy[i], 0.);
-        l2 += err*err;
-        if (err <= 0.) {
-            ++n;
+    /// Corner cases
+    if (input_f.size() < 2u) { // corner cases
+        if (input_f.size() == 0u) { 
+            return {};
+        }
+        if (input_f.size() == 1u) { 
+            return {0u};
         }
     }
-    return detail::test_ineq_constraints(ceq.begin(), ceq.end(), tol_copy.begin());
+
+    // Santity Checks
+    // 1 - All fitness vectors must have the same size
+    auto N = input_f[0].size();
+    for (decltype(N) i = 1u; i < N; ++i) {
+        if (input_f[i].size() != N) {
+            pagmo_throw(std::invalid_argument, "The fitness vector at position: " 
+                + std::to_string(i) + " has dimension "
+                + std::to_string(input_f[i].size()) + " while I was expecting: "
+                + std::to_string(N) + "(first element dimension)"
+            );
+        }
+    }
+    // 2 - The number of equality constraints must be at most input_f.size()-1
+    if (neq > input_f.size()-1u) {
+        pagmo_throw(std::invalid_argument, "Number of equality constraints declared: " 
+                + std::to_string(neq) + " while fitness vector has dimension: "
+                + std::to_string(input_f.size()) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"
+        );
+    }
+    // 3 - The tolerance vector size must be input_f.size()-1u
+    if (tol.size() != input_f.size()-1u) {
+        pagmo_throw(std::invalid_argument, "Tolerance vector dimension: " 
+                + std::to_string(tol.size()) + " while it must be: "
+                + std::to_string(input_f.size()-1u)
+        );
+    }    
+
+    // Create the indexes 0....N-1
+    std::vector<vector_double::size_type> retval(input_f.size());
+    std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
+    // Sort the indexes
+    std::sort(retval.begin(), retval.end(), [&input_f, &neq, &tol] (auto idx1, auto idx2) 
+    {
+        auto c1eq = detail::test_eq_constraints(input_f[idx1].data()+1, input_f[idx1].data()+1+neq, tol.data());
+        auto c1ineq = detail::test_ineq_constraints(input_f[idx1].data()+1+neq, input_f[idx1].data()+input_f[idx1].size(), tol.data() + neq);
+        auto n1 = c1eq.first+c1ineq.first;
+        auto l1 = c1eq.second+c1ineq.second;
+
+        auto c2eq = detail::test_eq_constraints(input_f[idx2].data()+1, input_f[idx2].data()+1+neq, tol.data());
+        auto c2ineq = detail::test_ineq_constraints(input_f[idx2].data()+1+neq, input_f[idx2].data()+input_f[idx2].size(), tol.data() + neq);
+        auto n2 = c2eq.first + c2ineq.first;
+        auto l2 = std::sqrt(c2eq.second*c2eq.second + c2ineq.second*c2ineq.second);
+
+        if (n1 == n2) { // same number of constraints satistfied
+            if (n1 == input_f.size() - 1u) { // fitness decides
+                return input_f[idx1][0] < input_f[idx2][0];
+            } else { // l2 norm decides
+                return l1 < l2;
+            }
+        } else { // number of constraints satisfied decides
+            return n1 > n2;
+        }
+    });
+    return retval;
 }
 
-/** Inequality constraints test (overload)
- *
- * Tests an inequality constraint vector, counting the number of  inequalityconstraints
- * violated \f$ n\f$ (allowing for a certain tolerance) and computing
- * the \f$L_2\f$ norm of the violation \f$ l\f$ (discounting the
- * tolerance for each inequality constraint).
- *
- * @note Calls pagmo::test_ineq_constraints setting the tolerance vector as uniform
- *
- * @param[in] ceq A vector_double containing the inequality constraints to be tested
- * @param[in] tol A double containing the tolerance to consider for all inequality constraints
- * @returns an <tt>std::pair</tt> containing \f$ n\f$ and \f$ l\f$
- */
-std::pair<vector_double::size_type, double> test_ineq_constraints(const vector_double &ceq, double tol)
+std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, double tol = 0.)
 {
-    vector_double tol_vector(ceq.size(), tol);
-    return detail::test_ineq_constraints(ceq.begin(), ceq.end(), tol_vector.begin());
+    vector_double tol_vector(input_f.size() - 1u, tol);
+    return sort_population_con(input_f, neq, tol_vector);
 }
 
 } // namespace pagmo

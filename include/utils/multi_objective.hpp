@@ -219,11 +219,13 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  */
 std::vector<vector_double::size_type> sort_population_mo(const std::vector<vector_double> &input_f)
 {
-    if (input_f.size() == 0u) { // corner case
-        return {};
-    }
-    if (input_f.size() == 1u) { // corner case
-        return {0u};
+    if (input_f.size() < 2u) { // corner cases
+        if (input_f.size() == 0u) { 
+            return {};
+        }
+        if (input_f.size() == 1u) { 
+            return {0u};
+        }
     }
     // Create the indexes 0....N-1
     std::vector<vector_double::size_type> retval(input_f.size());
