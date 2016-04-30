@@ -112,41 +112,44 @@ class population
             m_f[i] = f;
         }
 
+        /// Getter for the fitness vectors
         const std::vector<vector_double> &get_f() const
         {
             return m_f;
         }
 
+        /// Getter for the decision vectors
         const std::vector<vector_double> &get_x() const
         {
             return m_x;
         }
 
+        /// Getter for the individual IDs
         std::vector<unsigned long long> get_ID() const
         {
             return m_ID;
         }
 
-        // Gets the the seed of the population random engine
+        /// Getter for the seed of the population random engine
         unsigned int get_seed() const
         {
             return m_seed;
         }
 
-        // Number of individuals in the population
+        /// Number of individuals in the population
         size_type size() const
         {
             return m_ID.size();
         }
 
-        // Serialization.
+        /// Serialization.
         template <typename Archive>
         void serialize(Archive &ar)
         {
             ar(m_prob, m_ID, m_x, m_f, m_e, m_seed);
         }
 
-        // Streaming operator for the class pagmo::problem
+        /// Streaming operator for the class pagmo::problem
         friend std::ostream &operator<<(std::ostream &os, const population &p)
         {
             stream(os, p.m_prob, '\n');

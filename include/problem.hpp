@@ -896,48 +896,47 @@ class problem
             return m_ptr->get_extra_info();
         }
 
-        /// Human readable representation
+        /// Streaming operator
         /**
-         * @return An std::string containing a human-readable
-         * representation of the problem, appending the result from
+         * @return An std::ostream containing a human-readable
+         * representation of the problem, includeing the result from
          * the user-defined method extra_info if implemented.
          */
-        std::string human_readable() const
+        friend std::ostream &operator<<(std::ostream &os, const problem &p)
         {
-            std::ostringstream s;
-            s << "Problem name: " << get_name() << '\n';
-            s << "\tGlobal dimension:\t\t\t" << get_nx() << '\n';
-            s << "\tFitness dimension:\t\t\t" << get_nf() << '\n';
-            s << "\tNumber of objectives:\t\t\t" << get_nobj() << '\n';
-            s << "\tEquality constraints dimension:\t\t" << get_nec() << '\n';
-            s << "\tInequality constraints dimension:\t" << get_nic() << '\n';
-            s << "\tLower bounds: ";
-            stream(s, get_bounds().first, '\n');
-            s << "\tUpper bounds: ";
-            stream(s, get_bounds().second, '\n');
-            stream(s, "\n\tHas gradient: ", has_gradient(), '\n');
-            stream(s, "\tUser implemented gradient sparsity: ", has_gradient_sparsity(), '\n');
-            if (has_gradient()) {
-                stream(s, "\tExpected gradients: ", m_gs_dim, '\n');
+            os << "Problem name: " << p.get_name() << '\n';
+            os << "\tGlobal dimension:\t\t\t" << p.get_nx() << '\n';
+            os << "\tFitness dimension:\t\t\t" << p.get_nf() << '\n';
+            os << "\tNumber of objectives:\t\t\t" << p.get_nobj() << '\n';
+            os << "\tEquality constraints dimension:\t\t" << p.get_nec() << '\n';
+            os << "\tInequality constraints dimension:\t" << p.get_nic() << '\n';
+            os << "\tLower bounds: ";
+            stream(os, p.get_bounds().first, '\n');
+            os << "\tUpper bounds: ";
+            stream(os, p.get_bounds().second, '\n');
+            stream(os, "\n\tHas gradient: ", p.has_gradient(), '\n');
+            stream(os, "\tUser implemented gradient sparsity: ", p.has_gradient_sparsity(), '\n');
+            if (p.has_gradient()) {
+                stream(os, "\tExpected gradients: ", p.m_gs_dim, '\n');
             }
-            stream(s, "\tHas hessians: ", has_hessians(), '\n');
-            stream(s, "\tUser implemented hessians sparsity: ", has_hessians_sparsity(), '\n');
-            if (has_hessians()) {
-                stream(s, "\tExpected hessian components: ", m_hs_dim, '\n');
+            stream(os, "\tHas hessians: ", p.has_hessians(), '\n');
+            stream(os, "\tUser implemented hessians sparsity: ", p.has_hessians_sparsity(), '\n');
+            if (p.has_hessians()) {
+                stream(os, "\tExpected hessian components: ", p.m_hs_dim, '\n');
             }
-            stream(s, "\n\tFunction evaluations: ", get_fevals(), '\n');
-            if (has_gradient()) {
-                stream(s, "\tGradient evaluations: ", get_gevals(), '\n');
+            stream(os, "\n\tFunction evaluations: ", p.get_fevals(), '\n');
+            if (p.has_gradient()) {
+                stream(os, "\tGradient evaluations: ", p.get_gevals(), '\n');
             }
-            if (has_hessians()) {
-                stream(s, "\tHessians evaluations: ", get_hevals(), '\n');
+            if (p.has_hessians()) {
+                stream(os, "\tHessians evaluations: ", p.get_hevals(), '\n');
             }
 
-            const auto extra_str = get_extra_info();
+            const auto extra_str = p.get_extra_info();
             if (!extra_str.empty()) {
-                stream(s, "\nProblem's extra info:\n", extra_str);
+                stream(os, "\nProblem's extra info:\n", extra_str);
             }
-            return s.str();
+            return os;
         }
 
         /// Serialization: save
@@ -1098,13 +1097,6 @@ class problem
         // Expected dimensions of the returned hessians (matching the sparsity patterns)
         std::vector<vector_double::size_type> m_hs_dim;
 };
-
-// Streaming operator for the class pagmo::problem
-std::ostream &operator<<(std::ostream &os, const problem &p)
-{
-    os << p.human_readable() << '\n';
-    return os;
-}
 
 } // namespaces
 
