@@ -846,6 +846,15 @@ class problem
             return m_ptr->get_nic();
         }
 
+        /// Number of constraints
+        /**
+         * @return Returns \f$ n_{ic} _ n_{ec} \f$, the number of constraints
+         */
+        vector_double::size_type get_nc() const
+        {
+            return m_ptr->get_nic() + m_ptr->get_nec();
+        }
+
         /// Number of fitness evaluations
         unsigned long long get_fevals() const
         {

@@ -1,5 +1,6 @@
 #define BOOST_TEST_MODULE pagmo_mo_utilities_test
 #include <boost/test/unit_test.hpp>
+#include <exception>
 #include <tuple>
 
 #include "../include/utils/multi_objective.hpp"

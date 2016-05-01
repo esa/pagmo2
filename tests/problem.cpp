@@ -5,7 +5,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <sstream>
-#include <stdexcept>
+#include <exception>
 #include <string>
 #include <utility>
 #include <vector>

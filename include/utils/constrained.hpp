@@ -111,14 +111,14 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     if (neq > input_f.size()-1u) {
         pagmo_throw(std::invalid_argument, "Number of equality constraints declared: " 
                 + std::to_string(neq) + " while fitness vector has dimension: "
-                + std::to_string(input_f.size()) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"
+                + std::to_string(N) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"
         );
     }
     // 3 - The tolerance vector size must be input_f.size()-1u
     if (tol.size() != input_f.size()-1u) {
         pagmo_throw(std::invalid_argument, "Tolerance vector dimension: " 
                 + std::to_string(tol.size()) + " while it must be: "
-                + std::to_string(input_f.size()-1u)
+                + std::to_string(N-1u)
         );
     }    
 
@@ -139,7 +139,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
         auto l2 = std::sqrt(c2eq.second*c2eq.second + c2ineq.second*c2ineq.second);
 
         if (n1 == n2) { // same number of constraints satistfied
-            if (n1 == input_f.size() - 1u) { // fitness decides
+            if (n1 == input_f[0].size() - 1u) { // fitness decides
                 return input_f[idx1][0] < input_f[idx2][0];
             } else { // l2 norm decides
                 return l1 < l2;

@@ -15,7 +15,7 @@
 #include "rng.hpp"
 #include "serialization.hpp"
 #include "types.hpp"
-#include "utils/pareto.hpp"
+#include "utils/constrained.hpp"
 
 namespace pagmo
 {
@@ -112,6 +112,11 @@ class population
             m_f[i] = f;
         }
 
+        const problem &get_problem() const 
+        {
+            return m_prob;
+        }
+
         /// Getter for the fitness vectors
         const std::vector<vector_double> &get_f() const
         {
@@ -134,6 +139,22 @@ class population
         unsigned int get_seed() const
         {
             return m_seed;
+        }
+
+        /// Population champion
+        vector_double::size_type champion() const
+        {
+            if (m_prob.get_nobj() > 1) {
+                pagmo_throw(std::invalid_argument, "Champion can only be extracted in single objective problems");
+            } 
+            if (m_prob.get_nc() > 0) { // should we also code a min_element_population_con?
+                return sort_population_con(m_f, m_prob.get_nec())[0];
+            }
+            // Sort for single objective, unconstrained optimization
+            std::vector<vector_double::size_type> indexes(size());
+            std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
+            auto idx = std::min_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {return m_f[idx1] < m_f[idx2];});
+            return std::distance(indexes.begin(), idx);
         }
 
         /// Number of individuals in the population
