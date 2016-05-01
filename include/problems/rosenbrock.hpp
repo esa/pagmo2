@@ -16,7 +16,8 @@ namespace pagmo
 
 /// The Rosenbrock problem.
 /**
- * \image html rosenbrock.png "Two-dimensional Rosenbrock function."
+ *
+ * \image html rosenbrock.png "Two-dimensional Rosenbrock function." width=3cm
  *
  * This is a box-constrained continuous single-objecive problem.
  * The objective function is the generalised n-dimensional Rosenbrock function:
@@ -75,7 +76,7 @@ struct rosenbrock
     {
         ar(m_dim);
     }
-
+    /// Problem dimensions
     unsigned int m_dim;
 };
 

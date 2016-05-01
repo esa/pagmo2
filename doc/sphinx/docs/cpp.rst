@@ -22,6 +22,7 @@ to test your algorithms or to learn how to use PaGMO
 .. toctree::
   :maxdepth: 1
 
+  problems/rosenbrock
   problems/hock_schittkowsky_71
   problems/translate
 

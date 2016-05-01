@@ -72,11 +72,11 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first
  * @note: the fitness vectors are assumed to contain exactly one objective, \p neq equality
  * constraints and the rest (if any) inequality constraints
  *
- * @param[in] input_f an <tt>std::vector<\tt> of fitness vectors (containing objectives and constraints)
+ * @param[in] input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
  * @param[in] neq number of equality constraints
- * @param[tol] a vector_double containing tolerances to be accouted for in the constraints
+ * @param[in] tol a vector_double containing tolerances to be accouted for in the constraints
  *
- * @return an <tt>std::vector<\tt> of indexes containing the sorted population
+ * @return an <tt>std::vector</tt> of indexes containing the sorted population
  *
  * @throws std::invalid_argument If the input fitness vectors do not have all the same size \f$n\f$
  * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
@@ -151,6 +151,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     return retval;
 }
 
+/// Sorts a population in a constrained optimization case (from one tolerance valid for all)
 std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, double tol = 0.)
 {
     vector_double tol_vector(input_f.size() - 1u, tol);

@@ -1,7 +1,7 @@
 #ifndef PAGMO_MULTI_OBJECTIVE_HPP
 #define PAGMO_MULTI_OBJECTIVE_HPP
 
-/** \file multi-objective.hpp
+/** \file multi_objective.hpp
  * \brief Multi objective optimization utilities.
  *
  * This header contains utilities used to compute non dominated fronts and other
@@ -57,6 +57,64 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
         }
     }
     return ( ( (count1+count2) == obj1.size()) && (count1 > 0u) );
+}
+
+/// Pareto Front
+/**
+ * An implementation of the fast non dominated sorting algorithm. Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives
+ * and \f$N\f$ is the number of individuals.
+ *
+ * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
+ * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.
+ *
+ * @param[in] input_objs An std::vector containing the objectives of different individuals. Example {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
+ *
+ * @return an std::tuple containing:
+ *  - the non dominated fronts, an <tt>std::vector<std::vector<vector_double::size_type>></tt>
+ * containing the non dominated fronts. Example {{1,2},{3},{0}}
+ *  - the domination list, an <tt>std::vector<std::vector<size_type>></tt>
+ * containing the domination list, i.e. the indexes of all individuals
+ * dominated by the individual at position \f$i\f$. Example {{},{},{0,3},{0}}
+ *  - the domination count, an <tt>std::vector<size_type></tt> containing the number of individuals
+ * that dominate the individual at position \f$i\f$. Example {2, 0, 0, 1}
+ *  - the non domination rank, an <tt>std::vector<size_type></tt> containing the index of the non dominated
+ * front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
+ *
+ * @throws std::invalid_argument If the size of \p input_objs is not at least 2
+ * @throws unspecified all exceptions thrown by pagmo::pareto_dominance
+ */
+std::vector<vector_double::size_type> pareto_front(const std::vector<vector_double> &input_objs) 
+{
+    if (input_objs.size() == 0u) {
+        return {};
+    }
+    auto M = input_objs[0].size();
+    // We make sure all input_objs contain the same number of objectives
+    if (!std::all_of(input_objs.begin(), input_objs.end(), [M](const vector_double &item){return item.size() == M;})) {
+        pagmo_throw(std::invalid_argument, "Input contains vector of objectives with different dimensionality");
+    }
+    std::vector<vector_double::size_type> front;
+    std::vector<vector_double::size_type> indexes(input_objs.size());
+    std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
+    if (input_objs[0].size() == 0u) {  
+        return indexes;
+    }
+
+    // Sort with respect to first component
+    std::sort(indexes.begin(), indexes.end(), [&input_objs] (auto idx1, auto idx2) {return input_objs[idx1][0] < input_objs[idx2][0];});
+    for (auto i: indexes) {
+        bool flag = false;
+        for (auto j: front) {
+            if (pareto_dominance(input_objs[j], input_objs[i])) {
+                flag = true;
+                break;
+            } 
+        }
+        if (!flag) {
+            front.push_back(i);
+        }
+    }
+    return front;
 }
 
 /// Return type for the fast_non_dominated_sorting algorithm
@@ -278,6 +336,7 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
  * it for the last non-dominated front that contains individuals included in the best N.
  *
  * @param[in] input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
+ * @param[in] N Number of best individuals to return
  *
  * @returns an <tt>std::vector</tt> containing the indexes of the best N objective vectors. Example {2,1}
  *
@@ -390,10 +449,10 @@ vector_double nadir(const std::vector<vector_double> &input_f) {
     }
     // Sanity checks
     auto M = input_f[0].size();
-    // Lets extract all objective vectors belonging to the first non dominated front
-    auto fnds = fast_non_dominated_sorting(input_f);
+    // Lets extract all objective vectors belonging to the first non dominated front (the Pareto front)
+    auto pareto = pareto_front(input_f);
     std::vector<vector_double> nd_fits;
-    for (auto idx : std::get<0>(fnds)[0]) {
+    for (auto idx : pareto) {
         nd_fits.push_back(input_f[idx]);
     }
     // And compute the nadir over them
@@ -403,7 +462,6 @@ vector_double nadir(const std::vector<vector_double> &input_f) {
     }
     return retval;
 }
-
 
 } // namespace pagmo
 #endif
