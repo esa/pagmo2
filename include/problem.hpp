@@ -848,7 +848,7 @@ class problem
 
         /// Number of constraints
         /**
-         * @return Returns \f$ n_{ic} _ n_{ec} \f$, the number of constraints
+         * @return Returns \f$ n_{ic} + n_{ec} \f$, the number of constraints
          */
         vector_double::size_type get_nc() const
         {

@@ -130,7 +130,7 @@ class population
         }
 
         /// Getter for the individual IDs
-        std::vector<unsigned long long> get_ID() const
+        const std::vector<unsigned long long> &get_ID() const
         {
             return m_ID;
         }
