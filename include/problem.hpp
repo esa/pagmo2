@@ -412,9 +412,6 @@ inline void check_problem_bounds(const std::pair<vector_double,vector_double> &b
  * At each copy construction and copy assignment these counters are reset to zero.
  *
  * The only allowed operations on an object belonging to this class, after it has been moved, are assignment and destruction.
- *
- * @author Francesco Biscani (bluescarni@gmail.com)
- * @author Dario Izzo (darioizzo@gmail.com)
  */
 
 class problem

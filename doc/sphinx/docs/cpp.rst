@@ -24,6 +24,7 @@ to test your algorithms or to learn how to use PaGMO
 
   problems/rosenbrock
   problems/hock_schittkowsky_71
+  problems/zdt
   problems/translate
 
 Utilities
