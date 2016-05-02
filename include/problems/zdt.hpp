@@ -191,8 +191,9 @@ public:
     }
     /* Convergence metric for a given decision_vector (0 = on the optimal front)
      *
-     * Introduced by Martens and Izzo in their paper, this metric is able
-     * to measure the distance from the pareto front of any analytically.
+     * Introduced by Martens and Izzo, this metric is able
+     * to measure "a distance" of any point from the pareto front of any ZDT 
+     * problem analytically without the need to precompute the front.
      *
      * @see Märtens, Marcus, and Dario Izzo. "The asynchronous island model
      * and NSGA-II: study of a new migration operator and its performance." 
@@ -201,7 +202,7 @@ public:
      * @throws std::invalid_argument if the problem id is not 1-6
      *
      
-    double convergence_metric(const vector_double &x) const
+    double p_distance(const vector_double &x) const
     {
         switch(m_id)
         {
@@ -243,7 +244,7 @@ private:
         for(decltype(N) i = 1u; i < N; ++i) {
             g += x[i];
         }
-        g = 1. + (9. * g) / (N - 1u);
+        g = 1. + (9. * g) / static_cast<double>(N - 1u);
 
         f[1] = g * ( 1. - sqrt(x[0]/g));
         return f;
@@ -259,7 +260,7 @@ private:
         for(decltype(N) i = 1u; i < N; ++i) {
                 g += x[i];
         }
-        g = 1. + (9. * g) / (N - 1u);
+        g = 1. + (9. * g) / static_cast<double>(N - 1u);
         f[1] = g * ( 1. - (x[0]/g)*(x[0]/g));
 
         return f;
@@ -275,7 +276,7 @@ private:
         for(decltype(N) i = 1u; i < N; ++i) {
                 g += x[i];
         }
-        g = 1. + (9. * g) / (N - 1u);
+        g = 1. + (9. * g) / static_cast<double>(N - 1u);
         f[1] = g * ( 1. - sqrt(x[0]/g) - x[0]/g * sin(10. * pagmo::detail::pi() * x[0]));
 
         return f;
@@ -288,7 +289,7 @@ private:
         f[0] = x[0];
         auto N = x.size();
 
-        g = 1 + 10 * (N - 1u);
+        g = 1 + 10 * static_cast<double>(N - 1u);
         f[0] = x[0];
         for(decltype(N) i = 1u; i < N; ++i) {
             g += x[i]*x[i] - 10. * cos(4. * pagmo::detail::pi() * x[i]);
@@ -306,8 +307,8 @@ private:
         auto n_vectors = ((size_x-30u) / 5u) + 1u;
 
         int k = 30;
-        std::vector<unsigned int> u(n_vectors, 0u);
-        std::vector<unsigned int> v(n_vectors);
+        std::vector<vector_double::size_type> u(n_vectors, 0u);
+        std::vector<vector_double::size_type> v(n_vectors);
 
         // Convert the input vector into floored values (integers)
         vector_double x(size_x);
@@ -325,7 +326,7 @@ private:
                 ++k;
             }
         }
-        f[0] = 1.0 + u[0];
+        f[0] = 1.0 + static_cast<double>(u[0]);
         for (decltype(n_vectors) i = 1u; i<n_vectors; ++i) {
             if (u[i] < 5u) {
                 v[i] = 2u + u[i];
@@ -335,7 +336,7 @@ private:
             }
         }
         for (decltype(n_vectors) i = 1u; i<n_vectors; ++i) {
-            g += v[i];
+            g += static_cast<double>(v[i]);
         }
         f[1] = g * (1. / f[0]);
         return f;
@@ -353,7 +354,7 @@ vector_double zdt6_fitness(const vector_double &x) const
         for(decltype(N) i = 1; i < N; ++i) {
                 g += x[i];
         }
-        g = 1 + 9 * pow((g/(x.size()-1)),0.25);
+        g = 1 + 9 * pow((g / static_cast<double>(N - 1u)),0.25);
         f[1] = g * ( 1 - (f[0]/g)*(f[0]/g));
 
         return f;
