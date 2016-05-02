@@ -201,7 +201,7 @@ public:
      *
      * @throws std::invalid_argument if the problem id is not 1-6
      *
-     
+     */
     double p_distance(const vector_double &x) const
     {
         switch(m_id)
@@ -219,19 +219,7 @@ public:
         default:
             pagmo_throw(std::invalid_argument, "Error: There are only 6 test functions in this test suite!");
         }
-    }*/
-
-private:
-    friend class cereal::access; 
-    /// Serialization
-    template <typename Archive>
-    void serialize(Archive &ar)
-    {
-        ar(m_id, m_param);
     }
-    /// Problem dimensions
-    unsigned int m_id;
-    unsigned int m_param;
 
 private:
     vector_double zdt1_fitness(const vector_double &x) const
@@ -342,23 +330,113 @@ private:
         return f;
     }
 
-vector_double zdt6_fitness(const vector_double &x) const
-{
+    vector_double zdt6_fitness(const vector_double &x) const
+    {
+            double g = 0.;
+            vector_double f(2,0.);
+            f[0] = x[0];
+            auto N = x.size();
+
+
+            f[0] = 1 - exp(-4*x[0])*pow(sin(6*pagmo::detail::pi()*x[0]),6);
+            for(decltype(N) i = 1; i < N; ++i) {
+                    g += x[i];
+            }
+            g = 1 + 9 * pow((g / static_cast<double>(N - 1u)),0.25);
+            f[1] = g * ( 1 - (f[0]/g)*(f[0]/g));
+
+            return f;
+    }
+
+    double zdt123_p_distance(const vector_double &x) const
+    {
+        double c = 0.;
         double g = 0.;
-        vector_double f(2,0.);
-        f[0] = x[0];
         auto N = x.size();
 
-
-        f[0] = 1 - exp(-4*x[0])*pow(sin(6*pagmo::detail::pi()*x[0]),6);
-        for(decltype(N) i = 1; i < N; ++i) {
-                g += x[i];
+        for(decltype(N) j = 1u; j < N; ++j) {
+            g += x[j];
         }
-        g = 1 + 9 * pow((g / static_cast<double>(N - 1u)),0.25);
-        f[1] = g * ( 1 - (f[0]/g)*(f[0]/g));
+        c += 1. + (9. * g) / static_cast<double>(N-1u);
+        return c - 1.;
+    }
 
-        return f;
-}
+    double zdt4_p_distance(const vector_double &x) const
+    {
+        double c = 0.;
+        double g = 0.;
+        auto N = x.size();
+
+        for(decltype(N) j = 1u; j < N; ++j) {
+                g += x[j]*x[j] - 10. * cos(4. * pagmo::detail::pi() * x[j]);
+        }
+        c += 1. + 10. * static_cast<double>(N-1u) + g;
+        return c  - 1.;
+    }
+
+    double zdt5_p_distance(const vector_double &x_double) const
+    {
+        // Convert the input vector into floored values (integers)
+        vector_double x(x_double.size());
+        std::transform(x_double.begin(), x_double.end(), x.begin(), [](auto item) {return std::floor(item);});
+        double c = 0.;
+        double g = 0.;
+        int k = 30;
+        auto N = x.size();
+
+        auto n_vectors = (N-30u) / 5u + 1u;
+        std::vector<vector_double::size_type> u(n_vectors,0);
+        std::vector<vector_double::size_type> v(n_vectors);
+
+        for (decltype(n_vectors) i = 1u; i<n_vectors; ++i) {
+            for (int j=0; j<5; ++j) {
+                if (x[k] == 1.) {
+                    ++u[i];
+                }
+                ++k;
+            }
+        }
+
+        for (decltype(n_vectors) i=1u; i<n_vectors; ++i) {
+            if (u[i] < 5u) {
+                v[i] = 2u + u[i];
+            }
+            else {
+                v[i] = 1u;
+            }
+        }
+
+        for (decltype(n_vectors) i=1u; i<n_vectors; ++i) {
+                g += static_cast<double>(v[i]);
+        }
+        c +=  g;
+        return c - static_cast<double>(n_vectors) + 1;
+    }
+
+    double zdt6_p_distance(const vector_double &x) const
+    {
+        double c = 0.;
+        double g = 0.;
+        auto N = x.size();
+
+        for(decltype(N) j = 1; j < N; ++j) {
+                g += x[j];
+        }
+        c += 1. + 9. * pow((g / static_cast<double>(N - 1u)), 0.25);
+        return c - 1;
+    }
+    
+private:
+    friend class cereal::access; 
+    /// Serialization
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_id, m_param);
+    }
+    /// Problem dimensions
+    unsigned int m_id;
+    unsigned int m_param;
 
 };
 
