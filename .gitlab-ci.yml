@@ -1,39 +1,40 @@
-image: python:3.4-alpine
+#image: python:3.4-alpine
+image: ubuntu:16.04
 
-pagmo-gcc:
-  script:
-    - apk update && apk add build-base gcc
-    - apk add cmake && apk add boost-dev
-    - mkdir build
-    - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
-    - make
-    - make test
+# pagmo-gcc:
+#   script:
+#     - apk update && apk add build-base gcc
+#     - apk add cmake && apk add boost-dev
+#     - mkdir build
+#     - cd build
+#     - cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
+#     - make
+#     - make test
 
 pagmo-clang:
   script:
-    - apk update && apk add build-base clang
-    - apk add cmake && apk add boost-dev
+    - apt-get update
+    - apt-get install --assume-yes clang libboost-all-dev cmake
     - mkdir build
     - cd build
     - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
     - make
     - make test
 
-pages:
-  script:
-  - apk update && apk add doxygen
-  - apk add build-base gcc
-  - pip install sphinx
-  - pip install sphinx_bootstrap_theme
-  - pip install breathe
-  - cd doc/doxygen
-  - doxygen Doxyfile
-  - cd ../sphinx
-  - make html
-  - mv _build/html ../../public/
-  artifacts:
-    paths:
-    - public
-  only:
-  - master
+# pages:
+#   script:
+#   - apk update && apk add doxygen
+#   - apk add build-base gcc
+#   - pip install sphinx
+#   - pip install sphinx_bootstrap_theme
+#   - pip install breathe
+#   - cd doc/doxygen
+#   - doxygen Doxyfile
+#   - cd ../sphinx
+#   - make html
+#   - mv _build/html ../../public/
+#   artifacts:
+#     paths:
+#     - public
+#   only:
+#   - master
