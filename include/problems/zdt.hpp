@@ -296,7 +296,7 @@ private:
         auto size_x = x_double.size();
         auto n_vectors = ((size_x-30u) / 5u) + 1u;
 
-        int k = 30;
+        unsigned int k = 30;
         std::vector<vector_double::size_type> u(n_vectors, 0u);
         std::vector<vector_double::size_type> v(n_vectors);
 
@@ -306,7 +306,7 @@ private:
         f[0] = x[0];
 
         // Counts how many 1s are there in the first (30 dim)
-        u[0] = std::count(x.begin(), x.begin() + 30, 1.);
+        u[0] = static_cast<vector_double::size_type>(std::count(x.begin(), x.begin() + 30, 1.));
 
         for (decltype(n_vectors) i = 1u; i < n_vectors; ++i) {
             for (int j = 0; j < 5; ++j) {
