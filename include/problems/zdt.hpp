@@ -186,7 +186,9 @@ public:
     {   
         return "ZDT" + std::to_string(m_id);
     }
-    /* Convergence metric for a given decision_vector (0 = on the optimal front)
+    /// Distance from the Pareto front
+    /**
+     * Convergence metric for a given decision_vector (0 = on the optimal front)
      *
      * Introduced by Martens and Izzo, this metric is able
      * to measure "a distance" of any point from the pareto front of any ZDT 

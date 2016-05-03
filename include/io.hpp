@@ -10,6 +10,7 @@
 namespace pagmo
 {
 
+/// Forward declaration
 template <typename ... Args>
 void stream(std::ostream &, const Args & ...);
 
@@ -67,12 +68,14 @@ inline void stream_impl(std::ostream &os, const T &x, const Args & ... args)
 
 } // end of namespace detail
 
+/// The PaGMO streaming function
 template <typename ... Args>
 inline void stream(std::ostream &os, const Args & ... args)
 {
     detail::stream_impl(os,args...);
 }
 
+/// The PaGMO print function
 template <typename ... Args>
 inline void print(const Args & ... args)
 {
