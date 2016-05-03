@@ -137,7 +137,7 @@ struct prob_inner final: prob_inner_base
        return false;
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
-    static sparsity_pattern gradient_sparsity_impl(const U &p)
+    sparsity_pattern gradient_sparsity_impl(const U &p) const
     {
         return p.gradient_sparsity();
     }
@@ -191,7 +191,7 @@ struct prob_inner final: prob_inner_base
        return false;
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
-    static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &value)
+    std::vector<sparsity_pattern> hessians_sparsity_impl(const U &value) const
     {
         return value.hessians_sparsity();
     }
