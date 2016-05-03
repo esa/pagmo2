@@ -1040,7 +1040,7 @@ class problem
             // a symmetric matrix. Example, for a 4x4 dense symmetric
             // [(0,0), (1,0), (1,1), (2,0), (2,1), (2,2), (3,0), (3,1), (3,2), (3,3)]
             for (const auto &pair: hs) {
-                if ((pair.first >= nx) or (pair.second > pair.first)) {
+                if ((pair.first >= nx) || (pair.second > pair.first)) {
                     pagmo_throw(std::invalid_argument,"Invalid pair detected in the hessians sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nDecision vector dimension is: " + std::to_string(nx) + "\nNOTE: hessian is a symmetric matrix and PaGMO represents it as lower triangular: i.e (i,j) is not valid if j>i");
                 }
             }
