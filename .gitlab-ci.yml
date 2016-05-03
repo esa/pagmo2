@@ -1,5 +1,5 @@
 #image: python:3.4-alpine
-image: ubuntu:16.04
+image: alpine:3.3
 
 # pagmo-gcc:
 #   script:
