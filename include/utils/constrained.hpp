@@ -7,6 +7,8 @@
  * This header contains utilities useful for constrained optimization
  */
 
+#include <cmath>
+#include <numeric>
 #include <stdexcept>
 #include <string>
 #include <utility>

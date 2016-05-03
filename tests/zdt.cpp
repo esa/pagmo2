@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(zdt6_fitness_test)
     }
 }
 
-BOOST_AUTO_TEST_CASE(p_distance_test)
+BOOST_AUTO_TEST_CASE(zdt_p_distance_test)
 {
     zdt zdt1{1, 30};
     zdt zdt2{2, 30};
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE(p_distance_test)
     BOOST_CHECK_CLOSE(zdt6.p_distance(x), 5.534476131480399, 1e-13);
 }
 
-BOOST_AUTO_TEST_CASE(get_bounds_test)
+BOOST_AUTO_TEST_CASE(zdt_get_bounds_test)
 {
     zdt zdt1{1, 30};
     zdt zdt2{2, 30};
@@ -181,4 +181,27 @@ BOOST_AUTO_TEST_CASE(get_bounds_test)
     BOOST_CHECK(zdt4.get_bounds() == bounds4);
     BOOST_CHECK(zdt5.get_bounds() == bounds5);
     BOOST_CHECK(zdt6.get_bounds() == bounds6);
+}
+
+BOOST_AUTO_TEST_CASE(zdt_serialization_test)
+{
+    problem p{zdt{4, 4}};
+    // Call objfun to increase the internal counters.
+    p.fitness({1.,1.,1.,1.});
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(p);
+    // Now serialize, deserialize and compare the result.
+    {
+    cereal::JSONOutputArchive oarchive(ss);
+    oarchive(p);
+    }
+    // Change the content of p before deserializing.
+    p = problem{null_problem{}};
+    {
+    cereal::JSONInputArchive iarchive(ss);
+    iarchive(p);
+    }
+    auto after = boost::lexical_cast<std::string>(p);
+    BOOST_CHECK_EQUAL(before, after);
 }

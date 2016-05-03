@@ -62,7 +62,7 @@ class population
          */
         explicit population(const pagmo::problem &p, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed)
         {
-            for (decltype(size) i = 0u; i < pop_size; ++i) {
+            for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
                 push_back(random_decision_vector());
             }
         }
@@ -90,7 +90,7 @@ class population
          * \f$lb_i \le x_i \le ub_i\f$.
          *
          * @throws std::invalid_argument if the problem is unbounded
-         * @throws std::invalid_argument if the problems bounds are too large
+         * @throws std::invalid_argument if the problems bounds are too distant
          * for their difference to be represented
          *
          * @returns a random decision vector
@@ -234,7 +234,7 @@ class population
             std::vector<vector_double::size_type> indexes(size());
             std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
             auto idx = std::min_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {return m_f[idx1] < m_f[idx2];});
-            return std::distance(indexes.begin(), idx);
+            return static_cast<vector_double::size_type>(std::distance(indexes.begin(), idx));
         }
 
         /// Number of individuals in the population
