@@ -383,7 +383,7 @@ private:
         std::transform(x_double.begin(), x_double.end(), x.begin(), [](auto item) {return std::floor(item);});
         double c = 0.;
         double g = 0.;
-        int k = 30;
+        unsigned int k = 30;
         auto N = x.size();
 
         auto n_vectors = (N-30u) / 5u + 1u;

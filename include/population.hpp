@@ -234,7 +234,7 @@ class population
             std::vector<vector_double::size_type> indexes(size());
             std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
             auto idx = std::min_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {return m_f[idx1] < m_f[idx2];});
-            return std::distance(indexes.begin(), idx);
+            return static_cast<vector_double::size_type>(std::distance(indexes.begin(), idx));
         }
 
         /// Number of individuals in the population
