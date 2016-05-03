@@ -986,7 +986,7 @@ class problem
                 // 1 - We check that the gradient sparsity pattern has
                 // valid indexes.
                 for (const auto &pair: gs) {
-                    if ((pair.first >= nf) or (pair.second >= nx)) {
+                    if ((pair.first >= nf) || (pair.second >= nx)) {
                         pagmo_throw(std::invalid_argument,"Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nFitness dimension is: " + std::to_string(nf) + "\nDecision vector dimension is: " + std::to_string(nx));
                     }
                 }
