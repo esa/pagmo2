@@ -9,11 +9,11 @@ message(STATUS "The C++ compiler ID is: ${CMAKE_CXX_COMPILER_ID}")
 # Clang detection:
 # http://stackoverflow.com/questions/10046114/in-cmake-how-can-i-test-if-the-compiler-is-clang
 # http://www.cmake.org/cmake/help/v2.8.10/cmake.html#variable:CMAKE_LANG_COMPILER_ID
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")    
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     set(YACMA_COMPILER_IS_CLANGXX 1)
 endif()
 
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")    
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
     set(YACMA_COMPILER_IS_INTELXX 1)
 endif()
 
@@ -108,10 +108,3 @@ endif()
 
 # Mark as included.
 set(YACMACompilerLinkerSettingsIncluded YES)
-
-# This is an OS X specific setting that is suggested to be enabled. See:
-# https://blog.kitware.com/upcoming-in-cmake-2-8-12-osx-rpath-support/
-# http://stackoverflow.com/questions/31561309/cmake-warnings-under-os-x-macosx-rpath-is-not-specified-for-the-following-targe
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(CMAKE_MACOSX_RPATH 1)
-endif()
