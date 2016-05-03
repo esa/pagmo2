@@ -53,7 +53,7 @@ macro(YACMA_PYTHON_MODULE name)
     set_target_properties("${name}" PROPERTIES PREFIX "")
     if(NOT ${YACMA_PY_MODULE_EXTENSION} STREQUAL "")
         # If needed, set a custom extension for the module.
-        message(STATUS "Setting up custom extension \"${YACMA_PY_MODULE_EXTENSION}\" for the Python module \"${name}.\"")
+        message(STATUS "Setting up custom extension \"${YACMA_PY_MODULE_EXTENSION}\" for the Python module \"${name}\".")
         set_target_properties("${name}" PROPERTIES SUFFIX ".${YACMA_PY_MODULE_EXTENSION}")
     endif()
     # We need extra flags to be set when compiling Python modules, at least
