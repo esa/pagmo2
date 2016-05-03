@@ -101,3 +101,10 @@ endmacro()
 
 # Mark as included.
 set(YACMACompilerLinkerSettingsIncluded YES)
+
+# This is an OS X specific setting that is suggested to be enabled. See:
+# https://blog.kitware.com/upcoming-in-cmake-2-8-12-osx-rpath-support/
+# http://stackoverflow.com/questions/31561309/cmake-warnings-under-os-x-macosx-rpath-is-not-specified-for-the-following-targe
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(CMAKE_MACOSX_RPATH 1)
+endif()
