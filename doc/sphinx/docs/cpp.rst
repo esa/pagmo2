@@ -13,6 +13,7 @@ we suggest to follow the tutorials / examples.
   :maxdepth: 1
 
   problem
+  population
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
