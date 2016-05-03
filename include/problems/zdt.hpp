@@ -25,8 +25,7 @@ namespace pagmo
  * In their paper the authors propose a set of 6 different scalable problems all originating from a
  * well thought combination of functions allowing, by construction, to measure the distance of
  * any point to the Pareto front while creating interesting problems. They also suggest some
- * dimensions for instantiating the problems, namely \f$m = [30, 30, 30, 10, 11, 10]\f$, which are 
- * here used as default values.
+ * dimensions for instantiating the problems, namely \f$m = [30, 30, 30, 10, 11, 10]\f$.
  *
  * @note The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
  * via std::floor
@@ -122,30 +121,29 @@ public:
     /// Fitness
     vector_double fitness(const vector_double &x) const
     {
+        vector_double retval;
         switch(m_id)
         {
         case 1u:
-            return zdt1_fitness(x);
+            retval =  zdt1_fitness(x);
             break;
         case 2u:
-            return zdt2_fitness(x);
+            retval =  zdt2_fitness(x);
             break;
         case 3u:
-            return zdt3_fitness(x);
+            retval =  zdt3_fitness(x);
             break;
         case 4u:
-            return zdt4_fitness(x);
+            retval =  zdt4_fitness(x);
             break;
         case 5u:
-            return zdt5_fitness(x);
+            retval =  zdt5_fitness(x);
             break;
         case 6u:
-            return zdt6_fitness(x);
-            break;
-        default:
-            pagmo_throw(std::invalid_argument, "Error: There are only 6 test functions in the ZDT test suite!");
+            retval =  zdt6_fitness(x);
             break;
         }
+        return retval;
     }
     /// Number of objectives
     vector_double::size_type get_nobj() const
@@ -156,33 +154,32 @@ public:
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
+        std::pair<vector_double, vector_double> retval;
         switch(m_id)
         {
         case 1u:
         case 2u:
         case 3u:
         case 6u:
-        {
-            return {vector_double(m_param, 0.), vector_double(m_param, 1.)};
-        }
+            retval = {vector_double(m_param, 0.), vector_double(m_param, 1.)};
+            break;
         case 4u:
         {
             vector_double lb(m_param,-5.);
-            vector_double ub(m_param,5.);
+            vector_double ub(m_param, 5.);
             lb[0] = 0.0;
             ub[0] = 1.0;
-            return {lb, ub};
+            retval = {lb, ub};
+            break;
         }
         case 5u:
         {
             auto dim = 30u + 5u * (m_param - 1u);
-            return {vector_double(dim, 0.), vector_double(dim, 2.)}; // the bounds [0,2] guarantee that floor(x) will be in [0,1] as the rng generates in [0,2)
+            retval = {vector_double(dim, 0.), vector_double(dim, 2.)}; // the bounds [0,2] guarantee that floor(x) will be in [0,1] as the rng generates in [0,2)
             break;
         }
-        default:
-            pagmo_throw(std::invalid_argument, "Error: There are only 6 test functions in the ZDT test suite!");
-            break;
         }
+        return retval;
     }
     /// Problem name
     std::string get_name() const
@@ -199,33 +196,36 @@ public:
      * and NSGA-II: study of a new migration operator and its performance." 
      * Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013.
      *
-     * @throws std::invalid_argument if the problem id is not 1-6
      *
      */
     double p_distance(const vector_double &x) const
     {
+        double retval;
         switch(m_id)
         {
         case 1u:
         case 2u:
         case 3u:
-            return zdt123_p_distance(x);
+            retval =  zdt123_p_distance(x);
+            break;
         case 4u:
-            return zdt4_p_distance(x);
+            retval = zdt4_p_distance(x);
+            break;
         case 5u:
-            return zdt5_p_distance(x);
+            retval = zdt5_p_distance(x);
+            break;
         case 6u:
-            return zdt6_p_distance(x);
-        default:
-            pagmo_throw(std::invalid_argument, "Error: There are only 6 test functions in this test suite!");
+            retval = zdt6_p_distance(x);
+            break;
         }
+        return retval;
     }
 
 private:
     vector_double zdt1_fitness(const vector_double &x) const
     {
         double g = 0.;
-        vector_double f(2,0.);
+        vector_double f(2, 0.);
         f[0] = x[0];
         auto N = x.size();
 
@@ -234,7 +234,7 @@ private:
         }
         g = 1. + (9. * g) / static_cast<double>(N - 1u);
 
-        f[1] = g * ( 1. - sqrt(x[0]/g));
+        f[1] = g * ( 1. - sqrt(x[0] / g));
         return f;
     }
 
@@ -432,11 +432,11 @@ private:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_id, m_param);
+        ar(const_cast<unsigned int &>(m_id), const_cast<unsigned int &>(m_param));
     }
     /// Problem dimensions
-    unsigned int m_id;
-    unsigned int m_param;
+    const unsigned int m_id;
+    const unsigned int m_param;
 
 };
 
