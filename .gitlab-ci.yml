@@ -16,7 +16,7 @@ pagmo-clang:
     - apk add cmake && apk add boost-dev
     - mkdir build
     - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
+    - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
     - make
     - make test
 
