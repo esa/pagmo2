@@ -1,5 +1,4 @@
-Compile main.cpp with:
+PaGMO
+=====
 
-```
-clang++ -std=c++14 -Wall -Wextra -pedantic main.cpp -I include/external/cereal/include
-```
+[![build status](https://gitlab.com/EuropeanSpaceAgency/PaGMOreborn/badges/master/build.svg)](https://gitlab.com/EuropeanSpaceAgency/PaGMOreborn/commits/master)
