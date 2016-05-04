@@ -1,4 +1,4 @@
-image: pagmo/pagmo:basic
+image: pagmo/pagmo
 
 pagmo-gcc:
   script:
