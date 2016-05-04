@@ -13,7 +13,7 @@ image: alpine:3.3
 
 pagmo-clang:
   script:
-    - apk update && apk add clang
+    - apk update && apk add build-base clang
     - apk add cmake && apk add boost-dev
     - mkdir build
     - cd build
