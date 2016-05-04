@@ -15,6 +15,7 @@
 #include "rng.hpp"
 #include "serialization.hpp"
 #include "types.hpp"
+#include "utils/generic.hpp"
 #include "utils/constrained.hpp"
 
 namespace pagmo
@@ -63,7 +64,7 @@ class population
         explicit population(const pagmo::problem &p, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed)
         {
             for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
-                push_back(random_decision_vector());
+                push_back(decision_vector());
             }
         }
 
@@ -84,50 +85,16 @@ class population
 
         /// Creates a random decision vector 
         /**
-         * Creates a random decision vector within the problem's bounds. If
-         * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
-         * component of the randomly generated decision_vector will be such that
-         * \f$lb_i \le x_i \le ub_i\f$.
-         *
-         * @throws std::invalid_argument if the problem is unbounded
-         * @throws std::invalid_argument if the problems bounds are too distant
-         * for their difference to be represented
+         * Creates a random decision vector within the problem's bounds.
+         * It calls internally pagmo::decision_vector
          *
          * @returns a random decision vector
+         *
+         * @throws unspecified all excpetions thrown by pagmo::decision_vector
          */
-        vector_double random_decision_vector() const
+        vector_double decision_vector() const
         {
-            const auto dim = m_prob.get_nx();
-            const auto bounds = m_prob.get_bounds();
-            // This will check for consistent vector lengths, lb <= ub and no NaNs.
-            detail::check_problem_bounds(bounds);
-            if (bounds.first.size() != dim) {
-                pagmo_throw(std::invalid_argument,"Problem bounds are inconsistent with problem dimension");
-            }
-            vector_double retval(dim);
-            for (decltype(m_prob.get_nx()) i = 0u; i < dim; ++i) {
-                // NOTE: see here for the requirements for floating-point RNGS:
-                // http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution/uniform_real_distribution
-
-                // 1 - Forbid random generation when bounds are infinite.
-                if (std::isinf(bounds.first[i]) || std::isinf(bounds.second[i])) {
-                    pagmo_throw(std::invalid_argument,"Cannot generate a random individual if the problem is"
-                     " unbounded (inf bounds detected)");
-                }
-                // 2 - Bounds cannot be too large.
-                const auto delta = bounds.second[i] - bounds.first[i];
-                if (!std::isfinite(delta) || delta > std::numeric_limits<double>::max()) {
-                    pagmo_throw(std::invalid_argument,"Cannot generate a random individual if the problem bounds "
-                        "are too large");
-                }
-                // 3 - If the bounds are equal we don't call the RNG, as that would be undefined behaviour.
-                if (bounds.first[i] == bounds.second[i]) {
-                    retval[i] = bounds.first[i];
-                } else {
-                    retval[i] = std::uniform_real_distribution<double>(bounds.first[i], bounds.second[i])(m_e);
-                }
-            }
-            return retval;
+            return pagmo::decision_vector(m_prob.get_bounds(), std::uniform_int_distribution<unsigned int>()(m_e));
         }
 
         /// Sets the \f$i\f$-th individual's chromosome

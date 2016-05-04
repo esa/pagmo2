@@ -45,4 +45,5 @@ Various coding utilities.
 .. toctree::
   :maxdepth: 1
 
+  miscellanea/generic
   miscellanea/type_traits

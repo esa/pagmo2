@@ -41,21 +41,25 @@ BOOST_AUTO_TEST_CASE(population_push_back_test)
     // We fill it with a few individuals and check the size growth
     for (unsigned int i = 0u; i < 5u; ++i) {
         BOOST_CHECK(pop.size() == i);
+        BOOST_CHECK(pop.get_f().size() == i);
+        BOOST_CHECK(pop.get_x().size() == i);
+        BOOST_CHECK(pop.get_ID().size() == i);
         pop.push_back(vector_double(30, 0.5));
     }
     // We check the fitness counter
     BOOST_CHECK(pop.get_problem().get_fevals() == 5u);
 }
 
-BOOST_AUTO_TEST_CASE(population_random_decision_vector_test)
+BOOST_AUTO_TEST_CASE(population_decision_vector_test)
 {
     // Create an empty population
-    population pop{problem{zdt{1}}};
-    // We fill it with a few individuals and check the size growth
-    for (unsigned int i = 0u; i < 5u; ++i) {
-        BOOST_CHECK(pop.size() == i);
-        pop.push_back(vector_double(30, 0.5));
+    population pop{problem{null_problem{}}};
+    auto bounds = pop.get_problem().get_bounds();
+    // Generate a random decision_vector
+    auto x = pop.decision_vector();
+    // Check that the decisio_vector is indeed within bounds
+    for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
+        BOOST_CHECK(x[i] < bounds.second[i]);
+        BOOST_CHECK(x[i] >= bounds.first[i]);
     }
-    // We check the fitness counter
-    BOOST_CHECK(pop.get_problem().get_fevals() == 5u);
 }
