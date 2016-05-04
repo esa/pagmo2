@@ -8,8 +8,10 @@
 
 #include "../include/population.hpp"
 #include "../include/problem.hpp"
-#include "../include/problems/zdt.hpp"
+#include "../include/problems/hock_schittkowsky_71.hpp"
 #include "../include/problems/null_problem.hpp"
+#include "../include/problems/rosenbrock.hpp"
+#include "../include/problems/zdt.hpp"
 #include "../include/types.hpp"
 
 using namespace pagmo;
@@ -57,9 +59,36 @@ BOOST_AUTO_TEST_CASE(population_decision_vector_test)
     auto bounds = pop.get_problem().get_bounds();
     // Generate a random decision_vector
     auto x = pop.decision_vector();
-    // Check that the decisio_vector is indeed within bounds
+    // Check that the decision_vector is indeed within bounds
     for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
         BOOST_CHECK(x[i] < bounds.second[i]);
         BOOST_CHECK(x[i] >= bounds.first[i]);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(population_champion_test)
+{
+    // Test throw
+    {
+        population pop{problem{zdt{}}, 2};
+        BOOST_CHECK_THROW(pop.champion(), std::invalid_argument);
+    }
+    // Test on single objective
+    {
+        population pop{problem{rosenbrock{2}}};
+        pop.push_back({0.5,0.5});
+        pop.push_back({0.3,0.1});
+        pop.push_back(pop.get_problem().extract<rosenbrock>()->best_known());
+        pop.push_back({-0.5,0.5});
+        BOOST_CHECK(pop.champion() == 2u);
+    }
+    // Test on constrained
+    {
+        population pop{problem{hock_schittkowsky_71{}}};
+        pop.push_back({1.5,1.5,1.5,1.5});
+        pop.push_back({1.3,1.1,2.3,3.4});
+        pop.push_back(pop.get_problem().extract<hock_schittkowsky_71>()->best_known());
+        pop.push_back({2.5,1.5,3.4,3.3});
+        BOOST_CHECK(pop.champion(1e-5) == 2u); // tolerance matters here!!
     }
 }

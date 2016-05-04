@@ -1,6 +1,7 @@
 #ifndef PAGMO_POPULATION_H
 #define PAGMO_POPULATION_H
 
+#include <cassert>
 #include <cmath>
 #include <iostream>
 #include <iterator>
@@ -97,23 +98,47 @@ class population
             return pagmo::decision_vector(m_prob.get_bounds(), std::uniform_int_distribution<unsigned int>()(m_e));
         }
 
-        /// Sets the \f$i\f$-th individual's chromosome
+        /// Population champion
         /**
+         * The best individual of a population is defined as its *champion*.
+         * If the problem is single-objective and unconstrained ,the champion
+         * is simply the individual with the smallest fitness. If the problem 
+         * is, instead, single objective, but with constraints, the best individual
+         * will be defined using the criteria specified in pagmo::sort_population_con.
+         * If the problem is multi-objective one single champion is not defined. In
+         * this case the user can still obtain a strict ordering of the population
+         * individuals by calling the pagmo::sort_population_mo function
          *
-         * Sets the chromosome of the \f$i\f$-th individual to the 
-         * value \p x and changes its fitness accordingly. The
-         * individual's ID remains the same
-         *
-         * @note a call to this method triggers one fitness function evaluation
-         *
-         * @param[in] i individual's index in the population
-         * @param[in] x decision vector
-         *
-         * @throws unspecified any exception thrown by set_xf
+         * @throws std::invalid_argument if the problem is multiobjective and thus
+         * the notion of champion is not valid
          */
-        void set_x(size_type i, const vector_double &x)
+        vector_double::size_type champion(const vector_double &tol) const
         {
-            set_xf(i, x, m_prob.fitness(x));
+            if (m_prob.get_nobj() > 1) {
+                pagmo_throw(std::invalid_argument, "Champion can only be extracted in single objective problems");
+            } 
+            if (m_prob.get_nc() > 0) { // TODO: should we also code a min_element_population_con?
+                return sort_population_con(m_f, m_prob.get_nec(), tol)[0];
+            }
+            // Sort for single objective, unconstrained optimization
+            std::vector<vector_double::size_type> indexes(size());
+            std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
+            auto idx = std::min_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {return m_f[idx1] < m_f[idx2];});
+            return static_cast<vector_double::size_type>(std::distance(indexes.begin(), idx));
+        }
+
+        vector_double::size_type champion(double tol = 0.) const
+        {
+            vector_double tol_vector(m_prob.get_nf() - 1u, tol);
+            return champion(tol_vector);
+        }
+
+        /// Number of individuals in the population
+        size_type size() const
+        {
+            assert(m_f.size() == m_ID.size());
+            assert(m_x.size() == m_ID.size());
+            return m_ID.size();
         }
 
         /// Sets the \f$i\f$-th individual decision vector, and fitness
@@ -148,6 +173,25 @@ class population
             m_f[i] = f;
         }
 
+        /// Sets the \f$i\f$-th individual's chromosome
+        /**
+         *
+         * Sets the chromosome of the \f$i\f$-th individual to the 
+         * value \p x and changes its fitness accordingly. The
+         * individual's ID remains the same
+         *
+         * @note a call to this method triggers one fitness function evaluation
+         *
+         * @param[in] i individual's index in the population
+         * @param[in] x decision vector
+         *
+         * @throws unspecified any exception thrown by set_xf
+         */
+        void set_x(size_type i, const vector_double &x)
+        {
+            set_xf(i, x, m_prob.fitness(x));
+        }
+
         /// Getter for the pagmo::problem
         const problem &get_problem() const 
         {
@@ -176,38 +220,6 @@ class population
         unsigned int get_seed() const
         {
             return m_seed;
-        }
-
-        /// Population champion
-        /**
-         * The best individual of a population is defined as its *champion*.
-         * If the problem is single-objective and unconstrained ,the champion
-         * is simply the individual with the smallest fitness. If the problem 
-         * is, instead, single objective, but with constraints, the best individual
-         * will be defined using the criteria specified in pagmo::sort_population_con.
-         * If the problem is multi-objective one single champion is not defined. In
-         * this case the user can still obtain a strict ordering of the population
-         * individuals by calling the pagmo::sort_population_mo function
-         */
-        vector_double::size_type champion() const
-        {
-            if (m_prob.get_nobj() > 1) {
-                pagmo_throw(std::invalid_argument, "Champion can only be extracted in single objective problems");
-            } 
-            if (m_prob.get_nc() > 0) { // should we also code a min_element_population_con?
-                return sort_population_con(m_f, m_prob.get_nec())[0];
-            }
-            // Sort for single objective, unconstrained optimization
-            std::vector<vector_double::size_type> indexes(size());
-            std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
-            auto idx = std::min_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {return m_f[idx1] < m_f[idx2];});
-            return static_cast<vector_double::size_type>(std::distance(indexes.begin(), idx));
-        }
-
-        /// Number of individuals in the population
-        size_type size() const
-        {
-            return m_ID.size();
         }
 
         /// Streaming operator for the class pagmo::problem

@@ -87,45 +87,46 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first
  */
 std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, const vector_double &tol)
 {
+    auto N = input_f.size();
+    auto M = input_f[0].size();    
     /// Corner cases
-    if (input_f.size() < 2u) { // corner cases
-        if (input_f.size() == 0u) { 
+    if (N < 2u) { // corner cases
+        if (N == 0u) { 
             return {};
         }
-        if (input_f.size() == 1u) { 
+        if (N == 1u) { 
             return {0u};
         }
     }
-
     // Santity Checks
     // 1 - All fitness vectors must have the same size
-    auto N = input_f[0].size();
+
     for (decltype(N) i = 1u; i < N; ++i) {
-        if (input_f[i].size() != N) {
+        if (input_f[i].size() != M) {
             pagmo_throw(std::invalid_argument, "The fitness vector at position: " 
                 + std::to_string(i) + " has dimension "
                 + std::to_string(input_f[i].size()) + " while I was expecting: "
-                + std::to_string(N) + "(first element dimension)"
+                + std::to_string(M) + "(first element dimension)"
             );
         }
     }
-    // 2 - The number of equality constraints must be at most input_f.size()-1
-    if (neq > input_f.size()-1u) {
+    // 2 - The number of equality constraints must be at most input_f[0].size()-1
+    if (neq > M - 1u) {
         pagmo_throw(std::invalid_argument, "Number of equality constraints declared: " 
                 + std::to_string(neq) + " while fitness vector has dimension: "
-                + std::to_string(N) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"
+                + std::to_string(M) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"
         );
     }
-    // 3 - The tolerance vector size must be input_f.size()-1u
-    if (tol.size() != input_f.size()-1u) {
+    // 3 - The tolerance vector size must be input_f.size[0]()-1u
+    if (tol.size() != M-1u) {
         pagmo_throw(std::invalid_argument, "Tolerance vector dimension: " 
                 + std::to_string(tol.size()) + " while it must be: "
-                + std::to_string(N-1u)
+                + std::to_string(M-1u)
         );
     }    
 
     // Create the indexes 0....N-1
-    std::vector<vector_double::size_type> retval(input_f.size());
+    std::vector<vector_double::size_type> retval(N);
     std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
     // Sort the indexes
     std::sort(retval.begin(), retval.end(), [&input_f, &neq, &tol] (auto idx1, auto idx2) 
@@ -139,7 +140,6 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
         auto c2ineq = detail::test_ineq_constraints(input_f[idx2].data()+1+neq, input_f[idx2].data()+input_f[idx2].size(), tol.data() + neq);
         auto n2 = c2eq.first + c2ineq.first;
         auto l2 = std::sqrt(c2eq.second*c2eq.second + c2ineq.second*c2ineq.second);
-
         if (n1 == n2) { // same number of constraints satistfied
             if (n1 == input_f[0].size() - 1u) { // fitness decides
                 return input_f[idx1][0] < input_f[idx2][0];
@@ -156,7 +156,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
 /// Sorts a population in a constrained optimization case (from one tolerance valid for all)
 std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, double tol = 0.)
 {
-    vector_double tol_vector(input_f.size() - 1u, tol);
+    vector_double tol_vector(input_f[0].size() - 1u, tol);
     return sort_population_con(input_f, neq, tol_vector);
 }
 
