@@ -1,4 +1,4 @@
-image: python:3.4-alpine
+image: pagmo:pagmo
 
 pagmo-gcc:
   script:
