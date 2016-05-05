@@ -57,7 +57,7 @@ class population
          * @param[in] seed seed of the random number generator used, for example, to
          * create new random individuals within the bounds
          *
-         * @throws unspecified any excpetion thrown by random_decision_vector()
+         * @throws unspecified any excpetion thrown by decision_vector()
          *
          */
         explicit population(const pagmo::problem &p, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed)
@@ -84,11 +84,11 @@ class population
         /// Creates a random decision vector
         /**
          * Creates a random decision vector within the problem's bounds.
-         * It calls internally pagmo::decision_vector
+         * It calls internally pagmo::decision_vector()
          *
          * @returns a random decision vector
          *
-         * @throws unspecified all excpetions thrown by pagmo::decision_vector
+         * @throws unspecified all excpetions thrown by pagmo::decision_vector()
          */
         vector_double decision_vector() const
         {
@@ -98,23 +98,23 @@ class population
         /// Population champion
         /**
          * The best individual of a population is defined as its *champion*.
-         * If the problem is single-objective and unconstrained ,the champion
+         * If the problem is single-objective and unconstrained, the champion
          * is simply the individual with the smallest fitness. If the problem
          * is, instead, single objective, but with constraints, the best individual
-         * will be defined using the criteria specified in pagmo::sort_population_con.
+         * will be defined using the criteria specified in pagmo::sort_population_con().
          * If the problem is multi-objective one single champion is not defined. In
          * this case the user can still obtain a strict ordering of the population
-         * individuals by calling the pagmo::sort_population_mo function
+         * individuals by calling the pagmo::sort_population_mo() function.
          *
          * @throws std::invalid_argument if the problem is multiobjective and thus
          * the notion of champion is not valid
          */
         vector_double::size_type champion(const vector_double &tol) const
         {
-            if (m_prob.get_nobj() > 1) {
+            if (m_prob.get_nobj() > 1u) {
                 pagmo_throw(std::invalid_argument, "Champion can only be extracted in single objective problems");
             }
-            if (m_prob.get_nc() > 0) { // TODO: should we also code a min_element_population_con?
+            if (m_prob.get_nc() > 0u) { // TODO: should we also code a min_element_population_con?
                 return sort_population_con(m_f, m_prob.get_nec(), tol)[0];
             }
             // Sort for single objective, unconstrained optimization
@@ -141,7 +141,7 @@ class population
         /// Sets the \f$i\f$-th individual decision vector, and fitness
         /**
          * Sets simultaneously the \f$i\f$-th individual decision vector
-         * and fitness thus avoiding to trigger a fitness function evaluation
+         * and fitness thus avoiding to trigger a fitness function evaluation.
          *
          * @note: The user must make sure that the input fitness \p f makes sense
          * as pagmo will only check its dimension.
@@ -151,8 +151,8 @@ class population
          * @param[in] f a fitness vector
          *
          * @throws std::invalid_argument if \p i is invalid (i.e. larger or equal to the population size)
-         * @throws std::invalid_argument if \x has not the correct dimension
-         * @throws std::invalid_argument if \f has not the correct dimension
+         * @throws std::invalid_argument if \p x has not the correct dimension
+         * @throws std::invalid_argument if \p f has not the correct dimension
          *
          */
         void set_xf(size_type i, const vector_double &x, const vector_double &f)
@@ -186,7 +186,7 @@ class population
          *
          * Sets the chromosome of the \f$i\f$-th individual to the
          * value \p x and changes its fitness accordingly. The
-         * individual's ID remains the same
+         * individual's ID remains the same.
          *
          * @note a call to this method triggers one fitness function evaluation
          *
