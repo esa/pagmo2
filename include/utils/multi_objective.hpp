@@ -24,19 +24,19 @@ namespace pagmo{
 
 /// Pareto-dominance
 /**
- * Return true if obj1 Pareto dominates obj2, false otherwise. Minimization
+ * Return true if \p obj1 Pareto dominates \p obj2, false otherwise. Minimization
  * is assumed.
  *
- * Each pair of corresponding elements in obj1 and obj2 is compared: if all
- * elements in obj1 are less or equal to the corresponding element in obj2,
- * but at least one is different, true will be returned. Otherwise, false will be returned.
+ * Each pair of corresponding elements in \p obj1 and \p obj2 is compared: if all
+ * elements in \p obj1 are less or equal to the corresponding element in \p obj2,
+ * but at least one is different, \p true will be returned. Otherwise, \p false will be returned.
  *
  * @param[in] obj1 first vector of objectives.
  * @param[in] obj2 second vector of objectives.
  *
  * @return true if obj1 is dominating obj2, false otherwise.
  *
- * @throws std::invalid_argument if the dimensions of the two objectives is different
+ * @throws std::invalid_argument if the dimensions of the two objectives are different
  */
 bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
 {
@@ -83,7 +83,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
  * @throws std::invalid_argument If the size of \p input_objs is not at least 2
  * @throws unspecified all exceptions thrown by pagmo::pareto_dominance
  */
-std::vector<vector_double::size_type> pareto_front(const std::vector<vector_double> &input_objs) 
+std::vector<vector_double::size_type> pareto_front(const std::vector<vector_double> &input_objs)
 {
     if (input_objs.size() == 0u) {
         return {};
@@ -96,7 +96,7 @@ std::vector<vector_double::size_type> pareto_front(const std::vector<vector_doub
     std::vector<vector_double::size_type> front;
     std::vector<vector_double::size_type> indexes(input_objs.size());
     std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
-    if (input_objs[0].size() == 0u) {  
+    if (input_objs[0].size() == 0u) {
         return indexes;
     }
 
@@ -108,7 +108,7 @@ std::vector<vector_double::size_type> pareto_front(const std::vector<vector_doub
             if (pareto_dominance(input_objs[j], input_objs[i])) {
                 flag = true;
                 break;
-            } 
+            }
         }
         if (!flag) {
             front.push_back(i);
@@ -278,10 +278,10 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
 std::vector<vector_double::size_type> sort_population_mo(const std::vector<vector_double> &input_f)
 {
     if (input_f.size() < 2u) { // corner cases
-        if (input_f.size() == 0u) { 
+        if (input_f.size() == 0u) {
             return {};
         }
-        if (input_f.size() == 1u) { 
+        if (input_f.size() == 1u) {
             return {0u};
         }
     }
