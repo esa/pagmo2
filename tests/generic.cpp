@@ -29,4 +29,3 @@ BOOST_AUTO_TEST_CASE(decision_vector_test)
     BOOST_CHECK(decision_vector({0,0},{1,1})[0] >= 0);
     BOOST_CHECK(decision_vector({0,0},{1,1})[1] < 1);
 }
-
