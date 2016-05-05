@@ -2,10 +2,11 @@ image: pagmo/ci-alpine:v1
 
 pagmo-gcc:
   script:
+    - apk add bash
     - mkdir build
     - cd build
     - cmake -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
-    - make
+    - make -j4
     - make test
     - wget https://codecov.io/bash
     - bash bash -t a626fc78-6b1f-4668-aa4e-9d986524f0ff
