@@ -38,7 +38,7 @@ namespace pagmo
 class population
 {
     public:
-        /// A shortcut to std::vector<vector_double>::size_type
+        /// A shortcut to <tt>std::vector<vector_double>::size_type</tt>.
         using size_type = std::vector<vector_double>::size_type;
         /// Default constructor
         /**
@@ -228,7 +228,7 @@ class population
             return m_seed;
         }
 
-        /// Streaming operator for the class pagmo::problem
+        /// Streaming operator for the class pagmo::population
         friend std::ostream &operator<<(std::ostream &os, const population &p)
         {
             stream(os, p.m_prob, '\n');
