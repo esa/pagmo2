@@ -153,6 +153,10 @@ class population
          * @param[in] x a decision vector (chromosome)
          * @param[in] f a fitness vector
          *
+         * @throws std::invalid_argument if \p i is invalid (i.e. larger or equal to the population size)
+         * @throws std::invalid_argument if \x has not the correct dimension
+         * @throws std::invalid_argument if \f has not the correct dimension
+         *
          */
         void set_xf(size_type i, const vector_double &x, const vector_double &f)
         {
@@ -167,6 +171,13 @@ class population
                     + std::to_string(f.size()) 
                     + ", while problem get_nf returns: " 
                     + std::to_string(m_prob.get_nf())
+                );
+            }
+            if (x.size() != m_prob.get_nx()) {
+                pagmo_throw(std::invalid_argument,"Trying to set a decision vector of dimension: "  
+                    + std::to_string(x.size()) 
+                    + ", while problem get_nx returns: " 
+                    + std::to_string(m_prob.get_nx())
                 );
             }
             m_x[i] = x;
