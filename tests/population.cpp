@@ -92,3 +92,56 @@ BOOST_AUTO_TEST_CASE(population_champion_test)
         BOOST_CHECK(pop.champion(1e-5) == 2u); // tolerance matters here!!
     }
 }
+
+BOOST_AUTO_TEST_CASE(population_setters_test)
+{
+    population pop{problem{null_problem{}}, 2};
+    // Test throw
+    BOOST_CHECK_THROW(pop.set_xf(2, {3}, {1,2,3}), std::invalid_argument);// index invalid
+    BOOST_CHECK_THROW(pop.set_xf(2, {3}, {1,2,3}), std::invalid_argument);// chromosome invalid
+    BOOST_CHECK_THROW(pop.set_xf(2, {3}, {1,2}), std::invalid_argument);  // fitness invalid
+    // Test set_xf
+    pop.set_xf(0,{3},{1,2,3});
+    BOOST_CHECK((pop.get_x()[0] == vector_double{3}));
+    BOOST_CHECK((pop.get_f()[0] == vector_double{1,2,3}));
+    // Test set_x
+    pop.set_x(0,{1.2});
+    BOOST_CHECK((pop.get_x()[0] == vector_double{1.2}));
+    BOOST_CHECK(pop.get_f()[0] == pop.get_problem().fitness({1.2})); // works as counters are marked mutable
+}
+
+BOOST_AUTO_TEST_CASE(population_getters_test)
+{
+    population pop{problem{null_problem{}}, 1, 1234u};
+    pop.set_xf(0,{3},{1,2,3});
+    // Test 
+    BOOST_CHECK(pop.get_problem().get_name() == "Null problem");
+    BOOST_CHECK((pop.get_f()[0] == vector_double{1,2,3}));
+    BOOST_CHECK(pop.get_seed() == 1234u);
+    BOOST_CHECK_NO_THROW(pop.get_ID());
+    // Streaming operator is tested to contain the problem stream
+    auto pop_string = boost::lexical_cast<std::string>(pop);
+    auto prob_string = boost::lexical_cast<std::string>(pop.get_problem());
+    BOOST_CHECK(pop_string.find(prob_string) != std::string::npos);
+}
+
+BOOST_AUTO_TEST_CASE(population_serialization_test)
+{
+    population pop{problem{null_problem{}}, 30, 1234u};
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(pop);
+    // Now serialize, deserialize and compare the result.
+    {
+    cereal::JSONOutputArchive oarchive(ss);
+    oarchive(pop);
+    }
+    // Change the content of p before deserializing.
+    pop = population{problem{zdt{5, 20u}}, 30};
+    {
+    cereal::JSONInputArchive iarchive(ss);
+    iarchive(pop);
+    }
+    auto after = boost::lexical_cast<std::string>(pop);
+    BOOST_CHECK_EQUAL(before, after);
+}
