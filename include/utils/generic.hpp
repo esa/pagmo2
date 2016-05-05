@@ -20,7 +20,7 @@
 
 namespace pagmo{
 
-/// Generates a random decision vector 
+/// Generates a random decision vector
 /**
  * Creates a random decision vector within some bounds. If
  * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
@@ -31,18 +31,17 @@ namespace pagmo{
  * Example:
  *
  * @code
- * auto x = decision_vector({{1,3},{3,5}});       \\ a random vector
- * auto x = decision_vector({{1,3},{3,5}}, 1234); \\ a random vector with seed 1234
- * auto x = decision_vector({{1,3},{1,3}});       \\ the vector {1,3}
+ * auto x = decision_vector({{1,3},{3,5}});       // a random vector
+ * auto x = decision_vector({{1,3},{3,5}}, 1234); // a random vector with seed 1234
+ * auto x = decision_vector({{1,3},{1,3}});       // the vector {1,3}
  * @endcode
  *
  * @param[in] bounds an <tt>std::pair</tt> containing the bounds
  * @param[in] seed seed to the internal random engine used
  *
- * @throws std::invalid argument if the bounds are not of equal length,
- * contain NaNs or infs or, are not \f$ \mathbf{ub} \le \mathbf {lb}\f$
- * @throws std::invalid argument if \f$ub_i-lb_i\f$ is
- * larger than std::numeric_limits<double>::max()
+ * @throws std::invalid_argument if:
+ * - the bounds are not of equal length, they contain NaNs or infs, or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
+ * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
  *
  * @returns a vector_double containing a random decision vector
  */
@@ -90,19 +89,18 @@ vector_double decision_vector(const std::pair<vector_double, vector_double> &bou
  * Example:
  *
  * @code
- * auto x = decision_vector({1,3},{3,5});       \\ a random vector
- * auto x = decision_vector({1,3},{3,5}, 1234); \\ a random vector with seed 1234
- * auto x = decision_vector({1,3},{1,3});       \\ the vector {1,3}
+ * auto x = decision_vector({1,3},{3,5});       // a random vector
+ * auto x = decision_vector({1,3},{3,5}, 1234); // a random vector with seed 1234
+ * auto x = decision_vector({1,3},{1,3});       // the vector {1,3}
  * @endcode
  *
  * @param[in] lb a vector_double containing the lower bounds
  * @param[in] ub a vector_double containing the upper bounds
  * @param[in] seed seed to the internal random engine used
  *
- * @throws std::invalid argument if the bounds are not of equal length,
- * contain NaNs or infs or, are not \f$ \mathbf{ub} \le \mathbf {lb}\f$
- * @throws std::invalid argument if \f$ub_i-lb_i\f$ is
- * larger than std::numeric_limits<double>::max()
+ * @throws std::invalid_argument if:
+ * - the bounds are not of equal length, they contain NaNs or infs, or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
+ * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
  *
  * @returns a vector_double containing a random decision vector
  */
@@ -112,4 +110,5 @@ vector_double decision_vector(const vector_double &lb, const vector_double &ub, 
 }
 
 } // namespace pagmo
+
 #endif
