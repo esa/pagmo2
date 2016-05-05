@@ -27,21 +27,19 @@ namespace pagmo
  *
  * This class represents a population of individuals, i.e. potential
  * candidate solutions to a given problem. In PaGMO an
- * individual is determined 
+ * individual is determined
  * - by a unique ID used to track him across generations and migrations
  * - by a chromosome (a decision vector)
  * - by the fitness of the chromosome as evaluated by a pagmo::problem.
  * and thus including objectives, equality constraints and inequality
  * constraints if present.
- * 
+ *
  */
 class population
 {
-    private:
-    // A shortcut to std::vector<vector_double>::size_type
-    using size_type = std::vector<vector_double>::size_type;
-
     public:
+        /// A shortcut to std::vector<vector_double>::size_type
+        using size_type = std::vector<vector_double>::size_type;
         /// Default constructor
         /**
          * Constructs an empty population with a pagmo::null_problem
@@ -70,12 +68,11 @@ class population
         }
 
         /// Adds one decision vector (chromosome) to the population
-        /** 
+        /**
          * Appends a new chromosome \p x to the population, evaluating
          * its fitness and creating a new unique identifier for the newly
          * born individual
          */
-
         void push_back(const vector_double &x)
         {
             auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
@@ -84,7 +81,7 @@ class population
             m_f.push_back(m_prob.fitness(x));
         }
 
-        /// Creates a random decision vector 
+        /// Creates a random decision vector
         /**
          * Creates a random decision vector within the problem's bounds.
          * It calls internally pagmo::decision_vector
@@ -102,7 +99,7 @@ class population
         /**
          * The best individual of a population is defined as its *champion*.
          * If the problem is single-objective and unconstrained ,the champion
-         * is simply the individual with the smallest fitness. If the problem 
+         * is simply the individual with the smallest fitness. If the problem
          * is, instead, single objective, but with constraints, the best individual
          * will be defined using the criteria specified in pagmo::sort_population_con.
          * If the problem is multi-objective one single champion is not defined. In
@@ -116,7 +113,7 @@ class population
         {
             if (m_prob.get_nobj() > 1) {
                 pagmo_throw(std::invalid_argument, "Champion can only be extracted in single objective problems");
-            } 
+            }
             if (m_prob.get_nc() > 0) { // TODO: should we also code a min_element_population_con?
                 return sort_population_con(m_f, m_prob.get_nec(), tol)[0];
             }
@@ -145,7 +142,7 @@ class population
         /**
          * Sets simultaneously the \f$i\f$-th individual decision vector
          * and fitness thus avoiding to trigger a fitness function evaluation
-         * 
+         *
          * @note: The user must make sure that the input fitness \p f makes sense
          * as pagmo will only check its dimension.
          *
@@ -161,22 +158,22 @@ class population
         void set_xf(size_type i, const vector_double &x, const vector_double &f)
         {
             if (i >= size()) {
-                pagmo_throw(std::invalid_argument,"Trying to access individual at position: " 
-                    + std::to_string(i) 
-                    + ", while population has size: " 
+                pagmo_throw(std::invalid_argument,"Trying to access individual at position: "
+                    + std::to_string(i)
+                    + ", while population has size: "
                     + std::to_string(size()));
             }
             if (f.size() != m_prob.get_nf()) {
-                pagmo_throw(std::invalid_argument,"Trying to set a fitness of dimension: "  
-                    + std::to_string(f.size()) 
-                    + ", while problem get_nf returns: " 
+                pagmo_throw(std::invalid_argument,"Trying to set a fitness of dimension: "
+                    + std::to_string(f.size())
+                    + ", while problem get_nf returns: "
                     + std::to_string(m_prob.get_nf())
                 );
             }
             if (x.size() != m_prob.get_nx()) {
-                pagmo_throw(std::invalid_argument,"Trying to set a decision vector of dimension: "  
-                    + std::to_string(x.size()) 
-                    + ", while problem get_nx returns: " 
+                pagmo_throw(std::invalid_argument,"Trying to set a decision vector of dimension: "
+                    + std::to_string(x.size())
+                    + ", while problem get_nx returns: "
                     + std::to_string(m_prob.get_nx())
                 );
             }
@@ -187,7 +184,7 @@ class population
         /// Sets the \f$i\f$-th individual's chromosome
         /**
          *
-         * Sets the chromosome of the \f$i\f$-th individual to the 
+         * Sets the chromosome of the \f$i\f$-th individual to the
          * value \p x and changes its fitness accordingly. The
          * individual's ID remains the same
          *
@@ -204,7 +201,7 @@ class population
         }
 
         /// Getter for the pagmo::problem
-        const problem &get_problem() const 
+        const problem &get_problem() const
         {
             return m_prob;
         }
@@ -249,7 +246,7 @@ class population
         }
 
     private:
-        friend class cereal::access; 
+        friend class cereal::access;
         // Serialization.
         template <typename Archive>
         void serialize(Archive &ar)
