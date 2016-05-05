@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 
+#include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../problem.hpp"
 #include "../types.hpp"
@@ -16,7 +17,6 @@ namespace pagmo
 
 /// The Rosenbrock problem.
 /**
- *
  * \image html rosenbrock.png "Two-dimensional Rosenbrock function." width=3cm
  *
  * This is a box-constrained continuous single-objecive problem.
@@ -26,15 +26,13 @@ namespace pagmo
  *  \sum_{i=1}^{n-1}\left[ 100\left(x_i^2-x_{i+1}\right)^2+\left(x_i-1\right)^2\right], \quad x_i \in \left[ -5,10 \right].
  * \f]
  * The global minimum is in \f$x_i=1\f$, where \f$ F\left( 1,\ldots,1 \right) = 0 \f$.
- *
- * @author Dario Izzo (dario.izzo@esa.int)
  */
 struct rosenbrock
 {
     /// Constructor from dimension
-    rosenbrock(unsigned int dim = 2u) : m_dim(dim) 
+    rosenbrock(unsigned int dim = 2u) : m_dim(dim)
     {
-        if (dim < 2) {
+        if (dim < 2u) {
             pagmo_throw(std::invalid_argument, "Rosenbrock Function must have minimum 2 dimensions, " + std::to_string(dim) + " requested");
         }
     };
@@ -62,10 +60,10 @@ struct rosenbrock
     }
     /// Problem name
     std::string get_name() const
-    {   
+    {
         return "Multidimensional Rosenbrock Function";
     }
-    /// Optimal solution 
+    /// Optimal solution
     vector_double best_known() const
     {
         return vector_double(m_dim,1.);

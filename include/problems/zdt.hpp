@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "../detail/constants.hpp"
+#include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../problem.hpp"
 #include "../types.hpp"

@@ -13,8 +13,8 @@
 #include <string>
 #include <utility>
 
-#include "../problem.hpp"
 #include "../exceptions.hpp"
+#include "../problem.hpp"
 #include "../rng.hpp"
 #include "../types.hpp"
 

@@ -15,9 +15,9 @@
 #include <string>
 #include <tuple>
 
-#include "../types.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
+#include "../types.hpp"
 
 
 namespace pagmo{

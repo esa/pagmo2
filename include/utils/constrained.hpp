@@ -13,10 +13,9 @@
 #include <string>
 #include <utility>
 
-#include "../types.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
-
+#include "../types.hpp"
 
 namespace pagmo{
 
@@ -24,7 +23,7 @@ namespace detail {
 
 /// Tests equality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm of the violation
 template <typename It>
-std::pair<vector_double::size_type, double> test_eq_constraints(It ceq_first, It ceq_last, It tol_first) 
+std::pair<vector_double::size_type, double> test_eq_constraints(It ceq_first, It ceq_last, It tol_first)
 {
     // Main computation
     double l2=0.;
@@ -37,11 +36,11 @@ std::pair<vector_double::size_type, double> test_eq_constraints(It ceq_first, It
         }
     }
     return std::pair<vector_double::size_type, double>(n, std::sqrt(l2));
-} 
+}
 
 template <typename It>
 /// Tests inequality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm of the violation
-std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first, It cineq_last, It tol_first) 
+std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first, It cineq_last, It tol_first)
 {
     // Main computation
     double l2=0.;
@@ -54,23 +53,23 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first
         }
     }
     return std::pair<vector_double::size_type, double>(n, std::sqrt(l2));
-} 
+}
 
 } // detail namespace
 
 /** Sorts a population in a constrained optimization case
- * 
+ *
  * Sorts a population (intended here as an <tt>std::vector<vector_double></tt>
  * containing single objective fitness vectors)
  * with respect to the following strict ordering:
  * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is feasible and \f$f_2\f$ is not.
  * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is they are both infeasible, but \f$f_1\f$
- * violates less constraints than \f$f_2\f$, or in case they both violate the same 
+ * violates less constraints than \f$f_2\f$, or in case they both violate the same
  * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
  is smaller.
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
  * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
- * 
+ *
  * @note: the fitness vectors are assumed to contain exactly one objective, \p neq equality
  * constraints and the rest (if any) inequality constraints
  *
@@ -88,13 +87,13 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first
 std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, const vector_double &tol)
 {
     auto N = input_f.size();
-    auto M = input_f[0].size();    
+    auto M = input_f[0].size();
     /// Corner cases
     if (N < 2u) { // corner cases
-        if (N == 0u) { 
+        if (N == 0u) {
             return {};
         }
-        if (N == 1u) { 
+        if (N == 1u) {
             return {0u};
         }
     }
@@ -103,7 +102,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
 
     for (decltype(N) i = 1u; i < N; ++i) {
         if (input_f[i].size() != M) {
-            pagmo_throw(std::invalid_argument, "The fitness vector at position: " 
+            pagmo_throw(std::invalid_argument, "The fitness vector at position: "
                 + std::to_string(i) + " has dimension "
                 + std::to_string(input_f[i].size()) + " while I was expecting: "
                 + std::to_string(M) + "(first element dimension)"
@@ -112,24 +111,24 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     }
     // 2 - The number of equality constraints must be at most input_f[0].size()-1
     if (neq > M - 1u) {
-        pagmo_throw(std::invalid_argument, "Number of equality constraints declared: " 
+        pagmo_throw(std::invalid_argument, "Number of equality constraints declared: "
                 + std::to_string(neq) + " while fitness vector has dimension: "
                 + std::to_string(M) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"
         );
     }
     // 3 - The tolerance vector size must be input_f.size[0]()-1u
     if (tol.size() != M-1u) {
-        pagmo_throw(std::invalid_argument, "Tolerance vector dimension: " 
+        pagmo_throw(std::invalid_argument, "Tolerance vector dimension: "
                 + std::to_string(tol.size()) + " while it must be: "
                 + std::to_string(M-1u)
         );
-    }    
+    }
 
     // Create the indexes 0....N-1
     std::vector<vector_double::size_type> retval(N);
     std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
     // Sort the indexes
-    std::sort(retval.begin(), retval.end(), [&input_f, &neq, &tol] (auto idx1, auto idx2) 
+    std::sort(retval.begin(), retval.end(), [&input_f, &neq, &tol] (auto idx1, auto idx2)
     {
         auto c1eq = detail::test_eq_constraints(input_f[idx1].data()+1, input_f[idx1].data()+1+neq, tol.data());
         auto c1ineq = detail::test_ineq_constraints(input_f[idx1].data()+1+neq, input_f[idx1].data()+input_f[idx1].size(), tol.data() + neq);
