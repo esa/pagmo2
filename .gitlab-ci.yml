@@ -1,4 +1,4 @@
-image: pagmo/pagmo
+image: pagmo/ci-alpine:v1
 
 pagmo-gcc:
   script:
