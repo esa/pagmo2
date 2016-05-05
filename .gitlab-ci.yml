@@ -12,7 +12,7 @@ pagmo-clang:
   script:
     - mkdir build
     - cd build
-    - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON -DBoost_UNIT_TEST_FRAMEWORK_LIBRARY_DEBUG=/home/pagmo/libboost_unit_test_framework.so ..
+    - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-fsanitize=address" -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON -DBoost_UNIT_TEST_FRAMEWORK_LIBRARY_DEBUG=/home/pagmo/libboost_unit_test_framework.so ..
     - make
     - make test
 
