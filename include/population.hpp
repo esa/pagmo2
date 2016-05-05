@@ -242,9 +242,6 @@ class population
             }
             return os;
         }
-
-    private:
-        friend class cereal::access;
         // Serialization.
         template <typename Archive>
         void serialize(Archive &ar)

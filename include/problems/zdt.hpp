@@ -222,6 +222,12 @@ public:
         }
         return retval;
     }
+    // Serialization
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_id, m_param);
+    }
 
 private:
     vector_double zdt1_fitness(const vector_double &x) const
@@ -427,15 +433,7 @@ private:
         c += 1. + 9. * std::pow((g / static_cast<double>(N - 1u)), 0.25);
         return c - 1;
     }
-
 private:
-    friend class cereal::access;
-    // Serialization
-    template <typename Archive>
-    void serialize(Archive &ar)
-    {
-        ar(m_id, m_param);
-    }
     // Problem dimensions
     unsigned int m_id;
     unsigned int m_param;
