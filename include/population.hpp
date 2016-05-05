@@ -42,7 +42,7 @@ class population
         using size_type = std::vector<vector_double>::size_type;
         /// Default constructor
         /**
-         * Constructs an empty population with a pagmo::null_problem
+         * Constructs an empty population with a pagmo::null_problem.
          */
         population() : m_prob(null_problem{}), m_ID(), m_x(), m_f(), m_e(0u), m_seed(0u) {}
 
@@ -50,7 +50,7 @@ class population
         /**
          * Constructs a population with \p pop_size individuals associated
          * to the pagmo::problem p and setting the population random seed
-         * to \p seed
+         * to \p seed.
          *
          * @param[in] p the pagmo::problem the population refers to
          * @param[in] pop_size population size (i.e. number of individuals therein)
@@ -71,7 +71,7 @@ class population
         /**
          * Appends a new chromosome \p x to the population, evaluating
          * its fitness and creating a new unique identifier for the newly
-         * born individual
+         * born individual.
          */
         void push_back(const vector_double &x)
         {
@@ -84,7 +84,7 @@ class population
         /// Creates a random decision vector
         /**
          * Creates a random decision vector within the problem's bounds.
-         * It calls internally pagmo::decision_vector()
+         * It calls internally pagmo::decision_vector().
          *
          * @returns a random decision vector
          *
@@ -153,7 +153,6 @@ class population
          * @throws std::invalid_argument if \p i is invalid (i.e. larger or equal to the population size)
          * @throws std::invalid_argument if \p x has not the correct dimension
          * @throws std::invalid_argument if \p f has not the correct dimension
-         *
          */
         void set_xf(size_type i, const vector_double &x, const vector_double &f)
         {
@@ -183,7 +182,6 @@ class population
 
         /// Sets the \f$i\f$-th individual's chromosome
         /**
-         *
          * Sets the chromosome of the \f$i\f$-th individual to the
          * value \p x and changes its fitness accordingly. The
          * individual's ID remains the same.

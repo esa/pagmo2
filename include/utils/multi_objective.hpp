@@ -34,7 +34,7 @@ namespace pagmo{
  * @param[in] obj1 first vector of objectives.
  * @param[in] obj2 second vector of objectives.
  *
- * @return true if obj1 is dominating obj2, false otherwise.
+ * @return \p true if \p obj1 is dominating \p obj2, \p false otherwise.
  *
  * @throws std::invalid_argument if the dimensions of the two objectives are different
  */
@@ -204,7 +204,7 @@ fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &o
 /**
  * An implementation of the crowding distance. Complexity is \f$ O(MNlog(N))\f$ where \f$M\f$ is the number of objectives
  * and \f$N\f$ is the number of individuals. The function assumes the input is a non-dominated front. Failiure to this condition
- * will result in an undefined behaviour
+ * will result in undefined behaviour.
  *
  * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.

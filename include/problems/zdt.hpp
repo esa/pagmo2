@@ -1,9 +1,11 @@
 #ifndef PAGMO_PROBLEM_ZDT
 #define PAGMO_PROBLEM_ZDT
 
+#include <algorithm>
 #include <cmath>
 #include <exception>
 #include <iostream>
+#include <iterator>
 #include <string>
 #include <utility>
 #include <vector>
@@ -20,17 +22,17 @@ namespace pagmo
 /**
  *
  * This widespread test suite was conceived for two-objective problems and takes its name from its
- * authors Zitzler, Deb and Thiele. 
- * 
+ * authors Zitzler, Deb and Thiele.
+ *
  * In their paper the authors propose a set of 6 different scalable problems all originating from a
  * well thought combination of functions allowing, by construction, to measure the distance of
  * any point to the Pareto front while creating interesting problems. They also suggest some
  * dimensions for instantiating the problems, namely \f$m = [30, 30, 30, 10, 11, 10]\f$.
  *
  * @note The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
- * via std::floor
+ * via std::floor().
  *
- * @see Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms: 
+ * @see Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:
  * Empirical results." Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848
  *
  * ZDT1:
@@ -92,7 +94,6 @@ namespace pagmo
  *      F_2 \left(x\right) = g(x) \left[ 1 - (f_1(x) / g(x))^2  \right]  x \in \left[ 0,1 \right].
  * \end{array}
  * \f]
- *
  */
 
 class zdt
@@ -109,12 +110,12 @@ public:
      * @throws std::invalid_argument if \p id is not in [1,..,6]
      * @throws std::invalid_argument if \p param is not at least 2.
      */
-    zdt(unsigned int id = 1u, unsigned int param = 30u) : m_id(id), m_param(param) 
+    zdt(unsigned int id = 1u, unsigned int param = 30u) : m_id(id), m_param(param)
     {
-        if (param < 2) {
+        if (param < 2u) {
             pagmo_throw(std::invalid_argument, "ZDT test problems must have a minimum value of 2 for the constructing parameter (representing the dimension except for ZDT5), " + std::to_string(param) + " requested");
         }
-        if (id == 0 || id > 6) {
+        if (id == 0u || id > 6u) {
             pagmo_throw(std::invalid_argument, "ZDT test suite contains six (id=[1 ... 6]) problems, id=" + std::to_string(id) + " requested");
         }
     };
@@ -183,7 +184,7 @@ public:
     }
     /// Problem name
     std::string get_name() const
-    {   
+    {
         return "ZDT" + std::to_string(m_id);
     }
     /// Distance from the Pareto front
@@ -191,14 +192,12 @@ public:
      * Convergence metric for a given decision_vector (0 = on the optimal front)
      *
      * Introduced by Martens and Izzo, this metric is able
-     * to measure "a distance" of any point from the pareto front of any ZDT 
+     * to measure "a distance" of any point from the pareto front of any ZDT
      * problem analytically without the need to precompute the front.
      *
      * @see Märtens, Marcus, and Dario Izzo. "The asynchronous island model
-     * and NSGA-II: study of a new migration operator and its performance." 
+     * and NSGA-II: study of a new migration operator and its performance."
      * Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013.
-     *
-     *
      */
     double p_distance(const vector_double &x) const
     {
@@ -267,7 +266,7 @@ private:
                 g += x[i];
         }
         g = 1. + (9. * g) / static_cast<double>(N - 1u);
-        f[1] = g * ( 1. - sqrt(x[0]/g) - x[0]/g * sin(10. * pagmo::detail::pi() * x[0]));
+        f[1] = g * ( 1. - sqrt(x[0]/g) - x[0]/g * std::sin(10. * pagmo::detail::pi() * x[0]));
 
         return f;
     }
@@ -282,7 +281,7 @@ private:
         g = 1 + 10 * static_cast<double>(N - 1u);
         f[0] = x[0];
         for(decltype(N) i = 1u; i < N; ++i) {
-            g += x[i]*x[i] - 10. * cos(4. * pagmo::detail::pi() * x[i]);
+            g += x[i]*x[i] - 10. * std::cos(4. * pagmo::detail::pi() * x[i]);
         }
         f[1] = g * ( 1. - sqrt(x[0]/g) );
 
@@ -301,8 +300,8 @@ private:
         std::vector<vector_double::size_type> v(n_vectors);
 
         // Convert the input vector into floored values (integers)
-        vector_double x(size_x);
-        std::transform(x_double.begin(), x_double.end(), x.begin(), [](auto item) {return std::floor(item);});
+        vector_double x;
+        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x), [](auto item) {return std::floor(item);});
         f[0] = x[0];
 
         // Counts how many 1s are there in the first (30 dim)
@@ -340,11 +339,11 @@ private:
             auto N = x.size();
 
 
-            f[0] = 1 - exp(-4*x[0])*pow(sin(6*pagmo::detail::pi()*x[0]),6);
+            f[0] = 1 - std::exp(-4*x[0])*std::pow(std::sin(6*pagmo::detail::pi()*x[0]),6);
             for(decltype(N) i = 1; i < N; ++i) {
                     g += x[i];
             }
-            g = 1 + 9 * pow((g / static_cast<double>(N - 1u)),0.25);
+            g = 1 + 9 * std::pow((g / static_cast<double>(N - 1u)),0.25);
             f[1] = g * ( 1 - (f[0]/g)*(f[0]/g));
 
             return f;
@@ -370,7 +369,7 @@ private:
         auto N = x.size();
 
         for(decltype(N) j = 1u; j < N; ++j) {
-                g += x[j]*x[j] - 10. * cos(4. * pagmo::detail::pi() * x[j]);
+                g += x[j]*x[j] - 10. * std::cos(4. * pagmo::detail::pi() * x[j]);
         }
         c += 1. + 10. * static_cast<double>(N-1u) + g;
         return c  - 1.;
@@ -379,8 +378,8 @@ private:
     double zdt5_p_distance(const vector_double &x_double) const
     {
         // Convert the input vector into floored values (integers)
-        vector_double x(x_double.size());
-        std::transform(x_double.begin(), x_double.end(), x.begin(), [](auto item) {return std::floor(item);});
+        vector_double x;
+        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x), [](auto item) {return std::floor(item);});
         double c = 0.;
         double g = 0.;
         unsigned int k = 30;
@@ -424,21 +423,21 @@ private:
         for(decltype(N) j = 1; j < N; ++j) {
                 g += x[j];
         }
-        c += 1. + 9. * pow((g / static_cast<double>(N - 1u)), 0.25);
+        c += 1. + 9. * std::pow((g / static_cast<double>(N - 1u)), 0.25);
         return c - 1;
     }
-    
+
 private:
-    friend class cereal::access; 
-    /// Serialization
+    friend class cereal::access;
+    // Serialization
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(const_cast<unsigned int &>(m_id), const_cast<unsigned int &>(m_param));
+        ar(m_id, m_param);
     }
-    /// Problem dimensions
-    const unsigned int m_id;
-    const unsigned int m_param;
+    // Problem dimensions
+    unsigned int m_id;
+    unsigned int m_param;
 
 };
 
