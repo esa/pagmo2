@@ -41,7 +41,7 @@ struct rosenbrock
     /// Fitness
     vector_double fitness(const vector_double &x) const
     {
-        vector_double f(1.,0.);
+        vector_double f(1,0.);
         for (decltype(m_dim) i=0u; i < m_dim-1u; ++i){
                 f[0] += 100. * (x[i]*x[i] -x[i+1])*(x[i]*x[i] -x[i+1]) + (x[i]-1)*(x[i]-1);
         }
