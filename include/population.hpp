@@ -44,7 +44,7 @@ class population
         /**
          * Constructs an empty population with a pagmo::null_problem.
          */
-        population() : m_prob(null_problem{}), m_ID(), m_x(), m_f(), m_e(0u), m_seed(0u) {}
+        population() : m_prob(null_problem{}), m_e(0u), m_seed(0u) {}
 
         /// Constructor
         /**
@@ -57,14 +57,50 @@ class population
          * @param[in] seed seed of the random number generator used, for example, to
          * create new random individuals within the bounds
          *
-         * @throws unspecified any excpetion thrown by decision_vector()
-         *
+         * @throws unspecified any exception thrown by decision_vector() or by push_back()
          */
         explicit population(const pagmo::problem &p, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed)
         {
-            for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
+            for (size_type i = 0u; i < pop_size; ++i) {
                 push_back(decision_vector());
             }
+        }
+
+        /// Defaulted copy constructor.
+        population(const population &) = default;
+
+        /// Defaulted move constructor.
+        population(population &&) = default;
+
+        /// Copy assignment operator.
+        /**
+         * Copy assignment is implemented via copy+move.
+         *
+         * @param[in] other assignment argument.
+         *
+         * @return a reference to \p this.
+         *
+         * @throws unspecified any exception thrown by the copy constructor.
+         */
+        population &operator=(const population &other)
+        {
+            if (this != &other) {
+                *this = population(other);
+            }
+            return *this;
+        }
+
+        /// Defaulted move assignment operator.
+        population &operator=(population &&) = default;
+
+        /// Trivial destructor.
+        /**
+         * The destructor will run sanity checks in debug mode.
+         */
+        ~population()
+        {
+            assert(m_ID.size() == m_x.size());
+            assert(m_ID.size() == m_f.size());
         }
 
         /// Adds one decision vector (chromosome) to the population
@@ -72,13 +108,57 @@ class population
          * Appends a new chromosome \p x to the population, evaluating
          * its fitness and creating a new unique identifier for the newly
          * born individual.
+         *
+         * In case of exceptions, the population will not be altered.
+         *
+         * @param[in] x decision vector to be added to the population.
+         *
+         * @throws std::invalid_argument in the following cases:
+         * - the dimension of \p x is inconsistent with the problem dimension or with the dimension of existing
+         *   decision vectors in the population,
+         * - the calculated fitness vector has a dimension which is inconsistent with the fitness dimension of the
+         *   problem or with the dimension of existing fitness vectors in the population.
+         * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
          */
         void push_back(const vector_double &x)
         {
-            auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
+            // Prepare quantities to be appended to the internal vectors.
+            const auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
+            auto x_copy(x);
+            auto f = m_prob.fitness(x);
+            // Run a few consistency checks.
+            // 1. Check that the size of x is equal to the size of the decision vectors
+            // already in the population.
+            if (m_x.size() && x_copy.size() != m_x[0].size()) {
+                pagmo_throw(std::invalid_argument,"A decision vector of size " + std::to_string(x_copy.size()) +
+                    " is being inserted into the population, but existing decision vectors have a size of " +
+                    std::to_string(m_x[0].size()));
+            }
+            // 2. Check that the size of x is consistent with the problem dimension.
+            if (x_copy.size() != m_prob.get_nx()) {
+                pagmo_throw(std::invalid_argument,"A decision vector of size " + std::to_string(x_copy.size()) +
+                    " is being inserted into the population, but the problem dimension is " +
+                    std::to_string(m_prob.get_nx()));
+            }
+            // 3./4. Same as above for the fitness size.
+            if (m_f.size() && f.size() != m_f[0].size()) {
+                pagmo_throw(std::invalid_argument,"A fitness vector of size " + std::to_string(f.size()) +
+                    " is being inserted into the population, but existing fitness vectors have a size of " +
+                    std::to_string(m_f[0].size()));
+            }
+            if (f.size() != m_prob.get_nf()) {
+                pagmo_throw(std::invalid_argument,"A fitness vector of size " + std::to_string(f.size()) +
+                    " is being inserted into the population, but the fitness dimension of the problem is " +
+                    std::to_string(m_prob.get_nf()));
+            }
+            // Reserve space in the vectors.
+            m_ID.reserve(m_ID.size() + 1u);
+            m_x.reserve(m_x.size() + 1u);
+            m_f.reserve(m_f.size() + 1u);
+            // The rest is noexcept.
             m_ID.push_back(new_id);
-            m_x.push_back(x);
-            m_f.push_back(m_prob.fitness(x));
+            m_x.push_back(std::move(x_copy));
+            m_f.push_back(std::move(f));
         }
 
         /// Creates a random decision vector
@@ -88,7 +168,7 @@ class population
          *
          * @returns a random decision vector
          *
-         * @throws unspecified all excpetions thrown by pagmo::decision_vector()
+         * @throws unspecified all exceptions thrown by pagmo::decision_vector()
          */
         vector_double decision_vector() const
         {
