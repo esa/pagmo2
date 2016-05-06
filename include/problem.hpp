@@ -17,6 +17,25 @@
 #include "serialization.hpp"
 #include "type_traits.hpp"
 
+/// Macro for the registration of the serialization functionality for problems.
+/**
+ * This macro should always be invoked after the declaration of a problem: it will register
+ * the problem with PaGMO's serialization machinery. The macro should be called in the root namespace
+ * and using the fully qualified name of the problem to be registered. For example:
+ * @code
+ * namespace my_namespace
+ * {
+ *
+ * class my_problem
+ * {
+ *    // ...
+ * };
+ *
+ * }
+ *
+ * PAGMO_REGISTER_PROBLEM(my_namespace::my_problem)
+ * @endcode
+ */
 #define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>,#prob)
 
 namespace pagmo
