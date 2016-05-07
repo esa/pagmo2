@@ -17,8 +17,8 @@
 #include "rng.hpp"
 #include "serialization.hpp"
 #include "types.hpp"
-#include "utils/generic.hpp"
 #include "utils/constrained.hpp"
+#include "utils/generic.hpp"
 
 namespace pagmo
 {

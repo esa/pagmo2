@@ -38,8 +38,8 @@ std::pair<vector_double::size_type, double> test_eq_constraints(It ceq_first, It
     return std::pair<vector_double::size_type, double>(n, std::sqrt(l2));
 }
 
-template <typename It>
 /// Tests inequality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm of the violation
+template <typename It>
 std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first, It cineq_last, It tol_first)
 {
     // Main computation
