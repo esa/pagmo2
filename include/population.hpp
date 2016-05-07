@@ -1,6 +1,7 @@
 #ifndef PAGMO_POPULATION_H
 #define PAGMO_POPULATION_H
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -181,6 +182,9 @@ class population
          */
         vector_double::size_type champion(const vector_double &tol) const
         {
+            if (!size()) {
+                pagmo_throw(std::invalid_argument, "Cannot determine the champion of an empty population");
+            }
             if (m_prob.get_nobj() > 1u) {
                 pagmo_throw(std::invalid_argument, "Champion can only be extracted in single objective problems");
             }
@@ -190,8 +194,9 @@ class population
             // Sort for single objective, unconstrained optimization
             std::vector<vector_double::size_type> indexes(size());
             std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
-            auto idx = std::min_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {return m_f[idx1] < m_f[idx2];});
-            return static_cast<vector_double::size_type>(std::distance(indexes.begin(), idx));
+            return *std::min_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {
+                return m_f[idx1] < m_f[idx2];
+            });
         }
 
         vector_double::size_type champion(double tol = 0.) const
@@ -246,8 +251,12 @@ class population
                     + std::to_string(m_prob.get_nx())
                 );
             }
-            m_x[i] = x;
-            m_f[i] = f;
+            assert(m_x[i].size() == x.size());
+            assert(m_f[i].size() == f.size());
+            // Use std::copy in order to make sure we are not allocating and
+            // potentially throw.
+            std::copy(x.begin(),x.end(),m_x[i].begin());
+            std::copy(f.begin(),f.end(),m_f[i].begin());
         }
 
         /// Sets the \f$i\f$-th individual's chromosome

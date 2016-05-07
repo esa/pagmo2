@@ -178,7 +178,9 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     sparsity_pattern gradient_sparsity_impl(const U &) const
     {
-        pagmo_throw(std::logic_error,"Trying to access non-existing 'gradient_sparsity()' method.");
+        pagmo_throw(std::logic_error,"Trying to access non-existing 'gradient_sparsity()' method. This "
+            "indicates a logical error in the implementation of the concrete problem class, as the 'gradient_sparsity()' "
+            "method is accessed only if 'has_gradient_sparsity()' returns true.");
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(U &p)
@@ -229,7 +231,9 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
     {
-        pagmo_throw(std::logic_error,"Trying to access non-existing 'hessians_sparsity()' method.");
+        pagmo_throw(std::logic_error,"Trying to access non-existing 'hessians_sparsity()' method. This "
+            "indicates a logical error in the implementation of the concrete problem class, as the 'hessians_sparsity()' "
+            "method is accessed only if 'has_hessians_sparsity()' returns true.");
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(U &p)
@@ -443,7 +447,7 @@ class problem
             sparsity_pattern retval;
             for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
                 for (decltype(dim) i = 0u; i<dim; ++i) {
-                   retval.push_back({j, i});
+                   retval.push_back({j,i});
                 }
             }
             return retval;
