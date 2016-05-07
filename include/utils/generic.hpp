@@ -40,14 +40,15 @@ namespace pagmo{
  * @param[in] seed seed to the internal random engine used
  *
  * @throws std::invalid_argument if:
- * - the bounds are not of equal length, they contain NaNs or infs, or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
+ * - the bounds are not of equal length, they have zero size, they contain NaNs or infs,
+ *   or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
  * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
  *
  * @returns a vector_double containing a random decision vector
  */
 vector_double decision_vector(const std::pair<vector_double, vector_double> &bounds, unsigned int seed = pagmo::random_device::next())
 {
-    // This will check for consistent vector lengths, lb <= ub and no NaNs.
+    // This will check for consistent vector lengths, non-null sizes, lb <= ub and no NaNs.
     detail::check_problem_bounds(bounds);
     auto dim = bounds.first.size();
     vector_double retval(dim);
