@@ -127,31 +127,21 @@ class population
             auto x_copy(x);
             auto f = m_prob.fitness(x);
             // Run a few consistency checks.
-            // 1. Check that the size of x is equal to the size of the decision vectors
-            // already in the population.
-            if (m_x.size() && x_copy.size() != m_x[0].size()) {
-                pagmo_throw(std::invalid_argument,"A decision vector of size " + std::to_string(x_copy.size()) +
-                    " is being inserted into the population, but existing decision vectors have a size of " +
-                    std::to_string(m_x[0].size()));
-            }
-            // 2. Check that the size of x is consistent with the problem dimension.
+            // 1. Check that the size of x is consistent with the problem dimension.
             if (x_copy.size() != m_prob.get_nx()) {
                 pagmo_throw(std::invalid_argument,"A decision vector of size " + std::to_string(x_copy.size()) +
                     " is being inserted into the population, but the problem dimension is " +
                     std::to_string(m_prob.get_nx()));
             }
-            // 3./4. Same as above for the fitness size.
-            if (m_f.size() && f.size() != m_f[0].size()) {
-                pagmo_throw(std::invalid_argument,"A fitness vector of size " + std::to_string(f.size()) +
-                    " is being inserted into the population, but existing fitness vectors have a size of " +
-                    std::to_string(m_f[0].size()));
-            }
+            // 2. Same as above for the fitness size.
             if (f.size() != m_prob.get_nf()) {
                 pagmo_throw(std::invalid_argument,"A fitness vector of size " + std::to_string(f.size()) +
                     " is being inserted into the population, but the fitness dimension of the problem is " +
                     std::to_string(m_prob.get_nf()));
             }
             // Reserve space in the vectors.
+            // NOTE: in face of overflow here, reserve(0) will be called, which is fine.
+            // The first push_back below will then fail, with no modifications to the class taking place.
             m_ID.reserve(m_ID.size() + 1u);
             m_x.reserve(m_x.size() + 1u);
             m_f.reserve(m_f.size() + 1u);

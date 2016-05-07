@@ -12,4 +12,5 @@ if(YACMA_COMPILER_IS_CLANGXX OR YACMA_COMPILER_IS_GNUCXX OR YACMA_COMPILER_IS_IN
     else()
         message(FATAL_ERROR "C++14 is not supported by the compiler, aborting.")
     endif()
+    unset(PAGMO_CHECK_CXX_FLAG)
 endif()
