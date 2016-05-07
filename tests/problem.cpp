@@ -125,12 +125,12 @@ struct grad_p_override : grad_p
         const sparsity_pattern &gs = {{0,0}}
      ) : grad_p(nobj,nec,nic,ret_fit,lb,ub,g,gs) {}
 
-    bool has_gradient() const 
+    bool has_gradient() const
     {
         return false;
     }
 
-    bool has_gradient_sparsity() const 
+    bool has_gradient_sparsity() const
     {
         return false;
     }
@@ -196,12 +196,12 @@ struct hess_p_override : hess_p
         const std::vector<sparsity_pattern> &hs = {{{0,0}}}
      ) : hess_p(nobj,nec,nic,ret_fit,lb,ub,h,hs) {}
 
-    bool has_hessians() const 
+    bool has_hessians() const
     {
         return false;
     }
 
-    bool has_hessians_sparsity() const 
+    bool has_hessians_sparsity() const
     {
         return false;
     }
@@ -363,8 +363,6 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(a1==a2);
         // 2 - We check that the two outputs of human_readable are identical
         BOOST_CHECK(p1_string==p2_string);
-        // 3 - We check that the decision vector dimension is copied
-        BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 
     // We check the copy constructor
@@ -430,8 +428,6 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
         BOOST_CHECK(a1==a2);
         // 2 - We check that the two outputs of human_readable are identical
         BOOST_CHECK(p1_string==p2_string);
-        // 3 - We check that the decision vector dimension is copied
-        BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 
     // We check the copy assignment

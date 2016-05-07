@@ -3,8 +3,10 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cassert>
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -44,32 +46,9 @@ namespace pagmo
 namespace detail
 {
 
-inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
-{
-    std::vector<sparsity_pattern> retval(f_dim);
-    for (auto &Hs : retval) {
-        for (decltype(dim) j = 0u; j<dim; ++j) {
-            for (decltype(dim) i = 0u; i<=j; ++i) {
-               Hs.push_back({j,i});
-            }
-        }
-    }
-    return retval;
-}
-
-inline sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim)
-{
-    sparsity_pattern retval;
-    for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
-        for (decltype(dim) i = 0u; i<dim; ++i) {
-           retval.push_back({j, i});
-        }
-    }
-    return retval;
-}
-
 // Helper to check that the problem bounds are valid. This will throw if the bounds
 // are invalid because of:
+// - the bounds size is zero,
 // - inconsistent lengths of the vectors,
 // - nans in the bounds,
 // - lower bounds greater than upper bounds.
@@ -77,9 +56,14 @@ inline void check_problem_bounds(const std::pair<vector_double,vector_double> &b
 {
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
+    // 0 - Check that the size is at least 1.
+    if (lb.size() == 0u) {
+        pagmo_throw(std::invalid_argument,"The bounds dimension cannot be zero");
+    }
     // 1 - check bounds have equal length
     if (lb.size()!=ub.size()) {
-        pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) + ", length of upper bound is " + std::to_string(ub.size()));
+        pagmo_throw(std::invalid_argument,"Length of lower bounds vector is " + std::to_string(lb.size()) +
+            ", length of upper bound is " + std::to_string(ub.size()));
     }
     // 2 - checks lower < upper for all values in lb, ub, and check for nans.
     for (decltype(lb.size()) i=0u; i < lb.size(); ++i) {
@@ -128,14 +112,20 @@ struct prob_inner final: prob_inner_base
         "A problem must be default-constructible, copy-constructible, move-constructible and destructible."
     );
     static_assert(has_fitness<T>::value,
-        "A problem must provide a fitness function [vector_double fitness(const vector_double &x) const] and a method to query the number of objectives [vector_double::size_type get_nobj() const].");
+        "A problem must provide a fitness function 'vector_double fitness(const vector_double &x) const' and "
+        "a method to query the number of objectives 'vector_double::size_type get_nobj() const'.");
     static_assert(has_bounds<T>::value,
         "A problem must provide getters for its bounds [std::pair<vector_double, vector_double> get_bounds() const].");
+    // We just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
     prob_inner(prob_inner &&) = delete;
-    explicit prob_inner(T &&x):m_value(std::move(x)) {}
+    prob_inner &operator=(const prob_inner &) = delete;
+    prob_inner &operator=(prob_inner &&) = delete;
+    // Constructors from T (copy and move variants).
     explicit prob_inner(const T &x):m_value(x) {}
+    explicit prob_inner(T &&x):m_value(std::move(x)) {}
+    // The clone method, used in the copy constructor of problem.
     virtual prob_inner_base *clone() const override final
     {
         return ::new prob_inner(m_value);
@@ -153,7 +143,7 @@ struct prob_inner final: prob_inner_base
     {
         return m_value.get_bounds();
     }
-    // Optional methods.
+    // Implementation of the optional methods.
     template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value,int>::type = 0>
     static vector_double gradient_impl(U &value, const vector_double &dv)
     {
@@ -188,10 +178,7 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     sparsity_pattern gradient_sparsity_impl(const U &) const
     {
-        // By default a problem is dense
-        auto dim = get_bounds().first.size();
-        auto f_dim = get_nobj() + get_nec() + get_nic();
-        return dense_gradient(f_dim, dim);
+        pagmo_throw(std::logic_error,"Trying to access non-existing 'gradient_sparsity()' method.");
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(U &p)
@@ -242,10 +229,7 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
     {
-        // By default a problem has dense hessians
-        auto dim = get_bounds().first.size();
-        auto f_dim = get_nobj() + get_nec() + get_nic();
-        return dense_hessians(f_dim, dim);
+        pagmo_throw(std::logic_error,"Trying to access non-existing 'hessians_sparsity()' method.");
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(U &p)
@@ -302,6 +286,8 @@ struct prob_inner final: prob_inner_base
     {
         return "";
     }
+    // Here follow all the overrides of the optional methods for the base class,
+    // implemented via the _impl functions above.
     virtual vector_double gradient(const vector_double &dv) const override final
     {
         return gradient_impl(m_value, dv);
@@ -439,6 +425,29 @@ class problem
         // const/reference qualifiers).
         template <typename T>
         using generic_ctor_enabler = std::enable_if_t<!std::is_same<problem,std::decay_t<T>>::value,int>;
+        // Two helper functions to compute sparsity patterns in the dense case.
+        static std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
+        {
+            std::vector<sparsity_pattern> retval(f_dim);
+            for (auto &Hs: retval) {
+                for (decltype(dim) j = 0u; j<dim; ++j) {
+                    for (decltype(dim) i = 0u; i<=j; ++i) {
+                       Hs.push_back({j,i});
+                    }
+                }
+            }
+            return retval;
+        }
+        static sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim)
+        {
+            sparsity_pattern retval;
+            for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
+                for (decltype(dim) i = 0u; i<dim; ++i) {
+                   retval.push_back({j, i});
+                }
+            }
+            return retval;
+        }
     public:
         /// Constructor from a user defined object of type \p T
         /**
@@ -453,10 +462,10 @@ class problem
          *   vector_double::size_type get_nobj() const;
          *   std::pair<vector_double, vector_double> get_bounds() const;
          *   @endcode
-         *   otherwise it will result in a compile-time failiure
+         *   otherwise it will result in a compile-time failure
          * - \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled
          * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
-         *   otherwise it will result in a compile-time failiure
+         *   otherwise it will result in a compile-time failure
          *
          * The following methods, if implemented in \p T, will override
          * default choices:
@@ -487,27 +496,90 @@ class problem
         template <typename T, generic_ctor_enabler<T> = 0>
         explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u),m_gevals(0u),m_hevals(0u)
         {
-            // 1 - check bounds.
-            const auto bounds = get_bounds();
+            // 1 - Bounds.
+            auto bounds = ptr()->get_bounds();
             detail::check_problem_bounds(bounds);
-            // 2 - initialize problem dimension (must be before
-            // check_gradient_sparsity and check_hessians_sparsity)
-            m_nx = bounds.first.size();
-            // 3 - checks that the sparsity contains reasonable numbers
-            check_gradient_sparsity(); // here m_gs_dim is initialized
-            // 4 - checks that the hessians contain reasonable numbers
-            check_hessians_sparsity(); // here m_hs_dim is initialized
+            m_lb = std::move(bounds.first);
+            m_ub = std::move(bounds.second);
+            // 2 - Number of objectives.
+            m_nobj = ptr()->get_nobj();
+            if (m_nobj == 0u) {
+                pagmo_throw(std::invalid_argument,"The number of objectives must be at least 1, but "
+                + std::to_string(m_nobj) + " was provided instead");
+            }
+            // NOTE: here we check that we can always compute nobj + nec + nic safely.
+            if (m_nobj > std::numeric_limits<decltype(m_nobj)>::max() / 3u) {
+                pagmo_throw(std::invalid_argument,"The number of objectives is too large");
+            }
+            // 3 - Constraints.
+            m_nec = ptr()->get_nec();
+            if (m_nec > std::numeric_limits<decltype(m_nec)>::max() / 3u) {
+                pagmo_throw(std::invalid_argument,"The number of equality constraints is too large");
+            }
+            m_nic = ptr()->get_nic();
+            if (m_nic > std::numeric_limits<decltype(m_nic)>::max() / 3u) {
+                pagmo_throw(std::invalid_argument,"The number of inequality constraints is too large");
+            }
+            // 4 - Presence of gradient and its sparsity.
+            m_has_gradient = ptr()->has_gradient();
+            m_has_gradient_sparsity = ptr()->has_gradient_sparsity();
+            // 5 - Presence of Hessians and their sparsity.
+            m_has_hessians = ptr()->has_hessians();
+            m_has_hessians_sparsity = ptr()->has_hessians_sparsity();
+            // 6 - Name and extra info.
+            m_name = ptr()->get_name();
+            m_extra_info = ptr()->get_extra_info();
+            // 7 - Check the sparsities, and cache their sizes.
+            if (m_has_gradient_sparsity) {
+                // If the problem provides gradient sparsity, get it, check it
+                // and store its size.
+                const auto gs = ptr()->gradient_sparsity();
+                check_gradient_sparsity(gs);
+                m_gs_dim = gs.size();
+            } else {
+                // If the problem does not provide gradient sparsity, we assume dense
+                // sparsity. We can compute easily the expected size of the sparsity
+                // in this case.
+                const auto nx = get_nx();
+                const auto nf = get_nf();
+                if (nx > std::numeric_limits<vector_double::size_type>::max() / nf) {
+                    pagmo_throw(std::invalid_argument,"The size of the (dense) gradient "
+                        "sparsity is too large");
+                }
+                m_gs_dim = nx * nf;
+            }
+            // Same as above for the hessians.
+            if (m_has_hessians_sparsity) {
+                const auto hs = ptr()->hessians_sparsity();
+                check_hessians_sparsity(hs);
+                for (const auto &one_hs: hs) {
+                    m_hs_dim.push_back(one_hs.size());
+                }
+            } else {
+                const auto nx = get_nx();
+                const auto nf = get_nf();
+                if (nx == std::numeric_limits<vector_double::size_type>::max() ||
+                    nx / 2u > std::numeric_limits<vector_double::size_type>::max() / (nx + 1u))
+                {
+                    pagmo_throw(std::invalid_argument,"The size of the (dense) hessians "
+                        "sparsity is too large");
+                }
+                for (vector_double::size_type i = 0u; i < nf; ++i) {
+                    m_hs_dim.push_back(nx * (nx - 1u) / 2u + nx); // lower triangular
+                }
+            }
         }
 
         /// Copy constructor
         problem(const problem &other):
-            m_ptr(other.m_ptr->clone()),
-            m_fevals(0u),
-            m_gevals(0u),
-            m_hevals(0u),
-            m_nx(other.m_nx),
-            m_gs_dim(other.m_gs_dim),
-            m_hs_dim(other.m_hs_dim)
+            m_ptr(other.ptr()->clone()),
+            m_fevals(0u),m_gevals(0u),m_hevals(0u),
+            m_lb(other.m_lb),m_ub(other.m_ub),m_nobj(other.m_nobj),
+            m_nec(other.m_nec),m_nic(other.m_nic),
+            m_has_gradient(other.m_has_gradient),m_has_gradient_sparsity(other.m_has_gradient_sparsity),
+            m_has_hessians(other.m_has_hessians),m_has_hessians_sparsity(other.m_has_hessians_sparsity),
+            m_name(other.m_name),m_extra_info(other.m_extra_info),
+            m_gs_dim(other.m_gs_dim),m_hs_dim(other.m_hs_dim)
         {}
 
         /// Move constructor
@@ -516,9 +588,12 @@ class problem
             m_fevals(other.m_fevals.load()),
             m_gevals(other.m_gevals.load()),
             m_hevals(other.m_hevals.load()),
-            m_nx(other.m_nx),
-            m_gs_dim(other.m_gs_dim),
-            m_hs_dim(other.m_hs_dim)
+            m_lb(std::move(other.m_lb)),m_ub(std::move(other.m_ub)),m_nobj(other.m_nobj),
+            m_nec(other.m_nec),m_nic(other.m_nic),
+            m_has_gradient(other.m_has_gradient),m_has_gradient_sparsity(other.m_has_gradient_sparsity),
+            m_has_hessians(other.m_has_hessians),m_has_hessians_sparsity(other.m_has_hessians_sparsity),
+            m_name(std::move(other.m_name)),m_extra_info(std::move(other.m_extra_info)),
+            m_gs_dim(other.m_gs_dim),m_hs_dim(std::move(other.m_hs_dim))
         {}
 
         /// Move assignment operator
@@ -529,9 +604,19 @@ class problem
                 m_fevals.store(other.m_fevals.load());
                 m_gevals.store(other.m_gevals.load());
                 m_hevals.store(other.m_hevals.load());
-                m_nx = other.m_nx;
+                m_lb = std::move(other.m_lb);
+                m_ub = std::move(other.m_ub);
+                m_nobj = other.m_nobj;
+                m_nec = other.m_nec;
+                m_nic = other.m_nic;
+                m_has_gradient = other.m_has_gradient;
+                m_has_gradient_sparsity = other.m_has_gradient_sparsity;
+                m_has_hessians = other.m_has_hessians;
+                m_has_hessians_sparsity = other.m_has_hessians_sparsity;
+                m_name = std::move(other.m_name);
+                m_extra_info = std::move(other.m_extra_info);
                 m_gs_dim = other.m_gs_dim;
-                m_hs_dim = other.m_hs_dim;
+                m_hs_dim = std::move(other.m_hs_dim);
             }
             return *this;
         }
@@ -550,38 +635,36 @@ class problem
          *
          * @tparam T The type of the orignal user-defined problem
          *
-         * @return a const pointer to the user-defined problem
-         *
+         * @return a const pointer to the user-defined problem, or \p nullptr
+         * if \p T does not correspond exactly to the original problem type used
+         * in the constructor.
          */
         template <typename T>
         const T *extract() const
         {
-            auto ptr = dynamic_cast<const detail::prob_inner<T> *>(m_ptr.get());
-            if (ptr == nullptr) {
+            auto p = dynamic_cast<const detail::prob_inner<T> *>(ptr());
+            if (p == nullptr) {
                 return nullptr;
             }
-            return &(ptr->m_value);
+            return &(p->m_value);
         }
 
         /// Checks the user defined problem type at run-time
         /**
-         *
          * @tparam T The type to be checked
          *
-         * @return true if the user defined problem is \p T. false othewise.
-         *
+         * @return \p true if the user defined problem is \p T, \p false othewise.
          */
         template <typename T>
         bool is() const
         {
-            return extract<T>();
+            return extract<T>() != nullptr;
         }
 
         /// Computes the fitness
         /**
-         *
          * The fitness, implemented in the user-defined problem,
-         * is expected to be a pagmo::vector_double of dimension \f$ n_f\f$ containing
+         * is expected to be a pagmo::vector_double of dimension \f$n_f\f$ containing
          * the problem fitness: the concatenation of \f$n_{obj}\f$ objectives
          * to minimize, \f$n_{ec}\f$ equality constraints and \f$n_{ic}\f$
          * inequality constraints.
@@ -599,7 +682,7 @@ class problem
             // 1 - checks the decision vector
             check_decision_vector(dv);
             // 2 - computes the fitness
-            vector_double retval(m_ptr->fitness(dv));
+            vector_double retval(ptr()->fitness(dv));
             // 3 - checks the fitness vector
             check_fitness_vector(retval);
             // 4 - increments fitness evaluation counter
@@ -633,7 +716,7 @@ class problem
             // 1 - checks the decision vector
             check_decision_vector(dv);
             // 2 - compute the gradients
-            vector_double retval(m_ptr->gradient(dv));
+            vector_double retval(ptr()->gradient(dv));
             // 3 - checks the gradient vector
             check_gradient_vector(retval);
             // 4 - increments gradient evaluation counter
@@ -655,16 +738,14 @@ class problem
          * in the user-defined problem
          *
          * @return a boolean flag
-         *
          */
         bool has_gradient() const
         {
-            return m_ptr->has_gradient();
+            return m_has_gradient;
         }
 
         /// Computes the gradient sparsity pattern
         /**
-         *
          * The gradient sparsity pattern is a collection of the indexes
          * \f$(i,j)\f$ of the non-zero elements of
          * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$. By default
@@ -674,11 +755,15 @@ class problem
          * implemented in the user defined problem.
          *
          * @return The gradient sparsity pattern.
-         *
          */
         sparsity_pattern gradient_sparsity() const
         {
-            return m_ptr->gradient_sparsity();
+            if (has_gradient_sparsity()) {
+                auto retval = ptr()->gradient_sparsity();
+                check_gradient_sparsity(retval);
+                return retval;
+            }
+            return dense_gradient(get_nf(),get_nx());
         }
 
         /// Checks if the user-defined problem has a gradient_sparsity
@@ -695,17 +780,14 @@ class problem
          * in the user-defined problem
          *
          * @return a boolean flag
-         *
          */
-
         bool has_gradient_sparsity() const
         {
-            return m_ptr->has_gradient_sparsity();
+            return m_has_gradient_sparsity;
         }
 
         /// Computes the hessians
         /**
-         *
          * The hessians, optionally implemented in the user-defined problem,
          * are expected to be an <tt>std::vector</tt> of pagmo::vector_double.
          * The element \f$ l\f$ contains the problem hessian:
@@ -730,7 +812,7 @@ class problem
             // 1 - checks the decision vector
             check_decision_vector(dv);
             // 2 - computes the hessians
-            std::vector<vector_double> retval(m_ptr->hessians(dv));
+            std::vector<vector_double> retval(ptr()->hessians(dv));
             // 3 - checks the hessians
             check_hessians_vector(retval);
             // 4 - increments hessians evaluation counter
@@ -738,7 +820,7 @@ class problem
             return retval;
         }
 
-        /// Check if the user-defined dproblem implements the hessians
+        /// Check if the user-defined problem implements the hessians
         /**
          * If the user defined problem implements hessians, this
          * will return true, false otherwise. The value returned can
@@ -752,16 +834,14 @@ class problem
          * in the user-defined problem
          *
          * @return a boolean flag
-         *
          */
         bool has_hessians() const
         {
-            return m_ptr->has_hessians();
+            return m_has_hessians;
         }
 
         /// Computes the hessians sparsity pattern
         /**
-         *
          * Each component \f$ l\f$ of the hessians sparsity pattern is a
          * collection of the indexes \f$(i,j)\f$ of the non-zero elements of
          * \f$h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\f$. By default
@@ -772,11 +852,15 @@ class problem
          * implemented in the user defined problem.
          *
          * @return The hessians sparsity pattern.
-         *
          */
         std::vector<sparsity_pattern> hessians_sparsity() const
         {
-            return m_ptr->hessians_sparsity();
+            if (has_hessians_sparsity()) {
+                auto retval = ptr()->hessians_sparsity();
+                check_hessians_sparsity(retval);
+                return retval;
+            }
+            return dense_hessians(get_nf(),get_nx());
         }
 
         /// Check if the user-defined dproblem implements the hessians_sparsity
@@ -797,7 +881,7 @@ class problem
          */
         bool has_hessians_sparsity() const
         {
-            return m_ptr->has_hessians_sparsity();
+            return m_has_hessians_sparsity;
         }
 
         /// Number of objectives
@@ -807,7 +891,7 @@ class problem
          */
         vector_double::size_type get_nobj() const
         {
-            return m_ptr->get_nobj();
+            return m_nobj;
         }
 
         /// Problem dimension
@@ -817,7 +901,7 @@ class problem
          */
         vector_double::size_type get_nx() const
         {
-            return m_nx;
+            return m_lb.size();
         }
 
         /// Fitness dimension
@@ -827,7 +911,7 @@ class problem
          */
         vector_double::size_type get_nf() const
         {
-            return get_nobj()+get_nic()+get_nec();
+            return m_nobj + m_nic + m_nec;
         }
 
         /// Box-bounds
@@ -837,7 +921,7 @@ class problem
          */
         std::pair<vector_double, vector_double> get_bounds() const
         {
-            return m_ptr->get_bounds();
+            return std::make_pair(m_lb,m_ub);
         }
 
         /// Number of equality constraints
@@ -848,7 +932,7 @@ class problem
          */
         vector_double::size_type get_nec() const
         {
-            return m_ptr->get_nec();
+            return m_nec;
         }
 
         /// Number of inequality constraints
@@ -859,7 +943,7 @@ class problem
          */
         vector_double::size_type get_nic() const
         {
-            return m_ptr->get_nic();
+            return m_nic;
         }
 
         /// Number of constraints
@@ -868,7 +952,7 @@ class problem
          */
         vector_double::size_type get_nc() const
         {
-            return m_ptr->get_nic() + m_ptr->get_nec();
+            return m_nec + m_nic;
         }
 
         /// Number of fitness evaluations
@@ -908,7 +992,7 @@ class problem
          */
         std::string get_name() const
         {
-            return m_ptr->get_name();
+            return m_name;
         }
 
         /// Extra info
@@ -918,7 +1002,7 @@ class problem
          */
         std::string get_extra_info() const
         {
-            return m_ptr->get_extra_info();
+            return m_extra_info;
         }
 
         /// Streaming operator
@@ -968,7 +1052,10 @@ class problem
         template <typename Archive>
         void save(Archive &ar) const
         {
-            ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(), m_nx, m_gs_dim, m_hs_dim);
+            ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(),
+                m_lb,m_ub,m_nobj,m_nec,m_nic,m_has_gradient,m_has_gradient_sparsity,
+                m_has_hessians,m_has_hessians_sparsity,m_name,m_extra_info,
+                m_gs_dim,m_hs_dim);
         }
 
         /// Serialization: load
@@ -983,10 +1070,21 @@ class problem
             m_gevals.store(tmp);
             ar(tmp);
             m_hevals.store(tmp);
-            ar(m_nx, m_gs_dim,m_hs_dim);
+            ar(m_lb,m_ub,m_nobj,m_nec,m_nic,m_has_gradient,m_has_gradient_sparsity,
+                m_has_hessians,m_has_hessians_sparsity,m_name,m_extra_info,
+                m_gs_dim,m_hs_dim);
         }
 
     private:
+        // Just a small helper to make sure that whenever we require
+        // access to the pointer it actually points to something.
+        detail::prob_inner_base const *ptr() const
+        {
+            assert(m_ptr.get() != nullptr);
+            return m_ptr.get();
+        }
+
+        // A small helper to check if a vector containes unique elements.
         template <typename U>
         static bool all_unique(std::vector<U> x)
         {
@@ -994,66 +1092,40 @@ class problem
             auto it = std::unique(x.begin(),x.end());
             return it == x.end();
         }
-        // The gradient sparsity patter is, at this point, either the user
-        // defined one or the default (dense) one.
-        void check_gradient_sparsity()
-        {
-            auto nx = get_nx();
-            auto nf = get_nf();
-            if (has_gradient()) {
-                auto gs = gradient_sparsity();
-                // 1 - We check that the gradient sparsity pattern has
-                // valid indexes.
-                for (const auto &pair: gs) {
-                    if ((pair.first >= nf) || (pair.second >= nx)) {
-                        pagmo_throw(std::invalid_argument,"Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nFitness dimension is: " + std::to_string(nf) + "\nDecision vector dimension is: " + std::to_string(nx));
-                    }
-                }
-                // 1bis We check all pairs are unique
-                if (!all_unique(gs)) {
-                    pagmo_throw(std::invalid_argument, "Multiple entries of the same index pair was detected in the gradient sparsity pattern");
-                }
 
-                // 2 - We store the dimensions of the gradient sparsity pattern
-                // as we will check that the returned gradient has this dimension
-                m_gs_dim = gs.size();
+        void check_gradient_sparsity(const sparsity_pattern &gs) const
+        {
+            const auto nx = get_nx();
+            const auto nf = get_nf();
+            // 1 - We check that the gradient sparsity pattern has
+            // valid indexes.
+            for (const auto &pair: gs) {
+                if ((pair.first >= nf) || (pair.second >= nx)) {
+                    pagmo_throw(std::invalid_argument,"Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(pair.first) + ", " + std::to_string(pair.second) + ")\nFitness dimension is: " + std::to_string(nf) + "\nDecision vector dimension is: " + std::to_string(nx));
+                }
             }
-            else {
-                m_gs_dim = nx * nf;
+            // 2 - We check all pairs are unique
+            if (!all_unique(gs)) {
+                pagmo_throw(std::invalid_argument,"Multiple entries of the same index pair was detected in the gradient sparsity pattern");
             }
         }
-        void check_hessians_sparsity()
+        void check_hessians_sparsity(const std::vector<sparsity_pattern> &hs) const
         {
-            if(has_hessians()) {
-                auto hs = hessians_sparsity();
-                // 1 - We check that a hessian sparsity is provided for each component
-                // of the fitness
-                auto nf = get_nf();
-                if (hs.size()!=nf) {
-                    pagmo_throw(std::invalid_argument,"Invalid dimension of the hessians_sparsity: " + std::to_string(hs.size()) + ", expected: " + std::to_string(nf));
-                }
-                // 2 - We check that all hessian sparsity patterns have
-                // valid indexes.
-                for (const auto &one_hs: hs) {
-                    check_hessian_sparsity(one_hs);
-                }
-                // 3 - We store the dimensions of the hessian sparsity patterns
-                // for future quick checks.
-                m_hs_dim.clear();
-                for (const auto &one_hs: hs) {
-                    m_hs_dim.push_back(one_hs.size());
-                }
-            } else {
-                m_hs_dim.clear();
-                for (auto i = 0u; i < get_nf(); ++i) {
-                    m_hs_dim.push_back(m_nx * (m_nx - 1u) / 2u + m_nx); // lower triangular
-                }
+            // 1 - We check that a hessian sparsity is provided for each component
+            // of the fitness
+            const auto nf = get_nf();
+            if (hs.size()!=nf) {
+                pagmo_throw(std::invalid_argument,"Invalid dimension of the hessians_sparsity: " + std::to_string(hs.size()) + ", expected: " + std::to_string(nf));
             }
-
+            // 2 - We check that all hessian sparsity patterns have
+            // valid indexes.
+            for (const auto &one_hs: hs) {
+                check_hessian_sparsity(one_hs);
+            }
         }
-        void check_hessian_sparsity(const sparsity_pattern& hs)
+        void check_hessian_sparsity(const sparsity_pattern &hs) const
         {
-            auto nx = get_nx();
+            const auto nx = get_nx();
             // 1 - We check that the hessian sparsity pattern has
             // valid indexes. Assuming a lower triangular representation of
             // a symmetric matrix. Example, for a 4x4 dense symmetric
@@ -1108,18 +1180,31 @@ class problem
 
     private:
         // Pointer to the inner base problem
-        std::unique_ptr<detail::prob_inner_base> m_ptr;
+        std::unique_ptr<const detail::prob_inner_base> m_ptr;
         // Atomic counter for calls to the fitness
         mutable std::atomic<unsigned long long> m_fevals;
         // Atomic counter for calls to the gradient
         mutable std::atomic<unsigned long long> m_gevals;
         // Atomic counter for calls to the hessians
         mutable std::atomic<unsigned long long> m_hevals;
-        // Problem dimension
-        vector_double::size_type m_nx;
-        // Expected dimensions of the returned gradient (matching the sparsity pattern)
+        // Various problem properties determined at construction time
+        // from the concrete problem. These will be constant for the lifetime
+        // of problem, but we cannot mark them as such because of serialization.
+        vector_double m_lb;
+        vector_double m_ub;
+        vector_double::size_type m_nobj;
+        vector_double::size_type m_nec;
+        vector_double::size_type m_nic;
+        bool m_has_gradient;
+        bool m_has_gradient_sparsity;
+        bool m_has_hessians;
+        bool m_has_hessians_sparsity;
+        std::string m_name;
+        std::string m_extra_info;
+        // These are the dimensions of the sparsity objects, cached
+        // here upon construction in order to provide fast checking
+        // on the returned gradient and hessians.
         vector_double::size_type m_gs_dim;
-        // Expected dimensions of the returned hessians (matching the sparsity patterns)
         std::vector<vector_double::size_type> m_hs_dim;
 };
 
