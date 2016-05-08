@@ -39,8 +39,14 @@ namespace pagmo
 class population
 {
     public:
-        /// A shortcut to <tt>std::vector<vector_double>::size_type</tt>.
-        using size_type = std::vector<vector_double>::size_type;
+        #if defined(DOXYGEN_INVOKED)
+            /// A shortcut to <tt>std::vector<vector_double>::size_type</tt>.
+            typedef std::vector<vector_double>::size_type size_type;
+        #else
+            using size_type = std::vector<vector_double>::size_type;
+        #endif
+        
+        
         /// Default constructor
         /**
          * Constructs an empty population with a pagmo::null_problem.
