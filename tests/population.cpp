@@ -1,7 +1,6 @@
 #define BOOST_TEST_MODULE pagmo_population_test
 #include <boost/test/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
 #include <exception>
 #include <iostream>
 #include <string>

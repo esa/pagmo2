@@ -42,23 +42,21 @@ namespace pagmo{
  * \tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16},
  * \tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \f$
  *
- * Returns the n-th number in the Van der Corput sequence
  *
- * @param[in] n selects which number of the Halton sequence to return
- * @param[in] base prime number to be used as a base of the sequence
+ * @param[in] n selects which number of the sequence to return
+ * @param[in] b number to be used as a base of the sequence
  * @returns the n-th number in the van_der_corput sequence
  *
  * @see http://en.wikipedia.org/wiki/Van_der_Corput_sequence
  */
-
-double van_der_corput(unsigned int n, unsigned int base) {
+double van_der_corput(unsigned int n, unsigned int b) {
     double retval = 0.;
-    double f = 1.0 / base;
+    double f = 1.0 / b;
     unsigned int i = n;
     while (i > 0) {
-        retval += f * (i % base);
-        i = floor(i / base);
-        f = f / base;
+        retval += f * (i % b);
+        i = i / b;
+        f = f / b;
     }
     return retval;
 }
