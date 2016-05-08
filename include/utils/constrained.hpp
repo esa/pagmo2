@@ -87,7 +87,6 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first
 std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, const vector_double &tol)
 {
     auto N = input_f.size();
-    auto M = input_f[0].size();
     /// Corner cases
     if (N < 2u) { // corner cases
         if (N == 0u) {
@@ -97,9 +96,10 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
             return {0u};
         }
     }
+    // Now we are sure input_f is not empty and has size at least 2
+    auto M = input_f[0].size();
     // Santity Checks
     // 1 - All fitness vectors must have the same size
-
     for (decltype(N) i = 1u; i < N; ++i) {
         if (input_f[i].size() != M) {
             pagmo_throw(std::invalid_argument, "The fitness vector at position: "
@@ -109,18 +109,25 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
             );
         }
     }
-    // 2 - The number of equality constraints must be at most input_f[0].size()-1
-    if (neq > M - 1u) {
-        pagmo_throw(std::invalid_argument, "Number of equality constraints declared: "
-                + std::to_string(neq) + " while fitness vector has dimension: "
-                + std::to_string(M) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"
+    // 2 - The dimension of the fitness vectors mus be at least 2 (one objective and one constraint)
+    if (M < 1u) {
+        pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to sort: a dimension of "
+            + std::to_string(M) + " was detected. "
         );
     }
-    // 3 - The tolerance vector size must be input_f.size[0]()-1u
+    // Now we are sure M has size at least 2
+    // 3 - The number of equality constraints must be at most input_f[0].size()-1
+    if (neq > M - 1u) {
+        pagmo_throw(std::invalid_argument, "Number of equality constraints declared: "
+            + std::to_string(neq) + " while fitness vector has dimension: "
+            + std::to_string(M) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"
+        );
+    }
+    // 4 - The tolerance vector size must be input_f.size[0]()-1u
     if (tol.size() != M-1u) {
         pagmo_throw(std::invalid_argument, "Tolerance vector dimension: "
-                + std::to_string(tol.size()) + " while it must be: "
-                + std::to_string(M-1u)
+            + std::to_string(tol.size()) + " while it must be: "
+            + std::to_string(M-1u)
         );
     }
 
@@ -155,6 +162,16 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
 /// Sorts a population in a constrained optimization case (from one tolerance valid for all)
 std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, double tol = 0.)
 {
+    auto N = input_f.size();
+    /// Corner cases
+    if (N < 2u) { // corner cases
+        if (N == 0u) {
+            return {};
+        }
+        if (N == 1u) {
+            return {0u};
+        }
+    }
     vector_double tol_vector(input_f[0].size() - 1u, tol);
     return sort_population_con(input_f, neq, tol_vector);
 }
