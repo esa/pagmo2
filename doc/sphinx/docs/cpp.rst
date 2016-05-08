@@ -37,6 +37,7 @@ Various optimization utilities.
 
   utils/multi_objective
   utils/constrained
+  utils/discrepancy
 
 Miscellanea
 ^^^^^^^^^^^
