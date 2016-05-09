@@ -10,6 +10,12 @@ A number of utilities to generate and use low- discrepancy sequences
 .. doxygenfunction:: pagmo::van_der_corput
    :project: PaGMOreborn
 
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::project_2_simplex
+   :project: PaGMOreborn
+
+
 
 
 

@@ -7,6 +7,9 @@
  * This header contains utilities to generate low discrepancy sequences 
  */
 
+#include <algorithm>
+#include <vector>
+
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../types.hpp"
@@ -59,6 +62,59 @@ double van_der_corput(unsigned int n, unsigned int b) {
         f = f / b;
     }
     return retval;
+}
+
+/// Projects a point onto a simplex
+/**
+ * Projects a point \f$\mathbf x \in [0,1]^n\f$ onto a simplex so that if points comes from a uniform distribution
+ * their projection will also be uniformly distributed on the simplex.
+ *
+ * In order to generate a uniform distribution on a simplex, that is to sample a \f$n\f$-dimensional
+ * point \f$\mathbf x\f$ such that \f$\sum_{i=1}^{n} x_i = 1\f$ one can follow the following approach:
+ * take \f$n-1\f$ random numbers from the interval (0,1)(0,1), then add a 0 and 1 to get a list of \f$n+1\f$ numbers.
+ * Sort the list and record the differences between two consecutive elements. This creates
+ * a list of \f$n\f$ number that, by construction, will sum up to 1. Moreover this sampling is uniform. 
+ * As an example the following code would generate points uniformly distributed on a simplex:
+ *
+ * @code
+ * std::vector<std::vector<double>> points_on_a_simplex;
+ * for (auto i = 0u; i < 100u; ++i) {
+ *      auto v = random_vector(n+1); \\ we assume random_vector returns a uniformly distributed random vector of size n+1
+ *      points_on_a_simplex.push_back(project_2_simplex(v));
+ * }
+ * @endcode
+ *
+ * @param[in] in a <tt>std::vector</tt> containing a point in \f$n+1\f$ dimensions.
+ * @return a <tt>std::vector</tt> containing the projected point of \f$n\f$ dimensions.
+ *
+ * @throws std::invalid_argument if the input vector elements are not in [0,1]
+ * @throws std::invalid_argument if the input vector has size 0 or 1.
+ *
+ * @see Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134.
+ */
+std::vector<double> project_2_simplex(std::vector<double> in) const
+{
+    if (std::any_of(in.begin(), in.end(), [](auto item){return (item < 0 || item > 1);})) {
+        pagmo_throw(std::invlaid_argument,"Input vector must have all elements in [0,1]");
+    }
+    if (in.size() > 1) {
+        std::sort(in.begin(),in.end());
+        in.insert(in.begin(),0.0);
+        in.push_back(1.0);
+        double cumsum=0;
+        for (unsigned int i = 0u; i < in.size()-1u; ++i) {
+            in[i] = in[i+1] - in[i];
+            cumsum += in[i];
+        }
+        in.pop_back();
+        for (unsigned int i = 0u; i<in.size();++i) {
+            in[i] /= cumsum;
+        }
+        return in;
+    }
+    else {
+        pagmo_throw(std::invlaid_argument,"Input vector must have at least dimension 2, a size of " + std::to_string(in.size()) + " was detected instead.");
+    }
 }
 
 } // namespace pagmo
