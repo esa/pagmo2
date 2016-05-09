@@ -14,56 +14,10 @@
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../types.hpp"
+#include "../detail/prime_numbers.hpp"
 
 
 namespace pagmo{
-
-/// Van der Corput sequence
-/**
- * A Van der Corput sequence is the simplest one-dimensional low-discrepancy sequence over the
- * unit interval; it was first described in 1935 by the Dutch mathematician Johannes van der Corput.  
- * It is constructed by reversing the base representation of the sequence of natural number (1, 2, 3, …).
- * A positive integer \f$n \ge 1\f$ is represented, in the base \f$b\f$ by:
- * \f[
- * n = \sum_{i=0}^{L-1}d_i(n) b^i,
- * \f] 
- * where \f$L\f$ is the number of digits needed. 
- * The \f$n\f$-th number in a van der Corput sequence is thus defined as:
- * \f[
- * g_n=\sum_{i=0}^{L-1}d_i(n) b^{-i-1}.
- * \f]
- *
- * so that, for example, if \f$b = 10\f$:
- *
- * \f$ seq = \{ \tfrac{1}{10}, \tfrac{2}{10}, \tfrac{3}{10}, \tfrac{4}{10}, \tfrac{5}{10}, \tfrac{6}{10},
- * \tfrac{7}{10}, \tfrac{8}{10}, \tfrac{9}{10}, \tfrac{1}{100}, \tfrac{11}{100}, \tfrac{21}{100},
- * \tfrac{31}{100}, \tfrac{41}{100}, \tfrac{51}{100}, \tfrac{61}{100}, \tfrac{71}{100}, \tfrac{81}{100},
- * \tfrac{91}{100}, \tfrac{2}{100}, \tfrac{12}{100}, \tfrac{22}{100}, \tfrac{32}{100}, \ldots \} \,\f$
- *
- * or, if \f$b = 2\f$:
- *
- * \f$ seq = \{\tfrac{1}{2}, \tfrac{1}{4}, \tfrac{3}{4}, \tfrac{1}{8}, \tfrac{5}{8}, \tfrac{3}{8},
- * \tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16},
- * \tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \f$
- *
- *
- * @param[in] n selects which number of the sequence to return
- * @param[in] b number to be used as a base of the sequence
- * @returns the n-th number in the van_der_corput sequence
- *
- * @see http://en.wikipedia.org/wiki/Van_der_Corput_sequence
- */
-double van_der_corput(unsigned int n, unsigned int b) {
-    double retval = 0.;
-    double f = 1.0 / b;
-    unsigned int i = n;
-    while (i > 0) {
-        retval += f * (i % b);
-        i = i / b;
-        f = f / b;
-    }
-    return retval;
-}
 
 /// Sample from a simplex
 /**
@@ -110,6 +64,83 @@ std::vector<double> sample_from_simplex(std::vector<double> in)
     else {
         pagmo_throw(std::invalid_argument,"Input vector must have at least dimension 1, a size of " + std::to_string(in.size()) + " was detected instead.");
     }
+}
+
+/// Van der Corput sequence
+/**
+ * A Van der Corput sequence is the simplest one-dimensional low-discrepancy sequence over the
+ * unit interval; it was first described in 1935 by the Dutch mathematician Johannes van der Corput.  
+ * It is constructed by reversing the base representation of the sequence of natural number (1, 2, 3, …).
+ * A positive integer \f$n \ge 1\f$ is represented, in the base \f$b\f$ by:
+ * \f[
+ * n = \sum_{i=0}^{L-1}d_i(n) b^i,
+ * \f] 
+ * where \f$L\f$ is the number of digits needed. 
+ * The \f$n\f$-th number in a van der Corput sequence is thus defined as:
+ * \f[
+ * g_n=\sum_{i=0}^{L-1}d_i(n) b^{-i-1}.
+ * \f]
+ *
+ * so that, for example, if \f$b = 10\f$:
+ *
+ * \f$ seq = \{ 0, \tfrac{1}{10}, \tfrac{2}{10}, \tfrac{3}{10}, \tfrac{4}{10}, \tfrac{5}{10}, \tfrac{6}{10},
+ * \tfrac{7}{10}, \tfrac{8}{10}, \tfrac{9}{10}, \tfrac{1}{100}, \tfrac{11}{100}, \tfrac{21}{100},
+ * \tfrac{31}{100}, \tfrac{41}{100}, \tfrac{51}{100}, \tfrac{61}{100}, \tfrac{71}{100}, \tfrac{81}{100},
+ * \tfrac{91}{100}, \tfrac{2}{100}, \tfrac{12}{100}, \tfrac{22}{100}, \tfrac{32}{100}, \ldots \} \,\f$
+ *
+ * or, if \f$b = 2\f$:
+ *
+ * \f$ seq = \{0, \tfrac{1}{2}, \tfrac{1}{4}, \tfrac{3}{4}, \tfrac{1}{8}, \tfrac{5}{8}, \tfrac{3}{8},
+ * \tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16},
+ * \tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \f$
+ *
+ *
+ * @param[in] n selects which number of the sequence to return
+ * @param[in] b number to be used as a base of the sequence
+ * @returns the n-th number in the van_der_corput sequence
+ *
+ * @see http://en.wikipedia.org/wiki/Van_der_Corput_sequence
+ */
+double van_der_corput(unsigned int n, unsigned int b) {
+    if (b < 2) {
+        pagmo_throw(std::invalid_argument,"The base of the van der Corput sequence must be at least 2: " + std::to_string(b) + " was detected");
+    }
+    double retval = 0.;
+    double f = 1.0 / b;
+    unsigned int i = n;
+    while (i > 0) {
+        retval += f * (i % b);
+        i = i / b;
+        f = f / b;
+    }
+    return retval;
+}
+
+/// Halton sequence
+/**
+ * The Halton sequence is, essentially, a generalization of the van der Corput sequence
+ * to higher dimensions. It considers, along each dimension, a van der Corput sequence
+ * referred to co-prime numbers. Here, by default, we consider the sequence of all prime 
+ * numbers starting from 2, 3, 5, ...... so that, for example, for \p dim equal two the 
+ * following sequence is generated:
+ *
+ * \f[
+ * seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac 19\right), \left(\frac 18, 
+ * \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\}
+ * \f] 
+ *
+ * @param[in] n selects which element of the sequence to return
+ * @param[in] dim dimensions of the returned point
+ *
+ * @throws undefined all exceptions thrown by pagmo::svan_der_corput
+ *
+ */
+std::vector<double> halton(unsigned int n, unsigned int dim) {
+    std::vector<double> retval;
+    for (auto i=0u; i<dim; ++i) {
+        retval.push_back(van_der_corput(n,detail::prime(i+1)));
+    }
+    return retval;
 }
 
 } // namespace pagmo

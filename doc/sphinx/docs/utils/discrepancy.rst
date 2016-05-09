@@ -7,12 +7,17 @@ A number of utilities to generate and use low- discrepancy sequences
 
 --------------------------------------------------------------------------
 
+.. doxygenfunction:: pagmo::sample_from_simplex
+   :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
 .. doxygenfunction:: pagmo::van_der_corput
    :project: PaGMOreborn
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::project_to_simplex
+.. doxygenfunction:: pagmo::halton
    :project: PaGMOreborn
 
 
