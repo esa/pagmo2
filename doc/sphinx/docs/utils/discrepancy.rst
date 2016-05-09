@@ -12,7 +12,7 @@ A number of utilities to generate and use low- discrepancy sequences
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::project_2_simplex
+.. doxygenfunction:: pagmo::project_to_simplex
    :project: PaGMOreborn
 
 

@@ -27,3 +27,30 @@ BOOST_AUTO_TEST_CASE(van_der_corput_test)
         BOOST_CHECK_CLOSE(real10[i], computed10[i], 1e-13);
     }
 }
+
+BOOST_AUTO_TEST_CASE(sample_from_simplex_test)
+{
+    auto case1 = sample_from_simplex({0.3,0.1,0.6,0.9,1.});
+    auto result1 = std::vector<double>{0.1,0.2,0.3,0.3,0.1,0.};
+    for (auto i = 0u; i < case1.size(); ++i) { 
+        BOOST_CHECK_CLOSE(case1[i], result1[i], 1e-13);
+    }
+
+    auto case2 = sample_from_simplex({0.,0.9,0.3,1.,1.,0.2,0.});
+    auto result2 = std::vector<double>{0.,0.,0.2,0.1,0.6,0.1,0.,0.};
+    for (auto i = 0u; i < case2.size(); ++i) { 
+        BOOST_CHECK_CLOSE(case2[i], result2[i], 1e-13);
+    }
+
+    auto case3 = sample_from_simplex({0.2});
+    auto result3 = std::vector<double>{0.2,0.8};
+    for (auto i = 0u; i < case3.size(); ++i) { 
+        BOOST_CHECK_CLOSE(case3[i], result3[i], 1e-13);
+    }
+
+    // Check that throws if point is not in [0,1]
+    BOOST_CHECK_THROW(sample_from_simplex({0.2, 2.3}), std::invalid_argument);
+    BOOST_CHECK_THROW(sample_from_simplex({0.3,0.1,0.6,0.9,-0.1,1.}), std::invalid_argument);
+    // Checks that input cannot be empty
+    BOOST_CHECK_THROW(sample_from_simplex({}), std::invalid_argument);
+}

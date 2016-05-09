@@ -8,6 +8,7 @@
  */
 
 #include <algorithm>
+#include <exception>
 #include <vector>
 
 #include "../exceptions.hpp"
@@ -64,10 +65,9 @@ double van_der_corput(unsigned int n, unsigned int b) {
     return retval;
 }
 
-/// Projects a point onto a simplex
+/// Sample from a simplex
 /**
- * Projects a point \f$\mathbf x \in [0,1]^n\f$ onto a simplex so that if points comes from a uniform distribution
- * their projection will also be uniformly distributed on the simplex.
+ * Samples a point in a \f$n\f$ dimensional simplex from a sampled \f$n-1\f$ dimensional point
  *
  * In order to generate a uniform distribution on a simplex, that is to sample a \f$n\f$-dimensional
  * point \f$\mathbf x\f$ such that \f$\sum_{i=1}^{n} x_i = 1\f$ one can follow the following approach:
@@ -80,7 +80,7 @@ double van_der_corput(unsigned int n, unsigned int b) {
  * std::vector<std::vector<double>> points_on_a_simplex;
  * for (auto i = 0u; i < 100u; ++i) {
  *      auto v = random_vector(n+1); \\ we assume random_vector returns a uniformly distributed random vector of size n+1
- *      points_on_a_simplex.push_back(project_2_simplex(v));
+ *      points_on_a_simplex.push_back(project_to_simplex(v));
  * }
  * @endcode
  *
@@ -92,28 +92,23 @@ double van_der_corput(unsigned int n, unsigned int b) {
  *
  * @see Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134.
  */
-std::vector<double> project_2_simplex(std::vector<double> in) const
+std::vector<double> sample_from_simplex(std::vector<double> in) 
 {
     if (std::any_of(in.begin(), in.end(), [](auto item){return (item < 0 || item > 1);})) {
-        pagmo_throw(std::invlaid_argument,"Input vector must have all elements in [0,1]");
+        pagmo_throw(std::invalid_argument,"Input vector must have all elements in [0,1]");
     }
-    if (in.size() > 1) {
+    if (in.size() > 0u) {
         std::sort(in.begin(),in.end());
         in.insert(in.begin(),0.0);
         in.push_back(1.0);
-        double cumsum=0;
         for (unsigned int i = 0u; i < in.size()-1u; ++i) {
             in[i] = in[i+1] - in[i];
-            cumsum += in[i];
         }
         in.pop_back();
-        for (unsigned int i = 0u; i<in.size();++i) {
-            in[i] /= cumsum;
-        }
         return in;
     }
     else {
-        pagmo_throw(std::invlaid_argument,"Input vector must have at least dimension 2, a size of " + std::to_string(in.size()) + " was detected instead.");
+        pagmo_throw(std::invalid_argument,"Input vector must have at least dimension 1, a size of " + std::to_string(in.size()) + " was detected instead.");
     }
 }
 
