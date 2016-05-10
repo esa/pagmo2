@@ -147,28 +147,28 @@ struct prob_inner final: prob_inner_base
     }
     // Implementation of the optional methods.
     template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value,int>::type = 0>
-    static vector_double gradient_impl(U &value, const vector_double &dv)
+    static vector_double gradient_impl(const U &value, const vector_double &dv)
     {
         return value.gradient(dv);
     }
     template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value,int>::type = 0>
-    static vector_double gradient_impl(U &, const vector_double &)
+    static vector_double gradient_impl(const U &, const vector_double &)
     {
         pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\n"
             "A function with prototype 'vector_double gradient(const vector_double &x)' const was expected.");
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value,int>::type = 0>
-    static bool has_gradient_impl(U &p)
+    static bool has_gradient_impl(const U &p)
     {
        return p.has_gradient();
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value && !pagmo::override_has_gradient<U>::value,int>::type = 0>
-    static bool has_gradient_impl(U &)
+    static bool has_gradient_impl(const U &)
     {
        return true;
     }
     template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value,int>::type = 0>
-    static bool has_gradient_impl(U &)
+    static bool has_gradient_impl(const U &)
     {
        return false;
     }
@@ -185,43 +185,43 @@ struct prob_inner final: prob_inner_base
             "method is accessed only if 'has_gradient_sparsity()' returns true.");
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
-    static bool has_gradient_sparsity_impl(U &p)
+    static bool has_gradient_sparsity_impl(const U &p)
     {
        return p.has_gradient_sparsity();
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
-    static bool has_gradient_sparsity_impl(U &)
+    static bool has_gradient_sparsity_impl(const U &)
     {
        return true;
     }
     template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
-    static bool has_gradient_sparsity_impl(U &)
+    static bool has_gradient_sparsity_impl(const U &)
     {
        return false;
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value,int>::type = 0>
-    static std::vector<vector_double> hessians_impl(U &value, const vector_double &dv)
+    static std::vector<vector_double> hessians_impl(const U &value, const vector_double &dv)
     {
         return value.hessians(dv);
     }
     template <typename U, typename std::enable_if<!pagmo::has_hessians<U>::value,int>::type = 0>
-    static std::vector<vector_double> hessians_impl(U &, const vector_double &)
+    static std::vector<vector_double> hessians_impl(const U &, const vector_double &)
     {
         pagmo_throw(std::logic_error,"Hessians have been requested but not implemented.\n"
             "A function with prototype 'std::vector<vector_double> hessians(const vector_double &x)' const was expected.");
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value,int>::type = 0>
-    static bool has_hessians_impl(U &p)
+    static bool has_hessians_impl(const U &p)
     {
        return p.has_hessians();
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value && !pagmo::override_has_hessians<U>::value,int>::type = 0>
-    static bool has_hessians_impl(U &)
+    static bool has_hessians_impl(const U &)
     {
        return true;
     }
     template <typename U, typename std::enable_if<!pagmo::has_hessians<U>::value,int>::type = 0>
-    static bool has_hessians_impl(U &)
+    static bool has_hessians_impl(const U &)
     {
        return false;
     }
@@ -238,17 +238,17 @@ struct prob_inner final: prob_inner_base
             "method is accessed only if 'has_hessians_sparsity()' returns true.");
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
-    static bool has_hessians_sparsity_impl(U &p)
+    static bool has_hessians_sparsity_impl(const U &p)
     {
        return p.has_hessians_sparsity();
     }
     template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
-    static bool has_hessians_sparsity_impl(U &)
+    static bool has_hessians_sparsity_impl(const U &)
     {
        return true;
     }
     template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
-    static bool has_hessians_sparsity_impl(U &)
+    static bool has_hessians_sparsity_impl(const U &)
     {
        return false;
     }
