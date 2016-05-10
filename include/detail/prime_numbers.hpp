@@ -1,6 +1,8 @@
 #ifndef PAGMO_PRIME_NUMBERS_HPP
 #define PAGMO_PRIME_NUMBERS_HPP
 
+#include <algorithm>
+#include <array>
 #include <exception>
 
 #include "../exceptions.hpp"
@@ -9,17 +11,9 @@
 
 namespace pagmo { namespace detail {
 
-/// Returns a prime number
-/**
- * Returns any of the first 1600 prime numbers.
- *
- * @param[in] n the index of the desired prime number (0 is 1)
- *
- * @throw value_error if n is larger than 1600 or smaller than -1
-**/
-unsigned int prime ( unsigned int n )
+std::array<unsigned int, PRIME_MAX> prime_table()
 {
-	unsigned int npvec[PRIME_MAX] = { 1,
+	 return { { 1,
 		2,    3,    5,    7,   11,   13,   17,   19,   23,   29,
 		31,   37,   41,   43,   47,   53,   59,   61,   67,   71,
 		73,   79,   83,   89,   97,  101,  103,  107,  109,  113,
@@ -179,50 +173,16 @@ unsigned int prime ( unsigned int n )
 		13121,13127,13147,13151,13159,13163,13171,13177,13183,13187,
 		13217,13219,13229,13241,13249,13259,13267,13291,13297,13309,
 		13313,13327,13331,13337,13339,13367,13381,13397,13399,13411,
-		13417,13421,13441,13451,13457,13463,13469,13477,13487,13499 };
-	if ( n < PRIME_MAX ) {
-		return npvec[n];
-	}
-	else
-	{
-		pagmo_throw(std::invalid_argument,"n must be in [0,1600]");
-	}
+		13417,13421,13441,13451,13457,13463,13469,13477,13487,13499 }};
 }
 
-/// Returns the smallest prime greater than or equal to n
-/**
- * Returns the smallest prime greater than or equal to n
- * @param[in] n the number to be bounded.
- * @return the smallest prime greater than or equal to n.
- *
- * @throw std::invalid_argument if n is larger than 13499
- *
-**/
-unsigned int prime_ge ( unsigned int n )
-{
-	unsigned int lb = 0;
-	unsigned int ub = PRIME_MAX-1;
-	unsigned int min_p = prime(lb);
-	unsigned int max_p = prime(ub);
-	if (n<min_p || n>max_p) {
-		pagmo_throw(std::invalid_argument,"n is out of range");
+unsigned int prime(unsigned int n) {
+	if (n > PRIME_MAX) {
+		pagmo_throw(std::invalid_argument, "Out of bounds access to the prime table");
 	}
-	if (n == min_p) return min_p;
-	if (n == max_p) return max_p;
-	// bisection
-	while(!(ub-lb==1u)) {
-		unsigned int tmp = (ub+lb)/2;
-		unsigned int new_p = prime(tmp);
-		if (new_p >= n) {
-			ub = tmp;
-			max_p = new_p;
-		} else {
-			lb = tmp;
-			min_p = new_p;
-		}
-	}
-	return max_p;
+	return prime_table()[n];
 }
+
 # undef PRIME_MAX
 }}
 

@@ -111,7 +111,7 @@ public:
      * @throws std::invalid_argument if the base is 0u or 1u
      * 
      */
-    van_der_corput(unsigned int b, unsigned int n = 0u) : m_base(b), m_counter(n) {
+    van_der_corput(unsigned int b = 2u, unsigned int n = 0u) : m_base(b), m_counter(n) {
         if (b < 2) {
             pagmo_throw(std::invalid_argument,"The base of the van der Corput sequence must be at least 2: " + std::to_string(b) + " was detected");
         }
@@ -172,7 +172,7 @@ public:
      * @throws unspecified all exceptions thrown by pagmo::svan_der_corput
      * 
      */
-    halton(unsigned int dim, unsigned int n = 0) : m_dim(dim), m_counter(n) {
+    halton(unsigned int dim = 2u, unsigned int n = 0u) : m_dim(dim), m_counter(n) {
         for (auto i=0u; i<m_dim; ++i) {
             m_vdc.push_back(van_der_corput(detail::prime(i+1)));     
         }   

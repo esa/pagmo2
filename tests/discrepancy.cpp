@@ -70,4 +70,7 @@ BOOST_AUTO_TEST_CASE(halton_test)
             BOOST_CHECK_CLOSE(real2dim[i][j], computed2dim[i][j], 1e-13);
         }
     }
+    for (auto i = 0u; i<10; ++i) {
+        print(detail::)
+    }
 }
