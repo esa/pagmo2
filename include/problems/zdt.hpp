@@ -222,7 +222,7 @@ public:
         }
         return retval;
     }
-    // Serialization
+    /// Serialization
     template <typename Archive>
     void serialize(Archive &ar)
     {

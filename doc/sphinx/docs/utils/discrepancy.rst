@@ -12,13 +12,15 @@ A number of utilities to generate and use low- discrepancy sequences
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::van_der_corput
+.. doxygenclass:: pagmo::van_der_corput
    :project: PaGMOreborn
+   :members:
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::halton
+.. doxygenclass:: pagmo::halton
    :project: PaGMOreborn
+   :members:
 
 
 

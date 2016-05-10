@@ -102,6 +102,7 @@ public:
     template <typename Archive>
     void load(Archive &) = delete;
 
+    /// Serialize
     template <typename Archive>
     void serialize(Archive &ar)
     {

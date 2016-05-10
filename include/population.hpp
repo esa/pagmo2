@@ -205,6 +205,7 @@ class population
             });
         }
 
+        /// Population champion with scalar tolerance
         vector_double::size_type champion(double tol = 0.) const
         {
             vector_double tol_vector(m_prob.get_nf() - 1u, tol);
@@ -327,7 +328,7 @@ class population
             }
             return os;
         }
-        // Serialization.
+        /// Serialization.
         template <typename Archive>
         void serialize(Archive &ar)
         {
