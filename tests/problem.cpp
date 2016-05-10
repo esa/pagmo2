@@ -571,6 +571,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p1.get_nx() == 2);
     BOOST_CHECK(p1.get_nec() == 3);
     BOOST_CHECK(p1.get_nic() == 4);
+    BOOST_CHECK(p1.get_nc() == 4+3);
     BOOST_CHECK(p1.get_nf() == 2+3+4);
     BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13,13},{17,17}}));
     // dense
@@ -707,8 +708,50 @@ BOOST_AUTO_TEST_CASE(problem_constraint_dimension_test)
 {
     BOOST_CHECK(problem{c_01{}}.get_nec() == 1u);
     BOOST_CHECK(problem{c_01{}}.get_nic() == 0u);
+    BOOST_CHECK(problem{c_01{}}.get_nc() == 1u);
     BOOST_CHECK(problem{c_02{}}.get_nec() == 0u);
     BOOST_CHECK(problem{c_02{}}.get_nic() == 1u);
+    BOOST_CHECK(problem{c_02{}}.get_nc() == 1u);
     BOOST_CHECK(problem{c_03{}}.get_nec() == 1u);
     BOOST_CHECK(problem{c_03{}}.get_nic() == 1u);
+    BOOST_CHECK(problem{c_03{}}.get_nc() == 2u);
+}
+
+struct s_02
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {2,2,2};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nec() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nic() const
+    {
+        return 1u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0},{1}};
+    }
+    void set_seed(unsigned int seed)
+    {
+        m_seed = seed;
+    }
+    unsigned int m_seed = 0u;
+};
+
+BOOST_AUTO_TEST_CASE(problem_stochastic_test)
+{
+    print(has_set_seed<s_02>::value,'\n');
+    problem prob{s_02{}};
+    print(prob,'\n');
+    //BOOST_CHECK(prob.is_stochastic() == true);
+    //prob.set_seed(32u);
+    //BOOST_CHECK(prob.extract<s_02>()->m_seed == 32u);
 }

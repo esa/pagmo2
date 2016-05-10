@@ -94,6 +94,8 @@ struct prob_inner_base
     virtual std::pair<vector_double,vector_double> get_bounds() const = 0;
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
+    virtual void set_seed(unsigned int) const = 0;
+    virtual bool has_set_seed() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
     template <typename Archive>
@@ -270,6 +272,27 @@ struct prob_inner final: prob_inner_base
     {
         return 0;
     }
+    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value,int>::type = 0>
+    static void set_seed_impl(U &value, unsigned int seed)
+    {
+        value.set_seed(seed);
+    }
+    template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value,int>::type = 0>
+    static void set_seed_impl(U &, unsigned int)
+    {
+        pagmo_throw(std::logic_error,"The set_seed method has been called but not implemented by the user.\n"
+            "A function with prototype 'void set_seed(unsigned int)' was expected in the user defined problem.");
+    }
+    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value,int>::type = 0>
+    static bool has_set_seed_impl(U &p)
+    {
+       return true;
+    }
+    template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value,int>::type = 0>
+    static bool has_set_seed_impl(U &)
+    {
+       return false;
+    }
     template <typename U, typename std::enable_if<has_name<U>::value,int>::type = 0>
     static std::string get_name_impl(const U &value)
     {
@@ -331,6 +354,14 @@ struct prob_inner final: prob_inner_base
     virtual vector_double::size_type get_nic() const override final
     {
         return get_nic_impl(m_value);
+    }
+    virtual void set_seed(unsigned int seed) const override final
+    {
+        set_seed_impl(m_value, seed);
+    }
+    virtual bool has_set_seed() const override final
+    {
+        return has_set_seed_impl(m_value);
     }
     virtual std::string get_name() const override final
     {
@@ -530,6 +561,8 @@ class problem
             // 5 - Presence of Hessians and their sparsity.
             m_has_hessians = ptr()->has_hessians();
             m_has_hessians_sparsity = ptr()->has_hessians_sparsity();
+            // 5bis - Is this a stochastic problem?
+            m_is_stochastic = ptr()->has_set_seed();
             // 6 - Name and extra info.
             m_name = ptr()->get_name();
             m_extra_info = ptr()->get_extra_info();
@@ -582,7 +615,7 @@ class problem
             m_nec(other.m_nec),m_nic(other.m_nic),
             m_has_gradient(other.m_has_gradient),m_has_gradient_sparsity(other.m_has_gradient_sparsity),
             m_has_hessians(other.m_has_hessians),m_has_hessians_sparsity(other.m_has_hessians_sparsity),
-            m_name(other.m_name),m_extra_info(other.m_extra_info),
+            m_is_stochastic(other.m_is_stochastic), m_name(other.m_name),m_extra_info(other.m_extra_info),
             m_gs_dim(other.m_gs_dim),m_hs_dim(other.m_hs_dim)
         {}
 
@@ -596,7 +629,7 @@ class problem
             m_nec(other.m_nec),m_nic(other.m_nic),
             m_has_gradient(other.m_has_gradient),m_has_gradient_sparsity(other.m_has_gradient_sparsity),
             m_has_hessians(other.m_has_hessians),m_has_hessians_sparsity(other.m_has_hessians_sparsity),
-            m_name(std::move(other.m_name)),m_extra_info(std::move(other.m_extra_info)),
+            m_is_stochastic(other.m_is_stochastic), m_name(std::move(other.m_name)),m_extra_info(std::move(other.m_extra_info)),
             m_gs_dim(other.m_gs_dim),m_hs_dim(std::move(other.m_hs_dim))
         {}
 
@@ -617,6 +650,7 @@ class problem
                 m_has_gradient_sparsity = other.m_has_gradient_sparsity;
                 m_has_hessians = other.m_has_hessians;
                 m_has_hessians_sparsity = other.m_has_hessians_sparsity;
+                m_is_stochastic = other.m_is_stochastic,
                 m_name = std::move(other.m_name);
                 m_extra_info = std::move(other.m_extra_info);
                 m_gs_dim = other.m_gs_dim;
@@ -696,7 +730,6 @@ class problem
 
         /// Computes the gradient
         /**
-         *
          * The gradient, optionally implemented in the user-defined problem,
          * is expected to be a pagmo::vector_double containing the problem
          * fitness gradients \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$
@@ -989,6 +1022,16 @@ class problem
             return m_hs_dim;
         }
 
+        void set_seed(unsigned int seed)
+        {
+            ptr()->set_seed(seed);
+        }
+
+        bool is_stochastic() const
+        {
+            return m_is_stochastic;
+        }
+
         /// Problem's name.
         /**
          * @return The problem's name as returned by the corresponding
@@ -1017,8 +1060,11 @@ class problem
          */
         friend std::ostream &operator<<(std::ostream &os, const problem &p)
         {
-            os << "Problem name: " << p.get_name() << '\n';
-            os << "\tGlobal dimension:\t\t\t" << p.get_nx() << '\n';
+            os << "Problem name: " << p.get_name();
+            if (p.is_stochastic()) {
+                stream(os, "[stochastic]");
+            }
+            os << "\t\nGlobal dimension:\t\t\t" << p.get_nx() << '\n';
             os << "\tFitness dimension:\t\t\t" << p.get_nf() << '\n';
             os << "\tNumber of objectives:\t\t\t" << p.get_nobj() << '\n';
             os << "\tEquality constraints dimension:\t\t" << p.get_nec() << '\n';
@@ -1203,6 +1249,7 @@ class problem
         bool m_has_gradient_sparsity;
         bool m_has_hessians;
         bool m_has_hessians_sparsity;
+        bool m_is_stochastic;
         std::string m_name;
         std::string m_extra_info;
         // These are the dimensions of the sparsity objects, cached

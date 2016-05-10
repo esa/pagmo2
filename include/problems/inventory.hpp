@@ -2,8 +2,10 @@
 #define PAGMO_PROBLEM_INVENTORY_HPP
 
 #include <exception>
+#include <sstream>
 #include <iostream>
 #include <random>
+#include <string>
 #include <vector>
 
 #include "../exceptions.hpp"
@@ -75,11 +77,13 @@ class inventory
             }
             return {retval / m_sample_size};
         }
+
         /// Number of objectives
         vector_double::size_type get_nobj() const
         {
             return 1u;
         }
+
         /// Problem bounds
         std::pair<vector_double, vector_double> get_bounds() const
         {
@@ -87,16 +91,29 @@ class inventory
             vector_double ub(m_weeks, 200.);
             return {lb,ub};
         }
+
         /// Sets the seed
         void set_seed(unsigned int seed) 
         {
             m_seed = seed;
         }
+
         /// Problem name
         std::string get_name() const
         {
             return "Inventory problem (stochastic)";
         }
+
+        /// Extra informations
+        std::string get_extra_info() const
+        {
+            std::ostringstream ss;
+            ss << "\tWeeks: " << std::to_string(m_weeks) << "\n";
+            ss << "\tSample size: " << std::to_string(m_sample_size) << "\n";
+            ss << "\tSeed: " << std::to_string(m_seed) << "\n";
+            return ss.str();
+        }
+
         /// Serialization
         template <typename Archive>
         void serialize(Archive &ar)
