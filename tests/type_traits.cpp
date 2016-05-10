@@ -441,3 +441,35 @@ BOOST_AUTO_TEST_CASE(override_has_hessians_sparsity_test)
     BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_02>::value));
     BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_03>::value));
 }
+
+struct set_seed_00 {};
+
+// The good one.
+struct set_seed_01 
+{
+    void set_seed(unsigned int);
+};
+
+struct set_seed_02 
+{
+    void set_seed(unsigned int) const;
+};
+
+struct set_seed_03
+{
+    void set_seed(int);
+};
+
+struct set_seed_04 
+{
+    double set_seed(unsigned int);
+};
+
+BOOST_AUTO_TEST_CASE(has_set_seed_test)
+{
+    BOOST_CHECK((!has_set_seed<set_seed_00>::value));
+    BOOST_CHECK((has_set_seed<set_seed_01>::value));
+    BOOST_CHECK((has_set_seed<set_seed_02>::value));
+    BOOST_CHECK((has_set_seed<set_seed_03>::value));
+    BOOST_CHECK((!has_set_seed<set_seed_04>::value));
+}

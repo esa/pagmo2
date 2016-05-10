@@ -10,7 +10,7 @@
 
 namespace pagmo { namespace detail {
 
-std::array<unsigned int, PRIME_MAX> prime_table()
+inline std::array<unsigned int, PRIME_MAX> prime_table()
 {
      return { { 1,
         2,    3,    5,    7,   11,   13,   17,   19,   23,   29,
@@ -175,7 +175,8 @@ std::array<unsigned int, PRIME_MAX> prime_table()
         13417,13421,13441,13451,13457,13463,13469,13477,13487,13499 }};
 }
 
-unsigned int prime(unsigned int n) {
+inline unsigned int prime(unsigned int n) 
+{
     if (n > PRIME_MAX) {
         pagmo_throw(std::invalid_argument, "Out of bounds access to the prime table");
     }

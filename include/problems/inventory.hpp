@@ -62,7 +62,7 @@ class inventory
             // We construct a uniform distribution from 0 to 1.
             auto drng = std::uniform_real_distribution<double>(0., 1.);
             // We may now start the computations
-            const double c=1.0,b=1.5,h=0.1;
+            const double c=1.0, b=1.5, h=0.1; // c is the cost per unit, b is the backorder penalty cost and h is the holding cost
             double retval=0;
 
             for (size_t i = 0; i<m_sample_size; ++i) {
@@ -87,15 +87,15 @@ class inventory
             vector_double ub(m_weeks, 200.);
             return {lb,ub};
         }
-        /// Problem name
-        std::string get_name() const
-        {
-            return "Inventory problem (stochastic)";
-        }
         /// Sets the seed
         void set_seed(unsigned int seed) 
         {
             m_seed = seed;
+        }
+        /// Problem name
+        std::string get_name() const
+        {
+            return "Inventory problem (stochastic)";
         }
         /// Serialization
         template <typename Archive>
@@ -117,6 +117,6 @@ class inventory
 
 } // namespace pagmo
 
-//PAGMO_REGISTER_PROBLEM(pagmo::inventory)
+PAGMO_REGISTER_PROBLEM(pagmo::inventory)
 
 #endif

@@ -135,6 +135,35 @@ class has_i_constraints: detail::sfinae_types
 template <typename T>
 const bool has_i_constraints<T>::value;
 
+/// Type has set_seed()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if the expression p.set_seed(n) 
+ * is valid and returns void, where p is a non-const instance of \p T and n is an unsigned int
+ * 
+ * For example, if \p T has the following method implemented:
+ *
+ * @code
+ * void set_seed(unsigned int seed) 
+ * @endcode
+ *
+ */
+template <typename T>
+class has_set_seed: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(U &p) -> decltype(p.set_seed(std::declval<unsigned int>()));
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<void,decltype(test0(std::declval<T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_set_seed<T>::value;
+
 /// Type has get_name()
 /**
  * This type trait defines a static const boolean
