@@ -1,0 +1,49 @@
+environment:
+  global:
+    PLATFORMTOOLSET: "v140"
+
+  matrix:
+    # - BUILD_TYPE: "Debug"
+    #   COMPILER: MSVC15
+    #   PLATFORM: "Win32"
+    # - BUILD_TYPE: "Debug"
+    #   COMPILER: MinGW
+    - BUILD_TYPE: "Debug"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
+    # - BUILD_TYPE: "Debug"
+    #   COMPILER: MinGW-w64
+    # - BUILD_TYPE: "Release"
+    #   COMPILER: MSVC15
+    #   PLATFORM: "Win32"
+    # - BUILD_TYPE: "Release"
+    #   COMPILER: MinGW
+    # - BUILD_TYPE: "Release"
+    #   COMPILER: MSVC15
+    #   PLATFORM: "x64"
+    # - BUILD_TYPE: "Release"
+    #   COMPILER: MinGW-w64
+
+install:
+- if [%COMPILER%]==[MSVC15] set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+- if [%COMPILER%]==[MSVC15] call bin\appveyor-download.cmd https://github.com/bluescarni/binary_deps/raw/master/boost_4_pagmo.7z
+- if [%COMPILER%]==[MSVC15] 7z x boost_4_pagmo.7z > NUL
+- if [%COMPILER%]==[MSVC15] move boost_4_pagmo c:\
+- if [%COMPILER%]==[MSVC15] set PATH=%PATH%;c:\boost_4_pagmo\stage\lib
+
+build_script:
+- mkdir build
+- cd build
+
+- if [%COMPILER%]==[MSVC15] if [%PLATFORM%]==[x64] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_PREFIX_PATH=mpir-2.7.0/lib/%PLATFORM%/%BUILD_TYPE% -DCMAKE_CXX_FLAGS_RELEASE="/MT /W1 /O2 /Ob2 /D NDEBUG" -DCMAKE_CXX_FLAGS_DEBUG="/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1 /W1" ..
+
+- cmake --build . --config %BUILD_TYPE% #--target install
+
+test_script:
+- ctest --output-on-failure
+
+# Enable this to be able to login to the build worker. You can use the
+# `remmina` program in Ubuntu, use the login information that the line below
+# prints into the log.
+#on_finish:
+#- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
