@@ -91,3 +91,10 @@ BOOST_AUTO_TEST_CASE(translate_serialization_test)
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
 }
+
+BOOST_AUTO_TEST_CASE(translate_stochastic_test)
+{
+    hock_schittkowsky_71 p0{};
+    problem p{translate{p0,{ 0.1,-0.2, 0.3, 0.4}}};
+    BOOST_CHECK(!p.is_stochastic());
+}

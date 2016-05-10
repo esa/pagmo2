@@ -257,12 +257,12 @@ BOOST_AUTO_TEST_CASE(has_gradient_test)
 struct ov_grad_00 {};
 
 // The good one.
-struct ov_grad_01 
+struct ov_grad_01
 {
     bool has_gradient() const;
 };
 
-struct ov_grad_02 
+struct ov_grad_02
 {
     bool has_gradient();
 };
@@ -309,12 +309,12 @@ BOOST_AUTO_TEST_CASE(has_gradient_sparsity_test)
 struct ov_gs_00 {};
 
 // The good one.
-struct ov_gs_01 
+struct ov_gs_01
 {
     bool has_gradient_sparsity() const;
 };
 
-struct ov_gs_02 
+struct ov_gs_02
 {
     bool has_gradient_sparsity();
 };
@@ -419,12 +419,12 @@ BOOST_AUTO_TEST_CASE(has_hessians_sparsity_test)
 struct ov_hs_00 {};
 
 // The good one.
-struct ov_hs_01 
+struct ov_hs_01
 {
     bool has_hessians_sparsity() const;
 };
 
-struct ov_hs_02 
+struct ov_hs_02
 {
     bool has_hessians_sparsity();
 };
@@ -445,12 +445,12 @@ BOOST_AUTO_TEST_CASE(override_has_hessians_sparsity_test)
 struct set_seed_00 {};
 
 // The good one.
-struct set_seed_01 
+struct set_seed_01
 {
     void set_seed(unsigned int);
 };
 
-struct set_seed_02 
+struct set_seed_02
 {
     void set_seed(unsigned int) const;
 };
@@ -460,7 +460,7 @@ struct set_seed_03
     void set_seed(int);
 };
 
-struct set_seed_04 
+struct set_seed_04
 {
     double set_seed(unsigned int);
 };
@@ -472,4 +472,30 @@ BOOST_AUTO_TEST_CASE(has_set_seed_test)
     BOOST_CHECK((has_set_seed<set_seed_02>::value));
     BOOST_CHECK((has_set_seed<set_seed_03>::value));
     BOOST_CHECK((!has_set_seed<set_seed_04>::value));
+}
+
+struct ov_hss_00 {};
+
+// The good one.
+struct ov_hss_01
+{
+    bool has_set_seed() const;
+};
+
+struct ov_hss_02
+{
+    bool has_set_seed();
+};
+
+struct ov_hss_03
+{
+    void has_set_seed() const;
+};
+
+BOOST_AUTO_TEST_CASE(override_has_set_seed_test)
+{
+    BOOST_CHECK((!override_has_set_seed<ov_hss_00>::value));
+    BOOST_CHECK((override_has_set_seed<ov_hss_01>::value));
+    BOOST_CHECK((!override_has_set_seed<ov_hss_02>::value));
+    BOOST_CHECK((!override_has_set_seed<ov_hss_03>::value));
 }

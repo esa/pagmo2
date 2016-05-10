@@ -283,7 +283,12 @@ struct prob_inner final: prob_inner_base
         pagmo_throw(std::logic_error,"The set_seed method has been called but not implemented by the user.\n"
             "A function with prototype 'void set_seed(unsigned int)' was expected in the user defined problem.");
     }
-    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value,int>::type = 0>
+    static bool has_set_seed_impl(const U &p)
+    {
+       return p.has_set_seed();
+    }
+    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value,int>::type = 0>
     static bool has_set_seed_impl(const U &)
     {
        return true;
@@ -1025,6 +1030,11 @@ class problem
         void set_seed(unsigned int seed)
         {
             ptr()->set_seed(seed);
+        }
+
+        bool has_set_seed() const
+        {
+            return is_stochastic();
         }
 
         bool is_stochastic() const
