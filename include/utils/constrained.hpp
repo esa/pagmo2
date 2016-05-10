@@ -109,7 +109,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
             );
         }
     }
-    // 2 - The dimension of the fitness vectors mus be at least 2 (one objective and one constraint)
+    // 2 - The dimension of the fitness vectors mus be at least 1 
     if (M < 1u) {
         pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to sort: a dimension of "
             + std::to_string(M) + " was detected. "
@@ -172,7 +172,15 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
             return {0u};
         }
     }
-    vector_double tol_vector(input_f[0].size() - 1u, tol);
+    // Now we are sure input_f is not empty and has size at least 2
+    auto M = input_f[0].size();
+    // 2 - The dimension of the fitness vectors must be at least 1 
+    if (M < 1u) {
+        pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to sort: a dimension of "
+            + std::to_string(M) + " was detected. "
+        );
+    }
+    vector_double tol_vector(M - 1u, tol);
     return sort_population_con(input_f, neq, tol_vector);
 }
 
