@@ -94,7 +94,7 @@ struct prob_inner_base
     virtual std::pair<vector_double,vector_double> get_bounds() const = 0;
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
-    virtual void set_seed(unsigned int) const = 0;
+    virtual void set_seed(unsigned int) = 0;
     virtual bool has_set_seed() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
@@ -284,12 +284,12 @@ struct prob_inner final: prob_inner_base
             "A function with prototype 'void set_seed(unsigned int)' was expected in the user defined problem.");
     }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value,int>::type = 0>
-    static bool has_set_seed_impl(U &p)
+    static bool has_set_seed_impl(const U &)
     {
        return true;
     }
     template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value,int>::type = 0>
-    static bool has_set_seed_impl(U &)
+    static bool has_set_seed_impl(const U &)
     {
        return false;
     }
@@ -355,7 +355,7 @@ struct prob_inner final: prob_inner_base
     {
         return get_nic_impl(m_value);
     }
-    virtual void set_seed(unsigned int seed) const override final
+    virtual void set_seed(unsigned int seed) override final
     {
         set_seed_impl(m_value, seed);
     }
@@ -1126,9 +1126,14 @@ class problem
         }
 
     private:
-        // Just a small helper to make sure that whenever we require
+        // Just two small helpers to make sure that whenever we require
         // access to the pointer it actually points to something.
         detail::prob_inner_base const *ptr() const
+        {
+            assert(m_ptr.get() != nullptr);
+            return m_ptr.get();
+        }
+        detail::prob_inner_base *ptr()
         {
             assert(m_ptr.get() != nullptr);
             return m_ptr.get();
@@ -1230,7 +1235,7 @@ class problem
 
     private:
         // Pointer to the inner base problem
-        std::unique_ptr<const detail::prob_inner_base> m_ptr;
+        std::unique_ptr<detail::prob_inner_base> m_ptr;
         // Atomic counter for calls to the fitness
         mutable std::atomic<unsigned long long> m_fevals;
         // Atomic counter for calls to the gradient

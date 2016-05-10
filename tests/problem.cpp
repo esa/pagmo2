@@ -751,7 +751,7 @@ BOOST_AUTO_TEST_CASE(problem_stochastic_test)
     print(has_set_seed<s_02>::value,'\n');
     problem prob{s_02{}};
     print(prob,'\n');
-    //BOOST_CHECK(prob.is_stochastic() == true);
-    //prob.set_seed(32u);
-    //BOOST_CHECK(prob.extract<s_02>()->m_seed == 32u);
+    BOOST_CHECK(prob.is_stochastic() == true);
+    prob.set_seed(32u);
+    BOOST_CHECK(prob.extract<s_02>()->m_seed == 32u);
 }
