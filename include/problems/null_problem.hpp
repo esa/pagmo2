@@ -1,5 +1,5 @@
-#ifndef PAGMO_PROBLEM_NULL
-#define PAGMO_PROBLEM_NULL
+#ifndef PAGMO_PROBLEM_NULL_HPP
+#define PAGMO_PROBLEM_NULL_HPP
 
 #include "../io.hpp"
 #include "../problem.hpp"

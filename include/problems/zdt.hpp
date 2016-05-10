@@ -1,5 +1,5 @@
-#ifndef PAGMO_PROBLEM_ZDT
-#define PAGMO_PROBLEM_ZDT
+#ifndef PAGMO_PROBLEM_ZDT_HPP
+#define PAGMO_PROBLEM_ZDT_HPP
 
 #include <algorithm>
 #include <cmath>

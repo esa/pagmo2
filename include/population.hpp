@@ -1,5 +1,5 @@
-#ifndef PAGMO_POPULATION_H
-#define PAGMO_POPULATION_H
+#ifndef PAGMO_POPULATION_HPP
+#define PAGMO_POPULATION_HPP
 
 #include <algorithm>
 #include <cassert>

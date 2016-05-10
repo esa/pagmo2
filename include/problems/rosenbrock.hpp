@@ -1,5 +1,5 @@
-#ifndef PAGMO_PROBLEM_ROSENBROCK
-#define PAGMO_PROBLEM_ROSENBROCK
+#ifndef PAGMO_PROBLEM_ROSENBROCK_HPP
+#define PAGMO_PROBLEM_ROSENBROCK_HPP
 
 #include <exception>
 #include <iostream>
@@ -78,7 +78,7 @@ struct rosenbrock
     unsigned int m_dim;
 };
 
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::rosenbrock)
 

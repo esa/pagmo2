@@ -1,5 +1,5 @@
-#ifndef PAGMO_PROBLEM_TRANSLATE
-#define PAGMO_PROBLEM_TRANSLATE
+#ifndef PAGMO_PROBLEM_TRANSLATE_HPP
+#define PAGMO_PROBLEM_TRANSLATE_HPP
 
 #include <algorithm>
 #include <cassert>
