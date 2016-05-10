@@ -59,7 +59,7 @@ class inventory
         /// Fitness computation
         vector_double fitness(const vector_double &x) const
         {
-            // We seed the random engine 
+            // We seed the random engine
             m_e.seed(m_seed);
             // We construct a uniform distribution from 0 to 1.
             auto drng = std::uniform_real_distribution<double>(0., 1.);
@@ -93,7 +93,7 @@ class inventory
         }
 
         /// Sets the seed
-        void set_seed(unsigned int seed) 
+        void set_seed(unsigned int seed)
         {
             m_seed = seed;
         }
@@ -101,7 +101,7 @@ class inventory
         /// Problem name
         std::string get_name() const
         {
-            return "Inventory problem (stochastic)";
+            return "Inventory problem";
         }
 
         /// Extra informations
