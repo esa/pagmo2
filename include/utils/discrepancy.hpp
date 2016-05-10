@@ -94,8 +94,8 @@ std::vector<double> sample_from_simplex(std::vector<double> in)
  * \tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16},
  * \tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \f$
  *
- *
  * @see http://en.wikipedia.org/wiki/Van_der_Corput_sequence
+ *
  */
 class van_der_corput
 {
@@ -157,6 +157,8 @@ private:
  *
  * @param[in] n selects which element of the sequence to return
  * @param[in] dim dimensions of the returned point
+ *
+ * @see https://en.wikipedia.org/wiki/Halton_sequence
  *
  */
 class halton {

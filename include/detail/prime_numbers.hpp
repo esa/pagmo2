@@ -1,7 +1,6 @@
 #ifndef PAGMO_PRIME_NUMBERS_HPP
 #define PAGMO_PRIME_NUMBERS_HPP
 
-#include <algorithm>
 #include <array>
 #include <exception>
 
