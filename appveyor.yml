@@ -26,7 +26,7 @@ environment:
 
 install:
 - if [%COMPILER%]==[MSVC15] set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-- if [%COMPILER%]==[MSVC15] call bin\appveyor-download.cmd https://github.com/bluescarni/binary_deps/raw/master/boost_4_pagmo.7z
+- if [%COMPILER%]==[MSVC15] call tools\appveyor-download.cmd https://github.com/bluescarni/binary_deps/raw/master/boost_4_pagmo.7z
 - if [%COMPILER%]==[MSVC15] 7z x boost_4_pagmo.7z > NUL
 - if [%COMPILER%]==[MSVC15] move boost_4_pagmo c:\
 - if [%COMPILER%]==[MSVC15] set PATH=%PATH%;c:\boost_4_pagmo\stage\lib
