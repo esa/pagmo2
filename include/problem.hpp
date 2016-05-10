@@ -1104,7 +1104,7 @@ class problem
         {
             ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(),
                 m_lb,m_ub,m_nobj,m_nec,m_nic,m_has_gradient,m_has_gradient_sparsity,
-                m_has_hessians,m_has_hessians_sparsity,m_name,m_extra_info,
+                m_has_hessians,m_has_hessians_sparsity,m_is_stochastic,m_name,m_extra_info,
                 m_gs_dim,m_hs_dim);
         }
 
@@ -1121,7 +1121,7 @@ class problem
             ar(tmp);
             m_hevals.store(tmp);
             ar(m_lb,m_ub,m_nobj,m_nec,m_nic,m_has_gradient,m_has_gradient_sparsity,
-                m_has_hessians,m_has_hessians_sparsity,m_name,m_extra_info,
+                m_has_hessians,m_has_hessians_sparsity,m_is_stochastic,m_name,m_extra_info,
                 m_gs_dim,m_hs_dim);
         }
 
