@@ -17,7 +17,7 @@ namespace pagmo { namespace detail {
  *
  * @throw value_error if n is larger than 1600 or smaller than -1
 **/
-unsigned int prime ( int n )
+unsigned int prime ( unsigned int n )
 {
 	unsigned int npvec[PRIME_MAX] = { 1,
 		2,    3,    5,    7,   11,   13,   17,   19,   23,   29,
@@ -180,14 +180,12 @@ unsigned int prime ( int n )
 		13217,13219,13229,13241,13249,13259,13267,13291,13297,13309,
 		13313,13327,13331,13337,13339,13367,13381,13397,13399,13411,
 		13417,13421,13441,13451,13457,13463,13469,13477,13487,13499 };
-	if ( n == -1) {
-		return npvec[PRIME_MAX-1];
-	} else if ( n < PRIME_MAX ) {
+	if ( n < PRIME_MAX ) {
 		return npvec[n];
 	}
 	else
 	{
-		pagmo_throw(std::invalid_argument,"n must be in [-1,1600]");
+		pagmo_throw(std::invalid_argument,"n must be in [0,1600]");
 	}
 }
 
