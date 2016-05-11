@@ -47,8 +47,8 @@ struct algo_inner: algo_inner_base
     // Constructors from T (copy and move variants).
     explicit algo_inner(T &&x):m_value(std::move(x)) {}
     explicit algo_inner(const T &x):m_value(x) {}
-    // The clone method, used in the copy constructor of problem.
-    virtual algo_inner_base *clone() const override
+    // The clone method, used in the copy constructor of algorithm.
+    virtual algo_inner_base *clone() const override final
     {
         return ::new algo_inner<T>(m_value);
     }
@@ -88,7 +88,7 @@ struct algo_inner: algo_inner_base
     static void set_seed_impl(U &, unsigned int)
     {
         pagmo_throw(std::logic_error,"The set_seed method has been called but not implemented by the user.\n"
-            "A function with prototype 'void set_seed(unsigned int)' was expected in the user defined problem.");
+            "A function with prototype 'void set_seed(unsigned int)' was expected in the user defined algorithm.");
     }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value,int>::type = 0>
     static bool has_set_seed_impl(const U &p)
@@ -136,8 +136,8 @@ struct algo_inner: algo_inner_base
     // Serialization
     template <typename Archive>
     void serialize(Archive &ar)
-    { 
-        ar(cereal::base_class<algo_inner_base>(this),m_value); 
+    {
+        ar(cereal::base_class<algo_inner_base>(this),m_value);
     }
     T m_value;
 };
@@ -172,11 +172,11 @@ class algorithm
         {
             return m_ptr->evolve();
         }
-        
+
         template <typename Archive>
         void serialize(Archive &ar)
-        { 
-            ar(m_ptr); 
+        {
+            ar(m_ptr);
         }
     private:
         std::unique_ptr<detail::algo_inner_base> m_ptr;
