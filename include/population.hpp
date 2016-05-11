@@ -173,7 +173,7 @@ class population
             return pagmo::decision_vector(m_prob.get_bounds(), std::uniform_int_distribution<unsigned int>()(m_e));
         }
 
-        /// Population champion
+        /// Population champion with vector tolerance
         /**
          * The best individual of a population is defined as its *champion*.
          * If the problem is single-objective and unconstrained, the champion
@@ -183,6 +183,8 @@ class population
          * If the problem is multi-objective one single champion is not defined. In
          * this case the user can still obtain a strict ordering of the population
          * individuals by calling the pagmo::sort_population_mo() function.
+         *
+         * @param[in] tol vector of tolerances to be applied to each constraints
          *
          * @throws std::invalid_argument if the problem is multiobjective and thus
          * the notion of champion is not valid
@@ -207,6 +209,9 @@ class population
         }
 
         /// Population champion with scalar tolerance
+        /**
+         * @param[in] tol scalar tolerance to be considered for each constraint
+         */
         vector_double::size_type champion(double tol = 0.) const
         {
             vector_double tol_vector(m_prob.get_nf() - 1u, tol);
