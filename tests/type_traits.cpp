@@ -442,36 +442,36 @@ BOOST_AUTO_TEST_CASE(override_has_hessians_sparsity_test)
     BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_03>::value));
 }
 
-struct set_seed_00 {};
+struct hss_00 {};
 
 // The good one.
-struct set_seed_01
+struct hss_01
 {
     void set_seed(unsigned int);
 };
 
-struct set_seed_02
+struct hss_02
 {
     void set_seed(unsigned int) const;
 };
 
-struct set_seed_03
+struct hss_03
 {
     void set_seed(int);
 };
 
-struct set_seed_04
+struct hss_04
 {
     double set_seed(unsigned int);
 };
 
 BOOST_AUTO_TEST_CASE(has_set_seed_test)
 {
-    BOOST_CHECK((!has_set_seed<set_seed_00>::value));
-    BOOST_CHECK((has_set_seed<set_seed_01>::value));
-    BOOST_CHECK((has_set_seed<set_seed_02>::value));
-    BOOST_CHECK((has_set_seed<set_seed_03>::value));
-    BOOST_CHECK((!has_set_seed<set_seed_04>::value));
+    BOOST_CHECK((!has_set_seed<hss_00>::value));
+    BOOST_CHECK((has_set_seed<hss_01>::value));
+    BOOST_CHECK((has_set_seed<hss_02>::value));
+    BOOST_CHECK((has_set_seed<hss_03>::value));
+    BOOST_CHECK((!has_set_seed<hss_04>::value));
 }
 
 struct ov_hss_00 {};
@@ -499,3 +499,76 @@ BOOST_AUTO_TEST_CASE(override_has_set_seed_test)
     BOOST_CHECK((!override_has_set_seed<ov_hss_02>::value));
     BOOST_CHECK((!override_has_set_seed<ov_hss_03>::value));
 }
+
+struct hsv_00 {};
+
+// The good one 
+struct hsv_01
+{
+    void set_verbose(unsigned int);
+};
+
+// also good
+struct hsv_02
+{
+    void set_verbose(unsigned int) const;
+};
+
+// also good
+struct hsv_03
+{
+    void set_verbose(int);
+};
+
+struct hsv_04
+{
+    double set_verbose(unsigned int);
+};
+
+BOOST_AUTO_TEST_CASE(has_set_verbose_test)
+{
+    BOOST_CHECK((!has_set_verbose<hsv_00>::value));
+    BOOST_CHECK((has_set_verbose<hsv_01>::value));
+    BOOST_CHECK((has_set_verbose<hsv_02>::value));
+    BOOST_CHECK((has_set_verbose<hsv_03>::value));
+    BOOST_CHECK((!has_set_verbose<hsv_04>::value));
+}
+
+struct hev_00 {};
+
+// The good one 
+struct hev_01
+{
+    population evolve(const population&) const;
+};
+
+struct hev_02
+{
+    population evolve(const population&);
+};
+
+struct hev_03
+{
+    population evolve(population&) const;
+};
+
+struct hev_04
+{
+    double evolve(const population&) const;
+};
+
+struct hev_05
+{
+    population evolve(const double&) const;
+};
+
+BOOST_AUTO_TEST_CASE(has_evolve_test)
+{
+    BOOST_CHECK((!has_evolve<hev_00>::value));
+    BOOST_CHECK((has_evolve<hev_01>::value));
+    BOOST_CHECK((!has_evolve<hev_02>::value));
+    BOOST_CHECK((!has_evolve<hev_03>::value));
+    BOOST_CHECK((!has_evolve<hev_04>::value));
+    BOOST_CHECK((!has_evolve<hev_05>::value));
+}
+

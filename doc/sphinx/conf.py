@@ -44,7 +44,7 @@ extensions = [
 #sys.path.append( "/home/me/docproj/ext/breathe/" )
 breathe_projects = { "PaGMOreborn": "../doxygen/xml" }
 breathe_default_project = "PaGMOreborn"
-breathe_default_members = ('members')
+breathe_default_members = ('members',)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

@@ -6,7 +6,9 @@
 #include <utility>
 #include <vector>
 
+#include "detail/population_fwd.hpp"
 #include "types.hpp"
+
 
 namespace pagmo
 {
@@ -461,6 +463,61 @@ class override_has_hessians_sparsity: detail::sfinae_types
 
 template <typename T>
 const bool override_has_hessians_sparsity<T>::value;
+
+/// Type has set_verbose
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if the expression p.set_verbose(n)
+ * is valid and returns void, where p is a non-const instance of \p T and n is a bool
+ *
+ * For example, if \p T has the following method implemented:
+ *
+ * @code
+ * void set_verbose(unsigned int level)
+ * @endcode
+ *
+ */
+template <typename T>
+class has_set_verbose: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(U &p) -> decltype(p.set_verbose(std::declval<unsigned int>()));
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<void,decltype(test0(std::declval<T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_set_verbose<T>::value;
+
+/// Type has evolve
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * population evolve(const population& pop) const
+ * @endcode
+ */
+template <typename T>
+class has_evolve: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.evolve(std::declval<const population &>()));
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<population,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_evolve<T>::value;
 
 } // namespace pagmo
 

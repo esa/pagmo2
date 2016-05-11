@@ -21,10 +21,8 @@ pagmo-clang:
 
 pages:
   script:
-  - cd doc/doxygen
-  - doxygen Doxyfile
-  - cd ../sphinx
-  - make html
+  - cd doc/sphinx
+  - ./compile
   - mv _build/html ../../public/
   artifacts:
     paths:
