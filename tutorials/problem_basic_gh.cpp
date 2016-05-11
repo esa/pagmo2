@@ -127,7 +127,7 @@ struct problem_basic_gh
     // Optional, provides a name for the problem overrding the default name
     std::string get_name() const
     {   
-        return std::string("My Problem with derivatives!!");
+        return "My Problem with derivatives!!";
     }
 
     // Optional, provides extra information that will be appended after

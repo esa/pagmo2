@@ -42,16 +42,13 @@ struct problem_basic
     // Optional, provides a name for the problem overrding the default name
     std::string get_name() const
     {   
-        return std::string("My Problem");
+        return "My Problem";
     }
 
     // Optional, provides extra information that will be appended after
     // the default stream operator
     std::string get_extra_info() const {
-        std::ostringstream s;
-        s << "This is a simple toy stochastic problem with one fitness, " << '\n';
-        s << "no constraint and a fixed dimension of 4." << "\n";
-        return s.str();
+        return "This is a simple toy stochastic problem with one fitness, no constraint and a fixed dimension of 4.";
     }
     
     // Optional methods-data can also be accessed later via 
