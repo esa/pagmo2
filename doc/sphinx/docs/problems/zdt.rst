@@ -1,4 +1,4 @@
-.. cpp_translate
+.. cpp_zdt
 
 ZDT test suite
 ==============

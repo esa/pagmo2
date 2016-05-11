@@ -24,8 +24,9 @@ to test your algorithms or to learn how to use PaGMO
   :maxdepth: 1
 
   problems/rosenbrock
-  problems/hock_schittkowsky_71
   problems/zdt
+  problems/hock_schittkowsky_71
+  problems/inventory
   problems/translate
 
 Utilities
