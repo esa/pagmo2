@@ -393,9 +393,9 @@ struct prob_inner final: prob_inner_base
  * \f[
  * \begin{array}{rl}
  * \mbox{find:}      & \mathbf {lb} \le \mathbf x \le \mathbf{ub}\\
- * \mbox{to minimize: } & \mathbf f(\mathbf x) \in \mathbb R^{n_{obj}}\\
- * \mbox{subject to:} & \mathbf {c}_e(\mathbf x) = 0 \\
- *                    & \mathbf {c}_i(\mathbf x) \le 0
+ * \mbox{to minimize: } & \mathbf f(\mathbf x, s) \in \mathbb R^{n_{obj}}\\
+ * \mbox{subject to:} & \mathbf {c}_e(\mathbf x, s) = 0 \\
+ *                    & \mathbf {c}_i(\mathbf x, s) \le 0
  * \end{array}
  * \f]
  *
@@ -404,9 +404,12 @@ struct prob_inner final: prob_inner_base
  * \f$ \mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}\f$ define the *objectives*,
  * \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality constraints*,
  * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality constraints*.
+ * Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
+ * values of any number of stochastic variables. This allows also for stochastic programming
+ * tasks to be represented by this class.
  *
- * To create an instance of above problem the user is asked to construct a pagmo::problem from
- * a separate object of type T where, at least, the implementation of
+ * To create an instance of the above problem the user is asked to construct a pagmo::problem from
+ * a separate object of type \p T where, at least, the implementation of
  * the following methods is provided:
  *
  * @code
@@ -420,7 +423,9 @@ struct prob_inner final: prob_inner_base
  * - The return value of \p T::get_nobj() is expected to be \f$n_{obj}\f$
  * - The return value of \p T::get_bounds() is expected to contain \f$(\mathbf{lb}, \mathbf{ub})\f$.
  *
- * The user can also implement the following methods in \p T :
+ * The three mandatory methods above allow to define a deterministic, derivative-free, unconstrained problem.
+ * In order to consider more complex cases, the user may implement one or more
+ * of the following methods in \p T :
  *   @code
  *   vector_double::size_type get_nec() const;
  *   vector_double::size_type get_nic() const;
@@ -428,6 +433,7 @@ struct prob_inner final: prob_inner_base
  *   sparsity_pattern gradient_sparsity() const;
  *   std::vector<vector_double> hessians(const vector_double &x) const;
  *   std::vector<sparsity_pattern> hessians_sparsity() const;
+ *   void set_seed(unsigned int s);
  *   std::string get_name() const;
  *   std::string get_extra_info() const;
  *   @endcode
@@ -452,11 +458,15 @@ struct prob_inner final: prob_inner_base
  * is symmetric, only lower triangular elements are allowed. When
  * not implemented a dense pattern is assumed and a call to problem::hessians_sparsity()
  * returns \f$n_f\f$ sparsity patterns each one being \f$((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\f$.
+ * - \p T::set_seed() changes the value of the seed \f$s\f$ that can be used in the fitness function to
+ * consider stochastic objectives and constraints. When not implemented a call to problem::set_seed() throws an \p std::logic_error.
+ * - \p T::get_name() returns a string containing the problem name to be used in output streams.
+ * - \p T::get_extra_info() returns a string containing extra human readable information to be used in output streams.
  *
- * Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the hessians.
+ * @note Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the hessians.
  * At each copy construction and copy assignment these counters are reset to zero.
  *
- * The only allowed operations on an object belonging to this class, after it has been moved, are assignment and destruction.
+ * @note The only allowed operations on an object belonging to this class, after it has been moved, are assignment and destruction.
  */
 
 class problem
@@ -506,19 +516,6 @@ class problem
          * - \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled
          * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
          *   otherwise it will result in a compile-time failure
-         *
-         * The following methods, if implemented in \p T, will override
-         * default choices:
-         *   @code
-         *   vector_double::size_type get_nec() const;
-         *   vector_double::size_type get_nic() const;
-         *   vector_double gradient(const vector_double &x) const;
-         *   sparsity_pattern gradient_sparsity(const vector_double &x) const;
-         *   std::vector<vector_double> hessians(const vector_double &x) const;
-         *   std::vector<sparsity_pattern> hessians_sparsity() const;
-         *   std::string get_name() const;
-         *   std::string get_extra_info() const;
-         *   @endcode
          *
          * @note The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of problem::get_nf(),
          * while the decision vector dimension \f$n_x\f$ is defined
@@ -1027,16 +1024,56 @@ class problem
             return m_hs_dim;
         }
 
+        /// Sets the seed for the stochastic variables
+        /**
+         * Sets the seed to be used in the fitness function to instantiate
+         * all stochastic variables. 
+         *
+         * @param[in] seed seed
+         */
         void set_seed(unsigned int seed)
         {
             ptr()->set_seed(seed);
         }
 
+        /// Check if the user-defined problem implements a set_seed method
+        /**
+         * If the user defined problem implements a set_seed method, this
+         * will return true, false otherwise. The value returned can
+         * also be forced by the user by implementing the additional
+         * method
+         *
+         * @code
+         * bool has_set_seed() const
+         * @endcode
+         *
+         * in the user-defined problem
+         *
+         * @return a boolean flag
+         *
+         */
         bool has_set_seed() const
         {
             return is_stochastic();
         }
 
+        /// Check if the user-defined problem implements a set_seed method
+        /**
+         * This method is an alias for problem::has_set_seed().
+         * If the user defined problem implements a set_seed method, this
+         * will return true, false otherwise. The value returned can
+         * also be forced by the user by implementing the additional
+         * method
+         *
+         * @code
+         * bool has_set_seed() const
+         * @endcode
+         *
+         * in the user-defined problem
+         *
+         * @return a boolean flag
+         *
+         */
         bool is_stochastic() const
         {
             return m_is_stochastic;
@@ -1072,7 +1109,7 @@ class problem
         {
             os << "Problem name: " << p.get_name();
             if (p.is_stochastic()) {
-                stream(os, "[stochastic]");
+                stream(os, " [stochastic]");
             }
             os << "\t\nGlobal dimension:\t\t\t" << p.get_nx() << '\n';
             os << "\tFitness dimension:\t\t\t" << p.get_nf() << '\n';
