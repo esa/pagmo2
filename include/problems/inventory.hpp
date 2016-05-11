@@ -67,7 +67,7 @@ class inventory
             const double c=1.0, b=1.5, h=0.1; // c is the cost per unit, b is the backorder penalty cost and h is the holding cost
             double retval=0;
 
-            for (size_t i = 0; i<m_sample_size; ++i) {
+            for (decltype(m_sample_size) i = 0; i<m_sample_size; ++i) {
                 double I=0;
                 for (decltype(x.size()) j = 0u; j<x.size(); ++j) {
                     double d = drng(m_e) * 100;

@@ -781,11 +781,11 @@ struct s_03
 
 BOOST_AUTO_TEST_CASE(problem_stochastic_test)
 {
-    print(has_set_seed<s_02>::value,'\n');
     problem prob{s_02{}};
-    print(prob,'\n');
     BOOST_CHECK(prob.is_stochastic() == true);
+    BOOST_CHECK(prob.has_set_seed() == true);
     prob.set_seed(32u);
     BOOST_CHECK(prob.extract<s_02>()->m_seed == 32u);
     BOOST_CHECK(problem{s_03{}}.is_stochastic() == false);
+    BOOST_CHECK(problem{s_03{}}.has_set_seed() == false);
 }
