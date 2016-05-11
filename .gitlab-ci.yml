@@ -22,7 +22,7 @@ pagmo-clang:
 pages:
   script:
   - cd doc/sphinx
-  - ./compile
+  - ./compile.sh
   - mv _build/html ../../public/
   artifacts:
     paths:
