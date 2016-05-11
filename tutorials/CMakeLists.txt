@@ -4,5 +4,6 @@ macro(ADD_PAGMO_TUTORIAL arg1)
     add_test(${arg1} ${arg1})
 endmacro()
 
-ADD_PAGMO_TUTORIAL(example0)
-ADD_PAGMO_TUTORIAL(example0_gh)
+ADD_PAGMO_TUTORIAL(problem_basic)
+ADD_PAGMO_TUTORIAL(problem_basic_gh)
+ADD_PAGMO_TUTORIAL(problem_basic_s)

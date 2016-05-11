@@ -72,7 +72,7 @@
 
 
 using namespace pagmo;
-struct example0_g
+struct problem_basic_gh
 {
     // Mandatory, computes ... well ... the fitness
     vector_double fitness(const vector_double &x) const
@@ -152,7 +152,7 @@ struct example0_g
 int main()
 {
     // Constructing a problem
-    problem p0{example0_g{}};
+    problem p0{problem_basic_gh{}};
     // Streaming to screen the problem
     std::cout << p0 << '\n';
     // Getting its dimensions
@@ -191,7 +191,7 @@ int main()
     pagmo::print("Gradient sparsity pattern: ", p0.gradient_sparsity(), "\n");
     pagmo::print("Hessians sparsity pattern: ", p0.hessians_sparsity(), "\n\n");
 
-    // While our example0 struct is now hidden inside the pagmo::problem
+    // While our problem_basic_gh struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface
-    pagmo::print("Accessing best_known: ", p0.extract<example0_g>()->best_known(), "\n");
+    pagmo::print("Accessing best_known: ", p0.extract<problem_basic_gh>()->best_known(), "\n");
 }

@@ -1111,7 +1111,7 @@ class problem
             if (p.is_stochastic()) {
                 stream(os, " [stochastic]");
             }
-            os << "\t\nGlobal dimension:\t\t\t" << p.get_nx() << '\n';
+            os << "\n\tGlobal dimension:\t\t\t" << p.get_nx() << '\n';
             os << "\tFitness dimension:\t\t\t" << p.get_nf() << '\n';
             os << "\tNumber of objectives:\t\t\t" << p.get_nobj() << '\n';
             os << "\tEquality constraints dimension:\t\t" << p.get_nec() << '\n';

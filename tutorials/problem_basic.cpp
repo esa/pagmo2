@@ -18,7 +18,7 @@
 
 
 using namespace pagmo;
-struct example0
+struct problem_basic
 {
     // Mandatory, computes ... well ... the fitness
     vector_double fitness(const vector_double &x) const
@@ -49,7 +49,7 @@ struct example0
     // the default stream operator
     std::string get_extra_info() const {
         std::ostringstream s;
-        s << "This is just a simple toy problem with one fitness, " << '\n';
+        s << "This is a simple toy stochastic problem with one fitness, " << '\n';
         s << "no constraint and a fixed dimension of 4." << "\n";
         return s.str();
     }
@@ -66,7 +66,7 @@ struct example0
 int main()
 {
     // Constructing a problem
-    problem p0{example0{}};
+    problem p0{problem_basic{}};
     // Streaming to screen the problem
     std::cout << p0 << '\n';
     // Getting its dimensions
@@ -83,9 +83,10 @@ int main()
     pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2,2,2,2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
-
-    // While our example0 struct is now hidden inside the pagmo::problem
+    // The evaluation counter is now ... well ... 1
+    pagmo::print("fevals: ", p0.get_fevals(), "\n");
+    // While our problem_basic struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface
-    pagmo::print("Accessing best_known: ", p0.extract<example0>()->best_known(), "\n");
+    pagmo::print("Accessing best_known: ", p0.extract<problem_basic>()->best_known(), "\n");
  
 }
