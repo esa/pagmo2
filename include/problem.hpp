@@ -145,6 +145,63 @@ struct prob_inner final: prob_inner_base
     {
         return m_value.get_bounds();
     }
+    // optional methods
+    virtual vector_double gradient(const vector_double &dv) const override final
+    {
+        return gradient_impl(m_value, dv);
+    }
+    virtual bool has_gradient() const override final
+    {
+        return has_gradient_impl(m_value);
+    }
+    virtual sparsity_pattern gradient_sparsity() const override final
+    {
+        return gradient_sparsity_impl(m_value);
+    }
+    virtual bool has_gradient_sparsity() const override final
+    {
+        return has_gradient_sparsity_impl(m_value);
+    }
+    virtual std::vector<vector_double> hessians(const vector_double &dv) const override final
+    {
+        return hessians_impl(m_value, dv);
+    }
+    virtual bool has_hessians() const override final
+    {
+        return has_hessians_impl(m_value);
+    }
+    virtual std::vector<sparsity_pattern> hessians_sparsity() const override final
+    {
+        return hessians_sparsity_impl(m_value);
+    }
+    virtual bool has_hessians_sparsity() const override final
+    {
+        return has_hessians_sparsity_impl(m_value);
+    }
+    virtual vector_double::size_type get_nec() const override final
+    {
+        return get_nec_impl(m_value);
+    }
+    virtual vector_double::size_type get_nic() const override final
+    {
+        return get_nic_impl(m_value);
+    }
+    virtual void set_seed(unsigned int seed) override final
+    {
+        set_seed_impl(m_value, seed);
+    }
+    virtual bool has_set_seed() const override final
+    {
+        return has_set_seed_impl(m_value);
+    }
+    virtual std::string get_name() const override final
+    {
+        return get_name_impl(m_value);
+    }
+    virtual std::string get_extra_info() const override final
+    {
+        return get_extra_info_impl(m_value);
+    }
     // Implementation of the optional methods.
     template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value,int>::type = 0>
     static vector_double gradient_impl(const U &value, const vector_double &dv)
@@ -318,64 +375,7 @@ struct prob_inner final: prob_inner_base
     {
         return "";
     }
-    // Here follow all the overrides of the optional methods for the base class,
-    // implemented via the _impl functions above.
-    virtual vector_double gradient(const vector_double &dv) const override final
-    {
-        return gradient_impl(m_value, dv);
-    }
-    virtual bool has_gradient() const override final
-    {
-        return has_gradient_impl(m_value);
-    }
-    virtual sparsity_pattern gradient_sparsity() const override final
-    {
-        return gradient_sparsity_impl(m_value);
-    }
-    virtual bool has_gradient_sparsity() const override final
-    {
-        return has_gradient_sparsity_impl(m_value);
-    }
-    virtual std::vector<vector_double> hessians(const vector_double &dv) const override final
-    {
-        return hessians_impl(m_value, dv);
-    }
-    virtual bool has_hessians() const override final
-    {
-        return has_hessians_impl(m_value);
-    }
-    virtual std::vector<sparsity_pattern> hessians_sparsity() const override final
-    {
-        return hessians_sparsity_impl(m_value);
-    }
-    virtual bool has_hessians_sparsity() const override final
-    {
-        return has_hessians_sparsity_impl(m_value);
-    }
-    virtual vector_double::size_type get_nec() const override final
-    {
-        return get_nec_impl(m_value);
-    }
-    virtual vector_double::size_type get_nic() const override final
-    {
-        return get_nic_impl(m_value);
-    }
-    virtual void set_seed(unsigned int seed) override final
-    {
-        set_seed_impl(m_value, seed);
-    }
-    virtual bool has_set_seed() const override final
-    {
-        return has_set_seed_impl(m_value);
-    }
-    virtual std::string get_name() const override final
-    {
-        return get_name_impl(m_value);
-    }
-    virtual std::string get_extra_info() const override final
-    {
-        return get_extra_info_impl(m_value);
-    }
+    
     // Serialization.
     template <typename Archive>
     void serialize(Archive &ar)
