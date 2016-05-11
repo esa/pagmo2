@@ -1,8 +1,7 @@
-#!/bin/sh   
+#!/bin/sh
 make clean
 cd ../doxygen
-doxygen Doxyfile
+doxygen > /dev/null
 cp -r images/* xml
 cd ../sphinx
-make html
-
+make html > /dev/null
