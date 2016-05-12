@@ -82,3 +82,28 @@ BOOST_AUTO_TEST_CASE(algorithm_copy_constructor_test)
     BOOST_CHECK(algo.has_set_seed() == algo_copy.has_set_seed());
     BOOST_CHECK(algo.has_set_verbosity() == algo_copy.has_set_verbosity());
 }
+
+BOOST_AUTO_TEST_CASE(algorithm_move_constructor_test)
+{
+    // We instantiate an algorithm
+    algorithm algo{al_01{}};
+
+    // We set the seed and verbosity so that the default values are changed
+    algo.set_seed(1u);
+    algo.set_verbosity(1u);
+
+    // We store a streaming representation of the object
+    auto algo_string = boost::lexical_cast<std::string>(algo);
+    // We get the memory address where the user algo is stored
+    auto a1 = algo.extract<al_01>();
+    // We call the move constructor
+    algorithm moved_algo(std::move(algo));
+    // We get the memory address where the user algo is stored
+    auto a2 = moved_algo.extract<al_01>();
+    // And the string representation of the moved algo
+    auto moved_algo_string = boost::lexical_cast<std::string>(moved_algo);
+    // 1 - We check the resource pointed by m_ptr has been moved from algo to moved_algo
+    BOOST_CHECK(a1==a2);
+    // 2 - We check that the two string representations are identical
+    BOOST_CHECK(algo_string==moved_algo_string);
+}

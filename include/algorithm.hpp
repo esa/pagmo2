@@ -175,7 +175,7 @@ class algorithm
         using generic_ctor_enabler = std::enable_if_t<!std::is_same<algorithm,std::decay_t<T>>::value,int>;
     public:
         /// Constructor
-        template <typename T>
+        template <typename T, generic_ctor_enabler<T> = 0>
         explicit algorithm(T &&x):m_ptr(::new detail::algo_inner<std::decay_t<T>>(std::forward<T>(x)))
         {
             // We detect if set_seed is implemented in the algorithm, in which case the algorithm is stochastic
