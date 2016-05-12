@@ -107,3 +107,25 @@ BOOST_AUTO_TEST_CASE(algorithm_move_constructor_test)
     // 2 - We check that the two string representations are identical
     BOOST_CHECK(algo_string==moved_algo_string);
 }
+
+// Algorithm with overrides
+struct al_03 
+{
+    al_03() {};
+    population evolve(const population& pop) const {return pop;};
+    std::string get_name() const {return "name";};
+    std::string get_extra_info() const {return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);};
+    void set_seed(unsigned int seed) {m_seed = seed;};
+    void set_verbosity(unsigned int level) {m_verbosity = level;};
+    unsigned int m_seed = 0u;
+    unsigned int m_verbosity = 0u;
+    bool has_set_seed() const {return false;};
+    bool has_set_verbosity() const {return false;};
+};
+
+BOOST_AUTO_TEST_CASE(algorithm_override_mechanics_test)
+{
+    algorithm algo{al_03{}};
+    BOOST_CHECK(algo.has_set_seed() == false);
+    BOOST_CHECK(algo.has_set_verbosity() == false);
+}
