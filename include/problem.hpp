@@ -1140,7 +1140,7 @@ class problem
 
             const auto extra_str = p.get_extra_info();
             if (!extra_str.empty()) {
-                stream(os, "\nProblem's extra info:\n", extra_str);
+                stream(os, "\nExtra info:\n", extra_str);
             }
             return os;
         }

@@ -117,7 +117,10 @@ struct algo_inner: algo_inner_base
     }
     template <typename U, typename std::enable_if<!pagmo::has_set_verbosity<U>::value,int>::type = 0>
     static void set_verbosity_impl(U &, unsigned int)
-    {}
+    {
+        pagmo_throw(std::logic_error,"The set_verbosity method has been called but not implemented by the user.\n"
+            "A function with prototype 'void set_verbosity(unsigned int)' was expected in the user defined algorithm.");
+    }
     template <typename U, typename std::enable_if<pagmo::has_set_verbosity<U>::value && override_has_set_verbosity<U>::value,int>::type = 0>
     static bool has_set_verbosity_impl(const U &a)
     {
@@ -228,11 +231,11 @@ class algorithm
         template <typename T>
         const T *extract() const
         {
-            auto a = dynamic_cast<const detail::prob_inner<T> *>(ptr());
-            if (a == nullptr) {
+            auto p = dynamic_cast<const detail::algo_inner<T> *>(ptr());
+            if (p == nullptr) {
                 return nullptr;
             }
-            return &(a->m_value);
+            return &(p->m_value);
         }
 
         /// Checks the user defined algorithm type at run-time
@@ -298,19 +301,22 @@ class algorithm
         {
             os << "Algorithm name: " << a.get_name();
             if (!a.has_set_seed()) {
-                stream(os, " [deterministic]\n");
+                stream(os, " [deterministic]");
             }
-            stream(os, "Has verbosity: ");
+            else {
+                stream(os, " [stochastic]");
+            }
+            stream(os, "\nHas verbosity: ");
             if (a.has_set_verbosity()) {
                 stream(os, true);
             }
             else {
                 stream(os, false);
             }
-
+            stream(os, '\n');
             const auto extra_str = a.get_extra_info();
             if (!extra_str.empty()) {
-                stream(os, "Algorithm's extra info:\n", extra_str);
+                stream(os, "Extra info:\n", extra_str);
             }
             return os;
         }

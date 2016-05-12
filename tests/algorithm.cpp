@@ -16,27 +16,69 @@
 
 using namespace pagmo;
 
+// Complete algorithm stochastic
 struct al_01 
 {
-	al_01() {};
-	population evolve(const population& pop) const {return pop;};
-	std::string get_name() const {return "name";};
-	std::string get_extra_info() const {return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);};
-	void set_seed(unsigned int seed) {m_seed = seed;};
-	void set_verbosity(unsigned int level) {m_verbosity = level;};
-	unsigned int m_seed = 0u;
-	unsigned int m_verbosity = 0u;
+    al_01() {};
+    population evolve(const population& pop) const {return pop;};
+    std::string get_name() const {return "name";};
+    std::string get_extra_info() const {return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);};
+    void set_seed(unsigned int seed) {m_seed = seed;};
+    void set_verbosity(unsigned int level) {m_verbosity = level;};
+    unsigned int m_seed = 0u;
+    unsigned int m_verbosity = 0u;
+};
+
+// Minimal algorithm deterministic
+struct al_02 
+{
+    al_02() {};
+    population evolve(const population& pop) const {return pop;};
 };
 
 BOOST_AUTO_TEST_CASE(algorithm_construction_test)
 {
+    // We construct two different algorithms. One having all the 
+    // mandatory and optional methods implemented, the other
+    // having only the mandatory methods implemented
+    algorithm algo_full{al_01{}};
+    algorithm algo_minimal{al_02{}};
+    // We test that the optional methods are appropiately detected in the full case
+    BOOST_CHECK(algo_full.has_set_seed() == true);
+    BOOST_CHECK(algo_full.has_set_verbosity() == true);
+    BOOST_CHECK_NO_THROW(algo_full.set_seed(1u));
+    BOOST_CHECK_NO_THROW(algo_full.set_verbosity(1u));
+    // And in the minimal case
+    BOOST_CHECK(algo_minimal.has_set_seed() == false);
+    BOOST_CHECK(algo_minimal.has_set_verbosity() == false);
+    BOOST_CHECK_THROW(algo_minimal.set_seed(1u), std::logic_error);
+    BOOST_CHECK_THROW(algo_minimal.set_verbosity(1u), std::logic_error);
+    // We check that at construction the name has been assigned
+    BOOST_CHECK(algo_full.get_name()== "name");
+    BOOST_CHECK(algo_minimal.get_name().find("al_02") != std::string::npos);
+}
+
+BOOST_AUTO_TEST_CASE(algorithm_copy_constructor_test)
+{
+    // We check the copy constructor
     algorithm algo{al_01{}};
-    print(has_set_seed<al_01>::value, '\n');
-    problem prob{rosenbrock{5}};
-    population pop{prob, 10u};
-    auto pop2 = algo.evolve(pop);
-    algo.set_seed(32u);
-    print(algo,'\n');
+
+    // We set the seed and verbosity so that the default values are changed
+    algo.set_seed(1u);
     algo.set_verbosity(1u);
-    print(algo);
+
+    // We call the copy constructor
+    algorithm algo_copy(algo);
+    // We extract the user algorithm
+    auto a1 = algo.extract<al_01>();
+    auto a2 = algo_copy.extract<al_01>();
+
+    // 1 - We check the resources pointed to by m_ptr have different address
+    BOOST_CHECK(a1!=0);
+    BOOST_CHECK(a2!=0);
+    BOOST_CHECK(a1!=a2);
+    // 2 - We check that the other members are copied
+    BOOST_CHECK(algo.get_name() == algo_copy.get_name());
+    BOOST_CHECK(algo.has_set_seed() == algo_copy.has_set_seed());
+    BOOST_CHECK(algo.has_set_verbosity() == algo_copy.has_set_verbosity());
 }
