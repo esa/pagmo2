@@ -24,7 +24,8 @@ struct algo_inner_base
     virtual population evolve(const population &pop) const = 0;
     virtual void set_seed(unsigned int) = 0;
     virtual bool has_set_seed() const = 0;
-    virtual void set_verbose(unsigned int) = 0;
+    virtual void set_verbosity(unsigned int) = 0;
+    virtual bool has_set_verbosity() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
 
@@ -66,9 +67,13 @@ struct algo_inner: algo_inner_base
     {
         return has_set_seed_impl(m_value);
     }
-    virtual void set_verbose(unsigned int level) override final
+    virtual void set_verbosity(unsigned int level) override final
     {
-        set_verbose_impl(m_value, level);
+        set_verbosity_impl(m_value, level);
+    }
+    virtual bool has_set_verbosity() const override final
+    {
+        return has_set_verbosity_impl(m_value);
     }
     virtual std::string get_name() const override final
     {
@@ -80,9 +85,9 @@ struct algo_inner: algo_inner_base
     }
     // Implementation of the optional methods.
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value,int>::type = 0>
-    static void set_seed_impl(U &value, unsigned int seed)
+    static void set_seed_impl(U &a, unsigned int seed)
     {
-        value.set_seed(seed);
+        a.set_seed(seed);
     }
     template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value,int>::type = 0>
     static void set_seed_impl(U &, unsigned int)
@@ -91,9 +96,9 @@ struct algo_inner: algo_inner_base
             "A function with prototype 'void set_seed(unsigned int)' was expected in the user defined algorithm.");
     }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value,int>::type = 0>
-    static bool has_set_seed_impl(const U &p)
+    static bool has_set_seed_impl(const U &a)
     {
-       return p.has_set_seed();
+       return a.has_set_seed();
     }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value,int>::type = 0>
     static bool has_set_seed_impl(const U &)
@@ -105,14 +110,29 @@ struct algo_inner: algo_inner_base
     {
        return false;
     }
-    template <typename U, typename std::enable_if<pagmo::has_set_verbose<U>::value,int>::type = 0>
-    static void set_verbose_impl(U &value, unsigned int seed)
+    template <typename U, typename std::enable_if<pagmo::has_set_verbosity<U>::value,int>::type = 0>
+    static void set_verbosity_impl(U &value, unsigned int seed)
     {
-        value.set_verbose(seed);
+        value.set_verbosity(seed);
     }
-    template <typename U, typename std::enable_if<!pagmo::has_set_verbose<U>::value,int>::type = 0>
-    static void set_verbose_impl(U &, unsigned int)
+    template <typename U, typename std::enable_if<!pagmo::has_set_verbosity<U>::value,int>::type = 0>
+    static void set_verbosity_impl(U &, unsigned int)
     {}
+    template <typename U, typename std::enable_if<pagmo::has_set_verbosity<U>::value && override_has_set_verbosity<U>::value,int>::type = 0>
+    static bool has_set_verbosity_impl(const U &a)
+    {
+       return a.has_set_verbosity();
+    }
+    template <typename U, typename std::enable_if<pagmo::has_set_verbosity<U>::value && !override_has_set_verbosity<U>::value,int>::type = 0>
+    static bool has_set_verbosity_impl(const U &)
+    {
+       return true;
+    }
+    template <typename U, typename std::enable_if<!pagmo::has_set_verbosity<U>::value,int>::type = 0>
+    static bool has_set_verbosity_impl(const U &)
+    {
+       return false;
+    }
     template <typename U, typename std::enable_if<has_name<U>::value,int>::type = 0>
     static std::string get_name_impl(const U &value)
     {
@@ -156,31 +176,34 @@ class algorithm
         explicit algorithm(T &&x):m_ptr(::new detail::algo_inner<std::decay_t<T>>(std::forward<T>(x)))
         {
             // We detect if set_seed is implemented in the algorithm, in which case the algorithm is stochastic
-            m_is_stochastic = ptr()->has_set_seed();
-            // We store at construction the values returned from the name and extra info methods.
+            m_has_set_seed = ptr()->has_set_seed();
+            // We detect if set_verbosity is implemented in the algorithm
+            m_has_set_verbosity = ptr()->has_set_verbosity();
+            // We store at construction the value returned from the user implemented get_name 
             m_name = ptr()->get_name();
-            m_extra_info = ptr()->get_extra_info();
         }
         /// Copy constructor
         algorithm(const algorithm &other):
             m_ptr(other.m_ptr->clone()), 
-            m_is_stochastic(other.m_is_stochastic),
-            m_name(other.m_name),
-            m_extra_info(other.m_extra_info)
+            m_has_set_seed(other.m_has_set_seed),
+            m_has_set_verbosity(other.m_has_set_verbosity),
+            m_name(other.m_name)
         {}
         /// Move constructor
         algorithm(algorithm &&other) noexcept :
             m_ptr(std::move(other.m_ptr)),
-            m_name(other.m_name),
-            m_extra_info(other.m_extra_info)
+            m_has_set_seed(std::move(other.m_has_set_seed)),
+            m_has_set_verbosity(other.m_has_set_verbosity),
+            m_name(std::move(other.m_name))
         {}
         /// Move assignment operator
         algorithm &operator=(algorithm &&other) noexcept
         {
             if (this != &other) {
                 m_ptr = std::move(other.m_ptr);
-                m_name = other.m_name;
-                m_extra_info = other.m_extra_info;
+                m_has_set_seed = std::move(other.m_has_set_seed);
+                m_has_set_verbosity = other.m_has_set_verbosity;
+                m_name = std::move(other.m_name);
             }
             return *this;
         }
@@ -205,11 +228,11 @@ class algorithm
         template <typename T>
         const T *extract() const
         {
-            auto p = dynamic_cast<const detail::prob_inner<T> *>(ptr());
-            if (p == nullptr) {
+            auto a = dynamic_cast<const detail::prob_inner<T> *>(ptr());
+            if (a == nullptr) {
                 return nullptr;
             }
-            return &(p->m_value);
+            return &(a->m_value);
         }
 
         /// Checks the user defined algorithm type at run-time
@@ -238,13 +261,24 @@ class algorithm
         /// Check if the user-defined algorithm implements a set_seed method
         bool has_set_seed() const
         {
-            return is_stochastic();
+            return m_has_set_seed;
         }
 
         /// Check if the user-defined algorithm implements a set_seed method
         bool is_stochastic() const
         {
-            return m_is_stochastic;
+            return has_set_seed();
+        }
+
+        void set_verbosity(unsigned int level)
+        {
+            ptr()->set_verbosity(level);
+        }
+
+        /// Check if the user-defined algorithm implements a set_verbosity method
+        bool has_set_verbosity() const
+        {
+            return m_has_set_verbosity;
         }
 
         /// Get name
@@ -256,19 +290,27 @@ class algorithm
         /// Extra info
         std::string get_extra_info() const
         {
-            return m_extra_info;
+            return ptr()->get_extra_info();
         }
 
         /// Streaming operator
-        friend std::ostream &operator<<(std::ostream &os, const algorithm &p)
+        friend std::ostream &operator<<(std::ostream &os, const algorithm &a)
         {
-            os << "Algorithm name: " << p.get_name();
-            if (!p.is_stochastic()) {
-                stream(os, " [deterministic]");
+            os << "Algorithm name: " << a.get_name();
+            if (!a.has_set_seed()) {
+                stream(os, " [deterministic]\n");
             }
-            const auto extra_str = p.get_extra_info();
+            stream(os, "Has verbosity: ");
+            if (a.has_set_verbosity()) {
+                stream(os, true);
+            }
+            else {
+                stream(os, false);
+            }
+
+            const auto extra_str = a.get_extra_info();
             if (!extra_str.empty()) {
-                stream(os, "\nAlgorithm's extra info:\n", extra_str);
+                stream(os, "Algorithm's extra info:\n", extra_str);
             }
             return os;
         }
@@ -276,7 +318,7 @@ class algorithm
         template <typename Archive>
         void serialize(Archive &ar)
         {
-            ar(m_ptr);
+            ar(m_ptr, m_has_set_seed, m_has_set_verbosity, m_name);
         }
     private:
         // Two small helpers to make sure that whenever we require
@@ -293,9 +335,13 @@ class algorithm
         }
     private:
         std::unique_ptr<detail::algo_inner_base> m_ptr;
-        bool m_is_stochastic;
+        // Various problem properties determined at construction time
+        // from the concrete problem. These will be constant for the lifetime
+        // of problem, but we cannot mark them as such because of serialization.
+        // the extra_info string cannot be here as it must reflect the changes from set_seed
+        bool m_has_set_seed;
+        bool m_has_set_verbosity;
         std::string m_name;
-        std::string m_extra_info;
 };
 
 }

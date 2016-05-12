@@ -478,10 +478,10 @@ const bool override_has_hessians_sparsity<T>::value;
  *
  */
 template <typename T>
-class has_set_verbose: detail::sfinae_types
+class has_set_verbosity: detail::sfinae_types
 {
         template <typename U>
-        static auto test0(U &p) -> decltype(p.set_verbose(std::declval<unsigned int>()));
+        static auto test0(U &p) -> decltype(p.set_verbosity(std::declval<unsigned int>()));
         static no test0(...);
         static const bool implementation_defined =
             std::is_same<void,decltype(test0(std::declval<T &>()))>::value;
@@ -491,7 +491,34 @@ class has_set_verbose: detail::sfinae_types
 };
 
 template <typename T>
-const bool has_set_verbose<T>::value;
+const bool has_set_verbosity<T>::value;
+
+/// Type has has_set_verbosity()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * bool has_set_verbosity() const
+ * @endcode
+ *
+ */
+template <typename T>
+class override_has_set_verbosity: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.has_set_verbosity());
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool override_has_set_verbosity<T>::value;
 
 /// Type has evolve
 /**

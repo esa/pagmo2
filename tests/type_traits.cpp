@@ -505,33 +505,33 @@ struct hsv_00 {};
 // The good one 
 struct hsv_01
 {
-    void set_verbose(unsigned int);
+    void set_verbosity(unsigned int);
 };
 
 // also good
 struct hsv_02
 {
-    void set_verbose(unsigned int) const;
+    void set_verbosity(unsigned int) const;
 };
 
 // also good
 struct hsv_03
 {
-    void set_verbose(int);
+    void set_verbosity(int);
 };
 
 struct hsv_04
 {
-    double set_verbose(unsigned int);
+    double set_verbosity(unsigned int);
 };
 
 BOOST_AUTO_TEST_CASE(has_set_verbose_test)
 {
-    BOOST_CHECK((!has_set_verbose<hsv_00>::value));
-    BOOST_CHECK((has_set_verbose<hsv_01>::value));
-    BOOST_CHECK((has_set_verbose<hsv_02>::value));
-    BOOST_CHECK((has_set_verbose<hsv_03>::value));
-    BOOST_CHECK((!has_set_verbose<hsv_04>::value));
+    BOOST_CHECK((!has_set_verbosity<hsv_00>::value));
+    BOOST_CHECK((has_set_verbosity<hsv_01>::value));
+    BOOST_CHECK((has_set_verbosity<hsv_02>::value));
+    BOOST_CHECK((has_set_verbosity<hsv_03>::value));
+    BOOST_CHECK((!has_set_verbosity<hsv_04>::value));
 }
 
 struct hev_00 {};
