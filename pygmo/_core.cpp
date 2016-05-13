@@ -240,7 +240,6 @@ struct prob_inner<py::object> final: prob_inner_base
 }
 
 using namespace pagmo;
-using namespace std::literals;
 
 PYBIND11_PLUGIN(_core)
 {
@@ -289,7 +288,7 @@ PYBIND11_PLUGIN(_core)
     problem_class.def("_extract",[](const problem &p, const hock_schittkowsky_71 &) {
         auto ptr = p.extract<hock_schittkowsky_71>();
         if (!ptr) {
-            pagmo_throw(std::runtime_error,"cannot extract an instance of type '"s +
+            pagmo_throw(std::runtime_error,std::string("cannot extract an instance of type '") +
                 typeid(hock_schittkowsky_71).name() + "'");
         }
         return hock_schittkowsky_71(*ptr);
@@ -300,7 +299,7 @@ PYBIND11_PLUGIN(_core)
     problem_class.def("_extract",[](const problem &p, py::object o) {
         auto ptr = p.extract<py::object>();
         if (!ptr || pygmo::type(*ptr) != pygmo::type(o)) {
-            pagmo_throw(std::runtime_error,"cannot extract an instance of type '"s +
+            pagmo_throw(std::runtime_error,"cannot extract an instance of type '" +
                 pygmo::str(pygmo::type(o)).cast<std::string>() + "'");
         }
         return pygmo::deepcopy(*ptr);
