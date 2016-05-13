@@ -15,6 +15,8 @@
 #include <string>
 #include <utility>
 
+// The pybind11 code produces some warning messages when we compile
+// in debug mode.
 #if defined(__clang__) || defined(__GNUC__)
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wpedantic"
@@ -46,6 +48,7 @@ inline py::object deepcopy(py::object o)
     return static_cast<py::object>(py::module::import("copy").attr("deepcopy")).call(o);
 }
 
+// Import and return the builtin module.
 inline py::module builtin()
 {
 #if PY_MAJOR_VERSION < 3
@@ -55,14 +58,25 @@ inline py::module builtin()
 #endif
 }
 
+// Get the type of an object.
 inline py::object type(py::object o)
 {
     return static_cast<py::object>(builtin().attr("type")).call(o);
 }
 
+// String representation of an object.
 inline py::object str(py::object o)
 {
     return static_cast<py::object>(builtin().attr("str")).call(o);
+}
+
+// Check if type is callable.
+inline bool callable(py::object o)
+{
+    if (!o) {
+        return false;
+    }
+    return static_cast<py::object>(builtin().attr("callable")).call(o).cast<bool>();
 }
 
 }
@@ -76,24 +90,32 @@ namespace detail
 template <>
 struct prob_inner<py::object> final: prob_inner_base
 {
-    void check_construction_object() const
+    // Return instance attribute as a py::object.
+    static py::object attr(py::object o, const char *s)
     {
-        auto attr = static_cast<py::object>(m_value.attr("fitness"));
-        if (!attr) {
-            pagmo_throw(std::invalid_argument,"the 'fitness()' method is missing");
-        }
-        attr = static_cast<py::object>(m_value.attr("get_nobj"));
-        if (!attr) {
-            pagmo_throw(std::invalid_argument,"the 'get_nobj()' method is missing");
-        }
-        attr = static_cast<py::object>(m_value.attr("get_bounds"));
-        if (!attr) {
-            pagmo_throw(std::invalid_argument,"the 'get_bounds()' method is missing");
+        return o.attr(s);
+    }
+    // Throw if object does not have a callable attribute.
+    static void check_callable_attribute(py::object o, const char *s)
+    {
+        if (!pygmo::callable(attr(o,s))) {
+            pagmo_throw(std::logic_error,"the '" + std::string(s) + "' method is missing or "
+                "it is not callable");
         }
     }
+    // These are the mandatory methods that must be present.
+    void check_construction_object() const
+    {
+        check_callable_attribute(m_value,"fitness");
+        check_callable_attribute(m_value,"get_nobj");
+        check_callable_attribute(m_value,"get_bounds");
+    }
+    // Just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
     prob_inner(prob_inner &&) = delete;
+    prob_inner &operator=(const prob_inner &) = delete;
+    prob_inner &operator=(prob_inner &&) = delete;
     explicit prob_inner(py::object o):
         // Perform an explicit deep copy of the input object.
         m_value(pygmo::deepcopy(o))
@@ -108,104 +130,123 @@ struct prob_inner<py::object> final: prob_inner_base
     // Main methods.
     virtual vector_double fitness(const vector_double &dv) const override final
     {
-        return static_cast<py::object>(m_value.attr("fitness")).call(dv).cast<vector_double>();
+        return attr(m_value,"fitness").call(dv).cast<vector_double>();
     }
     virtual vector_double::size_type get_nobj() const override final
     {
-        return static_cast<py::object>(m_value.attr("get_nobj")).call().cast<vector_double::size_type>();
+        return attr(m_value,"get_nobj").call().cast<vector_double::size_type>();
     }
     virtual std::pair<vector_double,vector_double> get_bounds() const override final
     {
-        return static_cast<py::object>(m_value.attr("get_bounds")).call()
+        return attr(m_value,"get_bounds").call()
             .cast<std::pair<vector_double,vector_double>>();
     }
     virtual vector_double::size_type get_nec() const override final
     {
-        auto attr1 = static_cast<py::object>(m_value.attr("get_nec"));
-        auto attr2 = static_cast<py::object>(m_value.attr("get_nic"));
-        if (attr1 && attr2) {
-            return attr1.call().cast<vector_double::size_type>();
+        auto a = attr(m_value,"get_nec");
+        if (pygmo::callable(a)) {
+            return a.call().cast<vector_double::size_type>();
         }
         return 0u;
     }
     virtual vector_double::size_type get_nic() const override final
     {
-        auto attr1 = static_cast<py::object>(m_value.attr("get_nec"));
-        auto attr2 = static_cast<py::object>(m_value.attr("get_nic"));
-        if (attr1 && attr2) {
-            return attr2.call().cast<vector_double::size_type>();
+        auto a = attr(m_value,"get_nic");
+        if (pygmo::callable(a)) {
+            return a.call().cast<vector_double::size_type>();
         }
         return 0u;
     }
     virtual std::string get_name() const override final
     {
-        auto attr = static_cast<py::object>(m_value.attr("get_name"));
-        if (attr) {
-            return attr.call().cast<std::string>();
+        auto a = attr(m_value,"get_name");
+        if (pygmo::callable(a)) {
+            return a.call().cast<std::string>();
         }
         return pygmo::str(pygmo::type(m_value)).cast<std::string>();
     }
     virtual std::string get_extra_info() const override final
     {
-        auto attr = static_cast<py::object>(m_value.attr("get_extra_info"));
-        if (attr) {
-            return attr.call().cast<std::string>();
+        auto a = attr(m_value,"get_extra_info");
+        if (pygmo::callable(a)) {
+            return a.call().cast<std::string>();
         }
         return "";
     }
     virtual bool has_gradient() const override final
     {
-        return (static_cast<py::object>(m_value.attr("gradient")));
+        return pygmo::callable(attr(m_value,"gradient"));
     }
     virtual vector_double gradient(const vector_double &x) const override final
     {
-        auto attr = static_cast<py::object>(m_value.attr("gradient"));
-        if (attr) {
-            return attr.call(x).cast<vector_double>();
+        auto a = attr(m_value,"gradient");
+        if (pygmo::callable(a)) {
+            return a.call(x).cast<vector_double>();
         }
         pagmo_throw(std::logic_error,"Gradients have been requested but they are not implemented or not implemented correctly.");
     }
     virtual bool has_gradient_sparsity() const override final
     {
-        return (static_cast<py::object>(m_value.attr("gradient_sparsity")));
+        // If the concrete problem implements has_gradient_sparsity use it,
+        // otherwise check if the gradient_sparsity method exists.
+        auto a = attr(m_value,"has_gradient_sparsity");
+        if (pygmo::callable(a)) {
+            return a.call().cast<bool>();
+        }
+        return pygmo::callable(attr(m_value,"gradient_sparsity"));
     }
     virtual sparsity_pattern gradient_sparsity() const override final
     {
-        auto attr = static_cast<py::object>(m_value.attr("gradient_sparsity"));
-        if (attr) {
-            return attr.call().cast<sparsity_pattern>();
+        auto a = attr(m_value,"gradient_sparsity");
+        if (pygmo::callable(a)) {
+            return a.call().cast<sparsity_pattern>();
         }
-        // Use the dense default implementation.
-        auto dim = get_bounds().first.size();
-        auto f_dim = get_nobj() + get_nec() + get_nic();
-        return dense_gradient(f_dim, dim);
+        pagmo_throw(std::logic_error,"Gradient sparsity has been requested but it is not implemented or not implemented correctly.");
     }
     virtual bool has_hessians() const override final
     {
-        return (static_cast<py::object>(m_value.attr("hessians")));
+        return pygmo::callable(attr(m_value,"hessians"));
     }
     virtual std::vector<vector_double> hessians(const vector_double &x) const override final
     {
-        auto attr = static_cast<py::object>(m_value.attr("hessians"));
-        if (attr) {
-            return attr.call(x).cast<std::vector<vector_double>>();
+        auto a = attr(m_value,"hessians");
+        if (pygmo::callable(a)) {
+            return a.call(x).cast<std::vector<vector_double>>();
         }
         pagmo_throw(std::logic_error,"Hessians have been requested but they are not implemented or not implemented correctly.");
     }
     virtual bool has_hessians_sparsity() const override final
     {
-        return (static_cast<py::object>(m_value.attr("hessians_sparsity")));
+        auto a = attr(m_value,"has_hessians_sparsity");
+        if (pygmo::callable(a)) {
+            return a.call().cast<bool>();
+        }
+        return pygmo::callable(attr(m_value,"hessians_sparsity"));
     }
     virtual std::vector<sparsity_pattern> hessians_sparsity() const override final
     {
-        auto attr = static_cast<py::object>(m_value.attr("hessians_sparsity"));
-        if (attr) {
-            return attr.call().cast<std::vector<sparsity_pattern>>();
+        auto a = attr(m_value,"hessians_sparsity");
+        if (pygmo::callable(a)) {
+            return a.call().cast<std::vector<sparsity_pattern>>();
         }
-        // Dense default implementation.
-        auto dim = get_bounds().first.size();
-        auto f_dim = get_nobj() + get_nec() + get_nic();
-        return dense_hessians(f_dim, dim);
+        pagmo_throw(std::logic_error,"Hessians sparsities have been requested but they are not implemented or not implemented correctly.");
+    }
+    virtual void set_seed(unsigned n) override final
+    {
+        auto a = attr(m_value,"set_seed");
+        if (pygmo::callable(a)) {
+            a.call(n);
+        } else {
+            pagmo_throw(std::logic_error,"'set_seed()' has been called but it is not implemented or not implemented correctly");
+        }
+    }
+    virtual bool has_set_seed() const override final
+    {
+        auto a = attr(m_value,"has_set_seed");
+        if (pygmo::callable(a)) {
+            return a.call().cast<bool>();
+        }
+        return pygmo::callable(attr(m_value,"set_seed"));
     }
     py::object m_value;
 };
@@ -226,9 +267,31 @@ PYBIND11_PLUGIN(_core)
     // Expose the generic problem interface.
     problem_class.def(py::init<const problem &>())
         .def("fitness",&problem::fitness)
-        .def("get_bounds",&problem::get_bounds)
-        .def("get_fevals",&problem::get_fevals)
+        .def("gradient",&problem::gradient)
+        .def("has_gradient",&problem::has_gradient)
+        .def("gradient_sparsity",&problem::gradient_sparsity)
+        .def("has_gradient_sparsity",&problem::has_gradient_sparsity)
+        .def("hessians",&problem::hessians)
+        .def("has_hessians",&problem::has_hessians)
         .def("hessians_sparsity",&problem::hessians_sparsity)
+        .def("has_hessians_sparsity",&problem::has_hessians_sparsity)
+        .def("get_nobj",&problem::get_nobj)
+        .def("get_nx",&problem::get_nx)
+        .def("get_nf",&problem::get_nf)
+        .def("get_bounds",&problem::get_bounds)
+        .def("get_nec",&problem::get_nec)
+        .def("get_nic",&problem::get_nic)
+        .def("get_nc",&problem::get_nc)
+        .def("get_fevals",&problem::get_fevals)
+        .def("get_gevals",&problem::get_gevals)
+        .def("get_hevals",&problem::get_hevals)
+        .def("get_gs_dim",&problem::get_gs_dim)
+        .def("get_hs_dim",&problem::get_hs_dim)
+        .def("set_seed",&problem::set_seed)
+        .def("has_set_seed",&problem::has_set_seed)
+        .def("is_stochastic",&problem::is_stochastic)
+        .def("get_name",&problem::get_name)
+        .def("get_extra_info",&problem::get_extra_info)
         .def("__repr__",[](const problem &p) {
             std::stringstream oss;
             oss << p;
