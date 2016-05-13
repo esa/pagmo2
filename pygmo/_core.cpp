@@ -90,7 +90,7 @@ namespace detail
 template <>
 struct prob_inner<py::object> final: prob_inner_base
 {
-    // Return object attribute.
+    // Return instance attribute as a py::object.
     static py::object attr(py::object o, const char *s)
     {
         return o.attr(s);
@@ -267,9 +267,31 @@ PYBIND11_PLUGIN(_core)
     // Expose the generic problem interface.
     problem_class.def(py::init<const problem &>())
         .def("fitness",&problem::fitness)
-        .def("get_bounds",&problem::get_bounds)
-        .def("get_fevals",&problem::get_fevals)
+        .def("gradient",&problem::gradient)
+        .def("has_gradient",&problem::has_gradient)
+        .def("gradient_sparsity",&problem::gradient_sparsity)
+        .def("has_gradient_sparsity",&problem::has_gradient_sparsity)
+        .def("hessians",&problem::hessians)
+        .def("has_hessians",&problem::has_hessians)
         .def("hessians_sparsity",&problem::hessians_sparsity)
+        .def("has_hessians_sparsity",&problem::has_hessians_sparsity)
+        .def("get_nobj",&problem::get_nobj)
+        .def("get_nx",&problem::get_nx)
+        .def("get_nf",&problem::get_nf)
+        .def("get_bounds",&problem::get_bounds)
+        .def("get_nec",&problem::get_nec)
+        .def("get_nic",&problem::get_nic)
+        .def("get_nc",&problem::get_nc)
+        .def("get_fevals",&problem::get_fevals)
+        .def("get_gevals",&problem::get_gevals)
+        .def("get_hevals",&problem::get_hevals)
+        .def("get_gs_dim",&problem::get_gs_dim)
+        .def("get_hs_dim",&problem::get_hs_dim)
+        .def("set_seed",&problem::set_seed)
+        .def("has_set_seed",&problem::has_set_seed)
+        .def("is_stochastic",&problem::is_stochastic)
+        .def("get_name",&problem::get_name)
+        .def("get_extra_info",&problem::get_extra_info)
         .def("__repr__",[](const problem &p) {
             std::stringstream oss;
             oss << p;
