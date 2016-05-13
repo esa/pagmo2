@@ -567,7 +567,6 @@ class problem
             m_has_set_seed = ptr()->has_set_seed();
             // 6 - Name and extra info.
             m_name = ptr()->get_name();
-            m_extra_info = ptr()->get_extra_info();
             // 7 - Check the sparsities, and cache their sizes.
             if (m_has_gradient_sparsity) {
                 // If the problem provides gradient sparsity, get it, check it
@@ -617,7 +616,7 @@ class problem
             m_nec(other.m_nec),m_nic(other.m_nic),
             m_has_gradient(other.m_has_gradient),m_has_gradient_sparsity(other.m_has_gradient_sparsity),
             m_has_hessians(other.m_has_hessians),m_has_hessians_sparsity(other.m_has_hessians_sparsity),
-            m_has_set_seed(other.m_has_set_seed), m_name(other.m_name),m_extra_info(other.m_extra_info),
+            m_has_set_seed(other.m_has_set_seed), m_name(other.m_name),
             m_gs_dim(other.m_gs_dim),m_hs_dim(other.m_hs_dim)
         {}
 
@@ -631,7 +630,7 @@ class problem
             m_nec(other.m_nec),m_nic(other.m_nic),
             m_has_gradient(other.m_has_gradient),m_has_gradient_sparsity(other.m_has_gradient_sparsity),
             m_has_hessians(other.m_has_hessians),m_has_hessians_sparsity(other.m_has_hessians_sparsity),
-            m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)),m_extra_info(std::move(other.m_extra_info)),
+            m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)),
             m_gs_dim(other.m_gs_dim),m_hs_dim(std::move(other.m_hs_dim))
         {}
 
@@ -654,7 +653,6 @@ class problem
                 m_has_hessians_sparsity = other.m_has_hessians_sparsity;
                 m_has_set_seed = other.m_has_set_seed,
                 m_name = std::move(other.m_name);
-                m_extra_info = std::move(other.m_extra_info);
                 m_gs_dim = other.m_gs_dim;
                 m_hs_dim = std::move(other.m_hs_dim);
             }
@@ -1096,7 +1094,7 @@ class problem
          */
         std::string get_extra_info() const
         {
-            return m_extra_info;
+            return ptr()->get_extra_info();
         }
 
         /// Streaming operator
@@ -1151,7 +1149,7 @@ class problem
         {
             ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(),
                 m_lb,m_ub,m_nobj,m_nec,m_nic,m_has_gradient,m_has_gradient_sparsity,
-                m_has_hessians,m_has_hessians_sparsity,m_has_set_seed,m_name,m_extra_info,
+                m_has_hessians,m_has_hessians_sparsity,m_has_set_seed,m_name,
                 m_gs_dim,m_hs_dim);
         }
 
@@ -1168,7 +1166,7 @@ class problem
             ar(tmp);
             m_hevals.store(tmp);
             ar(m_lb,m_ub,m_nobj,m_nec,m_nic,m_has_gradient,m_has_gradient_sparsity,
-                m_has_hessians,m_has_hessians_sparsity,m_has_set_seed,m_name,m_extra_info,
+                m_has_hessians,m_has_hessians_sparsity,m_has_set_seed,m_name,
                 m_gs_dim,m_hs_dim);
         }
 
@@ -1303,7 +1301,6 @@ class problem
         bool m_has_hessians_sparsity;
         bool m_has_set_seed;
         std::string m_name;
-        std::string m_extra_info;
         // These are the dimensions of the sparsity objects, cached
         // here upon construction in order to provide fast checking
         // on the returned gradient and hessians.
