@@ -464,7 +464,7 @@ struct prob_inner final: prob_inner_base
  * - \p T::get_extra_info() returns a string containing extra human readable information to be used in output streams.
  *
  * @note Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the hessians.
- * At each copy construction and copy assignment these counters are reset to zero.
+ * At each copy construction and copy assignment these counters are also copied.
  *
  * @note The only allowed operations on an object belonging to this class, after it has been moved, are assignment and destruction.
  */
@@ -611,7 +611,7 @@ class problem
         /// Copy constructor
         problem(const problem &other):
             m_ptr(other.ptr()->clone()),
-            m_fevals(0u),m_gevals(0u),m_hevals(0u),
+            m_fevals(other.m_fevals.load()),m_gevals(other.m_gevals.load()),m_hevals(other.m_hevals.load()),
             m_lb(other.m_lb),m_ub(other.m_ub),m_nobj(other.m_nobj),
             m_nec(other.m_nec),m_nic(other.m_nic),
             m_has_gradient(other.m_has_gradient),m_has_gradient_sparsity(other.m_has_gradient_sparsity),

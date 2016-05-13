@@ -384,10 +384,10 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(a1!=0);
         BOOST_CHECK(a2!=0);
         BOOST_CHECK(a1!=a2);
-        // 2 - We check that the counters are reset by the copy operation
-        BOOST_CHECK(p2.get_fevals() == 0);
-        BOOST_CHECK(p2.get_gevals() == 0);
-        BOOST_CHECK(p2.get_hevals() == 0);
+        // 2 - We check that the counters are maintained by the copy operation
+        BOOST_CHECK(p2.get_fevals() == 1u);
+        BOOST_CHECK(p2.get_gevals() == 1u);
+        BOOST_CHECK(p2.get_hevals() == 1u);
         // 3 - We check that the expected gradient and hessans dims are left equal
         BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
         BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
@@ -451,9 +451,9 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
         BOOST_CHECK(a2!=0);
         BOOST_CHECK(a1!=a2);
         // 2 - We check that the counters are reset by the copy operation
-        BOOST_CHECK(p2.get_fevals() == 0);
-        BOOST_CHECK(p2.get_gevals() == 0);
-        BOOST_CHECK(p2.get_hevals() == 0);
+        BOOST_CHECK(p2.get_fevals() == 1u);
+        BOOST_CHECK(p2.get_gevals() == 1u);
+        BOOST_CHECK(p2.get_hevals() == 1u);
         // 3 - We check that the expected gradient and hessans dims are left equal
         BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
         BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
