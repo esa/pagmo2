@@ -15,27 +15,11 @@
 #include <string>
 #include <utility>
 
-// The pybind11 code produces some warning messages when we compile
-// in debug mode.
-#if defined(__clang__) || defined(__GNUC__)
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wpedantic"
-    #pragma GCC diagnostic ignored "-Wshadow"
-    #pragma GCC diagnostic ignored "-Wsign-conversion"
-    #pragma GCC diagnostic ignored "-Wdeprecated"
-#endif
-
-#include "../include/external/pybind11/include/pybind11/pybind11.h"
-#include "../include/external/pybind11/include/pybind11/stl.h"
-
-#if defined(__clang__) || defined(__GNUC__)
-    #pragma GCC diagnostic pop
-#endif
-
 #include "../include/exceptions.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/hock_schittkowsky_71.hpp"
 #include "../include/types.hpp"
+#include "pybind11.hpp"
 
 namespace py = pybind11;
 
