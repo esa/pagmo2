@@ -39,6 +39,11 @@ namespace pagmo
  */
 class population
 {
+    // Enable the generic ctor only if T is not an algorithm (after removing
+    // const/reference qualifiers).
+    template <typename T>
+    using generic_ctor_enabler = std::enable_if_t<!std::is_same<population,std::decay_t<T>>::value,int>;
+
     public:
         #if defined(DOXYGEN_INVOKED)
             /// A shortcut to <tt>std::vector<vector_double>::size_type</tt>.
@@ -46,28 +51,30 @@ class population
         #else
             using size_type = std::vector<vector_double>::size_type;
         #endif
-        
-        
+
+
         /// Default constructor
         /**
          * Constructs an empty population with a pagmo::null_problem.
          */
         population() : m_prob(null_problem{}), m_e(0u), m_seed(0u) {}
 
-        /// Constructor
+        /// Constructor from a problem of type \p T
         /**
          * Constructs a population with \p pop_size individuals associated
-         * to the pagmo::problem p and setting the population random seed
-         * to \p seed.
+         * to the problem \p x and setting the population random seed
+         * to \p seed. In order for the construction to be succesfull, \p x
+         * must be such that a pagmo::problem can be constructed from it.
          *
-         * @param[in] p the pagmo::problem the population refers to
+         * @param[in] x the user problem the population refers to
          * @param[in] pop_size population size (i.e. number of individuals therein)
          * @param[in] seed seed of the random number generator used, for example, to
          * create new random individuals within the bounds
          *
          * @throws unspecified any exception thrown by decision_vector() or by push_back()
          */
-        explicit population(const pagmo::problem &p, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(p), m_e(seed), m_seed(seed)
+        template <typename T, generic_ctor_enabler<T> = 0>
+        explicit population(T &&x, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next()) : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
         {
             for (size_type i = 0u; i < pop_size; ++i) {
                 push_back(decision_vector());

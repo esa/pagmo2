@@ -499,7 +499,7 @@ class problem
             return retval;
         }
     public:
-        /// Constructor from a user defined object of type \p T
+        /// Constructor from a user problem of type \p T
         /**
          * Construct a pagmo::problem with fitness dimension \f$n_f\f$ and decision vector
          * dimension \f$n_x\f$ from an object of type \p T. In
@@ -564,7 +564,7 @@ class problem
             m_has_hessians = ptr()->has_hessians();
             m_has_hessians_sparsity = ptr()->has_hessians_sparsity();
             // 5bis - Is this a stochastic problem?
-            m_is_stochastic = ptr()->has_set_seed();
+            m_has_set_seed = ptr()->has_set_seed();
             // 6 - Name and extra info.
             m_name = ptr()->get_name();
             m_extra_info = ptr()->get_extra_info();
@@ -617,7 +617,7 @@ class problem
             m_nec(other.m_nec),m_nic(other.m_nic),
             m_has_gradient(other.m_has_gradient),m_has_gradient_sparsity(other.m_has_gradient_sparsity),
             m_has_hessians(other.m_has_hessians),m_has_hessians_sparsity(other.m_has_hessians_sparsity),
-            m_is_stochastic(other.m_is_stochastic), m_name(other.m_name),m_extra_info(other.m_extra_info),
+            m_has_set_seed(other.m_has_set_seed), m_name(other.m_name),m_extra_info(other.m_extra_info),
             m_gs_dim(other.m_gs_dim),m_hs_dim(other.m_hs_dim)
         {}
 
@@ -631,7 +631,7 @@ class problem
             m_nec(other.m_nec),m_nic(other.m_nic),
             m_has_gradient(other.m_has_gradient),m_has_gradient_sparsity(other.m_has_gradient_sparsity),
             m_has_hessians(other.m_has_hessians),m_has_hessians_sparsity(other.m_has_hessians_sparsity),
-            m_is_stochastic(other.m_is_stochastic), m_name(std::move(other.m_name)),m_extra_info(std::move(other.m_extra_info)),
+            m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)),m_extra_info(std::move(other.m_extra_info)),
             m_gs_dim(other.m_gs_dim),m_hs_dim(std::move(other.m_hs_dim))
         {}
 
@@ -652,7 +652,7 @@ class problem
                 m_has_gradient_sparsity = other.m_has_gradient_sparsity;
                 m_has_hessians = other.m_has_hessians;
                 m_has_hessians_sparsity = other.m_has_hessians_sparsity;
-                m_is_stochastic = other.m_is_stochastic,
+                m_has_set_seed = other.m_has_set_seed,
                 m_name = std::move(other.m_name);
                 m_extra_info = std::move(other.m_extra_info);
                 m_gs_dim = other.m_gs_dim;
@@ -1054,7 +1054,7 @@ class problem
          */
         bool has_set_seed() const
         {
-            return is_stochastic();
+            return m_has_set_seed;
         }
 
         /// Check if the user-defined problem implements a set_seed method
@@ -1076,7 +1076,7 @@ class problem
          */
         bool is_stochastic() const
         {
-            return m_is_stochastic;
+            return has_set_seed();
         }
 
         /// Problem's name.
@@ -1151,7 +1151,7 @@ class problem
         {
             ar(m_ptr,m_fevals.load(), m_gevals.load(), m_hevals.load(),
                 m_lb,m_ub,m_nobj,m_nec,m_nic,m_has_gradient,m_has_gradient_sparsity,
-                m_has_hessians,m_has_hessians_sparsity,m_is_stochastic,m_name,m_extra_info,
+                m_has_hessians,m_has_hessians_sparsity,m_has_set_seed,m_name,m_extra_info,
                 m_gs_dim,m_hs_dim);
         }
 
@@ -1168,7 +1168,7 @@ class problem
             ar(tmp);
             m_hevals.store(tmp);
             ar(m_lb,m_ub,m_nobj,m_nec,m_nic,m_has_gradient,m_has_gradient_sparsity,
-                m_has_hessians,m_has_hessians_sparsity,m_is_stochastic,m_name,m_extra_info,
+                m_has_hessians,m_has_hessians_sparsity,m_has_set_seed,m_name,m_extra_info,
                 m_gs_dim,m_hs_dim);
         }
 
@@ -1301,7 +1301,7 @@ class problem
         bool m_has_gradient_sparsity;
         bool m_has_hessians;
         bool m_has_hessians_sparsity;
-        bool m_is_stochastic;
+        bool m_has_set_seed;
         std::string m_name;
         std::string m_extra_info;
         // These are the dimensions of the sparsity objects, cached
