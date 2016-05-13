@@ -63,6 +63,63 @@ inline bool callable(py::object o)
     return static_cast<py::object>(builtin().attr("callable")).call(o).cast<bool>();
 }
 
+// Convert a vector of doubles into a numpy array.
+inline py::array_t<double> vd_to_a(const pagmo::vector_double &v)
+{
+    return py::array(py::buffer_info(
+        // The const_cast should be ok, as there should be no write access into v.
+        static_cast<void *>(const_cast<double *>(v.data())),
+        sizeof(double),
+        py::format_descriptor<double>::value(),
+        1,
+        {v.size()},
+        {sizeof(double)}
+    ));
+}
+
+// Convert a numpy array of doubles into a vector of doubles.
+inline pagmo::vector_double a_to_vd(py::array_t<double> a)
+{
+    py::buffer_info info = a.request();
+    // Check that the input array is actually a 1-dimensional array
+    // of doubles.
+    if (!info.ptr || info.itemsize != sizeof(double) ||
+        info.format != py::format_descriptor<double>::value() ||
+        info.ndim != 1 || info.shape.size() != 1u || info.strides.size() != 1u ||
+        info.strides[0u] != sizeof(double))
+    {
+        pagmo_throw(std::invalid_argument,"Error creating a vector_double from a NumPy array: the "
+            "input array must be a unidimensional array of doubles.");
+    }
+    return pagmo::vector_double(
+        static_cast<double *>(info.ptr),
+        static_cast<double *>(info.ptr) + info.shape[0u]
+    );
+}
+
+// Try converting an arbitrary python object to a vector of doubles. If the input
+// is not a list of floats or a 1-dimensional array of floats, an error will be thrown.
+inline pagmo::vector_double to_vd(py::object o)
+{
+    py::module nm = py::module::import("numpy");
+    py::object ndarray = nm.attr("ndarray");
+    py::object isinstance = builtin().attr("isinstance");
+    py::object list = builtin().attr("list");
+    if (isinstance.call(o,ndarray).cast<bool>()) {
+        return a_to_vd(o);
+    } else if (isinstance.call(o,list).cast<bool>()) {
+        try {
+            return o.cast<pagmo::vector_double>();
+        } catch (const py::cast_error &) {
+            // This means that pybind11 was not able to cast o to a vector of doubles.
+            // We will raise an appropriate error below.
+        }
+    }
+    pagmo_throw(std::logic_error,"Cannot convert the type '" + str(type(o)).cast<std::string>() + "' to a "
+        "C++ vector of doubles. Only lists of floats and NumPy arrays of floats "
+        "are supported.");
+}
+
 }
 
 namespace pagmo
@@ -114,7 +171,7 @@ struct prob_inner<py::object> final: prob_inner_base
     // Main methods.
     virtual vector_double fitness(const vector_double &dv) const override final
     {
-        return attr(m_value,"fitness").call(dv).cast<vector_double>();
+        return pygmo::to_vd(attr(m_value,"fitness").call(pygmo::vd_to_a(dv)));
     }
     virtual vector_double::size_type get_nobj() const override final
     {
@@ -249,7 +306,12 @@ PYBIND11_PLUGIN(_core)
 
     // Expose the generic problem interface.
     problem_class.def(py::init<const problem &>())
-        .def("fitness",&problem::fitness)
+        .def("fitness",[](const problem &p, const std::vector<double> &dv) {
+            return pygmo::vd_to_a(p.fitness(dv));
+        },"Fitness.", py::arg("dv"))
+        .def("fitness",[](const problem &p, py::array_t<double> dv) {
+            return pygmo::vd_to_a(p.fitness(pygmo::a_to_vd(dv)));
+        },"Fitness.", py::arg("dv"))
         .def("gradient",&problem::gradient)
         .def("has_gradient",&problem::has_gradient)
         .def("gradient_sparsity",&problem::gradient_sparsity)
