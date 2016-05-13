@@ -375,7 +375,7 @@ struct prob_inner final: prob_inner_base
     {
         return "";
     }
-    
+
     // Serialization.
     template <typename Archive>
     void serialize(Archive &ar)
@@ -1027,7 +1027,7 @@ class problem
         /// Sets the seed for the stochastic variables
         /**
          * Sets the seed to be used in the fitness function to instantiate
-         * all stochastic variables. 
+         * all stochastic variables.
          *
          * @param[in] seed seed
          */
