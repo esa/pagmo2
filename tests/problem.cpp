@@ -610,9 +610,7 @@ BOOST_AUTO_TEST_CASE(problem_serialization_test)
     p.hessians({1.});
     // Store the string representation.
     std::stringstream ss;
-    stream(ss,p);
-    const std::string cmp = ss.str();
-    ss.str("");
+    auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
     cereal::JSONOutputArchive oarchive(ss);
@@ -624,9 +622,8 @@ BOOST_AUTO_TEST_CASE(problem_serialization_test)
     cereal::JSONInputArchive iarchive(ss);
     iarchive(p);
     }
-    std::ostringstream ss2;
-    stream(ss2,p);
-    BOOST_CHECK_EQUAL(ss2.str(),cmp);
+    auto after = boost::lexical_cast<std::string>(p);
+    BOOST_CHECK_EQUAL(before, after);
     // Check that the properties of base_p where restored as well.
     BOOST_CHECK_EQUAL(p.extract<full_p>()->m_nobj,p2.extract<full_p>()->m_nobj);
     BOOST_CHECK_EQUAL(p.extract<full_p>()->m_nec,p2.extract<full_p>()->m_nec);

@@ -26,16 +26,26 @@ struct al_01
     std::string get_extra_info() const {return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);};
     void set_seed(unsigned int seed) {m_seed = seed;};
     void set_verbosity(unsigned int level) {m_verbosity = level;};
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_seed, m_verbosity);
+    }
     unsigned int m_seed = 0u;
     unsigned int m_verbosity = 0u;
 };
+PAGMO_REGISTER_ALGORITHM(al_01)
 
 // Minimal algorithm deterministic
 struct al_02
 {
     al_02() {};
     population evolve(const population& pop) const {return pop;};
+    template <typename Archive>
+    void serialize(Archive &)
+    {}
 };
+PAGMO_REGISTER_ALGORITHM(al_02)
 
 BOOST_AUTO_TEST_CASE(algorithm_construction_test)
 {
@@ -181,4 +191,89 @@ BOOST_AUTO_TEST_CASE(algorithm_copy_assignment_test)
     BOOST_CHECK(algo.get_name() == algo_copy.get_name());
     BOOST_CHECK(algo.has_set_seed() == algo_copy.has_set_seed());
     BOOST_CHECK(algo.has_set_verbosity() == algo_copy.has_set_verbosity());
+}
+
+BOOST_AUTO_TEST_CASE(algorithm_extract_is_test)
+{
+    algorithm algo{al_01{}};
+    algo.set_seed(1u);
+    algo.set_verbosity(1u);
+    auto user_algo = algo.extract<al_01>();
+
+    // We check thet we can access to public data members
+    BOOST_CHECK(user_algo->m_seed == 1u);
+    BOOST_CHECK(user_algo->m_verbosity == 1u);
+
+    // We check that a non succesfull cast returns a null pointer
+    BOOST_CHECK(!algo.extract<al_02>());
+
+    // We check the is method
+    BOOST_CHECK(algo.is<al_01>());
+    BOOST_CHECK(!algo.is<al_02>());
+}
+
+BOOST_AUTO_TEST_CASE(algorithm_evolve_test)
+{
+    algorithm algo{al_01{}};
+    population pop{problem{rosenbrock{5}}, 2u};
+    population pop_out = algo.evolve(pop);
+    // We test that the evolve is called and does what
+    // its supposed to, in this case return the same population
+    BOOST_CHECK(pop.size() == pop_out.size());
+    BOOST_CHECK(pop.get_x() == pop_out.get_x());
+    BOOST_CHECK(pop.get_f() == pop_out.get_f());
+    BOOST_CHECK(pop.get_ID() == pop_out.get_ID());
+
+}
+
+BOOST_AUTO_TEST_CASE(algorithm_setters_test)
+{
+    algorithm algo{al_01{}};
+    algo.set_seed(32u);
+    BOOST_CHECK(algo.extract<al_01>()->m_seed == 32u);
+    algo.set_verbosity(32u);
+    BOOST_CHECK(algo.extract<al_01>()->m_verbosity == 32u);
+}
+
+BOOST_AUTO_TEST_CASE(algorithm_has_test)
+{
+    algorithm algo{al_01{}};
+    BOOST_CHECK(algo.has_set_seed() == true);
+    BOOST_CHECK(algo.has_set_seed() == algo.is_stochastic());
+    BOOST_CHECK(algo.has_set_verbosity() == true);
+}
+
+BOOST_AUTO_TEST_CASE(algorithm_getters_test)
+{
+    algorithm algo{al_01{}};
+    BOOST_CHECK(algo.get_name() == "name");
+    BOOST_CHECK(algo.get_extra_info().find("Seed") != std::string::npos);
+}
+
+BOOST_AUTO_TEST_CASE(algorithm_serialization_test)
+{
+    // Instantiate an algorithm
+    algorithm algo{al_01{}};
+    // Change its state
+    algo.set_seed(2u);
+    algo.set_verbosity(2u);
+    // Store the string representation.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(algo);
+    // Now serialize, deserialize and compare the result.
+    {
+    cereal::JSONOutputArchive oarchive(ss);
+    oarchive(algo);
+    }
+    // Create a new algorithm object
+    auto algo2 = algorithm{al_02{}};
+    {
+    cereal::JSONInputArchive iarchive(ss);
+    iarchive(algo2);
+    }
+    auto after = boost::lexical_cast<std::string>(algo2);
+    BOOST_CHECK_EQUAL(before, after);
+    // Check explicitly that the properties of base_p where restored as well.
+    BOOST_CHECK_EQUAL(algo.extract<al_01>()->m_seed, algo2.extract<al_01>()->m_seed);
+    BOOST_CHECK_EQUAL(algo.extract<al_01>()->m_verbosity, algo2.extract<al_01>()->m_verbosity);
 }

@@ -182,12 +182,12 @@ class algorithm
             m_has_set_seed = ptr()->has_set_seed();
             // We detect if set_verbosity is implemented in the algorithm
             m_has_set_verbosity = ptr()->has_set_verbosity();
-            // We store at construction the value returned from the user implemented get_name 
+            // We store at construction the value returned from the user implemented get_name
             m_name = ptr()->get_name();
         }
         /// Copy constructor
         algorithm(const algorithm &other):
-            m_ptr(other.m_ptr->clone()), 
+            m_ptr(other.m_ptr->clone()),
             m_has_set_seed(other.m_has_set_seed),
             m_has_set_verbosity(other.m_has_set_verbosity),
             m_name(other.m_name)

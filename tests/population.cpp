@@ -21,6 +21,7 @@ BOOST_AUTO_TEST_CASE(population_construction_test)
     population pop1{};
     population pop2{problem{zdt{1,5}}, 2, seed};
     population pop3{problem{zdt{2,5}}, 2, seed};
+
     // We check that the number of individuals is as expected
     BOOST_CHECK(pop1.size() == 0u);
     BOOST_CHECK(pop2.size() == 2u);
@@ -33,6 +34,25 @@ BOOST_AUTO_TEST_CASE(population_construction_test)
     BOOST_CHECK(pop2.get_f() != pop3.get_f());
     // We check that the seed has been set correctly
     BOOST_CHECK(pop2.get_seed() == seed);
+
+    // We test the generic constructor
+    population pop4{zdt{2,5}, 2, seed};
+    BOOST_CHECK(pop4.get_ID() == pop3.get_ID());
+    BOOST_CHECK(pop4.get_x() == pop3.get_x());
+    BOOST_CHECK(pop4.get_f() == pop3.get_f());
+    population pop5{zdt{1,5}, 2, seed};
+    BOOST_CHECK(pop2.get_ID() == pop5.get_ID());
+    BOOST_CHECK(pop2.get_x() == pop5.get_x());
+    BOOST_CHECK(pop2.get_f() == pop5.get_f());
+}
+
+BOOST_AUTO_TEST_CASE(population_copy_constructor_test)
+{
+    population pop1{problem{rosenbrock{5}}, 10u};
+    population pop2(pop1);
+    BOOST_CHECK(pop2.get_ID() == pop1.get_ID());
+    BOOST_CHECK(pop2.get_x() == pop1.get_x());
+    BOOST_CHECK(pop2.get_f() == pop1.get_f());
 }
 
 BOOST_AUTO_TEST_CASE(population_push_back_test)
@@ -113,7 +133,7 @@ BOOST_AUTO_TEST_CASE(population_getters_test)
 {
     population pop{problem{null_problem{}}, 1, 1234u};
     pop.set_xf(0,{3},{1,2,3});
-    // Test 
+    // Test
     BOOST_CHECK(pop.get_problem().get_name() == "Null problem");
     BOOST_CHECK((pop.get_f()[0] == vector_double{1,2,3}));
     BOOST_CHECK(pop.get_seed() == 1234u);

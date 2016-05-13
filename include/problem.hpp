@@ -499,7 +499,7 @@ class problem
             return retval;
         }
     public:
-        /// Constructor from a user defined object of type \p T
+        /// Constructor from a user problem of type \p T
         /**
          * Construct a pagmo::problem with fitness dimension \f$n_f\f$ and decision vector
          * dimension \f$n_x\f$ from an object of type \p T. In
