@@ -786,3 +786,48 @@ BOOST_AUTO_TEST_CASE(problem_stochastic_test)
     BOOST_CHECK(problem{s_03{}}.is_stochastic() == false);
     BOOST_CHECK(problem{s_03{}}.has_set_seed() == false);
 }
+
+struct extra_info_case
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {2,2,2};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nec() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nic() const
+    {
+        return 1u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0},{1}};
+    }
+    void set_seed(unsigned int seed)
+    {
+        m_seed = seed;
+    }
+    bool has_set_seed() const
+    {
+        return false;
+    }
+    std::string get_extra_info() const {
+        return std::to_string(m_seed);
+    }
+    unsigned int m_seed = 0u;
+};
+
+BOOST_AUTO_TEST_CASE(problem_extra_info_test)
+{
+    problem prob{extra_info_case{}};
+    problem prob2(prob);
+    BOOST_CHECK(prob.get_extra_info() == prob2.get_extra_info());
+    prob.set_seed(32u);
+    BOOST_CHECK(prob.get_extra_info() == "32");
+}
