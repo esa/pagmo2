@@ -306,9 +306,6 @@ PYBIND11_PLUGIN(_core)
 
     // Expose the generic problem interface.
     problem_class.def(py::init<const problem &>())
-        .def("fitness",[](const problem &p, const std::vector<double> &dv) {
-            return pygmo::vd_to_a(p.fitness(dv));
-        },"Fitness.", py::arg("dv"))
         .def("fitness",[](const problem &p, py::array_t<double,py::array::c_style> dv) {
             return pygmo::vd_to_a(p.fitness(pygmo::a_to_vd(dv)));
         },"Fitness.", py::arg("dv"))
