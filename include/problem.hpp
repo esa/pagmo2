@@ -237,16 +237,9 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     sparsity_pattern gradient_sparsity_impl(const U &) const
     {
-        pagmo_throw(std::logic_error,"Trying to access non-existing 'gradient_sparsity()' method. This "
-            "indicates a logical error in the implementation of the concrete problem class, as the 'gradient_sparsity()' "
-            "method is accessed only if 'has_gradient_sparsity()' returns true.");
+        pagmo_throw(std::logic_error,"This method should never be invoked. Please notify the developers.");
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
-    static bool has_gradient_sparsity_impl(const U &p)
-    {
-       return p.has_gradient_sparsity();
-    }
-    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(const U &)
     {
        return true;
@@ -290,16 +283,9 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
     {
-        pagmo_throw(std::logic_error,"Trying to access non-existing 'hessians_sparsity()' method. This "
-            "indicates a logical error in the implementation of the concrete problem class, as the 'hessians_sparsity()' "
-            "method is accessed only if 'has_hessians_sparsity()' returns true.");
+        pagmo_throw(std::logic_error,"This method should never be invoked. Please notify the developers.");
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
-    static bool has_hessians_sparsity_impl(const U &p)
-    {
-       return p.has_hessians_sparsity();
-    }
-    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
        return true;
@@ -795,32 +781,12 @@ class problem
          */
         sparsity_pattern gradient_sparsity() const
         {
-            if (has_gradient_sparsity()) {
+            if (m_has_gradient_sparsity) {
                 auto retval = ptr()->gradient_sparsity();
                 check_gradient_sparsity(retval);
                 return retval;
             }
             return dense_gradient(get_nf(),get_nx());
-        }
-
-        /// Checks if the user-defined problem has a gradient_sparsity
-        /**
-         * If the user defined problem implements a gradient_sparsity, this
-         * will return true, false otherwise. The value returned can
-         * also be directly hard-coded implementing the
-         * method
-         *
-         * @code
-         * bool has_gradient_sparsity() const
-         * @endcode
-         *
-         * in the user-defined problem
-         *
-         * @return a boolean flag
-         */
-        bool has_gradient_sparsity() const
-        {
-            return m_has_gradient_sparsity;
         }
 
         /// Computes the hessians
@@ -892,33 +858,12 @@ class problem
          */
         std::vector<sparsity_pattern> hessians_sparsity() const
         {
-            if (has_hessians_sparsity()) {
+            if (m_has_hessians_sparsity) {
                 auto retval = ptr()->hessians_sparsity();
                 check_hessians_sparsity(retval);
                 return retval;
             }
             return dense_hessians(get_nf(),get_nx());
-        }
-
-        /// Check if the user-defined dproblem implements the hessians_sparsity
-        /**
-         * If the user defined problem implements a hessians sparsity, this
-         * will return true, false otherwise. The value returned can
-         * also be directly hard-coded implementing the
-         * method
-         *
-         * @code
-         * bool has_hessians_sparsity() const
-         * @endcode
-         *
-         * in the user-defined problem
-         *
-         * @return a boolean flag
-         *
-         */
-        bool has_hessians_sparsity() const
-        {
-            return m_has_hessians_sparsity;
         }
 
         /// Number of objectives
@@ -1119,12 +1064,12 @@ class problem
             os << "\tUpper bounds: ";
             stream(os, p.get_bounds().second, '\n');
             stream(os, "\n\tHas gradient: ", p.has_gradient(), '\n');
-            stream(os, "\tUser implemented gradient sparsity: ", p.has_gradient_sparsity(), '\n');
+            stream(os, "\tUser implemented gradient sparsity: ", p.m_has_gradient_sparsity, '\n');
             if (p.has_gradient()) {
                 stream(os, "\tExpected gradients: ", p.m_gs_dim, '\n');
             }
             stream(os, "\tHas hessians: ", p.has_hessians(), '\n');
-            stream(os, "\tUser implemented hessians sparsity: ", p.has_hessians_sparsity(), '\n');
+            stream(os, "\tUser implemented hessians sparsity: ", p.m_has_hessians_sparsity, '\n');
             if (p.has_hessians()) {
                 stream(os, "\tExpected hessian components: ", p.m_hs_dim, '\n');
             }

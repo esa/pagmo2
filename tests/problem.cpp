@@ -130,11 +130,6 @@ struct grad_p_override : grad_p
         return false;
     }
 
-    bool has_gradient_sparsity() const
-    {
-        return false;
-    }
-
     template <typename Archive>
     void serialize(Archive &ar)
     {
@@ -197,11 +192,6 @@ struct hess_p_override : hess_p
      ) : hess_p(nobj,nec,nic,ret_fit,lb,ub,h,hs) {}
 
     bool has_hessians() const
-    {
-        return false;
-    }
-
-    bool has_hessians_sparsity() const
     {
         return false;
     }
@@ -532,25 +522,17 @@ BOOST_AUTO_TEST_CASE(problem_has_test)
     problem p5{hess_p_override{}};
 
     BOOST_CHECK(!p1.has_gradient());
-    BOOST_CHECK(!p1.has_gradient_sparsity());
     BOOST_CHECK(!p1.has_hessians());
-    BOOST_CHECK(!p1.has_hessians_sparsity());
 
     BOOST_CHECK(p2.has_gradient());
-    BOOST_CHECK(p2.has_gradient_sparsity());
     BOOST_CHECK(!p2.has_hessians());
-    BOOST_CHECK(!p2.has_hessians_sparsity());
 
 
     BOOST_CHECK(!p3.has_gradient());
-    BOOST_CHECK(!p3.has_gradient_sparsity());
     BOOST_CHECK(p3.has_hessians());
-    BOOST_CHECK(p3.has_hessians_sparsity());
 
     BOOST_CHECK(!p4.has_gradient());
-    BOOST_CHECK(!p4.has_gradient_sparsity());
     BOOST_CHECK(!p4.has_hessians());
-    BOOST_CHECK(!p4.has_hessians_sparsity());
 }
 
 BOOST_AUTO_TEST_CASE(problem_getters_test)

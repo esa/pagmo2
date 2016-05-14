@@ -306,32 +306,6 @@ BOOST_AUTO_TEST_CASE(has_gradient_sparsity_test)
     BOOST_CHECK((!has_gradient_sparsity<gs_03>::value));
 }
 
-struct ov_gs_00 {};
-
-// The good one.
-struct ov_gs_01
-{
-    bool has_gradient_sparsity() const;
-};
-
-struct ov_gs_02
-{
-    bool has_gradient_sparsity();
-};
-
-struct ov_gs_03
-{
-    void has_gradient_sparsity() const;
-};
-
-BOOST_AUTO_TEST_CASE(override_has_gradient_sparsity_test)
-{
-    BOOST_CHECK((!override_has_gradient_sparsity<ov_gs_00>::value));
-    BOOST_CHECK((override_has_gradient_sparsity<ov_gs_01>::value));
-    BOOST_CHECK((!override_has_gradient_sparsity<ov_gs_02>::value));
-    BOOST_CHECK((!override_has_gradient_sparsity<ov_gs_03>::value));
-}
-
 struct hess_00 {};
 
 // The good one.
@@ -416,32 +390,6 @@ BOOST_AUTO_TEST_CASE(has_hessians_sparsity_test)
     BOOST_CHECK((!has_hessians_sparsity<hs_03>::value));
 }
 
-struct ov_hs_00 {};
-
-// The good one.
-struct ov_hs_01
-{
-    bool has_hessians_sparsity() const;
-};
-
-struct ov_hs_02
-{
-    bool has_hessians_sparsity();
-};
-
-struct ov_hs_03
-{
-    void has_hessians_sparsity() const;
-};
-
-BOOST_AUTO_TEST_CASE(override_has_hessians_sparsity_test)
-{
-    BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_00>::value));
-    BOOST_CHECK((override_has_hessians_sparsity<ov_hs_01>::value));
-    BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_02>::value));
-    BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_03>::value));
-}
-
 struct hss_00 {};
 
 // The good one.
@@ -502,7 +450,7 @@ BOOST_AUTO_TEST_CASE(override_has_set_seed_test)
 
 struct hsv_00 {};
 
-// The good one 
+// The good one
 struct hsv_01
 {
     void set_verbosity(unsigned int);
@@ -536,7 +484,7 @@ BOOST_AUTO_TEST_CASE(has_set_verbose_test)
 
 struct hev_00 {};
 
-// The good one 
+// The good one
 struct hev_01
 {
     population evolve(const population&) const;
@@ -571,4 +519,3 @@ BOOST_AUTO_TEST_CASE(has_evolve_test)
     BOOST_CHECK((!has_evolve<hev_04>::value));
     BOOST_CHECK((!has_evolve<hev_05>::value));
 }
-
