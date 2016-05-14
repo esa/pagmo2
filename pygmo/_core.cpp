@@ -29,7 +29,7 @@ namespace pygmo
 // Perform a deep copy of input object o.
 inline py::object deepcopy(py::object o)
 {
-    return static_cast<py::object>(py::module::import("copy").attr("deepcopy")).call(o);
+    return static_cast<py::object>(py::module::import("copy").attr("deepcopy"))(o);
 }
 
 // Import and return the builtin module.
@@ -45,13 +45,13 @@ inline py::module builtin()
 // Get the type of an object.
 inline py::object type(py::object o)
 {
-    return static_cast<py::object>(builtin().attr("type")).call(o);
+    return static_cast<py::object>(builtin().attr("type"))(o);
 }
 
 // String representation of an object.
 inline py::object str(py::object o)
 {
-    return static_cast<py::object>(builtin().attr("str")).call(o);
+    return static_cast<py::object>(builtin().attr("str"))(o);
 }
 
 // Check if type is callable.
@@ -60,17 +60,17 @@ inline bool callable(py::object o)
     if (!o) {
         return false;
     }
-    return static_cast<py::object>(builtin().attr("callable")).call(o).cast<bool>();
+    return static_cast<py::object>(builtin().attr("callable"))(o).cast<bool>();
 }
 
 // Convert a vector of doubles into a numpy array.
-inline py::array_t<double> vd_to_a(const pagmo::vector_double &v)
+inline py::array_t<double,py::array::c_style> vd_to_a(const pagmo::vector_double &v)
 {
-    return py::array(py::buffer_info(
+    return py::array_t<double,py::array::c_style>(py::buffer_info(
         // The const_cast should be ok, as there should be no write access into v.
         static_cast<void *>(const_cast<double *>(v.data())),
         sizeof(double),
-        py::format_descriptor<double>::value(),
+        py::format_descriptor<double>::value,
         1,
         {v.size()},
         {sizeof(double)}
@@ -78,13 +78,13 @@ inline py::array_t<double> vd_to_a(const pagmo::vector_double &v)
 }
 
 // Convert a numpy array of doubles into a vector of doubles.
-inline pagmo::vector_double a_to_vd(py::array_t<double> a)
+inline pagmo::vector_double a_to_vd(py::array_t<double,py::array::c_style> a)
 {
     py::buffer_info info = a.request();
     // Check that the input array is actually a 1-dimensional array
     // of doubles.
     if (!info.ptr || info.itemsize != sizeof(double) ||
-        info.format != py::format_descriptor<double>::value() ||
+        info.format != py::format_descriptor<double>::value ||
         info.ndim != 1 || info.shape.size() != 1u || info.strides.size() != 1u ||
         info.strides[0u] != sizeof(double))
     {
@@ -98,16 +98,16 @@ inline pagmo::vector_double a_to_vd(py::array_t<double> a)
 }
 
 // Try converting an arbitrary python object to a vector of doubles. If the input
-// is not a list of floats or a 1-dimensional array of floats, an error will be thrown.
+// is not a list of floats or a 1-dimensional numpy array of floats, an error will be thrown.
 inline pagmo::vector_double to_vd(py::object o)
 {
     py::module nm = py::module::import("numpy");
     py::object ndarray = nm.attr("ndarray");
     py::object isinstance = builtin().attr("isinstance");
     py::object list = builtin().attr("list");
-    if (isinstance.call(o,ndarray).cast<bool>()) {
+    if (isinstance(o,ndarray).cast<bool>()) {
         return a_to_vd(o);
-    } else if (isinstance.call(o,list).cast<bool>()) {
+    } else if (isinstance(o,list).cast<bool>()) {
         try {
             return o.cast<pagmo::vector_double>();
         } catch (const py::cast_error &) {
@@ -171,22 +171,22 @@ struct prob_inner<py::object> final: prob_inner_base
     // Main methods.
     virtual vector_double fitness(const vector_double &dv) const override final
     {
-        return pygmo::to_vd(attr(m_value,"fitness").call(pygmo::vd_to_a(dv)));
+        return pygmo::to_vd(attr(m_value,"fitness")(pygmo::vd_to_a(dv)));
     }
     virtual vector_double::size_type get_nobj() const override final
     {
-        return attr(m_value,"get_nobj").call().cast<vector_double::size_type>();
+        return attr(m_value,"get_nobj")().cast<vector_double::size_type>();
     }
     virtual std::pair<vector_double,vector_double> get_bounds() const override final
     {
-        return attr(m_value,"get_bounds").call()
+        return attr(m_value,"get_bounds")()
             .cast<std::pair<vector_double,vector_double>>();
     }
     virtual vector_double::size_type get_nec() const override final
     {
         auto a = attr(m_value,"get_nec");
         if (pygmo::callable(a)) {
-            return a.call().cast<vector_double::size_type>();
+            return a().cast<vector_double::size_type>();
         }
         return 0u;
     }
@@ -194,7 +194,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"get_nic");
         if (pygmo::callable(a)) {
-            return a.call().cast<vector_double::size_type>();
+            return a().cast<vector_double::size_type>();
         }
         return 0u;
     }
@@ -202,7 +202,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"get_name");
         if (pygmo::callable(a)) {
-            return a.call().cast<std::string>();
+            return a().cast<std::string>();
         }
         return pygmo::str(pygmo::type(m_value)).cast<std::string>();
     }
@@ -210,7 +210,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"get_extra_info");
         if (pygmo::callable(a)) {
-            return a.call().cast<std::string>();
+            return a().cast<std::string>();
         }
         return "";
     }
@@ -222,7 +222,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"gradient");
         if (pygmo::callable(a)) {
-            return a.call(x).cast<vector_double>();
+            return a(x).cast<vector_double>();
         }
         pagmo_throw(std::logic_error,"Gradients have been requested but they are not implemented or not implemented correctly.");
     }
@@ -232,7 +232,7 @@ struct prob_inner<py::object> final: prob_inner_base
         // otherwise check if the gradient_sparsity method exists.
         auto a = attr(m_value,"has_gradient_sparsity");
         if (pygmo::callable(a)) {
-            return a.call().cast<bool>();
+            return a().cast<bool>();
         }
         return pygmo::callable(attr(m_value,"gradient_sparsity"));
     }
@@ -240,7 +240,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"gradient_sparsity");
         if (pygmo::callable(a)) {
-            return a.call().cast<sparsity_pattern>();
+            return a().cast<sparsity_pattern>();
         }
         pagmo_throw(std::logic_error,"Gradient sparsity has been requested but it is not implemented or not implemented correctly.");
     }
@@ -252,7 +252,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"hessians");
         if (pygmo::callable(a)) {
-            return a.call(x).cast<std::vector<vector_double>>();
+            return a(x).cast<std::vector<vector_double>>();
         }
         pagmo_throw(std::logic_error,"Hessians have been requested but they are not implemented or not implemented correctly.");
     }
@@ -260,7 +260,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"has_hessians_sparsity");
         if (pygmo::callable(a)) {
-            return a.call().cast<bool>();
+            return a().cast<bool>();
         }
         return pygmo::callable(attr(m_value,"hessians_sparsity"));
     }
@@ -268,7 +268,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"hessians_sparsity");
         if (pygmo::callable(a)) {
-            return a.call().cast<std::vector<sparsity_pattern>>();
+            return a().cast<std::vector<sparsity_pattern>>();
         }
         pagmo_throw(std::logic_error,"Hessians sparsities have been requested but they are not implemented or not implemented correctly.");
     }
@@ -276,7 +276,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"set_seed");
         if (pygmo::callable(a)) {
-            a.call(n);
+            a(n);
         } else {
             pagmo_throw(std::logic_error,"'set_seed()' has been called but it is not implemented or not implemented correctly");
         }
@@ -285,7 +285,7 @@ struct prob_inner<py::object> final: prob_inner_base
     {
         auto a = attr(m_value,"has_set_seed");
         if (pygmo::callable(a)) {
-            return a.call().cast<bool>();
+            return a().cast<bool>();
         }
         return pygmo::callable(attr(m_value,"set_seed"));
     }
@@ -309,7 +309,7 @@ PYBIND11_PLUGIN(_core)
         .def("fitness",[](const problem &p, const std::vector<double> &dv) {
             return pygmo::vd_to_a(p.fitness(dv));
         },"Fitness.", py::arg("dv"))
-        .def("fitness",[](const problem &p, py::array_t<double> dv) {
+        .def("fitness",[](const problem &p, py::array_t<double,py::array::c_style> dv) {
             return pygmo::vd_to_a(p.fitness(pygmo::a_to_vd(dv)));
         },"Fitness.", py::arg("dv"))
         .def("gradient",&problem::gradient)
