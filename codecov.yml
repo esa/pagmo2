@@ -1,0 +1,13 @@
+codecov:
+  token: "secret:UWAaBlrUAXYILRz2gV23N7kKhBqsnZHNH2oBg5q2lU+RiXfD/tjd1SyYvYr3f46wyVNHGIihqjxP56KyL+38H56nFGt/lhiOo2+x0IvoG/Y="
+
+coverage:
+  status:
+    patch: false
+    project:
+      default:
+        target: auto
+  ignore:
+  - tests/.*
+
+comment: off
