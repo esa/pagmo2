@@ -8,8 +8,8 @@ pagmo-gcc:
     - cmake -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
     - make -j4
     - make test
-    - wget https://codecov.io/bash
-    - bash <(curl -s https://codecov.io/bash)
+    - wget https://codecov.io/bash -O codecov.sh
+    - bash codecov.sh
 
 pagmo-clang:
   script:
