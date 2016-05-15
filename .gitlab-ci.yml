@@ -9,7 +9,7 @@ pagmo-gcc:
     - make -j4
     - make test
     - wget https://codecov.io/bash
-    - bash bash
+    - bash <(curl -s https://codecov.io/bash)
 
 pagmo-clang:
   script:
