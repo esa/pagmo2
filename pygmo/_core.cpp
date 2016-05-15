@@ -13,14 +13,19 @@
 #include <iterator>
 #include <sstream>
 #include <string>
-#include <utility>
 
 #include "../include/exceptions.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/hock_schittkowsky_71.hpp"
+#include "../include/problems/inventory.hpp"
+#include "../include/problems/rosenbrock.hpp"
+#include "../include/problems/translate.hpp"
+#include "../include/problems/zdt.hpp"
+#include "../include/rng.hpp"
 #include "../include/types.hpp"
 #include "common_utils.hpp"
 #include "prob_inner_python.hpp"
+#include "problem_exposition_suite.hpp"
 #include "pybind11.hpp"
 
 namespace py = pybind11;
@@ -34,24 +39,10 @@ PYBIND11_PLUGIN(_core)
 
     // Expose the generic problem interface.
     problem_class.def(py::init<const problem &>())
-        .def("fitness",[](const problem &p, py::array_t<double,py::array::c_style> dv) {
-            return pygmo::vd_to_a(p.fitness(pygmo::a_to_vd(dv)));
-        },"Fitness.", py::arg("dv"))
-        .def("gradient",[](const problem &p, py::array_t<double,py::array::c_style> dv) {
-            return pygmo::vd_to_a(p.gradient(pygmo::a_to_vd(dv)));
-        },"Gradient.", py::arg("dv"))
         .def("has_gradient",&problem::has_gradient)
         .def("gradient_sparsity",[](const problem &p) {
             return pygmo::sp_to_a(p.gradient_sparsity());
         },"Gradient sparsity.")
-        .def("hessians",[](const problem &p, py::array_t<double,py::array::c_style> dv) {
-            const auto tmp = p.hessians(pygmo::a_to_vd(dv));
-            std::vector<py::array_t<double,py::array::c_style>> retval;
-            std::transform(tmp.begin(),tmp.end(),std::back_inserter(retval),[](const auto &v) {
-                return pygmo::vd_to_a(v);
-            });
-            return retval;
-        },"Hessians.", py::arg("dv"))
         .def("has_hessians",&problem::has_hessians)
         .def("hessians_sparsity",[](const problem &p) {
             const auto tmp = p.hessians_sparsity();
@@ -64,10 +55,6 @@ PYBIND11_PLUGIN(_core)
         .def("get_nobj",&problem::get_nobj)
         .def("get_nx",&problem::get_nx)
         .def("get_nf",&problem::get_nf)
-        .def("get_bounds",[](const problem &p) {
-            auto tmp = p.get_bounds();
-            return py::make_tuple(pygmo::vd_to_a(std::move(tmp.first)),pygmo::vd_to_a(std::move(tmp.second)));
-        })
         .def("get_nec",&problem::get_nec)
         .def("get_nic",&problem::get_nic)
         .def("get_nc",&problem::get_nc)
@@ -80,25 +67,43 @@ PYBIND11_PLUGIN(_core)
         .def("has_set_seed",&problem::has_set_seed)
         .def("is_stochastic",&problem::is_stochastic)
         .def("get_name",&problem::get_name)
-        .def("get_extra_info",&problem::get_extra_info)
-        .def("__repr__",[](const problem &p) {
-            std::stringstream oss;
-            oss << p;
-            return oss.str();
-        });
+        .def("get_extra_info",&problem::get_extra_info);
+    // These are shared with the exposition of concrete C++ problems.
+    pygmo::expose_problem_repr(problem_class,"");
+    pygmo::expose_fitness(problem_class);
+    pygmo::expose_gradient(problem_class);
+    pygmo::expose_get_bounds(problem_class);
 
-    py::class_<hock_schittkowsky_71> hs71(m,"hock_schittkowsky_71");
-    hs71.def(py::init<>());
+    // Expose the translate problem. We do it first because we will need to expose its constructors from
+    // concrete C++ problems later.
+    auto t_prob = pygmo::expose_problem<translate>(m,"translate",problem_class);
+    // Expose a constructor of translate from translate. Translate-ception.
+    pygmo::expose_translate_ctor<translate>(t_prob);
 
-    problem_class.def(py::init<hock_schittkowsky_71>());
-    problem_class.def("_extract",[](const problem &p, const hock_schittkowsky_71 &) {
-        auto ptr = p.extract<hock_schittkowsky_71>();
-        if (!ptr) {
-            pagmo_throw(std::runtime_error,std::string("cannot extract an instance of type '") +
-                typeid(hock_schittkowsky_71).name() + "'");
-        }
-        return hock_schittkowsky_71(*ptr);
-    });
+    // Exposition of concrete C++ problems.
+    pygmo::expose_problem<hock_schittkowsky_71>(m,"hock_schittkowsky_71",problem_class,&t_prob);
+    auto rb = pygmo::expose_problem<rosenbrock>(m,"rosenbrock",problem_class,&t_prob);
+    rb.def(py::init<unsigned int>(),"Constructor from dimension.",py::arg("dim"));
+    auto inv = pygmo::expose_problem<inventory>(m,"inventory",problem_class,&t_prob);
+    // Here we define two separate constructors because if we default the seed to pagmo::random_device::next(),
+    // then the seed default value will be always the same (that is, the value randomly selected when the exposition
+    // code is running upon importing pygmo). These 2 ctors seem to achieve what we need from the inventory class.
+    inv.def(py::init<unsigned,unsigned>(),"Constructor from weeks and sample size (seed is randomly-generated).",
+        py::arg("weeks") = 4u,py::arg("sample_size") = 10u);
+    inv.def(py::init<unsigned,unsigned,unsigned>(),"Constructor from weeks, sample size and seed.",
+        py::arg("weeks") = 4u,py::arg("sample_size") = 10u, py::arg("seed"));
+    auto zdt = pygmo::expose_problem<pagmo::zdt>(m,"zdt",problem_class,&t_prob);
+    zdt.def(py::init<unsigned,unsigned>(),"Constructor from id and param.",
+        py::arg("id") = 1u,py::arg("param") = 30u);
+
+    // problem_class.def("_extract",[](const problem &p, const hock_schittkowsky_71 &) {
+    //     auto ptr = p.extract<hock_schittkowsky_71>();
+    //     if (!ptr) {
+    //         pagmo_throw(std::runtime_error,std::string("cannot extract an instance of type '") +
+    //             typeid(hock_schittkowsky_71).name() + "'");
+    //     }
+    //     return hock_schittkowsky_71(*ptr);
+    // });
 
     // This needs to go last, as it needs to have the lowest precedence among all ctors.
     problem_class.def(py::init<py::object>());

@@ -88,7 +88,7 @@ class inventory
         std::pair<vector_double, vector_double> get_bounds() const
         {
             vector_double lb(m_weeks,0.);
-            vector_double ub(m_weeks, 200.);
+            vector_double ub(m_weeks,200.);
             return {lb,ub};
         }
 
