@@ -9,7 +9,7 @@ pagmo-gcc:
     - make -j4
     - make test
     - wget https://codecov.io/bash -O codecov.sh
-    - bash codecov.sh
+    - bash codecov.sh -t $CODECOV_TOKEN
 
 pagmo-clang:
   script:
