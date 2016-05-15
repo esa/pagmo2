@@ -38,7 +38,7 @@ struct algo_inner: algo_inner_base
 {
     /// Static checks
     static_assert(has_evolve<T>::value,
-        "A user-defined algorithm must provide a method with signature 'population evolve(const population &) const'. Could not detect one. ");
+        "A user-defined algorithm must provide a method with signature 'population evolve(const population &) const'. Could not detect one.");
     // We just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;
@@ -341,9 +341,9 @@ class algorithm
         }
     private:
         std::unique_ptr<detail::algo_inner_base> m_ptr;
-        // Various problem properties determined at construction time
-        // from the concrete problem. These will be constant for the lifetime
-        // of problem, but we cannot mark them as such because of serialization.
+        // Various algorithm properties determined at construction time
+        // from the concrete algorithm. These will be constant for the lifetime
+        // of algorithm, but we cannot mark them as such because of serialization.
         // the extra_info string cannot be here as it must reflect the changes from set_seed
         bool m_has_set_seed;
         bool m_has_set_verbosity;
