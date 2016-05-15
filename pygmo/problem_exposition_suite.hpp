@@ -13,6 +13,7 @@
 #include "../include/io.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/translate.hpp"
+#include "../include/serialization.hpp"
 #include "../include/type_traits.hpp"
 #include "common_utils.hpp"
 #include "pybind11.hpp"
@@ -73,6 +74,9 @@ inline void expose_translate_ctor(py::class_<pagmo::translate> &translate)
 {
     // NOTE: need to do it like this in order to accept numpy arrays as input.
     translate.def("__init__",[](pagmo::translate &pt, const Prob &p, py::array_t<double,py::array::c_style> t) {
+        // NOTE: in case of exceptions, pybind11 considers the object as not-constructed. It is important
+        // that in custom __init__ methods like this we don't throw any exception after constructing the object,
+        // or the we call explicitly the dtor before re-throwing.
         ::new (&pt) pagmo::translate(p,a_to_vd(t));
     },"Constructor from problem and translation vector.",py::arg("problem"),py::arg("translation"));
 }
@@ -178,6 +182,46 @@ inline py::class_<Prob> expose_problem(py::module &m, const std::string &name, p
     if (t_ptr != nullptr) {
         expose_translate_ctor<Prob>(*t_ptr);
     }
+
+    // Serialization.
+    c.def("__getstate__", [](const Prob &p) {
+        // Serialize into JSON.
+        std::ostringstream oss;
+        {
+        cereal::JSONOutputArchive oarchive(oss);
+        oarchive(p);
+        }
+        // Return a tuple that fully encodes the state of the object.
+        return py::make_tuple(oss.str());
+    });
+    c.def("__setstate__", [](Prob &p, py::tuple t) {
+        // NOTE: the __setstate__ method is called by the serialization machinery
+        // in Python after calling new(). The important bit here is that p has not been
+        // constructed yet when this method is used by the pickle routines.
+        // NOTE: it is thus *very important* that this method is never called explicitly
+        // by any user code.
+        if (t.size() != 1u) {
+            // Object not constructed yet, ok to throw.
+            pagmo_throw(std::runtime_error,"invalid problem state");
+        }
+        std::string tmp = t[0].cast<std::string>();
+        // Default-construct the problem.
+        ::new (&p) Prob();
+        try {
+            // From now on we need to be careful, as any exception thrown here
+            // will mark the object as non-constructed, even if we indeed called the constructor
+            // above. We need to catch any exception, call the problem dtor, and then re-throw it.
+            std::istringstream iss;
+            iss.str(tmp);
+            {
+                cereal::JSONInputArchive iarchive(iss);
+                iarchive(p);
+            }
+        } catch (...) {
+            p.~Prob();
+            throw;
+        }
+    });
 
     return c;
 }
