@@ -39,7 +39,7 @@ namespace pagmo
  */
 class population
 {
-    // Enable the generic ctor only if T is not an algorithm (after removing
+    // Enable the generic ctor only if T is not aa population (after removing
     // const/reference qualifiers).
     template <typename T>
     using generic_ctor_enabler = std::enable_if_t<!std::is_same<population,std::decay_t<T>>::value,int>;

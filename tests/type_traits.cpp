@@ -1,5 +1,3 @@
-#include "../include/type_traits.hpp"
-
 #define BOOST_TEST_MODULE pagmo_type_traits_test
 #include <boost/test/unit_test.hpp>
 
@@ -7,6 +5,9 @@
 #include <utility>
 #include <vector>
 
+#include "../include/algorithm.hpp"
+#include "../include/population.hpp"
+#include "../include/type_traits.hpp"
 #include "../include/types.hpp"
 
 using namespace pagmo;
