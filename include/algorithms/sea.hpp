@@ -42,38 +42,40 @@ class sea
             }
             // ---------------------------------------------------------------------------------------------------------
 
-            std::uniform_real_distribution<double> drng(0.,1.);
-            double new_gene(0.);
-
             // Main loop
             // 1 - Compute the best and worst individual (index)
             auto best_idx = pop.get_best_idx();
             auto worst_idx = pop.get_worst_idx();
             unsigned int count = 1u; // regulates the screen output
+            std::uniform_real_distribution<double> drng(0.,1.); // [0,1]
 
             for (unsigned int i = 1u; i <= m_gen; ++i) {
                 vector_double offspring = pop.get_x()[best_idx];
-                // 2 - Mutate its components
-                for (vector_double::size_type j = 0u; j < dim; ++j) { // for each decision vector component
-                    if (drng(m_e) < 1.0 / dim)
-                    {
-                        new_gene = std::uniform_real_distribution<double>(lb[j],ub[j])(m_e);
-                        offspring[j] = new_gene;
+                // 2 - Mutate its components (at least one)
+                auto mut = 0u;
+                while(mut==0) {
+                    for (vector_double::size_type j = 0u; j < dim; ++j) { // for each decision vector component
+                        if (drng(m_e) < 1.0 / dim)
+                        {
+                            offspring[j] = std::uniform_real_distribution<double>(lb[j],ub[j])(m_e);
+                            ++mut;
+                        }
                     }
                 }
                 // 3 - Insert the offspring into the population if better
                 auto offspring_f = prob.fitness(offspring);
-                if (offspring_f[0] <= pop.get_f()[worst_idx][0]) {
+                auto improvement = pop.get_f()[worst_idx][0] - offspring_f[0];
+                if (improvement >= 0) {
                     pop.set_xf(worst_idx, offspring, offspring_f);
                     best_idx = worst_idx;
                     worst_idx = pop.get_worst_idx();
                     // Logs the improvement (verbosity mode 1)
-                    if (m_verbosity == 1u)
+                    if (m_verbosity == 1u && improvement > 1e-3 * offspring_f[0])
                     {
-                        print(i, "\t\t\t", pop.get_f()[best_idx][0],'\n');
+                        print(i, "\t\t", pop.get_f()[best_idx][0],"\t\t", improvement, "\t\t", mut,'\n');
                         ++count;
                         if (count % 50 == 1u) {
-                            std::cout << "\nGen:\t\t\tBest:" << '\n';
+                            std::cout << "\nGen:\t\tBest:\t\tImprovement:\tMutations:" << '\n';
                         }
                     }
                 }
