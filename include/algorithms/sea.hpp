@@ -51,11 +51,11 @@ class sea
 
             for (unsigned int i = 1u; i <= m_gen; ++i) {
                 vector_double offspring = pop.get_x()[best_idx];
-                // 2 - Mutate its components (at least one)
+                // 2 - Mutate the components (at least one) of the best
                 auto mut = 0u;
                 while(mut==0) {
                     for (vector_double::size_type j = 0u; j < dim; ++j) { // for each decision vector component
-                        if (drng(m_e) < 1.0 / dim)
+                        if (drng(m_e) < 1.0 / static_cast<double>(dim))
                         {
                             offspring[j] = std::uniform_real_distribution<double>(lb[j],ub[j])(m_e);
                             ++mut;
