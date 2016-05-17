@@ -1,16 +1,15 @@
 // In this tutorial we learn how to implement the gradients and the hessians
 // of each of fitness function components.
-// 
+//
 // Consider the simple problem:
 // f = x1^2 + x2^2 + x3^2 + x4^2 in the bounds:
 // -10 <= xi <= 10
 //
 
 // All we need to do is to implement a struct (or class) having the
-// following mandatory methods: 
+// following mandatory methods:
 //
 // vector_double fitness(const vector_double &) const
-// vector_double::size_type get_nf() const
 // std::pair<vector_double, vector_double> get_bounds() const
 //
 // And add the methods:
@@ -28,13 +27,13 @@
 // gradient sparsity pattern which, by default is dense and is:
 // [(0,0),(0,1), .., (1,0), (1,1), ..]
 //
-// The default dense gradient sparsity can be overridden by 
+// The default dense gradient sparsity can be overridden by
 // adding one optional method
 //
 // sparsity_pattern gradient_sparsity() const
 //
 // The gradient sparsity pattern is a std::vector of pairs (i,j)
-// containing the indeces of non null entries of the gradients. 
+// containing the indeces of non null entries of the gradients.
 // Note that the dimensions of the sparsity pattern of the gradients
 // must match that of the value returned by the implemented gradient
 // method
@@ -42,24 +41,24 @@
 //
 // Hessians:
 // In PaGMO each component fk of the fitness
-// may be associated to an Hessian containing d^2fk/dxj/dxi. 
+// may be associated to an Hessian containing d^2fk/dxj/dxi.
 // The user may implement the additional method:
 //
 // std::vector<vector_double> hessians(const vector_double &) const
 //
 // returning a vector of vector_double. Each vector_double contains
 // the hessian of the relative fitness component. Each hessian
-// being symmetric PaGMO only allow the definition of the diagonal and 
+// being symmetric PaGMO only allow the definition of the diagonal and
 // lower triangular compoents in the order defined by the
 // hessians sparsity pattern which, by default is dense and is:
 // [[(0,0),(1,0), (1,1), (2,0), (2,1), ...], [...], ...]
 //
-// The default dense hessians sparsity can be overridden by 
+// The default dense hessians sparsity can be overridden by
 // adding one optional method
 //
 // sparsity_pattern hessians_sparsity() const
 //
-// In this example we explicitly define the sparsity patterns as 
+// In this example we explicitly define the sparsity patterns as
 // to clarify the above notation.
 
 #include <iostream>
@@ -80,13 +79,6 @@ struct problem_basic_gh
         return {x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3]};
     }
 
-    // Mandatory, returns the dimension of the decision vector,
-    // in this case fixed to 1 (single objective)
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
-    }
-    
     // Mandatory, returns the box-bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -102,7 +94,7 @@ struct problem_basic_gh
 
     // Optional. Returns the sparsity of the problem as a sparsity_pattern
     // that is pairs (i,j) indicating that the j-th variable
-    // "influences" the i-th component in the fitness. 
+    // "influences" the i-th component in the fitness.
     // When not implemented a dense problem is assumed.
     sparsity_pattern gradient_sparsity() const
     {
@@ -126,7 +118,7 @@ struct problem_basic_gh
 
     // Optional, provides a name for the problem overrding the default name
     std::string get_name() const
-    {   
+    {
         return "My Problem with derivatives!!";
     }
 
@@ -140,8 +132,8 @@ struct problem_basic_gh
         s << "The sparsity of the gradient and hessians is user provided" << "\n";
         return s.str();
     }
-    
-    // Optional methods-data can also be accessed later via 
+
+    // Optional methods-data can also be accessed later via
     // the problem::extract() method
     vector_double best_known() const
     {

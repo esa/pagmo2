@@ -24,7 +24,7 @@ struct sfinae_types
 
 }
 
-/// Type has fitness() and get_nobj()
+/// Type has fitness()
 /**
  * This type trait defines a static const boolean
  * \p value flag which is \p true if \p T has the following
@@ -32,7 +32,6 @@ struct sfinae_types
  *
  * @code
  * fitness_vector fitness(const decision_vector &) const
- * fitness_vector::size_type get_nobj() const
  * @endcode
  *
  */
@@ -42,12 +41,8 @@ class has_fitness: detail::sfinae_types
         template <typename U>
         static auto test0(const U &p) -> decltype(p.fitness(std::declval<const vector_double &>()));
         static no test0(...);
-        template <typename U>
-        static auto test1(const U &p) -> decltype(p.get_nobj());
-        static no test1(...);
         static const bool implementation_defined =
-            std::is_same<vector_double,decltype(test0(std::declval<const T &>()))>::value &&
-            std::is_same<vector_double::size_type,decltype(test1(std::declval<const T &>()))>::value;
+            std::is_same<vector_double,decltype(test0(std::declval<const T &>()))>::value;
     public:
         /// static const boolean value flag
         static const bool value = implementation_defined;
@@ -55,6 +50,33 @@ class has_fitness: detail::sfinae_types
 
 template <typename T>
 const bool has_fitness<T>::value;
+
+/// Type has get_nobj()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * methods implemented:
+ *
+ * @code
+ * fitness_vector::size_type get_nobj() const
+ * @endcode
+ *
+ */
+template <typename T>
+class has_get_nobj: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.get_nobj());
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<vector_double::size_type,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_get_nobj<T>::value;
 
 /// Type has get_bounds()
 /**

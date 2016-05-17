@@ -1,4 +1,4 @@
-// In this tutorial, we will learn how to code a 
+// In this tutorial, we will learn how to code a
 // stochastic problem. We will focus on the trivial minimization
 // problem where the objective is (as in the previous tutorials)
 // f = x1^2 + x2^2 + x3^2 + x4^2 + s
@@ -7,12 +7,11 @@
 // deviation equal to 1.
 
 // All we need to do is to implement a class having the
-// following mandatory methods: 
+// following mandatory methods:
 //
 // fitness_vector fitness(const decision_vector &) const
-// fitness_vector::size_type get_nf() const
 // std::pair<decision_vector, decision_vector> get_bounds() const
-// 
+//
 // and add the method
 //
 // void set_seed(unsigned int)
@@ -39,9 +38,9 @@ class problem_basic_s
         {}
 
         // Mandatory, computes ... well ... the fitness.
-        // In a stochastic problem the fitness depends on the 
-        // chromosome (decision vector) but also on a number 
-        // of stochastic variables which are instantiated from a 
+        // In a stochastic problem the fitness depends on the
+        // chromosome (decision vector) but also on a number
+        // of stochastic variables which are instantiated from a
         // common seed s
         vector_double fitness(const vector_double &x) const
         {
@@ -53,13 +52,6 @@ class problem_basic_s
             return {x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3] + s(m_e)};
         }
 
-        // Mandatory, returns the dimension of the decision vector,
-        // in this case fixed to 1 (single objective)
-        vector_double::size_type get_nobj() const
-        {
-            return 1u;
-        }
-        
         // Mandatory, returns the box-bounds
         std::pair<vector_double, vector_double> get_bounds() const
         {
@@ -67,14 +59,14 @@ class problem_basic_s
         }
 
         // Mandatory for the problem to be stochastic
-        void set_seed(unsigned int seed) 
+        void set_seed(unsigned int seed)
         {
             m_seed = seed;
         }
 
         // Optional, provides a name for the problem overrding the default name
         std::string get_name() const
-        {   
+        {
             return "My Problem";
         }
 
@@ -83,8 +75,8 @@ class problem_basic_s
         std::string get_extra_info() const {
             return "This is just a simple toy problem with one fitness,\n no constraint and a fixed dimension of 4.\n";
         }
-        
-        // Optional methods-data can also be accessed later via 
+
+        // Optional methods-data can also be accessed later via
         // the problem::extract() method
         vector_double best_known() const
         {
@@ -126,5 +118,5 @@ int main()
     // While our problem_basic_s struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface
     pagmo::print("Accessing best_known: ", p0.extract<problem_basic_s>()->best_known(), "\n");
- 
+
 }

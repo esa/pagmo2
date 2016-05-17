@@ -17,25 +17,21 @@ struct f_00 {};
 // Various types of wrong fitness.
 struct f_01
 {
-    vector_double::size_type get_nobj() const;
     void fitness();
 };
 
 struct f_02
 {
-    vector_double::size_type get_nobj() const;
     void fitness(const vector_double &);
 };
 
 struct f_03
 {
-    vector_double::size_type get_nobj() const;
     vector_double fitness(const vector_double &);
 };
 
 struct f_04
 {
-    vector_double::size_type get_nobj() const;
     vector_double fitness(vector_double &) const;
 };
 
@@ -43,20 +39,9 @@ struct f_04
 struct f_05
 {
     vector_double fitness(const vector_double &) const;
-    vector_double::size_type get_nobj() const;
 };
 
-struct f_06
-{
-    vector_double fitness(const vector_double &) const;
-    vector_double::size_type get_nobj();
-};
 
-struct f_07
-{
-    vector_double fitness(const vector_double &) const;
-    int get_nobj() const;
-};
 
 BOOST_AUTO_TEST_CASE(has_fitness_test)
 {
@@ -66,8 +51,34 @@ BOOST_AUTO_TEST_CASE(has_fitness_test)
     BOOST_CHECK((!has_fitness<f_03>::value));
     BOOST_CHECK((!has_fitness<f_04>::value));
     BOOST_CHECK((has_fitness<f_05>::value));
-    BOOST_CHECK((!has_fitness<f_06>::value));
-    BOOST_CHECK((!has_fitness<f_07>::value));
+}
+
+// No fitness.
+struct no_00 {};
+
+// Various types of wrong get_nobj.
+struct no_01
+{
+    vector_double::size_type get_nobj();
+};
+
+struct no_02
+{
+    int get_nobj() const;
+};
+
+// Good one.
+struct no_03
+{
+    vector_double::size_type get_nobj() const;
+};
+
+BOOST_AUTO_TEST_CASE(has_get_nobj_test)
+{
+    BOOST_CHECK((!has_fitness<no_00>::value));
+    BOOST_CHECK((!has_fitness<no_01>::value));
+    BOOST_CHECK((!has_fitness<no_02>::value));
+    BOOST_CHECK((!has_fitness<no_03>::value));
 }
 
 struct db_00

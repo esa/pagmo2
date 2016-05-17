@@ -250,10 +250,6 @@ struct empty
     {
         return {1};
     }
-    vector_double::size_type get_nobj() const
-    {
-        return 1;
-    }
     vector_double::size_type get_nec() const
     {
         return 0;
@@ -624,10 +620,6 @@ struct c_01
     {
         return {2,2};
     }
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
-    }
     vector_double::size_type get_nec() const
     {
         return 1u;
@@ -645,10 +637,6 @@ struct c_02
     {
         return {2,2};
     }
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
-    }
     vector_double::size_type get_nic() const
     {
         return 1u;
@@ -665,10 +653,6 @@ struct c_03
     vector_double fitness(const vector_double &) const
     {
         return {2,2,2};
-    }
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
     }
     vector_double::size_type get_nec() const
     {
@@ -702,10 +686,6 @@ struct s_02
     {
         return {2,2,2};
     }
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
-    }
     vector_double::size_type get_nec() const
     {
         return 1u;
@@ -730,10 +710,6 @@ struct s_03
     vector_double fitness(const vector_double &) const
     {
         return {2,2,2};
-    }
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
     }
     vector_double::size_type get_nec() const
     {
@@ -775,10 +751,6 @@ struct extra_info_case
     {
         return {2,2,2};
     }
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
-    }
     vector_double::size_type get_nec() const
     {
         return 1u;
@@ -812,4 +784,39 @@ BOOST_AUTO_TEST_CASE(problem_extra_info_test)
     BOOST_CHECK(prob.get_extra_info() == prob2.get_extra_info());
     prob.set_seed(32u);
     BOOST_CHECK(prob.get_extra_info() == "32");
+}
+
+struct with_get_nobj
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {2,2,2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0},{1}};
+    }
+    vector_double::size_type get_nobj() const {
+        return 3u;
+    }
+};
+
+struct without_get_nobj
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {2,2,2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0},{1}};
+    }
+};
+
+BOOST_AUTO_TEST_CASE(problem_get_nobj_detection)
+{
+    BOOST_CHECK(problem{with_get_nobj{}}.get_nobj() == 3u);
+    BOOST_CHECK(problem{without_get_nobj{}}.get_nobj() == 1u);
+    BOOST_CHECK_NO_THROW(problem{with_get_nobj{}}.fitness({1.}));
+    BOOST_CHECK_THROW(problem{without_get_nobj{}}.fitness({1.}), std::invalid_argument); // detects a returned size of 3 but has the defualt
 }

@@ -3,10 +3,9 @@
 // -10 <= xi <= 10
 
 // All we need to do is to implement a struct (or class) having the
-// following mandatory methods: 
+// following mandatory methods:
 //
 // fitness_vector fitness(const decision_vector &) const
-// fitness_vector::size_type get_nf() const
 // std::pair<decision_vector, decision_vector> get_bounds() const
 
 #include <string>
@@ -26,13 +25,6 @@ struct problem_basic
         return {x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3]};
     }
 
-    // Mandatory, returns the dimension of the decision vector,
-    // in this case fixed to 1 (single objective)
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
-    }
-    
     // Mandatory, returns the box-bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -41,7 +33,7 @@ struct problem_basic
 
     // Optional, provides a name for the problem overrding the default name
     std::string get_name() const
-    {   
+    {
         return "My Problem";
     }
 
@@ -50,8 +42,8 @@ struct problem_basic
     std::string get_extra_info() const {
         return "This is a simple toy stochastic problem with one fitness, no constraint and a fixed dimension of 4.";
     }
-    
-    // Optional methods-data can also be accessed later via 
+
+    // Optional methods-data can also be accessed later via
     // the problem::extract() method
     vector_double best_known() const
     {
@@ -85,5 +77,5 @@ int main()
     // While our problem_basic struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface
     pagmo::print("Accessing best_known: ", p0.extract<problem_basic>()->best_known(), "\n");
- 
+
 }
