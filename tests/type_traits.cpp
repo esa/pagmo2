@@ -42,8 +42,6 @@ struct f_05
     vector_double fitness(const vector_double &) const;
 };
 
-
-
 BOOST_AUTO_TEST_CASE(has_fitness_test)
 {
     BOOST_CHECK((!has_fitness<f_00>::value));

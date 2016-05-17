@@ -14,87 +14,87 @@
 namespace pagmo
 {
 
-    /// Type has set_verbose
-    /**
-     * This type trait defines a static const boolean
-     * \p value flag which is \p true if the expression p.set_verbose(n)
-     * is valid and returns void, where p is a non-const instance of \p T and n is a bool
-     *
-     * For example, if \p T has the following method implemented:
-     *
-     * @code
-     * void set_verbose(unsigned int level)
-     * @endcode
-     *
-     */
-    template <typename T>
-    class has_set_verbosity: detail::sfinae_types
-    {
-            template <typename U>
-            static auto test0(U &p) -> decltype(p.set_verbosity(std::declval<unsigned int>()));
-            static no test0(...);
-            static const bool implementation_defined =
-                std::is_same<void,decltype(test0(std::declval<T &>()))>::value;
-        public:
-            /// static const boolean value flag
-            static const bool value = implementation_defined;
-    };
+/// Type has set_verbose
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if the expression p.set_verbose(n)
+ * is valid and returns void, where p is a non-const instance of \p T and n is a bool
+ *
+ * For example, if \p T has the following method implemented:
+ *
+ * @code
+ * void set_verbose(unsigned int level)
+ * @endcode
+ *
+ */
+template <typename T>
+class has_set_verbosity: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(U &p) -> decltype(p.set_verbosity(std::declval<unsigned int>()));
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<void,decltype(test0(std::declval<T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
 
-    template <typename T>
-    const bool has_set_verbosity<T>::value;
+template <typename T>
+const bool has_set_verbosity<T>::value;
 
-    /// Type has has_set_verbosity()
-    /**
-     * This type trait defines a static const boolean
-     * \p value flag which is \p true if \p T has the following
-     * method implemented:
-     *
-     * @code
-     * bool has_set_verbosity() const
-     * @endcode
-     *
-     */
-    template <typename T>
-    class override_has_set_verbosity: detail::sfinae_types
-    {
-            template <typename U>
-            static auto test0(const U &p) -> decltype(p.has_set_verbosity());
-            static no test0(...);
-            static const bool implementation_defined =
-                std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
-        public:
-            /// static const boolean value flag
-            static const bool value = implementation_defined;
-    };
+/// Type has has_set_verbosity()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * bool has_set_verbosity() const
+ * @endcode
+ *
+ */
+template <typename T>
+class override_has_set_verbosity: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.has_set_verbosity());
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
 
-    template <typename T>
-    const bool override_has_set_verbosity<T>::value;
+template <typename T>
+const bool override_has_set_verbosity<T>::value;
 
-    /// Type has evolve
-    /**
-     * This type trait defines a static const boolean
-     * \p value flag which is \p true if \p T has the following
-     * method implemented:
-     *
-     * @code
-     * population evolve(population pop) const
-     * @endcode
-     */
-    template <typename T>
-    class has_evolve: detail::sfinae_types
-    {
-            template <typename U>
-            static auto test0(const U &p) -> decltype(p.evolve(std::declval<population>()));
-            static no test0(...);
-            static const bool implementation_defined =
-                std::is_same<population,decltype(test0(std::declval<const T &>()))>::value;
-        public:
-            /// static const boolean value flag
-            static const bool value = implementation_defined;
-    };
+/// Type has evolve
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * population evolve(population pop) const
+ * @endcode
+ */
+template <typename T>
+class has_evolve: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.evolve(std::declval<population>()));
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<population,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
 
-    template <typename T>
-    const bool has_evolve<T>::value;
+template <typename T>
+const bool has_evolve<T>::value;
 
 namespace detail
 {
@@ -247,7 +247,7 @@ struct algo_inner: algo_inner_base
     T m_value;
 };
 
-}
+} // end of namespace detail
 
 class algorithm
 {
