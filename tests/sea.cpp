@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(sea_algorithm_test)
 {
     problem prob{rosenbrock{5u}};
     population pop{prob, 5u};
-    algorithm algo(sea{1000u});
+    algorithm algo(sea{100000u});
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
 }

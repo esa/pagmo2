@@ -46,9 +46,12 @@ class sea
             double new_gene(0.);
 
             // Main loop
+            // 1 - Compute the best and worst individual (index)
+            auto best_idx = pop.get_best_idx();
+            auto worst_idx = pop.get_worst_idx();
+            unsigned int count = 1u; // regulates the screen output
+
             for (unsigned int i = 1u; i <= m_gen; ++i) {
-                // 1 - Extract the best decision vector so far
-                auto best_idx = pop.get_best_idx();
                 vector_double offspring = pop.get_x()[best_idx];
                 // 2 - Mutate its components
                 for (vector_double::size_type j = 0u; j < dim; ++j) { // for each decision vector component
@@ -59,17 +62,32 @@ class sea
                     }
                 }
                 // 3 - Insert the offspring into the population if better
-                auto worst_idx = pop.get_worst_idx();
                 auto offspring_f = prob.fitness(offspring);
-                if (offspring_f <= pop.get_f()[worst_idx]) {
+                if (offspring_f[0] <= pop.get_f()[worst_idx][0]) {
                     pop.set_xf(worst_idx, offspring, offspring_f);
-                }
-                // 4 - Log
-                if (m_verbosity > 0u) {
-                    if (!((i-1u) % 50u)) {
-                        std::cout << "Gen:\t\t\tBest:" << '\n';
+                    best_idx = worst_idx;
+                    worst_idx = pop.get_worst_idx();
+                    // Logs the improvement (verbosity mode 1)
+                    if (m_verbosity == 1u)
+                    {
+                        print(i, "\t\t\t", pop.get_f()[best_idx][0],'\n');
+                        ++count;
+                        if (count % 50 == 1u) {
+                            std::cout << "\nGen:\t\t\tBest:" << '\n';
+                        }
                     }
-                    print(i, "\t\t\t", pop.get_f()[best_idx],'\n');
+                }
+                // 4 - Log (verbosity modes > 1)
+                if (m_verbosity > 1u) {
+                    // Every m_verbosity generations print a log line
+                    if (i % m_verbosity == 1u) {
+                        // Every 50 lines print the column names
+                        if (count % 50 == 1u) {
+                            std::cout << "\nGen:\t\t\tBest:" << '\n';
+                        }
+                        print(i, "\t\t\t", pop.get_f()[best_idx][0],'\n');
+                        ++count;
+                    }
                 }
             }
             return pop;
