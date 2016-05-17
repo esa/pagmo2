@@ -187,7 +187,7 @@ class population
          * is simply the individual with the smallest fitness. If the problem
          * is, instead, single objective, but with constraints, the best individual
          * will be defined using the criteria specified in pagmo::sort_population_con().
-         * If the problem is multi-objective one single champion is not defined. In
+         * If the problem is multi-objective one single champion is not well defined. In
          * this case the user can still obtain a strict ordering of the population
          * individuals by calling the pagmo::sort_population_mo() function.
          *
@@ -223,6 +223,25 @@ class population
         {
             vector_double tol_vector(m_prob.get_nf() - 1u, tol);
             return champion(tol_vector);
+        }
+
+        vector_double::size_type worst(const vector_double &tol) const
+        {
+            if (!size()) {
+                pagmo_throw(std::invalid_argument, "Cannot determine the worst element of an empty population");
+            }
+            if (m_prob.get_nobj() > 1u) {
+                pagmo_throw(std::invalid_argument, "The worst element of a population can only be extracted in single objective problems");
+            }
+            if (m_prob.get_nc() > 0u) { // TODO: should we also code a min_element_population_con?
+                return sort_population_con(m_f, m_prob.get_nec(), tol).back();
+            }
+            // Sort for single objective, unconstrained optimization
+            std::vector<vector_double::size_type> indexes(size());
+            std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
+            return *std::max_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {
+                return m_f[idx1] < m_f[idx2];
+            });
         }
 
         /// Number of individuals in the population

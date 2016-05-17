@@ -57,7 +57,7 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first
 
 } // detail namespace
 
-/** Sorts a population in a constrained optimization case
+/** Sorts a population in a constrained optimization case (from a vector of tolerances)
  *
  * Sorts a population (intended here as an <tt>std::vector<vector_double></tt>
  * containing single objective fitness vectors)
@@ -109,7 +109,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
             );
         }
     }
-    // 2 - The dimension of the fitness vectors mus be at least 1 
+    // 2 - The dimension of the fitness vectors mus be at least 1
     if (M < 1u) {
         pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to sort: a dimension of "
             + std::to_string(M) + " was detected. "
@@ -159,7 +159,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     return retval;
 }
 
-/// Sorts a population in a constrained optimization case (from one tolerance valid for all)
+/// Sorts a population in a constrained optimization case (from a scalar tolerance)
 std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, double tol = 0.)
 {
     auto N = input_f.size();
@@ -174,7 +174,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     }
     // Now we are sure input_f is not empty and has size at least 2
     auto M = input_f[0].size();
-    // 2 - The dimension of the fitness vectors must be at least 1 
+    // 2 - The dimension of the fitness vectors must be at least 1
     if (M < 1u) {
         pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to sort: a dimension of "
             + std::to_string(M) + " was detected. "
