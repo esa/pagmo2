@@ -498,7 +498,7 @@ struct hev_00 {};
 // The good one
 struct hev_01
 {
-    population evolve(const population&) const;
+    population evolve(population) const;
 };
 
 struct hev_02

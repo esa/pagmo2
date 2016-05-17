@@ -21,7 +21,7 @@ using namespace pagmo;
 struct al_01
 {
     al_01() {};
-    population evolve(const population& pop) const {return pop;};
+    population evolve(population pop) const {return pop;};
     std::string get_name() const {return "name";};
     std::string get_extra_info() const {return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);};
     void set_seed(unsigned int seed) {m_seed = seed;};
@@ -40,7 +40,7 @@ PAGMO_REGISTER_ALGORITHM(al_01)
 struct al_02
 {
     al_02() {};
-    population evolve(const population& pop) const {return pop;};
+    population evolve(population pop) const {return pop;};
     template <typename Archive>
     void serialize(Archive &)
     {}
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE(algorithm_move_constructor_test)
 struct al_03
 {
     al_03() {};
-    population evolve(const population& pop) const {return pop;};
+    population evolve(population pop) const {return pop;};
     std::string get_name() const {return "name";};
     std::string get_extra_info() const {return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);};
     void set_seed(unsigned int seed) {m_seed = seed;};

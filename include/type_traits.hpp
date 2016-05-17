@@ -495,14 +495,14 @@ const bool override_has_set_verbosity<T>::value;
  * method implemented:
  *
  * @code
- * population evolve(const population& pop) const
+ * population evolve(population pop) const
  * @endcode
  */
 template <typename T>
 class has_evolve: detail::sfinae_types
 {
         template <typename U>
-        static auto test0(const U &p) -> decltype(p.evolve(std::declval<const population &>()));
+        static auto test0(const U &p) -> decltype(p.evolve(std::declval<population>()));
         static no test0(...);
         static const bool implementation_defined =
             std::is_same<population,decltype(test0(std::declval<const T &>()))>::value;
