@@ -180,29 +180,30 @@ class population
             return pagmo::decision_vector(m_prob.get_bounds(), std::uniform_int_distribution<unsigned int>()(m_e));
         }
 
-        /// Population champion with vector tolerance
+        /// Index of best individual (accounting for a vector tolerance)
         /**
-         * The best individual of a population is defined as its *champion*.
-         * If the problem is single-objective and unconstrained, the champion
+         * If the problem is single-objective and unconstrained, the best
          * is simply the individual with the smallest fitness. If the problem
-         * is, instead, single objective, but with constraints, the best individual
+         * is, instead, single objective, but with constraints, the best
          * will be defined using the criteria specified in pagmo::sort_population_con().
-         * If the problem is multi-objective one single champion is not well defined. In
+         * If the problem is multi-objective one single best is not well defined. In
          * this case the user can still obtain a strict ordering of the population
          * individuals by calling the pagmo::sort_population_mo() function.
          *
          * @param[in] tol vector of tolerances to be applied to each constraints
          *
+         * @returns the index of the best individual
+         *
          * @throws std::invalid_argument if the problem is multiobjective and thus
-         * the notion of champion is not valid
+         * a best individual is not well defined
          */
-        vector_double::size_type champion(const vector_double &tol) const
+        vector_double::size_type get_best_idx(const vector_double &tol) const
         {
             if (!size()) {
-                pagmo_throw(std::invalid_argument, "Cannot determine the champion of an empty population");
+                pagmo_throw(std::invalid_argument, "Cannot determine the best individual of an empty population");
             }
             if (m_prob.get_nobj() > 1u) {
-                pagmo_throw(std::invalid_argument, "Champion can only be extracted in single objective problems");
+                pagmo_throw(std::invalid_argument, "The best individual can only be extracted in single objective problems");
             }
             if (m_prob.get_nc() > 0u) { // TODO: should we also code a min_element_population_con?
                 return sort_population_con(m_f, m_prob.get_nec(), tol)[0];
@@ -215,17 +216,34 @@ class population
             });
         }
 
-        /// Population champion with scalar tolerance
+        /// Index of best individual (accounting for a scalar tolerance)
         /**
          * @param[in] tol scalar tolerance to be considered for each constraint
          */
-        vector_double::size_type champion(double tol = 0.) const
+        vector_double::size_type get_best_idx(double tol = 0.) const
         {
             vector_double tol_vector(m_prob.get_nf() - 1u, tol);
-            return champion(tol_vector);
+            return get_best_idx(tol_vector);
         }
 
-        vector_double::size_type worst(const vector_double &tol) const
+        /// Index of worst individual (accounting for a vector tolerance)
+        /**
+         * If the problem is single-objective and unconstrained, the worst
+         * is simply the individual with the largest fitness. If the problem
+         * is, instead, single objective, but with constraints, the best individual
+         * will be defined using the criteria specified in pagmo::sort_population_con().
+         * If the problem is multi-objective one single worst is not defined. In
+         * this case the user can still obtain a strict ordering of the population
+         * individuals by calling the pagmo::sort_population_mo() function.
+         *
+         * @param[in] tol vector of tolerances to be applied to each constraints
+         *
+         * @returns the index of the best individual
+         *
+         * @throws std::invalid_argument if the problem is multiobjective and thus
+         * a best individual is not well defined
+         */
+        vector_double::size_type get_worst_idx(const vector_double &tol) const
         {
             if (!size()) {
                 pagmo_throw(std::invalid_argument, "Cannot determine the worst element of an empty population");
@@ -242,6 +260,16 @@ class population
             return *std::max_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {
                 return m_f[idx1] < m_f[idx2];
             });
+        }
+
+        /// Index of worst individual (accounting for a scalar tolerance)
+        /**
+         * @param[in] tol scalar tolerance to be considered for each constraint
+         */
+        vector_double::size_type get_worst_idx(double tol = 0.) const
+        {
+            vector_double tol_vector(m_prob.get_nf() - 1u, tol);
+            return get_worst_idx(tol_vector);
         }
 
         /// Number of individuals in the population

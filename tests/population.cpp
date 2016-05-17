@@ -85,30 +85,32 @@ BOOST_AUTO_TEST_CASE(population_decision_vector_test)
     }
 }
 
-BOOST_AUTO_TEST_CASE(population_champion_test)
+BOOST_AUTO_TEST_CASE(population_best_worst_test)
 {
     // Test throw
     {
         population pop{problem{zdt{}}, 2};
-        BOOST_CHECK_THROW(pop.champion(), std::invalid_argument);
+        population pop2{problem{null_problem{}}, 0u};
+        BOOST_CHECK_THROW(pop.get_best_idx(), std::invalid_argument);
+        BOOST_CHECK_THROW(pop.get_worst_idx(), std::invalid_argument);
+        BOOST_CHECK_THROW(pop2.get_best_idx(), std::invalid_argument);
+        BOOST_CHECK_THROW(pop2.get_worst_idx(), std::invalid_argument);
     }
     // Test on single objective
     {
         population pop{problem{rosenbrock{2}}};
         pop.push_back({0.5,0.5});
-        pop.push_back({0.3,0.1});
         pop.push_back(pop.get_problem().extract<rosenbrock>()->best_known());
-        pop.push_back({-0.5,0.5});
-        BOOST_CHECK(pop.champion() == 2u);
+        BOOST_CHECK(pop.get_worst_idx() == 0u);
+        BOOST_CHECK(pop.get_best_idx() == 1u);
     }
     // Test on constrained
     {
         population pop{problem{hock_schittkowsky_71{}}};
         pop.push_back({1.5,1.5,1.5,1.5});
-        pop.push_back({1.3,1.1,2.3,3.4});
         pop.push_back(pop.get_problem().extract<hock_schittkowsky_71>()->best_known());
-        pop.push_back({2.5,1.5,3.4,3.3});
-        BOOST_CHECK(pop.champion(1e-5) == 2u); // tolerance matters here!!
+        BOOST_CHECK(pop.get_worst_idx(1e-5) == 0u); // tolerance matter here!!!
+        BOOST_CHECK(pop.get_best_idx(1e-5) == 1u);
     }
 }
 
