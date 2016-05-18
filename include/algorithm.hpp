@@ -267,14 +267,16 @@ struct algo_inner: algo_inner_base
  * programming problem as represented by the pagmo::problem class.
  *
  * To create an instance of a pagmo::algorithm the user is asked to construct it from
- * a separate object of type \p T where, at least, the implementation of
- * the following method is provided:
+ * a separate object of type \p T where, at least, a method must be present having signature
+ * equivalent to the following:
  *
  * @code
- * population evolve(population) const;
+ * population evolve(const population&) const;
  * @endcode
  *
- * - The return value of \p T::evolve() is the optimized (*evolved*) pagmo::population.
+ * - The signature does not need to have const &.
+ * - The return value of \p T::evolve(const population&) is the
+ * optimized (*evolved*) pagmo::population.
  *
  * The mandatory method above allow to define a deterministic algorithm.
  * In order to consider more complex cases, the user may implement one or more
