@@ -14,6 +14,33 @@
 namespace pagmo
 {
 
+/// (N+1)-ES Simple Evolutionary Algorithm
+/**
+ * \image html sea.png
+ *
+ * Evolutionary strategies date back to the mid 1960s when P. Bienert,
+ * I. Rechenberg, and H.-P. Schwefel at the Technical University of Berlin, Germany,
+ * developed the first bionics-inspired schemes for evolving optimal shapes of
+ * minimal drag bodies in a wind tunnel using Darwin's evolution principle.
+ *
+ * This c++ class represents the simplest evolutionary strategy, where a
+ * population of \f$ \lambda \f$ individuals at each generation produces one offspring
+ * by mutating its best individual uniformly at random within the bounds. Should the
+ * offspring be better than the worst individual in the population it will substitute it.
+ *
+ * @note The algorithm does not work for multi-objective problems, nor for
+ * constrained optimization
+ *
+ * @note The mutation is uniform within the box-bounds. Hence, unbounded problems
+ * will be a problem for this simple approach.
+ *
+ * @see Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for
+ * combinatorial optimization: A decade of results." International Journal of Automation and Computing
+ * 4.3 (2007): 281-293.
+ *
+ * @see http://www.scholarpedia.org/article/Evolution_strategies
+ *
+ */
 class sea
 {
     using log_line = std::tuple<unsigned int, double, double, unsigned int>;
@@ -42,8 +69,8 @@ class sea
                 pagmo_throw(std::invalid_argument,"Multiple objectives detected. " + get_name() + " cannot deal with them");
             }
             // Get out if there is nothing to do.
-        	if (m_gen == 0u) {
-        		return pop;
+            if (m_gen == 0u) {
+                return pop;
             }
             // ---------------------------------------------------------------------------------------------------------
 
@@ -112,7 +139,7 @@ class sea
         {
             m_seed = seed;
         };
-        // Sets the verbosity
+        /// Sets the verbosity
         void set_verbosity(unsigned int level)
         {
             m_verbosity = level;
@@ -133,7 +160,7 @@ class sea
         const log_type& get_log() const {
             return m_log;
         }
-
+        /// Serialization
         template <typename Archive>
         void serialize(Archive &ar)
         {

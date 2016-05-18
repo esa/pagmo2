@@ -16,10 +16,22 @@ we suggest to follow the tutorials / examples.
   population
   algorithm
 
+Implemented algorithm
+^^^^^^^^^^^^^^^^^^^^^
+These are the algorithms implemented in PaGMO. They can be used
+to solve problems you have implemented or to learn how to use PaGMO to
+code your own algorithm
+
+.. toctree::
+  :maxdepth: 1
+
+  algorithms/sea
+
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
 These are the problems implemented in PaGMO. They can be used
-to test your algorithms or to learn how to use PaGMO
+to test your algorithms or to learn how to use PaGMO to represent your
+problem
 
 .. toctree::
   :maxdepth: 1
