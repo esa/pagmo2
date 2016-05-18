@@ -312,7 +312,7 @@ class algorithm
          *
          * - \p T must implement the following mandatory method:
          *   @code
-         *   population evolve(population) const;
+         *   population evolve(const population&) const;
          *   @endcode
          *   otherwise construction will result in a compile-time failure
          * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
