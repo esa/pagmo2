@@ -52,3 +52,15 @@ Type traits used in PaGMO
 .. doxygenclass:: pagmo::has_hessians_sparsity
    :project: PaGMOreborn
    :members:
+
+.. doxygenclass:: pagmo::has_set_verbosity
+   :project: PaGMOreborn
+   :members:
+
+.. doxygenclass:: pagmo::override_has_set_verbosity
+   :project: PaGMOreborn
+   :members:
+
+.. doxygenclass:: pagmo::has_evolve
+   :project: PaGMOreborn
+   :members:

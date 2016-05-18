@@ -384,6 +384,8 @@ struct prob_inner final: prob_inner_base
 
 /// Problem class.
 /**
+ * \image html problem.png
+ *
  * This class represents a generic *mathematical programming* or *evolutionary optimization* problem in the form:
  * \f[
  * \begin{array}{rl}
@@ -409,19 +411,18 @@ struct prob_inner final: prob_inner_base
  *
  * @code
  * vector_double fitness(const decision_vector &) const;
- * vector_double::size_type get_nobj() const;
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  *
  * - The return value of \p T::fitness() is expected to have a dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
  * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
- * - The return value of \p T::get_nobj() is expected to be \f$n_{obj}\f$
  * - The return value of \p T::get_bounds() is expected to contain \f$(\mathbf{lb}, \mathbf{ub})\f$.
  *
- * The three mandatory methods above allow to define a deterministic, derivative-free, unconstrained problem.
+ * The mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained problem.
  * In order to consider more complex cases, the user may implement one or more
  * of the following methods in \p T :
  *   @code
+ *   vector_double::size_type get_nobj() const;
  *   vector_double::size_type get_nec() const;
  *   vector_double::size_type get_nic() const;
  *   vector_double gradient(const vector_double &x) const;
@@ -433,6 +434,7 @@ struct prob_inner final: prob_inner_base
  *   std::string get_extra_info() const;
  *   @endcode
  *
+ * - \p T::get_nobj() returns \f$n_{obj}\f$. When not implemented \f$n_{obj} = 1\f$ is assumed, and the pagmo::problem::get_nec() method will return 1.
  * - \p T::get_nec() returns \f$n_{ec}\f$. When not implemented \f$n_{ec} = 0\f$ is assumed, and the pagmo::problem::get_nec() method will return 0.
  * - \p T::get_nic() returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed, and the pagmo::problem::get_nic() method will return 0.
  * - \p T::gradient() returns a sparse representation of the gradients. The \f$ k\f$-th term
@@ -453,8 +455,8 @@ struct prob_inner final: prob_inner_base
  * is symmetric, only lower triangular elements are allowed. When
  * not implemented a dense pattern is assumed and a call to problem::hessians_sparsity()
  * returns \f$n_f\f$ sparsity patterns each one being \f$((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\f$.
- * - \p T::set_seed() changes the value of the seed \f$s\f$ that can be used in the fitness function to
- * consider stochastic objectives and constraints. When not implemented a call to problem::set_seed() throws an \p std::logic_error.
+ * - \p T::set_seed(unsigned int seed) changes the value of the seed \f$s\f$ to be used in the user implemented fitness function to
+ * compute stochastic objectives and constraints. When not implemented a call to problem::set_seed() throws an \p std::logic_error.
  * - \p T::get_name() returns a string containing the problem name to be used in output streams.
  * - \p T::get_extra_info() returns a string containing extra human readable information to be used in output streams.
  *
@@ -496,15 +498,13 @@ class problem
     public:
         /// Constructor from a user problem of type \p T
         /**
-         * Construct a pagmo::problem with fitness dimension \f$n_f\f$ and decision vector
-         * dimension \f$n_x\f$ from an object of type \p T. In
+         * Construct a pagmo::problem from an object of type \p T. In
          * order for the construction to be successfull \p T needs
          * to satisfy the following requests:
          *
          * - \p T must implement the following mandatory methods:
          *   @code
          *   vector_double fitness(const decision_vector &) const;
-         *   vector_double::size_type get_nobj() const;
          *   std::pair<vector_double, vector_double> get_bounds() const;
          *   @endcode
          *   otherwise it will result in a compile-time failure
@@ -515,6 +515,9 @@ class problem
          * @note The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of problem::get_nf(),
          * while the decision vector dimension \f$n_x\f$ is defined
          * by the size of the bounds as returned by \p T::get_bounds()
+         *
+         * @note \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled and the
+         * copy constructor will be called instead.
          *
          * @param[in] x The user implemented problem
          *
@@ -1009,23 +1012,7 @@ class problem
             return m_has_set_seed;
         }
 
-        /// Check if the user-defined problem implements a set_seed method
-        /**
-         * This method is an alias for problem::has_set_seed().
-         * If the user defined problem implements a set_seed method, this
-         * will return true, false otherwise. The value returned can
-         * also be forced by the user by implementing the additional
-         * method
-         *
-         * @code
-         * bool has_set_seed() const
-         * @endcode
-         *
-         * in the user-defined problem
-         *
-         * @return a boolean flag
-         *
-         */
+        /// Alias for problem::has_set_seed
         bool is_stochastic() const
         {
             return has_set_seed();
@@ -1054,7 +1041,7 @@ class problem
         /// Streaming operator
         /**
          * @return An std::ostream containing a human-readable
-         * representation of the problem, includeing the result from
+         * representation of the problem, including the result from
          * the user-defined method extra_info if implemented.
          */
         friend std::ostream &operator<<(std::ostream &os, const problem &p)

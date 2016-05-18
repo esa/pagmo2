@@ -118,9 +118,16 @@ struct algo_inner_base
 template <typename T>
 struct algo_inner: algo_inner_base
 {
-    /// Static checks
+    // Static checks.
+    static_assert(
+        std::is_default_constructible<T>::value &&
+        std::is_copy_constructible<T>::value &&
+        std::is_move_constructible<T>::value &&
+        std::is_destructible<T>::value,
+        "A problem must be default-constructible, copy-constructible, move-constructible and destructible."
+    );
     static_assert(has_evolve<T>::value,
-        "A user-defined algorithm must provide a method with signature 'population evolve(const population &) const'. Could not detect one.");
+        "A user-defined algorithm must provide a method with signature 'population evolve(population) const'. Could not detect one.");
     // We just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;
@@ -249,6 +256,45 @@ struct algo_inner: algo_inner_base
 
 } // end of namespace detail
 
+/// Algorithm class.
+/**
+ * \image html algorithm.jpg
+ *
+ * This class represents an optimization algorithm. An algorithm can be
+ * stochastic, deterministic, population based, derivative-free, using hessians,
+ * using gradients, a meta-heuristic, evolutionary, etc.. Via this class PaGMO offers a common interface to
+ * all types of algorithms that can be applied to find solution to a generic matematical
+ * programming problem as represented by the pagmo::problem class.
+ *
+ * To create an instance of a pagmo::algorithm the user is asked to construct it from
+ * a separate object of type \p T where, at least, the implementation of
+ * the following method is provided:
+ *
+ * @code
+ * population evolve(population) const;
+ * @endcode
+ *
+ * - The return value of \p T::evolve() is the optimized (*evolved*) pagmo::population.
+ *
+ * The mandatory method above allow to define a deterministic algorithm.
+ * In order to consider more complex cases, the user may implement one or more
+ * of the following methods in \p T :
+ *   @code
+ * void set_seed(unsigned int seed)
+ * void set_verbosity(unsigned int level)
+ * std::string get_name() const
+ * std::string get_extra_info() const
+ *   @endcode
+ *
+ * - \p T::set_seed(unsigned int seed) changes the value of the random seed used in the user implemented evolve
+ * method to drive a stochastic optimization.
+ * - \p T::set_verbosity(unsigned int level) changes the value of the screen output and logs verbosity as implemented in
+ * the user defined problem. When not implemented a call to problem::set_verbosity(unsigned int level) throws an \p std::logic_error.
+ * - \p T::get_name() returns a string containing the algorithm name to be used in output streams.
+ * - \p T::get_extra_info() returns a string containing extra human readable information to be used in output streams. For
+ * example the algorithm parameters.
+ *
+ */
 class algorithm
 {
         // Enable the generic ctor only if T is not an algorithm (after removing
@@ -256,7 +302,26 @@ class algorithm
         template <typename T>
         using generic_ctor_enabler = std::enable_if_t<!std::is_same<algorithm,std::decay_t<T>>::value,int>;
     public:
-        /// Constructor
+        /// Constructor from a user algorithm of type \p T
+        /**
+         * Construct a pagmo::algorithm with from an object of type \p T. In
+         * order for the construction to be successfull \p T needs
+         * to satisfy the following requests:
+         *
+         * - \p T must implement the following mandatory method:
+         *   @code
+         *   population evolve(population) const;
+         *   @endcode
+         *   otherwise construction will result in a compile-time failure
+         * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
+         *   otherwise a call to this constructor will result in a compile-time failure
+         *
+         * @note \p T must be not of type pagmo::algorithm, otherwise this templated constructor is not enabled and the
+         * copy constructor will be called instead.
+         *
+         * @param[in] x The user implemented algorithm
+         *
+         */
         template <typename T, generic_ctor_enabler<T> = 0>
         explicit algorithm(T &&x):m_ptr(::new detail::algo_inner<std::decay_t<T>>(std::forward<T>(x)))
         {
@@ -333,52 +398,116 @@ class algorithm
         }
 
         /// Evolve method
+        /**
+         * Calls the user implemented evolve method. This is where the core of the optimization (*evolution*) is made.
+         *
+         * @param  pop starting population
+         * @return     evolved population
+         * @throws unspecified all excpetions thrown by the user implemented evolve method.
+         */
         population evolve(const population &pop) const
         {
             return ptr()->evolve(pop);
         }
 
+        /// Sets the seed for stochastic evolution
+        /**
+         * Sets the seed to be used in the evolve method for all
+         * all stochastic variables. This is assuming that the user implemented in his algorithm random generators
+         * controlled by the optional set_seed method.
+         *
+         * @param[in] seed seed
+         */
         void set_seed(unsigned int seed)
         {
             ptr()->set_seed(seed);
         }
 
         /// Check if the user-defined algorithm implements a set_seed method
+        /**
+         * If the user defined algorithm implements a set_seed method, this
+         * will return true, false otherwise. The value returned can
+         * also be forced by the user by implementing the additional
+         * method
+         *
+         * @code
+         * bool has_set_seed() const
+         * @endcode
+         *
+         * in the user-defined algorithm
+         *
+         * @return a boolean flag
+         *
+         */
         bool has_set_seed() const
         {
             return m_has_set_seed;
         }
 
-        /// Check if the user-defined algorithm implements a set_seed method
+        /// Alias for algorithm::has_set_seed
         bool is_stochastic() const
         {
             return has_set_seed();
         }
 
+        /// Sets the verbosity of logs and screen output
+        /**
+         * Sets the level of verbosity. This is assuming that the user implemented in his algorithm a verbosity
+         * control controlled by a set_verbosity method.
+         *
+         * @param[in] level verbosity level
+         */
         void set_verbosity(unsigned int level)
         {
             ptr()->set_verbosity(level);
         }
 
         /// Check if the user-defined algorithm implements a set_verbosity method
+        /**
+         * If the user defined algorithm implements a set_verbosity method, this
+         * will return true, false otherwise. The value returned can
+         * also be forced by the user by implementing the additional
+         * method
+         *
+         * @code
+         * bool has_set_verbosity() const
+         * @endcode
+         *
+         * in the user-defined algorithm
+         *
+         * @return a boolean flag
+         */
         bool has_set_verbosity() const
         {
             return m_has_set_verbosity;
         }
 
-        /// Get name
+        /// Algorithm's name.
+        /**
+         * @return The algorithm's name as returned by the corresponding
+         * user-implemented method if present, the C++ mingled class name otherwise.
+         */
         std::string get_name() const
         {
             return m_name;
         }
 
         /// Extra info
+        /**
+         * @return The algorithm's extra info as returned by the corresponding
+         * user-implemented method if present, an empty string otehrwise.
+         */
         std::string get_extra_info() const
         {
             return ptr()->get_extra_info();
         }
 
         /// Streaming operator
+        /**
+         * @return An std::ostream containing a human-readable
+         * representation of the algorithm, including the result from
+         * the user-defined method extra_info if implemented.
+         */
         friend std::ostream &operator<<(std::ostream &os, const algorithm &a)
         {
             os << "Algorithm name: " << a.get_name();
@@ -403,6 +532,7 @@ class algorithm
             return os;
         }
 
+        /// Serilization
         template <typename Archive>
         void serialize(Archive &ar)
         {

@@ -14,6 +14,7 @@ we suggest to follow the tutorials / examples.
 
   problem
   population
+  algorithm
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
