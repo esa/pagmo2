@@ -1,7 +1,9 @@
 #ifndef PAGMO_ALGORITHMS_SEA_HPP
 #define PAGMO_ALGORITHMS_SEA_HPP
 
+#include <iomanip>
 #include <random>
+#include <tuple>
 
 #include "../algorithm.hpp"
 #include "../io.hpp"
@@ -14,9 +16,12 @@ namespace pagmo
 
 class sea
 {
+    using log_line = std::tuple<unsigned int, double, double, unsigned int>;
+    using log_type = std::vector<log_line>;
+
     public:
         /// Constructor
-        sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next()):m_gen(gen),m_e(seed),m_seed(seed) {}
+        sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next()):m_gen(gen),m_e(seed),m_seed(seed), m_log() {}
 
         /// Algorithm evolve method (juice implementation of the algorithm)
         population evolve(population pop) const {
@@ -67,28 +72,35 @@ class sea
                 auto improvement = pop.get_f()[worst_idx][0] - offspring_f[0];
                 if (improvement >= 0) {
                     pop.set_xf(worst_idx, offspring, offspring_f);
-                    best_idx = worst_idx;
+                    if (pop.get_f()[best_idx][0] - offspring_f[0] >= 0.) {
+                        best_idx = worst_idx;
+                    }
                     worst_idx = pop.get_worst_idx();
-                    // Logs the improvement (verbosity mode 1)
-                    if (m_verbosity == 1u && improvement > 1e-3 * offspring_f[0])
+                    // Logs and prints (verbosity mode 1: a line is added everytime the population is improved by the offspring)
+                    if (m_verbosity == 1u && improvement > 0.)
                     {
-                        print(i, "\t\t", pop.get_f()[best_idx][0],"\t\t", improvement, "\t\t", mut,'\n');
-                        ++count;
+                        // Prints on screen
                         if (count % 50 == 1u) {
-                            std::cout << "\nGen:\t\tBest:\t\tImprovement:\tMutations:" << '\n';
+                            print("\n", std::setw(7),"Gen:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
+                        print(std::setw(7),i, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
+                        ++count;
+                        // Logs
+                        m_log.push_back(log_line(i, pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
-                // 4 - Log (verbosity modes > 1)
+                // 4 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
                 if (m_verbosity > 1u) {
                     // Every m_verbosity generations print a log line
                     if (i % m_verbosity == 1u) {
                         // Every 50 lines print the column names
                         if (count % 50 == 1u) {
-                            std::cout << "\nGen:\t\t\tBest:" << '\n';
+                            print("\n", std::setw(7),"Gen:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
-                        print(i, "\t\t\t", pop.get_f()[best_idx][0],'\n');
+                        print(std::setw(7),i, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
                         ++count;
+                        // Logs
+                        m_log.push_back(log_line(i, pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
             }
@@ -117,6 +129,10 @@ class sea
             return "\tGenerations: " + std::to_string(m_gen) + "\n\tVerbosity: " + std::to_string(m_verbosity)
                 + "\n\tSeed: " + std::to_string(m_seed);
         }
+        /// Get log
+        const log_type& get_log() const {
+            return m_log;
+        }
 
         template <typename Archive>
         void serialize(Archive &ar)
@@ -128,6 +144,7 @@ class sea
         mutable detail::random_engine_type               m_e;
         unsigned int                                     m_seed;
         unsigned int                                     m_verbosity = 0u;
+        mutable log_type                                 m_log;
 };
 
 } //namespaces
