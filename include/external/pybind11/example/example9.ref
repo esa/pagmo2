@@ -1,0 +1,22 @@
+example
+example.submodule
+submodule_func()
+A constructor
+A constructor
+B constructor
+A[1]
+A[1]
+A[2]
+A[2]
+A constructor
+A destructor
+A constructor
+A destructor
+A[42]
+A[42]
+A[43]
+A[43]
+OrderedDict([(1, 'a'), (2, 'b')])
+B destructor
+A destructor
+A destructor
