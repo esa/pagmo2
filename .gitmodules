@@ -1,3 +1,0 @@
-[submodule "include/external/pybind11"]
-	path = include/external/pybind11
-	url = https://github.com/pybind/pybind11
