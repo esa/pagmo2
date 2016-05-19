@@ -13,6 +13,7 @@ macro(ADD_PAGMO_TESTCASE arg1)
     endif()
 endmacro()
 
+ADD_PAGMO_TESTCASE(hypervolume)
 ADD_PAGMO_TESTCASE(io)
 ADD_PAGMO_TESTCASE(problem)
 ADD_PAGMO_TESTCASE(rng)
