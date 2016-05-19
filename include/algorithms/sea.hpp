@@ -46,11 +46,11 @@ class sea
     public:
         #if defined(DOXYGEN_INVOKED)
             /// Single entry of the log
-            typedef std::tuple<unsigned int, unsigned int, double, double, unsigned int> log_line_type;
+            typedef std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type> log_line_type;
             /// The log
             typedef std::vector<log_line_type> log_type;
         #else
-            using log_line_type = std::tuple<unsigned int, unsigned int, double, double, unsigned int>;
+            using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type>;
             using log_type = std::vector<log_line_type>;
         #endif
 
@@ -222,7 +222,7 @@ class sea
         template <typename Archive>
         void serialize(Archive &ar)
         {
-            ar(m_gen,m_e,m_seed,m_verbosity); // should we also serialize m_log here? 
+            ar(m_gen,m_e,m_seed,m_verbosity); // should we also serialize m_log here?
         }
     private:
         unsigned int                                     m_gen;

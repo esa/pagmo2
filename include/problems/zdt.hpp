@@ -202,7 +202,7 @@ public:
      */
     double p_distance(const vector_double &x) const
     {
-        double retval;
+        double retval = 0.;
         switch(m_id)
         {
         case 1u:
