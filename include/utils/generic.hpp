@@ -33,12 +33,13 @@ namespace pagmo{
  * Example:
  *
  * @code
- * detail::random_engine_type r_engine(32u);
+ * std::mt19937 r_engine(32u);
  * auto x = decision_vector({{1,3},{3,5}}, r_engine); // a random vector
  * auto x = decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
  * @endcode
  *
- * @param[in] bounds an <tt>std::pair</tt> containing the bounds
+ * @param[in] lb lower bound
+ * @param[in] ub upper bound
  * @param[in] r_engine a <tt>std::mt19937</tt> random engine
  *
  * @throws std::invalid_argument if:
@@ -89,7 +90,7 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
  * Example:
  *
  * @code
- * detail::random_engine_type r_engine(32u);
+ * std::mt19937 r_engine(32u);
  * auto x = decision_vector({{1,3},{3,5}}, r_engine); // a random vector
  * auto x = decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
  * @endcode
@@ -128,7 +129,7 @@ vector_double decision_vector(const std::pair<vector_double, vector_double> &bou
  * Example:
  *
  * @code
- * detail::random_engine_type r_engine(32u);
+ * std::mt19937 r_engine(32u);
  * auto x = decision_vector({1,3},{3,5}, r_engine); // a random vector
  * auto x = decision_vector({1,3},{1,3}, r_engine); // the vector {1,3}
  * @endcode

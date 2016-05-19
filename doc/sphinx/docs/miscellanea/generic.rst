@@ -7,12 +7,15 @@ A number of utilities to compute quantities that are of general relevance.
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::decision_vector(const std::pair<vector_double, vector_double>&, unsigned int)
+.. doxygenfunction:: uniform_real_from_range
    :project: PaGMOreborn
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::decision_vector(const vector_double&, const vector_double&, unsigned int)
+.. doxygenfunction:: pagmo::decision_vector(const std::pair<vector_double, vector_double>&, detail::random_engine_type&)
    :project: PaGMOreborn
 
+--------------------------------------------------------------------------
 
+.. doxygenfunction:: pagmo::decision_vector(const vector_double&, const vector_double&, detail::random_engine_type&)
+   :project: PaGMOreborn
