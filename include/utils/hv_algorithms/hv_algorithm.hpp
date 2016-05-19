@@ -80,7 +80,9 @@ namespace pagmo {
 	{
 	public:
 		/// Destructor required for pure virtual methods
-		hv_algorithm::~hv_algorithm() {}
+		hv_algorithm() {}
+		virtual ~hv_algorithm() {}
+		hv_algorithm(const hv_algorithm&) {}
 
 
 		/// Compute volume between two points
@@ -136,7 +138,7 @@ namespace pagmo {
 		* @param[in] r_point - reference point.
 		*/
 		virtual double compute(std::vector<vector_double> &points, const vector_double &r_point) const = 0;
-		
+
 
 		/// Exclusive hypervolume method
 		/**
@@ -162,8 +164,8 @@ namespace pagmo {
 
 			return compute(points, r_point) - compute(points_less, r_point);
 		}
-		
-		
+
+
 		/// Least contributor method
 		/**
 		* This method establishes the individual that contributes the least to the hypervolume.
@@ -180,7 +182,7 @@ namespace pagmo {
 			return extreme_contributor(points, r_point, cmp_least);
 		}
 
-		
+
 		/// Greatest contributor method
 		/**
 		* This method establishes the individual that contributes the most to the hypervolume.
@@ -196,8 +198,8 @@ namespace pagmo {
 		{
 			return extreme_contributor(points, r_point, cmp_greatest);
 		}
-		
-		
+
+
 		/// Contributions method
 		/**
 		* This methods return the exclusive contribution to the hypervolume for each point.
@@ -318,7 +320,7 @@ namespace pagmo {
 				}
 			}
 		}
-		
+
 
 		/// compute the extreme contributor
 		/**
@@ -344,7 +346,7 @@ namespace pagmo {
 
 			return idx_extreme;
 		}
-		
+
 
 		/// Comparison method for the least contributor
 		/**
@@ -417,7 +419,7 @@ namespace pagmo {
 			}
 			return DOM_CMP_A_B_EQUAL;
 		}
-		
+
 
 		/// Dominance comparison method
 		/**
@@ -453,7 +455,7 @@ namespace pagmo {
 			}
 			return DOM_CMP_A_B_EQUAL;
 		}
-		
+
 
 	};
 
@@ -532,7 +534,7 @@ namespace pagmo {
 
 		std::shared_ptr<cmp_fun> m_cmp_obj;
 	};
-	
+
 } // namespace pagmo
 
 

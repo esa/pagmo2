@@ -37,17 +37,11 @@
 
 #include "../hypervolume.hpp"
 #include "hv_algorithm.hpp"
+#include "hv2d.hpp"
 
 
 namespace pagmo {
 
-class hv2d : public hv_algorithm
-{
-public:
-	hv2d(const bool initial_sorting = true);
-	double compute(double** points, unsigned int n_points, double* r_point) const;
-};
-	
 
 /// WFG hypervolume algorithm
 /**
@@ -57,13 +51,13 @@ public:
  * @see "Lyndon While and Lucas Bradstreet. Applying the WFG Algorithm To Calculate Incremental Hypervolumes. 2012 IEEE Congress on Evolutionary Computation. CEC 2012, pages 489-496. IEEE, June 2012."
  *
  * @author Krzysztof Nowak (kn@linux.com)
- * @author Marcus Märtens (mmarcusx@gmail.com)
+ * @author Marcus Mï¿½rtens (mmarcusx@gmail.com)
  */
 class hvwfg : public hv_algorithm
 {
 public:
 	/// Constructor
-	hvwfg(const unsigned int stop_dimension = 2) : m_current_slice(0), m_stop_dimension(stop_dimension)
+	hvwfg(const unsigned int stop_dimension = 2) : hv_algorithm(), m_current_slice(0), m_stop_dimension(stop_dimension)
 	{
 		if (stop_dimension < 2) {
 			pagmo_throw(std::invalid_argument, "Stop dimension for WFG must be greater than or equal to 2");
@@ -188,7 +182,7 @@ private:
 					break;
 				}
 			}
-			
+
 			// If neither is, remove points dominated by 's' (we store that during the first loop).
 			if (keep_s) {
 				int prev = 0;
@@ -217,7 +211,7 @@ private:
 		m_frames_size[rec_level] = no_points;
 	}
 
-	
+
 	/// Compute the exclusive hypervolume of point at p_idx
 	double exclusive_hv(const unsigned int p_idx, const unsigned int rec_level) const
 	{
