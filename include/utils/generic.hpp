@@ -43,9 +43,9 @@ namespace pagmo{
  * @param[in] r_engine a <tt>std::mt19937</tt> random engine
  *
  * @throws std::invalid_argument if:
- * - the bounds are not of equal length, they have zero size, they contain NaNs or infs,
- *   or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
- * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
+ * - the bounds contain NaNs or infs,
+ *   or \f$ lb > ub \f$,
+ * - if \f$ub-lb\f$ is larger than implementation-defined value
  *
  * @returns a vector_double containing a random decision vector
  */
@@ -58,16 +58,15 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
     if (lb > ub) {
         pagmo_throw(std::invalid_argument,"Lower bounds are greater than upper bounds. Cannot generate a random pint in [lb, ub]");
     }
-
     // 1 - Forbid random generation when bounds are infinite.
     if (std::isinf(lb) || std::isinf(ub)) {
         pagmo_throw(std::invalid_argument,"Cannot generate a random point if (inf bounds detected)");
     }
-    // 2 - Bounds cannot be too large.
+    // 2 - Bounds cannot be too large or contain nans
     const auto delta = ub - lb;
     if (!std::isfinite(delta) || delta > std::numeric_limits<double>::max()) {
         pagmo_throw(std::invalid_argument,"Cannot generate a random point within bounds "
-            "that are too large");
+            "that are too large or that contain nans");
     }
     double retval;
     // 3 - If the bounds are equal we don't call the RNG, as that would be undefined behaviour.

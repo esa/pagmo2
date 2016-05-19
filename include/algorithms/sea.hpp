@@ -222,7 +222,7 @@ class sea
         template <typename Archive>
         void serialize(Archive &ar)
         {
-            ar(m_gen,m_e,m_seed,m_verbosity,m_log);
+            ar(m_gen,m_e,m_seed,m_verbosity); // should we also serialize m_log here? 
         }
     private:
         unsigned int                                     m_gen;

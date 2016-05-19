@@ -14,18 +14,23 @@ BOOST_AUTO_TEST_CASE(uniform_real_from_range_test)
 {
     auto inf = std::numeric_limits<double>::infinity();
     auto big = std::numeric_limits<double>::max();
+    auto nan = std::numeric_limits<double>::quiet_NaN();
     detail::random_engine_type r_engine(pagmo::random_device::next());
 
     // Test the throws
     BOOST_CHECK_THROW(uniform_real_from_range(1,0, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(uniform_real_from_range(-big, big, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(uniform_real_from_range(-3, inf, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(uniform_real_from_range(-nan, nan, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(uniform_real_from_range(-nan, 3, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(uniform_real_from_range(-3, nan, r_engine), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(decision_vector_test)
 {
     auto inf = std::numeric_limits<double>::infinity();
     auto big = std::numeric_limits<double>::max();
+    auto nan = std::numeric_limits<double>::quiet_NaN();
     detail::random_engine_type r_engine(pagmo::random_device::next());
 
     // Test the throws
@@ -33,6 +38,7 @@ BOOST_AUTO_TEST_CASE(decision_vector_test)
     BOOST_CHECK_THROW(decision_vector({{1,-big},{0,big}}, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(decision_vector({{1,-inf},{0,32}}, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(decision_vector({{1,2,3},{0,3}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(decision_vector({{0,2,3},{1,4,nan}}, r_engine), std::invalid_argument);
 
     // Test the results
     BOOST_CHECK((decision_vector({{3,4},{3,4}}, r_engine) == vector_double{3,4}));
