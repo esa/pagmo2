@@ -39,6 +39,11 @@
 #include "hv_algorithm.hpp"
 #include "hv2d.hpp"
 
+#if defined(__clang__) || defined(__GNUC__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wshorten-64-to-32"
+    #pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
 
 namespace pagmo {
 
@@ -405,5 +410,9 @@ private:
 };
 
 }  // namespace pagmo
+
+#if defined(__clang__) || defined(__GNUC__)
+    #pragma GCC diagnostic pop
+#endif
 
 #endif

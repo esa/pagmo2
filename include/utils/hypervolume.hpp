@@ -4,7 +4,7 @@
 /** \file hypervolume.hpp
  * \brief Hypervolume utilities for multi-objective optimization.
  *
- * This header contains functions to compute hypervolume and hypervolume 
+ * This header contains functions to compute hypervolume and hypervolume
  * contributions of points.
  */
 
@@ -23,10 +23,16 @@
 #include "../utils/hv_algorithms/hv_algorithm.hpp"
 #include "../utils/hv_algorithms/hv2d.hpp"
 
+#if defined(__clang__) || defined(__GNUC__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wunused-variable"
+	#pragma GCC diagnostic ignored "-Wshorten-64-to-32"
+#endif
+
 namespace pagmo
 {
 
-class hypervolume 
+class hypervolume
 {
 public:
 	/// Default constructor
@@ -38,14 +44,14 @@ public:
 	{
 		m_points.resize(0);
 	}
-	
+
 	/// Constructor from initializer list
 	/**
 	*  Constructs a hypervolume object from an initializer list, provided by curly-braces syntax
 	*  @example	hypervolume hv{{2,3},{3,4}};
 	*
 	*/
-	hypervolume(std::initializer_list<std::vector<double>> points) :m_points(points), m_copy_points(true), m_verify(true) { 
+	hypervolume(std::initializer_list<std::vector<double>> points) :m_points(points), m_copy_points(true), m_verify(true) {
 		verify_after_construct();
 	}
 
@@ -54,8 +60,8 @@ public:
 	* Constructs a hypervolume object from a provided set of points.
 	*
 	* @param[in] points vector of points for which the hypervolume is computed
-	* @param[in] verify flag stating whether the points should be verified after the construction. 
-	*			 This turns off the validation for the further computation as well, use 'set_verify' 
+	* @param[in] verify flag stating whether the points should be verified after the construction.
+	*			 This turns off the validation for the further computation as well, use 'set_verify'
 	*			 flag to alter it later.
 	*/
 	hypervolume(const std::vector<vector_double> &points, const bool verify) : m_points(points), m_copy_points(true), m_verify(verify)
@@ -71,15 +77,14 @@ public:
 	*
 	* @param[in] hv hypervolume object to be copied
 	*/
-	hypervolume(const hypervolume &hv) : m_points(hv.m_points), m_copy_points(hv.m_copy_points), m_verify(hv.m_verify) { }
-
+	hypervolume(const hypervolume &hv) = default;
 
 	/// Constructor from population
 	/**
 	* Constructs a hypervolume object, where points are elicited from the referenced population object.
 	*
 	* @param[in] reference parameter for the population object
-	* @param[in] verify flag stating whether the points should be verified after the construction. 
+	* @param[in] verify flag stating whether the points should be verified after the construction.
 	*			 This turns off the validation for the further computation as well, use 'set_verify' flag to alter it later.
 	*/
 	hypervolume(const pagmo::population &pop, const bool verify) : m_copy_points(true), m_verify(verify)
@@ -94,7 +99,7 @@ public:
 		}
 	}
 
-	
+
 	/// Setter for 'copy_points' flag
 	/**
 	* Sets the hypervolume as a single use object.
@@ -163,7 +168,7 @@ public:
 
 	/// Calculate the default reference point
 	/**
-	* Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object. 
+	* Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
 	* The result is a point that is necessarily dominated by all other points, frequently used for hypervolume computations.
 	*
 	* @param[in] offest	value that is to be added to each objective to assure strict domination
@@ -175,7 +180,7 @@ public:
 		if (m_points.size() == 0u) {
 			return {};
 		}
-		
+
 		auto fdim = m_points[0].size();
 		vector_double ref_point(m_points[0].begin(), m_points[0].end());
 
@@ -188,7 +193,7 @@ public:
 		for (auto &c : ref_point) {
 			c += offset;
 		}
-		
+
 		return ref_point;
 	}
 
@@ -232,7 +237,7 @@ public:
 			pagmo_throw(std::invalid_argument, "Current implementation allows only to compute 2d hypervolumes!");
 		}
 	}
-	
+
 
 	/// Compute hypervolume
 	/**
@@ -258,7 +263,7 @@ public:
 	*
 	* @return value representing the hypervolume
 	*/
-	double hypervolume::compute(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+	double compute(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
 	{
 		if (m_verify) {
 			verify_before_compute(r_point, hv_algo);
@@ -279,7 +284,7 @@ public:
 private:
 	std::vector<vector_double> m_points;
 	bool m_copy_points;
-	bool m_verify; 
+	bool m_verify;
 
 	/// Verify after construct method
 	/**
@@ -302,7 +307,7 @@ private:
 			}
 		}
 	}
-	
+
 	/// Verify before compute method
 	/**
 	* Verifies whether reference point and the hypervolume method meet certain criteria.
@@ -311,7 +316,7 @@ private:
 	*
 	* @throws value_error if reference point's and point set dimension do not agree
 	*/
-	void hypervolume::verify_before_compute(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+	void verify_before_compute(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
 	{
 		if (m_points[0].size() != r_point.size()) {
 			pagmo_throw(std::invalid_argument, "Point set dimensions and reference point dimension must be equal.");
@@ -345,6 +350,9 @@ private:
 
 };
 
+#if defined(__clang__) || defined(__GNUC__)
+    #pragma GCC diagnostic pop
+#endif
 
 } // namespace pagmo
 #endif

@@ -48,8 +48,8 @@ TypeError, hypervolume, self.good_ps_2d, foo="bar")  # extra kwarg
 
 BOOST_AUTO_TEST_CASE(hypervolume_test)
 {
-	auto inf = std::numeric_limits<double>::infinity();
-	auto big = std::numeric_limits<double>::max();
+	//auto inf = std::numeric_limits<double>::infinity();
+	//auto big = std::numeric_limits<double>::max();
 
 	// by vector
 	std::vector<vector_double> x1{ { 1,2 },{ 3,4 } };
@@ -66,22 +66,22 @@ BOOST_AUTO_TEST_CASE(hypervolume_test)
 	// by population
 	population pop1{ problem{ zdt{ 1,5 } }, 2 };
 	hypervolume hv3 = hypervolume(pop1, true);
-	
+
 	// errors
 	population pop2{ problem{ rosenbrock(10) }, 2 };
-	hypervolume hv4; 
-	BOOST_CHECK_THROW(hv4 = hypervolume(pop2, true), std::invalid_argument);
+	hypervolume hv4;
+	BOOST_CHECK_THROW(hypervolume(pop2, true), std::invalid_argument);
 
 	// computation of hypervolume indicator
 	hypervolume hv5 = hypervolume{ {1, 2},{2, 1} };
 	BOOST_CHECK((hv5.compute({ 3,3 }) == 3));
-	
+
 	hypervolume hv6 = { {1, 1, 1},{2, 2, 2,} };
 	BOOST_CHECK((hv6.compute({ 3, 3, 3 }) == 8));
-	
-	
+
+
 	/*# simple 2D test
-		
+
 		self.assertEqual(hv.compute(r = [3, 3]), 3)
 
 		# point on the border of refpoint(2D)

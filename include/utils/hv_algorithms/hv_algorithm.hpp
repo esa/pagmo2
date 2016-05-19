@@ -35,6 +35,12 @@
 #include "../../io.hpp"
 #include "../../types.hpp"
 
+#if defined(__clang__) || defined(__GNUC__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wshorten-64-to-32"
+    #pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
+
 namespace pagmo {
 
 	/// Base hypervolume algorithm class.
@@ -80,9 +86,10 @@ namespace pagmo {
 	{
 	public:
 		/// Destructor required for pure virtual methods
-		hv_algorithm() {}
+		hv_algorithm() = default;
 		virtual ~hv_algorithm() {}
-		hv_algorithm(const hv_algorithm&) {}
+		hv_algorithm(const hv_algorithm &) = default;
+		hv_algorithm(hv_algorithm &&) = default;
 
 
 		/// Compute volume between two points
@@ -537,5 +544,8 @@ namespace pagmo {
 
 } // namespace pagmo
 
+#if defined(__clang__) || defined(__GNUC__)
+    #pragma GCC diagnostic pop
+#endif
 
 #endif
