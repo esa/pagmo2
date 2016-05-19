@@ -31,8 +31,8 @@ namespace pagmo
  * @note The algorithm does not work for multi-objective problems, nor for
  * constrained optimization
  *
- * @note The mutation is uniform within the box-bounds. Hence, unbounded problems
- * will be a problem for this simple approach.
+ * @note The mutation is uniform within box-bounds. Hence, unbounded problems
+ * will produce an error.
  *
  * @see Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for
  * combinatorial optimization: A decade of results." International Journal of Automation and Computing
