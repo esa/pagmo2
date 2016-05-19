@@ -97,6 +97,14 @@ macro(YACMA_SETUP_CXX_FLAGS)
         # This became available in GCC at one point.
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wodr)
     endif()
+
+    # MSVC setup.
+    if(YACMA_COMPILER_IS_MSVC)
+        # Enable higher warning level than usual.
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(/W4)
+        # Treat warnings as errors.
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(/WX)
+    endif()
 endmacro()
 
 # This is an OS X specific setting that is suggested to be enabled. See:
