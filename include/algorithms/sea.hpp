@@ -43,16 +43,23 @@ namespace pagmo
  */
 class sea
 {
-    using log_line = std::tuple<unsigned int, unsigned int, double, double, unsigned int>;
-    using log_type = std::vector<log_line>;
-
     public:
+        #if defined(DOXYGEN_INVOKED)
+            /// Single entry of the log
+            typedef std::tuple<unsigned int, unsigned int, double, double, unsigned int> log_line_type;
+            /// The log
+            typedef std::vector<log_line_type> log_type;
+        #else
+            using log_line_type = std::tuple<unsigned int, unsigned int, double, double, unsigned int>;
+            using log_type = std::vector<log_line_type>;
+        #endif
+
         /// Constructor
         /**
-         * Constructs a sea algorithm from the number of generations made and the random seed.
+         * Constructs a sea algorithm from the number of generations and the random seed.
          *
          * @param[in] gen Number of generations to consider. Each generation will compute the objective function once
-         * @param[in] seed random seed used to generate Mutations
+         * @param[in] seed random seed used to generate mutations
          */
         sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next()):m_gen(gen),m_e(seed),m_seed(seed),m_verbosity(0u),m_log() {}
 
@@ -137,7 +144,7 @@ class sea
                         print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
                         ++count;
                         // Logs
-                        m_log.push_back(log_line(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
+                        m_log.push_back(log_line_type(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
                 // 4 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
@@ -151,7 +158,7 @@ class sea
                         print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
                         ++count;
                         // Logs
-                        m_log.push_back(log_line(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
+                        m_log.push_back(log_line_type(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
             }
@@ -166,7 +173,7 @@ class sea
         /// Sets the algorithm verbosity
         /**
          * Sets the verbosity level of the screen output and of the
-         * logs. \p level can be:
+         * log returned by get_log(). \p level can be:
          * - 0: no verbosity
          * - 1: will only print and log when the population is improved
          * - >1: will print and log one line each \p level generations.
@@ -176,9 +183,9 @@ class sea
          * Gen:        Fevals:          Best:   Improvement:     Mutations:
          * 632           3797        1464.31        51.0203              1
          * 633           3803        1463.23        13.4503              1
-         * 635           3815        1562.02        31.0434              2
-         * 667           4007         1481.6        24.1889              2
-         * 668           4013        1487.34        73.2677              3
+         * 635           3815        1562.02        31.0434              3
+         * 667           4007         1481.6        24.1889              1
+         * 668           4013        1487.34        73.2677              2
          * @endcode
          * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
          * function currently in the population, Improvement is the improvement made by the las mutation and Mutations
@@ -205,9 +212,9 @@ class sea
         /// Get log
         /**
          * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-         * <tt> std::vector </tt> is a tuple containing: Gen, Fevals, Best, Improvement, Mutations as described
+         * <tt> std::vector </tt> is a sea::log_line_type containing: Gen, Fevals, Best, Improvement, Mutations as described
          * in sea::set_verbosity
-         * @return an <tt> std::vector </tt> of tuples containing the loged values Gen, Fevals, Best, Improvement, Mutations
+         * @return an <tt> std::vector </tt> of sea::log_line_type containing the logged values Gen, Fevals, Best, Improvement, Mutations
          */
         const log_type& get_log() const {
             return m_log;
