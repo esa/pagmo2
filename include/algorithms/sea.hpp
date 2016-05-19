@@ -69,8 +69,6 @@ class sea
             const auto &bounds = prob.get_bounds();
             const auto &lb = bounds.first;
             const auto &ub = bounds.second;
-            // We clear the logs
-            m_log.clear();
 
             // PREAMBLE-------------------------------------------------------------------------------------------------
             // We start by checking that the problem is suitable for this
@@ -87,6 +85,9 @@ class sea
             }
             // ---------------------------------------------------------------------------------------------------------
 
+            // No throws, all valid: we clear the logs
+            m_log.clear();
+
             // Main loop
             // 1 - Compute the best and worst individual (index)
             auto best_idx = pop.get_best_idx();
@@ -100,19 +101,19 @@ class sea
                     // is forbidden being prob a const ref.
                     pop.set_problem_seed(std::uniform_int_distribution<unsigned int>()(m_e));
                     // re-evaluate the whole population w.r.t. the new seed
-                    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
-                        pop.set_xf(i, pop.get_x()[i], prob.fitness(pop.get_x()[i]));
+                    for (decltype(pop.size()) j = 0u; j < pop.size(); ++j) {
+                        pop.set_xf(j, pop.get_x()[j], prob.fitness(pop.get_x()[j]));
                     }
                 }
 
                 vector_double offspring = pop.get_x()[best_idx];
                 // 2 - Mutate the components (at least one) of the best
-                auto mut = 0u;
-                while(mut==0) {
+                vector_double::size_type  mut = 0u;
+                while(!mut) {
                     for (vector_double::size_type j = 0u; j < dim; ++j) { // for each decision vector component
                         if (drng(m_e) < 1.0 / static_cast<double>(dim))
                         {
-                            offspring[j] = std::uniform_real_distribution<double>(lb[j],ub[j])(m_e);
+                            offspring[j] = uniform_real_from_range(lb[j], ub[j], m_e);
                             ++mut;
                         }
                     }
@@ -120,7 +121,7 @@ class sea
                 // 3 - Insert the offspring into the population if better
                 auto offspring_f = prob.fitness(offspring);
                 auto improvement = pop.get_f()[worst_idx][0] - offspring_f[0];
-                if (improvement >= 0) {
+                if (improvement >= 0.) {
                     pop.set_xf(worst_idx, offspring, offspring_f);
                     if (pop.get_f()[best_idx][0] - offspring_f[0] >= 0.) {
                         best_idx = worst_idx;
@@ -130,7 +131,7 @@ class sea
                     if (m_verbosity == 1u && improvement > 0.)
                     {
                         // Prints on screen
-                        if (count % 50 == 1u) {
+                        if (count % 50u == 1u) {
                             print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
                         print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
@@ -144,7 +145,7 @@ class sea
                     // Every m_verbosity generations print a log line
                     if (i % m_verbosity == 1u) {
                         // Every 50 lines print the column names
-                        if (count % 50 == 1u) {
+                        if (count % 50u == 1u) {
                             print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
                         print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');

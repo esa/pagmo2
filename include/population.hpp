@@ -177,7 +177,7 @@ class population
          */
         vector_double decision_vector() const
         {
-            return pagmo::decision_vector(m_prob.get_bounds(), std::uniform_int_distribution<unsigned int>()(m_e));
+            return pagmo::decision_vector(m_prob.get_bounds(), m_e);
         }
 
         /// Index of best individual (accounting for a vector tolerance)
