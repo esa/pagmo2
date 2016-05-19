@@ -344,6 +344,12 @@ class population
             set_xf(i, x, m_prob.fitness(x));
         }
 
+        /// Setter for the problem seed
+        void set_problem_seed (unsigned int seed)
+        {
+            m_prob.set_seed(seed);
+        }
+
         /// Getter for the pagmo::problem
         const problem &get_problem() const
         {

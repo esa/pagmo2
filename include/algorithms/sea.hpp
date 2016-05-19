@@ -43,21 +43,34 @@ namespace pagmo
  */
 class sea
 {
-    using log_line = std::tuple<unsigned int, double, double, unsigned int>;
+    using log_line = std::tuple<unsigned int, unsigned int, double, double, unsigned int>;
     using log_type = std::vector<log_line>;
 
     public:
         /// Constructor
-        sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next()):m_gen(gen),m_e(seed),m_seed(seed), m_log() {}
+        /**
+         * Constructs a sea algorithm from the number of generations made and the random seed.
+         *
+         * @param[in] gen Number of generations to consider. Each generation will compute the objective function once
+         * @param[in] seed random seed used to generate Mutations
+         */
+        sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next()):m_gen(gen),m_e(seed),m_seed(seed),m_verbosity(0u),m_log() {}
 
         /// Algorithm evolve method (juice implementation of the algorithm)
+        /**
+         * @param[in] pop population to be evolved
+         * @return evolved population
+         * @throws std::invalid_argument if the problem is multi-objective or constrained
+         */
         population evolve(population pop) const {
             // We store some useful properties
-            const auto &prob = pop.get_problem();
-            const auto &dim = prob.get_nx();
+            const auto &prob = pop.get_problem();       // This is a const reference, so using set_seed for example will not be allowed
+            const auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
             const auto &bounds = prob.get_bounds();
             const auto &lb = bounds.first;
             const auto &ub = bounds.second;
+            // We clear the logs
+            m_log.clear();
 
             // PREAMBLE-------------------------------------------------------------------------------------------------
             // We start by checking that the problem is suitable for this
@@ -82,6 +95,16 @@ class sea
             std::uniform_real_distribution<double> drng(0.,1.); // [0,1]
 
             for (unsigned int i = 1u; i <= m_gen; ++i) {
+                if(prob.is_stochastic()) {
+                    // change the problem seed. This is done via the population_set_seed method as prob.set_seed
+                    // is forbidden being prob a const ref.
+                    pop.set_problem_seed(std::uniform_int_distribution<unsigned int>()(m_e));
+                    // re-evaluate the whole population w.r.t. the new seed
+                    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+                        pop.set_xf(i, pop.get_x()[i], prob.fitness(pop.get_x()[i]));
+                    }
+                }
+
                 vector_double offspring = pop.get_x()[best_idx];
                 // 2 - Mutate the components (at least one) of the best
                 auto mut = 0u;
@@ -108,12 +131,12 @@ class sea
                     {
                         // Prints on screen
                         if (count % 50 == 1u) {
-                            print("\n", std::setw(7),"Gen:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
+                            print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
-                        print(std::setw(7),i, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
+                        print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
                         ++count;
                         // Logs
-                        m_log.push_back(log_line(i, pop.get_f()[best_idx][0], improvement, mut));
+                        m_log.push_back(log_line(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
                 // 4 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
@@ -122,29 +145,51 @@ class sea
                     if (i % m_verbosity == 1u) {
                         // Every 50 lines print the column names
                         if (count % 50 == 1u) {
-                            print("\n", std::setw(7),"Gen:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
+                            print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
-                        print(std::setw(7),i, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
+                        print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
                         ++count;
                         // Logs
-                        m_log.push_back(log_line(i, pop.get_f()[best_idx][0], improvement, mut));
+                        m_log.push_back(log_line(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
             }
             return pop;
         };
 
-        /// Set seed method
+        /// Sets the algorithm seed
         void set_seed(unsigned int seed)
         {
             m_seed = seed;
         };
-        /// Sets the verbosity
+        /// Sets the algorithm verbosity
+        /**
+         * Sets the verbosity level of the screen output and of the
+         * logs. \p level can be:
+         * - 0: no verbosity
+         * - 1: will only print and log when the population is improved
+         * - >1: will print and log one line each \p level generations.
+         *
+         * Example (verbosity 1):
+         * @code
+         * Gen:        Fevals:          Best:   Improvement:     Mutations:
+         * 632           3797        1464.31        51.0203              1
+         * 633           3803        1463.23        13.4503              1
+         * 635           3815        1562.02        31.0434              2
+         * 667           4007         1481.6        24.1889              2
+         * 668           4013        1487.34        73.2677              3
+         * @endcode
+         * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
+         * function currently in the population, Improvement is the improvement made by the las mutation and Mutations
+         * is the number of mutated componnets of the decision vector
+         *
+         * @param level verbosity level
+         */
         void set_verbosity(unsigned int level)
         {
             m_verbosity = level;
         };
-        /// Problem name
+        /// Algorithm name
         std::string get_name() const
         {
             return "(N+1)-EA Simple Evolutionary Algorithm";
@@ -157,6 +202,12 @@ class sea
                 + "\n\tSeed: " + std::to_string(m_seed);
         }
         /// Get log
+        /**
+         * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+         * <tt> std::vector </tt> is a tuple containing: Gen, Fevals, Best, Improvement, Mutations as described
+         * in sea::set_verbosity
+         * @return an <tt> std::vector </tt> of tuples containing the loged values Gen, Fevals, Best, Improvement, Mutations
+         */
         const log_type& get_log() const {
             return m_log;
         }
@@ -170,7 +221,7 @@ class sea
         unsigned int                                     m_gen;
         mutable detail::random_engine_type               m_e;
         unsigned int                                     m_seed;
-        unsigned int                                     m_verbosity = 0u;
+        unsigned int                                     m_verbosity;
         mutable log_type                                 m_log;
 };
 
