@@ -8,6 +8,7 @@
  */
 
 #include <cmath>
+#include <limits>
 #include <numeric>
 #include <stdexcept>
 #include <string>
@@ -18,13 +19,14 @@
 #include "../rng.hpp"
 #include "../types.hpp"
 
-namespace pagmo{
+namespace pagmo
+{
+
 /// Generates a random number within some lower and upper bounds
 /**
- * Creates a random number within some lower and upper bounds. If
- * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
- * component of the randomly generated decision_vector will be such that
- * \f$lb_i \le x_i < ub_i\f$. If \f$lb_i == ub_i\f$ then \f$lb_i\f$ is
+ * Creates a random number within a closed range. If
+ * both the lower and upper bounds are finite numbers, then the generated value
+ * \f$ x \f$ will be such that \f$lb \le x < ub\f$. If \f$lb == ub\f$ then \f$lb\f$ is
  * returned
  *
  * @note: This has to be preferred to std::uniform_real<double>(r_engine) as it
@@ -34,8 +36,8 @@ namespace pagmo{
  *
  * @code
  * std::mt19937 r_engine(32u);
- * auto x = decision_vector({{1,3},{3,5}}, r_engine); // a random vector
- * auto x = decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
+ * auto x = uniform_real_from_range(3,5,r_engine); // a random value
+ * auto x = uniform_real_from_range(2,2,r_engine); // the value 2.
  * @endcode
  *
  * @param[in] lb lower bound
@@ -47,35 +49,32 @@ namespace pagmo{
  *   or \f$ lb > ub \f$,
  * - if \f$ub-lb\f$ is larger than implementation-defined value
  *
- * @returns a vector_double containing a random decision vector
+ * @returns a random floating-point value
  */
 double uniform_real_from_range(double lb, double ub, detail::random_engine_type &r_engine)
 {
     // NOTE: see here for the requirements for floating-point RNGS:
     // http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution/uniform_real_distribution
 
-    // 0 - Check that lb is <= ub
+    // 0 - Forbid random generation when bounds are not finite.
+    if (!std::isfinite(lb) || !std::isfinite(ub)) {
+        pagmo_throw(std::invalid_argument,"Cannot generate a random point if the bounds are not finite");
+    }
+    // 1 - Check that lb is <= ub
     if (lb > ub) {
-        pagmo_throw(std::invalid_argument,"Lower bounds are greater than upper bounds. Cannot generate a random pint in [lb, ub]");
+        pagmo_throw(std::invalid_argument,"Lower bound is greater than upper bound. Cannot generate a random point in [lb, ub]");
     }
-    // 1 - Forbid random generation when bounds are infinite.
-    if (std::isinf(lb) || std::isinf(ub)) {
-        pagmo_throw(std::invalid_argument,"Cannot generate a random point if (inf bounds detected)");
-    }
-    // 2 - Bounds cannot be too large or contain nans
+    // 2 - Bounds cannot be too large
     const auto delta = ub - lb;
     if (!std::isfinite(delta) || delta > std::numeric_limits<double>::max()) {
         pagmo_throw(std::invalid_argument,"Cannot generate a random point within bounds "
-            "that are too large or that contain nans");
+            "that are too large");
     }
-    double retval;
     // 3 - If the bounds are equal we don't call the RNG, as that would be undefined behaviour.
     if (lb == ub) {
-        retval = lb;
-    } else {
-        retval = std::uniform_real_distribution<double>(lb, ub)(r_engine);
+        return lb;
     }
-    return retval;
+    return std::uniform_real_distribution<double>(lb, ub)(r_engine);
 }
 
 /// Generates a random decision vector
