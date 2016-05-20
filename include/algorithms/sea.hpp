@@ -97,8 +97,8 @@ class sea
 
             // Main loop
             // 1 - Compute the best and worst individual (index)
-            auto best_idx = pop.get_best_idx();
-            auto worst_idx = pop.get_worst_idx();
+            auto best_idx = pop.best_idx();
+            auto worst_idx = pop.worst_idx();
             unsigned int count = 1u; // regulates the screen output
             std::uniform_real_distribution<double> drng(0.,1.); // [0,1]
 
@@ -133,7 +133,7 @@ class sea
                     if (pop.get_f()[best_idx][0] - offspring_f[0] >= 0.) {
                         best_idx = worst_idx;
                     }
-                    worst_idx = pop.get_worst_idx();
+                    worst_idx = pop.worst_idx();
                     // Logs and prints (verbosity mode 1: a line is added everytime the population is improved by the offspring)
                     if (m_verbosity == 1u && improvement > 0.)
                     {
@@ -196,6 +196,21 @@ class sea
         {
             m_verbosity = level;
         };
+        /// Get algorithm seed
+        unsigned int get_seed() const
+        {
+            return m_seed;
+        }
+        /// Get algorithm verbosity level
+        unsigned int get_verbosity() const
+        {
+            return m_verbosity;
+        }
+        /// Get generations
+        unsigned int get_gen() const
+        {
+            return m_gen;
+        }
         /// Algorithm name
         std::string get_name() const
         {

@@ -197,7 +197,7 @@ class population
          * @throws std::invalid_argument if the problem is multiobjective and thus
          * a best individual is not well defined
          */
-        vector_double::size_type get_best_idx(const vector_double &tol) const
+        vector_double::size_type best_idx(const vector_double &tol) const
         {
             if (!size()) {
                 pagmo_throw(std::invalid_argument, "Cannot determine the best individual of an empty population");
@@ -220,10 +220,10 @@ class population
         /**
          * @param[in] tol scalar tolerance to be considered for each constraint
          */
-        vector_double::size_type get_best_idx(double tol = 0.) const
+        vector_double::size_type best_idx(double tol = 0.) const
         {
             vector_double tol_vector(m_prob.get_nf() - 1u, tol);
-            return get_best_idx(tol_vector);
+            return best_idx(tol_vector);
         }
 
         /// Index of worst individual (accounting for a vector tolerance)
@@ -243,7 +243,7 @@ class population
          * @throws std::invalid_argument if the problem is multiobjective and thus
          * a best individual is not well defined
          */
-        vector_double::size_type get_worst_idx(const vector_double &tol) const
+        vector_double::size_type worst_idx(const vector_double &tol) const
         {
             if (!size()) {
                 pagmo_throw(std::invalid_argument, "Cannot determine the worst element of an empty population");
@@ -266,10 +266,10 @@ class population
         /**
          * @param[in] tol scalar tolerance to be considered for each constraint
          */
-        vector_double::size_type get_worst_idx(double tol = 0.) const
+        vector_double::size_type worst_idx(double tol = 0.) const
         {
             vector_double tol_vector(m_prob.get_nf() - 1u, tol);
-            return get_worst_idx(tol_vector);
+            return worst_idx(tol_vector);
         }
 
         /// Number of individuals in the population
