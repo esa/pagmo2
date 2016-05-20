@@ -17,6 +17,7 @@
 #include "external/cereal/types/polymorphic.hpp"
 #include "external/cereal/types/utility.hpp"
 #include "external/cereal/types/vector.hpp"
+#include "external/cereal/types/tuple.hpp"
 
 #if defined(__clang__) || defined(__GNUC__)
     #pragma GCC diagnostic pop

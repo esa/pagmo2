@@ -1,6 +1,7 @@
 #define BOOST_TEST_MODULE generic_utilities_test
 #include <boost/test/unit_test.hpp>
 #include <exception>
+#include <limits>
 #include <tuple>
 
 #include "../include/utils/generic.hpp"
@@ -22,8 +23,10 @@ BOOST_AUTO_TEST_CASE(uniform_real_from_range_test)
     BOOST_CHECK_THROW(uniform_real_from_range(-big, big, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(uniform_real_from_range(-3, inf, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(uniform_real_from_range(-nan, nan, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(uniform_real_from_range(nan, nan, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(uniform_real_from_range(-nan, 3, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(uniform_real_from_range(-3, nan, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(uniform_real_from_range(inf, inf, r_engine), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(decision_vector_test)
