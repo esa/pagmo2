@@ -46,6 +46,7 @@ if(BUILD_TUTORIALS)
 endif()
 
 if(BUILD_PYGMO)
+    find_package(Boost 1.55.0 REQUIRED COMPONENTS "python")
     add_subdirectory("${CMAKE_SOURCE_DIR}/pygmo")
 endif()
 

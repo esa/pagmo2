@@ -1,10 +1,7 @@
 #ifndef PYGMO_PROB_INNER_PYTHON_HPP
 #define PYGMO_PROB_INNER_PYTHON_HPP
 
-#include "python_includes.hpp"
-
 #include <algorithm>
-#include <boost/python/object.hpp>
 #include <iterator>
 #include <memory>
 #include <stdexcept>
@@ -14,7 +11,8 @@
 #include "../include/exceptions.hpp"
 #include "../include/problem.hpp"
 #include "../include/types.hpp"
-//#include "common_utils.hpp"
+#include "common_utils.hpp"
+#include "pybind11.hpp"
 
 namespace pagmo
 {
@@ -22,15 +20,20 @@ namespace pagmo
 namespace detail
 {
 
-namespace bp = boost::python;
+namespace py = pybind11;
 
 template <>
-struct prob_inner<bp::object> final: prob_inner_base
+struct prob_inner<py::object> final: prob_inner_base
 {
-    // Throw if object does not have a callable attribute.
-    static void check_callable_attribute(bp::object o, const char *s)
+    // Return instance attribute as a py::object.
+    static py::object attr(py::object o, const char *s)
     {
-        if (!pygmo::callable(o.attr(s))) {
+        return o.attr(s);
+    }
+    // Throw if object does not have a callable attribute.
+    static void check_callable_attribute(py::object o, const char *s)
+    {
+        if (!pygmo::callable(attr(o,s))) {
             pagmo_throw(std::logic_error,"the '" + std::string(s) + "()' method is missing or "
                 "it is not callable");
         }
@@ -48,7 +51,7 @@ struct prob_inner<bp::object> final: prob_inner_base
     prob_inner(prob_inner &&) = delete;
     prob_inner &operator=(const prob_inner &) = delete;
     prob_inner &operator=(prob_inner &&) = delete;
-    explicit prob_inner(bp::object o):
+    explicit prob_inner(py::object o):
         // Perform an explicit deep copy of the input object.
         m_value(pygmo::deepcopy(o))
     {
@@ -62,10 +65,8 @@ struct prob_inner<bp::object> final: prob_inner_base
     // Main methods.
     virtual vector_double fitness(const vector_double &dv) const override final
     {
-        return m_value.attr("fitness")(dv);
-        pygmo::to_vd(attr(m_value,"fitness")(pygmo::vd_to_a(dv)));
+        return pygmo::to_vd(attr(m_value,"fitness")(pygmo::vd_to_a(dv)));
     }
-#if 0
     virtual vector_double::size_type get_nobj() const override final
     {
         try {
@@ -234,8 +235,7 @@ struct prob_inner<bp::object> final: prob_inner_base
         }
         return pygmo::callable(attr(m_value,"set_seed"));
     }
-#endif
-    bp::object m_value;
+    py::object m_value;
 };
 
 }

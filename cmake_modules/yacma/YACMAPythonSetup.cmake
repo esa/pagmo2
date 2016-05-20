@@ -74,5 +74,14 @@ macro(YACMA_PYTHON_MODULE name)
     endif()
 endmacro()
 
+# Look if NumPy is avaiable.
+execute_process(COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/yacma_numpy_includes_dir.py"
+    OUTPUT_VARIABLE YACMA_NUMPY_INCLUDES_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+if(YACMA_NUMPY_INCLUDES_DIR)
+    message(STATUS "NumPy includes dir: ${YACMA_NUMPY_INCLUDES_DIR}")
+else()
+    message(STATUS "NumPy headers were not found.")
+endif()
+
 # Mark as included.
 set(YACMAPythonSetupIncluded YES)
