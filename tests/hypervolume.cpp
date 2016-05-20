@@ -3,7 +3,7 @@
 #include <exception>
 #include <tuple>
 
-#include "../include/utils/hypervolume.hpp"
+#include "../include/detail/hypervolume_blob.hpp"
 #include "../include/population.hpp"
 #include "../include/problem.hpp"
 #include "../include/types.hpp"

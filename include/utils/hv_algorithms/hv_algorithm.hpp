@@ -33,6 +33,8 @@
 #include <string>
 
 #include "../../io.hpp"
+#include "../../exceptions.hpp"
+#include "../../population.hpp"
 #include "../../types.hpp"
 
 #if defined(__clang__) || defined(__GNUC__)
