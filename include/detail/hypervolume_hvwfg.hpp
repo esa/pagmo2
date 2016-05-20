@@ -110,7 +110,7 @@ private:
 	void limitset(const unsigned int begin_idx, const unsigned int p_idx, const unsigned int rec_level) const
 	{
 		double **points = m_frames[rec_level - 1];
-		unsigned int n_points = m_frames_size[rec_level - 1];
+		auto n_points = m_frames_size[rec_level - 1];
 
 		int no_points = 0;
 
@@ -191,7 +191,7 @@ private:
 	double compute_hv(const unsigned int rec_level) const
 	{
 		double **points = m_frames[rec_level - 1];
-		unsigned int n_points = m_frames_size[rec_level - 1];
+		auto n_points = m_frames_size[rec_level - 1];
 
 		// Simple inclusion-exclusion for one and two points
 		if (n_points == 1) {
@@ -265,11 +265,11 @@ private:
 	*/
 	bool cmp_points(double* a, double* b) const
 	{
-		for (int i = m_current_slice - 1; i >= 0; --i) {
-			if (a[i] > b[i]) {
+		for (auto i = m_current_slice; i > 0u; --i) {
+			if (a[i+1] > b[i+1]) {
 				return true;
 			}
-			else if (a[i] < b[i]) {
+			else if (a[i+1] < b[i+1]) {
 				return false;
 			}
 		}
@@ -291,7 +291,7 @@ private:
 		// Reserve the space beforehand for each level or recursion.
 		// WFG with slicing feature will not go recursively deeper than the dimension size.
 		m_frames = new double**[m_max_dim];
-		m_frames_size = new unsigned int[m_max_dim];
+		m_frames_size = new vector_double::size_type[m_max_dim];
 
 		// Copy the initial set into the frame at index 0.
 		double** fr = new double*[m_max_points];
@@ -335,13 +335,13 @@ private:
 	 */
 
 	// Current slice depth
-	mutable unsigned int m_current_slice;
+	mutable vector_double::size_type m_current_slice;
 
 	// Array of point sets for each recursive level.
 	mutable double*** m_frames;
 
 	// Maintains the number of points at given recursion level.
-	mutable unsigned int* m_frames_size;
+	mutable vector_double::size_type* m_frames_size;
 
 	// Keeps track of currently allocated number of frames.
 	mutable unsigned int m_n_frames;
@@ -350,10 +350,10 @@ private:
 	mutable double* m_refpoint;
 
 	// Size of the original front
-	mutable unsigned int m_max_points;
+	mutable vector_double::size_type m_max_points;
 
 	// Size of the dimension
-	mutable unsigned int m_max_dim;
+	mutable vector_double::size_type m_max_dim;
 	/**
 	 * End of 'compute' method variables section.
 	 */

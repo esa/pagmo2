@@ -123,7 +123,7 @@ public:
 
 		typedef std::multiset<std::pair<vector_double, int>, hycon3d_tree_cmp > tree_t;
 
-		unsigned int n = p.size();
+		auto n = p.size();
 		const double INF = std::numeric_limits<double>::max();
 
 		// Placeholder value for undefined lower z value.
@@ -338,8 +338,8 @@ inline std::vector<double> hv2d::contributions(std::vector<vector_double> &point
 */
 inline std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_double &r_point) const
 {
-    unsigned int fdim = r_point.size();
-    unsigned int n = m_points.size();
+    auto fdim = r_point.size();
+    auto n = m_points.size();
     if (fdim == 2) {
         return hv2d().clone();
     }

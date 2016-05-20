@@ -65,7 +65,7 @@ public:
 	*
 	* @return hypervolume
 	*/
-	double compute(double** points, unsigned int n_points, double* r_point) const
+	double compute(double** points, vector_double::size_type n_points, double* r_point) const
 	{
 		if (n_points == 0) {
 			return 0.0;
@@ -82,7 +82,7 @@ public:
 
 		// width of the sweeping line
 		double w = r_point[0] - points[0][0];
-		for (unsigned int idx = 0; idx < n_points - 1; ++idx) {
+		for (decltype(n_points) idx = 0; idx < n_points - 1; ++idx) {
 			hypervolume += (points[idx + 1][1] - points[idx][1]) * w;
 			w = std::max(w, r_point[0] - points[idx + 1][0]);
 		}

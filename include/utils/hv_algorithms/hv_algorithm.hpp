@@ -37,12 +37,6 @@
 #include "../../population.hpp"
 #include "../../types.hpp"
 
-#if defined(__clang__) || defined(__GNUC__)
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wshorten-64-to-32"
-    #pragma GCC diagnostic ignored "-Wsign-conversion"
-#endif
-
 namespace pagmo {
 
 	/// Base hypervolume algorithm class.
@@ -104,7 +98,7 @@ namespace pagmo {
 		*
 		* @return volume of hypercube defined by points a and b
 		*/
-		static double volume_between(const vector_double &a, const vector_double &b, unsigned int dim_bound = 0)
+		static double volume_between(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound = 0)
 		{
 			if (dim_bound == 0) {
 				dim_bound = a.size();
@@ -127,7 +121,7 @@ namespace pagmo {
 		*
 		* @return volume of hypercube defined by points a and b
 		*/
-		static double volume_between(double* a, double* b, unsigned int size)
+		static double volume_between(double* a, double* b, vector_double::size_type size)
 		{
 			double volume = 1.0;
 			while (size--) {
@@ -406,7 +400,7 @@ namespace pagmo {
 		* returns DOM_CMP_A_B_EQUAL if point 'a' IS EQUAL TO 'b'
 		* returns DOM_CMP_INCOMPARABLE otherwise
 		*/
-		static int dom_cmp(double* a, double* b, unsigned int size)
+		static int dom_cmp(double* a, double* b, vector_double::size_type size)
 		{
 			for (vector_double::size_type i = 0; i < size; ++i) {
 				if (a[i] > b[i]) {
@@ -439,7 +433,7 @@ namespace pagmo {
 		* returns DOM_CMP_A_B_EQUAL if point 'a' IS EQUAL TO 'b'
 		* returns DOM_CMP_INCOMPARABLE otherwise
 		*/
-		static int dom_cmp(const vector_double &a, const vector_double &b, unsigned int dim_bound)
+		static int dom_cmp(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound)
 		{
 			if (dim_bound == 0) {
 				dim_bound = a.size();
@@ -545,9 +539,5 @@ namespace pagmo {
 	};
 
 } // namespace pagmo
-
-#if defined(__clang__) || defined(__GNUC__)
-    #pragma GCC diagnostic pop
-#endif
 
 #endif
