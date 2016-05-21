@@ -22,6 +22,9 @@
 #include "../include/types.hpp"
 #include "numpy.hpp"
 
+// A throwing macro similar to pagmo_throw, only for Python. This will set the global
+// error string of Python to "msg", the exception type to "type", and then invoke the Boost
+// Python function to raise the Python exception.
 #define pygmo_throw(type,msg) \
 ::PyErr_SetString(type,msg); \
 bp::throw_error_already_set(); \
@@ -165,7 +168,7 @@ inline pagmo::vector_double to_vd(bp::object o)
         return a_to_vd((PyArrayObject *)(o.ptr()));
     }
     pygmo_throw(PyExc_TypeError,("cannot convert the type '" + str(type(o)) + "' to a "
-        "vector of doubles: only lists of objects convertible to doubles and NumPy arrays of doubles "
+        "vector of doubles: only lists of doubles and NumPy arrays of doubles "
         "are supported").c_str());
 }
 
