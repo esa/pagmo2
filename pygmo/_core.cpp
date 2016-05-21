@@ -16,21 +16,19 @@
 namespace bp = boost::python;
 using namespace pagmo;
 
+// This is necessary because the NumPy macro import_array() has different return values
+// depending on the Python version.
 #if PY_MAJOR_VERSION < 3
-
 static inline void wrap_import_array()
 {
     import_array();
 }
-
 #else
-
-static void *wrap_import_array()
+static inline void *wrap_import_array()
 {
     import_array();
     return nullptr;
 }
-
 #endif
 
 BOOST_PYTHON_MODULE(_core)
@@ -46,9 +44,8 @@ BOOST_PYTHON_MODULE(_core)
         bp::import("numpy.core.multiarray");
     } catch (...) {
         pygmo::builtin().attr("print")(u8"\033[91m====ERROR====\nThe NumPy module could not be imported. "
-            u8"Make sure that NumPy has been correctly installed.\n====ERROR====\033[0m");
-        ::PyErr_SetString(PyExc_ImportError,"");
-		bp::throw_error_already_set();
+            u8"Please make sure that NumPy has been correctly installed.\n====ERROR====\033[0m");
+        pygmo_throw(PyExc_ImportError,"");
     }
     wrap_import_array();
 

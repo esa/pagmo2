@@ -226,7 +226,7 @@ inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
     const auto size = boost::numeric_cast<pagmo::sparsity_pattern::size_type>(PyArray_SHAPE(o)[0]);
     // Error handler for nice Python error messages.
     auto err_handler = [](const auto &n) {
-        pygmo_throw(PyExc_OverflowError,("could not convert the sparsity index " + std::to_string(n) + " to the "
+        pygmo_throw(PyExc_OverflowError,("overflow in the conversion of the sparsity index " + std::to_string(n) + " to the "
             "appropriate unsigned integer type").c_str());
     };
     if (size) {
@@ -268,8 +268,8 @@ inline pagmo::sparsity_pattern to_sp(bp::object o)
         };
         // Iterate over the list, trying to extract first a generic tuple from each element and then a pair
         // of appropriate integral values from each tuple's elements.
+        bp::tuple tup;
         for (; begin != end; ++begin) {
-            bp::tuple tup;
             try {
                 tup = *begin;
             } catch (...) {
