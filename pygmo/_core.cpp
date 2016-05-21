@@ -2,6 +2,7 @@
 
 #include <boost/python/class.hpp>
 #include <boost/python/def.hpp>
+#include <boost/python/errors.hpp>
 #include <boost/python/import.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
@@ -32,17 +33,6 @@ static void *wrap_import_array()
 
 #endif
 
-// Simple vector-to-array conversion.
-static inline auto test_vd_to_a()
-{
-    return pygmo::vd_to_a({1,2,3,4,5,6,7,8,9,10});
-}
-
-static inline bool test_to_vd(bp::object o)
-{
-    return pygmo::to_vd(o) == vector_double{1,2,3,4,5,6,7,8,9,10};
-}
-
 BOOST_PYTHON_MODULE(_core)
 {
     // Init numpy.
@@ -55,8 +45,10 @@ BOOST_PYTHON_MODULE(_core)
     try {
         bp::import("numpy.core.multiarray");
     } catch (...) {
-        std::cout << "The NumPy module could not be imported. Make sure that NumPy has been correctly installed.";
-        throw;
+        pygmo::builtin().attr("print")(u8"\033[91m====ERROR====\nThe NumPy module could not be imported. "
+            u8"Make sure that NumPy has been correctly installed.\n====ERROR====\033[0m");
+        ::PyErr_SetString(PyExc_ImportError,"");
+		bp::throw_error_already_set();
     }
     wrap_import_array();
 
@@ -66,9 +58,7 @@ BOOST_PYTHON_MODULE(_core)
     bp::def("_str",&pygmo::str);
     bp::def("_callable",&pygmo::callable);
     bp::def("_deepcopy",&pygmo::deepcopy);
-    bp::def("_test_vd_to_a",&test_vd_to_a);
-    bp::def("_test_to_vd",&test_to_vd);
-    bp::def("_to_vd",&pygmo::to_vd);
+    bp::def("_to_sp",&pygmo::to_sp);
 
     // Problem class.
     bp::class_<problem> problem_class("problem",bp::init<const problem &>());
