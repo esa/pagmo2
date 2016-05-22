@@ -16,7 +16,7 @@
 #include "common_utils.hpp"
 #include "numpy.hpp"
 #include "object_serialization.hpp"
-#include "prob_inner_python.hpp"
+#include "problem.hpp"
 
 namespace bp = boost::python;
 using namespace pagmo;

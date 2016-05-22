@@ -1,5 +1,5 @@
-#ifndef PYGMO_PROB_INNER_PYTHON_HPP
-#define PYGMO_PROB_INNER_PYTHON_HPP
+#ifndef PYGMO_PROBLEM_HPP
+#define PYGMO_PROBLEM_HPP
 
 #include "python_includes.hpp"
 
