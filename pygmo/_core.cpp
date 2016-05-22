@@ -6,12 +6,17 @@
 #include <boost/python/import.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
-#include <iostream>
+#include <boost/python/operators.hpp>
+#include <boost/python/self.hpp>
+#include <sstream>
 
 #include "../include/problem.hpp"
+#include "../include/problems/null_problem.hpp"
+#include "../include/serialization.hpp"
 #include "common_utils.hpp"
 #include "numpy.hpp"
-//#include "prob_inner_python.hpp"
+#include "object_serialization.hpp"
+#include "prob_inner_python.hpp"
 
 namespace bp = boost::python;
 using namespace pagmo;
@@ -30,6 +35,41 @@ static inline void *wrap_import_array()
     return nullptr;
 }
 #endif
+
+// Test that the cereal serialization of BP objects works as expected.
+// The object returned by this function should be identical to the input
+// object.
+static inline bp::object test_object_serialization(const bp::object &o)
+{
+    std::ostringstream oss;
+    {
+    cereal::PortableBinaryOutputArchive oarchive(oss);
+    oarchive(o);
+    }
+    const std::string tmp = oss.str();
+    std::istringstream iss;
+    iss.str(tmp);
+    bp::object retval;
+    {
+    cereal::PortableBinaryInputArchive iarchive(iss);
+    iarchive(retval);
+    }
+    return retval;
+}
+
+// TODO move out
+struct null_problem_pickle_suite : bp::pickle_suite
+{
+    static bp::tuple getinitargs(const null_problem &)
+    {
+        return bp::make_tuple();
+    }
+};
+
+static inline bp::object fitness_wrapper(const problem &p, const bp::object &dv)
+{
+    return pygmo::vd_to_a(p.fitness(pygmo::to_vd(dv)));
+}
 
 BOOST_PYTHON_MODULE(_core)
 {
@@ -56,9 +96,16 @@ BOOST_PYTHON_MODULE(_core)
     bp::def("_callable",&pygmo::callable);
     bp::def("_deepcopy",&pygmo::deepcopy);
     bp::def("_to_sp",&pygmo::to_sp);
+    bp::def("_test_object_serialization",&test_object_serialization);
 
     // Problem class.
     bp::class_<problem> problem_class("problem",bp::init<const problem &>());
+    problem_class.def(bp::init<bp::object>())
+        .def(bp::init<const null_problem &>())
+        .def(repr(bp::self))
+        .def("fitness",&fitness_wrapper)
+        .def_pickle(pygmo::problem_pickle_suite());
 
-    //problem_class.def(bp::init<bp::object>());
+    bp::class_<null_problem> np_class("null_problem",bp::init<>());
+    np_class.def_pickle(null_problem_pickle_suite());
 }

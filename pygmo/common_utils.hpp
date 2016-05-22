@@ -26,8 +26,8 @@
 // error string of Python to "msg", the exception type to "type", and then invoke the Boost
 // Python function to raise the Python exception.
 #define pygmo_throw(type,msg) \
-::PyErr_SetString(type,msg); \
-bp::throw_error_already_set(); \
+PyErr_SetString(type,msg); \
+boost::python::throw_error_already_set(); \
 throw
 
 namespace pygmo
@@ -61,7 +61,7 @@ PYGMO_CPP_NPY(long long,NPY_LONGLONG)
 #undef PYGMO_CPP_NPY
 
 // Perform a deep copy of input object o.
-inline bp::object deepcopy(bp::object o)
+inline bp::object deepcopy(const bp::object &o)
 {
     return bp::import("copy").attr("deepcopy")(o);
 }
@@ -77,19 +77,19 @@ inline bp::object builtin()
 }
 
 // Get the type of an object.
-inline bp::object type(bp::object o)
+inline bp::object type(const bp::object &o)
 {
     return builtin().attr("type")(o);
 }
 
 // String representation of an object.
-inline std::string str(bp::object o)
+inline std::string str(const bp::object &o)
 {
     return bp::extract<std::string>(builtin().attr("str")(o));
 }
 
 // Check if type is callable.
-inline bool callable(bp::object o)
+inline bool callable(const bp::object &o)
 {
     if (!o) {
         return false;
@@ -116,7 +116,7 @@ inline bp::object vd_to_a(const pagmo::vector_double &v)
 }
 
 // isinstance wrapper.
-inline bool isinstance(bp::object o, bp::object t)
+inline bool isinstance(const bp::object &o, const bp::object &t)
 {
     return bp::extract<bool>(builtin().attr("isinstance")(o,t));
 }
@@ -157,7 +157,7 @@ inline pagmo::vector_double a_to_vd(PyArrayObject *o)
 }
 
 // Convert an arbitrary python object to a vector_double.
-inline pagmo::vector_double to_vd(bp::object o)
+inline pagmo::vector_double to_vd(const bp::object &o)
 {
     bp::object l = builtin().attr("list");
     bp::object a = bp::import("numpy").attr("ndarray");
@@ -165,7 +165,16 @@ inline pagmo::vector_double to_vd(bp::object o)
         bp::stl_input_iterator<double> begin(o), end;
         return pagmo::vector_double(begin,end);
     } else if (isinstance(o,a)) {
-        return a_to_vd((PyArrayObject *)(o.ptr()));
+        // NOTE: the idea here is that we want to be able to convert
+        // from a NumPy array of types other than double. This is useful
+        // because one can then create arrays of ints and have them converted
+        // on the fly (e.g., for the bounds). If the array is already a
+        // double-precision array, this function should not do any copy.
+        auto n = PyArray_FROM_OTF(o.ptr(),NPY_DOUBLE,NPY_ARRAY_IN_ARRAY);
+        if (!n) {
+            bp::throw_error_already_set();
+        }
+        return a_to_vd((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
     }
     pygmo_throw(PyExc_TypeError,("cannot convert the type '" + str(type(o)) + "' to a "
         "vector of doubles: only lists of doubles and NumPy arrays of doubles "
@@ -252,7 +261,7 @@ inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
 }
 
 // Try converting a python object to a sparsity pattern.
-inline pagmo::sparsity_pattern to_sp(bp::object o)
+inline pagmo::sparsity_pattern to_sp(const bp::object &o)
 {
     using size_type = pagmo::vector_double::size_type;
     bp::object l = builtin().attr("list");
@@ -315,6 +324,22 @@ inline pagmo::sparsity_pattern to_sp(bp::object o)
     pygmo_throw(PyExc_TypeError,("cannot convert the type '" + str(type(o)) + "' to a "
         "sparsity pattern: only lists of pairs of ints and NumPy arrays of ints "
         "are supported").c_str());
+}
+
+// Wrapper around the CPython function to create a bytes object from raw data.
+bp::object make_bytes(const char *ptr, Py_ssize_t len)
+{
+    PyObject *retval;
+    if (len) {
+        retval = PyBytes_FromStringAndSize(ptr,len);
+    } else {
+        retval = PyBytes_FromStringAndSize(nullptr,0);
+    }
+    if (!retval) {
+        pygmo_throw(PyExc_RuntimeError,"unable to create a bytes object: the 'PyBytes_FromStringAndSize()' "
+            "function returned NULL");
+    }
+    return bp::object(bp::handle<>(retval));
 }
 
 }
