@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <numeric>
 #include <string>
 
 #include "../exceptions.hpp"
@@ -46,7 +47,7 @@ namespace pagmo
      *
      * @note The reference point \f$z^*\f$ is often taken as the ideal point and as such
      * it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
-     * this behaviour so that whenever a new ideal point is found \f$z^*\f$ is adapted accordingly. 
+     * this behaviour so that whenever a new ideal point is found \f$z^*\f$ is adapted accordingly.
      *
      * @note The use pagmo::decompose discards gradients and hessians so that if the original user defined problem
      * implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
