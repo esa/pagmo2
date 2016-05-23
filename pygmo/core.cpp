@@ -120,7 +120,7 @@ BOOST_PYTHON_MODULE(core)
     bp::class_<problem> problem_class("problem",pygmo::problem_docstring,bp::no_init);
     problem_class.def(bp::init<bp::object>())
         .def(bp::init<const problem &>("Deep copy constructor."))
-        .def(bp::init<const translate &>("Constructor from the :class:`.translate` meta-problem."))
+        .def(bp::init<const translate &>("Constructor from the :class:`pygmo.core.translate` meta-problem."))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
         .def("fitness",&fitness_wrapper,"Fitness.",(bp::arg("dv")));
