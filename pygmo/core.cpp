@@ -83,7 +83,7 @@ static inline bp::object fitness_wrapper(const problem &p, const bp::object &dv)
     return pygmo::vd_to_a(p.fitness(pygmo::to_vd(dv)));
 }
 
-BOOST_PYTHON_MODULE(_core)
+BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
     bp::docstring_options doc_options;

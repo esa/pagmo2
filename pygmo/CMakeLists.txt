@@ -13,5 +13,5 @@ endif()
 
 include_directories("${YACMA_NUMPY_INCLUDES_DIR}")
 
-YACMA_PYTHON_MODULE(_core _core.cpp)
-target_link_libraries(_core ${MANDATORY_LIBRARIES} ${Boost_PYTHON_LIBRARY} ${PYTHON_LIBRARIES})
+YACMA_PYTHON_MODULE(core core.cpp)
+target_link_libraries(core ${MANDATORY_LIBRARIES} ${Boost_PYTHON_LIBRARY} ${PYTHON_LIBRARIES})
