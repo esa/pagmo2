@@ -10,6 +10,7 @@
 #include "../include/io.hpp"
 #include "../include/problems/decompose.hpp"
 #include "../include/problems/null_problem.hpp"
+#include "../include/problems/rosenbrock.hpp"
 #include "../include/problems/zdt.hpp"
 
 
@@ -18,7 +19,56 @@ using namespace pagmo;
 BOOST_AUTO_TEST_CASE(decompose_construction_test)
 {
     // First we check directly the two constructors
-    decompose p0{};
-    problem p{decompose(zdt{1u,5u}, {0.5,0.5}, {0., 0.})};
-    print(p);
+    problem p0{decompose{}};
+    problem p1{decompose{zdt{1u,2u}, {0.5, 0.5}, {0., 0.}, "weighted", false}};
+
+    auto p0_string = boost::lexical_cast<std::string>(p0);
+    auto p1_string = boost::lexical_cast<std::string>(p1);
+
+    // We check that the default constructor constructs a problem
+    // which has an identical representation to the problem
+    // built by the explicit constructor.
+    BOOST_CHECK(p0_string==p1_string);
+    // We check the throws
+    // single objective problem
+    BOOST_CHECK_THROW(decompose(rosenbrock{},{0.5, 0.5},{0., 0.}), std::invalid_argument);
+    // constrained problem
+    BOOST_CHECK_THROW(decompose(null_problem{}, {0.5, 0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
+    // random decomposition method
+    BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.5}, {0., 0.}, "my_method", false), std::invalid_argument);
+    // wrong length for the weights
+    BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.2, 0.3}, {0., 0.}, "weighted", false), std::invalid_argument);
+    // wrong length for the reference point
+    BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.5}, {1.}, "weighted", false), std::invalid_argument);
+    // weight sum != 1
+    BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.9, 0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
+    // weight contains negative component
+    BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {1.5, -0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(decompose_fitness_test)
+{
+    problem p{zdt{1u,2u}};
+    vector_double lambda{0.5, 0.5};
+    vector_double z{0., 0.};
+    problem pdw{decompose{zdt{1u,2u}, lambda, z, "weighted", false}};
+    problem pdtch{decompose{zdt{1u,2u}, lambda, z, "tchebycheff", false}};
+    problem pdbi{decompose{zdt{1u,2u}, lambda, z, "bi", false}};
+
+    vector_double point{1.,1.};
+    auto f = p.fitness(point);
+    auto fdw = pdw.fitness(point);
+    auto fdtch = pdtch.fitness(point);
+    auto fdbi = pdbi.fitness(point);
+
+    BOOST_CHECK_CLOSE(fdw[0], f[0] * lambda[0] + f[1] * lambda[1], 1e-8);
+    BOOST_CHECK_CLOSE(fdtch[0], std::max(lambda[0]*std::abs(f[0] - z[0]), lambda[1]*std::abs(f[1] - z[1])), 1e-8);
+    double lnorm = std::sqrt(lambda[0]*lambda[0] + lambda[1]*lambda[1]);
+    vector_double ilambda{lambda[0]/lnorm, lambda[1]/lnorm};
+    double d1 =(f[0] - z[0]) * ilambda[0] + (f[1] - z[1]) * ilambda[1];
+    double d20 = f[0] - (z[0] + d1 * ilambda[0]);
+    double d21 = f[1] - (z[1] + d1 * ilambda[1]);
+    d20*=d20; d21*=d21;
+    double d2 = std::sqrt(d20 + d21);
+    BOOST_CHECK_CLOSE(fdbi[0], d1 + 5.0 * d2, 1e-8);
 }

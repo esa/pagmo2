@@ -40,13 +40,13 @@ namespace pagmo
      *
      * - boundary interception method (with penalty constraint): \f$ f_d(\mathbf x) = d_1 + \theta d_2\f$
      *
-     * where \f$d_1 = (\mathbf z^* - \mathbf f) \cdot \hat {\mathbf i}_{\lambda}\f$,
-     * \f$d_2 = \mathbf f - (\mathbf z^* - d_1 \hat {\mathbf i}_{\lambda})\f$ and
+     * where \f$d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}\f$,
+     * \f$d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\f$ and
      * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$
      *
      * @note The reference point \f$z^*\f$ is often taken as the ideal point and as such
      * it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
-     * this behaviour so that whenever a new ideal point is found \f$z^*\f$ is adapted accordingly.
+     * this behaviour so that whenever a new ideal point is found \f$z^*\f$ is adapted accordingly. 
      *
      * @note The use pagmo::decompose discards gradients and hessians so that if the original user defined problem
      * implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
@@ -60,7 +60,7 @@ class decompose : public problem
 {
 public:
     // default Constructor, only for serialization
-    decompose () : problem(zdt(1u,2u)), m_weight(), m_z(), m_method(""), m_adapt_ideal(false)
+    decompose () : problem(zdt(1u,2u)), m_weight({0.5, 0.5}), m_z({0.,0.}), m_method("weighted"), m_adapt_ideal(false)
     {}
     /// Constructor from problem
     /**
@@ -143,12 +143,12 @@ public:
     {
         return false;
     }
-    /// A decomposed problem has a dense gradient_sparsity
+    /// Returns a dense gradient_sparsity for the decomposed problem
     sparsity_pattern gradient_sparsity() const
     {
         return detail::dense_gradient(1u,get_nx());
     }
-    /// A decomposed problem has a dense hessians_sparsity
+    /// Returns a dense hessians_sparsity for the decomposed problem
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
         return detail::dense_hessians(1u,get_nx());
@@ -158,7 +158,6 @@ public:
     {
         return static_cast<const problem*>(this)->get_name() + " [decomposed]";
     }
-
     /// Extra informations
     std::string get_extra_info() const
     {
@@ -214,7 +213,7 @@ private:
                 weight_norm += std::pow(m_weight[i],2);
             }
             weight_norm = std::sqrt(weight_norm);
-            d1 = std::abs(d1)/weight_norm;
+            d1 = d1 / weight_norm;
 
             double d2 = 0.0;
             for(decltype(f.size()) i = 0u; i < f.size(); ++i) {
