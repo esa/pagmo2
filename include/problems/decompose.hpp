@@ -80,8 +80,9 @@ public:
     explicit decompose(T &&p, const vector_double &weight, const vector_double &z, const std::string &method = "weighted", bool adapt_ideal = false) :
             problem(std::forward<T>(p)), m_weight(weight), m_z(z), m_method(method), m_adapt_ideal(adapt_ideal)
     {
+        auto original_fitness_dimension = static_cast<const problem*>(this)->get_nobj();
         // 0 - we check that the problem is multiobjective and unconstrained
-        if (get_nobj() < 2u) {
+        if (original_fitness_dimension < 2u) {
             pagmo_throw(std::invalid_argument, "Decomposition can only be applied to multi-objective problems, it seems you are trying to decompose a problem with " + std::to_string(get_nobj()) + " objectives");
         }
         if (get_nc() != 0u) {
@@ -92,10 +93,10 @@ public:
             pagmo_throw(std::invalid_argument, "Decomposition method requested is: " + method + " while only one of ['weighted', 'tchebycheff' or 'bi'] are allowed");
         }
         // 2 - we check the sizes of the input weight vector and of the reference point
-        if (weight.size() != get_nobj()) {
+        if (weight.size() != original_fitness_dimension) {
             pagmo_throw(std::invalid_argument, "Weight vector size must be equal to the number of objectives. The size of the weight vector is " + std::to_string(weight.size()) + " while the problem has " + std::to_string(get_nobj()) + " objectives");
         }
-        if (z.size() != get_nobj()) {
+        if (z.size() != original_fitness_dimension) {
             pagmo_throw(std::invalid_argument, "Reference point size must be equal to the number of objectives. The size of the reference point is " + std::to_string(z.size()) + " while the problem has " + std::to_string(get_nobj()) + " objectives");
         }
         // 3 - we check that the weight vector is normalized.
@@ -127,7 +128,31 @@ public:
         // we return the decomposed fitness
         return decompose_fitness(f);
     }
-
+    /// A decomposed problem has one objective
+    vector_double::size_type get_nobj() const
+    {
+        return 1u;
+    }
+    /// A decomposed problem does not have gradients (tchebicheff is not differentiable)
+    bool has_gradient() const
+    {
+        return false;
+    }
+    /// A decomposed problem does not have hessians (tchebicheff is not differentiable)
+    bool has_hessians() const
+    {
+        return false;
+    }
+    /// A decomposed problem has a dense gradient_sparsity
+    sparsity_pattern gradient_sparsity() const
+    {
+        return detail::dense_gradient(1u,get_nx());
+    }
+    /// A decomposed problem has a dense hessians_sparsity
+    std::vector<sparsity_pattern> hessians_sparsity() const
+    {
+        return detail::dense_hessians(1u,get_nx());
+    }
     /// Appends "[decomposed]" to the user-defined problem name
     std::string get_name() const
     {

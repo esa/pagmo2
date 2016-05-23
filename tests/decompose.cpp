@@ -19,5 +19,6 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
 {
     // First we check directly the two constructors
     decompose p0{};
-    decompose p(zdt{1u,5u}, {0.5,0.5}, {0., 0.});
+    problem p{decompose(zdt{1u,5u}, {0.5,0.5}, {0., 0.})};
+    print(p);
 }
