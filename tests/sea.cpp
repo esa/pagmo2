@@ -1,6 +1,7 @@
 #define BOOST_TEST_MODULE pagmo_null_problem_test
 #include <boost/test/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 #include <iostream>
 #include <string>
 
@@ -105,16 +106,14 @@ BOOST_AUTO_TEST_CASE(sea_serialization_test)
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<sea>()->get_log();
     BOOST_CHECK_EQUAL(before_text, after_text);
-    // BOOST_CHECK(before_log == after_log);
+    // BOOST_CHECK(before_log == after_log); // This fails because of floating point problems when using JSON and cereal
+    // so we implement a close check
     for (auto i = 0u; i < before_log.size(); ++i) {
-        print(std::get<0>(before_log[i]), '\t', std::get<1>(before_log[i]), '\t', std::get<2>(before_log[i]), '\t', std::get<3>(before_log[i]), '\t', std::get<4>(before_log[i]), '\n');
-    }
-    for (auto i = 0u; i < after_log.size(); ++i) {
-        print(std::get<0>(after_log[i]), '\t', std::get<1>(after_log[i]), '\t', std::get<2>(after_log[i]), '\t', std::get<3>(after_log[i]), '\t', std::get<4>(after_log[i]), '\n');
-    }
-    print(before_log == after_log, '\n'); // ??!!!
-    for (auto i = 0u; i < before_log.size(); ++i) {
-        print(std::get<0>(before_log[i])==std::get<0>(after_log[i]), '\t', std::get<1>(before_log[i])==std::get<1>(after_log[i]), '\t', std::get<2>(before_log[i])==std::get<2>(after_log[i]), '\t', std::get<3>(before_log[i])==std::get<3>(after_log[i]), '\t', std::get<4>(before_log[i])==std::get<4>(after_log[i]), '\n');
+        BOOST_CHECK_EQUAL(std::get<0>(before_log[i]), std::get<0>(after_log[i]));
+        BOOST_CHECK_EQUAL(std::get<1>(before_log[i]), std::get<1>(after_log[i]));
+        BOOST_CHECK_CLOSE(std::get<2>(before_log[i]), std::get<2>(after_log[i]), 1e-8);
+        BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
+        BOOST_CHECK_EQUAL(std::get<4>(before_log[i]), std::get<4>(after_log[i]));
     }
 
 }

@@ -77,6 +77,31 @@ inline void check_problem_bounds(const std::pair<vector_double,vector_double> &b
     }
 }
 
+
+// Two helper functions to compute sparsity patterns in the dense case.
+inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
+{
+    std::vector<sparsity_pattern> retval(f_dim);
+    for (auto &Hs: retval) {
+        for (decltype(dim) j = 0u; j<dim; ++j) {
+            for (decltype(dim) i = 0u; i<=j; ++i) {
+               Hs.push_back({j,i});
+            }
+        }
+    }
+    return retval;
+}
+inline sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim)
+{
+    sparsity_pattern retval;
+    for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
+        for (decltype(dim) i = 0u; i<dim; ++i) {
+           retval.push_back({j,i});
+        }
+    }
+    return retval;
+}
+
 struct prob_inner_base
 {
     virtual ~prob_inner_base() {}
@@ -472,29 +497,6 @@ class problem
         // const/reference qualifiers).
         template <typename T>
         using generic_ctor_enabler = std::enable_if_t<!std::is_same<problem,std::decay_t<T>>::value,int>;
-        // Two helper functions to compute sparsity patterns in the dense case.
-        static std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
-        {
-            std::vector<sparsity_pattern> retval(f_dim);
-            for (auto &Hs: retval) {
-                for (decltype(dim) j = 0u; j<dim; ++j) {
-                    for (decltype(dim) i = 0u; i<=j; ++i) {
-                       Hs.push_back({j,i});
-                    }
-                }
-            }
-            return retval;
-        }
-        static sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim)
-        {
-            sparsity_pattern retval;
-            for (decltype(f_dim) j = 0u; j<f_dim; ++j) {
-                for (decltype(dim) i = 0u; i<dim; ++i) {
-                   retval.push_back({j,i});
-                }
-            }
-            return retval;
-        }
     public:
         /// Constructor from a user problem of type \p T
         /**
@@ -798,7 +800,7 @@ class problem
                 check_gradient_sparsity(retval);
                 return retval;
             }
-            return dense_gradient(get_nf(),get_nx());
+            return detail::dense_gradient(get_nf(),get_nx());
         }
 
         /// Computes the hessians
@@ -875,7 +877,7 @@ class problem
                 check_hessians_sparsity(retval);
                 return retval;
             }
-            return dense_hessians(get_nf(),get_nx());
+            return detail::dense_hessians(get_nf(),get_nx());
         }
 
         /// Number of objectives
@@ -1060,12 +1062,10 @@ class problem
             os << "\tUpper bounds: ";
             stream(os, p.get_bounds().second, '\n');
             stream(os, "\n\tHas gradient: ", p.has_gradient(), '\n');
-            stream(os, "\tUser implemented gradient sparsity: ", p.m_has_gradient_sparsity, '\n');
             if (p.has_gradient()) {
                 stream(os, "\tExpected gradients: ", p.m_gs_dim, '\n');
             }
             stream(os, "\tHas hessians: ", p.has_hessians(), '\n');
-            stream(os, "\tUser implemented hessians sparsity: ", p.m_has_hessians_sparsity, '\n');
             if (p.has_hessians()) {
                 stream(os, "\tExpected hessian components: ", p.m_hs_dim, '\n');
             }
