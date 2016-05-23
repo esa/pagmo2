@@ -1,22 +1,31 @@
 #include "python_includes.hpp"
 
+#include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
+#include <boost/python/default_call_policies.hpp>
 #include <boost/python/def.hpp>
+#include <boost/python/docstring_options.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/import.hpp>
+#include <boost/python/make_constructor.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
 #include <boost/python/self.hpp>
+#include <boost/python/tuple.hpp>
+#include <boost/shared_ptr.hpp>
 #include <sstream>
 
 #include "../include/problem.hpp"
 #include "../include/problems/null_problem.hpp"
+#include "../include/problems/rosenbrock.hpp"
+#include "../include/problems/translate.hpp"
 #include "../include/serialization.hpp"
 #include "common_utils.hpp"
 #include "numpy.hpp"
 #include "object_serialization.hpp"
 #include "problem.hpp"
+#include "problem_exposition_suite.hpp"
 
 namespace bp = boost::python;
 using namespace pagmo;
@@ -57,7 +66,10 @@ static inline bp::object test_object_serialization(const bp::object &o)
     return retval;
 }
 
-// TODO move out
+// A pickle suite for pagmo::null_problem. The problem pickle suite
+// uses null_problem for the initialization of a problem instance,
+// and the initialization argument returned by getinitargs
+// must be serializable itself.
 struct null_problem_pickle_suite : bp::pickle_suite
 {
     static bp::tuple getinitargs(const null_problem &)
@@ -66,6 +78,7 @@ struct null_problem_pickle_suite : bp::pickle_suite
     }
 };
 
+// Wrapper for the fitness function.
 static inline bp::object fitness_wrapper(const problem &p, const bp::object &dv)
 {
     return pygmo::vd_to_a(p.fitness(pygmo::to_vd(dv)));
@@ -73,6 +86,11 @@ static inline bp::object fitness_wrapper(const problem &p, const bp::object &dv)
 
 BOOST_PYTHON_MODULE(_core)
 {
+    // Setup doc options
+    bp::docstring_options doc_options;
+    doc_options.enable_py_signatures();
+    doc_options.disable_cpp_signatures();
+
     // Init numpy.
     // NOTE: only the second import is strictly necessary. We run a first import from BP
     // because that is the easiest way to detect whether numpy is installed or not (rather
@@ -99,13 +117,29 @@ BOOST_PYTHON_MODULE(_core)
     bp::def("_test_object_serialization",&test_object_serialization);
 
     // Problem class.
-    bp::class_<problem> problem_class("problem",bp::init<const problem &>());
-    problem_class.def(bp::init<bp::object>())
-        .def(bp::init<const null_problem &>())
+    bp::class_<problem> problem_class("problem","The main problem class.",bp::no_init);
+    problem_class.def(bp::init<bp::object>("Constructor from a concrete Python problem."))
+        .def(bp::init<const problem &>("Deep copy constructor."))
+        .def(bp::init<const translate &>("Constructor from the translate C++ meta-problem."))
         .def(repr(bp::self))
-        .def("fitness",&fitness_wrapper)
-        .def_pickle(pygmo::problem_pickle_suite());
+        .def_pickle(pygmo::problem_pickle_suite())
+        .def("fitness",&fitness_wrapper,"Fitness.",(bp::arg("dv")));
 
-    bp::class_<null_problem> np_class("null_problem",bp::init<>());
-    np_class.def_pickle(null_problem_pickle_suite());
+    // Translate meta-problem.
+    bp::class_<translate,boost::shared_ptr<translate>> tp("translate","The translate meta-problem.",
+        bp::init<>("Default constructor."));
+    // Constructor from Python concrete problem and translation vector (allows to translate Python problems).
+    tp.def("__init__",bp::make_constructor(&pygmo::translate_init<bp::object>,boost::python::default_call_policies(),
+        (bp::arg("problem"),bp::arg("translation"))),"Constructor from concrete Python problem and translation vector.");
+    // Constructor of translate from translate and translation vector. This allows to apply the
+    // translation multiple times.
+    tp.def("__init__",bp::make_constructor(&pygmo::translate_init<translate>,boost::python::default_call_policies(),
+        (bp::arg("problem"),bp::arg("translation"))),"Constructor from the translate C++ meta-problem and translation vector.");
+
+    auto np = pygmo::expose_problem<null_problem>("null_problem","The null problem.",problem_class,tp);
+    // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
+    // serialization of the problem. Not necessary for any other problem type.
+    np.def_pickle(null_problem_pickle_suite());
+    auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock","The Rosenbrock problem.",problem_class,tp);
+    rb.def(bp::init<unsigned>("Constructor from dimension.",(bp::arg("dim"))));
 }
