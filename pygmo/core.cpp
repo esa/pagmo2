@@ -84,6 +84,13 @@ static inline bp::object fitness_wrapper(const problem &p, const bp::object &dv)
     return pygmo::vd_to_a(p.fitness(pygmo::to_vd(dv)));
 }
 
+// Wrapper for the bounds getter.
+static inline bp::tuple get_bounds_wrapper(const problem &p)
+{
+    auto retval = p.get_bounds();
+    return bp::make_tuple(pygmo::vd_to_a(retval.first),pygmo::vd_to_a(retval.second));
+}
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -123,7 +130,10 @@ BOOST_PYTHON_MODULE(core)
         .def(bp::init<const translate &>("Constructor from a :class:`pygmo.core.translate` problem *p*.",(bp::arg("p"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
-        .def("fitness",&fitness_wrapper,"Fitness.",(bp::arg("dv")));
+        .def("fitness",&fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness from the input "
+            "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
+        .def("get_bounds",&get_bounds_wrapper,"Get bounds.\n\nThis method will return the problem bounds as a pair "
+            "of arrays of doubles of equal length.");
 
     // Translate meta-problem.
     bp::class_<translate> tp("translate","The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:",bp::init<>());

@@ -92,8 +92,7 @@ struct prob_inner<bp::object> final: prob_inner_base
     {
         // First we will try to extract the bounds as a pair of objects.
         bp::tuple tup;
-        bp::object obj;
-        obj = m_value.attr("get_bounds")();
+        bp::object obj = m_value.attr("get_bounds")();
         try {
             tup = bp::extract<bp::tuple>(obj);
         } catch (...) {
