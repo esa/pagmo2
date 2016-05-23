@@ -7,7 +7,6 @@
 #include <boost/python/class.hpp>
 #include <boost/python/default_call_policies.hpp>
 #include <boost/python/make_constructor.hpp>
-#include <boost/shared_ptr.hpp>
 #include <string>
 
 #include "../include/problem.hpp"
@@ -19,15 +18,17 @@ namespace pygmo
 
 namespace bp = boost::python;
 
+// NOTE: it seems like returning a raw pointer is fine. See the examples here:
+// http://www.boost.org/doc/libs/1_61_0/libs/python/test/injected.cpp
 template <typename Prob>
-inline boost::shared_ptr<pagmo::translate> translate_init(const Prob &p, const bp::object &o)
+inline pagmo::translate *translate_init(const Prob &p, const bp::object &o)
 {
-    return boost::shared_ptr<pagmo::translate>(::new pagmo::translate(p,to_vd(o)));
+    return ::new pagmo::translate(p,to_vd(o));
 }
 
 template <typename Prob>
 inline bp::class_<Prob> expose_problem(const char *name, const char *descr, bp::class_<pagmo::problem> &problem_class,
-    bp::class_<pagmo::translate,boost::shared_ptr<pagmo::translate>> &tp_class)
+    bp::class_<pagmo::translate> &tp_class)
 {
     // We require all problems to be def-ctible at the bare minimum.
     bp::class_<Prob> c(name,descr,bp::init<>("Default constructor."));

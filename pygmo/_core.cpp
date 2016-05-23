@@ -13,7 +13,6 @@
 #include <boost/python/operators.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
-#include <boost/shared_ptr.hpp>
 #include <sstream>
 
 #include "../include/problem.hpp"
@@ -126,7 +125,7 @@ BOOST_PYTHON_MODULE(_core)
         .def("fitness",&fitness_wrapper,"Fitness.",(bp::arg("dv")));
 
     // Translate meta-problem.
-    bp::class_<translate,boost::shared_ptr<translate>> tp("translate","The translate meta-problem.",
+    bp::class_<translate> tp("translate","The translate meta-problem.",
         bp::init<>("Default constructor."));
     // Constructor from Python concrete problem and translation vector (allows to translate Python problems).
     tp.def("__init__",bp::make_constructor(&pygmo::translate_init<bp::object>,boost::python::default_call_policies(),
