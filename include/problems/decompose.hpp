@@ -134,12 +134,12 @@ public:
     {
         return 1u;
     }
-    /// A decomposed problem does not have gradients (tchebicheff is not differentiable)
+    /// A decomposed problem does not have gradients (Tchebicheff is not differentiable)
     bool has_gradient() const
     {
         return false;
     }
-    /// A decomposed problem does not have hessians (tchebicheff is not differentiable)
+    /// A decomposed problem does not have hessians (Tchebicheff is not differentiable)
     bool has_hessians() const
     {
         return false;
