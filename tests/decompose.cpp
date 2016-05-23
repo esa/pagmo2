@@ -44,6 +44,8 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.9, 0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
     // weight contains negative component
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {1.5, -0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
+
+    print(p1);
 }
 
 BOOST_AUTO_TEST_CASE(decompose_fitness_test)

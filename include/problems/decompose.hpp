@@ -135,15 +135,11 @@ public:
         return 1u;
     }
     /// A decomposed problem does not have gradients (Tchebicheff is not differentiable)
-    bool has_gradient() const
-    {
-        return false;
-    }
+    vector_double gradient(const vector_double &dv) const = delete;
+    bool has_gradient() = delete;
     /// A decomposed problem does not have hessians (Tchebicheff is not differentiable)
-    bool has_hessians() const
-    {
-        return false;
-    }
+    std::vector<vector_double> hessians(const vector_double &dv) const = delete;
+    bool has_hessians() = delete;
     /// Returns a dense gradient_sparsity for the decomposed problem
     sparsity_pattern gradient_sparsity() const
     {
