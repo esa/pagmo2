@@ -37,8 +37,11 @@ import sphinx_bootstrap_theme
 # ones.
 extensions = [
     'sphinx.ext.mathjax',
+    'sphinx.ext.autodoc',
     'breathe',
 ]
+
+autoclass_content = 'both'
 
 # BREATHE configuration paths
 #sys.path.append( "/home/me/docproj/ext/breathe/" )

@@ -15,3 +15,13 @@ include_directories("${YACMA_NUMPY_INCLUDES_DIR}")
 
 YACMA_PYTHON_MODULE(core core.cpp)
 target_link_libraries(core ${MANDATORY_LIBRARIES} ${Boost_PYTHON_LIBRARY} ${PYTHON_LIBRARIES})
+
+# Setup the installation path.
+set(PYGMO_INSTALL_PATH "${YACMA_PYTHON_MODULES_INSTALL_PATH}/pygmo")
+install(TARGETS core
+ RUNTIME DESTINATION ${PYGMO_INSTALL_PATH}
+ LIBRARY DESTINATION ${PYGMO_INSTALL_PATH}
+)
+
+# Add the global init file.
+install(FILES __init__.py DESTINATION ${PYGMO_INSTALL_PATH})

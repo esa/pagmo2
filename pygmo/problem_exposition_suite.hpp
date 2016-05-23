@@ -31,15 +31,23 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr, bp::
     bp::class_<pagmo::translate> &tp_class)
 {
     // We require all problems to be def-ctible at the bare minimum.
-    bp::class_<Prob> c(name,descr,bp::init<>("Default constructor."));
+    bp::class_<Prob> c(name,descr,bp::init<>());
 
     // Expose the problem constructor from Prob.
-    problem_class.def(bp::init<const Prob &>(("Constructor from the C++ problem '" + std::string(name) + "'.").c_str()));
+    problem_class.def(bp::init<const Prob &>(("Constructor from the :class:`pygmo.core." + std::string(name) + "` problem.").c_str()));
 
     // Expose translate's constructor from Prob and translation vector.
     tp_class.def("__init__",bp::make_constructor(&translate_init<Prob>,boost::python::default_call_policies(),
         (bp::arg("problem"),bp::arg("translation"))),
-        ("Constructor from the C++ problem '" + std::string(name) + "' and translation vector.").c_str());
+        ("Constructor from the :class:`pygmo.core." + std::string(name) + "` problem and a translation vector."
+        /*":param problem: foobar\n"
+        ":type problem: footar\n"
+        ":param translation: foobar\n"
+        ":type translation: footar\n\n").c_str()*/
+        /*"Kwargs:\n"
+        "   problem (:class:`." + std::string(name) + "`): The problem argument.\n\n"
+        "   translation (array of doubles): the translation vector\n\n"*/
+        ).c_str());
 
     return c;
 }

@@ -24,6 +24,7 @@
 #include "numpy.hpp"
 #include "object_serialization.hpp"
 #include "problem.hpp"
+#include "problem_docstring.hpp"
 #include "problem_exposition_suite.hpp"
 
 namespace bp = boost::python;
@@ -116,24 +117,24 @@ BOOST_PYTHON_MODULE(core)
     bp::def("_test_object_serialization",&test_object_serialization);
 
     // Problem class.
-    bp::class_<problem> problem_class("problem","The main problem class.",bp::no_init);
-    problem_class.def(bp::init<bp::object>("Constructor from a concrete Python problem."))
+    bp::class_<problem> problem_class("problem",pygmo::problem_docstring,bp::no_init);
+    problem_class.def(bp::init<bp::object>())
         .def(bp::init<const problem &>("Deep copy constructor."))
-        .def(bp::init<const translate &>("Constructor from the translate C++ meta-problem."))
+        .def(bp::init<const translate &>("Constructor from the :class:`.translate` meta-problem."))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
         .def("fitness",&fitness_wrapper,"Fitness.",(bp::arg("dv")));
 
     // Translate meta-problem.
-    bp::class_<translate> tp("translate","The translate meta-problem.",
-        bp::init<>("Default constructor."));
+    bp::class_<translate> tp("translate","The translate meta-problem.\n\nBlah blah blah blah.",bp::init<>());
     // Constructor from Python concrete problem and translation vector (allows to translate Python problems).
     tp.def("__init__",bp::make_constructor(&pygmo::translate_init<bp::object>,boost::python::default_call_policies(),
-        (bp::arg("problem"),bp::arg("translation"))),"Constructor from concrete Python problem and translation vector.");
+        (bp::arg("problem"),bp::arg("translation"))),"Constructor from concrete Python problem and a translation vector.");
     // Constructor of translate from translate and translation vector. This allows to apply the
     // translation multiple times.
     tp.def("__init__",bp::make_constructor(&pygmo::translate_init<translate>,boost::python::default_call_policies(),
-        (bp::arg("problem"),bp::arg("translation"))),"Constructor from the translate C++ meta-problem and translation vector.");
+        (bp::arg("problem"),bp::arg("translation"))),"Constructor from the :class:`.translate` meta-problem and a translation vector.\n\n"
+        "This constructor allows to chain multiple problem translations.");
 
     auto np = pygmo::expose_problem<null_problem>("null_problem","The null problem.",problem_class,tp);
     // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
