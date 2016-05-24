@@ -5,7 +5,6 @@
 #include <random>
 #include <tuple>
 
-#include "../algorithm.hpp"
 #include "../io.hpp"
 #include "../exceptions.hpp"
 #include "../population.hpp"
