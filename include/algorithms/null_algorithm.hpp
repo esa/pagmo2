@@ -1,7 +1,6 @@
 #ifndef PAGMO_ALGORITHMS_NULL_HPP
 #define PAGMO_ALGORITHMS_NULL_HPP
 
-#include "../algorithm.hpp"
 #include "../detail/population_fwd.hpp"
 
 namespace pagmo
@@ -26,7 +25,7 @@ class null_algorithm
 
         /// Problem name
         std::string get_name() const
-        {   
+        {
             return "Null algorithm";
         }
 

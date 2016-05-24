@@ -196,12 +196,12 @@ class sea
         {
             m_verbosity = level;
         };
-        /// Get algorithm seed
+        /// Gets the seed
         unsigned int get_seed() const
         {
             return m_seed;
         }
-        /// Get algorithm verbosity level
+    /// Gets the verbosity level
         unsigned int get_verbosity() const
         {
             return m_verbosity;
@@ -216,7 +216,6 @@ class sea
         {
             return "(N+1)-EA Simple Evolutionary Algorithm";
         }
-
         /// Extra informations
         std::string get_extra_info() const
         {
@@ -237,7 +236,7 @@ class sea
         template <typename Archive>
         void serialize(Archive &ar)
         {
-            ar(m_gen,m_e,m_seed,m_verbosity,m_log); // should we also serialize m_log here?
+            ar(m_gen,m_e,m_seed,m_verbosity,m_log);
         }
     private:
         unsigned int                                     m_gen;
