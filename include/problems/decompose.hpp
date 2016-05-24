@@ -66,8 +66,8 @@ public:
     {}
     /// Constructor from problem
     /**
-     *  Constructs a pagmo::problem decomposing a given input problem. The type T can be any type that
-     *  can be used to construct a problem object.
+     * Wraps a user-defined problem so that its fitness will be decomposed using one of three decomposition methods.
+     * pagmo::translate objects can be used as user-defined problems in the construction of a pagmo::problem.
      *
      * @tparam T Any type from which pagmo::problem is constructable
      * @param[in] p The input problem.

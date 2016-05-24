@@ -26,8 +26,8 @@ public:
 
     /// Constructor from user-defined problem and translation vector
     /**
-     * Constructs a pagmo::problem translating a pagmo::problem
-     * by a translation vector.
+     * Wraps a user-defined problem so that its fitness , bounds, .... etc. will be shifted by a translation vector.
+     * pagmo::translate objects can be used as user-defined problems in the construction of a pagmo::problem.
      *
      * @tparam T Any type from which pagmo::problem is constructable
      * @param[in] p The user defined problem.
@@ -113,8 +113,8 @@ private:
     unsigned long long get_fevals() const = delete;
     unsigned long long get_gevals() const = delete;
     unsigned long long get_hevals() const = delete;
-    //vector_double::size_type get_gs_dim() const = delete;
-    //std::vector<vector_double::size_type> get_hs_dim() const = delete;
+    vector_double::size_type get_gs_dim() const = delete;
+    std::vector<vector_double::size_type> get_hs_dim() const = delete;
     bool is_stochastic() const = delete;
     template <typename Archive>
     void save(Archive &) const = delete;
