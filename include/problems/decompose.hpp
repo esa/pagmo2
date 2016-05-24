@@ -92,10 +92,10 @@ public:
         auto original_fitness_dimension = static_cast<const problem*>(this)->get_nobj();
         // 0 - we check that the problem is multiobjective and unconstrained
         if (original_fitness_dimension < 2u) {
-            pagmo_throw(std::invalid_argument, "Decomposition can only be applied to multi-objective problems, it seems you are trying to decompose a problem with " + std::to_string(get_nobj()) + " objectives");
+            pagmo_throw(std::invalid_argument, "Decomposition can only be applied to multi-objective problems, it seems you are trying to decompose a problem with " + std::to_string(original_fitness_dimension) + " objectives");
         }
-        if (get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Decomposition can only be applied to unconstrained problems, it seems you are trying to decompose a problem with " + std::to_string(get_nc()) + " constraints");
+        if (static_cast<const problem*>(this)->get_nc() != 0u) {
+            pagmo_throw(std::invalid_argument, "Decomposition can only be applied to unconstrained problems, it seems you are trying to decompose a problem with " + std::to_string(static_cast<const problem*>(this)->get_nc()) + " constraints");
         }
         // 1 - we check that the decomposition method is one of "weighted", "tchebycheff" or "bi"
         if (method != "weighted" && method != "tchebycheff" && method != "bi") {
@@ -103,7 +103,7 @@ public:
         }
         // 2 - we check the sizes of the input weight vector and of the reference point and forbids inf and nan
         if (weight.size() != original_fitness_dimension) {
-            pagmo_throw(std::invalid_argument, "Weight vector size must be equal to the number of objectives. The size of the weight vector is " + std::to_string(weight.size()) + " while the problem has " + std::to_string(get_nobj()) + " objectives");
+            pagmo_throw(std::invalid_argument, "Weight vector size must be equal to the number of objectives. The size of the weight vector is " + std::to_string(weight.size()) + " while the problem has " + std::to_string(original_fitness_dimension) + " objectives");
         }
         for (auto item : weight)
         {
@@ -112,7 +112,7 @@ public:
             }
         }
         if (z.size() != original_fitness_dimension) {
-            pagmo_throw(std::invalid_argument, "Reference point size must be equal to the number of objectives. The size of the reference point is " + std::to_string(z.size()) + " while the problem has " + std::to_string(get_nobj()) + " objectives");
+            pagmo_throw(std::invalid_argument, "Reference point size must be equal to the number of objectives. The size of the reference point is " + std::to_string(z.size()) + " while the problem has " + std::to_string(original_fitness_dimension) + " objectives");
         }
         for (auto item : z)
         {
@@ -159,12 +159,12 @@ public:
     /// Returns a dense gradient_sparsity for the decomposed problem
     sparsity_pattern gradient_sparsity() const
     {
-        return detail::dense_gradient(1u,get_nx());
+        return detail::dense_gradient(1u, static_cast<const problem*>(this)->get_nx());
     }
     /// Returns a dense hessians_sparsity for the decomposed problem
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
-        return detail::dense_hessians(1u,get_nx());
+        return detail::dense_hessians(1u, static_cast<const problem*>(this)->get_nx());
     }
     /// Gets the current reference point (may be different from the one the object was constructed with)
     vector_double get_z() const
@@ -197,15 +197,27 @@ public:
     }
 
 private:
-    // Delete the inherited serialization functions from problem, so there is no ambiguity
-    // over which serialization function to be used by cereal (the serialize() method
-    // defined above will be the only serialization function available).
+    // Delete all that we do not want to inherit from problem
+    // A - Common to all meta
+    template <typename T>
+    const T *extract() const = delete;
+    template <typename T>
+    bool is() const = delete;
+    vector_double::size_type get_nx() const = delete;
+    vector_double::size_type get_nf() const = delete;
+    vector_double::size_type get_nc() const = delete;
+    unsigned long long get_fevals() const = delete;
+    unsigned long long get_gevals() const = delete;
+    unsigned long long get_hevals() const = delete;
+    vector_double::size_type get_gs_dim() const = delete;
+    std::vector<vector_double::size_type> get_hs_dim() const = delete;
+    bool is_stochastic() const = delete;
     template <typename Archive>
     void save(Archive &) const = delete;
-
     template <typename Archive>
     void load(Archive &) = delete;
 
+    // B - Specific to the decompose
     // A decomposed problem does not have gradients (Tchebycheff is not differentiable)
     vector_double gradient(const vector_double &dv) const = delete;
     // delting has_gradient allow the automatic detection of gradients here, which will be thus be false

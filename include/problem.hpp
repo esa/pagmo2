@@ -1042,7 +1042,11 @@ class problem
 
         /// Streaming operator
         /**
-         * @return An std::ostream containing a human-readable
+         *
+         * @param os input <tt>std::ostream</tt>
+         * @param p pagmo::problem object to be streamed
+         *
+         * @return An <tt>std::ostream</tt> containing a human-readable
          * representation of the problem, including the result from
          * the user-defined method extra_info if implemented.
          */

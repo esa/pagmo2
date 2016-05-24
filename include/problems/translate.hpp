@@ -39,8 +39,8 @@ public:
      */
     template <typename T>
     explicit translate(T &&p, const vector_double &translation) : problem(std::forward<T>(p)), m_translation(translation) {
-        if (translation.size() != get_nx()) {
-            pagmo_throw(std::invalid_argument,"Length of shift vector is: " + std::to_string(translation.size()) + " while the problem dimension is: " + std::to_string(get_nx()));
+        if (translation.size() != static_cast<const problem*>(this)->get_nx()) {
+            pagmo_throw(std::invalid_argument,"Length of shift vector is: " + std::to_string(translation.size()) + " while the problem dimension is: " + std::to_string(static_cast<const problem*>(this)->get_nx()));
         }
     }
 
@@ -101,12 +101,23 @@ public:
     }
 
 private:
-    // Delete the inherited serialization functions from problem, so there is no ambiguity
-    // over which serialization function to be used by cereal (the serialize() method
-    // defined above will be the only serialization function available).
+    // Delete all that we do not want to inherit from problem
+    // A - Common to all meta
+    template <typename T>
+    const T *extract() const = delete;
+    template <typename T>
+    bool is() const = delete;
+    vector_double::size_type get_nx() const = delete;
+    vector_double::size_type get_nf() const = delete;
+    vector_double::size_type get_nc() const = delete;
+    unsigned long long get_fevals() const = delete;
+    unsigned long long get_gevals() const = delete;
+    unsigned long long get_hevals() const = delete;
+    //vector_double::size_type get_gs_dim() const = delete;
+    //std::vector<vector_double::size_type> get_hs_dim() const = delete;
+    bool is_stochastic() const = delete;
     template <typename Archive>
     void save(Archive &) const = delete;
-
     template <typename Archive>
     void load(Archive &) = delete;
 
