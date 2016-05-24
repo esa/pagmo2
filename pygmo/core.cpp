@@ -117,23 +117,23 @@ BOOST_PYTHON_MODULE(core)
     bp::def("_test_object_serialization",&test_object_serialization);
 
     // Problem class.
-    bp::class_<problem> problem_class("problem",pygmo::problem_docstring,bp::no_init);
-    problem_class.def(bp::init<bp::object>())
-        .def(bp::init<const problem &>("Deep copy constructor."))
-        .def(bp::init<const translate &>("Constructor from the :class:`pygmo.core.translate` meta-problem."))
+    bp::class_<problem> problem_class("problem",pygmo::problem_docstring().c_str(),bp::no_init);
+    problem_class.def(bp::init<const bp::object &>((bp::arg("p"))))
+        .def(bp::init<const problem &>("Deep copy constructor from a :class:`pygmo.core.problem` *p*.",(bp::arg("p"))))
+        .def(bp::init<const translate &>("Constructor from a :class:`pygmo.core.translate` problem *p*.",(bp::arg("p"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
         .def("fitness",&fitness_wrapper,"Fitness.",(bp::arg("dv")));
 
     // Translate meta-problem.
-    bp::class_<translate> tp("translate","The translate meta-problem.\n\nBlah blah blah blah.",bp::init<>());
+    bp::class_<translate> tp("translate","The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:",bp::init<>());
     // Constructor from Python concrete problem and translation vector (allows to translate Python problems).
     tp.def("__init__",bp::make_constructor(&pygmo::translate_init<bp::object>,boost::python::default_call_policies(),
-        (bp::arg("problem"),bp::arg("translation"))),"Constructor from concrete Python problem and a translation vector.");
+        (bp::arg("p"),bp::arg("t"))),"Constructor from a concrete Python problem *p* and a translation vector *t*.");
     // Constructor of translate from translate and translation vector. This allows to apply the
     // translation multiple times.
     tp.def("__init__",bp::make_constructor(&pygmo::translate_init<translate>,boost::python::default_call_policies(),
-        (bp::arg("problem"),bp::arg("translation"))),"Constructor from the :class:`.translate` meta-problem and a translation vector.\n\n"
+        (bp::arg("p"),bp::arg("t"))),"Constructor from a :class:`pygmo.core.translate` problem *p* and a translation vector *t*.\n\n"
         "This constructor allows to chain multiple problem translations.");
 
     auto np = pygmo::expose_problem<null_problem>("null_problem","The null problem.",problem_class,tp);
@@ -141,5 +141,5 @@ BOOST_PYTHON_MODULE(core)
     // serialization of the problem. Not necessary for any other problem type.
     np.def_pickle(null_problem_pickle_suite());
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock","The Rosenbrock problem.",problem_class,tp);
-    rb.def(bp::init<unsigned>("Constructor from dimension.",(bp::arg("dim"))));
+    rb.def(bp::init<unsigned>("Constructor from dimension *dim*.",(bp::arg("dim"))));
 }

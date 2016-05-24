@@ -41,6 +41,7 @@ problem
   problems/hock_schittkowsky_71
   problems/inventory
   problems/translate
+  problems/decompose
 
 Utilities
 ^^^^^^^^^
