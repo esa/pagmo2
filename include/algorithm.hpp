@@ -506,6 +506,10 @@ class algorithm
 
         /// Streaming operator
         /**
+         *
+         * @param os input <tt>std::ostream</tt>
+         * @param a pagmo::problem object to be streamed
+         *
          * @return An std::ostream containing a human-readable
          * representation of the algorithm, including the result from
          * the user-defined method extra_info if implemented.

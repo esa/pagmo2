@@ -196,6 +196,9 @@ public:
      * to measure "a distance" of any point from the pareto front of any ZDT
      * problem analytically without the need to precompute the front.
      *
+     * @param x input decision vector
+     * @return the p_distance
+     *
      * @see Märtens, Marcus, and Dario Izzo. "The asynchronous island model
      * and NSGA-II: study of a new migration operator and its performance."
      * Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013.

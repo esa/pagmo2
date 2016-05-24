@@ -3,6 +3,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <limits>
 #include <stdexcept>
 #include <string>
 
@@ -29,7 +30,10 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     // which has an identical representation to the problem
     // built by the explicit constructor.
     BOOST_CHECK(p0_string==p1_string);
+
     // We check the throws
+    auto inf = std::numeric_limits<double>::infinity();
+    auto nan = std::numeric_limits<double>::quiet_NaN();
     // single objective problem
     BOOST_CHECK_THROW(decompose(rosenbrock{},{0.5, 0.5},{0., 0.}), std::invalid_argument);
     // constrained problem
@@ -38,14 +42,26 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.5}, {0., 0.}, "my_method", false), std::invalid_argument);
     // wrong length for the weights
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.2, 0.3}, {0., 0.}, "weighted", false), std::invalid_argument);
+    BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, inf}, {0., 0.}, "weighted", false), std::invalid_argument);
     // wrong length for the reference point
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.5}, {1.}, "weighted", false), std::invalid_argument);
+    BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.5}, {0.,nan}, "weighted", false), std::invalid_argument);
     // weight sum != 1
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.9, 0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
     // weight contains negative component
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {1.5, -0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
 
     print(p1);
+}
+
+BOOST_AUTO_TEST_CASE(decompose_integration_into_problem_test)
+{
+    problem p{decompose{zdt{1u,2u}, {0.5, 0.5}, {0., 0.}, "weighted", false}};
+    BOOST_CHECK(p.has_gradient() == false);
+    BOOST_CHECK(p.has_hessians() == false);
+    BOOST_CHECK(p.get_nobj() == 1u);
+    BOOST_CHECK_THROW(p.gradient({1,2}), std::logic_error);
+    BOOST_CHECK_THROW(p.hessians({1,2}), std::logic_error);
 }
 
 BOOST_AUTO_TEST_CASE(decompose_fitness_test)
@@ -73,4 +89,62 @@ BOOST_AUTO_TEST_CASE(decompose_fitness_test)
     d20*=d20; d21*=d21;
     double d2 = std::sqrt(d20 + d21);
     BOOST_CHECK_CLOSE(fdbi[0], d1 + 5.0 * d2, 1e-8);
+}
+
+BOOST_AUTO_TEST_CASE(decompose_ideal_point_adaptation_test)
+{
+    // no adaptation
+    {
+    problem p{decompose{zdt{1u,2u}, {0.5,0.5}, {2.,2.}, "weighted", false}};
+    BOOST_CHECK(p.extract<decompose>()->get_z() == vector_double({2.,2.}) );
+    p.fitness({1.,1.});
+    BOOST_CHECK(p.extract<decompose>()->get_z() == vector_double({2.,2.}) );
+    }
+
+    // adaptation at work
+    {
+    problem p{decompose{zdt{1u,2u}, {0.5,0.5}, {2.,2.}, "weighted", true}};
+    BOOST_CHECK(p.extract<decompose>()->get_z() == vector_double({2.,2.}) );
+    p.fitness({1.,1.});
+    BOOST_CHECK(p.extract<decompose>()->get_z() == vector_double({1.,2.}) );
+    p.fitness({0.,0.});
+    BOOST_CHECK(p.extract<decompose>()->get_z() == vector_double({0.,1.}) );
+    }
+}
+
+BOOST_AUTO_TEST_CASE(decompose_has_dense_sparsities_test)
+{
+    problem p{decompose{zdt{1u,2u}, {0.5,0.5}, {2.,2.}, "weighted", false}};
+    BOOST_CHECK(p.gradient_sparsity() == detail::dense_gradient(1u, 2u));
+    BOOST_CHECK(p.hessians_sparsity() == detail::dense_hessians(1u, 2u));
+}
+
+BOOST_AUTO_TEST_CASE(decompose_name_and_extra_info_test)
+{
+    decompose p{zdt{1u,2u}, {0.5,0.5}, {2.,2.}, "weighted", false};
+    BOOST_CHECK(p.get_name().find("[decomposed]") != std::string::npos);
+    BOOST_CHECK(p.get_extra_info().find("Ideal point adaptation") != std::string::npos);
+}
+
+BOOST_AUTO_TEST_CASE(decompose_serialization_test)
+{
+    problem p{decompose{zdt{1u,2u}, {0.5,0.5}, {2.,2.}, "weighted", false}};
+    // Call objfun to increase the internal counters.
+    p.fitness({1.,1.});
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(p);
+    // Now serialize, deserialize and compare the result.
+    {
+    cereal::JSONOutputArchive oarchive(ss);
+    oarchive(p);
+    }
+    // Change the content of p before deserializing.
+    p = problem{null_problem{}};
+    {
+    cereal::JSONInputArchive iarchive(ss);
+    iarchive(p);
+    }
+    auto after = boost::lexical_cast<std::string>(p);
+    BOOST_CHECK_EQUAL(before, after);
 }
