@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <limits>
 #include <numeric>
 #include <string>
 
@@ -100,14 +101,26 @@ public:
         if (method != "weighted" && method != "tchebycheff" && method != "bi") {
             pagmo_throw(std::invalid_argument, "Decomposition method requested is: " + method + " while only one of ['weighted', 'tchebycheff' or 'bi'] are allowed");
         }
-        // 2 - we check the sizes of the input weight vector and of the reference point
+        // 2 - we check the sizes of the input weight vector and of the reference point and forbids inf and nan
         if (weight.size() != original_fitness_dimension) {
             pagmo_throw(std::invalid_argument, "Weight vector size must be equal to the number of objectives. The size of the weight vector is " + std::to_string(weight.size()) + " while the problem has " + std::to_string(get_nobj()) + " objectives");
+        }
+        for (auto item : weight)
+        {
+            if (!std::isfinite(item)) {
+                pagmo_throw(std::invalid_argument, "Weight contains non finite numbers");
+            }
         }
         if (z.size() != original_fitness_dimension) {
             pagmo_throw(std::invalid_argument, "Reference point size must be equal to the number of objectives. The size of the reference point is " + std::to_string(z.size()) + " while the problem has " + std::to_string(get_nobj()) + " objectives");
         }
-        for (auto i)
+        for (auto item : z)
+        {
+            if (!std::isfinite(item)) {
+                pagmo_throw(std::invalid_argument, "Reference point contains non finite numbers");
+            }
+        }
+
         // 3 - we check that the weight vector is normalized.
         auto sum = std::accumulate(weight.begin(), weight.end(), 0.);
         if (std::abs(sum-1.0) > 1E-8) {

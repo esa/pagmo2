@@ -3,6 +3,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <limits>
 #include <stdexcept>
 #include <string>
 
@@ -29,7 +30,10 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     // which has an identical representation to the problem
     // built by the explicit constructor.
     BOOST_CHECK(p0_string==p1_string);
+
     // We check the throws
+    auto inf = std::numeric_limits<double>::infinity();
+    auto nan = std::numeric_limits<double>::quiet_NaN();
     // single objective problem
     BOOST_CHECK_THROW(decompose(rosenbrock{},{0.5, 0.5},{0., 0.}), std::invalid_argument);
     // constrained problem
@@ -38,8 +42,10 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.5}, {0., 0.}, "my_method", false), std::invalid_argument);
     // wrong length for the weights
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.2, 0.3}, {0., 0.}, "weighted", false), std::invalid_argument);
+    BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, inf}, {0., 0.}, "weighted", false), std::invalid_argument);
     // wrong length for the reference point
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.5}, {1.}, "weighted", false), std::invalid_argument);
+    BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.5}, {0.,nan}, "weighted", false), std::invalid_argument);
     // weight sum != 1
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.9, 0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
     // weight contains negative component
