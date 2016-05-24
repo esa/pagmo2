@@ -49,7 +49,7 @@ namespace pagmo
      * it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
      * this behaviour so that whenever a new ideal point is found \f$z^*\f$ is adapted accordingly.
      *
-     * @note The use pagmo::decompose discards gradients and hessians so that if the original user defined problem
+     * @note The use of pagmo::decompose discards gradients and hessians so that if the original user defined problem
      * implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
      * the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
      * derivative-free optimization.
@@ -65,8 +65,8 @@ public:
     {}
     /// Constructor from problem
     /**
-     * Constructs a pagmo::problem decomposing a given input problem that can either be
-     * a pagmo::problem or any object a pagmo::problem can be constructed from (i.e. a user-defined problem)
+     *  Constructs a pagmo::problem decomposing a given input problem. The type T can be any type that
+     *  can be used to construct a problem object.
      *
      * @tparam T Any type from which pagmo::problem is constructable
      * @param[in] p The input problem.
@@ -75,7 +75,14 @@ public:
      * @param[in] z the reference point \f$\mathbf z^*\f$
      * @param[in] adapt_ideal when true the reference point is adapted at each fitness evaluation to be the ideal point
      *
-     * @throws std::invalid_argument
+     * @throws std::invalid_argument if the problem of type \p T is single objective
+     * @throws std::invalid_argument if the problem of type \p T is constrained
+     * @throws std::invalid_argument if \p method is not one of ["weighted", "tchebycheff" or "bi"]
+     * @throws std::invalid_argument if \p weight is not of size \f$n\f$
+     * @throws std::invalid_argument if \p z is not of size \f$n\f$
+     * @throws std::invalid_argument if \p weight is not such that \f$\lambda_i > 0, \forall i=1..n\f$
+     * @throws std::invalid_argument if \p weight is not such that \f$\sum_i \lambda_i = 1\f$
+     *
      */
     template <typename T>
     explicit decompose(T &&p, const vector_double &weight, const vector_double &z, const std::string &method = "weighted", bool adapt_ideal = false) :
