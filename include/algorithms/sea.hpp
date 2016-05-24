@@ -3,6 +3,7 @@
 
 #include <iomanip>
 #include <random>
+#include <string>
 #include <tuple>
 
 #include "../io.hpp"
