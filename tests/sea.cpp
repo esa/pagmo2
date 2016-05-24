@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-
+#include "../include/algorithm.hpp"
 #include "../include/algorithms/sea.hpp"
 #include "../include/algorithms/null_algorithm.hpp"
 #include "../include/io.hpp"
