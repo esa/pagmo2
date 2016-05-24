@@ -160,6 +160,14 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
 }
 
 /// Sorts a population in a constrained optimization case (from a scalar tolerance)
+/**
+ *
+ * @param[in] input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
+ * @param[in] neq number of equality constraints
+ * @param[in] tol scalar tolerance to be accouted for in the constraints
+ *
+ * @return an <tt>std::vector</tt> of indexes containing the sorted population
+ */
 std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, double tol = 0.)
 {
     auto N = input_f.size();

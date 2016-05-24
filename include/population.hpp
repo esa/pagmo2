@@ -219,6 +219,8 @@ class population
         /// Index of best individual (accounting for a scalar tolerance)
         /**
          * @param[in] tol scalar tolerance to be considered for each constraint
+         *
+         * @return index of the best individual
          */
         vector_double::size_type best_idx(double tol = 0.) const
         {
@@ -265,6 +267,8 @@ class population
         /// Index of worst individual (accounting for a scalar tolerance)
         /**
          * @param[in] tol scalar tolerance to be considered for each constraint
+         * 
+         * @return index of the best individual
          */
         vector_double::size_type worst_idx(double tol = 0.) const
         {
