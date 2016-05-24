@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <limits>
 #include <numeric>
 #include <string>
 
@@ -100,22 +101,35 @@ public:
         if (method != "weighted" && method != "tchebycheff" && method != "bi") {
             pagmo_throw(std::invalid_argument, "Decomposition method requested is: " + method + " while only one of ['weighted', 'tchebycheff' or 'bi'] are allowed");
         }
-        // 2 - we check the sizes of the input weight vector and of the reference point
+        // 2 - we check the sizes of the input weight vector and of the reference point and forbids inf and nan
         if (weight.size() != original_fitness_dimension) {
             pagmo_throw(std::invalid_argument, "Weight vector size must be equal to the number of objectives. The size of the weight vector is " + std::to_string(weight.size()) + " while the problem has " + std::to_string(get_nobj()) + " objectives");
+        }
+        for (auto item : weight)
+        {
+            if (!std::isfinite(item)) {
+                pagmo_throw(std::invalid_argument, "Weight contains non finite numbers");
+            }
         }
         if (z.size() != original_fitness_dimension) {
             pagmo_throw(std::invalid_argument, "Reference point size must be equal to the number of objectives. The size of the reference point is " + std::to_string(z.size()) + " while the problem has " + std::to_string(get_nobj()) + " objectives");
         }
+        for (auto item : z)
+        {
+            if (!std::isfinite(item)) {
+                pagmo_throw(std::invalid_argument, "Reference point contains non finite numbers");
+            }
+        }
+
         // 3 - we check that the weight vector is normalized.
         auto sum = std::accumulate(weight.begin(), weight.end(), 0.);
         if (std::abs(sum-1.0) > 1E-8) {
-            pagmo_throw(std::invalid_argument,"The weight vector must sum to 1 with a tolerance of E1-8. The sum of the weight vector components was detected to be: " + std::to_string(sum));
+            pagmo_throw(std::invalid_argument,"The weight vector must sum to 1 with a tolerance of 1E-8. The sum of the weight vector components was detected to be: " + std::to_string(sum));
         }
         // 4 - we check the weight vector only contains positive numbers
         for (decltype(m_weight.size()) i = 0u; i < m_weight.size(); ++i) {
             if (m_weight[i] < 0.) {
-                pagmo_throw(std::invalid_argument,"The weight vector may contain only positive values. A value of " + std::to_string(m_weight[i]) + " was detected at index " + std::to_string(i));
+                pagmo_throw(std::invalid_argument,"The weight vector may contain only non negative values. A value of " + std::to_string(m_weight[i]) + " was detected at index " + std::to_string(i));
             }
         }
     }
@@ -141,12 +155,7 @@ public:
     {
         return 1u;
     }
-    /// A decomposed problem does not have gradients (Tchebicheff is not differentiable)
-    vector_double gradient(const vector_double &dv) const = delete;
-    bool has_gradient() = delete;
-    /// A decomposed problem does not have hessians (Tchebicheff is not differentiable)
-    std::vector<vector_double> hessians(const vector_double &dv) const = delete;
-    bool has_hessians() = delete;
+
     /// Returns a dense gradient_sparsity for the decomposed problem
     sparsity_pattern gradient_sparsity() const
     {
@@ -180,6 +189,14 @@ public:
         return static_cast<const problem*>(this)->get_extra_info() + oss.str();
     }
 
+    /// Serialize
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(cereal::base_class<problem>(this), m_weight, m_z, m_method, m_adapt_ideal);
+    }
+
+private:
     // Delete the inherited serialization functions from problem, so there is no ambiguity
     // over which serialization function to be used by cereal (the serialize() method
     // defined above will be the only serialization function available).
@@ -189,14 +206,15 @@ public:
     template <typename Archive>
     void load(Archive &) = delete;
 
-    /// Serialize
-    template <typename Archive>
-    void serialize(Archive &ar)
-    {
-        ar(cereal::base_class<problem>(this), m_weight, m_z, m_method, m_adapt_ideal);
-    }
+    // A decomposed problem does not have gradients (Tchebycheff is not differentiable)
+    vector_double gradient(const vector_double &dv) const = delete;
+    // delting has_gradient allow the automatic detection of gradients here, which will be thus be false
+    bool has_gradient() = delete;
+    // A decomposed problem does not have hessians (Tchebycheff is not differentiable)
+    std::vector<vector_double> hessians(const vector_double &dv) const = delete;
+    // delting has_gradient allow the automatic detection of hessians here, which will thus be false
+    bool has_hessians() = delete;
 
-private:
     vector_double decompose_fitness(const vector_double &f) const
     {
         double fd = 0.;

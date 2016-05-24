@@ -93,6 +93,14 @@ public:
         return m_translation;
     }
 
+    /// Serialize
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(cereal::base_class<problem>(this), m_translation);
+    }
+
+private:
     // Delete the inherited serialization functions from problem, so there is no ambiguity
     // over which serialization function to be used by cereal (the serialize() method
     // defined above will be the only serialization function available).
@@ -102,14 +110,6 @@ public:
     template <typename Archive>
     void load(Archive &) = delete;
 
-    /// Serialize
-    template <typename Archive>
-    void serialize(Archive &ar)
-    {
-        ar(cereal::base_class<problem>(this), m_translation);
-    }
-
-private:
     vector_double translate_back(const vector_double& x) const
     {
         assert(x.size() == m_translation.size());
