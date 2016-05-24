@@ -150,6 +150,11 @@ public:
     {
         return detail::dense_hessians(1u,get_nx());
     }
+    /// Gets the current reference point (may be different from the one the object was constructed with)
+    vector_double get_z() const
+    {
+        return m_z;
+    }
     /// Appends "[decomposed]" to the user-defined problem name
     std::string get_name() const
     {
@@ -202,7 +207,7 @@ private:
                }
            }
        } else if (m_method == "bi") { //BI method
-            const double THETA = 5.0;
+            const double THETA = 5.;
             double d1 = 0.;
             double weight_norm = 0.;
             for(decltype(f.size()) i = 0u; i < f.size(); ++i) {
@@ -212,7 +217,7 @@ private:
             weight_norm = std::sqrt(weight_norm);
             d1 = d1 / weight_norm;
 
-            double d2 = 0.0;
+            double d2 = 0.;
             for(decltype(f.size()) i = 0u; i < f.size(); ++i) {
                 d2 += std::pow(f[i] - (m_z[i] + d1 * m_weight[i] / weight_norm), 2);
             }
