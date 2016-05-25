@@ -10,6 +10,7 @@
 #include "../exceptions.hpp"
 #include "../population.hpp"
 #include "../rng.hpp"
+#include "../utils/generic.hpp"
 
 namespace pagmo
 {
@@ -76,15 +77,17 @@ class sea
             const auto &bounds = prob.get_bounds();
             const auto &lb = bounds.first;
             const auto &ub = bounds.second;
+            auto fevals0 = prob.get_fevals();           // disount for the already made fevals
+            unsigned int count = 1u;                    // regulates the screen output
 
             // PREAMBLE-------------------------------------------------------------------------------------------------
             // We start by checking that the problem is suitable for this
             // particular algorithm.
             if (prob.get_nc() != 0u) {
-                pagmo_throw(std::invalid_argument,"Non linear constraints detected. " + get_name() + " cannot deal with them");
+                pagmo_throw(std::invalid_argument,"Non linear constraints detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");
             }
             if (prob.get_nf() != 1u) {
-                pagmo_throw(std::invalid_argument,"Multiple objectives detected. " + get_name() + " cannot deal with them");
+                pagmo_throw(std::invalid_argument,"Multiple objectives detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");
             }
             // Get out if there is nothing to do.
             if (m_gen == 0u) {
@@ -99,7 +102,6 @@ class sea
             // 1 - Compute the best and worst individual (index)
             auto best_idx = pop.best_idx();
             auto worst_idx = pop.worst_idx();
-            unsigned int count = 1u; // regulates the screen output
             std::uniform_real_distribution<double> drng(0.,1.); // [0,1]
 
             for (unsigned int i = 1u; i <= m_gen; ++i) {
@@ -141,10 +143,10 @@ class sea
                         if (count % 50u == 1u) {
                             print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
-                        print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
+                        print(std::setw(7),i, std::setw(15), prob.get_fevals()-fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
                         ++count;
                         // Logs
-                        m_log.push_back(log_line_type(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
+                        m_log.push_back(log_line_type(i, prob.get_fevals()-fevals0, pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
                 // 4 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
@@ -155,10 +157,10 @@ class sea
                         if (count % 50u == 1u) {
                             print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
-                        print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
+                        print(std::setw(7),i, std::setw(15), prob.get_fevals()-fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
                         ++count;
                         // Logs
-                        m_log.push_back(log_line_type(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
+                        m_log.push_back(log_line_type(i, prob.get_fevals()-fevals0, pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
             }
