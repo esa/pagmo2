@@ -16,8 +16,8 @@ we suggest to follow the tutorials / examples.
   population
   algorithm
 
-Implemented algorithm
-^^^^^^^^^^^^^^^^^^^^^
+Implemented algorithms
+^^^^^^^^^^^^^^^^^^^^^^
 These are the algorithms implemented in PaGMO. They can be used
 to solve problems you have implemented or to learn how to use PaGMO to
 code your own algorithm
@@ -26,6 +26,7 @@ code your own algorithm
   :maxdepth: 1
 
   algorithms/sea
+  algorithms/de
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
