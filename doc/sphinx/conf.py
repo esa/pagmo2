@@ -13,11 +13,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
-import os
 import sphinx_bootstrap_theme
-
-
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -155,6 +151,7 @@ html_theme_options = {
     'navbar_links': [
         ("home", "index"),
         ("C++ docs", "docs/cpp"),
+        ("Python docs", "docs/python")
     ],
 
     # Render the next and previous page links in navbar. (Default: true)
