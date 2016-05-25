@@ -7,6 +7,7 @@
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/import.hpp>
+#include <boost/python/list.hpp>
 #include <boost/python/make_constructor.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
@@ -111,6 +112,28 @@ static inline bp::object gradient_sparsity_wrapper(const problem &p)
     return pygmo::sp_to_a(p.gradient_sparsity());
 }
 
+// Wrapper for Hessians.
+static inline bp::list hessians_wrapper(const problem &p, const bp::object &dv)
+{
+    bp::list retval;
+    const auto h = p.hessians(pygmo::to_vd(dv));
+    for (const auto &v: h) {
+        retval.append(pygmo::vd_to_a(v));
+    }
+    return retval;
+}
+
+// Wrapper for Hessians sparsity.
+static inline bp::list hessians_sparsity_wrapper(const problem &p)
+{
+    bp::list retval;
+    const auto hs = p.hessians_sparsity();
+    for (const auto &sp: hs) {
+        retval.append(pygmo::sp_to_a(sp));
+    }
+    return retval;
+}
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -163,6 +186,10 @@ BOOST_PYTHON_MODULE(core)
             "decision vector *dv*. The gradient is returned as a an array of doubles.",(bp::arg("dv")))
         .def("has_gradient",&problem::has_gradient,"Gradient availability.")
         .def("gradient_sparsity",&gradient_sparsity_wrapper,"Gradient sparsity.")
+        .def("hessians",&hessians_wrapper,"Hessians.\n\nThis method will calculate the Hessians of the input "
+            "decision vector *dv*. The Hessians are returned as a list of arrays of doubles.",(bp::arg("dv")))
+        .def("has_hessians",&problem::has_hessians,"Hessians availability.")
+        .def("hessians_sparsity",&hessians_sparsity_wrapper,"Hessians sparsity.")
         .def("get_bounds",&get_bounds_wrapper,"Get bounds.\n\nThis method will return the problem bounds as a pair "
             "of arrays of doubles of equal length.");
 
