@@ -187,17 +187,31 @@ inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
 {
     // The unsigned integral type that is used in the sparsity pattern.
     using size_type = pagmo::vector_double::size_type;
+    // Its signed counterpart.
+    using int_type = std::make_signed<size_type>::type;
     npy_intp dims[] = {boost::numeric_cast<npy_intp>(s.size()),2};
-    PyObject *ret = PyArray_SimpleNew(2,dims,cpp_npy<size_type>::value);
+    PyObject *ret = PyArray_SimpleNew(2,dims,cpp_npy<int_type>::value);
     if (!ret) {
         pygmo_throw(PyExc_RuntimeError,"couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
     }
+    auto err_handler = [](const auto &n) {
+        pygmo_throw(PyExc_OverflowError,("overflow in the conversion of the sparsity index " + std::to_string(n) + " to the "
+            "appropriate signed integer type").c_str());
+    };
     // NOTE: same as above, avoid asking for the data pointer if size is zero.
     if (s.size()) {
-        auto data = static_cast<size_type *>(PyArray_DATA((PyArrayObject *)(ret)));
+        auto data = static_cast<int_type *>(PyArray_DATA((PyArrayObject *)(ret)));
         for (decltype(s.size()) i = 0u; i < s.size(); ++i) {
-            *(data + i + i) = s[i].first;
-            *(data + i + i + 1u) = s[i].second;
+            try {
+                *(data + i + i) = boost::numeric_cast<int_type>(s[i].first);
+            } catch (const std::bad_cast &) {
+                err_handler(s[i].first);
+            }
+            try {
+                *(data + i + i + 1u) = boost::numeric_cast<int_type>(s[i].second);
+            } catch (const std::bad_cast &) {
+                err_handler(s[i].second);
+            }
         }
     }
     // Hand over to boost python.

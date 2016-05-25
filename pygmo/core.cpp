@@ -100,9 +100,15 @@ static inline bp::tuple get_bounds_wrapper(const problem &p)
 
 // Wrapper for the best known method.
 template <typename Prob>
-bp::object best_known_wrapper(const Prob &p)
+static inline bp::object best_known_wrapper(const Prob &p)
 {
     return pygmo::vd_to_a(p.best_known());
+}
+
+// Wrapper for gradient sparsity.
+static inline bp::object gradient_sparsity_wrapper(const problem &p)
+{
+    return pygmo::sp_to_a(p.gradient_sparsity());
 }
 
 BOOST_PYTHON_MODULE(core)
@@ -155,6 +161,8 @@ BOOST_PYTHON_MODULE(core)
             "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
         .def("gradient",&gradient_wrapper,"Gradient.\n\nThis method will calculate the gradient of the input "
             "decision vector *dv*. The gradient is returned as a an array of doubles.",(bp::arg("dv")))
+        .def("has_gradient",&problem::has_gradient,"Gradient availability.")
+        .def("gradient_sparsity",&gradient_sparsity_wrapper,"Gradient sparsity.")
         .def("get_bounds",&get_bounds_wrapper,"Get bounds.\n\nThis method will return the problem bounds as a pair "
             "of arrays of doubles of equal length.");
 
