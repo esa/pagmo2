@@ -28,30 +28,17 @@ namespace pagmo
  * ruminations and computer simulations on both parts yielded many substantial improvements which
  * make DE the versatile and robust tool it is today'' (from the official web pages....)
  *
- * The implementation provided for PaGMO derives from the code provided in the official
+ * The implementation provided for PaGMO is based from the code provided in the official
  * DE web site and is suitable for box-constrained single-objective continuous optimization.
- *
- * At each call of the evolve method a number of function evaluations equal to m_gen * pop.size()
- * is performed.
- *
- * NOTE: when called on mixed-integer problems DE treats the integer part as fixed and optimizes
- * the continuous part.
- *
- * NOTE2: when called on stochastic optimization problems, DE changes the seed
- * at the end of each generation.
- *
- * NOTE3: the velocity is also updated along DE whenever a new chromosome is accepted.
  *
  * @see http://www.icsi.berkeley.edu/~storn/code.html for the official DE web site
  * @see http://www.springerlink.com/content/x555692233083677/ for the paper that introduces Differential Evolution
- *
- * @author Dario Izzo (dario.izzo@googlemail.com)
  */
 class de
 {
 public:
     #if defined(DOXYGEN_INVOKED)
-        /// Single entry of the log
+        /// Single entry of the log (gen, fevals, best, dx, df)
         typedef std::tuple<unsigned int, unsigned long long, double, double, double> log_line_type;
         /// The log
         typedef std::vector<log_line_type> log_type;
@@ -60,17 +47,52 @@ public:
         using log_type = std::vector<log_line_type>;
     #endif
 
-    de(unsigned int gen = 1u, double F = 0.7, double CR = 0.5, unsigned int strategy = 2u, double ftol = 1e-6, double xtol = 1e-6, unsigned int seed = pagmo::random_device::next()) :
-        m_gen(gen), m_F(F), m_CR(CR), m_strategy(strategy), m_ftol(ftol), m_xtol(xtol), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+    /// Constructor.
+    /**
+     * Constructs a de algorithm
+     *
+     * The following variants are available:
+     * @code
+     * 1 - best/1/exp                               2. - rand/1/exp
+     * 3 - rand-to-best/1/exp                       4. - best/2/exp
+     * 5 - rand/2/exp                               6. - best/1/bin
+     * 7 - rand/1/bin                               8. - rand-to-best/1/bin
+     * 9 - best/2/bin                               10. - rand/2/bin
+     * @endcode
+     *
+     * @param[in] gen number of generations.
+     * @param[in] F weight coefficient (dafault value is 0.8)
+     * @param[in] CR crossover probability (dafault value is 0.9)
+     * @param[in] variant variant (dafault variant is 2: /rand/1/exp)
+     * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
+     * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param[in] seed seed used by the internal random number generator (default is random)
+
+     * @throws std::invalid_argument if F, CR are not in [0,1]
+     * @throws std::invalid_argument if variant is not one of 1 .. 10
+     */
+    de(unsigned int gen = 1u, double F = 0.8, double CR = 0.9, unsigned int variant = 2u, double ftol = 1e-6, double xtol = 1e-6, unsigned int seed = pagmo::random_device::next()) :
+        m_gen(gen), m_F(F), m_CR(CR), m_variant(variant), m_ftol(ftol), m_xtol(xtol), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
-        if (strategy < 1u || strategy > 10u) {
-            pagmo_throw(std::invalid_argument, "The Differential Evolution strategy must be in [1, .., 10], while a value of " + std::to_string(strategy) + " was detected.");
+        if (variant < 1u || variant > 10u) {
+            pagmo_throw(std::invalid_argument, "The Differential Evolution variant must be in [1, .., 10], while a value of " + std::to_string(variant) + " was detected.");
         }
         if (CR < 0. || F < 0. || CR > 1. || F > 1.) {
             pagmo_throw(std::invalid_argument, "The F and CR parameters must be in the [0,1] range");
         }
     }
 
+    /// Algorithm evolve method (juice implementation of the algorithm)
+    /**
+     *
+     * Evolves the population for a maximum number of generations, until one of
+     * tolerances set on the population flatness (x_tol, f_tol) are met.
+     *
+     * @param[in] pop population to be evolved
+     * @return evolved population
+     * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
+     * @throws std::invalid_argument if the population size is not at least 5
+     */
     population evolve(population pop) const
     {
         // We store some useful variables
@@ -104,7 +126,7 @@ public:
 
         // We add some checks that are algorithm specific
         //
-        if (NP < 6) {
+        if (NP < 6u) {
             pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 5 individuals in the population, " + std::to_string(NP) + " detected");
         }
         // No throws, all valid: we clear the logs
@@ -135,7 +157,7 @@ public:
             for (decltype(NP) i = 0u; i < NP; ++i) {
                 /*-----We select at random 5 indexes from the population---------------------------------*/
                 std::vector<vector_double::size_type> idxs(NP);
-                std::iota(idxs.begin(), idxs.end(), 0u);
+                std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
                 for (auto j = 0u; j < 5u; ++j) { // Durstenfeld's algorithm to select 5 indexes at random
                     auto idx = std::uniform_int_distribution<vector_double::size_type>(0u, NP - 1u - j)(m_e);
                     r[j] = idxs[idx];
@@ -144,9 +166,9 @@ public:
 
 
                 /*-------DE/best/1/exp--------------------------------------------------------------------*/
-                /*-------The oldest DE strategy but still not bad. However, we have found several---------*/
+                /*-------The oldest DE variant but still not bad. However, we have found several---------*/
                 /*-------optimization problems where misconvergence occurs.-------------------------------*/
-                if (m_strategy == 1u) { /* strategy DE0 (not in the original paper on DE) */
+                if (m_variant == 1u) { /* variant DE0 (not in the original paper on DE) */
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     auto L = 0u;
@@ -161,7 +183,7 @@ public:
                 /*-------This is one of my favourite strategies. It works especially well when the-------*/
                 /*-------"gbIter[]"-schemes experience misconvergence. Try e.g. m_f=0.7 and m_cr=0.5---------*/
                 /*-------as a first guess.---------------------------------------------------------------*/
-                else if (m_strategy == 2u) { /* strategy DE1 */
+                else if (m_variant == 2u) { /* variant DE1 */
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     decltype(dim) L = 0u;
@@ -172,10 +194,10 @@ public:
                     } while ((drng(m_e) < m_CR) && (L < dim));
                 }
                 /*-------DE/rand-to-best/1/exp-----------------------------------------------------------*/
-                /*-------This strategy seems to be one of the best strategies. Try m_f=0.85 and m_cr=1.------*/
+                /*-------This variant seems to be one of the best strategies. Try m_f=0.85 and m_cr=1.------*/
                 /*-------If you get misconvergence try to increase NP. If this doesn't help you----------*/
                 /*-------should play around with all three control variables.----------------------------*/
-                else if (m_strategy == 3u) { /* similiar to DE2 but generally better */
+                else if (m_variant == 3u) { /* similiar to DE2 but generally better */
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     auto L = 0u;
@@ -185,8 +207,8 @@ public:
                         ++L;
                     } while ((drng(m_e) < m_CR) && (L < dim));
                 }
-                /*-------DE/best/2/exp is another powerful strategy worth trying--------------------------*/
-                else if (m_strategy == 4u) {
+                /*-------DE/best/2/exp is another powerful variant worth trying--------------------------*/
+                else if (m_variant == 4u) {
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     auto L = 0u;
@@ -198,7 +220,7 @@ public:
                     } while ((drng(m_e) < m_CR) && (L < dim));
                 }
                 /*-------DE/rand/2/exp seems to be a robust optimizer for many functions-------------------*/
-                else if (m_strategy == 5u) {
+                else if (m_variant == 5u) {
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     auto L = 0u;
@@ -212,7 +234,7 @@ public:
 
                 /*=======Essentially same strategies but BINOMIAL CROSSOVER===============================*/
                 /*-------DE/best/1/bin--------------------------------------------------------------------*/
-                else if (m_strategy == 6u) {
+                else if (m_variant == 6u) {
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
@@ -223,7 +245,7 @@ public:
                     }
                 }
                 /*-------DE/rand/1/bin-------------------------------------------------------------------*/
-                else if (m_strategy == 7u) {
+                else if (m_variant == 7u) {
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
@@ -234,7 +256,7 @@ public:
                     }
                 }
                 /*-------DE/rand-to-best/1/bin-----------------------------------------------------------*/
-                else if (m_strategy == 8u) {
+                else if (m_variant == 8u) {
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
@@ -245,7 +267,7 @@ public:
                     }
                 }
                 /*-------DE/best/2/bin--------------------------------------------------------------------*/
-                else if (m_strategy == 9u) {
+                else if (m_variant == 9u) {
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
@@ -257,7 +279,7 @@ public:
                     }
                 }
                 /*-------DE/rand/2/bin--------------------------------------------------------------------*/
-                else if (m_strategy == 10u) {
+                else if (m_variant == 10u) {
                     tmp = popold[i];
                     auto n = rand_ind_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
@@ -363,6 +385,29 @@ public:
         return m_seed;
     }
     /// Sets the algorithm verbosity
+    /**
+     * Sets the verbosity level of the screen output and of the
+     * log returned by get_log(). \p level can be:
+     * - 0: no verbosity
+     * - >0: will print and log one line each \p level generations.
+     *
+     * Example (verbosity 100):
+     * @code
+     * Gen:        Fevals:          Best:            dx:            df:
+     * 5001         100020    3.62028e-05      0.0396687      0.0002866
+     * 5101         102020    1.16784e-05      0.0473027    0.000249057
+     * 5201         104020    1.07883e-05      0.0455471    0.000243651
+     * 5301         106020    6.05099e-06      0.0268876    0.000103512
+     * 5401         108020    3.60664e-06      0.0230468    5.78161e-05
+     * 5501         110020     1.7188e-06      0.0141655    2.25688e-05
+     * @endcode
+     * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
+     * function currently in the population, dx is the population flatness evaluated as the distance between
+     * the decisions vector of the best and of the worst individual, df is the population flatness evaluated
+     * as the distance between the fitness of the best and of the worst individual.
+     *
+     * @param level verbosity level
+     */
     void set_verbosity(unsigned int level)
     {
         m_verbosity = level;
@@ -388,13 +433,19 @@ public:
         return "\tGenerations: " + std::to_string(m_gen) +
             "\n\tParameter F: " + std::to_string(m_F) +
             "\n\tParameter CR: " + std::to_string(m_CR) +
-            "\n\tStrategy: " + std::to_string(m_strategy) +
+            "\n\tvariant: " + std::to_string(m_variant) +
             "\n\tStopping xtol: " + std::to_string(m_xtol) +
             "\n\tStopping ftol: " + std::to_string(m_ftol) +
             "\n\tVerbosity: " + std::to_string(m_verbosity) +
             "\n\tSeed: " + std::to_string(m_seed);
     }
     /// Get log
+    /**
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+     * <tt> std::vector </tt> is a de::log_line_type containing: Gen, Fevals, Best, dx, df as described
+     * in de::set_verbosity
+     * @return an <tt> std::vector </tt> of de::log_line_type containing the logged values Gen, Fevals, Best, dx, df
+     */
     const log_type& get_log() const {
         return m_log;
     }
@@ -402,13 +453,13 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen,m_F,m_CR,m_strategy,m_ftol,m_xtol,m_e,m_seed,m_verbosity,m_log);
+        ar(m_gen,m_F,m_CR,m_variant,m_ftol,m_xtol,m_e,m_seed,m_verbosity,m_log);
     }
 private:
     unsigned int                        m_gen;
     double                              m_F;
     double                              m_CR;
-    unsigned int                        m_strategy;
+    unsigned int                        m_variant;
     double                              m_ftol;
     double                              m_xtol;
     mutable detail::random_engine_type  m_e;

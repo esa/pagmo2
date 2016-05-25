@@ -46,7 +46,7 @@ class sea
 {
     public:
         #if defined(DOXYGEN_INVOKED)
-            /// Single entry of the log
+            /// Single entry of the log (gen, fevals, best, improvement, mutations)
             typedef std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type> log_line_type;
             /// The log
             typedef std::vector<log_line_type> log_type;
@@ -60,7 +60,7 @@ class sea
          * Constructs a sea algorithm from the number of generations and the random seed.
          *
          * @param[in] gen Number of generations to consider. Each generation will compute the objective function once
-         * @param[in] seed random seed used to generate mutations
+         * @param[in] seed seed used by the internal random number generator
          */
         sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next()):m_gen(gen),m_e(seed),m_seed(seed),m_verbosity(0u),m_log() {}
 
