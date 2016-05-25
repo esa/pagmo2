@@ -43,7 +43,7 @@ public:
     population evolve(population pop) const
     {
         // We store some useful variables
-        const auto &prob = pop.get_problem();       // This is a const reference, so using set_seed for example will not be allowed
+        const auto &prob = pop.get_problem();       // This is a const reference, so using set_seed for example will not be allowed (pop.set_problem_seed is)
         auto dim = prob.get_nx();                   // This getter does not return a const reference but a copy
         const auto &bounds = prob.get_bounds();
         const auto &lb = bounds.first;
@@ -62,6 +62,9 @@ public:
         if (prob_f_dimension != 1u) {
             pagmo_throw(std::invalid_argument,"Multiple objectives detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");
         }
+        if (prob.is_stochastic()) {
+            pagmo_throw(std::invalid_argument,"The problem appears to be stochastic " + get_name() + " cannot deal with it");
+        }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
             return pop;
@@ -71,13 +74,12 @@ public:
         // We add some checks that are algorithm specific
         //
         if (NP < 6) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 6 individuals in the population, " + std::to_string(NP) + " detected");
+            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 5 individuals in the population, " + std::to_string(NP) + " detected");
         }
-
         // No throws, all valid: we clear the logs
         m_log.clear();
 
-        // Some vectors used during evolution are declared here.
+        // Some vectors used during evolution are declared.
         vector_double tmp(dim);                             // contains the mutated candidate
         std::uniform_real_distribution<double> drng(0.,1.); // to generate a number in [0, 1)]
         std::uniform_int_distribution<vector_double::size_type> rand_ind_idx(0u, dim - 1u); // to generate a random index in pop
@@ -98,7 +100,7 @@ public:
 
         // Main DE iterations
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
-            //Start of the loop through the deme
+            //Start of the loop through the population
             for (decltype(NP) i = 0u; i < NP; ++i) {
                 /*-----We select at random 5 indexes from the population---------------------------------*/
                 std::vector<vector_double::size_type> idxs(NP);
@@ -260,13 +262,12 @@ public:
                     popnew[i] = popold[i];
                 }
             } // End of one generation
-
             /* Save best population member of current iteration */
             gbIter = gbX;
             /* swap population arrays. New generation becomes old one */
             std::swap(popold, popnew);
 
-            //9 - Check the exit conditions (every 40 generations)
+            // Check the exit conditions (every 40 generations)
             double dx = 0., df = 0.;
             if (gen % 40u == 0u) {
                 best_idx = pop.best_idx();
@@ -313,14 +314,12 @@ public:
                     m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], dx, df));
                 }
             }
-
         } //end main DE iterations
         if (m_verbosity) {
-            std::cout << "Exit condition -- generations > " <<  m_gen << std::endl;
+            std::cout << "Exit condition -- generations = " <<  m_gen << std::endl;
         }
         return pop;
     }
-
 
     /// Sets the algorithm seed
     void set_seed(unsigned int seed)

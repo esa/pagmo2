@@ -72,7 +72,7 @@ class sea
          */
         population evolve(population pop) const {
             // We store some useful properties
-            const auto &prob = pop.get_problem();       // This is a const reference, so using set_seed for example will not be allowed
+            const auto &prob = pop.get_problem();       // This is a const reference, so using set_seed for example will not be allowed (pop.set_problem_seed is)
             const auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
             const auto &bounds = prob.get_bounds();
             const auto &lb = bounds.first;
