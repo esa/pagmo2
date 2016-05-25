@@ -16,6 +16,7 @@
 #include <sstream>
 
 #include "../include/problem.hpp"
+#include "../include/problems/hock_schittkowsky_71.hpp"
 #include "../include/problems/null_problem.hpp"
 #include "../include/problems/rosenbrock.hpp"
 #include "../include/problems/translate.hpp"
@@ -84,6 +85,12 @@ static inline bp::object fitness_wrapper(const problem &p, const bp::object &dv)
     return pygmo::vd_to_a(p.fitness(pygmo::to_vd(dv)));
 }
 
+// Wrapper for the gradient function.
+static inline bp::object gradient_wrapper(const problem &p, const bp::object &dv)
+{
+    return pygmo::vd_to_a(p.gradient(pygmo::to_vd(dv)));
+}
+
 // Wrapper for the bounds getter.
 static inline bp::tuple get_bounds_wrapper(const problem &p)
 {
@@ -91,10 +98,11 @@ static inline bp::tuple get_bounds_wrapper(const problem &p)
     return bp::make_tuple(pygmo::vd_to_a(retval.first),pygmo::vd_to_a(retval.second));
 }
 
-// Wrapper for Rosenbrock's best known.
-bp::object rb_best_known(const rosenbrock &rb)
+// Wrapper for the best known method.
+template <typename Prob>
+bp::object best_known_wrapper(const Prob &p)
 {
-    return pygmo::vd_to_a(vector_double(rb.m_dim,1.));
+    return pygmo::vd_to_a(p.best_known());
 }
 
 BOOST_PYTHON_MODULE(core)
@@ -143,8 +151,10 @@ BOOST_PYTHON_MODULE(core)
         .def("_py_extract",&pygmo::problem_py_extract<problem>)
         .def("_cpp_extract",&pygmo::problem_cpp_extract<problem,translate>)
         // Problem methods.
-        .def("fitness",&fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness from the input "
+        .def("fitness",&fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness of the input "
             "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
+        .def("gradient",&gradient_wrapper,"Gradient.\n\nThis method will calculate the gradient of the input "
+            "decision vector *dv*. The gradient is returned as a an array of doubles.",(bp::arg("dv")))
         .def("get_bounds",&get_bounds_wrapper,"Get bounds.\n\nThis method will return the problem bounds as a pair "
             "of arrays of doubles of equal length.");
 
@@ -176,5 +186,8 @@ BOOST_PYTHON_MODULE(core)
     // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock","The Rosenbrock problem.",problem_class,tp);
     rb.def(bp::init<unsigned>("Constructor from dimension *dim*.",(bp::arg("dim"))));
-    rb.def("best_known",&rb_best_known,"The best known solution for the Rosenbrock problem.");
+    rb.def("best_known",&best_known_wrapper<rosenbrock>,"The best known solution for the Rosenbrock problem.");
+    // Hock-Schittkowsky 71
+    auto hs71 = pygmo::expose_problem<hock_schittkowsky_71>("hock_schittkowsky_71","The Hock-Schittkowsky 71 problem.",problem_class,tp);
+    hs71.def("best_known",&best_known_wrapper<hock_schittkowsky_71>,"The best known solution for the Hock-Schittkowsky 71 problem.");
 }
