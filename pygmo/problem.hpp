@@ -63,6 +63,10 @@ struct prob_inner<bp::object> final: prob_inner_base
     // These are the mandatory methods that must be present.
     void check_construction_object() const
     {
+        if (pygmo::isinstance(m_value,pygmo::builtin().attr("type"))) {
+            pygmo_throw(PyExc_TypeError,"cannot construct a problem from a type: please use an instance "
+                "of an object as construction argument");
+        }
         check_callable_attribute(m_value,"fitness");
         check_callable_attribute(m_value,"get_bounds");
     }
