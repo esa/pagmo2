@@ -95,7 +95,7 @@ BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
     bp::docstring_options doc_options;
-    doc_options.enable_py_signatures();
+    doc_options.enable_all();
     doc_options.disable_cpp_signatures();
 
     // Init numpy.
@@ -130,6 +130,12 @@ BOOST_PYTHON_MODULE(core)
         .def(bp::init<const translate &>("Constructor from a :class:`pygmo.core.translate` problem *p*.",(bp::arg("p"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__",&pygmo::generic_copy_wrapper<problem>)
+        .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<problem>)
+        .def("_py_extract",&pygmo::problem_py_extract)
+        .def("_cpp_extract",&pygmo::problem_cpp_extract<translate>)
+        // Problem methods.
         .def("fitness",&fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness from the input "
             "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
         .def("get_bounds",&get_bounds_wrapper,"Get bounds.\n\nThis method will return the problem bounds as a pair "

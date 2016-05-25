@@ -32,10 +32,14 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr, bp::
 {
     // We require all problems to be def-ctible at the bare minimum.
     bp::class_<Prob> c(name,descr,bp::init<>());
+    // Mark it as a C++ problem.
+    c.attr("_pygmo_cpp_problem") = true;
 
     // Expose the problem constructor from Prob.
     problem_class.def(bp::init<const Prob &>(("Constructor from a :class:`pygmo.core." + std::string(name) + "` problem *p*.").c_str(),
         (bp::arg("p"))));
+    // Extract Prob.
+    problem_class.def("_cpp_extract",&problem_cpp_extract<Prob>);
 
     // Expose translate's constructor from Prob and translation vector.
     tp_class.def("__init__",bp::make_constructor(&translate_init<Prob>,boost::python::default_call_policies(),

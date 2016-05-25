@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/python/dict.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/handle.hpp>
@@ -340,6 +341,21 @@ bp::object make_bytes(const char *ptr, Py_ssize_t len)
             "function returned NULL");
     }
     return bp::object(bp::handle<>(retval));
+}
+
+// Generic copy wrappers.
+template <typename T>
+inline T generic_copy_wrapper(const T &x)
+{
+	return x;
+}
+
+template <typename T>
+inline T generic_deepcopy_wrapper(const T &x, bp::dict)
+{
+	return x;
+}
+
 }
 
 }

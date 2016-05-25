@@ -290,6 +290,29 @@ struct problem_pickle_suite : bp::pickle_suite
     }
 };
 
+// Wrapper for extract.
+template <typename T>
+inline T problem_cpp_extract(const pagmo::problem &p, const T &)
+{
+    auto ptr = p.extract<T>();
+    if (!ptr) {
+        pygmo_throw(PyExc_TypeError,"");
+    }
+    return *ptr;
+}
+
+inline bp::object problem_py_extract(const pagmo::problem &p, const bp::object &t)
+{
+    auto ptr = p.extract<bp::object>();
+    if (!ptr) {
+        pygmo_throw(PyExc_TypeError,"could not extract a Python object from the problem");
+    }
+    if (type(*ptr) != t) {
+        pygmo_throw(PyExc_TypeError,("the stored object is not of type " + str(t)).c_str());
+    }
+    return deepcopy(*ptr);
+}
+
 }
 
 #endif
