@@ -27,3 +27,4 @@ def _problem_extract(self,t):
 from .core import *
 
 setattr(problem,"extract",_problem_extract)
+setattr(translate,"extract",_problem_extract)

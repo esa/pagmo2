@@ -358,6 +358,4 @@ inline T generic_deepcopy_wrapper(const T &x, bp::dict)
 
 }
 
-}
-
 #endif

@@ -91,6 +91,12 @@ static inline bp::tuple get_bounds_wrapper(const problem &p)
     return bp::make_tuple(pygmo::vd_to_a(retval.first),pygmo::vd_to_a(retval.second));
 }
 
+// Wrapper for Rosenbrock's best known.
+bp::object rb_best_known(const rosenbrock &rb)
+{
+    return pygmo::vd_to_a(vector_double(rb.m_dim,1.));
+}
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -133,8 +139,9 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__",&pygmo::generic_copy_wrapper<problem>)
         .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<problem>)
-        .def("_py_extract",&pygmo::problem_py_extract)
-        .def("_cpp_extract",&pygmo::problem_cpp_extract<translate>)
+        // Problem extraction.
+        .def("_py_extract",&pygmo::problem_py_extract<problem>)
+        .def("_cpp_extract",&pygmo::problem_cpp_extract<problem,translate>)
         // Problem methods.
         .def("fitness",&fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness from the input "
             "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
@@ -145,17 +152,29 @@ BOOST_PYTHON_MODULE(core)
     bp::class_<translate> tp("translate","The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:",bp::init<>());
     // Constructor from Python concrete problem and translation vector (allows to translate Python problems).
     tp.def("__init__",bp::make_constructor(&pygmo::translate_init<bp::object>,boost::python::default_call_policies(),
-        (bp::arg("p"),bp::arg("t"))),"Constructor from a concrete Python problem *p* and a translation vector *t*.");
-    // Constructor of translate from translate and translation vector. This allows to apply the
-    // translation multiple times.
-    tp.def("__init__",bp::make_constructor(&pygmo::translate_init<translate>,boost::python::default_call_policies(),
-        (bp::arg("p"),bp::arg("t"))),"Constructor from a :class:`pygmo.core.translate` problem *p* and a translation vector *t*.\n\n"
-        "This constructor allows to chain multiple problem translations.");
+        (bp::arg("p"),bp::arg("t"))),"Constructor from a concrete Python problem *p* and a translation vector *t*.")
+        // Constructor of translate from translate and translation vector. This allows to apply the
+        // translation multiple times.
+        .def("__init__",bp::make_constructor(&pygmo::translate_init<translate>,boost::python::default_call_policies(),
+            (bp::arg("p"),bp::arg("t"))),"Constructor from a :class:`pygmo.core.translate` problem *p* and a translation vector *t*.\n\n"
+            "This constructor allows to chain multiple problem translations.")
+        // Copy and deepcopy.
+        .def("__copy__",&pygmo::generic_copy_wrapper<translate>)
+        .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<translate>)
+        // Problem extraction.
+        .def("_py_extract",&pygmo::problem_py_extract<translate>)
+        .def("_cpp_extract",&pygmo::problem_cpp_extract<translate,translate>);
+    // Mark it as a cpp problem.
+    tp.attr("_pygmo_cpp_problem") = true;
 
+    // Exposition of C++ problems.
+    // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem","The null problem.",problem_class,tp);
     // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
     // serialization of the problem. Not necessary for any other problem type.
     np.def_pickle(null_problem_pickle_suite());
+    // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock","The Rosenbrock problem.",problem_class,tp);
     rb.def(bp::init<unsigned>("Constructor from dimension *dim*.",(bp::arg("dim"))));
+    rb.def("best_known",&rb_best_known,"The best known solution for the Rosenbrock problem.");
 }

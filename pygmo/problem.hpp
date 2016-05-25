@@ -291,19 +291,20 @@ struct problem_pickle_suite : bp::pickle_suite
 };
 
 // Wrapper for extract.
-template <typename T>
-inline T problem_cpp_extract(const pagmo::problem &p, const T &)
+template <typename Prob, typename T>
+inline T problem_cpp_extract(const Prob &p, const T &)
 {
-    auto ptr = p.extract<T>();
+    auto ptr = p.template extract<T>();
     if (!ptr) {
         pygmo_throw(PyExc_TypeError,"");
     }
     return *ptr;
 }
 
-inline bp::object problem_py_extract(const pagmo::problem &p, const bp::object &t)
+template <typename Prob>
+inline bp::object problem_py_extract(const Prob &p, const bp::object &t)
 {
-    auto ptr = p.extract<bp::object>();
+    auto ptr = p.template extract<bp::object>();
     if (!ptr) {
         pygmo_throw(PyExc_TypeError,"could not extract a Python object from the problem");
     }
