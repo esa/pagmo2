@@ -208,11 +208,6 @@ class sea
         {
             return m_verbosity;
         }
-        /// Get generations
-        unsigned int get_gen() const
-        {
-            return m_gen;
-        }
         /// Algorithm name
         std::string get_name() const
         {

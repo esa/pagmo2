@@ -126,7 +126,7 @@ public:
 
         // We add some checks that are algorithm specific
         //
-        if (NP < 6u) {
+        if (NP < 5u) {
             pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 5 individuals in the population, " + std::to_string(NP) + " detected");
         }
         // No throws, all valid: we clear the logs

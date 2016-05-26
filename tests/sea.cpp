@@ -9,8 +9,10 @@
 #include "../include/algorithms/sea.hpp"
 #include "../include/algorithms/null_algorithm.hpp"
 #include "../include/io.hpp"
-#include "../include/problems/rosenbrock.hpp"
+#include "../include/problems/hock_schittkowsky_71.hpp"
 #include "../include/problems/inventory.hpp"
+#include "../include/problems/rosenbrock.hpp"
+#include "../include/problems/zdt.hpp"
 #include "../include/population.hpp"
 #include "../include/serialization.hpp"
 #include "../include/types.hpp"
@@ -21,7 +23,6 @@ using namespace std;
 BOOST_AUTO_TEST_CASE(sea_algorithm_construction)
 {
     sea user_algo{1234u, 42u};
-    BOOST_CHECK(user_algo.get_gen() == 1234u);
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 42u);
     BOOST_CHECK((user_algo.get_log() == sea::log_type{}));
@@ -64,6 +65,9 @@ BOOST_AUTO_TEST_CASE(sea_evolve_test)
 
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
     }
+    // We then check that the evolve throws if called on unsuitable problems
+    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{zdt{}},5u,23u}), std::invalid_argument);
+    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{hock_schittkowsky_71{}},5u,23u}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(sea_setters_getters_test)
@@ -73,7 +77,6 @@ BOOST_AUTO_TEST_CASE(sea_setters_getters_test)
     BOOST_CHECK(user_algo.get_verbosity() == 23u);
     user_algo.set_seed(23u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
-    BOOST_CHECK(user_algo.get_gen() == 10u);
     BOOST_CHECK(user_algo.get_name().find("Simple Evolutionary Algorithm") != std::string::npos);
     BOOST_CHECK(user_algo.get_extra_info().find("Verbosity") != std::string::npos);
     BOOST_CHECK_NO_THROW(user_algo.get_log());
