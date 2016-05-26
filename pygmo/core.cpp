@@ -190,8 +190,22 @@ BOOST_PYTHON_MODULE(core)
             "decision vector *dv*. The Hessians are returned as a list of arrays of doubles.",(bp::arg("dv")))
         .def("has_hessians",&problem::has_hessians,"Hessians availability.")
         .def("hessians_sparsity",&hessians_sparsity_wrapper,"Hessians sparsity.")
+        .def("get_nobj",&problem::get_nobj,"Get number of objectives.")
+        .def("get_nx",&problem::get_nx,"Get problem dimension.")
+        .def("get_nf",&problem::get_nf,"Get fitness dimension.")
         .def("get_bounds",&get_bounds_wrapper,"Get bounds.\n\nThis method will return the problem bounds as a pair "
-            "of arrays of doubles of equal length.");
+            "of arrays of doubles of equal length.")
+        .def("get_nec",&problem::get_nec,"Get number of equality constraints.")
+        .def("get_nic",&problem::get_nic,"Get number of inequality constraints.")
+        .def("get_nc",&problem::get_nc,"Get total number of constraints.")
+        .def("get_fevals",&problem::get_fevals,"Get total number of objective function evaluations.")
+        .def("get_gevals",&problem::get_gevals,"Get total number of gradient evaluations.")
+        .def("get_hevals",&problem::get_hevals,"Get total number of Hessians evaluations.")
+        .def("set_seed",&problem::set_seed,"Set problem seed.")
+        .def("has_set_seed",&problem::has_set_seed,"Detect the TODO")
+        .def("is_stochastic",&problem::is_stochastic,"TODO")
+        .def("get_name",&problem::get_name,"Get problem's name.")
+        .def("get_extra_info",&problem::get_extra_info,"Get problem's extra info.");
 
     // Translate meta-problem.
     bp::class_<translate> tp("translate","The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:",bp::init<>());
