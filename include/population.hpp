@@ -39,10 +39,10 @@ namespace pagmo
  */
 class population
 {
-    // Enable the generic ctor only if T is not aa population (after removing
-    // const/reference qualifiers).
-    template <typename T>
-    using generic_ctor_enabler = std::enable_if_t<!std::is_same<population,std::decay_t<T>>::value,int>;
+        // Enable the generic ctor only if T is not aa population (after removing
+        // const/reference qualifiers).
+        template <typename T>
+        using generic_ctor_enabler = std::enable_if_t<!std::is_same<population,std::decay_t<T>>::value,int>;
 
     public:
         #if defined(DOXYGEN_INVOKED)
@@ -56,6 +56,7 @@ class population
         /// Default constructor
         /**
          * Constructs an empty population with a pagmo::null_problem.
+         * The population random seed is initialised to zero.
          */
         population() : m_prob(null_problem{}), m_e(0u), m_seed(0u) {}
 
@@ -267,7 +268,7 @@ class population
         /// Index of worst individual (accounting for a scalar tolerance)
         /**
          * @param[in] tol scalar tolerance to be considered for each constraint
-         * 
+         *
          * @return index of the best individual
          */
         vector_double::size_type worst_idx(double tol = 0.) const
@@ -349,7 +350,7 @@ class population
         }
 
         /// Setter for the problem seed
-        void set_problem_seed (unsigned int seed)
+        void set_problem_seed(unsigned int seed)
         {
             m_prob.set_seed(seed);
         }
