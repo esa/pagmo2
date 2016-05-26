@@ -18,7 +18,6 @@
 #include "../include/types.hpp"
 
 using namespace pagmo;
-using namespace std;
 
 BOOST_AUTO_TEST_CASE(de_algorithm_construction)
 {
