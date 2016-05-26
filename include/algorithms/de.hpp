@@ -433,7 +433,7 @@ public:
         return "\tGenerations: " + std::to_string(m_gen) +
             "\n\tParameter F: " + std::to_string(m_F) +
             "\n\tParameter CR: " + std::to_string(m_CR) +
-            "\n\tvariant: " + std::to_string(m_variant) +
+            "\n\tVariant: " + std::to_string(m_variant) +
             "\n\tStopping xtol: " + std::to_string(m_xtol) +
             "\n\tStopping ftol: " + std::to_string(m_ftol) +
             "\n\tVerbosity: " + std::to_string(m_verbosity) +
