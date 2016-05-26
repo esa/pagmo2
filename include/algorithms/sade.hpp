@@ -398,14 +398,17 @@ public:
                     }
                     // The population flattness in fitness
                     df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
+                    // The average F, CR
+                    auto F_avg = std::accumulate(m_F.begin(), m_F.end(), 0.) / m_F.size();
+                    auto CR_avg = std::accumulate(m_CR.begin(), m_CR.end(), 0.) / m_CR.size();
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "dx:", std::setw(15), "df:",'\n');
+                        print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "F:", std::setw(15), "dx:", "CR:", std::setw(15), std::setw(15), "df:",'\n');
                     }
-                    print(std::setw(7),gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), dx, std::setw(15), df,'\n');
+                    print(std::setw(7),gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), F_avg, std::setw(15), CR_avg, std::setw(15), dx, std::setw(15), df,'\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], dx, df));
+                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], F_avg, CR_avg, dx, df));
                 }
             }
         } //end main DE iterations

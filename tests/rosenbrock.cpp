@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_rosenbrock_test
+#define BOOST_TEST_MODULE rosenbrock_test
 #include <boost/test/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
 #include <exception>

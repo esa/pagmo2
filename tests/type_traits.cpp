@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_type_traits_test
+#define BOOST_TEST_MODULE type_traits_test
 #include <boost/test/unit_test.hpp>
 
 #include <string>
