@@ -743,8 +743,7 @@ class problem
          *
          * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
          * @throws std::invalid_argument if the length of the gradient returned (as defined in the user defined problem)
-         * does not match the gradient sparsity pattern dimension as returned by
-         * problem::get_gs_dim()
+         * does not match the gradient sparsity pattern dimension
          * @throws std::logic_error if the user defined problem does not implement
          * the gradient method
          */
@@ -820,7 +819,7 @@ class problem
          * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
          * @throws std::invalid_argument if the length of each hessian returned
          * (as defined in the user defined problem) does not match the corresponding
-         * hessians sparsity pattern dimensions as returned by problem::get_hs_dim()
+         * hessians sparsity pattern dimensions
          * @throws std::logic_error if the user defined problem does not implement
          * the hessians method
          */
@@ -967,18 +966,6 @@ class problem
         unsigned long long get_hevals() const
         {
             return m_hevals.load();
-        }
-
-        /// Dimension of the gradient sparisy
-        vector_double::size_type get_gs_dim() const
-        {
-            return m_gs_dim;
-        }
-
-        /// Dimension of the hessians sparisy
-        std::vector<vector_double::size_type> get_hs_dim() const
-        {
-            return m_hs_dim;
         }
 
         /// Sets the seed for the stochastic variables

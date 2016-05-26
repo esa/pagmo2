@@ -318,14 +318,6 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(p1.get_gevals() == 0u);
         BOOST_CHECK(p1.get_hevals() == 0u);
         BOOST_CHECK(p1.get_hevals() == 0u);
-        // dense sparsity defined by default
-        BOOST_CHECK(p1.get_gs_dim() == 4u);
-        BOOST_CHECK((p1.get_hs_dim() == std::vector<vector_double::size_type>{3u, 3u}));
-        BOOST_CHECK(p2.get_gs_dim() == 12u*11u);
-        BOOST_CHECK((p2.get_hs_dim() == std::vector<vector_double::size_type>{66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u}));
-        // user defined sparsity
-        BOOST_CHECK(p3.get_gs_dim() == 2u);
-        BOOST_CHECK((p4.get_hs_dim() == std::vector<vector_double::size_type>{2u, 2u}));
     }
 
     // We check the move constructor
@@ -374,10 +366,7 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(p2.get_fevals() == 1u);
         BOOST_CHECK(p2.get_gevals() == 1u);
         BOOST_CHECK(p2.get_hevals() == 1u);
-        // 3 - We check that the expected gradient and hessans dims are left equal
-        BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
-        BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
-        // 4 - We check that the decision vector dimension is copied
+        // 3 - We check that the decision vector dimension is copied
         BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 }
@@ -440,10 +429,7 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
         BOOST_CHECK(p2.get_fevals() == 1u);
         BOOST_CHECK(p2.get_gevals() == 1u);
         BOOST_CHECK(p2.get_hevals() == 1u);
-        // 3 - We check that the expected gradient and hessans dims are left equal
-        BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
-        BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
-        // 4 - We check that the decision vector dimension is copied
+        // 3 - We check that the decision vector dimension is copied
         BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 }
@@ -552,12 +538,6 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p1.get_nc() == 4+3);
     BOOST_CHECK(p1.get_nf() == 2+3+4);
     BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13,13},{17,17}}));
-    // dense
-    BOOST_CHECK(p1.get_gs_dim() == 18);
-    BOOST_CHECK((p1.get_hs_dim() == std::vector<vector_double::size_type>(9,3)));
-    // sparse
-    BOOST_CHECK(p2.get_gs_dim() == 2);
-    BOOST_CHECK((p2.get_hs_dim() == std::vector<vector_double::size_type>{2,2}));
 
     // Making some evaluations
     auto N = 1235u;
