@@ -1,5 +1,5 @@
-#ifndef PAGMO_ALGORITHMS_DE_HPP
-#define PAGMO_ALGORITHMS_DE_HPP
+#ifndef PAGMO_ALGORITHMS_SADE_HPP
+#define PAGMO_ALGORITHMS_SADE_HPP
 
 #include <iomanip>
 #include <numeric> //std::iota
@@ -16,44 +16,46 @@
 
 namespace pagmo
 {
-/// Differential Evolution Algorithm
+/// Self-adaptive Differential Evolution Algorithm
 /**
- * \image html de.gif "Differential Evolution block diagram."
+ * \image html adaptation.jpg "Adapt already!".
  *
- * Differential Evolution is an heuristic optimizer developed by Rainer Storn and Kenneth Price.
+ * Two variants of Differential evolution exploiting the idea of self-adaptation.
  *
- * ''A breakthrough happened, when Ken came up with the idea of using vector differences for perturbing
- * the vector population. Since this seminal idea a lively discussion between Ken and Rainer and endless
- * ruminations and computer simulations on both parts yielded many substantial improvements which
- * make DE the versatile and robust tool it is today'' (from the official web pages....)
+ * The original Differential Evolution algorithm (pagmo::de) can be significantly improved introducing the
+ * idea of parameter self-adaptation. Many different proposals have been made to self-adapt both the CR and the F parameters
+ * of the original differential evolution algorithm. In PaGMO we implement two different mechanisms we found effective.
+ * The first one, proposed by Brest et al., does not make use of the DE operators to produce new
+ * values for F and CR and, strictly speaking, is thus not self-adaptation, rather parameter control.
+ * The resulting DE variant is often referred to as jDE. The second variant
+ * here implemented is inspired by the ideas introduced by Omran et al. and uses a variaton of the selected DE operator to produce new
+ * CR anf F parameters for each individual. We refer to this variant as to iDE.
  *
- * The implementation provided for PaGMO is based from the code provided in the official
- * DE web site and is suitable for box-constrained single-objective continuous optimization.
- *
- * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
- * the allowed box-bounds, is here done by substituting it with a random number in the bounds.
- *
- * @see http://www.icsi.berkeley.edu/~storn/code.html for the official DE web site
- * @see http://www.springerlink.com/content/x555692233083677/ for the paper that introduces Differential Evolution
+ * @see Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control parameters in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE Transactions on, 10(6), 646-657. Chicago
+ * @see Omran, M. G., Salman, A., & Engelbrecht, A. P. (2005). Self-adaptive differential evolution. In Computational intelligence and security (pp. 192-199). Springer Berlin Heidelberg.
  */
-class de
+class sade
 {
 public:
     #if defined(DOXYGEN_INVOKED)
-        /// Single entry of the log (gen, fevals, best, dx, df)
-        typedef std::tuple<unsigned int, unsigned long long, double, double, double> log_line_type;
+        /// Single entry of the log (gen, fevals, best, F, CR, dx, df)
+        typedef std::tuple<unsigned int, unsigned long long, double, double, double, double, double> log_line_type;
         /// The log
         typedef std::vector<log_line_type> log_type;
     #else
-        using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double>;
+        using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double, double, double>;
         using log_type = std::vector<log_line_type>;
     #endif
 
     /// Constructor.
     /**
-     * Constructs a de algorithm
+     * Constructs a self-adaptive differential evolution algorithm
      *
-     * The following variants are available:
+     * Two self-adaptation variants are available to control the F and CR parameters
+     * @code
+     * 1 - jDE (Brest et al.)                       2 - iDE (Omran at al. inspired)
+     * @endcode
+     * The following variants are available to produce a mutant vector:
      * @code
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
@@ -62,25 +64,26 @@ public:
      * 9 - best/2/bin                               10. - rand/2/bin
      * @endcode
      *
+     *
      * @param[in] gen number of generations.
-     * @param[in] F weight coefficient (dafault value is 0.8)
-     * @param[in] CR crossover probability (dafault value is 0.9)
      * @param[in] variant variant (dafault variant is 2: /rand/1/exp)
+     * @param[in] variant_adptv parameter adaptation scheme to be used (one of 1..2)
      * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param[in] memory when true the parameters CR anf F are not reset between successive calls to the evolve method
      * @param[in] seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if F, CR are not in [0,1]
      * @throws std::invalid_argument if variant is not one of 1 .. 10
      */
-    de(unsigned int gen = 1u, double F = 0.8, double CR = 0.9, unsigned int variant = 2u, double ftol = 1e-6, double xtol = 1e-6, unsigned int seed = pagmo::random_device::next()) :
-        m_gen(gen), m_F(F), m_CR(CR), m_variant(variant), m_ftol(ftol), m_xtol(xtol), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+    sade(unsigned int gen = 1u, unsigned int variant = 2u, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
+        m_gen(gen), m_CR(), m_F(), m_variant(variant), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (variant < 1u || variant > 10u) {
             pagmo_throw(std::invalid_argument, "The Differential Evolution variant must be in [1, .., 10], while a value of " + std::to_string(variant) + " was detected.");
         }
-        if (CR < 0. || F < 0. || CR > 1. || F > 1.) {
-            pagmo_throw(std::invalid_argument, "The F and CR parameters must be in the [0,1] range");
+        if (variant_adptv < 1u || variant_adptv > 2u) {
+            pagmo_throw(std::invalid_argument, "The variant for self-adaptation mus be in [1,2], while a value of " + std::to_string(variant_adptv) + " was detected.");
         }
     }
 
@@ -124,8 +127,8 @@ public:
         if (m_gen == 0u) {
             return pop;
         }
-        if (pop.size() < 5u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 5 individuals in the population, " + std::to_string(pop.size()) + " detected");
+        if (pop.size() < 7u) {
+            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 7 individuals in the population, " + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -135,7 +138,9 @@ public:
         // Some vectors used during evolution are declared.
         vector_double tmp(dim);                             // contains the mutated candidate
         std::uniform_real_distribution<double> drng(0.,1.); // to generate a number in [0, 1)
-        std::uniform_int_distribution<vector_double::size_type> c_idx(0u, dim - 1u); // to generate a random index for the chromosome
+        std::normal_distribution<> n_dist(0.,1.);           // to generate a normally distributed number
+        std::uniform_int_distribution<vector_double::size_type> c_idx(0u, dim - 1u); // to generate a random index in the chromosome
+        std::uniform_int_distribution<vector_double::size_type> p_idx(0u, NP - 1u); // to generate a random index in pop
 
         // We extract from pop the chromosomes and fitness associated
         auto popold = pop.get_x();
@@ -146,10 +151,33 @@ public:
         auto best_idx = pop.best_idx();
         vector_double::size_type worst_idx = 0u;
         auto gbX = popnew[best_idx];
+        double gbF = m_F[0];   //initialization to the 0 ind, will soon be forgotten
+        double gbCR = m_CR[0]; //initialization to the 0 ind, will soon be forgotten
         auto gbfit=fit[best_idx];
         // the best decision vector of a generation
         auto gbIter = gbX;
+        double gbIterF = gbF;
+        double gbIterCR = gbCR;
         std::vector<vector_double::size_type> r(5);   //indexes of 5 selected population members
+
+        // Initialize the F and CR vectors
+        if ( (m_CR.size() != NP) || (m_F.size() != NP) || (!m_memory) ) {
+            m_CR.resize(NP); m_F.resize(NP);
+            if (m_variant_adptv==1u) {
+                for (decltype(NP) i = 0u; i < NP; ++i) {
+                    m_CR[i] = drng(m_e);
+                    m_F[i]  = drng(m_e) * 0.9 + 0.1;
+                }
+            }
+            else if (m_variant_adptv==2u) {
+                for (decltype(NP) i = 0u; i < NP; ++i) {
+                    m_CR[i] = n_dist(m_e) * 0.15 + 0.5;
+                    m_F[i]  = n_dist(m_e) * 0.15 + 0.5;
+                }
+            }
+        }
+        // We initialize the global best for F and CR as the first individual (this will soon be forgotten)
+
 
         // Main DE iterations
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
@@ -158,12 +186,18 @@ public:
                 /*-----We select at random 5 indexes from the population---------------------------------*/
                 std::vector<vector_double::size_type> idxs(NP);
                 std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
-                for (auto j = 0u; j < 5u; ++j) { // Durstenfeld's algorithm to select 5 indexes at random
+                for (auto j = 0u; j < 7u; ++j) { // Durstenfeld's algorithm to select 7 indexes at random
                     auto idx = std::uniform_int_distribution<vector_double::size_type>(0u, NP - 1u - j)(m_e);
                     r[j] = idxs[idx];
                     std::swap(idxs[idx], idxs[NP - 1u - j]);
                 }
 
+                // Adapt amplification factor and crossover probability for jDE
+                double F=0., CR=0.;
+                if (m_variant_adptv==1u) {
+                    F =  (drng(m_e) < 0.9) ? m_F[i]  : drng(m_e) * 0.9 + 0.1;
+                    CR = (drng(m_e) < 0.9) ? m_CR[i] : drng(m_e);
+                }
 
                 /*-------DE/best/1/exp--------------------------------------------------------------------*/
                 /*-------The oldest DE variant but still not bad. However, we have found several---------*/
@@ -293,8 +327,11 @@ public:
 
                 /*==Trial mutation now in tmp. force feasibility and see how good this choice really was.==*/
                 // a) feasibility
-                // detail::force_in_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
-                detail::force_bounds_random(tmp, lb, ub, m_e);
+                for (decltype(dim) j = 0u; j < dim; ++j) {
+                    if ((tmp[j] < lb[j]) || (tmp[j] > ub[j])) {
+                        tmp[j] = uniform_real_from_range(lb[j], ub[j], m_e);
+                    }
+                }
                 //b) how good?
                 auto newfitness = prob.fitness(tmp);        /* Evaluates tmp[] */
                 if ( newfitness[0] <= fit[i][0] ) {         /* improved objective function value ? */
@@ -302,11 +339,16 @@ public:
                     popnew[i] = tmp;
                     //updates the individual in pop (avoiding to recompute the objective function)
                     pop.set_xf(i,popnew[i],newfitness);
+                    // Update the adapted parameters
+                    m_CR[i] = CR;
+                    m_F[i] = F;
 
                     if ( newfitness[0] <= gbfit[0] ) {
                         /* if so...*/
                         gbfit=newfitness;                   /* reset gbfit to new low...*/
                         gbX=popnew[i];
+                        gbF=F;
+                        gbCR=CR;
                     }
                 } else {
                     popnew[i] = popold[i];
@@ -314,6 +356,8 @@ public:
             } // End of one generation
             /* Save best population member of current iteration */
             gbIter = gbX;
+            gbIterF = gbF;
+            gbIterCR = gbCR;
             /* swap population arrays. New generation becomes old one */
             std::swap(popold, popnew);
 
@@ -390,17 +434,11 @@ public:
      *
      * Example (verbosity 100):
      * @code
-     * Gen:        Fevals:          Best:            dx:            df:
-     * 5001         100020    3.62028e-05      0.0396687      0.0002866
-     * 5101         102020    1.16784e-05      0.0473027    0.000249057
-     * 5201         104020    1.07883e-05      0.0455471    0.000243651
-     * 5301         106020    6.05099e-06      0.0268876    0.000103512
-     * 5401         108020    3.60664e-06      0.0230468    5.78161e-05
-     * 5501         110020     1.7188e-06      0.0141655    2.25688e-05
      * @endcode
      * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
-     * function currently in the population, dx is the population flatness evaluated as the distance between
-     * the decisions vector of the best and of the worst individual, df is the population flatness evaluated
+     * function currently in the population, F is the average F used, CR
+     * the average CR used, dx is the population flatness evaluated as the distance between
+     * the decisions vector of the best and of the worst individual and df is the population flatness evaluated
      * as the distance between the fitness of the best and of the worst individual.
      *
      * @param level verbosity level
@@ -422,26 +460,26 @@ public:
     /// Algorithm name
     std::string get_name() const
     {
-        return "Differential Evolution";
+        return "Self-adaptive Differential Evolution";
     }
     /// Extra informations
     std::string get_extra_info() const
     {
         return "\tGenerations: " + std::to_string(m_gen) +
-            "\n\tParameter F: " + std::to_string(m_F) +
-            "\n\tParameter CR: " + std::to_string(m_CR) +
             "\n\tVariant: " + std::to_string(m_variant) +
+            "\n\tSelf ataptation variant: " + std::to_string(m_variant) +
             "\n\tStopping xtol: " + std::to_string(m_xtol) +
             "\n\tStopping ftol: " + std::to_string(m_ftol) +
+            "\n\tMemory: " + std::to_string(m_memory) +
             "\n\tVerbosity: " + std::to_string(m_verbosity) +
             "\n\tSeed: " + std::to_string(m_seed);
     }
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a de::log_line_type containing: Gen, Fevals, Best, dx, df as described
-     * in de::set_verbosity
-     * @return an <tt> std::vector </tt> of de::log_line_type containing the logged values Gen, Fevals, Best, dx, df
+     * <tt> std::vector </tt> is a sade::log_line_type containing: Gen, Fevals, Best, F, CR, dx, df as described
+     * in sade::set_verbosity
+     * @return an <tt> std::vector </tt> of sade::log_line_type containing the logged values Gen, Fevals, Best, F, CR, dx, df
      */
     const log_type& get_log() const {
         return m_log;
@@ -454,9 +492,10 @@ public:
     }
 private:
     unsigned int                        m_gen;
-    double                              m_F;
-    double                              m_CR;
+    mutable vector_double               m_F;
+    mutable vector_double               m_CR;
     unsigned int                        m_variant;
+    unsigned int                        m_variant_adptv;
     double                              m_ftol;
     double                              m_xtol;
     mutable detail::random_engine_type  m_e;
@@ -467,6 +506,6 @@ private:
 
 } //namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::de)
+PAGMO_REGISTER_ALGORITHM(pagmo::sade)
 
 #endif

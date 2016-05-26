@@ -27,6 +27,7 @@ code your own algorithm
 
   algorithms/sea
   algorithms/de
+  algorithms/sade
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^

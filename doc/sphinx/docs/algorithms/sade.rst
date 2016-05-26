@@ -1,8 +1,8 @@
-.. cpp_de
+.. cpp_sade
 
-Differential Evolution
+Self-adaptive Differential Evolution
 ======================================
 
-.. doxygenclass:: pagmo::de
+.. doxygenclass:: pagmo::sade
    :project: PaGMOreborn
    :members:
