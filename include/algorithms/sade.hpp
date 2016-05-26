@@ -77,7 +77,7 @@ public:
      * @throws std::invalid_argument if variant is not one of 1 .. 10
      */
     sade(unsigned int gen = 1u, unsigned int variant = 2u, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
-        m_gen(gen), m_CR(), m_F(), m_variant(variant), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        m_gen(gen), m_F(), m_CR(), m_variant(variant), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (variant < 1u || variant > 10u) {
             pagmo_throw(std::invalid_argument, "The Differential Evolution variant must be in [1, .., 10], while a value of " + std::to_string(variant) + " was detected.");
@@ -138,7 +138,7 @@ public:
         // Some vectors used during evolution are declared.
         vector_double tmp(dim);                             // contains the mutated candidate
         std::uniform_real_distribution<double> drng(0.,1.); // to generate a number in [0, 1)
-        std::normal_distribution<> n_dist(0.,1.);           // to generate a normally distributed number
+        std::normal_distribution<double> n_dist(0.,1.);           // to generate a normally distributed number
         std::uniform_int_distribution<vector_double::size_type> c_idx(0u, dim - 1u); // to generate a random index in the chromosome
         std::uniform_int_distribution<vector_double::size_type> p_idx(0u, NP - 1u); // to generate a random index in pop
 
@@ -151,14 +151,10 @@ public:
         auto best_idx = pop.best_idx();
         vector_double::size_type worst_idx = 0u;
         auto gbX = popnew[best_idx];
-        double gbF = m_F[0];   //initialization to the 0 ind, will soon be forgotten
-        double gbCR = m_CR[0]; //initialization to the 0 ind, will soon be forgotten
         auto gbfit=fit[best_idx];
         // the best decision vector of a generation
         auto gbIter = gbX;
-        double gbIterF = gbF;
-        double gbIterCR = gbCR;
-        std::vector<vector_double::size_type> r(5);   //indexes of 5 selected population members
+        std::vector<vector_double::size_type> r(7);   //indexes of 7 selected population members
 
         // Initialize the F and CR vectors
         if ( (m_CR.size() != NP) || (m_F.size() != NP) || (!m_memory) ) {
@@ -176,6 +172,11 @@ public:
                 }
             }
         }
+        // Initialize the global and iteration bests for F and CR
+        double gbF = m_F[0];   //initialization to the 0 ind, will soon be forgotten
+        double gbCR = m_CR[0]; //initialization to the 0 ind, will soon be forgotten
+        double gbIterF = gbF;
+        double gbIterCR = gbCR;
         // We initialize the global best for F and CR as the first individual (this will soon be forgotten)
 
 
@@ -207,10 +208,10 @@ public:
                     auto n = c_idx(m_e);
                     auto L = 0u;
                     do {
-                        tmp[n] = gbIter[n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
+                        tmp[n] = gbIter[n] + F * (popold[r[1]][n] - popold[r[2]][n]);
                         n = (n + 1u) % dim;
                         ++L;
-                    } while ((drng(m_e) < m_CR) && (L < dim));
+                    } while ((drng(m_e) < CR) && (L < dim));
                 }
 
                 /*-------DE/rand/1/exp-------------------------------------------------------------------*/
@@ -222,10 +223,10 @@ public:
                     auto n = c_idx(m_e);
                     decltype(dim) L = 0u;
                     do {
-                        tmp[n] = popold[r[0]][n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
+                        tmp[n] = popold[r[0]][n] + F * (popold[r[1]][n] - popold[r[2]][n]);
                         n = (n + 1u) % dim;
                         ++L;
-                    } while ((drng(m_e) < m_CR) && (L < dim));
+                    } while ((drng(m_e) < CR) && (L < dim));
                 }
                 /*-------DE/rand-to-best/1/exp-----------------------------------------------------------*/
                 /*-------This variant seems to be one of the best strategies. Try m_f=0.85 and m_cr=1.------*/
@@ -236,10 +237,10 @@ public:
                     auto n = c_idx(m_e);
                     auto L = 0u;
                     do {
-                        tmp[n] = tmp[n] + m_F * (gbIter[n] - tmp[n]) + m_F * (popold[r[0]][n] - popold[r[1]][n]);
+                        tmp[n] = tmp[n] + F * (gbIter[n] - tmp[n]) + F * (popold[r[0]][n] - popold[r[1]][n]);
                         n = (n + 1u) % dim;
                         ++L;
-                    } while ((drng(m_e) < m_CR) && (L < dim));
+                    } while ((drng(m_e) < CR) && (L < dim));
                 }
                 /*-------DE/best/2/exp is another powerful variant worth trying--------------------------*/
                 else if (m_variant == 4u) {
@@ -248,10 +249,10 @@ public:
                     auto L = 0u;
                     do {
                         tmp[n] = gbIter[n] +
-                        (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
+                        (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * F;
                         n = (n + 1u) % dim;
                         ++L;
-                    } while ((drng(m_e) < m_CR) && (L < dim));
+                    } while ((drng(m_e) < CR) && (L < dim));
                 }
                 /*-------DE/rand/2/exp seems to be a robust optimizer for many functions-------------------*/
                 else if (m_variant == 5u) {
@@ -260,10 +261,10 @@ public:
                     auto L = 0u;
                     do {
                         tmp[n] = popold[r[4]][n] +
-                            (popold[r[0]][n]+popold[r[1]][n]-popold[r[2]][n]-popold[r[3]][n]) * m_F;
+                            (popold[r[0]][n]+popold[r[1]][n]-popold[r[2]][n]-popold[r[3]][n]) * F;
                         n = (n + 1u) % dim;
                         ++L;
-                    } while ((drng(m_e) < m_CR) && (L < dim));
+                    } while ((drng(m_e) < CR) && (L < dim));
                 }
 
                 /*=======Essentially same strategies but BINOMIAL CROSSOVER===============================*/
@@ -272,8 +273,8 @@ public:
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
-                        if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
-                            tmp[n] = gbIter[n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
+                        if ((drng(m_e) < CR) || L + 1u == dim) { /* change at least one parameter */
+                            tmp[n] = gbIter[n] + F * (popold[r[1]][n] - popold[r[2]][n]);
                         }
                         n = (n + 1u) % dim;
                     }
@@ -283,8 +284,8 @@ public:
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
-                        if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
-                        tmp[n] = popold[r[0]][n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
+                        if ((drng(m_e) < CR) || L + 1u == dim) { /* change at least one parameter */
+                        tmp[n] = popold[r[0]][n] + F * (popold[r[1]][n] - popold[r[2]][n]);
                         }
                         n = (n + 1u) % dim;
                     }
@@ -294,8 +295,8 @@ public:
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
-                        if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
-                            tmp[n] = tmp[n] + m_F * (gbIter[n] - tmp[n]) + m_F * (popold[r[0]][n] - popold[r[1]][n]);
+                        if ((drng(m_e) < CR) || L + 1u == dim) { /* change at least one parameter */
+                            tmp[n] = tmp[n] + F * (gbIter[n] - tmp[n]) + F * (popold[r[0]][n] - popold[r[1]][n]);
                         }
                         n = (n + 1u) % dim;
                     }
@@ -305,9 +306,9 @@ public:
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
-                        if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
+                        if ((drng(m_e) < CR) || L + 1u == dim) { /* change at least one parameter */
                             tmp[n] = gbIter[n] +
-                                (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
+                                (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * F;
                         }
                         n = (n + 1u) % dim;
                     }
@@ -317,9 +318,9 @@ public:
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
-                        if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
+                        if ((drng(m_e) < CR) || L + 1u == dim) { /* change at least one parameter */
                             tmp[n] = popold[r[4]][n] +
-                                (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
+                                (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * F;
                         }
                         n = (n + 1u) % dim;
                     }
@@ -398,17 +399,14 @@ public:
                     }
                     // The population flattness in fitness
                     df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-                    // The average F, CR
-                    auto F_avg = std::accumulate(m_F.begin(), m_F.end(), 0.) / m_F.size();
-                    auto CR_avg = std::accumulate(m_CR.begin(), m_CR.end(), 0.) / m_CR.size();
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "F:", std::setw(15), "dx:", "CR:", std::setw(15), std::setw(15), "df:",'\n');
+                        print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "F:", std::setw(15), "CR:", std::setw(15), "dx:", std::setw(15), std::setw(15), "df:",'\n');
                     }
-                    print(std::setw(7),gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), F_avg, std::setw(15), CR_avg, std::setw(15), dx, std::setw(15), df,'\n');
+                    print(std::setw(7),gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), gbIterF, std::setw(15), gbIterCR, std::setw(15), dx, std::setw(15), df,'\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], F_avg, CR_avg, dx, df));
+                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], gbIterF, gbIterCR, dx, df));
                 }
             }
         } //end main DE iterations
@@ -501,6 +499,7 @@ private:
     unsigned int                        m_variant_adptv;
     double                              m_ftol;
     double                              m_xtol;
+    bool                                m_memory;
     mutable detail::random_engine_type  m_e;
     unsigned int                        m_seed;
     unsigned int                        m_verbosity;
