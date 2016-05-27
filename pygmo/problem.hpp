@@ -65,7 +65,7 @@ struct prob_inner<bp::object> final: prob_inner_base
     {
         if (pygmo::isinstance(m_value,pygmo::builtin().attr("type"))) {
             pygmo_throw(PyExc_TypeError,"cannot construct a problem from a type: please use an instance "
-                "of an object as construction argument");
+                "as construction argument");
         }
         check_callable_attribute(m_value,"fitness");
         check_callable_attribute(m_value,"get_bounds");
@@ -143,9 +143,14 @@ struct prob_inner<bp::object> final: prob_inner_base
     }
     virtual bool has_gradient() const override final
     {
-        // If the problem exposes the "has_gradient" (that is, it overrides gradient detection) then
-        // call it, otherwise check if the "gradient" attribute exists.
-        return getter_wrapper<bool>("has_gradient",try_attr(m_value,"gradient"));
+        const bool hg = try_attr(m_value,"gradient");
+        if (hg) {
+            // If the problem has a "gradient()" attribute, we further check if
+            // it overrides the "has_gradient()" detection. If it does, we call
+            // it, otherwise we just return the presence of the "gradient()" method.
+            return getter_wrapper<bool>("has_gradient",hg);
+        }
+        return false;
     }
     virtual vector_double gradient(const vector_double &dv) const override final
     {
@@ -157,9 +162,17 @@ struct prob_inner<bp::object> final: prob_inner_base
     }
     virtual bool has_gradient_sparsity() const override final
     {
-        // Like in C++, there's no override for this - the problem class will provide an implementation
-        // of this one if not present.
-        return try_attr(m_value,"gradient_sparsity");
+        const bool hgs = try_attr(m_value,"gradient_sparsity");
+        if (hgs) {
+            // If the problem has a "gradient_sparsity()" method, we further
+            // check if the override is present. If it is we call it,
+            // otherwise we just report the detection of "gradient_sparsity()".
+            auto a = try_attr(m_value,"has_gradient_sparsity");
+            if (a) {
+                return a();
+            }
+        }
+        return hgs;
     }
     virtual sparsity_pattern gradient_sparsity() const override final
     {
@@ -174,7 +187,11 @@ struct prob_inner<bp::object> final: prob_inner_base
     }
     virtual bool has_hessians() const override final
     {
-        return getter_wrapper<bool>("has_hessians",try_attr(m_value,"hessians"));
+        const bool hh = try_attr(m_value,"hessians");
+        if (hh) {
+            return getter_wrapper<bool>("has_hessians",hh);
+        }
+        return false;
     }
     virtual std::vector<vector_double> hessians(const vector_double &dv) const override final
     {
@@ -198,7 +215,14 @@ struct prob_inner<bp::object> final: prob_inner_base
     }
     virtual bool has_hessians_sparsity() const override final
     {
-        return try_attr(m_value,"hessians_sparsity");
+        const bool hhs = try_attr(m_value,"hessians_sparsity");
+        if (hhs) {
+            auto a = try_attr(m_value,"has_hessians_sparsity");
+            if (a) {
+                return a();
+            }
+        }
+        return hhs;
     }
     virtual std::vector<sparsity_pattern> hessians_sparsity() const override final
     {
