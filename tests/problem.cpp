@@ -767,7 +767,7 @@ struct extra_info_case
     }
     bool has_set_seed() const
     {
-        return false;
+        return true;
     }
     std::string get_extra_info() const {
         return std::to_string(m_seed);
