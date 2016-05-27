@@ -39,7 +39,7 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr, bp::
     c.attr("_pygmo_cpp_problem") = true;
 
     // Expose the problem constructor from Prob.
-    problem_class.def(bp::init<const Prob &>(("Constructor from a :class:`pygmo.core." + std::string(name) + "` problem *p*.").c_str(),
+    problem_class.def(bp::init<const Prob &>(
         (bp::arg("p"))))
         // Extract Prob.
         .def("_cpp_extract",&problem_cpp_extract<pagmo::problem,Prob>);

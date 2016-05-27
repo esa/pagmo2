@@ -12,8 +12,9 @@ def _problem_extract(self,t):
     the user-defined problem will be returned. Otherwise, ``None`` will be returned.
 
     :param t: the type of the user-defined problem to extract
-    :type t: a type
+    :type t: ``type``
     :returns: a deep-copy of the internal user-defined problem if it is of type *t*, or ``None`` otherwise
+    :rtype: *t*
     :raises: :exc:`TypeError` if *t* is not a type
 
     """
@@ -36,8 +37,9 @@ def _problem_is(self,t):
     returned. Otherwise, ``False`` will be returned.
 
     :param t: the type of the user-defined problem to extract
-    :type t: a type
+    :type t: ``type``
     :returns: a boolean indicating whether the user-defined problem is of type *t* or not
+    :rtype: ``bool``
 
     """
     return not self.extract(t) is None

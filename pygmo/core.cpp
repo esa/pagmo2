@@ -140,6 +140,7 @@ BOOST_PYTHON_MODULE(core)
     bp::docstring_options doc_options;
     doc_options.enable_all();
     doc_options.disable_cpp_signatures();
+    doc_options.disable_py_signatures();
 
     // Init numpy.
     // NOTE: only the second import is strictly necessary. We run a first import from BP
@@ -169,8 +170,8 @@ BOOST_PYTHON_MODULE(core)
     // Problem class.
     bp::class_<problem> problem_class("problem",pygmo::problem_docstring().c_str(),bp::no_init);
     problem_class.def(bp::init<const bp::object &>((bp::arg("p"))))
-        .def(bp::init<const problem &>("Deep copy constructor from a :class:`pygmo.core.problem` *p*.",(bp::arg("p"))))
-        .def(bp::init<const translate &>("Constructor from a :class:`pygmo.core.translate` problem *p*.",(bp::arg("p"))))
+        .def(bp::init<const problem &>((bp::arg("p"))))
+        .def(bp::init<const translate &>((bp::arg("p"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
         // Copy and deepcopy.
@@ -201,9 +202,13 @@ BOOST_PYTHON_MODULE(core)
         .def("get_fevals",&problem::get_fevals,"Get total number of objective function evaluations.")
         .def("get_gevals",&problem::get_gevals,"Get total number of gradient evaluations.")
         .def("get_hevals",&problem::get_hevals,"Get total number of Hessians evaluations.")
-        .def("set_seed",&problem::set_seed,"Set problem seed.")
-        .def("has_set_seed",&problem::has_set_seed,"Detect the TODO")
-        .def("is_stochastic",&problem::is_stochastic,"TODO")
+        .def("set_seed",&problem::set_seed,"set_seed(seed)\n\nSet problem seed.\n\n:param seed: the desired seed\n:type seed: ``int``\n"
+            ":raises: :exc:`RuntimeError` if the user-defined problem does not support seed setting\n"
+            ":raises: :exc:`OverflowError` if *seed* is negative or too large\n\n",(bp::arg("seed")))
+        .def("has_set_seed",&problem::has_set_seed,"has_set_seed()\n\nDetect the presence of the ``set_seed()`` method in the user-defined problem.\n\n"
+            ":returns: ``True`` if the user-defined problem has the ability of setting a random seed, ``False`` otherwise\n"
+            ":rtype: ``bool``\n\n")
+        .def("is_stochastic",&problem::is_stochastic,"is_stochastic()\n\nAlias for :func:`~pygmo.core.problem.has_set_seed`.")
         .def("get_name",&problem::get_name,"Get problem's name.")
         .def("get_extra_info",&problem::get_extra_info,"Get problem's extra info.");
 
