@@ -45,17 +45,12 @@ struct rosenbrock
         }
         return f;
     }
-    /// Number of objectives
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
-    }
 
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
         vector_double lb(m_dim,-5.);
-        vector_double ub(m_dim, 1.);
+        vector_double ub(m_dim, 10.);
         return {lb,ub};
     }
     /// Problem name

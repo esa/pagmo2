@@ -293,7 +293,7 @@ public:
 
                 /*==Trial mutation now in tmp. force feasibility and see how good this choice really was.==*/
                 // a) feasibility
-                // detail::force_in_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
+                //detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
                 detail::force_bounds_random(tmp, lb, ub, m_e);
                 //b) how good?
                 auto newfitness = prob.fitness(tmp);        /* Evaluates tmp[] */
