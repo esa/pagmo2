@@ -1033,7 +1033,15 @@ class problem
          */
         void set_seed(unsigned int seed)
         {
-            ptr()->set_seed(seed);
+            if (m_has_set_seed) {
+                ptr()->set_seed(seed);
+            } else {
+                pagmo_throw(std::logic_error,"the user-defined problem does not support seed setting: "
+                    "either it does not provide the 'set_seed()' method or its 'has_set_seed()' method "
+                    "returns false\n\nThe expected prototypes for 'set_seed()' are:\n"
+                    "C++: 'void set_seed(unsigned int)'\n"
+                    "Python: 'set_seed(self, seed)'");
+            }
         }
 
         /// Check if the user-defined problem implements a set_seed method
