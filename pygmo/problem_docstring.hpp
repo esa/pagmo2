@@ -15,6 +15,8 @@ inline std::string problem_docstring()
 >>> p.fitness([1,2,3,4,5])
 array([ 14814.])
 
+See also :cpp:class:`pagmo::problem`.
+
 Additional constructors:
 
 )";
