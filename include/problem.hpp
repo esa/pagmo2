@@ -77,7 +77,6 @@ inline void check_problem_bounds(const std::pair<vector_double,vector_double> &b
     }
 }
 
-
 // Two helper functions to compute sparsity patterns in the dense case.
 inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
 {
@@ -91,6 +90,7 @@ inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_d
     }
     return retval;
 }
+
 inline sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim)
 {
     sparsity_pattern retval;
