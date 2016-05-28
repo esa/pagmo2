@@ -94,8 +94,14 @@ macro(YACMA_SETUP_CXX_FLAGS)
         # This is useful when the compiler decides the template backtrace is too verbose.
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-ftemplate-backtrace-limit=0)
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-fstack-protector-all)
-        # This became available in GCC at one point.
+        # These became available in GCC from version 5.
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wodr)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-final-types)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-final-methods)
+        # Attribute suggestion.
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-attribute=pure)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-attribute=const)
+        YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-attribute=noreturn)
     endif()
 
     # MSVC setup.
