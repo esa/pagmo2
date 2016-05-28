@@ -86,7 +86,7 @@ public:
     sade(unsigned int gen = 1u, unsigned int variant = 2u, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
         m_gen(gen), m_F(), m_CR(), m_variant(variant), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
-        if (variant < 1u || variant > 10u) {
+        if (variant < 1u || variant > 18u) {
             pagmo_throw(std::invalid_argument, "The Differential Evolution variant must be in [1, .., 10], while a value of " + std::to_string(variant) + " was detected.");
         }
         if (variant_adptv < 1u || variant_adptv > 2u) {
@@ -248,8 +248,8 @@ public:
                 /*-------should play around with all three control variables.----------------------------*/
                 else if (m_variant == 3u) { /* similiar to DE2 but generally better */
                     if (m_variant_adptv==2u) {
-                        F = m_F[r[i]] + n_dist(m_e) * 0.5 * (gbIterF - m_F[r[i]]) + n_dist(m_e) * 0.5 * (m_F[r[0]] - m_F[r[1]]);
-                        CR = m_CR[r[i]] + n_dist(m_e) * 0.5 * (gbIterCR - m_CR[r[i]]) + n_dist(m_e) * 0.5 * (m_CR[r[0]] - m_CR[r[1]]);
+                        F = m_F[i] + n_dist(m_e) * 0.5 * (gbIterF - m_F[i]) + n_dist(m_e) * 0.5 * (m_F[r[0]] - m_F[r[1]]);
+                        CR = m_CR[i] + n_dist(m_e) * 0.5 * (gbIterCR - m_CR[i]) + n_dist(m_e) * 0.5 * (m_CR[r[0]] - m_CR[r[1]]);
                     }
                     tmp = popold[i];
                     auto n = c_idx(m_e);
@@ -327,8 +327,8 @@ public:
                 /*-------DE/rand-to-best/1/bin-----------------------------------------------------------*/
                 else if (m_variant == 8u) {
                     if (m_variant_adptv==2u) {
-                        F = m_F[r[i]] + n_dist(m_e) * 0.5 * (gbIterF - m_F[r[i]]) + n_dist(m_e) * 0.5 * (m_F[r[0]] - m_F[r[1]]);
-                        CR = m_CR[r[i]] + n_dist(m_e) * 0.5 * (gbIterCR - m_CR[r[i]]) + n_dist(m_e) * 0.5 * (m_CR[r[0]] - m_CR[r[1]]);
+                        F = m_F[i] + n_dist(m_e) * 0.5 * (gbIterF - m_F[i]) + n_dist(m_e) * 0.5 * (m_F[r[0]] - m_F[r[1]]);
+                        CR = m_CR[i] + n_dist(m_e) * 0.5 * (gbIterCR - m_CR[i]) + n_dist(m_e) * 0.5 * (m_CR[r[0]] - m_CR[r[1]]);
                     }
                     tmp = popold[i];
                     auto n = c_idx(m_e);
@@ -438,15 +438,15 @@ public:
                 /*-------DE/rand-to-current/2/exp --------------------------------------------------------------------*/
                 else if (m_variant == 15u) {
                     if (m_variant_adptv==2u) {
-                        F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[r[i]]) + n_dist(m_e) * 0.5 * (m_F[r[3]] - m_F[r[4]]);
-                        CR = m_CR[r[0]] + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[r[i]]) + n_dist(m_e) * 0.5 * (m_CR[r[3]] - m_CR[r[4]]);
+                        F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[i]) + n_dist(m_e) * 0.5 * (m_F[r[3]] - m_F[r[4]]);
+                        CR = m_CR[r[0]] + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[i]) + n_dist(m_e) * 0.5 * (m_CR[r[3]] - m_CR[r[4]]);
                     }
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     auto L = 0u;
                     do {
                         tmp[n] = popold[r[0]][n] +
-                            (popold[r[1]][n] - popold[r[i]][n]) * F + (popold[r[2]][n] - popold[r[3]][n]) * F;
+                            (popold[r[1]][n] - popold[i][n]) * F + (popold[r[2]][n] - popold[r[3]][n]) * F;
                         n = (n + 1u) % dim;
                         ++L;
                     } while ((drng(m_e) < CR) && (L < dim));
@@ -454,15 +454,15 @@ public:
                 /*-------DE/rand-to-current/2/bin --------------------------------------------------------------------*/
                 else if (m_variant == 16u) {
                     if (m_variant_adptv==2u) {
-                        F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[r[i]]) + n_dist(m_e) * 0.5 * (m_F[r[3]] - m_F[r[4]]);
-                        CR = m_CR[r[0]] + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[r[i]]) + n_dist(m_e) * 0.5 * (m_CR[r[3]] - m_CR[r[4]]);
+                        F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[i]) + n_dist(m_e) * 0.5 * (m_F[r[3]] - m_F[r[4]]);
+                        CR = m_CR[r[0]] + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[i]) + n_dist(m_e) * 0.5 * (m_CR[r[3]] - m_CR[r[4]]);
                     }
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
                         if ((drng(m_e) < CR) || L + 1u == dim) { /* change at least one parameter */
                             tmp[n] = popold[r[0]][n] +
-                                (popold[r[1]][n] - popold[r[i]][n]) * F + (popold[r[2]][n] - popold[r[3]][n]) * F;
+                                (popold[r[1]][n] - popold[i][n]) * F + (popold[r[2]][n] - popold[r[3]][n]) * F;
                         }
                         n = (n + 1u) % dim;
                     }
@@ -470,15 +470,15 @@ public:
                 /*-------DE/rand-to-best-and-current/2/exp --------------------------------------------------------------------*/
                 else if (m_variant == 17u) {
                     if (m_variant_adptv==2u) {
-                        F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[r[i]]) - n_dist(m_e) * 0.5 * (m_F[r[2]] - gbIterF);
-                        CR = m_CR[r[0]] + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[r[i]]) - n_dist(m_e) * 0.5 * (m_CR[r[3]] -gbIterCR);
+                        F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[i]) - n_dist(m_e) * 0.5 * (m_F[r[2]] - gbIterF);
+                        CR = m_CR[r[0]] + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[i]) - n_dist(m_e) * 0.5 * (m_CR[r[3]] -gbIterCR);
                     }
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     auto L = 0u;
                     do {
                         tmp[n] = popold[r[0]][n] +
-                            (popold[r[1]][n] - popold[r[i]][n]) * F - (popold[r[2]][n] - gbIter[n]) * F;
+                            (popold[r[1]][n] - popold[i][n]) * F - (popold[r[2]][n] - gbIter[n]) * F;
                         n = (n + 1u) % dim;
                         ++L;
                     } while ((drng(m_e) < CR) && (L < dim));
@@ -486,15 +486,15 @@ public:
                 /*-------DE/rand-to-best-and-current/2/bin --------------------------------------------------------------------*/
                 else if (m_variant == 18u) {
                     if (m_variant_adptv==2u) {
-                        F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[r[i]]) - n_dist(m_e) * 0.5 * (m_F[r[2]] - gbIterF);
-                        CR = m_CR[r[0]] + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[r[i]]) - n_dist(m_e) * 0.5 * (m_CR[r[3]] -gbIterCR);
+                        F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[i]) - n_dist(m_e) * 0.5 * (m_F[r[2]] - gbIterF);
+                        CR = m_CR[r[0]] + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[i]) - n_dist(m_e) * 0.5 * (m_CR[r[3]] -gbIterCR);
                     }
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     for (decltype(dim) L = 0u; L < dim; ++L) { /* perform Dc binomial trials */
                         if ((drng(m_e) < CR) || L + 1u == dim) { /* change at least one parameter */
                             tmp[n] = popold[r[0]][n] +
-                                (popold[r[1]][n] - popold[r[i]][n]) * F - (popold[r[2]][n] - gbIter[n]) * F;
+                                (popold[r[1]][n] - popold[i][n]) * F - (popold[r[2]][n] - gbIter[n]) * F;
                         }
                         n = (n + 1u) % dim;
                     }
