@@ -642,7 +642,7 @@ public:
     {
         return "\tGenerations: " + std::to_string(m_gen) +
             "\n\tVariant: " + std::to_string(m_variant) +
-            "\n\tSelf ataptation variant: " + std::to_string(m_variant) +
+            "\n\tSelf adaptation variant: " + std::to_string(m_variant) +
             "\n\tStopping xtol: " + std::to_string(m_xtol) +
             "\n\tStopping ftol: " + std::to_string(m_ftol) +
             "\n\tMemory: " + std::to_string(m_memory) +

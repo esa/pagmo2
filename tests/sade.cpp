@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(setters_getters_test)
     user_algo.set_seed(23u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK(user_algo.get_name().find("Self-adaptive") != std::string::npos);
-    BOOST_CHECK(user_algo.get_extra_info().find("Self ataptation variant") != std::string::npos);
+    BOOST_CHECK(user_algo.get_extra_info().find("Self adaptation variant") != std::string::npos);
     BOOST_CHECK_NO_THROW(user_algo.get_log());
 }
 
