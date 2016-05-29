@@ -12,6 +12,7 @@ These are the core PyGMO classes.
    :maxdepth: 1
 
    python/py_problem
+   python/py_population
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^

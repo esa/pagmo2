@@ -6,6 +6,17 @@
 namespace pygmo
 {
 
+inline std::string population_docstring()
+{
+    return R"(__init__(p, size = 0, seed = random)
+
+The population class.
+
+See also :cpp:class:`pagmo::population`.
+
+)";
+}
+
 inline std::string problem_docstring()
 {
     return R"(The main problem class.
@@ -16,8 +27,6 @@ inline std::string problem_docstring()
 array([ 14814.])
 
 See also :cpp:class:`pagmo::problem`.
-
-Additional constructors:
 
 )";
 }

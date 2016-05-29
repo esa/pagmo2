@@ -17,6 +17,7 @@
 #include <sstream>
 #include <string>
 
+#include "../include/population.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/decompose.hpp"
 #include "../include/problems/hock_schittkowsky_71.hpp"
@@ -91,6 +92,8 @@ std::unique_ptr<bp::class_<problem>> problem_ptr(nullptr);
 std::unique_ptr<bp::class_<translate>> translate_ptr(nullptr);
 std::unique_ptr<bp::class_<decompose>> decompose_ptr(nullptr);
 
+std::unique_ptr<bp::class_<population>> population_ptr(nullptr);
+
 }
 
 // The cleanup function.
@@ -102,6 +105,8 @@ static inline void cleanup()
     pygmo::problem_ptr.reset();
     pygmo::translate_ptr.reset();
     pygmo::decompose_ptr.reset();
+
+    pygmo::population_ptr.reset();
 }
 
 BOOST_PYTHON_MODULE(core)
@@ -140,11 +145,21 @@ BOOST_PYTHON_MODULE(core)
     // Expose cleanup function.
     bp::def("_cleanup",&cleanup);
 
+    // Population class.
+    pygmo::population_ptr = std::make_unique<bp::class_<population>>("population",pygmo::population_docstring().c_str(),bp::init<>());
+    auto &pop_class = *pygmo::population_ptr;
+    // Ctor from Python problem.
+    pygmo::population_prob_init<bp::object>();
+    pop_class.def(repr(bp::self))
+        // Copy and deepcopy.
+        .def("__copy__",&pygmo::generic_copy_wrapper<population>)
+        .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<population>)
+        ;
+
     // Problem class.
     pygmo::problem_ptr = std::make_unique<bp::class_<problem>>("problem",pygmo::problem_docstring().c_str(),bp::no_init);
     auto &problem_class = *pygmo::problem_ptr;
     problem_class.def(bp::init<const bp::object &>((bp::arg("p"))))
-        .def(bp::init<const problem &>((bp::arg("p"))))
         .def(bp::init<const translate &>((bp::arg("p"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
@@ -202,6 +217,8 @@ BOOST_PYTHON_MODULE(core)
         .def("_cpp_extract",&pygmo::problem_cpp_extract<translate,translate>);
     // Mark it as a cpp problem.
     tp.attr("_pygmo_cpp_problem") = true;
+    // Ctor of pop from translate.
+    pygmo::population_prob_init<translate>();
 
     // Exposition of C++ problems.
     // Null problem.

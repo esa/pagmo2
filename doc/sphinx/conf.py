@@ -149,7 +149,7 @@ html_theme_options = {
     # Note the "1" or "True" value above as the third argument to indicate
     # an arbitrary url.
     'navbar_links': [
-        ("home", "index"),
+        ("Home", "index"),
         ("C++ docs", "docs/cpp"),
         ("Python docs", "docs/python")
     ],
