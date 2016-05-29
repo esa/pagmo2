@@ -31,7 +31,10 @@ namespace pagmo
  * here implemented is inspired by the ideas introduced by Elsayed et al. and uses a variaton of the selected DE operator to produce new
  * CR anf F parameters for each individual. We refer to this variant as to iDE.
  *
- * @note There exist an algorithm referred to as SaDE in some literature. This is not the algorithm implemented in PaGMO.
+ * @note There exist an algorithm referred to as SaDE in the literature. This is not the algorithm implemented in PaGMO.
+ *
+ * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+ * the allowed box-bounds, is here done by creating a random number in the bounds.
  *
  * @see (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control parameters in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE Transactions on, 10(6), 646-657. Chicago
  * @see (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011 IEEE Congress on (pp. 1041-1048). IEEE.

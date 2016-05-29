@@ -27,11 +27,11 @@ namespace pagmo
  * ruminations and computer simulations on both parts yielded many substantial improvements which
  * make DE the versatile and robust tool it is today'' (from the official web pages....)
  *
- * The implementation provided for PaGMO is based from the code provided in the official
- * DE web site and is suitable for box-constrained single-objective continuous optimization.
+ * The implementation provided for PaGMO is based on the code provided in the official
+ * DE web site. pagmo::de is suitable for box-constrained single-objective continuous optimization.
  *
  * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
- * the allowed box-bounds, is here done by substituting it with a random number in the bounds.
+ * the allowed box-bounds, is here done by creating a random number in the bounds.
  *
  * @see http://www.icsi.berkeley.edu/~storn/code.html for the official DE web site
  * @see http://www.springerlink.com/content/x555692233083677/ for the paper that introduces Differential Evolution

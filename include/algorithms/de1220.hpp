@@ -1,5 +1,5 @@
-#ifndef PAGMO_ALGORITHMS_DE_1220_HPP
-#define PAGMO_ALGORITHMS_DE_1220_HPP
+#ifndef PAGMO_ALGORITHMS_DE1220_HPP
+#define PAGMO_ALGORITHMS_DE1220_HPP
 
 #include <iomanip>
 #include <numeric> //std::iota
@@ -18,12 +18,12 @@
 namespace pagmo
 {
 
-/// A Differential Evolution Algorithm (1220, or kDE: our own DE flavour!!)
+/// A Differential Evolution Algorithm (1220, or pDE: our own DE flavour!!)
 /**
 * \image html original.jpg "Our own DE flavour".
 *
  * Differential Evolution (pagmo::de, pagmo::sade) is one of the best meta-heuristics in PaGMO, so we
- * dared to propose our own algoritmic variant we call DE 1220 (a.k.a. kDE). Our variant
+ * dared to propose our own algoritmic variant we call DE 1220 (a.k.a. pDE). Our variant
  * makes use of the pagmo::sade adaptation schemes for CR and F and adds self-adaptation for
  * the mutation variant. The only parameter left to be specified is thus population size.
  *
@@ -42,6 +42,9 @@ namespace pagmo
  *
  * where \f$\tau\f$ is set to be 0.1, \f$random\f$ selects a random mutation variant and \f$r_i\f$ is a random
  * uniformly distributed number in [0, 1]
+ *
+ * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+  * the allowed box-bounds, is here done by creating a random number in the bounds.
  */
 
 class de1220
@@ -49,17 +52,17 @@ class de1220
 public:
     #if defined(DOXYGEN_INVOKED)
         /// Single entry of the log (gen, fevals, best, F, CR, dx, df)
-        typedef std::tuple<unsigned int, unsigned long long, double, double, double, double, double> log_line_type;
+        typedef std::tuple<unsigned int, unsigned long long, double, double, double, unsigned int, double, double> log_line_type;
         /// The log
         typedef std::vector<log_line_type> log_type;
     #else
-        using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double, double, double>;
+        using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double, unsigned int, double, double>;
         using log_type = std::vector<log_line_type>;
     #endif
 
     /// Constructor.
     /**
-     * Constructs a kDE (a.k.a. DE 1220) algorithm
+     * Constructs a pDE (a.k.a. DE 1220) algorithm
      *
      * The same two self-adaptation variants used in pagmo::sade are used to self-adapt the
      * CR and F parameters.
@@ -96,7 +99,7 @@ public:
      * @see (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011 IEEE Congress on (pp. 1041-1048). IEEE.
      */
     de1220(unsigned int gen = 1u, std::vector<unsigned int> allowed_variants = {2u,3u,7u,10u,13u,14u,15u,16u}, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
-        m_gen(gen), m_F(), m_CR(), m_variants(), m_allowed_variants(allowed_variants), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        m_gen(gen), m_F(), m_CR(), m_variant(), m_allowed_variants(allowed_variants), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         for (auto variant: allowed_variants) {
             if (variant < 1u || variant > 18u) {
@@ -159,10 +162,10 @@ public:
         // Some vectors used during evolution are declared.
         vector_double tmp(dim);                             // contains the mutated candidate
         std::uniform_real_distribution<double> drng(0.,1.); // to generate a number in [0, 1)
-        std::normal_distribution<double> n_dist(0.,1.);           // to generate a normally distributed number
+        std::normal_distribution<double> n_dist(0.,1.);  // to generate a normally distributed number
         std::uniform_int_distribution<vector_double::size_type> c_idx(0u, dim - 1u); // to generate a random index in the chromosome
         std::uniform_int_distribution<vector_double::size_type> p_idx(0u, NP - 1u); // to generate a random index in pop
-        std::uniform_int_distribution<vector_double::size_type> v_idx(0u, m_allowed_variants.size() - 1u); // to generate a random index in pop
+        std::uniform_int_distribution<vector_double::size_type> v_idx(0u, m_allowed_variants.size() - 1u); // to generate a random variant
 
         // We extract from pop the chromosomes and fitness associated
         auto popold = pop.get_x();
@@ -179,8 +182,8 @@ public:
         std::vector<vector_double::size_type> r(7);   //indexes of 7 selected population members
 
         // Initialize the F and CR vectors
-        if ( (m_CR.size() != NP) || (m_F.size() != NP) || (m_variants.size() != NP)  || (!m_memory) ) {
-            m_CR.resize(NP); m_F.resize(NP); m_variants.resize(NP);
+        if ( (m_CR.size() != NP) || (m_F.size() != NP) || (m_variant.size() != NP)  || (!m_memory) ) {
+            m_CR.resize(NP); m_F.resize(NP); m_variant.resize(NP);
             if (m_variant_adptv==1u) {
                 for (decltype(NP) i = 0u; i < NP; ++i) {
                     m_CR[i] = drng(m_e);
@@ -193,15 +196,18 @@ public:
                     m_F[i]  = n_dist(m_e) * 0.15 + 0.5;
                 }
             }
-            for (auto &variant: m_variants) {
+            for (auto &variant: m_variant) {
                 variant = m_allowed_variants[v_idx(m_e)];
             }
         }
         // Initialize the global and iteration bests for F and CR
         double gbF = m_F[0];   //initialization to the 0 ind, will soon be forgotten
         double gbCR = m_CR[0]; //initialization to the 0 ind, will soon be forgotten
+        unsigned int gbVariant = m_variant[0];
         double gbIterF = gbF;
         double gbIterCR = gbCR;
+        unsigned int gbIterVariant;
+
         // We initialize the global best for F and CR as the first individual (this will soon be forgotten)
 
         // Main DE iterations
@@ -220,7 +226,7 @@ public:
                 // Adapt amplification factor, crossover probability and mutation variant for DE 1220
                 double F=0., CR=0.;
                 unsigned int VARIANT = 0u;
-                VARIANT = (drng(m_e) < 0.9) ? m_variants[i] : m_allowed_variants[v_idx(m_e)];
+                VARIANT = (drng(m_e) < 0.9) ? m_variant[i] : m_allowed_variants[v_idx(m_e)];
                 if (m_variant_adptv==1u) {
                     F =  (drng(m_e) < 0.9) ? m_F[i]  : drng(m_e) * 0.9 + 0.1;
                     CR = (drng(m_e) < 0.9) ? m_CR[i] : drng(m_e);
@@ -537,6 +543,7 @@ public:
                     // Update the adapted parameters
                     m_CR[i] = CR;
                     m_F[i] = F;
+                    m_variant[i] = VARIANT;
 
                     if ( newfitness[0] <= gbfit[0] ) {
                         /* if so...*/
@@ -544,6 +551,7 @@ public:
                         gbX=popnew[i];
                         gbF=F;                              /* these were forgotten in PaGMOlegacy */
                         gbCR=CR;                            /* these were forgotten in PaGMOlegacy */
+                        gbVariant=VARIANT;
                     }
                 } else {
                     popnew[i] = popold[i];
@@ -553,6 +561,7 @@ public:
             gbIter = gbX;
             gbIterF = gbF;
             gbIterCR = gbCR;
+            gbIterVariant = gbVariant; // the gbIterVariant is not really needed and is only kept for consistency
             /* swap population arrays. New generation becomes old one */
             std::swap(popold, popnew);
 
@@ -595,12 +604,12 @@ public:
                     df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "F:", std::setw(15), "CR:", std::setw(15), "dx:", std::setw(15), std::setw(15), "df:",'\n');
+                        print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "F:", std::setw(15), "CR:", std::setw(15), "Variant:", std::setw(15), "dx:", std::setw(15), std::setw(15), "df:",'\n');
                     }
-                    print(std::setw(7),gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), gbIterF, std::setw(15), gbIterCR, std::setw(15), dx, std::setw(15), df,'\n');
+                    print(std::setw(7),gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), gbIterF, std::setw(15), gbIterCR, std::setw(15), gbIterVariant, std::setw(15), dx, std::setw(15), df,'\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], gbIterF, gbIterCR, dx, df));
+                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], gbIterF, gbIterCR, gbIterVariant, dx, df));
                 }
             }
         } //end main DE iterations
@@ -691,7 +700,7 @@ private:
     unsigned int                        m_gen;
     mutable vector_double               m_F;
     mutable vector_double               m_CR;
-    mutable std::vector<unsigned int>   m_variants;
+    mutable std::vector<unsigned int>   m_variant;
     std::vector<unsigned int>           m_allowed_variants;
     unsigned int                        m_variant_adptv;
     double                              m_ftol;
