@@ -1,0 +1,8 @@
+.. cpp_sade
+
+Self-adaptive Differential Evolution (DE 1220 aka kDE)
+======================================================
+
+.. doxygenclass:: pagmo::de1220
+   :project: PaGMOreborn
+   :members:
