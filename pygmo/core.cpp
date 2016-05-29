@@ -6,11 +6,13 @@
 #include <boost/python/def.hpp>
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/errors.hpp>
+#include <boost/python/extract.hpp>
 #include <boost/python/import.hpp>
 #include <boost/python/make_constructor.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
+#include <boost/python/scope.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
 #include <memory>
@@ -145,6 +147,15 @@ BOOST_PYTHON_MODULE(core)
     // Expose cleanup function.
     bp::def("_cleanup",&cleanup);
 
+    // Create the problems submodule.
+	std::string problems_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".problems");
+	PyObject *problems_module_ptr = PyImport_AddModule(problems_module_name.c_str());
+	if (!problems_module_ptr) {
+		pygmo_throw(PyExc_RuntimeError,"error while creating the 'problems' submodule");
+	}
+	auto problems_module = bp::object(bp::handle<>(bp::borrowed(problems_module_ptr)));
+	bp::scope().attr("problems") = problems_module;
+
     // Population class.
     pygmo::population_ptr = std::make_unique<bp::class_<population>>("population",pygmo::population_docstring().c_str(),bp::init<>());
     auto &pop_class = *pygmo::population_ptr;
@@ -160,7 +171,6 @@ BOOST_PYTHON_MODULE(core)
     pygmo::problem_ptr = std::make_unique<bp::class_<problem>>("problem",pygmo::problem_docstring().c_str(),bp::no_init);
     auto &problem_class = *pygmo::problem_ptr;
     problem_class.def(bp::init<const bp::object &>((bp::arg("p"))))
-        .def(bp::init<const translate &>((bp::arg("p"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
         // Copy and deepcopy.
@@ -219,6 +229,10 @@ BOOST_PYTHON_MODULE(core)
     tp.attr("_pygmo_cpp_problem") = true;
     // Ctor of pop from translate.
     pygmo::population_prob_init<translate>();
+    // Ctor of problem from translate.
+    pygmo::problem_prob_init<translate>();
+    // Add it the the problems submodule.
+    bp::scope().attr("problems").attr("translate") = tp;
 
     // Exposition of C++ problems.
     // Null problem.

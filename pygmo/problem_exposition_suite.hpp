@@ -48,6 +48,15 @@ inline void population_prob_init()
 }
 
 template <typename Prob>
+inline void problem_prob_init()
+{
+    assert(problem_ptr.get() != nullptr);
+    auto &prob_class = *problem_ptr;
+    prob_class.def(bp::init<const Prob &>((bp::arg("p"))));
+}
+
+
+template <typename Prob>
 inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
 {
     assert(problem_ptr.get() != nullptr);
@@ -63,16 +72,18 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
     population_prob_init<Prob>();
 
     // Expose the problem constructor from Prob.
-    problem_class.def(bp::init<const Prob &>(
-        (bp::arg("p"))))
-        // Extract Prob.
-        .def("_cpp_extract",&problem_cpp_extract<pagmo::problem,Prob>);
+    problem_prob_init<Prob>();
+    // Expose extract.
+    problem_class.def("_cpp_extract",&problem_cpp_extract<pagmo::problem,Prob>);
 
     // Expose translate's constructor from Prob and translation vector.
     tp_class.def("__init__",bp::make_constructor(&translate_init<Prob>,boost::python::default_call_policies(),
         (bp::arg("p"),bp::arg("t"))))
         // Extract.
         .def("_cpp_extract",&problem_cpp_extract<pagmo::translate,Prob>);
+
+    // Add the problem to the problmes submodule.
+    bp::scope().attr("problems").attr(name) = c;
 
     return c;
 }
