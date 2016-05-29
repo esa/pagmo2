@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <boost/python/extract.hpp>
+#include <boost/python/list.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/tuple.hpp>
@@ -269,12 +270,12 @@ struct prob_inner<bp::object> final: prob_inner_base
 // Register the prob_inner specialised for bp::object.
 PAGMO_REGISTER_PROBLEM(boost::python::object)
 
-// Serialization support for the problem class.
 namespace pygmo
 {
 
 namespace bp = boost::python;
 
+// Serialization support for the problem class.
 struct problem_pickle_suite : bp::pickle_suite
 {
     static bp::tuple getinitargs(const pagmo::problem &)
@@ -318,7 +319,7 @@ struct problem_pickle_suite : bp::pickle_suite
     }
 };
 
-// Wrapper for extract.
+// Wrappers for extract.
 template <typename Prob, typename T>
 inline T problem_cpp_extract(const Prob &p, const T &)
 {
@@ -340,6 +341,53 @@ inline bp::object problem_py_extract(const Prob &p, const bp::object &t)
         pygmo_throw(PyExc_TypeError,("the stored object is not of type " + str(t)).c_str());
     }
     return deepcopy(*ptr);
+}
+
+// Wrapper for the fitness function.
+inline bp::object fitness_wrapper(const pagmo::problem &p, const bp::object &dv)
+{
+    return vd_to_a(p.fitness(to_vd(dv)));
+}
+
+// Wrapper for the gradient function.
+inline bp::object gradient_wrapper(const pagmo::problem &p, const bp::object &dv)
+{
+    return vd_to_a(p.gradient(to_vd(dv)));
+}
+
+// Wrapper for the bounds getter.
+inline bp::tuple get_bounds_wrapper(const pagmo::problem &p)
+{
+    auto retval = p.get_bounds();
+    return bp::make_tuple(vd_to_a(retval.first),vd_to_a(retval.second));
+}
+
+// Wrapper for gradient sparsity.
+inline bp::object gradient_sparsity_wrapper(const pagmo::problem &p)
+{
+    return sp_to_a(p.gradient_sparsity());
+}
+
+// Wrapper for Hessians.
+inline bp::list hessians_wrapper(const pagmo::problem &p, const bp::object &dv)
+{
+    bp::list retval;
+    const auto h = p.hessians(to_vd(dv));
+    for (const auto &v: h) {
+        retval.append(vd_to_a(v));
+    }
+    return retval;
+}
+
+// Wrapper for Hessians sparsity.
+inline bp::list hessians_sparsity_wrapper(const pagmo::problem &p)
+{
+    bp::list retval;
+    const auto hs = p.hessians_sparsity();
+    for (const auto &sp: hs) {
+        retval.append(sp_to_a(sp));
+    }
+    return retval;
 }
 
 }

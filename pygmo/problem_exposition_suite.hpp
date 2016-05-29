@@ -7,16 +7,26 @@
 #include <boost/python/class.hpp>
 #include <boost/python/default_call_policies.hpp>
 #include <boost/python/make_constructor.hpp>
+#include <boost/python/object.hpp>
+#include <cassert>
 #include <string>
 
 #include "../include/problem.hpp"
 #include "../include/problems/translate.hpp"
 #include "common_utils.hpp"
+#include "pygmo_classes.hpp"
 
 namespace pygmo
 {
 
 namespace bp = boost::python;
+
+// Wrapper for the best known method.
+template <typename Prob>
+inline bp::object best_known_wrapper(const Prob &p)
+{
+    return vd_to_a(p.best_known());
+}
 
 // NOTE: it seems like returning a raw pointer is fine. See the examples here:
 // http://www.boost.org/doc/libs/1_61_0/libs/python/test/injected.cpp
@@ -27,14 +37,14 @@ inline pagmo::translate *translate_init(const Prob &p, const bp::object &o)
 }
 
 template <typename Prob>
-inline bp::class_<Prob> expose_problem(const char *name, const char *descr, bp::class_<pagmo::problem> &problem_class,
-    bp::class_<pagmo::translate> &tp_class)
+inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
 {
+    assert(problem_ptr.get() != nullptr);
+    assert(translate_ptr.get() != nullptr);
+    auto &problem_class = *problem_ptr;
+    auto &tp_class = *translate_ptr;
     // We require all problems to be def-ctible at the bare minimum.
     bp::class_<Prob> c(name,descr,bp::init<>());
-    // Copy and deep copy.
-    c.def("__copy__",&generic_copy_wrapper<Prob>);
-    c.def("__deepcopy__",&generic_deepcopy_wrapper<Prob>);
     // Mark it as a C++ problem.
     c.attr("_pygmo_cpp_problem") = true;
 
@@ -46,8 +56,7 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr, bp::
 
     // Expose translate's constructor from Prob and translation vector.
     tp_class.def("__init__",bp::make_constructor(&translate_init<Prob>,boost::python::default_call_policies(),
-        (bp::arg("p"),bp::arg("t"))),
-        ("Constructor from a :class:`pygmo.core." + std::string(name) + "` problem *p* and a translation vector *t*.").c_str())
+        (bp::arg("p"),bp::arg("t"))))
         // Extract.
         .def("_cpp_extract",&problem_cpp_extract<pagmo::translate,Prob>);
 

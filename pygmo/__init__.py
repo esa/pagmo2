@@ -40,6 +40,7 @@ def _problem_is(self,t):
     :type t: ``type``
     :returns: a boolean indicating whether the user-defined problem is of type *t* or not
     :rtype: ``bool``
+    :raises: :exc:`TypeError` if *t* is not a type
 
     """
     return not self.extract(t) is None
@@ -51,3 +52,8 @@ setattr(problem,"extract",_problem_extract)
 setattr(problem,"is_",_problem_is)
 setattr(translate,"extract",_problem_extract)
 setattr(translate,"is_",_problem_is)
+
+# Register the cleanup function.
+import atexit as _atexit
+from .core import _cleanup
+_atexit.register(lambda : _cleanup())

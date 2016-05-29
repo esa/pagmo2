@@ -7,27 +7,30 @@
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/import.hpp>
-#include <boost/python/list.hpp>
 #include <boost/python/make_constructor.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
+#include <memory>
 #include <sstream>
+#include <string>
 
 #include "../include/problem.hpp"
+#include "../include/problems/decompose.hpp"
 #include "../include/problems/hock_schittkowsky_71.hpp"
 #include "../include/problems/null_problem.hpp"
 #include "../include/problems/rosenbrock.hpp"
 #include "../include/problems/translate.hpp"
 #include "../include/serialization.hpp"
 #include "common_utils.hpp"
+#include "docstrings.hpp"
 #include "numpy.hpp"
 #include "object_serialization.hpp"
 #include "problem.hpp"
-#include "problem_docstring.hpp"
 #include "problem_exposition_suite.hpp"
+#include "pygmo_classes.hpp"
 
 namespace bp = boost::python;
 using namespace pagmo;
@@ -80,58 +83,25 @@ struct null_problem_pickle_suite : bp::pickle_suite
     }
 };
 
-// Wrapper for the fitness function.
-static inline bp::object fitness_wrapper(const problem &p, const bp::object &dv)
+// Instances of the classes in pygmo_classes.hpp.
+namespace pygmo
 {
-    return pygmo::vd_to_a(p.fitness(pygmo::to_vd(dv)));
+
+std::unique_ptr<bp::class_<problem>> problem_ptr(nullptr);
+std::unique_ptr<bp::class_<translate>> translate_ptr(nullptr);
+std::unique_ptr<bp::class_<decompose>> decompose_ptr(nullptr);
+
 }
 
-// Wrapper for the gradient function.
-static inline bp::object gradient_wrapper(const problem &p, const bp::object &dv)
+// The cleanup function.
+// This function will be registered to be called when the pygmo core module is unloaded
+// (see the __init__.py file). I am not 100% sure it is needed to reset these global
+// variables, but it makes me nervous to have global boost python objects around on shutdown.
+static inline void cleanup()
 {
-    return pygmo::vd_to_a(p.gradient(pygmo::to_vd(dv)));
-}
-
-// Wrapper for the bounds getter.
-static inline bp::tuple get_bounds_wrapper(const problem &p)
-{
-    auto retval = p.get_bounds();
-    return bp::make_tuple(pygmo::vd_to_a(retval.first),pygmo::vd_to_a(retval.second));
-}
-
-// Wrapper for the best known method.
-template <typename Prob>
-static inline bp::object best_known_wrapper(const Prob &p)
-{
-    return pygmo::vd_to_a(p.best_known());
-}
-
-// Wrapper for gradient sparsity.
-static inline bp::object gradient_sparsity_wrapper(const problem &p)
-{
-    return pygmo::sp_to_a(p.gradient_sparsity());
-}
-
-// Wrapper for Hessians.
-static inline bp::list hessians_wrapper(const problem &p, const bp::object &dv)
-{
-    bp::list retval;
-    const auto h = p.hessians(pygmo::to_vd(dv));
-    for (const auto &v: h) {
-        retval.append(pygmo::vd_to_a(v));
-    }
-    return retval;
-}
-
-// Wrapper for Hessians sparsity.
-static inline bp::list hessians_sparsity_wrapper(const problem &p)
-{
-    bp::list retval;
-    const auto hs = p.hessians_sparsity();
-    for (const auto &sp: hs) {
-        retval.append(pygmo::sp_to_a(sp));
-    }
-    return retval;
+    pygmo::problem_ptr.reset();
+    pygmo::translate_ptr.reset();
+    pygmo::decompose_ptr.reset();
 }
 
 BOOST_PYTHON_MODULE(core)
@@ -167,8 +137,12 @@ BOOST_PYTHON_MODULE(core)
     bp::def("_to_sp",&pygmo::to_sp);
     bp::def("_test_object_serialization",&test_object_serialization);
 
+    // Expose cleanup function.
+    bp::def("_cleanup",&cleanup);
+
     // Problem class.
-    bp::class_<problem> problem_class("problem",pygmo::problem_docstring().c_str(),bp::no_init);
+    pygmo::problem_ptr = std::make_unique<bp::class_<problem>>("problem",pygmo::problem_docstring().c_str(),bp::no_init);
+    auto &problem_class = *pygmo::problem_ptr;
     problem_class.def(bp::init<const bp::object &>((bp::arg("p"))))
         .def(bp::init<const problem &>((bp::arg("p"))))
         .def(bp::init<const translate &>((bp::arg("p"))))
@@ -181,20 +155,20 @@ BOOST_PYTHON_MODULE(core)
         .def("_py_extract",&pygmo::problem_py_extract<problem>)
         .def("_cpp_extract",&pygmo::problem_cpp_extract<problem,translate>)
         // Problem methods.
-        .def("fitness",&fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness of the input "
+        .def("fitness",&pygmo::fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness of the input "
             "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
-        .def("gradient",&gradient_wrapper,"Gradient.\n\nThis method will calculate the gradient of the input "
+        .def("gradient",&pygmo::gradient_wrapper,"Gradient.\n\nThis method will calculate the gradient of the input "
             "decision vector *dv*. The gradient is returned as a an array of doubles.",(bp::arg("dv")))
         .def("has_gradient",&problem::has_gradient,"Gradient availability.")
-        .def("gradient_sparsity",&gradient_sparsity_wrapper,"Gradient sparsity.")
-        .def("hessians",&hessians_wrapper,"Hessians.\n\nThis method will calculate the Hessians of the input "
+        .def("gradient_sparsity",&pygmo::gradient_sparsity_wrapper,"Gradient sparsity.")
+        .def("hessians",&pygmo::hessians_wrapper,"Hessians.\n\nThis method will calculate the Hessians of the input "
             "decision vector *dv*. The Hessians are returned as a list of arrays of doubles.",(bp::arg("dv")))
         .def("has_hessians",&problem::has_hessians,"Hessians availability.")
-        .def("hessians_sparsity",&hessians_sparsity_wrapper,"Hessians sparsity.")
+        .def("hessians_sparsity",&pygmo::hessians_sparsity_wrapper,"Hessians sparsity.")
         .def("get_nobj",&problem::get_nobj,"Get number of objectives.")
         .def("get_nx",&problem::get_nx,"Get problem dimension.")
         .def("get_nf",&problem::get_nf,"Get fitness dimension.")
-        .def("get_bounds",&get_bounds_wrapper,"Get bounds.\n\nThis method will return the problem bounds as a pair "
+        .def("get_bounds",&pygmo::get_bounds_wrapper,"Get bounds.\n\nThis method will return the problem bounds as a pair "
             "of arrays of doubles of equal length.")
         .def("get_nec",&problem::get_nec,"Get number of equality constraints.")
         .def("get_nic",&problem::get_nic,"Get number of inequality constraints.")
@@ -213,18 +187,16 @@ BOOST_PYTHON_MODULE(core)
         .def("get_extra_info",&problem::get_extra_info,"Get problem's extra info.");
 
     // Translate meta-problem.
-    bp::class_<translate> tp("translate","The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:",bp::init<>());
+    pygmo::translate_ptr = std::make_unique<bp::class_<translate>>("translate",
+        "The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:",bp::init<>());
+    auto &tp = *pygmo::translate_ptr;
     // Constructor from Python concrete problem and translation vector (allows to translate Python problems).
     tp.def("__init__",bp::make_constructor(&pygmo::translate_init<bp::object>,boost::python::default_call_policies(),
-        (bp::arg("p"),bp::arg("t"))),"Constructor from a concrete Python problem *p* and a translation vector *t*.")
+        (bp::arg("p"),bp::arg("t"))))
         // Constructor of translate from translate and translation vector. This allows to apply the
         // translation multiple times.
         .def("__init__",bp::make_constructor(&pygmo::translate_init<translate>,boost::python::default_call_policies(),
-            (bp::arg("p"),bp::arg("t"))),"Constructor from a :class:`pygmo.core.translate` problem *p* and a translation vector *t*.\n\n"
-            "This constructor allows to chain multiple problem translations.")
-        // Copy and deepcopy.
-        .def("__copy__",&pygmo::generic_copy_wrapper<translate>)
-        .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<translate>)
+            (bp::arg("p"),bp::arg("t"))))
         // Problem extraction.
         .def("_py_extract",&pygmo::problem_py_extract<translate>)
         .def("_cpp_extract",&pygmo::problem_cpp_extract<translate,translate>);
@@ -233,15 +205,17 @@ BOOST_PYTHON_MODULE(core)
 
     // Exposition of C++ problems.
     // Null problem.
-    auto np = pygmo::expose_problem<null_problem>("null_problem","The null problem.",problem_class,tp);
+    auto np = pygmo::expose_problem<null_problem>("null_problem","__init__()\n\nThe null problem.\n\nA test problem.\n\n");
     // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
     // serialization of the problem. Not necessary for any other problem type.
     np.def_pickle(null_problem_pickle_suite());
     // Rosenbrock.
-    auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock","The Rosenbrock problem.",problem_class,tp);
-    rb.def(bp::init<unsigned>("Constructor from dimension *dim*.",(bp::arg("dim"))));
-    rb.def("best_known",&best_known_wrapper<rosenbrock>,"The best known solution for the Rosenbrock problem.");
+    auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock",pygmo::rosenbrock_docstring().c_str());
+    rb.def(bp::init<unsigned>((bp::arg("dim"))));
+    rb.def("best_known",&pygmo::best_known_wrapper<rosenbrock>,pygmo::get_best_docstring("Rosenbrock").c_str());
     // Hock-Schittkowsky 71
-    auto hs71 = pygmo::expose_problem<hock_schittkowsky_71>("hock_schittkowsky_71","The Hock-Schittkowsky 71 problem.",problem_class,tp);
-    hs71.def("best_known",&best_known_wrapper<hock_schittkowsky_71>,"The best known solution for the Hock-Schittkowsky 71 problem.");
+    auto hs71 = pygmo::expose_problem<hock_schittkowsky_71>("hock_schittkowsky_71","__init__()\n\nThe Hock-Schittkowsky 71 problem.\n\n"
+        "See :cpp:class:`pagmo::hock_schittkowsky_71`.\n\n");
+    hs71.def("best_known",&pygmo::best_known_wrapper<hock_schittkowsky_71>,
+        pygmo::get_best_docstring("Hock-Schittkowsky 71").c_str());
 }
