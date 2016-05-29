@@ -1,5 +1,6 @@
 #include "python_includes.hpp"
 
+#include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/default_call_policies.hpp>
@@ -111,6 +112,43 @@ static inline void cleanup()
     pygmo::population_ptr.reset();
 }
 
+// Serialization support for the population class.
+struct population_pickle_suite : bp::pickle_suite
+{
+    static bp::tuple getinitargs(const population &)
+    {
+        return bp::make_tuple();
+    }
+    static bp::tuple getstate(const population &pop)
+    {
+        std::ostringstream oss;
+        {
+        cereal::PortableBinaryOutputArchive oarchive(oss);
+        oarchive(pop);
+        }
+        auto s = oss.str();
+        return bp::make_tuple(pygmo::make_bytes(s.data(),boost::numeric_cast<Py_ssize_t>(s.size())));
+    }
+    static void setstate(population &pop, bp::tuple state)
+    {
+        if (len(state) != 1) {
+            pygmo_throw(PyExc_ValueError,"the state tuple must have a single element");
+        }
+        auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
+        if (!ptr) {
+            pygmo_throw(PyExc_TypeError,"a bytes object is needed to deserialize a population");
+        }
+        const auto size = len(state[0]);
+        std::string s(ptr,ptr + size);
+        std::istringstream iss;
+        iss.str(s);
+        {
+        cereal::PortableBinaryInputArchive iarchive(iss);
+        iarchive(pop);
+        }
+    }
+};
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -165,6 +203,7 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__",&pygmo::generic_copy_wrapper<population>)
         .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<population>)
+        .def_pickle(population_pickle_suite())
         ;
 
     // Problem class.
