@@ -53,7 +53,7 @@ public:
     /**
      * Constructs a de algorithm
      *
-     * The following variants are available:
+     * The following variants (mutation variants) are available to create a new candidate individual:
      * @code
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
@@ -65,7 +65,7 @@ public:
      * @param[in] gen number of generations.
      * @param[in] F weight coefficient (dafault value is 0.8)
      * @param[in] CR crossover probability (dafault value is 0.9)
-     * @param[in] variant variant (dafault variant is 2: /rand/1/exp)
+     * @param[in] variant mutation variant (dafault variant is 2: /rand/1/exp)
      * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param[in] seed seed used by the internal random number generator (default is random)

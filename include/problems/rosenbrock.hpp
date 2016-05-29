@@ -30,6 +30,10 @@ namespace pagmo
 struct rosenbrock
 {
     /// Constructor from dimension
+    /**
+     * @param[in] dim problem dimension
+     * @throw std::invalid_argument if \p dim is less than 2
+     */
     rosenbrock(unsigned int dim = 2u) : m_dim(dim)
     {
         if (dim < 2u) {

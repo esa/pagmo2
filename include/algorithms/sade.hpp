@@ -20,7 +20,7 @@ namespace pagmo
 /**
  * \image html adaptation.jpg "Adapt already!".
  *
- * Two variants of Differential evolution exploiting the idea of self-adaptation.
+ * Two different variants of the Differential Evolution algorithm exploiting the idea of self-adaptation.
  *
  * The original Differential Evolution algorithm (pagmo::de) can be significantly improved introducing the
  * idea of parameter self-adaptation. Many different proposals have been made to self-adapt both the CR and the F parameters
@@ -69,11 +69,11 @@ public:
      * 15. - rand-to-current/2/exp                  16. - rand-to-current/2/bin
      * 17. - rand-to-best-and-current/2/exp         18. - rand-to-best-and-current/2/bin
      * @endcode
-     * The first ten are the classical variants introduced in the orginal DE algorithm, the remaining ones are,
+     * The first ten are the classical mutation variants introduced in the orginal DE algorithm, the remaining ones are,
      * instead, considered in the work by Elsayed et al.
      *
      * @param[in] gen number of generations.
-     * @param[in] variant variant (dafault variant is 2: /rand/1/exp)
+     * @param[in] variant mutation variant (dafault variant is 2: /rand/1/exp)
      * @param[in] variant_adptv parameter adaptation scheme to be used (one of 1..2)
      * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
@@ -81,13 +81,13 @@ public:
      * @param[in] seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if F, CR are not in [0,1]
-     * @throws std::invalid_argument if variant is not one of 1 .. 10
+     * @throws std::invalid_argument if variant is not one of 1 .. 18
      */
     sade(unsigned int gen = 1u, unsigned int variant = 2u, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
         m_gen(gen), m_F(), m_CR(), m_variant(variant), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (variant < 1u || variant > 18u) {
-            pagmo_throw(std::invalid_argument, "The Differential Evolution variant must be in [1, .., 10], while a value of " + std::to_string(variant) + " was detected.");
+            pagmo_throw(std::invalid_argument, "The Differential Evolution mutation variant must be in [1, .., 18], while a value of " + std::to_string(variant) + " was detected.");
         }
         if (variant_adptv < 1u || variant_adptv > 2u) {
             pagmo_throw(std::invalid_argument, "The variant for self-adaptation mus be in [1,2], while a value of " + std::to_string(variant_adptv) + " was detected.");
@@ -642,7 +642,7 @@ public:
     {
         return "\tGenerations: " + std::to_string(m_gen) +
             "\n\tVariant: " + std::to_string(m_variant) +
-            "\n\tSelf adaptation variant: " + std::to_string(m_variant) +
+            "\n\tSelf adaptation variant: " + std::to_string(m_variant_adptv) +
             "\n\tStopping xtol: " + std::to_string(m_xtol) +
             "\n\tStopping ftol: " + std::to_string(m_ftol) +
             "\n\tMemory: " + std::to_string(m_memory) +
@@ -663,7 +663,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen,m_F,m_CR,m_variant,m_ftol,m_xtol,m_e,m_seed,m_verbosity,m_log);
+        ar(m_gen,m_F,m_CR,m_variant,m_variant_adptv,m_ftol,m_xtol,m_memory,m_e,m_seed,m_verbosity,m_log);
     }
 private:
     unsigned int                        m_gen;

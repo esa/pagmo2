@@ -17,7 +17,7 @@ class null_algorithm
             return pop;
         };
 
-        /// Getter for the algorithm parameter
+        /// Getter for the (irrelevant) algorithm parameter
         const double& get_a() const
         {
             return m_a;

@@ -1,7 +1,7 @@
 .. cpp_sade
 
-Self-adaptive Differential Evolution
-======================================
+Self-adaptive Differential Evolution (jDE and iDE)
+==================================================
 
 .. doxygenclass:: pagmo::sade
    :project: PaGMOreborn
