@@ -664,7 +664,7 @@ public:
     /// Algorithm name
     std::string get_name() const
     {
-        return "Self-adaptive Differential Evolution";
+        return "Self-adaptive Differential Evolution 1220";
     }
     /// Extra informations
     std::string get_extra_info() const
