@@ -50,6 +50,9 @@ public:
   */
   hypervolume(const hypervolume &hv) = default;
 
+  /// Defaulted copy assignment operator.
+  hypervolume &operator=(const hypervolume &) = default;
+
   /// Constructor from population
   /**
   * Constructs a hypervolume object, where points are elicited from the referenced population object.
@@ -238,7 +241,7 @@ public:
   *
   * @return value representing the hypervolume
   */
-  double hypervolume::exclusive(const unsigned int p_idx, const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+  double exclusive(const unsigned int p_idx, const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
   {
 	  if (m_verify) {
 		  verify_before_compute(r_point, hv_algo);
