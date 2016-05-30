@@ -18,12 +18,23 @@
 namespace pagmo
 {
 
+/// Static variables used in pagmo::de1220
+template <typename T>
+struct de1220_statics
+{
+/// Allowed mutation variants considered by default: {2u ,3u ,7u ,10u ,13u ,14u ,15u ,16u}
+    static std::vector<unsigned int> allowed_variants;
+};
+
+template<typename T>
+std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u ,3u ,7u ,10u ,13u ,14u ,15u ,16u};
+
 /// A Differential Evolution Algorithm (1220, or pDE: our own DE flavour!!)
 /**
 * \image html original.jpg "Our own DE flavour".
 *
  * Differential Evolution (pagmo::de, pagmo::sade) is one of the best meta-heuristics in PaGMO, so we
- * dared to propose our own algoritmic variant we call DE 1220 (a.k.a. pDE). Our variant
+ * dared to propose our own algoritmic variant we call DE 1220 (a.k.a. pDE as in pagmo DE). Our variant
  * makes use of the pagmo::sade adaptation schemes for CR and F and adds self-adaptation for
  * the mutation variant. The only parameter left to be specified is thus population size.
  *
@@ -37,21 +48,23 @@ namespace pagmo
  * \left\{\begin{array}{ll}
  * random & r_i < \tau \\
  * V_i & \mbox{otherwise}
- * \end{array}\right\.
+ * \end{array}\right.
  * \f]
  *
  * where \f$\tau\f$ is set to be 0.1, \f$random\f$ selects a random mutation variant and \f$r_i\f$ is a random
  * uniformly distributed number in [0, 1]
  *
  * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
-  * the allowed box-bounds, is here done by creating a random number in the bounds.
+ * the allowed box-bounds, is here done by creating a random number in the bounds.
+ *
+ * @see pagmo::de, pagmo::sade For other available algorithms based on Differential Evolution
  */
 
 class de1220
 {
 public:
     #if defined(DOXYGEN_INVOKED)
-        /// Single entry of the log (gen, fevals, best, F, CR, dx, df)
+        /// Single entry of the log (gen, fevals, best, F, CR, Variant, dx, df)
         typedef std::tuple<unsigned int, unsigned long long, double, double, double, unsigned int, double, double> log_line_type;
         /// The log
         typedef std::vector<log_line_type> log_type;
@@ -65,11 +78,14 @@ public:
      * Constructs a pDE (a.k.a. DE 1220) algorithm
      *
      * The same two self-adaptation variants used in pagmo::sade are used to self-adapt the
-     * CR and F parameters.
+     * CR and F parameters:
+     *
      * @code
      * 1 - jDE (Brest et al.)                       2 - iDE (Elsayed at al.)
      * @endcode
+     *
      * A subset of the following mutation variants is considered when adapting the mutation variant:
+     *
      * @code
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
@@ -81,24 +97,25 @@ public:
      * 15. - rand-to-current/2/exp                  16. - rand-to-current/2/bin
      * 17. - rand-to-best-and-current/2/exp         18. - rand-to-best-and-current/2/bin
      * @endcode
+     *
      * The first ten are the classical variants introduced in the orginal DE algorithm, the remaining ones are,
      * instead, introduced in the work by Elsayed et al.
      *
      * @param[in] gen number of generations.
-     * @param[in] allowed_variants a list of mutation variants allowed
+     * @param[in] allowed_variants the subset of mutation variants to be considered (default is {2u ,3u ,7u ,10u ,13u ,14u ,15u ,16u})
      * @param[in] variant_adptv parameter adaptation scheme to be used (one of 1..2)
      * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param[in] memory when true the parameters CR anf F are not reset between successive calls to the evolve method
      * @param[in] seed seed used by the internal random number generator (default is random)
 
-     * @throws std::invalid_argument if F, CR are not in [0,1]
-     * @throws std::invalid_argument if allowed_variants contains a number not in 1..18
+     * @throws std::invalid_argument if \p variant_adptv is not in [0,1]
+     * @throws std::invalid_argument if \p allowed_variants contains a number not in 1..18
      *
      * @see (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control parameters in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE Transactions on, 10(6), 646-657. Chicago
      * @see (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011 IEEE Congress on (pp. 1041-1048). IEEE.
      */
-    de1220(unsigned int gen = 1u, std::vector<unsigned int> allowed_variants = {2u,3u,7u,10u,13u,14u,15u,16u}, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
+    de1220(unsigned int gen = 1u, std::vector<unsigned int> allowed_variants = de1220_statics<void>::allowed_variants, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
         m_gen(gen), m_F(), m_CR(), m_variant(), m_allowed_variants(allowed_variants), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         for (auto variant: allowed_variants) {
@@ -113,14 +130,13 @@ public:
 
     /// Algorithm evolve method (juice implementation of the algorithm)
     /**
-     *
      * Evolves the population for a maximum number of generations, until one of
      * tolerances set on the population flatness (x_tol, f_tol) are met.
      *
      * @param[in] pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
-     * @throws std::invalid_argument if the population size is not at least 5
+     * @throws std::invalid_argument if the population size is not at least 7
      */
     population evolve(population pop) const
     {
@@ -636,12 +652,27 @@ public:
      * - 0: no verbosity
      * - >0: will print and log one line each \p level generations.
      *
-     * Example (verbosity 100):
+     * Example (verbosity 1):
      * @code
+     * Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:
+    *     1             15        45.4245       0.480391       0.567908              4        10.9413        35061.1
+    *     2             30        45.4245       0.480391       0.567908              4        10.9413        35061.1
+    *     3             45        45.4245       0.480391       0.567908              4        10.9413        35061.1
+    *     4             60        6.55036       0.194324      0.0732594              6        9.35874        4105.24
+    *     5             75        6.55036       0.194324      0.0732594              6        6.57553         3558.4
+    *     6             90        2.43304       0.448999       0.678681             14        3.71972        1026.26
+    *     7            105        2.43304       0.448999       0.678681             14        11.3925        820.816
+    *     8            120        1.61794       0.194324      0.0732594              6        11.0693        821.631
+    *     9            135        1.61794       0.194324      0.0732594              6        11.0693        821.631
+    *    10            150        1.61794       0.194324      0.0732594              6        11.0693        821.631
+    *    11            165       0.643149       0.388876       0.680573              7        11.2983        822.606
+
+
      * @endcode
      * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
-     * function currently in the population, F is the average F used, CR
-     * the average CR used, dx is the population flatness evaluated as the distance between
+     * function currently in the population, F is the F used to create the best so far, CR
+     * the CR used to create the best so far, Variant is the Variant used to create the best so far,
+     * dx is the population flatness evaluated as the distance between
      * the decisions vector of the best and of the worst individual and df is the population flatness evaluated
      * as the distance between the fitness of the best and of the worst individual.
      *
@@ -683,9 +714,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a sade::log_line_type containing: Gen, Fevals, Best, F, CR, dx, df as described
-     * in sade::set_verbosity
-     * @return an <tt> std::vector </tt> of sade::log_line_type containing the logged values Gen, Fevals, Best, F, CR, dx, df
+     * <tt> std::vector </tt> is a de1220::log_line_type containing: Gen, Fevals, Best, F, CR, Variant, dx, df as described
+     * in de1220::set_verbosity
+     * @return an <tt> std::vector </tt> of de1220::log_line_type containing the logged values Gen, Fevals, Best, F, CR, Variant, dx, df
      */
     const log_type& get_log() const {
         return m_log;

@@ -56,11 +56,14 @@ public:
     /**
      * Constructs a self-adaptive differential evolution algorithm
      *
-     * Two self-adaptation variants are available to control the F and CR parameters
+     * Two self-adaptation variants are available to control the F and CR parameters:
+     *
      * @code
      * 1 - jDE (Brest et al.)                       2 - iDE (Elsayed at al.)
      * @endcode
+     *
      * The following variants are available to produce a mutant vector:
+     *
      * @code
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
@@ -72,6 +75,7 @@ public:
      * 15. - rand-to-current/2/exp                  16. - rand-to-current/2/bin
      * 17. - rand-to-best-and-current/2/exp         18. - rand-to-best-and-current/2/bin
      * @endcode
+     *
      * The first ten are the classical mutation variants introduced in the orginal DE algorithm, the remaining ones are,
      * instead, considered in the work by Elsayed et al.
      *
@@ -83,8 +87,8 @@ public:
      * @param[in] memory when true the parameters CR anf F are not reset between successive calls to the evolve method
      * @param[in] seed seed used by the internal random number generator (default is random)
 
-     * @throws std::invalid_argument if F, CR are not in [0,1]
-     * @throws std::invalid_argument if variant is not one of 1 .. 18
+     * @throws std::invalid_argument if \p variant_adptv is not one of 0,1
+     * @throws std::invalid_argument if variant is not one of 1, .., 18
      */
     sade(unsigned int gen = 1u, unsigned int variant = 2u, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
         m_gen(gen), m_F(), m_CR(), m_variant(variant), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
@@ -106,7 +110,7 @@ public:
      * @param[in] pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
-     * @throws std::invalid_argument if the population size is not at least 5
+     * @throws std::invalid_argument if the population size is not at least 7
      */
     population evolve(population pop) const
     {
@@ -610,12 +614,21 @@ public:
      * - 0: no verbosity
      * - >0: will print and log one line each \p level generations.
      *
-     * Example (verbosity 100):
+     * Example (verbosity 1):
      * @code
+     * Gen:        Fevals:          Best:             F:            CR:            dx:            df:
+     *  301           4515       0.668472       0.374983       0.502932    0.000276682    0.000388866
+     *  302           4530       0.668472       0.374983       0.502932    0.000213271     0.00020986
+     *  303           4545       0.668426       0.598243       0.234825    0.000167061    0.000186339
+     *  304           4560       0.668426       0.598243       0.234825    0.000217549    0.000144896
+     *  305           4575       0.668339       0.807236       0.863048    0.000192539    0.000232005
+     *  306           4590       0.668339       0.807236       0.863048    0.000143711    0.000229041
+     *  307           4605       0.668307       0.374983       0.820731    0.000163919    0.000245393
+
      * @endcode
      * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
-     * function currently in the population, F is the average F used, CR
-     * the average CR used, dx is the population flatness evaluated as the distance between
+     * function currently in the population, F is the F used to create the best so far, CR
+     * the CR used to create the best so far, dx is the population flatness evaluated as the distance between
      * the decisions vector of the best and of the worst individual and df is the population flatness evaluated
      * as the distance between the fitness of the best and of the worst individual.
      *
