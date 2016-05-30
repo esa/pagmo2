@@ -37,6 +37,7 @@ problem
   :maxdepth: 1
 
   problems/rosenbrock
+  problems/rastrigin
   problems/zdt
   problems/hock_schittkowsky_71
   problems/inventory
