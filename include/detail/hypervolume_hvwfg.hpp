@@ -191,7 +191,7 @@ private:
 	double compute_hv(const unsigned int rec_level) const
 	{
 		double **points = m_frames[rec_level - 1];
-		auto n_points = m_frames_size[rec_level - 1];
+		size_t n_points = m_frames_size[rec_level - 1];
 
 		// Simple inclusion-exclusion for one and two points
 		if (n_points == 1) {
@@ -265,11 +265,11 @@ private:
 	*/
 	bool cmp_points(double* a, double* b) const
 	{
-		for (auto i = m_current_slice; i > 0u; --i) {
-			if (a[i+1] > b[i+1]) {
+		for (size_t i = m_current_slice - 1; i >= 0; --i) {
+			if (a[i] > b[i]) {
 				return true;
 			}
-			else if (a[i+1] < b[i+1]) {
+			else if (a[i] < b[i]) {
 				return false;
 			}
 		}
