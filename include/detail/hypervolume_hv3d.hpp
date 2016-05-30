@@ -123,7 +123,7 @@ public:
 
 		typedef std::multiset<std::pair<vector_double, int>, hycon3d_tree_cmp > tree_t;
 
-		auto n = p.size();
+		int n = (int) p.size();
 		const double INF = std::numeric_limits<double>::max();
 
 		// Placeholder value for undefined lower z value.
@@ -149,10 +149,10 @@ public:
 		// Boxes
 		std::vector<std::deque<box3d> > L(n + 3);
 
-		box3d b(r_point[0], r_point[1], NaN, p[0][0], p[0][1], p[0][2]);
-		L[0].push_front(b);
+		box3d b0(r_point[0], r_point[1], NaN, p[0][0], p[0][1], p[0][2]);
+		L[0].push_front(b0);
 
-		for (unsigned int i = 1; i < n + 1; ++i) {
+		for (int i = 1; i < n + 1; ++i) {
 			std::pair<vector_double, int> pi(p[i], i);
 
 			tree_t::iterator it = T.lower_bound(pi);
@@ -178,18 +178,18 @@ public:
 
 			// Process right neighbor region, region R
 			while (!L[r].empty()) {
-				box3d& b = L[r].front();
-				if (b.ux >= p[i][0]) {
-					b.lz = p[i][2];
-					c[r] += box_volume(b);
+				box3d& br = L[r].front();
+				if (br.ux >= p[i][0]) {
+					br.lz = p[i][2];
+					c[r] += box_volume(br);
 					L[r].pop_front();
 				}
-				else if (b.lx > p[i][0]) {
-					b.lz = p[i][2];
-					c[r] += box_volume(b);
-					b.lx = p[i][0];
-					b.uz = p[i][2];
-					b.lz = NaN;
+				else if (br.lx > p[i][0]) {
+					br.lz = p[i][2];
+					c[r] += box_volume(br);
+					br.lx = p[i][0];
+					br.uz = p[i][2];
+					br.lz = NaN;
 					break;
 				}
 				else {
@@ -204,9 +204,9 @@ public:
 			for (; r_it_idx != r_it_idx_e; ++r_it_idx) {
 				int jdom = *r_it_idx;
 				while (!L[jdom].empty()) {
-					box3d& b = L[jdom].front();
-					b.lz = p[i][2];
-					c[jdom] += box_volume(b);
+					box3d& bm = L[jdom].front();
+					bm.lz = p[i][2];
+					c[jdom] += box_volume(bm);
 					L[jdom].pop_front();
 				}
 				L[i].push_back(box3d(xleft, p[jdom][1], NaN, p[jdom][0], p[i][1], p[i][2]));
@@ -217,11 +217,11 @@ public:
 
 			// Process left neighbor region, region L
 			while (!L[t].empty()) {
-				box3d &b = L[t].back();
-				if (b.ly > p[i][1]) {
-					b.lz = p[i][2];
-					c[t] += box_volume(b);
-					xleft = b.lx;
+				box3d &bl = L[t].back();
+				if (bl.ly > p[i][1]) {
+					bl.lz = p[i][2];
+					c[t] += box_volume(bl);
+					xleft = bl.lx;
 					L[t].pop_back();
 				}
 				else {
@@ -338,26 +338,24 @@ inline std::vector<double> hv2d::contributions(std::vector<vector_double> &point
 */
 inline std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_double &r_point) const
 {
-    auto fdim = r_point.size();
-    auto n = m_points.size();
-    if (fdim == 2) {
-        return hv2d().clone();
-    }
-    /*else if (fdim == 3) {
-    return hv_algorithm::hv3d().clone();
-    }
-    else if (fdim == 4) {
-    return hv_algorithm::hv4d().clone();
-    }
-    else if (fdim == 5 && n < 80) {
-    return hv_algorithm::fpl().clone();
-    }
-    else {
-    return hv_algorithm::wfg().clone();
-    }*/
-    else {
-        pagmo_throw(std::invalid_argument, "Current implementation allows only to compute 2d hypervolumes!");
-    }
+	auto fdim = r_point.size();
+	//auto n = m_points.size();
+	if (fdim == 2) {
+		return hv2d().clone();
+	}
+	else if (fdim == 3) {
+		return hv3d().clone();
+	}
+	/*else if (fdim == 4) {
+	return hv_algorithm::hv4d().clone();
+	}
+	else if (fdim == 5 && n < 80) {
+	return hv_algorithm::fpl().clone();
+	}*/
+	else {
+		return hvwfg().clone();
+	}
 }
+
 
 }

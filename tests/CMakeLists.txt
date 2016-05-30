@@ -1,6 +1,6 @@
 # NOTE: this is hard-coded at the moment, ideally we would want to detect this
 # in the build system. This needs to be set only if the Boost libraries are dynamic.
-add_definitions(-DBOOST_TEST_DYN_LINK)
+#add_definitions(-DBOOST_TEST_DYN_LINK)
 
 # Include boost directories.
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})

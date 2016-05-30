@@ -228,6 +228,54 @@ public:
   }
 
 
+  /// Compute exclusive contribution
+  /**
+  * Computes exclusive hypervolume for given indivdual.
+  *
+  * @param[in] p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
+  * @param[in] r_point fitness vector describing the reference point
+  * @param[in] hv_algorithm instance of the algorithm object used for the computation
+  *
+  * @return value representing the hypervolume
+  */
+  double hypervolume::exclusive(const unsigned int p_idx, const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+  {
+	  if (m_verify) {
+		  verify_before_compute(r_point, hv_algo);
+	  }
+
+	  if (p_idx >= m_points.size()) {
+		  pagmo_throw(std::invalid_argument, "Index of the individual is out of bounds.");
+
+	  }
+
+	  // copy the initial set of points, as the algorithm may alter its contents
+	  if (m_copy_points) {
+		  std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
+		  return hv_algo->exclusive(p_idx, points_cpy, r_point);
+	  }
+	  else {
+		  return hv_algo->exclusive(p_idx, const_cast<std::vector<vector_double> &>(m_points), r_point);
+	  }
+  }
+
+  /// Compute exclusive contribution
+  /**
+  * Computes exclusive hypervolume for given indivdual.
+  * This methods chooses the hv_algorithm dynamically.
+  *
+  * @param[in] p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
+  * @param[in] r_point fitness vector describing the reference point
+  *
+  * @return value representing the hypervolume
+  */
+  /*double hypervolume::exclusive(const unsigned int p_idx, const vector_double &r_point) const
+  {
+	  return exclusive(p_idx, r_point, get_best_exclusive(p_idx, r_point));
+  }*/
+
+
+
 
 private:
   std::vector<vector_double> m_points;
@@ -271,6 +319,7 @@ private:
     }
     hv_algo->verify_before_compute(m_points, r_point);
   }
+
 
 
 
