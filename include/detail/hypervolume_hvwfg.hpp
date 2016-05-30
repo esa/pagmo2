@@ -265,11 +265,11 @@ private:
 	*/
 	bool cmp_points(double* a, double* b) const
 	{
-		for (size_t i = m_current_slice - 1; i >= 0; --i) {
-			if (a[i] > b[i]) {
+		for (auto i = m_current_slice; i > 0u; --i) {
+			if (a[i - 1] > b[i - 1]) {
 				return true;
 			}
-			else if (a[i] < b[i]) {
+			else if (a[i - 1] < b[i - 1]) {
 				return false;
 			}
 		}
