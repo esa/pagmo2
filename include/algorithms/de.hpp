@@ -100,7 +100,7 @@ public:
         // We store some useful variables
         const auto &prob = pop.get_problem();       // This is a const reference, so using set_seed for example will not be allowed (pop.set_problem_seed is)
         auto dim = prob.get_nx();                   // This getter does not return a const reference but a copy
-        const auto &bounds = prob.get_bounds();
+        const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
         auto NP = pop.size();
@@ -168,7 +168,7 @@ public:
                 /*-------DE/best/1/exp--------------------------------------------------------------------*/
                 /*-------The oldest DE variant but still not bad. However, we have found several---------*/
                 /*-------optimization problems where misconvergence occurs.-------------------------------*/
-                if (m_variant == 1u) { /* variant DE0 (not in the original paper on DE) */
+                if (m_variant == 1u) {
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     auto L = 0u;
@@ -183,7 +183,7 @@ public:
                 /*-------This is one of my favourite strategies. It works especially well when the-------*/
                 /*-------"gbIter[]"-schemes experience misconvergence. Try e.g. m_f=0.7 and m_cr=0.5---------*/
                 /*-------as a first guess.---------------------------------------------------------------*/
-                else if (m_variant == 2u) { /* variant DE1 */
+                else if (m_variant == 2u) {
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     decltype(dim) L = 0u;
@@ -197,7 +197,7 @@ public:
                 /*-------This variant seems to be one of the best strategies. Try m_f=0.85 and m_cr=1.------*/
                 /*-------If you get misconvergence try to increase NP. If this doesn't help you----------*/
                 /*-------should play around with all three control variables.----------------------------*/
-                else if (m_variant == 3u) { /* similiar to DE2 but generally better */
+                else if (m_variant == 3u) {
                     tmp = popold[i];
                     auto n = c_idx(m_e);
                     auto L = 0u;
@@ -291,7 +291,7 @@ public:
                     }
                 }
 
-                /*==Trial mutation now in tmp. force feasibility and see how good this choice really was.==*/
+                // Trial mutation now in tmp. force feasibility and see how good this choice really was.
                 // a) feasibility
                 //detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
                 detail::force_bounds_random(tmp, lb, ub, m_e);

@@ -216,7 +216,7 @@ public:
                 /*-------DE/best/1/exp--------------------------------------------------------------------*/
                 /*-------The oldest DE variant but still not bad. However, we have found several----------*/
                 /*-------optimization problems where misconvergence occurs.-------------------------------*/
-                if (m_variant == 1u) { /* variant DE0 (not in the original paper on DE) */
+                if (m_variant == 1u) {
                     if (m_variant_adptv==2u) {
                         F =  gbIterF  + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[r[2]]);
                         CR = gbIterCR + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[r[2]]);
@@ -235,7 +235,7 @@ public:
                 /*-------This is one of my favourite strategies. It works especially well when the-------*/
                 /*-------"gbIter[]"-schemes experience misconvergence. Try e.g. m_f=0.7 and m_cr=0.5-----*/
                 /*-------as a first guess.---------------------------------------------------------------*/
-                else if (m_variant == 2u) { /* variant DE1 */
+                else if (m_variant == 2u) {
                     if (m_variant_adptv==2u) {
                         F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[r[2]]);
                         CR = m_CR[r[0]] + n_dist(m_e) * 0.5 * (m_CR[r[1]] - m_CR[r[2]]);
@@ -253,7 +253,7 @@ public:
                 /*-------This variant seems to be one of the best strategies. Try m_f=0.85 and m_cr=1.------*/
                 /*-------If you get misconvergence try to increase NP. If this doesn't help you----------*/
                 /*-------should play around with all three control variables.----------------------------*/
-                else if (m_variant == 3u) { /* similiar to DE2 but generally better */
+                else if (m_variant == 3u) {
                     if (m_variant_adptv==2u) {
                         F = m_F[i] + n_dist(m_e) * 0.5 * (gbIterF - m_F[i]) + n_dist(m_e) * 0.5 * (m_F[r[0]] - m_F[r[1]]);
                         CR = m_CR[i] + n_dist(m_e) * 0.5 * (gbIterCR - m_CR[i]) + n_dist(m_e) * 0.5 * (m_CR[r[0]] - m_CR[r[1]]);
