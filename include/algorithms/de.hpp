@@ -74,7 +74,7 @@ public:
      * @throws std::invalid_argument if variant is not one of 1 .. 10
      */
     de(unsigned int gen = 1u, double F = 0.8, double CR = 0.9, unsigned int variant = 2u, double ftol = 1e-6, double xtol = 1e-6, unsigned int seed = pagmo::random_device::next()) :
-        m_gen(gen), m_F(F), m_CR(CR), m_variant(variant), m_ftol(ftol), m_xtol(xtol), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        m_gen(gen), m_F(F), m_CR(CR), m_variant(variant), m_Ftol(ftol), m_xtol(xtol), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (variant < 1u || variant > 10u) {
             pagmo_throw(std::invalid_argument, "The Differential Evolution variant must be in [1, .., 10], while a value of " + std::to_string(variant) + " was detected.");
@@ -181,7 +181,7 @@ public:
 
                 /*-------DE/rand/1/exp-------------------------------------------------------------------*/
                 /*-------This is one of my favourite strategies. It works especially well when the-------*/
-                /*-------"gbIter[]"-schemes experience misconvergence. Try e.g. m_f=0.7 and m_cr=0.5---------*/
+                /*-------"gbIter[]"-schemes experience misconvergence. Try e.g. m_F=0.7 and m_CR=0.5---------*/
                 /*-------as a first guess.---------------------------------------------------------------*/
                 else if (m_variant == 2u) {
                     tmp = popold[i];
@@ -194,7 +194,7 @@ public:
                     } while ((drng(m_e) < m_CR) && (L < dim));
                 }
                 /*-------DE/rand-to-best/1/exp-----------------------------------------------------------*/
-                /*-------This variant seems to be one of the best strategies. Try m_f=0.85 and m_cr=1.------*/
+                /*-------This variant seems to be one of the best strategies. Try m_F=0.85 and m_CR=1.------*/
                 /*-------If you get misconvergence try to increase NP. If this doesn't help you----------*/
                 /*-------should play around with all three control variables.----------------------------*/
                 else if (m_variant == 3u) {
@@ -333,9 +333,9 @@ public:
                 }
 
                 df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-                if (df < m_ftol) {
+                if (df < m_Ftol) {
                     if (m_verbosity > 0u) {
-                        std::cout << "Exit condition -- ftol < " <<  m_ftol << std::endl;
+                        std::cout << "Exit condition -- ftol < " <<  m_Ftol << std::endl;
                     }
                     return pop;
                 }
@@ -432,7 +432,7 @@ public:
             "\n\tParameter CR: " + std::to_string(m_CR) +
             "\n\tVariant: " + std::to_string(m_variant) +
             "\n\tStopping xtol: " + std::to_string(m_xtol) +
-            "\n\tStopping ftol: " + std::to_string(m_ftol) +
+            "\n\tStopping ftol: " + std::to_string(m_Ftol) +
             "\n\tVerbosity: " + std::to_string(m_verbosity) +
             "\n\tSeed: " + std::to_string(m_seed);
     }
@@ -450,14 +450,14 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen,m_F,m_CR,m_variant,m_ftol,m_xtol,m_e,m_seed,m_verbosity,m_log);
+        ar(m_gen,m_F,m_CR,m_variant,m_Ftol,m_xtol,m_e,m_seed,m_verbosity,m_log);
     }
 private:
     unsigned int                        m_gen;
     double                              m_F;
     double                              m_CR;
     unsigned int                        m_variant;
-    double                              m_ftol;
+    double                              m_Ftol;
     double                              m_xtol;
     mutable detail::random_engine_type  m_e;
     unsigned int                        m_seed;

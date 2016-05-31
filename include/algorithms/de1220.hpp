@@ -116,7 +116,7 @@ public:
      * @see (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011 IEEE Congress on (pp. 1041-1048). IEEE.
      */
     de1220(unsigned int gen = 1u, std::vector<unsigned int> allowed_variants = de1220_statics<void>::allowed_variants, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
-        m_gen(gen), m_F(), m_CR(), m_variant(), m_allowed_variants(allowed_variants), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        m_gen(gen), m_F(), m_CR(), m_variant(), m_allowed_variants(allowed_variants), m_variant_adptv(variant_adptv), m_Ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         for (auto variant: allowed_variants) {
             if (variant < 1u || variant > 18u) {
@@ -249,8 +249,6 @@ public:
                 }
 
                 /*-------DE/best/1/exp--------------------------------------------------------------------*/
-                /*-------The oldest DE variant but still not bad. However, we have found several----------*/
-                /*-------optimization problems where misconvergence occurs.-------------------------------*/
                 if (VARIANT == 1u) {
                     if (m_variant_adptv==2u) {
                         F =  gbIterF  + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[r[2]]);
@@ -267,9 +265,6 @@ public:
                 }
 
                 /*-------DE/rand/1/exp-------------------------------------------------------------------*/
-                /*-------This is one of my favourite strategies. It works especially well when the-------*/
-                /*-------"gbIter[]"-schemes experience misconvergence. Try e.g. m_f=0.7 and m_cr=0.5-----*/
-                /*-------as a first guess.---------------------------------------------------------------*/
                 else if (VARIANT == 2u) {
                     if (m_variant_adptv==2u) {
                         F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[r[2]]);
@@ -285,9 +280,6 @@ public:
                     } while ((drng(m_e) < CR) && (L < dim));
                 }
                 /*-------DE/rand-to-best/1/exp-----------------------------------------------------------*/
-                /*-------This variant seems to be one of the best strategies. Try m_f=0.85 and m_cr=1.------*/
-                /*-------If you get misconvergence try to increase NP. If this doesn't help you----------*/
-                /*-------should play around with all three control variables.----------------------------*/
                 else if (VARIANT == 3u) {
                     if (m_variant_adptv==2u) {
                         F = m_F[i] + n_dist(m_e) * 0.5 * (gbIterF - m_F[i]) + n_dist(m_e) * 0.5 * (m_F[r[0]] - m_F[r[1]]);
@@ -597,9 +589,9 @@ public:
                 }
 
                 df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-                if (df < m_ftol) {
+                if (df < m_Ftol) {
                     if (m_verbosity > 0u) {
-                        std::cout << "Exit condition -- ftol < " <<  m_ftol << std::endl;
+                        std::cout << "Exit condition -- ftol < " <<  m_Ftol << std::endl;
                     }
                     return pop;
                 }
@@ -705,7 +697,7 @@ public:
         stream(ss, "\n\tAllowed variants: ", m_allowed_variants);
         stream(ss, "\n\tSelf adaptation variant: ", m_variant_adptv);
         stream(ss, "\n\tStopping xtol: ", m_xtol);
-        stream(ss, "\n\tStopping ftol: ", m_ftol);
+        stream(ss, "\n\tStopping ftol: ", m_Ftol);
         stream(ss, "\n\tMemory: ", m_memory);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
         stream(ss, "\n\tSeed: ", m_seed);
@@ -725,7 +717,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen,m_F,m_CR,m_allowed_variants,m_variant_adptv,m_ftol,m_xtol,m_memory,m_e,m_seed,m_verbosity,m_log);
+        ar(m_gen,m_F,m_CR,m_allowed_variants,m_variant_adptv,m_Ftol,m_xtol,m_memory,m_e,m_seed,m_verbosity,m_log);
     }
 private:
     unsigned int                        m_gen;
@@ -734,7 +726,7 @@ private:
     mutable std::vector<unsigned int>   m_variant;
     std::vector<unsigned int>           m_allowed_variants;
     unsigned int                        m_variant_adptv;
-    double                              m_ftol;
+    double                              m_Ftol;
     double                              m_xtol;
     bool                                m_memory;
     mutable detail::random_engine_type  m_e;

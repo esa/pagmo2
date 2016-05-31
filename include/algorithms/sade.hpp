@@ -91,7 +91,7 @@ public:
      * @throws std::invalid_argument if variant is not one of 1, .., 18
      */
     sade(unsigned int gen = 1u, unsigned int variant = 2u, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
-        m_gen(gen), m_F(), m_CR(), m_variant(variant), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        m_gen(gen), m_F(), m_CR(), m_variant(variant), m_variant_adptv(variant_adptv), m_Ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (variant < 1u || variant > 18u) {
             pagmo_throw(std::invalid_argument, "The Differential Evolution mutation variant must be in [1, .., 18], while a value of " + std::to_string(variant) + " was detected.");
@@ -232,9 +232,6 @@ public:
                 }
 
                 /*-------DE/rand/1/exp-------------------------------------------------------------------*/
-                /*-------This is one of my favourite strategies. It works especially well when the-------*/
-                /*-------"gbIter[]"-schemes experience misconvergence. Try e.g. m_f=0.7 and m_cr=0.5-----*/
-                /*-------as a first guess.---------------------------------------------------------------*/
                 else if (m_variant == 2u) {
                     if (m_variant_adptv==2u) {
                         F = m_F[r[0]] + n_dist(m_e) * 0.5 * (m_F[r[1]] - m_F[r[2]]);
@@ -250,9 +247,6 @@ public:
                     } while ((drng(m_e) < CR) && (L < dim));
                 }
                 /*-------DE/rand-to-best/1/exp-----------------------------------------------------------*/
-                /*-------This variant seems to be one of the best strategies. Try m_f=0.85 and m_cr=1.------*/
-                /*-------If you get misconvergence try to increase NP. If this doesn't help you----------*/
-                /*-------should play around with all three control variables.----------------------------*/
                 else if (m_variant == 3u) {
                     if (m_variant_adptv==2u) {
                         F = m_F[i] + n_dist(m_e) * 0.5 * (gbIterF - m_F[i]) + n_dist(m_e) * 0.5 * (m_F[r[0]] - m_F[r[1]]);
@@ -559,9 +553,9 @@ public:
                 }
 
                 df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-                if (df < m_ftol) {
+                if (df < m_Ftol) {
                     if (m_verbosity > 0u) {
-                        std::cout << "Exit condition -- ftol < " <<  m_ftol << std::endl;
+                        std::cout << "Exit condition -- ftol < " <<  m_Ftol << std::endl;
                     }
                     return pop;
                 }
@@ -660,7 +654,7 @@ public:
             "\n\tVariant: " + std::to_string(m_variant) +
             "\n\tSelf adaptation variant: " + std::to_string(m_variant_adptv) +
             "\n\tStopping xtol: " + std::to_string(m_xtol) +
-            "\n\tStopping ftol: " + std::to_string(m_ftol) +
+            "\n\tStopping ftol: " + std::to_string(m_Ftol) +
             "\n\tMemory: " + std::to_string(m_memory) +
             "\n\tVerbosity: " + std::to_string(m_verbosity) +
             "\n\tSeed: " + std::to_string(m_seed);
@@ -679,7 +673,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen,m_F,m_CR,m_variant,m_variant_adptv,m_ftol,m_xtol,m_memory,m_e,m_seed,m_verbosity,m_log);
+        ar(m_gen,m_F,m_CR,m_variant,m_variant_adptv,m_Ftol,m_xtol,m_memory,m_e,m_seed,m_verbosity,m_log);
     }
 private:
     unsigned int                        m_gen;
@@ -687,7 +681,7 @@ private:
     mutable vector_double               m_CR;
     unsigned int                        m_variant;
     unsigned int                        m_variant_adptv;
-    double                              m_ftol;
+    double                              m_Ftol;
     double                              m_xtol;
     bool                                m_memory;
     mutable detail::random_engine_type  m_e;
