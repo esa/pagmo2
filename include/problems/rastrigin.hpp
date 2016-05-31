@@ -42,11 +42,11 @@ struct rastrigin
     {
         vector_double f(1, 0.);
         const auto omega = 2. * pagmo::detail::pi();
-        const auto n = x.size();
+        auto n = x.size();
         for (decltype(n) i = 0u; i < n; ++i) {
             f[0] += x[i] * x[i] - 10.0 * std::cos(omega * x[i]);
         }
-        f[0] += 10. * n;
+        f[0] += 10. * static_cast<double>(n);
         return f;
     }
 
@@ -57,6 +57,42 @@ struct rastrigin
         vector_double ub(m_dim, 5.12);
         return {lb,ub};
     }
+
+    /// Gradients (dense)
+    vector_double gradient(const vector_double &x) const
+    {
+        auto n = x.size();
+        vector_double g(n);
+        const auto omega = 2. * pagmo::detail::pi();
+        for (decltype(n) i = 0u; i < n; ++i) {
+            g[i] = 2 * x[i] + 10.0 * omega * std::sin(omega * x[i]);
+        }
+        return g;
+    }
+
+    /// Hessians (sparse) only the diagonal elements are non zero
+    std::vector<vector_double> hessians(const vector_double &x) const
+    {
+        auto n = x.size();
+        vector_double h(n);
+        const auto omega = 2. * pagmo::detail::pi();
+        for (decltype(n) i = 0u; i < n; ++i) {
+            h[i] = 2 + 10.0 * omega * omega * std::cos(omega * x[i]);
+        }
+        return {h};
+    }
+
+    /// Hessian sparsity
+    std::vector<sparsity_pattern> hessians_sparsity() const
+    {
+        sparsity_pattern hs;
+        auto n = m_dim;
+        for (decltype(n) i = 0u; i < n; ++i) {
+            hs.push_back({i,i});
+        }
+        return {hs};
+    }
+
     /// Problem name
     std::string get_name() const
     {
