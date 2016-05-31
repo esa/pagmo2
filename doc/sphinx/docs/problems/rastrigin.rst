@@ -1,6 +1,6 @@
-.. cpp_rosenbrock
+.. cpp_rastrigin
 
-Rosenbrock
+Rastrigin
 ==========
 
 .. doxygenstruct:: pagmo::rastrigin

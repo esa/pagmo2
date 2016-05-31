@@ -26,6 +26,15 @@ namespace pagmo
  * \f[
  * 	F\left(x_1,\ldots,x_n\right) = 10 \cdot n + \sum_{i=1}^n x_i^2 - 10\cdot\cos\left( 2\pi \cdot x_i \right), \quad x_i \in \left[ -5.12,5.12 \right].
  * \f]
+ *
+ * Gradients (dense) are also provided as:
+ * \f[
+ * 	G_i\left(x_1,\ldots,x_n\right) = 2 x_i + 10 \cdot 2\pi \cdot\sin\left( 2\pi \cdot x_i \right)
+ * \f]
+ * And Hessians (sparse as only the diagonal is non-zero) are:
+ * \f[
+ * 	H_{ii}\left(x_1,\ldots,x_n\right) = 2 + 10 \cdot 4\pi^2 \cdot\cos\left( 2\pi \cdot x_i \right)
+ * \f]
  * The global minimum is in the origin, where \f$ F\left( 0,\ldots,0 \right) = 0 \f$.
  */
 struct rastrigin
