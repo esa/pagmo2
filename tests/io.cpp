@@ -1,6 +1,6 @@
 #include "../include/io.hpp"
 
-#define BOOST_TEST_MODULE pagmo_io_test
+#define BOOST_TEST_MODULE io_test
 #include <boost/test/unit_test.hpp>
 
 #include <iomanip>

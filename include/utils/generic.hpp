@@ -147,6 +147,52 @@ vector_double decision_vector(const vector_double &lb, const vector_double &ub, 
     return decision_vector({lb, ub}, r_engine);
 }
 
+namespace detail
+{
+    // modifies a chromosome so that it will be in the bounds. elements that are off are resampled at random in the bounds
+    void force_bounds_random(vector_double &x, const vector_double &lb, const vector_double &ub, detail::random_engine_type &r_engine)
+    {
+        assert(x.size()==lb.size());
+        assert(x.size()==ub.size());
+        for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+            if ((x[j] < lb[j]) || (x[j] > ub[j])) {
+                x[j] = pagmo::uniform_real_from_range(lb[j], ub[j], r_engine);
+            }
+        }
+    }
+    // modifies a chromosome so that it will be in the bounds. Elements that are off are reflected in the bounds
+    void force_bounds_reflection(vector_double &x, const vector_double &lb, const vector_double &ub)
+    {
+        assert(x.size()==lb.size());
+        assert(x.size()==ub.size());
+        for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+            while(x[j] < lb[j] || x[j] > ub[j])
+            {
+                if (x[j] < lb[j]) {
+                    x[j] = 2 * lb[j] - x[j];
+                }
+                if (x[j] > ub[j]) {
+                    x[j] = 2 * ub[j] - x[j];
+                }
+            }
+        }
+    }
+    // modifies a chromosome so that it will be in the bounds. Elements that are off are set on the bounds
+    void force_bounds_stick(vector_double &x, const vector_double &lb, const vector_double &ub)
+    {
+        assert(x.size()==lb.size());
+        assert(x.size()==ub.size());
+        for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+            if (x[j] < lb[j]) {
+                x[j] = lb[j];
+            }
+            if (x[j] > ub[j]) {
+                x[j] = ub[j];
+            }
+        }
+    }
+}
+
 } // namespace pagmo
 
 #endif

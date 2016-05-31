@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_hock_schittkowsky_test
+#define BOOST_TEST_MODULE hock_schittkowsky_test
 #include <boost/test/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>

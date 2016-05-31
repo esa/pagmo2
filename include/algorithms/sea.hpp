@@ -3,13 +3,14 @@
 
 #include <iomanip>
 #include <random>
+#include <string>
 #include <tuple>
 
-#include "../algorithm.hpp"
 #include "../io.hpp"
 #include "../exceptions.hpp"
 #include "../population.hpp"
 #include "../rng.hpp"
+#include "../utils/generic.hpp"
 
 namespace pagmo
 {
@@ -45,7 +46,7 @@ class sea
 {
     public:
         #if defined(DOXYGEN_INVOKED)
-            /// Single entry of the log
+            /// Single entry of the log (gen, fevals, best, improvement, mutations)
             typedef std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type> log_line_type;
             /// The log
             typedef std::vector<log_line_type> log_type;
@@ -59,7 +60,7 @@ class sea
          * Constructs a sea algorithm from the number of generations and the random seed.
          *
          * @param[in] gen Number of generations to consider. Each generation will compute the objective function once
-         * @param[in] seed random seed used to generate mutations
+         * @param[in] seed seed used by the internal random number generator
          */
         sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next()):m_gen(gen),m_e(seed),m_seed(seed),m_verbosity(0u),m_log() {}
 
@@ -71,24 +72,29 @@ class sea
          */
         population evolve(population pop) const {
             // We store some useful properties
-            const auto &prob = pop.get_problem();       // This is a const reference, so using set_seed for example will not be allowed
+            const auto &prob = pop.get_problem();       // This is a const reference, so using set_seed for example will not be allowed (pop.set_problem_seed is)
             const auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
-            const auto &bounds = prob.get_bounds();
+            const auto bounds = prob.get_bounds();
             const auto &lb = bounds.first;
             const auto &ub = bounds.second;
+            auto fevals0 = prob.get_fevals();           // disount for the already made fevals
+            unsigned int count = 1u;                    // regulates the screen output
 
             // PREAMBLE-------------------------------------------------------------------------------------------------
             // We start by checking that the problem is suitable for this
             // particular algorithm.
             if (prob.get_nc() != 0u) {
-                pagmo_throw(std::invalid_argument,"Non linear constraints detected. " + get_name() + " cannot deal with them");
+                pagmo_throw(std::invalid_argument,"Non linear constraints detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");
             }
             if (prob.get_nf() != 1u) {
-                pagmo_throw(std::invalid_argument,"Multiple objectives detected. " + get_name() + " cannot deal with them");
+                pagmo_throw(std::invalid_argument,"Multiple objectives detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");
             }
             // Get out if there is nothing to do.
             if (m_gen == 0u) {
                 return pop;
+            }
+            if (pop.size() < 1u) {
+                pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 1 individual in the population, " + std::to_string(pop.size()) + " detected");
             }
             // ---------------------------------------------------------------------------------------------------------
 
@@ -99,7 +105,6 @@ class sea
             // 1 - Compute the best and worst individual (index)
             auto best_idx = pop.best_idx();
             auto worst_idx = pop.worst_idx();
-            unsigned int count = 1u; // regulates the screen output
             std::uniform_real_distribution<double> drng(0.,1.); // [0,1]
 
             for (unsigned int i = 1u; i <= m_gen; ++i) {
@@ -141,10 +146,10 @@ class sea
                         if (count % 50u == 1u) {
                             print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
-                        print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
+                        print(std::setw(7),i, std::setw(15), prob.get_fevals()-fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
                         ++count;
                         // Logs
-                        m_log.push_back(log_line_type(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
+                        m_log.push_back(log_line_type(i, prob.get_fevals()-fevals0, pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
                 // 4 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
@@ -155,10 +160,10 @@ class sea
                         if (count % 50u == 1u) {
                             print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "Improvement:", std::setw(15), "Mutations:",'\n');
                         }
-                        print(std::setw(7),i, std::setw(15), prob.get_fevals(), std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
+                        print(std::setw(7),i, std::setw(15), prob.get_fevals()-fevals0, std::setw(15), pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut,'\n');
                         ++count;
                         // Logs
-                        m_log.push_back(log_line_type(i, prob.get_fevals(), pop.get_f()[best_idx][0], improvement, mut));
+                        m_log.push_back(log_line_type(i, prob.get_fevals()-fevals0, pop.get_f()[best_idx][0], improvement, mut));
                     }
                 }
             }
@@ -196,27 +201,21 @@ class sea
         {
             m_verbosity = level;
         };
-        /// Get algorithm seed
+        /// Gets the seed
         unsigned int get_seed() const
         {
             return m_seed;
         }
-        /// Get algorithm verbosity level
+    /// Gets the verbosity level
         unsigned int get_verbosity() const
         {
             return m_verbosity;
-        }
-        /// Get generations
-        unsigned int get_gen() const
-        {
-            return m_gen;
         }
         /// Algorithm name
         std::string get_name() const
         {
             return "(N+1)-EA Simple Evolutionary Algorithm";
         }
-
         /// Extra informations
         std::string get_extra_info() const
         {
@@ -237,7 +236,7 @@ class sea
         template <typename Archive>
         void serialize(Archive &ar)
         {
-            ar(m_gen,m_e,m_seed,m_verbosity,m_log); // should we also serialize m_log here?
+            ar(m_gen,m_e,m_seed,m_verbosity,m_log);
         }
     private:
         unsigned int                                     m_gen;

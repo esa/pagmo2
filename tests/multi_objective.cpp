@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_mo_utilities_test
+#define BOOST_TEST_MODULE mo_utilities_test
 #include <boost/test/unit_test.hpp>
 #include <exception>
 #include <tuple>
@@ -115,11 +115,11 @@ BOOST_AUTO_TEST_CASE(crowding_distance_test)
     BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
     example = {{},{}};
     BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
-    example = {{1,2}};    
+    example = {{1,2}};
     BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
     example = {{1},{2}};
     BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
-    example = {{2,3},{3,4},{2,4,5}};    
+    example = {{2,3},{3,4},{2,4,5}};
     BOOST_CHECK_THROW(crowding_distance(example), std::invalid_argument);
 }
 
