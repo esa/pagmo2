@@ -1,6 +1,6 @@
 #include "../include/problem.hpp"
 
-#define BOOST_TEST_MODULE pagmo_problem_test
+#define BOOST_TEST_MODULE problem_test
 #include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>

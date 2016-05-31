@@ -1,0 +1,12 @@
+.. cpp_sade
+
+Self-adaptive Differential Evolution (DE 1220 aka pDE)
+======================================================
+
+.. doxygenclass:: pagmo::de1220
+   :project: PaGMOreborn
+   :members:
+
+.. doxygenstruct:: pagmo::de1220_statics
+  :project: PaGMOreborn
+  :members:

@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_translate_test
+#define BOOST_TEST_MODULE translate_test
 #include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>

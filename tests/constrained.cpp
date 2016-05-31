@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_constrained_utilities_test
+#define BOOST_TEST_MODULE constrained_utilities_test
 #include <boost/test/unit_test.hpp>
 #include <exception>
 
@@ -65,11 +65,11 @@ BOOST_AUTO_TEST_CASE(sort_population_con_test)
     // Test throw
     example = {{1,2,3},{1,2}};
     BOOST_CHECK_THROW(sort_population_con(example, neq), std::invalid_argument);
-    example = {{-1,0,0},{0,0,-1},{1,0,0}};    
+    example = {{-1,0,0},{0,0,-1},{1,0,0}};
     BOOST_CHECK_THROW(sort_population_con(example, 3), std::invalid_argument);
     BOOST_CHECK_THROW(sort_population_con(example, 4), std::invalid_argument);
-    tol = {2,3,4};   
+    tol = {2,3,4};
     BOOST_CHECK_THROW(sort_population_con(example, 0, tol), std::invalid_argument);
-    tol = {2};   
+    tol = {2};
     BOOST_CHECK_THROW(sort_population_con(example, 0, tol), std::invalid_argument);
 }
