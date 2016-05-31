@@ -20,6 +20,9 @@ namespace pagmo
 
 /// Stochastic Programming Test Problem: An Inventory Model
 /**
+ *
+ * \image html newsvendor.png "A news vendor icon" width=3cm
+ *
  * This problem is a generalization of the simple inventory problem so-called of the "news-vendor",
  * widely used to introduce the main tools and techniques of stochastic programming
  * Assume you are a newsvendor and each week, for the next \f$ N\f$ weeks, you need to decide how many

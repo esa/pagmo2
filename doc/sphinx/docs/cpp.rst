@@ -42,6 +42,8 @@ problem
   problems/rosenbrock
   problems/rastrigin
   problems/schwefel
+  problems/ackley
+  problems/griewank
   problems/zdt
   problems/hock_schittkowsky_71
   problems/inventory
