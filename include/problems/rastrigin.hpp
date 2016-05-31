@@ -43,7 +43,7 @@ struct rastrigin
     rastrigin(unsigned int dim = 1u) : m_dim(dim)
     {
         if (dim < 1u) {
-            pagmo_throw(std::invalid_argument, "Rosenbrock Function must have minimum 1 dimension, " + std::to_string(dim) + " requested");
+            pagmo_throw(std::invalid_argument, "Rastrigin Function must have minimum 1 dimension, " + std::to_string(dim) + " requested");
         }
     };
     /// Fitness
@@ -53,7 +53,7 @@ struct rastrigin
         const auto omega = 2. * pagmo::detail::pi();
         auto n = x.size();
         for (decltype(n) i = 0u; i < n; ++i) {
-            f[0] += x[i] * x[i] - 10.0 * std::cos(omega * x[i]);
+            f[0] += x[i] * x[i] - 10. * std::cos(omega * x[i]);
         }
         f[0] += 10. * static_cast<double>(n);
         return f;
