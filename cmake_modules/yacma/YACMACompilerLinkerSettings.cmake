@@ -110,6 +110,9 @@ macro(YACMA_SETUP_CXX_FLAGS)
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(/W4)
         # Treat warnings as errors.
         YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(/WX)
+        # The /bigobj flag (needed for heavily templated code).
+        # https://msdn.microsoft.com/en-us/library/ms173499.aspx
+        YACMA_CHECK_ENABLE_CXX_FLAG(/bigobj)
     endif()
 endmacro()
 
