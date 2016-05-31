@@ -19,7 +19,7 @@ namespace pagmo
 /**
  * \image html rosenbrock.png "Two-dimensional Rosenbrock function." width=3cm
  *
- * This is a box-constrained continuous single-objecive problem.
+ * This is a box-constrained continuous single-objective problem.
  * The objective function is the generalised n-dimensional Rosenbrock function:
  * \f[
  *  F\left(x_1,\ldots,x_n\right) =
