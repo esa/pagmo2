@@ -9,6 +9,7 @@
 #include <boost/python/init.hpp>
 #include <boost/python/make_constructor.hpp>
 #include <boost/python/object.hpp>
+#include <boost/python/scope.hpp>
 #include <cassert>
 #include <string>
 
@@ -82,7 +83,7 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
         // Extract.
         .def("_cpp_extract",&generic_cpp_extract<pagmo::translate,Prob>);
 
-    // Add the problem to the problmes submodule.
+    // Add the problem to the problems submodule.
     bp::scope().attr("problems").attr(name) = c;
 
     return c;
