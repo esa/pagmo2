@@ -14,6 +14,8 @@ namespace pygmo
 
 namespace bp = boost::python;
 
+// A common base class with methods useful inthe implementation of
+// the pythonic problem and algorithm.
 struct common_base
 {
     // Try to get an attribute from an object. If the call fails,
