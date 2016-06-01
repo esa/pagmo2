@@ -18,7 +18,7 @@ namespace pagmo
 
     /// Decompose meta-problem
     /**
-     * \image html decompose.png "Two-dimensional Rosenbrock function." width=3cm
+     * \image html decompose.png "Decomposition." width=3cm
      *
      * This meta-problem *decomposes* a multi-objective input problem (user-defined or a pagmo::problem),
      * resulting in a single-objective pagmo::problem with a fitness function combining the original fitness functions.

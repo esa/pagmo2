@@ -18,7 +18,6 @@ using namespace pagmo;
 // Generates a dummy simple problem with arbitrary dimensions and return values
 struct base_p
 {
-
     base_p(
         unsigned int nobj = 1,
         unsigned int nec = 0,
