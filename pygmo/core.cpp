@@ -21,6 +21,7 @@
 #include <string>
 
 #include "../include/algorithm.hpp"
+#include "../include/algorithms/de.hpp"
 #include "../include/algorithms/null_algorithm.hpp"
 #include "../include/population.hpp"
 #include "../include/problem.hpp"
@@ -169,6 +170,47 @@ struct population_pickle_suite : bp::pickle_suite
     }
 };
 
+// Various wrappers for the population exposition.
+static inline void pop_push_back_wrapper(population &pop, const bp::object &x)
+{
+    pop.push_back(pygmo::to_vd(x));
+}
+
+static inline bp::object pop_decision_vector_wrapper(const population &pop)
+{
+    return pygmo::vd_to_a(pop.decision_vector());
+}
+
+static inline vector_double::size_type pop_best_idx_wrapper_0(const population &pop, const bp::object &tol)
+{
+    return pop.best_idx(pygmo::to_vd(tol));
+}
+
+static inline vector_double::size_type pop_best_idx_wrapper_1(const population &pop, double tol)
+{
+    return pop.best_idx(tol);
+}
+
+static inline vector_double::size_type pop_best_idx_wrapper_2(const population &pop)
+{
+    return pop.best_idx();
+}
+
+static inline vector_double::size_type pop_worst_idx_wrapper_0(const population &pop, const bp::object &tol)
+{
+    return pop.worst_idx(pygmo::to_vd(tol));
+}
+
+static inline vector_double::size_type pop_worst_idx_wrapper_1(const population &pop, double tol)
+{
+    return pop.worst_idx(tol);
+}
+
+static inline vector_double::size_type pop_worst_idx_wrapper_2(const population &pop)
+{
+    return pop.worst_idx();
+}
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -233,6 +275,15 @@ BOOST_PYTHON_MODULE(core)
         .def("__copy__",&pygmo::generic_copy_wrapper<population>)
         .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<population>)
         .def_pickle(population_pickle_suite())
+        .def("push_back",&pop_push_back_wrapper,"push_back(x)\n\nPush back.")
+        .def("decision_vector",&pop_decision_vector_wrapper,"decision_vector(x)\n\nCreate random decision_vector.")
+        .def("best_idx",&pop_best_idx_wrapper_0)
+        .def("best_idx",&pop_best_idx_wrapper_1)
+        .def("best_idx",&pop_best_idx_wrapper_2,"best_idx(tol = 0.)\n\nGet best idx.\n\n")
+        .def("worst_idx",&pop_worst_idx_wrapper_0)
+        .def("worst_idx",&pop_worst_idx_wrapper_1)
+        .def("worst_idx",&pop_worst_idx_wrapper_2,"worst_idx(tol = 0.)\n\nGet worst idx.\n\n")
+        .def("size",&population::size,"size()\n\nGet population size.\n\n")
         ;
 
     // Problem class.
@@ -344,11 +395,16 @@ BOOST_PYTHON_MODULE(core)
     hs71.def("best_known",&pygmo::best_known_wrapper<hock_schittkowsky_71>,
         pygmo::get_best_docstring("Hock-Schittkowsky 71").c_str());
 
-
-    // Exposition of C++ problems.
+    // Exposition of C++ algorithms.
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm","__init__()\n\nThe null algorithm.\n\nA test algorithm.\n\n");
     // NOTE: this is needed only for the null_algorithm, as it is used in the implementation of the
     // serialization of the algorithm. Not necessary for any other algorithm type.
     na.def_pickle(null_algorithm_pickle_suite());
+    auto de_ = pygmo::expose_algorithm<de>("de","__init__(gen = 1, F = 0.8, CR = 0.9, variant = 2, ftol = 1e-6, tol = 1e-6, seed = random)\n\n"
+        "Differential evolution algorithm.\n\n");
+    de_.def(bp::init<unsigned int,double,double,unsigned int,double,double>((bp::arg("gen") = 1u, bp::arg("F") = .8,
+        bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6)));
+    de_.def(bp::init<unsigned int,double,double,unsigned int,double,double,unsigned>((bp::arg("gen") = 1u, bp::arg("F") = .8,
+        bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6, bp::arg("seed"))));
 }
