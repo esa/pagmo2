@@ -20,6 +20,8 @@
 #include <sstream>
 #include <string>
 
+#include "../include/algorithm.hpp"
+#include "../include/algorithms/null_algorithm.hpp"
 #include "../include/population.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/decompose.hpp"
@@ -28,6 +30,8 @@
 #include "../include/problems/rosenbrock.hpp"
 #include "../include/problems/translate.hpp"
 #include "../include/serialization.hpp"
+#include "algorithm.hpp"
+#include "algorithm_exposition_suite.hpp"
 #include "common_utils.hpp"
 #include "docstrings.hpp"
 #include "numpy.hpp"
@@ -87,14 +91,28 @@ struct null_problem_pickle_suite : bp::pickle_suite
     }
 };
 
+// Same as above for the null algo.
+struct null_algorithm_pickle_suite : bp::pickle_suite
+{
+    static bp::tuple getinitargs(const null_algorithm &)
+    {
+        return bp::make_tuple();
+    }
+};
+
 // Instances of the classes in pygmo_classes.hpp.
 namespace pygmo
 {
 
+// Problem and meta-problem classes.
 std::unique_ptr<bp::class_<problem>> problem_ptr(nullptr);
 std::unique_ptr<bp::class_<translate>> translate_ptr(nullptr);
 std::unique_ptr<bp::class_<decompose>> decompose_ptr(nullptr);
 
+// Algorithm and meta-algorithm classes.
+std::unique_ptr<bp::class_<algorithm>> algorithm_ptr(nullptr);
+
+// Population.
 std::unique_ptr<bp::class_<population>> population_ptr(nullptr);
 
 }
@@ -108,6 +126,8 @@ static inline void cleanup()
     pygmo::problem_ptr.reset();
     pygmo::translate_ptr.reset();
     pygmo::decompose_ptr.reset();
+
+    pygmo::algorithm_ptr.reset();
 
     pygmo::population_ptr.reset();
 }
@@ -194,6 +214,15 @@ BOOST_PYTHON_MODULE(core)
 	auto problems_module = bp::object(bp::handle<>(bp::borrowed(problems_module_ptr)));
 	bp::scope().attr("problems") = problems_module;
 
+    // Create the algorithms submodule.
+	std::string algorithms_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".algorithms");
+	PyObject *algorithms_module_ptr = PyImport_AddModule(algorithms_module_name.c_str());
+	if (!algorithms_module_ptr) {
+		pygmo_throw(PyExc_RuntimeError,"error while creating the 'algorithms' submodule");
+	}
+	auto algorithms_module = bp::object(bp::handle<>(bp::borrowed(algorithms_module_ptr)));
+	bp::scope().attr("algorithms") = algorithms_module;
+
     // Population class.
     pygmo::population_ptr = std::make_unique<bp::class_<population>>("population",pygmo::population_docstring().c_str(),bp::init<>());
     auto &pop_class = *pygmo::population_ptr;
@@ -250,6 +279,32 @@ BOOST_PYTHON_MODULE(core)
         .def("get_name",&problem::get_name,"Get problem's name.")
         .def("get_extra_info",&problem::get_extra_info,"Get problem's extra info.");
 
+    // Algorithm class.
+    pygmo::algorithm_ptr = std::make_unique<bp::class_<algorithm>>("algorithm",pygmo::algorithm_docstring().c_str(),bp::no_init);
+    auto &algorithm_class = *pygmo::algorithm_ptr;
+    algorithm_class.def(bp::init<const bp::object &>((bp::arg("a"))))
+        .def(repr(bp::self))
+        .def_pickle(pygmo::algorithm_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__",&pygmo::generic_copy_wrapper<algorithm>)
+        .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<algorithm>)
+        // Algorithm extraction.
+        .def("_py_extract",&pygmo::generic_py_extract<algorithm>)
+        // Algorithm methods.
+        .def("evolve",&algorithm::evolve,"evolve(pop)\n\nEvolve population.\n\n:param pop: the population to evolve\n"
+            ":type pop: :class:`pygmo.core.population`\n"
+            ":returns: the evolved population\n"
+            ":rtype: :class:`pygmo.core.population`\n\n",(bp::arg("pop")))
+        .def("set_seed",&algorithm::set_seed,"set_seed(seed)\n\nSet algorithm seed.\n\n:param seed: the desired seed\n:type seed: ``int``\n"
+            ":raises: :exc:`RuntimeError` if the user-defined algorithm does not support seed setting\n"
+            ":raises: :exc:`OverflowError` if *seed* is negative or too large\n\n",(bp::arg("seed")))
+        .def("has_set_seed",&algorithm::has_set_seed,"has_set_seed()\n\nDetect the presence of the ``set_seed()`` method in the user-defined algorithm.\n\n"
+            ":returns: ``True`` if the user-defined algorithm has the ability of setting a random seed, ``False`` otherwise\n"
+            ":rtype: ``bool``\n\n")
+        .def("is_stochastic",&algorithm::is_stochastic,"is_stochastic()\n\nAlias for :func:`~pygmo.core.algorithm.has_set_seed`.")
+        .def("get_name",&algorithm::get_name,"Get algorithm's name.")
+        .def("get_extra_info",&algorithm::get_extra_info,"Get algorithm's extra info.");
+
     // Translate meta-problem.
     pygmo::translate_ptr = std::make_unique<bp::class_<translate>>("translate",
         "The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:",bp::init<>());
@@ -288,4 +343,12 @@ BOOST_PYTHON_MODULE(core)
         "See :cpp:class:`pagmo::hock_schittkowsky_71`.\n\n");
     hs71.def("best_known",&pygmo::best_known_wrapper<hock_schittkowsky_71>,
         pygmo::get_best_docstring("Hock-Schittkowsky 71").c_str());
+
+
+    // Exposition of C++ problems.
+    // Null algo.
+    auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm","__init__()\n\nThe null algorithm.\n\nA test algorithm.\n\n");
+    // NOTE: this is needed only for the null_algorithm, as it is used in the implementation of the
+    // serialization of the algorithm. Not necessary for any other algorithm type.
+    na.def_pickle(null_algorithm_pickle_suite());
 }

@@ -31,6 +31,15 @@ See also :cpp:class:`pagmo::problem`.
 )";
 }
 
+inline std::string algorithm_docstring()
+{
+    return R"(The main algorithm class.
+
+See also :cpp:class:`pagmo::algorithm`.
+
+)";
+}
+
 inline std::string get_best_docstring(const std::string &name)
 {
     return "best_known()\n\nThe best known solution for the " + name + " problem.\n\n"

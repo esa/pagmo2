@@ -4,6 +4,7 @@
 #include <boost/python/class.hpp>
 #include <memory>
 
+#include "../include/algorithm.hpp"
 #include "../include/population.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/decompose.hpp"
@@ -16,6 +17,9 @@ namespace pygmo
 extern std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
 extern std::unique_ptr<bp::class_<pagmo::translate>> translate_ptr;
 extern std::unique_ptr<bp::class_<pagmo::decompose>> decompose_ptr;
+
+// pagmo::algorithm and meta-algorithms.
+extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
 
 // Population.
 extern std::unique_ptr<bp::class_<pagmo::population>> population_ptr;

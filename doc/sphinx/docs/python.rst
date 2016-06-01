@@ -12,6 +12,7 @@ These are the core PyGMO classes.
    :maxdepth: 1
 
    python/py_problem
+   python/py_algorithm
    python/py_population
 
 Implemented problems
@@ -23,3 +24,12 @@ These are the problems implemented in PyGMO.
 
    python/py_meta_problems
    python/py_cpp_problems
+
+Implemented algorithms
+^^^^^^^^^^^^^^^^^^^^^^
+These are the algorithms implemented in PyGMO.
+
+.. toctree::
+   :maxdepth: 1
+
+   python/py_cpp_algorithms
