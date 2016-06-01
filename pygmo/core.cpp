@@ -352,6 +352,12 @@ BOOST_PYTHON_MODULE(core)
         .def("has_set_seed",&algorithm::has_set_seed,"has_set_seed()\n\nDetect the presence of the ``set_seed()`` method in the user-defined algorithm.\n\n"
             ":returns: ``True`` if the user-defined algorithm has the ability of setting a random seed, ``False`` otherwise\n"
             ":rtype: ``bool``\n\n")
+        .def("set_verbosity",&algorithm::set_verbosity,"set_verbosity(level)\n\nSet algorithm verbosity.\n\n:param level: the desired verbosity level\n:type level: ``int``\n"
+            ":raises: :exc:`RuntimeError` if the user-defined algorithm does not support verbosity setting\n"
+            ":raises: :exc:`OverflowError` if *level* is negative or too large\n\n",(bp::arg("level")))
+        .def("has_set_verbosity",&algorithm::has_set_verbosity,"has_set_verbosity()\n\nDetect the presence of the ``set_verbosity()`` method in the user-defined algorithm.\n\n"
+            ":returns: ``True`` if the user-defined algorithm has the ability of setting a verbosity level, ``False`` otherwise\n"
+            ":rtype: ``bool``\n\n")
         .def("is_stochastic",&algorithm::is_stochastic,"is_stochastic()\n\nAlias for :func:`~pygmo.core.algorithm.has_set_seed`.")
         .def("get_name",&algorithm::get_name,"Get algorithm's name.")
         .def("get_extra_info",&algorithm::get_extra_info,"Get algorithm's extra info.");
