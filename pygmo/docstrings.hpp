@@ -8,9 +8,14 @@ namespace pygmo
 
 inline std::string population_docstring()
 {
-    return R"(__init__(p, size = 0, seed = random)
+    return R"(__init__(prob, size = 0, seed = random)
 
 The population class.
+
+Args:
+    prob: a user-defined problem
+    size (int): the number of individuals
+    seed (int): the random seed (if not specified, randomly-generated)
 
 See also :cpp:class:`pagmo::population`.
 
@@ -53,10 +58,12 @@ inline std::string rosenbrock_docstring()
 
 The Rosenbrock problem.
 
-:param dim: number of dimensions
-:type dim: ``int``
-:raises: :exc:`OverflowError` if *dim* is negative or greater than an implementation-defined value
-:raises: :exc:`ValueError` if *dim* is less than 2
+Args:
+    dim (int): number of dimensions
+
+Raises:
+    OverflowError: if `dim` is negative or greater than an implementation-defined value
+    ValueError: if `dim` is less than 2
 
 See :cpp:class:`pagmo::rosenbrock`.
 

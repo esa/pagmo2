@@ -56,7 +56,7 @@ class population
         /// Default constructor
         /**
          * Constructs an empty population with a pagmo::null_problem.
-         * The population random seed is initialised to zero.
+         * The random seed is initialised to zero.
          */
         population() : m_prob(null_problem{}), m_e(0u), m_seed(0u) {}
 

@@ -270,6 +270,8 @@ BOOST_PYTHON_MODULE(core)
     auto &pop_class = *pygmo::population_ptr;
     // Ctor from Python problem.
     pygmo::population_prob_init<bp::object>();
+    // Ctor from problem.
+    pygmo::population_prob_init<problem>();
     pop_class.def(repr(bp::self))
         // Copy and deepcopy.
         .def("__copy__",&pygmo::generic_copy_wrapper<population>)

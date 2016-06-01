@@ -35,6 +35,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.autodoc',
     'breathe',
+    'sphinx.ext.napoleon',
 ]
 
 autoclass_content = 'both'
