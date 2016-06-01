@@ -8,14 +8,7 @@ namespace pygmo
 
 inline std::string population_docstring()
 {
-    return R"(__init__(prob, size = 0, seed = random)
-
-The population class.
-
-Args:
-    prob: a user-defined problem
-    size (int): the number of individuals
-    seed (int): the random seed (if not specified, randomly-generated)
+    return R"(The population class.
 
 See also :cpp:class:`pagmo::population`.
 

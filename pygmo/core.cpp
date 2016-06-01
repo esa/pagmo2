@@ -113,9 +113,6 @@ std::unique_ptr<bp::class_<decompose>> decompose_ptr(nullptr);
 // Algorithm and meta-algorithm classes.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr(nullptr);
 
-// Population.
-std::unique_ptr<bp::class_<population>> population_ptr(nullptr);
-
 }
 
 // The cleanup function.
@@ -129,8 +126,6 @@ static inline void cleanup()
     pygmo::decompose_ptr.reset();
 
     pygmo::algorithm_ptr.reset();
-
-    pygmo::population_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -171,6 +166,15 @@ struct population_pickle_suite : bp::pickle_suite
 };
 
 // Various wrappers for the population exposition.
+
+// Expose a population constructor from problem.
+template <typename Prob>
+static inline void population_prob_init(bp::class_<population> &pop_class)
+{
+    pop_class.def(bp::init<const Prob &,population::size_type>())
+        .def(bp::init<const Prob &,population::size_type,unsigned>());
+}
+
 static inline void pop_push_back_wrapper(population &pop, const bp::object &x)
 {
     pop.push_back(pygmo::to_vd(x));
@@ -266,12 +270,9 @@ BOOST_PYTHON_MODULE(core)
 	bp::scope().attr("algorithms") = algorithms_module;
 
     // Population class.
-    pygmo::population_ptr = std::make_unique<bp::class_<population>>("population",pygmo::population_docstring().c_str(),bp::init<>());
-    auto &pop_class = *pygmo::population_ptr;
-    // Ctor from Python problem.
-    pygmo::population_prob_init<bp::object>();
+    bp::class_<population> pop_class("population",pygmo::population_docstring().c_str(),bp::no_init);
     // Ctor from problem.
-    pygmo::population_prob_init<problem>();
+    population_prob_init<problem>(pop_class);
     pop_class.def(repr(bp::self))
         // Copy and deepcopy.
         .def("__copy__",&pygmo::generic_copy_wrapper<population>)
@@ -380,8 +381,6 @@ BOOST_PYTHON_MODULE(core)
         .def("_cpp_extract",&pygmo::generic_cpp_extract<translate,translate>);
     // Mark it as a cpp problem.
     tp.attr("_pygmo_cpp_problem") = true;
-    // Ctor of pop from translate.
-    pygmo::population_prob_init<translate>();
     // Ctor of problem from translate.
     pygmo::problem_prob_init<translate>();
     // Add it the the problems submodule.

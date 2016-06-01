@@ -31,16 +31,19 @@ struct common_base
         return a;
     }
     // Throw if object does not have a callable attribute.
-    static void check_callable_attribute(const bp::object &o, const char *s)
+    static void check_callable_attribute(const bp::object &o, const char *s, const char *target)
     {
         bp::object a;
         try {
             a = o.attr(s);
         } catch (...) {
-            pygmo_throw(PyExc_TypeError,("the mandatory '" + std::string(s) + "()' method is missing").c_str());
+            pygmo_throw(PyExc_TypeError,("the mandatory '" + std::string(s) + "()' method is missing from the "
+                "user-defined Python " + std::string(target) + " '" + str(o) + "' of type '" + str(type(o)) + "'").c_str());
         }
         if (!pygmo::callable(a)) {
-            pygmo_throw(PyExc_TypeError,("the mandatory '" + std::string(s) + "()' method is not callable").c_str());
+            pygmo_throw(PyExc_TypeError,("the mandatory '" + std::string(s) + "()' method in the "
+            "user-defined Python " + std::string(target) + " '" + str(o) + "' of type '" + str(type(o)) + "' is "
+            "not callable").c_str());
         }
     }
     // A simple wrapper for getters.

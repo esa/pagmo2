@@ -37,7 +37,7 @@ struct algo_inner<bp::object> final: algo_inner_base, pygmo::common_base
             pygmo_throw(PyExc_TypeError,"cannot construct an algorithm from a type: please use an instance "
                 "as construction argument");
         }
-        check_callable_attribute(m_value,"evolve");
+        check_callable_attribute(m_value,"evolve","algorithm");
     }
     // Just need the def ctor, delete everything else.
     algo_inner() = default;

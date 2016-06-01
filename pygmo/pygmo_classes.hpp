@@ -21,9 +21,6 @@ extern std::unique_ptr<bp::class_<pagmo::decompose>> decompose_ptr;
 // pagmo::algorithm and meta-algorithms.
 extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
 
-// Population.
-extern std::unique_ptr<bp::class_<pagmo::population>> population_ptr;
-
 }
 
 #endif

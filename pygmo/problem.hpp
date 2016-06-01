@@ -42,8 +42,8 @@ struct prob_inner<bp::object> final: prob_inner_base, pygmo::common_base
             pygmo_throw(PyExc_TypeError,"cannot construct a problem from a type: please use an instance "
                 "as construction argument");
         }
-        check_callable_attribute(m_value,"fitness");
-        check_callable_attribute(m_value,"get_bounds");
+        check_callable_attribute(m_value,"fitness","problem");
+        check_callable_attribute(m_value,"get_bounds","problem");
     }
     // Just need the def ctor, delete everything else.
     prob_inner() = default;

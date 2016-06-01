@@ -13,7 +13,6 @@
 #include <cassert>
 #include <string>
 
-#include "../include/population.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/translate.hpp"
 #include "common_utils.hpp"
@@ -39,16 +38,6 @@ inline pagmo::translate *translate_init(const Prob &p, const bp::object &o)
     return ::new pagmo::translate(p,to_vd(o));
 }
 
-// Expose a population constructor from problem.
-template <typename Prob>
-inline void population_prob_init()
-{
-    assert(population_ptr.get() != nullptr);
-    auto &pop_class = *population_ptr;
-    pop_class.def(bp::init<const Prob &,pagmo::population::size_type>((bp::arg("p"),bp::arg("size") = 0u)))
-        .def(bp::init<const Prob &,pagmo::population::size_type,unsigned>((bp::arg("p"),bp::arg("size") = 0u,bp::arg("seed"))));
-}
-
 // Expose a problem ctor from a user-defined problem.
 template <typename Prob>
 inline void problem_prob_init()
@@ -70,9 +59,6 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
     bp::class_<Prob> c(name,descr,bp::init<>());
     // Mark it as a C++ problem.
     c.attr("_pygmo_cpp_problem") = true;
-
-    // Expose the ctor of population from problem.
-    population_prob_init<Prob>();
 
     // Expose the problem constructor from Prob.
     problem_prob_init<Prob>();
