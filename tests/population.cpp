@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_population_test
+#define BOOST_TEST_MODULE population_test
 #include <boost/test/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
 #include <exception>

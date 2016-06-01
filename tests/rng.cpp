@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_rng_test
+#define BOOST_TEST_MODULE rng_test
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>
@@ -16,16 +16,16 @@ BOOST_AUTO_TEST_CASE(set_seed_and_next)
     // We check that the first N pseudo random numbers are identical if generated
     // right after the same seed is set and different otherwise.
 
-    // We choose two seeds 
+    // We choose two seeds
     unsigned seed{0u}, seed2{1u};
 
-    // Length of the pseudo-random sequence tested 
+    // Length of the pseudo-random sequence tested
     unsigned int N = 10000u;
 
     // We generate three pseudo random sequences, two with the same seed
     random_device::set_seed(seed);
     std::vector<detail::random_engine_type::result_type> prs1;
-    std::generate_n(std::back_inserter(prs1),N,random_device::next);	
+    std::generate_n(std::back_inserter(prs1),N,random_device::next);
 
     random_device::set_seed(seed);
     std::vector<detail::random_engine_type::result_type> prs2;

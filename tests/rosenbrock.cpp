@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE pagmo_rosenbrock_test
+#define BOOST_TEST_MODULE rosenbrock_test
 #include <boost/test/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
 #include <exception>
@@ -27,9 +27,7 @@ BOOST_AUTO_TEST_CASE(rosenbrock_test)
     BOOST_CHECK((ros2.fitness({1.,1.}) == vector_double{0.}));
     BOOST_CHECK((ros5.fitness({1.,1.,1.,1.,1.}) == vector_double{0.}));
     // Bounds Test
-    BOOST_CHECK((ros2.get_bounds() == std::pair<vector_double, vector_double>{{-5.,-5.},{1.,1.}}));
-    // nobj test
-    BOOST_CHECK(ros5.get_nobj() == 1u);
+    BOOST_CHECK((ros2.get_bounds() == std::pair<vector_double, vector_double>{{-5.,-5.},{10.,10.}}));
     // Name and extra info tests
     BOOST_CHECK(ros5.get_name().find("Rosenbrock") != std::string::npos);
     // Best known test
