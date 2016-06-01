@@ -6,6 +6,7 @@
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/default_call_policies.hpp>
+#include <boost/python/init.hpp>
 #include <boost/python/make_constructor.hpp>
 #include <boost/python/object.hpp>
 #include <cassert>
@@ -54,7 +55,6 @@ inline void problem_prob_init()
     auto &prob_class = *problem_ptr;
     prob_class.def(bp::init<const Prob &>((bp::arg("p"))));
 }
-
 
 template <typename Prob>
 inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
