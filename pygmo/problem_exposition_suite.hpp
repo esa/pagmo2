@@ -49,6 +49,7 @@ inline void population_prob_init()
         .def(bp::init<const Prob &,pagmo::population::size_type,unsigned>((bp::arg("p"),bp::arg("size") = 0u,bp::arg("seed"))));
 }
 
+// Expose a problem ctor from a user-defined problem.
 template <typename Prob>
 inline void problem_prob_init()
 {
@@ -57,6 +58,7 @@ inline void problem_prob_init()
     prob_class.def(bp::init<const Prob &>((bp::arg("p"))));
 }
 
+// Main problem exposition function.
 template <typename Prob>
 inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
 {

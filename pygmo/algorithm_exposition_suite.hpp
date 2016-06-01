@@ -17,6 +17,7 @@ namespace pygmo
 
 namespace bp = boost::python;
 
+// Expose an algorithm ctor from a user-defined algorithm.
 template <typename Algo>
 inline void algorithm_algo_init()
 {
@@ -25,6 +26,7 @@ inline void algorithm_algo_init()
     algo_class.def(bp::init<const Algo &>((bp::arg("a"))));
 }
 
+// Main algorithm exposition function.
 template <typename Algo>
 inline bp::class_<Algo> expose_algorithm(const char *name, const char *descr)
 {
