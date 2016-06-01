@@ -216,8 +216,8 @@ BOOST_PYTHON_MODULE(core)
         .def("__copy__",&pygmo::generic_copy_wrapper<problem>)
         .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<problem>)
         // Problem extraction.
-        .def("_py_extract",&pygmo::problem_py_extract<problem>)
-        .def("_cpp_extract",&pygmo::problem_cpp_extract<problem,translate>)
+        .def("_py_extract",&pygmo::generic_py_extract<problem>)
+        .def("_cpp_extract",&pygmo::generic_cpp_extract<problem,translate>)
         // Problem methods.
         .def("fitness",&pygmo::fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness of the input "
             "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
@@ -262,8 +262,8 @@ BOOST_PYTHON_MODULE(core)
         .def("__init__",bp::make_constructor(&pygmo::translate_init<translate>,boost::python::default_call_policies(),
             (bp::arg("p"),bp::arg("t"))))
         // Problem extraction.
-        .def("_py_extract",&pygmo::problem_py_extract<translate>)
-        .def("_cpp_extract",&pygmo::problem_cpp_extract<translate,translate>);
+        .def("_py_extract",&pygmo::generic_py_extract<translate>)
+        .def("_cpp_extract",&pygmo::generic_cpp_extract<translate,translate>);
     // Mark it as a cpp problem.
     tp.attr("_pygmo_cpp_problem") = true;
     // Ctor of pop from translate.

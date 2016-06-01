@@ -74,13 +74,13 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
     // Expose the problem constructor from Prob.
     problem_prob_init<Prob>();
     // Expose extract.
-    problem_class.def("_cpp_extract",&problem_cpp_extract<pagmo::problem,Prob>);
+    problem_class.def("_cpp_extract",&generic_cpp_extract<pagmo::problem,Prob>);
 
     // Expose translate's constructor from Prob and translation vector.
     tp_class.def("__init__",bp::make_constructor(&translate_init<Prob>,boost::python::default_call_policies(),
         (bp::arg("p"),bp::arg("t"))))
         // Extract.
-        .def("_cpp_extract",&problem_cpp_extract<pagmo::translate,Prob>);
+        .def("_cpp_extract",&generic_cpp_extract<pagmo::translate,Prob>);
 
     // Add the problem to the problmes submodule.
     bp::scope().attr("problems").attr(name) = c;
