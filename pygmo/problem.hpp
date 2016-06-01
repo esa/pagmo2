@@ -9,15 +9,11 @@
 #include <boost/python/object.hpp>
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/tuple.hpp>
-#include <exception>
 #include <iterator>
-#include <memory>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
-#include "../include/exceptions.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/null_problem.hpp"
 #include "../include/serialization.hpp"
@@ -233,7 +229,7 @@ struct prob_inner<bp::object> final: prob_inner_base, pygmo::common_base
 
 }
 
-// Register the prob_inner specialised for bp::object.
+// Register the prob_inner specialisation for bp::object.
 PAGMO_REGISTER_PROBLEM(boost::python::object)
 
 namespace pygmo
