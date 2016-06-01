@@ -61,6 +61,17 @@ struct prob_inner<bp::object> final: prob_inner_base
             pygmo_throw(PyExc_TypeError,("the mandatory '" + std::string(s) + "()' method is not callable").c_str());
         }
     }
+    // A simple wrapper for getters.
+    template <typename RetType>
+    static RetType getter_wrapper(const bp::object &o, const char *name,
+        const RetType &def_value)
+    {
+        auto a = try_attr(o,name);
+        if (a) {
+            return bp::extract<RetType>(a());
+        }
+        return def_value;
+    }
     // These are the mandatory methods that must be present.
     void check_construction_object() const
     {
@@ -111,36 +122,26 @@ struct prob_inner<bp::object> final: prob_inner_base
         // Finally, we build the pair from the tuple elements.
         return std::make_pair(pygmo::to_vd(tup[0]),pygmo::to_vd(tup[1]));
     }
-    // A simple wrapper for the following getters.
-    template <typename RetType>
-    RetType getter_wrapper(const char *name, const RetType &def_value) const
-    {
-        auto a = try_attr(m_value,name);
-        if (a) {
-            return bp::extract<RetType>(a());
-        }
-        return def_value;
-    }
     // Optional methods.
     virtual vector_double::size_type get_nobj() const override final
     {
-        return getter_wrapper<vector_double::size_type>("get_nobj",1u);
+        return getter_wrapper<vector_double::size_type>(m_value,"get_nobj",1u);
     }
     virtual vector_double::size_type get_nec() const override final
     {
-        return getter_wrapper<vector_double::size_type>("get_nec",0u);
+        return getter_wrapper<vector_double::size_type>(m_value,"get_nec",0u);
     }
     virtual vector_double::size_type get_nic() const override final
     {
-        return getter_wrapper<vector_double::size_type>("get_nic",0u);
+        return getter_wrapper<vector_double::size_type>(m_value,"get_nic",0u);
     }
     virtual std::string get_name() const override final
     {
-        return getter_wrapper<std::string>("get_name",pygmo::str(pygmo::type(m_value)));
+        return getter_wrapper<std::string>(m_value,"get_name",pygmo::str(pygmo::type(m_value)));
     }
     virtual std::string get_extra_info() const override final
     {
-        return getter_wrapper<std::string>("get_extra_info",std::string{});
+        return getter_wrapper<std::string>(m_value,"get_extra_info",std::string{});
     }
     virtual bool has_gradient() const override final
     {
@@ -149,7 +150,7 @@ struct prob_inner<bp::object> final: prob_inner_base
             // If the problem has a "gradient()" attribute, we further check if
             // it overrides the "has_gradient()" detection. If it does, we call
             // it, otherwise we just return the presence of the "gradient()" method.
-            return getter_wrapper<bool>("has_gradient",hg);
+            return getter_wrapper<bool>(m_value,"has_gradient",hg);
         }
         return false;
     }
@@ -190,7 +191,7 @@ struct prob_inner<bp::object> final: prob_inner_base
     {
         const bool hh = try_attr(m_value,"hessians");
         if (hh) {
-            return getter_wrapper<bool>("has_hessians",hh);
+            return getter_wrapper<bool>(m_value,"has_hessians",hh);
         }
         return false;
     }
@@ -253,7 +254,7 @@ struct prob_inner<bp::object> final: prob_inner_base
     }
     virtual bool has_set_seed() const override final
     {
-        return getter_wrapper<bool>("has_set_seed",try_attr(m_value,"set_seed"));
+        return getter_wrapper<bool>(m_value,"has_set_seed",try_attr(m_value,"set_seed"));
     }
     template <typename Archive>
     void serialize(Archive &ar)
