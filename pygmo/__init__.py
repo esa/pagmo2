@@ -141,6 +141,8 @@ setattr(problem,"extract",_problem_extract)
 setattr(problem,"is_",_problem_is)
 setattr(translate,"extract",_problem_extract)
 setattr(translate,"is_",_problem_is)
+setattr(decompose,"extract",_problem_extract)
+setattr(decompose,"is_",_problem_is)
 
 # Same for algorithm and meta-algorithms.
 setattr(algorithm,"extract",_algorithm_extract)

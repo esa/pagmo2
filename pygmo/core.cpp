@@ -4,13 +4,11 @@
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/copy_const_reference.hpp>
-#include <boost/python/default_call_policies.hpp>
 #include <boost/python/def.hpp>
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/import.hpp>
-#include <boost/python/make_constructor.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
@@ -27,11 +25,17 @@
 #include "../include/algorithms/null_algorithm.hpp"
 #include "../include/population.hpp"
 #include "../include/problem.hpp"
+#include "../include/problems/ackley.hpp"
 #include "../include/problems/decompose.hpp"
+#include "../include/problems/griewank.hpp"
 #include "../include/problems/hock_schittkowsky_71.hpp"
+#include "../include/problems/inventory.hpp"
 #include "../include/problems/null_problem.hpp"
+#include "../include/problems/rastrigin.hpp"
 #include "../include/problems/rosenbrock.hpp"
+#include "../include/problems/schwefel.hpp"
 #include "../include/problems/translate.hpp"
+#include "../include/problems/zdt.hpp"
 #include "../include/serialization.hpp"
 #include "algorithm.hpp"
 #include "algorithm_exposition_suite.hpp"
@@ -177,16 +181,19 @@ static inline void population_prob_init(bp::class_<population> &pop_class)
         .def(bp::init<const Prob &,population::size_type,unsigned>());
 }
 
+// push_back().
 static inline void pop_push_back_wrapper(population &pop, const bp::object &x)
 {
     pop.push_back(pygmo::to_vd(x));
 }
 
+// decision_vector().
 static inline bp::object pop_decision_vector_wrapper(const population &pop)
 {
     return pygmo::vd_to_a(pop.decision_vector());
 }
 
+// Various best_idx() overloads.
 static inline vector_double::size_type pop_best_idx_wrapper_0(const population &pop, const bp::object &tol)
 {
     return pop.best_idx(pygmo::to_vd(tol));
@@ -202,6 +209,7 @@ static inline vector_double::size_type pop_best_idx_wrapper_2(const population &
     return pop.best_idx();
 }
 
+// Various worst_idx() overloads.
 static inline vector_double::size_type pop_worst_idx_wrapper_0(const population &pop, const bp::object &tol)
 {
     return pop.worst_idx(pygmo::to_vd(tol));
@@ -217,29 +225,40 @@ static inline vector_double::size_type pop_worst_idx_wrapper_2(const population 
     return pop.worst_idx();
 }
 
+// set_xf().
 static inline void pop_set_xf_wrapper(population &pop, population::size_type i, const bp::object &x, const bp::object &f)
 {
     pop.set_xf(i,pygmo::to_vd(x),pygmo::to_vd(f));
 }
 
+// set_x().
 static inline void pop_set_x_wrapper(population &pop, population::size_type i, const bp::object &x)
 {
     pop.set_x(i,pygmo::to_vd(x));
 }
 
+// get_f().
 static inline bp::object pop_get_f_wrapper(const population &pop)
 {
     return pygmo::vvd_to_a(pop.get_f());
 }
 
+// get_x().
 static inline bp::object pop_get_x_wrapper(const population &pop)
 {
     return pygmo::vvd_to_a(pop.get_x());
 }
 
+// get_ID().
 static inline bp::object pop_get_ID_wrapper(const population &pop)
 {
     return pygmo::vull_to_a(pop.get_ID());
+}
+
+// ZDT wrappers.
+static inline double zdt_p_distance_wrapper(const zdt &z, const bp::object &x)
+{
+    return z.p_distance(pygmo::to_vd(x));
 }
 
 BOOST_PYTHON_MODULE(core)
@@ -335,7 +354,6 @@ BOOST_PYTHON_MODULE(core)
         .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<problem>)
         // Problem extraction.
         .def("_py_extract",&pygmo::generic_py_extract<problem>)
-        .def("_cpp_extract",&pygmo::generic_cpp_extract<problem,translate>)
         // Problem methods.
         .def("fitness",&pygmo::fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness of the input "
             "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
@@ -404,13 +422,11 @@ BOOST_PYTHON_MODULE(core)
     pygmo::translate_ptr = std::make_unique<bp::class_<translate>>("translate",
         "The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:",bp::init<>());
     auto &tp = *pygmo::translate_ptr;
-    // Constructor from Python concrete problem and translation vector (allows to translate Python problems).
-    tp.def("__init__",bp::make_constructor(&pygmo::translate_init<bp::object>,boost::python::default_call_policies(),
-        (bp::arg("p"),bp::arg("t"))))
+    // Constructor from Python user-defined problem and translation vector (allows to translate Python problems).
+    tp.def("__init__",pygmo::make_translate_init<bp::object>())
         // Constructor of translate from translate and translation vector. This allows to apply the
         // translation multiple times.
-        .def("__init__",bp::make_constructor(&pygmo::translate_init<translate>,boost::python::default_call_policies(),
-            (bp::arg("p"),bp::arg("t"))))
+        .def("__init__",pygmo::make_translate_init<translate>())
         // Problem extraction.
         .def("_py_extract",&pygmo::generic_py_extract<translate>)
         .def("_cpp_extract",&pygmo::generic_cpp_extract<translate,translate>);
@@ -418,14 +434,45 @@ BOOST_PYTHON_MODULE(core)
     tp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from translate.
     pygmo::problem_prob_init<translate>();
-    // Add it the the problems submodule.
+    // Extract a translated problem from the problem class.
+    problem_class.def("_cpp_extract",&pygmo::generic_cpp_extract<problem,translate>);
+    // Add it to the the problems submodule.
     bp::scope().attr("problems").attr("translate") = tp;
+
+    // Decompose meta-problem.
+    pygmo::decompose_ptr = std::make_unique<bp::class_<decompose>>("decompose",
+        "The decompose meta-problem.\n\n",bp::init<>());
+    auto &dp = *pygmo::decompose_ptr;
+    // Constructor from Python user-defined problem.
+    dp.def("__init__",pygmo::make_decompose_init<bp::object>())
+        // Problem extraction.
+        .def("_py_extract",&pygmo::generic_py_extract<decompose>);
+    // Mark it as a cpp problem.
+    dp.attr("_pygmo_cpp_problem") = true;
+    // Ctor of problem from decompose.
+    pygmo::problem_prob_init<decompose>();
+    // Extract a decomposed problem from the problem class.
+    problem_class.def("_cpp_extract",&pygmo::generic_cpp_extract<problem,decompose>);
+    // Add it to the problems submodule.
+    bp::scope().attr("problems").attr("decompose") = dp;
+
+    // Before moving to the user-defined C++ problems, we need to expose the interoperability between
+    // meta-problems.
+    // Construct translate from decompose.
+    tp.def("__init__",pygmo::make_translate_init<decompose>());
+    // Extract decompose from translate.
+    tp.def("_cpp_extract",&pygmo::generic_cpp_extract<translate,decompose>);
+    // Construct decompose from translate.
+    dp.def("__init__",pygmo::make_decompose_init<translate>());
+    // Extract translate from decompose.
+    dp.def("_cpp_extract",&pygmo::generic_cpp_extract<decompose,translate>);
 
     // Exposition of C++ problems.
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem","__init__()\n\nThe null problem.\n\nA test problem.\n\n");
     // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
     // serialization of the problem. Not necessary for any other problem type.
+    // NOTE: this is needed because problem does not have a def ctor.
     np.def_pickle(null_problem_pickle_suite());
     // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock",pygmo::rosenbrock_docstring().c_str());
@@ -436,6 +483,40 @@ BOOST_PYTHON_MODULE(core)
         "See :cpp:class:`pagmo::hock_schittkowsky_71`.\n\n");
     hs71.def("best_known",&pygmo::best_known_wrapper<hock_schittkowsky_71>,
         pygmo::get_best_docstring("Hock-Schittkowsky 71").c_str());
+    // Rastrigin.
+    auto rastr = pygmo::expose_problem<rastrigin>("rastrigin","__init__(dim = 1)\n\nThe Rastrigin problem.\n\n"
+        "See :cpp:class:`pagmo::rastrigin`.\n\n");
+    rastr.def(bp::init<unsigned>((bp::arg("dim"))));
+    rastr.def("best_known",&pygmo::best_known_wrapper<rastrigin>,
+        pygmo::get_best_docstring("Rastrigin").c_str());
+    // Schwefel.
+    auto sch = pygmo::expose_problem<schwefel>("schwefel","__init__(dim = 1)\n\nThe Schwefel problem.\n\n"
+        "See :cpp:class:`pagmo::schwefel`.\n\n");
+    sch.def(bp::init<unsigned>((bp::arg("dim"))));
+    sch.def("best_known",&pygmo::best_known_wrapper<schwefel>,
+        pygmo::get_best_docstring("Schwefel").c_str());
+    // Ackley.
+    auto ack = pygmo::expose_problem<ackley>("ackley","__init__(dim = 1)\n\nThe Ackley problem.\n\n"
+        "See :cpp:class:`pagmo::ackley`.\n\n");
+    ack.def(bp::init<unsigned>((bp::arg("dim"))));
+    ack.def("best_known",&pygmo::best_known_wrapper<ackley>,
+        pygmo::get_best_docstring("Ackley").c_str());
+    // Griewank.
+    auto griew = pygmo::expose_problem<griewank>("griewank","__init__(dim = 1)\n\nThe Griewank problem.\n\n"
+        "See :cpp:class:`pagmo::griewank`.\n\n");
+    griew.def(bp::init<unsigned>((bp::arg("dim"))));
+    griew.def("best_known",&pygmo::best_known_wrapper<griewank>,
+        pygmo::get_best_docstring("Griewank").c_str());
+    // ZDT.
+    auto zdt_p = pygmo::expose_problem<zdt>("zdt","__init__(id = 1, param = 30)\n\nThe ZDT problem.\n\n"
+        "See :cpp:class:`pagmo::zdt`.\n\n");
+    zdt_p.def(bp::init<unsigned,unsigned>((bp::arg("id") = 1u,bp::arg("param") = 30u)));
+    zdt_p.def("p_distance",&zdt_p_distance_wrapper);
+    // Inventory.
+    auto inv = pygmo::expose_problem<inventory>("inventory","__init__(weeks = 4,sample_size = 10,seed = random)\n\nThe inventory problem.\n\n"
+        "See :cpp:class:`pagmo::inventory`.\n\n");
+    inv.def(bp::init<unsigned,unsigned>((bp::arg("weeks") = 4u,bp::arg("sample_size") = 10u)));
+    inv.def(bp::init<unsigned,unsigned,unsigned>((bp::arg("weeks") = 4u,bp::arg("sample_size") = 10u,bp::arg("seed"))));
 
     // Exposition of C++ algorithms.
     // Null algo.
