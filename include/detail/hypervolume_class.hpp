@@ -1,6 +1,7 @@
 namespace pagmo
 {
 
+
 class hypervolume
 {
 public:
@@ -189,6 +190,8 @@ public:
   * As of yet, only the dimension size is taken into account.
   */
   std::shared_ptr<hv_algorithm> get_best_compute(const vector_double &r_point) const;
+  std::shared_ptr<hv_algorithm> get_best_exclusive(const unsigned int p_idx, const vector_double &r_point) const;
+  std::shared_ptr<hv_algorithm> get_best_contributions(const vector_double &r_point) const;
 
   /// Compute hypervolume
   /**
@@ -272,12 +275,56 @@ public:
   *
   * @return value representing the hypervolume
   */
-  /*double hypervolume::exclusive(const unsigned int p_idx, const vector_double &r_point) const
+  double hypervolume::exclusive(const unsigned int p_idx, const vector_double &r_point) const
   {
 	  return exclusive(p_idx, r_point, get_best_exclusive(p_idx, r_point));
-  }*/
+  }
 
+  /// Contributions method
+  /**
+  * This method returns the exclusive contribution to the hypervolume by every point.
+  * The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor in a loop).
+  *
+  * @param[in] r_point fitness vector describing the reference point
+  * @param[in] hv_algorithm instance of the algorithm object used for the computation
+  * @return vector of exclusive contributions by every point
+  */
+  std::vector<double> hypervolume::contributions(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+  {
+	  if (m_verify) {
+		  verify_before_compute(r_point, hv_algo);
+	  }
 
+	  // Trivial case
+	  if (m_points.size() == 1) {
+		  std::vector<double> c;
+		  c.push_back(hv_algorithm::volume_between(m_points[0], r_point));
+		  return c;
+	  }
+
+	  // copy the initial set of points, as the algorithm may alter its contents
+	  if (m_copy_points) {
+		  std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
+		  return hv_algo->contributions(points_cpy, r_point);
+	  }
+	  else {
+		  return hv_algo->contributions(const_cast<std::vector<vector_double> &>(m_points), r_point);
+	  }
+  }
+
+  /// Contributions method
+  /**
+  * This method returns the exclusive contribution to the hypervolume by every point.
+  * The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor in a loop).
+  * The hv_algorithm itself is chosen dynamically, so the best performing method is employed for given task.
+  *
+  * @param[in] r_point fitness vector describing the reference point
+  * @return vector of exclusive contributions by every point
+  */
+  std::vector<double> hypervolume::contributions(const vector_double &r_point) const
+  {
+	  return contributions(r_point, get_best_contributions(r_point));
+  }
 
 
 private:
@@ -322,8 +369,6 @@ private:
     }
     hv_algo->verify_before_compute(m_points, r_point);
   }
-
-
 
 
   /*hv_algorithm::base_ptr hypervolume::get_best_exclusive(const unsigned int p_idx, const fitness_vector &r_point) const

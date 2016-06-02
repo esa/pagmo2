@@ -339,23 +339,39 @@ inline std::vector<double> hv2d::contributions(std::vector<vector_double> &point
 inline std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_double &r_point) const
 {
 	auto fdim = r_point.size();
-	//auto n = m_points.size();
+	
+	if (fdim == 2) {
+		return hv2d().clone();
+	} else if (fdim == 3) {
+		return hv3d().clone();
+	} else {
+		return hvwfg().clone();
+	}
+}
+
+
+inline std::shared_ptr<hv_algorithm> hypervolume::get_best_exclusive(const unsigned int p_idx, const vector_double &r_point) const
+{
+	(void)p_idx;
+	// Exclusive contribution and compute method share the same "best" set of algorithms.
+	return hypervolume::get_best_compute(r_point);
+}
+	   
+inline std::shared_ptr<hv_algorithm> hypervolume::get_best_contributions(const vector_double &r_point) const
+{
+	auto fdim = r_point.size();
+	
 	if (fdim == 2) {
 		return hv2d().clone();
 	}
 	else if (fdim == 3) {
 		return hv3d().clone();
 	}
-	/*else if (fdim == 4) {
-	return hv_algorithm::hv4d().clone();
-	}
-	else if (fdim == 5 && n < 80) {
-	return hv_algorithm::fpl().clone();
-	}*/
 	else {
 		return hvwfg().clone();
 	}
 }
+
 
 
 }

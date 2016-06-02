@@ -12,27 +12,24 @@
 #include "../include/problems/rosenbrock.hpp"
 
 using namespace pagmo;
+
+
 /**
- * Assertion method that tests correct computation of contributions for the whole contribution method
- * and the single exclusive method.
- */
-/*void assertContribs(const std::vector<vector_double> &points, std::vector<double> &ref, std::vector<double> &answers) {
+* Assertion method that tests correct computation of contributions for the whole contribution method
+* and the single exclusive method.
+*/
+void assertContribs(const std::vector<vector_double> &points, std::vector<double> &ref, std::vector<double> &answers) {
 	hypervolume hv = hypervolume(points, true);
-	BOOST_CHECK((hv.contributions(1.0) == answers));
+	BOOST_CHECK((hv.contributions(ref) == answers));
+	for (unsigned int i = 0; i < answers.size(); i++) {
+		BOOST_CHECK((hv.exclusive(i, ref) == answers[i]));
+	}
+}
 
-	self.assertEqual(hv.contributions(R), ans)
-			self.assertEqual(tuple(hv.exclusive(i, R) for i in range(len(S))), ans)
-}*/
 
-
-BOOST_AUTO_TEST_CASE(hypervolume_test)
+BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
 {
-	//auto inf = std::numeric_limits<double>::infinity();
-	//auto big = std::numeric_limits<double>::max();
 	hypervolume hv;
-
-	// error threshold
-	const double eps = 10e-8;
 
 	// by vector
 	std::vector<vector_double> x1{ { 1,2 },{ 3,4 } };
@@ -57,7 +54,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_test)
 	// 2d computation of hypervolume indicator
 	hv = hypervolume{ {1, 2},{2, 1} };
 	BOOST_CHECK((hv.compute({ 3,3 }) == 3));
-	
+
 	// point on the border of refpoint(2D)
 	BOOST_CHECK((hv.compute({ 2,2 }) == 0));
 
@@ -72,7 +69,6 @@ BOOST_AUTO_TEST_CASE(hypervolume_test)
 	// 4d computation of hypervolume indicator
 	hv = hypervolume{ {1, 1, 1, 1},{2, 2, 2, 2} };
 	BOOST_CHECK((hv.compute({ 3, 3, 3, 3 }) == 16));
-	BOOST_CHECK(fabs(hv.compute({ 3, 3, 3, 3 }) - 16) < eps);
 
 	// points on the border of refpoint(4D)
 	hv = hypervolume{ {1, 1, 1, 3},{2, 2, 2, 3} };
@@ -84,9 +80,6 @@ BOOST_AUTO_TEST_CASE(hypervolume_test)
 
 	// 4d duplicate and dominated
 	hv = hypervolume{ { 1.0, 1.0, 1.0, 1.0 },{ 1.0, 1.0, 1.0, 1.0 },{0.0,0.0,0.0,0.0} };
-	for (int i = 0; i < 10; ++i) {
-		std::cout << hv.compute({ 2.0, 2.0, 2.0, 2.0 }) << std::endl;
-	}
 	BOOST_CHECK((hv.compute({ 2.0, 2.0, 2.0, 2.0 }) == 16.0));
 
 	// tests for invalid reference points
@@ -126,9 +119,148 @@ BOOST_AUTO_TEST_CASE(hypervolume_test)
 	BOOST_CHECK_THROW(hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_algo_2d), std::invalid_argument);
 	BOOST_CHECK_THROW(hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_algo_3d), std::invalid_argument);
 	BOOST_CHECK((hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_algo_nd) == 373.21228));
-	std::cout << hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }) << std::endl;
+
+}
+
+BOOST_AUTO_TEST_CASE(hypervolume_contributions_test) {
+	// Tests for contributions and exclusive hypervolumes
+	std::vector<vector_double> points;
+	std::vector<double> ref;
+	std::vector<double> answers;
+
+	/*  This test contains a front with 3 non dominated points,
+		and many dominated points. Most of the dominated points
+		lie on edges of the front, which makes their exclusive contribution
+		equal to 0.*/
+	points = { { 1, 6.5 },{ 1, 6 },{ 1, 5 },{ 2, 5 },{ 3, 5 },{ 3, 3 },{ 4, 6.5 },
+	{ 4.5, 4 },{ 5, 3 },{ 5, 1.5 },{ 7, 1.5 },{ 7, 3.5 }, };
+	ref = { 7.0, 6.5, };
+	answers = { 0.0, 0.0, 1.0, 0.0, 0.0, 3.5, 0.0, 0.0, 0.0, 3.0, 0.0, 0.0, };
+	assertContribs(points, ref, answers);
+
+	// same test with duplicates and points on the edge of the ref-point
+	points = { { 1, 6.5 },{ 1, 6 },{ 1, 5 },{ 2, 5 },{ 3, 5 },{ 3, 3 },{ 4, 6.5 },
+	{ 4.5, 4 },{ 5, 3 },{ 5, 1.5 },{ 7, 1.5 },{ 7, 3.5 },{ 7, 0.5 },{ 7, 1.0 },{ 7, 4.5 },
+	{ 0.0, 6.5 },{ 5.5, 6.5 },{ 7, 0.5 },{ 5.5, 6.5 },{ 5, 5 },{ 5, 5 },{ 5, 5 } };
+	ref = { 7.0, 6.5, };
+	answers = { 0.0, 0.0, 1.0, 0.0, 0.0, 3.5, 0.0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+	assertContribs(points, ref, answers);
+
+	// Gradually adding duplicate points to the set, making sure the contribution change accordingly.
+	points = { {1, 1} };
+	ref = { 2, 2 };
+	answers = { 1.0 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 1, 1 });
+	answers = { 0.0, 0.0 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 1, 1 });
+	answers = { 0.0, 0.0, 0.0 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 0.5, 0.5 });
+	answers = { 0.0, 0.0, 0.0, 1.25 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 0.5, 0.5 });
+	answers = { 0.0, 0.0, 0.0, 0.0, 0.0 };
+	assertContribs(points, ref, answers);
+
+	// Next test contains a tricky front in 3D with some weakly dominated points on the "edges" of the bounding box.
+	// Non - tricky base problem
+	points = { { -6, -1, -6 },{ -1, -3, -5 },{ -3, -4, -4 },
+	{ -4, -2, -3 },{ -5, -5, -2 },{ -2, -6, -1 } };
+	ref = { 0, 0, 0 };
+	answers = { 18, 2, 12, 1, 18, 2 };
+	assertContribs(points, ref, answers);
+
+	// Add some points that contribute nothing and do not alter other
+	points = { { -6, -1, -6 },{ -1, -3, -5 },{ -3, -4, -4 },
+	{ -4, -2, -3 },{ -5, -5, -2 },{ -2, -6, -1 }, {-3, -1, -3},{ -1, -1, -5 },{ -1, -2, -4 },
+	{ -1, -3, -4 },{ -7, -7, 0 },{ 0, -5, -5 },{ -7, 0, -7 } };
+	answers = { 18, 2, 12, 1, 18, 2, 0, 0, 0, 0, 0, 0, 0 };
+	assertContribs(points, ref, answers);
 
 
+	//	Gradually adding points, some of which are dominated or duplicates.
+	//	Tests whether contributions and repeated exclusive method produce the same results.
+	points = { {3, 3, 3} };
+	ref = { 5, 5, 5 };
+	answers = { 8.0 };
+	assertContribs(points, ref, answers);
 
+	// Decrease the contribution of first point.Second point is dominated.
+	points.push_back({ 4, 4, 4 });
+	answers = { 7, 0, };
+	assertContribs(points, ref, answers);
+
+	// Add duplicate point
+	points.push_back({ 3, 3, 3 });
+	answers = { 0, 0, 0 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 3, 3, 2 });
+	answers = { 0, 0, 0, 4 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 3,3,1 });
+	answers = { 0, 0, 0, 0, 4 };
+	assertContribs(points, ref, answers);
+
+	//	Combine extreme points together. Mixing small and large contributions in a single front
+	points = { {-1, -1, -1}, { -1, -1, -1 }, { -1, -1, -1 } };
+	ref = { 0, 0, 0 };
+	answers = { 0, 0, 0 };
+	assertContribs(points, ref, answers);
+	
+
+	// Adding a point far away
+	points.push_back({-1000,-1000,-1000});
+	answers = { 0, 0, 0, 999999999 };
+	assertContribs(points, ref, answers);
+
+	// Adding an even further point
+	points.push_back({ -10000,-10000,-10000 });
+	answers = { 0, 0, 0, 0, 999000000000 };
+	assertContribs(points, ref, answers);
+
+	//	Gradually adding points in 4d.	Tests whether contributions and repeated exclusive methods produce the same results.
+	points = { {1, 1, 1, 1} };
+	ref = { 5, 5, 5, 5 };
+	answers = { 256 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 4,4,4,4 });
+	answers = { 255, 0 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 3,3,3,3 });
+	answers = { 240, 0, 0};
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 1,1,1,1 });
+	answers = { 0, 0, 0, 0 };
+	assertContribs(points, ref, answers);
+
+	//	Gradually adding points in 5d.	Tests whether contributions and repeated exclusive methods produce the same results.
+	points = { { 1, 1, 1, 1, 1 } };
+	ref = { 5, 5, 5, 5, 5 };
+	answers = { 1024 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 4,4,4,4,4});
+	answers = { 1023, 0 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 3,3,3,3,3 });
+	answers = { 992, 0, 0 };
+	assertContribs(points, ref, answers);
+
+	points.push_back({ 1,1,1,1,1 });
+	answers = { 0, 0, 0, 0 };
+	assertContribs(points, ref, answers);
 
 }
