@@ -3,6 +3,7 @@
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
+#include <boost/python/copy_const_reference.hpp>
 #include <boost/python/default_call_policies.hpp>
 #include <boost/python/def.hpp>
 #include <boost/python/docstring_options.hpp>
@@ -13,6 +14,7 @@
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
+#include <boost/python/return_value_policy.hpp>
 #include <boost/python/scope.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
@@ -215,6 +217,31 @@ static inline vector_double::size_type pop_worst_idx_wrapper_2(const population 
     return pop.worst_idx();
 }
 
+static inline void pop_set_xf_wrapper(population &pop, population::size_type i, const bp::object &x, const bp::object &f)
+{
+    pop.set_xf(i,pygmo::to_vd(x),pygmo::to_vd(f));
+}
+
+static inline void pop_set_x_wrapper(population &pop, population::size_type i, const bp::object &x)
+{
+    pop.set_x(i,pygmo::to_vd(x));
+}
+
+static inline bp::object pop_get_f_wrapper(const population &pop)
+{
+    return pygmo::vvd_to_a(pop.get_f());
+}
+
+static inline bp::object pop_get_x_wrapper(const population &pop)
+{
+    return pygmo::vvd_to_a(pop.get_x());
+}
+
+static inline bp::object pop_get_ID_wrapper(const population &pop)
+{
+    return pygmo::vull_to_a(pop.get_ID());
+}
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -279,7 +306,7 @@ BOOST_PYTHON_MODULE(core)
         .def("__deepcopy__",&pygmo::generic_deepcopy_wrapper<population>)
         .def_pickle(population_pickle_suite())
         .def("push_back",&pop_push_back_wrapper,"push_back(x)\n\nPush back.")
-        .def("decision_vector",&pop_decision_vector_wrapper,"decision_vector(x)\n\nCreate random decision_vector.")
+        .def("decision_vector",&pop_decision_vector_wrapper,"decision_vector()\n\nCreate random decision_vector.")
         .def("best_idx",&pop_best_idx_wrapper_0)
         .def("best_idx",&pop_best_idx_wrapper_1)
         .def("best_idx",&pop_best_idx_wrapper_2,"best_idx(tol = 0.)\n\nGet best idx.\n\n")
@@ -287,7 +314,15 @@ BOOST_PYTHON_MODULE(core)
         .def("worst_idx",&pop_worst_idx_wrapper_1)
         .def("worst_idx",&pop_worst_idx_wrapper_2,"worst_idx(tol = 0.)\n\nGet worst idx.\n\n")
         .def("size",&population::size,"size()\n\nGet population size.\n\n")
-        ;
+        .def("__len__",&population::size)
+        .def("set_xf",&pop_set_xf_wrapper)
+        .def("set_x",&pop_set_x_wrapper)
+        .def("set_problem_seed",&population::set_problem_seed)
+        .def("get_problem",&population::get_problem,bp::return_value_policy<bp::copy_const_reference>())
+        .def("get_f",&pop_get_f_wrapper)
+        .def("get_x",&pop_get_x_wrapper)
+        .def("get_ID",&pop_get_ID_wrapper)
+        .def("get_seed",&population::get_seed);
 
     // Problem class.
     pygmo::problem_ptr = std::make_unique<bp::class_<problem>>("problem",pygmo::problem_docstring().c_str(),bp::no_init);

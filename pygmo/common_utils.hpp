@@ -18,6 +18,7 @@
 #include <string>
 #include <type_traits>
 #include <typeinfo>
+#include <vector>
 
 #include "../include/exceptions.hpp"
 #include "../include/types.hpp"
@@ -116,6 +117,52 @@ inline bp::object vd_to_a(const pagmo::vector_double &v)
     return bp::object(bp::handle<>(ret));
 }
 
+// Convert a vector of vectors of doubles into a numpy array.
+inline bp::object vvd_to_a(const std::vector<pagmo::vector_double> &v)
+{
+    // The dimensions of the array to be created.
+    const auto nrows = v.size();
+    const auto ncols = nrows ? v[0].size() : 0u;
+    npy_intp dims[] = {boost::numeric_cast<npy_intp>(nrows),boost::numeric_cast<npy_intp>(ncols)};
+    // Attempt creating the array.
+    PyObject *ret = PyArray_SimpleNew(2,dims,NPY_DOUBLE);
+    if (!ret) {
+        pygmo_throw(PyExc_RuntimeError,"couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
+    }
+    // Hand over to BP for exception-safe behaviour.
+    bp::object retval{bp::handle<>(ret)};
+    if (nrows) {
+        auto data = static_cast<double *>(PyArray_DATA((PyArrayObject *)(ret)));
+        for (const auto &i: v) {
+            if (i.size() != ncols) {
+                pygmo_throw(PyExc_ValueError,"cannot convert a vector of vector_double to a NumPy 2D array "
+                    "if the vector_double instances don't have all the same size");
+            }
+            std::copy(i.begin(),i.end(),data);
+            data += ncols;
+        }
+    }
+    return retval;
+}
+
+// Convert a vector of ull into a numpy array.
+inline bp::object vull_to_a(const std::vector<unsigned long long> &v)
+{
+    // The dimensions of the array to be created.
+    npy_intp dims[] = {boost::numeric_cast<npy_intp>(v.size())};
+    // Attempt creating the array.
+    PyObject *ret = PyArray_SimpleNew(1,dims,cpp_npy<unsigned long long>::value);
+    if (!ret) {
+        pygmo_throw(PyExc_RuntimeError,"couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
+    }
+    if (v.size()) {
+        // Copy over the data.
+        std::copy(v.begin(),v.end(),static_cast<unsigned long long *>(PyArray_DATA((PyArrayObject *)(ret))));
+    }
+    // Hand over to boost python.
+    return bp::object(bp::handle<>(ret));
+}
+
 // isinstance wrapper.
 inline bool isinstance(const bp::object &o, const bp::object &t)
 {
@@ -188,7 +235,7 @@ inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
     // The unsigned integral type that is used in the sparsity pattern.
     using size_type = pagmo::vector_double::size_type;
     // Its signed counterpart.
-    using int_type = std::make_signed<size_type>::type;
+    using int_type = std::make_signed_t<size_type>;
     npy_intp dims[] = {boost::numeric_cast<npy_intp>(s.size()),2};
     PyObject *ret = PyArray_SimpleNew(2,dims,cpp_npy<int_type>::value);
     if (!ret) {
@@ -222,7 +269,7 @@ inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
 inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
 {
     using size_type = pagmo::vector_double::size_type;
-    using int_type = std::make_signed<size_type>::type;
+    using int_type = std::make_signed_t<size_type>;
     if (!PyArray_ISCARRAY_RO(o)) {
         pygmo_throw(PyExc_RuntimeError,"cannot convert NumPy array to a sparsity pattern: "
          "data must be C-style contiguous, aligned, and in machine byte-order");
@@ -326,7 +373,7 @@ inline pagmo::sparsity_pattern to_sp(const bp::object &o)
         // in typical usage Python integers are converted so signed integers when used inside NumPy arrays, so we want
         // to work with signed ints here as well in order no to force the user to create sparsity patterns
         // like array(...,dtype='ulonglong').
-        auto n = PyArray_FROM_OTF(o.ptr(),cpp_npy<std::make_signed<size_type>::type>::value,NPY_ARRAY_IN_ARRAY);
+        auto n = PyArray_FROM_OTF(o.ptr(),cpp_npy<std::make_signed_t<size_type>>::value,NPY_ARRAY_IN_ARRAY);
         if (!n) {
             // NOTE: PyArray_FROM_OTF already sets the exception at the Python level with an appropriate message,
             // so we just throw the Python exception.
