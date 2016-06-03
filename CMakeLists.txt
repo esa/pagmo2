@@ -46,13 +46,7 @@ if(BUILD_PYGMO)
     # NOTE: we need to run the python setup macros before actually looking
     # for Boost.Python.
     include(YACMAPythonSetup)
-    if(${PYTHON_VERSION_MAJOR} EQUAL 2)
-        set(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python2)
-    elseif(${PYTHON_VERSION_MAJOR} EQUAL 3)
-        set(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python3)
-    else()
-        set(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python)
-    endif()
+    set(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python)
 endif()
 
 # Now actually look for Boost.

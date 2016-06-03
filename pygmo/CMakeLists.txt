@@ -14,13 +14,7 @@ endif()
 include_directories("${YACMA_NUMPY_INCLUDES_DIR}")
 
 YACMA_PYTHON_MODULE(core core.cpp)
-if(${PYTHON_VERSION_MAJOR} EQUAL 2)
-	target_link_libraries(core ${MANDATORY_LIBRARIES} ${Boost_PYTHON2_LIBRARY} ${PYTHON_LIBRARIES})
-elseif(${PYTHON_VERSION_MAJOR} EQUAL 3)
-	target_link_libraries(core ${MANDATORY_LIBRARIES} ${Boost_PYTHON3_LIBRARY} ${PYTHON_LIBRARIES})
-else()
-	target_link_libraries(core ${MANDATORY_LIBRARIES} ${Boost_PYTHON_LIBRARY} ${PYTHON_LIBRARIES})
-endif()
+target_link_libraries(core ${MANDATORY_LIBRARIES} ${Boost_PYTHON_LIBRARY} ${PYTHON_LIBRARIES})
 
 # Setup the installation path.
 set(PYGMO_INSTALL_PATH "${YACMA_PYTHON_MODULES_INSTALL_PATH}/pygmo")
