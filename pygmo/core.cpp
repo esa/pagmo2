@@ -558,10 +558,14 @@ BOOST_PYTHON_MODULE(core)
         bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6)));
     de_.def(bp::init<unsigned int,double,double,unsigned int,double,double,unsigned>((bp::arg("gen") = 1u, bp::arg("F") = .8,
         bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6, bp::arg("seed"))));
+    pygmo::expose_algo_log(de_,"");
+    de_.def("get_seed",&de::get_seed);
     auto sea_ = pygmo::expose_algorithm<sea>("sea","__init__(gen = 1, seed = random)\n\n"
         "(N+1)-ES simple evolutionary algorithm.\n\n");
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
     sea_.def(bp::init<unsigned,unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
+    pygmo::expose_algo_log(sea_,"");
+    sea_.def("get_seed",&sea::get_seed);
     auto sade_ = pygmo::expose_algorithm<sade>("sade","__init__(gen = 1, variant = 2, variant_adptv = 1, "
         "ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
         "Self-adaptive differential evolution (jDE and iDE).\n\n");
@@ -570,6 +574,8 @@ BOOST_PYTHON_MODULE(core)
     sade_.def(bp::init<unsigned,unsigned,unsigned,double,double,bool,unsigned>((bp::arg("gen") = 1u, bp::arg("variant") = 2u,
         bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
         bp::arg("seed"))));
+    pygmo::expose_algo_log(sade_,"");
+    sade_.def("get_seed",&sade::get_seed);
     auto de1220_ = pygmo::expose_algorithm<de1220>("de1220","__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], "
         "variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
         "Self-adaptive differential evolution (DE 1220 aka pDE).\n\n");
@@ -579,4 +585,6 @@ BOOST_PYTHON_MODULE(core)
     de1220_.def("__init__",bp::make_constructor(&de1220_init_1,bp::default_call_policies(),
         (bp::arg("gen") = 1u,bp::arg("allowed_variants") = de1220_allowed_variants(),bp::arg("variant_adptv") = 1u,
         bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
+    pygmo::expose_algo_log(de1220_,"");
+    de1220_.def("get_seed",&de1220::get_seed);
 }

@@ -14,10 +14,13 @@
 #include <boost/python/object.hpp>
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/tuple.hpp>
+#include <cstddef>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <typeinfo>
+#include <utility>
 #include <vector>
 
 #include "../include/exceptions.hpp"
@@ -498,6 +501,34 @@ inline bp::object generic_py_extract(const C &c, const bp::object &t)
         pygmo_throw(PyExc_TypeError,("the inner object is not of type " + str(t)).c_str());
     }
     return deepcopy(*ptr);
+}
+
+// Detail implementation of the tuple conversion below.
+namespace detail
+{
+
+template<typename Func, typename Tup, std::size_t... index>
+decltype(auto) ct2pt_invoke_helper(Func&& func, Tup&& tup, std::index_sequence<index...>)
+{
+    return func(std::get<index>(std::forward<Tup>(tup))...);
+}
+
+template<typename Func, typename Tup>
+decltype(auto) ct2pt_invoke(Func&& func, Tup&& tup)
+{
+    constexpr auto Size = std::tuple_size<std::decay_t<Tup>>::value;
+    return ct2pt_invoke_helper(std::forward<Func>(func),
+                         std::forward<Tup>(tup),
+                         std::make_index_sequence<Size>{});
+}
+
+}
+
+// Utility function to convert a C++ tuple into a Python tuple.
+template <typename ... Args>
+inline bp::tuple cpptuple_to_pytuple(const std::tuple<Args ...> &t)
+{
+    return detail::ct2pt_invoke(bp::make_tuple<Args...>,t);
 }
 
 }

@@ -6,6 +6,7 @@
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/init.hpp>
+#include <boost/python/list.hpp>
 #include <boost/python/scope.hpp>
 #include <cassert>
 
@@ -24,6 +25,23 @@ inline void algorithm_algo_init()
     assert(algorithm_ptr.get() != nullptr);
     auto &algo_class = *algorithm_ptr;
     algo_class.def(bp::init<const Algo &>((bp::arg("a"))));
+}
+
+// Utils to expose algo log.
+template <typename Algo>
+inline bp::list generic_log_getter(const Algo &a)
+{
+    bp::list retval;
+    for (const auto &t: a.get_log()) {
+        retval.append(cpptuple_to_pytuple(t));
+    }
+    return retval;
+}
+
+template <typename Algo>
+inline void expose_algo_log(bp::class_<Algo> &algo_class, const char *doc)
+{
+    algo_class.def("get_log",&generic_log_getter<Algo>,doc);
 }
 
 // Main algorithm exposition function.
