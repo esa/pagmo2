@@ -1,0 +1,20 @@
+/* This adds, before all documentated methods and functions a black line */
+dl.function::before {
+    content: "";
+    height: 1px;
+    background-color: #cccccc;
+    display: inline-block;
+    width: 100%;
+}
+
+/* This increases the indentation level of the methods/functions*/
+dl.function {
+    margin-left: 40px;
+}
+
+/* this devcreases the font size of names .... */
+code.descname {
+    background-color: rgba(240, 65, 36, 0.15);
+    font-weight: bold;
+    font-size: 1em;
+}
