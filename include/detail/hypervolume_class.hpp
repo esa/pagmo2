@@ -275,7 +275,7 @@ public:
   *
   * @return value representing the hypervolume
   */
-  double hypervolume::exclusive(const unsigned int p_idx, const vector_double &r_point) const
+  double exclusive(const unsigned int p_idx, const vector_double &r_point) const
   {
 	  return exclusive(p_idx, r_point, get_best_exclusive(p_idx, r_point));
   }
@@ -289,7 +289,7 @@ public:
   * @param[in] hv_algorithm instance of the algorithm object used for the computation
   * @return vector of exclusive contributions by every point
   */
-  std::vector<double> hypervolume::contributions(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+  std::vector<double> contributions(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
   {
 	  if (m_verify) {
 		  verify_before_compute(r_point, hv_algo);
@@ -321,9 +321,94 @@ public:
   * @param[in] r_point fitness vector describing the reference point
   * @return vector of exclusive contributions by every point
   */
-  std::vector<double> hypervolume::contributions(const vector_double &r_point) const
+  std::vector<double> contributions(const vector_double &r_point) const
   {
 	  return contributions(r_point, get_best_contributions(r_point));
+  }
+
+  /// Find the least contributing individual
+  /**
+  * Establishes the individual contributing the least to the total hypervolume.
+  *
+  * @param[in] r_point fitness vector describing the reference point
+  * @param[in] hv_algorithm instance of the algorithm object used for the computation
+  *
+  * @return index of the least contributing point
+  */
+  unsigned int least_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+  {
+	  if (m_verify) {
+		  verify_before_compute(r_point, hv_algo);
+	  }
+
+	  // Trivial case
+	  if (m_points.size() == 1) {
+		  return 0;
+	  }
+
+	  // copy the initial set of points, as the algorithm may alter its contents
+	  if (m_copy_points) {
+		  std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
+		  return hv_algo->least_contributor(points_cpy, r_point);
+	  }
+	  else {
+		  return hv_algo->least_contributor(const_cast<std::vector<vector_double> &>(m_points), r_point);
+	  }
+  }
+
+
+  /// Find the least contributing individual
+  /**
+  * Establishes the individual contributing the least to the total hypervolume.
+  * This method chooses the best performing hv_algorithm dynamically
+  *
+  * @param[in] r_point fitness vector describing the reference point
+  *
+  * @return index of the least contributing point
+  */
+  unsigned int hypervolume::least_contributor(const vector_double &r_point) const
+  {
+	  return least_contributor(r_point, get_best_contributions(r_point));
+  }
+
+
+  /// Find the most contributing individual
+  /**
+  * Establish the individual contributing the most to the total hypervolume.
+  *
+  * @param[in] r_point fitness vector describing the reference point
+  * @param[in] hv_algorithm instance of the algorithm object used for the computation
+  *
+  * @return index of the most contributing point
+  */
+  unsigned int hypervolume::greatest_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+  {
+	  if (m_verify) {
+		  verify_before_compute(r_point, hv_algo);
+	  }
+
+	  // copy the initial set of points, as the algorithm may alter its contents
+	  if (m_copy_points) {
+		  std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
+		  return hv_algo->greatest_contributor(points_cpy, r_point);
+	  }
+	  else {
+		  return hv_algo->greatest_contributor(const_cast<std::vector<vector_double> &>(m_points), r_point);
+	  }
+  }
+
+  /// Find the most contributing individual
+  /**
+  * Establish the individual contributing the most to the total hypervolume.
+  * This method chooses the best performing hv_algorithm dynamically
+  *
+  * @param[in] r_point fitness vector describing the reference point
+  *
+  * @return index of the most contributing point
+  */
+  unsigned int hypervolume::greatest_contributor(const vector_double &r_point) const
+  {
+	  return greatest_contributor(r_point, get_best_contributions(r_point));
   }
 
 
@@ -369,28 +454,6 @@ private:
     }
     hv_algo->verify_before_compute(m_points, r_point);
   }
-
-
-  /*hv_algorithm::base_ptr hypervolume::get_best_exclusive(const unsigned int p_idx, const fitness_vector &r_point) const
-  {
-    (void)p_idx;
-    // Exclusive contribution and compute method share the same "best" set of algorithms.
-    return get_best_compute(r_point);
-  }
-
-  hv_algorithm::base_ptr hypervolume::get_best_contributions(const fitness_vector &r_point) const
-  {
-    unsigned int fdim = r_point.size();
-    if (fdim == 2) {
-      return hv_algorithm::hv2d().clone();
-    }
-    else if (fdim == 3) {
-      return hv_algorithm::hv3d().clone();
-    }
-    else {
-      return hv_algorithm::wfg().clone();
-    }
-  }*/
 
 
 };

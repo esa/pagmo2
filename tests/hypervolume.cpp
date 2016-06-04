@@ -35,15 +35,13 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
 	std::vector<vector_double> x1{ { 1,2 },{ 3,4 } };
 	hv = hypervolume(x1, true);
 	BOOST_CHECK(hv.get_points() == x1);
-	BOOST_CHECK((hv.get_refpoint(1.0) == vector_double{ 4.0, 5.0 }));
-
+	
 	// by list constructor
 	hv = hypervolume{ { 6,4 },{ 3,5 } };
 	std::vector<vector_double> x2{ { 6,4 },{ 3,5 } };
 	BOOST_CHECK((hv.get_points() == x2));
-	BOOST_CHECK((hv.get_refpoint(0.0) == vector_double{ 6.0, 5.0 }));
-
-	// by population
+	
+		// by population
 	population pop1{ problem{ zdt{ 1,5 } }, 2 };
 	hv = hypervolume(pop1, true);
 
@@ -119,6 +117,9 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
 	BOOST_CHECK_THROW(hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_algo_2d), std::invalid_argument);
 	BOOST_CHECK_THROW(hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_algo_3d), std::invalid_argument);
 	BOOST_CHECK((hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_algo_nd) == 373.21228));
+
+	BOOST_CHECK_THROW(hvwfg(0), std::invalid_argument);
+	BOOST_CHECK_THROW(hvwfg(1), std::invalid_argument);
 
 }
 
@@ -263,4 +264,59 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributions_test) {
 	answers = { 0, 0, 0, 0 };
 	assertContribs(points, ref, answers);
 
+}
+
+BOOST_AUTO_TEST_CASE(hypervolume_least_contribution_test) {
+	hypervolume hv;
+	std::vector<double> ref = { 4, 4 };
+
+	hv = hypervolume({ { 3, 1 },{ 2, 2 },{ 1, 3 } });  // All points are least contributors
+	BOOST_CHECK((hv.least_contributor(ref) >= 0 && hv.least_contributor(ref) <= 2));
+	BOOST_CHECK((hv.greatest_contributor(ref) >= 0 && hv.greatest_contributor(ref) <= 2));
+
+
+	hv = hypervolume({ { 2.5, 1 },{ 2, 2 },{ 1, 3 } });
+	BOOST_CHECK((hv.least_contributor(ref) == 1));
+
+	hv = hypervolume({ { 3.5, 1 },{ 2, 2 },{ 1, 3 } });
+	BOOST_CHECK((hv.least_contributor(ref) == 0));
+
+	hv = hypervolume({ { 3, 1 },{ 2.5, 2.5 },{ 1, 3 } });
+	BOOST_CHECK((hv.least_contributor(ref) == 1));
+
+	hv = hypervolume({ { 3, 1 },{ 2, 2 },{ 1, 3.5 } });
+	BOOST_CHECK((hv.least_contributor(ref) == 2));
+
+	hv = hypervolume({ { 3, 1 },{ 2, 2 },{ 1, 3.5 } });
+	BOOST_CHECK_THROW(hv.least_contributor({ 4,4,4 }), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(hypervolume_exclusive_test) {
+	hypervolume hv;
+	std::vector<double> ref = { 4, 4 };
+
+	// all are equal(take first->idx = 0)
+	hv = hypervolume{ {3, 1},{2, 2},{1, 3} };
+	BOOST_CHECK((hv.exclusive(0, ref) == 1));
+	BOOST_CHECK((hv.exclusive(1, ref) == 1));
+	BOOST_CHECK((hv.exclusive(2, ref) == 1));
+
+	// index out of bounds
+	BOOST_CHECK_THROW(hv.exclusive(200, ref), std::invalid_argument);
+	
+	// picking the wrong algorithm
+	std::shared_ptr<hv_algorithm> hv_algo_3d = hv3d().clone();
+	BOOST_CHECK_THROW(hv.exclusive(0, ref, hv_algo_3d), std::invalid_argument);
+
+}
+
+BOOST_AUTO_TEST_CASE(hypervolume_refpoint_test) {
+	hypervolume hv = hypervolume{ {3, 1},{2, 2},{1, 3} };
+
+	BOOST_CHECK((hv.get_refpoint() == vector_double{3, 3}));
+	BOOST_CHECK((hv.get_refpoint(5) == vector_double{ 8, 8 }));
+	BOOST_CHECK((hv.get_refpoint(0) == vector_double{ 3, 3 }));
+	BOOST_CHECK((hv.get_refpoint(-0) == vector_double{ 3, 3 }));
+	BOOST_CHECK((hv.get_refpoint(-1) == vector_double{ 2, 2 }));
+	
 }
