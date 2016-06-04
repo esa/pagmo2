@@ -5,10 +5,13 @@
 #include <boost/python/class.hpp>
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/def.hpp>
+#include <boost/python/default_call_policies.hpp>
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/import.hpp>
+#include <boost/python/init.hpp>
+#include <boost/python/make_constructor.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
@@ -22,7 +25,10 @@
 
 #include "../include/algorithm.hpp"
 #include "../include/algorithms/de.hpp"
+#include "../include/algorithms/de1220.hpp"
 #include "../include/algorithms/null_algorithm.hpp"
+#include "../include/algorithms/sade.hpp"
+#include "../include/algorithms/sea.hpp"
 #include "../include/population.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/ackley.hpp"
@@ -259,6 +265,28 @@ static inline bp::object pop_get_ID_wrapper(const population &pop)
 static inline double zdt_p_distance_wrapper(const zdt &z, const bp::object &x)
 {
     return z.p_distance(pygmo::to_vd(x));
+}
+
+// DE1220 ctors.
+static inline de1220 *de1220_init_0(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv, double ftol,
+    double xtol, bool memory)
+{
+    return ::new de1220(gen,pygmo::to_vu(allowed_variants),variant_adptv,ftol,xtol,memory);
+}
+
+static inline de1220 *de1220_init_1(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv, double ftol,
+    double xtol, bool memory, unsigned seed)
+{
+    return ::new de1220(gen,pygmo::to_vu(allowed_variants),variant_adptv,ftol,xtol,memory,seed);
+}
+
+static inline bp::list de1220_allowed_variants()
+{
+    bp::list retval;
+    for (const auto &n: de1220_statics<void>::allowed_variants) {
+        retval.append(n);
+    }
+    return retval;
 }
 
 BOOST_PYTHON_MODULE(core)
@@ -530,4 +558,25 @@ BOOST_PYTHON_MODULE(core)
         bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6)));
     de_.def(bp::init<unsigned int,double,double,unsigned int,double,double,unsigned>((bp::arg("gen") = 1u, bp::arg("F") = .8,
         bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6, bp::arg("seed"))));
+    auto sea_ = pygmo::expose_algorithm<sea>("sea","__init__(gen = 1, seed = random)\n\n"
+        "(N+1)-ES simple evolutionary algorithm.\n\n");
+    sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
+    sea_.def(bp::init<unsigned,unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
+    auto sade_ = pygmo::expose_algorithm<sade>("sade","__init__(gen = 1, variant = 2, variant_adptv = 1, "
+        "ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
+        "Self-adaptive differential evolution (jDE and iDE).\n\n");
+    sade_.def(bp::init<unsigned,unsigned,unsigned,double,double,bool>((bp::arg("gen") = 1u, bp::arg("variant") = 2u,
+        bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
+    sade_.def(bp::init<unsigned,unsigned,unsigned,double,double,bool,unsigned>((bp::arg("gen") = 1u, bp::arg("variant") = 2u,
+        bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
+        bp::arg("seed"))));
+    auto de1220_ = pygmo::expose_algorithm<de1220>("de1220","__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], "
+        "variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
+        "Self-adaptive differential evolution (DE 1220 aka pDE).\n\n");
+    de1220_.def("__init__",bp::make_constructor(&de1220_init_0,bp::default_call_policies(),
+        (bp::arg("gen") = 1u,bp::arg("allowed_variants") = de1220_allowed_variants(),bp::arg("variant_adptv") = 1u,
+        bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
+    de1220_.def("__init__",bp::make_constructor(&de1220_init_1,bp::default_call_policies(),
+        (bp::arg("gen") = 1u,bp::arg("allowed_variants") = de1220_allowed_variants(),bp::arg("variant_adptv") = 1u,
+        bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
 }

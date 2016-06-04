@@ -12,5 +12,8 @@ Exposed C++ algorithms
 .. autoclass:: pygmo.core.sade
    :members:
 
+.. autoclass:: pygmo.core.de1220
+   :members:
+
 .. autoclass:: pygmo.core.null_algorithm
    :members:

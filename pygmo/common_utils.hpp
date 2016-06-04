@@ -229,6 +229,63 @@ inline pagmo::vector_double to_vd(const bp::object &o)
         "are supported").c_str());
 }
 
+// Convert a numpy array to an std::vector<unsigned>.
+inline std::vector<unsigned> a_to_vu(PyArrayObject *o)
+{
+    using size_type = std::vector<unsigned>::size_type;
+    using int_type = std::make_signed_t<std::size_t>;
+    if (!PyArray_ISCARRAY_RO(o)) {
+        pygmo_throw(PyExc_RuntimeError,"cannot convert NumPy array to a vector of unsigned: "
+         "data must be C-style contiguous, aligned, and in machine byte-order");
+    }
+    if (PyArray_NDIM(o) != 1) {
+        pygmo_throw(PyExc_ValueError,"cannot convert NumPy array to a vector of unsigned: "
+         "the array must be unidimensional");
+    }
+    if (PyArray_TYPE(o) != cpp_npy<int_type>::value) {
+        pygmo_throw(PyExc_TypeError,"cannot convert NumPy array to a vector of unsigned: "
+         "invalid scalar type");
+    }
+    if (PyArray_STRIDES(o)[0] != sizeof(int_type)) {
+        pygmo_throw(PyExc_RuntimeError,("cannot convert NumPy array to a vector of unsigned: "
+         "the stride value must be " + std::to_string(sizeof(int_type))).c_str());
+    }
+    if (PyArray_ITEMSIZE(o) != sizeof(int_type)) {
+        pygmo_throw(PyExc_RuntimeError,("cannot convert NumPy array to a vector of unsigned: "
+         "the size of the scalar type must be " + std::to_string(sizeof(int_type))).c_str());
+    }
+    const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
+    std::vector<unsigned> retval;
+    if (size) {
+        auto data = static_cast<int_type *>(PyArray_DATA(o));
+        std::transform(data,data + size,std::back_inserter(retval),[](int_type n){return boost::numeric_cast<unsigned>(n);});
+    }
+    return retval;
+}
+
+// Convert an arbitrary python object to a vector of unsigned.
+inline std::vector<unsigned> to_vu(const bp::object &o)
+{
+    bp::object l = builtin().attr("list");
+    bp::object a = bp::import("numpy").attr("ndarray");
+    if (isinstance(o,l)) {
+        bp::stl_input_iterator<unsigned> begin(o), end;
+        return std::vector<unsigned>(begin,end);
+    } else if (isinstance(o,a)) {
+        // NOTE: as usual, we try first to create an array of signed ints,
+        // and we convert to unsigned in a_to_vu().
+        using int_type = std::make_signed_t<std::size_t>;
+        auto n = PyArray_FROM_OTF(o.ptr(),cpp_npy<int_type>::value,NPY_ARRAY_IN_ARRAY);
+        if (!n) {
+            bp::throw_error_already_set();
+        }
+        return a_to_vu((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
+    }
+    pygmo_throw(PyExc_TypeError,("cannot convert the type '" + str(type(o)) + "' to a "
+        "vector of ints: only lists of ints and NumPy arrays of ints "
+        "are supported").c_str());
+}
+
 // Convert a sparsity pattern into a numpy array.
 inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
 {
