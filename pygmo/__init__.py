@@ -93,8 +93,6 @@ __original_population_init = population.__init__
 
 def _population_init(self,prob=None,size=0,seed=None):
     """
-    Constructor documentation:
-
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
             (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)

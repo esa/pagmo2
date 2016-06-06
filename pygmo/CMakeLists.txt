@@ -13,7 +13,7 @@ endif()
 
 include_directories("${YACMA_NUMPY_INCLUDES_DIR}")
 
-YACMA_PYTHON_MODULE(core core.cpp)
+YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp)
 target_link_libraries(core ${MANDATORY_LIBRARIES} ${Boost_PYTHON_LIBRARY} ${PYTHON_LIBRARIES})
 
 # Setup the installation path.
