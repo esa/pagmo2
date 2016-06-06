@@ -1,6 +1,8 @@
 #ifndef PYGMO_PYGMO_CLASSES_HPP
 #define PYGMO_PYGMO_CLASSES_HPP
 
+#include "python_includes.hpp"
+
 #include <boost/python/class.hpp>
 #include <memory>
 

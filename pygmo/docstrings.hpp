@@ -1,6 +1,8 @@
 #ifndef PYGMO_DOCSTRINGS_HPP
 #define PYGMO_DOCSTRINGS_HPP
 
+#include "python_includes.hpp"
+
 #include <string>
 
 namespace pygmo
