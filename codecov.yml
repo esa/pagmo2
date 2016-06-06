@@ -1,5 +1,5 @@
-codecov:
-  token: "secret:/sJJyHQr/wvCP0JSVAkRMAYQ+4ZhdcK72qQ+dqlkCRwXWNl6ZN0ETRI+bXGt37jfgG1JHj8rhnn7i7VmcDrsySIZ3Qy07m7YiArmIqoneGU="
+#codecov:
+#  token: "secret:/sJJyHQr/wvCP0JSVAkRMAYQ+4ZhdcK72qQ+dqlkCRwXWNl6ZN0ETRI+bXGt37jfgG1JHj8rhnn7i7VmcDrsySIZ3Qy07m7YiArmIqoneGU="
 
 coverage:
   status:
