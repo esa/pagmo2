@@ -32,13 +32,13 @@ Appends a new chromosome x to the population, evaluating its fitness and creatin
 born individual. In case of exceptions, the population will not be altered.
 
 Args:
-    x (1d array of doubles): decision vector to be added to the population
+    x (array or list of doubles): decision vector to be added to the population
 
 Raises:
     ValueError: if the dimension of *x* is inconsistent with the problem dimension or with the dimension of existing
         decision vectors in the population, the calculated fitness vector has a dimension which is inconsistent with the
         fitness dimension of the problem or with the dimension of existing fitness vectors in the population
-    TypeError: if *x* cannot be converted to a NumPy array of doubles
+    TypeError: if *x* cannot be converted to a vector of doubles
 
 Examples:
 
@@ -73,7 +73,20 @@ std::string population_decision_vector_docstring()
 Create random decision_vector.
 
 Returns:
-    1d NumPy array of doubles: a random decision vector within the problem’s bounds
+    NumPy array of doubles: a random decision vector within the problem’s bounds
+
+)";
+}
+
+std::string population_best_idx_docstring()
+{
+    return R"(best_idx(tol = 0.)
+
+Get best idx. See also :cpp:func:`pagmo::population::best_idx()`.
+
+Args:
+    tol (a ``float`` or a array or list of doubles): tolerance
+
 )";
 }
 
@@ -102,9 +115,14 @@ See also :cpp:class:`pagmo::algorithm`.
 
 std::string get_best_docstring(const std::string &name)
 {
-    return "best_known()\n\nThe best known solution for the " + name + " problem.\n\n"
-        ":returns: the best known solution for the " + name + " problem\n"
-        ":rtype: an array of doubles\n\n";
+    return R"(best_known()
+
+The best known solution for the )" + name + R"( problem.
+
+Returns:
+    NumPy array of doubles: the best known solution for the )" + name + R"( problem
+
+)";
 }
 
 std::string rosenbrock_docstring()
