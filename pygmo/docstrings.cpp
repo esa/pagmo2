@@ -82,10 +82,59 @@ std::string population_best_idx_docstring()
 {
     return R"(best_idx(tol = 0.)
 
-Get best idx. See also :cpp:func:`pagmo::population::best_idx()`.
+Index of best individual. See :cpp:func:`pagmo::population::best_idx()`.
 
 Args:
-    tol (a ``float`` or a array or list of doubles): tolerance
+    tol (a double, or an array or list of doubles): a scalar tolerance or a vector of tolerances to be applied to
+      each constraints
+
+Returns:
+    ``int``: the index of the best individual
+
+)";
+}
+
+std::string population_worst_idx_docstring()
+{
+    return R"(worst_idx(tol = 0.)
+
+Index of worst individual. See :cpp:func:`pagmo::population::worst_idx()`.
+
+Args:
+    tol (a double, or an array or list of doubles): a scalar tolerance or a vector of tolerances to be applied to
+      each constraints
+
+Returns:
+    ``int``: the index of the worst individual
+
+)";
+}
+
+std::string population_size_docstring()
+{
+    return R"(size()
+
+Size of the population.
+
+Returns:
+    ``int``: the number of individuals
+
+)";
+}
+
+std::string population_set_xf_docstring()
+{
+    return R"(set_xf(i,x,f)
+
+Sets the i-th individual's decision vector and fitness.
+
+Sets simultaneously the i-th individual decision vector and fitness, thus avoiding to trigger a fitness
+function evaluation.
+
+Args:
+    i (an ``int``): individual’s index in the population
+    x (an array or list of doubles): a decision vector (chromosome)
+    f (an array or list of doubles): a fitness vector
 
 )";
 }
