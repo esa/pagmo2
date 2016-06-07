@@ -96,6 +96,9 @@ Args:
 Returns:
     ``int``: the index of the best individual
 
+Raises:
+    ValueError: if the population is empty
+
 Examples:
 
 >>> pop = population(size = 5)
@@ -117,6 +120,9 @@ Args:
 
 Returns:
     ``int``: the index of the worst individual
+
+Raises:
+    ValueError: if the population is empty
 
 Examples:
 
@@ -253,6 +259,113 @@ Extra info:
 Traceback (most recent call last):
   ...
 RuntimeError: the user-defined problem does not support seed setting
+
+)";
+}
+
+std::string population_get_problem_docstring()
+{
+    return R"(get_problem()
+
+This method will return a deep copy of the internal problem instance.
+
+Returns:
+    :class:`~pygmo.core.problem`: a deep copy of the internal problem instance
+
+Examples:
+
+>>> pop = population()
+>>> pop.get_problem() # doctest: +SKIP
+Problem name: Null problem
+        Global dimension:                       1
+        Fitness dimension:                      3
+[...]
+
+)";
+}
+
+std::string population_get_f_docstring()
+{
+    return R"(get_f()
+
+This method will return the fitness vectors of the individuals as a 2D NumPy array.
+
+Each row of the returned array represents the fitness vector of the individual at the corresponding position in the
+population.
+
+Returns:
+    NumPy array of doubles: a deep copy of the fitness vectors of the individuals
+
+Examples:
+
+>>> pop = population(size = 1)
+>>> pop.get_f() # doctest: +SKIP
+array([[ 0.13275027, 0.41543223, 0.28420476]])
+
+)";
+}
+
+std::string population_get_x_docstring()
+{
+    return R"(get_x()
+
+This method will return the chromosomes of the individuals as a 2D NumPy array.
+
+Each row of the returned array represents the chromosome of the individual at the corresponding position in the
+population.
+
+Returns:
+    NumPy array of doubles: a deep copy of the chromosomes of the individuals
+
+Examples:
+
+>>> pop = population(size = 5)
+>>> pop.get_x() # doctest: +SKIP
+array([[ 0.13275027],
+       [ 0.26826544],
+       [ 0.30058279],
+       [ 0.41543223],
+       [ 0.13370117]])
+
+)";
+}
+
+std::string population_get_ID_docstring()
+{
+    return R"(get_ID()
+
+This method will return the IDs of the individuals as a 2D NumPy array.
+
+Each row of the returned array represents the ID of the individual at the corresponding position in the
+population.
+
+Returns:
+    NumPy array of ``int``: a deep copy of the IDs of the individuals
+
+Examples:
+
+>>> pop = population(size = 5)
+>>> pop.get_ID() # doctest: +SKIP
+array([12098820240406021962,  2435494813514879429, 16758705632650014019,
+       13060277951708126199,  1018350750245690412], dtype=uint64)
+
+)";
+}
+
+std::string population_get_seed_docstring()
+{
+    return R"(get_seed()
+
+This method will return the random seed of the population.
+
+Returns:
+    ``int``: the random seed of the population
+
+Examples:
+
+>>> pop = population(seed = 12)
+>>> pop.get_seed()
+12
 
 )";
 }

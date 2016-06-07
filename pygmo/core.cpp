@@ -366,11 +366,12 @@ BOOST_PYTHON_MODULE(core)
         .def("set_x",&pop_set_x_wrapper,pygmo::population_set_x_docstring().c_str())
         .def("set_problem_seed",&population::set_problem_seed,pygmo::population_set_problem_seed_docstring().c_str(),
             (bp::arg("seed")))
-        .def("get_problem",&population::get_problem,bp::return_value_policy<bp::copy_const_reference>())
-        .def("get_f",&pop_get_f_wrapper)
-        .def("get_x",&pop_get_x_wrapper)
-        .def("get_ID",&pop_get_ID_wrapper)
-        .def("get_seed",&population::get_seed);
+        .def("get_problem",&population::get_problem,pygmo::population_get_problem_docstring().c_str(),
+            bp::return_value_policy<bp::copy_const_reference>())
+        .def("get_f",&pop_get_f_wrapper,pygmo::population_get_f_docstring().c_str())
+        .def("get_x",&pop_get_x_wrapper,pygmo::population_get_x_docstring().c_str())
+        .def("get_ID",&pop_get_ID_wrapper,pygmo::population_get_ID_docstring().c_str())
+        .def("get_seed",&population::get_seed,pygmo::population_get_seed_docstring().c_str());
 
     // Problem class.
     pygmo::problem_ptr = std::make_unique<bp::class_<problem>>("problem",pygmo::problem_docstring().c_str(),bp::no_init);
