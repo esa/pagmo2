@@ -17,7 +17,7 @@ namespace pagmo
 /// The Schwefel problem.
 /**
  *
- * \image html schwefel.gif "Two-dimensional Schwefel function." width=3cm
+ * \image html schwefel.jpg "Two-dimensional Schwefel function." width=3cm
  *
  * This is a scalable box-constrained continuous single-objective problem.
  * The objective function is the generalised n-dimensional Schwefel function:
