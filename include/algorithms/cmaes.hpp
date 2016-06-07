@@ -67,9 +67,8 @@ public:
         auto lam = pop.size();
         auto mu = lam / 2u;
         auto prob_f_dimension = prob.get_nf();
-        //auto fevals0 = prob.get_fevals();           // disount for the already made fevals
+        //auto fevals0 = prob.get_fevals();           // discount for the already made fevals
         //auto count = 1u;                            // regulates the screen output
-
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
@@ -80,15 +79,12 @@ public:
         if (prob_f_dimension != 1u) {
             pagmo_throw(std::invalid_argument,"Multiple objectives detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");
         }
-        if (prob.is_stochastic()) {
-            pagmo_throw(std::invalid_argument,"The problem appears to be stochastic " + get_name() + " cannot deal with it");
-        }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
             return pop;
         }
-        if (pop.size() < 5u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 7 individuals in the population, " + std::to_string(pop.size()) + " detected");
+        if (lam < 5u) {
+            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 5 individuals in the population, " + std::to_string(lam) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -111,7 +107,7 @@ public:
         double cc(m_cc), cs(m_cs), c1(m_c1), cmu(m_cmu);
         double N = static_cast<double>(dim);
         if (cc == -1) {
-            cc = (4. + mueff/N) / (N + 4. + 2. * mueff / N);                                // t-const for cumulation for C
+            cc = (4. + mueff / N) / (N + 4. + 2. * mueff / N);                                // t-const for cumulation for C
         }
         if (cs == -1) {
             cs = (mueff + 2.) / (N + mueff + 5.);                                           // t-const for cumulation for sigma control
@@ -176,14 +172,13 @@ public:
             }
             pc.resize(dim); pc = Eigen::VectorXd::Zero(dim);
             ps.resize(dim); ps = Eigen::VectorXd::Zero(dim);
-            counteval = 0;
-            eigeneval = 0;
+            counteval = 0u;
+            eigeneval = 0u;
         }
 
         // ----------------------------------------------//
         // HERE WE START THE JUICE OF THE ALGORITHM      //
         // ----------------------------------------------//
-
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(dim);
         for (decltype(m_gen) g = 1u; g < m_gen; ++g) {
             // 1 - We generate and evaluate lam new individuals
@@ -269,10 +264,10 @@ public:
             }
 
             // 4 - Update evolution paths
-            ps = (1. - cs) * ps + std::sqrt(cs*(2-cs)*mueff) * invsqrtC * (mean-meanold) / sigma;
+            ps = (1. - cs) * ps + std::sqrt(cs*(2. - cs)*mueff) * invsqrtC * (mean-meanold) / sigma;
             double hsig = 0.;
-            hsig = (ps.squaredNorm() / N / (1-std::pow((1-cs),(2.0 * static_cast<double>(counteval / lam) ))) ) < (2.0 + 4/(N+1));
-            pc = (1. - cc) * pc + hsig * std::sqrt(cc*(2. - cc)*mueff) * (mean-meanold) / sigma;
+            hsig = (ps.squaredNorm() / N / (1. - std::pow((1. - cs),(2. * static_cast<double>(counteval / lam) ))) ) < (2. + 4. / (N + 1.));
+            pc = (1. - cc) * pc + hsig * std::sqrt(cc * (2. - cc) * mueff) * (mean - meanold) / sigma;
 
             // 5 - Adapt Covariance Matrix
             Cold = C;
@@ -283,10 +278,10 @@ public:
             C /= sigma*sigma;
             C = (1. - c1-cmu) * Cold +
                 cmu * C +
-                c1 * ((pc * pc.transpose()) + (1-hsig) * cc * (2-cc) * Cold);
+                c1 * ((pc * pc.transpose()) + (1. - hsig) * cc * (2. - cc) * Cold);
 
-                //6 - Adapt sigma
-            sigma *= std::exp( std::min( 0.6, (cs/damps) * (ps.norm()/chiN - 1) ) );
+            //6 - Adapt sigma
+            sigma *= std::exp( std::min( 0.6, (cs / damps) * (ps.norm() / chiN - 1.) ) );
             if ( !std::isfinite(sigma) || !std::isfinite(var_norm)) { //debug info
                 std::cout << "eigen: " << es.info() << std::endl;
                 std::cout << "B: " << B << std::endl;
@@ -297,9 +292,9 @@ public:
             }
 
             //7 - Perform eigen-decomposition of C
-            if ( static_cast<double>(counteval - eigeneval) > (static_cast<double>(lam) / (c1 + cmu) / static_cast<double>(dim) / 10u) ) {   //achieve O(N^2)
+            if ( static_cast<double>(counteval - eigeneval) > (static_cast<double>(lam) / (c1 + cmu) / N / 10u) ) {   //achieve O(N^2)
                 eigeneval = counteval;
-                C = (C + C.transpose()) / 2;                            //enforce symmetry
+                C = (C + C.transpose()) / 2.;                            //enforce symmetry
                 es.compute(C);                                          //eigen decomposition
                 if (es.info()==Eigen::Success) {
                     B = es.eigenvectors();
@@ -308,7 +303,7 @@ public:
                         D(j,j) = std::sqrt( std::max(1e-20, D(j,j)) );       //D contains standard deviations now
                     }
                     for (decltype(dim) j = 0u; j < dim; ++j ) {
-                        Dinv(j,j) = 1.0 / D(j,j);
+                        Dinv(j,j) = 1. / D(j,j);
                     }
                     invsqrtC = B*Dinv*B.transpose();
                 } //if eigendecomposition fails just skip it and keep pevious successful one.
