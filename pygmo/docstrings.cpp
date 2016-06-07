@@ -168,6 +168,8 @@ Raises:
         inconsistent with the problem properties)
     TypeError: if the argument types are invalid
 
+Examples:
+
 >>> pop = population(size = 1)
 >>> pop.set_xf(0,[1],[1,2,3])
 >>> pop # doctest: +SKIP
@@ -202,6 +204,8 @@ Raises:
         inconsistent with the problem properties)
     TypeError: if the argument types are invalid
 
+Examples:
+
 >>> pop = population(size = 1)
 >>> pop.set_x(0,[1])
 >>> pop # doctest: +SKIP
@@ -215,6 +219,40 @@ List of individuals:
 Traceback (most recent call last):
   ...
 ValueError: Length of decision vector is 2, should be 1
+
+)";
+}
+
+std::string population_set_problem_seed_docstring()
+{
+    return R"(set_problem_seed(seed)
+
+Sets the problem seed.
+
+Args:
+    seed (an ``int``): the desired seed (must be non-negative)
+
+Raises:
+    RuntimeError: if the problem is not stochastic
+    OverflowError: if *seed* is too large or negative
+    TypeError: if the argument types are invalid
+
+Examples:
+
+>>> pop = population(inventory())
+>>> pop.set_problem_seed(42)
+>>> pop # doctest: +SKIP
+[...]
+Extra info:
+        Weeks: 4
+        Sample size: 10
+        Seed: 42
+[...]
+>>> pop = population()
+>>> pop.set_problem_seed(seed = 42) # doctest: +IGNORE_EXCEPTION_DETAIL
+Traceback (most recent call last):
+  ...
+RuntimeError: the user-defined problem does not support seed setting
 
 )";
 }
