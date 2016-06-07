@@ -70,8 +70,7 @@ public:
         //auto fevals0 = prob.get_fevals();           // discount for the already made fevals
         //auto count = 1u;                            // regulates the screen output
 
-        // PREAMBLE-------------------------------------------------------------------------------------------------
-        // We start by checking that the problem is suitable for this
+        // PREAMBLE--------------------------------------------------
         // particular algorithm.
         if (prob.get_nc() != 0u) {
             pagmo_throw(std::invalid_argument,"Non linear constraints detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");
@@ -86,7 +85,7 @@ public:
         if (lam < 5u) {
             pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 5 individuals in the population, " + std::to_string(lam) + " detected");
         }
-        // ---------------------------------------------------------------------------------------------------------
+        // -----------------------------------------------------------
 
         // No throws, all valid: we clear the logs
         // m_log.clear();
@@ -346,6 +345,10 @@ public:
     }
 
 private:
+    // Eigen stores indexes and sizes as signed types, while pagmo
+    // uses STL containers thus sizes and indexes are unsigned. To
+    // make the conversion as painless as possible this template is provided
+    // allowing, for example, syntax of the type D(_(i),_(j)) to adress an Eigen matrix. 
     template <typename I>
     static Eigen::DenseIndex _(I n)
     {

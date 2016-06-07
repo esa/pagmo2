@@ -27,11 +27,14 @@
 #include <random>
 #include <sstream>
 #include <string>
+#ifdef PAGMO_ENABLE_EIGEN3
+    #include <Eigen/Dense>
+#endif
 
-// Implement serialization for the Mersenne twister engine.
+
 namespace cereal
 {
-
+// Implement serialization for the Mersenne twister engine.
 template <class Archive, class UIntType,
     std::size_t w, std::size_t n, std::size_t m, std::size_t r,
     UIntType a, std:: size_t u, UIntType d, std::size_t s,
@@ -44,7 +47,6 @@ void CEREAL_SAVE_FUNCTION_NAME( Archive & ar, std::mersenne_twister_engine<UIntT
     oss << e;
     ar(oss.str());
 }
-
 template <class Archive, class UIntType,
     std::size_t w, std::size_t n, std::size_t m, std::size_t r,
     UIntType a, std:: size_t u, UIntType d, std::size_t s,
@@ -60,6 +62,40 @@ void CEREAL_LOAD_FUNCTION_NAME( Archive & ar, std::mersenne_twister_engine<UIntT
     iss >> e;
 }
 
+#ifdef PAGMO_ENABLE_EIGEN3
+    // Implement the serializetion of the Eigen::Matrix class
+    template <class Archive, class S, int R, int C> inline
+    void CEREAL_SAVE_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S,R,C> const &cb)
+    {
+        // Let's first save the dimension
+        auto nrows = cb.rows();
+        auto ncols = cb.cols();
+        ar << nrows;
+        ar << ncols;
+        //And then the numbers
+        for (decltype(nrows) i = 0; i < nrows; ++i) {
+            for (decltype(nrows) j = 0; j < ncols; ++j) {
+                ar << cb(i,j);
+            }
+        }
+    }
+    template <class Archive, class S, int R, int C> inline
+    void CEREAL_LOAD_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S,R,C> &cb)
+    {
+        decltype(cb.rows()) nrows;
+        decltype(cb.cols()) ncols;
+        // Let's first restore the dimension
+        ar >> nrows;
+        ar >> ncols;
+        cb.resize(nrows,ncols);
+        //And then the numbers
+        for (decltype(nrows) i = 0; i < nrows; ++i) {
+            for (decltype(nrows) j = 0; j < ncols; ++j) {
+                ar >> cb(i,j);
+            }
+        }
+    }
+#endif
 }
 
 #endif
