@@ -1,7 +1,7 @@
 #ifndef PAGMO_ALGORITHMS_NULL_HPP
 #define PAGMO_ALGORITHMS_NULL_HPP
 
-#include "../algorithm"
+#include "../algorithm.hpp"
 #include "../detail/population_fwd.hpp"
 
 namespace pagmo

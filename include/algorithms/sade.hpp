@@ -8,7 +8,7 @@
 #include <string>
 #include <tuple>
 
-#include "../algorithm"
+#include "../algorithm.hpp"
 #include "../io.hpp"
 #include "../exceptions.hpp"
 #include "../population.hpp"

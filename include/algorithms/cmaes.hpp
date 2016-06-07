@@ -7,7 +7,7 @@
 #include <tuple>
 #include <Eigen/Dense>
 
-#include "../algorithm"
+#include "../algorithm.hpp"
 #include "../io.hpp"
 #include "../exceptions.hpp"
 #include "../population.hpp"
@@ -143,7 +143,7 @@ public:
             newpop = std::vector<Eigen::VectorXd>(lam, tmp);
             variation.resize(dim);
 
-            //We define the satrting B,D,C
+            //We define the starting B,D,C
             B = Eigen::MatrixXd::Identity(dim, dim);                 //B defines the coordinate system
             D = Eigen::MatrixXd::Identity(dim, dim);                 //diagonal D defines the scaling. By default this is the witdh of the box bounds.
                                                                      //If this is too small... then 1e-6 is used
