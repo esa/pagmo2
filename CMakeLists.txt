@@ -25,7 +25,7 @@ option(BUILD_TUTORIALS "Build tutorials." OFF)
 option(BUILD_PYGMO "Build PyGMO." OFF)
 
 # Build option: I have Eigen in my system!!
-option(HAVE_EIGEN3 "Eigen3 is in the system, use it. This will activate additional includes such as cmaes.h" OFF)
+option(PAGMO_ENABLE_EIGEN3 "Eigen3 is in the system, use it. This will activate additional includes such as cmaes.h" OFF)
 
 # Compiler setup.
 include(PAGMOCompilerLinkerSettings)
@@ -39,7 +39,7 @@ message(STATUS "Current CXX flags: ${CMAKE_CXX_FLAGS}")
 message(STATUS "Current CXX debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
 
 # Setting up Eigen3
-if(HAVE_EIGEN3)
+if(PAGMO_ENABLE_EIGEN3)
     find_package(Eigen3)
     if(EIGEN_FOUND)
         message(STATUS "Eigen include directory: ${EIGEN_INCLUDE_DIRS}")

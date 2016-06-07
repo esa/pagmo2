@@ -40,7 +40,7 @@ ADD_PAGMO_TESTCASE(schwefel)
 ADD_PAGMO_TESTCASE(ackley)
 ADD_PAGMO_TESTCASE(griewank)
 
-if(HAVE_EIGEN3)
+if(PAGMO_ENABLE_EIGEN3)
     # Include eigen directories.
     include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
     ADD_PAGMO_TESTCASE(cmaes)
