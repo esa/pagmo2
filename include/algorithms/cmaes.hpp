@@ -41,18 +41,18 @@ public:
         }
 
         // Initialize the algorithm memory
-        m_sigma = m_sigma0;
-        m_mean = Eigen::VectorXd::Zero(1);
-        m_variation = Eigen::VectorXd::Zero(1);
-        m_newpop = std::vector<Eigen::VectorXd>();
-        m_B = Eigen::MatrixXd::Identity(1,1);
-        m_D = Eigen::MatrixXd::Identity(1,1);
-        m_C = Eigen::MatrixXd::Identity(1,1);
-        m_invsqrtC = Eigen::MatrixXd::Identity(1,1);
-        m_pc = Eigen::VectorXd::Zero(1);
-        m_ps = Eigen::VectorXd::Zero(1);
-        m_counteval = 0u;
-        m_eigeneval = 0u;
+        sigma = m_sigma0;
+        mean = Eigen::VectorXd::Zero(1);
+        variation = Eigen::VectorXd::Zero(1);
+        newpop = std::vector<Eigen::VectorXd>{};
+        B = Eigen::MatrixXd::Identity(1,1);
+        D = Eigen::MatrixXd::Identity(1,1);
+        C = Eigen::MatrixXd::Identity(1,1);
+        invsqrtC = Eigen::MatrixXd::Identity(1,1);
+        pc = Eigen::VectorXd::Zero(1);
+        ps = Eigen::VectorXd::Zero(1);
+        counteval = 0u;
+        eigeneval = 0u;
     }
 
     /// Algorithm evolve method (juice implementation of the algorithm)
@@ -122,20 +122,6 @@ public:
         double damps = 1. + 2. * std::max(0., std::sqrt((mueff - 1.)/(N + 1.)) - 1.) + cs;  // damping coefficient for sigma
         double chiN = std::sqrt(N) * (1. - 1. / (4. * N) + 1. / (21 * N * N));              // expectation of ||N(0,I)|| == norm(randn(N,1))
 
-        // Algorithm's Memory. This allows the algorithm to start from its last "state"
-        double sigma(m_sigma);
-        Eigen::VectorXd mean(m_mean);
-        Eigen::VectorXd variation(m_variation);
-        std::vector<Eigen::VectorXd> newpop(m_newpop);
-        Eigen::MatrixXd B(m_B);
-        Eigen::MatrixXd D(m_D);
-        Eigen::MatrixXd C(m_C);
-        Eigen::MatrixXd invsqrtC(m_invsqrtC);
-        Eigen::VectorXd pc(m_pc);
-        Eigen::VectorXd ps(m_ps);
-        auto counteval = m_counteval;
-        auto eigeneval = m_eigeneval;
-        double var_norm = 0.;
 
         // Some buffers
         Eigen::VectorXd meanold = Eigen::VectorXd::Zero(dim);
@@ -144,9 +130,10 @@ public:
         Eigen::VectorXd tmp = Eigen::VectorXd::Zero(dim);
         std::vector<Eigen::VectorXd> elite(mu, tmp);
         vector_double dumb(dim, 0.);
+        double var_norm = 0.;
 
         // If the algorithm is called for the first time on this problem dimension / pop size or if m_memory is false we erease the memory of past calls
-        if ( (m_newpop.size() != lam) || ((unsigned int)m_newpop[0].rows() != dim) || (m_memory==false) ) {
+        if ( (newpop.size() != lam) || ((unsigned int)newpop[0].rows() != dim) || (m_memory==false) ) {
             sigma = m_sigma0;
             mean.resize(dim);
             auto idx_b = pop.best_idx();
@@ -157,9 +144,9 @@ public:
             variation.resize(dim);
 
             //We define the satrting B,D,C
-            B.resize(dim, dim); B = Eigen::MatrixXd::Identity(dim, dim);                 //B defines the coordinate system
-            D.resize(dim, dim); D = Eigen::MatrixXd::Identity(dim, dim);                 //diagonal D defines the scaling. By default this is the witdh of the box bounds.
-                                                                                  //If this is too small... then 1e-6 is used
+            B = Eigen::MatrixXd::Identity(dim, dim);                 //B defines the coordinate system
+            D = Eigen::MatrixXd::Identity(dim, dim);                 //diagonal D defines the scaling. By default this is the witdh of the box bounds.
+                                                                     //If this is too small... then 1e-6 is used
             // TODO: here if the problem is unbounded what happens?
             for (decltype(dim) j = 0u; j < dim; ++j) {
                 D(j,j) = std::max((ub[j]-lb[j]), 1e-6);
@@ -308,23 +295,6 @@ public:
                     invsqrtC = B*Dinv*B.transpose();
                 } //if eigendecomposition fails just skip it and keep pevious successful one.
             }
-
-            // Update algorithm memory
-            if (m_memory) {
-                m_sigma = sigma;
-                m_mean = mean;
-                m_variation = variation;
-                m_newpop = newpop;
-                m_B = B;
-                m_D = D;
-                m_C = C;
-                m_invsqrtC = invsqrtC;
-                m_pc = pc;
-                m_ps = ps;
-                m_counteval = counteval;
-                m_eigeneval = eigeneval;
-                m_sigma = sigma;
-            }
         } // end of generation loop
         return pop;
     }
@@ -388,18 +358,18 @@ private:
     bool m_memory;
 
     // "Memory" data members (these are adapted during each evolve call and may be remembered if m_memory is true)
-    mutable double m_sigma;
-    mutable Eigen::VectorXd m_mean;
-    mutable Eigen::VectorXd m_variation;
-    mutable std::vector<Eigen::VectorXd> m_newpop;
-    mutable Eigen::MatrixXd m_B;
-    mutable Eigen::MatrixXd m_D;
-    mutable Eigen::MatrixXd m_C;
-    mutable Eigen::MatrixXd m_invsqrtC;
-    mutable Eigen::VectorXd m_pc;
-    mutable Eigen::VectorXd m_ps;
-    mutable population::size_type m_counteval;
-    mutable population::size_type m_eigeneval;
+    mutable double sigma;
+    mutable Eigen::VectorXd mean;
+    mutable Eigen::VectorXd variation;
+    mutable std::vector<Eigen::VectorXd> newpop;
+    mutable Eigen::MatrixXd B;
+    mutable Eigen::MatrixXd D;
+    mutable Eigen::MatrixXd C;
+    mutable Eigen::MatrixXd invsqrtC;
+    mutable Eigen::VectorXd pc;
+    mutable Eigen::VectorXd ps;
+    mutable population::size_type counteval;
+    mutable population::size_type eigeneval;
 
     // "Common" data members
     mutable detail::random_engine_type  m_e;
