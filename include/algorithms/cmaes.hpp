@@ -96,7 +96,7 @@ public:
         std::normal_distribution<double> normally_distributed_number(0.,1.);           // to generate a normally distributed number
 
         // Setting coefficients for Selection
-        Eigen::VectorXd weights(mu);
+        Eigen::VectorXd weights(_(mu));
         for (decltype(weights.rows()) i = 0u; i < weights.rows(); ++i){
             weights(i) = std::log(static_cast<double>(mu) + 0.5) - std::log(static_cast<double>(i) + 1.);
         }
@@ -124,10 +124,10 @@ public:
 
 
         // Some buffers
-        Eigen::VectorXd meanold = Eigen::VectorXd::Zero(dim);
-        Eigen::MatrixXd Dinv = Eigen::MatrixXd::Identity(dim, dim);
-        Eigen::MatrixXd Cold = Eigen::MatrixXd::Identity(dim, dim);
-        Eigen::VectorXd tmp = Eigen::VectorXd::Zero(dim);
+        Eigen::VectorXd meanold = Eigen::VectorXd::Zero(_(dim));
+        Eigen::MatrixXd Dinv = Eigen::MatrixXd::Identity(_(dim), _(dim));
+        Eigen::MatrixXd Cold = Eigen::MatrixXd::Identity(_(dim), _(dim));
+        Eigen::VectorXd tmp = Eigen::VectorXd::Zero(_(dim));
         std::vector<Eigen::VectorXd> elite(mu, tmp);
         vector_double dumb(dim, 0.);
         double var_norm = 0.;
@@ -135,30 +135,30 @@ public:
         // If the algorithm is called for the first time on this problem dimension / pop size or if m_memory is false we erease the memory of past calls
         if ( (newpop.size() != lam) || ((unsigned int)newpop[0].rows() != dim) || (m_memory==false) ) {
             sigma = m_sigma0;
-            mean.resize(dim);
+            mean.resize(_(dim));
             auto idx_b = pop.best_idx();
             for (decltype(dim) i = 0u; i < dim; ++i){
-                mean(i) = pop.get_x()[idx_b][i];
+                mean(_(i)) = pop.get_x()[idx_b][i];
             }
             newpop = std::vector<Eigen::VectorXd>(lam, tmp);
-            variation.resize(dim);
+            variation.resize(_(dim));
 
             //We define the starting B,D,C
-            B = Eigen::MatrixXd::Identity(dim, dim);                 //B defines the coordinate system
-            D = Eigen::MatrixXd::Identity(dim, dim);                 //diagonal D defines the scaling. By default this is the witdh of the box bounds.
+            B = Eigen::MatrixXd::Identity(_(dim), _(dim));                 //B defines the coordinate system
+            D = Eigen::MatrixXd::Identity(_(dim), _(dim));                 //diagonal D defines the scaling. By default this is the witdh of the box bounds.
                                                                      //If this is too small... then 1e-6 is used
             // TODO: here if the problem is unbounded what happens?
             for (decltype(dim) j = 0u; j < dim; ++j) {
-                D(j,j) = std::max((ub[j]-lb[j]), 1e-6);
+                D(_(j),_(j)) = std::max((ub[j]-lb[j]), 1e-6);
             }
-            C.resize(dim, dim); C = Eigen::MatrixXd::Identity(dim, dim);                 //covariance matrix C
+            C = Eigen::MatrixXd::Identity(_(dim), _(dim));                 //covariance matrix C
             C = D * D;
-            invsqrtC.resize(dim, dim); invsqrtC = Eigen::MatrixXd::Identity(dim, dim);   //inverse of sqrt(C)
-            for (decltype(dim) j = 0u; j < dim; ++j) {
-                invsqrtC(j,j) = 1. / D(j,j);
+            invsqrtC = Eigen::MatrixXd::Identity(_(dim), _(dim));   //inverse of sqrt(C)
+            for (decltype(dim) j = 0; j < dim; ++j) {
+                invsqrtC(_(j),_(j)) = 1. / D(_(j),_(j));
             }
-            pc.resize(dim); pc = Eigen::VectorXd::Zero(dim);
-            ps.resize(dim); ps = Eigen::VectorXd::Zero(dim);
+            pc = Eigen::VectorXd::Zero(_(dim));
+            ps = Eigen::VectorXd::Zero(_(dim));
             counteval = 0u;
             eigeneval = 0u;
         }
@@ -166,13 +166,13 @@ public:
         // ----------------------------------------------//
         // HERE WE START THE JUICE OF THE ALGORITHM      //
         // ----------------------------------------------//
-        Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(dim);
+        Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(_(dim));
         for (decltype(m_gen) g = 1u; g < m_gen; ++g) {
             // 1 - We generate and evaluate lam new individuals
             for (decltype(lam) i = 0u; i < lam; ++i ) {
                 // 1a - we create a randomly normal distributed vector
                 for (decltype(dim) j = 0u; j < dim; ++j){
-                    tmp(j) = normally_distributed_number(m_e);
+                    tmp(_(j)) = normally_distributed_number(m_e);
                 }
                 // 1b - and store its transformed value in the newpop
                 newpop[i] = mean + (sigma * B * D * tmp);
@@ -207,8 +207,8 @@ public:
             // via an Eigen matrix. Maybe iterators could be used to generalize that util
             for (decltype(lam) i = 0u; i < lam; ++i) {
                 for (decltype(dim) j = 0u; j < dim; ++j) {
-                    if ( (newpop[i](j) < lb[j]) || (newpop[i](j) > ub[j]) ) {
-                        newpop[i](j) = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
+                    if ( (newpop[i](_(j)) < lb[j]) || (newpop[i](_(j)) > ub[j]) ) {
+                        newpop[i](_(j)) = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
                     }
                 }
             }
@@ -226,7 +226,7 @@ public:
             // Reinsertion
             for (decltype(lam) i = 0u; i < lam; ++i) {
                 for (decltype(dim) j = 0u; j < dim; ++j ) {
-                    dumb[j] = newpop[i](j);
+                    dumb[j] = newpop[i](_(j));
                 }
                 pop.set_x(i,dumb);
             }
@@ -239,7 +239,7 @@ public:
             best_idx.resize(mu); // not needed?
             for (decltype(mu) i = 0u; i < mu; ++i ) {
                 for (decltype(dim) j = 0u; j < dim; ++j) {
-                    elite[i](j) = pop.get_x()[best_idx[i]][j];
+                    elite[i](_(j)) = pop.get_x()[best_idx[i]][j];
                 }
             }
 
@@ -247,7 +247,7 @@ public:
             meanold = mean;
             mean = elite[0]*weights(0);
             for (decltype(mu) i = 1u; i < mu; ++i) {
-                mean += elite[i] * weights(i);
+                mean += elite[i] * weights(_(i));
             }
 
             // 4 - Update evolution paths
@@ -260,7 +260,7 @@ public:
             Cold = C;
             C = (elite[0]-meanold)*(elite[0]-meanold).transpose()*weights(0);
             for (decltype(mu) i = 1u; i < mu; ++i ) {
-                C += (elite[i]-meanold)*(elite[i]-meanold).transpose()*weights(i);
+                C += (elite[i]-meanold)*(elite[i]-meanold).transpose()*weights(_(i));
             }
             C /= sigma*sigma;
             C = (1. - c1-cmu) * Cold +
@@ -287,10 +287,10 @@ public:
                     B = es.eigenvectors();
                     D = es.eigenvalues().asDiagonal();
                     for (decltype(dim) j = 0u; j < dim; ++j ) {
-                        D(j,j) = std::sqrt( std::max(1e-20, D(j,j)) );       //D contains standard deviations now
+                        D(_(j),_(j)) = std::sqrt( std::max(1e-20, D(_(j),_(j))) );       //D contains standard deviations now
                     }
                     for (decltype(dim) j = 0u; j < dim; ++j ) {
-                        Dinv(j,j) = 1. / D(j,j);
+                        Dinv(_(j),_(j)) = 1. / D(_(j),_(j));
                     }
                     invsqrtC = B*Dinv*B.transpose();
                 } //if eigendecomposition fails just skip it and keep pevious successful one.
@@ -346,6 +346,11 @@ public:
     }
 
 private:
+    template <typename I>
+    static Eigen::DenseIndex _(I n)
+    {
+        return static_cast<Eigen::DenseIndex>(n);
+    }
     // "Real" data members
     unsigned int m_gen;
     double m_cc;
