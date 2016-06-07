@@ -35,9 +35,8 @@ Args:
     x (array or list of doubles): decision vector to be added to the population
 
 Raises:
-    ValueError: if the dimension of *x* is inconsistent with the problem dimension or with the dimension of existing
-        decision vectors in the population, the calculated fitness vector has a dimension which is inconsistent with the
-        fitness dimension of the problem or with the dimension of existing fitness vectors in the population
+    ValueError: if the dimension of *x* is inconsistent with the problem dimension or the calculated fitness vector has
+        a dimension which is inconsistent with the fitness dimension of the problem
     TypeError: if *x* cannot be converted to a vector of doubles
 
 Examples:
@@ -75,6 +74,12 @@ Create random decision_vector.
 Returns:
     NumPy array of doubles: a random decision vector within the problem’s bounds
 
+Examples:
+
+>>> pop = population()
+>>> pop.decision_vector() # doctest: +SKIP
+array([ 0.5393175])
+
 )";
 }
 
@@ -90,6 +95,12 @@ Args:
 
 Returns:
     ``int``: the index of the best individual
+
+Examples:
+
+>>> pop = population(size = 5)
+>>> pop.best_idx()
+0
 
 )";
 }
@@ -107,6 +118,12 @@ Args:
 Returns:
     ``int``: the index of the worst individual
 
+Examples:
+
+>>> pop = population(size = 5)
+>>> pop.worst_idx()
+0
+
 )";
 }
 
@@ -116,8 +133,18 @@ std::string population_size_docstring()
 
 Size of the population.
 
+The population size can also be queried using the builtin ``len()`` method.
+
 Returns:
     ``int``: the number of individuals
+
+Examples:
+
+>>> pop = population(size = 5)
+>>> pop.size()
+5
+>>> len(pop)
+5
 
 )";
 }
@@ -135,6 +162,59 @@ Args:
     i (an ``int``): individual’s index in the population
     x (an array or list of doubles): a decision vector (chromosome)
     f (an array or list of doubles): a fitness vector
+
+Raises:
+    ValueError: if *i* is invalid, or if *x* or *f* have the wrong dimensions (i.e., their dimensions are
+        inconsistent with the problem properties)
+    TypeError: if the argument types are invalid
+
+>>> pop = population(size = 1)
+>>> pop.set_xf(0,[1],[1,2,3])
+>>> pop # doctest: +SKIP
+[...]
+List of individuals:
+#0:
+        ID:                     12917122990260990364
+        Decision vector:        [1]
+        Fitness vector:         [1, 2, 3]
+>>> pop.set_xf(1,[1],[1,2,3]) # doctest: +IGNORE_EXCEPTION_DETAIL
+Traceback (most recent call last):
+  ...
+ValueError: Trying to access individual at position: 1, while population has size: 1
+
+)";
+}
+
+std::string population_set_x_docstring()
+{
+    return R"(set_x(i,x)
+
+Sets the i-th individual's decision vector.
+
+The fitness of the individual will be computed from *x*.
+
+Args:
+    i (an ``int``): individual’s index in the population
+    x (an array or list of doubles): a decision vector (chromosome)
+
+Raises:
+    ValueError: if *i* is invalid, or if *x* has the wrong dimensions (i.e., the dimension is
+        inconsistent with the problem properties)
+    TypeError: if the argument types are invalid
+
+>>> pop = population(size = 1)
+>>> pop.set_x(0,[1])
+>>> pop # doctest: +SKIP
+[...]
+List of individuals:
+#0:
+        ID:                     5051278815751827100
+        Decision vector:        [1]
+        Fitness vector:         [0, 0, 0]
+>>> pop.set_x(1,[1,2]) # doctest: +IGNORE_EXCEPTION_DETAIL
+Traceback (most recent call last):
+  ...
+ValueError: Length of decision vector is 2, should be 1
 
 )";
 }

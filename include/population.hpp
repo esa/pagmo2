@@ -130,10 +130,9 @@ class population
          * @param[in] x decision vector to be added to the population.
          *
          * @throws std::invalid_argument in the following cases:
-         * - the dimension of \p x is inconsistent with the problem dimension or with the dimension of existing
-         *   decision vectors in the population,
+         * - the dimension of \p x is inconsistent with the problem dimension,
          * - the calculated fitness vector has a dimension which is inconsistent with the fitness dimension of the
-         *   problem or with the dimension of existing fitness vectors in the population.
+         *   problem.
          * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
          */
         void push_back(const vector_double &x)
