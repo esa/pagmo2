@@ -20,12 +20,21 @@ namespace pagmo
 class cmaes
 {
 public:
+    #if defined(DOXYGEN_INVOKED)
+        /// Single entry of the log (gen, fevals, best, dx, df)
+        typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
+        /// The log
+        typedef std::vector<log_line_type> log_type;
+    #else
+        using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double, double>;
+        using log_type = std::vector<log_line_type>;
+    #endif
     /// Constructor.
     cmaes(unsigned int gen = 1, double cc = -1, double cs = -1, double c1 = -1, double cmu = -1, double sigma0 = 0.5, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
         m_gen(gen), m_cc(cc), m_cs(cs), m_c1(c1),
         m_cmu(cmu), m_sigma0(sigma0), m_ftol(ftol),
         m_xtol(xtol), m_memory(memory),
-        m_e(seed), m_seed(seed), m_verbosity(0u)
+        m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if ( ((cc < 0.) || (cc > 1.)) && !(cc==-1) ) {
             pagmo_throw(std::invalid_argument, "cc must be in [0,1] or -1 if its value has to be initialized automatically, a value of " + std::to_string(cc) + " was detected");
@@ -40,7 +49,7 @@ public:
             pagmo_throw(std::invalid_argument, "cmu needs to be in [0,1] or -1 if its value has to be initialized automatically, a value of " + std::to_string(cmu) + " was detected");
         }
 
-        // Initialize the algorithm memory
+        // Initialize explicitly the algorithm memory
         sigma = m_sigma0;
         mean = Eigen::VectorXd::Zero(1);
         variation = Eigen::VectorXd::Zero(1);
@@ -67,8 +76,8 @@ public:
         auto lam = pop.size();
         auto mu = lam / 2u;
         auto prob_f_dimension = prob.get_nf();
-        //auto fevals0 = prob.get_fevals();           // discount for the already made fevals
-        //auto count = 1u;                            // regulates the screen output
+        auto fevals0 = prob.get_fevals();           // discount for the already made fevals
+        auto count = 1u;                            // regulates the screen output
 
         // PREAMBLE--------------------------------------------------
         // particular algorithm.
@@ -88,19 +97,17 @@ public:
         // -----------------------------------------------------------
 
         // No throws, all valid: we clear the logs
-        // m_log.clear();
+        m_log.clear();
 
         // Initializing the random number generators
         std::uniform_real_distribution<double> randomly_distributed_number(0.,1.); // to generate a number in [0, 1)
-        std::normal_distribution<double> normally_distributed_number(0.,1.);           // to generate a normally distributed number
-
-        // Setting coefficients for Selection
+        std::normal_distribution<double> normally_distributed_number(0.,1.);       // to generate a normally distributed number        // Setting coefficients for Selection
         Eigen::VectorXd weights(_(mu));
         for (decltype(weights.rows()) i = 0u; i < weights.rows(); ++i){
             weights(i) = std::log(static_cast<double>(mu) + 0.5) - std::log(static_cast<double>(i) + 1.);
         }
         weights /= weights.sum();                                   // weights for the weighted recombination
-        double mueff = 1.0 / (weights.transpose() * weights);       // variance-effectiveness of sum w_i x_i
+        double mueff = 1. / (weights.transpose() * weights);       // variance-effectiveness of sum w_i x_i
 
         // Setting coefficients for Adaptation automatically or to user defined data
         double cc(m_cc), cs(m_cs), c1(m_c1), cmu(m_cmu);
@@ -115,11 +122,11 @@ public:
             c1 = 2. / ((N + 1.3) * (N + 1.3) + mueff);                                      // learning rate for rank-one update of C
         }
         if (cmu == -1) {
-            cmu = 2. * (mueff - 2 + 1 / mueff) / ((N + 2) * (N + 2) + mueff);               // and for rank-mu update
+            cmu = 2. * (mueff - 2. + 1. / mueff) / ((N + 2.) * (N + 2.) + mueff);               // and for rank-mu update
         }
 
         double damps = 1. + 2. * std::max(0., std::sqrt((mueff - 1.)/(N + 1.)) - 1.) + cs;  // damping coefficient for sigma
-        double chiN = std::sqrt(N) * (1. - 1. / (4. * N) + 1. / (21 * N * N));              // expectation of ||N(0,I)|| == norm(randn(N,1))
+        double chiN = std::sqrt(N) * (1. - 1. / (4. * N) + 1. / (21. * N * N));              // expectation of ||N(0,I)|| == norm(randn(N,1))
 
 
         // Some buffers
@@ -129,7 +136,6 @@ public:
         Eigen::VectorXd tmp = Eigen::VectorXd::Zero(_(dim));
         std::vector<Eigen::VectorXd> elite(mu, tmp);
         vector_double dumb(dim, 0.);
-        double var_norm = 0.;
 
         // If the algorithm is called for the first time on this problem dimension / pop size or if m_memory is false we erease the memory of past calls
         if ( (newpop.size() != lam) || ((unsigned int)newpop[0].rows() != dim) || (m_memory==false) ) {
@@ -161,12 +167,11 @@ public:
             counteval = 0u;
             eigeneval = 0u;
         }
-
         // ----------------------------------------------//
         // HERE WE START THE JUICE OF THE ALGORITHM      //
         // ----------------------------------------------//
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(_(dim));
-        for (decltype(m_gen) g = 1u; g < m_gen; ++g) {
+        for (decltype(m_gen) gen = 1u; gen < m_gen; ++gen) {
             // 1 - We generate and evaluate lam new individuals
             for (decltype(lam) i = 0u; i < lam; ++i ) {
                 // 1a - we create a randomly normal distributed vector
@@ -176,13 +181,10 @@ public:
                 // 1b - and store its transformed value in the newpop
                 newpop[i] = mean + (sigma * B * D * tmp);
             }
-            //This is evaluated here on the last generated tmp and will be used only as
-            //a stopping criteria
-            var_norm = (sigma * B * D * tmp).norm();
 
-            // 1bis - Check the exit conditions (every 5 generations) // we need to do it here as
-            //termination is defined on tmp
-            if (g % 5u == 0u) {
+            // 1bis - Check the exit conditions (every 10 generations) and logs
+            // we need to do it here as termination is defined on tmp
+            if (gen % 10u == 0u) {
                 // Exit condition on xtol
                 if  ( (sigma*B*D*tmp).norm() < m_xtol ) {
                     if (m_verbosity > 0u) {
@@ -201,9 +203,28 @@ public:
                     return pop;
                 }
             }
-
-            // 1c - we fix the bounds. We cannot use the utils::generic::force_bounds_random as we here represent a chromosome
-            // via an Eigen matrix. Maybe iterators could be used to generalize that util
+            // 1bis - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
+            if (m_verbosity > 0u) {
+                // Every m_verbosity generations print a log line
+                if (gen % m_verbosity == 1u || m_verbosity == 1u) {
+                    // The population flattness in chromosome
+                    auto dx = (sigma*B*D*tmp).norm();
+                    // The population flattness in fitness
+                    auto idx_b = pop.best_idx();
+                    auto idx_w = pop.worst_idx();
+                    auto df = std::abs(pop.get_f()[idx_b][0] - pop.get_f()[idx_w][0]);
+                    // Every 50 lines print the column names
+                    if (count % 50u == 1u) {
+                        print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15), "dx:", std::setw(15), "df:", std::setw(15), "sigma:",'\n');
+                    }
+                    print(std::setw(7),gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), pop.get_f()[idx_b][0], std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
+                    ++count;
+                    // Logs
+                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[idx_b][0], dx, df, sigma));
+                }
+            }
+            // 2 - we fix the bounds. We cannot use the utils::generic::force_bounds_random as we here represent a chromosome
+            // via an Eigen matrix. Maybe iterators could be used to generalize that util?
             for (decltype(lam) i = 0u; i < lam; ++i) {
                 for (decltype(dim) j = 0u; j < dim; ++j) {
                     if ( (newpop[i](_(j)) < lb[j]) || (newpop[i](_(j)) > ub[j]) ) {
@@ -211,16 +232,11 @@ public:
                     }
                 }
             }
-
-            // 2 - We Evaluate the new population (if the problem is stochastic change seed first)
+            // 3 - We Evaluate the new population (if the problem is stochastic change seed first)
             if(prob.is_stochastic()) {
                 // change the problem seed. This is done via the population_set_seed method as prob.set_seed
                 // is forbidden being prob a const ref.
                 pop.set_problem_seed(std::uniform_int_distribution<unsigned int>()(m_e));
-                // re-evaluate the whole population w.r.t. the new seed
-                for (decltype(lam) j = 0u; j < lam; ++j) {
-                    pop.set_xf(j, pop.get_x()[j], prob.fitness(pop.get_x()[j]));
-                }
             }
             // Reinsertion
             for (decltype(lam) i = 0u; i < lam; ++i) {
@@ -230,8 +246,7 @@ public:
                 pop.set_x(i,dumb);
             }
             counteval += lam;
-
-            // 2 - We extract the elite from this generation.
+            // 4 - We extract the elite from this generation.
             std::vector<population::size_type> best_idx(lam);
             std::iota(best_idx.begin(), best_idx.end(), population::size_type(0));
             std::sort(best_idx.begin(), best_idx.end(), [&pop](auto idx1, auto idx2) {return pop.get_f()[idx1][0] < pop.get_f()[idx2][0];});
@@ -241,21 +256,18 @@ public:
                     elite[i](_(j)) = pop.get_x()[best_idx[i]][j];
                 }
             }
-
-            // 3 - Compute the new mean of the elite storing the old one
+            // 5 - Compute the new mean of the elite storing the old one
             meanold = mean;
             mean = elite[0]*weights(0);
             for (decltype(mu) i = 1u; i < mu; ++i) {
                 mean += elite[i] * weights(_(i));
             }
-
-            // 4 - Update evolution paths
+            // 6 - Update evolution paths
             ps = (1. - cs) * ps + std::sqrt(cs*(2. - cs)*mueff) * invsqrtC * (mean-meanold) / sigma;
             double hsig = 0.;
             hsig = (ps.squaredNorm() / N / (1. - std::pow((1. - cs),(2. * static_cast<double>(counteval / lam) ))) ) < (2. + 4. / (N + 1.));
             pc = (1. - cc) * pc + hsig * std::sqrt(cc * (2. - cc) * mueff) * (mean - meanold) / sigma;
-
-            // 5 - Adapt Covariance Matrix
+            // 7 - Adapt Covariance Matrix
             Cold = C;
             C = (elite[0]-meanold)*(elite[0]-meanold).transpose()*weights(0);
             for (decltype(mu) i = 1u; i < mu; ++i ) {
@@ -265,19 +277,9 @@ public:
             C = (1. - c1-cmu) * Cold +
                 cmu * C +
                 c1 * ((pc * pc.transpose()) + (1. - hsig) * cc * (2. - cc) * Cold);
-
-            //6 - Adapt sigma
+            // 8 - Adapt sigma
             sigma *= std::exp( std::min( 0.6, (cs / damps) * (ps.norm() / chiN - 1.) ) );
-            if ( !std::isfinite(sigma) || !std::isfinite(var_norm)) { //debug info
-                std::cout << "eigen: " << es.info() << std::endl;
-                std::cout << "B: " << B << std::endl;
-                std::cout << "D: " << D << std::endl;
-                std::cout << "Dinv: " << D << std::endl;
-                std::cout << "invsqrtC: " << invsqrtC << std::endl;
-                pagmo_throw(std::invalid_argument, "NaN!!!!! in CMAES");
-            }
-
-            //7 - Perform eigen-decomposition of C
+            //9 - Perform eigen-decomposition of C
             if ( static_cast<double>(counteval - eigeneval) > (static_cast<double>(lam) / (c1 + cmu) / N / 10u) ) {   //achieve O(N^2)
                 eigeneval = counteval;
                 C = (C + C.transpose()) / 2.;                            //enforce symmetry
@@ -295,6 +297,9 @@ public:
                 } //if eigendecomposition fails just skip it and keep pevious successful one.
             }
         } // end of generation loop
+        if (m_verbosity) {
+            std::cout << "Exit condition -- generations = " <<  m_gen << std::endl;
+        }
         return pop;
     }
 
@@ -349,7 +354,7 @@ public:
     {
         ar(m_gen,m_cc,m_cs,m_c1,m_cmu,m_sigma0,m_ftol,m_xtol,m_memory,
         sigma, mean, variation, newpop,B,D,C,invsqrtC,pc,ps,counteval,eigeneval,
-        m_e,m_seed,m_verbosity);
+        m_e,m_seed,m_verbosity, m_log);
     }
 
 private:
@@ -392,10 +397,11 @@ private:
     mutable detail::random_engine_type  m_e;
     unsigned int                        m_seed;
     unsigned int                        m_verbosity;
+    mutable log_type                    m_log;
 };
 
 } //namespace pagmo
 
-// PAGMO_REGISTER_ALGORITHM(pagmo::cmaes)
+PAGMO_REGISTER_ALGORITHM(pagmo::cmaes)
 
 #endif
