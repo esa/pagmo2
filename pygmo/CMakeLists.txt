@@ -2,6 +2,9 @@
 # in case one day we decide to split off Pyranha.
 include(YACMAPythonSetup)
 
+# We need access to the Boost includes.
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+
 # Python version check.
 if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
 	message(FATAL_ERROR "Minimum supported Python version is 2.7.")

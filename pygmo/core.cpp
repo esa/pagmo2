@@ -1,5 +1,14 @@
 #include "python_includes.hpp"
 
+#if defined(_MSC_VER)
+
+// Disable various warnings from MSVC.
+#pragma warning(push,0)
+#pragma warning(disable:4275)
+#pragma warning(disable:4996)
+
+#endif
+
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
@@ -52,6 +61,12 @@
 #include "problem.hpp"
 #include "problem_exposition_suite.hpp"
 #include "pygmo_classes.hpp"
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif
 
 namespace bp = boost::python;
 using namespace pagmo;
