@@ -46,9 +46,14 @@ if(BUILD_PYGMO)
 endif()
 
 # Now actually look for Boost.
+# NOTE: if we have any Boost libraries to link to, we ask for them, otherwise
+# we just look for the headers.
 if(REQUIRED_BOOST_LIBS)
     find_package(Boost 1.55.0 REQUIRED COMPONENTS "${REQUIRED_BOOST_LIBS}")
+else()
+    find_package(Boost 1.55.0 REQUIRED)
 endif()
+message(STATUS "Boost was successfully detected. The include dirs are: ${Boost_INCLUDE_DIRS}")
 
 if(BUILD_TESTS)
     add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
