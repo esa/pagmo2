@@ -17,6 +17,7 @@ if(PAGMO_ENABLE_EIGEN3)
     # Include eigen directories.
     include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
     ADD_PAGMO_TESTCASE(cmaes)
+    ADD_PAGMO_TESTCASE(eigen3_serialization)
 endif()
 
 ADD_PAGMO_TESTCASE(io)

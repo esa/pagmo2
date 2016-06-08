@@ -63,7 +63,7 @@ void CEREAL_LOAD_FUNCTION_NAME( Archive & ar, std::mersenne_twister_engine<UIntT
 }
 
 #ifdef PAGMO_ENABLE_EIGEN3
-    // Implement the serializetion of the Eigen::Matrix class
+    // Implement the serialization of the Eigen::Matrix class
     template <class Archive, class S, int R, int C> inline
     void CEREAL_SAVE_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S,R,C> const &cb)
     {

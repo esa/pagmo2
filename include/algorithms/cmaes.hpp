@@ -343,12 +343,21 @@ public:
             "\n\tVerbosity: " + std::to_string(m_verbosity) +
             "\n\tSeed: " + std::to_string(m_seed);
     }
+    /// Serialization
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_gen,m_cc,m_cs,m_c1,m_cmu,m_sigma0,m_ftol,m_xtol,m_memory,
+        sigma, mean, variation, newpop,B,D,C,invsqrtC,pc,ps,counteval,eigeneval,
+        m_e,m_seed,m_verbosity);
+    }
 
 private:
-    // Eigen stores indexes and sizes as signed types, while pagmo
+    // Eigen stores indexes and sizes as signed types, while PaGMO
     // uses STL containers thus sizes and indexes are unsigned. To
     // make the conversion as painless as possible this template is provided
-    // allowing, for example, syntax of the type D(_(i),_(j)) to adress an Eigen matrix. 
+    // allowing, for example, syntax of the type D(_(i),_(j)) to adress an Eigen matrix
+    // when i and j are unsigned
     template <typename I>
     static Eigen::DenseIndex _(I n)
     {
