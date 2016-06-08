@@ -17,11 +17,27 @@
 namespace pagmo
 {
 /// Covariance Matrix Adaptation Evolutionary Strategy
+/**
+ * \image html cmaes.png "CMA-ES logic." width=3cm
+ *
+ * CMA-ES is one of the most successful algorithm, classified as an Evolutionary Strategy, for derivative-free global optimization.
+ * The version implemented in PaGMO is the "classic" version described in the 2006 paper titled
+ * "The CMA evolution strategy: a comparing review.".
+ *
+ * @note Since at each generation all newly generated individuals sampled from the adapted distribution are reinserted
+ * into the population, CMA-ES may not preserve the best individual (not elitist). As a consequence the plot of the
+ * population best fitness may not be perfectly monotonically decreasing
+ *
+ * @note The cmaes::evolve method cannot be called concurrently by different threads even if it is marked as const. The
+ * mutable members make such an operation result in an undefined behaviour in terms of algorithmic convergence.
+ *
+ * @see Hansen, Nikolaus. "The CMA evolution strategy: a comparing review." Towards a new evolutionary computation. Springer Berlin Heidelberg, 2006. 75-102.
+ */
 class cmaes
 {
 public:
     #if defined(DOXYGEN_INVOKED)
-        /// Single entry of the log (gen, fevals, best, dx, df)
+        /// Single entry of the log (gen, fevals, best, dx, df, sigma)
         typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
         /// The log
         typedef std::vector<log_line_type> log_type;
