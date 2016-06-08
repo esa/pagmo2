@@ -1,7 +1,7 @@
 #include "../include/problem.hpp"
 
 #define BOOST_TEST_MODULE problem_test
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <sstream>

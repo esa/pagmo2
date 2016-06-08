@@ -38,10 +38,6 @@ message(STATUS "Current CXX debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
 # Setup the list of the required Boost libraries.
 set(REQUIRED_BOOST_LIBS)
 
-if(BUILD_TESTS)
-    set(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} unit_test_framework)
-endif()
-
 if(BUILD_PYGMO)
     # NOTE: we need to run the python setup macros before actually looking
     # for Boost.Python.
