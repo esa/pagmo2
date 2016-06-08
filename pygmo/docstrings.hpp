@@ -28,6 +28,8 @@ std::string algorithm_docstring();
 
 std::string rosenbrock_docstring();
 
+std::string cmaes_docstring();
+
 }
 
 #endif

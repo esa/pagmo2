@@ -47,7 +47,9 @@ if(PAGMO_ENABLE_EIGEN3)
     else()
         message(FATAL_ERROR "Cannot find Eigen3, the script FindEigen3.cmake failed.")
     endif()
-    ADD_DEFINITIONS(-DPAGMO_ENABLE_EIGEN3)
+    add_definitions(-DPAGMO_ENABLE_EIGEN3)
+    # Include eigen directories.
+    include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
 endif()
 
 # Setup the list of the required Boost libraries.
