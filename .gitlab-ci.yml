@@ -28,13 +28,19 @@ pygmo-clang-python3:
     - make install
     - python3 -c "import pygmo.test; pygmo.test.run_test_suite()"
 
-# pages:
-#   script:
-#   - cd doc/sphinx
-#   - ./compile.sh
-#   - mv _build/html ../../public/
-#   artifacts:
-#     paths:
-#     - public
-#   only:
-#   - master
+pages:
+  script:
+    - mkdir build
+    - cd build
+    - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_PYGMO=ON -DCMAKE_INSTALL_PREFIX=/usr -DPYTHON_EXECUTABLE=/usr/bin/python3 -DBoost_PYTHON_LIBRARY_DEBUG=/usr/lib/x86_64-linux-gnu/libboost_python-py35.so  ..
+    - make -j4
+    - make install
+    - cd ../doc/sphinx
+    - ./compile.sh
+    - mv _build/html ../../public/
+  artifacts:
+    paths:
+    - public
+  only:
+    - master
+    - boost_python
