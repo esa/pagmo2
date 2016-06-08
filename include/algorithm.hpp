@@ -116,7 +116,7 @@ struct algo_inner_base
 };
 
 template <typename T>
-struct algo_inner: algo_inner_base
+struct algo_inner final: algo_inner_base
 {
     // Static checks.
     static_assert(
@@ -124,7 +124,7 @@ struct algo_inner: algo_inner_base
         std::is_copy_constructible<T>::value &&
         std::is_move_constructible<T>::value &&
         std::is_destructible<T>::value,
-        "A problem must be default-constructible, copy-constructible, move-constructible and destructible."
+        "An algorithm must be default-constructible, copy-constructible, move-constructible and destructible."
     );
     static_assert(has_evolve<T>::value,
         "A user-defined algorithm must provide a method with signature 'population evolve(population) const'. Could not detect one.");
@@ -291,7 +291,7 @@ struct algo_inner: algo_inner_base
  * - \p T::set_seed(unsigned int seed) changes the value of the random seed used in the user implemented evolve
  * method to drive a stochastic optimization.
  * - \p T::set_verbosity(unsigned int level) changes the value of the screen output and logs verbosity as implemented in
- * the user defined problem. When not implemented a call to problem::set_verbosity(unsigned int level) throws an \p std::logic_error.
+ * the user defined algorithm. When not implemented a call to algorithm::set_verbosity(unsigned int level) throws an \p std::logic_error.
  * - \p T::get_name() returns a string containing the algorithm name to be used in output streams.
  * - \p T::get_extra_info() returns a string containing extra human readable information to be used in output streams. For
  * example the algorithm parameters.
@@ -508,7 +508,7 @@ class algorithm
         /**
          *
          * @param os input <tt>std::ostream</tt>
-         * @param a pagmo::problem object to be streamed
+         * @param a pagmo::algorithm object to be streamed
          *
          * @return An std::ostream containing a human-readable
          * representation of the algorithm, including the result from

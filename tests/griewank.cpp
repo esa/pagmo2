@@ -1,5 +1,6 @@
 #define BOOST_TEST_MODULE griewank_test
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
+
 #include <boost/lexical_cast.hpp>
 #include <exception>
 #include <iostream>

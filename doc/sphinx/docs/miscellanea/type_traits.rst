@@ -41,6 +41,10 @@ Type traits used in PaGMO
    :project: PaGMOreborn
    :members:
 
+.. doxygenclass:: pagmo::override_has_gradient_sparsity
+   :project: PaGMOreborn
+   :members:
+
 .. doxygenclass:: pagmo::has_hessians
    :project: PaGMOreborn
    :members:
@@ -50,6 +54,10 @@ Type traits used in PaGMO
    :members:
 
 .. doxygenclass:: pagmo::has_hessians_sparsity
+   :project: PaGMOreborn
+   :members:
+
+.. doxygenclass:: pagmo::override_has_hessians_sparsity
    :project: PaGMOreborn
    :members:
 

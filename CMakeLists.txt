@@ -35,9 +35,22 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS}")
 message(STATUS "Current CXX flags: ${CMAKE_CXX_FLAGS}")
 message(STATUS "Current CXX debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
 
+# Setup the list of the required Boost libraries.
+set(REQUIRED_BOOST_LIBS)
+
+if(BUILD_PYGMO)
+    # NOTE: we need to run the python setup macros before actually looking
+    # for Boost.Python.
+    include(YACMAPythonSetup)
+    set(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python)
+endif()
+
+# Now actually look for Boost.
+if(REQUIRED_BOOST_LIBS)
+    find_package(Boost 1.55.0 REQUIRED COMPONENTS "${REQUIRED_BOOST_LIBS}")
+endif()
+
 if(BUILD_TESTS)
-    # Boost unit test library.
-    find_package(Boost 1.55.0 REQUIRED COMPONENTS "unit_test_framework")
     add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
 endif()
 

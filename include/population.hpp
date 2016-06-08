@@ -39,10 +39,10 @@ namespace pagmo
  */
 class population
 {
-    // Enable the generic ctor only if T is not aa population (after removing
-    // const/reference qualifiers).
-    template <typename T>
-    using generic_ctor_enabler = std::enable_if_t<!std::is_same<population,std::decay_t<T>>::value,int>;
+        // Enable the generic ctor only if T is not aa population (after removing
+        // const/reference qualifiers).
+        template <typename T>
+        using generic_ctor_enabler = std::enable_if_t<!std::is_same<population,std::decay_t<T>>::value,int>;
 
     public:
         #if defined(DOXYGEN_INVOKED)
@@ -56,6 +56,7 @@ class population
         /// Default constructor
         /**
          * Constructs an empty population with a pagmo::null_problem.
+         * The random seed is initialised to zero.
          */
         population() : m_prob(null_problem{}), m_e(0u), m_seed(0u) {}
 
@@ -129,10 +130,9 @@ class population
          * @param[in] x decision vector to be added to the population.
          *
          * @throws std::invalid_argument in the following cases:
-         * - the dimension of \p x is inconsistent with the problem dimension or with the dimension of existing
-         *   decision vectors in the population,
+         * - the dimension of \p x is inconsistent with the problem dimension,
          * - the calculated fitness vector has a dimension which is inconsistent with the fitness dimension of the
-         *   problem or with the dimension of existing fitness vectors in the population.
+         *   problem.
          * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
          */
         void push_back(const vector_double &x)
@@ -267,7 +267,7 @@ class population
         /// Index of worst individual (accounting for a scalar tolerance)
         /**
          * @param[in] tol scalar tolerance to be considered for each constraint
-         * 
+         *
          * @return index of the best individual
          */
         vector_double::size_type worst_idx(double tol = 0.) const
@@ -349,7 +349,7 @@ class population
         }
 
         /// Setter for the problem seed
-        void set_problem_seed (unsigned int seed)
+        void set_problem_seed(unsigned int seed)
         {
             m_prob.set_seed(seed);
         }

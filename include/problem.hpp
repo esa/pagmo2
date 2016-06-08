@@ -77,7 +77,6 @@ inline void check_problem_bounds(const std::pair<vector_double,vector_double> &b
     }
 }
 
-
 // Two helper functions to compute sparsity patterns in the dense case.
 inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
 {
@@ -91,6 +90,7 @@ inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_d
     }
     return retval;
 }
+
 inline sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim)
 {
     sparsity_pattern retval;
@@ -271,9 +271,16 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     sparsity_pattern gradient_sparsity_impl(const U &) const
     {
-        pagmo_throw(std::logic_error,"This method should never be invoked. Please notify the developers.");
+        pagmo_throw(std::logic_error,"trying to access non-existing 'gradient_sparsity()' method: this "
+            "indicates a logical error in the implementation of the concrete problem class, as the 'gradient_sparsity()' "
+            "method is accessed only if 'has_gradient_sparsity()' returns true.");
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
+    static bool has_gradient_sparsity_impl(const U &p)
+    {
+        return p.has_gradient_sparsity();
+    }
+    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(const U &)
     {
        return true;
@@ -317,12 +324,19 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
     {
-        pagmo_throw(std::logic_error,"This method should never be invoked. Please notify the developers.");
+        pagmo_throw(std::logic_error,"trying to access non-existing 'hessians_sparsity()' method: this "
+            "indicates a logical error in the implementation of the concrete problem class, as the 'hessians_sparsity()' "
+            "method is accessed only if 'has_hessians_sparsity()' returns true");
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
+    static bool has_hessians_sparsity_impl(const U &p)
+    {
+        return p.has_hessians_sparsity();
+    }
+    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
-       return true;
+        return true;
     }
     template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(const U &)
@@ -743,8 +757,7 @@ class problem
          *
          * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
          * @throws std::invalid_argument if the length of the gradient returned (as defined in the user defined problem)
-         * does not match the gradient sparsity pattern dimension as returned by
-         * problem::get_gs_dim()
+         * does not match the gradient sparsity pattern dimension
          * @throws std::logic_error if the user defined problem does not implement
          * the gradient method
          */
@@ -803,6 +816,27 @@ class problem
             return detail::dense_gradient(get_nf(),get_nx());
         }
 
+        /// Checks if the user-defined problem has a gradient_sparsity
+        /**
+         * If the user defined problem implements a gradient_sparsity, this
+         * will return true, false otherwise. The value returned can
+         * also be directly hard-coded implementing the
+         * method
+         *
+         * @code
+         * bool has_gradient_sparsity() const
+         * @endcode
+         *
+         * in the user-defined problem
+         *
+         * @return a boolean flag
+         */
+        bool has_gradient_sparsity() const
+        {
+            return m_has_gradient_sparsity;
+        }
+
+
         /// Computes the hessians
         /**
          * The hessians, optionally implemented in the user-defined problem,
@@ -820,7 +854,7 @@ class problem
          * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
          * @throws std::invalid_argument if the length of each hessian returned
          * (as defined in the user defined problem) does not match the corresponding
-         * hessians sparsity pattern dimensions as returned by problem::get_hs_dim()
+         * hessians sparsity pattern dimensions
          * @throws std::logic_error if the user defined problem does not implement
          * the hessians method
          */
@@ -878,6 +912,27 @@ class problem
                 return retval;
             }
             return detail::dense_hessians(get_nf(),get_nx());
+        }
+
+        /// Check if the user-defined dproblem implements the hessians_sparsity
+        /**
+         * If the user defined problem implements a hessians sparsity, this
+         * will return true, false otherwise. The value returned can
+         * also be directly hard-coded implementing the
+         * method
+         *
+         * @code
+         * bool has_hessians_sparsity() const
+         * @endcode
+         *
+         * in the user-defined problem
+         *
+         * @return a boolean flag
+         *
+         */
+        bool has_hessians_sparsity() const
+        {
+            return m_has_hessians_sparsity;
         }
 
         /// Number of objectives
@@ -969,18 +1024,6 @@ class problem
             return m_hevals.load();
         }
 
-        /// Dimension of the gradient sparisy
-        vector_double::size_type get_gs_dim() const
-        {
-            return m_gs_dim;
-        }
-
-        /// Dimension of the hessians sparisy
-        std::vector<vector_double::size_type> get_hs_dim() const
-        {
-            return m_hs_dim;
-        }
-
         /// Sets the seed for the stochastic variables
         /**
          * Sets the seed to be used in the fitness function to instantiate
@@ -990,7 +1033,15 @@ class problem
          */
         void set_seed(unsigned int seed)
         {
-            ptr()->set_seed(seed);
+            if (m_has_set_seed) {
+                ptr()->set_seed(seed);
+            } else {
+                pagmo_throw(std::logic_error,"the user-defined problem does not support seed setting: "
+                    "either it does not provide the 'set_seed()' method or its 'has_set_seed()' method "
+                    "returns false\n\nThe expected prototypes for 'set_seed()' are:\n"
+                    "C++: 'void set_seed(unsigned int)'\n"
+                    "Python: 'set_seed(self, seed)'");
+            }
         }
 
         /// Check if the user-defined problem implements a set_seed method
@@ -1066,10 +1117,12 @@ class problem
             os << "\tUpper bounds: ";
             stream(os, p.get_bounds().second, '\n');
             stream(os, "\n\tHas gradient: ", p.has_gradient(), '\n');
+            stream(os, "\tUser implemented gradient sparsity: ", p.m_has_gradient_sparsity, '\n');
             if (p.has_gradient()) {
                 stream(os, "\tExpected gradients: ", p.m_gs_dim, '\n');
             }
             stream(os, "\tHas hessians: ", p.has_hessians(), '\n');
+            stream(os, "\tUser implemented hessians sparsity: ", p.m_has_hessians_sparsity, '\n');
             if (p.has_hessians()) {
                 stream(os, "\tExpected hessian components: ", p.m_hs_dim, '\n');
             }
