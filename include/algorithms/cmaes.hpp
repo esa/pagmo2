@@ -46,6 +46,21 @@ public:
         using log_type = std::vector<log_line_type>;
     #endif
     /// Constructor.
+    /**
+     * Constructs a cmaes algorithm
+     *
+     * @param[in] gen number of generations.
+     * @param[in] cc backward time horizon for the evolution path (by default is automatically assigned)
+     * @param[in] cs makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned)
+     * @param[in] c1  learning rate for the rank-one update of the covariance matrix (by default is automatically assigned)
+     * @param[in] cmu learning rate for the rank-\f$\mu\f$  update of the covariance matrix (by default is automatically assigned)
+     * @param[in] sigma0 initial step-size
+     * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
+     * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param[in] seed seed used by the internal random number generator (default is random)
+
+     * @throws std::invalid_argument if cc, cs, c1 and cmu are not in [0, 1]
+     */
     cmaes(unsigned int gen = 1, double cc = -1, double cs = -1, double c1 = -1, double cmu = -1, double sigma0 = 0.5, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
         m_gen(gen), m_cc(cc), m_cs(cs), m_c1(c1),
         m_cmu(cmu), m_sigma0(sigma0), m_ftol(ftol),
@@ -81,6 +96,16 @@ public:
     }
 
     /// Algorithm evolve method (juice implementation of the algorithm)
+    /**
+     *
+     * Evolves the population for a maximum number of generations, until one of
+     * tolerances set on the population flatness (x_tol, f_tol) are met.
+     *
+     * @param[in] pop population to be evolved
+     * @return evolved population
+     * @throws std::invalid_argument if the problem is multi-objective or constrained
+     * @throws std::invalid_argument if the population size is not at least 5
+     */
     population evolve(population pop) const
     {
         // We store some useful variables
@@ -330,6 +355,32 @@ public:
         return m_seed;
     }
     /// Sets the algorithm verbosity
+    /**
+     * Sets the verbosity level of the screen output and of the
+     * log returned by get_log(). \p level can be:
+     * - 0: no verbosity
+     * - >0: will print and log one line each \p level generations.
+     *
+     * Example (verbosity 1):
+     * @code
+     * Gen:      Fevals:          Best:            dx:            df:         sigma:
+     * 51           1000    1.15409e-06     0.00205151    3.38618e-05       0.138801
+     * 52           1020     3.6735e-07     0.00423372    2.91669e-05        0.13002
+     * 53           1040     3.7195e-07    0.000655583    1.04182e-05       0.107739
+     * 54           1060    6.26405e-08     0.00181163    3.86002e-06      0.0907474
+     * 55           1080    4.09783e-09    0.000714699    3.57819e-06      0.0802022
+     * 56           1100    1.77896e-08    4.91136e-05    9.14752e-07       0.075623
+     * 57           1120    7.63914e-09    0.000355162    1.10134e-06      0.0750457
+     * 58           1140    1.35199e-09    0.000356034    2.65614e-07      0.0622128
+     * 59           1160    8.24796e-09    0.000695454    1.14508e-07        0.04993
+     * @endcode
+     * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
+     * function currently in the population, dx is the norm of the distance to the population mean of
+     * the mutant vectors, df is the population flatness evaluated as the distance between the fitness
+     * of the best and of the worst individual and sigma is the current step-size
+     *
+     * @param[in] level verbosity level
+     */
     void set_verbosity(unsigned int level)
     {
         m_verbosity = level;
@@ -365,6 +416,12 @@ public:
             "\n\tSeed: " + std::to_string(m_seed);
     }
     /// Get log
+    /**
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+     * <tt> std::vector </tt> is a de::log_line_type containing: Gen, Fevals, Best, dx, df, sigma
+     * as described in cmaes::set_verbosity
+     * @return an <tt> std::vector </tt> of cmaes::log_line_type containing the logged values Gen, Fevals, Best, dx, df, sigma
+     */
     const log_type& get_log() const {
         return m_log;
     }
