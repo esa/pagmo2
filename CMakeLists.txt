@@ -38,7 +38,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS}")
 message(STATUS "Current CXX flags: ${CMAKE_CXX_FLAGS}")
 message(STATUS "Current CXX debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
 
-<<<<<<< HEAD
 # Setting up Eigen3
 if(PAGMO_ENABLE_EIGEN3)
     find_package(Eigen3)
@@ -49,7 +48,8 @@ if(PAGMO_ENABLE_EIGEN3)
         message(FATAL_ERROR "Cannot find Eigen3, the script FindEigen3.cmake failed.")
     endif()
     ADD_DEFINITIONS(-DPAGMO_ENABLE_EIGEN3)
-=======
+endif()
+
 # Setup the list of the required Boost libraries.
 set(REQUIRED_BOOST_LIBS)
 
@@ -63,7 +63,6 @@ endif()
 # Now actually look for Boost.
 if(REQUIRED_BOOST_LIBS)
     find_package(Boost 1.55.0 REQUIRED COMPONENTS "${REQUIRED_BOOST_LIBS}")
->>>>>>> master
 endif()
 
 if(BUILD_TESTS)
