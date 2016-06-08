@@ -40,7 +40,7 @@ message(STATUS "Current CXX debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
 
 # Setting up Eigen3
 if(PAGMO_ENABLE_EIGEN3)
-    find_package(Eigen3)
+    find_package(Eigen3 REQUIRED)
     if(EIGEN_FOUND)
         message(STATUS "Eigen include directory: ${EIGEN_INCLUDE_DIRS}")
         message(STATUS "Eigen version detected: ${EIGEN_VERSION}")
