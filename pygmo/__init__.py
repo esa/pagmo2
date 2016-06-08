@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import as _ai
 
-__all__ = ['core']
+__all__ = ['core','test']
 
 # Problem extract functionality.
 def _problem_extract(self,t):

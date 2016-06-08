@@ -23,5 +23,5 @@ install(TARGETS core
  LIBRARY DESTINATION ${PYGMO_INSTALL_PATH}
 )
 
-# Add the global init file.
-install(FILES __init__.py DESTINATION ${PYGMO_INSTALL_PATH})
+# Add the Python files.
+install(FILES __init__.py test.py DESTINATION ${PYGMO_INSTALL_PATH})
