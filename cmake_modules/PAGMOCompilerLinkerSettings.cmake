@@ -14,3 +14,8 @@ if(YACMA_COMPILER_IS_CLANGXX OR YACMA_COMPILER_IS_GNUCXX OR YACMA_COMPILER_IS_IN
     endif()
     unset(PAGMO_CHECK_CXX_FLAG)
 endif()
+
+# Disable the use of the nonstandard min/max macros. They break lot of code.
+if(YACMA_COMPILER_IS_MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DNOMINMAX")
+endif()
