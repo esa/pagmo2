@@ -1,7 +1,7 @@
 #include "../include/problem.hpp"
 
 #define BOOST_TEST_MODULE problem_test
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <sstream>
@@ -129,6 +129,11 @@ struct grad_p_override : grad_p
         return false;
     }
 
+    bool has_gradient_sparsity() const
+    {
+        return false;
+    }
+
     template <typename Archive>
     void serialize(Archive &ar)
     {
@@ -191,6 +196,11 @@ struct hess_p_override : hess_p
      ) : hess_p(nobj,nec,nic,ret_fit,lb,ub,h,hs) {}
 
     bool has_hessians() const
+    {
+        return false;
+    }
+
+    bool has_hessians_sparsity() const
     {
         return false;
     }
@@ -317,14 +327,6 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(p1.get_gevals() == 0u);
         BOOST_CHECK(p1.get_hevals() == 0u);
         BOOST_CHECK(p1.get_hevals() == 0u);
-        // dense sparsity defined by default
-        BOOST_CHECK(p1.get_gs_dim() == 4u);
-        BOOST_CHECK((p1.get_hs_dim() == std::vector<vector_double::size_type>{3u, 3u}));
-        BOOST_CHECK(p2.get_gs_dim() == 12u*11u);
-        BOOST_CHECK((p2.get_hs_dim() == std::vector<vector_double::size_type>{66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u, 66u}));
-        // user defined sparsity
-        BOOST_CHECK(p3.get_gs_dim() == 2u);
-        BOOST_CHECK((p4.get_hs_dim() == std::vector<vector_double::size_type>{2u, 2u}));
     }
 
     // We check the move constructor
@@ -373,10 +375,7 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         BOOST_CHECK(p2.get_fevals() == 1u);
         BOOST_CHECK(p2.get_gevals() == 1u);
         BOOST_CHECK(p2.get_hevals() == 1u);
-        // 3 - We check that the expected gradient and hessans dims are left equal
-        BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
-        BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
-        // 4 - We check that the decision vector dimension is copied
+        // 3 - We check that the decision vector dimension is copied
         BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 }
@@ -439,10 +438,7 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
         BOOST_CHECK(p2.get_fevals() == 1u);
         BOOST_CHECK(p2.get_gevals() == 1u);
         BOOST_CHECK(p2.get_hevals() == 1u);
-        // 3 - We check that the expected gradient and hessans dims are left equal
-        BOOST_CHECK(p2.get_gs_dim() == p1.get_gs_dim());
-        BOOST_CHECK(p2.get_hs_dim() == p1.get_hs_dim());
-        // 4 - We check that the decision vector dimension is copied
+        // 3 - We check that the decision vector dimension is copied
         BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
 }
@@ -517,17 +513,25 @@ BOOST_AUTO_TEST_CASE(problem_has_test)
     problem p5{hess_p_override{}};
 
     BOOST_CHECK(!p1.has_gradient());
+    BOOST_CHECK(!p1.has_gradient_sparsity());
     BOOST_CHECK(!p1.has_hessians());
+    BOOST_CHECK(!p1.has_hessians_sparsity());
 
     BOOST_CHECK(p2.has_gradient());
+    BOOST_CHECK(p2.has_gradient_sparsity());
     BOOST_CHECK(!p2.has_hessians());
+    BOOST_CHECK(!p2.has_hessians_sparsity());
 
 
     BOOST_CHECK(!p3.has_gradient());
+    BOOST_CHECK(!p3.has_gradient_sparsity());
     BOOST_CHECK(p3.has_hessians());
+    BOOST_CHECK(p3.has_hessians_sparsity());
 
     BOOST_CHECK(!p4.has_gradient());
+    BOOST_CHECK(!p4.has_gradient_sparsity());
     BOOST_CHECK(!p4.has_hessians());
+    BOOST_CHECK(!p4.has_hessians_sparsity());
 }
 
 BOOST_AUTO_TEST_CASE(problem_getters_test)
@@ -551,12 +555,6 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p1.get_nc() == 4+3);
     BOOST_CHECK(p1.get_nf() == 2+3+4);
     BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13,13},{17,17}}));
-    // dense
-    BOOST_CHECK(p1.get_gs_dim() == 18);
-    BOOST_CHECK((p1.get_hs_dim() == std::vector<vector_double::size_type>(9,3)));
-    // sparse
-    BOOST_CHECK(p2.get_gs_dim() == 2);
-    BOOST_CHECK((p2.get_hs_dim() == std::vector<vector_double::size_type>{2,2}));
 
     // Making some evaluations
     auto N = 1235u;
@@ -768,7 +766,7 @@ struct extra_info_case
     }
     bool has_set_seed() const
     {
-        return false;
+        return true;
     }
     std::string get_extra_info() const {
         return std::to_string(m_seed);

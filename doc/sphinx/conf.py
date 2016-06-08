@@ -13,11 +13,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
-import os
 import sphinx_bootstrap_theme
-
-
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -37,8 +33,12 @@ import sphinx_bootstrap_theme
 # ones.
 extensions = [
     'sphinx.ext.mathjax',
+    'sphinx.ext.autodoc',
     'breathe',
+    'sphinx.ext.napoleon',
 ]
+
+autoclass_content = 'both'
 
 # BREATHE configuration paths
 #sys.path.append( "/home/me/docproj/ext/breathe/" )
@@ -150,8 +150,9 @@ html_theme_options = {
     # Note the "1" or "True" value above as the third argument to indicate
     # an arbitrary url.
     'navbar_links': [
-        ("home", "index"),
+        ("Home", "index"),
         ("C++ docs", "docs/cpp"),
+        ("Python docs", "docs/python")
     ],
 
     # Render the next and previous page links in navbar. (Default: true)

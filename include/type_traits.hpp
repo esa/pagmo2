@@ -432,6 +432,58 @@ class has_hessians_sparsity: detail::sfinae_types
 template <typename T>
 const bool has_hessians_sparsity<T>::value;
 
+/// Type has has_gradient_sparsity()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * bool has_gradient_sparsity() const
+ * @endcode
+ */
+template <typename T>
+class override_has_gradient_sparsity: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.has_gradient_sparsity());
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool override_has_gradient_sparsity<T>::value;
+
+/// Type has has_hessians_sparsity()
+/**
+ * This type trait defines a static const boolean
+ * \p value flag which is \p true if \p T has the following
+ * method implemented:
+ *
+ * @code
+ * bool has_hessians_sparsity() const
+ * @endcode
+ */
+template <typename T>
+class override_has_hessians_sparsity: detail::sfinae_types
+{
+        template <typename U>
+        static auto test0(const U &p) -> decltype(p.has_hessians_sparsity());
+        static no test0(...);
+        static const bool implementation_defined =
+            std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
+    public:
+        /// static const boolean value flag
+        static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool override_has_hessians_sparsity<T>::value;
+
 } // namespace pagmo
 
 #endif

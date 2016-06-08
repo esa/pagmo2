@@ -23,7 +23,7 @@ namespace pagmo
 template <typename T>
 struct de1220_statics
 {
-/// Allowed mutation variants considered by default: {2u ,3u ,7u ,10u ,13u ,14u ,15u ,16u}
+    /// Allowed mutation variants considered by default: {2u ,3u ,7u ,10u ,13u ,14u ,15u ,16u}
     static std::vector<unsigned int> allowed_variants;
 };
 

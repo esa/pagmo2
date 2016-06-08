@@ -1,5 +1,6 @@
 #define BOOST_TEST_MODULE discrepancy_test
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
+
 #include <boost/test/floating_point_comparison.hpp>
 #include <exception>
 #include <tuple>
@@ -14,19 +15,19 @@ BOOST_AUTO_TEST_CASE(sample_from_simplex_test)
 {
     auto case1 = sample_from_simplex({0.3,0.1,0.6,0.9,1.});
     auto result1 = std::vector<double>{0.1,0.2,0.3,0.3,0.1,0.};
-    for (auto i = 0u; i < case1.size(); ++i) { 
+    for (auto i = 0u; i < case1.size(); ++i) {
         BOOST_CHECK_CLOSE(case1[i], result1[i], 1e-13);
     }
 
     auto case2 = sample_from_simplex({0.,0.9,0.3,1.,1.,0.2,0.});
     auto result2 = std::vector<double>{0.,0.,0.2,0.1,0.6,0.1,0.,0.};
-    for (auto i = 0u; i < case2.size(); ++i) { 
+    for (auto i = 0u; i < case2.size(); ++i) {
         BOOST_CHECK_CLOSE(case2[i], result2[i], 1e-13);
     }
 
     auto case3 = sample_from_simplex({0.2});
     auto result3 = std::vector<double>{0.2,0.8};
-    for (auto i = 0u; i < case3.size(); ++i) { 
+    for (auto i = 0u; i < case3.size(); ++i) {
         BOOST_CHECK_CLOSE(case3[i], result3[i], 1e-13);
     }
 
@@ -38,7 +39,7 @@ BOOST_AUTO_TEST_CASE(sample_from_simplex_test)
 }
 
 BOOST_AUTO_TEST_CASE(van_der_corput_test)
-{   
+{
     // We test explicitly the first ten elements of the Van der Corput
     // sequences corresponding to base 2 and base 10.
     std::vector<double> computed2;
@@ -66,7 +67,7 @@ BOOST_AUTO_TEST_CASE(halton_test)
     }
     std::vector<std::vector<double>> real2dim{{0.,0.}, {1./2.,1./3.},{1./4., 2./3.},{3./4.,1./9.},{1./8.,4./9.}, {5./8.,7./9.}};
     for (auto i = 0u; i<6u;++i) {     // in base 10 we need to check with a tolerance as per floating point representation problems
-        for (auto j = 0u; j<2u;++j) { 
+        for (auto j = 0u; j<2u;++j) {
             BOOST_CHECK_CLOSE(real2dim[i][j], computed2dim[i][j], 1e-13);
         }
     }
