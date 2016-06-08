@@ -442,7 +442,7 @@ Args:
     seed (int): seed used by the internal random number generator (default is random)
 
 Raises:
-    OverflowError: if `dim` is negative or greater than an implementation-defined value
+    OverflowError: if `gen` is negative or greater than an implementation-defined value
     ValueError: if `cc`, `cs`, `c1`, `cmu` are not in [0,1] or -1
 
 See :cpp:class:`pagmo::cmaes`.
