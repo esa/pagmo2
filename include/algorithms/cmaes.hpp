@@ -171,7 +171,7 @@ public:
         // HERE WE START THE JUICE OF THE ALGORITHM      //
         // ----------------------------------------------//
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(_(dim));
-        for (decltype(m_gen) gen = 1u; gen < m_gen; ++gen) {
+        for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
             // 1 - We generate and evaluate lam new individuals
             for (decltype(lam) i = 0u; i < lam; ++i ) {
                 // 1a - we create a randomly normal distributed vector
@@ -347,6 +347,10 @@ public:
             "\n\tMemory: " + std::to_string(m_memory) +
             "\n\tVerbosity: " + std::to_string(m_verbosity) +
             "\n\tSeed: " + std::to_string(m_seed);
+    }
+    /// Get log
+    const log_type& get_log() const {
+        return m_log;
     }
     /// Serialization
     template <typename Archive>
