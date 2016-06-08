@@ -6,6 +6,7 @@ coverage:
         target: auto
   ignore:
   - tests/.*
+  - tutorials/.*
   - include/external/.*
 
 comment: off
