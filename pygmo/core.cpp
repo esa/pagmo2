@@ -24,7 +24,9 @@
 #include <string>
 
 #include "../include/algorithm.hpp"
-#include "../include/algorithms/cmaes.hpp"
+#ifdef PAGMO_ENABLE_EIGEN3
+    #include "../include/algorithms/cmaes.hpp"
+#endif
 #include "../include/algorithms/de.hpp"
 #include "../include/algorithms/de1220.hpp"
 #include "../include/algorithms/null_algorithm.hpp"
@@ -595,6 +597,7 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algo_log(de1220_,"");
     de1220_.def("get_seed",&de1220::get_seed);
     // CMA-ES
+#ifdef PAGMO_ENABLE_EIGEN3
     auto cmaes_ = pygmo::expose_algorithm<cmaes>("cmaes", pygmo::cmaes_docstring().c_str());
     cmaes_.def(bp::init<unsigned,double,double,double,double,double,double,double,bool>(
         (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
@@ -605,4 +608,5 @@ BOOST_PYTHON_MODULE(core)
          bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
     pygmo::expose_algo_log(cmaes_,"");
     cmaes_.def("get_seed",&cmaes::get_seed);
+#endif
 }
