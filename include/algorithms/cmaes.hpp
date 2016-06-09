@@ -57,6 +57,7 @@ public:
      * @param[in] sigma0 initial step-size
      * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param[in] memory when true the adapted parameters are not reset between successive calls to the evolve method
      * @param[in] seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if cc, cs, c1 and cmu are not in [0, 1]
