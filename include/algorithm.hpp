@@ -523,16 +523,9 @@ class algorithm
             else {
                 stream(os, " [stochastic]");
             }
-            if (a.has_set_verbosity()) {
-                stream(os, true);
-            }
-            else {
-                stream(os, false);
-            }
-            stream(os, '\n');
             const auto extra_str = a.get_extra_info();
             if (!extra_str.empty()) {
-                stream(os, "Extra info:\n", extra_str);
+                stream(os, "\nExtra info:\n", extra_str);
             }
             return os;
         }
