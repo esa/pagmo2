@@ -134,12 +134,12 @@ public:
         }
         for (auto num : lb) {
             if (!std::isfinite(num)) {
-                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the lower bounds " + prob.get_name() + " cannot deal with it.");
+                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the lower bounds, " + this->get_name() + " cannot deal with it.");
             }
         }
         for (auto num : ub) {
             if (!std::isfinite(num)) {
-                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the lower bounds " + prob.get_name() + " cannot deal with it.");
+                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the upper bounds, " + this->get_name() + " cannot deal with it.");
             }
         }
         // Get out if there is nothing to do.
@@ -204,7 +204,6 @@ public:
             B = Eigen::MatrixXd::Identity(_(dim), _(dim));                 //B defines the coordinate system
             D = Eigen::MatrixXd::Identity(_(dim), _(dim));                 //diagonal D defines the scaling. By default this is the witdh of the box bounds.
                                                                      //If this is too small... then 1e-6 is used
-            // TODO: here if the problem is unbounded what happens?
             for (decltype(dim) j = 0u; j < dim; ++j) {
                 D(_(j),_(j)) = std::max((ub[j]-lb[j]), 1e-6);
             }
