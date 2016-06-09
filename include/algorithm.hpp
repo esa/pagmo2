@@ -523,7 +523,6 @@ class algorithm
             else {
                 stream(os, " [stochastic]");
             }
-            stream(os, "\nHas verbosity: ");
             if (a.has_set_verbosity()) {
                 stream(os, true);
             }
