@@ -423,4 +423,31 @@ See :cpp:class:`pagmo::rosenbrock`.
 )";
 }
 
+std::string cmaes_docstring()
+{
+    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = -1, ftol = 1e-6, xtol = 1e-6, memory = false, seed = random)
+
+Covariance Matrix Evolutionary Strategy (CMA-ES).
+
+Args:
+    gen (int): number of generations
+    cc (float): backward time horizon for the evolution path (by default is automatically assigned)
+    cs (float): makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned)
+    c1 (float): learning rate for the rank-one update of the covariance matrix (by default is automatically assigned)
+    cmu (float): learning rate for the rank-mu  update of the covariance matrix (by default is automatically assigned)
+    sigma0 (float): initial step-size
+    ftol (float): stopping criteria on the x tolerance
+    xtol (float): stopping criteria on the f tolerance
+    memory (bool): when true the adapted parameters are not reset between successive calls to the evolve method
+    seed (int): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if `gen` is negative or greater than an implementation-defined value
+    ValueError: if `cc`, `cs`, `c1`, `cmu` are not in [0,1] or -1
+
+See :cpp:class:`pagmo::cmaes`.
+
+)";
 }
+
+} // namespace

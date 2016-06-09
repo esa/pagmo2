@@ -8,6 +8,7 @@
 #include <string>
 #include <tuple>
 
+#include "../algorithm.hpp"
 #include "../io.hpp"
 #include "../exceptions.hpp"
 #include "../population.hpp"
@@ -317,9 +318,9 @@ public:
             /* swap population arrays. New generation becomes old one */
             std::swap(popold, popnew);
 
-            // Check the exit conditions (every 40 generations)
+            // Check the exit conditions (every 10 generations)
             double dx = 0., df = 0.;
-            if (gen % 40u == 0u) {
+            if (gen % 10u == 0u) {
                 best_idx = pop.best_idx();
                 worst_idx = pop.worst_idx();
                 for (decltype(dim) i = 0u; i < dim; ++i) {

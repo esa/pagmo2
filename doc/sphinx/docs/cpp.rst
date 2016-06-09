@@ -29,6 +29,7 @@ code your own algorithm
   algorithms/de
   algorithms/sade
   algorithms/de1220
+  algorithms/cmaes
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^

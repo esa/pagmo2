@@ -35,3 +35,8 @@ ADD_PAGMO_TESTCASE(rastrigin)
 ADD_PAGMO_TESTCASE(schwefel)
 ADD_PAGMO_TESTCASE(ackley)
 ADD_PAGMO_TESTCASE(griewank)
+
+if(PAGMO_ENABLE_EIGEN3)
+    ADD_PAGMO_TESTCASE(cmaes)
+    ADD_PAGMO_TESTCASE(eigen3_serialization)
+endif()

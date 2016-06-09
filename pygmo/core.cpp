@@ -24,6 +24,9 @@
 #include <string>
 
 #include "../include/algorithm.hpp"
+#ifdef PAGMO_ENABLE_EIGEN3
+    #include "../include/algorithms/cmaes.hpp"
+#endif
 #include "../include/algorithms/de.hpp"
 #include "../include/algorithms/de1220.hpp"
 #include "../include/algorithms/null_algorithm.hpp"
@@ -554,6 +557,7 @@ BOOST_PYTHON_MODULE(core)
     // NOTE: this is needed only for the null_algorithm, as it is used in the implementation of the
     // serialization of the algorithm. Not necessary for any other algorithm type.
     na.def_pickle(null_algorithm_pickle_suite());
+    // DE
     auto de_ = pygmo::expose_algorithm<de>("de","__init__(gen = 1, F = 0.8, CR = 0.9, variant = 2, ftol = 1e-6, tol = 1e-6, seed = random)\n\n"
         "Differential evolution algorithm.\n\n");
     de_.def(bp::init<unsigned int,double,double,unsigned int,double,double>((bp::arg("gen") = 1u, bp::arg("F") = .8,
@@ -562,12 +566,14 @@ BOOST_PYTHON_MODULE(core)
         bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6, bp::arg("seed"))));
     pygmo::expose_algo_log(de_,"");
     de_.def("get_seed",&de::get_seed);
+    // SEA
     auto sea_ = pygmo::expose_algorithm<sea>("sea","__init__(gen = 1, seed = random)\n\n"
         "(N+1)-ES simple evolutionary algorithm.\n\n");
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
     sea_.def(bp::init<unsigned,unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     pygmo::expose_algo_log(sea_,"");
     sea_.def("get_seed",&sea::get_seed);
+    // SADE
     auto sade_ = pygmo::expose_algorithm<sade>("sade","__init__(gen = 1, variant = 2, variant_adptv = 1, "
         "ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
         "Self-adaptive differential evolution (jDE and iDE).\n\n");
@@ -578,6 +584,7 @@ BOOST_PYTHON_MODULE(core)
         bp::arg("seed"))));
     pygmo::expose_algo_log(sade_,"");
     sade_.def("get_seed",&sade::get_seed);
+    // DE-1220
     auto de1220_ = pygmo::expose_algorithm<de1220>("de1220","__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], "
         "variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
         "Self-adaptive differential evolution (DE 1220 aka pDE).\n\n");
@@ -589,4 +596,17 @@ BOOST_PYTHON_MODULE(core)
         bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
     pygmo::expose_algo_log(de1220_,"");
     de1220_.def("get_seed",&de1220::get_seed);
+    // CMA-ES
+#ifdef PAGMO_ENABLE_EIGEN3
+    auto cmaes_ = pygmo::expose_algorithm<cmaes>("cmaes", pygmo::cmaes_docstring().c_str());
+    cmaes_.def(bp::init<unsigned,double,double,double,double,double,double,double,bool>(
+        (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
+         bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false))
+     );
+    cmaes_.def(bp::init<unsigned,double,double,double,double,double,double, double,bool,unsigned>((bp::arg("gen") = 1u,
+         bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
+         bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
+    pygmo::expose_algo_log(cmaes_,"");
+    cmaes_.def("get_seed",&cmaes::get_seed);
+#endif
 }
