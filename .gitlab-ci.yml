@@ -4,14 +4,14 @@ pagmo-gcc:
   script:
     - mkdir build
     - cd build
-    - cmake -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
+    - cmake -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug -DPAGMO_ENABLE_EIGEN3=YES -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON ..
     - make -j4
     - make test
     - wget https://codecov.io/bash -O codecov.sh
     - chmod +x codecov.sh
     - ./codecov.sh -t ca222632-02f3-4603-b2d6-7e1b3d3149e4
 
-pagmo-clang:
+pagmo-clang-minimal:
   script:
     - mkdir build
     - cd build
@@ -19,11 +19,19 @@ pagmo-clang:
     - make -j4
     - make test
 
+pagmo-clang:
+  script:
+    - mkdir build
+    - cd build
+    - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_TUTORIALS=ON -DPAGMO_ENABLE_EIGEN3=YES ..
+    - make -j4
+    - make test
+
 pygmo-clang-python3:
   script:
     - mkdir build
     - cd build
-    - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_PYGMO=ON -DCMAKE_INSTALL_PREFIX=/usr -DPYTHON_EXECUTABLE=/usr/bin/python3 -DBoost_PYTHON_LIBRARY_DEBUG=/usr/lib/x86_64-linux-gnu/libboost_python-py35.so  ..
+    - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_PYGMO=ON -DPAGMO_ENABLE_EIGEN3=YES -DCMAKE_INSTALL_PREFIX=/usr -DPYTHON_EXECUTABLE=/usr/bin/python3 -DBoost_PYTHON_LIBRARY_DEBUG=/usr/lib/x86_64-linux-gnu/libboost_python-py35.so  ..
     - make -j4
     - make install
     - python3 -c "import pygmo.test; pygmo.test.run_test_suite()"
@@ -32,7 +40,7 @@ pages:
   script:
     - mkdir build
     - cd build
-    - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_PYGMO=ON -DCMAKE_INSTALL_PREFIX=/usr -DPYTHON_EXECUTABLE=/usr/bin/python3 -DBoost_PYTHON_LIBRARY_DEBUG=/usr/lib/x86_64-linux-gnu/libboost_python-py35.so  ..
+    - CXX=clang++ CC=clang cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_PYGMO=ON -DPAGMO_ENABLE_EIGEN3=YES -DCMAKE_INSTALL_PREFIX=/usr -DPYTHON_EXECUTABLE=/usr/bin/python3 -DBoost_PYTHON_LIBRARY_DEBUG=/usr/lib/x86_64-linux-gnu/libboost_python-py35.so  ..
     - make -j4
     - make install
     - cd ../doc/sphinx
