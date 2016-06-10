@@ -155,7 +155,6 @@ public:
     {
         return 1u;
     }
-
     /// Returns a dense gradient_sparsity for the decomposed problem
     sparsity_pattern gradient_sparsity() const
     {
@@ -219,11 +218,15 @@ private:
     // A decomposed problem does not have gradients (Tchebycheff is not differentiable)
     vector_double gradient(const vector_double &dv) const = delete;
     // delting has_gradient allow the automatic detection of gradients here, which will be thus be false
-    bool has_gradient() = delete;
+    bool has_gradient() const = delete;
+    // deleting the gradient sparsity in necessary and sparsity will by default be dense
+    bool has_gradient_sparsity() const = delete;
     // A decomposed problem does not have hessians (Tchebycheff is not differentiable)
     std::vector<vector_double> hessians(const vector_double &dv) const = delete;
     // delting has_gradient allow the automatic detection of hessians here, which will thus be false
-    bool has_hessians() = delete;
+    bool has_hessians() const = delete;
+    // deleting the hessians sparsity in necessary and sparsity will by default be dense
+    bool has_hessians_sparsity() const = delete;
 
     vector_double decompose_fitness(const vector_double &f) const
     {
