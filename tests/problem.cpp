@@ -19,12 +19,12 @@ using namespace pagmo;
 struct base_p
 {
     base_p(
-        unsigned int nobj = 1,
-        unsigned int nec = 0,
-        unsigned int nic = 0,
-        const vector_double &ret_fit = {1},
-        const vector_double &lb = {0},
-        const vector_double &ub = {1}
+        vector_double::size_type nobj = 1u,
+        vector_double::size_type nec = 0u,
+        vector_double::size_type nic = 0u,
+        const vector_double &ret_fit = {1.},
+        const vector_double &lb = {0.},
+        const vector_double &ub = {1.}
     ) : m_nobj(nobj), m_nec(nec), m_nic(nic),
         m_ret_fit(ret_fit), m_lb(lb), m_ub(ub) {}
 
@@ -64,9 +64,9 @@ struct base_p
         ar(m_nobj,m_nec,m_nic,m_ret_fit,m_lb,m_ub);
     }
 
-    unsigned int m_nobj;
-    unsigned int m_nec;
-    unsigned int m_nic;
+    vector_double::size_type m_nobj;
+    vector_double::size_type m_nec;
+    vector_double::size_type m_nic;
     vector_double m_ret_fit;
     vector_double m_lb;
     vector_double m_ub;
@@ -77,9 +77,9 @@ struct base_p
 struct grad_p : base_p
 {
     grad_p(
-        unsigned int nobj = 1,
-        unsigned int nec = 0,
-        unsigned int nic = 0,
+        vector_double::size_type nobj = 1u,
+        vector_double::size_type nec = 0u,
+        vector_double::size_type nic = 0u,
         const vector_double &ret_fit = {1},
         const vector_double &lb = {0},
         const vector_double &ub = {1},
@@ -114,9 +114,9 @@ PAGMO_REGISTER_PROBLEM(grad_p)
 struct grad_p_override : grad_p
 {
     grad_p_override(
-        unsigned int nobj = 1,
-        unsigned int nec = 0,
-        unsigned int nic = 0,
+        vector_double::size_type nobj = 1u,
+        vector_double::size_type nec = 0u,
+        vector_double::size_type nic = 0u,
         const vector_double &ret_fit = {1},
         const vector_double &lb = {0},
         const vector_double &ub = {1},
@@ -148,9 +148,9 @@ PAGMO_REGISTER_PROBLEM(grad_p_override)
 struct hess_p : base_p
 {
     hess_p(
-        unsigned int nobj = 1,
-        unsigned int nec = 0,
-        unsigned int nic = 0,
+        vector_double::size_type nobj = 1u,
+        vector_double::size_type nec = 0u,
+        vector_double::size_type nic = 0u,
         const vector_double &ret_fit = {1},
         const vector_double &lb = {0},
         const vector_double &ub = {1},
@@ -185,9 +185,9 @@ PAGMO_REGISTER_PROBLEM(hess_p)
 struct hess_p_override : hess_p
 {
     hess_p_override(
-        unsigned int nobj = 1,
-        unsigned int nec = 0,
-        unsigned int nic = 0,
+        vector_double::size_type nobj = 1u,
+        vector_double::size_type nec = 0u,
+        vector_double::size_type nic = 0u,
         const vector_double &ret_fit = {1},
         const vector_double &lb = {0},
         const vector_double &ub = {1},
@@ -219,9 +219,9 @@ PAGMO_REGISTER_PROBLEM(hess_p_override)
 struct full_p : grad_p
 {
     full_p(
-        unsigned int nobj = 1,
-        unsigned int nec = 0,
-        unsigned int nic = 0,
+        vector_double::size_type nobj = 1u,
+        vector_double::size_type nec = 0u,
+        vector_double::size_type nic = 0u,
         const vector_double &ret_fit = {1},
         const vector_double &lb = {0},
         const vector_double &ub = {1},
@@ -318,6 +318,14 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     BOOST_CHECK_THROW(problem{hess_p(1,1,0,fit_2,lb_2,ub_2,hess_22, hesss_22_repeated)}, std::invalid_argument);
     // 9 - hessian sparsity has the wrong length
     BOOST_CHECK_THROW(problem{hess_p(1,1,0,fit_2,lb_2,ub_2,hess_22, {{{0,0},{1,0}},{{0,0},{1,0}},{{0,0}}})}, std::invalid_argument);
+    // 10 - 0 objectives
+    BOOST_CHECK_THROW(problem{base_p(0,0,0,fit_2,{1},{2})}, std::invalid_argument);
+    // 11 - many objectives
+    BOOST_CHECK_THROW(problem{base_p(std::numeric_limits<vector_double::size_type>::max(),0,0,fit_2,{1},{2})}, std::invalid_argument);
+    // 12 - too many equalities
+    //BOOST_CHECK_THROW(problem{base_p(1,std::numeric_limits<vector_double::size_type>::max(),0,fit_2,{1},{2})}, std::invalid_argument);
+    // 13 - too many inequalities
+    //BOOST_CHECK_THROW(problem{base_p(1,0,std::numeric_limits<vector_double::size_type>::max(),fit_2,{1},{2})}, std::invalid_argument);
     // We check that the data members are initialized correctly (i.e. counters to zero
     // and gradient / hessian dimensions to the right values
     {
