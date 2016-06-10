@@ -19,22 +19,10 @@ using namespace pagmo;
 
 struct mc_01
 {
-    vector_double fitness(const vector_double &) const
-    {
-        return {1.,1.};
-    }
-    vector_double::size_type get_nobj() const
-    {
-        return 2u;
-    }
-    vector_double::size_type get_nec() const
-    {
-        return 1u;
-    }
-    std::pair<vector_double, vector_double> get_bounds() const
-    {
-        return {{0.},{1.}};
-    }
+    vector_double fitness(const vector_double &) const { return {1.,1.};}
+    vector_double::size_type get_nobj() const { return 2u;}
+    vector_double::size_type get_nec() const {return 1u;}
+    std::pair<vector_double, vector_double> get_bounds() const {return {{0.},{1.}};}
 };
 
 BOOST_AUTO_TEST_CASE(decompose_construction_test)

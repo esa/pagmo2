@@ -298,6 +298,8 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     std::vector<sparsity_pattern> hesss_22_repeated{{{0,0},{0,0}},{{0,0},{1,0}}};
     std::vector<sparsity_pattern> hesss_22_correct{{{0,0},{1,0}},{{0,0},{1,0}}};
 
+    // 0 - lb size is zero
+    BOOST_CHECK_THROW(problem{base_p(1,0,0,fit_2,{},{})}, std::invalid_argument);
     // 1 - lb > ub
     BOOST_CHECK_THROW(problem{base_p(1,0,0,fit_2,ub_2,lb_2)}, std::invalid_argument);
     // 2 - lb length is wrong
@@ -504,6 +506,24 @@ BOOST_AUTO_TEST_CASE(problem_hessians_test)
     BOOST_CHECK((p1.hessians({3,3}) == std::vector<vector_double>{{12,13}}));
 }
 
+// We add a problem signalling gradient_sparsity() as present, but not implementing it
+struct hgs_not_impl
+{
+    vector_double fitness(const vector_double &) const { return {1.,1.};}
+    vector_double::size_type get_nobj() const { return 1u;}
+    bool has_gradient_sparsity() const {return true;}
+    std::pair<vector_double, vector_double> get_bounds() const {return {{0.},{1.}};}
+};
+
+// We add a problem signalling hessians_sparsity() as present, but not implementing it
+struct hhs_not_impl
+{
+    vector_double fitness(const vector_double &) const { return {1.,1.};}
+    vector_double::size_type get_nobj() const { return 1u;}
+    bool has_hessians_sparsity() const {return true;}
+    std::pair<vector_double, vector_double> get_bounds() const {return {{0.},{1.}};}
+};
+
 BOOST_AUTO_TEST_CASE(problem_has_test)
 {
     problem p1{base_p{}};
@@ -532,6 +552,9 @@ BOOST_AUTO_TEST_CASE(problem_has_test)
     BOOST_CHECK(!p4.has_gradient_sparsity());
     BOOST_CHECK(!p4.has_hessians());
     BOOST_CHECK(!p4.has_hessians_sparsity());
+
+    BOOST_CHECK_THROW(problem{hgs_not_impl{}}, std::logic_error);
+    BOOST_CHECK_THROW(problem{hhs_not_impl{}}, std::logic_error);
 }
 
 BOOST_AUTO_TEST_CASE(problem_getters_test)
