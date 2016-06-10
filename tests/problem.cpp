@@ -524,6 +524,15 @@ struct hhs_not_impl
     std::pair<vector_double, vector_double> get_bounds() const {return {{0.},{1.}};}
 };
 
+// We add a problem signalling set_seed() as present, but not implementing it
+struct ss_not_impl
+{
+    vector_double fitness(const vector_double &) const { return {1.,1.};}
+    vector_double::size_type get_nobj() const { return 1u;}
+    bool has_set_seed() const {return true;}
+    std::pair<vector_double, vector_double> get_bounds() const {return {{0.},{1.}};}
+};
+
 BOOST_AUTO_TEST_CASE(problem_has_test)
 {
     problem p1{base_p{}};
@@ -555,6 +564,9 @@ BOOST_AUTO_TEST_CASE(problem_has_test)
 
     BOOST_CHECK_THROW(problem{hgs_not_impl{}}, std::logic_error);
     BOOST_CHECK_THROW(problem{hhs_not_impl{}}, std::logic_error);
+
+    problem p6{ss_not_impl{}};
+    BOOST_CHECK_THROW(p6.set_seed(32u), std::logic_error);
 }
 
 BOOST_AUTO_TEST_CASE(problem_getters_test)
