@@ -17,6 +17,26 @@
 
 using namespace pagmo;
 
+struct mc_01
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {1.,1.};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    vector_double::size_type get_nec() const
+    {
+        return 1u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.},{1.}};
+    }
+};
+
 BOOST_AUTO_TEST_CASE(decompose_construction_test)
 {
     // First we check directly the two constructors
@@ -37,7 +57,7 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     // single objective problem
     BOOST_CHECK_THROW(decompose(rosenbrock{},{0.5, 0.5},{0., 0.}), std::invalid_argument);
     // constrained problem
-    BOOST_CHECK_THROW(decompose(null_problem{}, {0.5, 0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
+    BOOST_CHECK_THROW(decompose(mc_01{}, {0.5, 0.5}, {0., 0.}, "weighted", false), std::invalid_argument);
     // random decomposition method
     BOOST_CHECK_THROW(decompose(zdt{1u,2u}, {0.5, 0.5}, {0., 0.}, "my_method", false), std::invalid_argument);
     // wrong length for the weights
