@@ -323,9 +323,9 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     // 11 - many objectives
     BOOST_CHECK_THROW(problem{base_p(std::numeric_limits<vector_double::size_type>::max(),0,0,fit_2,{1},{2})}, std::invalid_argument);
     // 12 - too many equalities
-    //BOOST_CHECK_THROW(problem{base_p(1,std::numeric_limits<vector_double::size_type>::max(),0,fit_2,{1},{2})}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1,std::numeric_limits<vector_double::size_type>::max(),0,fit_2,{1},{2})}, std::invalid_argument);
     // 13 - too many inequalities
-    //BOOST_CHECK_THROW(problem{base_p(1,0,std::numeric_limits<vector_double::size_type>::max(),fit_2,{1},{2})}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1,0,std::numeric_limits<vector_double::size_type>::max(),fit_2,{1},{2})}, std::invalid_argument);
     // We check that the data members are initialized correctly (i.e. counters to zero
     // and gradient / hessian dimensions to the right values
     {
