@@ -388,8 +388,7 @@ BOOST_PYTHON_MODULE(core)
         // Problem extraction.
         .def("_py_extract",&pygmo::generic_py_extract<problem>)
         // Problem methods.
-        .def("fitness",&pygmo::fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness of the input "
-            "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
+        .def("fitness",&pygmo::fitness_wrapper,pygmo::problem_fitness_docstring().c_str(),(bp::arg("dv")))
         .def("gradient",&pygmo::gradient_wrapper,"Gradient.\n\nThis method will calculate the gradient of the input "
             "decision vector *dv*. The gradient is returned as a an array of doubles.",(bp::arg("dv")))
         .def("has_gradient",&problem::has_gradient,"Gradient availability.")

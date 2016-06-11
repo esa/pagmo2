@@ -22,6 +22,7 @@ std::string population_get_ID_docstring();
 std::string population_get_seed_docstring();
 
 std::string problem_docstring();
+std::string problem_fitness_docstring();
 std::string get_best_docstring(const std::string &);
 
 std::string algorithm_docstring();

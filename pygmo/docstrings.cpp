@@ -32,12 +32,12 @@ Appends a new chromosome x to the population, evaluating its fitness and creatin
 born individual. In case of exceptions, the population will not be altered.
 
 Args:
-    x (array or list of doubles): decision vector to be added to the population
+    x (array or list of floats): decision vector to be added to the population
 
 Raises:
     ValueError: if the dimension of *x* is inconsistent with the problem dimension or the calculated fitness vector has
         a dimension which is inconsistent with the fitness dimension of the problem
-    TypeError: if *x* cannot be converted to a vector of doubles
+    TypeError: if the type of *x* is invalid
 
 Examples:
 
@@ -72,7 +72,7 @@ std::string population_decision_vector_docstring()
 Create random decision_vector.
 
 Returns:
-    NumPy array of doubles: a random decision vector within the problem’s bounds
+    NumPy array of floats: a random decision vector within the problem’s bounds
 
 Examples:
 
@@ -90,11 +90,11 @@ std::string population_best_idx_docstring()
 Index of best individual. See :cpp:func:`pagmo::population::best_idx()`.
 
 Args:
-    tol (a double, or an array or list of doubles): a scalar tolerance or a vector of tolerances to be applied to
+    tol (float, or array or list of floats): a scalar tolerance or a vector of tolerances to be applied to
       each constraints
 
 Returns:
-    ``int``: the index of the best individual
+    int: the index of the best individual
 
 Raises:
     ValueError: if the population is empty
@@ -115,11 +115,11 @@ std::string population_worst_idx_docstring()
 Index of worst individual. See :cpp:func:`pagmo::population::worst_idx()`.
 
 Args:
-    tol (a double, or an array or list of doubles): a scalar tolerance or a vector of tolerances to be applied to
+    tol (float, or array or list of floats): a scalar tolerance or a vector of tolerances to be applied to
       each constraints
 
 Returns:
-    ``int``: the index of the worst individual
+    int: the index of the worst individual
 
 Raises:
     ValueError: if the population is empty
@@ -142,7 +142,7 @@ Size of the population.
 The population size can also be queried using the builtin ``len()`` method.
 
 Returns:
-    ``int``: the number of individuals
+    int: the number of individuals
 
 Examples:
 
@@ -165,9 +165,9 @@ Sets simultaneously the i-th individual decision vector and fitness, thus avoidi
 function evaluation.
 
 Args:
-    i (an ``int``): individual’s index in the population
-    x (an array or list of doubles): a decision vector (chromosome)
-    f (an array or list of doubles): a fitness vector
+    i (int): individual’s index in the population
+    x (array or list of floats): a decision vector (chromosome)
+    f (array or list of floats): a fitness vector
 
 Raises:
     ValueError: if *i* is invalid, or if *x* or *f* have the wrong dimensions (i.e., their dimensions are
@@ -202,8 +202,8 @@ Sets the i-th individual's decision vector.
 The fitness of the individual will be computed from *x*.
 
 Args:
-    i (an ``int``): individual’s index in the population
-    x (an array or list of doubles): a decision vector (chromosome)
+    i (int): individual’s index in the population
+    x (array or list of floats): a decision vector (chromosome)
 
 Raises:
     ValueError: if *i* is invalid, or if *x* has the wrong dimensions (i.e., the dimension is
@@ -236,7 +236,7 @@ std::string population_set_problem_seed_docstring()
 Sets the problem seed.
 
 Args:
-    seed (an ``int``): the desired seed (must be non-negative)
+    seed (int): the desired seed (must be non-negative)
 
 Raises:
     RuntimeError: if the problem is not stochastic
@@ -294,7 +294,7 @@ Each row of the returned array represents the fitness vector of the individual a
 population.
 
 Returns:
-    NumPy array of doubles: a deep copy of the fitness vectors of the individuals
+    NumPy array of floats: a deep copy of the fitness vectors of the individuals
 
 Examples:
 
@@ -315,7 +315,7 @@ Each row of the returned array represents the chromosome of the individual at th
 population.
 
 Returns:
-    NumPy array of doubles: a deep copy of the chromosomes of the individuals
+    NumPy array of floats: a deep copy of the chromosomes of the individuals
 
 Examples:
 
@@ -340,7 +340,7 @@ Each row of the returned array represents the ID of the individual at the corres
 population.
 
 Returns:
-    NumPy array of ``int``: a deep copy of the IDs of the individuals
+    NumPy array of int: a deep copy of the IDs of the individuals
 
 Examples:
 
@@ -359,7 +359,7 @@ std::string population_get_seed_docstring()
 This method will return the random seed of the population.
 
 Returns:
-    ``int``: the random seed of the population
+    int: the random seed of the population
 
 Examples:
 
@@ -372,14 +372,44 @@ Examples:
 
 std::string problem_docstring()
 {
-    return R"(The main problem class.
+    return R"(__init__(prob)
 
->>> from pygmo import problem, rosenbrock
->>> p = problem(rosenbrock(dim=5))
->>> p.fitness([1,2,3,4,5])
-array([ 14814.])
+The problem class.
+
+This class represents a generic mathematical programming or evolutionary optimization problem. Optimization problems
+can be created in PyGMO by defining a class with an appropriate set of methods (i.e., a user-defined problem, or UDP)
+and then by using an instance of the UDP to construct a :class:`~pygmo.core.problem`.
 
 See also :cpp:class:`pagmo::problem`.
+
+Args:
+    prob: a user-defined problem (either C++ or Python)
+
+Raises:
+    TypeError,ValueError,RuntimeError: if *prob* is not a user-defined problem
+    unspecified: any exception thrown by the constructor of the underlying C++ class
+
+)";
+}
+
+std::string problem_fitness_docstring()
+{
+    return R"(fitness(dv)
+
+Fitness.
+
+This method will calculate the fitness of the input decision vector *dv*.
+
+Args:
+    dv (array or list of floats): the decision vector (chromosome) to be evaluated
+
+Returns:
+    NumPy array of floats: the fitness of *dv*
+
+Raises:
+    ValueError: if the length of *dv* is not equal to the dimension of the problem, or if the size of the returned
+        fitness is inconsistent with the fitness dimension of the UDP
+    TypeError: if the type of *dv* is invalid
 
 )";
 }
@@ -400,7 +430,7 @@ std::string get_best_docstring(const std::string &name)
 The best known solution for the )" + name + R"( problem.
 
 Returns:
-    NumPy array of doubles: the best known solution for the )" + name + R"( problem
+    NumPy array of floats: the best known solution for the )" + name + R"( problem
 
 )";
 }
