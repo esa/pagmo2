@@ -378,7 +378,8 @@ The problem class.
 
 This class represents a generic mathematical programming or evolutionary optimization problem. Optimization problems
 can be created in PyGMO by defining a class with an appropriate set of methods (i.e., a user-defined problem, or UDP)
-and then by using an instance of the UDP to construct a :class:`~pygmo.core.problem`.
+and then by using an instance of the UDP to construct a :class:`~pygmo.core.problem`. The exposed C++ problems can
+also be used as a UDP.
 
 See also :cpp:class:`pagmo::problem`.
 
@@ -398,7 +399,7 @@ std::string problem_fitness_docstring()
 
 Fitness.
 
-This method will calculate the fitness of the input decision vector *dv*.
+This method will calculate the fitness of the input decision vector *dv*. See :cpp:func:`pagmo::problem::fitness()`.
 
 Args:
     dv (array or list of floats): the decision vector (chromosome) to be evaluated
@@ -411,6 +412,62 @@ Raises:
         fitness is inconsistent with the fitness dimension of the UDP
     TypeError: if the type of *dv* is invalid
 
+Examples:
+
+>>> p = problem(rosenbrock())
+>>> p.fitness([1,2])
+array([ 100.])
+>>> p.fitness('abc') # doctest: +IGNORE_EXCEPTION_DETAIL
+Traceback (most recent call last):
+  ...
+TypeError: cannot convert the type '<class 'str'>' to a vector of doubles
+
+)";
+}
+
+std::string problem_gradient_docstring()
+{
+    return R"(gradient(dv)
+
+Gradient.
+
+This method will calculate the gradient of the input decision vector *dv*. See :cpp:func:`pagmo::problem::gradient()`.
+
+Args:
+    dv (array or list of floats): the decision vector (chromosome) to be evaluated
+
+Returns:
+    NumPy array of floats: the gradient of *dv*
+
+Raises:
+    ValueError: if the length of *dv* is not equal to the dimension of the problem, or if the size of the returned
+        value does not match the gradient sparsity pattern dimension
+    TypeError: if the type of *dv* is invalid
+    RuntimeError: if the user-defined problem does not implement the gradient method
+
+Examples:
+
+>>> p = problem(hock_schittkowsky_71())
+>>> p.gradient([1,2,3,4])
+array([ 28.,   4.,   5.,   6.,   2.,   4.,   6.,   8., -24., -12.,  -8.,
+        -6.])
+>>> p = problem(rosenbrock())
+>>> p.gradient([1,2]) # doctest: +IGNORE_EXCEPTION_DETAIL
+  ...
+RuntimeError: gradients have been requested but not implemented.
+
+)";
+}
+
+std::string problem_get_best_docstring(const std::string &name)
+{
+    return R"(best_known()
+
+The best known solution for the )" + name + R"( problem.
+
+Returns:
+    NumPy array of floats: the best known solution for the )" + name + R"( problem
+
 )";
 }
 
@@ -419,18 +476,6 @@ std::string algorithm_docstring()
     return R"(The main algorithm class.
 
 See also :cpp:class:`pagmo::algorithm`.
-
-)";
-}
-
-std::string get_best_docstring(const std::string &name)
-{
-    return R"(best_known()
-
-The best known solution for the )" + name + R"( problem.
-
-Returns:
-    NumPy array of floats: the best known solution for the )" + name + R"( problem
 
 )";
 }
