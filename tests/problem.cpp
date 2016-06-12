@@ -575,6 +575,9 @@ BOOST_AUTO_TEST_CASE(problem_has_test)
 
     problem p6{ss_not_impl{}};
     BOOST_CHECK_THROW(p6.set_seed(32u), std::logic_error);
+
+    problem p7{base_p{}};
+    BOOST_CHECK_THROW(p7.set_seed(32u), std::logic_error);
 }
 
 BOOST_AUTO_TEST_CASE(problem_getters_test)
@@ -859,4 +862,11 @@ BOOST_AUTO_TEST_CASE(problem_get_nobj_detection)
     BOOST_CHECK(problem{without_get_nobj{}}.get_nobj() == 1u);
     BOOST_CHECK_NO_THROW(problem{with_get_nobj{}}.fitness({1.}));
     BOOST_CHECK_THROW(problem{without_get_nobj{}}.fitness({1.}), std::invalid_argument); // detects a returned size of 3 but has the defualt
+}
+
+BOOST_AUTO_TEST_CASE(problem_auto_sparsity_test)
+{
+    problem p{base_p(2u,2u,2u,{1.,1.,1.,1.,1.,1.},{0.,0.},{1.,1.})};
+    BOOST_CHECK(p.gradient_sparsity() == detail::dense_gradient(6u,2u));
+    BOOST_CHECK(p.hessians_sparsity() == detail::dense_hessians(6u,2u));
 }

@@ -67,8 +67,7 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
     // 2 - Bounds cannot be too large
     const auto delta = ub - lb;
     if (!std::isfinite(delta) || delta > std::numeric_limits<double>::max()) {
-        pagmo_throw(std::invalid_argument,"Cannot generate a random point within bounds "
-            "that are too large");
+        pagmo_throw(std::invalid_argument,"Cannot generate a random point within bounds that are too large");
     }
     // 3 - If the bounds are equal we don't call the RNG, as that would be undefined behaviour.
     if (lb == ub) {
