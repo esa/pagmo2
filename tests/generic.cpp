@@ -88,10 +88,17 @@ BOOST_AUTO_TEST_CASE(force_bounds_test)
     vector_double x_fix = x;
     detail::force_bounds_stick(x_fix, {0., 0., 0.}, {3.,3.,5.});
     BOOST_CHECK(x == x_fix);
+    // ub
     detail::force_bounds_stick(x_fix, {0., 0., 0.}, {1., 1.9, 2.1});
     BOOST_CHECK(x != x_fix);
     BOOST_CHECK_EQUAL(x_fix[0], 1.);
     BOOST_CHECK_EQUAL(x_fix[1], 1.9);
     BOOST_CHECK_EQUAL(x_fix[2], 2.1);
+    // lb
+    detail::force_bounds_stick(x_fix, {2., 2., 2.}, {3., 3., 3.});
+    BOOST_CHECK_EQUAL(x_fix[0], 2.);
+    BOOST_CHECK_EQUAL(x_fix[1], 2.);
+    BOOST_CHECK_EQUAL(x_fix[2], 2.1);
+
     }
 }
