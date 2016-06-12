@@ -381,6 +381,8 @@ can be created in PyGMO by defining a class with an appropriate set of methods (
 and then by using an instance of the UDP to construct a :class:`~pygmo.core.problem`. The exposed C++ problems can
 also be used as a UDP.
 
+Note that the UDP provided on construction will be deep-copied and stored inside the problem.
+
 See also :cpp:class:`pagmo::problem`.
 
 Args:

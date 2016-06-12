@@ -103,6 +103,9 @@ from .core import *
 # Override of the population constructor.
 __original_population_init = population.__init__
 
+# NOTE: the idea of having the pop init here instead of exposed from C++ is that like this we don't need
+# to expose a new pop ctor each time we expose a new problem: in this method we will use the problem ctor
+# from a C++ problem, and on the C++ exposition side we need only to expose the ctor of pop from pagmo::problem.
 def _population_init(self,prob=None,size=0,seed=None):
     """
     Args:
