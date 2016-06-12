@@ -866,7 +866,7 @@ BOOST_AUTO_TEST_CASE(problem_get_nobj_detection)
 
 BOOST_AUTO_TEST_CASE(problem_auto_sparsity_test)
 {
-    problem p{base_p(2.,2.,2.,{1.,1.,1.,1.,1.,1.},{0.,0.},{1.,1.})};
+    problem p{base_p(2u,2u,2u,{1.,1.,1.,1.,1.,1.},{0.,0.},{1.,1.})};
     BOOST_CHECK(p.gradient_sparsity() == detail::dense_gradient(6u,2u));
     BOOST_CHECK(p.hessians_sparsity() == detail::dense_hessians(6u,2u));
 }
