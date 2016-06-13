@@ -44,6 +44,8 @@ class problem_test_case(_ut.TestCase):
 	"""
 	def runTest(self):
 		self.run_basic_tests()
+		self.run_nobj_tests()
+		self.run_nec_nic_tests()
 	def run_basic_tests(self):
 		# Tests for minimal problem, and mandatory methods.
 		from numpy import all, array
@@ -170,6 +172,91 @@ class problem_test_case(_ut.TestCase):
 				return array([42])
 		prob = problem(p())
 		self.assert_(all(prob.fitness([1,2]) == array([42])))
+	def run_nobj_tests(self):
+		from .core import problem
+		class p(object):
+			def get_nobj(self):
+				return 2
+			def get_bounds(self):
+				return ([0,0],[1,1])
+			def fitness(self,a):
+				return [42,43]
+		prob = problem(p())
+		self.assertEqual(prob.get_nobj(),2)
+		# Wrong number of nobj.
+		class p(object):
+			def get_nobj(self):
+				return 0
+			def get_bounds(self):
+				return ([0,0],[1,1])
+			def fitness(self,a):
+				return [42,43]
+		self.assertRaises(ValueError,lambda : problem(p()))
+		class p(object):
+			def get_nobj(self):
+				return -1
+			def get_bounds(self):
+				return ([0,0],[1,1])
+			def fitness(self,a):
+				return [42,43]
+		self.assertRaises(OverflowError,lambda : problem(p()))
+		# Inconsistent nobj.
+		class p(object):
+			def get_nobj(self):
+				return 2
+			def get_bounds(self):
+				return ([0,0],[1,1])
+			def fitness(self,a):
+				return [42]
+		prob = problem(p())
+		self.assertRaises(ValueError,lambda : prob.fitness([1,2]))
+	def run_nec_nic_tests(self):
+		from .core import problem
+		class p(object):
+			def get_nec(self):
+				return 2
+			def get_bounds(self):
+				return ([0,0],[1,1])
+			def fitness(self,a):
+				return [42]
+		prob = problem(p())
+		self.assertEqual(prob.get_nf(),3)
+		class p(object):
+			def get_nec(self):
+				return -1
+			def get_bounds(self):
+				return ([0,0],[1,1])
+			def fitness(self,a):
+				return [42]
+		self.assertRaises(OverflowError,lambda : problem(p()))
+		class p(object):
+			def get_nic(self):
+				return 2
+			def get_bounds(self):
+				return ([0,0],[1,1])
+			def fitness(self,a):
+				return [42]
+		prob = problem(p())
+		self.assertEqual(prob.get_nf(),3)
+		class p(object):
+			def get_nic(self):
+				return -1
+			def get_bounds(self):
+				return ([0,0],[1,1])
+			def fitness(self,a):
+				return [42]
+		self.assertRaises(OverflowError,lambda : problem(p()))
+		class p(object):
+			def get_nec(self):
+				return 2
+			def get_nic(self):
+				return 3
+			def get_bounds(self):
+				return ([0,0],[1,1])
+			def fitness(self,a):
+				return [42]
+		prob = problem(p())
+		self.assertEqual(prob.get_nf(),6)
 
 def run_test_suite():
 	"""Run the full test suite.
