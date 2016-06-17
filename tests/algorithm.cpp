@@ -245,9 +245,14 @@ BOOST_AUTO_TEST_CASE(algorithm_has_test)
 
 BOOST_AUTO_TEST_CASE(algorithm_getters_test)
 {
+    {
     algorithm algo{al_01{}};
     BOOST_CHECK(algo.get_name() == "name");
     BOOST_CHECK(algo.get_extra_info().find("Seed") != std::string::npos);
+    }
+    algorithm algo{al_02{}};
+    BOOST_CHECK(algo.get_name().find("al_02") != std::string::npos);
+    BOOST_CHECK(algo.get_extra_info().find("") != std::string::npos);
 }
 
 BOOST_AUTO_TEST_CASE(algorithm_serialization_test)
@@ -267,6 +272,7 @@ BOOST_AUTO_TEST_CASE(algorithm_serialization_test)
     }
     // Create a new algorithm object
     auto algo2 = algorithm{al_02{}};
+    boost::lexical_cast<std::string>(algo2); // triggers the streaming operator for a deterministic algo
     {
     cereal::JSONInputArchive iarchive(ss);
     iarchive(algo2);
