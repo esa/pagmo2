@@ -78,6 +78,9 @@ BOOST_AUTO_TEST_CASE(de_evolve_test)
     BOOST_CHECK_THROW(de{10u}.evolve(population{problem{zdt{}},15u}), std::invalid_argument);
     BOOST_CHECK_THROW(de{10u}.evolve(population{problem{hock_schittkowsky_71{}},15u}), std::invalid_argument);
     BOOST_CHECK_THROW(de{10u}.evolve(population{problem{inventory{}},15u}), std::invalid_argument);
+    // And a clean exit for 0 generations
+    population pop{rosenbrock{25u}, 10u};
+    BOOST_CHECK(de{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
 }
 
 BOOST_AUTO_TEST_CASE(de_setters_getters_test)

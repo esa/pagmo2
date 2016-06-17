@@ -74,9 +74,13 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
     BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{rosenbrock{}},4u}), std::invalid_argument);
     BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{zdt{}},15u}), std::invalid_argument);
     BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{hock_schittkowsky_71{}},15u}), std::invalid_argument);
+    // And a clean exit for 0 generations
+    population pop{rosenbrock{25u}, 10u};
+    BOOST_CHECK(cmaes{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
 
     // and we call evolve on the stochastic problem
     BOOST_CHECK_NO_THROW(cmaes{10u}.evolve(population{problem{inventory{}},15u}));
+
 }
 
 BOOST_AUTO_TEST_CASE(cmaes_setters_getters_test)

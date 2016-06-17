@@ -63,20 +63,20 @@ BOOST_AUTO_TEST_CASE(evolve_test)
 
     // Here we check that the exit condition of ftol and xtol actually provoke an exit within 5000 gen (rosenbrock{2} is used)
     { // xtol
-    de1220 user_algo(53u, mutation_variants, 1, 1e-6, 1e-45, false, 41u);
+    de1220 user_algo(300u, mutation_variants, 2, 1e-3, 1e-45, false, 41u);
     user_algo.set_verbosity(1u);
     problem prob{rosenbrock{2u}};
     population pop{prob, 20u, 23u};
     pop = user_algo.evolve(pop);
-    BOOST_CHECK(user_algo.get_log().size() < 5000u);
+    BOOST_CHECK(user_algo.get_log().size() < 300u);
     }
     { // ftol
-    de1220 user_algo(53u, mutation_variants, 1, 1e-45, 1e-6, false, 41u);
+    de1220 user_algo(300u, mutation_variants, 1, 1e-45, 1e-3, false, 41u);
     user_algo.set_verbosity(1u);
     problem prob{rosenbrock{2u}};
     population pop{prob, 20u, 23u};
     pop = user_algo.evolve(pop);
-    BOOST_CHECK(user_algo.get_log().size() < 5000u);
+    BOOST_CHECK(user_algo.get_log().size() < 300u);
     }
 
     // We then check that the evolve throws if called on unsuitable problems
@@ -84,6 +84,9 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{zdt{}},15u}), std::invalid_argument);
     BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{hock_schittkowsky_71{}},15u}), std::invalid_argument);
     BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{inventory{}},15u}), std::invalid_argument);
+    // And a clean exit for 0 generations
+    population pop{rosenbrock{25u}, 10u};
+    BOOST_CHECK(de1220{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
 }
 
 BOOST_AUTO_TEST_CASE(setters_getters_test)
