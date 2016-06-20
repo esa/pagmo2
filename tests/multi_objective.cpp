@@ -219,11 +219,12 @@ BOOST_AUTO_TEST_CASE(select_best_N_mo_test)
     }
 
     // Test 3 - throws
-    N=4;
     example = {{0},{1,2},{2},{0,0},{6}};
-    BOOST_CHECK_THROW(select_best_N_mo(example, 2), std::invalid_argument);
+    BOOST_CHECK_THROW(select_best_N_mo(example, 2u), std::invalid_argument);
     example = {{},{},{},{},{},{}};
-    BOOST_CHECK_THROW(select_best_N_mo(example, 2), std::invalid_argument);
+    BOOST_CHECK_THROW(select_best_N_mo(example, 2u), std::invalid_argument);
+    example = {{1,2},{3,4},{0,1},{1,0},{2,2},{2,4}};
+    BOOST_CHECK_THROW(select_best_N_mo(example, 0u), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(ideal_test)
@@ -231,6 +232,9 @@ BOOST_AUTO_TEST_CASE(ideal_test)
     std::vector<vector_double> example;
     vector_double result;
     // Test 1
+    example = {};
+    result = {};
+    BOOST_CHECK(ideal(example) == result);
     example = {{},{},{},{},{}};
     result = {};
     BOOST_CHECK(ideal(example) == result);
@@ -255,6 +259,9 @@ BOOST_AUTO_TEST_CASE(nadir_test)
     std::vector<vector_double> example;
     vector_double result;
     // Test 1
+    example = {};
+    result = {};
+    BOOST_CHECK(nadir(example) == result);
     example = {{},{},{},{},{}};
     result = {};
     BOOST_CHECK(nadir(example) == result);
