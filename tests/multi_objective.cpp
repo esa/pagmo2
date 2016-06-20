@@ -24,6 +24,8 @@ BOOST_AUTO_TEST_CASE(pareto_dominance_test)
 
 BOOST_AUTO_TEST_CASE(pareto_2d_test)
 {
+    // Corner cases
+    BOOST_CHECK(pareto_front_2d({}) == std::vector<vector_double::size_type>{});
     // We test some known cases
     {
         auto res = pareto_front_2d({{0,1},{1,1},{1,2}});
