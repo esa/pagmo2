@@ -105,30 +105,26 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
             pagmo_throw(std::invalid_argument, "The fitness vector at position: "
                 + std::to_string(i) + " has dimension "
                 + std::to_string(input_f[i].size()) + " while I was expecting: "
-                + std::to_string(M) + "(first element dimension)"
-            );
+                + std::to_string(M) + "(first element dimension)");
         }
     }
     // 2 - The dimension of the fitness vectors mus be at least 1
     if (M < 1u) {
         pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to sort: a dimension of "
-            + std::to_string(M) + " was detected. "
-        );
+            + std::to_string(M) + " was detected. ");
     }
     // Now we are sure M has size at least 2
     // 3 - The number of equality constraints must be at most input_f[0].size()-1
     if (neq > M - 1u) {
         pagmo_throw(std::invalid_argument, "Number of equality constraints declared: "
             + std::to_string(neq) + " while fitness vector has dimension: "
-            + std::to_string(M) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"
-        );
+            + std::to_string(M) + "(it must be striclty smaller as the objfun is assumed to be at position 0)"); // LCOV_EXCL_LINE
     }
     // 4 - The tolerance vector size must be input_f.size[0]()-1u
     if (tol.size() != M-1u) {
         pagmo_throw(std::invalid_argument, "Tolerance vector dimension: "
             + std::to_string(tol.size()) + " while it must be: "
-            + std::to_string(M-1u)
-        );
+            + std::to_string(M-1u));
     }
 
     // Create the indexes 0....N-1
@@ -185,8 +181,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     // 2 - The dimension of the fitness vectors must be at least 1
     if (M < 1u) {
         pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to sort: a dimension of "
-            + std::to_string(M) + " was detected. "
-        );
+            + std::to_string(M) + " was detected. ");
     }
     vector_double tol_vector(M - 1u, tol);
     return sort_population_con(input_f, neq, tol_vector);

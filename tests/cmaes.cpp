@@ -3,6 +3,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <iostream>
+#include <limits> //  std::numeric_limits<double>::infinity();
 #include <string>
 
 #include "../include/algorithms/cmaes.hpp"
@@ -12,6 +13,9 @@
 #include "../include/problems/inventory.hpp"
 #include "../include/problems/zdt.hpp"
 #include "../include/population.hpp"
+#include "../include/rng.hpp"
+#include "../include/utils/generic.hpp"
+
 
 using namespace pagmo;
 
@@ -31,6 +35,32 @@ BOOST_AUTO_TEST_CASE(cmaes_algorithm_construction)
     BOOST_CHECK_THROW((cmaes{1234u,-1,-1,-1, 1.2}), std::invalid_argument);
     BOOST_CHECK_THROW((cmaes{1234u,-1,-1,-1,-1.2}), std::invalid_argument);
 }
+
+struct unbounded_lb {
+    /// Fitness
+    vector_double fitness(const vector_double &) const
+    {
+        return {0.};
+    }
+    /// Problem bounds
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{-std::numeric_limits<double>::infinity()}, {0.}};
+    }
+};
+
+struct unbounded_ub {
+    /// Fitness
+    vector_double fitness(const vector_double &) const
+    {
+        return {0.};
+    }
+    /// Problem bounds
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.},{std::numeric_limits<double>::infinity()}};
+    }
+};
 
 BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
 {
@@ -54,7 +84,7 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
 
     // Here we check that the exit condition of ftol and xtol actually provoke an exit within 5000 gen (rosenbrock{2} is used)
     {
-    cmaes user_algo{1000000u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, 23u};
+    cmaes user_algo{5000u, -1, -1, -1, -1, 0.5, 1e-6, 1e-16, false, 23u};
     user_algo.set_verbosity(1u);
     problem prob{rosenbrock{2u}};
     population pop{prob, 20u, 23u};
@@ -62,7 +92,7 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
     BOOST_CHECK(user_algo.get_log().size() < 5000u);
     }
     {
-    cmaes user_algo{10000000u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, 23u};
+    cmaes user_algo{5000u, -1, -1, -1, -1, 0.5, 1e-16, 1e-6, false, 23u};
     user_algo.set_verbosity(1u);
     problem prob{rosenbrock{2u}};
     population pop{prob, 20u, 23u};
@@ -74,6 +104,16 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
     BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{rosenbrock{}},4u}), std::invalid_argument);
     BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{zdt{}},15u}), std::invalid_argument);
     BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{hock_schittkowsky_71{}},15u}), std::invalid_argument);
+
+    detail::random_engine_type r_engine(32u);
+    population pop_lb{problem{unbounded_lb{}}};
+    population pop_ub{problem{unbounded_ub{}}};
+    for (auto i = 0u; i < 20u; ++i) {
+        pop_lb.push_back(pagmo::decision_vector({0.},{1.},r_engine));
+        pop_ub.push_back(pagmo::decision_vector({0.},{1.},r_engine));
+    }
+    BOOST_CHECK_THROW(cmaes{10u}.evolve(pop_lb), std::invalid_argument);
+    BOOST_CHECK_THROW(cmaes{10u}.evolve(pop_ub), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};
     BOOST_CHECK(cmaes{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);

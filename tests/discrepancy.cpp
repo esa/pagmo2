@@ -5,6 +5,7 @@
 #include <exception>
 #include <tuple>
 
+#include "../include/detail/prime_numbers.hpp"
 #include "../include/utils/discrepancy.hpp"
 #include "../include/types.hpp"
 #include "../include/io.hpp"
@@ -56,6 +57,10 @@ BOOST_AUTO_TEST_CASE(van_der_corput_test)
     for (auto i = 0u; i<10;++i) {     // in base 10 we need to check with a tolerance as per floating point representation problems
         BOOST_CHECK_CLOSE(real10[i], computed10[i], 1e-13);
     }
+    // We check the construcion throws
+    BOOST_CHECK_THROW(van_der_corput{1u}, std::invalid_argument);
+    // We check here the prime number utility of PaGMO (TODO: move somewhere else?)
+    BOOST_CHECK_THROW(detail::prime(1700u), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(halton_test)
