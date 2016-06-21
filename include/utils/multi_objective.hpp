@@ -61,13 +61,15 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
 
 /// Pareto Front 2D (Kung's algorithm)
 /**
-    Finds the Pareto front of a set of two dimensional objectives. Complexity is O(N logN) and is thus lower than the
-    complexity of calling pagmo::fast_non_dominated_sorting
-
-    @see Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
-    IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
-
-    @throws std::invalid_argument If the objective vectors are not all containing two-objectives
+ * Finds the Pareto front of a set of two dimensional objectives. Complexity is O(N logN) and is thus lower than the
+ * complexity of calling pagmo::fast_non_dominated_sorting
+ *
+ * @see Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
+ * IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
+ *
+ * @param[in] input_objs an <tt>std::vector</tt> containing the points (i.e. vector of objectives)
+ *
+ * @throws std::invalid_argument If the objective vectors are not all containing two-objectives
  */
 std::vector<vector_double::size_type> pareto_front_2d(const std::vector<vector_double> &input_objs)
 {
