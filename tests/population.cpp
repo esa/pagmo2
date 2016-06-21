@@ -56,20 +56,42 @@ BOOST_AUTO_TEST_CASE(population_copy_constructor_test)
     BOOST_CHECK(pop2.get_f() == pop1.get_f());
 }
 
+struct malformed
+{
+    vector_double fitness(const vector_double &) const
+    {
+        return {0.5};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.},{1.}};
+    }
+};
+
 BOOST_AUTO_TEST_CASE(population_push_back_test)
 {
     // Create an empty population
-    population pop{problem{zdt{1}}};
+    population pop{problem{zdt{1u, 30u}}};
     // We fill it with a few individuals and check the size growth
     for (unsigned int i = 0u; i < 5u; ++i) {
         BOOST_CHECK(pop.size() == i);
         BOOST_CHECK(pop.get_f().size() == i);
         BOOST_CHECK(pop.get_x().size() == i);
         BOOST_CHECK(pop.get_ID().size() == i);
-        pop.push_back(vector_double(30, 0.5));
+        pop.push_back(vector_double(30u, 0.5));
     }
     // We check the fitness counter
     BOOST_CHECK(pop.get_problem().get_fevals() == 5u);
+    // We check important undefined throws
+    // 1 - Cannot push back the wrong decision vector dimension
+    BOOST_CHECK_THROW(pop.push_back(vector_double(28u, 0.5)), std::invalid_argument);
+    // 2 - Malformed problem. The user declares 2 objectives but returns something else
+    population pop2{problem{malformed{}}};
+    BOOST_CHECK_THROW(pop2.push_back({1.}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(population_decision_vector_test)
@@ -120,8 +142,8 @@ BOOST_AUTO_TEST_CASE(population_setters_test)
     population pop{problem{null_problem{}}, 2};
     // Test throw
     BOOST_CHECK_THROW(pop.set_xf(2, {3}, {1,2,3}), std::invalid_argument);// index invalid
-    BOOST_CHECK_THROW(pop.set_xf(2, {3}, {1,2,3}), std::invalid_argument);// chromosome invalid
-    BOOST_CHECK_THROW(pop.set_xf(2, {3}, {1,2}), std::invalid_argument);  // fitness invalid
+    BOOST_CHECK_THROW(pop.set_xf(1, {3,2}, {1,2,3}), std::invalid_argument);// chromosome invalid
+    BOOST_CHECK_THROW(pop.set_xf(1, {3}, {1,2}), std::invalid_argument);  // fitness invalid
     // Test set_xf
     pop.set_xf(0,{3},{1,2,3});
     BOOST_CHECK((pop.get_x()[0] == vector_double{3}));

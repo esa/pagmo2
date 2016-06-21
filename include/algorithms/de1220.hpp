@@ -117,7 +117,7 @@ public:
      * @see (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011 IEEE Congress on (pp. 1041-1048). IEEE.
      */
     de1220(unsigned int gen = 1u, std::vector<unsigned int> allowed_variants = de1220_statics<void>::allowed_variants, unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next()) :
-        m_gen(gen), m_F(), m_CR(), m_variant(), m_allowed_variants(allowed_variants), m_variant_adptv(variant_adptv), m_Ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        m_gen(gen), m_F(), m_CR(), m_variant(), m_allowed_variants(allowed_variants), m_variant_adptv(variant_adptv), m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         for (auto variant: allowed_variants) {
             if (variant < 1u || variant > 18u) {
@@ -590,9 +590,9 @@ public:
                 }
 
                 df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-                if (df < m_Ftol) {
+                if (df < m_ftol) {
                     if (m_verbosity > 0u) {
-                        std::cout << "Exit condition -- ftol < " <<  m_Ftol << std::endl;
+                        std::cout << "Exit condition -- ftol < " <<  m_ftol << std::endl;
                     }
                     return pop;
                 }
@@ -698,7 +698,7 @@ public:
         stream(ss, "\n\tAllowed variants: ", m_allowed_variants);
         stream(ss, "\n\tSelf adaptation variant: ", m_variant_adptv);
         stream(ss, "\n\tStopping xtol: ", m_xtol);
-        stream(ss, "\n\tStopping ftol: ", m_Ftol);
+        stream(ss, "\n\tStopping ftol: ", m_ftol);
         stream(ss, "\n\tMemory: ", m_memory);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
         stream(ss, "\n\tSeed: ", m_seed);
@@ -718,7 +718,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen,m_F,m_CR,m_allowed_variants,m_variant_adptv,m_Ftol,m_xtol,m_memory,m_e,m_seed,m_verbosity,m_log);
+        ar(m_gen,m_F,m_CR,m_allowed_variants,m_variant_adptv,m_ftol,m_xtol,m_memory,m_e,m_seed,m_verbosity,m_log);
     }
 private:
     unsigned int                        m_gen;
@@ -727,7 +727,7 @@ private:
     mutable std::vector<unsigned int>   m_variant;
     std::vector<unsigned int>           m_allowed_variants;
     unsigned int                        m_variant_adptv;
-    double                              m_Ftol;
+    double                              m_ftol;
     double                              m_xtol;
     bool                                m_memory;
     mutable detail::random_engine_type  m_e;

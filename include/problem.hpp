@@ -271,11 +271,10 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
     sparsity_pattern gradient_sparsity_impl(const U &) const
     {
-        pagmo_throw(std::logic_error,"trying to access non-existing 'gradient_sparsity()' method: this "
-            "indicates a logical error in the implementation of the concrete problem class, as the 'gradient_sparsity()' "
-            "method is accessed only if 'has_gradient_sparsity()' returns true.");
+        pagmo_throw(std::logic_error,"gradient_sparsity() was signalled as present in the user-defined problem, but it is not actually implemented: this "
+            "indicates a logical error in the implementation of the user-defined problem class");
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(const U &p)
     {
         return p.has_gradient_sparsity();
@@ -285,7 +284,7 @@ struct prob_inner final: prob_inner_base
     {
        return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,int>::type = 0>
     static bool has_gradient_sparsity_impl(const U &)
     {
        return false;
@@ -324,11 +323,10 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
     {
-        pagmo_throw(std::logic_error,"trying to access non-existing 'hessians_sparsity()' method: this "
-            "indicates a logical error in the implementation of the concrete problem class, as the 'hessians_sparsity()' "
-            "method is accessed only if 'has_hessians_sparsity()' returns true");
+        pagmo_throw(std::logic_error,"hessians_sparsity() was signalled as present in the user-defined problem, but it is not actually implemented: this "
+            "indicates a logical error in the implementation of the user-defined problem class");
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(const U &p)
     {
         return p.has_hessians_sparsity();
@@ -338,7 +336,7 @@ struct prob_inner final: prob_inner_base
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,int>::type = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
        return false;
@@ -372,9 +370,9 @@ struct prob_inner final: prob_inner_base
     static void set_seed_impl(U &, unsigned int)
     {
         pagmo_throw(std::logic_error,"The set_seed method has been called but not implemented by the user.\n"
-            "A function with prototype 'void set_seed(unsigned int)' was expected in the user defined problem.");
+            "A function with prototype 'void set_seed(unsigned int)' was expected in the user-defined problem.");
     }
-    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<override_has_set_seed<U>::value,int>::type = 0>
     static bool has_set_seed_impl(const U &p)
     {
        return p.has_set_seed();
@@ -384,7 +382,7 @@ struct prob_inner final: prob_inner_base
     {
        return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value,int>::type = 0>
+    template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value,int>::type = 0>
     static bool has_set_seed_impl(const U &)
     {
        return false;
@@ -616,8 +614,11 @@ class problem
                     pagmo_throw(std::invalid_argument,"The size of the (dense) hessians "
                         "sparsity is too large");
                 }
+                // We resize rather than push back here, so that an std::length_error is called quickly rather
+                // than an std::bad_alloc after waiting the growth
+                m_hs_dim.resize(nf);
                 for (vector_double::size_type i = 0u; i < nf; ++i) {
-                    m_hs_dim.push_back(nx * (nx - 1u) / 2u + nx); // lower triangular
+                    m_hs_dim[i] = (nx * (nx - 1u) / 2u + nx); // lower triangular
                 }
             }
         }

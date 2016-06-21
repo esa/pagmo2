@@ -54,3 +54,51 @@ BOOST_AUTO_TEST_CASE(decision_vector_test)
     BOOST_CHECK(decision_vector({0,0},{1,1}, r_engine)[0] >= 0);
     BOOST_CHECK(decision_vector({0,0},{1,1}, r_engine)[1] < 1);
 }
+
+BOOST_AUTO_TEST_CASE(force_bounds_test)
+{
+    detail::random_engine_type r_engine(32u);
+    // force_bounds_random
+    {
+    vector_double x{1.,2.,3.};
+    vector_double x_fix = x;
+    detail::force_bounds_random(x_fix, {0., 0., 0.}, {3.,3.,3.}, r_engine);
+    BOOST_CHECK(x == x_fix);
+    detail::force_bounds_random(x_fix, {0., 0., 0.}, {1.,1.,1.}, r_engine);
+    BOOST_CHECK(x != x_fix);
+    BOOST_CHECK_EQUAL(x_fix[0], 1.);
+    BOOST_CHECK(x_fix[1] <= 1. && x_fix[1] >= 0.);
+    BOOST_CHECK(x_fix[2] <= 1. && x_fix[2] >= 0.);
+    }
+    // force_bounds_reflection
+    {
+    vector_double x{1.,2.,5.};
+    vector_double x_fix = x;
+    detail::force_bounds_reflection(x_fix, {0., 0., 0.}, {3.,3.,5.});
+    BOOST_CHECK(x == x_fix);
+    detail::force_bounds_reflection(x_fix, {0., 0., 0.}, {1., 1.9, 2.1});
+    BOOST_CHECK(x != x_fix);
+    BOOST_CHECK_EQUAL(x_fix[0], 1.);
+    BOOST_CHECK_CLOSE(x_fix[1], 1.8, 1e-8);
+    BOOST_CHECK_CLOSE(x_fix[2], 0.8, 1e-8);
+    }
+    // force_bounds_stick
+    {
+    vector_double x{1.,2.,5.};
+    vector_double x_fix = x;
+    detail::force_bounds_stick(x_fix, {0., 0., 0.}, {3.,3.,5.});
+    BOOST_CHECK(x == x_fix);
+    // ub
+    detail::force_bounds_stick(x_fix, {0., 0., 0.}, {1., 1.9, 2.1});
+    BOOST_CHECK(x != x_fix);
+    BOOST_CHECK_EQUAL(x_fix[0], 1.);
+    BOOST_CHECK_EQUAL(x_fix[1], 1.9);
+    BOOST_CHECK_EQUAL(x_fix[2], 2.1);
+    // lb
+    detail::force_bounds_stick(x_fix, {2., 2., 2.}, {3., 3., 3.});
+    BOOST_CHECK_EQUAL(x_fix[0], 2.);
+    BOOST_CHECK_EQUAL(x_fix[1], 2.);
+    BOOST_CHECK_EQUAL(x_fix[2], 2.1);
+
+    }
+}

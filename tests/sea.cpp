@@ -69,6 +69,11 @@ BOOST_AUTO_TEST_CASE(sea_evolve_test)
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{zdt{}},5u,23u}), std::invalid_argument);
     BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{hock_schittkowsky_71{}},5u,23u}), std::invalid_argument);
+    // Or with not enough individuals
+    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{rosenbrock{}},0u}), std::invalid_argument);
+    // And a clean exit for 0 generations
+    population pop{rosenbrock{25u}, 10u};
+    BOOST_CHECK(sea{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
 }
 
 BOOST_AUTO_TEST_CASE(sea_setters_getters_test)

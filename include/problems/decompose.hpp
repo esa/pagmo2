@@ -155,7 +155,6 @@ public:
     {
         return 1u;
     }
-
     /// Returns a dense gradient_sparsity for the decomposed problem
     sparsity_pattern gradient_sparsity() const
     {
@@ -218,12 +217,22 @@ private:
     // B - Specific to the decompose
     // A decomposed problem does not have gradients (Tchebycheff is not differentiable)
     vector_double gradient(const vector_double &dv) const = delete;
-    // delting has_gradient allow the automatic detection of gradients here, which will be thus be false
-    bool has_gradient() = delete;
+    // deleting has_gradient allows the automatic detection of gradients to see that decompose does not have any regardless
+    // of whether the class its build from has them. A decompose problem will thus never have gradients
+    bool has_gradient() const = delete;
+    // deleting has_gradient_sparsity allows the automatic detection of gradient_sparsisty to see that decompose does have an
+    // implementation for it. The sparsity will thus always be dense (decompose::gradient_sparsity) and referred to
+    // a problem with one objective
+    bool has_gradient_sparsity() const = delete;
     // A decomposed problem does not have hessians (Tchebycheff is not differentiable)
     std::vector<vector_double> hessians(const vector_double &dv) const = delete;
-    // delting has_gradient allow the automatic detection of hessians here, which will thus be false
-    bool has_hessians() = delete;
+    // deleting has_hessians allows the automatic detection of hessians to see that decompose does not have any regardless
+    // of whether the class its build from has them. A decompose problem will thus never have hessians
+    bool has_hessians() const = delete;
+    // deleting has_hessians_sparsity allows the automatic detection of hessians_sparsisty to see that decompose does have an
+    // implementation for it. The hessians_sparsisty will thus always be dense (decompose::hessians_sparsisty) and referred to
+    // a problem with one objective
+    bool has_hessians_sparsity() const = delete;
 
     vector_double decompose_fitness(const vector_double &f) const
     {

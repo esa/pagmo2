@@ -129,31 +129,16 @@ class population
          *
          * @param[in] x decision vector to be added to the population.
          *
-         * @throws std::invalid_argument in the following cases:
-         * - the dimension of \p x is inconsistent with the problem dimension,
-         * - the calculated fitness vector has a dimension which is inconsistent with the fitness dimension of the
-         *   problem.
          * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
+         * Wrong dimensions for the input decision vector or the output fitness will trigger an exception.
          */
         void push_back(const vector_double &x)
         {
             // Prepare quantities to be appended to the internal vectors.
             const auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
             auto x_copy(x);
+            // This line will throw if dv dimensions are wrong, or fitness dimensions are worng
             auto f = m_prob.fitness(x);
-            // Run a few consistency checks.
-            // 1. Check that the size of x is consistent with the problem dimension.
-            if (x_copy.size() != m_prob.get_nx()) {
-                pagmo_throw(std::invalid_argument,"A decision vector of size " + std::to_string(x_copy.size()) +
-                    " is being inserted into the population, but the problem dimension is " +
-                    std::to_string(m_prob.get_nx()));
-            }
-            // 2. Same as above for the fitness size.
-            if (f.size() != m_prob.get_nf()) {
-                pagmo_throw(std::invalid_argument,"A fitness vector of size " + std::to_string(f.size()) +
-                    " is being inserted into the population, but the fitness dimension of the problem is " +
-                    std::to_string(m_prob.get_nf()));
-            }
             // Reserve space in the vectors.
             // NOTE: in face of overflow here, reserve(0) will be called, which is fine.
             // The first push_back below will then fail, with no modifications to the class taking place.

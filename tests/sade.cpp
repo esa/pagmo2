@@ -56,9 +56,9 @@ for (unsigned int j = 1u; j <= 2u; ++j) {
         BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
     }
 }
-    // Here we check that the exit condition of ftol and xtol actually provoke an exit within 5000 gen (rosenbrock{2} is used)
+    // Here we check that the exit condition of ftol and xtol actually provoke an exit within 300u gen (rosenbrock{2} is used)
     {
-    sade user_algo{100u, 2, 1, 1e-6, 1e-6, false, 23u};
+    sade user_algo{300u, 2, 1, 1e-3, 1e-16, false, 23u};
     user_algo.set_verbosity(1u);
     problem prob{rosenbrock{2u}};
     population pop{prob, 20u, 23u};
@@ -66,12 +66,12 @@ for (unsigned int j = 1u; j <= 2u; ++j) {
     BOOST_CHECK(user_algo.get_log().size() < 5000u);
     }
     {
-    sade user_algo{100u, 2, 1, 1e-6, 1e-6, false, 23u};
+    sade user_algo{300u, 2, 1, 1e-16, 1e-3, false, 23u};
     user_algo.set_verbosity(1u);
     problem prob{rosenbrock{2u}};
     population pop{prob, 20u, 23u};
     pop = user_algo.evolve(pop);
-    BOOST_CHECK(user_algo.get_log().size() < 5000u);
+    BOOST_CHECK(user_algo.get_log().size() < 300u);
     }
 
     // We then check that the evolve throws if called on unsuitable problems
@@ -79,6 +79,9 @@ for (unsigned int j = 1u; j <= 2u; ++j) {
     BOOST_CHECK_THROW(sade{10u}.evolve(population{problem{zdt{}},15u}), std::invalid_argument);
     BOOST_CHECK_THROW(sade{10u}.evolve(population{problem{hock_schittkowsky_71{}},15u}), std::invalid_argument);
     BOOST_CHECK_THROW(sade{10u}.evolve(population{problem{inventory{}},15u}), std::invalid_argument);
+    // And a clean exit for 0 generations
+    population pop{rosenbrock{25u}, 10u};
+    BOOST_CHECK(sade{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
 }
 
 BOOST_AUTO_TEST_CASE(setters_getters_test)
@@ -98,7 +101,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     // Make one evolution
     problem prob{rosenbrock{2u}};
     population pop{prob, 15u, 23u};
-    algorithm algo{sade{10000000u, 2, 1, 1e-6, 1e-6, false, 23u}};
+    algorithm algo{sade{10000000u, 2, 1, 1e-3, 1e-3, false, 23u}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
 
