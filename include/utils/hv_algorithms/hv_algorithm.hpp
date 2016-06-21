@@ -242,7 +242,7 @@ namespace pagmo {
 				copy(points.begin() + idx + 1, points.end(), back_inserter(points_less));
 				double delta = hv_total - compute(points_less, r_point);
 
-				if (fabs(delta) < 1e-8) {
+				if (std::abs(delta) < 1e-8) {
 					delta = 0.0;
 				}
 				c.push_back(delta);
@@ -332,16 +332,16 @@ namespace pagmo {
 		virtual unsigned int extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point, bool(*cmp_func)(double, double)) const
 		{
 			// Trivial case
-			if (points.size() == 1) {
+			if (points.size() == 1u) {
 				return 0;
 			}
 
 			std::vector<double> c = contributions(points, r_point);
 
-			unsigned int idx_extreme = 0;
+			unsigned int idx_extreme = 0u;
 
 			// Check the remaining ones using the provided comparison function
-			for (unsigned int idx = 1; idx < c.size(); ++idx) {
+			for (unsigned int idx = 1u; idx < c.size(); ++idx) {
 				if (cmp_func(c[idx], c[idx_extreme])) {
 					idx_extreme = idx;
 				}

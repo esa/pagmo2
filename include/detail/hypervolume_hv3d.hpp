@@ -12,7 +12,7 @@ namespace pagmo
  * @see "Computing hypervolume contribution in low dimensions: asymptotically optimal algorithm and complexity results", Michael T. M. Emmerich, Carlos M. Fonseca
  *
  * @author Krzysztof Nowak (kn@linux.com)
- * @author Marcus Märtens (mmarcusx@gmail.com)
+ * @author Marcus Maertens (mmarcusx@gmail.com)
  */
 class hv3d : public hv_algorithm
 {
@@ -44,11 +44,12 @@ public:
 	double compute(std::vector<vector_double> &points, const vector_double &r_point) const
 	{
 		if (m_initial_sorting) {
-			sort(points.begin(), points.end(), vector_double_cmp(2, '<'));
+			sort(points.begin(), points.end(), [](vector_double a, vector_double b) {return a[2] < b[2]; });
 		}
 		double V = 0.0; // hypervolume
 		double A = 0.0; // area of the sweeping plane
 		std::multiset<vector_double, vector_double_cmp> T(vector_double_cmp(0, '>'));
+		//std::multiset<vector_double, vector_double_cmp> T(vector_double_cmp(0, '>'));
 
 		// sentinel points (r_point[0], -INF, r_point[2]) and (-INF, r_point[1], r_point[2])
 		const double INF = std::numeric_limits<double>::max();
@@ -59,11 +60,12 @@ public:
 		T.insert(sB);
 		double z3 = points[0][2];
 		T.insert(points[0]);
-		A = fabs((points[0][0] - r_point[0]) * (points[0][1] - r_point[1]));
+		A = std::abs((points[0][0] - r_point[0]) * (points[0][1] - r_point[1]));
 
 		std::multiset<vector_double>::iterator p;
 		std::multiset<vector_double>::iterator q;
-		for (std::vector<vector_double>::size_type idx = 1; idx < points.size(); ++idx) {
+		//for (std::vector<vector_double>::size_type idx = 1; idx < points.size(); ++idx) {
+		for (decltype(points.size()) idx = 1u; idx < points.size(); ++idx) {
 			p = T.insert(points[idx]);
 			q = (p);
 			++q; //setup q to be a successor of p
@@ -71,7 +73,7 @@ public:
 				T.erase(p); // disregard the point from further calculation
 			}
 			else {
-				V += A * fabs(z3 - (*p)[2]);
+				V += A * std::abs(z3 - (*p)[2]);
 				z3 = (*p)[2];
 				std::multiset<vector_double>::reverse_iterator rev_it(q);
 				++rev_it;
@@ -81,14 +83,14 @@ public:
 				while ((*rev_it)[1] >= (*p)[1]) {
 					rev_it_pred = rev_it;
 					++rev_it_pred;
-					A -= fabs(((*rev_it)[0] - (*rev_it_pred)[0])*((*rev_it)[1] - (*q)[1]));
+					A -= std::abs(((*rev_it)[0] - (*rev_it_pred)[0])*((*rev_it)[1] - (*q)[1]));
 					++rev_it;
 				}
-				A += fabs(((*p)[0] - (*(rev_it))[0])*((*p)[1] - (*q)[1]));
+				A += std::abs(((*p)[0] - (*(rev_it))[0])*((*p)[1] - (*q)[1]));
 				T.erase(rev_it.base(), erase_begin.base());
 			}
 		}
-		V += A * fabs(z3 - r_point[2]);
+		V += A * std::abs(z3 - r_point[2]);
 
 		return V;
 	}
@@ -111,13 +113,13 @@ public:
 
 		std::vector<std::pair<vector_double, unsigned int> > point_pairs;
 		point_pairs.reserve(p.size());
-		for (unsigned int i = 0; i < p.size(); ++i) {
+		for (unsigned int i = 0u; i < p.size(); ++i) {
 			point_pairs.push_back(std::make_pair(p[i], i));
 		}
 		if (m_initial_sorting) {
 			sort(point_pairs.begin(), point_pairs.end(), hycon3d_sort_cmp);
 		}
-		for (unsigned int i = 0; i < p.size(); ++i) {
+		for (unsigned int i = 0u; i < p.size(); ++i) {
 			p[i] = point_pairs[i].first;
 		}
 
@@ -236,7 +238,7 @@ public:
 
 		// Fix the indices
 		std::vector<double> contribs(n, 0.0);
-		for (unsigned int i = 0; i < c.size(); ++i) {
+		for (decltype(c.size()) i = 0u; i < c.size(); ++i) {
 			contribs[point_pairs[i].second] = c[i];
 		}
 		return contribs;
@@ -254,7 +256,7 @@ public:
 	*/
 	void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
 	{
-		if (r_point.size() != 3) {
+		if (r_point.size() != 3u) {
 			pagmo_throw(std::invalid_argument, "Algorithm hv3d works only for 3-dimensional cases");
 		}
 
@@ -311,7 +313,7 @@ private:
 	*/
 	static double box_volume(const box3d &b)
 	{
-		return fabs((b.ux - b.lx) * (b.uy - b.ly) * (b.uz - b.lz));
+		return std::abs((b.ux - b.lx) * (b.uy - b.ly) * (b.uz - b.lz));
 	}
 
 };
@@ -322,7 +324,7 @@ inline std::vector<double> hv2d::contributions(std::vector<vector_double> &point
     vector_double new_r(r_point);
     new_r.push_back(1.0);
 
-    for (unsigned int i = 0; i < points.size(); ++i) {
+    for (decltype(points.size()) i = 0u; i < points.size(); ++i) {
         new_points[i][0] = points[i][0];
         new_points[i][1] = points[i][1];
         new_points[i][2] = 0.0;
@@ -340,9 +342,9 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_
 {
 	auto fdim = r_point.size();
 	
-	if (fdim == 2) {
+	if (fdim == 2u) {
 		return hv2d().clone();
-	} else if (fdim == 3) {
+	} else if (fdim == 3u) {
 		return hv3d().clone();
 	} else {
 		return hvwfg().clone();
@@ -361,10 +363,10 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_contributions(const v
 {
 	auto fdim = r_point.size();
 	
-	if (fdim == 2) {
+	if (fdim == 2u) {
 		return hv2d().clone();
 	}
-	else if (fdim == 3) {
+	else if (fdim == 3u) {
 		return hv3d().clone();
 	}
 	else {

@@ -27,10 +27,10 @@ public:
 	*/
 	double compute(std::vector<vector_double> &points, const vector_double &r_point) const
 	{
-		if (points.size() == 0) {
+		if (points.size() == 0u) {
 			return 0.0;
 		}
-		else if (points.size() == 1) {
+		else if (points.size() == 1u) {
 			return hv_algorithm::volume_between(points[0], r_point);
 		}
 
@@ -42,11 +42,11 @@ public:
 
 		// width of the sweeping line
 		double w = r_point[0] - points[0][0];
-		for (unsigned int idx = 0; idx < points.size() - 1; ++idx) {
-			hypervolume += (points[idx + 1][1] - points[idx][1]) * w;
-			w = std::max(w, r_point[0] - points[idx + 1][0]);
+		for (decltype(points.size()) idx = 0u; idx < points.size() - 1u; ++idx) {
+			hypervolume += (points[idx + 1u][1] - points[idx][1]) * w;
+			w = std::max(w, r_point[0] - points[idx + 1u][0]);
 		}
-		hypervolume += (r_point[1] - points[points.size() - 1][1]) * w;
+		hypervolume += (r_point[1] - points[points.size() - 1u][1]) * w;
 
 		return hypervolume;
 	}
@@ -67,10 +67,10 @@ public:
 	*/
 	double compute(double** points, vector_double::size_type n_points, double* r_point) const
 	{
-		if (n_points == 0) {
+		if (n_points == 0u) {
 			return 0.0;
 		}
-		else if (n_points == 1) {
+		else if (n_points == 1u) {
 			return volume_between(points[0], r_point, 2);
 		}
 
@@ -82,11 +82,11 @@ public:
 
 		// width of the sweeping line
 		double w = r_point[0] - points[0][0];
-		for (decltype(n_points) idx = 0; idx < n_points - 1; ++idx) {
-			hypervolume += (points[idx + 1][1] - points[idx][1]) * w;
-			w = std::max(w, r_point[0] - points[idx + 1][0]);
+		for (decltype(n_points) idx = 0; idx < n_points - 1u; ++idx) {
+			hypervolume += (points[idx + 1u][1] - points[idx][1]) * w;
+			w = std::max(w, r_point[0] - points[idx + 1u][0]);
 		}
-		hypervolume += (r_point[1] - points[n_points - 1][1]) * w;
+		hypervolume += (r_point[1] - points[n_points - 1u][1]) * w;
 
 		return hypervolume;
 	}
@@ -121,7 +121,7 @@ public:
 	*/
 	void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
 	{
-		if (r_point.size() != 2) {
+		if (r_point.size() != 2u) {
 			pagmo_throw(std::invalid_argument, "Algorithm hv2d works only for 2-dimensional cases.");
 		}
 

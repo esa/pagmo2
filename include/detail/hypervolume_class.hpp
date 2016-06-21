@@ -10,10 +10,7 @@ public:
   * Initiates hypervolume with empty set of points.
   * Used for serialization purposes.
   */
-  hypervolume() : m_copy_points(true), m_verify(false)
-  {
-    m_points.resize(0);
-  }
+  hypervolume() : m_points({}), m_copy_points(true), m_verify(false) {}
 
   /// Constructor from initializer list
   /**
@@ -85,7 +82,7 @@ public:
   *
   * @param[in] copy_points boolean value stating whether the hypervolume computation may use original set
   */
-  void set_copy_points(const bool copy_points)
+  void set_copy_points(bool copy_points)
   {
     m_copy_points = copy_points;
   }
@@ -131,13 +128,13 @@ public:
   static double get_expected_operations(const unsigned int n, const unsigned int d)
   {
     if (d <= 3) {
-      return d * n * log(n);  // hv3d
+      return d * n * std::log(n);  // hv3d
     }
     else if (d == 4) {
       return 4.0 * n * n;  // hv4d
     }
     else {
-      return 0.0005 * d * pow(n, d * 0.5);  // exponential complexity
+      return 0.0005 * d * std::pow(n, d * 0.5);  // exponential complexity
     }
   }
 
@@ -150,7 +147,7 @@ public:
   *
   * @return reference point
   */
-  vector_double get_refpoint(const double offset = 0.0) const {
+  vector_double refpoint(const double offset = 0.0) const {
     // Corner case
     if (m_points.size() == 0u) {
       return {};
@@ -160,7 +157,7 @@ public:
     vector_double ref_point(m_points[0].begin(), m_points[0].end());
 
     for (decltype(fdim) f_idx = 0u; f_idx < fdim; ++f_idx) {
-      for (std::vector<vector_double>::size_type idx = 1; idx < m_points.size(); ++idx) {
+	  for (std::vector<vector_double>::size_type idx = 1; idx < m_points.size(); ++idx) {
         ref_point[f_idx] = std::max(ref_point[f_idx], m_points[idx][f_idx]);
       }
     }
@@ -343,7 +340,7 @@ public:
 
 	  // Trivial case
 	  if (m_points.size() == 1) {
-		  return 0;
+		  return 0u;
 	  }
 
 	  // copy the initial set of points, as the algorithm may alter its contents
@@ -366,7 +363,7 @@ public:
   *
   * @return index of the least contributing point
   */
-  unsigned int hypervolume::least_contributor(const vector_double &r_point) const
+  unsigned int least_contributor(const vector_double &r_point) const
   {
 	  return least_contributor(r_point, get_best_contributions(r_point));
   }
@@ -381,7 +378,7 @@ public:
   *
   * @return index of the most contributing point
   */
-  unsigned int hypervolume::greatest_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+  unsigned int greatest_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
   {
 	  if (m_verify) {
 		  verify_before_compute(r_point, hv_algo);
@@ -406,7 +403,7 @@ public:
   *
   * @return index of the most contributing point
   */
-  unsigned int hypervolume::greatest_contributor(const vector_double &r_point) const
+  unsigned int greatest_contributor(const vector_double &r_point) const
   {
 	  return greatest_contributor(r_point, get_best_contributions(r_point));
   }

@@ -89,6 +89,9 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
 	// refpoint dominating all points
 	BOOST_CHECK_THROW(hv.compute({ 0, 0 }), std::invalid_argument);
 
+	// invalid dimensions of points.
+	BOOST_CHECK_THROW(hv = hypervolume({ {2.3, 3.4, 5.6}, {1.0, 2.0, 3.0, 4.0} }), std::invalid_argument);
+
 	// Calling specific algorithms
 	std::shared_ptr<hv_algorithm> hv_algo_2d = hv2d().clone();
 	std::shared_ptr<hv_algorithm> hv_algo_3d = hv3d().clone();
@@ -313,10 +316,10 @@ BOOST_AUTO_TEST_CASE(hypervolume_exclusive_test) {
 BOOST_AUTO_TEST_CASE(hypervolume_refpoint_test) {
 	hypervolume hv = hypervolume{ {3, 1},{2, 2},{1, 3} };
 
-	BOOST_CHECK((hv.get_refpoint() == vector_double{3, 3}));
-	BOOST_CHECK((hv.get_refpoint(5) == vector_double{ 8, 8 }));
-	BOOST_CHECK((hv.get_refpoint(0) == vector_double{ 3, 3 }));
-	BOOST_CHECK((hv.get_refpoint(-0) == vector_double{ 3, 3 }));
-	BOOST_CHECK((hv.get_refpoint(-1) == vector_double{ 2, 2 }));
+	BOOST_CHECK((hv.refpoint() == vector_double{3, 3}));
+	BOOST_CHECK((hv.refpoint(5) == vector_double{ 8, 8 }));
+	BOOST_CHECK((hv.refpoint(0) == vector_double{ 3, 3 }));
+	BOOST_CHECK((hv.refpoint(-0) == vector_double{ 3, 3 }));
+	BOOST_CHECK((hv.refpoint(-1) == vector_double{ 2, 2 }));
 	
 }

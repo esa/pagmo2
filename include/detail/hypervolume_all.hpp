@@ -1,6 +1,3 @@
-#ifndef PAGMO_UTIL_HV_ALGORITHMS_HV2D_H
-#define PAGMO_UTIL_HV_ALGORITHMS_HV2D_H
-
 #include <set>
 
 #if defined(__clang__) || defined(__GNUC__)
@@ -16,9 +13,6 @@
 #include "hypervolume_hv3d.hpp"
 
 
-
 #if defined(__clang__) || defined(__GNUC__)
     #pragma GCC diagnostic pop
-#endif
-
 #endif
