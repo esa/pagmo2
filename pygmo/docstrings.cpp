@@ -415,8 +415,8 @@ Args:
     dim (int): number of dimensions
 
 Raises:
-    OverflowError: if `dim` is negative or greater than an implementation-defined value
-    ValueError: if `dim` is less than 2
+    OverflowError: if *dim* is negative or greater than an implementation-defined value
+    ValueError: if *dim* is less than 2
 
 See :cpp:class:`pagmo::rosenbrock`.
 
@@ -442,10 +442,44 @@ Args:
     seed (int): seed used by the internal random number generator (default is random)
 
 Raises:
-    OverflowError: if `gen` is negative or greater than an implementation-defined value
-    ValueError: if `cc`, `cs`, `c1`, `cmu` are not in [0,1] or -1
+    OverflowError: if *gen* is negative or greater than an implementation-defined value
+    ValueError: if *cc*, *cs*, *c1*, *cmu* are not in [0,1] or -1
 
 See :cpp:class:`pagmo::cmaes`.
+
+)";
+}
+
+std::string decompose_decompose_fitness_docstring()
+{
+    return R"(decompose_fitness(f, weights, ref_point)
+
+Returns the original fitness of the multi-objective problem
+
+Args:
+    f (array or list of doubles): fitness vector to be decomposed
+    weights (array or list of doubles): weights of the decomposition
+    ref_point (array or list of doubles): reference point for the decomposition (only for tchebycheff and bi)
+
+Raises:
+    ValueError: if the dimensions of *f*, *weights* or *ref_point* are inconsistent
+    TypeError: if *f*, *weights* or *ref_point* cannot be converted to vectors of doubles
+
+Examples:
+
+>>> from pygmo.core import *
+>>> prob = problem(zdt(id=1, param=30))
+>>> prob_d = problem(decompose(prob, [0.5,0.5], [0,0], "weighted", False))
+>>> fit = prob.fitness([0.5]*30)
+>>> fit_d = prob_d.fitness([0.5]*30)
+>>> print(fit)
+[ 0.5        3.8416876]
+>>> print(fit_d)
+[ 2.1708438]
+>>> prob_d.extract(decompose).decompose_fitness(fit, [0.5,0.5],[0,0])
+array([ 2.1708438])
+>>> prob_d.extract(decompose).decompose_fitness(fit, [0.4,0.6],[0,0])
+array([ 2.50501256])
 
 )";
 }

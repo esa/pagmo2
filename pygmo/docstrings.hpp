@@ -30,6 +30,8 @@ std::string rosenbrock_docstring();
 
 std::string cmaes_docstring();
 
+std::string decompose_decompose_fitness_docstring();
+
 }
 
 #endif

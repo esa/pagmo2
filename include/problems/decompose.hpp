@@ -156,7 +156,7 @@ public:
      *
      * @note This is *not* the fitness of the decomposed problem, that is returned by calling decompose::fitness()
      *
-     * @param[in] x A decision vector
+     * @param[in] x Input decision vector
      *
      * @returns the fitness of the original multi-objective problem
      */
@@ -171,18 +171,18 @@ public:
      *
      * @param[in] f Input fitness
      * @param[in] weight the weight to be used in the decomposition
-     * @param[in] ref_z the reference point to be used if either "tchebycheff" or "bi"
-     * was indicated as a decomposition method
+     * @param[in] ref_point the reference point to be used if either "tchebycheff" or "bi"
+     * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
      * @returns the decomposed fitness vector
-     * @throws std::invalid_argument if the input \p f, \p weight and \p ref_z have different sizes
+     * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes
      */
-    vector_double decompose_fitness(const vector_double &f, const vector_double &weight, const vector_double &ref_z) const
+    vector_double decompose_fitness(const vector_double &f, const vector_double &weight, const vector_double &ref_point) const
     {
         if (weight.size() != f.size()) {
             pagmo_throw(std::invalid_argument, "Weight vector size must be equal to the number of objectives. The size of the weight vector is " + std::to_string(weight.size()) + " while " + std::to_string(f.size()) + " objectives were detected");
         }
-        if (ref_z.size() != f.size()) {
-            pagmo_throw(std::invalid_argument, "Reference point size must be equal to the number of objectives. The size of the reference point is " + std::to_string(ref_z.size()) + " while " + std::to_string(f.size()) + " objectives were detected");
+        if (ref_point.size() != f.size()) {
+            pagmo_throw(std::invalid_argument, "Reference point size must be equal to the number of objectives. The size of the reference point is " + std::to_string(ref_point.size()) + " while " + std::to_string(f.size()) + " objectives were detected");
         }
         double fd = 0.;
         if(m_method == "weighted") {
@@ -193,7 +193,7 @@ public:
             double tmp,fixed_weight;
             for(decltype(f.size()) i = 0u; i < f.size(); ++i) {
                (weight[i] == 0.) ? (fixed_weight = 1e-4) : (fixed_weight = weight[i]); //fixes the numerical problem of 0 weights
-               tmp = fixed_weight * std::abs(f[i] - ref_z[i]);
+               tmp = fixed_weight * std::abs(f[i] - ref_point[i]);
                if(tmp > fd) {
                    fd = tmp;
                }
@@ -203,7 +203,7 @@ public:
             double d1 = 0.;
             double weight_norm = 0.;
             for(decltype(f.size()) i = 0u; i < f.size(); ++i) {
-                d1 += (f[i] - ref_z[i]) * weight[i];
+                d1 += (f[i] - ref_point[i]) * weight[i];
                 weight_norm += std::pow(weight[i],2);
             }
             weight_norm = std::sqrt(weight_norm);
@@ -211,7 +211,7 @@ public:
 
             double d2 = 0.;
             for(decltype(f.size()) i = 0u; i < f.size(); ++i) {
-                d2 += std::pow(f[i] - (ref_z[i] + d1 * weight[i] / weight_norm), 2);
+                d2 += std::pow(f[i] - (ref_point[i] + d1 * weight[i] / weight_norm), 2);
             }
             d2 = std::sqrt(d2);
             fd = d1 + THETA * d2;
@@ -251,7 +251,7 @@ public:
             "\n\tDecomposition method: ", m_method,
             "\n\tDecomposition weight: ", m_weight,
             "\n\tDecomposition reference: ", m_z,
-            "\n\tIdeal point adaptation: ", m_adapt_ideal
+            "\n\tIdeal point adaptation: ", m_adapt_ideal, "\n"
         );
         return static_cast<const problem*>(this)->get_extra_info() + oss.str();
     }

@@ -99,6 +99,48 @@ BOOST_AUTO_TEST_CASE(decompose_fitness_test)
     BOOST_CHECK_CLOSE(fdbi[0], d1 + 5.0 * d2, 1e-8);
 }
 
+BOOST_AUTO_TEST_CASE(original_and_decomposed_fitness_test)
+{
+    zdt p{zdt{1u,2u}};
+    vector_double lambda{0.5, 0.5};
+    vector_double z{0., 0.};
+    decompose pdw{zdt{1u,2u}, lambda, z, "weighted", false};
+    decompose pdtch{zdt{1u,2u}, lambda, z, "tchebycheff", false};
+    decompose pdbi{zdt{1u,2u}, lambda, z, "bi", false};
+
+    vector_double dv{1.,1.};
+    auto f = p.fitness(dv);
+    auto fdw = pdw.original_fitness(dv);
+    auto fdtch = pdtch.original_fitness(dv);
+    auto fdbi = pdbi.original_fitness(dv);
+
+    // We check that the original fitness is always the same
+    BOOST_CHECK(f == fdw);
+    BOOST_CHECK(f == fdtch);
+    BOOST_CHECK(f == fdbi);
+
+    // We check that the decomposed fitness is correct (by a direct call, not via fitness)
+    lambda = {0.2,0.8};
+    z = {0.1,0.1};
+    fdw = pdw.decompose_fitness(f, lambda, z);
+    fdtch = pdtch.decompose_fitness(f, lambda, z);
+    fdbi = pdbi.decompose_fitness(f, lambda, z);
+    BOOST_CHECK_CLOSE(fdw[0], f[0] * lambda[0] + f[1] * lambda[1], 1e-8);
+    BOOST_CHECK_CLOSE(fdtch[0], std::max(lambda[0]*std::abs(f[0] - z[0]), lambda[1]*std::abs(f[1] - z[1])), 1e-8);
+    double lnorm = std::sqrt(lambda[0]*lambda[0] + lambda[1]*lambda[1]);
+    vector_double ilambda{lambda[0]/lnorm, lambda[1]/lnorm};
+    double d1 =(f[0] - z[0]) * ilambda[0] + (f[1] - z[1]) * ilambda[1];
+    double d20 = f[0] - (z[0] + d1 * ilambda[0]);
+    double d21 = f[1] - (z[1] + d1 * ilambda[1]);
+    d20*=d20; d21*=d21;
+    double d2 = std::sqrt(d20 + d21);
+    BOOST_CHECK_CLOSE(fdbi[0], d1 + 5.0 * d2, 1e-8);
+
+    // We check the throws
+    BOOST_CHECK_THROW(pdw.decompose_fitness(f, {1.,2.,3}, z), std::invalid_argument);
+    BOOST_CHECK_THROW(pdw.decompose_fitness(f, lambda, {1.}), std::invalid_argument);
+}
+
 BOOST_AUTO_TEST_CASE(decompose_ideal_point_adaptation_test)
 {
     // no adaptation

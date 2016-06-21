@@ -264,6 +264,12 @@ static inline bp::object pop_get_ID_wrapper(const population &pop)
     return pygmo::vull_to_a(pop.get_ID());
 }
 
+// Decompose methods wrappers
+inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decompose &p, const bp::object &f, const bp::object &weights, const bp::object &z_ref)
+{
+    return pygmo::vd_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weights), pygmo::to_vd(z_ref)));
+}
+
 // ZDT wrappers.
 static inline double zdt_p_distance_wrapper(const zdt &z, const bp::object &x)
 {
@@ -480,10 +486,8 @@ BOOST_PYTHON_MODULE(core)
     dp.def("__init__",pygmo::make_decompose_init<bp::object>())
         // Problem extraction.
         .def("_py_extract",&pygmo::generic_py_extract<decompose>)
-        // Returns the original fitness
-        .def("original_fitness", &decompose::original_fitness)
         // Returns the decomposed fitness with an arbitrary weight and reference point
-        .def("decompose_fitness", &decompose::decompose_fitness);
+        .def("decompose_fitness", &decompose_decompose_fitness_wrapper,pygmo::decompose_decompose_fitness_docstring().c_str(), (bp::arg("f"), bp::arg("weights"), bp::arg("ref_point")));
     // Mark it as a cpp problem.
     dp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from decompose.
