@@ -3,13 +3,18 @@
 Multi-objective optimization utilities
 ======================================
 
-A number of utilities to compute quantities that are of relevance to 
+A number of utilities to compute quantities that are of relevance to
 the determination of non dominated fronts, Pareto dominance criterias and
 more in general, to multi-objective optimization tasks.
 
 --------------------------------------------------------------------------
 
 .. doxygenfunction:: pagmo::pareto_dominance
+   :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::pareto_front_2d
    :project: PaGMOreborn
 
 --------------------------------------------------------------------------

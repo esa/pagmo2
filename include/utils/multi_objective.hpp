@@ -44,7 +44,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
         pagmo_throw(std::invalid_argument,
             "Different number of objectives: " + std::to_string(obj1.size()) +
             " and " + std::to_string(obj2.size()) +
-         ": cannot define dominance"); // LCOV_EXCL_LINE
+         ": cannot define dominance");
     }
     vector_double::size_type count1 = 0u;
     vector_double::size_type count2 = 0u;

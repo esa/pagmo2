@@ -22,6 +22,31 @@ BOOST_AUTO_TEST_CASE(pareto_dominance_test)
     BOOST_CHECK_THROW(pareto_dominance({1,2},{3,4,5}), std::invalid_argument);
 }
 
+BOOST_AUTO_TEST_CASE(pareto_2d_test)
+{
+    // Corner cases
+    BOOST_CHECK(pareto_front_2d({}) == std::vector<vector_double::size_type>{});
+    // We test some known cases
+    {
+        auto res = pareto_front_2d({{0,1},{1,1},{1,2}});
+        auto sol = std::vector<vector_double::size_type>{0u};
+        BOOST_CHECK(std::is_permutation(res.begin(), res.end(), sol.begin()));
+    }
+    {
+        auto res = pareto_front_2d({{0,1},{0,1},{-1,2},{-1,2}});
+        auto sol = std::vector<vector_double::size_type>{0u,1u,2u,3u};
+        BOOST_CHECK(std::is_permutation(res.begin(), res.end(), sol.begin()));
+    }
+    {
+        auto res = pareto_front_2d({{0,1},{11,9},{6,4},{2,4},{4,2},{1,0}});
+        auto sol = std::vector<vector_double::size_type>{0u,5u};
+        BOOST_CHECK(std::is_permutation(res.begin(), res.end(), sol.begin()));
+    }
+    // And we test the throws
+    BOOST_CHECK_THROW(pareto_front_2d({{1,2},{2},{2,3,4}}), std::invalid_argument);
+    BOOST_CHECK_THROW(pareto_front_2d({{2,3,2},{1,2,5},{2,3,4}}), std::invalid_argument);
+}
+
 BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
 {
     // We create various values to compute
@@ -196,11 +221,12 @@ BOOST_AUTO_TEST_CASE(select_best_N_mo_test)
     }
 
     // Test 3 - throws
-    N=4;
     example = {{0},{1,2},{2},{0,0},{6}};
-    BOOST_CHECK_THROW(select_best_N_mo(example, 2), std::invalid_argument);
+    BOOST_CHECK_THROW(select_best_N_mo(example, 2u), std::invalid_argument);
     example = {{},{},{},{},{},{}};
-    BOOST_CHECK_THROW(select_best_N_mo(example, 2), std::invalid_argument);
+    BOOST_CHECK_THROW(select_best_N_mo(example, 2u), std::invalid_argument);
+    example = {{1,2},{3,4},{0,1},{1,0},{2,2},{2,4}};
+    BOOST_CHECK_THROW(select_best_N_mo(example, 0u), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(ideal_test)
@@ -208,6 +234,9 @@ BOOST_AUTO_TEST_CASE(ideal_test)
     std::vector<vector_double> example;
     vector_double result;
     // Test 1
+    example = {};
+    result = {};
+    BOOST_CHECK(ideal(example) == result);
     example = {{},{},{},{},{}};
     result = {};
     BOOST_CHECK(ideal(example) == result);
@@ -232,6 +261,9 @@ BOOST_AUTO_TEST_CASE(nadir_test)
     std::vector<vector_double> example;
     vector_double result;
     // Test 1
+    example = {};
+    result = {};
+    BOOST_CHECK(nadir(example) == result);
     example = {{},{},{},{},{}};
     result = {};
     BOOST_CHECK(nadir(example) == result);
