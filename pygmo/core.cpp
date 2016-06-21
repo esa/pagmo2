@@ -265,7 +265,7 @@ static inline bp::object pop_get_ID_wrapper(const population &pop)
 }
 
 // Decompose methods wrappers
-inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decompose &p, const bp::object &f, const bp::object &weights, const bp::object &z_ref)
+static inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decompose &p, const bp::object &f, const bp::object &weights, const bp::object &z_ref)
 {
     return pygmo::vd_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weights), pygmo::to_vd(z_ref)));
 }
