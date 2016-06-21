@@ -44,7 +44,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
         pagmo_throw(std::invalid_argument,
             "Different number of objectives: " + std::to_string(obj1.size()) +
             " and " + std::to_string(obj2.size()) +
-         ": cannot define dominance");
+         ": cannot define dominance"); // LCOV_EXCL_LINE
     }
     vector_double::size_type count1 = 0u;
     vector_double::size_type count2 = 0u;
@@ -59,7 +59,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
     return ( ( (count1+count2) == obj1.size()) && (count1 > 0u) );
 }
 
-/// Pareto Front 2D (Kung's algorithm)
+/// Non dominated front 2D (Kung's algorithm)
 /**
  * Finds the Pareto front of a set of two dimensional objectives. Complexity is O(N logN) and is thus lower than the
  * complexity of calling pagmo::fast_non_dominated_sorting
@@ -69,9 +69,11 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
  *
  * @param[in] input_objs an <tt>std::vector</tt> containing the points (i.e. vector of objectives)
  *
+ * @return A <tt>std::vector</tt> containing the indexes of the points in the non-dominated front
+ *
  * @throws std::invalid_argument If the objective vectors are not all containing two-objectives
  */
-std::vector<vector_double::size_type> pareto_front_2d(const std::vector<vector_double> &input_objs)
+std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<vector_double> &input_objs)
 {
     // If the input is empty return an empty vector
     if (input_objs.size() == 0u) {

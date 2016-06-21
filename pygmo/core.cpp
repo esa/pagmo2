@@ -479,7 +479,11 @@ BOOST_PYTHON_MODULE(core)
     // Constructor from Python user-defined problem.
     dp.def("__init__",pygmo::make_decompose_init<bp::object>())
         // Problem extraction.
-        .def("_py_extract",&pygmo::generic_py_extract<decompose>);
+        .def("_py_extract",&pygmo::generic_py_extract<decompose>)
+        // Returns the original fitness
+        .def("original_fitness", &decompose::original_fitness)
+        // Returns the decomposed fitness with an arbitrary weight and reference point
+        .def("decompose_fitness", &decompose::decompose_fitness);
     // Mark it as a cpp problem.
     dp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from decompose.
