@@ -146,6 +146,16 @@ vector_double decision_vector(const vector_double &lb, const vector_double &ub, 
     return decision_vector({lb, ub}, r_engine);
 }
 
+template <typename T, typename U>
+inline T safe_cast(const U &x)
+{
+    static_assert(std::is_unsigned<T>::value && std::is_unsigned<U>::value,"Safe cast can only be used on unsigned types");
+    if (x > std::numeric_limits<T>::max()) {
+        pagmo_throw(std::overflow_error,"Converting between unsigned types caused a loss");
+    }
+    return static_cast<T>(x);
+}
+
 namespace detail
 {
     // modifies a chromosome so that it will be in the bounds. elements that are off are resampled at random in the bounds

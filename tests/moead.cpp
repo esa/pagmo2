@@ -9,6 +9,7 @@
 #include "../include/algorithm.hpp"
 #include "../include/algorithms/moead.hpp"
 #include "../include/io.hpp"
+#include "../include/problems/zdt.hpp"
 #include "../include/serialization.hpp"
 #include "../include/types.hpp"
 
@@ -19,4 +20,7 @@ BOOST_AUTO_TEST_CASE(moead_construction)
     moead user_algo{};
     algorithm algo{user_algo};
     print(algo,'\n');
+    problem prob{zdt{}};
+    population pop{prob, 40u};
+    pop = algo.evolve(pop);
 }
