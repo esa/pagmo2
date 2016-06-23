@@ -113,7 +113,6 @@ public:
         }
         // Generate the vector of weight's vectors for the NP decomposed problems. Will throw if the population size is not compatible with the weight generation scheme chosen
         auto weights = generate_weights(prob.get_nf(), NP);
-        print("Weights: ", weights, '\n');
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
@@ -129,7 +128,6 @@ public:
     	vector_double candidate(dim);
         // We compute, for each vector of weights, the k = m_T neighbours
         auto neigh_idxs = compute_neighbours(weights);
-        print("Neighbours ids: ", neigh_idxs, '\n');
         // We compute the initial ideal point (will be adapted along the course of the algorithm)
         vector_double ideal_point = ideal(pop.get_f());
         // We create a decompose problem which will be used only to access its decompose_fitness(f) method
@@ -342,7 +340,6 @@ private:
                 }
                 H--;
             }
-
             // We check that NP equals the population size resulting from H
             if (std::abs(static_cast<double>(n_w) - binomial_coefficient(H + n_f - 1u, n_f - 1u)) > 1E-8 ) {
                 std::ostringstream error_message;
@@ -352,7 +349,6 @@ private:
                     << " is possible.";
                     pagmo_throw(std::invalid_argument, error_message.str());
             }
-
             // We generate the weights
             std::vector<population::size_type> range(H + 1u);
             std::iota(range.begin(), range.end(), std::vector<population::size_type>::size_type(0u));
@@ -475,7 +471,6 @@ private:
             std::vector<population::size_type> idxs(weights.size());
             std::iota(idxs.begin(), idxs.end(), population::size_type(0u));
             std::sort(idxs.begin(), idxs.end(), [&distances] (auto idx1, auto idx2) {return distances[idx1] < distances[idx2];});
-print("distances: ", distances);
             neigh_idxs.push_back(idxs);
         }
         // We remove the first element containg the self-distance (0) and crop the rest to m_T
