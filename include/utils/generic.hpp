@@ -150,7 +150,15 @@ vector_double decision_vector(const vector_double &lb, const vector_double &ub, 
 /**
  * Performs a cast between unsigned types throwing if the input cannot be represented in the new type
  *
- * @param[in] an unsigned value \p x to be casted to \p T
+ * Example:
+ * @code
+ * unsigned short s = std::numeric_limits<unsigned short>::max();
+ * unsigned long l = std::numeric_limits<unsigned long>::max();
+ * auto res1 = safe_cast<unsigned long>(s); // Will always work
+ * auto res2 = safe_cast<unsigned short>(l); // Will throw an std::overflow_error if precision is lost
+ * @endcode
+ *
+ * @param[in] x an unsigned value \p x to be casted to \p T
  * @return the input \p x safey casted to \p T
  * @throws std::overflow_error if \p x cannot be represented by the new type
  */
@@ -186,9 +194,14 @@ double binomial_coefficient(vector_double::size_type n, vector_double::size_type
  * The algorithm complexity (naive implementation) is \f$ O(MN^2)\f$ where \f$N\f$ is the number of
  * points and \f$M\f$ their dimensionality
  *
- * @param[in] points The \f$N\f$ having dimension \f$M\f$
+ * Example:
+ * @code
+ * auto res = kNN({{1, 1}, {2, 2}, {3.1, 3.1}, {5, 5}}, 2u);
+ * @endcode
+ *
+ * @param[in] points the \f$N\f$ points having dimension \f$M\f$
  * @param[in] k number of neighbours to detect
- * @return An <tt>std::vector<std::vector<population::size_type> > <\tt> containing the indexes of the sorted k nearest neighbours
+ * @return An <tt>std::vector<std::vector<population::size_type> > </tt> containing the indexes of the k nearest neighbours sorted by distance
  * @throws std::invalid_argument If the points do not all have the same dimension.
  */
 std::vector<std::vector<vector_double::size_type> > kNN(const std::vector<vector_double> &points, std::vector<vector_double>::size_type k) {

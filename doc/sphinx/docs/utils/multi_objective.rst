@@ -46,3 +46,8 @@ more in general, to multi-objective optimization tasks.
 
 .. doxygenfunction:: pagmo::nadir
    :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::decomposition_weights
+  :project: PaGMOreborn

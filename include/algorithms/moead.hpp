@@ -19,7 +19,23 @@
 
 namespace pagmo
 {
-
+/// Multi Objective Evolutionary Algorithms by Decomposition (the DE variant)
+/**
+  * \image html moead.png "Solving by decomposition" width=3cm
+  *
+  * MOEA/D-DE is a very successfull multi-objective optimization algorithms, always worth a try. Based on the idea of problem decomposition,
+  * it leverages on evolutionary operators to combine good solutions of neighbouring problems thus allowing for nice convergence
+  * properties. MOEA/D is, essentially, a framework and this particual algorithm implemented in pagmo with the name pagmo::moead
+  * uses the rand/2/exp Differential Evolution operator followed by a polynomial mutation to create offsprings, and the tchebycheff
+  * decomposition method to instantiate the decomposed problems. A diversity preservation mechanism, as proposed in the work
+  * from Li et al. referenced below, is also implemented.
+  *
+  * @note The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This allows to have MOEA/D-DE
+  * work on populations having arbitrary size, while preserving a nice coverage of the final non-dominated front.
+  *
+  * @see Zhang, Qingfu, and Hui Li. "MOEA/D: A multiobjective evolutionary algorithm based on decomposition." Evolutionary Computation, IEEE Transactions on 11.6 (2007): 712-731.
+  * @see Li, Hui, and Qingfu Zhang. "Multiobjective optimization problems with complicated Pareto sets, MOEA/D and NSGA-II." Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
+ */
 class moead
 {
 public:
@@ -30,12 +46,13 @@ public:
      * @param[in] gen number of generations
      * @param[in] weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random")
      * @param[in] T size of the weight's neighborhood
-     * @param[in] CR Crossover parameter in the Differential Evolution operator
+     * @param[in] CR crossover parameter in the Differential Evolution operator
      * @param[in] F parameter for the Differential Evolution operator
-     * @param[in] eta_m Distribution index used by the polynomial mutation
+     * @param[in] eta_m distribution index used by the polynomial mutation
      * @param[in] realb chance that a neighbourhood of dimension T is considered at each generation for each weight, rather than the whole population (only if preserve_diversity is true)
-     * @param[in] limit Maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
+     * @param[in] limit maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
      * @param[in] preserve_diversity when true activates the two diversity preservation mechanisms described in Li, Hui, and Qingfu Zhang paper
+     * @param[in] seed seed used by the internal random number generator (default is random)
      * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not in [1.0] or m_eta is < 0
      */
     moead(unsigned int gen = 1u,
@@ -109,7 +126,8 @@ public:
         if ( m_T > NP - 1u ) {
             pagmo_throw(std::invalid_argument, "The neighbourhood size specified (T) is " + std::to_string(m_T) + ": too large for the input population having size " + std::to_string(NP) );
         }
-        // Generate the vector of weight's vectors for NP decomposed problems. Will throw if the population size is not compatible with the weight generation scheme chosen
+        // Generate NP weight vectors for the decomposed problems. Will throw if the population size is not compatible
+        // with the weight generation scheme chosen
         auto weights = decomposition_weights(prob.get_nf(), NP, m_weight_generation, m_e);
         // ---------------------------------------------------------------------------------------------------------
 

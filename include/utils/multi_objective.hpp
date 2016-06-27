@@ -491,22 +491,28 @@ vector_double nadir(const std::vector<vector_double> &input_f) {
 
 /// Decomposition weights generation
 /**
- * Generates the requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:
- * - "grid" generates the weights on an uniform grid. This method may only be used when the number of requested weights to be genrated is such that a uniform grid is indeed possible. In
+ * Generates a requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:
+ * - "grid" generates weights on an uniform grid. This method may only be used when the number of requested weights to be genrated is such that a uniform grid is indeed possible. In
  * two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases
- * - "random" generates the weights randomly distributing them uniformly on the simplex (a weight is such that \f$\sum_i \lambda_i = 1\f$)
- * - "low discrepancy" generates the weights using a low-discrepancy sequence to obtain a better coverage of the Pareto front. Halton sequence is used since
+ * - "random" generates weights randomly distributing them uniformly on the simplex (a weight is such that \f$\sum_i \lambda_i = 1\f$)
+ * - "low discrepancy" generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of the Pareto front. Halton sequence is used since
  * low dimensionalities are expected in the number of objcetvices (i.e. less than 20), hence Halton sequence is deemes as appropriate.
  *
  * @note All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All weight generation methods
- * are guaranteed to generate first the canonical directions [1,0,0,...], [0,1,0,..] etc.
+ * are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
+ *
+ * Example: to generate 10 weights distributed somehow regularly to decompose a three dimensional problem:
+ * @code
+ * detail::random_engine_type r_engine();
+ * auto lambdas = decomposition_weights(3u, 10u, "low discrepancy", r_engine);
+ * @endcode
  *
  * @param[in] n_f dimension of each weight vector (i.e. fitness dimension)
  * @param[in] n_w number of weights to be generated
  * @param[in] weight_generation methods to generate the weights of the decomposed problems. One of "grid", "random", "low discrepancy"
  * @param[in] r_engine random engine
  *
- * @returns an <tt>std:vector<\tt> containing the weight vectors
+ * @returns an <tt>std:vector</tt> containing the weight vectors
  *
  * @throws if the population size is not compatible with the selected weight generation method
 **/

@@ -24,3 +24,13 @@ A number of utilities to compute quantities that are of general relevance.
 
 .. doxygenfunction:: pagmo::safe_cast
   :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::binomial_coefficient
+  :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::kNN
+  :project: PaGMOreborn
