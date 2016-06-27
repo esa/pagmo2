@@ -2,7 +2,6 @@
 #define PAGMO_ALGORITHMS_MOEAD_HPP
 
 #include <algorithm> // std::shuffle, std::transform
-#include <cmath>     // std::tgamma
 #include <iomanip>
 #include <numeric>   // std::iota, std::inner_product
 #include <random>
@@ -15,8 +14,7 @@
 #include "../population.hpp"
 #include "../problems/decompose.hpp"
 #include "../utils/generic.hpp" // safe_cast
-#include "../utils/multi_objective.hpp" // ideal
-#include "../utils/discrepancy.hpp" // halton
+#include "../utils/multi_objective.hpp" // ideal, decomposition_weights
 #include "../rng.hpp"
 
 namespace pagmo
@@ -111,8 +109,8 @@ public:
         if ( m_T > NP - 1u ) {
             pagmo_throw(std::invalid_argument, "The neighbourhood size specified (T) is " + std::to_string(m_T) + ": too large for the input population having size " + std::to_string(NP) );
         }
-        // Generate the vector of weight's vectors for the NP decomposed problems. Will throw if the population size is not compatible with the weight generation scheme chosen
-        auto weights = generate_weights(prob.get_nf(), NP);
+        // Generate the vector of weight's vectors for NP decomposed problems. Will throw if the population size is not compatible with the weight generation scheme chosen
+        auto weights = decomposition_weights(prob.get_nf(), NP, m_weight_generation, m_e);
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
@@ -274,113 +272,6 @@ public:
         ar(m_gen, m_weight_generation, m_T, m_CR, m_F, m_eta_m, m_realb, m_limit, m_preserve_diversity, m_e, m_seed, m_verbosity);
     }
 private:
-    //Recursive function building all m-ple of elements of X summing to s
-    void reksum(
-            std::vector<std::vector<double> > &retval,
-            const std::vector<population::size_type>& X,
-            population::size_type m,
-            population::size_type s,
-            std::vector<double> eggs = std::vector<double>() ) const
-    {
-        if (m==1u) {
-            if (std::find(X.begin(),X.end(), s) == X.end()) { //not found
-                return;
-            } else {
-                eggs.push_back(static_cast<double>(s));
-                retval.push_back(eggs);
-            }
-        } else {
-            for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
-                eggs.push_back(static_cast<double>(X[i]));
-                reksum(retval, X , m - 1u, s - X[i], eggs);
-                eggs.pop_back();
-            }
-        }
-    }
-
-    // Binomial coefficient implemented via gamma functions
-    double binomial_coefficient(vector_double::size_type n, vector_double::size_type k) const
-    {
-        return std::exp(std::lgamma(static_cast<double>(n) + 1.) - std::lgamma(static_cast<double>(k) + 1.) - std::lgamma(static_cast<double>(n) - static_cast<double>(k) + 1.));
-    }
-
-    /// Weights generation
-    /**
-     * Generates the weight vectors used to decompose the problem.
-     *
-     * @param[in] n_f dimension of each weight vector (i.e. fitness dimension)
-     * @param[in] n_w number of weights (i.e. population size)
-     *
-     * @returns an <tt>std:vector<\tt> containing the weight vectors
-     *
-     * @throws if the population size is not compatible with the selected weight generation method
-    **/
-     std::vector<vector_double> generate_weights(vector_double::size_type n_f, vector_double::size_type n_w) const
-    {
-        // Sanity check
-        if (n_f > n_w) {
-             pagmo_throw(std::invalid_argument,"A fitness size of " + std::to_string(n_f) + " was requested to the weight generation routine, while " + std::to_string(n_w) + " weights were requested to be generated. To allow weight be generated correctly the number of weights must be strictly larger than the number of objectives");
-        }
-
-        // Random distributions
-        std::uniform_real_distribution<double> drng(0.,1.); // to generate a number in [0, 1)
-        std::vector<vector_double> retval;
-        if(m_weight_generation == "grid") {
-            // find the largest H resulting in a population smaller or equal to NP
-            decltype(n_w) H;
-            if (n_f == 2u) {
-                H = n_w - 1u;
-            } else if (n_f == 3u) {
-                H = static_cast<decltype(H)>(std::floor(0.5 * (std::sqrt(8. * static_cast<double>(n_w) + 1.) - 3.)));
-            } else {
-                H = 1u;
-                while(binomial_coefficient(H + n_f - 1u, n_f - 1u) <= static_cast<double>(n_w))
-                {
-                    ++H;
-                }
-                H--;
-            }
-            // We check that NP equals the population size resulting from H
-            if (std::abs(static_cast<double>(n_w) - binomial_coefficient(H + n_f - 1u, n_f - 1u)) > 1E-8 ) {
-                std::ostringstream error_message;
-                error_message << "Population size of " << std::to_string(n_w) << " is detected, but not supported by the '" << m_weight_generation
-                    << "' weight generation method selected for " << get_name() << ". A size of " << binomial_coefficient(H + n_f - 1u, n_f - 1u)
-                    << " or " << binomial_coefficient(H + n_f, n_f - 1u)
-                    << " is possible.";
-                    pagmo_throw(std::invalid_argument, error_message.str());
-            }
-            // We generate the weights
-            std::vector<population::size_type> range(H + 1u);
-            std::iota(range.begin(), range.end(), std::vector<population::size_type>::size_type(0u));
-            reksum(retval, range, n_f, H);
-            for(decltype(retval.size()) i = 0u; i < retval.size(); ++i) {
-                for(decltype(retval[i].size()) j = 0u; j < retval[i].size(); ++j) {
-                    retval[i][j] /= static_cast<double>(H);
-                }
-            }
-        } else if(m_weight_generation == "low discrepancy") {
-            // We first push back the "corners" [1,0,0,...], [0,1,0,...]
-            for(decltype(n_f) i = 0u; i < n_f; ++i) {
-                retval.push_back(vector_double(n_f, 0.));
-                retval[i][i] = 1.;
-            }
-            // Then we add points on the simplex randomly genrated using Halton low discrepancy sequence
-            halton ld_seq{safe_cast<unsigned int>(n_f), 1u};
-            for(decltype(n_w) i = n_f; i < n_w; ++i) {
-                retval.push_back(sample_from_simplex(ld_seq()));
-            }
-        } else if(m_weight_generation == "random") {
-            for (decltype(n_w) i = 0u; i < n_w; ++i) {
-                vector_double dummy(n_f - 1u, 0.);
-                for(decltype(n_f) j = 0u; j < n_f - 1u; ++j) {
-                    dummy[j] = drng(m_e);
-                }
-                retval.push_back(sample_from_simplex(dummy));
-            }
-        }
-        return retval;
-     }
-
      // Performs polynomial mutation (same as nsgaII)
      void polynomial_mutation(vector_double& child, const population& pop, double rate) const
      {

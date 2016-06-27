@@ -13,14 +13,43 @@
 #include <numeric>
 #include <stdexcept>
 #include <string>
+#include <vector>
 #include <tuple>
 
 #include "../exceptions.hpp"
 #include "../io.hpp"
+#include "../population.hpp"
 #include "../types.hpp"
+#include "../utils/discrepancy.hpp" // halton
 
 
 namespace pagmo{
+
+namespace detail {
+    //Recursive function building all m-ple of elements of X summing to s
+    void reksum(
+            std::vector<std::vector<double> > &retval,
+            const std::vector<population::size_type>& X,
+            population::size_type m,
+            population::size_type s,
+            std::vector<double> eggs = std::vector<double>() )
+    {
+        if (m==1u) {
+            if (std::find(X.begin(),X.end(), s) == X.end()) { //not found
+                return;
+            } else {
+                eggs.push_back(static_cast<double>(s));
+                retval.push_back(eggs);
+            }
+        } else {
+            for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
+                eggs.push_back(static_cast<double>(X[i]));
+                reksum(retval, X , m - 1u, s - X[i], eggs);
+                eggs.pop_back();
+            }
+        }
+    }
+}
 
 /// Pareto-dominance
 /**
@@ -456,6 +485,104 @@ vector_double nadir(const std::vector<vector_double> &input_f) {
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
         retval[i] = (*std::max_element(nd_fits.begin(), nd_fits.end(), [i] (auto f1, auto f2) {return f1[i] < f2[i];}))[i];
+    }
+    return retval;
+}
+
+/// Decomposition weights generation
+/**
+ * Generates the requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:
+ * - "grid" generates the weights on an uniform grid. This method may only be used when the number of requested weights to be genrated is such that a uniform grid is indeed possible. In
+ * two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases
+ * - "random" generates the weights randomly distributing them uniformly on the simplex (a weight is such that \f$\sum_i \lambda_i = 1\f$)
+ * - "low discrepancy" generates the weights using a low-discrepancy sequence to obtain a better coverage of the Pareto front. Halton sequence is used since
+ * low dimensionalities are expected in the number of objcetvices (i.e. less than 20), hence Halton sequence is deemes as appropriate.
+ *
+ * @note All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All weight generation methods
+ * are guaranteed to generate first the canonical directions [1,0,0,...], [0,1,0,..] etc.
+ *
+ * @param[in] n_f dimension of each weight vector (i.e. fitness dimension)
+ * @param[in] n_w number of weights to be generated
+ * @param[in] weight_generation methods to generate the weights of the decomposed problems. One of "grid", "random", "low discrepancy"
+ * @param[in] r_engine random engine
+ *
+ * @returns an <tt>std:vector<\tt> containing the weight vectors
+ *
+ * @throws if the population size is not compatible with the selected weight generation method
+**/
+ std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, vector_double::size_type n_w, const std::string &weight_generation, detail::random_engine_type &r_engine)
+{
+    // Sanity check
+    if (n_f > n_w) {
+         pagmo_throw(std::invalid_argument,"A fitness size of " + std::to_string(n_f) + " was requested to the weight generation routine, while " + std::to_string(n_w) + " weights were requested to be generated. To allow weight be generated correctly the number of weights must be strictly larger than the number of objectives");
+    }
+
+    if (n_f < 2u) {
+         pagmo_throw(std::invalid_argument,"A fitness size of " + std::to_string(n_f) + " was requested to generate decomposed weights. A dimension of at least two must be requested.");
+    }
+
+    // Random distributions
+    std::uniform_real_distribution<double> drng(0.,1.); // to generate a number in [0, 1)
+    std::vector<vector_double> retval;
+    if(weight_generation == "grid") {
+        // find the largest H resulting in a population smaller or equal to NP
+        decltype(n_w) H;
+        if (n_f == 2u) {
+            H = n_w - 1u;
+        } else if (n_f == 3u) {
+            H = static_cast<decltype(H)>(std::floor(0.5 * (std::sqrt(8. * static_cast<double>(n_w) + 1.) - 3.)));
+        } else {
+            H = 1u;
+            while(binomial_coefficient(H + n_f - 1u, n_f - 1u) <= static_cast<double>(n_w))
+            {
+                ++H;
+            }
+            H--;
+        }
+        // We check that NP equals the population size resulting from H
+        if (std::abs(static_cast<double>(n_w) - binomial_coefficient(H + n_f - 1u, n_f - 1u)) > 1E-8 ) {
+            std::ostringstream error_message;
+            error_message << "Population size of " << std::to_string(n_w) << " is detected, but not supported by the '" << weight_generation
+                << "' weight generation method selected. A size of " << binomial_coefficient(H + n_f - 1u, n_f - 1u)
+                << " or " << binomial_coefficient(H + n_f, n_f - 1u)
+                << " is possible.";
+                pagmo_throw(std::invalid_argument, error_message.str());
+        }
+        // We generate the weights
+        std::vector<population::size_type> range(H + 1u);
+        std::iota(range.begin(), range.end(), std::vector<population::size_type>::size_type(0u));
+        detail::reksum(retval, range, n_f, H);
+        for(decltype(retval.size()) i = 0u; i < retval.size(); ++i) {
+            for(decltype(retval[i].size()) j = 0u; j < retval[i].size(); ++j) {
+                retval[i][j] /= static_cast<double>(H);
+            }
+        }
+    } else if(weight_generation == "low discrepancy") {
+        // We first push back the "corners" [1,0,0,...], [0,1,0,...]
+        for(decltype(n_f) i = 0u; i < n_f; ++i) {
+            retval.push_back(vector_double(n_f, 0.));
+            retval[i][i] = 1.;
+        }
+        // Then we add points on the simplex randomly genrated using Halton low discrepancy sequence
+        halton ld_seq{safe_cast<unsigned int>(n_f - 1u), safe_cast<unsigned int>(n_f)};
+        for(decltype(n_w) i = n_f; i < n_w; ++i) {
+            retval.push_back(sample_from_simplex(ld_seq()));
+        }
+    } else if(weight_generation == "random") {
+        // We first push back the "corners" [1,0,0,...], [0,1,0,...]
+        for(decltype(n_f) i = 0u; i < n_f; ++i) {
+            retval.push_back(vector_double(n_f, 0.));
+            retval[i][i] = 1.;
+        }
+        for (decltype(n_w) i = n_f; i < n_w; ++i) {
+            vector_double dummy(n_f - 1u, 0.);
+            for(decltype(n_f) j = 0u; j < n_f - 1u; ++j) {
+                dummy[j] = drng(r_engine);
+            }
+            retval.push_back(sample_from_simplex(dummy));
+        }
+    } else {
+        pagmo_throw(std::invalid_argument,"Weight generation method " + weight_generation + " is unknown. One of 'grid', 'random' or 'low discrepancy' was expected");
     }
     return retval;
 }

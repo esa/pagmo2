@@ -146,6 +146,14 @@ vector_double decision_vector(const vector_double &lb, const vector_double &ub, 
     return decision_vector({lb, ub}, r_engine);
 }
 
+/// Safely cast between unsigned types
+/**
+ * Performs a cast between unsigned types throwing if the input cannot be represented in the new type
+ *
+ * @param[in] an unsigned value \p x to be casted to \p T
+ * @return the input \p x safey casted to \p T
+ * @throws std::overflow_error if \p x cannot be represented by the new type
+ */
 template <typename T, typename U>
 inline T safe_cast(const U &x)
 {
@@ -154,6 +162,22 @@ inline T safe_cast(const U &x)
         pagmo_throw(std::overflow_error,"Converting between unsigned types caused a loss");
     }
     return static_cast<T>(x);
+}
+
+/// Binomial coefficient
+/**
+ * An implementation of the binomial coefficient using gamma functions
+ * @param  n first parameter \f$n\f$
+ * @param  k second paramater \f$k\f$
+ * @return the binomial coefficient \f$ n \choose k \f$
+ */
+double binomial_coefficient(vector_double::size_type n, vector_double::size_type k)
+{
+    if (k <= n) {
+        return std::round(std::exp(std::lgamma(static_cast<double>(n) + 1.) - std::lgamma(static_cast<double>(k) + 1.) - std::lgamma(static_cast<double>(n) - static_cast<double>(k) + 1.)));
+    } else {
+        pagmo_throw(std::invalid_argument, "The binomial coefficient is only defined for k<=n, you requested n=" + std::to_string(n) + " and k=" + std::to_string(k));
+    }
 }
 
 namespace detail
@@ -200,7 +224,7 @@ namespace detail
             }
         }
     }
-}
+} // namespace detail
 
 } // namespace pagmo
 
