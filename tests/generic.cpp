@@ -127,3 +127,40 @@ BOOST_AUTO_TEST_CASE(binomial_coefficient_test)
     BOOST_CHECK_THROW(binomial_coefficient(0u,1u), std::invalid_argument);
     BOOST_CHECK_THROW(binomial_coefficient(4u,7u), std::invalid_argument);
 }
+
+BOOST_AUTO_TEST_CASE(kNN_test)
+{
+    // Corner cases
+    {
+        std::vector<vector_double> points = {};
+        std::vector<std::vector<vector_double::size_type> > res = {};
+        BOOST_CHECK(kNN(points, 2u) == res);
+    }
+    {
+        std::vector<vector_double> points = {{1.2,1.2}};
+        std::vector<std::vector<vector_double::size_type> > res = {{}};
+        BOOST_CHECK(kNN(points, 2u) == res);
+    }
+    {
+        std::vector<vector_double> points = {{1.2,1.2}, {1.2,1.2}};
+        std::vector<std::vector<vector_double::size_type> > res = {{1u},{0u}};
+        BOOST_CHECK(kNN(points, 2u) == res);
+    }
+    {
+        std::vector<vector_double> points = {{1,1}, {2,2}, {3.1,3.1}};
+        std::vector<std::vector<vector_double::size_type> > res = {{1u, 2u},{0u,2u},{1u,0u}};
+        BOOST_CHECK(kNN(points, 2u) == res);
+    }
+
+    // Some test cases
+    {
+        std::vector<vector_double> points = {{1,1}, {2,2}, {3.1,3.1}, {4.2, 4.2}, {5.4, 5.4}};
+        std::vector<std::vector<vector_double::size_type> > res = {{1u, 2u, 3u}, {0u,2u, 3u},{1u,3u,0u}, {2u, 4u, 1u}, {3u, 2u, 1u}};
+        BOOST_CHECK(kNN(points, 3u) == res);
+    }
+    // throws
+    {
+        std::vector<vector_double> points = {{1,1}, {2,2},{2,3,4}};
+        BOOST_CHECK_THROW(kNN(points, 3u), std::invalid_argument);
+    }
+}

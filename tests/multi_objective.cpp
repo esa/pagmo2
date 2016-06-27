@@ -304,6 +304,8 @@ BOOST_AUTO_TEST_CASE(decomposition_weights_test)
     BOOST_CHECK_THROW(decomposition_weights(2u, 5u, "grod", r_engine), std::invalid_argument);
     // The number of weights are smaller than the number of objectives
     BOOST_CHECK_THROW(decomposition_weights(10u, 5u, "grid", r_engine), std::invalid_argument);
+    // The number of weights is not compatible with 'grid'
+    BOOST_CHECK_THROW(decomposition_weights(4u, 31u, "grid", r_engine), std::invalid_argument);
 
     // We test some known cases
     {
@@ -341,5 +343,9 @@ BOOST_AUTO_TEST_CASE(decomposition_weights_test)
     {
         auto ws = decomposition_weights(2u, 4u, "low discrepancy", r_engine);
         check_weights(ws, 2u);
+    }
+    {
+        auto ws = decomposition_weights(5u, 25u, "random", r_engine);
+        check_weights(ws, 5u);
     }
 }

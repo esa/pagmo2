@@ -180,6 +180,55 @@ double binomial_coefficient(vector_double::size_type n, vector_double::size_type
     }
 }
 
+/// K-Nearest Neighbours
+/**
+ * Computes the indexes of the k nearest neighbours (euclidean distance) to each of the input points.
+ * The algorithm complexity (naive implementation) is \f$ O(MN^2)\f$ where \f$N\f$ is the number of
+ * points and \f$M\f$ their dimensionality
+ *
+ * @param[in] points The \f$N\f$ having dimension \f$M\f$
+ * @param[in] k number of neighbours to detect
+ * @return An <tt>std::vector<std::vector<population::size_type> > <\tt> containing the indexes of the sorted k nearest neighbours
+ * @throws std::invalid_argument If the points do not all have the same dimension.
+ */
+std::vector<std::vector<vector_double::size_type> > kNN(const std::vector<vector_double> &points, std::vector<vector_double>::size_type k) {
+    std::vector<std::vector<vector_double::size_type> > neigh_idxs;
+    auto N = points.size();
+    if (N == 0u) {
+        return {};
+    }
+    auto M = points[0].size();
+    if (!std::all_of(points.begin(), points.end(), [M](const auto &p){return p.size() == M;} )) {
+        pagmo_throw(std::invalid_argument, "All points must have the same dimensionality for k-NN to be invoked");
+    }
+    // loop through the points
+    for(decltype(N) i = 0u; i < N; ++i) {
+        // We compute all the distances to all other points including the self
+        vector_double distances;
+        for(decltype(N) j = 0u; j < N; ++j) {
+            double dist = 0.;
+            for (decltype(M) l = 0u; l < M; ++l) {
+                dist += (points[i][l] - points[j][l]) * (points[i][l] - points[j][l]);
+            }
+            distances.push_back(std::sqrt(dist));
+        }
+        // We sort the indexes with respect to the distance
+        std::vector<vector_double::size_type> idxs(N);
+        std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
+        std::sort(idxs.begin(), idxs.end(), [&distances] (auto idx1, auto idx2) {return distances[idx1] < distances[idx2];});
+        // We remove the first element containg the self-distance (0)
+        idxs.erase(std::remove(idxs.begin(), idxs.end(), i), idxs.end());
+        neigh_idxs.push_back(idxs);
+    }
+    // We trim to k the lists if needed
+    if (k < N - 1u) {
+        for (decltype(neigh_idxs.size()) i = 0u; i < neigh_idxs.size();++i) {
+                neigh_idxs[i].erase(neigh_idxs[i].begin() + k, neigh_idxs[i].end());
+        }
+    }
+    return neigh_idxs;
+}
+
 namespace detail
 {
     // modifies a chromosome so that it will be in the bounds. elements that are off are resampled at random in the bounds

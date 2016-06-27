@@ -13,7 +13,7 @@
 #include "../exceptions.hpp"
 #include "../population.hpp"
 #include "../problems/decompose.hpp"
-#include "../utils/generic.hpp" // safe_cast
+#include "../utils/generic.hpp" // safe_cast, kNN
 #include "../utils/multi_objective.hpp" // ideal, decomposition_weights
 #include "../rng.hpp"
 
@@ -125,7 +125,7 @@ public:
         // Declaring the candidate chromosome
     	vector_double candidate(dim);
         // We compute, for each vector of weights, the k = m_T neighbours
-        auto neigh_idxs = compute_neighbours(weights);
+        auto neigh_idxs = kNN(weights, m_T);
         // We compute the initial ideal point (will be adapted along the course of the algorithm)
         vector_double ideal_point = ideal(pop.get_f());
         // We create a decompose problem which will be used only to access its decompose_fitness(f) method
@@ -341,35 +341,6 @@ private:
             if(flag) retval.push_back(p);
         }
         return retval;
-    }
-
-    // The returned value [i][j] component will contain the j-th closest vector
-    // (according to the euclidian distance) to the i-th vector. with j=1..m_T
-    std::vector<std::vector<population::size_type> > compute_neighbours(const std::vector<vector_double> &weights) const {
-        std::vector<std::vector<population::size_type> > neigh_idxs;
-        // loop through the weights
-        for(decltype(weights.size()) i = 0u; i < weights.size(); ++i) {
-            // We compute all the distances to all other weights including the self
-            vector_double distances;
-            for(decltype(weights.size()) j = 0u; j < weights.size(); ++j) {
-                double dist = 0.;
-                for (decltype(weights[i].size()) k = 0u; k < weights[i].size(); ++k) {
-                    dist += (weights[i][k] - weights[j][k]) * (weights[i][k] - weights[j][k]);
-                }
-                distances.push_back(std::sqrt(dist));
-            }
-            // We sort the indexes with respect to the distance
-            std::vector<population::size_type> idxs(weights.size());
-            std::iota(idxs.begin(), idxs.end(), population::size_type(0u));
-            std::sort(idxs.begin(), idxs.end(), [&distances] (auto idx1, auto idx2) {return distances[idx1] < distances[idx2];});
-            neigh_idxs.push_back(idxs);
-        }
-        // We remove the first element containg the self-distance (0) and crop the rest to m_T
-        for (decltype(neigh_idxs.size()) i = 0u; i < neigh_idxs.size();++i) {
-            neigh_idxs[i].erase(neigh_idxs[i].begin());
-            neigh_idxs[i].erase(neigh_idxs[i].begin() + m_T, neigh_idxs[i].end());
-        }
-        return neigh_idxs;
     }
 
     unsigned int                        m_gen;
