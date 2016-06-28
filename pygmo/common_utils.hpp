@@ -51,7 +51,7 @@ struct cpp_npy<from> \
     static constexpr auto value = to; \
 };
 
-// We only need integral types at the moment.
+// We only need the types below at the moment.
 PYGMO_CPP_NPY(unsigned char,NPY_UBYTE)
 PYGMO_CPP_NPY(unsigned short,NPY_USHORT)
 PYGMO_CPP_NPY(unsigned,NPY_UINT)
@@ -62,6 +62,7 @@ PYGMO_CPP_NPY(short,NPY_SHORT)
 PYGMO_CPP_NPY(int,NPY_INT)
 PYGMO_CPP_NPY(long,NPY_LONG)
 PYGMO_CPP_NPY(long long,NPY_LONGLONG)
+PYGMO_CPP_NPY(double,NPY_DOUBLE)
 
 #undef PYGMO_CPP_NPY
 
@@ -102,40 +103,48 @@ inline bool callable(const bp::object &o)
     return bp::extract<bool>(builtin().attr("callable")(o));
 }
 
-// Convert a vector of doubles into a numpy array.
-inline bp::object vd_to_a(const pagmo::vector_double &v)
+// Convert a vector of arithmetic types into a numpy array.
+template <typename T>
+    using v_to_a_enabler = std::enable_if_t<std::is_arithmetic<T>::value,int>;
+
+template <typename T, v_to_a_enabler<T> = 0>
+inline bp::object v_to_a(const std::vector<T> &v)
 {
     // The dimensions of the array to be created.
     npy_intp dims[] = {boost::numeric_cast<npy_intp>(v.size())};
     // Attempt creating the array.
-    PyObject *ret = PyArray_SimpleNew(1,dims,NPY_DOUBLE);
+    PyObject *ret = PyArray_SimpleNew(1, dims, cpp_npy<T>::value);
     if (!ret) {
         pygmo_throw(PyExc_RuntimeError,"couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
     }
     if (v.size()) {
         // Copy over the data.
-        std::copy(v.begin(),v.end(),static_cast<double *>(PyArray_DATA((PyArrayObject *)(ret))));
+        std::copy(v.begin(),v.end(),static_cast<T *>(PyArray_DATA((PyArrayObject *)(ret))));
     }
     // Hand over to boost python.
     return bp::object(bp::handle<>(ret));
 }
 
-// Convert a vector of vectors of doubles into a numpy array.
-inline bp::object vvd_to_a(const std::vector<pagmo::vector_double> &v)
+// Convert a vector of vectors of arithmetic types into a numpy array.
+template <typename T>
+    using vv_to_a_enabler = std::enable_if_t<std::is_arithmetic<T>::value,int>;
+
+template <typename T, vv_to_a_enabler<T> = 0>
+inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
 {
     // The dimensions of the array to be created.
     const auto nrows = v.size();
     const auto ncols = nrows ? v[0].size() : 0u;
     npy_intp dims[] = {boost::numeric_cast<npy_intp>(nrows),boost::numeric_cast<npy_intp>(ncols)};
     // Attempt creating the array.
-    PyObject *ret = PyArray_SimpleNew(2,dims,NPY_DOUBLE);
+    PyObject *ret = PyArray_SimpleNew(2,dims, cpp_npy<T>::value);
     if (!ret) {
         pygmo_throw(PyExc_RuntimeError,"couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
     }
     // Hand over to BP for exception-safe behaviour.
     bp::object retval{bp::handle<>(ret)};
     if (nrows) {
-        auto data = static_cast<double *>(PyArray_DATA((PyArrayObject *)(ret)));
+        auto data = static_cast<T *>(PyArray_DATA((PyArrayObject *)(ret)));
         for (const auto &i: v) {
             if (i.size() != ncols) {
                 pygmo_throw(PyExc_ValueError,"cannot convert a vector of vector_double to a NumPy 2D array "
@@ -146,24 +155,6 @@ inline bp::object vvd_to_a(const std::vector<pagmo::vector_double> &v)
         }
     }
     return retval;
-}
-
-// Convert a vector of ull into a numpy array.
-inline bp::object vull_to_a(const std::vector<unsigned long long> &v)
-{
-    // The dimensions of the array to be created.
-    npy_intp dims[] = {boost::numeric_cast<npy_intp>(v.size())};
-    // Attempt creating the array.
-    PyObject *ret = PyArray_SimpleNew(1,dims,cpp_npy<unsigned long long>::value);
-    if (!ret) {
-        pygmo_throw(PyExc_RuntimeError,"couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
-    }
-    if (v.size()) {
-        // Copy over the data.
-        std::copy(v.begin(),v.end(),static_cast<unsigned long long *>(PyArray_DATA((PyArrayObject *)(ret))));
-    }
-    // Hand over to boost python.
-    return bp::object(bp::handle<>(ret));
 }
 
 // isinstance wrapper.

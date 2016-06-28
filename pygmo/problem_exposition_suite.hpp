@@ -27,7 +27,7 @@ namespace bp = boost::python;
 template <typename Prob>
 inline bp::object best_known_wrapper(const Prob &p)
 {
-    return vd_to_a(p.best_known());
+    return v_to_a(p.best_known());
 }
 
 // Constructor of translate from problem and translation vector.

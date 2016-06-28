@@ -200,7 +200,7 @@ static inline void pop_push_back_wrapper(population &pop, const bp::object &x)
 // decision_vector().
 static inline bp::object pop_decision_vector_wrapper(const population &pop)
 {
-    return pygmo::vd_to_a(pop.decision_vector());
+    return pygmo::v_to_a(pop.decision_vector());
 }
 
 // Various best_idx() overloads.
@@ -250,25 +250,25 @@ static inline void pop_set_x_wrapper(population &pop, population::size_type i, c
 // get_f().
 static inline bp::object pop_get_f_wrapper(const population &pop)
 {
-    return pygmo::vvd_to_a(pop.get_f());
+    return pygmo::vv_to_a(pop.get_f());
 }
 
 // get_x().
 static inline bp::object pop_get_x_wrapper(const population &pop)
 {
-    return pygmo::vvd_to_a(pop.get_x());
+    return pygmo::vv_to_a(pop.get_x());
 }
 
 // get_ID().
 static inline bp::object pop_get_ID_wrapper(const population &pop)
 {
-    return pygmo::vull_to_a(pop.get_ID());
+    return pygmo::v_to_a(pop.get_ID());
 }
 
 // Decompose methods wrappers
 static inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decompose &p, const bp::object &f, const bp::object &weights, const bp::object &z_ref)
 {
-    return pygmo::vd_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weights), pygmo::to_vd(z_ref)));
+    return pygmo::v_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weights), pygmo::to_vd(z_ref)));
 }
 
 // ZDT wrappers.
