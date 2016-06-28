@@ -39,6 +39,15 @@ namespace pagmo
 class moead
 {
 public:
+    #if defined(DOXYGEN_INVOKED)
+        /// Single entry of the log (gen, fevals, adf, ideal_point)
+        typedef std::tuple<unsigned int, unsigned long long, double, vector_double> log_line_type;
+        /// The log
+        typedef std::vector<log_line_type> log_type;
+    #else
+        using log_line_type = std::tuple<unsigned int, unsigned long long, double, vector_double>;
+        using log_type = std::vector<log_line_type>;
+    #endif
     /// Constructor
      /**
      * Constructs a MOEA/D-DE algorithm
@@ -66,7 +75,7 @@ public:
             bool preserve_diversity = true,
             unsigned int seed = pagmo::random_device::next()
             ) : m_gen(gen), m_weight_generation(weight_generation), m_T(T), m_CR(CR), m_F(F), m_eta_m(eta_m),
-                m_realb(realb), m_limit(limit), m_preserve_diversity(preserve_diversity), m_e(seed), m_seed(seed), m_verbosity(0u)
+                m_realb(realb), m_limit(limit), m_preserve_diversity(preserve_diversity), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         // Sanity checks
         if(m_weight_generation != "random" && m_weight_generation != "grid" && m_weight_generation != "low discrepancy") {
@@ -104,27 +113,27 @@ public:
         const auto &ub = bounds.second;
         auto NP = pop.size();
 
-        //auto fevals0 = prob.get_fevals();           // disount for the already made fevals
-        //unsigned int count = 1u;                    // regulates the screen output
+        auto fevals0 = prob.get_fevals();           // discount for the fevals already made
+        unsigned int count = 1u;                    // regulates the screen output
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
         // particular algorithm.
-        if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument,"Non linear constraints detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");
-        }
         if (prob.get_nf() < 2u) {
             pagmo_throw(std::invalid_argument,"Number of objectives detected in " + prob.get_name() + " instance is " + std::to_string(prob.get_nf()) + ". " + get_name() + " necessitates a problem with multiple objectives");
+        }
+        if (prob.get_nc() != 0u) {
+            pagmo_throw(std::invalid_argument,"Non linear constraints detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");
         }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,"The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
+        if ( m_T > NP - 1u ) {
+            pagmo_throw(std::invalid_argument, "The neighbourhood size specified (T) is " + std::to_string(m_T) + ": too large for the input population having size " + std::to_string(NP) );
+        }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
             return pop;
-        }
-        if ( m_T > NP - 1u ) {
-            pagmo_throw(std::invalid_argument, "The neighbourhood size specified (T) is " + std::to_string(m_T) + ": too large for the input population having size " + std::to_string(NP) );
         }
         // Generate NP weight vectors for the decomposed problems. Will throw if the population size is not compatible
         // with the weight generation scheme chosen
@@ -132,9 +141,7 @@ public:
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
-        //m_log.clear();
-
-
+        m_log.clear();
 
         // Setting up necessary quantities------------------------------------------------------------------------------
         // Random distributions
@@ -155,6 +162,40 @@ public:
 
         // Main MOEA/D loop --------------------------------------------------------------------------------------------
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
+        // 0 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
+        if (m_verbosity > 0u) {
+            // Every m_verbosity generations print a log line
+            if (gen % m_verbosity == 1u || m_verbosity == 1u) {
+                // We compute the average decomposed fitness (ADF)
+                auto adf = 0.;
+                for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+                    adf += prob_decomposed.decompose_fitness(pop.get_f()[i], weights[i], ideal_point)[0];
+                }
+                // Every 50 lines print the column names
+                if (count % 50u == 1u) {
+                    print("\n", std::setw(7),"Gen:", std::setw(15), "Fevals:", std::setw(15), "ADF:");
+                    for (decltype(ideal_point.size()) i = 0u; i < ideal_point.size(); ++i) {
+                        if (i >= 5u) {
+                            print(std::setw(15), "... :");
+                            break;
+                        }
+                        print(std::setw(15), "ideal" + std::to_string(i + 1u) + ":");
+                    }
+                    print('\n');
+                }
+                print(std::setw(7),gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), adf);
+                for (decltype(ideal_point.size()) i = 0u; i < ideal_point.size(); ++i) {
+                    if (i >= 5u) {
+                        break;
+                    }
+                    print(std::setw(15), ideal_point[i]);
+                }
+                print('\n');
+                ++count;
+                // Logs
+                m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, adf, ideal_point));
+            }
+        }
         // 1 - Shuffle the population indexes
         std::shuffle(shuffle.begin(), shuffle.end(), m_e);
         // 2 - Loop over the shuffled NP decomposed problems
@@ -283,11 +324,21 @@ public:
             "\n\tVerbosity: " + std::to_string(m_verbosity) +
             "\n\tSeed: " + std::to_string(m_seed);
     }
+    /// Get log
+    /**
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+     * <tt> std::vector </tt> is a moead::log_line_type containing: Gen, Fevals, ADR, ideal_point
+     * as described in moead::set_verbosity
+     * @return an <tt> std::vector </tt> of moead::log_line_type containing the logged values Gen, Fevals, ADR, ideal_point
+     */
+    const log_type& get_log() const {
+        return m_log;
+    }
     /// Serialization
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_weight_generation, m_T, m_CR, m_F, m_eta_m, m_realb, m_limit, m_preserve_diversity, m_e, m_seed, m_verbosity);
+        ar(m_gen, m_weight_generation, m_T, m_CR, m_F, m_eta_m, m_realb, m_limit, m_preserve_diversity, m_e, m_seed, m_verbosity, m_log);
     }
 private:
      // Performs polynomial mutation (same as nsgaII)
@@ -373,6 +424,7 @@ private:
     mutable detail::random_engine_type  m_e;
     unsigned int                        m_seed;
     unsigned int                        m_verbosity;
+    mutable log_type                    m_log;
 };
 
 } //namespace pagmo

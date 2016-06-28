@@ -64,12 +64,12 @@ struct unbounded_ub {
 
 BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
 {
+    {
     // Here we only test that evolution is deterministic if the
     // seed is controlled
-    problem prob1{rosenbrock{25u}};
-    population pop1{prob1, 5u, 23u};
-    problem prob2{rosenbrock{25u}};
-    population pop2{prob2, 5u, 23u};
+    problem prob{rosenbrock{25u}};
+    population pop1{prob, 5u, 23u};
+    population pop2{prob, 5u, 23u};
 
     cmaes user_algo1{10u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, 23u};
     user_algo1.set_verbosity(1u);
@@ -81,6 +81,7 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
 
     BOOST_CHECK(user_algo1.get_log().size() > 0u);
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+    }
 
     // Here we check that the exit condition of ftol and xtol actually provoke an exit within 5000 gen (rosenbrock{2} is used)
     {
@@ -120,7 +121,6 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
 
     // and we call evolve on the stochastic problem
     BOOST_CHECK_NO_THROW(cmaes{10u}.evolve(population{problem{inventory{}},15u}));
-
 }
 
 BOOST_AUTO_TEST_CASE(cmaes_setters_getters_test)

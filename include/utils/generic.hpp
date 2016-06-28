@@ -236,7 +236,7 @@ std::vector<std::vector<vector_double::size_type> > kNN(const std::vector<vector
     // We trim to k the lists if needed
     if (k < N - 1u) {
         for (decltype(neigh_idxs.size()) i = 0u; i < neigh_idxs.size();++i) {
-                neigh_idxs[i].erase(neigh_idxs[i].begin() + static_cast<int>(k), neigh_idxs[i].end());
+                neigh_idxs[i].erase(neigh_idxs[i].begin() + static_cast<int>(k), neigh_idxs[i].end()); // TODO: remove the static_cast
         }
     }
     return neigh_idxs;
