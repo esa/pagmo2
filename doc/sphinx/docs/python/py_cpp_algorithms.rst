@@ -20,3 +20,6 @@ Exposed C++ algorithms
 
 .. autoclass:: pygmo.core.null_algorithm
    :members:
+
+.. autoclass:: pygmo.core.moead
+   :members:

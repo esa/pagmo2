@@ -120,7 +120,7 @@ public:
         // We start by checking that the problem is suitable for this
         // particular algorithm.
         if (prob.get_nf() < 2u) {
-            pagmo_throw(std::invalid_argument,"Number of objectives detected in " + prob.get_name() + " instance is " + std::to_string(prob.get_nf()) + ". " + get_name() + " necessitates a problem with multiple objectives");
+            pagmo_throw(std::invalid_argument,"The number of objectives detected in the instance of '" + prob.get_name() + "' is " + std::to_string(prob.get_nf()) + ". " + get_name() + " necessitates a problem with multiple objectives");
         }
         if (prob.get_nc() != 0u) {
             pagmo_throw(std::invalid_argument,"Non linear constraints detected in " + prob.get_name() + " instance. " + get_name() + " cannot deal with them");

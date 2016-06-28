@@ -5,7 +5,7 @@
 
 namespace pygmo
 {
-
+// population
 std::string population_docstring();
 std::string population_push_back_docstring();
 std::string population_decision_vector_docstring();
@@ -21,18 +21,23 @@ std::string population_get_x_docstring();
 std::string population_get_ID_docstring();
 std::string population_get_seed_docstring();
 
+// problem
 std::string problem_docstring();
-std::string get_best_docstring(const std::string &);
 
+// algorithm
 std::string algorithm_docstring();
 
+// user - problems
 std::string rosenbrock_docstring();
+std::string decompose_decompose_fitness_docstring();
+std::string get_best_docstring(const std::string &);
+
+// user - algorithms
 std::string moead_docstring();
 std::string moead_get_log_docstring();
 std::string cmaes_docstring();
+std::string cmaes_get_log_docstring();
 
-
-std::string decompose_decompose_fitness_docstring();
 
 }
 

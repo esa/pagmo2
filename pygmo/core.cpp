@@ -622,7 +622,7 @@ BOOST_PYTHON_MODULE(core)
     cmaes_.def(bp::init<unsigned,double,double,double,double,double,double, double,bool,unsigned>((bp::arg("gen") = 1u,
          bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
          bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
-    pygmo::expose_algo_log(cmaes_,"");
+    pygmo::expose_algo_log(cmaes_,pygmo::cmaes_get_log_docstring().c_str());
     cmaes_.def("get_seed",&cmaes::get_seed);
 #endif
     // MOEA/D - DE

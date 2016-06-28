@@ -17,7 +17,7 @@ individual is determined:
 * by the fitness of the chromosome as evaluated by a :class:`~pygmo.core.problem` and thus including objectives,
   equality constraints and inequality constraints if present.
 
-See also :cpp:class:`pagmo::population`.
+See also the docs of the C++ equivalent :cpp:class:`pagmo::population`.
 
 )";
 }
@@ -379,7 +379,7 @@ std::string problem_docstring()
 >>> p.fitness([1,2,3,4,5])
 array([ 14814.])
 
-See also :cpp:class:`pagmo::problem`.
+See also the docs of the C++ equivalent :cpp:class:`pagmo::problem`.
 
 )";
 }
@@ -418,7 +418,7 @@ Raises:
     OverflowError: if *dim* is negative or greater than an implementation-defined value
     ValueError: if *dim* is less than 2
 
-See :cpp:class:`pagmo::rosenbrock`.
+See also the docs of the C++ equivalent :cpp:class:`pagmo::rosenbrock`.
 
 )";
 }
@@ -445,7 +445,7 @@ Raises:
     OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
     ValueError: if *cc*, *cs*, *c1*, *cmu* are not in [0,1] or -1
 
-See :cpp:class:`pagmo::moead`.
+See also the docs of the C++ equivalent :cpp:class:`pagmo::moead`.
 
 )";
 }
@@ -454,42 +454,46 @@ std::string moead_get_log_docstring()
 {
     return R"(moead.get_log()
 
-The log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
 parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
 constructed with a :class:`~pygmo.core.moead`. A verbosity of N implies a log line each N generations.
 
 Returns:
-    NumPy tuple: each entry contains Gen, Fevals, ADR, ideal_point.
+    list of tuples: at each logged epoch, the values Gen, Fevals, ADR, ideal_point.
 
-Where
- * Gen (int), generation number
- * Fevals (int), number of functions evaluation made.
- * ADF (float), Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness
-along the corresponding direction.
- * ideal_point (list?), The ideal point of the current population
+Where:
+    * Gen (int), generation number
+    * Fevals (int), number of functions evaluation made.
+    * ADF (float), Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness along the corresponding direction.
+    * ideal_point (list?), The ideal point of the current population
 
-Logged screen output example (verbosity 1, objectives 2):
+Examples:
+    >>> from pygmo.core import *
+    >>> algo  = algorithm(moead(gen = 500))
+    >>> algo.set_verbosity(100)
+    >>> prob = problem(zdt(1, 30))
+    >>> pop = population(prob, 40)
+    >>> pop = algo.evolve(pop)
+    Gen:        Fevals:           ADF:        ideal1:        ideal2:
+      1              0        25.4579      0.0420194        2.70624
+    101           4000        5.71961    1.45123e-08       0.509844
+    201           8000        5.27717    1.45123e-08        0.08718
+    301          12000        5.20037    3.84274e-11      0.0399277
+    401          16000        5.20402    1.75423e-12      0.0149309
+    >>> al = algo.extract(moead)
+    >>> al.get_log()
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    TypeError: No to_python (by-value) converter found for C++ type: std::__1::vector<double, std::__1::allocator<double> >
 
-Gen:        Fevals:           ADF:        ideal1:        ideal2:
-  1              0        24.9576       0.117748        2.77748
-  2             40        19.2461      0.0238826        2.51403
-  3             80        12.4375      0.0238826        2.51403
-  4            120        9.08406     0.00389182        2.51403
-  5            160        7.10407       0.002065        2.51403
-  6            200        6.11242     0.00205598        2.51403
-  7            240        8.79749     0.00205598        2.25538
-  8            280        7.23155    7.33914e-05        2.25538
-  9            320        6.83249    7.33914e-05        2.25538
- 10            360        6.55125    7.33914e-05        2.25538
-
-See :cpp:class:`pagmo::moead`.
+See also the docs of the C++ equivalent :cpp:function:`pagmo::moead::get_log`.
 
 )";
 }
 
 std::string cmaes_docstring()
 {
-    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = -1, ftol = 1e-6, xtol = 1e-6, memory = false, seed = random)
+    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = false, seed = random)
 
 Covariance Matrix Evolutionary Strategy (CMA-ES).
 
@@ -509,7 +513,49 @@ Raises:
     OverflowError: if *gen* is negative or greater than an implementation-defined value
     ValueError: if *cc*, *cs*, *c1*, *cmu* are not in [0,1] or -1
 
-See :cpp:class:`pagmo::cmaes`.
+See also the docs of the C++ equivalent :cpp:class:`pagmo::cmaes`.
+
+)";
+}
+
+std::string cmaes_get_log_docstring()
+{
+    return R"(cmaes.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+constructed with a :class:`~pygmo.core.cmaes`. A verbosity of N implies a log line each N generations.
+
+Returns:
+    list of tuples: at each logged epoch, the values Gen, Fevals, Best, dx, df, sigma
+
+Where:
+    * Gen (int), generation number
+    * Fevals (int), number of functions evaluation made.
+    * Best (float), the best fitness function currently in the population
+    * dx (float), the norm of the distance to the population mean of the mutant vectors
+    * df (float), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+    * sigma (float), the current step-size
+
+Examples:
+    >>> from pygmo.core import *
+    >>> algo = algorithm(cmaes(gen = 500))
+    >>> algo.set_verbosity(100)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop)
+    Gen:        Fevals:          Best:            dx:            df:         sigma:
+      1              0         173924        33.6872    3.06519e+06            0.5
+    101           2000        92.9612       0.583942        156.921      0.0382078
+    201           4000        8.79819       0.117574          5.101      0.0228353
+    301           6000        4.81377      0.0698366        1.34637      0.0297664
+    401           8000        1.04445      0.0568541       0.514459      0.0649836
+    Exit condition -- generations = 500
+    >>> al = algo.extract(cmaes)
+    >>> al.get_log()
+    [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
+
+See also the docs of the C++ equivalent :cpp:function:`pagmo::cmaes::get_log`.
 
 )";
 }
@@ -533,7 +579,6 @@ Raises:
     TypeError: if *f*, *weights* or *ref_point* cannot be converted to vectors of doubles
 
 Examples:
-
 >>> from pygmo.core import *
 >>> prob = problem(zdt(id=1, param=30))
 >>> prob_d = problem(decompose(prob, [0.5,0.5], [0,0], "weighted", False))
