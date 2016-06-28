@@ -32,6 +32,7 @@
 #include "../include/algorithms/null_algorithm.hpp"
 #include "../include/algorithms/sade.hpp"
 #include "../include/algorithms/sea.hpp"
+#include "../include/algorithms/moead.hpp"
 #include "../include/population.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/ackley.hpp"
@@ -617,4 +618,16 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algo_log(cmaes_,"");
     cmaes_.def("get_seed",&cmaes::get_seed);
 #endif
+    // MOEA/D - DE
+    auto moead_ = pygmo::expose_algorithm<moead>("moead", pygmo::moead_docstring().c_str());
+    moead_.def(bp::init<unsigned,std::string, unsigned, double, double, double, double, unsigned, bool>(
+        (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5,
+         bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u, bp::arg("preserve_diversity") = true))
+     );
+     moead_.def(bp::init<unsigned,std::string, unsigned, double, double, double, double, unsigned, bool, unsigned>(
+         (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5,
+          bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u, bp::arg("preserve_diversity") = true, bp::arg("seed")))
+      );
+    pygmo::expose_algo_log(moead_,"");
+    moead_.def("get_seed",&moead::get_seed);
 }

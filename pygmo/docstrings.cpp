@@ -423,6 +423,33 @@ See :cpp:class:`pagmo::rosenbrock`.
 )";
 }
 
+std::string moead_docstring()
+{
+    return R"(__init__(gen = 1, weight_generation = "grid", neighbours = 20, CR = 1, F = 0.5, eta_m = 20, realb = 0.9, limit = 2, preserve_diversity = true, seed = random)
+
+Multi Objective Evolutionary Algorithms by Decomposition (the DE variant)
+
+Args:
+    gen (int): number of generations
+    weight_generation (float): method used to generate the weights, one of "grid", "low discrepancy" or "random"
+    neighbours (int): size of the weight's neighborhood
+    CR (float): crossover parameter in the Differential Evolution operator
+    F (float): parameter for the Differential Evolution operator
+    eta_m (float): distribution index used by the polynomial mutation
+    realb (float): chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true)
+    limit (int): stopping criteria on the f tolerance
+    preserve_diversity (bool): maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
+    seed (int): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
+    ValueError: if *cc*, *cs*, *c1*, *cmu* are not in [0,1] or -1
+
+See :cpp:class:`pagmo::moead`.
+
+)";
+}
+
 std::string cmaes_docstring()
 {
     return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = -1, ftol = 1e-6, xtol = 1e-6, memory = false, seed = random)

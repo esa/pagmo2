@@ -27,7 +27,7 @@ std::string get_best_docstring(const std::string &);
 std::string algorithm_docstring();
 
 std::string rosenbrock_docstring();
-
+std::string moead_docstring();
 std::string cmaes_docstring();
 
 std::string decompose_decompose_fitness_docstring();

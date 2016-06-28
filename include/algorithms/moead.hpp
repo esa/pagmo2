@@ -53,12 +53,12 @@ public:
      * Constructs a MOEA/D-DE algorithm
      *
      * @param[in] gen number of generations
-     * @param[in] weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random")
-     * @param[in] T size of the weight's neighborhood
+     * @param[in] weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
+     * @param[in] neighbours size of the weight's neighborhood
      * @param[in] CR crossover parameter in the Differential Evolution operator
      * @param[in] F parameter for the Differential Evolution operator
      * @param[in] eta_m distribution index used by the polynomial mutation
-     * @param[in] realb chance that a neighbourhood of dimension T is considered at each generation for each weight, rather than the whole population (only if preserve_diversity is true)
+     * @param[in] realb chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true)
      * @param[in] limit maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
      * @param[in] preserve_diversity when true activates the two diversity preservation mechanisms described in Li, Hui, and Qingfu Zhang paper
      * @param[in] seed seed used by the internal random number generator (default is random)
@@ -66,7 +66,7 @@ public:
      */
     moead(unsigned int gen = 1u,
             std::string weight_generation = "grid",
-            population::size_type T = 20u,
+            population::size_type neighbours = 20u,
             double CR = 1.0,
             double F = 0.5,
             double eta_m = 20.,
@@ -74,7 +74,7 @@ public:
             unsigned int limit = 2u,
             bool preserve_diversity = true,
             unsigned int seed = pagmo::random_device::next()
-            ) : m_gen(gen), m_weight_generation(weight_generation), m_T(T), m_CR(CR), m_F(F), m_eta_m(eta_m),
+            ) : m_gen(gen), m_weight_generation(weight_generation), m_neighbours(neighbours), m_CR(CR), m_F(F), m_eta_m(eta_m),
                 m_realb(realb), m_limit(limit), m_preserve_diversity(preserve_diversity), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         // Sanity checks
@@ -128,8 +128,8 @@ public:
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,"The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
-        if ( m_T > NP - 1u ) {
-            pagmo_throw(std::invalid_argument, "The neighbourhood size specified (T) is " + std::to_string(m_T) + ": too large for the input population having size " + std::to_string(NP) );
+        if ( m_neighbours > NP - 1u ) {
+            pagmo_throw(std::invalid_argument, "The neighbourhood size specified (T) is " + std::to_string(m_neighbours) + ": too large for the input population having size " + std::to_string(NP) );
         }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
@@ -149,8 +149,8 @@ public:
         std::uniform_int_distribution<vector_double::size_type> p_idx(0u, NP - 1u); // to generate a random index for the population
         // Declaring the candidate chromosome
     	vector_double candidate(dim);
-        // We compute, for each vector of weights, the k = m_T neighbours
-        auto neigh_idxs = kNN(weights, m_T);
+        // We compute, for each vector of weights, the k = m_neighbours neighbours
+        auto neigh_idxs = kNN(weights, m_neighbours);
         // We compute the initial ideal point (will be adapted along the course of the algorithm)
         vector_double ideal_point = ideal(pop.get_f());
         // We create a decompose problem which will be used only to access its decompose_fitness(f) method
@@ -292,6 +292,32 @@ public:
         return m_seed;
     }
     /// Sets the algorithm verbosity
+    /**
+     * Sets the verbosity level of the screen output and of the
+     * log returned by get_log(). \p level can be:
+     * - 0: no verbosity
+     * - >0: will print and log one line each \p level generations.
+     *
+     * Example (verbosity 1):
+     * @code
+     * Gen:        Fevals:           ADF:        ideal1:        ideal2:
+     *   1              0        24.9576       0.117748        2.77748
+     *   2             40        19.2461      0.0238826        2.51403
+     *   3             80        12.4375      0.0238826        2.51403
+     *   4            120        9.08406     0.00389182        2.51403
+     *   5            160        7.10407       0.002065        2.51403
+     *   6            200        6.11242     0.00205598        2.51403
+     *   7            240        8.79749     0.00205598        2.25538
+     *   8            280        7.23155    7.33914e-05        2.25538
+     *   9            320        6.83249    7.33914e-05        2.25538
+     *  10            360        6.55125    7.33914e-05        2.25538
+     * @endcode
+     * Gen, is the generation number, Fevals the number of function evaluation used. ADF is the Average
+     * Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness
+     * along the corresponding direction. The ideal point of the current population follows cropped to its 5th component.
+     *
+     * @param[in] level verbosity level
+     */
     void set_verbosity(unsigned int level)
     {
         m_verbosity = level;
@@ -316,7 +342,7 @@ public:
     {
         return "\tGenerations: " + std::to_string(m_gen) +
             "\n\tWeight generation: " + m_weight_generation +
-            "\n\tNeighbourhood size: " + std::to_string(m_T) +
+            "\n\tNeighbourhood size: " + std::to_string(m_neighbours) +
             "\n\tParameter CR: " + std::to_string(m_CR) +
             "\n\tParameter F: " + std::to_string(m_F) +
             "\n\tDistribution index: " + std::to_string(m_eta_m) +
@@ -338,7 +364,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_weight_generation, m_T, m_CR, m_F, m_eta_m, m_realb, m_limit, m_preserve_diversity, m_e, m_seed, m_verbosity, m_log);
+        ar(m_gen, m_weight_generation, m_neighbours, m_CR, m_F, m_eta_m, m_realb, m_limit, m_preserve_diversity, m_e, m_seed, m_verbosity, m_log);
     }
 private:
      // Performs polynomial mutation (same as nsgaII)
@@ -414,7 +440,7 @@ private:
 
     unsigned int                        m_gen;
     std::string                         m_weight_generation;
-    population::size_type               m_T;
+    population::size_type               m_neighbours;
     double                              m_CR;
     double                              m_F;
     double                              m_eta_m;
