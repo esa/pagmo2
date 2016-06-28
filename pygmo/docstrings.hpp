@@ -28,7 +28,9 @@ std::string algorithm_docstring();
 
 std::string rosenbrock_docstring();
 std::string moead_docstring();
+std::string moead_get_log_docstring();
 std::string cmaes_docstring();
+
 
 std::string decompose_decompose_fitness_docstring();
 

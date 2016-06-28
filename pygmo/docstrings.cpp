@@ -450,6 +450,43 @@ See :cpp:class:`pagmo::moead`.
 )";
 }
 
+std::string moead_get_log_docstring()
+{
+    return R"(moead.get_log()
+
+The log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+constructed with a :class:`~pygmo.core.moead`. A verbosity of N implies a log line each N generations.
+
+Returns:
+    NumPy tuple: each entry contains Gen, Fevals, ADR, ideal_point.
+
+Where
+ * Gen (int), generation number
+ * Fevals (int), number of functions evaluation made.
+ * ADF (float), Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness
+along the corresponding direction.
+ * ideal_point (list?), The ideal point of the current population
+
+Logged screen output example (verbosity 1, objectives 2):
+
+Gen:        Fevals:           ADF:        ideal1:        ideal2:
+  1              0        24.9576       0.117748        2.77748
+  2             40        19.2461      0.0238826        2.51403
+  3             80        12.4375      0.0238826        2.51403
+  4            120        9.08406     0.00389182        2.51403
+  5            160        7.10407       0.002065        2.51403
+  6            200        6.11242     0.00205598        2.51403
+  7            240        8.79749     0.00205598        2.25538
+  8            280        7.23155    7.33914e-05        2.25538
+  9            320        6.83249    7.33914e-05        2.25538
+ 10            360        6.55125    7.33914e-05        2.25538
+
+See :cpp:class:`pagmo::moead`.
+
+)";
+}
+
 std::string cmaes_docstring()
 {
     return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = -1, ftol = 1e-6, xtol = 1e-6, memory = false, seed = random)
@@ -487,6 +524,9 @@ Args:
     f (array or list of doubles): fitness vector to be decomposed
     weights (array or list of doubles): weights of the decomposition
     ref_point (array or list of doubles): reference point for the decomposition (only for tchebycheff and bi)
+
+Returns:
+    NumPy array of doubles: containing one single value representing the decomposed fitness
 
 Raises:
     ValueError: if the dimensions of *f*, *weights* or *ref_point* are inconsistent

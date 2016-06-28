@@ -299,6 +299,13 @@ static inline bp::list de1220_allowed_variants()
     return retval;
 }
 
+// Wrappers for utils/multi_objective stuff
+// fast_non_dominated_sorting
+//static inline void fast_non_dominated_sorting_wrapper(const bp::object &x)
+//{
+//    auto retval = fast_non_dominated_sorting(pygmo::to_vvd(x));
+//}
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -628,6 +635,6 @@ BOOST_PYTHON_MODULE(core)
          (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5,
           bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u, bp::arg("preserve_diversity") = true, bp::arg("seed")))
       );
-    pygmo::expose_algo_log(moead_,"");
+    pygmo::expose_algo_log(moead_,pygmo::moead_get_log_docstring().c_str());
     moead_.def("get_seed",&moead::get_seed);
 }
