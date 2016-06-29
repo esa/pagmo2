@@ -33,10 +33,16 @@ std::string decompose_decompose_fitness_docstring();
 std::string get_best_docstring(const std::string &);
 
 // user - algorithms
-std::string moead_docstring();
-std::string moead_get_log_docstring();
 std::string cmaes_docstring();
 std::string cmaes_get_log_docstring();
+std::string de_docstring();
+std::string de_get_log_docstring();
+std::string moead_docstring();
+std::string moead_get_log_docstring();
+std::string sade_docstring();
+std::string sade_get_log_docstring();
+
+
 
 
 }

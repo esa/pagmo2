@@ -17,7 +17,7 @@ individual is determined:
 * by the fitness of the chromosome as evaluated by a :class:`~pygmo.core.problem` and thus including objectives,
   equality constraints and inequality constraints if present.
 
-See also the docs of the C++ equivalent :cpp:class:`pagmo::population`.
+See also the docs of the C++ class :cpp:class:`pagmo::population`.
 
 )";
 }
@@ -379,7 +379,7 @@ std::string problem_docstring()
 >>> p.fitness([1,2,3,4,5])
 array([ 14814.])
 
-See also the docs of the C++ equivalent :cpp:class:`pagmo::problem`.
+See also the docs of the C++ class :cpp:class:`pagmo::problem`.
 
 )";
 }
@@ -412,16 +412,191 @@ std::string rosenbrock_docstring()
 The Rosenbrock problem.
 
 Args:
-    dim (int): number of dimensions
+    dim (``int``): number of dimensions
 
 Raises:
     OverflowError: if *dim* is negative or greater than an implementation-defined value
     ValueError: if *dim* is less than 2
 
-See also the docs of the C++ equivalent :cpp:class:`pagmo::rosenbrock`.
+See also the docs of the C++ class :cpp:class:`pagmo::rosenbrock`.
 
 )";
 }
+
+std::string de_docstring()
+{
+    return R"(__init__(gen = 1, F = 0.8, CR = 0.9, variant = 2, ftol = 1e-6, xtol = 1e-6, seed = random)
+
+Differential Evolution
+
+Args:
+    gen (``int``): number of generations
+    F (``float``): weight coefficient (dafault value is 0.8)
+    CR (``float``): crossover probability (dafault value is 0.9)
+    variant (``int``): mutation variant (dafault variant is 2: /rand/1/exp)
+    ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
+    xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen*, *variant* or *seed* is negative or greater than an implementation-defined value
+    ValueError: if *F*, *CR* are not in [0,1]
+
+The following variants (mutation variants) are available to create a new candidate individual:
+
++-------------------------+-------------------------+
+| 1 - best/1/exp          | 2 - rand/1/exp          |
++-------------------------+-------------------------+
+| 3 - rand-to-best/1/exp  | 4 - best/2/exp          |
++-------------------------+-------------------------+
+| 5 - rand/2/exp          | 6 - best/1/bin          |
++-------------------------+-------------------------+
+| 7 - rand/1/bin          | 8 - rand-to-best/1/bin  |
++-------------------------+-------------------------+
+| 9 - best/2/bin          | 10 - rand/2/bin         |
++-------------------------+-------------------------+
+
+See also the docs of the C++ class :cpp:class:`pagmo::de`.
+
+)";
+}
+
+std::string de_get_log_docstring()
+{
+    return R"(de.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+constructed with a :class:`~pygmo.core.de`. A verbosity of N implies a log line each N generations.
+
+Returns:
+    list of tuples: at each logged epoch, the values Gen, Fevals, Best, dx, df
+
+Where:
+    * Gen (``int``), generation number
+    * Fevals (``int``), number of functions evaluation made.
+    * Best (``float``), the best fitness function currently in the population
+    * dx (``float``), the norm of the distance to the population mean of the mutant vectors
+    * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+
+Examples:
+    >>> from pygmo.core import *
+    >>> algo = algorithm(de(gen = 500))
+    >>> algo.set_verbosity(100)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop)
+    Gen:        Fevals:          Best:            dx:            df:
+      1             20         162446        65.2891    1.78686e+06
+    101           2020        198.402         8.4454        572.161
+    201           4020        21.1155        2.60629        24.5152
+    301           6020        6.67069        0.51811        1.99744
+    401           8020        3.60022       0.583444       0.554511
+    Exit condition -- generations = 500
+    >>> al = algo.extract(de)
+    >>> al.get_log()
+    [(1, 20, 162446.0185265718, 65.28911664703388, 1786857.8926660626), ...
+
+See also the docs of the C++ class :cpp:class:`pagmo::de::get_log`.
+
+)";
+}
+
+std::string sade_docstring()
+{
+    return R"(__init__(gen = 1, variant = 2, variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
+
+Self-adaptive Differential Evolution
+
+Args:
+    gen (``int``): number of generations
+    variant (``int``): mutation variant (dafault variant is 2: /rand/1/exp)
+    variant_adptv (``int``): F and CR parameter adaptation scheme to be used (one of 1..2)
+    ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
+    xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
+    memory (``bool``): when true the adapted parameters CR anf F are not reset between successive calls to the evolve method
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen*, *variant*, *variant_adptv* or *seed* is negative or greater than an implementation-defined value
+    ValueError: if *variant* is not in [1,18] or *variant_adptv* is not in [0,1]
+
+The following variants (mutation variants) are available to create a new candidate individual:
+
++--------------------------------------+--------------------------------------+
+| 1 - best/1/exp                       | 2 - rand/1/exp                       |
++--------------------------------------+--------------------------------------+
+| 3 - rand-to-best/1/exp               | 4 - best/2/exp                       |
++--------------------------------------+--------------------------------------+
+| 5 - rand/2/exp                       | 6 - best/1/bin                       |
++--------------------------------------+--------------------------------------+
+| 7 - rand/1/bin                       | 8 - rand-to-best/1/bin               |
++--------------------------------------+--------------------------------------+
+| 9 - best/2/bin                       | 10 - rand/2/bin                      |
++--------------------------------------+--------------------------------------+
+| 11 - rand/3/exp                      | 12 - rand/3/bin                      |
++--------------------------------------+--------------------------------------+
+| 13 - best/3/exp                      | 14 - best/3/bin                      |
++--------------------------------------+--------------------------------------+
+| 15 - rand-to-current/2/exp           | 16 - rand-to-current/2/bin           |
++--------------------------------------+--------------------------------------+
+| 17 - rand-to-best-and-current/2/exp  | 18 - rand-to-best-and-current/2/bin  |
++--------------------------------------+--------------------------------------+
+
+The following adaptation schemes are available:
+
++--------------------------------------+--------------------------------------+
+| 1 - jDE                              | 2 - iDE                              |
++--------------------------------------+--------------------------------------+
+
+See also the docs of the C++ class :cpp:class:`pagmo::sade`.
+
+)";
+}
+
+std::string sade_get_log_docstring()
+{
+    return R"(sade.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+constructed with a :class:`~pygmo.core.sade`. A verbosity of N implies a log line each N generations.
+
+Returns:
+    list of tuples: at each logged epoch, the values Gen, Fevals, Best, F, CR, dx, df
+
+Where:
+    * Gen (``int``), generation number
+    * Fevals (``int``), number of functions evaluation made.
+    * Best (``float``), the best fitness function currently in the population
+    * F (``float``), the value of the adapted paramter F used to create the best so far
+    * CR (``float``), the value of the adapted paramter CR used to create the best so far
+    * dx (``float``), the norm of the distance to the population mean of the mutant vectors
+    * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+
+Examples:
+    >>> from pygmo.core import *
+    >>> algo.set_verbosity(100)
+    >>> algo = algorithm(sade(gen = 500))
+    >>> prob = problems.rosenbrock(10)
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop)
+    Gen:        Fevals:          Best:             F:            CR:            dx:            df:
+      1             20         297060       0.690031       0.294769        44.1494    2.30584e+06
+    101           2020        97.4258        0.58354       0.591527        13.3115        441.545
+    201           4020        8.79247         0.6678        0.53148        17.8822        121.676
+    301           6020        6.84774       0.494549        0.98105        12.2781        40.9626
+    401           8020         4.7861       0.428741       0.743813        12.2938        39.7791
+    Exit condition -- generations = 500
+    >>> al = algo.extract(sade)
+    >>> al.get_log()
+    [(1, 20, 297059.6296130389, 0.690031071850855, 0.29476914701127666, 44.14940516578547, 2305836.7422693395), ...
+
+See also the docs of the C++ class :cpp:class:`pagmo::sade::get_log`.
+
+)";
+}
+
 
 std::string moead_docstring()
 {
@@ -430,22 +605,24 @@ std::string moead_docstring()
 Multi Objective Evolutionary Algorithms by Decomposition (the DE variant)
 
 Args:
-    gen (int): number of generations
-    weight_generation (float): method used to generate the weights, one of "grid", "low discrepancy" or "random"
-    neighbours (int): size of the weight's neighborhood
-    CR (float): crossover parameter in the Differential Evolution operator
-    F (float): parameter for the Differential Evolution operator
-    eta_m (float): distribution index used by the polynomial mutation
-    realb (float): chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true)
-    limit (int): stopping criteria on the f tolerance
-    preserve_diversity (bool): maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
-    seed (int): seed used by the internal random number generator (default is random)
+    gen (``int``): number of generations
+    weight_generation (``str``): method used to generate the weights, one of "grid", "low discrepancy" or "random"
+    neighbours (``int``): size of the weight's neighborhood
+    CR (``float``): crossover parameter in the Differential Evolution operator
+    F (``float``): parameter for the Differential Evolution operator
+    eta_m (``float``): distribution index used by the polynomial mutation
+    realb (``float``): chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true)
+    limit (``int``):  maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
+    preserve_diversity (``bool``): when true activates diversity preservation mechanisms
+    seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
     OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
-    ValueError: if *cc*, *cs*, *c1*, *cmu* are not in [0,1] or -1
+    ValueError: if *weight_generation* is not one of 'random', 'low discrepancy', 'grid'
+    ValueError: if *CR* or *F* or *realb* are not in [0.,1.]
+    ValueError: if *eta_m* is negative
 
-See also the docs of the C++ equivalent :cpp:class:`pagmo::moead`.
+See also the docs of the C++ class :cpp:class:`pagmo::moead`.
 
 )";
 }
@@ -462,9 +639,9 @@ Returns:
     list of tuples: at each logged epoch, the values Gen, Fevals, ADR, ideal_point.
 
 Where:
-    * Gen (int), generation number
-    * Fevals (int), number of functions evaluation made.
-    * ADF (float), Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness along the corresponding direction.
+    * Gen (``int``), generation number
+    * Fevals (``int``), number of functions evaluation made.
+    * ADF (``float``), Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness along the corresponding direction.
     * ideal_point (list?), The ideal point of the current population
 
 Examples:
@@ -486,7 +663,7 @@ Examples:
       File "<stdin>", line 1, in <module>
     TypeError: No to_python (by-value) converter found for C++ type: std::__1::vector<double, std::__1::allocator<double> >
 
-See also the docs of the C++ equivalent :cpp:function:`pagmo::moead::get_log`.
+See also the docs of the C++ class :cpp:class:`pagmo::moead::get_log`.
 
 )";
 }
@@ -498,22 +675,22 @@ std::string cmaes_docstring()
 Covariance Matrix Evolutionary Strategy (CMA-ES).
 
 Args:
-    gen (int): number of generations
-    cc (float): backward time horizon for the evolution path (by default is automatically assigned)
-    cs (float): makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned)
-    c1 (float): learning rate for the rank-one update of the covariance matrix (by default is automatically assigned)
-    cmu (float): learning rate for the rank-mu  update of the covariance matrix (by default is automatically assigned)
-    sigma0 (float): initial step-size
-    ftol (float): stopping criteria on the x tolerance
-    xtol (float): stopping criteria on the f tolerance
-    memory (bool): when true the adapted parameters are not reset between successive calls to the evolve method
-    seed (int): seed used by the internal random number generator (default is random)
+    gen (``int``): number of generations
+    cc (``float``): backward time horizon for the evolution path (by default is automatically assigned)
+    cs (``float``): makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned)
+    c1 (``float``): learning rate for the rank-one update of the covariance matrix (by default is automatically assigned)
+    cmu (``float``): learning rate for the rank-mu  update of the covariance matrix (by default is automatically assigned)
+    sigma0 (``float``): initial step-size
+    ftol (``float``): stopping criteria on the x tolerance
+    xtol (``float``): stopping criteria on the f tolerance
+    memory (``bool``): when true the adapted parameters are not reset between successive calls to the evolve method
+    seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
     OverflowError: if *gen* is negative or greater than an implementation-defined value
     ValueError: if *cc*, *cs*, *c1*, *cmu* are not in [0,1] or -1
 
-See also the docs of the C++ equivalent :cpp:class:`pagmo::cmaes`.
+See also the docs of the C++ class :cpp:class:`pagmo::cmaes`.
 
 )";
 }
@@ -530,12 +707,12 @@ Returns:
     list of tuples: at each logged epoch, the values Gen, Fevals, Best, dx, df, sigma
 
 Where:
-    * Gen (int), generation number
-    * Fevals (int), number of functions evaluation made.
-    * Best (float), the best fitness function currently in the population
-    * dx (float), the norm of the distance to the population mean of the mutant vectors
-    * df (float), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
-    * sigma (float), the current step-size
+    * Gen (``int``), generation number
+    * Fevals (``int``), number of functions evaluation made.
+    * Best (``float``), the best fitness function currently in the population
+    * dx (``float``), the norm of the distance to the population mean of the mutant vectors
+    * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+    * sigma (``float``), the current step-size
 
 Examples:
     >>> from pygmo.core import *
@@ -555,7 +732,7 @@ Examples:
     >>> al.get_log()
     [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
 
-See also the docs of the C++ equivalent :cpp:function:`pagmo::cmaes::get_log`.
+See also the docs of the C++ class :cpp:class:`pagmo::cmaes::get_log`.
 
 )";
 }
@@ -567,12 +744,12 @@ std::string decompose_decompose_fitness_docstring()
 Returns the original fitness of the multi-objective problem
 
 Args:
-    f (array or list of doubles): fitness vector to be decomposed
-    weights (array or list of doubles): weights of the decomposition
-    ref_point (array or list of doubles): reference point for the decomposition (only for tchebycheff and bi)
+    f (array or list of floats): fitness vector to be decomposed
+    weights (array or list of floats): weights of the decomposition
+    ref_point (array or list of floats): reference point for the decomposition (only for tchebycheff and bi)
 
 Returns:
-    NumPy array of doubles: containing one single value representing the decomposed fitness
+    NumPy array of floats: containing one single value representing the decomposed fitness
 
 Raises:
     ValueError: if the dimensions of *f*, *weights* or *ref_point* are inconsistent

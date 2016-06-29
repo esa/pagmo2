@@ -82,10 +82,10 @@ public:
      *
      * @param[in] gen number of generations.
      * @param[in] variant mutation variant (dafault variant is 2: /rand/1/exp)
-     * @param[in] variant_adptv parameter adaptation scheme to be used (one of 1..2)
+     * @param[in] variant_adptv F and CR parameter adaptation scheme to be used (one of 1..2)
      * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
-     * @param[in] memory when true the parameters CR anf F are not reset between successive calls to the evolve method
+     * @param[in] memory when true the adapted parameters CR anf F are not reset between successive calls to the evolve method
      * @param[in] seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if \p variant_adptv is not one of 0,1

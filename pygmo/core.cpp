@@ -574,13 +574,12 @@ BOOST_PYTHON_MODULE(core)
     // serialization of the algorithm. Not necessary for any other algorithm type.
     na.def_pickle(null_algorithm_pickle_suite());
     // DE
-    auto de_ = pygmo::expose_algorithm<de>("de","__init__(gen = 1, F = 0.8, CR = 0.9, variant = 2, ftol = 1e-6, tol = 1e-6, seed = random)\n\n"
-        "Differential evolution algorithm.\n\n");
+    auto de_ = pygmo::expose_algorithm<de>("de", pygmo::de_docstring().c_str());
     de_.def(bp::init<unsigned int,double,double,unsigned int,double,double>((bp::arg("gen") = 1u, bp::arg("F") = .8,
         bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6)));
     de_.def(bp::init<unsigned int,double,double,unsigned int,double,double,unsigned>((bp::arg("gen") = 1u, bp::arg("F") = .8,
         bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6, bp::arg("seed"))));
-    pygmo::expose_algo_log(de_,"");
+    pygmo::expose_algo_log(de_,pygmo::de_get_log_docstring().c_str());
     de_.def("get_seed",&de::get_seed);
     // SEA
     auto sea_ = pygmo::expose_algorithm<sea>("sea","__init__(gen = 1, seed = random)\n\n"
@@ -590,15 +589,13 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algo_log(sea_,"");
     sea_.def("get_seed",&sea::get_seed);
     // SADE
-    auto sade_ = pygmo::expose_algorithm<sade>("sade","__init__(gen = 1, variant = 2, variant_adptv = 1, "
-        "ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
-        "Self-adaptive differential evolution (jDE and iDE).\n\n");
+    auto sade_ = pygmo::expose_algorithm<sade>("sade", pygmo::sade_docstring().c_str());
     sade_.def(bp::init<unsigned,unsigned,unsigned,double,double,bool>((bp::arg("gen") = 1u, bp::arg("variant") = 2u,
         bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
     sade_.def(bp::init<unsigned,unsigned,unsigned,double,double,bool,unsigned>((bp::arg("gen") = 1u, bp::arg("variant") = 2u,
         bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
         bp::arg("seed"))));
-    pygmo::expose_algo_log(sade_,"");
+    pygmo::expose_algo_log(sade_, pygmo::sade_get_log_docstring().c_str());
     sade_.def("get_seed",&sade::get_seed);
     // DE-1220
     auto de1220_ = pygmo::expose_algorithm<de1220>("de1220","__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], "
