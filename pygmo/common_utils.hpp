@@ -226,6 +226,62 @@ inline pagmo::vector_double to_vd(const bp::object &o)
         "are supported").c_str());
 }
 
+// Convert a numpy array to a vector of vector_double.
+inline std::vector<pagmo::vector_double> a_to_vvd(PyArrayObject *o)
+{
+    using size_type = std::vector<pagmo::vector_double>::size_type;
+    if (!PyArray_ISCARRAY_RO(o)) {
+        pygmo_throw(PyExc_RuntimeError,"cannot convert NumPy array to a vector of vector_double: "
+         "data must be C-style contiguous, aligned, and in machine byte-order");
+    }
+    if (PyArray_NDIM(o) != 2) {
+        pygmo_throw(PyExc_ValueError,"cannot convert NumPy array to a vector of vector_double: "
+         "the array must be 2-dimensional");
+    }
+    if (PyArray_TYPE(o) != NPY_DOUBLE) {
+        pygmo_throw(PyExc_TypeError,"cannot convert NumPy array to a vector of vector_double: "
+         "the scalar type must be 'double'");
+    }
+    if (PyArray_ITEMSIZE(o) != sizeof(double)) {
+        pygmo_throw(PyExc_RuntimeError,("cannot convert NumPy array to a vector of vector_double: "
+         "the size of the scalar type must be " + std::to_string(sizeof(double))).c_str());
+    }
+    const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
+    std::vector<pagmo::vector_double> retval;
+    if (size) {
+        auto data = static_cast<double *>(PyArray_DATA(o));
+        const auto ssize = PyArray_SHAPE(o)[1];
+        for (size_type i = 0u; i < size; ++i, data += ssize) {
+            retval.push_back(pagmo::vector_double(data,data + ssize));
+        }
+    }
+    return retval;
+}
+
+// Convert an arbitrary Python object to a vector of vector_double.
+inline std::vector<pagmo::vector_double> to_vvd(const bp::object &o)
+{
+    bp::object l = builtin().attr("list");
+    bp::object a = bp::import("numpy").attr("ndarray");
+    if (isinstance(o,l)) {
+        bp::stl_input_iterator<bp::object> begin(o), end;
+        std::vector<pagmo::vector_double> retval;
+        for (; begin != end; ++begin) {
+            retval.push_back(to_vd(*begin));
+        }
+        return retval;
+    } else if (isinstance(o,a)) {
+        auto n = PyArray_FROM_OTF(o.ptr(),NPY_DOUBLE,NPY_ARRAY_IN_ARRAY);
+        if (!n) {
+            bp::throw_error_already_set();
+        }
+        return a_to_vvd((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
+    }
+    pygmo_throw(PyExc_TypeError,("cannot convert the type '" + str(type(o)) + "' to a "
+        "vector of vector_double: only lists of doubles and NumPy arrays of doubles "
+        "are supported").c_str());
+}
+
 // Convert a numpy array to an std::vector<unsigned>.
 inline std::vector<unsigned> a_to_vu(PyArrayObject *o)
 {
