@@ -756,7 +756,7 @@ Raises:
     OverflowError: if *gen*, *variant*, *variant_adptv* or *seed* is negative or greater than an implementation-defined value
     ValueError: if each id in *variant_adptv* is not in [1,18] or *variant_adptv* is not in [0,1]
 
-The following variants (mutation variants) are available to create a new candidate individual:
+The following variants (mutation variants) can be put into *allowed_variants*:
 
 +--------------------------------------+--------------------------------------+
 | 1 - best/1/exp                       | 2 - rand/1/exp                       |
@@ -778,7 +778,7 @@ The following variants (mutation variants) are available to create a new candida
 | 17 - rand-to-best-and-current/2/exp  | 18 - rand-to-best-and-current/2/bin  |
 +--------------------------------------+--------------------------------------+
 
-The following adaptation schemes for F and CR are available:
+The following adaptation schemes for the parameters F and CR are available:
 
 +--------------------------------------+--------------------------------------+
 | 1 - jDE                              | 2 - iDE                              |
@@ -817,7 +817,6 @@ Examples:
     >>> prob = problem(rosenbrock(10))
     >>> pop = population(prob, 20)
     >>> pop = algo.evolve(pop)
-
        Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:
           1             20         285653        0.55135       0.441551             16        43.9719    2.02379e+06
         101           2020        12.2721       0.127285      0.0792493             14        3.22986        106.764
