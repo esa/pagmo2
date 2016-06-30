@@ -641,26 +641,24 @@ Where:
     * Gen (``int``), generation number
     * Fevals (``int``), number of functions evaluation made.
     * ADF (``float``), Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness along the corresponding direction.
-    * ideal_point (list?), The ideal point of the current population
+    * ideal_point (NumPy array), The ideal point of the current population (cropped to max 5 dimensions only in the screen output)
 
 Examples:
     >>> from pygmo.core import *
-    >>> algo  = algorithm(moead(gen = 500))
+    >>> algo = algorithm(moead(gen=500))
     >>> algo.set_verbosity(100)
-    >>> prob = problem(zdt(1, 30))
+    >>> prob = problem(zdt())
     >>> pop = population(prob, 40)
     >>> pop = algo.evolve(pop)
     Gen:        Fevals:           ADF:        ideal1:        ideal2:
-      1              0        25.4579      0.0420194        2.70624
-    101           4000        5.71961    1.45123e-08       0.509844
-    201           8000        5.27717    1.45123e-08        0.08718
-    301          12000        5.20037    3.84274e-11      0.0399277
-    401          16000        5.20402    1.75423e-12      0.0149309
+      1              0        32.5747     0.00190532        2.65685
+    101           4000        5.67751    2.56736e-09       0.468789
+    201           8000        5.38297    2.56736e-09      0.0855025
+    301          12000        5.05509    9.76581e-10      0.0574796
+    401          16000        5.13126    9.76581e-10      0.0242256
     >>> al = algo.extract(moead)
     >>> al.get_log()
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    TypeError: No to_python (by-value) converter found for C++ type: std::__1::vector<double, std::__1::allocator<double> >
+    [(1, 0, 32.574745630075874, array([  1.90532430e-03,   2.65684834e+00])), ...
 
 See also the docs of the C++ class :cpp:class:`pagmo::moead::get_log`.
 
@@ -887,9 +885,9 @@ Returns:
 Returns:
     dl (list of NumPy arrays): the domination list
 Returns:
-    dc (NumPy arrays): the domination count
+    dc (NumPy array): the domination count
 Returns:
-    ndr (NumPy arrays): the non domination ranks
+    ndr (NumPy array): the non domination ranks
 
 Examples:
     >>> from pygmo.core import *

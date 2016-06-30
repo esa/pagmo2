@@ -300,6 +300,16 @@ static inline bp::list de1220_allowed_variants()
     return retval;
 }
 
+// moead needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+inline bp::list expose_moead_log(const moead &a)
+{
+    bp::list retval;
+    for (const auto &t: a.get_log()) {
+        retval.append(bp::make_tuple(std::get<0>(t),std::get<1>(t),std::get<2>(t),pygmo::v_to_a(std::get<3>(t))));
+    }
+    return retval;
+}
+
 // Wrappers for utils/multi_objective stuff
 // fast_non_dominated_sorting
 static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
@@ -314,7 +324,7 @@ static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
     // the domination list
     auto dl = std::get<1>(fnds);
     bp::list dl_py;
-    for (const std::vector<vector_double::size_type> &item : dl) {
+    for (const auto &item : dl) {
         dl_py.append(pygmo::v_to_a(item));
     }
     return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)), pygmo::v_to_a(std::get<3>(fnds)));
@@ -326,6 +336,7 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
     auto res = pygmo::to_vvd(o);
     return res.size() == n && std::all_of(res.begin(),res.end(),[m](const auto &v) {return v.size() == m;});
 }
+
 
 BOOST_PYTHON_MODULE(core)
 {
@@ -652,7 +663,7 @@ BOOST_PYTHON_MODULE(core)
          (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5,
           bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u, bp::arg("preserve_diversity") = true, bp::arg("seed")))
       );
-    pygmo::expose_algo_log(moead_,pygmo::moead_get_log_docstring().c_str());
+    moead_.def("get_log", expose_moead_log, pygmo::moead_get_log_docstring().c_str());
     moead_.def("get_seed",&moead::get_seed);
 
     // Exposition of stand alone functions
