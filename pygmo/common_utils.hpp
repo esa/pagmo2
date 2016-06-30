@@ -62,6 +62,7 @@ PYGMO_CPP_NPY(short,NPY_SHORT)
 PYGMO_CPP_NPY(int,NPY_INT)
 PYGMO_CPP_NPY(long,NPY_LONG)
 PYGMO_CPP_NPY(long long,NPY_LONGLONG)
+PYGMO_CPP_NPY(float,NPY_FLOAT)
 PYGMO_CPP_NPY(double,NPY_DOUBLE)
 
 #undef PYGMO_CPP_NPY
@@ -103,7 +104,7 @@ inline bool callable(const bp::object &o)
     return bp::extract<bool>(builtin().attr("callable")(o));
 }
 
-// Convert a vector of arithmetic types into a numpy array.
+// Convert a vector of arithmetic types into a 1D numpy array.
 template <typename T>
     using v_to_a_enabler = std::enable_if_t<std::is_arithmetic<T>::value,int>;
 
@@ -117,15 +118,17 @@ inline bp::object v_to_a(const std::vector<T> &v)
     if (!ret) {
         pygmo_throw(PyExc_RuntimeError,"couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
     }
+    // Hand over to BP for exception-safe behaviour.
+    bp::object retval{bp::handle<>(ret)};
     if (v.size()) {
         // Copy over the data.
         std::copy(v.begin(),v.end(),static_cast<T *>(PyArray_DATA((PyArrayObject *)(ret))));
     }
     // Hand over to boost python.
-    return bp::object(bp::handle<>(ret));
+    return retval;
 }
 
-// Convert a vector of vectors of arithmetic types into a numpy array.
+// Convert a vector of vectors of arithmetic types into a 2D numpy array.
 template <typename T>
     using vv_to_a_enabler = std::enable_if_t<std::is_arithmetic<T>::value,int>;
 
@@ -147,8 +150,8 @@ inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
         auto data = static_cast<T *>(PyArray_DATA((PyArrayObject *)(ret)));
         for (const auto &i: v) {
             if (i.size() != ncols) {
-                pygmo_throw(PyExc_ValueError,"cannot convert a vector of vector_double to a NumPy 2D array "
-                    "if the vector_double instances don't have all the same size");
+                pygmo_throw(PyExc_ValueError,"cannot convert a vector of vectors to a NumPy 2D array "
+                    "if the vector instances don't have all the same size");
             }
             std::copy(i.begin(),i.end(),data);
             data += ncols;
