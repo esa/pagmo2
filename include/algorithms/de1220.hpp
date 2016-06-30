@@ -664,7 +664,7 @@ public:
      * @endcode
      * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
      * function currently in the population, F is the F used to create the best so far, CR
-     * the CR used to create the best so far, Variant is the Variant used to create the best so far,
+     * the CR used to create the best so far, Variant is the mutation variant used to create the best so far,
      * dx is the population flatness evaluated as the distance between
      * the decisions vector of the best and of the worst individual and df is the population flatness evaluated
      * as the distance between the fitness of the best and of the worst individual.

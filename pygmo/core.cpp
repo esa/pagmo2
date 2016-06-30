@@ -598,16 +598,14 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algo_log(sade_, pygmo::sade_get_log_docstring().c_str());
     sade_.def("get_seed",&sade::get_seed);
     // DE-1220
-    auto de1220_ = pygmo::expose_algorithm<de1220>("de1220","__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], "
-        "variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
-        "Self-adaptive differential evolution (DE 1220 aka pDE).\n\n");
+    auto de1220_ = pygmo::expose_algorithm<de1220>("de1220", pygmo::de1220_docstring().c_str());
     de1220_.def("__init__",bp::make_constructor(&de1220_init_0,bp::default_call_policies(),
         (bp::arg("gen") = 1u,bp::arg("allowed_variants") = de1220_allowed_variants(),bp::arg("variant_adptv") = 1u,
         bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
     de1220_.def("__init__",bp::make_constructor(&de1220_init_1,bp::default_call_policies(),
         (bp::arg("gen") = 1u,bp::arg("allowed_variants") = de1220_allowed_variants(),bp::arg("variant_adptv") = 1u,
         bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
-    pygmo::expose_algo_log(de1220_,"");
+    pygmo::expose_algo_log(de1220_, pygmo::de1220_get_log_docstring().c_str());
     de1220_.def("get_seed",&de1220::get_seed);
     // CMA-ES
 #ifdef PAGMO_ENABLE_EIGEN3

@@ -576,8 +576,8 @@ Where:
 
 Examples:
     >>> from pygmo.core import *
-    >>> algo.set_verbosity(100)
     >>> algo = algorithm(sade(gen = 500))
+    >>> algo.set_verbosity(100)
     >>> prob = problems.rosenbrock(10)
     >>> pop = population(prob, 20)
     >>> pop = algo.evolve(pop)
@@ -596,7 +596,6 @@ See also the docs of the C++ class :cpp:class:`pagmo::sade::get_log`.
 
 )";
 }
-
 
 std::string moead_docstring()
 {
@@ -737,6 +736,104 @@ See also the docs of the C++ class :cpp:class:`pagmo::cmaes::get_log`.
 )";
 }
 
+std::string de1220_docstring()
+{
+    return R"(__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
+
+Self-adaptive Differential Evolution, PaGMO flavour (pDE).
+The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
+
+Args:
+    gen (``int``): number of generations
+    allowed_variants (NumPy array or list of floats): allowed mutation variants, each one being a number in [1, 18]
+    variant_adptv (``int``): F and CR parameter adaptation scheme to be used (one of 1..2)
+    ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
+    xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
+    memory (``bool``): when true the adapted parameters CR anf F are not reset between successive calls to the evolve method
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen*, *variant*, *variant_adptv* or *seed* is negative or greater than an implementation-defined value
+    ValueError: if each id in *variant_adptv* is not in [1,18] or *variant_adptv* is not in [0,1]
+
+The following variants (mutation variants) are available to create a new candidate individual:
+
++--------------------------------------+--------------------------------------+
+| 1 - best/1/exp                       | 2 - rand/1/exp                       |
++--------------------------------------+--------------------------------------+
+| 3 - rand-to-best/1/exp               | 4 - best/2/exp                       |
++--------------------------------------+--------------------------------------+
+| 5 - rand/2/exp                       | 6 - best/1/bin                       |
++--------------------------------------+--------------------------------------+
+| 7 - rand/1/bin                       | 8 - rand-to-best/1/bin               |
++--------------------------------------+--------------------------------------+
+| 9 - best/2/bin                       | 10 - rand/2/bin                      |
++--------------------------------------+--------------------------------------+
+| 11 - rand/3/exp                      | 12 - rand/3/bin                      |
++--------------------------------------+--------------------------------------+
+| 13 - best/3/exp                      | 14 - best/3/bin                      |
++--------------------------------------+--------------------------------------+
+| 15 - rand-to-current/2/exp           | 16 - rand-to-current/2/bin           |
++--------------------------------------+--------------------------------------+
+| 17 - rand-to-best-and-current/2/exp  | 18 - rand-to-best-and-current/2/bin  |
++--------------------------------------+--------------------------------------+
+
+The following adaptation schemes for F and CR are available:
+
++--------------------------------------+--------------------------------------+
+| 1 - jDE                              | 2 - iDE                              |
++--------------------------------------+--------------------------------------+
+
+See also the docs of the C++ class :cpp:class:`pagmo::de1220`.
+
+)";
+}
+
+std::string de1220_get_log_docstring()
+{
+    return R"(de1220.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+constructed with a :class:`~pygmo.core.de1220`. A verbosity of N implies a log line each N generations.
+
+Returns:
+    list of tuples: at each logged epoch, the values Gen, Fevals, Best, F, CR, Variant, dx, df
+
+Where:
+    * Gen (``int``), generation number
+    * Fevals (``int``), number of functions evaluation made.
+    * Best (``float``), the best fitness function currently in the population
+    * F (``float``), the value of the adapted paramter F used to create the best so far
+    * CR (``float``), the value of the adapted paramter CR used to create the best so far
+    * Variant (``int``), the mutation variant used to create the best so far
+    * dx (``float``), the norm of the distance to the population mean of the mutant vectors
+    * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+
+Examples:
+    >>> from pygmo.core import *
+    >>> algo = algorithm(de1220(gen = 500))
+    >>> algo.set_verbosity(100)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop)
+
+       Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:
+          1             20         285653        0.55135       0.441551             16        43.9719    2.02379e+06
+        101           2020        12.2721       0.127285      0.0792493             14        3.22986        106.764
+        201           4020        5.72927       0.148337       0.777806             14        2.72177        4.10793
+        301           6020        4.85084        0.12193       0.996191              3        2.95555        3.85027
+        401           8020        4.20638       0.235997       0.996259              3        3.60338        4.49432
+    Exit condition -- generations = 500
+    >>> al = algo.extract(de1220)
+    >>> al.get_log()
+    [(1, 20, 285652.7928977573, 0.551350234239449, 0.4415510963067054, 16, 43.97185788345982, 2023791.5123259544), ...
+
+See also the docs of the C++ class :cpp:class:`pagmo::de1220::get_log`.
+
+)";
+}
+
 std::string decompose_decompose_fitness_docstring()
 {
     return R"(decompose_fitness(f, weights, ref_point)
@@ -744,9 +841,9 @@ std::string decompose_decompose_fitness_docstring()
 Returns the original fitness of the multi-objective problem
 
 Args:
-    f (array or list of floats): fitness vector to be decomposed
-    weights (array or list of floats): weights of the decomposition
-    ref_point (array or list of floats): reference point for the decomposition (only for tchebycheff and bi)
+    f (NumPy array or list of floats): fitness vector to be decomposed
+    weights (NumPy array or list of floats): weights of the decomposition
+    ref_point (NumPy array or list of floats): reference point for the decomposition (only for tchebycheff and bi)
 
 Returns:
     NumPy array of floats: containing one single value representing the decomposed fitness
