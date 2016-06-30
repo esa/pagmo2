@@ -1,5 +1,6 @@
 #include "python_includes.hpp"
 
+#include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
@@ -306,6 +307,13 @@ static inline bp::list de1220_allowed_variants()
 //    auto retval = fast_non_dominated_sorting(pygmo::to_vvd(x));
 //}
 
+// Helper function to test the to_vvd functionality.
+static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
+{
+    auto res = pygmo::to_vvd(o);
+    return res.size() == n && std::all_of(res.begin(),res.end(),[m](const auto &v) {return v.size() == m;});
+}
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -338,6 +346,7 @@ BOOST_PYTHON_MODULE(core)
     bp::def("_deepcopy",&pygmo::deepcopy);
     bp::def("_to_sp",&pygmo::to_sp);
     bp::def("_test_object_serialization",&test_object_serialization);
+    bp::def("_test_to_vvd",&test_to_vvd);
 
     // Expose cleanup function.
     bp::def("_cleanup",&cleanup);
