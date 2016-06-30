@@ -869,4 +869,41 @@ array([ 2.50501256])
 )";
 }
 
+std::string fast_non_dominated_sorting_docstring()
+{
+    return R"(ndf, dl, dc, ndr = fast_non_dominated_sorting(points)
+
+Runs the fast non dominated sorting algorithm on the input *points*
+
+Args:
+    points (array or list of arrais or lists of doubles): the input points
+
+Raises:
+    ValueError: if *points* is malformed
+    TypeError: if *points* cannot be converted to a vector of vector doubles
+
+Returns:
+    ndf (list of NumPy arrays): the non dominated fronts
+Returns:
+    dl (list of NumPy arrays): the domination list
+Returns:
+    dc (NumPy arrays): the domination count
+Returns:
+    ndr (NumPy arrays): the non domination ranks
+
+Examples:
+    >>> from pygmo.core import *
+    >>> ndf, dl, dc, ndr = fast_non_dominated_sorting([[2,3],[-1,2],[-3,2],[0,5],[1,1]])
+    >>> print(ndf)
+    [array([2, 4], dtype=uint64), array([1], dtype=uint64), array([0, 3], dtype=uint64)]
+    >>> print(dl)
+    [array([], dtype=uint64), array([0, 3], dtype=uint64), array([0, 1, 3], dtype=uint64), array([], dtype=uint64), array([0], dtype=uint64)]
+    >>> print(dc)
+    [3 1 0 2 0]
+    >>> print(ndr)
+    [2 1 0 2 0]
+
+)";
+}
+
 } // namespace

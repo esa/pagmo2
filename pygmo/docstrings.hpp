@@ -44,7 +44,8 @@ std::string moead_get_log_docstring();
 std::string sade_docstring();
 std::string sade_get_log_docstring();
 
-
+// stand alone functions
+std::string fast_non_dominated_sorting_docstring();
 
 
 }

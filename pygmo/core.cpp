@@ -302,10 +302,23 @@ static inline bp::list de1220_allowed_variants()
 
 // Wrappers for utils/multi_objective stuff
 // fast_non_dominated_sorting
-//static inline void fast_non_dominated_sorting_wrapper(const bp::object &x)
-//{
-//    auto retval = fast_non_dominated_sorting(pygmo::to_vvd(x));
-//}
+static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
+{
+    auto fnds = fast_non_dominated_sorting(pygmo::to_vvd(x));
+    // the non-dominated fronts
+    auto ndf = std::get<0>(fnds);
+    bp::list ndf_py;
+    for (const std::vector<vector_double::size_type> &front : ndf) {
+        ndf_py.append(pygmo::v_to_a(front));
+    }
+    // the domination list
+    auto dl = std::get<1>(fnds);
+    bp::list dl_py;
+    for (const std::vector<vector_double::size_type> &item : dl) {
+        dl_py.append(pygmo::v_to_a(item));
+    }
+    return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)), pygmo::v_to_a(std::get<3>(fnds)));
+}
 
 // Helper function to test the to_vvd functionality.
 static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
@@ -641,4 +654,8 @@ BOOST_PYTHON_MODULE(core)
       );
     pygmo::expose_algo_log(moead_,pygmo::moead_get_log_docstring().c_str());
     moead_.def("get_seed",&moead::get_seed);
+
+    // Exposition of stand alone functions
+    // Multi-objective utilities
+    bp::def("fast_non_dominated_sorting", fast_non_dominated_sorting_wrapper, pygmo::fast_non_dominated_sorting_docstring().c_str(), boost::python::arg("points"));
 }

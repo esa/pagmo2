@@ -71,9 +71,9 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
 {
     if (obj1.size() != obj2.size()) {
         pagmo_throw(std::invalid_argument,
-            "Different number of objectives: " + std::to_string(obj1.size()) +
+            "Different number of objectives found in input fitnesses: " + std::to_string(obj1.size()) +
             " and " + std::to_string(obj2.size()) +
-         ": cannot define dominance"); // LCOV_EXCL_LINE
+         ". I cannot define dominance");
     }
     vector_double::size_type count1 = 0u;
     vector_double::size_type count2 = 0u;
@@ -155,25 +155,24 @@ using fnds_return_type = std::tuple<std::vector<std::vector<vector_double::size_
  * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.
  *
- * @param[in] obj_list An std::vector containing the objectives of different individuals. Example {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
+ * @param[in] points An std::vector containing the objectives of different individuals. Example {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
  *
  * @return an std::tuple containing:
  *  - the non dominated fronts, an <tt>std::vector<std::vector<vector_double::size_type>></tt>
  * containing the non dominated fronts. Example {{1,2},{3},{0}}
- *  - the domination list, an <tt>std::vector<std::vector<size_type>></tt>
+ *  - the domination list, an <tt>std::vector<std::vector<vector_double::size_type>></tt>
  * containing the domination list, i.e. the indexes of all individuals
  * dominated by the individual at position \f$i\f$. Example {{},{},{0,3},{0}}
- *  - the domination count, an <tt>std::vector<size_type></tt> containing the number of individuals
+ *  - the domination count, an <tt>std::vector<vector_double::size_type></tt> containing the number of individuals
  * that dominate the individual at position \f$i\f$. Example {2, 0, 0, 1}
- *  - the non domination rank, an <tt>std::vector<size_type></tt> containing the index of the non dominated
+ *  - the non domination rank, an <tt>std::vector<vector_double::size_type></tt> containing the index of the non dominated
  * front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
  *
- * @throws std::invalid_argument If the size of \p obj_list is not at least 2
- * @throws unspecified all exceptions thrown by pagmo::pareto_dominance
+ * @throws std::invalid_argument If the size of \p points is not at least 2
  */
-fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &obj_list)
+fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &points)
     {
-        auto N = obj_list.size();
+        auto N = points.size();
         // We make sure to have two points at least (one could also be allowed)
         if (N < 2u) {
             pagmo_throw(std::invalid_argument, "At least two points are needed for fast_non_dominated_sorting: " + std::to_string(N) + " detected.");
@@ -192,9 +191,9 @@ fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &o
                 if (i==j) {
                     continue;
                 }
-                if (pareto_dominance(obj_list[i], obj_list[j])) {
+                if (pareto_dominance(points[i], points[j])) {
                     dom_list[i].push_back(j);
-                } else if (pareto_dominance(obj_list[j], obj_list[i])) {
+                } else if (pareto_dominance(points[j], points[i])) {
                     ++dom_count[i];
                 }
             }
