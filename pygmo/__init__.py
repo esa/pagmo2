@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-
+# for python 2.0 compatibility
 from __future__ import absolute_import as _ai
 
-__all__ = ['core', 'test', 'pygmo_plots']
-
-# For convenience import plotting functions into the core namespace
-from pygmo.pygmo_plots import *
-__all__ += [name for name in dir(pygmo_plots) if not name.startswith('__')]
+# We import the sub-modules
+from .core import *
+from .plotting import *
 
 # Problem extract functionality.
 def _problem_extract(self,t):
@@ -89,8 +87,6 @@ def _algorithm_is(self,t):
 
     """
     return not self.extract(t) is None
-
-from .core import *
 
 # Override of the population constructor.
 __original_population_init = population.__init__

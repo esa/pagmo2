@@ -874,7 +874,7 @@ std::string fast_non_dominated_sorting_docstring()
 Runs the fast non dominated sorting algorithm on the input *points*
 
 Args:
-    points (array or list of arrais or lists of doubles): the input points
+    points (array [or list] of arrays [or lists] of doubles): the input points
 
 Raises:
     ValueError: if *points* is malformed

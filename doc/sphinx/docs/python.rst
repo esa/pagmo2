@@ -42,3 +42,4 @@ Various optimization utilities implemented in PyGMO.
   :maxdepth: 1
 
   python/py_mo_utils
+  python/py_plotting

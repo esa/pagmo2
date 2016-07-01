@@ -27,7 +27,7 @@ install(TARGETS core
 )
 
 # Add submodules directories
-ADD_SUBDIRECTORY(pygmo_plots)
+ADD_SUBDIRECTORY(plotting)
 
 # Add the Python files.
 install(FILES __init__.py test.py DESTINATION ${PYGMO_INSTALL_PATH})
