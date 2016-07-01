@@ -881,13 +881,13 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (``tuple``): (ndf, dl, dc, ndr)
+    (``tuple``): (*ndf*, *dl*, *dc*, *ndr*)
 
 Where:
-    * ndf (``list`` of ``arrays``): the non dominated fronts
-    * dl (``list`` of ``arrays``): the domination list
-    * dc (``array``): the domination count
-    * ndr (``array``): the non domination ranks
+    * *ndf* (``list`` of ``arrays``): the non dominated fronts
+    * *dl* (``list`` of ``arrays``): the domination list
+    * *dc* (``array``): the domination count
+    * *ndr* (``array``): the non domination ranks
 
 Examples:
     >>> from pygmo import *

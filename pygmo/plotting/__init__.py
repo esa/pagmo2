@@ -9,7 +9,7 @@ def plot_non_dominated_fronts(points, marker = 'o', comp = [0,1]):
     compute the non dominated fronts.
 
     Args:
-        points (``array`` [or ``list``] of ``arrays`` [or ``lists``] of ``doubles``): points to plot
+        points (``array`` [or ``list``] of ``arrays`` [or ``lists``] of ``floats``): points to plot
         marker (``str``): matplotlib marker used to plot the *points*
         comp (``list``): Components to be considered in the two dimensional plot (useful in many-objectives cases)
 
