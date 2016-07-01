@@ -2,9 +2,14 @@
 # for python 2.0 compatibility
 from __future__ import absolute_import as _ai
 
-# We import the sub-modules
+# We import the sub-modules into the root namespace
 from .core import *
 from .plotting import *
+
+# And we explicitly import the submudules
+from . import core
+from . import plotting
+
 
 # Problem extract functionality.
 def _problem_extract(self,t):

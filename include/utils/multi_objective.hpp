@@ -27,6 +27,15 @@ namespace pagmo{
 
 namespace detail {
     //Recursive function building all m-ple of elements of X summing to s
+    //In C/C++ implementations there exists a limit on the number of times you
+    //can call recursively a function. It depends on a variety of factors,
+    //but probably it a number around few thousands on modern machines.
+    //If the limit is surpassed, the program terminates.
+    //I was thinking that one could create a problem with a few thousands objectives,
+    //call this function thus causing a crash from Python. In principle I think we
+    //can prevent this by limiting the recursion (e.g., via a function parameter that
+    //gets increased each time the function is called from itself).
+    //But for now I'd just put a note about this.
     void reksum(
             std::vector<std::vector<double> > &retval,
             const std::vector<population::size_type>& X,
