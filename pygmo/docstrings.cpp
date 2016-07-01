@@ -466,7 +466,7 @@ std::string de_get_log_docstring()
     return R"(de.get_log()
 
 Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
 constructed with a :class:`~pygmo.core.de`. A verbosity of N implies a log line each N generations.
 
 Returns:
@@ -559,7 +559,7 @@ std::string sade_get_log_docstring()
     return R"(sade.get_log()
 
 Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
 constructed with a :class:`~pygmo.core.sade`. A verbosity of N implies a log line each N generations.
 
 Returns:
@@ -631,7 +631,7 @@ std::string moead_get_log_docstring()
     return R"(moead.get_log()
 
 Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
 constructed with a :class:`~pygmo.core.moead`. A verbosity of N implies a log line each N generations.
 
 Returns:
@@ -697,7 +697,7 @@ std::string cmaes_get_log_docstring()
     return R"(cmaes.get_log()
 
 Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
 constructed with a :class:`~pygmo.core.cmaes`. A verbosity of N implies a log line each N generations.
 
 Returns:
@@ -792,7 +792,7 @@ std::string de1220_get_log_docstring()
     return R"(de1220.get_log()
 
 Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algoritm`
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
 constructed with a :class:`~pygmo.core.de1220`. A verbosity of N implies a log line each N generations.
 
 Returns:
