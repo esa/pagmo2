@@ -32,7 +32,7 @@ Appends a new chromosome x to the population, evaluating its fitness and creatin
 born individual. In case of exceptions, the population will not be altered.
 
 Args:
-    x (array or list of doubles): decision vector to be added to the population
+    x (``array``, or ``list`` of ``doubles``): decision vector to be added to the population
 
 Raises:
     ValueError: if the dimension of *x* is inconsistent with the problem dimension or the calculated fitness vector has
@@ -90,7 +90,7 @@ std::string population_best_idx_docstring()
 Index of best individual. See :cpp:func:`pagmo::population::best_idx()`.
 
 Args:
-    tol (a double, or an array or list of doubles): a scalar tolerance or a vector of tolerances to be applied to
+    tol (``double``, or ``array``, or ``list`` of ``doubles``): a scalar tolerance or a vector of tolerances to be applied to
       each constraints
 
 Returns:
@@ -115,7 +115,7 @@ std::string population_worst_idx_docstring()
 Index of worst individual. See :cpp:func:`pagmo::population::worst_idx()`.
 
 Args:
-    tol (a double, or an array or list of doubles): a scalar tolerance or a vector of tolerances to be applied to
+    tol (``double``, or an ``array``, or ``list`` of ``doubles``): a scalar tolerance or a vector of tolerances to be applied to
       each constraints
 
 Returns:
@@ -165,9 +165,9 @@ Sets simultaneously the i-th individual decision vector and fitness, thus avoidi
 function evaluation.
 
 Args:
-    i (an ``int``): individual’s index in the population
-    x (an array or list of doubles): a decision vector (chromosome)
-    f (an array or list of doubles): a fitness vector
+    i (``int``): individual’s index in the population
+    x (``array`` or ``list`` of ``doubles``): a decision vector (chromosome)
+    f (``array`` or ``list`` of ``doubles``): a fitness vector
 
 Raises:
     ValueError: if *i* is invalid, or if *x* or *f* have the wrong dimensions (i.e., their dimensions are
@@ -202,8 +202,8 @@ Sets the i-th individual's decision vector.
 The fitness of the individual will be computed from *x*.
 
 Args:
-    i (an ``int``): individual’s index in the population
-    x (an array or list of doubles): a decision vector (chromosome)
+    i (``int``): individual’s index in the population
+    x (``array`` or ``list`` of ``doubles``): a decision vector (chromosome)
 
 Raises:
     ValueError: if *i* is invalid, or if *x* has the wrong dimensions (i.e., the dimension is
@@ -236,7 +236,7 @@ std::string population_set_problem_seed_docstring()
 Sets the problem seed.
 
 Args:
-    seed (an ``int``): the desired seed (must be non-negative)
+    seed (``int``): the desired seed (must be non-negative)
 
 Raises:
     RuntimeError: if the problem is not stochastic
@@ -294,7 +294,7 @@ Each row of the returned array represents the fitness vector of the individual a
 population.
 
 Returns:
-    NumPy array of doubles: a deep copy of the fitness vectors of the individuals
+    ``array`` of ``doubles``: a deep copy of the fitness vectors of the individuals
 
 Examples:
 
@@ -315,7 +315,7 @@ Each row of the returned array represents the chromosome of the individual at th
 population.
 
 Returns:
-    NumPy array of doubles: a deep copy of the chromosomes of the individuals
+    ``array`` of ``doubles``: a deep copy of the chromosomes of the individuals
 
 Examples:
 
@@ -340,7 +340,7 @@ Each row of the returned array represents the ID of the individual at the corres
 population.
 
 Returns:
-    NumPy array of ``int``: a deep copy of the IDs of the individuals
+    ``array`` of ``int``: a deep copy of the IDs of the individuals
 
 Examples:
 
@@ -400,7 +400,7 @@ std::string get_best_docstring(const std::string &name)
 The best known solution for the )" + name + R"( problem.
 
 Returns:
-    NumPy array of doubles: the best known solution for the )" + name + R"( problem
+    ``array`` of ``doubles``: the best known solution for the )" + name + R"( problem
 
 )";
 }
@@ -470,7 +470,7 @@ parameter (by default nothing is logged) which can be set calling the method set
 constructed with a :class:`~pygmo.core.de`. A verbosity of N implies a log line each N generations.
 
 Returns:
-    list of tuples: at each logged epoch, the values Gen, Fevals, Best, dx, df
+    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, Best, dx, df
 
 Where:
     * Gen (``int``), generation number
@@ -563,7 +563,7 @@ parameter (by default nothing is logged) which can be set calling the method set
 constructed with a :class:`~pygmo.core.sade`. A verbosity of N implies a log line each N generations.
 
 Returns:
-    list of tuples: at each logged epoch, the values Gen, Fevals, Best, F, CR, dx, df
+    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, Best, F, CR, dx, df
 
 Where:
     * Gen (``int``), generation number
@@ -635,13 +635,13 @@ parameter (by default nothing is logged) which can be set calling the method set
 constructed with a :class:`~pygmo.core.moead`. A verbosity of N implies a log line each N generations.
 
 Returns:
-    list of tuples: at each logged epoch, the values Gen, Fevals, ADR, ideal_point.
+    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, ADR, ideal_point.
 
 Where:
     * Gen (``int``), generation number
     * Fevals (``int``), number of functions evaluation made.
     * ADF (``float``), Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness along the corresponding direction.
-    * ideal_point (NumPy array), The ideal point of the current population (cropped to max 5 dimensions only in the screen output)
+    * ideal_point (``array``), The ideal point of the current population (cropped to max 5 dimensions only in the screen output)
 
 Examples:
     >>> from pygmo.core import *
@@ -701,7 +701,7 @@ parameter (by default nothing is logged) which can be set calling the method set
 constructed with a :class:`~pygmo.core.cmaes`. A verbosity of N implies a log line each N generations.
 
 Returns:
-    list of tuples: at each logged epoch, the values Gen, Fevals, Best, dx, df, sigma
+    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, Best, dx, df, sigma
 
 Where:
     * Gen (``int``), generation number
@@ -743,7 +743,7 @@ The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
 
 Args:
     gen (``int``): number of generations
-    allowed_variants (NumPy array or list of floats): allowed mutation variants, each one being a number in [1, 18]
+    allowed_variants (``NumPy array or list of floats``): allowed mutation variants, each one being a number in [1, 18]
     variant_adptv (``int``): F and CR parameter adaptation scheme to be used (one of 1..2)
     ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
     xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
@@ -796,7 +796,7 @@ parameter (by default nothing is logged) which can be set calling the method set
 constructed with a :class:`~pygmo.core.de1220`. A verbosity of N implies a log line each N generations.
 
 Returns:
-    list of tuples: at each logged epoch, the values Gen, Fevals, Best, F, CR, Variant, dx, df
+    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, Best, F, CR, Variant, dx, df
 
 Where:
     * Gen (``int``), generation number
@@ -838,12 +838,12 @@ std::string decompose_decompose_fitness_docstring()
 Returns the original fitness of the multi-objective problem
 
 Args:
-    f (NumPy array or list of floats): fitness vector to be decomposed
-    weights (NumPy array or list of floats): weights of the decomposition
-    ref_point (NumPy array or list of floats): reference point for the decomposition (only for tchebycheff and bi)
+    f (``array`` or ``list`` of ``floats``): fitness vector to be decomposed
+    weights (``array`` or ``list`` of ``floats``): weights of the decomposition
+    ref_point (``array`` or ``list`` of ``floats``): reference point for the decomposition (only for tchebycheff and bi)
 
 Returns:
-    NumPy array of floats: containing one single value representing the decomposed fitness
+    ``array`` of ``floats``: containing one single value representing the decomposed fitness
 
 Raises:
     ValueError: if the dimensions of *f*, *weights* or *ref_point* are inconsistent
@@ -869,25 +869,25 @@ array([ 2.50501256])
 
 std::string fast_non_dominated_sorting_docstring()
 {
-    return R"(ndf, dl, dc, ndr = fast_non_dominated_sorting(points)
+    return R"(fast_non_dominated_sorting(points)
 
 Runs the fast non dominated sorting algorithm on the input *points*
 
 Args:
-    points (array [or list] of arrays [or lists] of doubles): the input points
+    points (``array`` [or ``list``] of ``arrays`` [or ``lists``] of ``doubles``): the input points
 
 Raises:
     ValueError: if *points* is malformed
     TypeError: if *points* cannot be converted to a vector of vector doubles
 
 Returns:
-    ndf (list of NumPy arrays): the non dominated fronts
-Returns:
-    dl (list of NumPy arrays): the domination list
-Returns:
-    dc (NumPy array): the domination count
-Returns:
-    ndr (NumPy array): the non domination ranks
+    (``tuple``): (ndf, dl, dc, ndr)
+
+Where:
+    * ndf (``list`` of ``arrays``): the non dominated fronts
+    * dl (``list of ``arrays``): the domination list
+    * dc (``array``): the domination count
+    * ndr (``array``): the non domination ranks
 
 Examples:
     >>> from pygmo.core import *

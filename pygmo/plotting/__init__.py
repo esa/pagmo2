@@ -5,18 +5,16 @@ from __future__ import absolute_import as _ai
 # Plotting functions
 def plot_non_dominated_fronts(points, marker = 'o', comp = [0,1]):
     """
-    axis = plot_non_dominated_fronts(points, marker = 'o', comp = [0,1])
-
     Plots the nondominated fronts of a set of points. Makes use of :class:`~pygmo.core.fast_non_dominated_sorting` to
     compute the non dominated fronts.
 
     Args:
-        points (array [or list] of arrays [or lists] of doubles): points to plot
+        points (``array`` [or ``list``] of ``arrays`` [or ``lists``] of ``doubles``): points to plot
         marker (``str``): matplotlib marker used to plot the *points*
-        comp (``float``): Components to be considered in the two dimensional plot (useful in many-objectives cases)
+        comp (``list``): Components to be considered in the two dimensional plot (useful in many-objectives cases)
 
     Returns:
-        matplotlib.axes._subplots.AxesSubplot: the current axis of the matplotlib plot
+        ``matplotlib.axes._subplots.AxesSubplot``: the current axis of the matplotlib plot
 
     Examples:
         >>> from pygmo import *
@@ -47,7 +45,7 @@ def plot_non_dominated_fronts(points, marker = 'o', comp = [0,1]):
         # Then sort them by the first objective
         tmp = [(a, b) for a, b in zip(x, y)]
         tmp = sorted(tmp, key=lambda k: k[0])
-        # Now plot
+        # Now plot using step
         plt.step([c[0] for c in tmp], [c[1] for c in tmp], color=cl[ndr], where='post')
 
     plt.show()

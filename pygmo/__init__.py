@@ -101,8 +101,8 @@ def _population_init(self,prob=None,size=0,seed=None):
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
             (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)
-        size (int): the number of individuals
-        seed (int): the random seed (if ``None``, it will be randomly-generated)
+        size (``int``): the number of individuals
+        seed (``int``): the random seed (if ``None``, it will be randomly-generated)
 
     Raises:
         TypeError: if *size* is not an ``int`` or *seed* is not ``None`` and not an ``int``
