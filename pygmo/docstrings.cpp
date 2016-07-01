@@ -32,12 +32,12 @@ Appends a new chromosome x to the population, evaluating its fitness and creatin
 born individual. In case of exceptions, the population will not be altered.
 
 Args:
-    x (``array``, or ``list`` of ``doubles``): decision vector to be added to the population
+    x (``array``, or ``list`` of ``floats``): decision vector to be added to the population
 
 Raises:
     ValueError: if the dimension of *x* is inconsistent with the problem dimension or the calculated fitness vector has
         a dimension which is inconsistent with the fitness dimension of the problem
-    TypeError: if *x* cannot be converted to a vector of doubles
+    TypeError: if *x* cannot be converted to a vector of floats
 
 Examples:
 
@@ -60,7 +60,7 @@ List of individuals:
 >>> pop.push_back(3) # doctest: +IGNORE_EXCEPTION_DETAIL
 Traceback (most recent call last):
    ...
-TypeError: cannot convert the type '<class 'int'>' to a vector of doubles
+TypeError: cannot convert the type '<class 'int'>' to a vector of floats
 
 )";
 }
@@ -72,7 +72,7 @@ std::string population_decision_vector_docstring()
 Create random decision_vector.
 
 Returns:
-    NumPy array of doubles: a random decision vector within the problem’s bounds
+    NumPy array of floats: a random decision vector within the problem’s bounds
 
 Examples:
 
@@ -90,7 +90,7 @@ std::string population_best_idx_docstring()
 Index of best individual. See :cpp:func:`pagmo::population::best_idx()`.
 
 Args:
-    tol (``double``, or ``array``, or ``list`` of ``doubles``): a scalar tolerance or a vector of tolerances to be applied to
+    tol (``float``, or ``array``, or ``list`` of ``floats``): a scalar tolerance or a vector of tolerances to be applied to
       each constraints
 
 Returns:
@@ -115,7 +115,7 @@ std::string population_worst_idx_docstring()
 Index of worst individual. See :cpp:func:`pagmo::population::worst_idx()`.
 
 Args:
-    tol (``double``, or an ``array``, or ``list`` of ``doubles``): a scalar tolerance or a vector of tolerances to be applied to
+    tol (``float``, or an ``array``, or ``list`` of ``floats``): a scalar tolerance or a vector of tolerances to be applied to
       each constraints
 
 Returns:
@@ -166,8 +166,8 @@ function evaluation.
 
 Args:
     i (``int``): individual’s index in the population
-    x (``array`` or ``list`` of ``doubles``): a decision vector (chromosome)
-    f (``array`` or ``list`` of ``doubles``): a fitness vector
+    x (``array`` or ``list`` of ``floats``): a decision vector (chromosome)
+    f (``array`` or ``list`` of ``floats``): a fitness vector
 
 Raises:
     ValueError: if *i* is invalid, or if *x* or *f* have the wrong dimensions (i.e., their dimensions are
@@ -203,7 +203,7 @@ The fitness of the individual will be computed from *x*.
 
 Args:
     i (``int``): individual’s index in the population
-    x (``array`` or ``list`` of ``doubles``): a decision vector (chromosome)
+    x (``array`` or ``list`` of ``floats``): a decision vector (chromosome)
 
 Raises:
     ValueError: if *i* is invalid, or if *x* has the wrong dimensions (i.e., the dimension is
@@ -294,7 +294,7 @@ Each row of the returned array represents the fitness vector of the individual a
 population.
 
 Returns:
-    ``array`` of ``doubles``: a deep copy of the fitness vectors of the individuals
+    ``array`` of ``floats``: a deep copy of the fitness vectors of the individuals
 
 Examples:
 
@@ -315,7 +315,7 @@ Each row of the returned array represents the chromosome of the individual at th
 population.
 
 Returns:
-    ``array`` of ``doubles``: a deep copy of the chromosomes of the individuals
+    ``array`` of ``floats``: a deep copy of the chromosomes of the individuals
 
 Examples:
 
@@ -400,7 +400,7 @@ std::string get_best_docstring(const std::string &name)
 The best known solution for the )" + name + R"( problem.
 
 Returns:
-    ``array`` of ``doubles``: the best known solution for the )" + name + R"( problem
+    ``array`` of ``floats``: the best known solution for the )" + name + R"( problem
 
 )";
 }
@@ -480,7 +480,7 @@ Where:
     * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
 
 Examples:
-    >>> from pygmo.core import *
+    >>> from pygmo import *
     >>> algo = algorithm(de(gen = 500))
     >>> algo.set_verbosity(100)
     >>> prob = problem(rosenbrock(10))
@@ -575,7 +575,7 @@ Where:
     * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
 
 Examples:
-    >>> from pygmo.core import *
+    >>> from pygmo import *
     >>> algo = algorithm(sade(gen = 500))
     >>> algo.set_verbosity(100)
     >>> prob = problems.rosenbrock(10)
@@ -644,7 +644,7 @@ Where:
     * ideal_point (``array``), The ideal point of the current population (cropped to max 5 dimensions only in the screen output)
 
 Examples:
-    >>> from pygmo.core import *
+    >>> from pygmo import *
     >>> algo = algorithm(moead(gen=500))
     >>> algo.set_verbosity(100)
     >>> prob = problem(zdt())
@@ -712,7 +712,7 @@ Where:
     * sigma (``float``), the current step-size
 
 Examples:
-    >>> from pygmo.core import *
+    >>> from pygmo import *
     >>> algo = algorithm(cmaes(gen = 500))
     >>> algo.set_verbosity(100)
     >>> prob = problem(rosenbrock(10))
@@ -809,7 +809,7 @@ Where:
     * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
 
 Examples:
-    >>> from pygmo.core import *
+    >>> from pygmo import *
     >>> algo = algorithm(de1220(gen = 500))
     >>> algo.set_verbosity(100)
     >>> prob = problem(rosenbrock(10))
@@ -843,14 +843,14 @@ Args:
     ref_point (``array`` or ``list`` of ``floats``): reference point for the decomposition (only for tchebycheff and bi)
 
 Returns:
-    ``array`` of ``floats``: containing one single value representing the decomposed fitness
+    ``array`` of ``floats``: one single value representing the decomposed fitness
 
 Raises:
     ValueError: if the dimensions of *f*, *weights* or *ref_point* are inconsistent
-    TypeError: if *f*, *weights* or *ref_point* cannot be converted to vectors of doubles
+    TypeError: if *f*, *weights* or *ref_point* cannot be converted to vectors of floats
 
 Examples:
->>> from pygmo.core import *
+>>> from pygmo import *
 >>> prob = problem(zdt(id=1, param=30))
 >>> prob_d = problem(decompose(prob, [0.5,0.5], [0,0], "weighted", False))
 >>> fit = prob.fitness([0.5]*30)
@@ -874,23 +874,23 @@ std::string fast_non_dominated_sorting_docstring()
 Runs the fast non dominated sorting algorithm on the input *points*
 
 Args:
-    points (``array`` [or ``list``] of ``arrays`` [or ``lists``] of ``doubles``): the input points
+    points (``array`` [or ``list``] of ``arrays`` [or ``lists``] of ``floats``): the input points
 
 Raises:
     ValueError: if *points* is malformed
-    TypeError: if *points* cannot be converted to a vector of vector doubles
+    TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
     (``tuple``): (ndf, dl, dc, ndr)
 
 Where:
     * ndf (``list`` of ``arrays``): the non dominated fronts
-    * dl (``list of ``arrays``): the domination list
+    * dl (``list`` of ``arrays``): the domination list
     * dc (``array``): the domination count
     * ndr (``array``): the non domination ranks
 
 Examples:
-    >>> from pygmo.core import *
+    >>> from pygmo import *
     >>> ndf, dl, dc, ndr = fast_non_dominated_sorting([[2,3],[-1,2],[-3,2],[0,5],[1,1]])
     >>> print(ndf)
     [array([2, 4], dtype=uint64), array([1], dtype=uint64), array([0, 3], dtype=uint64)]
