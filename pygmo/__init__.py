@@ -2,7 +2,11 @@
 
 from __future__ import absolute_import as _ai
 
-__all__ = ['core','test']
+__all__ = ['core', 'test', 'pygmo_plots']
+
+# For convenience import plotting functions into the core namespace
+from pygmo.pygmo_plots import *
+__all__ += [name for name in dir(pygmo_plots) if not name.startswith('__')]
 
 # Problem extract functionality.
 def _problem_extract(self,t):
