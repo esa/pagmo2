@@ -14,7 +14,7 @@ def plot_non_dominated_fronts(points, marker = 'o', comp = [0,1]):
         comp (``list``): Components to be considered in the two dimensional plot (useful in many-objectives cases)
 
     Returns:
-        ``matplotlib.axes._subplots.AxesSubplot``: the current axis of the matplotlib plot
+        ``matplotlib.axes.Axes``: the current ``matplotlib.axes.Axes`` instance on the current figure
 
     Examples:
         >>> from pygmo import *
