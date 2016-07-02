@@ -99,7 +99,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
 
 /// Non dominated front 2D (Kung's algorithm)
 /**
- * Finds the Pareto front of a set of two dimensional objectives. Complexity is O(N logN) and is thus lower than the
+ * Finds the non dominated front of a set of two dimensional objectives. Complexity is O(N logN) and is thus lower than the
  * complexity of calling pagmo::fast_non_dominated_sorting
  *
  * @see Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."

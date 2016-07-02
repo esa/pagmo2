@@ -37,7 +37,7 @@ Args:
 Raises:
     ValueError: if the dimension of *x* is inconsistent with the problem dimension or the calculated fitness vector has
         a dimension which is inconsistent with the fitness dimension of the problem
-    TypeError: if *x* cannot be converted to a vector of floats
+    TypeError: if *x* cannot be converted to a C++ ``vector`` of ``floats``
 
 Examples:
 
@@ -72,7 +72,7 @@ std::string population_decision_vector_docstring()
 Create random decision_vector.
 
 Returns:
-    NumPy array of floats: a random decision vector within the problem’s bounds
+    ``array`` of ``floats``: a random decision vector within the problem’s bounds
 
 Examples:
 
