@@ -379,7 +379,7 @@ The problem class.
 This class represents a generic mathematical programming or evolutionary optimization problem. Optimization problems
 can be created in PyGMO by defining a class with an appropriate set of methods (i.e., a user-defined problem, or UDP)
 and then by using an instance of the UDP to construct a :class:`~pygmo.core.problem`. The exposed C++ problems can
-also be used as a UDP.
+also be used as UDPs.
 
 Note that the UDP provided on construction will be deep-copied and stored inside the problem.
 
