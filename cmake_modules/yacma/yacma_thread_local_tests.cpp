@@ -1,5 +1,8 @@
+#include <iostream>
+#include <vector>
+
 int main()
 {
-	thread_local int n;
-	(void)n;
+    static thread_local std::vector<char> n;
+    std::cout << n.size() << std::endl;
 }
