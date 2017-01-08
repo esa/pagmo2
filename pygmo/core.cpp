@@ -9,6 +9,7 @@
 
 #endif
 
+#include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
@@ -41,6 +42,7 @@
 #include "../include/algorithms/null_algorithm.hpp"
 #include "../include/algorithms/sade.hpp"
 #include "../include/algorithms/sea.hpp"
+#include "../include/algorithms/moead.hpp"
 #include "../include/population.hpp"
 #include "../include/problem.hpp"
 #include "../include/problems/ackley.hpp"
@@ -214,7 +216,7 @@ static inline void pop_push_back_wrapper(population &pop, const bp::object &x)
 // decision_vector().
 static inline bp::object pop_decision_vector_wrapper(const population &pop)
 {
-    return pygmo::vd_to_a(pop.decision_vector());
+    return pygmo::v_to_a(pop.decision_vector());
 }
 
 // Various best_idx() overloads.
@@ -264,19 +266,25 @@ static inline void pop_set_x_wrapper(population &pop, population::size_type i, c
 // get_f().
 static inline bp::object pop_get_f_wrapper(const population &pop)
 {
-    return pygmo::vvd_to_a(pop.get_f());
+    return pygmo::vv_to_a(pop.get_f());
 }
 
 // get_x().
 static inline bp::object pop_get_x_wrapper(const population &pop)
 {
-    return pygmo::vvd_to_a(pop.get_x());
+    return pygmo::vv_to_a(pop.get_x());
 }
 
 // get_ID().
 static inline bp::object pop_get_ID_wrapper(const population &pop)
 {
-    return pygmo::vull_to_a(pop.get_ID());
+    return pygmo::v_to_a(pop.get_ID());
+}
+
+// Decompose methods wrappers
+static inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decompose &p, const bp::object &f, const bp::object &weights, const bp::object &z_ref)
+{
+    return pygmo::v_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weights), pygmo::to_vd(z_ref)));
 }
 
 // ZDT wrappers.
@@ -306,6 +314,44 @@ static inline bp::list de1220_allowed_variants()
     }
     return retval;
 }
+
+// moead needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+inline bp::list expose_moead_log(const moead &a)
+{
+    bp::list retval;
+    for (const auto &t: a.get_log()) {
+        retval.append(bp::make_tuple(std::get<0>(t),std::get<1>(t),std::get<2>(t),pygmo::v_to_a(std::get<3>(t))));
+    }
+    return retval;
+}
+
+// Wrappers for utils/multi_objective stuff
+// fast_non_dominated_sorting
+static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
+{
+    auto fnds = fast_non_dominated_sorting(pygmo::to_vvd(x));
+    // the non-dominated fronts
+    auto ndf = std::get<0>(fnds);
+    bp::list ndf_py;
+    for (const std::vector<vector_double::size_type> &front : ndf) {
+        ndf_py.append(pygmo::v_to_a(front));
+    }
+    // the domination list
+    auto dl = std::get<1>(fnds);
+    bp::list dl_py;
+    for (const auto &item : dl) {
+        dl_py.append(pygmo::v_to_a(item));
+    }
+    return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)), pygmo::v_to_a(std::get<3>(fnds)));
+}
+
+// Helper function to test the to_vvd functionality.
+static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
+{
+    auto res = pygmo::to_vvd(o);
+    return res.size() == n && std::all_of(res.begin(),res.end(),[m](const auto &v) {return v.size() == m;});
+}
+
 
 BOOST_PYTHON_MODULE(core)
 {
@@ -339,6 +385,7 @@ BOOST_PYTHON_MODULE(core)
     bp::def("_deepcopy",&pygmo::deepcopy);
     bp::def("_to_sp",&pygmo::to_sp);
     bp::def("_test_object_serialization",&test_object_serialization);
+    bp::def("_test_to_vvd",&test_to_vvd);
 
     // Expose cleanup function.
     bp::def("_cleanup",&cleanup);
@@ -494,7 +541,9 @@ BOOST_PYTHON_MODULE(core)
     // Constructor from Python user-defined problem.
     dp.def("__init__",pygmo::make_decompose_init<bp::object>())
         // Problem extraction.
-        .def("_py_extract",&pygmo::generic_py_extract<decompose>);
+        .def("_py_extract",&pygmo::generic_py_extract<decompose>)
+        // Returns the decomposed fitness with an arbitrary weight and reference point
+        .def("decompose_fitness", &decompose_decompose_fitness_wrapper,pygmo::decompose_decompose_fitness_docstring().c_str(), (bp::arg("f"), bp::arg("weights"), bp::arg("ref_point")));
     // Mark it as a cpp problem.
     dp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from decompose.
@@ -573,13 +622,12 @@ BOOST_PYTHON_MODULE(core)
     // serialization of the algorithm. Not necessary for any other algorithm type.
     na.def_pickle(null_algorithm_pickle_suite());
     // DE
-    auto de_ = pygmo::expose_algorithm<de>("de","__init__(gen = 1, F = 0.8, CR = 0.9, variant = 2, ftol = 1e-6, tol = 1e-6, seed = random)\n\n"
-        "Differential evolution algorithm.\n\n");
+    auto de_ = pygmo::expose_algorithm<de>("de", pygmo::de_docstring().c_str());
     de_.def(bp::init<unsigned int,double,double,unsigned int,double,double>((bp::arg("gen") = 1u, bp::arg("F") = .8,
         bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6)));
     de_.def(bp::init<unsigned int,double,double,unsigned int,double,double,unsigned>((bp::arg("gen") = 1u, bp::arg("F") = .8,
         bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6, bp::arg("tol") = 1E-6, bp::arg("seed"))));
-    pygmo::expose_algo_log(de_,"");
+    pygmo::expose_algo_log(de_,pygmo::de_get_log_docstring().c_str());
     de_.def("get_seed",&de::get_seed);
     // SEA
     auto sea_ = pygmo::expose_algorithm<sea>("sea","__init__(gen = 1, seed = random)\n\n"
@@ -589,27 +637,23 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algo_log(sea_,"");
     sea_.def("get_seed",&sea::get_seed);
     // SADE
-    auto sade_ = pygmo::expose_algorithm<sade>("sade","__init__(gen = 1, variant = 2, variant_adptv = 1, "
-        "ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
-        "Self-adaptive differential evolution (jDE and iDE).\n\n");
+    auto sade_ = pygmo::expose_algorithm<sade>("sade", pygmo::sade_docstring().c_str());
     sade_.def(bp::init<unsigned,unsigned,unsigned,double,double,bool>((bp::arg("gen") = 1u, bp::arg("variant") = 2u,
         bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
     sade_.def(bp::init<unsigned,unsigned,unsigned,double,double,bool,unsigned>((bp::arg("gen") = 1u, bp::arg("variant") = 2u,
         bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
         bp::arg("seed"))));
-    pygmo::expose_algo_log(sade_,"");
+    pygmo::expose_algo_log(sade_, pygmo::sade_get_log_docstring().c_str());
     sade_.def("get_seed",&sade::get_seed);
     // DE-1220
-    auto de1220_ = pygmo::expose_algorithm<de1220>("de1220","__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], "
-        "variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)\n\n"
-        "Self-adaptive differential evolution (DE 1220 aka pDE).\n\n");
+    auto de1220_ = pygmo::expose_algorithm<de1220>("de1220", pygmo::de1220_docstring().c_str());
     de1220_.def("__init__",bp::make_constructor(&de1220_init_0,bp::default_call_policies(),
         (bp::arg("gen") = 1u,bp::arg("allowed_variants") = de1220_allowed_variants(),bp::arg("variant_adptv") = 1u,
         bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
     de1220_.def("__init__",bp::make_constructor(&de1220_init_1,bp::default_call_policies(),
         (bp::arg("gen") = 1u,bp::arg("allowed_variants") = de1220_allowed_variants(),bp::arg("variant_adptv") = 1u,
         bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
-    pygmo::expose_algo_log(de1220_,"");
+    pygmo::expose_algo_log(de1220_, pygmo::de1220_get_log_docstring().c_str());
     de1220_.def("get_seed",&de1220::get_seed);
     // CMA-ES
 #ifdef PAGMO_ENABLE_EIGEN3
@@ -621,7 +665,23 @@ BOOST_PYTHON_MODULE(core)
     cmaes_.def(bp::init<unsigned,double,double,double,double,double,double, double,bool,unsigned>((bp::arg("gen") = 1u,
          bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
          bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
-    pygmo::expose_algo_log(cmaes_,"");
+    pygmo::expose_algo_log(cmaes_,pygmo::cmaes_get_log_docstring().c_str());
     cmaes_.def("get_seed",&cmaes::get_seed);
 #endif
+    // MOEA/D - DE
+    auto moead_ = pygmo::expose_algorithm<moead>("moead", pygmo::moead_docstring().c_str());
+    moead_.def(bp::init<unsigned,std::string, unsigned, double, double, double, double, unsigned, bool>(
+        (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5,
+         bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u, bp::arg("preserve_diversity") = true))
+     );
+     moead_.def(bp::init<unsigned,std::string, unsigned, double, double, double, double, unsigned, bool, unsigned>(
+         (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5,
+          bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u, bp::arg("preserve_diversity") = true, bp::arg("seed")))
+      );
+    moead_.def("get_log", expose_moead_log, pygmo::moead_get_log_docstring().c_str());
+    moead_.def("get_seed",&moead::get_seed);
+
+    // Exposition of stand alone functions
+    // Multi-objective utilities
+    bp::def("fast_non_dominated_sorting", fast_non_dominated_sorting_wrapper, pygmo::fast_non_dominated_sorting_docstring().c_str(), boost::python::arg("points"));
 }

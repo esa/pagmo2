@@ -2,6 +2,7 @@
 
 #include <boost/test/included/unit_test.hpp>
 #include <exception>
+#include <numeric>
 #include <tuple>
 
 #include "../include/utils/multi_objective.hpp"
@@ -22,29 +23,29 @@ BOOST_AUTO_TEST_CASE(pareto_dominance_test)
     BOOST_CHECK_THROW(pareto_dominance({1,2},{3,4,5}), std::invalid_argument);
 }
 
-BOOST_AUTO_TEST_CASE(pareto_2d_test)
+BOOST_AUTO_TEST_CASE(non_dominated_front_2d_test)
 {
     // Corner cases
-    BOOST_CHECK(pareto_front_2d({}) == std::vector<vector_double::size_type>{});
+    BOOST_CHECK(non_dominated_front_2d({}) == std::vector<vector_double::size_type>{});
     // We test some known cases
     {
-        auto res = pareto_front_2d({{0,1},{1,1},{1,2}});
+        auto res = non_dominated_front_2d({{0,1},{1,1},{1,2}});
         auto sol = std::vector<vector_double::size_type>{0u};
         BOOST_CHECK(std::is_permutation(res.begin(), res.end(), sol.begin()));
     }
     {
-        auto res = pareto_front_2d({{0,1},{0,1},{-1,2},{-1,2}});
+        auto res = non_dominated_front_2d({{0,1},{0,1},{-1,2},{-1,2}});
         auto sol = std::vector<vector_double::size_type>{0u,1u,2u,3u};
         BOOST_CHECK(std::is_permutation(res.begin(), res.end(), sol.begin()));
     }
     {
-        auto res = pareto_front_2d({{0,1},{11,9},{6,4},{2,4},{4,2},{1,0}});
+        auto res = non_dominated_front_2d({{0,1},{11,9},{6,4},{2,4},{4,2},{1,0}});
         auto sol = std::vector<vector_double::size_type>{0u,5u};
         BOOST_CHECK(std::is_permutation(res.begin(), res.end(), sol.begin()));
     }
     // And we test the throws
-    BOOST_CHECK_THROW(pareto_front_2d({{1,2},{2},{2,3,4}}), std::invalid_argument);
-    BOOST_CHECK_THROW(pareto_front_2d({{2,3,2},{1,2,5},{2,3,4}}), std::invalid_argument);
+    BOOST_CHECK_THROW(non_dominated_front_2d({{1,2},{2},{2,3,4}}), std::invalid_argument);
+    BOOST_CHECK_THROW(non_dominated_front_2d({{2,3,2},{1,2,5},{2,3,4}}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(fast_non_dominated_sorting_test)
@@ -281,4 +282,70 @@ BOOST_AUTO_TEST_CASE(nadir_test)
     BOOST_CHECK_THROW(nadir(example), std::invalid_argument);
     example = {{},{1}};
     BOOST_CHECK_THROW(nadir(example), std::invalid_argument);
+}
+
+void check_weights(const std::vector<std::vector<double>> &win, vector_double::size_type n_f)
+{
+    for (auto lambda : win)
+    {
+        BOOST_CHECK_EQUAL(lambda.size(), n_f);
+        auto sum = std::accumulate(lambda.begin(), lambda.end(), 0.);
+        BOOST_CHECK_CLOSE(sum, 1., 1e-08);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(decomposition_weights_test)
+{
+    detail::random_engine_type r_engine(23u);
+    // We test some throws
+    // At least 2 objectives are needed
+    BOOST_CHECK_THROW(decomposition_weights(1u, 5u, "grid", r_engine), std::invalid_argument);
+    // The weight generation method must be one of 'grid', 'random', 'low discrepancy'
+    BOOST_CHECK_THROW(decomposition_weights(2u, 5u, "grod", r_engine), std::invalid_argument);
+    // The number of weights are smaller than the number of objectives
+    BOOST_CHECK_THROW(decomposition_weights(10u, 5u, "grid", r_engine), std::invalid_argument);
+    // The number of weights is not compatible with 'grid'
+    BOOST_CHECK_THROW(decomposition_weights(4u, 31u, "grid", r_engine), std::invalid_argument);
+
+    // We test some known cases
+    {
+        auto ws = decomposition_weights(3u, 3u, "grid", r_engine);
+        check_weights(ws, 3u);
+    }
+    {
+        auto ws = decomposition_weights(3u, 3u, "random", r_engine);
+        check_weights(ws, 3u);
+    }
+    {
+        auto ws = decomposition_weights(3u, 3u, "low discrepancy", r_engine);
+        check_weights(ws, 3u);
+    }
+    {
+        auto ws = decomposition_weights(3u, 6u, "grid", r_engine);
+        check_weights(ws, 3u);
+    }
+    {
+        auto ws = decomposition_weights(3u, 4u, "random", r_engine);
+        check_weights(ws, 3u);
+    }
+    {
+        auto ws = decomposition_weights(3u, 4u, "low discrepancy", r_engine);
+        check_weights(ws, 3u);
+    }
+    {
+        auto ws = decomposition_weights(2u, 4u, "grid", r_engine);
+        check_weights(ws, 2u);
+    }
+    {
+        auto ws = decomposition_weights(2u, 4u, "random", r_engine);
+        check_weights(ws, 2u);
+    }
+    {
+        auto ws = decomposition_weights(2u, 4u, "low discrepancy", r_engine);
+        check_weights(ws, 2u);
+    }
+    {
+        auto ws = decomposition_weights(5u, 25u, "random", r_engine);
+        check_weights(ws, 5u);
+    }
 }

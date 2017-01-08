@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
-
+# for python 2.0 compatibility
 from __future__ import absolute_import as _ai
 
-__all__ = ['core','test']
+# We import the sub-modules into the root namespace
+from .core import *
+from .plotting import *
+
+# And we explicitly import the submudules
+from . import core
+from . import plotting
+
 
 # Problem extract functionality.
 def _problem_extract(self,t):
@@ -98,8 +105,6 @@ def _algorithm_is(self,t):
     """
     return not self.extract(t) is None
 
-from .core import *
-
 # Override of the population constructor.
 __original_population_init = population.__init__
 
@@ -111,8 +116,8 @@ def _population_init(self,prob=None,size=0,seed=None):
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
             (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)
-        size (int): the number of individuals
-        seed (int): the random seed (if ``None``, it will be randomly-generated)
+        size (``int``): the number of individuals
+        seed (``int``): the random seed (if ``None``, it will be randomly-generated)
 
     Raises:
         TypeError: if *size* is not an int or *seed* is not ``None`` and not an int

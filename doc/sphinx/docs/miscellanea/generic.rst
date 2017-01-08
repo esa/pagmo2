@@ -19,3 +19,18 @@ A number of utilities to compute quantities that are of general relevance.
 
 .. doxygenfunction:: pagmo::decision_vector(const vector_double&, const vector_double&, detail::random_engine_type&)
    :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::safe_cast
+  :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::binomial_coefficient
+  :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::kNN
+  :project: PaGMOreborn

@@ -13,14 +13,52 @@
 #include <numeric>
 #include <stdexcept>
 #include <string>
+#include <vector>
 #include <tuple>
 
 #include "../exceptions.hpp"
 #include "../io.hpp"
+#include "../population.hpp"
 #include "../types.hpp"
+#include "../utils/discrepancy.hpp" // halton
 
 
 namespace pagmo{
+
+namespace detail {
+    //Recursive function building all m-ple of elements of X summing to s
+    //In C/C++ implementations there exists a limit on the number of times you
+    //can call recursively a function. It depends on a variety of factors,
+    //but probably it a number around few thousands on modern machines.
+    //If the limit is surpassed, the program terminates.
+    //I was thinking that one could create a problem with a few thousands objectives,
+    //call this function thus causing a crash from Python. In principle I think we
+    //can prevent this by limiting the recursion (e.g., via a function parameter that
+    //gets increased each time the function is called from itself).
+    //But for now I'd just put a note about this.
+    void reksum(
+            std::vector<std::vector<double> > &retval,
+            const std::vector<population::size_type>& X,
+            population::size_type m,
+            population::size_type s,
+            std::vector<double> eggs = std::vector<double>() )
+    {
+        if (m==1u) {
+            if (std::find(X.begin(),X.end(), s) == X.end()) { //not found
+                return;
+            } else {
+                eggs.push_back(static_cast<double>(s));
+                retval.push_back(eggs);
+            }
+        } else {
+            for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
+                eggs.push_back(static_cast<double>(X[i]));
+                reksum(retval, X , m - 1u, s - X[i], eggs);
+                eggs.pop_back();
+            }
+        }
+    }
+}
 
 /// Pareto-dominance
 /**
@@ -42,9 +80,9 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
 {
     if (obj1.size() != obj2.size()) {
         pagmo_throw(std::invalid_argument,
-            "Different number of objectives: " + std::to_string(obj1.size()) +
+            "Different number of objectives found in input fitnesses: " + std::to_string(obj1.size()) +
             " and " + std::to_string(obj2.size()) +
-         ": cannot define dominance");
+         ". I cannot define dominance");
     }
     vector_double::size_type count1 = 0u;
     vector_double::size_type count2 = 0u;
@@ -59,17 +97,21 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
     return ( ( (count1+count2) == obj1.size()) && (count1 > 0u) );
 }
 
-/// Pareto Front 2D (Kung's algorithm)
+/// Non dominated front 2D (Kung's algorithm)
 /**
-    Finds the Pareto front of a set of two dimensional objectives. Complexity is O(N logN) and is thus lower than the
-    complexity of calling pagmo::fast_non_dominated_sorting
-
-    @see Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
-    IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
-
-    @throws std::invalid_argument If the objective vectors are not all containing two-objectives
+ * Finds the non dominated front of a set of two dimensional objectives. Complexity is O(N logN) and is thus lower than the
+ * complexity of calling pagmo::fast_non_dominated_sorting
+ *
+ * @see Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
+ * IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
+ *
+ * @param[in] input_objs an <tt>std::vector</tt> containing the points (i.e. vector of objectives)
+ *
+ * @return A <tt>std::vector</tt> containing the indexes of the points in the non-dominated front
+ *
+ * @throws std::invalid_argument If the objective vectors are not all containing two-objectives
  */
-std::vector<vector_double::size_type> pareto_front_2d(const std::vector<vector_double> &input_objs)
+std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<vector_double> &input_objs)
 {
     // If the input is empty return an empty vector
     if (input_objs.size() == 0u) {
@@ -122,25 +164,24 @@ using fnds_return_type = std::tuple<std::vector<std::vector<vector_double::size_
  * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.
  *
- * @param[in] obj_list An std::vector containing the objectives of different individuals. Example {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
+ * @param[in] points An std::vector containing the objectives of different individuals. Example {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
  *
  * @return an std::tuple containing:
  *  - the non dominated fronts, an <tt>std::vector<std::vector<vector_double::size_type>></tt>
  * containing the non dominated fronts. Example {{1,2},{3},{0}}
- *  - the domination list, an <tt>std::vector<std::vector<size_type>></tt>
+ *  - the domination list, an <tt>std::vector<std::vector<vector_double::size_type>></tt>
  * containing the domination list, i.e. the indexes of all individuals
  * dominated by the individual at position \f$i\f$. Example {{},{},{0,3},{0}}
- *  - the domination count, an <tt>std::vector<size_type></tt> containing the number of individuals
+ *  - the domination count, an <tt>std::vector<vector_double::size_type></tt> containing the number of individuals
  * that dominate the individual at position \f$i\f$. Example {2, 0, 0, 1}
- *  - the non domination rank, an <tt>std::vector<size_type></tt> containing the index of the non dominated
+ *  - the non domination rank, an <tt>std::vector<vector_double::size_type></tt> containing the index of the non dominated
  * front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
  *
- * @throws std::invalid_argument If the size of \p obj_list is not at least 2
- * @throws unspecified all exceptions thrown by pagmo::pareto_dominance
+ * @throws std::invalid_argument If the size of \p points is not at least 2
  */
-fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &obj_list)
+fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &points)
     {
-        auto N = obj_list.size();
+        auto N = points.size();
         // We make sure to have two points at least (one could also be allowed)
         if (N < 2u) {
             pagmo_throw(std::invalid_argument, "At least two points are needed for fast_non_dominated_sorting: " + std::to_string(N) + " detected.");
@@ -159,9 +200,9 @@ fnds_return_type fast_non_dominated_sorting (const std::vector<vector_double> &o
                 if (i==j) {
                     continue;
                 }
-                if (pareto_dominance(obj_list[i], obj_list[j])) {
+                if (pareto_dominance(points[i], points[j])) {
                     dom_list[i].push_back(j);
-                } else if (pareto_dominance(obj_list[j], obj_list[i])) {
+                } else if (pareto_dominance(points[j], points[i])) {
                     ++dom_count[i];
                 }
             }
@@ -452,6 +493,110 @@ vector_double nadir(const std::vector<vector_double> &input_f) {
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
         retval[i] = (*std::max_element(nd_fits.begin(), nd_fits.end(), [i] (auto f1, auto f2) {return f1[i] < f2[i];}))[i];
+    }
+    return retval;
+}
+
+/// Decomposition weights generation
+/**
+ * Generates a requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:
+ * - "grid" generates weights on an uniform grid. This method may only be used when the number of requested weights to be genrated is such that a uniform grid is indeed possible. In
+ * two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases
+ * - "random" generates weights randomly distributing them uniformly on the simplex (a weight is such that \f$\sum_i \lambda_i = 1\f$)
+ * - "low discrepancy" generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of the Pareto front. Halton sequence is used since
+ * low dimensionalities are expected in the number of objcetvices (i.e. less than 20), hence Halton sequence is deemes as appropriate.
+ *
+ * @note All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All weight generation methods
+ * are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
+ *
+ * Example: to generate 10 weights distributed somehow regularly to decompose a three dimensional problem:
+ * @code
+ * detail::random_engine_type r_engine();
+ * auto lambdas = decomposition_weights(3u, 10u, "low discrepancy", r_engine);
+ * @endcode
+ *
+ * @param[in] n_f dimension of each weight vector (i.e. fitness dimension)
+ * @param[in] n_w number of weights to be generated
+ * @param[in] weight_generation methods to generate the weights of the decomposed problems. One of "grid", "random", "low discrepancy"
+ * @param[in] r_engine random engine
+ *
+ * @returns an <tt>std:vector</tt> containing the weight vectors
+ *
+ * @throws if the population size is not compatible with the selected weight generation method
+**/
+ std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, vector_double::size_type n_w, const std::string &weight_generation, detail::random_engine_type &r_engine)
+{
+    // Sanity check
+    if (n_f > n_w) {
+         pagmo_throw(std::invalid_argument,"A fitness size of " + std::to_string(n_f) + " was requested to the weight generation routine, while " + std::to_string(n_w) + " weights were requested to be generated. To allow weight be generated correctly the number of weights must be strictly larger than the number of objectives");
+    }
+
+    if (n_f < 2u) {
+         pagmo_throw(std::invalid_argument,"A fitness size of " + std::to_string(n_f) + " was requested to generate decomposed weights. A dimension of at least two must be requested.");
+    }
+
+    // Random distributions
+    std::uniform_real_distribution<double> drng(0.,1.); // to generate a number in [0, 1)
+    std::vector<vector_double> retval;
+    if(weight_generation == "grid") {
+        // find the largest H resulting in a population smaller or equal to NP
+        decltype(n_w) H;
+        if (n_f == 2u) {
+            H = n_w - 1u;
+        } else if (n_f == 3u) {
+            H = static_cast<decltype(H)>(std::floor(0.5 * (std::sqrt(8. * static_cast<double>(n_w) + 1.) - 3.)));
+        } else {
+            H = 1u;
+            while(binomial_coefficient(H + n_f - 1u, n_f - 1u) <= static_cast<double>(n_w))
+            {
+                ++H;
+            }
+            H--;
+        }
+        // We check that NP equals the population size resulting from H
+        if (std::abs(static_cast<double>(n_w) - binomial_coefficient(H + n_f - 1u, n_f - 1u)) > 1E-8 ) {
+            std::ostringstream error_message;
+            error_message << "Population size of " << std::to_string(n_w) << " is detected, but not supported by the '" << weight_generation
+                << "' weight generation method selected. A size of " << binomial_coefficient(H + n_f - 1u, n_f - 1u)
+                << " or " << binomial_coefficient(H + n_f, n_f - 1u)
+                << " is possible.";
+                pagmo_throw(std::invalid_argument, error_message.str());
+        }
+        // We generate the weights
+        std::vector<population::size_type> range(H + 1u);
+        std::iota(range.begin(), range.end(), std::vector<population::size_type>::size_type(0u));
+        detail::reksum(retval, range, n_f, H);
+        for(decltype(retval.size()) i = 0u; i < retval.size(); ++i) {
+            for(decltype(retval[i].size()) j = 0u; j < retval[i].size(); ++j) {
+                retval[i][j] /= static_cast<double>(H);
+            }
+        }
+    } else if(weight_generation == "low discrepancy") {
+        // We first push back the "corners" [1,0,0,...], [0,1,0,...]
+        for(decltype(n_f) i = 0u; i < n_f; ++i) {
+            retval.push_back(vector_double(n_f, 0.));
+            retval[i][i] = 1.;
+        }
+        // Then we add points on the simplex randomly genrated using Halton low discrepancy sequence
+        halton ld_seq{safe_cast<unsigned int>(n_f - 1u), safe_cast<unsigned int>(n_f)};
+        for(decltype(n_w) i = n_f; i < n_w; ++i) {
+            retval.push_back(sample_from_simplex(ld_seq()));
+        }
+    } else if(weight_generation == "random") {
+        // We first push back the "corners" [1,0,0,...], [0,1,0,...]
+        for(decltype(n_f) i = 0u; i < n_f; ++i) {
+            retval.push_back(vector_double(n_f, 0.));
+            retval[i][i] = 1.;
+        }
+        for (decltype(n_w) i = n_f; i < n_w; ++i) {
+            vector_double dummy(n_f - 1u, 0.);
+            for(decltype(n_f) j = 0u; j < n_f - 1u; ++j) {
+                dummy[j] = drng(r_engine);
+            }
+            retval.push_back(sample_from_simplex(dummy));
+        }
+    } else {
+        pagmo_throw(std::invalid_argument,"Weight generation method " + weight_generation + " is unknown. One of 'grid', 'random' or 'low discrepancy' was expected");
     }
     return retval;
 }

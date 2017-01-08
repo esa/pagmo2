@@ -174,13 +174,13 @@ class halton
          * @param[in] dim dimension
          * @param[in] n position of the starting element
          *
-         * @throws unspecified all exceptions thrown by pagmo::svan_der_corput
+         * @throws unspecified all exceptions thrown by pagmo::van_der_corput
          *
          */
-        halton(unsigned int dim = 2u, unsigned int n = 0u) : m_dim(dim), m_counter(n)
+        halton(unsigned int dim = 2u, unsigned int n = 0u) : m_dim(dim)
         {
             for (auto i=0u; i<m_dim; ++i) {
-                m_vdc.push_back(van_der_corput(detail::prime(i+1)));
+                m_vdc.push_back(van_der_corput(detail::prime(i+1), n));
             }
         }
         /// Returns the next point in the sequence
@@ -190,20 +190,17 @@ class halton
             for (auto i=0u; i<m_dim; ++i) {
                 retval.push_back(m_vdc[i]());
             }
-            ++m_counter;
             return retval;
         }
         /// Serialization.
         template <typename Archive>
         void serialize(Archive &ar)
         {
-            ar(m_dim, m_counter, m_vdc);
+            ar(m_dim, m_vdc);
         }
     private:
         // Dimension of the sequence
         unsigned int m_dim;
-        // Element of the sequence to compute
-        unsigned int m_counter;
         // van der Corput sequences used for each dimension
         std::vector<van_der_corput> m_vdc;
 };

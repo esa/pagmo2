@@ -65,7 +65,7 @@ struct prob_inner<bp::object> final: prob_inner_base, pygmo::common_base
     // Mandatory methods.
     virtual vector_double fitness(const vector_double &dv) const override final
     {
-        return pygmo::to_vd(m_value.attr("fitness")(pygmo::vd_to_a(dv)));
+        return pygmo::to_vd(m_value.attr("fitness")(pygmo::v_to_a(dv)));
     }
     virtual std::pair<vector_double,vector_double> get_bounds() const override final
     {
@@ -121,7 +121,7 @@ struct prob_inner<bp::object> final: prob_inner_base, pygmo::common_base
     {
         auto a = try_attr(m_value,"gradient");
         if (a) {
-            return pygmo::to_vd(a(pygmo::vd_to_a(dv)));
+            return pygmo::to_vd(a(pygmo::v_to_a(dv)));
         }
         pygmo_throw(PyExc_RuntimeError,"gradients have been requested but they are not implemented");
     }
@@ -163,7 +163,7 @@ struct prob_inner<bp::object> final: prob_inner_base, pygmo::common_base
         auto a = try_attr(m_value,"gradient");
         if (a) {
             // Invoke the method, getting out a generic Python object.
-            bp::object tmp = a(pygmo::vd_to_a(dv));
+            bp::object tmp = a(pygmo::v_to_a(dv));
             // Check that it is a list.
             if (!pygmo::isinstance(tmp,pygmo::builtin().attr("list"))) {
                 pygmo_throw(PyExc_TypeError,"the Hessians must be returned as a list of arrays or lists of doubles");
@@ -286,20 +286,20 @@ struct problem_pickle_suite : bp::pickle_suite
 // Wrapper for the fitness function.
 inline bp::object fitness_wrapper(const pagmo::problem &p, const bp::object &dv)
 {
-    return vd_to_a(p.fitness(to_vd(dv)));
+    return v_to_a(p.fitness(to_vd(dv)));
 }
 
 // Wrapper for the gradient function.
 inline bp::object gradient_wrapper(const pagmo::problem &p, const bp::object &dv)
 {
-    return vd_to_a(p.gradient(to_vd(dv)));
+    return v_to_a(p.gradient(to_vd(dv)));
 }
 
 // Wrapper for the bounds getter.
 inline bp::tuple get_bounds_wrapper(const pagmo::problem &p)
 {
     auto retval = p.get_bounds();
-    return bp::make_tuple(vd_to_a(retval.first),vd_to_a(retval.second));
+    return bp::make_tuple(v_to_a(retval.first),v_to_a(retval.second));
 }
 
 // Wrapper for gradient sparsity.
@@ -314,7 +314,7 @@ inline bp::list hessians_wrapper(const pagmo::problem &p, const bp::object &dv)
     bp::list retval;
     const auto h = p.hessians(to_vd(dv));
     for (const auto &v: h) {
-        retval.append(vd_to_a(v));
+        retval.append(v_to_a(v));
     }
     return retval;
 }

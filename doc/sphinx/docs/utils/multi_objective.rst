@@ -14,7 +14,7 @@ more in general, to multi-objective optimization tasks.
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::pareto_front_2d
+.. doxygenfunction:: pagmo::non_dominated_front_2d
    :project: PaGMOreborn
 
 --------------------------------------------------------------------------
@@ -46,3 +46,8 @@ more in general, to multi-objective optimization tasks.
 
 .. doxygenfunction:: pagmo::nadir
    :project: PaGMOreborn
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::decomposition_weights
+  :project: PaGMOreborn

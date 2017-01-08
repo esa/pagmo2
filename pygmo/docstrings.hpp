@@ -5,8 +5,7 @@
 
 namespace pygmo
 {
-
-// Population docstrings.
+// population
 std::string population_docstring();
 std::string population_push_back_docstring();
 std::string population_decision_vector_docstring();
@@ -22,20 +21,35 @@ std::string population_get_x_docstring();
 std::string population_get_ID_docstring();
 std::string population_get_seed_docstring();
 
-// Problem docstrings.
+// problem
 std::string problem_docstring();
 std::string problem_fitness_docstring();
 std::string problem_gradient_docstring();
 std::string problem_get_best_docstring(const std::string &);
 
-// Algorithm docstrings.
+// algorithm
 std::string algorithm_docstring();
 
-// Exposed C++ problems docstrings.
+// user - problems
 std::string rosenbrock_docstring();
+std::string decompose_decompose_fitness_docstring();
+std::string get_best_docstring(const std::string &);
 
-// Exposed C++ algorithms docstrings.
+// user - algorithms
 std::string cmaes_docstring();
+std::string cmaes_get_log_docstring();
+std::string de_docstring();
+std::string de_get_log_docstring();
+std::string de1220_docstring();
+std::string de1220_get_log_docstring();
+std::string moead_docstring();
+std::string moead_get_log_docstring();
+std::string sade_docstring();
+std::string sade_get_log_docstring();
+
+// stand alone functions
+std::string fast_non_dominated_sorting_docstring();
+
 
 }
 

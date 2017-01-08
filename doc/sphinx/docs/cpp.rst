@@ -30,6 +30,7 @@ code your own algorithm
   algorithms/sade
   algorithms/de1220
   algorithms/cmaes
+  algorithms/moead
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
