@@ -25,9 +25,14 @@ set(YACMA_PY_MODULE_EXTENSION "")
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     message(STATUS "OS X platform detected.")
     # Apparently on OS X Python expects the .so extension for compiled modules.
-	message(STATUS "Output extension for compiled modules will be '.so'.")
+	  message(STATUS "Output extension for compiled modules will be '.so'.")
     set(YACMA_PY_MODULE_EXTENSION "so")
-    # TODO fill in.
+    # We must establish if the installation dir for Python modules is named 'site-packages' (as usual)
+    # or 'dist-packages' (apparently Ubuntu 9.04 or maybe Python 2.6, it's not clear).
+    execute_process(COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/yacma_python_packages_dir.py"
+        OUTPUT_VARIABLE _YACMA_PY_PACKAGES_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+    message(STATUS "Python packages dir is: ${_YACMA_PY_PACKAGES_DIR}")
+    set(YACMA_PYTHON_MODULES_INSTALL_PATH "lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/${_YACMA_PY_PACKAGES_DIR}")
 elseif(UNIX)
     message(STATUS "Generic UNIX platform detected.")
     # We must establish if the installation dir for Python modules is named 'site-packages' (as usual)
@@ -40,7 +45,12 @@ elseif(WIN32)
     message(STATUS "Windows platform detected.")
     message(STATUS "Output extension for compiled modules will be '.pyd'.")
     set(YACMA_PY_MODULE_EXTENSION "pyd")
-    # TODO fill in.
+    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"
+        OUTPUT_VARIABLE YACMA_PYTHON_MODULES_INSTALL_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+
+if("${YACMA_PYTHON_MODULES_INSTALL_PATH}" STREQUAL "")
+  message(FATAL_ERROR "Python module install path not detected correctly.")
 endif()
 
 message(STATUS "Python modules install path: " "${YACMA_PYTHON_MODULES_INSTALL_PATH}")
