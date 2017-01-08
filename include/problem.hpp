@@ -245,8 +245,10 @@ struct prob_inner final: prob_inner_base
     template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value,int>::type = 0>
     static vector_double gradient_impl(const U &, const vector_double &)
     {
-        pagmo_throw(std::logic_error,"Gradients have been requested but not implemented.\n"
-            "A function with prototype 'vector_double gradient(const vector_double &x)' const was expected.");
+        pagmo_throw(std::logic_error,"gradients have been requested but not implemented\n\n"
+            "The expected prototypes are:\n"
+            "C++: vector_double gradient(const vector_double &x) const\n"
+            "Python: gradient(x)");
     }
     template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value,int>::type = 0>
     static bool has_gradient_impl(const U &p)
@@ -1041,7 +1043,7 @@ class problem
                     "either it does not provide the 'set_seed()' method or its 'has_set_seed()' method "
                     "returns false\n\nThe expected prototypes for 'set_seed()' are:\n"
                     "C++: 'void set_seed(unsigned int)'\n"
-                    "Python: 'set_seed(self, seed)'");
+                    "Python: 'set_seed(seed)'");
             }
         }
 

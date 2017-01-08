@@ -27,7 +27,7 @@ namespace pagmo
 /**
  * \image html population.jpg
  *
- * This class represents a population of individuals, i.e. potential
+ * This class represents a population of individuals, i.e., potential
  * candidate solutions to a given problem. In PaGMO an
  * individual is determined
  * - by a unique ID used to track him across generations and migrations
@@ -39,7 +39,7 @@ namespace pagmo
  */
 class population
 {
-        // Enable the generic ctor only if T is not aa population (after removing
+        // Enable the generic ctor only if T is not a population (after removing
         // const/reference qualifiers).
         template <typename T>
         using generic_ctor_enabler = std::enable_if_t<!std::is_same<population,std::decay_t<T>>::value,int>;

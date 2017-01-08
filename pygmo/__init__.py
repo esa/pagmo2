@@ -11,11 +11,14 @@ def _problem_extract(self,t):
     If *t* is the same type of the user-defined problem used to construct this problem, then a deep copy of
     the user-defined problem will be returned. Otherwise, ``None`` will be returned.
 
-    :param t: the type of the user-defined problem to extract
-    :type t: ``type``
-    :returns: a deep-copy of the internal user-defined problem if it is of type *t*, or ``None`` otherwise
-    :rtype: *t*
-    :raises: :exc:`TypeError` if *t* is not a type
+    Args:
+        t (type): the type of the user-defined problem to extract
+
+    Returns:
+        a deep-copy of the internal user-defined problem if it is of type *t*, or ``None`` otherwise
+
+    Raises:
+        TypeError: if *t* is not a type
 
     """
     if not isinstance(t,type):
@@ -36,11 +39,14 @@ def _problem_is(self,t):
     If *t* is the same type of the user-defined problem used to construct this problem, then ``True`` will be
     returned. Otherwise, ``False`` will be returned.
 
-    :param t: the type of the user-defined problem to extract
-    :type t: ``type``
-    :returns: a boolean indicating whether the user-defined problem is of type *t* or not
-    :rtype: ``bool``
-    :raises: :exc:`TypeError` if *t* is not a type
+    Args:
+        t (type): the type of the user-defined problem to extract
+
+    Returns:
+        bool: whether the user-defined problem is of type *t* or not
+
+    Raises:
+        TypeError: if *t* is not a type
 
     """
     return not self.extract(t) is None
@@ -52,11 +58,14 @@ def _algorithm_extract(self,t):
     If *t* is the same type of the user-defined algorithm used to construct this algorithm, then a deep copy of
     the user-defined algorithm will be returned. Otherwise, ``None`` will be returned.
 
-    :param t: the type of the user-defined algorithm to extract
-    :type t: ``type``
-    :returns: a deep-copy of the internal user-defined algorithm if it is of type *t*, or ``None`` otherwise
-    :rtype: *t*
-    :raises: :exc:`TypeError` if *t* is not a type
+    Args:
+        t (type): the type of the user-defined algorithm to extract
+
+    Returns:
+        a deep-copy of the internal user-defined algorithm if it is of type *t*, or ``None`` otherwise
+
+    Rsies:
+        TypeError" if *t* is not a type
 
     """
     if not isinstance(t,type):
@@ -77,11 +86,14 @@ def _algorithm_is(self,t):
     If *t* is the same type of the user-defined algorithm used to construct this algorithm, then ``True`` will be
     returned. Otherwise, ``False`` will be returned.
 
-    :param t: the type of the user-defined algorithm to extract
-    :type t: ``type``
-    :returns: a boolean indicating whether the user-defined algorithm is of type *t* or not
-    :rtype: ``bool``
-    :raises: :exc:`TypeError` if *t* is not a type
+    Args:
+        t (type): the type of the user-defined algorithm to extract
+
+    Returns:
+        bool: whether the user-defined algorithm is of type *t* or not
+
+    Raises:
+        TypeError: if *t* is not a type
 
     """
     return not self.extract(t) is None
@@ -91,6 +103,9 @@ from .core import *
 # Override of the population constructor.
 __original_population_init = population.__init__
 
+# NOTE: the idea of having the pop init here instead of exposed from C++ is that like this we don't need
+# to expose a new pop ctor each time we expose a new problem: in this method we will use the problem ctor
+# from a C++ problem, and on the C++ exposition side we need only to expose the ctor of pop from pagmo::problem.
 def _population_init(self,prob=None,size=0,seed=None):
     """
     Args:
@@ -100,7 +115,7 @@ def _population_init(self,prob=None,size=0,seed=None):
         seed (int): the random seed (if ``None``, it will be randomly-generated)
 
     Raises:
-        TypeError: if *size* is not an ``int`` or *seed* is not ``None`` and not an ``int``
+        TypeError: if *size* is not an int or *seed* is not ``None`` and not an int
         OverflowError:  is *size* or *seed* are negative
         unspecified: any exception thrown by the invoked C++ constructors or by the constructor of
             :class:`~pygmo.core.problem`

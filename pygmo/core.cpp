@@ -379,7 +379,7 @@ BOOST_PYTHON_MODULE(core)
     // Problem class.
     pygmo::problem_ptr = std::make_unique<bp::class_<problem>>("problem",pygmo::problem_docstring().c_str(),bp::no_init);
     auto &problem_class = *pygmo::problem_ptr;
-    problem_class.def(bp::init<const bp::object &>((bp::arg("p"))))
+    problem_class.def(bp::init<const bp::object &>((bp::arg("prob"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
         // Copy and deepcopy.
@@ -388,16 +388,16 @@ BOOST_PYTHON_MODULE(core)
         // Problem extraction.
         .def("_py_extract",&pygmo::generic_py_extract<problem>)
         // Problem methods.
-        .def("fitness",&pygmo::fitness_wrapper,"Fitness.\n\nThis method will calculate the fitness of the input "
-            "decision vector *dv*. The fitness is returned as a an array of doubles.",(bp::arg("dv")))
-        .def("gradient",&pygmo::gradient_wrapper,"Gradient.\n\nThis method will calculate the gradient of the input "
-            "decision vector *dv*. The gradient is returned as a an array of doubles.",(bp::arg("dv")))
+        .def("fitness",&pygmo::fitness_wrapper,pygmo::problem_fitness_docstring().c_str(),(bp::arg("dv")))
+        .def("gradient",&pygmo::gradient_wrapper,pygmo::problem_gradient_docstring().c_str(),(bp::arg("dv")))
         .def("has_gradient",&problem::has_gradient,"Gradient availability.")
         .def("gradient_sparsity",&pygmo::gradient_sparsity_wrapper,"Gradient sparsity.")
+        .def("has_gradient_sparsity",&problem::has_gradient_sparsity,"User-provided gradient sparsity availability.")
         .def("hessians",&pygmo::hessians_wrapper,"Hessians.\n\nThis method will calculate the Hessians of the input "
             "decision vector *dv*. The Hessians are returned as a list of arrays of doubles.",(bp::arg("dv")))
         .def("has_hessians",&problem::has_hessians,"Hessians availability.")
         .def("hessians_sparsity",&pygmo::hessians_sparsity_wrapper,"Hessians sparsity.")
+        .def("has_hessians_sparsity",&problem::has_hessians_sparsity,"User-provided Hessians sparsity availability.")
         .def("get_nobj",&problem::get_nobj,"Get number of objectives.")
         .def("get_nx",&problem::get_nx,"Get problem dimension.")
         .def("get_nf",&problem::get_nf,"Get fitness dimension.")
@@ -510,36 +510,36 @@ BOOST_PYTHON_MODULE(core)
     // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock",pygmo::rosenbrock_docstring().c_str());
     rb.def(bp::init<unsigned>((bp::arg("dim"))));
-    rb.def("best_known",&pygmo::best_known_wrapper<rosenbrock>,pygmo::get_best_docstring("Rosenbrock").c_str());
+    rb.def("best_known",&pygmo::best_known_wrapper<rosenbrock>,pygmo::problem_get_best_docstring("Rosenbrock").c_str());
     // Hock-Schittkowsky 71
     auto hs71 = pygmo::expose_problem<hock_schittkowsky_71>("hock_schittkowsky_71","__init__()\n\nThe Hock-Schittkowsky 71 problem.\n\n"
         "See :cpp:class:`pagmo::hock_schittkowsky_71`.\n\n");
     hs71.def("best_known",&pygmo::best_known_wrapper<hock_schittkowsky_71>,
-        pygmo::get_best_docstring("Hock-Schittkowsky 71").c_str());
+        pygmo::problem_get_best_docstring("Hock-Schittkowsky 71").c_str());
     // Rastrigin.
     auto rastr = pygmo::expose_problem<rastrigin>("rastrigin","__init__(dim = 1)\n\nThe Rastrigin problem.\n\n"
         "See :cpp:class:`pagmo::rastrigin`.\n\n");
     rastr.def(bp::init<unsigned>((bp::arg("dim"))));
     rastr.def("best_known",&pygmo::best_known_wrapper<rastrigin>,
-        pygmo::get_best_docstring("Rastrigin").c_str());
+        pygmo::problem_get_best_docstring("Rastrigin").c_str());
     // Schwefel.
     auto sch = pygmo::expose_problem<schwefel>("schwefel","__init__(dim = 1)\n\nThe Schwefel problem.\n\n"
         "See :cpp:class:`pagmo::schwefel`.\n\n");
     sch.def(bp::init<unsigned>((bp::arg("dim"))));
     sch.def("best_known",&pygmo::best_known_wrapper<schwefel>,
-        pygmo::get_best_docstring("Schwefel").c_str());
+        pygmo::problem_get_best_docstring("Schwefel").c_str());
     // Ackley.
     auto ack = pygmo::expose_problem<ackley>("ackley","__init__(dim = 1)\n\nThe Ackley problem.\n\n"
         "See :cpp:class:`pagmo::ackley`.\n\n");
     ack.def(bp::init<unsigned>((bp::arg("dim"))));
     ack.def("best_known",&pygmo::best_known_wrapper<ackley>,
-        pygmo::get_best_docstring("Ackley").c_str());
+        pygmo::problem_get_best_docstring("Ackley").c_str());
     // Griewank.
     auto griew = pygmo::expose_problem<griewank>("griewank","__init__(dim = 1)\n\nThe Griewank problem.\n\n"
         "See :cpp:class:`pagmo::griewank`.\n\n");
     griew.def(bp::init<unsigned>((bp::arg("dim"))));
     griew.def("best_known",&pygmo::best_known_wrapper<griewank>,
-        pygmo::get_best_docstring("Griewank").c_str());
+        pygmo::problem_get_best_docstring("Griewank").c_str());
     // ZDT.
     auto zdt_p = pygmo::expose_problem<zdt>("zdt","__init__(id = 1, param = 30)\n\nThe ZDT problem.\n\n"
         "See :cpp:class:`pagmo::zdt`.\n\n");
