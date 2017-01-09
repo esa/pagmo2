@@ -28,16 +28,15 @@ namespace detail
 namespace bp = boost::python;
 
 template <>
-struct algo_inner<bp::object> final: algo_inner_base, pygmo::common_base
-{
+struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     // These are the mandatory methods that must be present.
     void check_construction_object() const
     {
-        if (pygmo::isinstance(m_value,pygmo::builtin().attr("type"))) {
-            pygmo_throw(PyExc_TypeError,"cannot construct an algorithm from a type: please use an instance "
-                "as construction argument");
+        if (pygmo::isinstance(m_value, pygmo::builtin().attr("type"))) {
+            pygmo_throw(PyExc_TypeError, "cannot construct an algorithm from a type: please use an instance "
+                                         "as construction argument");
         }
-        check_callable_attribute(m_value,"evolve","algorithm");
+        check_callable_attribute(m_value, "evolve", "algorithm");
     }
     // Just need the def ctor, delete everything else.
     algo_inner() = default;
@@ -45,9 +44,9 @@ struct algo_inner<bp::object> final: algo_inner_base, pygmo::common_base
     algo_inner(algo_inner &&) = delete;
     algo_inner &operator=(const algo_inner &) = delete;
     algo_inner &operator=(algo_inner &&) = delete;
-    explicit algo_inner(bp::object o):
-        // Perform an explicit deep copy of the input object.
-        m_value(pygmo::deepcopy(o))
+    explicit algo_inner(bp::object o)
+        : // Perform an explicit deep copy of the input object.
+          m_value(pygmo::deepcopy(o))
     {
         check_construction_object();
     }
@@ -64,43 +63,41 @@ struct algo_inner<bp::object> final: algo_inner_base, pygmo::common_base
     // Optional methods.
     virtual void set_seed(unsigned n) override final
     {
-        auto a = try_attr(m_value,"set_seed");
+        auto a = try_attr(m_value, "set_seed");
         if (a) {
             a(n);
         } else {
-            pygmo_throw(PyExc_RuntimeError,"'set_seed()' has been called but it is not implemented");
+            pygmo_throw(PyExc_RuntimeError, "'set_seed()' has been called but it is not implemented");
         }
     }
     virtual bool has_set_seed() const override final
     {
-        return getter_wrapper<bool>(m_value,"has_set_seed",try_attr(m_value,"set_seed"));
+        return getter_wrapper<bool>(m_value, "has_set_seed", try_attr(m_value, "set_seed"));
     }
     virtual std::string get_name() const override final
     {
-        return getter_wrapper<std::string>(m_value,"get_name",pygmo::str(pygmo::type(m_value)));
+        return getter_wrapper<std::string>(m_value, "get_name", pygmo::str(pygmo::type(m_value)));
     }
     virtual std::string get_extra_info() const override final
     {
-        return getter_wrapper<std::string>(m_value,"get_extra_info",std::string{});
+        return getter_wrapper<std::string>(m_value, "get_extra_info", std::string{});
     }
     virtual void set_verbosity(unsigned n) override final
     {
-        auto a = try_attr(m_value,"set_verbosity");
+        auto a = try_attr(m_value, "set_verbosity");
         if (a) {
             a(n);
         } else {
-            pygmo_throw(PyExc_RuntimeError,"'set_verbosity()' has been called but it is not implemented");
+            pygmo_throw(PyExc_RuntimeError, "'set_verbosity()' has been called but it is not implemented");
         }
     }
     virtual bool has_set_verbosity() const override final
     {
-        return getter_wrapper<bool>(m_value,"has_set_verbosity",try_attr(m_value,"set_verbosity"));
+        return getter_wrapper<bool>(m_value, "has_set_verbosity", try_attr(m_value, "set_verbosity"));
     }
     bp::object m_value;
 };
-
 }
-
 }
 
 // Register the algo_inner specialisation for bp::object.
@@ -112,8 +109,7 @@ namespace pygmo
 namespace bp = boost::python;
 
 // Serialization support for the algorithm class.
-struct algorithm_pickle_suite : bp::pickle_suite
-{
+struct algorithm_pickle_suite : bp::pickle_suite {
     static bp::tuple getinitargs(const pagmo::algorithm &)
     {
         // For initialization purposes, we use the null algo.
@@ -126,11 +122,11 @@ struct algorithm_pickle_suite : bp::pickle_suite
         // this object into a Python bytes object and return that.
         std::ostringstream oss;
         {
-        cereal::PortableBinaryOutputArchive oarchive(oss);
-        oarchive(a);
+            cereal::PortableBinaryOutputArchive oarchive(oss);
+            oarchive(a);
         }
         auto s = oss.str();
-        return bp::make_tuple(make_bytes(s.data(),boost::numeric_cast<Py_ssize_t>(s.size())));
+        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
     }
     static void setstate(pagmo::algorithm &a, bp::tuple state)
     {
@@ -138,23 +134,22 @@ struct algorithm_pickle_suite : bp::pickle_suite
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
         if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError,"the state tuple must have a single element");
+            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
         }
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
-            pygmo_throw(PyExc_TypeError,"a bytes object is needed to deserialize a problem");
+            pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize a problem");
         }
         const auto size = len(state[0]);
-        std::string s(ptr,ptr + size);
+        std::string s(ptr, ptr + size);
         std::istringstream iss;
         iss.str(s);
         {
-        cereal::PortableBinaryInputArchive iarchive(iss);
-        iarchive(a);
+            cereal::PortableBinaryInputArchive iarchive(iss);
+            iarchive(a);
         }
     }
 };
-
 }
 
 #endif

@@ -49,20 +49,21 @@ namespace pagmo
  */
 inline std::vector<double> sample_from_simplex(std::vector<double> in)
 {
-    if (std::any_of(in.begin(), in.end(), [](double item){return (item < 0 || item > 1);})) {
-        pagmo_throw(std::invalid_argument,"Input vector must have all elements in [0,1]");
+    if (std::any_of(in.begin(), in.end(), [](double item) { return (item < 0 || item > 1); })) {
+        pagmo_throw(std::invalid_argument, "Input vector must have all elements in [0,1]");
     }
     if (in.size() > 0u) {
-        std::sort(in.begin(),in.end());
-        in.insert(in.begin(),0.0);
+        std::sort(in.begin(), in.end());
+        in.insert(in.begin(), 0.0);
         in.push_back(1.0);
-        for (decltype(in.size()) i = 0u; i < in.size()-1u; ++i) {
-            in[i] = in[i+1u] - in[i];
+        for (decltype(in.size()) i = 0u; i < in.size() - 1u; ++i) {
+            in[i] = in[i + 1u] - in[i];
         }
         in.pop_back();
         return in;
     } else {
-        pagmo_throw(std::invalid_argument,"Input vector must have at least dimension 1, a size of " + std::to_string(in.size()) + " was detected instead.");
+        pagmo_throw(std::invalid_argument, "Input vector must have at least dimension 1, a size of "
+                                               + std::to_string(in.size()) + " was detected instead.");
     }
 }
 
@@ -99,49 +100,51 @@ inline std::vector<double> sample_from_simplex(std::vector<double> in)
  */
 class van_der_corput
 {
-    public:
-        /// Constructor from base and starting element
-        /**
-         * Consruct a van der Corput lowp-discrepancy sequence with base
-         * \p b and starting element position \p n
-         *
-         * @param[in] b base
-         * @param[in] n position of the starting element
-         *
-         * @throws std::invalid_argument if the base is 0u or 1u
-         *
-         */
-        van_der_corput(unsigned int b = 2u, unsigned int n = 0u) : m_base(b), m_counter(n)
-        {
-            if (b < 2u) {
-                pagmo_throw(std::invalid_argument,"The base of the van der Corput sequence must be at least 2: " + std::to_string(b) + " was detected");
-            }
+public:
+    /// Constructor from base and starting element
+    /**
+     * Consruct a van der Corput lowp-discrepancy sequence with base
+     * \p b and starting element position \p n
+     *
+     * @param[in] b base
+     * @param[in] n position of the starting element
+     *
+     * @throws std::invalid_argument if the base is 0u or 1u
+     *
+     */
+    van_der_corput(unsigned int b = 2u, unsigned int n = 0u) : m_base(b), m_counter(n)
+    {
+        if (b < 2u) {
+            pagmo_throw(std::invalid_argument, "The base of the van der Corput sequence must be at least 2: "
+                                                   + std::to_string(b) + " was detected");
         }
-        /// Returns the next number in the sequence
-        double operator()()
-        {
-            double retval = 0.;
-            double f = 1.0 / m_base;
-            unsigned int i = m_counter;
-            while (i > 0u) {
-                retval += f * (i % m_base);
-                i = i / m_base;
-                f = f / m_base;
-            }
-            ++m_counter;
-            return retval;
+    }
+    /// Returns the next number in the sequence
+    double operator()()
+    {
+        double retval = 0.;
+        double f = 1.0 / m_base;
+        unsigned int i = m_counter;
+        while (i > 0u) {
+            retval += f * (i % m_base);
+            i = i / m_base;
+            f = f / m_base;
         }
-        /// Serialization.
-        template <typename Archive>
-        void serialize(Archive &ar)
-        {
-            ar(m_base, m_counter);
-        }
-    private:
-        // Base of the sequence
-        unsigned int m_base;
-        // Element of the sequence to compute
-        unsigned int m_counter;
+        ++m_counter;
+        return retval;
+    }
+    /// Serialization.
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_base, m_counter);
+    }
+
+private:
+    // Base of the sequence
+    unsigned int m_base;
+    // Element of the sequence to compute
+    unsigned int m_counter;
 };
 
 /// Halton sequence
@@ -153,7 +156,8 @@ class van_der_corput
  * following sequence is generated:
  *
  * \f[
- * seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac 19\right), \left(\frac 18,
+ * seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac
+ * 19\right), \left(\frac 18,
  * \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\}
  * \f]
  *
@@ -165,44 +169,45 @@ class van_der_corput
  */
 class halton
 {
-    public:
-        /// Constructor from base and starting element
-        /**
-         * Consruct a Halton low-discrepancy sequence with dimension
-         * \p dim and starting element position \p n
-         *
-         * @param[in] dim dimension
-         * @param[in] n position of the starting element
-         *
-         * @throws unspecified all exceptions thrown by pagmo::van_der_corput
-         *
-         */
-        halton(unsigned int dim = 2u, unsigned int n = 0u) : m_dim(dim)
-        {
-            for (auto i=0u; i<m_dim; ++i) {
-                m_vdc.push_back(van_der_corput(detail::prime(i+1), n));
-            }
+public:
+    /// Constructor from base and starting element
+    /**
+     * Consruct a Halton low-discrepancy sequence with dimension
+     * \p dim and starting element position \p n
+     *
+     * @param[in] dim dimension
+     * @param[in] n position of the starting element
+     *
+     * @throws unspecified all exceptions thrown by pagmo::van_der_corput
+     *
+     */
+    halton(unsigned int dim = 2u, unsigned int n = 0u) : m_dim(dim)
+    {
+        for (auto i = 0u; i < m_dim; ++i) {
+            m_vdc.push_back(van_der_corput(detail::prime(i + 1), n));
         }
-        /// Returns the next point in the sequence
-        std::vector<double> operator()()
-        {
-            std::vector<double> retval;
-            for (auto i=0u; i<m_dim; ++i) {
-                retval.push_back(m_vdc[i]());
-            }
-            return retval;
+    }
+    /// Returns the next point in the sequence
+    std::vector<double> operator()()
+    {
+        std::vector<double> retval;
+        for (auto i = 0u; i < m_dim; ++i) {
+            retval.push_back(m_vdc[i]());
         }
-        /// Serialization.
-        template <typename Archive>
-        void serialize(Archive &ar)
-        {
-            ar(m_dim, m_vdc);
-        }
-    private:
-        // Dimension of the sequence
-        unsigned int m_dim;
-        // van der Corput sequences used for each dimension
-        std::vector<van_der_corput> m_vdc;
+        return retval;
+    }
+    /// Serialization.
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_dim, m_vdc);
+    }
+
+private:
+    // Dimension of the sequence
+    unsigned int m_dim;
+    // van der Corput sequences used for each dimension
+    std::vector<van_der_corput> m_vdc;
 };
 
 } // namespace pagmo

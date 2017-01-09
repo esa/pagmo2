@@ -465,10 +465,12 @@ std::string problem_get_best_docstring(const std::string &name)
 {
     return R"(best_known()
 
-The best known solution for the )" + name + R"( problem.
+The best known solution for the )"
+           + name + R"( problem.
 
 Returns:
-    ``array`` of ``floats``: the best known solution for the )" + name + R"( problem
+    ``array`` of ``floats``: the best known solution for the )"
+           + name + R"( problem
 
 )";
 }

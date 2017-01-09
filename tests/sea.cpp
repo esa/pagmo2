@@ -7,14 +7,14 @@
 #include <string>
 
 #include "../include/algorithm.hpp"
-#include "../include/algorithms/sea.hpp"
 #include "../include/algorithms/null_algorithm.hpp"
+#include "../include/algorithms/sea.hpp"
 #include "../include/io.hpp"
+#include "../include/population.hpp"
 #include "../include/problems/hock_schittkowsky_71.hpp"
 #include "../include/problems/inventory.hpp"
 #include "../include/problems/rosenbrock.hpp"
 #include "../include/problems/zdt.hpp"
-#include "../include/population.hpp"
 #include "../include/serialization.hpp"
 #include "../include/types.hpp"
 
@@ -36,41 +36,41 @@ BOOST_AUTO_TEST_CASE(sea_evolve_test)
     //
     // On a single objective deterministic problem
     {
-    problem prob1{rosenbrock{25u}};
-    population pop1{prob1, 5u, 23u};
-    sea user_algo1{10u, 23u};
-    user_algo1.set_verbosity(1u);
-    pop1 = user_algo1.evolve(pop1);
+        problem prob1{rosenbrock{25u}};
+        population pop1{prob1, 5u, 23u};
+        sea user_algo1{10u, 23u};
+        user_algo1.set_verbosity(1u);
+        pop1 = user_algo1.evolve(pop1);
 
-    problem prob2{rosenbrock{25u}};
-    population pop2{prob2, 5u, 23u};
-    sea user_algo2{10u, 23u};
-    user_algo2.set_verbosity(1u);
-    pop2 = user_algo2.evolve(pop2);
+        problem prob2{rosenbrock{25u}};
+        population pop2{prob2, 5u, 23u};
+        sea user_algo2{10u, 23u};
+        user_algo2.set_verbosity(1u);
+        pop2 = user_algo2.evolve(pop2);
 
-    BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+        BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
     }
     // On a single objective stochastic problem
     {
-    problem prob1{inventory{25u, 5u, 1432u}};
-    population pop1{prob1, 5u, 23u};
-    sea user_algo1{10u, 23u};
-    user_algo1.set_verbosity(2u);
-    pop1 = user_algo1.evolve(pop1);
+        problem prob1{inventory{25u, 5u, 1432u}};
+        population pop1{prob1, 5u, 23u};
+        sea user_algo1{10u, 23u};
+        user_algo1.set_verbosity(2u);
+        pop1 = user_algo1.evolve(pop1);
 
-    problem prob2{inventory{25u, 5u, 1432u}};
-    population pop2{prob2, 5u, 23u};
-    sea user_algo2{10u, 23u};
-    user_algo2.set_verbosity(2u); // more verbosity here to also cover the relative code lines
-    pop2 = user_algo2.evolve(pop2);
+        problem prob2{inventory{25u, 5u, 1432u}};
+        population pop2{prob2, 5u, 23u};
+        sea user_algo2{10u, 23u};
+        user_algo2.set_verbosity(2u); // more verbosity here to also cover the relative code lines
+        pop2 = user_algo2.evolve(pop2);
 
-    BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+        BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
     }
     // We then check that the evolve throws if called on unsuitable problems
-    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{zdt{}},5u,23u}), std::invalid_argument);
-    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{hock_schittkowsky_71{}},5u,23u}), std::invalid_argument);
+    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{zdt{}}, 5u, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 5u, 23u}), std::invalid_argument);
     // Or with not enough individuals
-    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{rosenbrock{}},0u}), std::invalid_argument);
+    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};
     BOOST_CHECK(sea{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
@@ -103,14 +103,14 @@ BOOST_AUTO_TEST_CASE(sea_serialization_test)
     auto before_log = algo.extract<sea>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(algo);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(algo);
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo);
     }
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<sea>()->get_log();

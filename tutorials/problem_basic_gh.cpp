@@ -69,27 +69,25 @@
 #include "../include/problem.hpp"
 #include "../include/types.hpp"
 
-
 using namespace pagmo;
-struct problem_basic_gh
-{
+struct problem_basic_gh {
     // Mandatory, computes ... well ... the fitness
     vector_double fitness(const vector_double &x) const
     {
-        return {x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3]};
+        return {x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3]};
     }
 
     // Mandatory, returns the box-bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        return {{-10,-10,-10,-10},{10,10,10,10}};
+        return {{-10, -10, -10, -10}, {10, 10, 10, 10}};
     }
 
     // Optional, computes the gradients. In this simple case only one
     // df0/dx0, df0/dx1, df0/dx2, df0/dx3
     vector_double gradient(const vector_double &x) const
     {
-        return {2 * x[0],2 * x[1], 2 * x[2], 2 * x[3]};
+        return {2 * x[0], 2 * x[1], 2 * x[2], 2 * x[3]};
     }
 
     // Optional. Returns the sparsity of the problem as a sparsity_pattern
@@ -98,7 +96,7 @@ struct problem_basic_gh
     // When not implemented a dense problem is assumed.
     sparsity_pattern gradient_sparsity() const
     {
-        return {{0,0},{0,1},{0,2},{0,3}};
+        return {{0, 0}, {0, 1}, {0, 2}, {0, 3}};
     }
 
     // Optional. Returns the Hessians of the various fitness
@@ -107,13 +105,13 @@ struct problem_basic_gh
     // also sparse as most of its components are 0.
     std::vector<vector_double> hessians(const vector_double &) const
     {
-        return {{2.,2.,2.,2.}};
+        return {{2., 2., 2., 2.}};
     }
 
     // Optional. Returns the sparsity of the hessians.
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
-        return {{{0,0},{1,1},{2,2},{3,3}}};
+        return {{{0, 0}, {1, 1}, {2, 2}, {3, 3}}};
     }
 
     // Optional, provides a name for the problem overrding the default name
@@ -124,12 +122,16 @@ struct problem_basic_gh
 
     // Optional, provides extra information that will be appended after
     // the default stream operator
-    std::string get_extra_info() const {
+    std::string get_extra_info() const
+    {
         std::ostringstream s;
         s << "This is a simple toy problem with one fitness, " << '\n';
-        s << "no constraint and a fixed dimension of 4." << "\n";
-        s << "The fitness function gradient and hessians are also implemented" << "\n";
-        s << "The sparsity of the gradient and hessians is user provided" << "\n";
+        s << "no constraint and a fixed dimension of 4."
+          << "\n";
+        s << "The fitness function gradient and hessians are also implemented"
+          << "\n";
+        s << "The sparsity of the gradient and hessians is user provided"
+          << "\n";
         return s.str();
     }
 
@@ -137,7 +139,7 @@ struct problem_basic_gh
     // the problem::extract() method
     vector_double best_known() const
     {
-        return {0,0,0,0};
+        return {0, 0, 0, 0};
     }
 };
 
@@ -158,7 +160,7 @@ int main()
     // is set to zero. Checking its value is easy
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
     // Computing one fitness
-    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2,2,2,2}), "\n");
+    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2, 2, 2, 2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("fevals: ", p0.get_fevals(), "\n\n");
 
@@ -167,7 +169,7 @@ int main()
     pagmo::print("gevals: ", p0.get_gevals(), "\n");
     // Computing one gradient
     pagmo::print("gradient implementation detected?: ", p0.has_gradient(), '\n');
-    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient({2,2,2,2}), "\n");
+    pagmo::print("calling gradient in x=[2,2,2,2]: ", p0.gradient({2, 2, 2, 2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("gevals: ", p0.get_gevals(), "\n\n");
 
@@ -176,7 +178,7 @@ int main()
     pagmo::print("hevals: ", p0.get_hevals(), "\n");
     // Computing one gradient
     pagmo::print("hessians implementation detected?: ", p0.has_hessians(), '\n');
-    pagmo::print("calling hessians in x=[2,2,2,2]: ", p0.hessians({2,2,2,2}), "\n");
+    pagmo::print("calling hessians in x=[2,2,2,2]: ", p0.hessians({2, 2, 2, 2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("hevals: ", p0.get_hevals(), "\n\n");
 

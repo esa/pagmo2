@@ -10,8 +10,8 @@
 #include "../include/algorithms/moead.hpp"
 #include "../include/algorithms/null_algorithm.hpp"
 #include "../include/io.hpp"
-#include "../include/problems/zdt.hpp"
 #include "../include/problems/rosenbrock.hpp"
+#include "../include/problems/zdt.hpp"
 #include "../include/serialization.hpp"
 #include "../include/types.hpp"
 
@@ -41,7 +41,7 @@ struct mo_con {
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
-        return {0.,0.,0.};
+        return {0., 0., 0.};
     }
     vector_double::size_type get_nobj() const
     {
@@ -54,7 +54,7 @@ struct mo_con {
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        return {{0.,0.},{1.,1.}};
+        return {{0., 0.}, {1., 1.}};
     }
 };
 
@@ -62,7 +62,7 @@ struct mo_sto {
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
-        return {0.,0.};
+        return {0., 0.};
     }
     vector_double::size_type get_nobj() const
     {
@@ -71,16 +71,18 @@ struct mo_sto {
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        return {{0.,0.},{1.,1.}};
+        return {{0., 0.}, {1., 1.}};
     }
-    void set_seed(unsigned int) {}
+    void set_seed(unsigned int)
+    {
+    }
 };
 
 struct mo_many {
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
-        return {0.,0.,0.,0.,0.,0.};
+        return {0., 0., 0., 0., 0., 0.};
     }
     vector_double::size_type get_nobj() const
     {
@@ -89,7 +91,7 @@ struct mo_many {
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        return {{0.,0.},{1.,1.}};
+        return {{0., 0.}, {1., 1.}};
     }
 };
 
@@ -118,9 +120,9 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     // Multi-objective problem with constraints
     BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{mo_con{}}, 20u}), std::invalid_argument);
     // Stochastic problem
-    BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{mo_sto{}},15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{mo_sto{}}, 15u}), std::invalid_argument);
     // Population size is too small for the neighbourhood specified
-    BOOST_CHECK_THROW(moead(10u, "grid", 20u).evolve(population{problem{zdt{}},15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(moead(10u, "grid", 20u).evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
 
     // And a clean exit for 0 generations
     population pop{zdt{}, 40u};
@@ -158,14 +160,14 @@ BOOST_AUTO_TEST_CASE(moead_serialization_test)
     auto before_log = algo.extract<moead>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(algo);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(algo);
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo);
     }
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<moead>()->get_log();

@@ -2,9 +2,9 @@
 #define PAGMO_PROBLEM_INVENTORY_HPP
 
 #include <exception>
-#include <sstream>
 #include <iostream>
 #include <random>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -36,7 +36,8 @@ namespace pagmo
  * \f]
  * while the total cost of running the journal sales for \f$N\f$ weeks will be:
  * \f[
- *  J(\mathbf x, \mathbf d) = c \sum_{i=1}^N x_i+ b \sum_{i=1}^N [d_i - I_i - x_i]_+ + h \sum_{i=1}^N [I_i + x_i - d_i]_+
+ *  J(\mathbf x, \mathbf d) = c \sum_{i=1}^N x_i+ b \sum_{i=1}^N [d_i - I_i - x_i]_+ + h \sum_{i=1}^N [I_i + x_i -
+ * d_i]_+
  * \f]
  *
  * @see www2.isye.gatech.edu/people/faculty/Alex_Shapiro/SPbook.pdf
@@ -44,95 +45,99 @@ namespace pagmo
  */
 class inventory
 {
-    public:
-        /// Constructor from weeks, sample size and random seed
-        /**
-         * Given the numer of weeks (i.e. prolem dimension), the sample size to
-         * approximate the expected value and a starting random seed, we construct
-         * the inventory prolem
-         *
-         * @param[in] weeks dimension of the problem corresponding to the numer of weeks
-         * to plan the inventory for.
-         * @param[in] sample_size dimension of the sample used to approximate the expected value
-         * @param[in] seed starting random seed to build the pseudorandom sequences used to
-         * generate the sample
-         */
-        inventory(unsigned int weeks = 4u, unsigned int sample_size = 10u, unsigned int seed = pagmo::random_device::next()) : m_weeks(weeks), m_sample_size(sample_size), m_e(seed), m_seed(seed) {}
+public:
+    /// Constructor from weeks, sample size and random seed
+    /**
+     * Given the numer of weeks (i.e. prolem dimension), the sample size to
+     * approximate the expected value and a starting random seed, we construct
+     * the inventory prolem
+     *
+     * @param[in] weeks dimension of the problem corresponding to the numer of weeks
+     * to plan the inventory for.
+     * @param[in] sample_size dimension of the sample used to approximate the expected value
+     * @param[in] seed starting random seed to build the pseudorandom sequences used to
+     * generate the sample
+     */
+    inventory(unsigned int weeks = 4u, unsigned int sample_size = 10u, unsigned int seed = pagmo::random_device::next())
+        : m_weeks(weeks), m_sample_size(sample_size), m_e(seed), m_seed(seed)
+    {
+    }
 
-        /// Fitness computation
-        vector_double fitness(const vector_double &x) const
-        {
-            // We seed the random engine
-            m_e.seed(m_seed);
-            // We construct a uniform distribution from 0 to 1.
-            auto drng = std::uniform_real_distribution<double>(0., 1.);
-            // We may now start the computations
-            const double c=1.0, b=1.5, h=0.1; // c is the cost per unit, b is the backorder penalty cost and h is the holding cost
-            double retval=0;
+    /// Fitness computation
+    vector_double fitness(const vector_double &x) const
+    {
+        // We seed the random engine
+        m_e.seed(m_seed);
+        // We construct a uniform distribution from 0 to 1.
+        auto drng = std::uniform_real_distribution<double>(0., 1.);
+        // We may now start the computations
+        const double c = 1.0, b = 1.5,
+                     h = 0.1; // c is the cost per unit, b is the backorder penalty cost and h is the holding cost
+        double retval = 0;
 
-            for (decltype(m_sample_size) i = 0; i<m_sample_size; ++i) {
-                double I=0;
-                for (decltype(x.size()) j = 0u; j<x.size(); ++j) {
-                    double d = drng(m_e) * 100;
-                    retval += c * x[j] + b * std::max<double>(d-I-x[j],0) + h * std::max<double>(I+x[j]-d,0);
-                    I = std::max<double>(0, I + x[j] - d);
-                }
+        for (decltype(m_sample_size) i = 0; i < m_sample_size; ++i) {
+            double I = 0;
+            for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+                double d = drng(m_e) * 100;
+                retval += c * x[j] + b * std::max<double>(d - I - x[j], 0) + h * std::max<double>(I + x[j] - d, 0);
+                I = std::max<double>(0, I + x[j] - d);
             }
-            return {retval / m_sample_size};
         }
+        return {retval / m_sample_size};
+    }
 
-        /// Number of objectives
-        vector_double::size_type get_nobj() const
-        {
-            return 1u;
-        }
+    /// Number of objectives
+    vector_double::size_type get_nobj() const
+    {
+        return 1u;
+    }
 
-        /// Problem bounds
-        std::pair<vector_double, vector_double> get_bounds() const
-        {
-            vector_double lb(m_weeks,0.);
-            vector_double ub(m_weeks,200.);
-            return {lb,ub};
-        }
+    /// Problem bounds
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        vector_double lb(m_weeks, 0.);
+        vector_double ub(m_weeks, 200.);
+        return {lb, ub};
+    }
 
-        /// Sets the seed
-        void set_seed(unsigned int seed)
-        {
-            m_seed = seed;
-        }
+    /// Sets the seed
+    void set_seed(unsigned int seed)
+    {
+        m_seed = seed;
+    }
 
-        /// Problem name
-        std::string get_name() const
-        {
-            return "Inventory problem";
-        }
+    /// Problem name
+    std::string get_name() const
+    {
+        return "Inventory problem";
+    }
 
-        /// Extra informations
-        std::string get_extra_info() const
-        {
-            std::ostringstream ss;
-            ss << "\tWeeks: " << std::to_string(m_weeks) << "\n";
-            ss << "\tSample size: " << std::to_string(m_sample_size) << "\n";
-            ss << "\tSeed: " << std::to_string(m_seed) << "\n";
-            return ss.str();
-        }
+    /// Extra informations
+    std::string get_extra_info() const
+    {
+        std::ostringstream ss;
+        ss << "\tWeeks: " << std::to_string(m_weeks) << "\n";
+        ss << "\tSample size: " << std::to_string(m_sample_size) << "\n";
+        ss << "\tSeed: " << std::to_string(m_seed) << "\n";
+        return ss.str();
+    }
 
-        /// Serialization
-        template <typename Archive>
-        void serialize(Archive &ar)
-        {
-            ar(m_weeks, m_sample_size, m_e, m_seed);
-        }
+    /// Serialization
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_weeks, m_sample_size, m_e, m_seed);
+    }
 
-    private:
-        // Number of weeks to plan for
-        unsigned int                            m_weeks;
-        // Sample size
-        unsigned int                            m_sample_size;
-        // Random engine
-        mutable detail::random_engine_type      m_e;
-        // Seed
-        unsigned int                            m_seed;
+private:
+    // Number of weeks to plan for
+    unsigned int m_weeks;
+    // Sample size
+    unsigned int m_sample_size;
+    // Random engine
+    mutable detail::random_engine_type m_e;
+    // Seed
+    unsigned int m_seed;
 };
 
 } // namespace pagmo

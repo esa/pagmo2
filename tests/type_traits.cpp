@@ -13,32 +13,28 @@
 using namespace pagmo;
 
 // No fitness.
-struct f_00 {};
+struct f_00 {
+};
 
 // Various types of wrong fitness.
-struct f_01
-{
+struct f_01 {
     void fitness();
 };
 
-struct f_02
-{
+struct f_02 {
     void fitness(const vector_double &);
 };
 
-struct f_03
-{
+struct f_03 {
     vector_double fitness(const vector_double &);
 };
 
-struct f_04
-{
+struct f_04 {
     vector_double fitness(vector_double &) const;
 };
 
 // Good one.
-struct f_05
-{
+struct f_05 {
     vector_double fitness(const vector_double &) const;
 };
 
@@ -53,22 +49,20 @@ BOOST_AUTO_TEST_CASE(has_fitness_test)
 }
 
 // No fitness.
-struct no_00 {};
+struct no_00 {
+};
 
 // Various types of wrong get_nobj.
-struct no_01
-{
+struct no_01 {
     vector_double::size_type get_nobj();
 };
 
-struct no_02
-{
+struct no_02 {
     int get_nobj() const;
 };
 
 // Good one.
-struct no_03
-{
+struct no_03 {
     vector_double::size_type get_nobj() const;
 };
 
@@ -80,27 +74,23 @@ BOOST_AUTO_TEST_CASE(has_get_nobj_test)
     BOOST_CHECK((!has_fitness<no_03>::value));
 }
 
-struct db_00
-{};
+struct db_00 {
+};
 
 // The good one.
-struct db_01
-{
-    std::pair<vector_double,vector_double> get_bounds() const;
+struct db_01 {
+    std::pair<vector_double, vector_double> get_bounds() const;
 };
 
-struct db_02
-{
-    std::pair<vector_double,vector_double> get_bounds();
+struct db_02 {
+    std::pair<vector_double, vector_double> get_bounds();
 };
 
-struct db_03
-{
+struct db_03 {
     vector_double get_bounds() const;
 };
 
-struct db_04
-{
+struct db_04 {
 };
 
 BOOST_AUTO_TEST_CASE(has_bounds_test)
@@ -112,47 +102,40 @@ BOOST_AUTO_TEST_CASE(has_bounds_test)
     BOOST_CHECK((!has_bounds<db_04>::value));
 }
 
-struct c_00
-{};
+struct c_00 {
+};
 
 // The good one.
-struct c_01
-{
+struct c_01 {
     vector_double::size_type get_nec() const;
     vector_double::size_type get_nic() const;
 };
 
-struct c_02
-{
+struct c_02 {
     vector_double::size_type get_nec();
     vector_double::size_type get_nic() const;
 };
 
-struct c_03
-{
+struct c_03 {
     int get_nec() const;
     vector_double::size_type get_nic() const;
 };
 
-struct c_04
-{
+struct c_04 {
     vector_double::size_type get_nec() const;
     vector_double::size_type get_nic();
 };
 
-struct c_05
-{
+struct c_05 {
     vector_double::size_type get_nec() const;
     void get_nic() const;
 };
 
-struct c_06
-{
+struct c_06 {
     vector_double::size_type get_nec() const;
 };
 
-struct c_07
-{
+struct c_07 {
     vector_double::size_type get_nic() const;
 };
 
@@ -180,21 +163,19 @@ BOOST_AUTO_TEST_CASE(has_i_constraints_test)
     BOOST_CHECK((has_i_constraints<c_07>::value));
 }
 
-struct n_00 {};
+struct n_00 {
+};
 
 // The good one.
-struct n_01
-{
+struct n_01 {
     std::string get_name() const;
 };
 
-struct n_02
-{
+struct n_02 {
     std::string get_name();
 };
 
-struct n_03
-{
+struct n_03 {
     void get_name() const;
 };
 
@@ -206,21 +187,19 @@ BOOST_AUTO_TEST_CASE(has_name_test)
     BOOST_CHECK((!has_name<n_03>::value));
 }
 
-struct ei_00 {};
+struct ei_00 {
+};
 
 // The good one.
-struct ei_01
-{
+struct ei_01 {
     std::string get_extra_info() const;
 };
 
-struct ei_02
-{
+struct ei_02 {
     std::string get_extra_info();
 };
 
-struct ei_03
-{
+struct ei_03 {
     void get_extra_info() const;
 };
 
@@ -232,26 +211,23 @@ BOOST_AUTO_TEST_CASE(has_extra_info_test)
     BOOST_CHECK((!has_extra_info<ei_03>::value));
 }
 
-struct grad_00 {};
+struct grad_00 {
+};
 
 // The good one.
-struct grad_01
-{
+struct grad_01 {
     vector_double gradient(const vector_double &) const;
 };
 
-struct grad_02
-{
+struct grad_02 {
     vector_double gradient(const vector_double &);
 };
 
-struct grad_03
-{
+struct grad_03 {
     vector_double gradient(vector_double &) const;
 };
 
-struct grad_04
-{
+struct grad_04 {
     void gradient(const vector_double &) const;
 };
 
@@ -264,21 +240,19 @@ BOOST_AUTO_TEST_CASE(has_gradient_test)
     BOOST_CHECK((!has_gradient<grad_04>::value));
 }
 
-struct ov_grad_00 {};
+struct ov_grad_00 {
+};
 
 // The good one.
-struct ov_grad_01
-{
+struct ov_grad_01 {
     bool has_gradient() const;
 };
 
-struct ov_grad_02
-{
+struct ov_grad_02 {
     bool has_gradient();
 };
 
-struct ov_grad_03
-{
+struct ov_grad_03 {
     void has_gradient() const;
 };
 
@@ -290,21 +264,19 @@ BOOST_AUTO_TEST_CASE(override_has_gradient_test)
     BOOST_CHECK((!override_has_gradient<ov_grad_03>::value));
 }
 
-struct gs_00 {};
+struct gs_00 {
+};
 
 // The good one.
-struct gs_01
-{
+struct gs_01 {
     sparsity_pattern gradient_sparsity() const;
 };
 
-struct gs_02
-{
+struct gs_02 {
     sparsity_pattern gradient_sparsity();
 };
 
-struct gs_03
-{
+struct gs_03 {
     int gradient_sparsity() const;
 };
 
@@ -316,21 +288,19 @@ BOOST_AUTO_TEST_CASE(has_gradient_sparsity_test)
     BOOST_CHECK((!has_gradient_sparsity<gs_03>::value));
 }
 
-struct ov_gs_00 {};
+struct ov_gs_00 {
+};
 
 // The good one.
-struct ov_gs_01
-{
+struct ov_gs_01 {
     bool has_gradient_sparsity() const;
 };
 
-struct ov_gs_02
-{
+struct ov_gs_02 {
     bool has_gradient_sparsity();
 };
 
-struct ov_gs_03
-{
+struct ov_gs_03 {
     void has_gradient_sparsity() const;
 };
 
@@ -342,26 +312,23 @@ BOOST_AUTO_TEST_CASE(override_has_gradient_sparsity_test)
     BOOST_CHECK((!override_has_gradient_sparsity<ov_gs_03>::value));
 }
 
-struct hess_00 {};
+struct hess_00 {
+};
 
 // The good one.
-struct hess_01
-{
+struct hess_01 {
     std::vector<vector_double> hessians(const vector_double &) const;
 };
 
-struct hess_02
-{
+struct hess_02 {
     std::vector<vector_double> hessians(const vector_double &);
 };
 
-struct hess_03
-{
+struct hess_03 {
     std::vector<vector_double> hessians(vector_double &) const;
 };
 
-struct hess_04
-{
+struct hess_04 {
     void hessians(const vector_double &) const;
 };
 
@@ -374,21 +341,19 @@ BOOST_AUTO_TEST_CASE(has_hessians_test)
     BOOST_CHECK((!has_hessians<hess_04>::value));
 }
 
-struct ov_hess_00 {};
+struct ov_hess_00 {
+};
 
 // The good one.
-struct ov_hess_01
-{
+struct ov_hess_01 {
     bool has_hessians() const;
 };
 
-struct ov_hess_02
-{
+struct ov_hess_02 {
     bool has_hessians();
 };
 
-struct ov_hess_03
-{
+struct ov_hess_03 {
     void has_hessians() const;
 };
 
@@ -400,21 +365,19 @@ BOOST_AUTO_TEST_CASE(override_has_hessians_test)
     BOOST_CHECK((!override_has_hessians<ov_hess_03>::value));
 }
 
-struct hs_00 {};
+struct hs_00 {
+};
 
 // The good one.
-struct hs_01
-{
+struct hs_01 {
     std::vector<sparsity_pattern> hessians_sparsity() const;
 };
 
-struct hs_02
-{
+struct hs_02 {
     std::vector<sparsity_pattern> hessians_sparsity();
 };
 
-struct hs_03
-{
+struct hs_03 {
     int hessians_sparsity() const;
 };
 
@@ -426,21 +389,19 @@ BOOST_AUTO_TEST_CASE(has_hessians_sparsity_test)
     BOOST_CHECK((!has_hessians_sparsity<hs_03>::value));
 }
 
-struct ov_hs_00 {};
+struct ov_hs_00 {
+};
 
 // The good one.
-struct ov_hs_01
-{
+struct ov_hs_01 {
     bool has_hessians_sparsity() const;
 };
 
-struct ov_hs_02
-{
+struct ov_hs_02 {
     bool has_hessians_sparsity();
 };
 
-struct ov_hs_03
-{
+struct ov_hs_03 {
     void has_hessians_sparsity() const;
 };
 
@@ -452,26 +413,23 @@ BOOST_AUTO_TEST_CASE(override_has_hessians_sparsity_test)
     BOOST_CHECK((!override_has_hessians_sparsity<ov_hs_03>::value));
 }
 
-struct hss_00 {};
+struct hss_00 {
+};
 
 // The good one.
-struct hss_01
-{
+struct hss_01 {
     void set_seed(unsigned int);
 };
 
-struct hss_02
-{
+struct hss_02 {
     void set_seed(unsigned int) const;
 };
 
-struct hss_03
-{
+struct hss_03 {
     void set_seed(int);
 };
 
-struct hss_04
-{
+struct hss_04 {
     double set_seed(unsigned int);
 };
 
@@ -484,21 +442,19 @@ BOOST_AUTO_TEST_CASE(has_set_seed_test)
     BOOST_CHECK((!has_set_seed<hss_04>::value));
 }
 
-struct ov_hss_00 {};
+struct ov_hss_00 {
+};
 
 // The good one.
-struct ov_hss_01
-{
+struct ov_hss_01 {
     bool has_set_seed() const;
 };
 
-struct ov_hss_02
-{
+struct ov_hss_02 {
     bool has_set_seed();
 };
 
-struct ov_hss_03
-{
+struct ov_hss_03 {
     void has_set_seed() const;
 };
 
@@ -510,28 +466,25 @@ BOOST_AUTO_TEST_CASE(override_has_set_seed_test)
     BOOST_CHECK((!override_has_set_seed<ov_hss_03>::value));
 }
 
-struct hsv_00 {};
+struct hsv_00 {
+};
 
 // The good one
-struct hsv_01
-{
+struct hsv_01 {
     void set_verbosity(unsigned int);
 };
 
 // also good
-struct hsv_02
-{
+struct hsv_02 {
     void set_verbosity(unsigned int) const;
 };
 
 // also good
-struct hsv_03
-{
+struct hsv_03 {
     void set_verbosity(int);
 };
 
-struct hsv_04
-{
+struct hsv_04 {
     double set_verbosity(unsigned int);
 };
 
@@ -544,32 +497,28 @@ BOOST_AUTO_TEST_CASE(has_set_verbose_test)
     BOOST_CHECK((!has_set_verbosity<hsv_04>::value));
 }
 
-struct hev_00 {};
+struct hev_00 {
+};
 
 // The good one
-struct hev_01
-{
+struct hev_01 {
     population evolve(population) const;
 };
 
-struct hev_02
-{
-    population evolve(const population&);
+struct hev_02 {
+    population evolve(const population &);
 };
 
-struct hev_03
-{
-    population evolve(population&) const;
+struct hev_03 {
+    population evolve(population &) const;
 };
 
-struct hev_04
-{
-    double evolve(const population&) const;
+struct hev_04 {
+    double evolve(const population &) const;
 };
 
-struct hev_05
-{
-    population evolve(const double&) const;
+struct hev_05 {
+    population evolve(const double &) const;
 };
 
 BOOST_AUTO_TEST_CASE(has_evolve_test)

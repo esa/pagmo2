@@ -14,21 +14,18 @@
 #include "../include/problem.hpp"
 #include "../include/types.hpp"
 
-
-
 using namespace pagmo;
-struct problem_basic
-{
+struct problem_basic {
     // Mandatory, computes ... well ... the fitness
     vector_double fitness(const vector_double &x) const
     {
-        return {x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3]};
+        return {x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3]};
     }
 
     // Mandatory, returns the box-bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        return {{-10,-10,-10,-10},{10,10,10,10}};
+        return {{-10, -10, -10, -10}, {10, 10, 10, 10}};
     }
 
     // Optional, provides a name for the problem overrding the default name
@@ -39,7 +36,8 @@ struct problem_basic
 
     // Optional, provides extra information that will be appended after
     // the default stream operator
-    std::string get_extra_info() const {
+    std::string get_extra_info() const
+    {
         return "This is a simple toy stochastic problem with one fitness, no constraint and a fixed dimension of 4.";
     }
 
@@ -47,9 +45,8 @@ struct problem_basic
     // the problem::extract() method
     vector_double best_known() const
     {
-        return {0.,0.,0.,0.};
+        return {0., 0., 0., 0.};
     }
-
 };
 
 int main()
@@ -69,7 +66,7 @@ int main()
     // is set to zero. Checking its value is easy
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
     // Computing one fitness
-    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2,2,2,2}), "\n");
+    pagmo::print("calling fitness in x=[2,2,2,2]: ", p0.fitness({2, 2, 2, 2}), "\n");
     // The evaluation counter is now ... well ... 1
     pagmo::print("fevals: ", p0.get_fevals(), "\n");
     // The evaluation counter is now ... well ... 1
@@ -77,5 +74,4 @@ int main()
     // While our problem_basic struct is now hidden inside the pagmo::problem
     // we can still access its methods / data via the extract interface
     pagmo::print("Accessing best_known: ", p0.extract<problem_basic>()->best_known(), "\n");
-
 }

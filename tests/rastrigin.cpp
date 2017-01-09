@@ -8,8 +8,8 @@
 
 #include "../include/detail/constants.hpp"
 #include "../include/problem.hpp"
-#include "../include/problems/rastrigin.hpp"
 #include "../include/problems/null_problem.hpp"
+#include "../include/problems/rastrigin.hpp"
 #include "../include/types.hpp"
 
 using namespace pagmo;
@@ -46,10 +46,10 @@ BOOST_AUTO_TEST_CASE(rastrigin_test)
         BOOST_CHECK_CLOSE(h5[0][i], 2. + 4 * detail::pi() * detail::pi() * 10, 1e-12);
     }
     // Hessian sparsity test
-    BOOST_CHECK((ras1.hessians_sparsity() == std::vector<sparsity_pattern>{{{0,0}}}));
-    BOOST_CHECK((ras5.hessians_sparsity() == std::vector<sparsity_pattern>{{{0,0},{1,1},{2,2},{3,3},{4,4}}}));
+    BOOST_CHECK((ras1.hessians_sparsity() == std::vector<sparsity_pattern>{{{0, 0}}}));
+    BOOST_CHECK((ras5.hessians_sparsity() == std::vector<sparsity_pattern>{{{0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}}}));
     // Bounds Test
-    BOOST_CHECK((ras1.get_bounds() == std::pair<vector_double, vector_double>{{-5.12},{5.12}}));
+    BOOST_CHECK((ras1.get_bounds() == std::pair<vector_double, vector_double>{{-5.12}, {5.12}}));
     // Name and extra info tests
     BOOST_CHECK(ras5.get_name().find("Rastrigin") != std::string::npos);
     // Best known test
@@ -61,22 +61,22 @@ BOOST_AUTO_TEST_CASE(rastrigin_serialization_test)
 {
     problem p{rastrigin{4u}};
     // Call objfun to increase the internal counters.
-    p.fitness({1.,1.,1.,1.});
-    p.gradient({1.,1.,1.,1.});
-    p.hessians({1.,1.,1.,1.});
+    p.fitness({1., 1., 1., 1.});
+    p.gradient({1., 1., 1., 1.});
+    p.hessians({1., 1., 1., 1.});
     // Store the string representation of p.
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(p);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(p);
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

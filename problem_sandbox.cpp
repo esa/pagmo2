@@ -5,7 +5,7 @@
 //
 
 // All we need to do is to implement a struct (or class) having the
-// following mandatory methods: 
+// following mandatory methods:
 //
 // vector_double fitness(const vector_double &)
 // vector_double::size_type get_n() const
@@ -19,18 +19,16 @@
 
 #include "include/io.hpp"
 #include "include/problem.hpp"
-#include "include/types.hpp"
 #include "include/problems/null.hpp"
 #include "include/problems/translate.hpp"
-
+#include "include/types.hpp"
 
 using namespace pagmo;
-
 
 int main()
 {
     // Constructing a problem
-    problem p0{translate{null_problem{},{1.}}};
+    problem p0{translate{null_problem{}, {1.}}};
     // Streaming to screen the problem
     std::cout << p0 << '\n';
     // Getting its dimensions

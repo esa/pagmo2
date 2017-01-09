@@ -20,8 +20,8 @@ BOOST_AUTO_TEST_CASE(rng_serialization_test)
     auto rng_save = [](const r_type &r) {
         std::stringstream ss;
         {
-        oa_type oarchive(ss);
-        oarchive(r);
+            oa_type oarchive(ss);
+            oarchive(r);
         }
         return ss.str();
     };
@@ -29,8 +29,8 @@ BOOST_AUTO_TEST_CASE(rng_serialization_test)
         std::stringstream ss;
         ss.str(str);
         {
-        ia_type iarchive(ss);
-        iarchive(r);
+            ia_type iarchive(ss);
+            iarchive(r);
         }
     };
     std::uniform_int_distribution<r_type::result_type> dist;
@@ -40,12 +40,12 @@ BOOST_AUTO_TEST_CASE(rng_serialization_test)
         r.seed(seed);
         auto str = rng_save(r);
         std::vector<r_type::result_type> v1;
-        std::generate_n(std::back_inserter(v1),100,r);
+        std::generate_n(std::back_inserter(v1), 100, r);
         auto r_copy(r);
-        rng_load(str,r);
+        rng_load(str, r);
         std::vector<r_type::result_type> v2;
-        std::generate_n(std::back_inserter(v2),100,r);
-        BOOST_CHECK_EQUAL_COLLECTIONS(v1.begin(),v1.end(),v2.begin(),v2.end());
+        std::generate_n(std::back_inserter(v2), 100, r);
+        BOOST_CHECK_EQUAL_COLLECTIONS(v1.begin(), v1.end(), v2.begin(), v2.end());
         BOOST_CHECK(r_copy == r);
     }
 }

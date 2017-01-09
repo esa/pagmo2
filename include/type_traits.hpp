@@ -12,7 +12,6 @@
 #include "detail/population_fwd.hpp"
 #include "types.hpp"
 
-
 namespace pagmo
 {
 
@@ -146,18 +145,17 @@ using decay_t = typename std::decay<T>::type;
 
 template <bool B, typename T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
-
 }
 
 namespace detail
 {
 
-struct sfinae_types
-{
-    struct yes {};
-    struct no {};
+struct sfinae_types {
+    struct yes {
+    };
+    struct no {
+    };
 };
-
 }
 
 /// Type has fitness()
@@ -172,16 +170,17 @@ struct sfinae_types
  *
  */
 template <typename T>
-class has_fitness: detail::sfinae_types
+class has_fitness : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.fitness(std::declval<const vector_double &>()));
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<vector_double,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.fitness(std::declval<const vector_double &>()));
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<vector_double, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -199,16 +198,17 @@ const bool has_fitness<T>::value;
  *
  */
 template <typename T>
-class has_get_nobj: detail::sfinae_types
+class has_get_nobj : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.get_nobj());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<vector_double::size_type,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.get_nobj());
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<vector_double::size_type, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -226,16 +226,17 @@ const bool has_get_nobj<T>::value;
  *
  */
 template <typename T>
-class has_bounds: detail::sfinae_types
+class has_bounds : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.get_bounds());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<std::pair<vector_double,vector_double>,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.get_bounds());
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<std::pair<vector_double, vector_double>, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -253,16 +254,17 @@ const bool has_bounds<T>::value;
  *
  */
 template <typename T>
-class has_e_constraints: detail::sfinae_types
+class has_e_constraints : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.get_nec());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<vector_double::size_type,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.get_nec());
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<vector_double::size_type, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -280,16 +282,17 @@ const bool has_e_constraints<T>::value;
  *
  */
 template <typename T>
-class has_i_constraints: detail::sfinae_types
+class has_i_constraints : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.get_nic());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<vector_double::size_type,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.get_nic());
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<vector_double::size_type, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -309,16 +312,16 @@ const bool has_i_constraints<T>::value;
  *
  */
 template <typename T>
-class has_set_seed: detail::sfinae_types
+class has_set_seed : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(U &p) -> decltype(p.set_seed(std::declval<unsigned int>()));
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<void,decltype(test0(std::declval<T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(U &p) -> decltype(p.set_seed(std::declval<unsigned int>()));
+    static no test0(...);
+    static const bool implementation_defined = std::is_same<void, decltype(test0(std::declval<T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -336,16 +339,16 @@ const bool has_set_seed<T>::value;
  *
  */
 template <typename T>
-class override_has_set_seed: detail::sfinae_types
+class override_has_set_seed : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.has_set_seed());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.has_set_seed());
+    static no test0(...);
+    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -363,16 +366,17 @@ const bool override_has_set_seed<T>::value;
  *
  */
 template <typename T>
-class has_name: detail::sfinae_types
+class has_name : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.get_name());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<std::string,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.get_name());
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<std::string, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -390,16 +394,17 @@ const bool has_name<T>::value;
  *
  */
 template <typename T>
-class has_extra_info: detail::sfinae_types
+class has_extra_info : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.get_extra_info());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<std::string,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.get_extra_info());
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<std::string, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -417,21 +422,21 @@ const bool has_extra_info<T>::value;
  *
  */
 template <typename T>
-class has_gradient: detail::sfinae_types
+class has_gradient : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.gradient(std::declval<const vector_double &>()));
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<vector_double,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.gradient(std::declval<const vector_double &>()));
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<vector_double, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
 const bool has_gradient<T>::value;
-
 
 /// Type has has_gradient()
 /**
@@ -445,16 +450,16 @@ const bool has_gradient<T>::value;
  *
  */
 template <typename T>
-class override_has_gradient: detail::sfinae_types
+class override_has_gradient : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.has_gradient());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.has_gradient());
+    static no test0(...);
+    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -472,16 +477,17 @@ const bool override_has_gradient<T>::value;
  *
  */
 template <typename T>
-class has_gradient_sparsity: detail::sfinae_types
+class has_gradient_sparsity : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.gradient_sparsity());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<sparsity_pattern,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.gradient_sparsity());
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<sparsity_pattern, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -499,16 +505,17 @@ const bool has_gradient_sparsity<T>::value;
  *
  */
 template <typename T>
-class has_hessians: detail::sfinae_types
+class has_hessians : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.hessians(std::declval<const vector_double &>()));
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<std::vector<vector_double>,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.hessians(std::declval<const vector_double &>()));
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<std::vector<vector_double>, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -526,16 +533,16 @@ const bool has_hessians<T>::value;
  *
  */
 template <typename T>
-class override_has_hessians: detail::sfinae_types
+class override_has_hessians : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.has_hessians());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.has_hessians());
+    static no test0(...);
+    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -553,16 +560,17 @@ const bool override_has_hessians<T>::value;
  *
  */
 template <typename T>
-class has_hessians_sparsity: detail::sfinae_types
+class has_hessians_sparsity : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.hessians_sparsity());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<std::vector<sparsity_pattern>,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.hessians_sparsity());
+    static no test0(...);
+    static const bool implementation_defined
+        = std::is_same<std::vector<sparsity_pattern>, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -579,16 +587,16 @@ const bool has_hessians_sparsity<T>::value;
  * @endcode
  */
 template <typename T>
-class override_has_gradient_sparsity: detail::sfinae_types
+class override_has_gradient_sparsity : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.has_gradient_sparsity());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.has_gradient_sparsity());
+    static no test0(...);
+    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>
@@ -605,16 +613,16 @@ const bool override_has_gradient_sparsity<T>::value;
  * @endcode
  */
 template <typename T>
-class override_has_hessians_sparsity: detail::sfinae_types
+class override_has_hessians_sparsity : detail::sfinae_types
 {
-        template <typename U>
-        static auto test0(const U &p) -> decltype(p.has_hessians_sparsity());
-        static no test0(...);
-        static const bool implementation_defined =
-            std::is_same<bool,decltype(test0(std::declval<const T &>()))>::value;
-    public:
-        /// static const boolean value flag
-        static const bool value = implementation_defined;
+    template <typename U>
+    static auto test0(const U &p) -> decltype(p.has_hessians_sparsity());
+    static no test0(...);
+    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
+
+public:
+    /// static const boolean value flag
+    static const bool value = implementation_defined;
 };
 
 template <typename T>

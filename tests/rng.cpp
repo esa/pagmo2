@@ -25,20 +25,20 @@ BOOST_AUTO_TEST_CASE(set_seed_and_next)
     // We generate three pseudo random sequences, two with the same seed
     random_device::set_seed(seed);
     std::vector<detail::random_engine_type::result_type> prs1;
-    std::generate_n(std::back_inserter(prs1),N,random_device::next);
+    std::generate_n(std::back_inserter(prs1), N, random_device::next);
 
     random_device::set_seed(seed);
     std::vector<detail::random_engine_type::result_type> prs2;
-    std::generate_n(std::back_inserter(prs2),N,random_device::next);
+    std::generate_n(std::back_inserter(prs2), N, random_device::next);
 
     random_device::set_seed(seed2);
     std::vector<detail::random_engine_type::result_type> prs3;
-    std::generate_n(std::back_inserter(prs3),N,random_device::next);
+    std::generate_n(std::back_inserter(prs3), N, random_device::next);
 
     // We check that prs1 and prs2 are equal, since the seed was the same
-    BOOST_CHECK(std::equal(prs1.begin(),prs1.end(),prs2.begin()));
+    BOOST_CHECK(std::equal(prs1.begin(), prs1.end(), prs2.begin()));
     // We check that prs1 are prs3 are different since the seed was different
-    BOOST_CHECK(!std::equal(prs1.begin(),prs1.end(),prs3.begin()));
+    BOOST_CHECK(!std::equal(prs1.begin(), prs1.end(), prs3.begin()));
 }
 
 // This test just runs calls to random_device::next() in two separate threads. If this executable
@@ -48,8 +48,8 @@ BOOST_AUTO_TEST_CASE(data_races_test)
 {
     unsigned int N = 10000u;
     std::vector<detail::random_engine_type::result_type> prs4, prs5;
-    std::thread t1([&]() {std::generate_n(std::back_inserter(prs4),N,random_device::next);});
-    std::thread t2([&]() {std::generate_n(std::back_inserter(prs5),N,random_device::next);});
+    std::thread t1([&]() { std::generate_n(std::back_inserter(prs4), N, random_device::next); });
+    std::thread t2([&]() { std::generate_n(std::back_inserter(prs5), N, random_device::next); });
     t1.join();
     t2.join();
 }

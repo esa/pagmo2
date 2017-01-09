@@ -12,12 +12,11 @@ namespace pagmo
 /**
  * This problem is used to test, develop and provide default values to e.g. meta-problems
  */
-struct null_problem
-{
+struct null_problem {
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
-        return {0.,0.,0.};
+        return {0., 0., 0.};
     }
 
     /// Number of objectives (one)
@@ -37,11 +36,11 @@ struct null_problem
     {
         return 1u;
     }
-    
+
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        return {{0.},{1.}};
+        return {{0.}, {1.}};
     }
 
     /// Gradients
@@ -54,23 +53,23 @@ struct null_problem
     sparsity_pattern gradient_sparsity() const
     {
         return {};
-    }   
+    }
 
     /// Hessians
     std::vector<vector_double> hessians(const vector_double &) const
     {
-        return {{},{},{}};
+        return {{}, {}, {}};
     }
 
     /// Hessian sparsity
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
-        return {{},{},{}};
+        return {{}, {}, {}};
     }
 
     /// Problem name
     std::string get_name() const
-    {   
+    {
         return "Null problem";
     }
 
@@ -79,8 +78,8 @@ struct null_problem
     {
         return "\tA fictitious problem useful to test, debug and initialize default constructors";
     }
-    
-    /// Optimal solution 
+
+    /// Optimal solution
     vector_double best_known() const
     {
         return {0.};
@@ -88,9 +87,10 @@ struct null_problem
 
     /// Serialization
     template <typename Archive>
-    void serialize(Archive &) {}
+    void serialize(Archive &)
+    {
+    }
 };
-
 }
 
 PAGMO_REGISTER_PROBLEM(pagmo::null_problem)

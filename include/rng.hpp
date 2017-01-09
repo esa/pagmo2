@@ -6,24 +6,25 @@
 
 namespace pagmo
 {
-namespace detail {
+namespace detail
+{
 
 // PaGMO makes use of the 32-bit Mersenne Twister by Matsumoto and Nishimura, 1998.
 using random_engine_type = std::mt19937;
 
 template <typename dummy>
-struct random_device_statics
-{
+struct random_device_statics {
     /// PaGMO random engine
     static random_engine_type m_e;
     /// Mutex protecting access to PaGMO random engine
-    static std::mutex  m_mutex;
+    static std::mutex m_mutex;
 };
 
-template<typename dummy>
-random_engine_type random_device_statics<dummy>::m_e(static_cast<random_engine_type::result_type>(std::random_device()()));
+template <typename dummy>
+random_engine_type
+    random_device_statics<dummy>::m_e(static_cast<random_engine_type::result_type>(std::random_device()()));
 
-template<typename dummy>
+template <typename dummy>
 std::mutex random_device_statics<dummy>::m_mutex;
 
 } // end namespace detail
@@ -44,7 +45,8 @@ std::mutex random_device_statics<dummy>::m_mutex;
  * @code
  * #include "rng.hpp"
  * class class_using_random {
- * explicit class_using_random(args ...... , unsigned int seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed);
+ * explicit class_using_random(args ...... , unsigned int seed = pagmo::random_device::next()) : m_e(seed),
+ * m_seed(seed);
  * private:
  *    // Random engine
  *    mutable detail::random_engine_type               m_e;
@@ -80,7 +82,6 @@ public:
         std::lock_guard<std::mutex> lock(m_mutex);
         m_e.seed(static_cast<detail::random_engine_type::result_type>(seed));
     }
-
 };
 
 } // end namespace pagmo

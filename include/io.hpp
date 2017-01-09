@@ -11,10 +11,11 @@ namespace pagmo
 {
 
 /// Forward declaration
-template <typename ... Args>
-void stream(std::ostream &, const Args & ...);
+template <typename... Args>
+void stream(std::ostream &, const Args &...);
 
-namespace detail {
+namespace detail
+{
 
 template <typename T>
 inline void stream_impl(std::ostream &os, const T &x)
@@ -54,32 +55,32 @@ inline void stream_impl(std::ostream &os, const std::vector<T> &v)
 }
 
 template <typename T, typename U>
-inline void stream_impl(std::ostream &os, const std::pair<T,U> &p)
+inline void stream_impl(std::ostream &os, const std::pair<T, U> &p)
 {
-    stream(os,'(',p.first,',',p.second,')');
+    stream(os, '(', p.first, ',', p.second, ')');
 }
 
-template <typename T, typename ... Args>
-inline void stream_impl(std::ostream &os, const T &x, const Args & ... args)
+template <typename T, typename... Args>
+inline void stream_impl(std::ostream &os, const T &x, const Args &... args)
 {
-    stream_impl(os,x);
-    stream_impl(os,args...);
+    stream_impl(os, x);
+    stream_impl(os, args...);
 }
 
 } // end of namespace detail
 
 /// The PaGMO streaming function
-template <typename ... Args>
-inline void stream(std::ostream &os, const Args & ... args)
+template <typename... Args>
+inline void stream(std::ostream &os, const Args &... args)
 {
-    detail::stream_impl(os,args...);
+    detail::stream_impl(os, args...);
 }
 
 /// The PaGMO print function
-template <typename ... Args>
-inline void print(const Args & ... args)
+template <typename... Args>
+inline void print(const Args &... args)
 {
-    stream(std::cout,args...);
+    stream(std::cout, args...);
 }
 
 } // end of namespace pagmo

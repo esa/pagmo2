@@ -29,13 +29,13 @@ void save(Archive &archive, const boost::python::object &o)
     // content of the bytes object.
     auto ptr = PyBytes_AsString(tmp.ptr());
     if (!ptr) {
-        pygmo_throw(PyExc_TypeError,"pickle dumps did not return a bytes object");
+        pygmo_throw(PyExc_TypeError, "pickle dumps did not return a bytes object");
     }
     // NOTE: this will be the length of the bytes object *without* the terminator.
     const auto size = len(tmp);
     // NOTE: we store as char here because that's what is returned by the CPython function.
     // From Python it seems like these are unsigned chars, but this should not concern us.
-    std::vector<char> v(ptr,ptr + size);
+    std::vector<char> v(ptr, ptr + size);
     archive(v);
 }
 
@@ -46,10 +46,9 @@ void load(Archive &archive, boost::python::object &o)
     // Extract the char vector.
     std::vector<char> v;
     archive(v);
-    auto b = pygmo::make_bytes(v.data(),boost::numeric_cast<Py_ssize_t>(v.size()));
+    auto b = pygmo::make_bytes(v.data(), boost::numeric_cast<Py_ssize_t>(v.size()));
     o = import("pickle").attr("loads")(b);
 }
-
 }
 
 #endif

@@ -65,7 +65,8 @@ namespace pagmo
  * \begin{array}{l}
  *      g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\
  *      F_1 \left(x\right) = x_1 \\
- *      F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} - x_1/g(x) \sin(10 \pi x_1) \right]  x \in \left[ 0,1 \right].
+ *      F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} - x_1/g(x) \sin(10 \pi x_1) \right]  x \in \left[ 0,1
+ * \right].
  * \end{array}
  * \f]
  *
@@ -76,7 +77,8 @@ namespace pagmo
  * \begin{array}{l}
  *      g\left(x\right) = 91 + \sum_{i=2}^{n} \left[x_i^2 - 10 \cos \left(4\pi x_i \right) \right] \\
  *      F_1 \left(x\right) = x_1 \\
- *      F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} \right]  x_1 \in [0,1], x_i \in \left[ -5,5 \right] i=2, \cdots, 10.
+ *      F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} \right]  x_1 \in [0,1], x_i \in \left[ -5,5 \right] i=2,
+ * \cdots, 10.
  * \end{array}
  * \f]
  *
@@ -114,36 +116,38 @@ public:
     zdt(unsigned int id = 1u, unsigned int param = 30u) : m_id(id), m_param(param)
     {
         if (param < 2u) {
-            pagmo_throw(std::invalid_argument, "ZDT test problems must have a minimum value of 2 for the constructing parameter (representing the dimension except for ZDT5), " + std::to_string(param) + " requested");
+            pagmo_throw(std::invalid_argument, "ZDT test problems must have a minimum value of 2 for the constructing "
+                                               "parameter (representing the dimension except for ZDT5), "
+                                                   + std::to_string(param) + " requested");
         }
         if (id == 0u || id > 6u) {
-            pagmo_throw(std::invalid_argument, "ZDT test suite contains six (id=[1 ... 6]) problems, id=" + std::to_string(id) + " requested");
+            pagmo_throw(std::invalid_argument,
+                        "ZDT test suite contains six (id=[1 ... 6]) problems, id=" + std::to_string(id) + " requested");
         }
     };
     /// Fitness
     vector_double fitness(const vector_double &x) const
     {
         vector_double retval;
-        switch(m_id)
-        {
-        case 1u:
-            retval =  zdt1_fitness(x);
-            break;
-        case 2u:
-            retval =  zdt2_fitness(x);
-            break;
-        case 3u:
-            retval =  zdt3_fitness(x);
-            break;
-        case 4u:
-            retval =  zdt4_fitness(x);
-            break;
-        case 5u:
-            retval =  zdt5_fitness(x);
-            break;
-        case 6u:
-            retval =  zdt6_fitness(x);
-            break;
+        switch (m_id) {
+            case 1u:
+                retval = zdt1_fitness(x);
+                break;
+            case 2u:
+                retval = zdt2_fitness(x);
+                break;
+            case 3u:
+                retval = zdt3_fitness(x);
+                break;
+            case 4u:
+                retval = zdt4_fitness(x);
+                break;
+            case 5u:
+                retval = zdt5_fitness(x);
+                break;
+            case 6u:
+                retval = zdt6_fitness(x);
+                break;
         }
         return retval;
     }
@@ -157,29 +161,30 @@ public:
     std::pair<vector_double, vector_double> get_bounds() const
     {
         std::pair<vector_double, vector_double> retval;
-        switch(m_id)
-        {
-        case 1u:
-        case 2u:
-        case 3u:
-        case 6u:
-            retval = {vector_double(m_param, 0.), vector_double(m_param, 1.)};
-            break;
-        case 4u:
-        {
-            vector_double lb(m_param,-5.);
-            vector_double ub(m_param, 5.);
-            lb[0] = 0.0;
-            ub[0] = 1.0;
-            retval = {lb, ub};
-            break;
-        }
-        case 5u:
-        {
-            auto dim = 30u + 5u * (m_param - 1u);
-            retval = {vector_double(dim, 0.), vector_double(dim, 2.)}; // the bounds [0,2] guarantee that floor(x) will be in [0,1] as the rng generates in [0,2)
-            break;
-        }
+        switch (m_id) {
+            case 1u:
+            case 2u:
+            case 3u:
+            case 6u:
+                retval = {vector_double(m_param, 0.), vector_double(m_param, 1.)};
+                break;
+            case 4u: {
+                vector_double lb(m_param, -5.);
+                vector_double ub(m_param, 5.);
+                lb[0] = 0.0;
+                ub[0] = 1.0;
+                retval = {lb, ub};
+                break;
+            }
+            case 5u: {
+                auto dim = 30u + 5u * (m_param - 1u);
+                retval = {
+                    vector_double(dim, 0.),
+                    vector_double(
+                        dim,
+                        2.)}; // the bounds [0,2] guarantee that floor(x) will be in [0,1] as the rng generates in [0,2)
+                break;
+            }
         }
         return retval;
     }
@@ -206,22 +211,21 @@ public:
     double p_distance(const vector_double &x) const
     {
         double retval = 0.;
-        switch(m_id)
-        {
-        case 1u:
-        case 2u:
-        case 3u:
-            retval =  zdt123_p_distance(x);
-            break;
-        case 4u:
-            retval = zdt4_p_distance(x);
-            break;
-        case 5u:
-            retval = zdt5_p_distance(x);
-            break;
-        case 6u:
-            retval = zdt6_p_distance(x);
-            break;
+        switch (m_id) {
+            case 1u:
+            case 2u:
+            case 3u:
+                retval = zdt123_p_distance(x);
+                break;
+            case 4u:
+                retval = zdt4_p_distance(x);
+                break;
+            case 5u:
+                retval = zdt5_p_distance(x);
+                break;
+            case 6u:
+                retval = zdt6_p_distance(x);
+                break;
         }
         return retval;
     }
@@ -240,27 +244,27 @@ private:
         f[0] = x[0];
         auto N = x.size();
 
-        for(decltype(N) i = 1u; i < N; ++i) {
+        for (decltype(N) i = 1u; i < N; ++i) {
             g += x[i];
         }
         g = 1. + (9. * g) / static_cast<double>(N - 1u);
 
-        f[1] = g * ( 1. - sqrt(x[0] / g));
+        f[1] = g * (1. - sqrt(x[0] / g));
         return f;
     }
 
     vector_double zdt2_fitness(const vector_double &x) const
     {
         double g = 0.;
-        vector_double f(2,0.);
+        vector_double f(2, 0.);
         f[0] = x[0];
         auto N = x.size();
 
-        for(decltype(N) i = 1u; i < N; ++i) {
-                g += x[i];
+        for (decltype(N) i = 1u; i < N; ++i) {
+            g += x[i];
         }
         g = 1. + (9. * g) / static_cast<double>(N - 1u);
-        f[1] = g * ( 1. - (x[0]/g)*(x[0]/g));
+        f[1] = g * (1. - (x[0] / g) * (x[0] / g));
 
         return f;
     }
@@ -268,15 +272,15 @@ private:
     vector_double zdt3_fitness(const vector_double &x) const
     {
         double g = 0.;
-        vector_double f(2,0.);
+        vector_double f(2, 0.);
         f[0] = x[0];
         auto N = x.size();
 
-        for(decltype(N) i = 1u; i < N; ++i) {
-                g += x[i];
+        for (decltype(N) i = 1u; i < N; ++i) {
+            g += x[i];
         }
         g = 1. + (9. * g) / static_cast<double>(N - 1u);
-        f[1] = g * ( 1. - sqrt(x[0]/g) - x[0]/g * std::sin(10. * pagmo::detail::pi() * x[0]));
+        f[1] = g * (1. - sqrt(x[0] / g) - x[0] / g * std::sin(10. * pagmo::detail::pi() * x[0]));
 
         return f;
     }
@@ -284,16 +288,16 @@ private:
     vector_double zdt4_fitness(const vector_double &x) const
     {
         double g = 0.;
-        vector_double f(2,0.);
+        vector_double f(2, 0.);
         f[0] = x[0];
         auto N = x.size();
 
         g = 1 + 10 * static_cast<double>(N - 1u);
         f[0] = x[0];
-        for(decltype(N) i = 1u; i < N; ++i) {
-            g += x[i]*x[i] - 10. * std::cos(4. * pagmo::detail::pi() * x[i]);
+        for (decltype(N) i = 1u; i < N; ++i) {
+            g += x[i] * x[i] - 10. * std::cos(4. * pagmo::detail::pi() * x[i]);
         }
-        f[1] = g * ( 1. - sqrt(x[0]/g) );
+        f[1] = g * (1. - sqrt(x[0] / g));
 
         return f;
     }
@@ -301,9 +305,9 @@ private:
     vector_double zdt5_fitness(const vector_double &x_double) const
     {
         double g = 0.;
-        vector_double f(2,0.);
+        vector_double f(2, 0.);
         auto size_x = x_double.size();
-        auto n_vectors = ((size_x-30u) / 5u) + 1u;
+        auto n_vectors = ((size_x - 30u) / 5u) + 1u;
 
         unsigned int k = 30;
         std::vector<vector_double::size_type> u(n_vectors, 0u);
@@ -311,7 +315,8 @@ private:
 
         // Convert the input vector into floored values (integers)
         vector_double x;
-        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x), [](double item) {return std::floor(item);});
+        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x),
+                       [](double item) { return std::floor(item); });
         f[0] = x[0];
 
         // Counts how many 1s are there in the first (30 dim)
@@ -326,15 +331,14 @@ private:
             }
         }
         f[0] = 1.0 + static_cast<double>(u[0]);
-        for (decltype(n_vectors) i = 1u; i<n_vectors; ++i) {
+        for (decltype(n_vectors) i = 1u; i < n_vectors; ++i) {
             if (u[i] < 5u) {
                 v[i] = 2u + u[i];
-            }
-            else {
+            } else {
                 v[i] = 1u;
             }
         }
-        for (decltype(n_vectors) i = 1u; i<n_vectors; ++i) {
+        for (decltype(n_vectors) i = 1u; i < n_vectors; ++i) {
             g += static_cast<double>(v[i]);
         }
         f[1] = g * (1. / f[0]);
@@ -343,20 +347,19 @@ private:
 
     vector_double zdt6_fitness(const vector_double &x) const
     {
-            double g = 0.;
-            vector_double f(2,0.);
-            f[0] = x[0];
-            auto N = x.size();
+        double g = 0.;
+        vector_double f(2, 0.);
+        f[0] = x[0];
+        auto N = x.size();
 
+        f[0] = 1 - std::exp(-4 * x[0]) * std::pow(std::sin(6 * pagmo::detail::pi() * x[0]), 6);
+        for (decltype(N) i = 1; i < N; ++i) {
+            g += x[i];
+        }
+        g = 1 + 9 * std::pow((g / static_cast<double>(N - 1u)), 0.25);
+        f[1] = g * (1 - (f[0] / g) * (f[0] / g));
 
-            f[0] = 1 - std::exp(-4*x[0])*std::pow(std::sin(6*pagmo::detail::pi()*x[0]),6);
-            for(decltype(N) i = 1; i < N; ++i) {
-                    g += x[i];
-            }
-            g = 1 + 9 * std::pow((g / static_cast<double>(N - 1u)),0.25);
-            f[1] = g * ( 1 - (f[0]/g)*(f[0]/g));
-
-            return f;
+        return f;
     }
 
     double zdt123_p_distance(const vector_double &x) const
@@ -365,10 +368,10 @@ private:
         double g = 0.;
         auto N = x.size();
 
-        for(decltype(N) j = 1u; j < N; ++j) {
+        for (decltype(N) j = 1u; j < N; ++j) {
             g += x[j];
         }
-        c += 1. + (9. * g) / static_cast<double>(N-1u);
+        c += 1. + (9. * g) / static_cast<double>(N - 1u);
         return c - 1.;
     }
 
@@ -378,29 +381,30 @@ private:
         double g = 0.;
         auto N = x.size();
 
-        for(decltype(N) j = 1u; j < N; ++j) {
-                g += x[j]*x[j] - 10. * std::cos(4. * pagmo::detail::pi() * x[j]);
+        for (decltype(N) j = 1u; j < N; ++j) {
+            g += x[j] * x[j] - 10. * std::cos(4. * pagmo::detail::pi() * x[j]);
         }
-        c += 1. + 10. * static_cast<double>(N-1u) + g;
-        return c  - 1.;
+        c += 1. + 10. * static_cast<double>(N - 1u) + g;
+        return c - 1.;
     }
 
     double zdt5_p_distance(const vector_double &x_double) const
     {
         // Convert the input vector into floored values (integers)
         vector_double x;
-        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x), [](double item) {return std::floor(item);});
+        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x),
+                       [](double item) { return std::floor(item); });
         double c = 0.;
         double g = 0.;
         unsigned int k = 30;
         auto N = x.size();
 
-        auto n_vectors = (N-30u) / 5u + 1u;
-        std::vector<vector_double::size_type> u(n_vectors,0);
+        auto n_vectors = (N - 30u) / 5u + 1u;
+        std::vector<vector_double::size_type> u(n_vectors, 0);
         std::vector<vector_double::size_type> v(n_vectors);
 
-        for (decltype(n_vectors) i = 1u; i<n_vectors; ++i) {
-            for (int j=0; j<5; ++j) {
+        for (decltype(n_vectors) i = 1u; i < n_vectors; ++i) {
+            for (int j = 0; j < 5; ++j) {
                 if (x[k] == 1.) {
                     ++u[i];
                 }
@@ -408,19 +412,18 @@ private:
             }
         }
 
-        for (decltype(n_vectors) i=1u; i<n_vectors; ++i) {
+        for (decltype(n_vectors) i = 1u; i < n_vectors; ++i) {
             if (u[i] < 5u) {
                 v[i] = 2u + u[i];
-            }
-            else {
+            } else {
                 v[i] = 1u;
             }
         }
 
-        for (decltype(n_vectors) i=1u; i<n_vectors; ++i) {
-                g += static_cast<double>(v[i]);
+        for (decltype(n_vectors) i = 1u; i < n_vectors; ++i) {
+            g += static_cast<double>(v[i]);
         }
-        c +=  g;
+        c += g;
         return c - static_cast<double>(n_vectors) + 1;
     }
 
@@ -430,19 +433,18 @@ private:
         double g = 0.;
         auto N = x.size();
 
-        for(decltype(N) j = 1; j < N; ++j) {
-                g += x[j];
+        for (decltype(N) j = 1; j < N; ++j) {
+            g += x[j];
         }
         c += 1. + 9. * std::pow((g / static_cast<double>(N - 1u)), 0.25);
         return c - 1;
     }
+
 private:
     // Problem dimensions
     unsigned int m_id;
     unsigned int m_param;
-
 };
-
 }
 
 PAGMO_REGISTER_PROBLEM(pagmo::zdt)

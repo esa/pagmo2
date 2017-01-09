@@ -6,29 +6,30 @@
 using namespace pagmo;
 int main()
 {
-//     {
-//     algorithm a{algorithms::null{}};
-//     std::stringstream ss;
-//     {
-//     cereal::JSONOutputArchive oarchive(ss);
-//     oarchive(a);
-//     }
-//     std::cout << ss.str() << '\n';
-//     {
-//     cereal::JSONInputArchive iarchive(ss);
-//     iarchive(a);
-//     }    
-//     a.evolve();
-//     }
+    //     {
+    //     algorithm a{algorithms::null{}};
+    //     std::stringstream ss;
+    //     {
+    //     cereal::JSONOutputArchive oarchive(ss);
+    //     oarchive(a);
+    //     }
+    //     std::cout << ss.str() << '\n';
+    //     {
+    //     cereal::JSONInputArchive iarchive(ss);
+    //     iarchive(a);
+    //     }
+    //     a.evolve();
+    //     }
 
-    problem p{hock_schittkowsky_71{}};std::stringstream ss;
+    problem p{hock_schittkowsky_71{}};
+    std::stringstream ss;
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(p);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
     }
     std::cout << ss.str() << '\n';
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(p);
-    }    
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
+    }
 }

@@ -20,24 +20,24 @@ namespace detail
 {
 
 template <typename Exception>
-struct ex_thrower
-{
+struct ex_thrower {
     // Determine the type of the __LINE__ macro.
     using line_type = decay_t<decltype(__LINE__)>;
-    explicit ex_thrower(const char *file, line_type line, const char *func):m_file(file),m_line(line),m_func(func)
-    {}
-    template <typename ... Args, typename = enable_if_t<std::is_constructible<Exception,Args...>::value>>
-    [[ noreturn ]] void operator()(Args && ... args) const
+    explicit ex_thrower(const char *file, line_type line, const char *func) : m_file(file), m_line(line), m_func(func)
+    {
+    }
+    template <typename... Args, typename = enable_if_t<std::is_constructible<Exception, Args...>::value>>
+    [[noreturn]] void operator()(Args &&... args) const
     {
         Exception e(std::forward<Args>(args)...);
         throw e;
     }
-    template <typename Str, typename ... Args, typename = typename std::enable_if<
-        std::is_constructible<Exception,std::string,Args...>::value && (
-        std::is_same<decay_t<Str>,std::string>::value ||
-        std::is_same<decay_t<Str>,char *>::value ||
-        std::is_same<decay_t<Str>,const char *>::value)>::type>
-    [[ noreturn ]] void operator()(Str &&desc, Args && ... args) const
+    template <typename Str, typename... Args,
+              typename = typename std::enable_if<std::is_constructible<Exception, std::string, Args...>::value
+                                                 && (std::is_same<decay_t<Str>, std::string>::value
+                                                     || std::is_same<decay_t<Str>, char *>::value
+                                                     || std::is_same<decay_t<Str>, const char *>::value)>::type>
+    [[noreturn]] void operator()(Str &&desc, Args &&... args) const
     {
         std::string msg("\nfunction: ");
         msg += m_func;
@@ -48,14 +48,14 @@ struct ex_thrower
         msg += "\nwhat: ";
         msg += desc;
         msg += "\n";
-        throw Exception(msg,std::forward<Args>(args)...);
+        throw Exception(msg, std::forward<Args>(args)...);
     }
-    const char  *m_file;
+    const char *m_file;
     const line_type m_line;
-    const char  *m_func;
+    const char *m_func;
 };
-
-}}
+}
+}
 
 /// Exception-throwing macro.
 /**
@@ -69,7 +69,8 @@ struct ex_thrower
  * - and if the exception can be constructed from the set of arguments <tt>[str,arg1,...]</tt>,
  *   where \p str is an instance of \p std::string,
  *
- * then the first argument \p arg0 is interpreted as the error message associated to the exception object, and it will be decorated
+ * then the first argument \p arg0 is interpreted as the error message associated to the exception object, and it will
+ be decorated
  * with information about the context in which the exception was thrown (file, line, function) before being
  * passed on for construction.
  *
@@ -84,6 +85,7 @@ struct ex_thrower
  @endcode
  * is correct.
  */
-#define pagmo_throw(exception_type,...) pagmo::detail::ex_thrower<exception_type>(__FILE__,__LINE__,__func__)(__VA_ARGS__)
+#define pagmo_throw(exception_type, ...)                                                                               \
+    pagmo::detail::ex_thrower<exception_type>(__FILE__, __LINE__, __func__)(__VA_ARGS__)
 
 #endif

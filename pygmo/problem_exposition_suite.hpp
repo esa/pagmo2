@@ -36,31 +36,32 @@ inline bp::object best_known_wrapper(const Prob &p)
 template <typename Prob>
 inline pagmo::translate *translate_init(const Prob &p, const bp::object &o)
 {
-    return ::new pagmo::translate(p,to_vd(o));
+    return ::new pagmo::translate(p, to_vd(o));
 }
 
 // Make Python init from ctor above.
 template <typename Prob>
 inline auto make_translate_init()
 {
-    return bp::make_constructor(&translate_init<Prob>,bp::default_call_policies(),
-        (bp::arg("prob"),bp::arg("translation")));
+    return bp::make_constructor(&translate_init<Prob>, bp::default_call_policies(),
+                                (bp::arg("prob"), bp::arg("translation")));
 }
 
 // Constructor of decompose from problem and weight, z, method and bool flag.
 template <typename Prob>
 inline pagmo::decompose *decompose_init(const Prob &p, const bp::object &weight, const bp::object &z,
-    const std::string &method, bool adapt_ideal)
+                                        const std::string &method, bool adapt_ideal)
 {
-    return ::new pagmo::decompose(p,to_vd(weight),to_vd(z),method,adapt_ideal);
+    return ::new pagmo::decompose(p, to_vd(weight), to_vd(z), method, adapt_ideal);
 }
 
 // Make a python init from the above ctor.
 template <typename Prob>
 inline auto make_decompose_init()
 {
-    return bp::make_constructor(&decompose_init<Prob>,bp::default_call_policies(),(bp::arg("prob"),bp::arg("weight"),bp::arg("z"),
-        bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false));
+    return bp::make_constructor(&decompose_init<Prob>, bp::default_call_policies(),
+                                (bp::arg("prob"), bp::arg("weight"), bp::arg("z"),
+                                 bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false));
 }
 
 // Expose a problem ctor from a user-defined problem.
@@ -83,31 +84,32 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
     auto &tp_class = *translate_ptr;
     auto &dp_class = *decompose_ptr;
     // We require all problems to be def-ctible at the bare minimum.
-    bp::class_<Prob> c(name,descr,bp::init<>());
+    bp::class_<Prob> c(name, descr, bp::init<>());
     // Mark it as a C++ problem.
     c.attr("_pygmo_cpp_problem") = true;
 
     // Expose the problem constructor from Prob.
     problem_prob_init<Prob>();
     // Expose extract.
-    problem_class.def("_cpp_extract",&generic_cpp_extract<pagmo::problem,Prob>);
+    problem_class.def("_cpp_extract", &generic_cpp_extract<pagmo::problem, Prob>);
 
     // Expose translate's constructor from Prob and translation vector.
-    tp_class.def("__init__",make_translate_init<Prob>())
+    tp_class
+        .def("__init__", make_translate_init<Prob>())
         // Extract.
-        .def("_cpp_extract",&generic_cpp_extract<pagmo::translate,Prob>);
+        .def("_cpp_extract", &generic_cpp_extract<pagmo::translate, Prob>);
 
     // Expose decompose's constructor from Prob.
-    dp_class.def("__init__",make_decompose_init<Prob>())
+    dp_class
+        .def("__init__", make_decompose_init<Prob>())
         // Extract.
-        .def("_cpp_extract",&generic_cpp_extract<pagmo::decompose,Prob>);
+        .def("_cpp_extract", &generic_cpp_extract<pagmo::decompose, Prob>);
 
     // Add the problem to the problems submodule.
     bp::scope().attr("problems").attr(name) = c;
 
     return c;
 }
-
 }
 
 #endif

@@ -22,43 +22,44 @@ namespace pagmo
  * This is a scalabale box-constrained continuous single-objective problem.
  * The objective function is the generalised n-dimensional Griewank function:
  * \f[
- * 	F\left(x_1,\ldots,x_n\right) = \sum_{i=1}^n x_i^2 / 4000 - \prod_{i=1}^n\cos\frac{x_i}{\sqrt{i}}, \quad x_i \in \left[ -600,600 \right].
+ * 	F\left(x_1,\ldots,x_n\right) = \sum_{i=1}^n x_i^2 / 4000 - \prod_{i=1}^n\cos\frac{x_i}{\sqrt{i}}, \quad x_i \in
+ * \left[ -600,600 \right].
  * \f]
  * The global minimum is in \f$x_i=0\f$, where \f$ F\left( 0,\ldots,0 \right) = 0 \f$.
  */
-struct griewank
-{
+struct griewank {
     /// Constructor from dimension
     griewank(unsigned int dim = 1u) : m_dim(dim)
     {
         if (dim < 1u) {
-            pagmo_throw(std::invalid_argument, "Griewank Function must have minimum 1 dimension, " + std::to_string(dim) + " requested");
+            pagmo_throw(std::invalid_argument,
+                        "Griewank Function must have minimum 1 dimension, " + std::to_string(dim) + " requested");
         }
     };
     /// Fitness
     vector_double fitness(const vector_double &x) const
     {
-    	vector_double f(1, 0.);
-    	auto n = x.size();
-    	double fr = 4000.;
-    	double retval = 0.;
-    	double p = 1.;
+        vector_double f(1, 0.);
+        auto n = x.size();
+        double fr = 4000.;
+        double retval = 0.;
+        double p = 1.;
 
-    	for (decltype(n) i = 0u; i < n; i++) {
-             retval += x[i]*x[i];
+        for (decltype(n) i = 0u; i < n; i++) {
+            retval += x[i] * x[i];
         }
-    	for (decltype(n) i = 0u; i < n; i++){
-            p *= std::cos(x[i] / std::sqrt(static_cast<double>(i)+1.0));
+        for (decltype(n) i = 0u; i < n; i++) {
+            p *= std::cos(x[i] / std::sqrt(static_cast<double>(i) + 1.0));
         }
-    	f[0] = (retval / fr - p + 1.);
+        f[0] = (retval / fr - p + 1.);
         return f;
     }
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        vector_double lb(m_dim,-600);
+        vector_double lb(m_dim, -600);
         vector_double ub(m_dim, 600);
-        return {lb,ub};
+        return {lb, ub};
     }
     /// Problem name
     std::string get_name() const

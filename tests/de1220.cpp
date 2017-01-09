@@ -29,12 +29,11 @@ BOOST_AUTO_TEST_CASE(construction_test)
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK((user_algo.get_log() == de1220::log_type{}));
 
-    BOOST_CHECK_THROW((de1220{53u, {3u, 5u, 0u, 14u},  1u, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((de1220{53u, {3u, 5u, 0u, 14u}, 1u, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((de1220{53u, {4u, 5u, 15u, 22u, 7u}, 1u, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
-    BOOST_CHECK_THROW((de1220{53u, mutation_variants,  0u, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
-    BOOST_CHECK_THROW((de1220{53u, mutation_variants,  3u, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((de1220{53u, mutation_variants, 0u, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((de1220{53u, mutation_variants, 3u, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
 }
-
 
 BOOST_AUTO_TEST_CASE(evolve_test)
 {
@@ -48,7 +47,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     problem prob2{rosenbrock{25u}};
     population pop2{prob2, 15u, 23u};
 
-    for (unsigned int i = 1u; i <=2u; ++i) {
+    for (unsigned int i = 1u; i <= 2u; ++i) {
         de1220 user_algo1(10u, mutation_variants, i, 1e-6, 1e-6, false, 41u);
         user_algo1.set_verbosity(1u);
         pop1 = user_algo1.evolve(pop1);
@@ -61,29 +60,30 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
     }
 
-    // Here we check that the exit condition of ftol and xtol actually provoke an exit within 5000 gen (rosenbrock{2} is used)
+    // Here we check that the exit condition of ftol and xtol actually provoke an exit within 5000 gen (rosenbrock{2} is
+    // used)
     { // xtol
-    de1220 user_algo(300u, mutation_variants, 2, 1e-3, 1e-45, false, 41u);
-    user_algo.set_verbosity(1u);
-    problem prob{rosenbrock{2u}};
-    population pop{prob, 20u, 23u};
-    pop = user_algo.evolve(pop);
-    BOOST_CHECK(user_algo.get_log().size() < 300u);
+        de1220 user_algo(300u, mutation_variants, 2, 1e-3, 1e-45, false, 41u);
+        user_algo.set_verbosity(1u);
+        problem prob{rosenbrock{2u}};
+        population pop{prob, 20u, 23u};
+        pop = user_algo.evolve(pop);
+        BOOST_CHECK(user_algo.get_log().size() < 300u);
     }
     { // ftol
-    de1220 user_algo(300u, mutation_variants, 1, 1e-45, 1e-3, false, 41u);
-    user_algo.set_verbosity(1u);
-    problem prob{rosenbrock{2u}};
-    population pop{prob, 20u, 23u};
-    pop = user_algo.evolve(pop);
-    BOOST_CHECK(user_algo.get_log().size() < 300u);
+        de1220 user_algo(300u, mutation_variants, 1, 1e-45, 1e-3, false, 41u);
+        user_algo.set_verbosity(1u);
+        problem prob{rosenbrock{2u}};
+        population pop{prob, 20u, 23u};
+        pop = user_algo.evolve(pop);
+        BOOST_CHECK(user_algo.get_log().size() < 300u);
     }
 
     // We then check that the evolve throws if called on unsuitable problems
-    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{rosenbrock{}},6u}), std::invalid_argument);
-    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{zdt{}},15u}), std::invalid_argument);
-    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{hock_schittkowsky_71{}},15u}), std::invalid_argument);
-    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{inventory{}},15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{rosenbrock{}}, 6u}), std::invalid_argument);
+    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};
     BOOST_CHECK(de1220{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
@@ -121,14 +121,14 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     auto before_log = algo.extract<de1220>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(algo);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(algo);
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo);
     }
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<de1220>()->get_log();

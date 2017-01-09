@@ -7,8 +7,8 @@
 #include <string>
 
 #include "../include/algorithm.hpp"
-#include "../include/algorithms/null_algorithm.hpp"
 #include "../include/algorithms/de.hpp"
+#include "../include/algorithms/null_algorithm.hpp"
 #include "../include/io.hpp"
 #include "../include/population.hpp"
 #include "../include/problems/rosenbrock.hpp"
@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_and_evolve)
     rosenbrock user_prob{};
     population pop(user_prob, 20u);
     auto evolved_pop = user_algo.evolve(pop);
-    for(decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
         BOOST_CHECK(pop.get_x()[i] == evolved_pop.get_x()[i]);
         BOOST_CHECK(pop.get_f()[i] == evolved_pop.get_f()[i]);
         BOOST_CHECK(pop.get_ID()[i] == evolved_pop.get_ID()[i]);
@@ -42,15 +42,15 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     // Now serialize, deserialize and compare the result.
     std::stringstream ss;
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(algo);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
     }
     // Change the content of p before deserializing.
     algo = algorithm{de{}};
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(algo);
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo);
     }
-    auto after_a =  algo.extract<null_algorithm>()->get_a();
+    auto after_a = algo.extract<null_algorithm>()->get_a();
     BOOST_CHECK_EQUAL(a, after_a);
 }

@@ -58,16 +58,17 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
 
     // 0 - Forbid random generation when bounds are not finite.
     if (!std::isfinite(lb) || !std::isfinite(ub)) {
-        pagmo_throw(std::invalid_argument,"Cannot generate a random point if the bounds are not finite");
+        pagmo_throw(std::invalid_argument, "Cannot generate a random point if the bounds are not finite");
     }
     // 1 - Check that lb is <= ub
     if (lb > ub) {
-        pagmo_throw(std::invalid_argument,"Lower bound is greater than upper bound. Cannot generate a random point in [lb, ub]");
+        pagmo_throw(std::invalid_argument,
+                    "Lower bound is greater than upper bound. Cannot generate a random point in [lb, ub]");
     }
     // 2 - Bounds cannot be too large
     const auto delta = ub - lb;
     if (!std::isfinite(delta) || delta > std::numeric_limits<double>::max()) {
-        pagmo_throw(std::invalid_argument,"Cannot generate a random point within bounds that are too large");
+        pagmo_throw(std::invalid_argument, "Cannot generate a random point within bounds that are too large");
     }
     // 3 - If the bounds are equal we don't call the RNG, as that would be undefined behaviour.
     if (lb == ub) {
@@ -102,7 +103,8 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
  *
  * @returns a vector_double containing a random decision vector
  */
-vector_double decision_vector(const std::pair<vector_double, vector_double> &bounds, detail::random_engine_type &r_engine)
+vector_double decision_vector(const std::pair<vector_double, vector_double> &bounds,
+                              detail::random_engine_type &r_engine)
 {
     // This will check for consistent vector lengths, non-null sizes, lb <= ub and no NaNs.
     detail::check_problem_bounds(bounds);
@@ -165,9 +167,10 @@ vector_double decision_vector(const vector_double &lb, const vector_double &ub, 
 template <typename T, typename U>
 inline T safe_cast(const U &x)
 {
-    static_assert(std::is_unsigned<T>::value && std::is_unsigned<U>::value,"Safe cast can only be used on unsigned types");
+    static_assert(std::is_unsigned<T>::value && std::is_unsigned<U>::value,
+                  "Safe cast can only be used on unsigned types");
     if (x > std::numeric_limits<T>::max()) {
-        pagmo_throw(std::overflow_error,"Converting between unsigned types caused a loss");
+        pagmo_throw(std::overflow_error, "Converting between unsigned types caused a loss");
     }
     return static_cast<T>(x);
 }
@@ -182,9 +185,11 @@ inline T safe_cast(const U &x)
 double binomial_coefficient(vector_double::size_type n, vector_double::size_type k)
 {
     if (k <= n) {
-        return std::round(std::exp(std::lgamma(static_cast<double>(n) + 1.) - std::lgamma(static_cast<double>(k) + 1.) - std::lgamma(static_cast<double>(n) - static_cast<double>(k) + 1.)));
+        return std::round(std::exp(std::lgamma(static_cast<double>(n) + 1.) - std::lgamma(static_cast<double>(k) + 1.)
+                                   - std::lgamma(static_cast<double>(n) - static_cast<double>(k) + 1.)));
     } else {
-        pagmo_throw(std::invalid_argument, "The binomial coefficient is only defined for k<=n, you requested n=" + std::to_string(n) + " and k=" + std::to_string(k));
+        pagmo_throw(std::invalid_argument, "The binomial coefficient is only defined for k<=n, you requested n="
+                                               + std::to_string(n) + " and k=" + std::to_string(k));
     }
 }
 
@@ -201,24 +206,27 @@ double binomial_coefficient(vector_double::size_type n, vector_double::size_type
  *
  * @param[in] points the \f$N\f$ points having dimension \f$M\f$
  * @param[in] k number of neighbours to detect
- * @return An <tt>std::vector<std::vector<population::size_type> > </tt> containing the indexes of the k nearest neighbours sorted by distance
+ * @return An <tt>std::vector<std::vector<population::size_type> > </tt> containing the indexes of the k nearest
+ * neighbours sorted by distance
  * @throws std::invalid_argument If the points do not all have the same dimension.
  */
-std::vector<std::vector<vector_double::size_type> > kNN(const std::vector<vector_double> &points, std::vector<vector_double>::size_type k) {
-    std::vector<std::vector<vector_double::size_type> > neigh_idxs;
+std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<vector_double> &points,
+                                                       std::vector<vector_double>::size_type k)
+{
+    std::vector<std::vector<vector_double::size_type>> neigh_idxs;
     auto N = points.size();
     if (N == 0u) {
         return {};
     }
     auto M = points[0].size();
-    if (!std::all_of(points.begin(), points.end(), [M](const vector_double &p){return p.size() == M;} )) {
+    if (!std::all_of(points.begin(), points.end(), [M](const vector_double &p) { return p.size() == M; })) {
         pagmo_throw(std::invalid_argument, "All points must have the same dimensionality for k-NN to be invoked");
     }
     // loop through the points
-    for(decltype(N) i = 0u; i < N; ++i) {
+    for (decltype(N) i = 0u; i < N; ++i) {
         // We compute all the distances to all other points including the self
         vector_double distances;
-        for(decltype(N) j = 0u; j < N; ++j) {
+        for (decltype(N) j = 0u; j < N; ++j) {
             double dist = 0.;
             for (decltype(M) l = 0u; l < M; ++l) {
                 dist += (points[i][l] - points[j][l]) * (points[i][l] - points[j][l]);
@@ -228,15 +236,18 @@ std::vector<std::vector<vector_double::size_type> > kNN(const std::vector<vector
         // We sort the indexes with respect to the distance
         std::vector<vector_double::size_type> idxs(N);
         std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
-        std::sort(idxs.begin(), idxs.end(), [&distances] (vector_double::size_type idx1, vector_double::size_type idx2) {return distances[idx1] < distances[idx2];});
+        std::sort(idxs.begin(), idxs.end(), [&distances](vector_double::size_type idx1, vector_double::size_type idx2) {
+            return distances[idx1] < distances[idx2];
+        });
         // We remove the first element containg the self-distance (0)
         idxs.erase(std::remove(idxs.begin(), idxs.end(), i), idxs.end());
         neigh_idxs.push_back(idxs);
     }
     // We trim to k the lists if needed
     if (k < N - 1u) {
-        for (decltype(neigh_idxs.size()) i = 0u; i < neigh_idxs.size();++i) {
-                neigh_idxs[i].erase(neigh_idxs[i].begin() + static_cast<int>(k), neigh_idxs[i].end()); // TODO: remove the static_cast
+        for (decltype(neigh_idxs.size()) i = 0u; i < neigh_idxs.size(); ++i) {
+            neigh_idxs[i].erase(neigh_idxs[i].begin() + static_cast<int>(k),
+                                neigh_idxs[i].end()); // TODO: remove the static_cast
         }
     }
     return neigh_idxs;
@@ -244,48 +255,48 @@ std::vector<std::vector<vector_double::size_type> > kNN(const std::vector<vector
 
 namespace detail
 {
-    // modifies a chromosome so that it will be in the bounds. elements that are off are resampled at random in the bounds
-    void force_bounds_random(vector_double &x, const vector_double &lb, const vector_double &ub, detail::random_engine_type &r_engine)
-    {
-        assert(x.size()==lb.size());
-        assert(x.size()==ub.size());
-        for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
-            if ((x[j] < lb[j]) || (x[j] > ub[j])) {
-                x[j] = pagmo::uniform_real_from_range(lb[j], ub[j], r_engine);
-            }
+// modifies a chromosome so that it will be in the bounds. elements that are off are resampled at random in the bounds
+void force_bounds_random(vector_double &x, const vector_double &lb, const vector_double &ub,
+                         detail::random_engine_type &r_engine)
+{
+    assert(x.size() == lb.size());
+    assert(x.size() == ub.size());
+    for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+        if ((x[j] < lb[j]) || (x[j] > ub[j])) {
+            x[j] = pagmo::uniform_real_from_range(lb[j], ub[j], r_engine);
         }
     }
-    // modifies a chromosome so that it will be in the bounds. Elements that are off are reflected in the bounds
-    void force_bounds_reflection(vector_double &x, const vector_double &lb, const vector_double &ub)
-    {
-        assert(x.size()==lb.size());
-        assert(x.size()==ub.size());
-        for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
-            while(x[j] < lb[j] || x[j] > ub[j])
-            {
-                if (x[j] < lb[j]) {
-                    x[j] = 2 * lb[j] - x[j];
-                }
-                if (x[j] > ub[j]) {
-                    x[j] = 2 * ub[j] - x[j];
-                }
-            }
-        }
-    }
-    // modifies a chromosome so that it will be in the bounds. Elements that are off are set on the bounds
-    void force_bounds_stick(vector_double &x, const vector_double &lb, const vector_double &ub)
-    {
-        assert(x.size()==lb.size());
-        assert(x.size()==ub.size());
-        for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+}
+// modifies a chromosome so that it will be in the bounds. Elements that are off are reflected in the bounds
+void force_bounds_reflection(vector_double &x, const vector_double &lb, const vector_double &ub)
+{
+    assert(x.size() == lb.size());
+    assert(x.size() == ub.size());
+    for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+        while (x[j] < lb[j] || x[j] > ub[j]) {
             if (x[j] < lb[j]) {
-                x[j] = lb[j];
+                x[j] = 2 * lb[j] - x[j];
             }
             if (x[j] > ub[j]) {
-                x[j] = ub[j];
+                x[j] = 2 * ub[j] - x[j];
             }
         }
     }
+}
+// modifies a chromosome so that it will be in the bounds. Elements that are off are set on the bounds
+void force_bounds_stick(vector_double &x, const vector_double &lb, const vector_double &ub)
+{
+    assert(x.size() == lb.size());
+    assert(x.size() == ub.size());
+    for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+        if (x[j] < lb[j]) {
+            x[j] = lb[j];
+        }
+        if (x[j] > ub[j]) {
+            x[j] = ub[j];
+        }
+    }
+}
 } // namespace detail
 
 } // namespace pagmo

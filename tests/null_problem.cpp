@@ -1,13 +1,13 @@
 #define BOOST_TEST_MODULE null_problem_test
 
-#include <boost/test/included/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/test/included/unit_test.hpp>
 #include <iostream>
 #include <string>
 
-#include "../include/types.hpp"
 #include "../include/problems/hock_schittkowsky_71.hpp"
 #include "../include/problems/null_problem.hpp"
+#include "../include/types.hpp"
 
 using namespace pagmo;
 
@@ -19,8 +19,8 @@ BOOST_AUTO_TEST_CASE(null_problem_test)
     vector_double x1 = {1};
     vector_double x2 = {2};
     // Fitness test
-    BOOST_CHECK((p.fitness(x1) == vector_double{0,0,0}));
-    BOOST_CHECK((p.fitness(x2) == vector_double{0,0,0}));
+    BOOST_CHECK((p.fitness(x1) == vector_double{0, 0, 0}));
+    BOOST_CHECK((p.fitness(x2) == vector_double{0, 0, 0}));
     // Gradient test
     BOOST_CHECK((p.gradient(x1) == vector_double{}));
     BOOST_CHECK((p.gradient(x2) == vector_double{}));
@@ -61,14 +61,14 @@ BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(p);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(p);
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

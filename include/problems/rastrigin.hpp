@@ -24,7 +24,8 @@ namespace pagmo
  * This is a scalable box-constrained continuous single-objective problem.
  * The objective function is the generalised n-dimensional Rastrigin function:
  * \f[
- * 	F\left(x_1,\ldots,x_n\right) = 10 \cdot n + \sum_{i=1}^n x_i^2 - 10\cdot\cos\left( 2\pi \cdot x_i \right), \quad x_i \in \left[ -5.12,5.12 \right].
+ * 	F\left(x_1,\ldots,x_n\right) = 10 \cdot n + \sum_{i=1}^n x_i^2 - 10\cdot\cos\left( 2\pi \cdot x_i \right), \quad x_i
+ * \in \left[ -5.12,5.12 \right].
  * \f]
  *
  * Gradients (dense) are also provided as:
@@ -37,13 +38,13 @@ namespace pagmo
  * \f]
  * The global minimum is in the origin, where \f$ F\left( 0,\ldots,0 \right) = 0 \f$.
  */
-struct rastrigin
-{
+struct rastrigin {
     /// Constructor from dimension
     rastrigin(unsigned int dim = 1u) : m_dim(dim)
     {
         if (dim < 1u) {
-            pagmo_throw(std::invalid_argument, "Rastrigin Function must have minimum 1 dimension, " + std::to_string(dim) + " requested");
+            pagmo_throw(std::invalid_argument,
+                        "Rastrigin Function must have minimum 1 dimension, " + std::to_string(dim) + " requested");
         }
     };
     /// Fitness
@@ -62,9 +63,9 @@ struct rastrigin
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        vector_double lb(m_dim,-5.12);
+        vector_double lb(m_dim, -5.12);
         vector_double ub(m_dim, 5.12);
-        return {lb,ub};
+        return {lb, ub};
     }
 
     /// Gradients (dense)
@@ -97,7 +98,7 @@ struct rastrigin
         sparsity_pattern hs;
         auto n = m_dim;
         for (decltype(n) i = 0u; i < n; ++i) {
-            hs.push_back({i,i});
+            hs.push_back({i, i});
         }
         return {hs};
     }
@@ -110,7 +111,7 @@ struct rastrigin
     /// Optimal solution
     vector_double best_known() const
     {
-        return vector_double(m_dim,0.);
+        return vector_double(m_dim, 0.);
     }
     /// Serialization
     template <typename Archive>
