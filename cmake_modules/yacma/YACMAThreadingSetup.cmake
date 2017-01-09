@@ -58,7 +58,9 @@ else()
 endif()
 
 # Final report.
-message(STATUS "Extra compiler flags for threading: ${YACMA_THREADING_CXX_FLAGS}")
+if(YACMA_THREADING_CXX_FLAGS)
+  message(STATUS "Extra compiler flags for threading: ${YACMA_THREADING_CXX_FLAGS}")
+endif()
 
 # Mark as included.
 set(YACMAThreadingSetupIncluded YES)
