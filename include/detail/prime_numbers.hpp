@@ -6,14 +6,14 @@
 
 #include "../exceptions.hpp"
 
-#define PRIME_MAX 1601
+#define PAGMO_PRIME_MAX 1601
 
 namespace pagmo
 {
 namespace detail
 {
 
-inline std::array<unsigned int, PRIME_MAX> prime_table()
+inline std::array<unsigned int, PAGMO_PRIME_MAX> prime_table()
 {
     return {
         {1,     2,     3,     5,     7,     11,    13,    17,    19,    23,    29,    31,    37,    41,    43,    47,
@@ -121,13 +121,13 @@ inline std::array<unsigned int, PRIME_MAX> prime_table()
 
 inline unsigned int prime(unsigned int n)
 {
-    if (n > PRIME_MAX) {
+    if (n > PAGMO_PRIME_MAX) {
         pagmo_throw(std::invalid_argument, "Out of bounds access to the prime table");
     }
     return prime_table()[n];
 }
 
-#undef PRIME_MAX
+#undef PAGMO_PRIME_MAX
 }
 }
 

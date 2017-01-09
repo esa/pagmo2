@@ -86,7 +86,7 @@ inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_d
     for (auto &Hs : retval) {
         for (decltype(dim) j = 0u; j < dim; ++j) {
             for (decltype(dim) i = 0u; i <= j; ++i) {
-                Hs.push_back({j, i});
+                Hs.emplace_back(j, i);
             }
         }
     }
@@ -98,7 +98,7 @@ inline sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_do
     sparsity_pattern retval;
     for (decltype(f_dim) j = 0u; j < f_dim; ++j) {
         for (decltype(dim) i = 0u; i < dim; ++i) {
-            retval.push_back({j, i});
+            retval.emplace_back(j, i);
         }
     }
     return retval;

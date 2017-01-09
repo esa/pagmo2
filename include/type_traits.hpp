@@ -9,7 +9,6 @@
 #include <utility>
 #include <vector>
 
-#include "detail/population_fwd.hpp"
 #include "types.hpp"
 
 namespace pagmo

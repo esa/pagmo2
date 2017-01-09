@@ -12,7 +12,7 @@ namespace detail
 // PaGMO makes use of the 32-bit Mersenne Twister by Matsumoto and Nishimura, 1998.
 using random_engine_type = std::mt19937;
 
-template <typename dummy>
+template <typename = void>
 struct random_device_statics {
     /// PaGMO random engine
     static random_engine_type m_e;
@@ -20,12 +20,11 @@ struct random_device_statics {
     static std::mutex m_mutex;
 };
 
-template <typename dummy>
-random_engine_type
-    random_device_statics<dummy>::m_e(static_cast<random_engine_type::result_type>(std::random_device()()));
+template <typename T>
+random_engine_type random_device_statics<T>::m_e(static_cast<random_engine_type::result_type>(std::random_device()()));
 
-template <typename dummy>
-std::mutex random_device_statics<dummy>::m_mutex;
+template <typename T>
+std::mutex random_device_statics<T>::m_mutex;
 
 } // end namespace detail
 
@@ -55,7 +54,7 @@ std::mutex random_device_statics<dummy>::m_mutex;
  * }
  * @endcode
  */
-class random_device : public detail::random_device_statics<void>
+class random_device : public detail::random_device_statics<>
 {
 public:
     /// Next element of the Pseudo Random Sequence
