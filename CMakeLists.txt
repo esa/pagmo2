@@ -2,7 +2,7 @@ project(pagmo)
 
 enable_testing()
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.2)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules" "${CMAKE_SOURCE_DIR}/cmake_modules/yacma")
 
@@ -16,67 +16,54 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Build option: enable test set.
-option(BUILD_TESTS "Build test set." OFF)
+option(PAGMO_BUILD_TESTS "Build test set." OFF)
 
 # Build option: enable tutorials.
-option(BUILD_TUTORIALS "Build tutorials." OFF)
+option(PAGMO_BUILD_TUTORIALS "Build tutorials." OFF)
 
 # Build option: enable PyGMO.
-option(BUILD_PYGMO "Build PyGMO." OFF)
+option(PAGMO_BUILD_PYGMO "Build PyGMO." OFF)
 
-# Build option: I have Eigen in my system!!
-option(PAGMO_ENABLE_EIGEN3 "Eigen3 is in the system, use it. This will activate additional includes such as cmaes.h" OFF)
+# Build option: enable features depending on Eigen3.
+option(PAGMO_WITH_EIGEN3 "Enable features depending on Eigen3 (such as CMAES). Requires Eigen3." OFF)
 
-# Compiler setup.
-include(PAGMOCompilerLinkerSettings)
+# Initial setup of compiler flags.
+include(YACMACompilerLinkerSettings)
 
 # Threading setup.
 include(YACMAThreadingSetup)
-set(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS}")
 
-message(STATUS "Current CXX flags: ${CMAKE_CXX_FLAGS}")
-message(STATUS "Current CXX debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
+# Assemble the flags.
+set(PAGMO_CXX_FLAGS_DEBUG ${YACMA_CXX_FLAGS} ${YACMA_CXX_FLAGS_DEBUG} ${YACMA_THREADING_CXX_FLAGS})
+set(PAGMO_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
 
 # Setting up Eigen3
-if(PAGMO_ENABLE_EIGEN3)
+if(PAGMO_WITH_EIGEN3)
     find_package(Eigen3 REQUIRED)
     message(STATUS "Eigen include directory: ${EIGEN_INCLUDE_DIRS}")
     message(STATUS "Eigen version detected: ${EIGEN_VERSION}")
-    add_definitions(-DPAGMO_ENABLE_EIGEN3)
-    # Include eigen directories.
-    include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
 endif()
 
-# Setup the list of the required Boost libraries.
-set(REQUIRED_BOOST_LIBS)
-
-if(BUILD_PYGMO)
-    # NOTE: we need to run the python setup macros before actually looking
-    # for Boost.Python.
-    include(YACMAPythonSetup)
-    set(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python)
+# Setup of the header-only pagmo library.
+add_library(pagmo INTERFACE)
+target_link_libraries(pagmo INTERFACE Threads::Threads)
+target_include_directories(pagmo INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
+if(PAGMO_WITH_EIGEN3)
+    target_include_directories(pagmo SYSTEM INTERFACE "${EIGEN_INCLUDE_DIRS}")
+    target_compile_definitions(pagmo INTERFACE PAGMO_WITH_EIGEN3)
 endif()
 
-# Now actually look for Boost.
-# NOTE: if we have any Boost libraries to link to, we ask for them, otherwise
-# we just look for the headers.
-if(REQUIRED_BOOST_LIBS)
-    find_package(Boost 1.55.0 REQUIRED COMPONENTS "${REQUIRED_BOOST_LIBS}")
-else()
-    find_package(Boost 1.55.0 REQUIRED)
-endif()
-message(STATUS "Boost was successfully detected. The include dirs are: ${Boost_INCLUDE_DIRS}")
-
-if(BUILD_TESTS)
+if(PAGMO_BUILD_TESTS)
     add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
 endif()
 
-if(BUILD_TUTORIALS)
+if(PAGMO_BUILD_TUTORIALS)
     add_subdirectory("${CMAKE_SOURCE_DIR}/tutorials")
 endif()
 
-if(BUILD_PYGMO)
+if(PAGMO_BUILD_PYGMO)
     add_subdirectory("${CMAKE_SOURCE_DIR}/pygmo")
 endif()
 

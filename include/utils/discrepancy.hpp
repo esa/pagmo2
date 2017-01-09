@@ -49,7 +49,7 @@ namespace pagmo
  */
 inline std::vector<double> sample_from_simplex(std::vector<double> in)
 {
-    if (std::any_of(in.begin(), in.end(), [](auto item){return (item < 0 || item > 1);})) {
+    if (std::any_of(in.begin(), in.end(), [](double item){return (item < 0 || item > 1);})) {
         pagmo_throw(std::invalid_argument,"Input vector must have all elements in [0,1]");
     }
     if (in.size() > 0u) {

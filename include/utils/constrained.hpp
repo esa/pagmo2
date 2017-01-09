@@ -131,7 +131,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     std::vector<vector_double::size_type> retval(N);
     std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
     // Sort the indexes
-    std::sort(retval.begin(), retval.end(), [&input_f, &neq, &tol] (auto idx1, auto idx2)
+    std::sort(retval.begin(), retval.end(), [&input_f, &neq, &tol] (vector_double::size_type idx1, vector_double::size_type idx2)
     {
         auto c1eq = detail::test_eq_constraints(input_f[idx1].data()+1, input_f[idx1].data()+1+neq, tol.data());
         auto c1ineq = detail::test_ineq_constraints(input_f[idx1].data()+1+neq, input_f[idx1].data()+input_f[idx1].size(), tol.data() + neq);

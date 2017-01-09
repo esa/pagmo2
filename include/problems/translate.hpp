@@ -123,7 +123,7 @@ private:
     {
         assert(x.size() == m_translation.size());
         vector_double x_sh(x.size());
-        std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::minus<>());
+        std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::minus<double>());
         return x_sh;
     }
 
@@ -131,7 +131,7 @@ private:
     {
         assert(x.size() == m_translation.size());
         vector_double x_sh(x.size());
-        std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::plus<>());
+        std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::plus<double>());
         return x_sh;
     }
     /// translation vector

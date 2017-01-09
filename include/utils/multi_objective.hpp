@@ -132,7 +132,7 @@ std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<v
     std::vector<vector_double::size_type> indexes(input_objs.size());
     std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
     // Sort in ascending order with respect to the first component
-    std::sort(indexes.begin(), indexes.end(), [&input_objs] (auto idx1, auto idx2) {
+    std::sort(indexes.begin(), indexes.end(), [&input_objs] (vector_double::size_type idx1, vector_double::size_type idx2) {
         if (input_objs[idx1][0] == input_objs[idx2][0]) {
             return input_objs[idx1][1] < input_objs[idx2][1];
         }
@@ -341,7 +341,7 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
         }
     }
     // Sort the indexes
-    std::sort(retval.begin(), retval.end(), [&tuple, &crowding] (auto idx1, auto idx2)
+    std::sort(retval.begin(), retval.end(), [&tuple, &crowding] (vector_double::size_type idx1, vector_double::size_type idx2)
     {
         if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {     // same non domination rank
             return crowding[idx1] > crowding[idx2];                     // crowding distance decides
@@ -421,7 +421,7 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
     // We now have front and crowding distance, we sort the front w.r.t. the crowding
     std::vector<vector_double::size_type> idxs(front.size());
     std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
-    std::sort(idxs.begin(), idxs.end(), [&cds] (auto idx1, auto idx2){return (cds[idx1] > cds[idx2]);}); // Descending order1
+    std::sort(idxs.begin(), idxs.end(), [&cds] (vector_double::size_type idx1, vector_double::size_type idx2){return (cds[idx1] > cds[idx2]);}); // Descending order1
     auto remaining = N - retval.size();
     for (decltype(remaining) i = 0u; i < remaining; ++i) {
         retval.push_back(front[idxs[i]]);
@@ -459,7 +459,7 @@ vector_double ideal(const std::vector<vector_double> &input_f)
     // Actual algorithm
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
-        retval[i] = (*std::min_element(input_f.begin(), input_f.end(), [i] (auto f1, auto f2) {return f1[i] < f2[i];}))[i];
+        retval[i] = (*std::min_element(input_f.begin(), input_f.end(), [i] (const vector_double &f1, const vector_double &f2) {return f1[i] < f2[i];}))[i];
     }
     return retval;
 }
@@ -492,7 +492,7 @@ vector_double nadir(const std::vector<vector_double> &input_f) {
     // And compute the nadir over them
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
-        retval[i] = (*std::max_element(nd_fits.begin(), nd_fits.end(), [i] (auto f1, auto f2) {return f1[i] < f2[i];}))[i];
+        retval[i] = (*std::max_element(nd_fits.begin(), nd_fits.end(), [i] (const vector_double &f1, const vector_double &f2) {return f1[i] < f2[i];}))[i];
     }
     return retval;
 }

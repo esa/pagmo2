@@ -301,7 +301,7 @@ public:
             // 4 - We extract the elite from this generation.
             std::vector<population::size_type> best_idx(lam);
             std::iota(best_idx.begin(), best_idx.end(), population::size_type(0));
-            std::sort(best_idx.begin(), best_idx.end(), [&pop](auto idx1, auto idx2) {return pop.get_f()[idx1][0] < pop.get_f()[idx2][0];});
+            std::sort(best_idx.begin(), best_idx.end(), [&pop](population::size_type idx1, population::size_type idx2) {return pop.get_f()[idx1][0] < pop.get_f()[idx2][0];});
             best_idx.resize(mu); // not needed?
             for (decltype(mu) i = 0u; i < mu; ++i ) {
                 for (decltype(dim) j = 0u; j < dim; ++j) {

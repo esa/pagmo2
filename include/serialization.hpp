@@ -27,7 +27,7 @@
 #include <random>
 #include <sstream>
 #include <string>
-#ifdef PAGMO_ENABLE_EIGEN3
+#ifdef PAGMO_WITH_EIGEN3
     #include <Eigen/Dense>
 #endif
 
@@ -62,7 +62,7 @@ void CEREAL_LOAD_FUNCTION_NAME( Archive & ar, std::mersenne_twister_engine<UIntT
     iss >> e;
 }
 
-#ifdef PAGMO_ENABLE_EIGEN3
+#ifdef PAGMO_WITH_EIGEN3
     // Implement the serialization of the Eigen::Matrix class
     template <class Archive, class S, int R, int C> inline
     void CEREAL_SAVE_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S,R,C> const &cb)

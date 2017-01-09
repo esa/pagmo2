@@ -211,7 +211,7 @@ std::vector<std::vector<vector_double::size_type> > kNN(const std::vector<vector
         return {};
     }
     auto M = points[0].size();
-    if (!std::all_of(points.begin(), points.end(), [M](const auto &p){return p.size() == M;} )) {
+    if (!std::all_of(points.begin(), points.end(), [M](const vector_double &p){return p.size() == M;} )) {
         pagmo_throw(std::invalid_argument, "All points must have the same dimensionality for k-NN to be invoked");
     }
     // loop through the points
@@ -228,7 +228,7 @@ std::vector<std::vector<vector_double::size_type> > kNN(const std::vector<vector
         // We sort the indexes with respect to the distance
         std::vector<vector_double::size_type> idxs(N);
         std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
-        std::sort(idxs.begin(), idxs.end(), [&distances] (auto idx1, auto idx2) {return distances[idx1] < distances[idx2];});
+        std::sort(idxs.begin(), idxs.end(), [&distances] (vector_double::size_type idx1, vector_double::size_type idx2) {return distances[idx1] < distances[idx2];});
         // We remove the first element containg the self-distance (0)
         idxs.erase(std::remove(idxs.begin(), idxs.end(), i), idxs.end());
         neigh_idxs.push_back(idxs);

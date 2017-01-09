@@ -510,7 +510,7 @@ class problem
         // Enable the generic ctor only if T is not a problem (after removing
         // const/reference qualifiers).
         template <typename T>
-        using generic_ctor_enabler = std::enable_if_t<!std::is_same<problem,std::decay_t<T>>::value,int>;
+        using generic_ctor_enabler = enable_if_t<!std::is_same<problem,uncvref_t<T>>::value,int>;
     public:
         /// Constructor from a user problem of type \p T
         /**
@@ -545,7 +545,7 @@ class problem
          * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity() method and this contains any repeated index pair.
          */
         template <typename T, generic_ctor_enabler<T> = 0>
-        explicit problem(T &&x):m_ptr(::new detail::prob_inner<std::decay_t<T>>(std::forward<T>(x))),m_fevals(0u),m_gevals(0u),m_hevals(0u)
+        explicit problem(T &&x):m_ptr(::new detail::prob_inner<uncvref_t<T>>(std::forward<T>(x))),m_fevals(0u),m_gevals(0u),m_hevals(0u)
         {
             // 1 - Bounds.
             auto bounds = ptr()->get_bounds();

@@ -17,6 +17,7 @@
 #include "problems/null_problem.hpp"
 #include "rng.hpp"
 #include "serialization.hpp"
+#include "type_traits.hpp"
 #include "types.hpp"
 #include "utils/constrained.hpp"
 #include "utils/generic.hpp"
@@ -42,7 +43,7 @@ class population
         // Enable the generic ctor only if T is not a population (after removing
         // const/reference qualifiers).
         template <typename T>
-        using generic_ctor_enabler = std::enable_if_t<!std::is_same<population,std::decay_t<T>>::value,int>;
+        using generic_ctor_enabler = enable_if_t<!std::is_same<population,uncvref_t<T>>::value,int>;
 
     public:
         #if defined(DOXYGEN_INVOKED)
@@ -196,7 +197,7 @@ class population
             // Sort for single objective, unconstrained optimization
             std::vector<vector_double::size_type> indexes(size());
             std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
-            return *std::min_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {
+            return *std::min_element(indexes.begin(), indexes.end(), [this](vector_double::size_type idx1, vector_double::size_type idx2) {
                 return m_f[idx1] < m_f[idx2];
             });
         }
@@ -244,7 +245,7 @@ class population
             // Sort for single objective, unconstrained optimization
             std::vector<vector_double::size_type> indexes(size());
             std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
-            return *std::max_element(indexes.begin(), indexes.end(), [this](auto idx1, auto idx2) {
+            return *std::max_element(indexes.begin(), indexes.end(), [this](vector_double::size_type idx1, vector_double::size_type idx2) {
                 return m_f[idx1] < m_f[idx2];
             });
         }

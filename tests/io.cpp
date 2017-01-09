@@ -9,7 +9,6 @@
 #include <vector>
 
 using namespace pagmo;
-using namespace std::string_literals;
 
 BOOST_AUTO_TEST_CASE(stream_print_test)
 {
@@ -20,8 +19,8 @@ BOOST_AUTO_TEST_CASE(stream_print_test)
     BOOST_CHECK_EQUAL(ss1.str(),ss2.str());
     ss1.str("");
     ss2.str("");
-    stream(ss1,"Hello "," world"s);
-    ss2 << "Hello " << " world"s;
+    stream(ss1,"Hello ",std::string(" world"));
+    ss2 << "Hello " << std::string(" world");
     BOOST_CHECK_EQUAL(ss1.str(),ss2.str());
     ss1.str("");
     ss2.str("");

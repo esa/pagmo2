@@ -311,7 +311,7 @@ private:
 
         // Convert the input vector into floored values (integers)
         vector_double x;
-        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x), [](auto item) {return std::floor(item);});
+        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x), [](double item) {return std::floor(item);});
         f[0] = x[0];
 
         // Counts how many 1s are there in the first (30 dim)
@@ -389,7 +389,7 @@ private:
     {
         // Convert the input vector into floored values (integers)
         vector_double x;
-        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x), [](auto item) {return std::floor(item);});
+        std::transform(x_double.begin(), x_double.end(), std::back_inserter(x), [](double item) {return std::floor(item);});
         double c = 0.;
         double g = 0.;
         unsigned int k = 30;

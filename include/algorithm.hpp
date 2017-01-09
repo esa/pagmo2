@@ -8,6 +8,7 @@
 
 #include "serialization.hpp"
 #include "population.hpp"
+#include "type_traits.hpp"
 
 #define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>,#algo)
 
@@ -302,7 +303,7 @@ class algorithm
         // Enable the generic ctor only if T is not an algorithm (after removing
         // const/reference qualifiers).
         template <typename T>
-        using generic_ctor_enabler = std::enable_if_t<!std::is_same<algorithm,std::decay_t<T>>::value,int>;
+        using generic_ctor_enabler = enable_if_t<!std::is_same<algorithm,uncvref_t<T>>::value,int>;
     public:
         /// Constructor from a user algorithm of type \p T
         /**
@@ -325,7 +326,7 @@ class algorithm
          *
          */
         template <typename T, generic_ctor_enabler<T> = 0>
-        explicit algorithm(T &&x):m_ptr(::new detail::algo_inner<std::decay_t<T>>(std::forward<T>(x)))
+        explicit algorithm(T &&x):m_ptr(::new detail::algo_inner<uncvref_t<T>>(std::forward<T>(x)))
         {
             // We detect if set_seed is implemented in the algorithm, in which case the algorithm is stochastic
             m_has_set_seed = ptr()->has_set_seed();

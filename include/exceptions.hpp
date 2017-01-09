@@ -4,14 +4,15 @@
 /** \file exceptions.hpp
  * \brief Exceptions.
  *
- * This header contains custom exceptions used within pagmo and related utilities. It
- * is taken "as is" from the project piranha by Francesco Biscani
+ * This header contains exception-related utils used within pagmo.
  */
 
 #include <exception>
 #include <string>
 #include <type_traits>
 #include <utility>
+
+#include "type_traits.hpp"
 
 namespace pagmo
 {
@@ -22,10 +23,10 @@ template <typename Exception>
 struct ex_thrower
 {
     // Determine the type of the __LINE__ macro.
-    using line_type = std::decay_t<decltype(__LINE__)>;
+    using line_type = decay_t<decltype(__LINE__)>;
     explicit ex_thrower(const char *file, line_type line, const char *func):m_file(file),m_line(line),m_func(func)
     {}
-    template <typename ... Args, typename = std::enable_if_t<std::is_constructible<Exception,Args...>::value>>
+    template <typename ... Args, typename = enable_if_t<std::is_constructible<Exception,Args...>::value>>
     [[ noreturn ]] void operator()(Args && ... args) const
     {
         Exception e(std::forward<Args>(args)...);
@@ -33,9 +34,9 @@ struct ex_thrower
     }
     template <typename Str, typename ... Args, typename = typename std::enable_if<
         std::is_constructible<Exception,std::string,Args...>::value && (
-        std::is_same<std::decay_t<Str>,std::string>::value ||
-        std::is_same<std::decay_t<Str>,char *>::value ||
-        std::is_same<std::decay_t<Str>,const char *>::value)>::type>
+        std::is_same<decay_t<Str>,std::string>::value ||
+        std::is_same<decay_t<Str>,char *>::value ||
+        std::is_same<decay_t<Str>,const char *>::value)>::type>
     [[ noreturn ]] void operator()(Str &&desc, Args && ... args) const
     {
         std::string msg("\nfunction: ");
