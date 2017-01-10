@@ -57,6 +57,7 @@ matrix:
         apt:
           sources:
           - llvm-toolchain-precise-3.8
+          - ubuntu-toolchain-r-test
           packages:
           - clang-3.8
     - env: PAGMO_BUILD="ReleaseClang38"
@@ -66,6 +67,7 @@ matrix:
         apt:
           sources:
           - llvm-toolchain-precise-3.8
+          - ubuntu-toolchain-r-test
           packages:
           - clang-3.8
 script:
