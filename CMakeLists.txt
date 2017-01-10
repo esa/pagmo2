@@ -40,8 +40,8 @@ set(PAGMO_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
 # Setting up Eigen3
 if(PAGMO_WITH_EIGEN3)
     find_package(Eigen3 REQUIRED)
-    message(STATUS "Eigen include directory: ${EIGEN_INCLUDE_DIRS}")
-    message(STATUS "Eigen version detected: ${EIGEN_VERSION}")
+    message(STATUS "Eigen include directory: ${EIGEN3_INCLUDE_DIR}")
+    message(STATUS "Eigen version detected: ${EIGEN3_VERSION}")
 endif()
 
 # Setup of the header-only pagmo library.
@@ -51,7 +51,7 @@ target_include_directories(pagmo INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 if(PAGMO_WITH_EIGEN3)
-    target_include_directories(pagmo SYSTEM INTERFACE "${EIGEN_INCLUDE_DIRS}")
+    target_include_directories(pagmo SYSTEM INTERFACE "${EIGEN3_INCLUDE_DIR}")
     target_compile_definitions(pagmo INTERFACE PAGMO_WITH_EIGEN3)
 endif()
 
