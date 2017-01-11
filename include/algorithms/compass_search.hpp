@@ -84,6 +84,8 @@ public:
         const auto &ub = bounds.second;
         auto prob_f_dimension = prob.get_nf();
 
+        unsigned int count = 1u;          // regulates the screen output
+
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
         // particular algorithm.
