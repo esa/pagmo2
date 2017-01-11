@@ -427,10 +427,8 @@ private:
                     deltaq = 1. - (std::pow(val, mut_pow));
                 }
                 y = y + deltaq * (yu - yl);
-                if (y < yl)
-                    y = yl;
-                if (y > yu)
-                    y = yu;
+                if (y < yl) y = yl;
+                if (y > yu) y = yu;
                 child[j] = y;
             }
         }
@@ -461,8 +459,7 @@ private:
                     break;
                 }
             }
-            if (flag)
-                retval.push_back(p);
+            if (flag) retval.push_back(p);
         }
         return retval;
     }

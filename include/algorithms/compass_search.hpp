@@ -3,6 +3,7 @@
 
 #include <sstream> //std::osstringstream
 #include <string>
+#include <vector>
 
 #include "../algorithm.hpp"
 #include "../detail/population_fwd.hpp"
@@ -45,6 +46,16 @@ namespace pagmo
 class compass_search
 {
 public:
+#if defined(DOXYGEN_INVOKED)
+    /// Single entry of the log (iter, range, best)
+    typedef std::tuple<unsigned int, double, double> log_line_type;
+    /// The log
+    typedef std::vector<log_line_type> log_type;
+#else
+    using log_line_type = std::tuple<unsigned int, double, double>;
+    using log_type = std::vector<log_line_type>;
+#endif
+
     /// Constructor
     compass_search(unsigned int max_iters = 1, double stop_range = 0.01, double start_range = 0.1,
                    double reduction_coeff = 0.5)
