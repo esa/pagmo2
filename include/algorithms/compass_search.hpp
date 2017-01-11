@@ -1,6 +1,7 @@
 #ifndef PAGMO_ALGORITHMS_COMPASS_SEARCH_HPP
 #define PAGMO_ALGORITHMS_COMPASS_SEARCH_HPP
 
+#include <exceptions>
 #include <sstream> //std::osstringstream
 #include <string>
 #include <vector>
@@ -46,21 +47,16 @@ namespace pagmo
 class compass_search
 {
 public:
-#if defined(DOXYGEN_INVOKED)
-    /// Single entry of the log (iter, range, best)
+    /// Single entry of the log (feval, range, best fitness)
     typedef std::tuple<unsigned int, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor
-    compass_search(unsigned int max_iters = 1, double stop_range = 0.01, double start_range = 0.1,
+    compass_search(unsigned int max_fevals = 1, double stop_range = 0.01, double start_range = 0.1,
                    double reduction_coeff = 0.5)
-        : m_max_iters(max_iters), m_stop_range(stop_range), m_start_range(start_range),
-          m_reduction_coeff(reduction_coeff)
+        : m_max_fevals(max_fevals), m_stop_range(stop_range), m_start_range(start_range),
+          m_reduction_coeff(reduction_coeff), m_verbosity(0u), m_log()
     {
         if (reduction_coeff >= 1. || reduction_coeff <= 0.) {
             pagmo_throw(std::invalid_argument, "The reduction coefficient must be in (0,1), while a value of "
@@ -79,6 +75,93 @@ public:
     /// Algorithm implementation
     population evolve(const population &pop) const
     {
+        // We store some useful variables
+        const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
+                                              // allowed (pop.set_problem_seed is)
+        auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
+        const auto bounds = prob.get_bounds();
+        const auto &lb = bounds.first;
+        const auto &ub = bounds.second;
+        auto prob_f_dimension = prob.get_nf();
+
+        // PREAMBLE-------------------------------------------------------------------------------------------------
+        // We start by checking that the problem is suitable for this
+        // particular algorithm.
+        if (prob.get_nc() != 0u) {
+            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
+        }
+        if (prob_f_dimension != 1u) {
+            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
+        }
+        if (prob.is_stochastic()) {
+            pagmo_throw(std::invalid_argument,
+                        "The problem appears to be stochastic " + get_name() + " cannot deal with it");
+        }
+        // Get out if there is nothing to do.
+        if (max_iters == 0u) {
+            return pop;
+        }
+        if (pop.size() == 0u) {
+            pagmo_throw(std::invalid_argument, prob.get_name()
+                                                   + " does not work on an empty population, a population size of "
+                                                   + std::to_string(pop.size()) + " was, instead, detected");
+        }
+        // ---------------------------------------------------------------------------------------------------------
+
+        // No throws, all valid: we clear the logs
+        m_log.clear();
+
+        // We run the compass search starting from the best individual of the population
+        auto best_idx = pop.best_idx();
+        auto cur_best_x = pop.get_x()[best_idx];
+        auto cur_best_f = pop.get_f()[best_idx];
+
+        // We need some auxiliary variables
+        bool flag = false;
+        unsigned int fevals = 0u;
+
+        double newrange = m_start_range;
+
+        while (newrange > m_stop_range && fevals <= m_max_fevals) {
+            flag = false;
+            for (unsigned int i = 0u; i < Dc; i++) {
+                auto x_trial = cur_best_x;
+                // move up
+                x_trial[i] = cur_best_x[i] + newrange * (ub[i] - lb[i]);
+                // feasibility correction
+                if (x_trial[i] > ub[i]) x_trial[i] = ub[i];
+                // objective function evaluation
+                auto f_trial = prob.objfun(x_trial);
+                fevals++;
+                if (f_trial[0] < cur_best_f[0]) {
+                    cur_best_f = f_trial;
+                    cur_best_x = x_trial;
+                    flag = true;
+                    break; // accept
+                }
+
+                // move down
+                x_trial[i] = cur_best_x[i] - newrange * (ub[i] - lb[i]);
+                // feasibility correction
+                if (x_trial[i] < lb[i]) x_trial[i] = lb[i];
+                // objective function evaluation
+                f_trial = prob.objfun(x_trial);
+                fevals++;
+                if (f_trial[0] < cur_best_f[0]) {
+                    cur_best_f = f_trial;
+                    cur_best_x = x_trial;
+                    flag = true;
+                    break; // accept
+                }
+            }
+            if (!flag) {
+                newrange *= m_reduction_coeff;
+            }
+        } // end while
+        // Force the current best into the original population
+        pop.set_xf(best_idx, cur_best_f, cur_best_x);
         return pop;
     };
 
@@ -116,24 +199,27 @@ public:
     std::string get_extra_info() const
     {
         std::ostringstream ss;
-        stream(ss, "\tMaximum number of iterations: ", m_max_iters);
+        stream(ss, "\tMaximum number of objective function evaluations: ", m_max_fevals);
         stream(ss, "\n\tStart range: ", m_start_range);
         stream(ss, "\n\tStop range: ", m_stop_range);
         stream(ss, "\n\tReduction coefficient: ", m_reduction_coeff);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
         return ss.str();
     }
 
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_max_iters, m_start_range, m_stop_range, m_reduction_coeff);
+        ar(m_max_iters, m_start_range, m_stop_range, m_reduction_coeff, m_verbosity, m_log);
     }
 
 private:
-    unsigned int m_max_iters;
+    unsigned int m_max_fevals;
     double m_start_range;
     double m_stop_range;
     double m_reduction_coeff;
+    unsigned int m_verbosity;
+    mutable log_type m_log;
 };
 
 } // namespaces
