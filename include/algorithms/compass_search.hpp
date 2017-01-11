@@ -47,7 +47,7 @@ namespace pagmo
 class compass_search
 {
 public:
-    /// Single entry of the log (feval, range, best fitness)
+    /// Single entry of the log (feval, best fitness, range)
     typedef std::tuple<unsigned int, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
@@ -84,6 +84,7 @@ public:
         const auto &ub = bounds.second;
         auto prob_f_dimension = prob.get_nf();
 
+        auto fevals0 = prob.get_fevals(); // discount for the already made fevals
         unsigned int count = 1u;          // regulates the screen output
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
@@ -160,6 +161,22 @@ public:
             }
             if (!flag) {
                 newrange *= m_reduction_coeff;
+            }
+
+            // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
+            if (m_verbosity > 0u) {
+                // Prints a log line if a new best is found or the range has been decreased
+
+                // 1 - Every 50 lines print the column names
+                if (count % 50u == 1u) {
+                    print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Range:", '\n');
+                }
+                // 2 - Print
+                print(std::setw(7), prob.get_fevals() - fevals0, std::setw(15), cur_best_f, std::setw(15), newrange,
+                      '\n');
+                ++count;
+                // Logs
+                m_log.push_back(log_line_type(prob.get_fevals() - fevals0, cur_best_f, newrange));
             }
         } // end while
         // Force the current best into the original population
