@@ -20,6 +20,7 @@ matrix:
           packages:
           - gcc-4.8
           - g++-4.8
+          - binutils-gold
     - env: PAGMO_BUILD="ReleaseGCC48"
       compiler: gcc
       os: linux

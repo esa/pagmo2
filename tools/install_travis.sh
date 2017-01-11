@@ -12,7 +12,7 @@ if [[ "${PAGMO_BUILD}" == "ReleaseGCC48" ]]; then
     make -j2 VERBOSE=1;
     ctest -V;
 elif [[ "${PAGMO_BUILD}" == "DebugGCC48" ]]; then
-    CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DCMAKE_CXX_FLAGS="-fsanitize=address" ../;
+    CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DCMAKE_CXX_FLAGS="-fsanitize=address -fuse-ld=gold" ../;
     make -j2 VERBOSE=1;
     ctest -V;
 elif [[ "${PAGMO_BUILD}" == "CoverageGCC5" ]]; then
