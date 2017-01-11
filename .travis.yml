@@ -70,10 +70,10 @@ matrix:
     #       - ubuntu-toolchain-r-test
     #       packages:
     #       - clang-3.8
-    - env: BUILD_TYPE="OSXDebug"
+    - env: PAGMO_BUILD="OSXDebug"
       os: osx
       osx_image: xcode6.4
-    - env: BUILD_TYPE="OSXRelease"
+    - env: PAGMO_BUILD="OSXRelease"
       os: osx
       osx_image: xcode6.4
 
