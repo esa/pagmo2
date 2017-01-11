@@ -10,66 +10,66 @@ branches:
 
 matrix:
   include:
-    # - env: PAGMO_BUILD="DebugGCC48"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-4.8
-    #       - g++-4.8
-    # - env: PAGMO_BUILD="ReleaseGCC48"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-4.8
-    #       - g++-4.8
-    # - env: PAGMO_BUILD="CoverageGCC5"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-5
-    #       - g++-5
-    # - env: PAGMO_BUILD="DebugGCC6"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-6
-    #       - g++-6
-    # - env: PAGMO_BUILD="DebugClang38"
-    #   compiler: clang
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - llvm-toolchain-precise-3.8
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - clang-3.8
-    # - env: PAGMO_BUILD="ReleaseClang38"
-    #   compiler: clang
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - llvm-toolchain-precise-3.8
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - clang-3.8
+    - env: PAGMO_BUILD="DebugGCC48"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-4.8
+          - g++-4.8
+    - env: PAGMO_BUILD="ReleaseGCC48"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-4.8
+          - g++-4.8
+    - env: PAGMO_BUILD="CoverageGCC5"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-5
+          - g++-5
+    - env: PAGMO_BUILD="DebugGCC6"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-6
+          - g++-6
+    - env: PAGMO_BUILD="DebugClang38"
+      compiler: clang
+      os: linux
+      addons:
+        apt:
+          sources:
+          - llvm-toolchain-precise-3.8
+          - ubuntu-toolchain-r-test
+          packages:
+          - clang-3.8
+    - env: PAGMO_BUILD="ReleaseClang38"
+      compiler: clang
+      os: linux
+      addons:
+        apt:
+          sources:
+          - llvm-toolchain-precise-3.8
+          - ubuntu-toolchain-r-test
+          packages:
+          - clang-3.8
     - env: PAGMO_BUILD="OSXDebug"
       os: osx
       osx_image: xcode6.4
