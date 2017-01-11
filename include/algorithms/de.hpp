@@ -40,15 +40,10 @@ namespace pagmo
 class de
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, dx, df)
     typedef std::tuple<unsigned int, unsigned long long, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor.
     /**

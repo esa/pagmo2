@@ -63,17 +63,11 @@ std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u, 3u, 7u, 10u
 class de1220
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, F, CR, Variant, dx, df)
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, unsigned int, double, double>
         log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type
-        = std::tuple<unsigned int, unsigned long long, double, double, double, unsigned int, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor.
     /**
