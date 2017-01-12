@@ -519,7 +519,7 @@ Args:
 
 Raises:
     OverflowError: if *gen*, *variant* or *seed* is negative or greater than an implementation-defined value
-    ValueError: if *F*, *CR* are not in [0,1]
+    ValueError: if *F*, *CR* are not in [0,1] or *variant* is not in [1, 10]
 
 The following variants (mutation variants) are available to create a new candidate individual:
 
@@ -577,6 +577,84 @@ Examples:
     [(1, 20, 162446.0185265718, 65.28911664703388, 1786857.8926660626), ...
 
 See also the docs of the C++ class :cpp:class:`pagmo::de::get_log`.
+
+)";
+}
+
+std::string compass_search_docstring()
+{
+    return R"(__init__(max_fevals = 1, start_range = .1, stop_range = .01, reduction_coeff = .5)
+
+Compass Search
+
+Args:
+    max_fevals (``int``): number of generations
+    start_range (``float``): starting range (dafault value is .1)
+    stop_range (``float``): stop range (dafault value is .01)
+    reduction_coeff (``float``): rnage reduction coefficient (dafault value is .5)
+
+Raises:
+    OverflowError: if *max_fevals* is negative or greater than an implementation-defined value
+    ValueError: if *start_range* is not in (0, 1]
+    ValueError: if *stop_range* is not in (*start_range*, 1]
+    ValueError: if *reduction_coeff* is not in (0,1)
+
+See also the docs of the C++ class :cpp:class:`pagmo::compass_search`.
+
+)";
+}
+
+std::string compass_search_get_log_docstring()
+{
+    return R"(compass_search.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.compass_search`. A verbosity larger than 0 implies one log line at each improvment of the fitness or
+change in the search range.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values Fevals, Best, Range
+
+Where:
+    * Fevals (``int``), number of functions evaluation made.
+    * Best (``float``), the best fitness function currently in the population
+    * Range (``float``), the range used to vary the chromosome (relative to the box bounds width)
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(compass_search(max_fevals = 500))
+    >>> algo.set_verbosity(1)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 1)
+    >>> pop = algo.evolve(pop)
+    Fevals:          Best:         Range:
+          2    1.25998e+06            0.5
+         14    1.18725e+06            0.5
+         28    1.18213e+06            0.5
+         46         715894            0.5
+         69         658715            0.5
+         94         614449            0.5
+        125         604085            0.5
+        159         266352            0.5
+        194         230685            0.5
+        231         191145            0.5
+        277        94448.9            0.5
+        326        89696.4            0.5
+        376        89696.4           0.25
+        ...        .......          .....
+        970        3812.16          0.125
+       1000         3718.9          0.125
+       1046        1856.31          0.125
+       1090        1809.17          0.125
+       1140        1809.17         0.0625
+    Exit condition -- range: 0.0625 <= 0.1
+
+    >>> al = algo.extract(compass_search)
+    >>> al.get_log()
+    [(1, 20, 162446.0185265718, 65.28911664703388, 1786857.8926660626), ...
+
+See also the docs of the C++ class :cpp:class:`pagmo::compass_search::get_log`.
 
 )";
 }

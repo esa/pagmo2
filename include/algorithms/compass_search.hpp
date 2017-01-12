@@ -183,10 +183,10 @@ public:
 
         if (m_verbosity) {
             if (newrange <= m_stop_range) {
-                std::cout << "\nExit condition -- range: " << newrange << " <= " << m_stop_range << "\n";
+                std::cout << "Exit condition -- range: " << newrange << " <= " << m_stop_range << "\n";
             }
             else {
-                std::cout << "\nExit condition -- fevals: " << fevals << " > " << m_max_fevals << "\n";
+                std::cout << "Exit condition -- fevals: " << fevals << " > " << m_max_fevals << "\n";
             }
         }
 
