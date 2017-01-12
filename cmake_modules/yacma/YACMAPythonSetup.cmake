@@ -60,7 +60,7 @@ if("${YACMA_PYTHON_MODULES_INSTALL_PATH}" STREQUAL "")
   message(FATAL_ERROR "Python module install path not detected correctly.")
 endif()
 
-message(STATUS "Python modules install path: " "${YACMA_PYTHON_MODULES_INSTALL_PATH}")
+message(STATUS "Python modules install path: ${YACMA_PYTHON_MODULES_INSTALL_PATH}")
 
 function(YACMA_PYTHON_MODULE name)
     message(STATUS "Setting up the compilation of the Python module '${name}'.")
