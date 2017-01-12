@@ -54,8 +54,8 @@ public:
     typedef std::vector<log_line_type> log_type;
 
     /// Constructor
-    compass_search(unsigned int max_fevals = 1, double start_range = 0.1, double stop_range = 0.01,
-                   double reduction_coeff = 0.5)
+    compass_search(unsigned int max_fevals = 1, double start_range = .1, double stop_range = .01,
+                   double reduction_coeff = .5)
         : m_max_fevals(max_fevals), m_start_range(start_range), m_stop_range(stop_range),
           m_reduction_coeff(reduction_coeff), m_verbosity(0u), m_log()
     {
@@ -202,20 +202,20 @@ public:
      * - 0: no verbosity
      * - >0: will print and log one line each objective function improvement, or range reduction
      *
-     * Example (verbosity 100):
+     * Example (verbosity > 0u):
      * @code
-     * Gen:        Fevals:          Best:            dx:            df:
-     * 5001         100020    3.62028e-05      0.0396687      0.0002866
-     * 5101         102020    1.16784e-05      0.0473027    0.000249057
-     * 5201         104020    1.07883e-05      0.0455471    0.000243651
-     * 5301         106020    6.05099e-06      0.0268876    0.000103512
-     * 5401         108020    3.60664e-06      0.0230468    5.78161e-05
-     * 5501         110020     1.7188e-06      0.0141655    2.25688e-05
+     * Fevals:          Best:         Range:
+     *       2    1.25998e+06            0.5
+     *      14    1.18725e+06            0.5
+     *      28    1.18213e+06            0.5
+     *      46         715894            0.5
+     *      69         658715            0.5
+     *     326        89696.4            0.5
+     *     376        89696.4           0.25
+     *     382          84952           0.25
      * @endcode
-     * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
-     * function currently in the population, dx is the population flatness evaluated as the distance between
-     * the decisions vector of the best and of the worst individual, df is the population flatness evaluated
-     * as the distance between the fitness of the best and of the worst individual.
+     * Fevals, is the number of function evaluations made, Best is the best fitness
+     * and Range is the range used at that point of the search
      *
      * @param level verbosity level
      */
@@ -274,15 +274,16 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a de::log_line_type containing: Gen, Fevals, Best, dx, df as described
-     * in de::set_verbosity
-     * @return an <tt> std::vector </tt> of de::log_line_type containing the logged values Gen, Fevals, Best, dx, df
+     * <tt> std::vector </tt> is a compass_search::log_line_type containing: Fevals, Best, Range as described
+     * in compass_search::set_verbosity
+     * @return an <tt> std::vector </tt> of compass_search::log_line_type containing the logged values Fevals, Best, Range
      */
     const log_type &get_log() const
     {
         return m_log;
     }
 
+    /// Serialization
     template <typename Archive>
     void serialize(Archive &ar)
     {
