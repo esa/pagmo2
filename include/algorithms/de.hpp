@@ -5,6 +5,7 @@
 #include <numeric> //std::iota
 #include <random>
 #include <string>
+#include <stdexcept>
 #include <tuple>
 #include <utility> //std::swap
 

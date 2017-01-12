@@ -1,7 +1,8 @@
 #ifndef PAGMO_ALGORITHMS_COMPASS_SEARCH_HPP
 #define PAGMO_ALGORITHMS_COMPASS_SEARCH_HPP
 
-#include <exceptions>
+#include <iomanip>
+#include <stdexcept>
 #include <sstream> //std::osstringstream
 #include <string>
 #include <vector>
@@ -48,20 +49,16 @@ class compass_search
 {
 public:
     /// Single entry of the log (feval, best fitness, range)
-    typedef std::tuple<unsigned int, double, double> log_line_type;
+    typedef std::tuple<unsigned long long, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
     /// Constructor
-    compass_search(unsigned int max_fevals = 1, double stop_range = 0.01, double start_range = 0.1,
+    compass_search(unsigned int max_fevals = 1, double start_range = 0.1, double stop_range = 0.01,
                    double reduction_coeff = 0.5)
-        : m_max_fevals(max_fevals), m_stop_range(stop_range), m_start_range(start_range),
+        : m_max_fevals(max_fevals), m_start_range(start_range), m_stop_range(stop_range),
           m_reduction_coeff(reduction_coeff), m_verbosity(0u), m_log()
     {
-        if (reduction_coeff >= 1. || reduction_coeff <= 0.) {
-            pagmo_throw(std::invalid_argument, "The reduction coefficient must be in (0,1), while a value of "
-                                                   + std::to_string(reduction_coeff) + " was detected.");
-        }
         if (start_range > 1. || start_range <= 0.) {
             pagmo_throw(std::invalid_argument, "The start range must be in (0, 1], while a value of "
                                                    + std::to_string(start_range) + " was detected.");
@@ -70,10 +67,14 @@ public:
             pagmo_throw(std::invalid_argument, "the stop range must be in (start_range, 1], while a value of "
                                                    + std::to_string(stop_range) + " was detected.");
         }
+        if (reduction_coeff >= 1. || reduction_coeff <= 0.) {
+            pagmo_throw(std::invalid_argument, "The reduction coefficient must be in (0,1), while a value of "
+                                                   + std::to_string(reduction_coeff) + " was detected.");
+        }
     }
 
     /// Algorithm implementation
-    population evolve(const population &pop) const
+    population evolve(population pop) const
     {
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
@@ -103,7 +104,7 @@ public:
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
         // Get out if there is nothing to do.
-        if (max_iters == 0u) {
+        if (m_max_fevals == 0u) {
             return pop;
         }
         if (pop.size() == 0u) {
@@ -129,14 +130,14 @@ public:
 
         while (newrange > m_stop_range && fevals <= m_max_fevals) {
             flag = false;
-            for (unsigned int i = 0u; i < Dc; i++) {
+            for (unsigned int i = 0u; i < dim; i++) {
                 auto x_trial = cur_best_x;
                 // move up
                 x_trial[i] = cur_best_x[i] + newrange * (ub[i] - lb[i]);
                 // feasibility correction
                 if (x_trial[i] > ub[i]) x_trial[i] = ub[i];
                 // objective function evaluation
-                auto f_trial = prob.objfun(x_trial);
+                auto f_trial = prob.fitness(x_trial);
                 fevals++;
                 if (f_trial[0] < cur_best_f[0]) {
                     cur_best_f = f_trial;
@@ -150,7 +151,7 @@ public:
                 // feasibility correction
                 if (x_trial[i] < lb[i]) x_trial[i] = lb[i];
                 // objective function evaluation
-                f_trial = prob.objfun(x_trial);
+                f_trial = prob.fitness(x_trial);
                 fevals++;
                 if (f_trial[0] < cur_best_f[0]) {
                     cur_best_f = f_trial;
@@ -172,38 +173,82 @@ public:
                     print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Range:", '\n');
                 }
                 // 2 - Print
-                print(std::setw(7), prob.get_fevals() - fevals0, std::setw(15), cur_best_f, std::setw(15), newrange,
+                print(std::setw(7), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0], std::setw(15), newrange,
                       '\n');
                 ++count;
                 // Logs
-                m_log.push_back(log_line_type(prob.get_fevals() - fevals0, cur_best_f, newrange));
+                m_log.push_back(log_line_type(prob.get_fevals() - fevals0, cur_best_f[0], newrange));
             }
         } // end while
+
+        if (m_verbosity) {
+            if (newrange <= m_stop_range) {
+                std::cout << "\nExit condition -- range: " << newrange << " <= " << m_stop_range << "\n";
+            }
+            else {
+                std::cout << "\nExit condition -- fevals: " << fevals << " > " << m_max_fevals << "\n";
+            }
+        }
+
         // Force the current best into the original population
-        pop.set_xf(best_idx, cur_best_f, cur_best_x);
+        pop.set_xf(best_idx, cur_best_x, cur_best_f);
         return pop;
     };
 
-    /// Gets the maximum number of iterations allowed
-    unsigned int get_max_iters() const
+    /// Sets the algorithm verbosity
+    /**
+     * Sets the verbosity level of the screen output and of the
+     * log returned by get_log(). \p level can be:
+     * - 0: no verbosity
+     * - >0: will print and log one line each objective function improvement, or range reduction
+     *
+     * Example (verbosity 100):
+     * @code
+     * Gen:        Fevals:          Best:            dx:            df:
+     * 5001         100020    3.62028e-05      0.0396687      0.0002866
+     * 5101         102020    1.16784e-05      0.0473027    0.000249057
+     * 5201         104020    1.07883e-05      0.0455471    0.000243651
+     * 5301         106020    6.05099e-06      0.0268876    0.000103512
+     * 5401         108020    3.60664e-06      0.0230468    5.78161e-05
+     * 5501         110020     1.7188e-06      0.0141655    2.25688e-05
+     * @endcode
+     * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
+     * function currently in the population, dx is the population flatness evaluated as the distance between
+     * the decisions vector of the best and of the worst individual, df is the population flatness evaluated
+     * as the distance between the fitness of the best and of the worst individual.
+     *
+     * @param level verbosity level
+     */
+    void set_verbosity(unsigned int level)
     {
-        return m_max_iters;
+        m_verbosity = level;
+    };
+    /// Gets the verbosity level
+    unsigned int get_verbosity() const
+    {
+        return m_verbosity;
+    }
+
+    /// Gets the maximum number of iterations allowed
+    double get_max_fevals() const
+    {
+        return m_max_fevals;
     }
 
     /// Gets the stop_range
-    unsigned int get_stop_range() const
+    double get_stop_range() const
     {
         return m_stop_range;
     }
 
     /// Get the start range
-    unsigned int get_start_range() const
+    double get_start_range() const
     {
         return m_start_range;
     }
 
     /// Get the reduction_coeff
-    unsigned int get_reduction_coeff() const
+    double get_reduction_coeff() const
     {
         return m_reduction_coeff;
     }
@@ -226,10 +271,22 @@ public:
         return ss.str();
     }
 
+    /// Get log
+    /**
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+     * <tt> std::vector </tt> is a de::log_line_type containing: Gen, Fevals, Best, dx, df as described
+     * in de::set_verbosity
+     * @return an <tt> std::vector </tt> of de::log_line_type containing the logged values Gen, Fevals, Best, dx, df
+     */
+    const log_type &get_log() const
+    {
+        return m_log;
+    }
+
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_max_iters, m_start_range, m_stop_range, m_reduction_coeff, m_verbosity, m_log);
+        ar(m_max_fevals, m_start_range, m_stop_range, m_reduction_coeff, m_verbosity, m_log);
     }
 
 private:
