@@ -27,6 +27,9 @@ option(PAGMO_BUILD_PYGMO "Build PyGMO." OFF)
 # Build option: enable features depending on Eigen3.
 option(PAGMO_WITH_EIGEN3 "Enable features depending on Eigen3 (such as CMAES). Requires Eigen3." OFF)
 
+# Build option: install header.
+option(PAGMO_INSTALL_HEADERS "Enable the installation of PaGMO's header files." ON)
+
 # Initial setup of compiler flags.
 include(YACMACompilerLinkerSettings)
 
@@ -70,4 +73,8 @@ endif()
 
 if(PAGMO_BUILD_PYGMO)
     add_subdirectory("${CMAKE_SOURCE_DIR}/pygmo")
+endif()
+
+if(PAGMO_INSTALL_HEADERS)
+  install(DIRECTORY include/ DESTINATION include)
 endif()
