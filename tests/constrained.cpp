@@ -3,9 +3,9 @@
 
 #include <exception>
 
-#include "../include/io.hpp"
-#include "../include/types.hpp"
-#include "../include/utils/constrained.hpp"
+#include <pagmo/io.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/constrained.hpp>
 
 using namespace pagmo;
 

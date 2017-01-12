@@ -5,10 +5,10 @@
 #include <limits>
 #include <tuple>
 
-#include "../include/io.hpp"
-#include "../include/rng.hpp"
-#include "../include/types.hpp"
-#include "../include/utils/generic.hpp"
+#include <pagmo/io.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/generic.hpp>
 
 using namespace pagmo;
 

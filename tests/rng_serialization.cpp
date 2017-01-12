@@ -6,7 +6,7 @@
 #include <sstream>
 #include <vector>
 
-#include "../include/serialization.hpp"
+#include <pagmo/serialization.hpp>
 
 static std::mt19937 rng;
 

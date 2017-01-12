@@ -1,4 +1,4 @@
-#include "../include/problem.hpp"
+#include <pagmo/problem.hpp>
 
 #define BOOST_TEST_MODULE problem_test
 #include <boost/test/included/unit_test.hpp>
@@ -10,8 +10,8 @@
 #include <utility>
 #include <vector>
 
-#include "../include/serialization.hpp"
-#include "../include/types.hpp"
+#include <pagmo/serialization.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 

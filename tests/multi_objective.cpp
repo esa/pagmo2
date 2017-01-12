@@ -5,9 +5,9 @@
 #include <numeric>
 #include <tuple>
 
-#include "../include/io.hpp"
-#include "../include/types.hpp"
-#include "../include/utils/multi_objective.hpp"
+#include <pagmo/io.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/multi_objective.hpp>
 
 using namespace pagmo;
 

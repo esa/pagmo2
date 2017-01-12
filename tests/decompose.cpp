@@ -7,12 +7,12 @@
 #include <stdexcept>
 #include <string>
 
-#include "../include/io.hpp"
-#include "../include/problems/decompose.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/problems/rosenbrock.hpp"
-#include "../include/problems/zdt.hpp"
-#include "../include/types.hpp"
+#include <pagmo/io.hpp>
+#include <pagmo/problems/decompose.hpp>
+#include <pagmo/problems/null_problem.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/zdt.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 

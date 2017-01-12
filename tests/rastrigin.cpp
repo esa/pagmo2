@@ -6,11 +6,11 @@
 #include <iostream>
 #include <string>
 
-#include "../include/detail/constants.hpp"
-#include "../include/problem.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/problems/rastrigin.hpp"
-#include "../include/types.hpp"
+#include <pagmo/detail/constants.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/null_problem.hpp>
+#include <pagmo/problems/rastrigin.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 

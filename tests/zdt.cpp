@@ -7,10 +7,10 @@
 #include <iostream>
 #include <string>
 
-#include "../include/problem.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/problems/zdt.hpp"
-#include "../include/types.hpp"
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/null_problem.hpp>
+#include <pagmo/problems/zdt.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 

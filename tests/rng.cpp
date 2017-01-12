@@ -7,7 +7,7 @@
 #include <thread>
 #include <vector>
 
-#include "../include/rng.hpp"
+#include <pagmo/rng.hpp>
 
 using namespace pagmo;
 

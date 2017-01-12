@@ -71,6 +71,3 @@ endif()
 if(PAGMO_BUILD_PYGMO)
     add_subdirectory("${CMAKE_SOURCE_DIR}/pygmo")
 endif()
-
-# Install the headers.
-#install(FILES src/arbpp.hpp DESTINATION include/arbpp)

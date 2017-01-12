@@ -6,17 +6,17 @@
 #include <iostream>
 #include <string>
 
-#include "../include/algorithm.hpp"
-#include "../include/algorithms/null_algorithm.hpp"
-#include "../include/algorithms/sea.hpp"
-#include "../include/io.hpp"
-#include "../include/population.hpp"
-#include "../include/problems/hock_schittkowsky_71.hpp"
-#include "../include/problems/inventory.hpp"
-#include "../include/problems/rosenbrock.hpp"
-#include "../include/problems/zdt.hpp"
-#include "../include/serialization.hpp"
-#include "../include/types.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/algorithms/sea.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/zdt.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 using namespace std;

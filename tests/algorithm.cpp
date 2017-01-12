@@ -8,12 +8,12 @@
 #include <utility>
 #include <vector>
 
-#include "../include/algorithm.hpp"
-#include "../include/algorithms/null_algorithm.hpp"
-#include "../include/population.hpp"
-#include "../include/problems/rosenbrock.hpp"
-#include "../include/serialization.hpp"
-#include "../include/types.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 
