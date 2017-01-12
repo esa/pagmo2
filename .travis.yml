@@ -20,6 +20,7 @@ matrix:
           packages:
           - gcc-4.8
           - g++-4.8
+          - binutils-gold
     - env: PAGMO_BUILD="ReleaseGCC48"
       compiler: gcc
       os: linux
@@ -30,6 +31,7 @@ matrix:
           packages:
           - gcc-4.8
           - g++-4.8
+          - binutils-gold
     - env: PAGMO_BUILD="CoverageGCC5"
       compiler: gcc
       os: linux
@@ -40,6 +42,7 @@ matrix:
           packages:
           - gcc-5
           - g++-5
+          - binutils-gold
     - env: PAGMO_BUILD="DebugGCC6"
       compiler: gcc
       os: linux
@@ -50,6 +53,7 @@ matrix:
           packages:
           - gcc-6
           - g++-6
+          - binutils-gold
     - env: PAGMO_BUILD="DebugClang38"
       compiler: clang
       os: linux
