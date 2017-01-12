@@ -33,30 +33,31 @@
 #include <sstream>
 #include <string>
 
-#include "../include/algorithm.hpp"
+#include <pagmo/algorithm.hpp>
 #ifdef PAGMO_WITH_EIGEN3
-#include "../include/algorithms/cmaes.hpp"
+#include <pagmo/algorithms/cmaes.hpp>
 #endif
-#include "../include/algorithms/de.hpp"
-#include "../include/algorithms/de1220.hpp"
-#include "../include/algorithms/moead.hpp"
-#include "../include/algorithms/null_algorithm.hpp"
-#include "../include/algorithms/sade.hpp"
-#include "../include/algorithms/sea.hpp"
-#include "../include/population.hpp"
-#include "../include/problem.hpp"
-#include "../include/problems/ackley.hpp"
-#include "../include/problems/decompose.hpp"
-#include "../include/problems/griewank.hpp"
-#include "../include/problems/hock_schittkowsky_71.hpp"
-#include "../include/problems/inventory.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/problems/rastrigin.hpp"
-#include "../include/problems/rosenbrock.hpp"
-#include "../include/problems/schwefel.hpp"
-#include "../include/problems/translate.hpp"
-#include "../include/problems/zdt.hpp"
-#include "../include/serialization.hpp"
+#include <pagmo/algorithms/de.hpp>
+#include <pagmo/algorithms/de1220.hpp>
+#include <pagmo/algorithms/moead.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/algorithms/sade.hpp>
+#include <pagmo/algorithms/sea.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/ackley.hpp>
+#include <pagmo/problems/decompose.hpp>
+#include <pagmo/problems/griewank.hpp>
+#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/null_problem.hpp>
+#include <pagmo/problems/rastrigin.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/schwefel.hpp>
+#include <pagmo/problems/translate.hpp>
+#include <pagmo/problems/zdt.hpp>
+#include <pagmo/serialization.hpp>
+
 #include "algorithm.hpp"
 #include "algorithm_exposition_suite.hpp"
 #include "common_utils.hpp"
@@ -72,6 +73,14 @@
 #pragma warning(pop)
 
 #endif
+
+// Implementation of std::make_unique:
+// http://stackoverflow.com/questions/17902405/how-to-implement-make-unique-function-in-c11
+template <typename T, typename... Args>
+static inline std::unique_ptr<T> make_unique(Args &&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 
 namespace bp = boost::python;
 using namespace pagmo;
@@ -347,7 +356,8 @@ static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
 static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 {
     auto res = pygmo::to_vvd(o);
-    return res.size() == n && std::all_of(res.begin(), res.end(), [m](const auto &v) { return v.size() == m; });
+    return res.size() == n
+           && std::all_of(res.begin(), res.end(), [m](const vector_double &v) { return v.size() == m; });
 }
 
 BOOST_PYTHON_MODULE(core)
@@ -438,8 +448,7 @@ BOOST_PYTHON_MODULE(core)
         .def("get_seed", &population::get_seed, pygmo::population_get_seed_docstring().c_str());
 
     // Problem class.
-    pygmo::problem_ptr
-        = std::make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::no_init);
+    pygmo::problem_ptr = make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::no_init);
     auto &problem_class = *pygmo::problem_ptr;
     problem_class.def(bp::init<const bp::object &>((bp::arg("prob"))))
         .def(repr(bp::self))
@@ -491,7 +500,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Algorithm class.
     pygmo::algorithm_ptr
-        = std::make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::no_init);
+        = make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::no_init);
     auto &algorithm_class = *pygmo::algorithm_ptr;
     algorithm_class.def(bp::init<const bp::object &>((bp::arg("a"))))
         .def(repr(bp::self))
@@ -535,7 +544,7 @@ BOOST_PYTHON_MODULE(core)
         .def("get_extra_info", &algorithm::get_extra_info, "Get algorithm's extra info.");
 
     // Translate meta-problem.
-    pygmo::translate_ptr = std::make_unique<bp::class_<translate>>(
+    pygmo::translate_ptr = make_unique<bp::class_<translate>>(
         "translate", "The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:", bp::init<>());
     auto &tp = *pygmo::translate_ptr;
     // Constructor from Python user-defined problem and translation vector (allows to translate Python problems).
@@ -557,7 +566,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Decompose meta-problem.
     pygmo::decompose_ptr
-        = std::make_unique<bp::class_<decompose>>("decompose", "The decompose meta-problem.\n\n", bp::init<>());
+        = make_unique<bp::class_<decompose>>("decompose", "The decompose meta-problem.\n\n", bp::init<>());
     auto &dp = *pygmo::decompose_ptr;
     // Constructor from Python user-defined problem.
     dp.def("__init__", pygmo::make_decompose_init<bp::object>())

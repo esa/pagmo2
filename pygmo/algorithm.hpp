@@ -11,10 +11,11 @@
 #include <sstream>
 #include <string>
 
-#include "../include/algorithm.hpp"
-#include "../include/algorithms/null_algorithm.hpp"
-#include "../include/population.hpp"
-#include "../include/serialization.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/serialization.hpp>
+
 #include "common_base.hpp"
 #include "common_utils.hpp"
 #include "object_serialization.hpp"

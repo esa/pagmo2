@@ -23,8 +23,10 @@
 #include <utility>
 #include <vector>
 
-#include "../include/exceptions.hpp"
-#include "../include/types.hpp"
+#include <pagmo/exceptions.hpp>
+#include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
+
 #include "numpy.hpp"
 
 // A throwing macro similar to pagmo_throw, only for Python. This will set the global
@@ -106,7 +108,7 @@ inline bool callable(const bp::object &o)
 
 // Convert a vector of arithmetic types into a 1D numpy array.
 template <typename T>
-using v_to_a_enabler = std::enable_if_t<std::is_arithmetic<T>::value, int>;
+using v_to_a_enabler = pagmo::enable_if_t<std::is_arithmetic<T>::value, int>;
 
 template <typename T, v_to_a_enabler<T> = 0>
 inline bp::object v_to_a(const std::vector<T> &v)
@@ -130,7 +132,7 @@ inline bp::object v_to_a(const std::vector<T> &v)
 
 // Convert a vector of vectors of arithmetic types into a 2D numpy array.
 template <typename T>
-using vv_to_a_enabler = std::enable_if_t<std::is_arithmetic<T>::value, int>;
+using vv_to_a_enabler = pagmo::enable_if_t<std::is_arithmetic<T>::value, int>;
 
 template <typename T, vv_to_a_enabler<T> = 0>
 inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
@@ -296,7 +298,7 @@ inline std::vector<pagmo::vector_double> to_vvd(const bp::object &o)
 inline std::vector<unsigned> a_to_vu(PyArrayObject *o)
 {
     using size_type = std::vector<unsigned>::size_type;
-    using int_type = std::make_signed_t<std::size_t>;
+    using int_type = std::make_signed<std::size_t>::type;
     if (!PyArray_ISCARRAY_RO(o)) {
         pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a vector of unsigned: "
                                         "data must be C-style contiguous, aligned, and in machine byte-order");
@@ -342,7 +344,7 @@ inline std::vector<unsigned> to_vu(const bp::object &o)
     } else if (isinstance(o, a)) {
         // NOTE: as usual, we try first to create an array of signed ints,
         // and we convert to unsigned in a_to_vu().
-        using int_type = std::make_signed_t<std::size_t>;
+        using int_type = std::make_signed<std::size_t>::type;
         auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<int_type>::value, NPY_ARRAY_IN_ARRAY);
         if (!n) {
             bp::throw_error_already_set();
@@ -362,13 +364,13 @@ inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
     // The unsigned integral type that is used in the sparsity pattern.
     using size_type = pagmo::vector_double::size_type;
     // Its signed counterpart.
-    using int_type = std::make_signed_t<size_type>;
+    using int_type = std::make_signed<size_type>::type;
     npy_intp dims[] = {boost::numeric_cast<npy_intp>(s.size()), 2};
     PyObject *ret = PyArray_SimpleNew(2, dims, cpp_npy<int_type>::value);
     if (!ret) {
         pygmo_throw(PyExc_RuntimeError, "couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
     }
-    auto err_handler = [](const auto &n) {
+    auto err_handler = [](const decltype(s[0].first) &n) {
         pygmo_throw(PyExc_OverflowError, ("overflow in the conversion of the sparsity index " + std::to_string(n)
                                           + " to the "
                                             "appropriate signed integer type")
@@ -398,7 +400,7 @@ inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
 inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
 {
     using size_type = pagmo::vector_double::size_type;
-    using int_type = std::make_signed_t<size_type>;
+    using int_type = std::make_signed<size_type>::type;
     if (!PyArray_ISCARRAY_RO(o)) {
         pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a sparsity pattern: "
                                         "data must be C-style contiguous, aligned, and in machine byte-order");
@@ -430,7 +432,7 @@ inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
     }
     const auto size = boost::numeric_cast<pagmo::sparsity_pattern::size_type>(PyArray_SHAPE(o)[0]);
     // Error handler for nice Python error messages.
-    auto err_handler = [](const auto &n) {
+    auto err_handler = [](int_type n) {
         pygmo_throw(PyExc_OverflowError, ("overflow in the conversion of the sparsity index " + std::to_string(n)
                                           + " to the "
                                             "appropriate unsigned integer type")
@@ -469,7 +471,7 @@ inline pagmo::sparsity_pattern to_sp(const bp::object &o)
         pagmo::sparsity_pattern retval;
         bp::stl_input_iterator<bp::tuple> begin(o), end;
         // Error handler to make better error messages in Python.
-        auto err_handler = [](const auto &obj) {
+        auto err_handler = [](const bp::object &obj) {
             pygmo_throw(PyExc_RuntimeError, ("couldn't extract a suitable sparsity index value from the object '"
                                              + str(obj) + "' of type '" + str(type(obj)) + "'.")
                                                 .c_str());
@@ -514,7 +516,7 @@ inline pagmo::sparsity_pattern to_sp(const bp::object &o)
         // in typical usage Python integers are converted so signed integers when used inside NumPy arrays, so we want
         // to work with signed ints here as well in order no to force the user to create sparsity patterns
         // like array(...,dtype='ulonglong').
-        auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<std::make_signed_t<size_type>>::value, NPY_ARRAY_IN_ARRAY);
+        auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<std::make_signed<size_type>::type>::value, NPY_ARRAY_IN_ARRAY);
         if (!n) {
             // NOTE: PyArray_FROM_OTF already sets the exception at the Python level with an appropriate message,
             // so we just throw the Python exception.
@@ -591,16 +593,19 @@ namespace detail
 {
 
 template <typename Func, typename Tup, std::size_t... index>
-decltype(auto) ct2pt_invoke_helper(Func &&func, Tup &&tup, std::index_sequence<index...>)
+auto ct2pt_invoke_helper(Func &&func, Tup &&tup, pagmo::index_sequence<index...>)
+    -> decltype(func(std::get<index>(std::forward<Tup>(tup))...))
 {
     return func(std::get<index>(std::forward<Tup>(tup))...);
 }
 
 template <typename Func, typename Tup>
-decltype(auto) ct2pt_invoke(Func &&func, Tup &&tup)
+auto ct2pt_invoke(Func &&func, Tup &&tup)
+    -> decltype(ct2pt_invoke_helper(std::forward<Func>(func), std::forward<Tup>(tup),
+                                    pagmo::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{}))
 {
-    constexpr auto Size = std::tuple_size<std::decay_t<Tup>>::value;
-    return ct2pt_invoke_helper(std::forward<Func>(func), std::forward<Tup>(tup), std::make_index_sequence<Size>{});
+    return ct2pt_invoke_helper(std::forward<Func>(func), std::forward<Tup>(tup),
+                               pagmo::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{});
 }
 }
 
