@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
 
     BOOST_CHECK(user_algo1.get_log().size() > 0u);
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
-    BOOST_CHECK(std::get<2>(user_algo1.get_log()[user_algo1.get_log().size()]) <= stop_range);
+    BOOST_CHECK(std::get<2>(user_algo1.get_log()[user_algo1.get_log().size() - 1]) <= stop_range);
 
     // We test the max_fevals stopping criteria
     auto max_fevals = 10u;
@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
     user_algo3.set_verbosity(1u);
     population pop3{prob2, 5u, 23u};
     pop3 = user_algo3.evolve(pop3);
-    BOOST_CHECK(std::get<0>(user_algo3.get_log()[user_algo3.get_log().size()]) > max_fevals);
+    BOOST_CHECK(std::get<0>(user_algo3.get_log()[user_algo3.get_log().size() - 1]) > max_fevals);
 
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
