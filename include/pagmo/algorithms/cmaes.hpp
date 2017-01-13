@@ -12,6 +12,7 @@
 #include "../io.hpp"
 #include "../population.hpp"
 #include "../rng.hpp"
+#include "../serialization.hpp"
 #include "../utils/generic.hpp"
 
 namespace pagmo
