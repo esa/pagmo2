@@ -62,8 +62,8 @@ inline void CEREAL_LOAD_FUNCTION_NAME(Archive &ar,
 
 #ifdef PAGMO_WITH_EIGEN3
 // Implement the serialization of the Eigen::Matrix class
-template <class Archive, class S, int R, int C>
-inline void CEREAL_SAVE_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S, R, C> const &cb)
+template <class Archive, class S, int R, int C, int O, int MR, int MC>
+inline void CEREAL_SAVE_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S, R, C, O, MR, MC> const &cb)
 {
     // Let's first save the dimension
     auto nrows = cb.rows();
@@ -77,8 +77,8 @@ inline void CEREAL_SAVE_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S, R, C> const 
         }
     }
 }
-template <class Archive, class S, int R, int C>
-inline void CEREAL_LOAD_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S, R, C> &cb)
+template <class Archive, class S, int R, int C, int O, int MR, int MC>
+inline void CEREAL_LOAD_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S, R, C, O, MR, MC> &cb)
 {
     decltype(cb.rows()) nrows;
     decltype(cb.cols()) ncols;
