@@ -36,7 +36,7 @@ build_script:
 - mkdir build
 - cd build
 
-- if [%COMPILER%]==[MSVC15] if [%PLATFORM%]==[x64] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=YES -DCMAKE_PREFIX_PATH=C:/local ..
+- if [%COMPILER%]==[MSVC15] if [%PLATFORM%]==[x64] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=YES -DEIGEN3_INCLUDE_DIR=C:/local/include -DBoost_INCLUDE_DIR=C:/local/include ..
 
 - cmake --build . --config %BUILD_TYPE%
 
