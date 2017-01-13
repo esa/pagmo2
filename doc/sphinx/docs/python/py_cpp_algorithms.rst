@@ -35,3 +35,8 @@ Exposed C++ algorithms
 
 .. autoclass:: pygmo.core.moead
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.compass_search
+   :members:

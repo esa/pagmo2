@@ -31,6 +31,7 @@ code your own algorithm
   algorithms/de1220
   algorithms/cmaes
   algorithms/moead
+  algorithms/compass_search
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
