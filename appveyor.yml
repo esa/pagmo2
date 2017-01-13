@@ -27,14 +27,16 @@ environment:
 install:
 - if [%COMPILER%]==[MSVC15] set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 - if [%COMPILER%]==[MSVC15] call tools\appveyor-download.cmd https://github.com/bluescarni/binary_deps/raw/master/boost_msvc_64.7z
+- if [%COMPILER%]==[MSVC15] call tools\appveyor-download.cmd https://github.com/bluescarni/binary_deps/raw/master/eigen3.7z
 - if [%COMPILER%]==[MSVC15] 7z x -oC:\ boost_msvc_64.7z > NUL
+- if [%COMPILER%]==[MSVC15] 7z x -oC:\ eigen3.7z > NUL
 - if [%COMPILER%]==[MSVC15] set PATH=%PATH%;c:\local\lib
 
 build_script:
 - mkdir build
 - cd build
 
-- if [%COMPILER%]==[MSVC15] if [%PLATFORM%]==[x64] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DBoost_INCLUDE_DIR=C:/local/include ..
+- if [%COMPILER%]==[MSVC15] if [%PLATFORM%]==[x64] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=YES -DCMAKE_PREFIX_PATH=C:/local ..
 
 - cmake --build . --config %BUILD_TYPE%
 
