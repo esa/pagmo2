@@ -49,19 +49,14 @@ namespace pagmo
 class sade
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, F, CR, dx, df)
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor.
     /**
-     * Constructs a self-adaptive differential evolution algorithm
+     * Constructs self-adaptive differential evolution
      *
      * Two self-adaptation variants are available to control the F and CR parameters:
      *

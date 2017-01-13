@@ -47,18 +47,14 @@ namespace pagmo
 class moead
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, adf, ideal_point)
     typedef std::tuple<unsigned int, unsigned long long, double, vector_double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, vector_double>;
-    using log_type = std::vector<log_line_type>;
-#endif
+
     /// Constructor
     /**
-    * Constructs a MOEA/D-DE algorithm
+    * Constructs MOEA/D-DE
     *
     * @param[in] gen number of generations
     * @param[in] weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
@@ -427,10 +423,8 @@ private:
                     deltaq = 1. - (std::pow(val, mut_pow));
                 }
                 y = y + deltaq * (yu - yl);
-                if (y < yl)
-                    y = yl;
-                if (y > yu)
-                    y = yu;
+                if (y < yl) y = yl;
+                if (y > yu) y = yu;
                 child[j] = y;
             }
         }
@@ -461,8 +455,7 @@ private:
                     break;
                 }
             }
-            if (flag)
-                retval.push_back(p);
+            if (flag) retval.push_back(p);
         }
         return retval;
     }

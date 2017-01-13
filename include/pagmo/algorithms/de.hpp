@@ -5,6 +5,7 @@
 #include <numeric> //std::iota
 #include <random>
 #include <string>
+#include <stdexcept>
 #include <tuple>
 #include <utility> //std::swap
 
@@ -40,19 +41,14 @@ namespace pagmo
 class de
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, dx, df)
     typedef std::tuple<unsigned int, unsigned long long, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor.
     /**
-     * Constructs a de algorithm
+     * Constructs de
      *
      * The following variants (mutation variants) are available to create a new candidate individual:
      * @code

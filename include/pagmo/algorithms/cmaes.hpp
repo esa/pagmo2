@@ -38,18 +38,14 @@ namespace pagmo
 class cmaes
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, dx, df, sigma)
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
+
     /// Constructor.
     /**
-     * Constructs a cmaes algorithm
+     * Constructs cmaes
      *
      * @param[in] gen number of generations.
      * @param[in] cc backward time horizon for the evolution path (by default is automatically assigned)

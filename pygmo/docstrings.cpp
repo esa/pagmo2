@@ -519,7 +519,7 @@ Args:
 
 Raises:
     OverflowError: if *gen*, *variant* or *seed* is negative or greater than an implementation-defined value
-    ValueError: if *F*, *CR* are not in [0,1]
+    ValueError: if *F*, *CR* are not in [0,1] or *variant* is not in [1, 10]
 
 The following variants (mutation variants) are available to create a new candidate individual:
 
@@ -576,7 +576,82 @@ Examples:
     >>> al.get_log()
     [(1, 20, 162446.0185265718, 65.28911664703388, 1786857.8926660626), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::de::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::de::get_log`.
+
+)";
+}
+
+std::string compass_search_docstring()
+{
+    return R"(__init__(max_fevals = 1, start_range = .1, stop_range = .01, reduction_coeff = .5)
+
+Compass Search
+
+Args:
+    max_fevals (``int``): maximum number of function evaluation
+    start_range (``float``): start range (dafault value is .1)
+    stop_range (``float``): stop range (dafault value is .01)
+    reduction_coeff (``float``): range reduction coefficient (dafault value is .5)
+
+Raises:
+    OverflowError: if *max_fevals* is negative or greater than an implementation-defined value
+    ValueError: if *start_range* is not in (0, 1]
+    ValueError: if *stop_range* is not in (*start_range*, 1]
+    ValueError: if *reduction_coeff* is not in (0,1)
+
+See also the docs of the C++ class :cpp:class:`pagmo::compass_search`.
+
+)";
+}
+
+std::string compass_search_get_log_docstring()
+{
+    return R"(compass_search.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.compass_search`. A verbosity larger than 0 implies one log line at each improvment of the fitness or
+change in the search range.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values Fevals, Best, Range
+
+Where:
+    * Fevals (``int``), number of functions evaluation made.
+    * Best (``float``), the best fitness function currently in the population
+    * Range (``float``), the range used to vary the chromosome (relative to the box bounds width)
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(compass_search(max_fevals = 500))
+    >>> algo.set_verbosity(1)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 1)
+    >>> pop = algo.evolve(pop)
+    Fevals:          Best:         Range:
+          2         352531            0.1
+          4         256100            0.1
+        ...        .......            ...
+        159        1006.28            0.1
+        178        815.293            0.1
+        198        815.293           0.05
+        204        654.538           0.05
+        207        481.065           0.05
+        217        372.571           0.05
+        229        116.117           0.05
+        249        116.117          0.025
+        257         90.486          0.025
+        ...        .......         ......
+        382        14.1021         0.0125
+        402        14.1021        0.00625
+    Exit condition -- range: 0.00625 <= 0.01
+
+    >>> al = algo.extract(compass_search)
+    >>> al.get_log()
+    [(2, 352531.0009957846, 0.1), (4, 256100.15408875767, 0.1), ...
+
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::compass_search::get_log`.
 
 )";
 }
@@ -671,7 +746,7 @@ Examples:
     >>> al.get_log()
     [(1, 20, 297059.6296130389, 0.690031071850855, 0.29476914701127666, 44.14940516578547, 2305836.7422693395), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::sade::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log`.
 
 )";
 }
@@ -739,7 +814,7 @@ Examples:
     >>> al.get_log()
     [(1, 0, 32.574745630075874, array([  1.90532430e-03,   2.65684834e+00])), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::moead::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log`.
 
 )";
 }
@@ -808,7 +883,7 @@ Examples:
     >>> al.get_log()
     [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::cmaes::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::cmaes::get_log`.
 
 )";
 }
@@ -905,7 +980,7 @@ Examples:
     >>> al.get_log()
     [(1, 20, 285652.7928977573, 0.551350234239449, 0.4415510963067054, 16, 43.97185788345982, 2023791.5123259544), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::de1220::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log`.
 
 )";
 }

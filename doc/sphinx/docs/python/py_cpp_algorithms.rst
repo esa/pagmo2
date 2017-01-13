@@ -1,7 +1,7 @@
 .. py_cpp_algorithms
 
-Exposed C++ algorithms
-======================
+Algorithms exposed from C++
+===========================
 
 .. autoclass:: pygmo.core.de
    :members:
@@ -34,4 +34,9 @@ Exposed C++ algorithms
 -------------------------------------------------------------
 
 .. autoclass:: pygmo.core.moead
+   :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.compass_search
    :members:

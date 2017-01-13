@@ -46,19 +46,14 @@ namespace pagmo
 class sea
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, improvement, mutations)
     typedef std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor
     /**
-     * Constructs a sea algorithm from the number of generations and the random seed.
+     * Constructs sea
      *
      * @param[in] gen Number of generations to consider. Each generation will compute the objective function once
      * @param[in] seed seed used by the internal random number generator
