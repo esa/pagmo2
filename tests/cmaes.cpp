@@ -6,15 +6,15 @@
 #include <limits> //  std::numeric_limits<double>::infinity();
 #include <string>
 
-#include "../include/algorithms/cmaes.hpp"
-#include "../include/algorithms/null_algorithm.hpp"
-#include "../include/population.hpp"
-#include "../include/problems/hock_schittkowsky_71.hpp"
-#include "../include/problems/inventory.hpp"
-#include "../include/problems/rosenbrock.hpp"
-#include "../include/problems/zdt.hpp"
-#include "../include/rng.hpp"
-#include "../include/utils/generic.hpp"
+#include <pagmo/algorithms/cmaes.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/zdt.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>
 
 using namespace pagmo;
 

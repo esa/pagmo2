@@ -10,9 +10,9 @@
 
 #include <string>
 
-#include "../include/io.hpp"
-#include "../include/problem.hpp"
-#include "../include/types.hpp"
+#include <pagmo/io.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 struct problem_basic {

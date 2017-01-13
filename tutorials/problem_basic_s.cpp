@@ -20,11 +20,11 @@
 
 #include <string>
 
-#include "../include/io.hpp"
-#include "../include/problem.hpp"
-#include "../include/rng.hpp"
-#include "../include/serialization.hpp"
-#include "../include/types.hpp"
+#include <pagmo/io.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 class problem_basic_s

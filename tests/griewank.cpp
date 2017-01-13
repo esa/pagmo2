@@ -6,10 +6,10 @@
 #include <iostream>
 #include <string>
 
-#include "../include/problem.hpp"
-#include "../include/problems/griewank.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/types.hpp"
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/griewank.hpp>
+#include <pagmo/problems/null_problem.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 

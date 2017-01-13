@@ -7,7 +7,7 @@
 #include <sstream>
 #include <vector>
 
-#include "../include/serialization.hpp"
+#include <pagmo/serialization.hpp>
 
 template <typename T>
 void serialize_deserialize_and_compare(T &object)

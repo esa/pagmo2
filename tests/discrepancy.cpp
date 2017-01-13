@@ -5,10 +5,10 @@
 #include <exception>
 #include <tuple>
 
-#include "../include/detail/prime_numbers.hpp"
-#include "../include/io.hpp"
-#include "../include/types.hpp"
-#include "../include/utils/discrepancy.hpp"
+#include <pagmo/detail/prime_numbers.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/discrepancy.hpp>
 
 using namespace pagmo;
 

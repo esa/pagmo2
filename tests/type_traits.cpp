@@ -5,10 +5,10 @@
 #include <utility>
 #include <vector>
 
-#include "../include/algorithm.hpp"
-#include "../include/population.hpp"
-#include "../include/type_traits.hpp"
-#include "../include/types.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 

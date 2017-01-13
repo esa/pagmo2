@@ -12,9 +12,11 @@
 #include <boost/python/scope.hpp>
 #include <cassert>
 #include <string>
+#include <utility>
 
-#include "../include/problem.hpp"
-#include "../include/problems/translate.hpp"
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/translate.hpp>
+
 #include "common_utils.hpp"
 #include "pygmo_classes.hpp"
 
@@ -42,6 +44,8 @@ inline pagmo::translate *translate_init(const Prob &p, const bp::object &o)
 // Make Python init from ctor above.
 template <typename Prob>
 inline auto make_translate_init()
+    -> decltype(bp::make_constructor(&translate_init<Prob>, bp::default_call_policies(),
+                                     (bp::arg(std::declval<const char *>()), bp::arg(std::declval<const char *>()))))
 {
     return bp::make_constructor(&translate_init<Prob>, bp::default_call_policies(),
                                 (bp::arg("prob"), bp::arg("translation")));
@@ -58,6 +62,11 @@ inline pagmo::decompose *decompose_init(const Prob &p, const bp::object &weight,
 // Make a python init from the above ctor.
 template <typename Prob>
 inline auto make_decompose_init()
+    -> decltype(bp::make_constructor(&decompose_init<Prob>, bp::default_call_policies(),
+                                     (bp::arg(std::declval<const char *>()), bp::arg(std::declval<const char *>()),
+                                      bp::arg(std::declval<const char *>()),
+                                      bp::arg(std::declval<const char *>()) = std::string(std::declval<const char *>()),
+                                      bp::arg(std::declval<const char *>()) = false)))
 {
     return bp::make_constructor(&decompose_init<Prob>, bp::default_call_policies(),
                                 (bp::arg("prob"), bp::arg("weight"), bp::arg("z"),

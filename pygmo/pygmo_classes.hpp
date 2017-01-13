@@ -6,11 +6,11 @@
 #include <boost/python/class.hpp>
 #include <memory>
 
-#include "../include/algorithm.hpp"
-#include "../include/population.hpp"
-#include "../include/problem.hpp"
-#include "../include/problems/decompose.hpp"
-#include "../include/problems/translate.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/decompose.hpp>
+#include <pagmo/problems/translate.hpp>
 
 namespace pygmo
 {

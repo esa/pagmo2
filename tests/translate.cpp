@@ -6,11 +6,11 @@
 #include <stdexcept>
 #include <string>
 
-#include "../include/io.hpp"
-#include "../include/problems/hock_schittkowsky_71.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/problems/translate.hpp"
-#include "../include/types.hpp"
+#include <pagmo/io.hpp>
+#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/null_problem.hpp>
+#include <pagmo/problems/translate.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 

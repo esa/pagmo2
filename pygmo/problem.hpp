@@ -16,10 +16,11 @@
 #include <string>
 #include <utility>
 
-#include "../include/problem.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/serialization.hpp"
-#include "../include/types.hpp"
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/null_problem.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/types.hpp>
+
 #include "common_base.hpp"
 #include "common_utils.hpp"
 #include "object_serialization.hpp"
@@ -172,7 +173,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
             // Let's build the return value.
             std::vector<vector_double> retval;
             bp::stl_input_iterator<bp::object> begin(tmp), end;
-            std::transform(begin, end, std::back_inserter(retval), [](const auto &o) { return pygmo::to_vd(o); });
+            std::transform(begin, end, std::back_inserter(retval), [](const bp::object &o) { return pygmo::to_vd(o); });
             return retval;
         }
         pygmo_throw(PyExc_RuntimeError, "Hessians have been requested but they are not implemented");
@@ -198,7 +199,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
             }
             std::vector<sparsity_pattern> retval;
             bp::stl_input_iterator<bp::object> begin(tmp), end;
-            std::transform(begin, end, std::back_inserter(retval), [](const auto &o) { return pygmo::to_sp(o); });
+            std::transform(begin, end, std::back_inserter(retval), [](const bp::object &o) { return pygmo::to_sp(o); });
             return retval;
         }
         pygmo_throw(PyExc_RuntimeError, "Hessians sparsities have been requested but they are not implemented");

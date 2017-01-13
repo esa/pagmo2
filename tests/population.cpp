@@ -6,13 +6,13 @@
 #include <iostream>
 #include <string>
 
-#include "../include/population.hpp"
-#include "../include/problem.hpp"
-#include "../include/problems/hock_schittkowsky_71.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/problems/rosenbrock.hpp"
-#include "../include/problems/zdt.hpp"
-#include "../include/types.hpp"
+#include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/null_problem.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/zdt.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 

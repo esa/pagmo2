@@ -1,4 +1,4 @@
-#include "../include/io.hpp"
+#include <pagmo/io.hpp>
 
 #define BOOST_TEST_MODULE io_test
 #include <boost/test/included/unit_test.hpp>

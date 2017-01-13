@@ -8,7 +8,8 @@
 #include <boost/python/object.hpp>
 #include <vector>
 
-#include "../include/serialization.hpp"
+#include <pagmo/serialization.hpp>
+
 #include "common_utils.hpp"
 
 namespace cereal
