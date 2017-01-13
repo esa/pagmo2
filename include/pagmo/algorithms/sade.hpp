@@ -56,7 +56,7 @@ public:
 
     /// Constructor.
     /**
-     * Constructs a self-adaptive differential evolution algorithm
+     * Constructs self-adaptive differential evolution
      *
      * Two self-adaptation variants are available to control the F and CR parameters:
      *

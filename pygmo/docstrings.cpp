@@ -576,7 +576,7 @@ Examples:
     >>> al.get_log()
     [(1, 20, 162446.0185265718, 65.28911664703388, 1786857.8926660626), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::de::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::de::get_log`.
 
 )";
 }
@@ -588,10 +588,10 @@ std::string compass_search_docstring()
 Compass Search
 
 Args:
-    max_fevals (``int``): number of generations
-    start_range (``float``): starting range (dafault value is .1)
+    max_fevals (``int``): maximum number of function evaluation
+    start_range (``float``): start range (dafault value is .1)
     stop_range (``float``): stop range (dafault value is .01)
-    reduction_coeff (``float``): rnage reduction coefficient (dafault value is .5)
+    reduction_coeff (``float``): range reduction coefficient (dafault value is .5)
 
 Raises:
     OverflowError: if *max_fevals* is negative or greater than an implementation-defined value
@@ -651,7 +651,7 @@ Examples:
     [(2, 352531.0009957846, 0.1), (4, 256100.15408875767, 0.1), ...
 
 
-See also the docs of the C++ class :cpp:class:`pagmo::compass_search::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::compass_search::get_log`.
 
 )";
 }
@@ -746,7 +746,7 @@ Examples:
     >>> al.get_log()
     [(1, 20, 297059.6296130389, 0.690031071850855, 0.29476914701127666, 44.14940516578547, 2305836.7422693395), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::sade::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log`.
 
 )";
 }
@@ -814,7 +814,7 @@ Examples:
     >>> al.get_log()
     [(1, 0, 32.574745630075874, array([  1.90532430e-03,   2.65684834e+00])), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::moead::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log`.
 
 )";
 }
@@ -883,7 +883,7 @@ Examples:
     >>> al.get_log()
     [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::cmaes::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::cmaes::get_log`.
 
 )";
 }
@@ -980,7 +980,7 @@ Examples:
     >>> al.get_log()
     [(1, 20, 285652.7928977573, 0.551350234239449, 0.4415510963067054, 16, 43.97185788345982, 2023791.5123259544), ...
 
-See also the docs of the C++ class :cpp:class:`pagmo::de1220::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log`.
 
 )";
 }

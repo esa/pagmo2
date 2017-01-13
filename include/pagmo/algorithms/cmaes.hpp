@@ -45,7 +45,7 @@ public:
 
     /// Constructor.
     /**
-     * Constructs a cmaes algorithm
+     * Constructs cmaes
      *
      * @param[in] gen number of generations.
      * @param[in] cc backward time horizon for the evolution path (by default is automatically assigned)

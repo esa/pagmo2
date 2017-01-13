@@ -71,7 +71,7 @@ public:
 
     /// Constructor.
     /**
-     * Constructs a pDE (a.k.a. DE 1220) algorithm
+     * Constructs pDE (a.k.a. DE 1220)
      *
      * The same two self-adaptation variants used in pagmo::sade are used to self-adapt the
      * CR and F parameters:

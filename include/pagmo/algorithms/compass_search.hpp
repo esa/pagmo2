@@ -16,8 +16,7 @@ namespace pagmo
 
 /// The Compass Search Solver (CS)
 /**
- *
- * \image html compass_search.png "Compass Search Illustration from Kolda et al."
+ * \image html compass_search.png "Compass Search Illustration from Kolda et al." width=3cm
  *
  * In the review paper by Kolda, Lewis, Torczon: 'Optimization by Direct Search: New Perspectives on Some Classical and
  * Modern Methods'
@@ -41,9 +40,19 @@ namespace pagmo
  * a standard in the scientific computing community for exactly the reason observed
  * by Davidon: it is slow but sure'.
  *
+ * @note This algorithm does not work for multi-objective problems, nor for
+ * constrained optimization or stochastic problems.
+ *
+ * @note The search range is defined relative to the box-bounds. Hence, unbounded problems
+ * will produce an error.
+ *
+ * @note Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
+ * called from two identical populations.
  *
  * @see Kolda, Lewis, Torczon: 'Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods'
- * published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003) (http://www.cs.wm.edu/~va/research/sirev.pdf)
+ * published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)
+ *
+ * @see http://www.cs.wm.edu/~va/research/sirev.pdf
  */
 class compass_search
 {
@@ -53,7 +62,18 @@ public:
     /// The log
     typedef std::vector<log_line_type> log_type;
 
-    /// Constructor
+    /// Constructor.
+    /**
+     * Constructs compass_search
+     *
+     * @param[in] max_fevals maximum number of function evaluations
+     * @param[in] start_range start range
+     * @param[in] stop_range stop range
+     * @param[in] reduction_coeff range reduction coefficient
+     * @throws std::invalid_argument if \p start_range is not in (0,1]
+     * @throws std::invalid_argument if \p stop_range is not in (start_range,1]
+     * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
+     */
     compass_search(unsigned int max_fevals = 1, double start_range = .1, double stop_range = .01,
                    double reduction_coeff = .5)
         : m_max_fevals(max_fevals), m_start_range(start_range), m_stop_range(stop_range),
@@ -63,7 +83,7 @@ public:
             pagmo_throw(std::invalid_argument, "The start range must be in (0, 1], while a value of "
                                                    + std::to_string(start_range) + " was detected.");
         }
-        if (stop_range > 1. || stop_range > start_range) {
+        if (stop_range > 1. || stop_range >= start_range) {
             pagmo_throw(std::invalid_argument, "the stop range must be in (start_range, 1], while a value of "
                                                    + std::to_string(stop_range) + " was detected.");
         }

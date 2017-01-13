@@ -48,7 +48,7 @@ public:
 
     /// Constructor.
     /**
-     * Constructs a de algorithm
+     * Constructs de
      *
      * The following variants (mutation variants) are available to create a new candidate individual:
      * @code

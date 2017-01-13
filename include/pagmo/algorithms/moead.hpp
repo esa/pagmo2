@@ -54,7 +54,7 @@ public:
 
     /// Constructor
     /**
-    * Constructs a MOEA/D-DE algorithm
+    * Constructs MOEA/D-DE
     *
     * @param[in] gen number of generations
     * @param[in] weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"

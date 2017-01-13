@@ -53,7 +53,7 @@ public:
 
     /// Constructor
     /**
-     * Constructs a sea algorithm from the number of generations and the random seed.
+     * Constructs sea
      *
      * @param[in] gen Number of generations to consider. Each generation will compute the objective function once
      * @param[in] seed seed used by the internal random number generator
