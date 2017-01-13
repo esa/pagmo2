@@ -44,6 +44,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND YACMA_COMPILER_IS_CLANGXX)
   list(APPEND PAGMO_CXX_FLAGS_DEBUG "-stdlib=libc++")
   list(APPEND PAGMO_CXX_FLAGS_RELEASE "-stdlib=libc++")
 endif()
+if(YACMA_COMPILER_IS_MSVC)
+  # Disable the idiotic minmax macros on MSVC, some annoying warnings,
+  # and enable the bigobj option.
+  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/bigobj")
+  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/bigobj")
+endif()
 
 # Setting up Eigen3
 if(PAGMO_WITH_EIGEN3)
