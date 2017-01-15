@@ -4,5 +4,4 @@ Algorithm
 =========
 
 .. doxygenclass:: pagmo::algorithm
-   :project: PaGMOreborn
    :members:

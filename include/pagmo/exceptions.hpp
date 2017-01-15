@@ -76,13 +76,13 @@ struct ex_thrower {
  *
  * Note that, in order to be fully standard-compliant, for use with exceptions that take no arguments on construction
  * the invocation must include a closing comma. E.g.,
- @code
- pagmo_throw(std::bad_alloc);
- @endcode
+ * @code
+ * pagmo_throw(std::bad_alloc);
+ * @endcode
  * is not correct, whereas
- @code
- pagmo_throw(std::bad_alloc,);
- @endcode
+ * @code
+ * pagmo_throw(std::bad_alloc,);
+ * @endcode
  * is correct.
  */
 #define pagmo_throw(exception_type, ...)                                                                               \

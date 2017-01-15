@@ -593,7 +593,7 @@ namespace detail
 {
 
 template <typename Func, typename Tup, std::size_t... index>
-auto ct2pt_invoke_helper(Func &&func, Tup &&tup, pagmo::index_sequence<index...>)
+auto ct2pt_invoke_helper(Func &&func, Tup &&tup, pagmo::detail::index_sequence<index...>)
     -> decltype(func(std::get<index>(std::forward<Tup>(tup))...))
 {
     return func(std::get<index>(std::forward<Tup>(tup))...);
@@ -602,10 +602,10 @@ auto ct2pt_invoke_helper(Func &&func, Tup &&tup, pagmo::index_sequence<index...>
 template <typename Func, typename Tup>
 auto ct2pt_invoke(Func &&func, Tup &&tup)
     -> decltype(ct2pt_invoke_helper(std::forward<Func>(func), std::forward<Tup>(tup),
-                                    pagmo::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{}))
+                                    pagmo::detail::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{}))
 {
     return ct2pt_invoke_helper(std::forward<Func>(func), std::forward<Tup>(tup),
-                               pagmo::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{});
+                               pagmo::detail::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{});
 }
 }
 
