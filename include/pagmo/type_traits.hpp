@@ -3,8 +3,10 @@
 
 #include <cstddef>
 #include <initializer_list>
+#include <string>
 #include <tuple>
 #include <type_traits>
+#include <utility>
 
 namespace pagmo
 {
@@ -167,16 +169,105 @@ using enable_if_t = typename std::enable_if<B, T>::type;
 template <typename T>
 using uncvref_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
 
-namespace detail
+/// Detect \p set_seed() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * void set_seed(unsigned);
+ * @endcode
+ * The \p set_seed() method is part of the interface for the definition of a problem or an algorithm
+ * (see pagmo::problem and pagmo::algorithm).
+ */
+template <typename T>
+class has_set_seed
 {
+    template <typename U>
+    using set_seed_t = decltype(std::declval<U &>().set_seed(1u));
+    static const bool implementation_defined = std::is_same<void, detected_t<set_seed_t, T>>::value;
 
-struct sfinae_types {
-    struct yes {
-    };
-    struct no {
-    };
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
 };
-}
+
+template <typename T>
+const bool has_set_seed<T>::value;
+
+/// Detect \p has_set_seed() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * bool has_set_seed() const;
+ * @endcode
+ * The \p has_set_seed() method is part of the interface for the definition of a problem or an algorithm
+ * (see pagmo::problem and pagmo::algorithm).
+ */
+template <typename T>
+class override_has_set_seed
+{
+    template <typename U>
+    using has_set_seed_t = decltype(std::declval<const U &>().has_set_seed());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_set_seed_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool override_has_set_seed<T>::value;
+
+/// Detect \p get_name() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * std::string get_name() const;
+ * @endcode
+ * The \p get_name() method is part of the interface for the definition of a problem or an algorithm
+ * (see pagmo::problem and pagmo::algorithm).
+ */
+template <typename T>
+class has_name
+{
+    template <typename U>
+    using get_name_t = decltype(std::declval<const U &>().get_name());
+    static const bool implementation_defined = std::is_same<std::string, detected_t<get_name_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_name<T>::value;
+
+/// Detect \p get_extra_info() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * std::string get_extra_info() const;
+ * @endcode
+ * The \p get_extra_info() method is part of the interface for the definition of a problem or an algorithm
+ * (see pagmo::problem and pagmo::algorithm).
+ */
+template <typename T>
+class has_extra_info
+{
+    template <typename U>
+    using get_extra_info_t = decltype(std::declval<const U &>().get_extra_info());
+    static const bool implementation_defined = std::is_same<std::string, detected_t<get_extra_info_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_extra_info<T>::value;
 
 } // namespace pagmo
 
