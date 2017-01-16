@@ -2,6 +2,6 @@ coverage:
   ignore:
   - tests/.*
   - tutorials/.*
-  - include/external/.*
+  - include/pagmo/external/.*
 
 comment: off
