@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_PROBLEM_HPP
 #define PAGMO_PROBLEM_HPP
 
@@ -18,6 +46,7 @@
 #include "io.hpp"
 #include "serialization.hpp"
 #include "type_traits.hpp"
+#include "types.hpp"
 
 /// Macro for the registration of the serialization functionality for problems.
 /**
@@ -42,6 +71,361 @@
 
 namespace pagmo
 {
+
+/// Null problem
+/**
+ * This problem is used to implement the default constructors of meta-problems.
+ */
+struct null_problem {
+    /// Fitness
+    vector_double fitness(const vector_double &) const
+    {
+        return {0.};
+    }
+    /// Problem bounds
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    /// Serialization
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
+};
+}
+
+namespace pagmo
+{
+
+/// Detect \p fitness() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * vector_double fitness(const vector_double &) const;
+ * @endcode
+ * The \p fitness() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_fitness
+{
+    template <typename U>
+    using fitness_t = decltype(std::declval<const U &>().fitness(std::declval<const vector_double &>()));
+    static const bool implementation_defined = std::is_same<detected_t<fitness_t, T>, vector_double>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_fitness<T>::value;
+
+/// Detect \p get_nobj() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * vector_double::size_type get_nobj() const;
+ * @endcode
+ * The \p get_nobj() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_get_nobj
+{
+    template <typename U>
+    using get_nobj_t = decltype(std::declval<const U &>().get_nobj());
+    static const bool implementation_defined = std::is_same<detected_t<get_nobj_t, T>, vector_double::size_type>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_get_nobj<T>::value;
+
+/// Detect \p get_bounds() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * std::pair<vector_double, vector_double> get_bounds() const;
+ * @endcode
+ * The \p get_bounds() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_bounds
+{
+    template <typename U>
+    using get_bounds_t = decltype(std::declval<const U &>().get_bounds());
+    static const bool implementation_defined
+        = std::is_same<std::pair<vector_double, vector_double>, detected_t<get_bounds_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_bounds<T>::value;
+
+/// Detect \p get_nec() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * vector_double::size_type get_nec() const;
+ * @endcode
+ * The \p get_nec() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_e_constraints
+{
+    template <typename U>
+    using get_nec_t = decltype(std::declval<const U &>().get_nec());
+    static const bool implementation_defined = std::is_same<vector_double::size_type, detected_t<get_nec_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_e_constraints<T>::value;
+
+/// Detect \p get_nic() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * vector_double::size_type get_nic() const;
+ * @endcode
+ * The \p get_nic() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_i_constraints
+{
+    template <typename U>
+    using get_nic_t = decltype(std::declval<const U &>().get_nic());
+    static const bool implementation_defined = std::is_same<vector_double::size_type, detected_t<get_nic_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_i_constraints<T>::value;
+
+/// Detect \p gradient() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * vector_double gradient(const vector_double &) const;
+ * @endcode
+ * The \p gradient() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_gradient
+{
+    template <typename U>
+    using gradient_t = decltype(std::declval<const U &>().gradient(std::declval<const vector_double &>()));
+    static const bool implementation_defined = std::is_same<vector_double, detected_t<gradient_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_gradient<T>::value;
+
+/// Detect \p has_gradient() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * bool has_gradient() const;
+ * @endcode
+ * The \p has_gradient() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class override_has_gradient
+{
+    template <typename U>
+    using has_gradient_t = decltype(std::declval<const U &>().has_gradient());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_gradient_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool override_has_gradient<T>::value;
+
+/// Detect \p gradient_sparsity() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * sparsity_pattern gradient_sparsity() const;
+ * @endcode
+ * The \p gradient_sparsity() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_gradient_sparsity
+{
+    template <typename U>
+    using gradient_sparsity_t = decltype(std::declval<const U &>().gradient_sparsity());
+    static const bool implementation_defined
+        = std::is_same<sparsity_pattern, detected_t<gradient_sparsity_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_gradient_sparsity<T>::value;
+
+/// Detect \p hessians() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * std::vector<vector_double> hessians(const vector_double &) const;
+ * @endcode
+ * The \p hessians() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_hessians
+{
+    template <typename U>
+    using hessians_t = decltype(std::declval<const U &>().hessians(std::declval<const vector_double &>()));
+    static const bool implementation_defined
+        = std::is_same<std::vector<vector_double>, detected_t<hessians_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_hessians<T>::value;
+
+/// Detect \p has_hessians() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * bool has_hessians() const;
+ * @endcode
+ * The \p has_hessians() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class override_has_hessians
+{
+    template <typename U>
+    using has_hessians_t = decltype(std::declval<const U &>().has_hessians());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_hessians_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool override_has_hessians<T>::value;
+
+/// Detect \p hessians_sparsity() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * std::vector<sparsity_pattern> hessians_sparsity() const;
+ * @endcode
+ * The \p hessians_sparsity() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_hessians_sparsity
+{
+    template <typename U>
+    using hessians_sparsity_t = decltype(std::declval<const U &>().hessians_sparsity());
+    static const bool implementation_defined
+        = std::is_same<std::vector<sparsity_pattern>, detected_t<hessians_sparsity_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_hessians_sparsity<T>::value;
+
+/// Detect \p has_gradient_sparsity() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * bool has_gradient_sparsity() const;
+ * @endcode
+ * The \p has_gradient_sparsity() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class override_has_gradient_sparsity
+{
+    template <typename U>
+    using has_gradient_sparsity_t = decltype(std::declval<const U &>().has_gradient_sparsity());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_gradient_sparsity_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool override_has_gradient_sparsity<T>::value;
+
+/// Detect \p has_hessians_sparsity() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * bool has_hessians_sparsity() const;
+ * @endcode
+ * The \p has_hessians_sparsity() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class override_has_hessians_sparsity
+{
+    template <typename U>
+    using has_hessians_sparsity_t = decltype(std::declval<const U &>().has_hessians_sparsity());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_hessians_sparsity_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool override_has_hessians_sparsity<T>::value;
 
 namespace detail
 {
@@ -1375,5 +1759,7 @@ private:
 };
 
 } // namespaces
+
+PAGMO_REGISTER_PROBLEM(pagmo::null_problem)
 
 #endif

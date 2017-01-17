@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PYGMO_COMMON_UTILS_HPP
 #define PYGMO_COMMON_UTILS_HPP
 
@@ -593,7 +621,7 @@ namespace detail
 {
 
 template <typename Func, typename Tup, std::size_t... index>
-auto ct2pt_invoke_helper(Func &&func, Tup &&tup, pagmo::index_sequence<index...>)
+auto ct2pt_invoke_helper(Func &&func, Tup &&tup, pagmo::detail::index_sequence<index...>)
     -> decltype(func(std::get<index>(std::forward<Tup>(tup))...))
 {
     return func(std::get<index>(std::forward<Tup>(tup))...);
@@ -602,10 +630,10 @@ auto ct2pt_invoke_helper(Func &&func, Tup &&tup, pagmo::index_sequence<index...>
 template <typename Func, typename Tup>
 auto ct2pt_invoke(Func &&func, Tup &&tup)
     -> decltype(ct2pt_invoke_helper(std::forward<Func>(func), std::forward<Tup>(tup),
-                                    pagmo::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{}))
+                                    pagmo::detail::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{}))
 {
     return ct2pt_invoke_helper(std::forward<Func>(func), std::forward<Tup>(tup),
-                               pagmo::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{});
+                               pagmo::detail::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{});
 }
 }
 

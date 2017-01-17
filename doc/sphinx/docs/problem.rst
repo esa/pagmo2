@@ -1,8 +1,7 @@
 .. cpp_problem_class
 
-Problem 
+Problem
 =======
 
 .. doxygenclass:: pagmo::problem
-   :project: PaGMOreborn
    :members:

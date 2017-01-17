@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #include "python_includes.hpp"
 
 #if defined(_MSC_VER)
@@ -42,7 +70,6 @@
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
 #include <pagmo/algorithms/moead.hpp>
-#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/population.hpp>
@@ -52,7 +79,6 @@
 #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
@@ -600,8 +626,9 @@ BOOST_PYTHON_MODULE(core)
 
     // Exposition of C++ problems.
     // Null problem.
-    auto np
-        = pygmo::expose_problem<null_problem>("null_problem", "__init__()\n\nThe null problem.\n\nA test problem.\n\n");
+    auto np = pygmo::expose_problem<null_problem>(
+        "null_problem",
+        "__init__()\n\nThe null problem.\n\nA problem used only in the initialization of meta-problems.\n\n");
     // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
     // serialization of the problem. Not necessary for any other problem type.
     // NOTE: this is needed because problem does not have a def ctor.

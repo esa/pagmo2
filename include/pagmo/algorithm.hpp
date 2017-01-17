@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_ALGORITHM_HPP
 #define PAGMO_ALGORITHM_HPP
 
@@ -15,83 +43,97 @@
 namespace pagmo
 {
 
-/// Type has set_verbose
+/// Null algorithm
 /**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if the expression p.set_verbose(n)
- * is valid and returns void, where p is a non-const instance of \p T and n is a bool
- *
- * For example, if \p T has the following method implemented:
- *
+ * This algorithm is used to implement the default constructors of meta-algorithms.
+ */
+struct null_algorithm {
+    /// Algorithm implementation
+    population evolve(const population &pop) const
+    {
+        return pop;
+    };
+    /// Serialization support.
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
+};
+
+} // namespaces
+
+namespace pagmo
+{
+
+/// Detect \p set_verbose() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
  * @code
- * void set_verbose(unsigned int level)
+ * void set_verbose(unsigned);
  * @endcode
- *
+ * The \p set_verbose() method is part of the interface for the definition of an algorithm
+ * (see pagmo::algorithm).
  */
 template <typename T>
-class has_set_verbosity : detail::sfinae_types
+class has_set_verbosity
 {
     template <typename U>
-    static auto test0(U &p) -> decltype(p.set_verbosity(std::declval<unsigned int>()));
-    static no test0(...);
-    static const bool implementation_defined = std::is_same<void, decltype(test0(std::declval<T &>()))>::value;
+    using set_verbosity_t = decltype(std::declval<U &>().set_verbosity(1u));
+    static const bool implementation_defined = std::is_same<void, detected_t<set_verbosity_t, T>>::value;
 
 public:
-    /// static const boolean value flag
+    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
 template <typename T>
 const bool has_set_verbosity<T>::value;
 
-/// Type has has_set_verbosity()
+/// Detect \p has_set_verbosity() method.
 /**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
  * @code
- * bool has_set_verbosity() const
+ * bool has_set_verbosity() const;
  * @endcode
- *
+ * The \p has_set_verbosity() method is part of the interface for the definition of an algorithm
+ * (see pagmo::algorithm).
  */
 template <typename T>
-class override_has_set_verbosity : detail::sfinae_types
+class override_has_set_verbosity
 {
     template <typename U>
-    static auto test0(const U &p) -> decltype(p.has_set_verbosity());
-    static no test0(...);
-    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
+    using has_set_verbosity_t = decltype(std::declval<const U &>().has_set_verbosity());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_set_verbosity_t, T>>::value;
 
 public:
-    /// static const boolean value flag
+    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
 template <typename T>
 const bool override_has_set_verbosity<T>::value;
 
-/// Type has evolve
+/// Detect \p evolve() method.
 /**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
  * @code
- * population evolve(population pop) const
+ * population evolve(const population &) const;
  * @endcode
+ * The \p evolve() method is part of the interface for the definition of an algorithm
+ * (see pagmo::algorithm).
  */
 template <typename T>
-class has_evolve : detail::sfinae_types
+class has_evolve
 {
     template <typename U>
-    static auto test0(const U &p) -> decltype(p.evolve(std::declval<const population &>()));
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<population, decltype(test0(std::declval<const T &>()))>::value;
+    using evolve_t = decltype(std::declval<const U &>().evolve(std::declval<const population &>()));
+    static const bool implementation_defined = std::is_same<population, detected_t<evolve_t, T>>::value;
 
 public:
-    /// static const boolean value flag
+    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
@@ -113,7 +155,6 @@ struct algo_inner_base {
     virtual bool has_set_verbosity() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
-
     template <typename Archive>
     void serialize(Archive &)
     {
@@ -579,5 +620,7 @@ private:
     std::string m_name;
 };
 }
+
+PAGMO_REGISTER_ALGORITHM(pagmo::null_algorithm)
 
 #endif
