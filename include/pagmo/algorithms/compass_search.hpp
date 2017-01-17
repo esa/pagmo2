@@ -28,8 +28,8 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include "../algorithm.hpp"
-#include "../detail/population_fwd.hpp"
 #include "../exceptions.hpp"
+#include "../population.hpp"
 
 namespace pagmo
 {

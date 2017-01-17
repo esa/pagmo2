@@ -26,7 +26,7 @@ see https://www.gnu.org/licenses/. */
 
 #include "../exceptions.hpp"
 
-#define PAGMO_PRIME_MAX 1601
+#define PAGMO_PRIME_MAX 1601u
 
 namespace pagmo
 {
