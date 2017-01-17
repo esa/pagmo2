@@ -4,5 +4,4 @@ Compass Search
 ===========================================================
 
 .. doxygenclass:: pagmo::compass_search
-   :project: PaGMOreborn
    :members:

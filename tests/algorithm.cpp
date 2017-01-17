@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #define BOOST_TEST_MODULE algorithm_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -9,7 +37,7 @@
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/algorithms/de.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/serialization.hpp>
@@ -318,4 +346,34 @@ BOOST_AUTO_TEST_CASE(algorithm_serialization_test)
     // Check explicitly that the properties of base_p where restored as well.
     BOOST_CHECK_EQUAL(algo.extract<al_01>()->m_seed, algo2.extract<al_01>()->m_seed);
     BOOST_CHECK_EQUAL(algo.extract<al_01>()->m_verbosity, algo2.extract<al_01>()->m_verbosity);
+}
+
+BOOST_AUTO_TEST_CASE(null_algorithm_construction_and_evolve)
+{
+    // Trivial checks
+    null_algorithm user_algo{};
+    // Evolve check (population does not change)
+    rosenbrock user_prob{};
+    population pop(user_prob, 20u);
+    auto evolved_pop = user_algo.evolve(pop);
+    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+        BOOST_CHECK(pop.get_x()[i] == evolved_pop.get_x()[i]);
+        BOOST_CHECK(pop.get_f()[i] == evolved_pop.get_f()[i]);
+        BOOST_CHECK(pop.get_ID()[i] == evolved_pop.get_ID()[i]);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(serialization_test)
+{
+    algorithm algo{null_algorithm{}};
+    std::stringstream ss;
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
+    }
+    algo = algorithm{de{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo);
+    }
 }

@@ -4,5 +4,4 @@ Rosenbrock
 ==========
 
 .. doxygenstruct:: pagmo::rosenbrock
-   :project: PaGMOreborn
    :members:

@@ -1,15 +1,43 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_ALGORITHMS_COMPASS_SEARCH_HPP
 #define PAGMO_ALGORITHMS_COMPASS_SEARCH_HPP
 
 #include <iomanip>
-#include <stdexcept>
 #include <sstream> //std::osstringstream
+#include <stdexcept>
 #include <string>
 #include <vector>
 
 #include "../algorithm.hpp"
-#include "../detail/population_fwd.hpp"
 #include "../exceptions.hpp"
+#include "../population.hpp"
 
 namespace pagmo
 {
@@ -204,8 +232,7 @@ public:
         if (m_verbosity) {
             if (newrange <= m_stop_range) {
                 std::cout << "Exit condition -- range: " << newrange << " <= " << m_stop_range << "\n";
-            }
-            else {
+            } else {
                 std::cout << "Exit condition -- fevals: " << fevals << " > " << m_max_fevals << "\n";
             }
         }
@@ -305,7 +332,8 @@ public:
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
      * <tt> std::vector </tt> is a compass_search::log_line_type containing: Fevals, Best, Range as described
      * in compass_search::set_verbosity
-     * @return an <tt> std::vector </tt> of compass_search::log_line_type containing the logged values Fevals, Best, Range
+     * @return an <tt> std::vector </tt> of compass_search::log_line_type containing the logged values Fevals, Best,
+     * Range
      */
     const log_type &get_log() const
     {

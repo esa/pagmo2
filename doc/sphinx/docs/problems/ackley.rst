@@ -4,5 +4,4 @@ Ackley
 ==========
 
 .. doxygenstruct:: pagmo::ackley
-   :project: PaGMOreborn
    :members:

@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #define BOOST_TEST_MODULE compass_search_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -8,13 +36,12 @@
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
-#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
-#include <pagmo/problems/inventory.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/types.hpp>
 
@@ -32,7 +59,6 @@ BOOST_AUTO_TEST_CASE(compass_search_algorithm_construction)
     BOOST_CHECK_THROW((compass_search{1234u, 0.7, 0.8}), std::invalid_argument);
     BOOST_CHECK_THROW((compass_search{1234u, 0.7, 0.1, 1.3}), std::invalid_argument);
     BOOST_CHECK_THROW((compass_search{1234u, 0.7, 0.1, -0.3}), std::invalid_argument);
-
 }
 
 BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
@@ -45,11 +71,11 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
     problem prob2{rosenbrock{25u}};
     population pop2{prob2, 5u, 23u};
 
-    compass_search user_algo1{10000u, 0.5,stop_range, 0.5};
+    compass_search user_algo1{10000u, 0.5, stop_range, 0.5};
     user_algo1.set_verbosity(1u);
     pop1 = user_algo1.evolve(pop1);
 
-    compass_search user_algo2{10000u, 0.5,stop_range, 0.5};
+    compass_search user_algo2{10000u, 0.5, stop_range, 0.5};
     user_algo2.set_verbosity(1u);
     pop2 = user_algo2.evolve(pop2);
 
@@ -59,7 +85,7 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
 
     // We test the max_fevals stopping criteria
     auto max_fevals = 10u;
-    compass_search user_algo3{max_fevals, 0.5,stop_range, 0.5};
+    compass_search user_algo3{max_fevals, 0.5, stop_range, 0.5};
     user_algo3.set_verbosity(1u);
     population pop3{prob2, 5u, 23u};
     pop3 = user_algo3.evolve(pop3);
@@ -68,7 +94,8 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
-    BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}),
+                      std::invalid_argument);
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};

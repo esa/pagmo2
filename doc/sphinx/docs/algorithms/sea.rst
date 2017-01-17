@@ -4,5 +4,4 @@
 ======================================
 
 .. doxygenclass:: pagmo::sea
-   :project: PaGMOreborn
    :members:
