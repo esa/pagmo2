@@ -28,8 +28,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <pagmo/io.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>

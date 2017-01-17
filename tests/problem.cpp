@@ -893,3 +893,38 @@ BOOST_AUTO_TEST_CASE(problem_auto_sparsity_test)
     BOOST_CHECK(p.gradient_sparsity() == detail::dense_gradient(6u, 2u));
     BOOST_CHECK(p.hessians_sparsity() == detail::dense_hessians(6u, 2u));
 }
+
+BOOST_AUTO_TEST_CASE(null_problem_test)
+{
+    // Problem instantiation
+    problem p{null_problem{}};
+    // Pick a few reference points
+    vector_double x1 = {1};
+    vector_double x2 = {2};
+    // Fitness test
+    BOOST_CHECK((p.fitness(x1) == vector_double{0}));
+    BOOST_CHECK((p.fitness(x2) == vector_double{0}));
+}
+
+BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
+{
+    problem p{null_problem{}};
+    // Call objfun to increase the internal counter.
+    p.fitness({1});
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(p);
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
+    }
+    // Change the content of p before deserializing.
+    p = problem{null_problem{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
+    }
+    auto after = boost::lexical_cast<std::string>(p);
+    BOOST_CHECK_EQUAL(before, after);
+}

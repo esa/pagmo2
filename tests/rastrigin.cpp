@@ -28,7 +28,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/constants.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/types.hpp>
 

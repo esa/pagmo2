@@ -32,9 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <vector>
 
-#include "detail/population_fwd.hpp"
 #include "problem.hpp"
-#include "problems/null_problem.hpp"
 #include "rng.hpp"
 #include "serialization.hpp"
 #include "type_traits.hpp"

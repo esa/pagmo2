@@ -27,7 +27,6 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;

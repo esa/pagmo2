@@ -64,6 +64,32 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+/// Null problem
+/**
+ * This problem is used to implement the default constructors of meta-problems.
+ */
+struct null_problem {
+    /// Fitness
+    vector_double fitness(const vector_double &) const
+    {
+        return {0.};
+    }
+    /// Problem bounds
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    /// Serialization
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
+};
+}
+
+namespace pagmo
+{
+
 /// Detect \p fitness() method.
 /**
  * This type trait will be \p true if \p T provides a method with
@@ -1725,5 +1751,7 @@ private:
 };
 
 } // namespaces
+
+PAGMO_REGISTER_PROBLEM(pagmo::null_problem)
 
 #endif

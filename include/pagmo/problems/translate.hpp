@@ -28,7 +28,6 @@ see https://www.gnu.org/licenses/. */
 #include "../problem.hpp"
 #include "../serialization.hpp"
 #include "../types.hpp"
-#include "null_problem.hpp"
 
 namespace pagmo
 {
@@ -42,7 +41,7 @@ class translate : public problem
 {
 public:
     /// Default constructor
-    translate() : problem(null_problem{}), m_translation({1.})
+    translate() : problem(null_problem{}), m_translation({0.})
     {
     }
 

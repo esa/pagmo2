@@ -27,7 +27,6 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/types.hpp>
 

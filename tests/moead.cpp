@@ -28,7 +28,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/moead.hpp>
-#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>

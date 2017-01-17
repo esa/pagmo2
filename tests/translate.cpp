@@ -28,7 +28,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/io.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/types.hpp>
 
@@ -38,7 +37,7 @@ BOOST_AUTO_TEST_CASE(translate_construction_test)
 {
     // First we check directly the two constructors
     problem p0{translate{}};
-    problem p1{translate{null_problem{}, {1}}};
+    problem p1{translate{null_problem{}, {0.}}};
 
     auto p0_string = boost::lexical_cast<std::string>(p0);
     auto p1_string = boost::lexical_cast<std::string>(p1);

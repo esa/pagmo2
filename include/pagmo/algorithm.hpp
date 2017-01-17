@@ -35,6 +35,28 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+/// Null algorithm
+/**
+ * This algorithm is used to implement the default constructors of meta-algorithms.
+ */
+struct null_algorithm {
+    /// Algorithm implementation
+    population evolve(const population &pop) const
+    {
+        return pop;
+    };
+    /// Serialization support.
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
+};
+
+} // namespaces
+
+namespace pagmo
+{
+
 /// Detect \p set_verbose() method.
 /**
  * This type trait will be \p true if \p T provides a method with
@@ -590,5 +612,7 @@ private:
     std::string m_name;
 };
 }
+
+PAGMO_REGISTER_ALGORITHM(pagmo::null_algorithm)
 
 #endif

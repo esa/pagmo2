@@ -28,7 +28,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/griewank.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;

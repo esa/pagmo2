@@ -32,7 +32,6 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/serialization.hpp>
 

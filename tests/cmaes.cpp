@@ -26,8 +26,8 @@ see https://www.gnu.org/licenses/. */
 #include <limits> //  std::numeric_limits<double>::infinity();
 #include <string>
 
+#include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/cmaes.hpp>
-#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>

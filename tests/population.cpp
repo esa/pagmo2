@@ -29,7 +29,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
@@ -164,9 +163,9 @@ BOOST_AUTO_TEST_CASE(population_setters_test)
     BOOST_CHECK_THROW(pop.set_xf(1, {3, 2}, {1, 2, 3}), std::invalid_argument); // chromosome invalid
     BOOST_CHECK_THROW(pop.set_xf(1, {3}, {1, 2}), std::invalid_argument);       // fitness invalid
     // Test set_xf
-    pop.set_xf(0, {3}, {1, 2, 3});
+    pop.set_xf(0, {3}, {1});
     BOOST_CHECK((pop.get_x()[0] == vector_double{3}));
-    BOOST_CHECK((pop.get_f()[0] == vector_double{1, 2, 3}));
+    BOOST_CHECK((pop.get_f()[0] == vector_double{1}));
     // Test set_x
     pop.set_x(0, {1.2});
     BOOST_CHECK((pop.get_x()[0] == vector_double{1.2}));
@@ -176,10 +175,9 @@ BOOST_AUTO_TEST_CASE(population_setters_test)
 BOOST_AUTO_TEST_CASE(population_getters_test)
 {
     population pop{problem{null_problem{}}, 1, 1234u};
-    pop.set_xf(0, {3}, {1, 2, 3});
+    pop.set_xf(0, {3}, {1});
     // Test
-    BOOST_CHECK(pop.get_problem().get_name() == "Null problem");
-    BOOST_CHECK((pop.get_f()[0] == vector_double{1, 2, 3}));
+    BOOST_CHECK((pop.get_f()[0] == vector_double{1}));
     BOOST_CHECK(pop.get_seed() == 1234u);
     BOOST_CHECK_NO_THROW(pop.get_ID());
     // Streaming operator is tested to contain the problem stream

@@ -37,7 +37,6 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/types.hpp>
 
