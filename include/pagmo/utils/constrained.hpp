@@ -61,6 +61,60 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first
 
 } // detail namespace
 
+inline bool compare_fc(const std::vector<double> f1, const std::vector<double> f2, vector_double::size_type neq, const vector_double &tol)
+{
+    // 1 - The two fitness must have the same dimension
+    if (f1.size()!=f2.size()) {
+        pagmo_throw(std::invalid_argument, "Fitness dimensions should be equal: "
+                                           + std::to_string(f1.size()) + " != " + std::to_string(f2.size()));
+    }
+    // 2 - The dimension of the fitness vectors must be at least 1
+    if (f1.size() < 1u) {
+        pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to compare: a dimension of "
+                                               + std::to_string(f1.size()) + " was detected. ");
+    }
+    // 3 - The dimension of the tolerance vector must be that of the fitness minus one
+    if (f1.size() - 1u != tol.size()) {
+        pagmo_throw(std::invalid_argument, "Tolerance vector dimension is detected to be: "
+                                           + std::to_string(tol.size()) + ", while the fitness dimension is: " + std::to_string(f1.size())
+                                           + ", I was expecting the tolerance vector dimension to be that of the fitness vector minus 1");
+    }
+    // 4 - The number of equality constraints must be at most f1.size()-1
+    if (neq > f1.size() - 1u) {
+        pagmo_throw(
+            std::invalid_argument,
+            "Number of equality constraints declared: " + std::to_string(neq) + " while fitness vector has dimension: "
+                + std::to_string(f1.size())
+                + "(it must be striclty smaller as the objfun is assumed to be at position 0)");
+    }
+
+    auto c1eq = detail::test_eq_constraints(f1.data() + 1, f1.data() + 1 + neq, tol.data());
+    auto c1ineq = detail::test_ineq_constraints(f1.data() + 1 + neq,
+                                                f1.data() + f1.size(), tol.data() + neq);
+    auto n1 = c1eq.first + c1ineq.first;
+    auto l1 = c1eq.second + c1ineq.second;
+
+    auto c2eq = detail::test_eq_constraints(f2.data() + 1, f2.data() + 1 + neq, tol.data());
+    auto c2ineq = detail::test_ineq_constraints(f2.data() + 1 + neq,
+                                                f2.data() + f2.size(), tol.data() + neq);
+    auto n2 = c2eq.first + c2ineq.first;
+    auto l2 = std::sqrt(c2eq.second * c2eq.second + c2ineq.second * c2ineq.second);
+    if (n1 == n2) {                         // same number of constraints satistfied
+        if (n1 == f1.size() - 1u) { // fitness decides
+            return f1[0] < f2[0];
+        } else { // l2 norm decides
+            return l1 < l2;
+        }
+    } else { // number of constraints satisfied decides
+        return n1 > n2;
+    }
+}
+
+inline bool compare_fc(const std::vector<double> f1, const std::vector<double> f2, vector_double::size_type neq, double tol)
+{
+    return compare_fc(f1, f2, neq, std::vector<double>(f1.size()-1u, tol));
+}
+
 /** Sorts a population in a constrained optimization case (from a vector of tolerances)
  *
  * Sorts a population (intended here as an <tt>std::vector<vector_double></tt>
@@ -113,7 +167,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
                                                    + "(first element dimension)");
         }
     }
-    // 2 - The dimension of the fitness vectors mus be at least 1
+    // 2 - The dimension of the fitness vectors must be at least 1
     if (M < 1u) {
         pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to sort: a dimension of "
                                                + std::to_string(M) + " was detected. ");
@@ -125,7 +179,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
             std::invalid_argument,
             "Number of equality constraints declared: " + std::to_string(neq) + " while fitness vector has dimension: "
                 + std::to_string(M)
-                + "(it must be striclty smaller as the objfun is assumed to be at position 0)"); // LCOV_EXCL_LINE
+                + "(it must be striclty smaller as the objfun is assumed to be at position 0)");
     }
     // 4 - The tolerance vector size must be input_f.size[0]()-1u
     if (tol.size() != M - 1u) {
@@ -139,26 +193,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     // Sort the indexes
     std::sort(retval.begin(), retval.end(), [&input_f, &neq, &tol](vector_double::size_type idx1,
                                                                    vector_double::size_type idx2) {
-        auto c1eq = detail::test_eq_constraints(input_f[idx1].data() + 1, input_f[idx1].data() + 1 + neq, tol.data());
-        auto c1ineq = detail::test_ineq_constraints(input_f[idx1].data() + 1 + neq,
-                                                    input_f[idx1].data() + input_f[idx1].size(), tol.data() + neq);
-        auto n1 = c1eq.first + c1ineq.first;
-        auto l1 = c1eq.second + c1ineq.second;
-
-        auto c2eq = detail::test_eq_constraints(input_f[idx2].data() + 1, input_f[idx2].data() + 1 + neq, tol.data());
-        auto c2ineq = detail::test_ineq_constraints(input_f[idx2].data() + 1 + neq,
-                                                    input_f[idx2].data() + input_f[idx2].size(), tol.data() + neq);
-        auto n2 = c2eq.first + c2ineq.first;
-        auto l2 = std::sqrt(c2eq.second * c2eq.second + c2ineq.second * c2ineq.second);
-        if (n1 == n2) {                         // same number of constraints satistfied
-            if (n1 == input_f[0].size() - 1u) { // fitness decides
-                return input_f[idx1][0] < input_f[idx2][0];
-            } else { // l2 norm decides
-                return l1 < l2;
-            }
-        } else { // number of constraints satisfied decides
-            return n1 > n2;
-        }
+        return compare_fc(input_f[idx1], input_f[idx2], neq, tol);
     });
     return retval;
 }
