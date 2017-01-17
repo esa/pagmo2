@@ -13,9 +13,9 @@
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
-#include <pagmo/problems/inventory.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/types.hpp>
 
@@ -24,5 +24,6 @@ using namespace pagmo;
 BOOST_AUTO_TEST_CASE(mbh_algorithm_construction)
 {
     mbh user_algo{compass_search{}, 50u, 0.1};
-    std::cout << user_algo << "/n";
+    algorithm algo{user_algo};
+    std::cout << algo << "\n";
 }

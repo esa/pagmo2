@@ -119,6 +119,9 @@ private:
     vector_double::size_type get_gs_dim() const = delete;
     std::vector<vector_double::size_type> get_hs_dim() const = delete;
     bool is_stochastic() const = delete;
+    // NOTE: We delete the streaming operator overload called with translate, otherwise the inner prob would stream
+    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
+    friend std::ostream &operator<<(std::ostream &, const translate &) = delete;
     template <typename Archive>
     void save(Archive &) const = delete;
     template <typename Archive>

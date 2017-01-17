@@ -4,8 +4,8 @@
 #include <iomanip>
 #include <numeric> //std::iota
 #include <random>
-#include <string>
 #include <stdexcept>
+#include <string>
 #include <tuple>
 #include <utility> //std::swap
 
