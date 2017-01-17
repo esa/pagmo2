@@ -670,9 +670,11 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algo_log(de_, pygmo::de_get_log_docstring().c_str());
     de_.def("get_seed", &de::get_seed);
     // COMPASS SEARCH
-    auto compass_search_ = pygmo::expose_algorithm<compass_search>("compass_search", pygmo::compass_search_docstring().c_str());
-    compass_search_.def(bp::init<unsigned int, double, double, double>(
-        (bp::arg("max_fevals") = 1u, bp::arg("start_range") = .1, bp::arg("stop_range") = .01, bp::arg("reduction_coeff") = .5)));
+    auto compass_search_
+        = pygmo::expose_algorithm<compass_search>("compass_search", pygmo::compass_search_docstring().c_str());
+    compass_search_.def(
+        bp::init<unsigned int, double, double, double>((bp::arg("max_fevals") = 1u, bp::arg("start_range") = .1,
+                                                        bp::arg("stop_range") = .01, bp::arg("reduction_coeff") = .5)));
     pygmo::expose_algo_log(compass_search_, pygmo::compass_search_get_log_docstring().c_str());
     compass_search_.def("get_max_fevals", &compass_search::get_max_fevals);
     compass_search_.def("get_start_range", &compass_search::get_start_range);

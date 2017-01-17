@@ -2,8 +2,8 @@
 #define PAGMO_ALGORITHMS_COMPASS_SEARCH_HPP
 
 #include <iomanip>
-#include <stdexcept>
 #include <sstream> //std::osstringstream
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -204,8 +204,7 @@ public:
         if (m_verbosity) {
             if (newrange <= m_stop_range) {
                 std::cout << "Exit condition -- range: " << newrange << " <= " << m_stop_range << "\n";
-            }
-            else {
+            } else {
                 std::cout << "Exit condition -- fevals: " << fevals << " > " << m_max_fevals << "\n";
             }
         }
@@ -305,7 +304,8 @@ public:
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
      * <tt> std::vector </tt> is a compass_search::log_line_type containing: Fevals, Best, Range as described
      * in compass_search::set_verbosity
-     * @return an <tt> std::vector </tt> of compass_search::log_line_type containing the logged values Fevals, Best, Range
+     * @return an <tt> std::vector </tt> of compass_search::log_line_type containing the logged values Fevals, Best,
+     * Range
      */
     const log_type &get_log() const
     {
