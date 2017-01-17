@@ -89,7 +89,34 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first
 
 } // detail namespace
 
-inline bool compare_fc(const std::vector<double> f1, const std::vector<double> f2, vector_double::size_type neq,
+/** Compares two fitness vectors in a single-objective, constrained, case (from a vector of tolerances)
+ *
+ * Comparison between two fitness vectors (assuming a single-objective optimization)
+ * with respect to the following strict ordering:
+ * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is feasible and \f$f_2\f$ is not.
+ * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is they are both infeasible, but \f$f_1\f$
+ * violates less constraints than \f$f_2\f$, or in case they both violate the same
+ * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
+ is smaller.
+ * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
+ * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
+ *
+ * @note: the fitness vectors are assumed to contain exactly one objective, \p neq equality
+ * constraints and the rest (if any) inequality constraints
+ *
+ * @param[in] f1 first fitness vector
+ * @param[in] f2 second fitness vector
+ * @param[in] neq number of equality constraints
+ * @param[in] tol a vector_double containing the tolerances to be accounted for in the constraints
+ *
+ * @return true if \p f1 is "better" than \p f2
+ *
+ * @throws std::invalid_argument If \p f1 and \p f2 do not have equal size \f$n\f$
+ * @throws std::invalid_argument If \p f1 does not have at least size 1
+ * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
+ * @throws std::invalid_argument If the size of the \p tol is not exactly the size of \p f1 - 1
+ */
+inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double::size_type neq,
                        const vector_double &tol)
 {
     // 1 - The two fitness must have the same dimension
@@ -107,7 +134,7 @@ inline bool compare_fc(const std::vector<double> f1, const std::vector<double> f
         pagmo_throw(std::invalid_argument,
                     "Tolerance vector dimension is detected to be: " + std::to_string(tol.size())
                         + ", while the fitness dimension is: " + std::to_string(f1.size())
-                        + ", I was expecting the tolerance vector dimension to be that of the fitness vector minus 1");
+                        + ", I was expecting the tolerance vector dimension to be: "  + std::to_string(f1.size() - 1u));
     }
     // 4 - The number of equality constraints must be at most f1.size()-1
     if (neq > f1.size() - 1u) {
@@ -137,13 +164,26 @@ inline bool compare_fc(const std::vector<double> f1, const std::vector<double> f
     }
 }
 
-inline bool compare_fc(const std::vector<double> f1, const std::vector<double> f2, vector_double::size_type neq,
+/** Compares two fitness vectors in a single-objective, constrained, case (from a scalar tolerance)
+ *
+ * @param[in] f1 first fitness vector
+ * @param[in] f2 second fitness vector
+ * @param[in] neq number of equality constraints
+ * @param[in] tol a vector_double containing the tolerances to be accounted for in the constraints
+ *
+ * @return true if \p f1 is "better" than \p f2
+ *
+ * @throws std::invalid_argument If \p f1 and \p f2 do not have equal size \f$n\f$
+ * @throws std::invalid_argument If \p f1 does not have at least size 1
+ * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
+ */
+inline bool compare_fc(const vector_double& f1, const vector_double& f2, vector_double::size_type neq,
                        double tol)
 {
-    return compare_fc(f1, f2, neq, std::vector<double>(f1.size() - 1u, tol));
+    return compare_fc(f1, f2, neq, vector_double(f1.size() - 1u, tol));
 }
 
-/** Sorts a population in a constrained optimization case (from a vector of tolerances)
+/** Sorts a population in a single-objective, constrained, case (from a vector of tolerances)
  *
  * Sorts a population (intended here as an <tt>std::vector<vector_double></tt>
  * containing single objective fitness vectors)
@@ -165,7 +205,7 @@ inline bool compare_fc(const std::vector<double> f1, const std::vector<double> f
  *
  * @return an <tt>std::vector</tt> of indexes containing the sorted population
  *
- * @throws std::invalid_argument If the input fitness vectors do not have all the same size \f$n\f$
+ * @throws std::invalid_argument If the input fitness vectors do not have all the same size \f$n >=1\f$
  * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
  * @throws std::invalid_argument If the size of the \p tol is not exactly the size of \p input_f - 1
  *
@@ -195,7 +235,7 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     return retval;
 }
 
-/// Sorts a population in a constrained optimization case (from a scalar tolerance)
+/// Sorts a population in a single-objective, constrained, case (from a scalar tolerance)
 /**
  *
  * @param[in] input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
@@ -203,6 +243,9 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
  * @param[in] tol scalar tolerance to be accouted for in the constraints
  *
  * @return an <tt>std::vector</tt> of indexes containing the sorted population
+ *
+ * @throws std::invalid_argument If the input fitness vectors do not have all the same size \f$n >=1\f$
+ * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
  */
 std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f,
                                                           vector_double::size_type neq, double tol = 0.)
