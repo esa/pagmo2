@@ -1651,7 +1651,7 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_ptr, m_fevals.load(), m_gevals.load(), m_hevals.load(), m_lb, m_ub, m_nobj, m_nec, m_nic, m_has_gradient,
+        ar(m_ptr, m_fevals.load(), m_gevals.load(), m_hevals.load(), m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient,
            m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim,
            m_hs_dim);
     }
@@ -1668,7 +1668,7 @@ public:
         m_gevals.store(tmp);
         ar(tmp);
         m_hevals.store(tmp);
-        ar(m_lb, m_ub, m_nobj, m_nec, m_nic, m_has_gradient, m_has_gradient_sparsity, m_has_hessians,
+        ar(m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient, m_has_gradient_sparsity, m_has_hessians,
            m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim);
     }
 
