@@ -180,6 +180,12 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
 inline bool compare_fc(const vector_double& f1, const vector_double& f2, vector_double::size_type neq,
                        double tol)
 {
+    // 1 - The dimension of the fitness vector must be at least 1 (this check
+    // cannot be removed and delegated to the other overload as f1.size()-1u is used)
+    if (f1.size() < 1u) {
+        pagmo_throw(std::invalid_argument, "Fitness dimension should be at least 1 to compare: a dimension of "
+                                               + std::to_string(f1.size()) + " was detected. ");
+    }
     return compare_fc(f1, f2, neq, vector_double(f1.size() - 1u, tol));
 }
 
