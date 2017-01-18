@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_TYPE_TRAITS_HPP
 #define PAGMO_TYPE_TRAITS_HPP
 
@@ -7,14 +35,11 @@
 #include <tuple>
 #include <type_traits>
 #include <utility>
-#include <vector>
-
-#include "types.hpp"
 
 namespace pagmo
 {
 
-inline namespace impl
+namespace detail
 {
 
 // http://en.cppreference.com/w/cpp/types/void_t
@@ -46,12 +71,6 @@ struct nonesuch {
     nonesuch(nonesuch const &) = delete;
     void operator=(nonesuch const &) = delete;
 };
-
-template <template <class...> class Op, class... Args>
-using is_detected = typename detector<nonesuch, void, Op, Args...>::value_t;
-
-template <template <class...> class Op, class... Args>
-using detected_t = typename detector<nonesuch, void, Op, Args...>::type;
 
 // http://en.cppreference.com/w/cpp/types/conjunction
 template <class...>
@@ -134,498 +153,149 @@ void tuple_for_each(Tuple &&t, const F &f)
     apply_to_each_item(std::forward<Tuple>(t), f,
                        make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{});
 }
+}
 
-// Some handy aliases.
-template <typename T>
-using uncvref_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
+/// Implementation of \p std::is_detected.
+/**
+ * Implementation of \p std::is_detected, from C++17. See: http://en.cppreference.com/w/cpp/experimental/is_detected.
+ */
+template <template <class...> class Op, class... Args>
+using is_detected =
+#if defined(PAGMO_DOXYGEN_INVOKED)
+    implementation_defined;
+#else
+    typename detail::detector<detail::nonesuch, void, Op, Args...>::value_t;
+#endif
 
+/// Implementation of \p std::detected_t.
+/**
+ * Implementation of \p std::detected_t, from C++17. See: http://en.cppreference.com/w/cpp/experimental/is_detected.
+ */
+template <template <class...> class Op, class... Args>
+using detected_t =
+#if defined(PAGMO_DOXYGEN_INVOKED)
+    implementation_defined;
+#else
+    typename detail::detector<detail::nonesuch, void, Op, Args...>::type;
+#endif
+
+/// Implementation of \p std::decay_t.
+/**
+ * Implementation of \p std::decay_t, from C++14. See: http://en.cppreference.com/w/cpp/types/decay.
+ */
 template <typename T>
 using decay_t = typename std::decay<T>::type;
 
+/// Implementation of \p std::enable_if_t.
+/**
+ * Implementation of \p std::enable_if_t, from C++14. See: http://en.cppreference.com/w/cpp/types/enable_if.
+ */
 template <bool B, typename T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
-}
 
-namespace detail
-{
+/// Remove reference and cv qualifiers from type \p T.
+template <typename T>
+using uncvref_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
 
-struct sfinae_types {
-    struct yes {
-    };
-    struct no {
-    };
-};
-}
-
-/// Type has fitness()
+/// Detect \p set_seed() method.
 /**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * methods implemented:
- *
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
  * @code
- * fitness_vector fitness(const decision_vector &) const
+ * void set_seed(unsigned);
  * @endcode
- *
+ * The \p set_seed() method is part of the interface for the definition of a problem or an algorithm
+ * (see pagmo::problem and pagmo::algorithm).
  */
 template <typename T>
-class has_fitness : detail::sfinae_types
+class has_set_seed
 {
     template <typename U>
-    static auto test0(const U &p) -> decltype(p.fitness(std::declval<const vector_double &>()));
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<vector_double, decltype(test0(std::declval<const T &>()))>::value;
+    using set_seed_t = decltype(std::declval<U &>().set_seed(1u));
+    static const bool implementation_defined = std::is_same<void, detected_t<set_seed_t, T>>::value;
 
 public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_fitness<T>::value;
-
-/// Type has get_nobj()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * methods implemented:
- *
- * @code
- * fitness_vector::size_type get_nobj() const
- * @endcode
- *
- */
-template <typename T>
-class has_get_nobj : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.get_nobj());
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<vector_double::size_type, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_get_nobj<T>::value;
-
-/// Type has get_bounds()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * std::pair<vector_double, vector_double> get_bounds() const
- * @endcode
- *
- */
-template <typename T>
-class has_bounds : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.get_bounds());
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<std::pair<vector_double, vector_double>, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_bounds<T>::value;
-
-/// Type has get_nec()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * vector_double::size_type get_nec() const
- * @endcode
- *
- */
-template <typename T>
-class has_e_constraints : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.get_nec());
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<vector_double::size_type, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_e_constraints<T>::value;
-
-/// Type has get_nic()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * vector_double::size_type get_nic() const
- * @endcode
- *
- */
-template <typename T>
-class has_i_constraints : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.get_nic());
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<vector_double::size_type, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_i_constraints<T>::value;
-
-/// Type has set_seed()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if the expression p.set_seed(n)
- * is valid and returns void, where p is a non-const instance of \p T and n is an unsigned int
- *
- * For example, if \p T has the following method implemented:
- *
- * @code
- * void set_seed(unsigned int seed)
- * @endcode
- *
- */
-template <typename T>
-class has_set_seed : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(U &p) -> decltype(p.set_seed(std::declval<unsigned int>()));
-    static no test0(...);
-    static const bool implementation_defined = std::is_same<void, decltype(test0(std::declval<T &>()))>::value;
-
-public:
-    /// static const boolean value flag
+    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
 template <typename T>
 const bool has_set_seed<T>::value;
 
-/// Type has has_set_seed()
+/// Detect \p has_set_seed() method.
 /**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
  * @code
- * bool has_set_seed() const
+ * bool has_set_seed() const;
  * @endcode
- *
+ * The \p has_set_seed() method is part of the interface for the definition of a problem or an algorithm
+ * (see pagmo::problem and pagmo::algorithm).
  */
 template <typename T>
-class override_has_set_seed : detail::sfinae_types
+class override_has_set_seed
 {
     template <typename U>
-    static auto test0(const U &p) -> decltype(p.has_set_seed());
-    static no test0(...);
-    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
+    using has_set_seed_t = decltype(std::declval<const U &>().has_set_seed());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_set_seed_t, T>>::value;
 
 public:
-    /// static const boolean value flag
+    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
 template <typename T>
 const bool override_has_set_seed<T>::value;
 
-/// Type has get_name()
+/// Detect \p get_name() method.
 /**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
  * @code
- * std::string get_name() const
+ * std::string get_name() const;
  * @endcode
- *
+ * The \p get_name() method is part of the interface for the definition of a problem or an algorithm
+ * (see pagmo::problem and pagmo::algorithm).
  */
 template <typename T>
-class has_name : detail::sfinae_types
+class has_name
 {
     template <typename U>
-    static auto test0(const U &p) -> decltype(p.get_name());
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<std::string, decltype(test0(std::declval<const T &>()))>::value;
+    using get_name_t = decltype(std::declval<const U &>().get_name());
+    static const bool implementation_defined = std::is_same<std::string, detected_t<get_name_t, T>>::value;
 
 public:
-    /// static const boolean value flag
+    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
 template <typename T>
 const bool has_name<T>::value;
 
-/// Type has get_extra_info()
+/// Detect \p get_extra_info() method.
 /**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
  * @code
- * std::string get_extra_info() const
+ * std::string get_extra_info() const;
  * @endcode
- *
+ * The \p get_extra_info() method is part of the interface for the definition of a problem or an algorithm
+ * (see pagmo::problem and pagmo::algorithm).
  */
 template <typename T>
-class has_extra_info : detail::sfinae_types
+class has_extra_info
 {
     template <typename U>
-    static auto test0(const U &p) -> decltype(p.get_extra_info());
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<std::string, decltype(test0(std::declval<const T &>()))>::value;
+    using get_extra_info_t = decltype(std::declval<const U &>().get_extra_info());
+    static const bool implementation_defined = std::is_same<std::string, detected_t<get_extra_info_t, T>>::value;
 
 public:
-    /// static const boolean value flag
+    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
 template <typename T>
 const bool has_extra_info<T>::value;
-
-/// Type has gradient()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * vector_double gradient(const vector_double &x) const
- * @endcode
- *
- */
-template <typename T>
-class has_gradient : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.gradient(std::declval<const vector_double &>()));
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<vector_double, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_gradient<T>::value;
-
-/// Type has has_gradient()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * bool has_gradient() const
- * @endcode
- *
- */
-template <typename T>
-class override_has_gradient : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.has_gradient());
-    static no test0(...);
-    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool override_has_gradient<T>::value;
-
-/// Type has gradient_sparsity()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * sparsity_pattern gradient_sparsity() const
- * @endcode
- *
- */
-template <typename T>
-class has_gradient_sparsity : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.gradient_sparsity());
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<sparsity_pattern, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_gradient_sparsity<T>::value;
-
-/// Type has hessians()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * std::vector<vector_double> hessians(const vector_double &x) const
- * @endcode
- *
- */
-template <typename T>
-class has_hessians : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.hessians(std::declval<const vector_double &>()));
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<std::vector<vector_double>, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_hessians<T>::value;
-
-/// Type has has_hessians()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * bool has_hessians() const
- * @endcode
- *
- */
-template <typename T>
-class override_has_hessians : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.has_hessians());
-    static no test0(...);
-    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool override_has_hessians<T>::value;
-
-/// Type has hessians_sparsity()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * std::vector<sparsity_pattern> hessians_sparsity() const
- * @endcode
- *
- */
-template <typename T>
-class has_hessians_sparsity : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.hessians_sparsity());
-    static no test0(...);
-    static const bool implementation_defined
-        = std::is_same<std::vector<sparsity_pattern>, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_hessians_sparsity<T>::value;
-
-/// Type has has_gradient_sparsity()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * bool has_gradient_sparsity() const
- * @endcode
- */
-template <typename T>
-class override_has_gradient_sparsity : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.has_gradient_sparsity());
-    static no test0(...);
-    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool override_has_gradient_sparsity<T>::value;
-
-/// Type has has_hessians_sparsity()
-/**
- * This type trait defines a static const boolean
- * \p value flag which is \p true if \p T has the following
- * method implemented:
- *
- * @code
- * bool has_hessians_sparsity() const
- * @endcode
- */
-template <typename T>
-class override_has_hessians_sparsity : detail::sfinae_types
-{
-    template <typename U>
-    static auto test0(const U &p) -> decltype(p.has_hessians_sparsity());
-    static no test0(...);
-    static const bool implementation_defined = std::is_same<bool, decltype(test0(std::declval<const T &>()))>::value;
-
-public:
-    /// static const boolean value flag
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool override_has_hessians_sparsity<T>::value;
 
 } // namespace pagmo
 

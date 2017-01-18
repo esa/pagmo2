@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #define BOOST_TEST_MODULE translate_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -8,7 +36,6 @@
 
 #include <pagmo/io.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/types.hpp>
 
@@ -18,7 +45,7 @@ BOOST_AUTO_TEST_CASE(translate_construction_test)
 {
     // First we check directly the two constructors
     problem p0{translate{}};
-    problem p1{translate{null_problem{}, {1}}};
+    problem p1{translate{null_problem{}, {0.}}};
 
     auto p0_string = boost::lexical_cast<std::string>(p0);
     auto p1_string = boost::lexical_cast<std::string>(p1);

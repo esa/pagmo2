@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #include <pagmo/problem.hpp>
 
 #define BOOST_TEST_MODULE problem_test
@@ -872,4 +900,39 @@ BOOST_AUTO_TEST_CASE(problem_auto_sparsity_test)
     problem p{base_p(2u, 2u, 2u, {1., 1., 1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
     BOOST_CHECK(p.gradient_sparsity() == detail::dense_gradient(6u, 2u));
     BOOST_CHECK(p.hessians_sparsity() == detail::dense_hessians(6u, 2u));
+}
+
+BOOST_AUTO_TEST_CASE(null_problem_test)
+{
+    // Problem instantiation
+    problem p{null_problem{}};
+    // Pick a few reference points
+    vector_double x1 = {1};
+    vector_double x2 = {2};
+    // Fitness test
+    BOOST_CHECK((p.fitness(x1) == vector_double{0}));
+    BOOST_CHECK((p.fitness(x2) == vector_double{0}));
+}
+
+BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
+{
+    problem p{null_problem{}};
+    // Call objfun to increase the internal counter.
+    p.fitness({1});
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(p);
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
+    }
+    // Change the content of p before deserializing.
+    p = problem{null_problem{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
+    }
+    auto after = boost::lexical_cast<std::string>(p);
+    BOOST_CHECK_EQUAL(before, after);
 }

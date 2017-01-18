@@ -1,8 +1,7 @@
 .. cpp_problem_class
 
-Population 
+Population
 ==========
 
 .. doxygenclass:: pagmo::population
-   :project: PaGMOreborn
    :members:

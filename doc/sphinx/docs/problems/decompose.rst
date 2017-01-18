@@ -4,5 +4,4 @@ Decompose
 =====================
 
 .. doxygenclass:: pagmo::decompose
-   :project: PaGMOreborn
    :members:
