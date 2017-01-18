@@ -44,7 +44,7 @@ test_script:
 - ctest --output-on-failure
 
 notifications:
-  - provider: Gitter
+  - provider: Webhook
     url: https://webhooks.gitter.im/e/1a3742192bd3f7e6d8e2
 
 # Enable this to be able to login to the build worker. You can use the
