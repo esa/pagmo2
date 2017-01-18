@@ -1058,7 +1058,6 @@ public:
         if (m_nic > std::numeric_limits<decltype(m_nic)>::max() / 3u) {
             pagmo_throw(std::invalid_argument, "The number of inequality constraints is too large");
         }
-        m_c_tol = ptr()->get_c_tol();
         // 4 - Presence of gradient and its sparsity.
         m_has_gradient = ptr()->has_gradient();
         m_has_gradient_sparsity = ptr()->has_gradient_sparsity();
@@ -1111,6 +1110,7 @@ public:
             }
         }
         // 8 - Constraint tolerance (this is at the end as to allow previous cases to trigger first in tests)
+        m_c_tol = ptr()->get_c_tol();
         if (m_c_tol.size() != m_nec + m_nic) {
             pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is: "
                     + std::to_string(m_c_tol.size())
