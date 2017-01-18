@@ -1,5 +1,5 @@
-PaGMO
-=====
+PaGMO v2.0
+==========
 
 [![Join the chat at https://gitter.im/pagmo2/Lobby](https://badges.gitter.im/pagmo2/Lobby.svg)](https://gitter.im/pagmo2/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
