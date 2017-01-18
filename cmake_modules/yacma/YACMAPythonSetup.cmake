@@ -15,6 +15,9 @@ message(STATUS "Python library version: " ${PYTHONLIBS_VERSION_STRING})
 
 # Setup the imported target for the compilation of Python modules.
 add_library(YACMA::PythonModule UNKNOWN IMPORTED)
+# NOTE: probably down the line we would want to have separate targets for the Python includes
+# and lib. Right now, we are always using this in conjunction with Boost.Python, where we never
+# need the two separated.
 set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${PYTHON_INCLUDE_DIRS}"
   IMPORTED_LOCATION "${PYTHON_LIBRARIES}" IMPORTED_LINK_INTERFACE_LANGUAGES "C")
 
@@ -67,7 +70,9 @@ message(STATUS "Python modules install path: ${YACMA_PYTHON_MODULES_INSTALL_PATH
 function(YACMA_PYTHON_MODULE name)
     message(STATUS "Setting up the compilation of the Python module '${name}'.")
     # A Python module is a shared library.
-    # TODO can this become a MODULE?
+    # NOTE: can this become a MODULE? It is supposed to be the right way of doing it,
+    # but it's not clear if this will work when linking to Boost.Python as well. Let's keep
+    # it like this for now.
     add_library("${name}" SHARED ${ARGN})
     # Any "lib" prefix normally added by CMake must be removed.
     set_target_properties("${name}" PROPERTIES PREFIX "")
@@ -84,12 +89,10 @@ function(YACMA_PYTHON_MODULE name)
     # to check in the future.
     if(YACMA_COMPILER_IS_GNUCXX OR YACMA_COMPILER_IS_CLANGXX)
         message(STATUS "Setting up extra compiler flag '-fwrapv' for the Python module '${name}'.")
-        set_target_properties("${name}" PROPERTIES COMPILE_FLAGS "-fwrapv")
-        set_target_properties("${name}" PROPERTIES LINK_FLAGS "-fwrapv")
+        target_compile_options(${name} PRIVATE "-fwrapv")
         if(${PYTHON_VERSION_MAJOR} LESS 3)
             message(STATUS "Python < 3 detected, setting up extra compiler flag '-fno-strict-aliasing' for the Python module '${name}'.")
-            set_target_properties("${name}" PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing")
-            set_target_properties("${name}" PROPERTIES LINK_FLAGS "-fno-strict-aliasing")
+            target_compile_options(${name} PRIVATE "-fno-strict-aliasing")
         endif()
     endif()
     target_link_libraries("${name}" PRIVATE YACMA::PythonModule)
