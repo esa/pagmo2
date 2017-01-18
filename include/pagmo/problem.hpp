@@ -224,6 +224,31 @@ public:
 template <typename T>
 const bool has_i_constraints<T>::value;
 
+/// Detect \p get_c_tol() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * vector_double get_c_tol() const;
+ * @endcode
+ * The \p get_c_tol() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_c_tolerance
+{
+    template <typename U>
+    using get_c_tol_t = decltype(std::declval<const U &>().get_c_tol());
+    static const bool implementation_defined = std::is_same<vector_double, detected_t<get_c_tol_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_c_tolerance<T>::value;
+
 /// Detect \p gradient() method.
 /**
  * This type trait will be \p true if \p T provides a method with

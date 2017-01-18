@@ -178,6 +178,16 @@ BOOST_AUTO_TEST_CASE(has_e_constraints_test)
     BOOST_CHECK((!has_e_constraints<c_07>::value));
 }
 
+// The good one.
+struct ct_01 {
+    vector_double get_c_tol() const;
+};
+
+BOOST_AUTO_TEST_CASE(has_c_tolerance_test)
+{
+    BOOST_CHECK((has_c_tolerance<ct_01>::value));
+}
+
 BOOST_AUTO_TEST_CASE(has_i_constraints_test)
 {
     BOOST_CHECK((!has_i_constraints<c_00>::value));
