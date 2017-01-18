@@ -178,16 +178,6 @@ BOOST_AUTO_TEST_CASE(has_e_constraints_test)
     BOOST_CHECK((!has_e_constraints<c_07>::value));
 }
 
-// The good one.
-struct ct_01 {
-    vector_double get_c_tol() const;
-};
-
-BOOST_AUTO_TEST_CASE(has_c_tolerance_test)
-{
-    BOOST_CHECK((has_c_tolerance<ct_01>::value));
-}
-
 BOOST_AUTO_TEST_CASE(has_i_constraints_test)
 {
     BOOST_CHECK((!has_i_constraints<c_00>::value));
@@ -198,6 +188,45 @@ BOOST_AUTO_TEST_CASE(has_i_constraints_test)
     BOOST_CHECK((!has_i_constraints<c_05>::value));
     BOOST_CHECK((!has_i_constraints<c_06>::value));
     BOOST_CHECK((has_i_constraints<c_07>::value));
+}
+
+struct ctol_00 {
+};
+
+// The good one.
+struct ctol_01 {
+    vector_double get_c_tol() const;
+};
+
+struct ctol_02 {
+    std::vector<int> get_c_tol() const;
+};
+
+struct ctol_03 {
+    vector_double get_c_tol();
+};
+
+struct ctol_04 {
+    int get_c_tol() const;
+};
+
+struct ctol_05 {
+    const vector_double& get_c_tol() const;
+};
+
+struct ctol_06 {
+    vector_double get_c_tol(int) const;
+};
+
+BOOST_AUTO_TEST_CASE(has_c_tolerance_test)
+{
+    BOOST_CHECK((!has_c_tolerance<ctol_00>::value));
+    BOOST_CHECK((has_c_tolerance<ctol_01>::value));
+    BOOST_CHECK((!has_c_tolerance<ctol_02>::value));
+    BOOST_CHECK((!has_c_tolerance<ctol_03>::value));
+    BOOST_CHECK((!has_c_tolerance<ctol_04>::value));
+    BOOST_CHECK((!has_c_tolerance<ctol_05>::value));
+    BOOST_CHECK((!has_c_tolerance<ctol_06>::value));
 }
 
 struct n_00 {
