@@ -817,6 +817,9 @@ struct prob_inner final : prob_inner_base {
     template <typename U, typename std::enable_if<!has_c_tolerance<U>::value, int>::type = 0>
     static vector_double get_c_tol_impl(const U &value)
     {
+        // We need not to worry here about overflow as this is only called by the
+        // pagmo::problem constructor once and after nec and nic have been checked to
+        // be < MAX/3
         return vector_double(get_nic_impl(value)+get_nec_impl(value), 0.);
     }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
@@ -1109,7 +1112,8 @@ public:
                 m_hs_dim[i] = (nx * (nx - 1u) / 2u + nx); // lower triangular
             }
         }
-        // 8 - Constraint tolerance (this is at the end as to allow previous cases to trigger first in tests)
+        // 8 - Constraint tolerance (this is at the end as nec < MAX/3 and nic < MAX/3 has been tested above)
+        // so no overflow is possible
         m_c_tol = ptr()->get_c_tol();
         if (m_c_tol.size() != m_nec + m_nic) {
             pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is: "
