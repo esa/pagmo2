@@ -550,15 +550,15 @@ struct prob_inner final : prob_inner_base {
     {
         return m_value.fitness(dv);
     }
-    virtual vector_double::size_type get_nobj() const override final
-    {
-        return get_nobj_impl(m_value);
-    }
     virtual std::pair<vector_double, vector_double> get_bounds() const override final
     {
         return m_value.get_bounds();
     }
     // optional methods
+    virtual vector_double::size_type get_nobj() const override final
+    {
+        return get_nobj_impl(m_value);
+    }
     virtual vector_double gradient(const vector_double &dv) const override final
     {
         return gradient_impl(m_value, dv);
@@ -954,7 +954,7 @@ public:
      *
      * - \p T must implement the following mandatory methods:
      *   @code
-     *   vector_double fitness(const decision_vector &) const;
+     *   vector_double fitness(const vector_double &) const;
      *   std::pair<vector_double, vector_double> get_bounds() const;
      *   @endcode
      *   otherwise it will result in a compile-time failure
