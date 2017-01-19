@@ -933,7 +933,6 @@ struct prob_inner final : prob_inner_base {
  * can be invoked via pagmo::problem::get_bounds().
  *
  * The mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
-<<<<<<< HEAD
  * problem. In order to consider more complex cases, the UDP may implement one or more of the following methods:
  * @code{.unparsed}
  * vector_double::size_type get_nobj() const;
