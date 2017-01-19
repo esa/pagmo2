@@ -45,9 +45,9 @@ see https://www.gnu.org/licenses/. */
 #include "exceptions.hpp"
 #include "io.hpp"
 #include "serialization.hpp"
-#include "utils/constrained.hpp"
 #include "type_traits.hpp"
 #include "types.hpp"
+#include "utils/constrained.hpp"
 
 /// Macro for the registration of the serialization functionality for problems.
 /**
@@ -1565,7 +1565,7 @@ public:
      * @return true if the descision vector results in a feasible fitness
      *
      */
-    bool feasibility_x(const vector_double& x)
+    bool feasibility_x(const vector_double &x) const
     {
         // wrong dimensions of x will trigger exceptions in the called functions
         return feasibility_f(fitness(x));
@@ -1580,14 +1580,17 @@ public:
      * @param[in] x fitness vector
      * @return true if the fitness vector is feasible
      */
-    bool feasibility_f(const vector_double& f)
+    bool feasibility_f(const vector_double &f) const
     {
         if (f.size() != get_nf()) {
-            pagmo_throw(std::invalid_argument, "The fitness passed as argument has dimension of: " + std::to_string(f.size()) +
-            ", while the problem defines a fitness size of: " + std::to_string(get_nf()));
+            pagmo_throw(std::invalid_argument,
+                        "The fitness passed as argument has dimension of: " + std::to_string(f.size())
+                            + ", while the problem defines a fitness size of: " + std::to_string(get_nf()));
         }
-        auto feas_eq = detail::test_eq_constraints(f.data() + get_nobj(), f.data() + get_nobj() + get_nec(), get_c_tol().data());
-        auto feas_ineq = detail::test_ineq_constraints(f.data() + get_nobj() + get_nec(), f.data() + f.size(), get_c_tol().data() + get_nec());
+        auto feas_eq
+            = detail::test_eq_constraints(f.data() + get_nobj(), f.data() + get_nobj() + get_nec(), get_c_tol().data());
+        auto feas_ineq = detail::test_ineq_constraints(f.data() + get_nobj() + get_nec(), f.data() + f.size(),
+                                                       get_c_tol().data() + get_nec());
         return feas_eq.first + feas_ineq.first == get_nc();
     }
 

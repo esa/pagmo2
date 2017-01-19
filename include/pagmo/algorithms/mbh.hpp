@@ -11,6 +11,7 @@
 #include "../io.hpp"
 #include "../population.hpp"
 #include "../rng.hpp"
+#include "../utils/constrained.hpp"
 
 namespace pagmo
 {
@@ -50,13 +51,13 @@ class mbh : public algorithm
 {
 public:
     /// Default constructor, only here as serialization requires it
-    mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_e(0u), m_seed(0u)
+    mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_e(0u), m_seed(0u), m_verbosity(0u)
     {
     }
     /// Constructor
     template <typename T>
     explicit mbh(T &&a, unsigned int stop, double perturb, unsigned int seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed)
+        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
     {
     }
     /// Algorithm evolve method (juice implementation of the algorithm)
@@ -71,13 +72,12 @@ public:
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
         auto NP = pop.size();
-        auto prob_f_dimension = prob.get_nf();
 
         auto fevals0 = prob.get_fevals(); // discount for the already made fevals
         unsigned int count = 1u;          // regulates the screen output
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
-        if (prob_f_dimension != 1u) {
+        if (prob.get_nobj() != 1u) {
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
         }
@@ -110,13 +110,21 @@ public:
                     tmp_x[k] = std::uniform_real_distribution<double>(
                         std::max(pop.get_x()[j][k] - m_perturb[k] * (ub[k] - lb[k]), lb[k]),
                         std::min(pop.get_x()[j][k] + m_perturb[k] * (ub[k] - lb[k]), ub[k]))(m_e);
-                    pop.set_x(k, tmp_x);
                 }
-
+                pop.set_x(j, tmp_x);
             }
             // 3 - We evolve the current population with the selected algorithm
             pop = static_cast<const algorithm *>(this)->evolve(pop);
             i++;
+            if (m_verbosity > 0u) {
+                std::cout << i << ". "
+                          << "\tLocal solution: " << pop.get_f()[pop.best_idx()][0]
+                          << "\tGlobal best: " << pop_old.get_f()[pop_old.best_idx()][0];
+                if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
+                    std::cout << " i";
+                }
+                std::cout << std::endl; // we flush here as we want the user to read in real time ...
+            }
             // 4 - We reset the counter if we have improved, otherwise we reset the population
             if (compare_fc(pop.get_f()[pop.best_idx()], pop_old.get_f()[pop_old.best_idx()], nec, prob.get_c_tol())) {
                 i = 0u;
@@ -139,6 +147,16 @@ public:
     {
         return m_seed;
     }
+    /// Sets the verbosity level
+    void set_verbosity(unsigned int level)
+    {
+        m_verbosity = level;
+    };
+    /// Gets the verbosity level
+    unsigned int get_verbosity() const
+    {
+        return m_verbosity;
+    }
     /// Algorithm name
     std::string get_name() const
     {
@@ -151,6 +169,7 @@ public:
         stream(ss, "\tStop: ", m_stop);
         stream(ss, "\n\tPerturbation vector: ", m_perturb);
         stream(ss, "\n\tSeed: ", m_seed);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
         stream(ss, "\n\n\tInner algorithm: ", static_cast<const algorithm *>(this)->get_name());
         stream(ss, "\n\tInner algorithm extra info: ");
         stream(ss, "\n", static_cast<const algorithm *>(this)->get_extra_info());
@@ -161,7 +180,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<algorithm>(this), m_stop, m_perturb, m_e, m_seed);
+        ar(cereal::base_class<algorithm>(this), m_stop, m_perturb, m_e, m_seed, m_verbosity);
     }
 
 private:
@@ -171,7 +190,6 @@ private:
     bool is() const = delete;
     bool has_set_seed() const = delete;
     bool is_stochastic() const = delete;
-    void set_verbosity(unsigned int level) = delete;
     bool has_set_verbosity() const = delete;
     // NOTE: We delete the streaming operator overload called with mbh, otherwise the inner algo would stream
     // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
@@ -187,6 +205,7 @@ private:
     mutable std::vector<double> m_perturb;
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
+    unsigned int m_verbosity;
 };
 }
 PAGMO_REGISTER_ALGORITHM(pagmo::mbh)

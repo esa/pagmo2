@@ -94,8 +94,6 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
-    BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}),
-                      std::invalid_argument);
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};

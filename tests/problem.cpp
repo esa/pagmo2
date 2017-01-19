@@ -954,22 +954,21 @@ BOOST_AUTO_TEST_CASE(problem_feasibility_methods_test)
     problem test05{base_p(1u, 2u, 0u, {1e-8, 1e-9}, {1., -1e-9, -1e-10}, {0.}, {1.})};
     problem test06{base_p(1u, 0u, 2u, {1e-8, 1e-9}, {1., -12., -22.}, {0.}, {1.})};
 
-    BOOST_CHECK(test01.feasibility_x({1.,1.}) == false);
-    BOOST_CHECK(test02.feasibility_x({1.,1.}) == true);
-    BOOST_CHECK(test03.feasibility_x({1.,1.}) == true);
+    BOOST_CHECK(test01.feasibility_x({1., 1.}) == false);
+    BOOST_CHECK(test02.feasibility_x({1., 1.}) == true);
+    BOOST_CHECK(test03.feasibility_x({1., 1.}) == true);
     BOOST_CHECK(test04.feasibility_x({1.}) == true);
     BOOST_CHECK(test05.feasibility_x({1.}) == true);
     BOOST_CHECK(test06.feasibility_x({1.}) == true);
 
-    BOOST_CHECK(test01.feasibility_f({2.,3.,1e-10, 3.}) == false);
+    BOOST_CHECK(test01.feasibility_f({2., 3., 1e-10, 3.}) == false);
     BOOST_CHECK(test02.feasibility_f({-10., 23., 1e-9, -23.}) == true);
-    BOOST_CHECK(test03.feasibility_f({1.,1., -1.999, 1.999}) == true);
+    BOOST_CHECK(test03.feasibility_f({1., 1., -1.999, 1.999}) == true);
     BOOST_CHECK(test04.feasibility_f({1., 0., -10000.}) == true);
     BOOST_CHECK(test05.feasibility_f({1., 1e-9, 1e-10}) == true);
     BOOST_CHECK(test06.feasibility_f({1., -23, 1e-10}) == true);
 
     BOOST_CHECK_THROW(test06.feasibility_f({1., -23, 1e-10, 2., 34.}), std::invalid_argument);
-
 }
 
 BOOST_AUTO_TEST_CASE(null_problem_test)

@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include "../algorithm.hpp"
 #include "../exceptions.hpp"
 #include "../population.hpp"
+#include "../utils/constrained.hpp"
 
 namespace pagmo
 {
@@ -68,8 +69,7 @@ namespace pagmo
  * a standard in the scientific computing community for exactly the reason observed
  * by Davidon: it is slow but sure'.
  *
- * @note This algorithm does not work for multi-objective problems, nor for
- * constrained optimization or stochastic problems.
+ * @note This algorithm does not work for multi-objective problems, nor for stochastic problems.
  *
  * @note The search range is defined relative to the box-bounds. Hence, unbounded problems
  * will produce an error.
@@ -131,7 +131,6 @@ public:
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
-        auto prob_f_dimension = prob.get_nf();
 
         auto fevals0 = prob.get_fevals(); // discount for the already made fevals
         unsigned int count = 1u;          // regulates the screen output
@@ -139,11 +138,7 @@ public:
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
         // particular algorithm.
-        if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
-        }
-        if (prob_f_dimension != 1u) {
+        if (prob.get_nobj() != 1u) {
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
         }
@@ -187,7 +182,7 @@ public:
                 // objective function evaluation
                 auto f_trial = prob.fitness(x_trial);
                 fevals++;
-                if (f_trial[0] < cur_best_f[0]) {
+                if (compare_fc(f_trial, cur_best_f, prob.get_nec(), prob.get_c_tol())) {
                     cur_best_f = f_trial;
                     cur_best_x = x_trial;
                     flag = true;
@@ -201,7 +196,7 @@ public:
                 // objective function evaluation
                 f_trial = prob.fitness(x_trial);
                 fevals++;
-                if (f_trial[0] < cur_best_f[0]) {
+                if (compare_fc(f_trial, cur_best_f, prob.get_nec(), prob.get_c_tol())) {
                     cur_best_f = f_trial;
                     cur_best_x = x_trial;
                     flag = true;

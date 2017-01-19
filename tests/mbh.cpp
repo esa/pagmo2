@@ -22,7 +22,12 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(mbh_algorithm_construction)
 {
+    compass_search{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u});
     mbh user_algo{compass_search{}, 50u, 0.1};
     algorithm algo{user_algo};
     std::cout << algo << "\n";
+    problem prob{hock_schittkowsky_71{}};
+    population pop{prob, 1u};
+    algo.set_verbosity(1u);
+    pop = algo.evolve(pop);
 }
