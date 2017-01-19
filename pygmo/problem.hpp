@@ -127,6 +127,10 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     {
         return getter_wrapper<vector_double::size_type>(m_value, "get_nic", 0u);
     }
+    virtual vector_double get_c_tol() const override final
+    {
+        return getter_wrapper<vector_double>(m_value, "get_c_tol", {});
+    }
     virtual std::string get_name() const override final
     {
         return getter_wrapper<std::string>(m_value, "get_name", pygmo::str(pygmo::type(m_value)));

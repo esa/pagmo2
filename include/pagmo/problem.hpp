@@ -224,6 +224,31 @@ public:
 template <typename T>
 const bool has_i_constraints<T>::value;
 
+/// Detect \p get_c_tol() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code
+ * vector_double get_c_tol() const;
+ * @endcode
+ * The \p get_c_tol() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_c_tolerance
+{
+    template <typename U>
+    using get_c_tol_t = decltype(std::declval<const U &>().get_c_tol());
+    static const bool implementation_defined = std::is_same<vector_double, detected_t<get_c_tol_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_c_tolerance<T>::value;
+
 /// Detect \p gradient() method.
 /**
  * This type trait will be \p true if \p T provides a method with
@@ -506,6 +531,7 @@ struct prob_inner_base {
     virtual std::pair<vector_double, vector_double> get_bounds() const = 0;
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
+    virtual vector_double get_c_tol() const = 0;
     virtual void set_seed(unsigned int) = 0;
     virtual bool has_set_seed() const = 0;
     virtual std::string get_name() const = 0;
@@ -598,6 +624,10 @@ struct prob_inner final : prob_inner_base {
     virtual vector_double::size_type get_nic() const override final
     {
         return get_nic_impl(m_value);
+    }
+    virtual vector_double get_c_tol() const override final
+    {
+        return get_c_tol_impl(m_value);
     }
     virtual void set_seed(unsigned int seed) override final
     {
@@ -779,6 +809,19 @@ struct prob_inner final : prob_inner_base {
     {
         return 0u;
     }
+    template <typename U, typename std::enable_if<has_c_tolerance<U>::value, int>::type = 0>
+    static vector_double get_c_tol_impl(const U &value)
+    {
+        return value.get_c_tol();
+    }
+    template <typename U, typename std::enable_if<!has_c_tolerance<U>::value, int>::type = 0>
+    static vector_double get_c_tol_impl(const U &value)
+    {
+        // We need not to worry here about overflow as this is only called by the
+        // pagmo::problem constructor once and after nec and nic have been checked to
+        // be < MAX/3
+        return vector_double(get_nic_impl(value)+get_nec_impl(value), 0.);
+    }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
     static void set_seed_impl(U &value, unsigned int seed)
     {
@@ -886,6 +929,7 @@ struct prob_inner final : prob_inner_base {
  *   vector_double::size_type get_nobj() const;
  *   vector_double::size_type get_nec() const;
  *   vector_double::size_type get_nic() const;
+ *   vector_double get_c_tol() const;
  *   vector_double gradient(const vector_double &x) const;
  *   sparsity_pattern gradient_sparsity() const;
  *   std::vector<vector_double> hessians(const vector_double &x) const;
@@ -901,6 +945,10 @@ struct prob_inner final : prob_inner_base {
  * pagmo::problem::get_nec() method will return 0.
  * - \p T::get_nic() returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed, and the
  * pagmo::problem::get_nic() method will return 0.
+ * - \p T::get_c_tol() returns a vector of dimension \f$n_{ec} + n_{ic}\f$ containing tolerances to
+ * be used when checking constraint feasibility. When not implemented a tolerance of zero is assumed
+ * for all constraints, and the pagmo::problem::get_c_tol() method will return a vector
+ * filled up with zeros.
  * - \p T::gradient() returns a sparse representation of the gradients. The \f$ k\f$-th term
  * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
  * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by
@@ -1064,13 +1112,23 @@ public:
                 m_hs_dim[i] = (nx * (nx - 1u) / 2u + nx); // lower triangular
             }
         }
+        // 8 - Constraint tolerance (this is at the end as nec < MAX/3 and nic < MAX/3 has been tested above)
+        // so no overflow is possible
+        m_c_tol = ptr()->get_c_tol();
+        if (m_c_tol.size() != m_nec + m_nic) {
+            pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is: "
+                    + std::to_string(m_c_tol.size())
+                    + ", while the number of constraints are: "
+                    + std::to_string(m_nec + m_nic)
+                    + ". They need to be equal");
+        }
     }
 
     /// Copy constructor
     problem(const problem &other)
         : m_ptr(other.ptr()->clone()), m_fevals(other.m_fevals.load()), m_gevals(other.m_gevals.load()),
           m_hevals(other.m_hevals.load()), m_lb(other.m_lb), m_ub(other.m_ub), m_nobj(other.m_nobj), m_nec(other.m_nec),
-          m_nic(other.m_nic), m_has_gradient(other.m_has_gradient),
+          m_nic(other.m_nic), m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
           m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
           m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
           m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim)
@@ -1081,7 +1139,7 @@ public:
     problem(problem &&other) noexcept
         : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals.load()), m_gevals(other.m_gevals.load()),
           m_hevals(other.m_hevals.load()), m_lb(std::move(other.m_lb)), m_ub(std::move(other.m_ub)),
-          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_has_gradient(other.m_has_gradient),
+          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
           m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
           m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
           m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim), m_hs_dim(std::move(other.m_hs_dim))
@@ -1101,6 +1159,7 @@ public:
             m_nobj = other.m_nobj;
             m_nec = other.m_nec;
             m_nic = other.m_nic;
+            m_c_tol = other.m_c_tol;
             m_has_gradient = other.m_has_gradient;
             m_has_gradient_sparsity = other.m_has_gradient_sparsity;
             m_has_hessians = other.m_has_hessians;
@@ -1435,6 +1494,16 @@ public:
         return m_nic;
     }
 
+    /// Constraint tolerance
+    /**
+     * @return Returns a vector_double containing the tolerances to use when
+     * checking for constraint feasibility
+     */
+    vector_double get_c_tol() const
+    {
+        return m_c_tol;
+    }
+
     /// Number of constraints
     /**
      * @return Returns \f$ n_{ic} + n_{ec} \f$, the number of constraints
@@ -1551,6 +1620,9 @@ public:
         os << "\tNumber of objectives:\t\t\t" << p.get_nobj() << '\n';
         os << "\tEquality constraints dimension:\t\t" << p.get_nec() << '\n';
         os << "\tInequality constraints dimension:\t" << p.get_nic() << '\n';
+        if (p.get_nec() + p.get_nic() > 0u) {
+            stream(os, "\tTolerances on constraints:\t", p.get_c_tol(), '\n');
+        }
         os << "\tLower bounds: ";
         stream(os, p.get_bounds().first, '\n');
         os << "\tUpper bounds: ";
@@ -1584,7 +1656,7 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_ptr, m_fevals.load(), m_gevals.load(), m_hevals.load(), m_lb, m_ub, m_nobj, m_nec, m_nic, m_has_gradient,
+        ar(m_ptr, m_fevals.load(), m_gevals.load(), m_hevals.load(), m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient,
            m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim,
            m_hs_dim);
     }
@@ -1601,7 +1673,7 @@ public:
         m_gevals.store(tmp);
         ar(tmp);
         m_hevals.store(tmp);
-        ar(m_lb, m_ub, m_nobj, m_nec, m_nic, m_has_gradient, m_has_gradient_sparsity, m_has_hessians,
+        ar(m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient, m_has_gradient_sparsity, m_has_hessians,
            m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim);
     }
 
@@ -1745,6 +1817,7 @@ private:
     vector_double::size_type m_nobj;
     vector_double::size_type m_nec;
     vector_double::size_type m_nic;
+    vector_double m_c_tol;
     bool m_has_gradient;
     bool m_has_gradient_sparsity;
     bool m_has_hessians;
