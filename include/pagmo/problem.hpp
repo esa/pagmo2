@@ -1018,6 +1018,7 @@ public:
      * pair \f$ (i,j)\f$ having \f$i \ge n_x\f$ or \f$j > i\f$
      * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity() method and this contains any repeated index
      * pair.
+     * TODO c_tol documentation.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit problem(T &&x)
@@ -1105,6 +1106,21 @@ public:
             pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is " + std::to_string(m_c_tol.size())
                                                    + ", while the number of constraints is "
                                                    + std::to_string(m_nec + m_nic) + ". They need to be equal");
+        }
+        // Check the returned tolerance vector.
+        for (decltype(m_c_tol.size()) i = 0; i < m_c_tol.size(); ++i) {
+            if (!std::isfinite(m_c_tol[i])) {
+                pagmo_throw(std::invalid_argument,
+                            "The constraint tolerance contains the non-finite value " + std::to_string(m_c_tol[i])
+                                + " at the index " + std::to_string(i)
+                                + ". The elements of the constraint tolerance must all be finite and non-negative");
+            }
+            if (m_c_tol[i] < 0.) {
+                pagmo_throw(std::invalid_argument,
+                            "The constraint tolerance contains the negative value " + std::to_string(m_c_tol[i])
+                                + " at the index " + std::to_string(i)
+                                + ". The elements of the constraint tolerance must all be finite and non-negative");
+            }
         }
     }
 

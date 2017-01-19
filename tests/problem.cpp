@@ -342,6 +342,16 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
                       std::invalid_argument);
     // 14 - wrong ctol size returned
     BOOST_CHECK_THROW(problem{base_p(1, 1, 0, {2., 3., 4.}, fit_2, {1}, {2})}, std::invalid_argument);
+    // 15 - ctol contains invalid data
+    BOOST_CHECK_THROW(problem{base_p(1, 1, 1, {2., -1.}, fit_2, {1}, {2})}, std::invalid_argument);
+    if (std::numeric_limits<double>::is_iec559) {
+        BOOST_CHECK_THROW(problem{base_p(1, 1, 1, {std::numeric_limits<double>::infinity(), 1.}, fit_2, {1}, {2})},
+                          std::invalid_argument);
+        BOOST_CHECK_THROW(problem{base_p(1, 1, 1, {-std::numeric_limits<double>::infinity(), 1.}, fit_2, {1}, {2})},
+                          std::invalid_argument);
+        BOOST_CHECK_THROW(problem{base_p(1, 1, 1, {0, std::numeric_limits<double>::quiet_NaN()}, fit_2, {1}, {2})},
+                          std::invalid_argument);
+    }
     // We check that the data members are initialized correctly (i.e. counters to zero
     // and gradient / hessian dimensions to the right values
     {
