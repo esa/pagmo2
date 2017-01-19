@@ -865,43 +865,52 @@ struct prob_inner final : prob_inner_base {
  * values of any number of stochastic variables. This allows also for stochastic programming
  * tasks to be represented by this class.
  *
- * To create an instance of the above problem the user is asked to construct a pagmo::problem from
- * a separate object of type \p T where, at least, the implementation of
- * the following methods is provided:
+ * In order to define an optimizaztion problem in PaGMO, the user must first define a class
+ * (or a struct) whose methods describe the properties of the problem and allow to compute
+ * the objective function, the gradient, the constraints, etc. In PaGMO, we refer to such
+ * a class as a *user-defined problem*, or UDP for short. Once defined and instantiated,
+ * a UDP can then be used to construct an instance of this class, pagmo::problem, which
+ * provides a generic interface to optimization problems.
  *
- * @code
- * vector_double fitness(const decision_vector &) const;
+ * Every UDP must implement at least the following two methods:
+ *
+ * @code{.unparsed}
+ * vector_double fitness(const vector_double &) const;
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  *
- * - The return value of \p T::fitness() is expected to have a dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
+ * - The return value of \p %fitness() is expected to have a dimension of
+ * \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
  * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
- * - The return value of \p T::get_bounds() is expected to contain \f$(\mathbf{lb}, \mathbf{ub})\f$.
+ * The \p %fitness() method of the UDP
+ * can be invoked via pagmo::problem::fitness().
+ * - The return value of \p %get_bounds() is expected to contain the box bounds of the problem,
+ * \f$(\mathbf{lb}, \mathbf{ub})\f$, which also implicitly define the dimension of the problem.
+ * The \p %get_bounds() method of the UDP
+ * can be invoked via pagmo::problem::get_bounds().
  *
  * The mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
- * problem.
- * In order to consider more complex cases, the user may implement one or more
- * of the following methods in \p T :
- *   @code
- *   vector_double::size_type get_nobj() const;
- *   vector_double::size_type get_nec() const;
- *   vector_double::size_type get_nic() const;
- *   vector_double gradient(const vector_double &x) const;
- *   sparsity_pattern gradient_sparsity() const;
- *   std::vector<vector_double> hessians(const vector_double &x) const;
- *   std::vector<sparsity_pattern> hessians_sparsity() const;
- *   void set_seed(unsigned int s);
- *   std::string get_name() const;
- *   std::string get_extra_info() const;
- *   @endcode
+ * problem. In order to consider more complex cases, the UDP may implement one or more of the following methods:
+ * @code{.unparsed}
+ * vector_double::size_type get_nobj() const;
+ * vector_double::size_type get_nec() const;
+ * vector_double::size_type get_nic() const;
+ * vector_double gradient(const vector_double &) const;
+ * sparsity_pattern gradient_sparsity() const;
+ * std::vector<vector_double> hessians(const vector_double &) const;
+ * std::vector<sparsity_pattern> hessians_sparsity() const;
+ * void set_seed(unsigned int);
+ * std::string get_name() const;
+ * std::string get_extra_info() const;
+ * @endcode
  *
- * - \p T::get_nobj() returns \f$n_{obj}\f$. When not implemented \f$n_{obj} = 1\f$ is assumed, and the
- * pagmo::problem::get_nec() method will return 1.
- * - \p T::get_nec() returns \f$n_{ec}\f$. When not implemented \f$n_{ec} = 0\f$ is assumed, and the
+ * - \p %get_nobj() returns \f$n_{obj}\f$. When not implemented in the UDP, \f$n_{obj} = 1\f$ is assumed, and the
+ * pagmo::problem::get_nobj() method will return 1.
+ * - \p %get_nec() returns \f$n_{ec}\f$. When not implemented in the UDP, \f$n_{ec} = 0\f$ is assumed, and the
  * pagmo::problem::get_nec() method will return 0.
- * - \p T::get_nic() returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed, and the
+ * - \p %get_nic() returns \f$n_{ic}\f$. When not implemented in the UDP, \f$n_{ic} = 0\f$ is assumed, and the
  * pagmo::problem::get_nic() method will return 0.
- * - \p T::gradient() returns a sparse representation of the gradients. The \f$ k\f$-th term
+ * - \p %gradient() returns a sparse representation of the gradient. The \f$ k\f$-th term
  * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
  * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by
  * problem::gradient_sparsity().
