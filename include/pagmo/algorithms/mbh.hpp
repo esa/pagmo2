@@ -66,21 +66,25 @@ public:
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                               // allowed (pop.set_problem_seed is)
         auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
+        auto nec = prob.get_nec();            // This getter does not return a const reference but a copy
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
+        auto NP = pop.size();
         auto prob_f_dimension = prob.get_nf();
 
         auto fevals0 = prob.get_fevals(); // discount for the already made fevals
         unsigned int count = 1u;          // regulates the screen output
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
-        // No need for one as the inner algorithm will be tasked to check the population compatibility
+        if (prob_f_dimension != 1u) {
+            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
+        }
         // ---------------------------------------------------------------------------------------------------------
         // Check if the perturbation vector has size 1, in which case the whole perturbation vector is filled with
-        // m_perturb[0]
         if (m_perturb.size() == 1u) {
-            for (decltype(dim) i=1u; i<dim; ++i) {
+            for (decltype(dim) i = 1u; i < dim; ++i) {
                 m_perturb.push_back(m_perturb[0]);
             }
         }
@@ -94,8 +98,36 @@ public:
         if (m_stop == 0u) {
             return pop;
         }
+        // mbh main loop
+        unsigned int i = 0u;
+        while (i < m_stop) {
+            // 1 - We make a copy of the current population
+            population pop_old(pop);
+            // 2 - We perturb the current population (NP funevals are made here)
+            for (decltype(NP) j = 0u; j < NP; ++j) {
+                vector_double tmp_x(dim);
+                for (decltype(dim) k = 0u; k < dim; ++k) {
+                    tmp_x[k] = std::uniform_real_distribution<double>(
+                        std::max(pop.get_x()[j][k] - m_perturb[k] * (ub[k] - lb[k]), lb[k]),
+                        std::min(pop.get_x()[j][k] + m_perturb[k] * (ub[k] - lb[k]), ub[k]))(m_e);
+                    pop.set_x(k, tmp_x);
+                }
+
+            }
+            // 3 - We evolve the current population with the selected algorithm
+            pop = static_cast<const algorithm *>(this)->evolve(pop);
+            i++;
+            // 4 - We reset the counter if we have improved, otherwise we reset the population
+            if (compare_fc(pop.get_f()[pop.best_idx()], pop_old.get_f()[pop_old.best_idx()], nec, prob.get_c_tol())) {
+                i = 0u;
+            } else {
+                for (decltype(NP) j = 0u; j < NP; ++j) {
+                    pop.set_xf(j, pop_old.get_x()[j], pop_old.get_f()[j]);
+                }
+            }
+        }
         // We extract chromosomes and fitnesses
-        return static_cast<const algorithm *>(this)->evolve(pop);
+        return pop;
     }
     /// Sets the algorithm seed
     void set_seed(unsigned int seed)
@@ -137,9 +169,6 @@ private:
     // A - Common to all meta
     template <typename T>
     bool is() const = delete;
-    // population evolve(const population &pop) const = delete;
-    // template <typename Archive>
-    // void serialize(Archive &ar) = delete;
     bool has_set_seed() const = delete;
     bool is_stochastic() const = delete;
     void set_verbosity(unsigned int level) = delete;
@@ -154,8 +183,7 @@ private:
     // and as a vector (in which case mbh will only operate on problem having the correct dimension)
     // While the use of "mutable" is not encouraged, in this case the alternative would be to have the user
     // construct the mbh algo passing one further parameter (the problem dmension) rather than having this determined
-    // upon
-    // the first call to evolve.
+    // upon the first call to evolve.
     mutable std::vector<double> m_perturb;
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;

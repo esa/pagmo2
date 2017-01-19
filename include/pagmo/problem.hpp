@@ -45,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include "exceptions.hpp"
 #include "io.hpp"
 #include "serialization.hpp"
+#include "utils/constrained.hpp"
 #include "type_traits.hpp"
 #include "types.hpp"
 
@@ -820,7 +821,7 @@ struct prob_inner final : prob_inner_base {
         // We need not to worry here about overflow as this is only called by the
         // pagmo::problem constructor once and after nec and nic have been checked to
         // be < MAX/3
-        return vector_double(get_nic_impl(value)+get_nec_impl(value), 0.);
+        return vector_double(get_nic_impl(value) + get_nec_impl(value), 0.);
     }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
     static void set_seed_impl(U &value, unsigned int seed)
@@ -1117,10 +1118,9 @@ public:
         m_c_tol = ptr()->get_c_tol();
         if (m_c_tol.size() != m_nec + m_nic) {
             pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is: "
-                    + std::to_string(m_c_tol.size())
-                    + ", while the number of constraints are: "
-                    + std::to_string(m_nec + m_nic)
-                    + ". They need to be equal");
+                                                   + std::to_string(m_c_tol.size())
+                                                   + ", while the number of constraints are: "
+                                                   + std::to_string(m_nec + m_nic) + ". They need to be equal");
         }
     }
 
@@ -1139,10 +1139,11 @@ public:
     problem(problem &&other) noexcept
         : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals.load()), m_gevals(other.m_gevals.load()),
           m_hevals(other.m_hevals.load()), m_lb(std::move(other.m_lb)), m_ub(std::move(other.m_ub)),
-          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
-          m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
-          m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
-          m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim), m_hs_dim(std::move(other.m_hs_dim))
+          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_c_tol(other.m_c_tol),
+          m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
+          m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
+          m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
+          m_hs_dim(std::move(other.m_hs_dim))
     {
     }
 
@@ -1552,6 +1553,44 @@ public:
         }
     }
 
+    /// Feasibility of a decision vector
+    /**
+     * Checks the feasibility of the fitness corresponding to
+     * a decision vector \p x against
+     * the tolerances returned by problem::get_c_tol
+     *
+     * @note This will cause one fitness evaluation
+     *
+     * @param[in] x decision vector
+     * @return true if the descision vector results in a feasible fitness
+     *
+     */
+    bool feasibility_x(const vector_double& x)
+    {
+        // wrong dimensions of x will trigger exceptions in the called functions
+        return feasibility_f(fitness(x));
+    }
+
+    /// Feasibility of a fitness vector
+    /**
+     * Checks the feasibility of a fitness vector \p f against
+     * the tolerances returned by problem::get_c_tol
+     *
+     *
+     * @param[in] x fitness vector
+     * @return true if the fitness vector is feasible
+     */
+    bool feasibility_f(const vector_double& f)
+    {
+        if (f.size() != get_nf()) {
+            pagmo_throw(std::invalid_argument, "The fitness passed as argument has dimension of: " + std::to_string(f.size()) +
+            ", while the problem defines a fitness size of: " + std::to_string(get_nf()));
+        }
+        auto feas_eq = detail::test_eq_constraints(f.data() + get_nobj(), f.data() + get_nobj() + get_nec(), get_c_tol().data());
+        auto feas_ineq = detail::test_ineq_constraints(f.data() + get_nobj() + get_nec(), f.data() + f.size(), get_c_tol().data() + get_nec());
+        return feas_eq.first + feas_ineq.first == get_nc();
+    }
+
     /// Check if the user-defined problem implements a set_seed method
     /**
      * If the user defined problem implements a set_seed method, this
@@ -1656,9 +1695,9 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_ptr, m_fevals.load(), m_gevals.load(), m_hevals.load(), m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient,
-           m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim,
-           m_hs_dim);
+        ar(m_ptr, m_fevals.load(), m_gevals.load(), m_hevals.load(), m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol,
+           m_has_gradient, m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name,
+           m_gs_dim, m_hs_dim);
     }
 
     /// Serialization: load

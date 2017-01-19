@@ -211,7 +211,7 @@ struct ctol_04 {
 };
 
 struct ctol_05 {
-    const vector_double& get_c_tol() const;
+    const vector_double &get_c_tol() const;
 };
 
 struct ctol_06 {

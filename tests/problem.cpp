@@ -46,7 +46,8 @@ using namespace pagmo;
 // Generates a dummy simple problem with arbitrary dimensions and return values
 struct base_p {
     base_p(vector_double::size_type nobj = 1u, vector_double::size_type nec = 0u, vector_double::size_type nic = 0u,
-           const vector_double& c_tol = {}, const vector_double &ret_fit = {1.}, const vector_double &lb = {0.}, const vector_double &ub = {1.})
+           const vector_double &c_tol = {}, const vector_double &ret_fit = {1.}, const vector_double &lb = {0.},
+           const vector_double &ub = {1.})
         : m_nobj(nobj), m_nec(nec), m_nic(nic), m_c_tol(c_tol), m_ret_fit(ret_fit), m_lb(lb), m_ub(ub)
     {
     }
@@ -104,8 +105,8 @@ struct base_p {
 // having the gradient implemented
 struct grad_p : base_p {
     grad_p(vector_double::size_type nobj = 1u, vector_double::size_type nec = 0u, vector_double::size_type nic = 0u,
-           const vector_double& c_tol = {}, const vector_double &ret_fit = {1}, const vector_double &lb = {0}, const vector_double &ub = {1},
-           const vector_double &g = {1}, const sparsity_pattern &gs = {{0, 0}})
+           const vector_double &c_tol = {}, const vector_double &ret_fit = {1}, const vector_double &lb = {0},
+           const vector_double &ub = {1}, const vector_double &g = {1}, const sparsity_pattern &gs = {{0, 0}})
         : base_p(nobj, nec, nic, c_tol, ret_fit, lb, ub), m_g(g), m_gs(gs)
     {
     }
@@ -136,9 +137,9 @@ PAGMO_REGISTER_PROBLEM(grad_p)
 // having the gradient implemented but overriding the has methods
 struct grad_p_override : grad_p {
     grad_p_override(vector_double::size_type nobj = 1u, vector_double::size_type nec = 0u,
-                    vector_double::size_type nic = 0u, const vector_double &c_tol = {}, const vector_double &ret_fit = {1},
-                    const vector_double &lb = {0}, const vector_double &ub = {1}, const vector_double &g = {1},
-                    const sparsity_pattern &gs = {{0, 0}})
+                    vector_double::size_type nic = 0u, const vector_double &c_tol = {},
+                    const vector_double &ret_fit = {1}, const vector_double &lb = {0}, const vector_double &ub = {1},
+                    const vector_double &g = {1}, const sparsity_pattern &gs = {{0, 0}})
         : grad_p(nobj, nec, nic, c_tol, ret_fit, lb, ub, g, gs)
     {
     }
@@ -166,8 +167,9 @@ PAGMO_REGISTER_PROBLEM(grad_p_override)
 // having the hessians implemented
 struct hess_p : base_p {
     hess_p(vector_double::size_type nobj = 1u, vector_double::size_type nec = 0u, vector_double::size_type nic = 0u,
-           const vector_double& c_tol = {}, const vector_double &ret_fit = {1}, const vector_double &lb = {0}, const vector_double &ub = {1},
-           const std::vector<vector_double> &h = {{1}}, const std::vector<sparsity_pattern> &hs = {{{0, 0}}})
+           const vector_double &c_tol = {}, const vector_double &ret_fit = {1}, const vector_double &lb = {0},
+           const vector_double &ub = {1}, const std::vector<vector_double> &h = {{1}},
+           const std::vector<sparsity_pattern> &hs = {{{0, 0}}})
         : base_p(nobj, nec, nic, c_tol, ret_fit, lb, ub), m_h(h), m_hs(hs)
     {
     }
@@ -198,8 +200,8 @@ PAGMO_REGISTER_PROBLEM(hess_p)
 // having the hessians implemented but overriding the has methods
 struct hess_p_override : hess_p {
     hess_p_override(vector_double::size_type nobj = 1u, vector_double::size_type nec = 0u,
-                    vector_double::size_type nic = 0u, const vector_double& c_tol = {}, const vector_double &ret_fit = {1},
-                    const vector_double &lb = {0}, const vector_double &ub = {1},
+                    vector_double::size_type nic = 0u, const vector_double &c_tol = {},
+                    const vector_double &ret_fit = {1}, const vector_double &lb = {0}, const vector_double &ub = {1},
                     const std::vector<vector_double> &h = {{1}}, const std::vector<sparsity_pattern> &hs = {{{0, 0}}})
         : hess_p(nobj, nec, nic, c_tol, ret_fit, lb, ub, h, hs)
     {
@@ -228,8 +230,8 @@ PAGMO_REGISTER_PROBLEM(hess_p_override)
 // having the hessians and the gradients implemented
 struct full_p : grad_p {
     full_p(vector_double::size_type nobj = 1u, vector_double::size_type nec = 0u, vector_double::size_type nic = 0u,
-           const vector_double& c_tol = {}, const vector_double &ret_fit = {1}, const vector_double &lb = {0}, const vector_double &ub = {1},
-           const vector_double &g = {1}, const sparsity_pattern &gs = {{0, 0}},
+           const vector_double &c_tol = {}, const vector_double &ret_fit = {1}, const vector_double &lb = {0},
+           const vector_double &ub = {1}, const vector_double &g = {1}, const sparsity_pattern &gs = {{0, 0}},
            const std::vector<vector_double> &h = {{1}}, const std::vector<sparsity_pattern> &hs = {{{0, 0}}})
         : grad_p(nobj, nec, nic, c_tol, ret_fit, lb, ub, g, gs), m_h(h), m_hs(hs)
     {
@@ -310,17 +312,19 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     // 3 - ub length is wrong
     BOOST_CHECK_THROW(problem{base_p(1, 0, 0, {}, fit_1, lb_2, ub_3)}, std::invalid_argument);
     // 4 - gradient sparsity has index out of bounds
-    BOOST_CHECK_THROW(problem{grad_p(1, 0, 0, {}, fit_1, lb_2, ub_2, grad_2, grads_2_outofbounds)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{grad_p(1, 0, 0, {}, fit_1, lb_2, ub_2, grad_2, grads_2_outofbounds)},
+                      std::invalid_argument);
     // 5 - gradient sparsity has a repeating pair
     BOOST_CHECK_THROW(problem{grad_p(1, 0, 0, {}, fit_1, lb_2, ub_2, grad_2, grads_2_repeats)}, std::invalid_argument);
     // 6 - hessian sparsity has index out of bounds
     BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {1}, fit_2, lb_2, ub_2, hess_22, hesss_22_outofbounds)},
                       std::invalid_argument);
     // 7 - hessian sparsity is not lower triangular
-    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {1},fit_2, lb_2, ub_2, hess_22, hesss_22_notlowertriangular)},
+    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {1}, fit_2, lb_2, ub_2, hess_22, hesss_22_notlowertriangular)},
                       std::invalid_argument);
     // 8 - hessian sparsity has repeated indexes
-    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {1},fit_2, lb_2, ub_2, hess_22, hesss_22_repeated)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {1}, fit_2, lb_2, ub_2, hess_22, hesss_22_repeated)},
+                      std::invalid_argument);
     // 9 - hessian sparsity has the wrong length
     BOOST_CHECK_THROW(
         problem{hess_p(1, 1, 0, {1}, fit_2, lb_2, ub_2, hess_22, {{{0, 0}, {1, 0}}, {{0, 0}, {1, 0}}, {{0, 0}}})},
@@ -337,12 +341,12 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     BOOST_CHECK_THROW(problem{base_p(1, 0, std::numeric_limits<vector_double::size_type>::max(), {}, fit_2, {1}, {2})},
                       std::invalid_argument);
     // 14 - wrong ctol size returned
-    BOOST_CHECK_THROW(problem{base_p(1, 1, 0, {2.,3.,4.}, fit_2, {1}, {2})}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1, 1, 0, {2., 3., 4.}, fit_2, {1}, {2})}, std::invalid_argument);
     // We check that the data members are initialized correctly (i.e. counters to zero
     // and gradient / hessian dimensions to the right values
     {
         problem p1{base_p(2, 0, 0, {}, fit_2, lb_2, ub_2)};
-        problem p2{base_p(3, 4, 5, {1.,1.,1.,1.,1.,1.,1.,1.,1.}, fit_12, lb_11, ub_11)};
+        problem p2{base_p(3, 4, 5, {1., 1., 1., 1., 1., 1., 1., 1., 1.}, fit_12, lb_11, ub_11)};
         problem p3{grad_p(1, 0, 0, {}, fit_2, lb_2, ub_2, grad_2, grads_2_correct)};
         problem p4{hess_p(1, 1, 0, {1.}, fit_2, lb_2, ub_2, hess_22, hesss_22_correct)};
         BOOST_CHECK(p1.get_fevals() == 0u);
@@ -467,7 +471,7 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
 
 BOOST_AUTO_TEST_CASE(problem_extract_is_test)
 {
-    problem p1{base_p{2, 2, 2, {1.,1.,1.,1.}, {1, 1}, {5, 5}, {10, 10}}};
+    problem p1{base_p{2, 2, 2, {1., 1., 1., 1.}, {1, 1}, {5, 5}, {10, 10}}};
     auto user_problem = p1.extract<base_p>();
 
     // We check we have access to public data members
@@ -488,8 +492,8 @@ BOOST_AUTO_TEST_CASE(problem_extract_is_test)
 
 BOOST_AUTO_TEST_CASE(problem_fitness_test)
 {
-    problem p1{base_p{2, 2, 2, {1.,1.,1.,1.}, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
-    problem p1_wrong_retval{base_p{2, 2, 2, {1.,1.,1.,1.}, {1, 1, 1}, {5, 5}, {10, 10}}};
+    problem p1{base_p{2, 2, 2, {1., 1., 1., 1.}, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
+    problem p1_wrong_retval{base_p{2, 2, 2, {1., 1., 1., 1.}, {1, 1, 1}, {5, 5}, {10, 10}}};
 
     // We check the fitness checks
     BOOST_CHECK_THROW(p1.fitness({3, 3, 3, 3}), std::invalid_argument);
@@ -509,7 +513,7 @@ BOOST_AUTO_TEST_CASE(problem_gradient_test)
     BOOST_CHECK((p1.gradient({3, 3}) == vector_double{12, 13}));
 
     {
-        problem p2{base_p{2, 2, 2, {1.,1.,1.,1.}, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
+        problem p2{base_p{2, 2, 2, {1., 1., 1., 1.}, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
         BOOST_CHECK_THROW(p2.gradient({3, 3}), std::logic_error);
         BOOST_CHECK_THROW(p2.hessians({3, 3}), std::logic_error);
     }
@@ -634,7 +638,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     std::vector<vector_double> hess_22{{1, 1}, {1, 1}};
     std::vector<sparsity_pattern> hesss_22_correct{{{0, 0}, {1, 0}}, {{0, 0}, {1, 0}}};
 
-    problem p1{base_p(2, 3, 4, {1.,1.,1.,1.,1.,1.,1.}, {3, 4, 5, 6, 7, 8, 9, 0, 1}, lb_2, ub_2)};
+    problem p1{base_p(2, 3, 4, {1., 1., 1., 1., 1., 1., 1.}, {3, 4, 5, 6, 7, 8, 9, 0, 1}, lb_2, ub_2)};
     problem p2{full_p(2, 0, 0, {}, fit_2, lb_2, ub_2, grad_2, grads_2_correct, hess_22, hesss_22_correct)};
     problem p3{empty{}};
 
@@ -643,7 +647,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p1.get_nec() == 3);
     BOOST_CHECK(p1.get_nic() == 4);
     BOOST_CHECK(p1.get_nc() == 4 + 3);
-    BOOST_CHECK((p1.get_c_tol() == vector_double{1.,1.,1.,1.,1.,1.,1.}));
+    BOOST_CHECK((p1.get_c_tol() == vector_double{1., 1., 1., 1., 1., 1., 1.}));
     BOOST_CHECK(p1.get_nf() == 2 + 3 + 4);
     BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13, 13}, {17, 17}}));
 
@@ -905,7 +909,7 @@ BOOST_AUTO_TEST_CASE(problem_get_nobj_detection)
 
 BOOST_AUTO_TEST_CASE(problem_auto_sparsity_test)
 {
-    problem p{base_p(2u, 2u, 2u, {1.,1.,1.,1.}, {1., 1., 1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
+    problem p{base_p(2u, 2u, 2u, {1., 1., 1., 1.}, {1., 1., 1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
     BOOST_CHECK(p.gradient_sparsity() == detail::dense_gradient(6u, 2u));
     BOOST_CHECK(p.hessians_sparsity() == detail::dense_hessians(6u, 2u));
 }
@@ -913,7 +917,7 @@ BOOST_AUTO_TEST_CASE(problem_auto_sparsity_test)
 struct ctolni {
     vector_double fitness(const vector_double &) const
     {
-        return {1.,1.,1.,1.};
+        return {1., 1., 1., 1.};
     }
     vector_double::size_type get_nobj() const
     {
@@ -929,7 +933,7 @@ struct ctolni {
     }
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        return {{0.,0.}, {1.,1.}};
+        return {{0., 0.}, {1., 1.}};
     }
 };
 
@@ -939,6 +943,33 @@ BOOST_AUTO_TEST_CASE(problem_get_c_tol_test)
     problem ctol_not_implemented{ctolni{}};
     BOOST_CHECK((ctol_is_implemented.get_c_tol() == vector_double{1e-8, 1e-9}));
     BOOST_CHECK((ctol_not_implemented.get_c_tol() == vector_double{0., 0.}));
+}
+
+BOOST_AUTO_TEST_CASE(problem_feasibility_methods_test)
+{
+    problem test01{base_p(2u, 1u, 1u, {1e-8, 1e-9}, {1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
+    problem test02{base_p(2u, 1u, 1u, {1e-8, 1e-9}, {1., 1., 1e-9, -1.}, {0., 0.}, {1., 1.})};
+    problem test03{base_p(2u, 1u, 1u, {2., 2.}, {1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
+    problem test04{base_p(1u, 1u, 1u, {1e-8, 1e-9}, {1., 1e-9, 1e-10}, {0.}, {1.})};
+    problem test05{base_p(1u, 2u, 0u, {1e-8, 1e-9}, {1., -1e-9, -1e-10}, {0.}, {1.})};
+    problem test06{base_p(1u, 0u, 2u, {1e-8, 1e-9}, {1., -12., -22.}, {0.}, {1.})};
+
+    BOOST_CHECK(test01.feasibility_x({1.,1.}) == false);
+    BOOST_CHECK(test02.feasibility_x({1.,1.}) == true);
+    BOOST_CHECK(test03.feasibility_x({1.,1.}) == true);
+    BOOST_CHECK(test04.feasibility_x({1.}) == true);
+    BOOST_CHECK(test05.feasibility_x({1.}) == true);
+    BOOST_CHECK(test06.feasibility_x({1.}) == true);
+
+    BOOST_CHECK(test01.feasibility_f({2.,3.,1e-10, 3.}) == false);
+    BOOST_CHECK(test02.feasibility_f({-10., 23., 1e-9, -23.}) == true);
+    BOOST_CHECK(test03.feasibility_f({1.,1., -1.999, 1.999}) == true);
+    BOOST_CHECK(test04.feasibility_f({1., 0., -10000.}) == true);
+    BOOST_CHECK(test05.feasibility_f({1., 1e-9, 1e-10}) == true);
+    BOOST_CHECK(test06.feasibility_f({1., -23, 1e-10}) == true);
+
+    BOOST_CHECK_THROW(test06.feasibility_f({1., -23, 1e-10, 2., 34.}), std::invalid_argument);
+
 }
 
 BOOST_AUTO_TEST_CASE(null_problem_test)

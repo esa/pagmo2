@@ -9,7 +9,6 @@
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/mbh.hpp>
-#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
