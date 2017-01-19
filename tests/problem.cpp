@@ -314,16 +314,16 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     // 5 - gradient sparsity has a repeating pair
     BOOST_CHECK_THROW(problem{grad_p(1, 0, 0, {}, fit_1, lb_2, ub_2, grad_2, grads_2_repeats)}, std::invalid_argument);
     // 6 - hessian sparsity has index out of bounds
-    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {}, fit_2, lb_2, ub_2, hess_22, hesss_22_outofbounds)},
+    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {1}, fit_2, lb_2, ub_2, hess_22, hesss_22_outofbounds)},
                       std::invalid_argument);
     // 7 - hessian sparsity is not lower triangular
-    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {},fit_2, lb_2, ub_2, hess_22, hesss_22_notlowertriangular)},
+    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {1},fit_2, lb_2, ub_2, hess_22, hesss_22_notlowertriangular)},
                       std::invalid_argument);
     // 8 - hessian sparsity has repeated indexes
-    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {},fit_2, lb_2, ub_2, hess_22, hesss_22_repeated)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, {1},fit_2, lb_2, ub_2, hess_22, hesss_22_repeated)}, std::invalid_argument);
     // 9 - hessian sparsity has the wrong length
     BOOST_CHECK_THROW(
-        problem{hess_p(1, 1, 0, {}, fit_2, lb_2, ub_2, hess_22, {{{0, 0}, {1, 0}}, {{0, 0}, {1, 0}}, {{0, 0}}})},
+        problem{hess_p(1, 1, 0, {1}, fit_2, lb_2, ub_2, hess_22, {{{0, 0}, {1, 0}}, {{0, 0}, {1, 0}}, {{0, 0}}})},
         std::invalid_argument);
     // 10 - 0 objectives
     BOOST_CHECK_THROW(problem{base_p(0, 0, 0, {}, fit_1, {1}, {2})}, std::invalid_argument);
@@ -342,9 +342,9 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     // and gradient / hessian dimensions to the right values
     {
         problem p1{base_p(2, 0, 0, {}, fit_2, lb_2, ub_2)};
-        problem p2{base_p(3, 4, 5, {}, fit_12, lb_11, ub_11)};
+        problem p2{base_p(3, 4, 5, {1.,1.,1.,1.,1.,1.,1.,1.,1.}, fit_12, lb_11, ub_11)};
         problem p3{grad_p(1, 0, 0, {}, fit_2, lb_2, ub_2, grad_2, grads_2_correct)};
-        problem p4{hess_p(1, 1, 0, {}, fit_2, lb_2, ub_2, hess_22, hesss_22_correct)};
+        problem p4{hess_p(1, 1, 0, {1.}, fit_2, lb_2, ub_2, hess_22, hesss_22_correct)};
         BOOST_CHECK(p1.get_fevals() == 0u);
         BOOST_CHECK(p1.get_gevals() == 0u);
         BOOST_CHECK(p1.get_hevals() == 0u);
@@ -467,7 +467,7 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
 
 BOOST_AUTO_TEST_CASE(problem_extract_is_test)
 {
-    problem p1{base_p{2, 2, 2, {}, {1, 1}, {5, 5}, {10, 10}}};
+    problem p1{base_p{2, 2, 2, {1.,1.,1.,1.}, {1, 1}, {5, 5}, {10, 10}}};
     auto user_problem = p1.extract<base_p>();
 
     // We check we have access to public data members
@@ -488,8 +488,8 @@ BOOST_AUTO_TEST_CASE(problem_extract_is_test)
 
 BOOST_AUTO_TEST_CASE(problem_fitness_test)
 {
-    problem p1{base_p{2, 2, 2, {}, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
-    problem p1_wrong_retval{base_p{2, 2, 2, {}, {1, 1, 1}, {5, 5}, {10, 10}}};
+    problem p1{base_p{2, 2, 2, {1.,1.,1.,1.}, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
+    problem p1_wrong_retval{base_p{2, 2, 2, {1.,1.,1.,1.}, {1, 1, 1}, {5, 5}, {10, 10}}};
 
     // We check the fitness checks
     BOOST_CHECK_THROW(p1.fitness({3, 3, 3, 3}), std::invalid_argument);
@@ -509,7 +509,7 @@ BOOST_AUTO_TEST_CASE(problem_gradient_test)
     BOOST_CHECK((p1.gradient({3, 3}) == vector_double{12, 13}));
 
     {
-        problem p2{base_p{2, 2, 2, {}, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
+        problem p2{base_p{2, 2, 2, {1.,1.,1.,1.}, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
         BOOST_CHECK_THROW(p2.gradient({3, 3}), std::logic_error);
         BOOST_CHECK_THROW(p2.hessians({3, 3}), std::logic_error);
     }
@@ -634,7 +634,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     std::vector<vector_double> hess_22{{1, 1}, {1, 1}};
     std::vector<sparsity_pattern> hesss_22_correct{{{0, 0}, {1, 0}}, {{0, 0}, {1, 0}}};
 
-    problem p1{base_p(2, 3, 4, {}, {3, 4, 5, 6, 7, 8, 9, 0, 1}, lb_2, ub_2)};
+    problem p1{base_p(2, 3, 4, {1.,1.,1.,1.,1.,1.,1.}, {3, 4, 5, 6, 7, 8, 9, 0, 1}, lb_2, ub_2)};
     problem p2{full_p(2, 0, 0, {}, fit_2, lb_2, ub_2, grad_2, grads_2_correct, hess_22, hesss_22_correct)};
     problem p3{empty{}};
 
@@ -643,7 +643,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p1.get_nec() == 3);
     BOOST_CHECK(p1.get_nic() == 4);
     BOOST_CHECK(p1.get_nc() == 4 + 3);
-    BOOST_CHECK((p1.get_c_tol() == vector_double{0,0,0,0,0,0,0}));
+    BOOST_CHECK((p1.get_c_tol() == vector_double{1.,1.,1.,1.,1.,1.,1.}));
     BOOST_CHECK(p1.get_nf() == 2 + 3 + 4);
     BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13, 13}, {17, 17}}));
 
@@ -905,7 +905,7 @@ BOOST_AUTO_TEST_CASE(problem_get_nobj_detection)
 
 BOOST_AUTO_TEST_CASE(problem_auto_sparsity_test)
 {
-    problem p{base_p(2u, 2u, 2u, {}, {1., 1., 1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
+    problem p{base_p(2u, 2u, 2u, {1.,1.,1.,1.}, {1., 1., 1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
     BOOST_CHECK(p.gradient_sparsity() == detail::dense_gradient(6u, 2u));
     BOOST_CHECK(p.hessians_sparsity() == detail::dense_hessians(6u, 2u));
 }

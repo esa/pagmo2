@@ -815,9 +815,12 @@ struct prob_inner final : prob_inner_base {
         return value.get_c_tol();
     }
     template <typename U, typename std::enable_if<!has_c_tolerance<U>::value, int>::type = 0>
-    static vector_double get_c_tol_impl(const U &)
+    static vector_double get_c_tol_impl(const U &value)
     {
-        return vector_double{};
+        // We need not to worry here about overflow as this is only called by the
+        // pagmo::problem constructor once and after nec and nic have been checked to
+        // be < MAX/3
+        return vector_double(get_nic_impl(value)+get_nec_impl(value), 0.);
     }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
     static void set_seed_impl(U &value, unsigned int seed)
@@ -943,8 +946,8 @@ struct prob_inner final : prob_inner_base {
  * - \p T::get_nic() returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed, and the
  * pagmo::problem::get_nic() method will return 0.
  * - \p T::get_c_tol() returns a vector of dimension \f$n_{ec} + n_{ic}\f$ containing tolerances to
- * be used when checking constraint feasibility. When not implemented, or when returning an empty vector,
- * a tolerance of zero is assumed, and the pagmo::problem::get_c_tol() method will return a vector
+ * be used when checking constraint feasibility. When not implemented a tolerance of zero is assumed
+ * for all constraints, and the pagmo::problem::get_c_tol() method will return a vector
  * filled up with zeros.
  * - \p T::gradient() returns a sparse representation of the gradients. The \f$ k\f$-th term
  * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
@@ -1058,14 +1061,6 @@ public:
         if (m_nic > std::numeric_limits<decltype(m_nic)>::max() / 3u) {
             pagmo_throw(std::invalid_argument, "The number of inequality constraints is too large");
         }
-        m_c_tol = ptr()->get_c_tol();
-        // 3a - Constraint tolerance
-        if (m_c_tol.size() == 0u) { // thats the default option returned if the method is not implemented
-            m_c_tol = vector_double(m_nec + m_nic, 0.);
-        }
-        if (m_c_tol.size() != m_nec + m_nic) {
-            pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is not equal to the number of constrained declared");
-        }
         // 4 - Presence of gradient and its sparsity.
         m_has_gradient = ptr()->has_gradient();
         m_has_gradient_sparsity = ptr()->has_gradient_sparsity();
@@ -1116,6 +1111,16 @@ public:
             for (vector_double::size_type i = 0u; i < nf; ++i) {
                 m_hs_dim[i] = (nx * (nx - 1u) / 2u + nx); // lower triangular
             }
+        }
+        // 8 - Constraint tolerance (this is at the end as nec < MAX/3 and nic < MAX/3 has been tested above)
+        // so no overflow is possible
+        m_c_tol = ptr()->get_c_tol();
+        if (m_c_tol.size() != m_nec + m_nic) {
+            pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is: "
+                    + std::to_string(m_c_tol.size())
+                    + ", while the number of constraints are: "
+                    + std::to_string(m_nec + m_nic)
+                    + ". They need to be equal");
         }
     }
 
