@@ -53,7 +53,7 @@ see https://www.gnu.org/licenses/. */
  * This macro should always be invoked after the declaration of a problem: it will register
  * the problem with PaGMO's serialization machinery. The macro should be called in the root namespace
  * and using the fully qualified name of the problem to be registered. For example:
- * @code
+ * @code{.unparsed}
  * namespace my_namespace
  * {
  *
@@ -102,7 +102,7 @@ namespace pagmo
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double fitness(const vector_double &) const;
  * @endcode
  * The \p fitness() method is part of the interface for the definition of a problem
@@ -127,7 +127,7 @@ const bool has_fitness<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double::size_type get_nobj() const;
  * @endcode
  * The \p get_nobj() method is part of the interface for the definition of a problem
@@ -152,7 +152,7 @@ const bool has_get_nobj<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  * The \p get_bounds() method is part of the interface for the definition of a problem
@@ -178,7 +178,7 @@ const bool has_bounds<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double::size_type get_nec() const;
  * @endcode
  * The \p get_nec() method is part of the interface for the definition of a problem
@@ -203,7 +203,7 @@ const bool has_e_constraints<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double::size_type get_nic() const;
  * @endcode
  * The \p get_nic() method is part of the interface for the definition of a problem
@@ -228,7 +228,7 @@ const bool has_i_constraints<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double get_c_tol() const;
  * @endcode
  * The \p get_c_tol() method is part of the interface for the definition of a problem
@@ -253,7 +253,7 @@ const bool has_c_tolerance<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double gradient(const vector_double &) const;
  * @endcode
  * The \p gradient() method is part of the interface for the definition of a problem
@@ -278,7 +278,7 @@ const bool has_gradient<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_gradient() const;
  * @endcode
  * The \p has_gradient() method is part of the interface for the definition of a problem
@@ -303,7 +303,7 @@ const bool override_has_gradient<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * sparsity_pattern gradient_sparsity() const;
  * @endcode
  * The \p gradient_sparsity() method is part of the interface for the definition of a problem
@@ -329,7 +329,7 @@ const bool has_gradient_sparsity<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * std::vector<vector_double> hessians(const vector_double &) const;
  * @endcode
  * The \p hessians() method is part of the interface for the definition of a problem
@@ -355,7 +355,7 @@ const bool has_hessians<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_hessians() const;
  * @endcode
  * The \p has_hessians() method is part of the interface for the definition of a problem
@@ -380,7 +380,7 @@ const bool override_has_hessians<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * std::vector<sparsity_pattern> hessians_sparsity() const;
  * @endcode
  * The \p hessians_sparsity() method is part of the interface for the definition of a problem
@@ -406,7 +406,7 @@ const bool has_hessians_sparsity<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_gradient_sparsity() const;
  * @endcode
  * The \p has_gradient_sparsity() method is part of the interface for the definition of a problem
@@ -431,7 +431,7 @@ const bool override_has_gradient_sparsity<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_hessians_sparsity() const;
  * @endcode
  * The \p has_hessians_sparsity() method is part of the interface for the definition of a problem
@@ -820,7 +820,7 @@ struct prob_inner final : prob_inner_base {
         // We need not to worry here about overflow as this is only called by the
         // pagmo::problem constructor once and after nec and nic have been checked to
         // be < MAX/3
-        return vector_double(get_nic_impl(value)+get_nec_impl(value), 0.);
+        return vector_double(get_nic_impl(value) + get_nec_impl(value), 0.);
     }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
     static void set_seed_impl(U &value, unsigned int seed)
@@ -911,30 +911,26 @@ struct prob_inner final : prob_inner_base {
  * In order to define an optimizaztion problem in PaGMO, the user must first define a class
  * (or a struct) whose methods describe the properties of the problem and allow to compute
  * the objective function, the gradient, the constraints, etc. In PaGMO, we refer to such
- * a class as a *user-defined problem*, or UDP for short. Once defined and instantiated,
+ * a class as a **user-defined problem**, or UDP for short. Once defined and instantiated,
  * a UDP can then be used to construct an instance of this class, pagmo::problem, which
  * provides a generic interface to optimization problems.
  *
  * Every UDP must implement at least the following two methods:
- *
- * @code{.unparsed}
+ * @code{.unparsed}{.unparsed}
  * vector_double fitness(const vector_double &) const;
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  *
- * - The return value of \p %fitness() is expected to have a dimension of
- * \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
- * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
- * The \p %fitness() method of the UDP
- * can be invoked via pagmo::problem::fitness().
- * - The return value of \p %get_bounds() is expected to contain the box bounds of the problem,
+ * The \p %fitness() method is expected to return the fitness of the input decision vector, while
+ * \p %get_bounds() is expected to return the box bounds of the problem,
  * \f$(\mathbf{lb}, \mathbf{ub})\f$, which also implicitly define the dimension of the problem.
- * The \p %get_bounds() method of the UDP
- * can be invoked via pagmo::problem::get_bounds().
+ * The \p %fitness() and \p %get_bounds() methods of the UDP are accessible from the corresponding problem::fitness()
+ * and problem::get_bounds() methods (see their documentation for details).
  *
- * The mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
- * problem. In order to consider more complex cases, the UDP may implement one or more of the following methods:
- * @code{.unparsed}
+ * The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
+ * optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following
+ * methods:
+ * @code{.unparsed}{.unparsed}
  * vector_double::size_type get_nobj() const;
  * vector_double::size_type get_nec() const;
  * vector_double::size_type get_nic() const;
@@ -948,21 +944,13 @@ struct prob_inner final : prob_inner_base {
  * std::string get_extra_info() const;
  * @endcode
  *
- * - \p %get_nobj() returns \f$n_{obj}\f$. When not implemented in the UDP, \f$n_{obj} = 1\f$ is assumed, and the
- * pagmo::problem::get_nobj() method will return 1.
- * - \p %get_nec() returns \f$n_{ec}\f$. When not implemented in the UDP, \f$n_{ec} = 0\f$ is assumed, and the
- * pagmo::problem::get_nec() method will return 0.
- * - \p %get_nic() returns \f$n_{ic}\f$. When not implemented in the UDP, \f$n_{ic} = 0\f$ is assumed, and the
- * pagmo::problem::get_nic() method will return 0.
+ * -
+ * -
  * - \p %gradient() returns a sparse representation of the gradient. The \f$ k\f$-th term
  * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
  * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by
  * problem::gradient_sparsity().
  * When not implemented, a call to problem::gradient() throws an \p std::logic_error.
- * - \p %get_c_tol() returns a vector of dimension \f$n_{ec} + n_{ic}\f$ containing tolerances to
- * be used when checking constraint feasibility. When not implemented a tolerance of zero is assumed
- * for all constraints, and the pagmo::problem::get_c_tol() method will return a vector
- * filled up with zeros.
  * - \p T::gradient_sparsity() returns the gradient sparsity pattern, i.e a collection of the non-zero index pairs
  * \f$(i,j)\f$. When
  * not implemented a dense pattern is assumed and a call to problem::gradient_sparsity().
@@ -1010,7 +998,7 @@ public:
      * to satisfy the following requests:
      *
      * - \p T must implement the following mandatory methods:
-     *   @code
+     *   @code{.unparsed}
      *   vector_double fitness(const vector_double &) const;
      *   std::pair<vector_double, vector_double> get_bounds() const;
      *   @endcode
@@ -1125,11 +1113,9 @@ public:
         // so no overflow is possible
         m_c_tol = ptr()->get_c_tol();
         if (m_c_tol.size() != m_nec + m_nic) {
-            pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is: "
-                    + std::to_string(m_c_tol.size())
-                    + ", while the number of constraints are: "
-                    + std::to_string(m_nec + m_nic)
-                    + ". They need to be equal");
+            pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is " + std::to_string(m_c_tol.size())
+                                                   + ", while the number of constraints is "
+                                                   + std::to_string(m_nec + m_nic) + ". They need to be equal");
         }
     }
 
@@ -1148,10 +1134,11 @@ public:
     problem(problem &&other) noexcept
         : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals.load()), m_gevals(other.m_gevals.load()),
           m_hevals(other.m_hevals.load()), m_lb(std::move(other.m_lb)), m_ub(std::move(other.m_ub)),
-          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
-          m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
-          m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
-          m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim), m_hs_dim(std::move(other.m_hs_dim))
+          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_c_tol(other.m_c_tol),
+          m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
+          m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
+          m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
+          m_hs_dim(std::move(other.m_hs_dim))
     {
     }
 
@@ -1220,21 +1207,25 @@ public:
         return extract<T>() != nullptr;
     }
 
-    /// Computes the fitness
+    /// Fitness
     /**
-     * The fitness, implemented in the user-defined problem,
-     * is expected to be a pagmo::vector_double of dimension \f$n_f\f$ containing
-     * the problem fitness: the concatenation of \f$n_{obj}\f$ objectives
-     * to minimize, \f$n_{ec}\f$ equality constraints and \f$n_{ic}\f$
-     * inequality constraints.
+     * This method will invoke the \p %fitness() method of the UDP to compute the fitness of the
+     * input decision vector \p dv. The return value of the \p %fitness() method of the UDP is expected to have a
+     * dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
+     * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
      *
-     * @param[in] dv The decision vector
+     * In addition to invoking the \p %fitness() method of the UDP, this method will perform sanity checks on \p dv
+     * and on the returned fitness vector, and it will increase the internal fitness evaluation counter of the problem
+     * (see problem::get_fevals()).
      *
-     * @return The user implemented fitness.
+     * @param dv The decision vector
      *
-     * @throws std::invalid_argument if the length of the decision vector is not \f$n_x\f$
-     * @throws std::invalid_argument if the length of the fitness returned (as defined in the user defined problem)
-     * is not \f$n_f\f$
+     * @return the fitness of \p dv.
+     *
+     * @throws std::invalid_argument if either
+     * - the length of \p dv differs from the output of get_nx(), or
+     * - the length of the returned fitness vector differs from the output
+     *   of get_nf().
      */
     vector_double fitness(const vector_double &dv) const
     {
@@ -1288,7 +1279,7 @@ public:
      * also be directly hard-coded implementing the
      * method
      *
-     * @code
+     * @code{.unparsed}
      * bool has_gradient() const
      * @endcode
      *
@@ -1330,7 +1321,7 @@ public:
      * also be directly hard-coded implementing the
      * method
      *
-     * @code
+     * @code{.unparsed}
      * bool has_gradient_sparsity() const
      * @endcode
      *
@@ -1384,7 +1375,7 @@ public:
      * also be directly hard-coded implementing the
      * method
      *
-     * @code
+     * @code{.unparsed}
      * bool has_hessians() const
      * @endcode
      *
@@ -1427,7 +1418,7 @@ public:
      * also be directly hard-coded implementing the
      * method
      *
-     * @code
+     * @code{.unparsed}
      * bool has_hessians_sparsity() const
      * @endcode
      *
@@ -1443,8 +1434,11 @@ public:
 
     /// Number of objectives
     /**
-     * @return Returns \f$ n_{obj}\f$, the number of objectives as returned by the
-     * corresponding user-implemented method if present, 1 otherwise
+     * This method will return \f$ n_{obj}\f$, the number of objectives of the optimization
+     * problem. If the UDP satisfies the pagmo::has_get_nobj type traits, then the output of
+     * its \p %get_nobj() method will be returned. Otherwise, this method will return 1.
+     *
+     * @return the number of objectives of the problem.
      */
     vector_double::size_type get_nobj() const
     {
@@ -1473,8 +1467,8 @@ public:
 
     /// Box-bounds
     /**
-     * @return Returns \f$ (\mathbf{lb}, \mathbf{ub}) \f$, the box-bounds as returned by
-     * the corresponding user-implemented method
+     * @return \f$ (\mathbf{lb}, \mathbf{ub}) \f$, the box-bounds, as returned by
+     * the \p %get_bounds() method of the UDP.
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -1483,9 +1477,11 @@ public:
 
     /// Number of equality constraints
     /**
-     * @return Returns \f$ n_{ec} \f$, the number of inequality constraints
-     * as returned by the the corresponding user-implemented method if present,
-     * zero otherwise
+     * This method will return \f$ n_{ec} \f$, the number of equality constraints of the problem.
+     * If the UDP satisfies pagmo::has_e_constraints, then the output of
+     * its \p %get_nec() method will be returned. Otherwise, this method will return 0.
+     *
+     * @return the number of equality constraints of the problem.
      */
     vector_double::size_type get_nec() const
     {
@@ -1494,9 +1490,11 @@ public:
 
     /// Number of inequality constraints
     /**
-     * @return Returns \f$ n_{ic} \f$, the number of inequality constraints
-     * as returned by the the corresponding user-implemented method if present,
-     * zero otherwise
+     * This method will return \f$ n_{ic} \f$, the number of inequality constraints of the problem.
+     * If the UDP satisfies pagmo::has_i_constraints, then the output of
+     * its \p %get_nic() method will be returned. Otherwise, this method will return 0.
+     *
+     * @return the number of inequality constraints of the problem.
      */
     vector_double::size_type get_nic() const
     {
@@ -1505,17 +1503,22 @@ public:
 
     /// Constraint tolerance
     /**
-     * @return Returns a vector_double containing the tolerances to use when
-     * checking for constraint feasibility
+     * This method will return a vector of dimension \f$n_{ec} + n_{ic}\f$ containing tolerances to
+     * be used when checking constraint feasibility. If the UDP satisfies pagmo::has_c_tolerance,
+     * then the output of its \p %get_c_tol() method will be returned. Otherwise, this method will return
+     * a zero-filled vector.
+     *
+     * @return a pagmo::vector_double containing the tolerances to use when
+     * checking for constraint feasibility.
      */
     vector_double get_c_tol() const
     {
         return m_c_tol;
     }
 
-    /// Number of constraints
+    /// Total number of constraints
     /**
-     * @return Returns \f$ n_{ic} + n_{ec} \f$, the number of constraints
+     * @return the sum of the output of get_nic() and get_nec() (i.e., the total number of constraints).
      */
     vector_double::size_type get_nc() const
     {
@@ -1568,7 +1571,7 @@ public:
      * also be forced by the user by implementing the additional
      * method
      *
-     * @code
+     * @code{.unparsed}
      * bool has_set_seed() const
      * @endcode
      *
@@ -1665,9 +1668,9 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_ptr, m_fevals.load(), m_gevals.load(), m_hevals.load(), m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient,
-           m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim,
-           m_hs_dim);
+        ar(m_ptr, m_fevals.load(), m_gevals.load(), m_hevals.load(), m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol,
+           m_has_gradient, m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name,
+           m_gs_dim, m_hs_dim);
     }
 
     /// Serialization: load

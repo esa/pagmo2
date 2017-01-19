@@ -69,7 +69,7 @@ std::mutex random_device_statics<T>::m_mutex;
  *
  * In PaGMO, all classes that contain a random engine (thus that generate
  * random numbers from variates), by default should contain something like:
- * @code
+ * @code{.unparsed}
  * #include "rng.hpp"
  * class class_using_random {
  * explicit class_using_random(args ...... , unsigned int seed = pagmo::random_device::next()) : m_e(seed),

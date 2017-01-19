@@ -55,7 +55,7 @@ namespace cereal
 
       @note This feature is experimental and may be altered or removed in a future release. See issue #46.
 
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       struct MyUserData
       {
         int * myRawPointer;

@@ -40,7 +40,7 @@ namespace cereal
 
       \sa virtual_base_class
 
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       struct MyBase
       {
         int x;
@@ -90,7 +90,7 @@ namespace cereal
 
       \sa base_class
 
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       struct MyBase
       {
         int x;

@@ -69,7 +69,7 @@ namespace pagmo
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * void set_verbose(unsigned);
  * @endcode
  * The \p set_verbose() method is part of the interface for the definition of an algorithm
@@ -94,7 +94,7 @@ const bool has_set_verbosity<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_set_verbosity() const;
  * @endcode
  * The \p has_set_verbosity() method is part of the interface for the definition of an algorithm
@@ -119,7 +119,7 @@ const bool override_has_set_verbosity<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * population evolve(const population &) const;
  * @endcode
  * The \p evolve() method is part of the interface for the definition of an algorithm
@@ -328,7 +328,7 @@ struct algo_inner final : algo_inner_base {
  * a separate object of type \p T where, at least, a method must be present having signature
  * equivalent to the following:
  *
- * @code
+ * @code{.unparsed}
  * population evolve(const population&) const;
  * @endcode
  *
@@ -339,7 +339,7 @@ struct algo_inner final : algo_inner_base {
  * The mandatory method above allow to define a deterministic algorithm.
  * In order to consider more complex cases, the user may implement one or more
  * of the following methods in \p T :
- *   @code
+ *   @code{.unparsed}
  * void set_seed(unsigned int seed)
  * void set_verbosity(unsigned int level)
  * std::string get_name() const
@@ -372,7 +372,7 @@ public:
      * to satisfy the following requests:
      *
      * - \p T must implement the following mandatory method:
-     *   @code
+     *   @code{.unparsed}
      *   population evolve(const population&) const;
      *   @endcode
      *   otherwise construction will result in a compile-time failure
@@ -491,7 +491,7 @@ public:
      * also be forced by the user by implementing the additional
      * method
      *
-     * @code
+     * @code{.unparsed}
      * bool has_set_seed() const
      * @endcode
      *
@@ -530,7 +530,7 @@ public:
      * also be forced by the user by implementing the additional
      * method
      *
-     * @code
+     * @code{.unparsed}
      * bool has_set_verbosity() const
      * @endcode
      *

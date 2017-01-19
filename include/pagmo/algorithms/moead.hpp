@@ -350,7 +350,7 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 1):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:           ADF:        ideal1:        ideal2:
      *   1              0        24.9576       0.117748        2.77748
      *   2             40        19.2461      0.0238826        2.51403

@@ -88,13 +88,13 @@ public:
      *
      * Two self-adaptation variants are available to control the F and CR parameters:
      *
-     * @code
+     * @code{.unparsed}
      * 1 - jDE (Brest et al.)                       2 - iDE (Elsayed at al.)
      * @endcode
      *
      * The following variants are available to produce a mutant vector:
      *
-     * @code
+     * @code{.unparsed}
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
      * 5 - rand/2/exp                               6. - best/1/bin
@@ -684,7 +684,7 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 1):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:          Best:             F:            CR:            dx:            df:
      *  301           4515       0.668472       0.374983       0.502932    0.000276682    0.000388866
      *  302           4530       0.668472       0.374983       0.502932    0.000213271     0.00020986

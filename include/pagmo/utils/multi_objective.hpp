@@ -341,10 +341,10 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  *
  * @note This function will also work for single objective optimization, i.e. with 1 objective
  * in which case, though, it is more efficient to sort using directly on of the following forms:
- * @code
+ * @code{.unparsed}
  * std::sort(input_f.begin(), input_f.end(), [] (auto a, auto b) {return a[0] < b[0];});
  * @endcode
- * @code
+ * @code{.unparsed}
  * std::vector<vector_double::size_type> idx(input_f.size());
  * std::iota(idx.begin(), idx.end(), vector_double::size_type(0u));
  * std::sort(idx.begin(), idx.end(), [] (auto a, auto b) {return input_f[a][0] < input_f[b][0];});
@@ -410,7 +410,7 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
  * While the complexity is the same as that of pagmo::sort_population_mo, this function returns a permutation
  * of:
  *
- * @code
+ * @code{.unparsed}
  * auto ret = pagmo::sort_population_mo(input_f).resize(N);
  * @endcode
  *
@@ -575,7 +575,7 @@ vector_double nadir(const std::vector<vector_double> &input_f)
  * are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
  *
  * Example: to generate 10 weights distributed somehow regularly to decompose a three dimensional problem:
- * @code
+ * @code{.unparsed}
  * detail::random_engine_type r_engine();
  * auto lambdas = decomposition_weights(3u, 10u, "low discrepancy", r_engine);
  * @endcode

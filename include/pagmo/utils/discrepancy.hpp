@@ -59,7 +59,7 @@ namespace pagmo
  * a list of \f$n\f$ number that, by construction, will sum up to 1. Moreover this sampling is uniform.
  * As an example the following code would generate points distributed on a \f$n\f$ dimensional simplex:
  *
- * @code
+ * @code{.unparsed}
  * std::vector<std::vector<double>> points_on_a_simplex;
  * halton ld_rng(n-1);
  * for (auto i = 0u; i < 100u; ++i) {

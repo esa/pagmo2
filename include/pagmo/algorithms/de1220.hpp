@@ -104,13 +104,13 @@ public:
      * The same two self-adaptation variants used in pagmo::sade are used to self-adapt the
      * CR and F parameters:
      *
-     * @code
+     * @code{.unparsed}
      * 1 - jDE (Brest et al.)                       2 - iDE (Elsayed at al.)
      * @endcode
      *
      * A subset of the following mutation variants is considered when adapting the mutation variant:
      *
-     * @code
+     * @code{.unparsed}
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
      * 5 - rand/2/exp                               6. - best/1/bin
@@ -721,7 +721,7 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 1):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:
     *     1             15        45.4245       0.480391       0.567908              4        10.9413        35061.1
     *     2             30        45.4245       0.480391       0.567908              4        10.9413        35061.1

@@ -201,7 +201,7 @@ using uncvref_t = typename std::remove_cv<typename std::remove_reference<T>::typ
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * void set_seed(unsigned);
  * @endcode
  * The \p set_seed() method is part of the interface for the definition of a problem or an algorithm
@@ -226,7 +226,7 @@ const bool has_set_seed<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_set_seed() const;
  * @endcode
  * The \p has_set_seed() method is part of the interface for the definition of a problem or an algorithm
@@ -251,7 +251,7 @@ const bool override_has_set_seed<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * std::string get_name() const;
  * @endcode
  * The \p get_name() method is part of the interface for the definition of a problem or an algorithm
@@ -276,7 +276,7 @@ const bool has_name<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * std::string get_extra_info() const;
  * @endcode
  * The \p get_extra_info() method is part of the interface for the definition of a problem or an algorithm

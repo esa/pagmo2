@@ -131,10 +131,10 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
     }
     // 3 - The dimension of the tolerance vector must be that of the fitness minus one
     if (f1.size() - 1u != tol.size()) {
-        pagmo_throw(std::invalid_argument,
-                    "Tolerance vector dimension is detected to be: " + std::to_string(tol.size())
-                        + ", while the fitness dimension is: " + std::to_string(f1.size())
-                        + ", I was expecting the tolerance vector dimension to be: "  + std::to_string(f1.size() - 1u));
+        pagmo_throw(std::invalid_argument, "Tolerance vector dimension is detected to be: " + std::to_string(tol.size())
+                                               + ", while the fitness dimension is: " + std::to_string(f1.size())
+                                               + ", I was expecting the tolerance vector dimension to be: "
+                                               + std::to_string(f1.size() - 1u));
     }
     // 4 - The number of equality constraints must be at most f1.size()-1
     if (neq > f1.size() - 1u) {
@@ -177,8 +177,7 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
  * @throws std::invalid_argument If \p f1 does not have at least size 1
  * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
  */
-inline bool compare_fc(const vector_double& f1, const vector_double& f2, vector_double::size_type neq,
-                       double tol)
+inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double::size_type neq, double tol)
 {
     // 1 - The dimension of the fitness vector must be at least 1 (this check
     // cannot be removed and delegated to the other overload as f1.size()-1u is used)

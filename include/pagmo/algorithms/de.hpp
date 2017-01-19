@@ -79,7 +79,7 @@ public:
      * Constructs de
      *
      * The following variants (mutation variants) are available to create a new candidate individual:
-     * @code
+     * @code{.unparsed}
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
      * 5 - rand/2/exp                               6. - best/1/bin
@@ -425,7 +425,7 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 100):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:          Best:            dx:            df:
      * 5001         100020    3.62028e-05      0.0396687      0.0002866
      * 5101         102020    1.16784e-05      0.0473027    0.000249057

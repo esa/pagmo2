@@ -250,7 +250,7 @@ public:
      * - >0: will print and log one line each objective function improvement, or range reduction
      *
      * Example (verbosity > 0u):
-     * @code
+     * @code{.unparsed}
      * Fevals:          Best:         Range:
      *       2         352531            0.1
      *       4         256100            0.1
