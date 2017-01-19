@@ -646,22 +646,22 @@ struct prob_inner final : prob_inner_base {
         return get_extra_info_impl(m_value);
     }
     // Implementation of the optional methods.
-    template <typename U, typename std::enable_if<has_get_nobj<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_get_nobj<U>::value, int> = 0>
     static vector_double::size_type get_nobj_impl(const U &value)
     {
         return value.get_nobj();
     }
-    template <typename U, typename std::enable_if<!has_get_nobj<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_get_nobj<U>::value, int> = 0>
     static vector_double::size_type get_nobj_impl(const U &)
     {
         return 1u;
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_gradient<U>::value, int> = 0>
     static vector_double gradient_impl(const U &value, const vector_double &dv)
     {
         return value.gradient(dv);
     }
-    template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_gradient<U>::value, int> = 0>
     static vector_double gradient_impl(const U &, const vector_double &)
     {
         pagmo_throw(std::logic_error, "gradients have been requested but not implemented\n\n"
@@ -669,32 +669,28 @@ struct prob_inner final : prob_inner_base {
                                       "C++: vector_double gradient(const vector_double &x) const\n"
                                       "Python: gradient(x)");
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value, int> = 0>
     static bool has_gradient_impl(const U &p)
     {
         return p.has_gradient();
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_gradient<U>::value && !pagmo::override_has_gradient<U>::value, int>::type
-        = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_gradient<U>::value && !pagmo::override_has_gradient<U>::value, int> = 0>
     static bool has_gradient_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_gradient<U>::value, int> = 0>
     static bool has_gradient_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_gradient_sparsity<U>::value, int> = 0>
     sparsity_pattern gradient_sparsity_impl(const U &p) const
     {
         return p.gradient_sparsity();
     }
-    template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_gradient_sparsity<U>::value, int> = 0>
     sparsity_pattern gradient_sparsity_impl(const U &) const
     {
         pagmo_throw(std::logic_error,
@@ -702,7 +698,7 @@ struct prob_inner final : prob_inner_base {
                     "implemented: this "
                     "indicates a logical error in the implementation of the user-defined problem class");
     }
-    template <typename U, typename std::enable_if<pagmo::override_has_gradient_sparsity<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::override_has_gradient_sparsity<U>::value, int> = 0>
     static bool has_gradient_sparsity_impl(const U &p)
     {
         return p.has_gradient_sparsity();
@@ -723,44 +719,40 @@ struct prob_inner final : prob_inner_base {
     {
         return false;
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_hessians<U>::value, int> = 0>
     static std::vector<vector_double> hessians_impl(const U &value, const vector_double &dv)
     {
         return value.hessians(dv);
     }
-    template <typename U, typename std::enable_if<!pagmo::has_hessians<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_hessians<U>::value, int> = 0>
     static std::vector<vector_double> hessians_impl(const U &, const vector_double &)
     {
         pagmo_throw(std::logic_error, "Hessians have been requested but not implemented.\n"
                                       "A function with prototype 'std::vector<vector_double> hessians(const "
                                       "vector_double &x)' const was expected.");
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value, int> = 0>
     static bool has_hessians_impl(const U &p)
     {
         return p.has_hessians();
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_hessians<U>::value && !pagmo::override_has_hessians<U>::value, int>::type
-        = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_hessians<U>::value && !pagmo::override_has_hessians<U>::value, int> = 0>
     static bool has_hessians_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_hessians<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_hessians<U>::value, int> = 0>
     static bool has_hessians_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_hessians_sparsity<U>::value, int> = 0>
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &value) const
     {
         return value.hessians_sparsity();
     }
-    template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_hessians_sparsity<U>::value, int> = 0>
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
     {
         pagmo_throw(std::logic_error,
@@ -768,7 +760,7 @@ struct prob_inner final : prob_inner_base {
                     "implemented: this "
                     "indicates a logical error in the implementation of the user-defined problem class");
     }
-    template <typename U, typename std::enable_if<pagmo::override_has_hessians_sparsity<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::override_has_hessians_sparsity<U>::value, int> = 0>
     static bool has_hessians_sparsity_impl(const U &p)
     {
         return p.has_hessians_sparsity();
@@ -789,32 +781,32 @@ struct prob_inner final : prob_inner_base {
     {
         return false;
     }
-    template <typename U, typename std::enable_if<has_e_constraints<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_e_constraints<U>::value, int> = 0>
     static vector_double::size_type get_nec_impl(const U &value)
     {
         return value.get_nec();
     }
-    template <typename U, typename std::enable_if<!has_e_constraints<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_e_constraints<U>::value, int> = 0>
     static vector_double::size_type get_nec_impl(const U &)
     {
         return 0u;
     }
-    template <typename U, typename std::enable_if<has_i_constraints<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_i_constraints<U>::value, int> = 0>
     static vector_double::size_type get_nic_impl(const U &value)
     {
         return value.get_nic();
     }
-    template <typename U, typename std::enable_if<!has_i_constraints<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_i_constraints<U>::value, int> = 0>
     static vector_double::size_type get_nic_impl(const U &)
     {
         return 0u;
     }
-    template <typename U, typename std::enable_if<has_c_tolerance<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_c_tolerance<U>::value, int> = 0>
     static vector_double get_c_tol_impl(const U &value)
     {
         return value.get_c_tol();
     }
-    template <typename U, typename std::enable_if<!has_c_tolerance<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_c_tolerance<U>::value, int> = 0>
     static vector_double get_c_tol_impl(const U &value)
     {
         // We need not to worry here about overflow as this is only called by the
@@ -822,12 +814,12 @@ struct prob_inner final : prob_inner_base {
         // be < MAX/3
         return vector_double(get_nic_impl(value) + get_nec_impl(value), 0.);
     }
-    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value, int> = 0>
     static void set_seed_impl(U &value, unsigned int seed)
     {
         value.set_seed(seed);
     }
-    template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_set_seed<U>::value, int> = 0>
     static void set_seed_impl(U &, unsigned int)
     {
         pagmo_throw(
@@ -835,40 +827,37 @@ struct prob_inner final : prob_inner_base {
             "The set_seed method has been called but not implemented by the user.\n"
             "A function with prototype 'void set_seed(unsigned int)' was expected in the user-defined problem.");
     }
-    template <typename U, typename std::enable_if<override_has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<override_has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &p)
     {
         return p.has_set_seed();
     }
-    template <typename U,
-              typename std::enable_if<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return true;
     }
-    template <typename U,
-              typename std::enable_if<!pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int>::type
-              = 0>
+    template <typename U, enable_if_t<!pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<has_name<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &value)
     {
         return value.get_name();
     }
-    template <typename U, typename std::enable_if<!has_name<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &)
     {
         return typeid(U).name();
     }
-    template <typename U, typename std::enable_if<has_extra_info<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_extra_info<U>::value, int> = 0>
     static std::string get_extra_info_impl(const U &value)
     {
         return value.get_extra_info();
     }
-    template <typename U, typename std::enable_if<!has_extra_info<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_extra_info<U>::value, int> = 0>
     static std::string get_extra_info_impl(const U &)
     {
         return "";
