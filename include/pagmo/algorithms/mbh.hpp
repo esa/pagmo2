@@ -108,10 +108,10 @@ public:
         if (prob.get_nobj() != 1u) {
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
-            if (prob.is_stochastic()) {
-                pagmo_throw(std::invalid_argument,
-                            "The problem appears to be stochastic " + get_name() + " cannot deal with it");
-            }
+        }
+        if (prob.is_stochastic()) {
+            pagmo_throw(std::invalid_argument,
+                        "The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
         // Get out if there is nothing to do.
         if (m_stop == 0u) {
