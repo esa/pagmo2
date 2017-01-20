@@ -905,7 +905,7 @@ struct prob_inner final : prob_inner_base {
  * provides a generic interface to optimization problems.
  *
  * Every UDP must implement at least the following two methods:
- * @code{.unparsed}{.unparsed}
+ * @code{.unparsed}
  * vector_double fitness(const vector_double &) const;
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
@@ -919,11 +919,12 @@ struct prob_inner final : prob_inner_base {
  * The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
  * optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following
  * methods:
- * @code{.unparsed}{.unparsed}
+ * @code{.unparsed}
  * vector_double::size_type get_nobj() const;
  * vector_double::size_type get_nec() const;
  * vector_double::size_type get_nic() const;
  * vector_double get_c_tol() const;
+ * bool has_gradient() const;
  * vector_double gradient(const vector_double &) const;
  * sparsity_pattern gradient_sparsity() const;
  * std::vector<vector_double> hessians(const vector_double &) const;
@@ -1277,20 +1278,18 @@ public:
         return retval;
     }
 
-    /// Checks if the user-defined problem has a gradient
+    /// Check if gradient is available.
     /**
-     * If the user defined problem implements a gradient, this
-     * will return true, false otherwise. The value returned can
-     * also be directly hard-coded implementing the
-     * method
+     * This method will return \p true if the gradient is available, \p false otherwise.
      *
-     * @code{.unparsed}
-     * bool has_gradient() const
-     * @endcode
+     * The availability of the gradient is determined as follows:
+     * - if the UDP does not satisfy pagmo::has_gradient, then this method will always return \p false;
+     * - if the UDP satisfies pagmo::has_gradient but it does not satisfy pagmo::override_has_gradient,
+     *   then this method will always return \p true;
+     * - if the UDP satisfies both pagmo::has_gradient and pagmo::override_has_gradient,
+     *   then this method will return the output of the \p %has_gradient() method of the UDP.
      *
-     * in the user-defined problem
-     *
-     * @return a boolean flag
+     * @return a flag signalling the availability of the gradient.
      */
     bool has_gradient() const
     {
