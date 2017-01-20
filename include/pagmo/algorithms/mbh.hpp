@@ -50,7 +50,7 @@ namespace pagmo
 class mbh : public algorithm
 {
 public:
-    /// Single entry of the log (feval, best fitness, n. constraints satisfied, violation norm, trial)
+    /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, trial)
     typedef std::tuple<unsigned long long, double, vector_double::size_type, double, unsigned int> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;

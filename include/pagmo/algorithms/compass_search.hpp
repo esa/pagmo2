@@ -85,7 +85,7 @@ namespace pagmo
 class compass_search
 {
 public:
-    /// Single entry of the log (feval, best fitness, n. constraints satisfied, violation norm, range)
+    /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, range)
     typedef std::tuple<unsigned long long, double, vector_double::size_type, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
