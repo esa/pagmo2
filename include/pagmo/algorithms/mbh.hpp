@@ -50,14 +50,18 @@ namespace pagmo
 class mbh : public algorithm
 {
 public:
+    /// Single entry of the log (feval, best fitness, n. constraints satisfied, violation norm, trial)
+    typedef std::tuple<unsigned long long, double, vector_double::size_type, double, unsigned int> log_line_type;
+    /// The log
+    typedef std::vector<log_line_type> log_type;
     /// Default constructor, only here as serialization requires it
-    mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_e(0u), m_seed(0u), m_verbosity(0u)
+    mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_e(0u), m_seed(0u), m_verbosity(0u), m_log()
     {
     }
     /// Constructor
     template <typename T>
     explicit mbh(T &&a, unsigned int stop, double perturb, unsigned int seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
+        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
     }
     /// Algorithm evolve method (juice implementation of the algorithm)
@@ -81,7 +85,10 @@ public:
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
         }
-        // ---------------------------------------------------------------------------------------------------------
+        // Get out if there is nothing to do.
+        if (m_stop == 0u) {
+            return pop;
+        }
         // Check if the perturbation vector has size 1, in which case the whole perturbation vector is filled with
         if (m_perturb.size() == 1u) {
             for (decltype(dim) i = 1u; i < dim; ++i) {
@@ -94,10 +101,10 @@ public:
                                                    + ", while the problem dimension is: " + std::to_string(dim)
                                                    + ". They need to be equal for MBH to work.");
         }
-        // Get out if there is nothing to do.
-        if (m_stop == 0u) {
-            return pop;
-        }
+        // ---------------------------------------------------------------------------------------------------------
+
+        // No throws, all valid: we clear the logs
+        m_log.clear();
         // mbh main loop
         unsigned int i = 0u;
         while (i < m_stop) {
@@ -175,12 +182,11 @@ public:
         stream(ss, "\n", static_cast<const algorithm *>(this)->get_extra_info());
         return ss.str();
     }
-
     /// Serialization
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<algorithm>(this), m_stop, m_perturb, m_e, m_seed, m_verbosity);
+        ar(cereal::base_class<algorithm>(this), m_stop, m_perturb, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -206,6 +212,7 @@ private:
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;
+    mutable log_type m_log;
 };
 }
 PAGMO_REGISTER_ALGORITHM(pagmo::mbh)

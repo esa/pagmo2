@@ -225,31 +225,6 @@ public:
 template <typename T>
 const bool has_i_constraints<T>::value;
 
-/// Detect \p get_c_tol() method.
-/**
- * This type trait will be \p true if \p T provides a method with
- * the following signature:
- * @code
- * vector_double get_c_tol() const;
- * @endcode
- * The \p get_c_tol() method is part of the interface for the definition of a problem
- * (see pagmo::problem).
- */
-template <typename T>
-class has_c_tolerance
-{
-    template <typename U>
-    using get_c_tol_t = decltype(std::declval<const U &>().get_c_tol());
-    static const bool implementation_defined = std::is_same<vector_double, detected_t<get_c_tol_t, T>>::value;
-
-public:
-    /// Value of the type trait.
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_c_tolerance<T>::value;
-
 /// Detect \p gradient() method.
 /**
  * This type trait will be \p true if \p T provides a method with
@@ -532,7 +507,6 @@ struct prob_inner_base {
     virtual std::pair<vector_double, vector_double> get_bounds() const = 0;
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
-    virtual vector_double get_c_tol() const = 0;
     virtual void set_seed(unsigned int) = 0;
     virtual bool has_set_seed() const = 0;
     virtual std::string get_name() const = 0;
@@ -625,10 +599,6 @@ struct prob_inner final : prob_inner_base {
     virtual vector_double::size_type get_nic() const override final
     {
         return get_nic_impl(m_value);
-    }
-    virtual vector_double get_c_tol() const override final
-    {
-        return get_c_tol_impl(m_value);
     }
     virtual void set_seed(unsigned int seed) override final
     {
@@ -810,19 +780,6 @@ struct prob_inner final : prob_inner_base {
     {
         return 0u;
     }
-    template <typename U, typename std::enable_if<has_c_tolerance<U>::value, int>::type = 0>
-    static vector_double get_c_tol_impl(const U &value)
-    {
-        return value.get_c_tol();
-    }
-    template <typename U, typename std::enable_if<!has_c_tolerance<U>::value, int>::type = 0>
-    static vector_double get_c_tol_impl(const U &value)
-    {
-        // We need not to worry here about overflow as this is only called by the
-        // pagmo::problem constructor once and after nec and nic have been checked to
-        // be < MAX/3
-        return vector_double(get_nic_impl(value) + get_nec_impl(value), 0.);
-    }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
     static void set_seed_impl(U &value, unsigned int seed)
     {
@@ -907,7 +864,8 @@ struct prob_inner final : prob_inner_base {
  * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality constraints*.
  * Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
  * values of any number of stochastic variables. This allows also for stochastic programming
- * tasks to be represented by this class.
+ * tasks to be represented by this class. A tolerance is considered for the verification of the constraints and is set
+ * by default to zero, but can be modified via the problem::set_c_tol method
  *
  * To create an instance of the above problem the user is asked to construct a pagmo::problem from
  * a separate object of type \p T where, at least, the implementation of
@@ -946,10 +904,6 @@ struct prob_inner final : prob_inner_base {
  * pagmo::problem::get_nec() method will return 0.
  * - \p T::get_nic() returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed, and the
  * pagmo::problem::get_nic() method will return 0.
- * - \p T::get_c_tol() returns a vector of dimension \f$n_{ec} + n_{ic}\f$ containing tolerances to
- * be used when checking constraint feasibility. When not implemented a tolerance of zero is assumed
- * for all constraints, and the pagmo::problem::get_c_tol() method will return a vector
- * filled up with zeros.
  * - \p T::gradient() returns a sparse representation of the gradients. The \f$ k\f$-th term
  * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
  * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by
@@ -980,8 +934,7 @@ struct prob_inner final : prob_inner_base {
  * - \p T::get_extra_info() returns a string containing extra human readable information to be used in output streams.
  *
  * @note Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the
- * hessians.
- * At each copy construction and copy assignment these counters are also copied.
+ * hessians. At each copy construction and copy assignment these counters are also copied.
  *
  * @note The only allowed operations on an object belonging to this class, after it has been moved, are assignment and
  * destruction.
@@ -1113,15 +1066,8 @@ public:
                 m_hs_dim[i] = (nx * (nx - 1u) / 2u + nx); // lower triangular
             }
         }
-        // 8 - Constraint tolerance (this is at the end as nec < MAX/3 and nic < MAX/3 has been tested above)
-        // so no overflow is possible
-        m_c_tol = ptr()->get_c_tol();
-        if (m_c_tol.size() != m_nec + m_nic) {
-            pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is: "
-                                                   + std::to_string(m_c_tol.size())
-                                                   + ", while the number of constraints are: "
-                                                   + std::to_string(m_nec + m_nic) + ". They need to be equal");
-        }
+        // 8 - Constraint tolerance
+        m_c_tol = vector_double( m_nec + m_nic, 0.);
     }
 
     /// Copy constructor
@@ -1494,8 +1440,20 @@ public:
     {
         return m_nic;
     }
-
-    /// Constraint tolerance
+    /// Sets the constraint tolerance
+    /**
+     * @param[in] c_tol a vector_double containing the tolerances to use when
+     * checking for constraint feasibility
+     */
+    void set_c_tol(const vector_double& c_tol)
+    {
+        if (c_tol.size() != this->get_nc()) {
+            pagmo_throw(std::invalid_argument, "The tolerance vector size should be: " + std::to_string(this->get_nc()) +
+            ", while a size of: " + std::to_string(c_tol.size()) + " was detected.");
+        }
+        m_c_tol = c_tol;
+    }
+    /// Gets the constraint tolerance
     /**
      * @return Returns a vector_double containing the tolerances to use when
      * checking for constraint feasibility
@@ -1504,6 +1462,7 @@ public:
     {
         return m_c_tol;
     }
+
 
     /// Number of constraints
     /**

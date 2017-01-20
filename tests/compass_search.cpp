@@ -67,9 +67,13 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
 
     // Here we only test that evolution is deterministic (stop criteria will be range)
     problem prob1{hock_schittkowsky_71{}};
+    prob1.set_c_tol({1e-3, 1e-3});
     population pop1{prob1, 5u, 23u};
+
     problem prob2{hock_schittkowsky_71{}};
+    prob2.set_c_tol({1e-3, 1e-3});
     population pop2{prob2, 5u, 23u};
+
 
     compass_search user_algo1{10000u, 0.5, stop_range, 0.5};
     user_algo1.set_verbosity(1u);
