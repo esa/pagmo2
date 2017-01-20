@@ -50,7 +50,7 @@ see https://www.gnu.org/licenses/. */
 
 /// Macro for the registration of the serialization functionality for problems.
 /**
- * This macro should always be invoked after the declaration of a problem: it will register
+ * This macro should always be invoked after the declaration of a user-defined problem: it will register
  * the problem with PaGMO's serialization machinery. The macro should be called in the root namespace
  * and using the fully qualified name of the problem to be registered. For example:
  * @code{.unparsed}
