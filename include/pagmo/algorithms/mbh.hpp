@@ -58,13 +58,36 @@ public:
     mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_e(0u), m_seed(0u), m_verbosity(0u), m_log()
     {
     }
-    /// Constructor
+    /// Constructor.
+    /**
+     * Constructs Monotonic Basin Hopping
+     *
+     * @param[in] stop consecutive runs of the inner algorithm that need to
+     * result in no improvement for pagmo::mbh to stop
+     * @param[in] perturb vector_double containing the perturbation applied to each component
+     * of the decision vector of the best population found when generating a new starting point.
+     * These are defined relative to the corresponding bounds.
+     * @param[in] seed stop range
+     * @throws std::invalid_argument if \p start_range is not in (0,1]
+     * @throws std::invalid_argument if \p stop_range is not in (start_range,1]
+     * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
+     */
     template <typename T>
     explicit mbh(T &&a, unsigned int stop, double perturb, unsigned int seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
+          m_log()
     {
     }
     /// Algorithm evolve method (juice implementation of the algorithm)
+    /**
+     * Evolves the population up to when \p stop consecutve runs of the internal
+     * algorithm do not improve the solution.
+     *
+     * @param[in] pop population to be evolved
+     * @return evolved population
+     * @throws std::invalid_argument if the problem is multi-objective or stochastic
+     * @throws std::invalid_argument if the perturbation vector size does not equal the problem size
+     */
     population evolve(population pop) const
     {
         // We store some useful variables
@@ -75,6 +98,7 @@ public:
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
+        auto neq = prob.get_nec();
         auto NP = pop.size();
 
         auto fevals0 = prob.get_fevals(); // discount for the already made fevals
@@ -84,6 +108,10 @@ public:
         if (prob.get_nobj() != 1u) {
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
+            if (prob.is_stochastic()) {
+                pagmo_throw(std::invalid_argument,
+                            "The problem appears to be stochastic " + get_name() + " cannot deal with it");
+            }
         }
         // Get out if there is nothing to do.
         if (m_stop == 0u) {
@@ -123,15 +151,6 @@ public:
             // 3 - We evolve the current population with the selected algorithm
             pop = static_cast<const algorithm *>(this)->evolve(pop);
             i++;
-            if (m_verbosity > 0u) {
-                std::cout << i << ". "
-                          << "\tLocal solution: " << pop.get_f()[pop.best_idx()][0]
-                          << "\tGlobal best: " << pop_old.get_f()[pop_old.best_idx()][0];
-                if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
-                    std::cout << " i";
-                }
-                std::cout << std::endl; // we flush here as we want the user to read in real time ...
-            }
             // 4 - We reset the counter if we have improved, otherwise we reset the population
             if (compare_fc(pop.get_f()[pop.best_idx()], pop_old.get_f()[pop_old.best_idx()], nec, prob.get_c_tol())) {
                 i = 0u;
@@ -139,6 +158,32 @@ public:
                 for (decltype(NP) j = 0u; j < NP; ++j) {
                     pop.set_xf(j, pop_old.get_x()[j], pop_old.get_f()[j]);
                 }
+            }
+            // 5 - We log to screen
+            if (m_verbosity > 0u) {
+                // Prints a log line after each call to the inner algorithm
+                // 1 - Every 50 lines print the column names
+                if (count % 50u == 1u) {
+                    print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Violated:",
+                          std::setw(15), "Viol. Norm:", std::setw(15), "Trial:", '\n');
+                }
+                // 2 - Print
+                auto cur_best_f = pop.get_f()[pop.best_idx()];
+                auto c1eq = detail::test_eq_constraints(cur_best_f.data() + 1, cur_best_f.data() + 1 + neq,
+                                                        prob.get_c_tol().data());
+                auto c1ineq = detail::test_ineq_constraints(
+                    cur_best_f.data() + 1 + neq, cur_best_f.data() + cur_best_f.size(), prob.get_c_tol().data() + neq);
+                auto n = prob.get_nc() - c1eq.first - c1ineq.first;
+                auto l = c1eq.second + c1ineq.second;
+                print(std::setw(7), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0], std::setw(15), n,
+                      std::setw(15), l, std::setw(15), i);
+                if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
+                    std::cout << " i";
+                }
+                ++count;
+                std::cout << std::endl; // we flush here as we want the user to read in real time ...
+                // Logs
+                m_log.push_back(log_line_type(prob.get_fevals() - fevals0, n, l, cur_best_f[0], i));
             }
         }
         // We extract chromosomes and fitnesses

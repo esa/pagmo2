@@ -321,7 +321,7 @@ static inline bp::object prob_get_c_tol_wrapper(const problem &prob)
     return pygmo::v_to_a(prob.get_c_tol());
 }
 
-//set_c_tol
+// set_c_tol
 static inline void prob_set_c_tol_wrapper(problem &prob, const bp::object &c_tol)
 {
     prob.set_c_tol(pygmo::to_vd(c_tol));

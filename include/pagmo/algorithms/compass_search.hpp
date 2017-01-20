@@ -275,7 +275,8 @@ public:
 
      * @endcode
      * Fevals, is the number of function evaluations made, Best is the best fitness
-     * Violated and Viol.Norm are the number of constraints violated and the L2 norm of the violation (accounting for the
+     * Violated and Viol.Norm are the number of constraints violated and the L2 norm of the violation (accounting for
+     the
      * tolerances returned by problem::get_c_tol, and Range is the range used at that point of the search
      *
      * @param level verbosity level

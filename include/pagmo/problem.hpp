@@ -1067,7 +1067,7 @@ public:
             }
         }
         // 8 - Constraint tolerance
-        m_c_tol = vector_double( m_nec + m_nic, 0.);
+        m_c_tol = vector_double(m_nec + m_nic, 0.);
     }
 
     /// Copy constructor
@@ -1445,11 +1445,12 @@ public:
      * @param[in] c_tol a vector_double containing the tolerances to use when
      * checking for constraint feasibility
      */
-    void set_c_tol(const vector_double& c_tol)
+    void set_c_tol(const vector_double &c_tol)
     {
         if (c_tol.size() != this->get_nc()) {
-            pagmo_throw(std::invalid_argument, "The tolerance vector size should be: " + std::to_string(this->get_nc()) +
-            ", while a size of: " + std::to_string(c_tol.size()) + " was detected.");
+            pagmo_throw(std::invalid_argument, "The tolerance vector size should be: " + std::to_string(this->get_nc())
+                                                   + ", while a size of: " + std::to_string(c_tol.size())
+                                                   + " was detected.");
         }
         m_c_tol = c_tol;
     }
@@ -1462,7 +1463,6 @@ public:
     {
         return m_c_tol;
     }
-
 
     /// Number of constraints
     /**

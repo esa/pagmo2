@@ -74,7 +74,6 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
     prob2.set_c_tol({1e-3, 1e-3});
     population pop2{prob2, 5u, 23u};
 
-
     compass_search user_algo1{10000u, 0.5, stop_range, 0.5};
     user_algo1.set_verbosity(1u);
     pop1 = user_algo1.evolve(pop1);
