@@ -63,12 +63,12 @@ BOOST_AUTO_TEST_CASE(compass_search_algorithm_construction)
 
 BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
 {
-    double stop_range = 1e-3;
+    double stop_range = 1e-5;
 
     // Here we only test that evolution is deterministic (stop criteria will be range)
-    problem prob1{rosenbrock{25u}};
+    problem prob1{hock_schittkowsky_71{}};
     population pop1{prob1, 5u, 23u};
-    problem prob2{rosenbrock{25u}};
+    problem prob2{hock_schittkowsky_71{}};
     population pop2{prob2, 5u, 23u};
 
     compass_search user_algo1{10000u, 0.5, stop_range, 0.5};
@@ -148,6 +148,8 @@ BOOST_AUTO_TEST_CASE(compass_search_serialization_test)
     for (auto i = 0u; i < before_log.size(); ++i) {
         BOOST_CHECK_EQUAL(std::get<0>(before_log[i]), std::get<0>(after_log[i]));
         BOOST_CHECK_CLOSE(std::get<1>(before_log[i]), std::get<1>(after_log[i]), 1e-8);
-        BOOST_CHECK_CLOSE(std::get<2>(before_log[i]), std::get<2>(after_log[i]), 1e-8);
+        BOOST_CHECK_EQUAL(std::get<2>(before_log[i]), std::get<2>(after_log[i]));
+        BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
+        BOOST_CHECK_CLOSE(std::get<4>(before_log[i]), std::get<4>(after_log[i]), 1e-8);
     }
 }
