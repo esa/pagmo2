@@ -106,7 +106,7 @@ public:
         : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
           m_log()
     {
-        if (perturb > 1. || perturb <= 0.) {
+        if (perturb > 1. || perturb <= 0. || std::isnan(perturb)) {
             pagmo_throw(std::invalid_argument, "The scalar perturbation must be in (0, 1], while a value of "
                                                    + std::to_string(perturb) + " was detected.");
         }
@@ -116,6 +116,7 @@ public:
      * Constructs Monotonic Basin Hopping using a vector perturbation
      *
      * @param[in] a Any object that can construct a pagmo::algorithm and that will
+     * then be used as inner algorithm for the generalized mbh.
      * @param[in] stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop
      * @param[in] perturb a vector_double with the perturbations to be applied to each component
@@ -129,7 +130,8 @@ public:
         : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
           m_log()
     {
-        if (!std::all_of(perturb.begin(), perturb.end(), [](double item) { return (item > 0. && item <= 1.); })) {
+        if (!std::all_of(perturb.begin(), perturb.end(),
+                         [](double item) { return (item > 0. && item <= 1. && !std::isnan(item)); })) {
             pagmo_throw(std::invalid_argument,
                         "The perturbation must have all components in (0, 1], while that is not the case.");
         }
@@ -173,6 +175,7 @@ public:
             return pop;
         }
         // Check if the perturbation vector has size 1, in which case the whole perturbation vector is filled with
+        // the same value equal to its first entry
         if (m_perturb.size() == 1u) {
             for (decltype(dim) i = 1u; i < dim; ++i) {
                 m_perturb.push_back(m_perturb[0]);
@@ -197,9 +200,9 @@ public:
             for (decltype(NP) j = 0u; j < NP; ++j) {
                 vector_double tmp_x(dim);
                 for (decltype(dim) k = 0u; k < dim; ++k) {
-                    tmp_x[k] = std::uniform_real_distribution<double>(
+                    tmp_x[k] = uniform_real_from_range(
                         std::max(pop.get_x()[j][k] - m_perturb[k] * (ub[k] - lb[k]), lb[k]),
-                        std::min(pop.get_x()[j][k] + m_perturb[k] * (ub[k] - lb[k]), ub[k]))(m_e);
+                        std::min(pop.get_x()[j][k] + m_perturb[k] * (ub[k] - lb[k]), ub[k]), m_e);
                 }
                 pop.set_x(j, tmp_x); // fitness is evaluated here
             }
@@ -300,6 +303,11 @@ public:
     /// Sets the perturbation vector
     void set_perturb(const vector_double &perturb)
     {
+        if (!std::all_of(perturb.begin(), perturb.end(),
+                         [](double item) { return (item > 0. && item <= 1. && !std::isnan(item)); })) {
+            pagmo_throw(std::invalid_argument,
+                        "The perturbation must have all components in (0, 1], while that is not the case.");
+        }
         m_perturb = perturb;
     }
     /// Get log
@@ -349,6 +357,8 @@ private:
     bool is_stochastic() const = delete;
     bool has_set_verbosity() const = delete;
 
+// The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
+// it would just result in a "weird" behaviour in case the user would try to stream this object
 #if __GNUC__ > 4
     // NOTE: We delete the streaming operator overload called with mbh, otherwise the inner algo would stream
     // NOTE: If a streaming operator is wanted for this class remove the line below and implement it.

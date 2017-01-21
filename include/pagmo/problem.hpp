@@ -936,7 +936,8 @@ struct prob_inner final : prob_inner_base {
  * **NOTE** Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the
  * hessians. At each copy construction and copy assignment these counters are also copied.
  *
- * **NOTE** The only allowed operations on an object belonging to this class, after it has been moved, are assignment and
+ * **NOTE** The only allowed operations on an object belonging to this class, after it has been moved, are assignment
+ * and
  * destruction.
  */
 

@@ -3,5 +3,5 @@
 Monotonic Basin Hopping (MBH) - Generalized
 ===========================================================
 
-.. doxygenclass:: pagmo::de
+.. doxygenclass:: pagmo::mbh
    :members:

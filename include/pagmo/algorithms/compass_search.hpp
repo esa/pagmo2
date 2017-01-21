@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_COMPASS_SEARCH_HPP
 #define PAGMO_ALGORITHMS_COMPASS_SEARCH_HPP
 
+#include <cmath> //std::isnan
 #include <iomanip>
 #include <sstream> //std::osstringstream
 #include <stdexcept>
@@ -74,7 +75,8 @@ namespace pagmo
  * **NOTE** The search range is defined relative to the box-bounds. Hence, unbounded problems
  * will produce an error.
  *
- * **NOTE** Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
+ * **NOTE** Compass search is a fully deterministic algorithms and will produce identical results if its evolve method
+ * is
  * called from two identical populations.
  *
  * @see Kolda, Lewis, Torczon: 'Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods'
@@ -107,21 +109,30 @@ public:
         : m_max_fevals(max_fevals), m_start_range(start_range), m_stop_range(stop_range),
           m_reduction_coeff(reduction_coeff), m_verbosity(0u), m_log()
     {
-        if (start_range > 1. || start_range <= 0.) {
+        if (start_range > 1. || start_range <= 0. || std::isnan(start_range)) {
             pagmo_throw(std::invalid_argument, "The start range must be in (0, 1], while a value of "
                                                    + std::to_string(start_range) + " was detected.");
         }
-        if (stop_range > 1. || stop_range >= start_range) {
+        if (stop_range > 1. || stop_range >= start_range || std::isnan(stop_range)) {
             pagmo_throw(std::invalid_argument, "the stop range must be in (start_range, 1], while a value of "
                                                    + std::to_string(stop_range) + " was detected.");
         }
-        if (reduction_coeff >= 1. || reduction_coeff <= 0.) {
+        if (reduction_coeff >= 1. || reduction_coeff <= 0. || std::isnan(reduction_coeff)) {
             pagmo_throw(std::invalid_argument, "The reduction coefficient must be in (0,1), while a value of "
                                                    + std::to_string(reduction_coeff) + " was detected.");
         }
     }
 
-    /// Algorithm implementation
+    /// Algorithm evolve method (juice implementation of the algorithm)
+    /**
+     * Evolves the population up to when the search range becomes smaller than
+     * the defined stop_range
+     *
+     * @param[in] pop population to be evolved
+     * @return evolved population
+     * @throws std::invalid_argument if the problem is multi-objective or stochastic
+     * @throws std::invalid_argument if the population is empty
+     */
     population evolve(population pop) const
     {
         // We store some useful variables
@@ -147,14 +158,14 @@ public:
             pagmo_throw(std::invalid_argument,
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
-        // Get out if there is nothing to do.
-        if (m_max_fevals == 0u) {
-            return pop;
-        }
         if (pop.size() == 0u) {
             pagmo_throw(std::invalid_argument, prob.get_name()
                                                    + " does not work on an empty population, a population size of "
                                                    + std::to_string(pop.size()) + " was, instead, detected");
+        }
+        // Get out if there is nothing to do.
+        if (m_max_fevals == 0u) {
+            return pop;
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -174,7 +185,7 @@ public:
 
         while (newrange > m_stop_range && fevals <= m_max_fevals) {
             flag = false;
-            for (unsigned int i = 0u; i < dim; i++) {
+            for (decltype(dim) i = 0u; i < dim; i++) {
                 auto x_trial = cur_best_x;
                 // move up
                 x_trial[i] = cur_best_x[i] + newrange * (ub[i] - lb[i]);

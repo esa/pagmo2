@@ -62,7 +62,8 @@ namespace pagmo
  * operator to produce new
  * CR anf F parameters for each individual. We refer to this variant as to iDE.
  *
- * **NOTE** There exist an algorithm referred to as SaDE in the literature. This is not the algorithm implemented in PaGMO.
+ * **NOTE** There exist an algorithm referred to as SaDE in the literature. This is not the algorithm implemented in
+ * PaGMO.
  *
  * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
  * the allowed box-bounds, is here done by creating a random number in the bounds.

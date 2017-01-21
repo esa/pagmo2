@@ -63,7 +63,8 @@ namespace pagmo
  * work
   * from Li et al. referenced below, is also implemented.
   *
-  * **NOTE** The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This allows
+  * **NOTE** The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This
+ * allows
  * to have MOEA/D-DE
   * work on populations having arbitrary size, while preserving a nice coverage of the final non-dominated front.
   *

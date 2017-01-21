@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <cmath>
 #include <iostream>
 #include <string>
 
@@ -65,9 +66,11 @@ BOOST_AUTO_TEST_CASE(mbh_algorithm_construction)
     }
     BOOST_CHECK_THROW((mbh{inner_algo, 5u, -2.1}), std::invalid_argument);
     BOOST_CHECK_THROW((mbh{inner_algo, 5u, 3.2}), std::invalid_argument);
+    BOOST_CHECK_THROW((mbh{inner_algo, 5u, std::nan("")}), std::invalid_argument);
     BOOST_CHECK_THROW((mbh{inner_algo, 5u, {0.2, 0.1, 0.}}), std::invalid_argument);
     BOOST_CHECK_THROW((mbh{inner_algo, 5u, {0.2, 0.1, -0.12}}), std::invalid_argument);
     BOOST_CHECK_THROW((mbh{inner_algo, 5u, {0.2, 1.1, 0.12}}), std::invalid_argument);
+    BOOST_CHECK_THROW((mbh{inner_algo, 5u, {0.2, std::nan(""), 0.12}}), std::invalid_argument);
     BOOST_CHECK_NO_THROW(mbh{});
 }
 
@@ -109,7 +112,8 @@ BOOST_AUTO_TEST_CASE(mbh_evolve_test)
     // And a clean exit for 0 generations
     problem prob{hock_schittkowsky_71{}};
     population pop{prob, 10u};
-    BOOST_CHECK((mbh{compass_search{100u, 0.1, 0.001, 0.7}, 0u, {1e-3, 1e-2}, 23u}.evolve(pop).get_x()[0]) == (pop.get_x()[0]));
+    BOOST_CHECK((mbh{compass_search{100u, 0.1, 0.001, 0.7}, 0u, {1e-3, 1e-2}, 23u}.evolve(pop).get_x()[0])
+                == (pop.get_x()[0]));
 }
 
 BOOST_AUTO_TEST_CASE(mbh_setters_getters_test)
@@ -119,8 +123,11 @@ BOOST_AUTO_TEST_CASE(mbh_setters_getters_test)
     BOOST_CHECK(user_algo.get_verbosity() == 23u);
     user_algo.set_seed(23u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
-    user_algo.set_perturb({1., 2., 3., 4.});
-    BOOST_CHECK((user_algo.get_perturb() == vector_double{1., 2., 3., 4.}));
+    user_algo.set_perturb({0.1,0.2,0.3,0.4});
+    BOOST_CHECK((user_algo.get_perturb() == vector_double{0.1,0.2,0.3,0.4}));
+    BOOST_CHECK_THROW(user_algo.set_perturb({0.1, std::nan(""), 0.3, 0.4}), std::invalid_argument);
+    BOOST_CHECK_THROW(user_algo.set_perturb({0.1, -0.2, 0.3, 0.4}), std::invalid_argument);
+    BOOST_CHECK_THROW(user_algo.set_perturb({0.1, 2.3, 0.3, 0.4}), std::invalid_argument);
     BOOST_CHECK(user_algo.get_name().find("Monotonic Basin Hopping") != std::string::npos);
     BOOST_CHECK(user_algo.get_extra_info().find("Inner algorithm extra info") != std::string::npos);
     BOOST_CHECK_NO_THROW(user_algo.get_log());

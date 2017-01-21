@@ -146,6 +146,9 @@ private:
     vector_double::size_type get_gs_dim() const = delete;
     std::vector<vector_double::size_type> get_hs_dim() const = delete;
     bool is_stochastic() const = delete;
+
+// The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
+// it would just result in a "weird" behaviour in case the user would try to stream this object
 #if __GNUC__ > 4
     // NOTE: We delete the streaming operator overload called with translate, otherwise the inner prob would stream
     // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
