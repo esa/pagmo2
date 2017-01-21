@@ -101,4 +101,62 @@ BOOST_AUTO_TEST_CASE(mbh_evolve_test)
         mbh user_algo{compass_search{100u, 0.1, 0.001, 0.7}, 5u, 0.1, 23u};
         BOOST_CHECK_THROW(user_algo.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     }
+    // And that it throws if called with a wrong dimension of the perturbation vector
+    {
+    mbh user_algo{compass_search{100u, 0.1, 0.001, 0.7}, 5u, {1e-3, 1e-2}, 23u};
+    BOOST_CHECK_THROW(user_algo.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(mbh_setters_getters_test)
+{
+    mbh user_algo{compass_search{100u, 0.1, 0.001, 0.7}, 5u, {1e-3, 1e-2}, 23u};
+    user_algo.set_verbosity(23u);
+    BOOST_CHECK(user_algo.get_verbosity() == 23u);
+    user_algo.set_seed(23u);
+    BOOST_CHECK(user_algo.get_seed() == 23u);
+    user_algo.set_perturb({1.,2.,3.,4.});
+    BOOST_CHECK((user_algo.get_perturb() == vector_double{1.,2.,3.,4.}));
+    BOOST_CHECK(user_algo.get_name().find("Monotonic Basin Hopping") != std::string::npos);
+    BOOST_CHECK(user_algo.get_extra_info().find("Inner algorithm extra info") != std::string::npos);
+    BOOST_CHECK_NO_THROW(user_algo.get_log());
+}
+
+BOOST_AUTO_TEST_CASE(mbh_serialization_test)
+{
+    // Make one evolution
+    problem prob{hock_schittkowsky_71{}};
+    population pop{prob, 10u, 23u};
+    algorithm algo{mbh{compass_search{100u, 0.1, 0.001, 0.7}, 5u, 1e-3, 23u}};
+    algo.set_verbosity(1u);
+    pop = algo.evolve(pop);
+
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before_text = boost::lexical_cast<std::string>(algo);
+    auto before_log = algo.extract<mbh>()->get_log();
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
+    }
+    // Change the content of p before deserializing.
+    algo = algorithm{null_algorithm{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo);
+    }
+    auto after_text = boost::lexical_cast<std::string>(algo);
+    auto after_log = algo.extract<mbh>()->get_log();
+    BOOST_CHECK_EQUAL(before_text, after_text);
+    // BOOST_CHECK(before_log == after_log); // This fails because of floating point problems when using JSON and cereal
+    // so we implement a close check
+    BOOST_CHECK(before_log.size() > 0u);
+    for (auto i = 0u; i < before_log.size(); ++i) {
+        BOOST_CHECK_EQUAL(std::get<0>(before_log[i]), std::get<0>(after_log[i]));
+        BOOST_CHECK_CLOSE(std::get<1>(before_log[i]), std::get<1>(after_log[i]), 1e-8);
+        BOOST_CHECK_EQUAL(std::get<2>(before_log[i]), std::get<2>(after_log[i]));
+        BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
+        BOOST_CHECK_EQUAL(std::get<4>(before_log[i]), std::get<4>(after_log[i]));
+    }
 }
