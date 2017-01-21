@@ -91,6 +91,8 @@ public:
     /**
      * Constructs Monotonic Basin Hopping using a scalar perturbation
      *
+     * @param[in] a Any object that can construct a pagmo::algorithm and that will
+     * then be used as inner algorithm for the generalized mbh.
      * @param[in] stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop
      * @param[in] perturb the perturbation to be applied to each component
@@ -113,6 +115,7 @@ public:
     /**
      * Constructs Monotonic Basin Hopping using a vector perturbation
      *
+     * @param[in] a Any object that can construct a pagmo::algorithm and that will
      * @param[in] stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop
      * @param[in] perturb a vector_double with the perturbations to be applied to each component

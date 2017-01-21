@@ -1535,8 +1535,7 @@ public:
      * Checks the feasibility of a fitness vector \p f against
      * the tolerances returned by problem::get_c_tol
      *
-     *
-     * @param[in] x fitness vector
+     * @param[in] f fitness vector
      * @return true if the fitness vector is feasible
      */
     bool feasibility_f(const vector_double &f) const
