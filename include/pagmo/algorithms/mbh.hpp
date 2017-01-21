@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_ALGORITHMS_MBH_HPP
 #define PAGMO_ALGORITHMS_MBH_HPP
 
@@ -58,13 +86,13 @@ public:
     mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_e(0u), m_seed(0u), m_verbosity(0u), m_log()
     {
     }
-    /// Constructor.
+    /// Constructor
     /**
-     * Constructs Monotonic Basin Hopping
+     * Constructs Monotonic Basin Hopping using a scalar perturbation
      *
      * @param[in] stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop
-     * @param[in] perturb vector_double containing the perturbation applied to each component
+     * @param[in] perturb the perturbation to be applied to each component
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
      * @param[in] seed stop range
@@ -75,6 +103,26 @@ public:
     template <typename T>
     explicit mbh(T &&a, unsigned int stop, double perturb, unsigned int seed = pagmo::random_device::next())
         : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
+          m_log()
+    {
+    }
+    /// Constructor
+    /**
+     * Constructs Monotonic Basin Hopping using a vector perturbation
+     *
+     * @param[in] stop consecutive runs of the inner algorithm that need to
+     * result in no improvement for pagmo::mbh to stop
+     * @param[in] perturb a vector_double with the perturbations to be applied to each component
+     * of the decision vector of the best population found when generating a new starting point.
+     * These are defined relative to the corresponding bounds.
+     * @param[in] seed stop range
+     * @throws std::invalid_argument if \p start_range is not in (0,1]
+     * @throws std::invalid_argument if \p stop_range is not in (start_range,1]
+     * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
+     */
+    template <typename T>
+    explicit mbh(T &&a, unsigned int stop, vector_double perturb, unsigned int seed = pagmo::random_device::next())
+        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
           m_log()
     {
     }
@@ -98,7 +146,6 @@ public:
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
-        auto neq = prob.get_nec();
         auto NP = pop.size();
 
         auto fevals0 = prob.get_fevals(); // discount for the already made fevals
@@ -146,7 +193,7 @@ public:
                         std::max(pop.get_x()[j][k] - m_perturb[k] * (ub[k] - lb[k]), lb[k]),
                         std::min(pop.get_x()[j][k] + m_perturb[k] * (ub[k] - lb[k]), ub[k]))(m_e);
                 }
-                pop.set_x(j, tmp_x);
+                pop.set_x(j, tmp_x); // fitness is evaluated here
             }
             // 3 - We evolve the current population with the selected algorithm
             pop = static_cast<const algorithm *>(this)->evolve(pop);
@@ -169,10 +216,10 @@ public:
                 }
                 // 2 - Print
                 auto cur_best_f = pop.get_f()[pop.best_idx()];
-                auto c1eq = detail::test_eq_constraints(cur_best_f.data() + 1, cur_best_f.data() + 1 + neq,
+                auto c1eq = detail::test_eq_constraints(cur_best_f.data() + 1, cur_best_f.data() + 1 + nec,
                                                         prob.get_c_tol().data());
                 auto c1ineq = detail::test_ineq_constraints(
-                    cur_best_f.data() + 1 + neq, cur_best_f.data() + cur_best_f.size(), prob.get_c_tol().data() + neq);
+                    cur_best_f.data() + 1 + nec, cur_best_f.data() + cur_best_f.size(), prob.get_c_tol().data() + nec);
                 auto n = prob.get_nc() - c1eq.first - c1ineq.first;
                 auto l = c1eq.second + c1ineq.second;
                 print(std::setw(7), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0], std::setw(15), n,
@@ -199,7 +246,35 @@ public:
     {
         return m_seed;
     }
-    /// Sets the verbosity level
+    /// Sets the algorithm verbosity
+    /**
+     * Sets the verbosity level of the screen output and of the
+     * log returned by get_log(). \p level can be:
+     * - 0: no verbosity
+     * - >0: will print and log one line at each call of the inner algorithm
+     *
+     * Example (verbosity 100):
+     * @code
+     * Fevals:          Best:      Violated:    Viol. Norm:         Trial:
+     *     105        110.395              1      0.0259512              0 i
+     *     211        110.395              1      0.0259512              1 i
+     *     319        110.395              1      0.0259512              2 i
+     *     422        110.514              1      0.0181383              0 i
+     *     525         111.33              1      0.0149418              0 i
+     *     628         111.33              1      0.0149418              1 i
+     *     731         111.33              1      0.0149418              2 i
+     *     834         111.33              1      0.0149418              3 i
+     *     937         111.33              1      0.0149418              4 i
+     *    1045         111.33              1      0.0149418              5 i
+     * @endcode
+     * Fevals, is the number of funcrion evaluations, Best is the objective function of the best
+     * fitness currently in the population, Violated is the number of constraints currently violated
+     * by the best solution, Viol. Norm is the norm of the violation (discounted already by the constraints
+     * tolerance) and Trial is the improvement trial number (which will determine the algorithm stop).
+     * The small i appearing at the end of the line stands for infeasible and will disappear only once Violated is 0.
+     *
+     * @param level verbosity level
+     */
     void set_verbosity(unsigned int level)
     {
         m_verbosity = level;
@@ -208,6 +283,28 @@ public:
     unsigned int get_verbosity() const
     {
         return m_verbosity;
+    }
+    /// Gets the perturbation vector
+    const vector_double& get_perturb() const
+    {
+        return m_perturb;
+    }
+    /// Sets the perturbation vector
+    void set_perturb(const vector_double& perturb)
+    {
+        m_perturb = perturb;
+    }
+    /// Get log
+    /**
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+     * <tt> std::vector </tt> is a compass_search::log_line_type containing: Fevals, Best, Violated and Viol.Norm,
+     * Trial as described in mbh::set_verbosity
+     * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals, Best,
+     * Trial
+     */
+    const log_type &get_log() const
+    {
+        return m_log;
     }
     /// Algorithm name
     std::string get_name() const
