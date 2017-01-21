@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_MBH_HPP
 #define PAGMO_ALGORITHMS_MBH_HPP
 
+#include <algorithm> //std::if_all
 #include <iomanip>
 #include <random>
 #include <string>
@@ -95,16 +96,18 @@ public:
      * @param[in] perturb the perturbation to be applied to each component
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
-     * @param[in] seed stop range
-     * @throws std::invalid_argument if \p start_range is not in (0,1]
-     * @throws std::invalid_argument if \p stop_range is not in (start_range,1]
-     * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
+     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @throws std::invalid_argument if \p stop is not in (0,1]
      */
     template <typename T>
     explicit mbh(T &&a, unsigned int stop, double perturb, unsigned int seed = pagmo::random_device::next())
         : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
           m_log()
     {
+        if (perturb > 1. || perturb <= 0.) {
+            pagmo_throw(std::invalid_argument, "The scalar perturbation must be in (0, 1], while a value of "
+                                                   + std::to_string(perturb) + " was detected.");
+        }
     }
     /// Constructor
     /**
@@ -115,16 +118,18 @@ public:
      * @param[in] perturb a vector_double with the perturbations to be applied to each component
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
-     * @param[in] seed stop range
-     * @throws std::invalid_argument if \p start_range is not in (0,1]
-     * @throws std::invalid_argument if \p stop_range is not in (start_range,1]
-     * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
+     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @throws std::invalid_argument if \p stop is not in (0,1]
      */
     template <typename T>
     explicit mbh(T &&a, unsigned int stop, vector_double perturb, unsigned int seed = pagmo::random_device::next())
         : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
           m_log()
     {
+        if (!std::all_of(perturb.begin(), perturb.end(), [](double item) { return (item > 0. && item <= 1.); })) {
+            pagmo_throw(std::invalid_argument,
+                        "The perturbation must have all components in (0, 1], while that is not the case.");
+        }
     }
     /// Algorithm evolve method (juice implementation of the algorithm)
     /**
@@ -251,7 +256,7 @@ public:
      * Sets the verbosity level of the screen output and of the
      * log returned by get_log(). \p level can be:
      * - 0: no verbosity
-     * - >0: will print and log one line at each call of the inner algorithm
+     * - >0: will print and log one line at the end of each call to the inner algorithm
      *
      * Example (verbosity 100):
      * @code
@@ -267,11 +272,11 @@ public:
      *     937         111.33              1      0.0149418              4 i
      *    1045         111.33              1      0.0149418              5 i
      * @endcode
-     * Fevals, is the number of funcrion evaluations, Best is the objective function of the best
+     * Fevals, is the number of fitness evaluations, Best is the objective function of the best
      * fitness currently in the population, Violated is the number of constraints currently violated
      * by the best solution, Viol. Norm is the norm of the violation (discounted already by the constraints
-     * tolerance) and Trial is the improvement trial number (which will determine the algorithm stop).
-     * The small i appearing at the end of the line stands for infeasible and will disappear only once Violated is 0.
+     * tolerance) and Trial is the trial number (which will determine the algorithm stop).
+     * The small i appearing at the end of the line stands for "infeasible" and will disappear only once Violated is 0.
      *
      * @param level verbosity level
      */
@@ -285,21 +290,22 @@ public:
         return m_verbosity;
     }
     /// Gets the perturbation vector
-    const vector_double& get_perturb() const
+    const vector_double &get_perturb() const
     {
         return m_perturb;
     }
     /// Sets the perturbation vector
-    void set_perturb(const vector_double& perturb)
+    void set_perturb(const vector_double &perturb)
     {
         m_perturb = perturb;
     }
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a compass_search::log_line_type containing: Fevals, Best, Violated and Viol.Norm,
+     * <tt> std::vector </tt> is a mbh::log_line_type containing: Fevals, Best, Violated, Viol.Norm and
      * Trial as described in mbh::set_verbosity
-     * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals, Best,
+     * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals,
+     * Violated, Viol.Norm and
      * Trial
      */
     const log_type &get_log() const
