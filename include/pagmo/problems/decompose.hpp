@@ -333,11 +333,11 @@ private:
     vector_double::size_type get_gs_dim() const = delete;
     std::vector<vector_double::size_type> get_hs_dim() const = delete;
     bool is_stochastic() const = delete;
-    #if __GNUC__ > 4
+#if __GNUC__ > 4
     // NOTE: We delete the streaming operator overload called with decompose, otherwise the inner prob would stream
     // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
     friend std::ostream &operator<<(std::ostream &, const decompose &) = delete;
-    #endif
+#endif
     template <typename Archive>
     void save(Archive &) const = delete;
     template <typename Archive>

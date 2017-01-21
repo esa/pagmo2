@@ -345,11 +345,12 @@ private:
     bool has_set_seed() const = delete;
     bool is_stochastic() const = delete;
     bool has_set_verbosity() const = delete;
+
+#if __GNUC__ > 4
     // NOTE: We delete the streaming operator overload called with mbh, otherwise the inner algo would stream
-    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
-    #if __GNUC__ > 4
+    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it.
     friend std::ostream &operator<<(std::ostream &, const mbh &) = delete;
-    #endif
+#endif
 
     unsigned int m_stop;
     // The member m_perturb is mutable as to allow to construct mbh also using a perturbation defined as a scalar

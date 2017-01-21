@@ -103,9 +103,13 @@ BOOST_AUTO_TEST_CASE(mbh_evolve_test)
     }
     // And that it throws if called with a wrong dimension of the perturbation vector
     {
-    mbh user_algo{compass_search{100u, 0.1, 0.001, 0.7}, 5u, {1e-3, 1e-2}, 23u};
-    BOOST_CHECK_THROW(user_algo.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
+        mbh user_algo{compass_search{100u, 0.1, 0.001, 0.7}, 5u, {1e-3, 1e-2}, 23u};
+        BOOST_CHECK_THROW(user_algo.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
     }
+    // And a clean exit for 0 generations
+    problem prob{hock_schittkowsky_71{}};
+    population pop{prob, 10u};
+    BOOST_CHECK((mbh{compass_search{100u, 0.1, 0.001, 0.7}, 0u, {1e-3, 1e-2}, 23u}.evolve(pop).get_x()[0]) == (pop.get_x()[0]));
 }
 
 BOOST_AUTO_TEST_CASE(mbh_setters_getters_test)
@@ -115,8 +119,8 @@ BOOST_AUTO_TEST_CASE(mbh_setters_getters_test)
     BOOST_CHECK(user_algo.get_verbosity() == 23u);
     user_algo.set_seed(23u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
-    user_algo.set_perturb({1.,2.,3.,4.});
-    BOOST_CHECK((user_algo.get_perturb() == vector_double{1.,2.,3.,4.}));
+    user_algo.set_perturb({1., 2., 3., 4.});
+    BOOST_CHECK((user_algo.get_perturb() == vector_double{1., 2., 3., 4.}));
     BOOST_CHECK(user_algo.get_name().find("Monotonic Basin Hopping") != std::string::npos);
     BOOST_CHECK(user_algo.get_extra_info().find("Inner algorithm extra info") != std::string::npos);
     BOOST_CHECK_NO_THROW(user_algo.get_log());
