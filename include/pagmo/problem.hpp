@@ -933,10 +933,10 @@ struct prob_inner final : prob_inner_base {
  * - \p T::get_name() returns a string containing the problem name to be used in output streams.
  * - \p T::get_extra_info() returns a string containing extra human readable information to be used in output streams.
  *
- * @note Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the
+ * **NOTE** Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the
  * hessians. At each copy construction and copy assignment these counters are also copied.
  *
- * @note The only allowed operations on an object belonging to this class, after it has been moved, are assignment and
+ * **NOTE** The only allowed operations on an object belonging to this class, after it has been moved, are assignment and
  * destruction.
  */
 
@@ -964,12 +964,12 @@ public:
      * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
      *   otherwise it will result in a compile-time failure
      *
-     * @note The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of
+     * **NOTE** The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of
      * problem::get_nf(),
      * while the decision vector dimension \f$n_x\f$ is defined
      * by the size of the bounds as returned by \p T::get_bounds()
      *
-     * @note \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled and the
+     * **NOTE** \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled and the
      * copy constructor will be called instead.
      *
      * @param[in] x The user implemented problem
@@ -1518,7 +1518,7 @@ public:
      * a decision vector \p x against
      * the tolerances returned by problem::get_c_tol
      *
-     * @note This will cause one fitness evaluation
+     * **NOTE** This will cause one fitness evaluation
      *
      * @param[in] x decision vector
      * @return true if the descision vector results in a feasible fitness

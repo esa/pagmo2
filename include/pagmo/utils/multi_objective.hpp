@@ -339,7 +339,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  *
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @note This function will also work for single objective optimization, i.e. with 1 objective
+ * **NOTE** This function will also work for single objective optimization, i.e. with 1 objective
  * in which case, though, it is more efficient to sort using directly on of the following forms:
  * @code
  * std::sort(input_f.begin(), input_f.end(), [] (auto a, auto b) {return a[0] < b[0];});
@@ -570,7 +570,7 @@ vector_double nadir(const std::vector<vector_double> &input_f)
  * low dimensionalities are expected in the number of objcetvices (i.e. less than 20), hence Halton sequence is deemes
  *as appropriate.
  *
- * @note All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All
+ * **NOTE** All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All
  *weight generation methods
  * are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
  *

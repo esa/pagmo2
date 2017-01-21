@@ -78,11 +78,11 @@ namespace pagmo
  * \f$d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\f$ and
  * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$
  *
- * @note The reference point \f$z^*\f$ is often taken as the ideal point and as such
+ * **NOTE** The reference point \f$z^*\f$ is often taken as the ideal point and as such
  * it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
  * this behaviour so that whenever a new ideal point is found \f$z^*\f$ is adapted accordingly.
  *
- * @note The use of pagmo::decompose discards gradients and hessians so that if the original user defined problem
+ * **NOTE** The use of pagmo::decompose discards gradients and hessians so that if the original user defined problem
  * implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
  * the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
  * derivative-free optimization.
@@ -204,7 +204,7 @@ public:
     /**
      * Returns the fitness of the original multi-objective problem used to construct the decomposed problem.
      *
-     * @note This is *not* the fitness of the decomposed problem, that is returned by calling decompose::fitness()
+     * **NOTE** This is *not* the fitness of the decomposed problem, that is returned by calling decompose::fitness()
      *
      * @param[in] x Input decision vector
      *

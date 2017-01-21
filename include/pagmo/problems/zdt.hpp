@@ -58,7 +58,7 @@ namespace pagmo
  * any point to the Pareto front while creating interesting problems. They also suggest some
  * dimensions for instantiating the problems, namely \f$m = [30, 30, 30, 10, 11, 10]\f$.
  *
- * @note The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
+ * **NOTE** The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
  * via std::floor().
  *
  * @see Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:

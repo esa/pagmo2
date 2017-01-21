@@ -101,7 +101,7 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It1 cineq_firs
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
  * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
  *
- * @note: the fitness vectors are assumed to contain exactly one objective, \p neq equality
+ * **NOTE**: the fitness vectors are assumed to contain exactly one objective, \p neq equality
  * constraints and the rest (if any) inequality constraints
  *
  * @param[in] f1 first fitness vector
@@ -201,7 +201,7 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
  * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
  *
- * @note: the fitness vectors are assumed to contain exactly one objective, \p neq equality
+ * **NOTE**: the fitness vectors are assumed to contain exactly one objective, \p neq equality
  * constraints and the rest (if any) inequality constraints
  *
  * @param[in] input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)

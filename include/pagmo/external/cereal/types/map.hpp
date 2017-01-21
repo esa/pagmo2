@@ -89,7 +89,7 @@ namespace cereal
   }
 
   //! Saving for std::multimap
-  /*! @note serialization for this type is not guaranteed to preserve ordering */
+  /*! **NOTE** serialization for this type is not guaranteed to preserve ordering */
   template <class Archive, class K, class T, class C, class A> inline
   void CEREAL_SAVE_FUNCTION_NAME( Archive & ar, std::multimap<K, T, C, A> const & multimap )
   {
@@ -97,7 +97,7 @@ namespace cereal
   }
 
   //! Loading for std::multimap
-  /*! @note serialization for this type is not guaranteed to preserve ordering */
+  /*! **NOTE** serialization for this type is not guaranteed to preserve ordering */
   template <class Archive, class K, class T, class C, class A> inline
   void CEREAL_LOAD_FUNCTION_NAME( Archive & ar, std::multimap<K, T, C, A> & multimap )
   {

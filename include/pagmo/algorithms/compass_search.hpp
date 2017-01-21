@@ -69,12 +69,12 @@ namespace pagmo
  * a standard in the scientific computing community for exactly the reason observed
  * by Davidon: it is slow but sure'.
  *
- * @note This algorithm does not work for multi-objective problems, nor for stochastic problems.
+ * **NOTE** This algorithm does not work for multi-objective problems, nor for stochastic problems.
  *
- * @note The search range is defined relative to the box-bounds. Hence, unbounded problems
+ * **NOTE** The search range is defined relative to the box-bounds. Hence, unbounded problems
  * will produce an error.
  *
- * @note Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
+ * **NOTE** Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
  * called from two identical populations.
  *
  * @see Kolda, Lewis, Torczon: 'Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods'
