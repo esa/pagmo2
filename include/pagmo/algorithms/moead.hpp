@@ -51,7 +51,7 @@ namespace pagmo
 /**
   * \image html moead.png "Solving by decomposition" width=3cm
   *
-  * MOEA/D-DE is a very successfull multi-objective optimization algorithm, always worth a try. Based on the idea of
+  * MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of
  * problem decomposition,
   * it leverages on evolutionary operators to combine good solutions of neighbouring problems thus allowing for nice
  * convergence

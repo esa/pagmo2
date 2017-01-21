@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
  */
 
 #include <exception>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -115,5 +116,19 @@ struct ex_thrower {
  */
 #define pagmo_throw(exception_type, ...)                                                                               \
     pagmo::detail::ex_thrower<exception_type>(__FILE__, __LINE__, __func__)(__VA_ARGS__)
+
+namespace pagmo
+{
+
+/// Exception for functionality which has not been implemented.
+/**
+ * This exception is used by pagmo::problem, pagmo::algorithm, etc. to signal that
+ * optional methods in user-defined classes are not implemented.
+ * This class inherits the constructors from \p std::runtime_error.
+ */
+struct not_implemented_error final : std::runtime_error {
+    using std::runtime_error::runtime_error;
+};
+}
 
 #endif

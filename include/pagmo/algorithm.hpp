@@ -368,7 +368,7 @@ public:
     /// Constructor from a user algorithm of type \p T
     /**
      * Construct a pagmo::algorithm with from an object of type \p T. In
-     * order for the construction to be successfull \p T needs
+     * order for the construction to be successful \p T needs
      * to satisfy the following requests:
      *
      * - \p T must implement the following mandatory method:

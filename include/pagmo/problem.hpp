@@ -471,8 +471,9 @@ inline void check_problem_bounds(const std::pair<vector_double, vector_double> &
     }
     // 1 - check bounds have equal length
     if (lb.size() != ub.size()) {
-        pagmo_throw(std::invalid_argument, "Length of lower bounds vector is " + std::to_string(lb.size())
-                                               + ", length of upper bound is " + std::to_string(ub.size()));
+        pagmo_throw(std::invalid_argument, "The length of the lower bounds vector is " + std::to_string(lb.size())
+                                               + ", the length of the upper bounds vector is "
+                                               + std::to_string(ub.size()));
     }
     // 2 - checks lower < upper for all values in lb, ub, and check for nans.
     for (decltype(lb.size()) i = 0u; i < lb.size(); ++i) {
@@ -548,11 +549,8 @@ struct prob_inner final : prob_inner_base {
     static_assert(std::is_default_constructible<T>::value && std::is_copy_constructible<T>::value
                       && std::is_move_constructible<T>::value && std::is_destructible<T>::value,
                   "A problem must be default-constructible, copy-constructible, move-constructible and destructible.");
-    static_assert(has_fitness<T>::value,
-                  "A problem must provide a fitness function 'vector_double fitness(const vector_double &x) const'. ");
-    static_assert(
-        has_bounds<T>::value,
-        "A problem must provide getters for its bounds 'std::pair<vector_double, vector_double> get_bounds() const'.");
+    static_assert(has_fitness<T>::value, "A problem must provide a fitness function.");
+    static_assert(has_bounds<T>::value, "A problem must provide getters for its box bounds.");
     // We just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
@@ -664,10 +662,7 @@ struct prob_inner final : prob_inner_base {
     template <typename U, enable_if_t<!pagmo::has_gradient<U>::value, int> = 0>
     static vector_double gradient_impl(const U &, const vector_double &)
     {
-        pagmo_throw(std::logic_error, "gradients have been requested but not implemented\n\n"
-                                      "The expected prototypes are:\n"
-                                      "C++: vector_double gradient(const vector_double &x) const\n"
-                                      "Python: gradient(x)");
+        pagmo_throw(not_implemented_error, "The gradient has been requested but it is not implemented in the UDP");
     }
     template <typename U, enable_if_t<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value, int> = 0>
     static bool has_gradient_impl(const U &p)
@@ -686,35 +681,31 @@ struct prob_inner final : prob_inner_base {
         return false;
     }
     template <typename U, enable_if_t<pagmo::has_gradient_sparsity<U>::value, int> = 0>
-    sparsity_pattern gradient_sparsity_impl(const U &p) const
+    static sparsity_pattern gradient_sparsity_impl(const U &p)
     {
         return p.gradient_sparsity();
     }
     template <typename U, enable_if_t<!pagmo::has_gradient_sparsity<U>::value, int> = 0>
-    sparsity_pattern gradient_sparsity_impl(const U &) const
+    static sparsity_pattern gradient_sparsity_impl(const U &)
     {
-        pagmo_throw(std::logic_error,
-                    "gradient_sparsity() was signalled as present in the user-defined problem, but it is not actually "
-                    "implemented: this "
-                    "indicates a logical error in the implementation of the user-defined problem class");
+        pagmo_throw(not_implemented_error,
+                    "The gradient sparsity has been requested but it is not implemented in the UDP");
     }
-    template <typename U, enable_if_t<pagmo::override_has_gradient_sparsity<U>::value, int> = 0>
+    template <
+        typename U,
+        enable_if_t<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value, int> = 0>
     static bool has_gradient_sparsity_impl(const U &p)
     {
         return p.has_gradient_sparsity();
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value
-                                                      && !pagmo::override_has_gradient_sparsity<U>::value,
-                                                  int>::type
-                          = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,
+                          int> = 0>
     static bool has_gradient_sparsity_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value
-                                                      && !pagmo::override_has_gradient_sparsity<U>::value,
-                                                  int>::type
-                          = 0>
+    template <typename U, enable_if_t<!pagmo::has_gradient_sparsity<U>::value, int> = 0>
     static bool has_gradient_sparsity_impl(const U &)
     {
         return false;
@@ -727,9 +718,9 @@ struct prob_inner final : prob_inner_base {
     template <typename U, enable_if_t<!pagmo::has_hessians<U>::value, int> = 0>
     static std::vector<vector_double> hessians_impl(const U &, const vector_double &)
     {
-        pagmo_throw(std::logic_error, "Hessians have been requested but not implemented.\n"
-                                      "A function with prototype 'std::vector<vector_double> hessians(const "
-                                      "vector_double &x)' const was expected.");
+        pagmo_throw(not_implemented_error, "Hessians have been requested but not implemented.\n"
+                                           "A function with prototype 'std::vector<vector_double> hessians(const "
+                                           "vector_double &x)' const was expected.");
     }
     template <typename U, enable_if_t<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value, int> = 0>
     static bool has_hessians_impl(const U &p)
@@ -752,10 +743,11 @@ struct prob_inner final : prob_inner_base {
     {
         return value.hessians_sparsity();
     }
+    // TODO static
     template <typename U, enable_if_t<!pagmo::has_hessians_sparsity<U>::value, int> = 0>
     std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
     {
-        pagmo_throw(std::logic_error,
+        pagmo_throw(not_implemented_error,
                     "hessians_sparsity() was signalled as present in the user-defined problem, but it is not actually "
                     "implemented: this "
                     "indicates a logical error in the implementation of the user-defined problem class");
@@ -765,18 +757,16 @@ struct prob_inner final : prob_inner_base {
     {
         return p.has_hessians_sparsity();
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value
-                                                      && !pagmo::override_has_hessians_sparsity<U>::value,
-                                                  int>::type
-                          = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,
+                          int> = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value
-                                                      && !pagmo::override_has_hessians_sparsity<U>::value,
-                                                  int>::type
-                          = 0>
+    template <typename U,
+              enable_if_t<!pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,
+                          int> = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
         return false;
@@ -823,7 +813,7 @@ struct prob_inner final : prob_inner_base {
     static void set_seed_impl(U &, unsigned int)
     {
         pagmo_throw(
-            std::logic_error,
+            not_implemented_error,
             "The set_seed method has been called but not implemented by the user.\n"
             "A function with prototype 'void set_seed(unsigned int)' was expected in the user-defined problem.");
     }
@@ -923,9 +913,9 @@ struct prob_inner final : prob_inner_base {
  * vector_double::size_type get_nobj() const;
  * vector_double::size_type get_nec() const;
  * vector_double::size_type get_nic() const;
- * vector_double get_c_tol() const;
  * bool has_gradient() const;
  * vector_double gradient(const vector_double &) const;
+ * bool has_gradient_sparsity() const;
  * sparsity_pattern gradient_sparsity() const;
  * std::vector<vector_double> hessians(const vector_double &) const;
  * std::vector<sparsity_pattern> hessians_sparsity() const;
@@ -934,17 +924,6 @@ struct prob_inner final : prob_inner_base {
  * std::string get_extra_info() const;
  * @endcode
  *
- * -
- * -
- * - \p %gradient() returns a sparse representation of the gradient. The \f$ k\f$-th term
- * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
- * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by
- * problem::gradient_sparsity().
- * When not implemented, a call to problem::gradient() throws an \p std::logic_error.
- * - \p T::gradient_sparsity() returns the gradient sparsity pattern, i.e a collection of the non-zero index pairs
- * \f$(i,j)\f$. When
- * not implemented a dense pattern is assumed and a call to problem::gradient_sparsity().
- * returns \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$
  * - \p T::hessians() returns a vector of sparse representations for the hessians. For
  * the \f$l\f$-th value returned by \p T::fitness(), the hessian is defined as \f$ \frac{\partial f^2_l}{\partial
  * x_i\partial x_j}\f$
@@ -984,7 +963,7 @@ public:
     /// Constructor from a user problem of type \p T
     /**
      * Construct a pagmo::problem from an object of type \p T. In
-     * order for the construction to be successfull \p T needs
+     * order for the construction to be successful \p T needs
      * to satisfy the following requests:
      *
      * - \p T must implement the following mandatory methods:
@@ -1057,7 +1036,7 @@ public:
         m_has_hessians_sparsity = ptr()->has_hessians_sparsity();
         // 5bis - Is this a stochastic problem?
         m_has_set_seed = ptr()->has_set_seed();
-        // 6 - Name and extra info.
+        // 6 - Name.
         m_name = ptr()->get_name();
         // 7 - Check the sparsities, and cache their sizes.
         if (m_has_gradient_sparsity) {
@@ -1213,7 +1192,7 @@ public:
         return extract<T>() != nullptr;
     }
 
-    /// Fitness
+    /// Fitness.
     /**
      * This method will invoke the \p %fitness() method of the UDP to compute the fitness of the
      * input decision vector \p dv. The return value of the \p %fitness() method of the UDP is expected to have a
@@ -1221,10 +1200,10 @@ public:
      * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
      *
      * In addition to invoking the \p %fitness() method of the UDP, this method will perform sanity checks on \p dv
-     * and on the returned fitness vector, and it will increase the internal fitness evaluation counter of the problem
-     * (see problem::get_fevals()).
+     * and on the returned fitness vector. A successful call of this method will increase the internal fitness
+     * evaluation counter (see problem::get_fevals()).
      *
-     * @param dv The decision vector
+     * @param dv the decision vector.
      *
      * @return the fitness of \p dv.
      *
@@ -1232,6 +1211,7 @@ public:
      * - the length of \p dv differs from the output of get_nx(), or
      * - the length of the returned fitness vector differs from the output
      *   of get_nf().
+     * @throws unspecified any exception thrown by the \p %fitness() method of the UDP.
      */
     vector_double fitness(const vector_double &dv) const
     {
@@ -1246,24 +1226,32 @@ public:
         return retval;
     }
 
-    /// Computes the gradient
+    /// Gradient.
     /**
-     * The gradient, optionally implemented in the user-defined problem,
-     * is expected to be a pagmo::vector_double containing the problem
-     * fitness gradients \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$
-     * in the order specified by the gradient sparsity pattern returned by
-     * problem::gradient_sparsity()
-     * (a vector of index pairs \f$(i,j)\f$).
+     * This method will compute the gradient of the input decision vector \p dv by invoking
+     * the \p %gradient() method of the UDP. The \p %gradient() method of the UDP must return
+     * a sparse representation of the gradient: the \f$ k\f$-th term of the gradient vector
+     * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
+     * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs), as returned by
+     * problem::gradient_sparsity().
      *
-     * @param[in] dv The decision vector
+     * If the UDP satisfies pagmo::has_gradient, this method will forward \p dv to the \p %gradient()
+     * method of the UDP after sanity checks. The output of the \p %gradient()
+     * method of the UDP will also be checked before being returned. If the UDP does not satisfy
+     * pagmo::has_gradient, an error will be raised.
      *
-     * @return The gradient as implemented by the user.
+     * A successful call of this method will increase the internal gradient evaluation counter (see
+     * problem::get_gevals()).
      *
-     * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
-     * @throws std::invalid_argument if the length of the gradient returned (as defined in the user defined problem)
-     * does not match the gradient sparsity pattern dimension
-     * @throws std::logic_error if the user defined problem does not implement
-     * the gradient method
+     * @param dv the decision vector whose gradient will be computed.
+     *
+     * @return the gradient of \p dv.
+     *
+     * @throws std::invalid_argument if either:
+     * - the length of \p dv differs from the output of get_nx(), or
+     * - the returned gradient vector does not have the same size as the output of pagmo::sparsity_pattern().
+     * @throws not_implemented_error if the UDP does not satisfy pagmo::has_gradient.
+     * @throws unspecified any exception thrown by the \p %gradient() method of the UDP.
      */
     vector_double gradient(const vector_double &dv) const
     {
@@ -1278,9 +1266,9 @@ public:
         return retval;
     }
 
-    /// Check if gradient is available.
+    /// Check if the gradient is available in the UDP.
     /**
-     * This method will return \p true if the gradient is available, \p false otherwise.
+     * This method will return \p true if the gradient is available in the UDP, \p false otherwise.
      *
      * The availability of the gradient is determined as follows:
      * - if the UDP does not satisfy pagmo::has_gradient, then this method will always return \p false;
@@ -1296,21 +1284,29 @@ public:
         return m_has_gradient;
     }
 
-    /// Computes the gradient sparsity pattern
+    /// Gradient sparsity pattern.
     /**
-     * The gradient sparsity pattern is a collection of the indexes
-     * \f$(i,j)\f$ of the non-zero elements of
-     * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$. By default
-     * PaGMO assumes a dense pattern (all index pairs in the order
-     * \f$(0,0) .. (0,n_x-1), ...(1,0) .. (1,n_x-1) .. (n_f-1,n_x-1)\f$
-     * but this default is overidden if the method gradient_sparsity is
-     * implemented in the user defined problem.
+     * This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a
+     * collection of the indexes \f$(i,j)\f$ of the non-zero elements of
+     * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$.
      *
-     * @return The gradient sparsity pattern.
+     * If problem::has_gradient_sparsity() returns \p true,
+     * then the \p %gradient_sparsity() method of the UDP will be invoked, and its result returned (after sanity
+     * checks). Otherwise, a a dense pattern is assumed and the returned vector will be
+     * \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$.
+     *
+     * @return the gradient sparsity pattern.
+     *
+     * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
+     * it contains duplicate pairs of indices or if the indices in the pattern are incompatible with the properties of
+     * the problem).
+     * @throws not_implemented_error if the \p %gradient_sparsity() method of the UDP is invoked without being
+     * available. This indicates in general an inconsistency in the implementation of the UDP.
+     * @throws unspecified memory errors in standard containers.
      */
     sparsity_pattern gradient_sparsity() const
     {
-        if (m_has_gradient_sparsity) {
+        if (has_gradient_sparsity()) {
             auto retval = ptr()->gradient_sparsity();
             check_gradient_sparsity(retval);
             return retval;
@@ -1318,20 +1314,22 @@ public:
         return detail::dense_gradient(get_nf(), get_nx());
     }
 
-    /// Checks if the user-defined problem has a gradient_sparsity
+    /// Check if the gradient sparsity is available in the UDP.
     /**
-     * If the user defined problem implements a gradient_sparsity, this
-     * will return true, false otherwise. The value returned can
-     * also be directly hard-coded implementing the
-     * method
+     * This method will return \p true if the gradient sparsity is available in the UDP, \p false otherwise.
      *
-     * @code{.unparsed}
-     * bool has_gradient_sparsity() const
-     * @endcode
+     * The availability of the gradient sparsity is determined as follows:
+     * - if the UDP does not satisfy pagmo::has_gradient_sparsity, then this method will always return \p false;
+     * - if the UDP satisfies pagmo::has_gradient_sparsity but it does not satisfy
+     *   pagmo::override_has_gradient_sparsity, then this method will always return \p true;
+     * - if the UDP satisfies both pagmo::has_gradient_sparsity and pagmo::override_has_gradient_sparsity,
+     *   then this method will return the output of the \p %has_gradient_sparsity() method of the UDP.
      *
-     * in the user-defined problem
+     * Note that, regardless of what this method returns, the problem::gradient_sparsity() method will always return
+     * a sparsity pattern: if the UDP does not provide the gradient sparsity, PaGMO will assume that the sparsity
+     * pattern of the gradient is dense. See problem::gradient_sparsity() for more details.
      *
-     * @return a boolean flag
+     * @return a flag signalling the availability of the gradient sparsity in the UDP.
      */
     bool has_gradient_sparsity() const
     {
@@ -1559,7 +1557,7 @@ public:
         if (m_has_set_seed) {
             ptr()->set_seed(seed);
         } else {
-            pagmo_throw(std::logic_error,
+            pagmo_throw(not_implemented_error,
                         "the user-defined problem does not support seed setting: "
                         "either it does not provide the 'set_seed()' method or its 'has_set_seed()' method "
                         "returns false\n\nThe expected prototypes for 'set_seed()' are:\n"
@@ -1721,7 +1719,7 @@ private:
         const auto nx = get_nx();
         const auto nf = get_nf();
         // 1 - We check that the gradient sparsity pattern has
-        // valid indexes.
+        // valid indices.
         for (const auto &pair : gs) {
             if ((pair.first >= nf) || (pair.second >= nx)) {
                 pagmo_throw(std::invalid_argument, "Invalid pair detected in the gradient sparsity pattern: ("
