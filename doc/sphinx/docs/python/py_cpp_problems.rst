@@ -1,4 +1,4 @@
-.. py_cpp_problems
+.. _py_cpp_problems:
 
 Exposed C++ problems
 ====================

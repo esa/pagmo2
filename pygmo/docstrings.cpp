@@ -402,19 +402,98 @@ std::string problem_docstring()
 {
     return R"(__init__(prob)
 
-The problem class.
+Problem class.
 
-This class represents a generic mathematical programming or evolutionary optimization problem. Optimization problems
-can be created in PyGMO by defining a class with an appropriate set of methods (i.e., a user-defined problem, or UDP)
-and then by using an instance of the UDP to construct a :class:`~pygmo.core.problem`. The exposed C++ problems can
-also be used as UDPs.
+This class represents a generic *mathematical programming* or *evolutionary optimization* problem in the form:
 
-Note that the UDP provided on construction will be deep-copied and stored inside the problem.
+.. math::
+   \begin{array}{rl}
+   \mbox{find:}      & \mathbf {lb} \le \mathbf x \le \mathbf{ub}\\
+   \mbox{to minimize: } & \mathbf f(\mathbf x, s) \in \mathbb R^{n_{obj}}\\
+   \mbox{subject to:} & \mathbf {c}_e(\mathbf x, s) = 0 \\
+                     & \mathbf {c}_i(\mathbf x, s) \le 0
+   \end{array}
 
-See also the docs of the C++ class :cpp:class:`pagmo::problem`.
+where :math:`\mathbf x \in \mathbb R^{n_x}` is called *decision vector* or
+*chromosome*, :math:`\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_x}` are the *box-bounds*,
+:math:`\mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}` define the *objectives*,
+:math:`\mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}` are non linear *equality constraints*,
+and :math:`\mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}` are non linear *inequality constraints*.
+Note that the objectives and constraints may also depend from an added value :math:`s` seeding the
+values of any number of stochastic variables. This allows also for stochastic programming
+tasks to be represented by this class.
+
+In order to define an optimizaztion problem in PyGMO, the user must first define a class
+whose methods describe the properties of the problem and allow to compute
+the objective function, the gradient, the constraints, etc. In PyGMO, we refer to such
+a class as a **user-defined problem**, or UDP for short. Once defined and instantiated,
+a UDP can then be used to construct an instance of this class, :class:`~pygmo.core.problem`, which
+provides a generic interface to optimization problems.
+
+Every UDP must implement at least the following two methods:
+
+.. code-block:: python
+
+   def fitness(self, dv):
+     ...
+   def get_bounds(self):
+     ...
+
+The ``fitness()`` method is expected to return the fitness of the input decision vector, while
+``get_bounds()`` is expected to return the box bounds of the problem,
+:math:`(\mathbf{lb}, \mathbf{ub})`, which also implicitly define the dimension of the problem.
+The ``fitness()`` and ``get_bounds()`` methods of the UDP are accessible from the corresponding
+:func:`pygmo.core.problem.fitness()` and :func:`pygmo.core.problem.get_bounds()`
+methods (see their documentation for information on how the two methods should be implemented
+in the UDP and other details).
+
+The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
+optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following
+methods:
+
+.. code-block:: python
+
+   def get_nobj(self):
+     ...
+   def get_nec(self):
+     ...
+   def get_nic(self):
+     ...
+   def has_gradient(self):
+     ...
+   def gradient(self, dv):
+     ...
+   def has_gradient_sparsity(self):
+     ...
+   def gradient_sparsity(self):
+     ...
+   def has_hessians(self):
+     ...
+   def hessians(self, dv):
+     ...
+   def has_hessians_sparsity(self):
+     ...
+   def hessians_sparsity(self):
+     ...
+   def has_set_seed(self):
+     ...
+   def set_seed(self, s):
+     ...
+   def get_name(self):
+     ...
+   def get_extra_info(self):
+     ...
+
+See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDP should be implemented and on how they are used by :class:`~pygmo.core.problem`.
+Note that the :ref:`exposed C++ problems <py_cpp_problems>` can also be used as UDPs.
+
+See also the docs of the C++ class :cpp:class:`pagmo::problem` (of which this class is the Python
+counterpart).
 
 Args:
-    prob: a user-defined problem (either C++ or Python)
+    prob: a user-defined problem (either C++ or Python - note that *prob* will be deep-copied
+      and stored inside the :class:`~pygmo.core.problem` instance)
 
 Raises:
     TypeError,ValueError,RuntimeError: if *prob* is not a user-defined problem
