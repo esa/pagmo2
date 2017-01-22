@@ -62,7 +62,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PaGMO'
-copyright = '2016, Francesco Biscani and Dario Izzo'
+copyright = '2017, Francesco Biscani and Dario Izzo'
 author = 'Francesco Biscani and Dario Izzo'
 
 # The version info for the project you're documenting, acts as replacement for
