@@ -928,8 +928,8 @@ struct prob_inner final : prob_inner_base {
  * std::string get_extra_info() const;
  * @endcode
  *
- * See the documentation of the corresponding methods in this class to see how the presence of the optional methods
- * in the UDP influences the properties of a pagmo::problem.
+ * See the documentation of the corresponding methods in this class for details on how the optional
+ * methods in the UDP are used by pagmo::problem.
  *
  * **NOTE** the only allowed operations on an object belonging to this class, after it has been moved, are assignment
  * and destruction.
