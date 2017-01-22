@@ -940,44 +940,33 @@ class problem
     using generic_ctor_enabler = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value, int>;
 
 public:
-    /// Constructor from a user problem of type \p T
+    /// Constructor from a user-defined problem of type \p T
     /**
-     * Construct a pagmo::problem from an object of type \p T. In
-     * order for the construction to be successful \p T needs
-     * to satisfy the following requests:
+     * **NOTE** this constructor is not enabled if, after the removal of cv and reference qualifiers,
+     * \p T is of type pagmo::problem (that is, this constructor does not compete with the copy/move
+     * constructors of pagmo::problem).
      *
-     * - \p T must implement the following mandatory methods:
-     *   @code{.unparsed}
-     *   vector_double fitness(const vector_double &) const;
-     *   std::pair<vector_double, vector_double> get_bounds() const;
-     *   @endcode
-     *   otherwise it will result in a compile-time failure
-     * - \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled
-     * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
-     *   otherwise it will result in a compile-time failure
+     * This constructor will construct a pagmo::problem from the UDP (user-defined problem) \p x of type \p T. In order
+     * for the construction to be successful, the UDP must implement a minimal set of methods,
+     * as described in the documentation of pagmo::problem. The constructor will examine the properties of \p x and
+     * store them as data members of \p this.
      *
-     * @note The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of
-     * problem::get_nf(),
-     * while the decision vector dimension \f$n_x\f$ is defined
-     * by the size of the bounds as returned by \p T::get_bounds()
+     * @param x the UDP.
      *
-     * @note \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled and the
-     * copy constructor will be called instead.
+     * @throws std::invalid_argument in the following cases:
+     * - the number of objectives of the UDP is zero,
+     * - the number of objectives, equality or inequality constraints is larger than an implementation-defined value,
+     * - the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
+     *   different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
+     * - the \p %gradient_sparsity() and \p %hessians_sparsity() methods of the UDP fail basic sanity checks (e.g.,
+     *   they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.).
+     * @throws not_implemented_error if, while querying the problem properties, a functionality not implemented by the
+     * UDP is requested. This indicates a logical error in the implementation of the UDP (e.g., the UDP's
+     * \p %has_gradient_sparsity() method returns \p true but the \p %gradient_sparsity() method is not actually
+     * implemented).
+     * @throws unspecified any exception thrown by the invoked methods in the UDP or by memory errors in strings
+     * and standard containers.
      *
-     * @param x The user implemented problem
-     *
-     * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds()
-     * have different length.
-     * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds()
-     * are not such that \f$lb_i \le ub_i, \forall i\f$
-     * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity() method and this returns an invalid index
-     * pair \f$ (i,j)\f$ having \f$i \ge n_f\f$ or \f$j \ge n_x\f$
-     * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity() method and this contains any repeated index
-     * pair.
-     * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity() method and this returns an invalid index
-     * pair \f$ (i,j)\f$ having \f$i \ge n_x\f$ or \f$j > i\f$
-     * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity() method and this contains any repeated index
-     * pair.
      * TODO c_tol documentation.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
@@ -1032,8 +1021,7 @@ public:
             const auto nx = get_nx();
             const auto nf = get_nf();
             if (nx > std::numeric_limits<vector_double::size_type>::max() / nf) {
-                pagmo_throw(std::invalid_argument, "The size of the (dense) gradient "
-                                                   "sparsity is too large");
+                pagmo_throw(std::invalid_argument, "The size of the (dense) gradient sparsity is too large");
             }
             m_gs_dim = nx * nf;
         }
@@ -1486,7 +1474,7 @@ public:
     /// Box-bounds
     /**
      * @return \f$ (\mathbf{lb}, \mathbf{ub}) \f$, the box-bounds, as returned by
-     * the \p %get_bounds() method of the UDP.
+     * the \p %get_bounds() method of the UDP. Inifinities in the bounds are allowed.
      *
      * @throws unspecified any exception thrown by memory errors in standard containers.
      */
