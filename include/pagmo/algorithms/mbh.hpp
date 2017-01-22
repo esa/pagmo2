@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include "../population.hpp"
 #include "../rng.hpp"
 #include "../utils/constrained.hpp"
+#include "../utils/generic.hpp" // pagmo::uniform_real_from_range
 
 namespace pagmo
 {

@@ -123,8 +123,8 @@ BOOST_AUTO_TEST_CASE(mbh_setters_getters_test)
     BOOST_CHECK(user_algo.get_verbosity() == 23u);
     user_algo.set_seed(23u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
-    user_algo.set_perturb({0.1,0.2,0.3,0.4});
-    BOOST_CHECK((user_algo.get_perturb() == vector_double{0.1,0.2,0.3,0.4}));
+    user_algo.set_perturb({0.1, 0.2, 0.3, 0.4});
+    BOOST_CHECK((user_algo.get_perturb() == vector_double{0.1, 0.2, 0.3, 0.4}));
     BOOST_CHECK_THROW(user_algo.set_perturb({0.1, std::nan(""), 0.3, 0.4}), std::invalid_argument);
     BOOST_CHECK_THROW(user_algo.set_perturb({0.1, -0.2, 0.3, 0.4}), std::invalid_argument);
     BOOST_CHECK_THROW(user_algo.set_perturb({0.1, 2.3, 0.3, 0.4}), std::invalid_argument);
