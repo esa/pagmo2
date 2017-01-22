@@ -204,7 +204,7 @@ using uncvref_t = typename std::remove_cv<typename std::remove_reference<T>::typ
  * @code{.unparsed}
  * void set_seed(unsigned);
  * @endcode
- * The \p set_seed() method is part of the interface for the definition of a problem or an algorithm
+ * The \p set_seed() method is part of the interface for the definition of problems and algorithms
  * (see pagmo::problem and pagmo::algorithm).
  */
 template <typename T>
@@ -229,7 +229,7 @@ const bool has_set_seed<T>::value;
  * @code{.unparsed}
  * bool has_set_seed() const;
  * @endcode
- * The \p has_set_seed() method is part of the interface for the definition of a problem or an algorithm
+ * The \p has_set_seed() method is part of the interface for the definition of problems and algorithms
  * (see pagmo::problem and pagmo::algorithm).
  */
 template <typename T>
@@ -254,7 +254,7 @@ const bool override_has_set_seed<T>::value;
  * @code{.unparsed}
  * std::string get_name() const;
  * @endcode
- * The \p get_name() method is part of the interface for the definition of a problem or an algorithm
+ * The \p get_name() method is part of the interface for the definition of problems and algorithms
  * (see pagmo::problem and pagmo::algorithm).
  */
 template <typename T>
@@ -279,7 +279,7 @@ const bool has_name<T>::value;
  * @code{.unparsed}
  * std::string get_extra_info() const;
  * @endcode
- * The \p get_extra_info() method is part of the interface for the definition of a problem or an algorithm
+ * The \p get_extra_info() method is part of the interface for the definition of problems and algorithms
  * (see pagmo::problem and pagmo::algorithm).
  */
 template <typename T>

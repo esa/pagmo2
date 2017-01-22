@@ -450,7 +450,7 @@ public:
     /**
      * @tparam T The type to be checked
      *
-     * @return \p true if the user defined algorithm is \p T, \p false othewise.
+     * @return \p true if the user defined algorithm is \p T, \p false otherwise.
      */
     template <typename T>
     bool is() const
