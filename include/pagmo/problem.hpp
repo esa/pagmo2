@@ -692,12 +692,13 @@ struct prob_inner final : prob_inner_base {
         return p.gradient_sparsity();
     }
     template <typename U, enable_if_t<!pagmo::has_gradient_sparsity<U>::value, int> = 0>
-    static sparsity_pattern gradient_sparsity_impl(const U &)
+    [[noreturn]] static sparsity_pattern gradient_sparsity_impl(const U &)
     {
         // NOTE: we should never end up here. gradient_sparsity() is called only if m_has_gradient_sparsity
         // in the problem is set to true, and m_has_gradient_sparsity is unconditionally false if the UDP
         // does not implement gradient_sparsity() (see implementation of the three overloads below).
         assert(false);
+        throw;
     }
     template <
         typename U,
@@ -750,10 +751,11 @@ struct prob_inner final : prob_inner_base {
         return value.hessians_sparsity();
     }
     template <typename U, enable_if_t<!pagmo::has_hessians_sparsity<U>::value, int> = 0>
-    static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &)
+    [[noreturn]] static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &)
     {
         // See above why we should never end up here.
         assert(false);
+        throw;
     }
     template <
         typename U,
