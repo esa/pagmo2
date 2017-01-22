@@ -694,8 +694,10 @@ struct prob_inner final : prob_inner_base {
     template <typename U, enable_if_t<!pagmo::has_gradient_sparsity<U>::value, int> = 0>
     static sparsity_pattern gradient_sparsity_impl(const U &)
     {
-        pagmo_throw(not_implemented_error,
-                    "The gradient sparsity has been requested but it is not implemented in the UDP");
+        // NOTE: we should never end up here. gradient_sparsity() is called only if m_has_gradient_sparsity
+        // in the problem is set to true, and m_has_gradient_sparsity is unconditionally false if the UDP
+        // does not implement gradient_sparsity() (see implementation of the three overloads below).
+        assert(false);
     }
     template <
         typename U,
@@ -750,10 +752,12 @@ struct prob_inner final : prob_inner_base {
     template <typename U, enable_if_t<!pagmo::has_hessians_sparsity<U>::value, int> = 0>
     static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &)
     {
-        pagmo_throw(not_implemented_error,
-                    "The hessians sparsity has been requested but it is not implemented in the UDP");
+        // See above why we should never end up here.
+        assert(false);
     }
-    template <typename U, enable_if_t<pagmo::override_has_hessians_sparsity<U>::value, int> = 0>
+    template <
+        typename U,
+        enable_if_t<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value, int> = 0>
     static bool has_hessians_sparsity_impl(const U &p)
     {
         return p.has_hessians_sparsity();
@@ -765,9 +769,7 @@ struct prob_inner final : prob_inner_base {
     {
         return true;
     }
-    template <typename U,
-              enable_if_t<!pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,
-                          int> = 0>
+    template <typename U, enable_if_t<!pagmo::has_hessians_sparsity<U>::value, int> = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
         return false;
@@ -960,10 +962,6 @@ public:
      *   different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
      * - the \p %gradient_sparsity() and \p %hessians_sparsity() methods of the UDP fail basic sanity checks (e.g.,
      *   they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.).
-     * @throws not_implemented_error if, while querying the problem properties, a functionality not implemented by the
-     * UDP is requested. This indicates a logical error in the implementation of the UDP (e.g., the UDP's
-     * \p %has_gradient_sparsity() method returns \p true but the \p %gradient_sparsity() method is not actually
-     * implemented).
      * @throws unspecified any exception thrown by the invoked methods in the UDP or by memory errors in strings
      * and standard containers.
      *

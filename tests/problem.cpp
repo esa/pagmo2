@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <pagmo/exceptions.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/types.hpp>
 
@@ -524,8 +525,8 @@ BOOST_AUTO_TEST_CASE(problem_gradient_test)
 
     {
         problem p2{base_p{2, 2, 2, {1., 1., 1., 1.}, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
-        BOOST_CHECK_THROW(p2.gradient({3, 3}), std::logic_error);
-        BOOST_CHECK_THROW(p2.hessians({3, 3}), std::logic_error);
+        BOOST_CHECK_THROW(p2.gradient({3, 3}), not_implemented_error);
+        BOOST_CHECK_THROW(p2.hessians({3, 3}), not_implemented_error);
     }
 }
 
@@ -628,14 +629,21 @@ BOOST_AUTO_TEST_CASE(problem_has_test)
     BOOST_CHECK(!p4.has_hessians());
     BOOST_CHECK(!p4.has_hessians_sparsity());
 
-    BOOST_CHECK_THROW(problem{hgs_not_impl{}}, std::logic_error);
-    BOOST_CHECK_THROW(problem{hhs_not_impl{}}, std::logic_error);
-
     problem p6{ss_not_impl{}};
-    BOOST_CHECK_THROW(p6.set_seed(32u), std::logic_error);
+    BOOST_CHECK_THROW(p6.set_seed(32u), not_implemented_error);
 
     problem p7{base_p{}};
-    BOOST_CHECK_THROW(p7.set_seed(32u), std::logic_error);
+    BOOST_CHECK_THROW(p7.set_seed(32u), not_implemented_error);
+
+    // These two implement the has_sparsity() methods without the sparsity() methods.
+    // They will not error out because the lack of the sparsity() methods makes the has_sparsity()
+    // methods return always false.
+    BOOST_CHECK_NO_THROW(problem{hgs_not_impl{}});
+    BOOST_CHECK(!problem{hgs_not_impl{}}.has_gradient_sparsity());
+    BOOST_CHECK_NO_THROW(problem{hgs_not_impl{}}.gradient_sparsity());
+    BOOST_CHECK_NO_THROW(problem{hhs_not_impl{}});
+    BOOST_CHECK(!problem{hhs_not_impl{}}.has_hessians_sparsity());
+    BOOST_CHECK_NO_THROW(problem{hhs_not_impl{}}.hessians_sparsity());
 }
 
 BOOST_AUTO_TEST_CASE(problem_getters_test)
