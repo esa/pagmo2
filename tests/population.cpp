@@ -167,9 +167,9 @@ BOOST_AUTO_TEST_CASE(population_setters_test)
 {
     population pop{problem{null_problem{}}, 2};
     // Test throw
-    BOOST_CHECK_THROW(pop.set_xf(2, {3}, {1, 2, 3}), std::invalid_argument);    // index invalid
-    BOOST_CHECK_THROW(pop.set_xf(1, {3, 2}, {1, 2, 3}), std::invalid_argument); // chromosome invalid
-    BOOST_CHECK_THROW(pop.set_xf(1, {3}, {1, 2}), std::invalid_argument);       // fitness invalid
+    BOOST_CHECK_THROW(pop.set_xf(2, {3}, {1, 2, 3}), std::invalid_argument); // index invalid
+    BOOST_CHECK_THROW(pop.set_xf(1, {3, 2}, {1}), std::invalid_argument);    // chromosome invalid
+    BOOST_CHECK_THROW(pop.set_xf(1, {3}, {1, 2}), std::invalid_argument);    // fitness invalid
     // Test set_xf
     pop.set_xf(0, {3}, {1});
     BOOST_CHECK((pop.get_x()[0] == vector_double{3}));

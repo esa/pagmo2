@@ -82,7 +82,7 @@ std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u, 3u, 7u, 10u
  * where \f$\tau\f$ is set to be 0.1, \f$random\f$ selects a random mutation variant and \f$r_i\f$ is a random
  * uniformly distributed number in [0, 1]
  *
- * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+ * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
  * the allowed box-bounds, is here done by creating a random number in the bounds.
  *
  * @see pagmo::de, pagmo::sade For other available algorithms based on Differential Evolution

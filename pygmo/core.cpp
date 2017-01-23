@@ -315,6 +315,18 @@ static inline bp::object pop_get_ID_wrapper(const population &pop)
     return pygmo::v_to_a(pop.get_ID());
 }
 
+// get_c_tol
+static inline bp::object prob_get_c_tol_wrapper(const problem &prob)
+{
+    return pygmo::v_to_a(prob.get_c_tol());
+}
+
+// set_c_tol
+static inline void prob_set_c_tol_wrapper(problem &prob, const bp::object &c_tol)
+{
+    prob.set_c_tol(pygmo::to_vd(c_tol));
+}
+
 // Decompose methods wrappers
 static inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decompose &p, const bp::object &f,
                                                              const bp::object &weights, const bp::object &z_ref)
@@ -508,7 +520,7 @@ BOOST_PYTHON_MODULE(core)
         .def("get_nec", &problem::get_nec, "Get number of equality constraints.")
         .def("get_nic", &problem::get_nic, "Get number of inequality constraints.")
         .def("get_nc", &problem::get_nc, "Get total number of constraints.")
-        .def("get_c_tol", &problem::get_c_tol, "Get the constraints tolerances.")
+        .add_property("c_tol", &prob_get_c_tol_wrapper, &prob_set_c_tol_wrapper)
         .def("get_fevals", &problem::get_fevals, "Get total number of objective function evaluations.")
         .def("get_gevals", &problem::get_gevals, "Get total number of gradient evaluations.")
         .def("get_hevals", &problem::get_hevals, "Get total number of Hessians evaluations.")

@@ -379,7 +379,7 @@ public:
      * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
      *   otherwise a call to this constructor will result in a compile-time failure
      *
-     * @note \p T must be not of type pagmo::algorithm, otherwise this templated constructor is not enabled and the
+     * **NOTE** \p T must be not of type pagmo::algorithm, otherwise this templated constructor is not enabled and the
      * copy constructor will be called instead.
      *
      * @param[in] x The user implemented algorithm

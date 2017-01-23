@@ -60,7 +60,7 @@ namespace pagmo
  * The implementation provided for PaGMO is based on the code provided in the official
  * DE web site. pagmo::de is suitable for box-constrained single-objective continuous optimization.
  *
- * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+ * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
  * the allowed box-bounds, is here done by creating a random number in the bounds.
  *
  * @see http://www.icsi.berkeley.edu/~storn/code.html for the official DE web site

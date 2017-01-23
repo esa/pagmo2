@@ -53,7 +53,7 @@ namespace cereal
       with the construct class to allow for non-default
       constructors.
 
-      @note This feature is experimental and may be altered or removed in a future release. See issue #46.
+      **NOTE** This feature is experimental and may be altered or removed in a future release. See issue #46.
 
       @code{.unparsed}{.cpp}
       struct MyUserData
@@ -134,9 +134,9 @@ namespace cereal
       some archive wrapped by UserDataAdapter.  If this is used on
       an archive that is not wrapped, a run-time exception will occur.
 
-      @note This feature is experimental and may be altered or removed in a future release. See issue #46.
+      **NOTE** This feature is experimental and may be altered or removed in a future release. See issue #46.
 
-      @note The correct use of this function cannot be enforced at compile
+      **NOTE** The correct use of this function cannot be enforced at compile
             time.
 
       @relates UserDataAdapter

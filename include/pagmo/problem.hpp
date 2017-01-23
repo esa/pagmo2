@@ -47,6 +47,7 @@ see https://www.gnu.org/licenses/. */
 #include "serialization.hpp"
 #include "type_traits.hpp"
 #include "types.hpp"
+#include "utils/constrained.hpp"
 
 /// Macro for the registration of the serialization functionality for problems.
 /**
@@ -229,31 +230,6 @@ public:
 
 template <typename T>
 const bool has_i_constraints<T>::value;
-
-/// Detect \p get_c_tol() method.
-/**
- * This type trait will be \p true if \p T provides a method with
- * the following signature:
- * @code{.unparsed}
- * vector_double get_c_tol() const;
- * @endcode
- * The \p get_c_tol() method is part of the interface for the definition of a problem
- * (see pagmo::problem).
- */
-template <typename T>
-class has_c_tolerance
-{
-    template <typename U>
-    using get_c_tol_t = decltype(std::declval<const U &>().get_c_tol());
-    static const bool implementation_defined = std::is_same<vector_double, detected_t<get_c_tol_t, T>>::value;
-
-public:
-    /// Value of the type trait.
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool has_c_tolerance<T>::value;
 
 /// Detect \p gradient() method.
 /**
@@ -538,7 +514,6 @@ struct prob_inner_base {
     virtual std::pair<vector_double, vector_double> get_bounds() const = 0;
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
-    virtual vector_double get_c_tol() const = 0;
     virtual void set_seed(unsigned int) = 0;
     virtual bool has_set_seed() const = 0;
     virtual std::string get_name() const = 0;
@@ -628,10 +603,6 @@ struct prob_inner final : prob_inner_base {
     virtual vector_double::size_type get_nic() const override final
     {
         return get_nic_impl(m_value);
-    }
-    virtual vector_double get_c_tol() const override final
-    {
-        return get_c_tol_impl(m_value);
     }
     virtual void set_seed(unsigned int seed) override final
     {
@@ -796,20 +767,7 @@ struct prob_inner final : prob_inner_base {
     {
         return 0u;
     }
-    template <typename U, enable_if_t<has_c_tolerance<U>::value, int> = 0>
-    static vector_double get_c_tol_impl(const U &value)
-    {
-        return value.get_c_tol();
-    }
-    template <typename U, enable_if_t<!has_c_tolerance<U>::value, int> = 0>
-    static vector_double get_c_tol_impl(const U &value)
-    {
-        // We need not to worry here about overflow as this is only called by the
-        // pagmo::problem constructor once and after nec and nic have been checked to
-        // be < MAX/3
-        return vector_double(get_nic_impl(value) + get_nec_impl(value), 0.);
-    }
-    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value, int> = 0>
+    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
     static void set_seed_impl(U &value, unsigned int seed)
     {
         value.set_seed(seed);
@@ -888,7 +846,8 @@ struct prob_inner final : prob_inner_base {
  * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality constraints*.
  * Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
  * values of any number of stochastic variables. This allows also for stochastic programming
- * tasks to be represented by this class.
+ * tasks to be represented by this class. A tolerance is considered for the verification of the constraints and is set
+ * by default to zero, but can be modified via the problem::set_c_tol method
  *
  * In order to define an optimizaztion problem in PaGMO, the user must first define a class
  * (or a struct) whose methods describe the properties of the problem and allow to compute
@@ -966,8 +925,6 @@ public:
      *   they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.).
      * @throws unspecified any exception thrown by the invoked methods in the UDP or by memory errors in strings
      * and standard containers.
-     *
-     * TODO c_tol documentation.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit problem(T &&x)
@@ -1047,29 +1004,8 @@ public:
                 m_hs_dim[i] = (nx * (nx - 1u) / 2u + nx); // lower triangular
             }
         }
-        // 8 - Constraint tolerance (this is at the end as nec < MAX/3 and nic < MAX/3 has been tested above)
-        // so no overflow is possible
-        m_c_tol = ptr()->get_c_tol();
-        if (m_c_tol.size() != m_nec + m_nic) {
-            pagmo_throw(std::invalid_argument, "The constraint tolerance dimension is " + std::to_string(m_c_tol.size())
-                                                   + ", while the number of constraints is "
-                                                   + std::to_string(m_nec + m_nic) + ". They need to be equal");
-        }
-        // Check the returned tolerance vector.
-        for (decltype(m_c_tol.size()) i = 0; i < m_c_tol.size(); ++i) {
-            if (!std::isfinite(m_c_tol[i])) {
-                pagmo_throw(std::invalid_argument,
-                            "The constraint tolerance contains the non-finite value " + std::to_string(m_c_tol[i])
-                                + " at the index " + std::to_string(i)
-                                + ". The elements of the constraint tolerance must all be finite and non-negative");
-            }
-            if (m_c_tol[i] < 0.) {
-                pagmo_throw(std::invalid_argument,
-                            "The constraint tolerance contains the negative value " + std::to_string(m_c_tol[i])
-                                + " at the index " + std::to_string(i)
-                                + ". The elements of the constraint tolerance must all be finite and non-negative");
-            }
-        }
+        // 8 - Constraint tolerance
+        m_c_tol = vector_double(m_nec + m_nic, 0.);
     }
 
     /// Copy constructor.
@@ -1508,8 +1444,21 @@ public:
     {
         return m_nic;
     }
-
-    /// Constraint tolerance
+    /// Sets the constraint tolerance
+    /**
+     * @param[in] c_tol a vector_double containing the tolerances to use when
+     * checking for constraint feasibility
+     */
+    void set_c_tol(const vector_double &c_tol)
+    {
+        if (c_tol.size() != this->get_nc()) {
+            pagmo_throw(std::invalid_argument, "The tolerance vector size should be: " + std::to_string(this->get_nc())
+                                                   + ", while a size of: " + std::to_string(c_tol.size())
+                                                   + " was detected.");
+        }
+        m_c_tol = c_tol;
+    }
+    /// Gets the constraint tolerance
     /**
      * This method will return a vector of dimension \f$n_{ec} + n_{ic}\f$ containing tolerances to
      * be used when checking constraint feasibility. If the UDP satisfies pagmo::has_c_tolerance,
@@ -1586,6 +1535,46 @@ public:
     void set_seed(unsigned seed)
     {
         ptr()->set_seed(seed);
+    }
+
+    /// Feasibility of a decision vector
+    /**
+     * Checks the feasibility of the fitness corresponding to
+     * a decision vector \p x against
+     * the tolerances returned by problem::get_c_tol
+     *
+     * **NOTE** This will cause one fitness evaluation
+     *
+     * @param[in] x decision vector
+     * @return true if the descision vector results in a feasible fitness
+     *
+     */
+    bool feasibility_x(const vector_double &x) const
+    {
+        // wrong dimensions of x will trigger exceptions in the called functions
+        return feasibility_f(fitness(x));
+    }
+
+    /// Feasibility of a fitness vector
+    /**
+     * Checks the feasibility of a fitness vector \p f against
+     * the tolerances returned by problem::get_c_tol
+     *
+     * @param[in] f fitness vector
+     * @return true if the fitness vector is feasible
+     */
+    bool feasibility_f(const vector_double &f) const
+    {
+        if (f.size() != get_nf()) {
+            pagmo_throw(std::invalid_argument,
+                        "The fitness passed as argument has dimension of: " + std::to_string(f.size())
+                            + ", while the problem defines a fitness size of: " + std::to_string(get_nf()));
+        }
+        auto feas_eq
+            = detail::test_eq_constraints(f.data() + get_nobj(), f.data() + get_nobj() + get_nec(), get_c_tol().data());
+        auto feas_ineq = detail::test_ineq_constraints(f.data() + get_nobj() + get_nec(), f.data() + f.size(),
+                                                       get_c_tol().data() + get_nec());
+        return feas_eq.first + feas_ineq.first == get_nc();
     }
 
     /// Check if a \p %set_seed() method is available in the UDP.

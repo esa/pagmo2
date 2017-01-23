@@ -32,6 +32,7 @@ code your own algorithm
   algorithms/cmaes
   algorithms/moead
   algorithms/compass_search
+  algorithms/mbh
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^

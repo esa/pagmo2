@@ -300,7 +300,7 @@ public:
      * Sets simultaneously the \f$i\f$-th individual decision vector
      * and fitness thus avoiding to trigger a fitness function evaluation.
      *
-     * @note: The user must make sure that the input fitness \p f makes sense
+     * **NOTE**: The user must make sure that the input fitness \p f makes sense
      * as pagmo will only check its dimension.
      *
      * @param[in] i individual's index in the population
@@ -341,7 +341,7 @@ public:
      * value \p x and changes its fitness accordingly. The
      * individual's ID remains the same.
      *
-     * @note a call to this method triggers one fitness function evaluation
+     * **NOTE** a call to this method triggers one fitness function evaluation
      *
      * @param[in] i individual's index in the population
      * @param[in] x decision vector

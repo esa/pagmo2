@@ -78,11 +78,11 @@ namespace pagmo
  * \f$d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\f$ and
  * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$
  *
- * @note The reference point \f$z^*\f$ is often taken as the ideal point and as such
+ * **NOTE** The reference point \f$z^*\f$ is often taken as the ideal point and as such
  * it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
  * this behaviour so that whenever a new ideal point is found \f$z^*\f$ is adapted accordingly.
  *
- * @note The use of pagmo::decompose discards gradients and hessians so that if the original user defined problem
+ * **NOTE** The use of pagmo::decompose discards gradients and hessians so that if the original user defined problem
  * implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
  * the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
  * derivative-free optimization.
@@ -204,7 +204,7 @@ public:
     /**
      * Returns the fitness of the original multi-objective problem used to construct the decomposed problem.
      *
-     * @note This is *not* the fitness of the decomposed problem, that is returned by calling decompose::fitness()
+     * **NOTE** This is *not* the fitness of the decomposed problem, that is returned by calling decompose::fitness()
      *
      * @param[in] x Input decision vector
      *
@@ -333,6 +333,14 @@ private:
     vector_double::size_type get_gs_dim() const = delete;
     std::vector<vector_double::size_type> get_hs_dim() const = delete;
     bool is_stochastic() const = delete;
+
+// The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
+// it would just result in a "weird" behaviour in case the user would try to stream this object
+#if __GNUC__ > 4
+    // NOTE: We delete the streaming operator overload called with decompose, otherwise the inner prob would stream
+    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
+    friend std::ostream &operator<<(std::ostream &, const decompose &) = delete;
+#endif
     template <typename Archive>
     void save(Archive &) const = delete;
     template <typename Archive>

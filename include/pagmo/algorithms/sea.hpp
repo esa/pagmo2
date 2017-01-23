@@ -58,10 +58,10 @@ namespace pagmo
  * by mutating its best individual uniformly at random within the bounds. Should the
  * offspring be better than the worst individual in the population it will substitute it.
  *
- * @note The algorithm does not work for multi-objective problems, nor for
+ * **NOTE** The algorithm does not work for multi-objective problems, nor for
  * constrained optimization
  *
- * @note The mutation is uniform within box-bounds. Hence, unbounded problems
+ * **NOTE** The mutation is uniform within box-bounds. Hence, unbounded problems
  * will produce an error.
  *
  * @see Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for

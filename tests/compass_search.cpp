@@ -63,12 +63,15 @@ BOOST_AUTO_TEST_CASE(compass_search_algorithm_construction)
 
 BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
 {
-    double stop_range = 1e-3;
+    double stop_range = 1e-5;
 
     // Here we only test that evolution is deterministic (stop criteria will be range)
-    problem prob1{rosenbrock{25u}};
+    problem prob1{hock_schittkowsky_71{}};
+    prob1.set_c_tol({1e-3, 1e-3});
     population pop1{prob1, 5u, 23u};
-    problem prob2{rosenbrock{25u}};
+
+    problem prob2{hock_schittkowsky_71{}};
+    prob2.set_c_tol({1e-3, 1e-3});
     population pop2{prob2, 5u, 23u};
 
     compass_search user_algo1{10000u, 0.5, stop_range, 0.5};
@@ -94,8 +97,6 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
-    BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}),
-                      std::invalid_argument);
     BOOST_CHECK_THROW(compass_search{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};
@@ -150,6 +151,8 @@ BOOST_AUTO_TEST_CASE(compass_search_serialization_test)
     for (auto i = 0u; i < before_log.size(); ++i) {
         BOOST_CHECK_EQUAL(std::get<0>(before_log[i]), std::get<0>(after_log[i]));
         BOOST_CHECK_CLOSE(std::get<1>(before_log[i]), std::get<1>(after_log[i]), 1e-8);
-        BOOST_CHECK_CLOSE(std::get<2>(before_log[i]), std::get<2>(after_log[i]), 1e-8);
+        BOOST_CHECK_EQUAL(std::get<2>(before_log[i]), std::get<2>(after_log[i]));
+        BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
+        BOOST_CHECK_CLOSE(std::get<4>(before_log[i]), std::get<4>(after_log[i]), 1e-8);
     }
 }
