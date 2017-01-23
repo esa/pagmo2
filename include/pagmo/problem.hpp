@@ -530,8 +530,10 @@ struct prob_inner final : prob_inner_base {
     static_assert(std::is_default_constructible<T>::value && std::is_copy_constructible<T>::value
                       && std::is_move_constructible<T>::value && std::is_destructible<T>::value,
                   "A problem must be default-constructible, copy-constructible, move-constructible and destructible.");
-    static_assert(has_fitness<T>::value, "A problem must provide a fitness function.");
-    static_assert(has_bounds<T>::value, "A problem must provide getters for its box bounds.");
+    static_assert(has_fitness<T>::value, "A problem must provide a fitness function: the fitness function was either "
+                                         "not provided or not implemented correctly.");
+    static_assert(has_bounds<T>::value, "A problem must provide a getter for its box bounds: the getter was either not "
+                                        "provided or not implemented correctly.");
     // We just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
@@ -724,7 +726,9 @@ struct prob_inner final : prob_inner_base {
     template <typename U, enable_if_t<!pagmo::has_hessians_sparsity<U>::value, int> = 0>
     [[noreturn]] static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &)
     {
-        // See above why we should never end up here.
+        // NOTE: we should never end up here. hessians_sparsity() is called only if m_has_hessians_sparsity
+        // in the problem is set to true, and m_has_hessians_sparsity is unconditionally false if the UDP
+        // does not implement hessians_sparsity() (see implementation of the three overloads below).
         assert(false);
         throw;
     }
@@ -1250,7 +1254,7 @@ public:
      * - if the UDP satisfies both pagmo::has_gradient_sparsity and pagmo::override_has_gradient_sparsity,
      *   then this method will return the output of the \p %has_gradient_sparsity() method of the UDP.
      *
-     * Note that, regardless of what this method returns, the problem::gradient_sparsity() method will always return
+     * **NOTE** regardless of what this method returns, the problem::gradient_sparsity() method will always return
      * a sparsity pattern: if the UDP does not provide the gradient sparsity, PaGMO will assume that the sparsity
      * pattern of the gradient is dense. See problem::gradient_sparsity() for more details.
      *
@@ -1363,7 +1367,7 @@ public:
      * - if the UDP satisfies both pagmo::has_hessians_sparsity and pagmo::override_has_hessians_sparsity,
      *   then this method will return the output of the \p %has_hessians_sparsity() method of the UDP.
      *
-     * Note that, regardless of what this method returns, the problem::hessians_sparsity() method will always return
+     * **NOTE** regardless of what this method returns, the problem::hessians_sparsity() method will always return
      * a vector of sparsity patterns: if the UDP does not provide the hessians sparsity, PaGMO will assume that the
      * sparsity pattern of the hessians is dense. See problem::hessians_sparsity() for more details.
      *
