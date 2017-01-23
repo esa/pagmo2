@@ -851,7 +851,7 @@ struct prob_inner final : prob_inner_base {
  * Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
  * values of any number of stochastic variables. This allows also for stochastic programming
  * tasks to be represented by this class. A tolerance is considered for the verification of the constraints and is set
- * by default to zero, but can be modified via the problem::set_c_tol method
+ * by default to zero, but it can be modified via the problem::set_c_tol() method.
  *
  * In order to define an optimizaztion problem in PaGMO, the user must first define a class
  * (or a struct) whose methods describe the properties of the problem and allow to compute
@@ -1009,7 +1009,7 @@ public:
             }
         }
         // 8 - Constraint tolerance
-        m_c_tol = vector_double(m_nec + m_nic, 0.);
+        m_c_tol.resize(m_nec + m_nic);
     }
 
     /// Copy constructor.
@@ -1039,7 +1039,7 @@ public:
     problem(problem &&other) noexcept
         : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals.load()), m_gevals(other.m_gevals.load()),
           m_hevals(other.m_hevals.load()), m_lb(std::move(other.m_lb)), m_ub(std::move(other.m_ub)),
-          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_c_tol(other.m_c_tol),
+          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_c_tol(std::move(other.m_c_tol)),
           m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
           m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
           m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
@@ -1065,7 +1065,7 @@ public:
             m_nobj = other.m_nobj;
             m_nec = other.m_nec;
             m_nic = other.m_nic;
-            m_c_tol = other.m_c_tol;
+            m_c_tol = std::move(other.m_c_tol);
             m_has_gradient = other.m_has_gradient;
             m_has_gradient_sparsity = other.m_has_gradient_sparsity;
             m_has_hessians = other.m_has_hessians;
@@ -1448,10 +1448,13 @@ public:
     {
         return m_nic;
     }
-    /// Sets the constraint tolerance
+    /// Set the constraint tolerance.
     /**
-     * @param[in] c_tol a vector_double containing the tolerances to use when
-     * checking for constraint feasibility
+     * @param c_tol a vector containing the tolerances to use when
+     * checking for constraint feasibility.
+     *
+     * @throws std::invalid_argument if the size of \p c_tol differs from the number of constraints, or if
+     * any of its elements is negative or NaN.
      */
     void set_c_tol(const vector_double &c_tol)
     {
@@ -1460,14 +1463,23 @@ public:
                                                    + ", while a size of: " + std::to_string(c_tol.size())
                                                    + " was detected.");
         }
+        for (decltype(c_tol.size()) i = 0; i < c_tol.size(); ++i) {
+            if (std::isnan(c_tol[i])) {
+                pagmo_throw(std::invalid_argument,
+                            "The tolerance vector has a NaN value at the index " + std::to_string(i));
+            }
+            if (c_tol[i] < 0.) {
+                pagmo_throw(std::invalid_argument,
+                            "The tolerance vector has a negative value at the index " + std::to_string(i));
+            }
+        }
         m_c_tol = c_tol;
     }
-    /// Gets the constraint tolerance
+    /// Get the constraint tolerance.
     /**
      * This method will return a vector of dimension \f$n_{ec} + n_{ic}\f$ containing tolerances to
-     * be used when checking constraint feasibility. If the UDP satisfies pagmo::has_c_tolerance,
-     * then the output of its \p %get_c_tol() method will be returned. Otherwise, this method will return
-     * a zero-filled vector.
+     * be used when checking constraint feasibility. The constraint tolerance is zero-filled upon problem
+     * construction, and it can be set via problem::set_c_tol().
      *
      * @return a pagmo::vector_double containing the tolerances to use when
      * checking for constraint feasibility.
@@ -1541,31 +1553,36 @@ public:
         ptr()->set_seed(seed);
     }
 
-    /// Feasibility of a decision vector
+    /// Feasibility of a decision vector.
     /**
-     * Checks the feasibility of the fitness corresponding to
+     * This method will checks the feasibility of the fitness corresponding to
      * a decision vector \p x against
-     * the tolerances returned by problem::get_c_tol
+     * the tolerances returned by problem::get_c_tol().
      *
-     * **NOTE** This will cause one fitness evaluation
+     * **NOTE** This will cause one fitness evaluation.
      *
-     * @param[in] x decision vector
-     * @return true if the descision vector results in a feasible fitness
+     * @param x a decision vector.
      *
+     * @return \p true if the decision vector results in a feasible fitness, \p false otherwise.
+     *
+     * @throws unspecified any exception thrown by problem::feasibility_f() or problem::fitness().
      */
     bool feasibility_x(const vector_double &x) const
     {
-        // wrong dimensions of x will trigger exceptions in the called functions
+        // Wrong dimensions of x will trigger exceptions in the called functions
         return feasibility_f(fitness(x));
     }
 
-    /// Feasibility of a fitness vector
+    /// Feasibility of a fitness vector.
     /**
-     * Checks the feasibility of a fitness vector \p f against
-     * the tolerances returned by problem::get_c_tol
+     * This method will check the feasibility of a fitness vector \p f against
+     * the tolerances returned by problem::get_c_tol().
      *
-     * @param[in] f fitness vector
-     * @return true if the fitness vector is feasible
+     * @param f a fitness vector.
+     *
+     * @return \p true if the fitness vector is feasible, \p false otherwise.
+     *
+     * @throws std::invalid_argument if the size of \p f is not the same as the output of problem::get_nf().
      */
     bool feasibility_f(const vector_double &f) const
     {
