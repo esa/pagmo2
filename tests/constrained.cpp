@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(compare_fc_test)
     vector_double f3 = {1., -2.};
     vector_double f4 = {1., -3., -5.};
     vector_double f5 = {0.2, 1., 2.};
-    vector_double tol = {0.,0.};
+    vector_double tol = {0., 0.};
     vector_double empty = {};
     BOOST_CHECK(compare_fc(f1, f2, 1u, 0.) == true);
     BOOST_CHECK(compare_fc(f2, f1, 1u, 0.) == false);

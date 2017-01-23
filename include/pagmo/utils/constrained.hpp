@@ -53,8 +53,8 @@ namespace detail
 
 /// Tests equality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm of
 /// the violation
-template <typename It>
-std::pair<vector_double::size_type, double> test_eq_constraints(It ceq_first, It ceq_last, It tol_first)
+template <typename It1, typename It2>
+std::pair<vector_double::size_type, double> test_eq_constraints(It1 ceq_first, It1 ceq_last, It2 tol_first)
 {
     // Main computation
     double l2 = 0.;
@@ -71,8 +71,8 @@ std::pair<vector_double::size_type, double> test_eq_constraints(It ceq_first, It
 
 /// Tests inequality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm
 /// of the violation
-template <typename It>
-std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first, It cineq_last, It tol_first)
+template <typename It1, typename It2>
+std::pair<vector_double::size_type, double> test_ineq_constraints(It1 cineq_first, It1 cineq_last, It2 tol_first)
 {
     // Main computation
     double l2 = 0.;
@@ -101,7 +101,7 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It cineq_first
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
  * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
  *
- * @note: the fitness vectors are assumed to contain exactly one objective, \p neq equality
+ * **NOTE**: the fitness vectors are assumed to contain exactly one objective, \p neq equality
  * constraints and the rest (if any) inequality constraints
  *
  * @param[in] f1 first fitness vector
@@ -131,10 +131,10 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
     }
     // 3 - The dimension of the tolerance vector must be that of the fitness minus one
     if (f1.size() - 1u != tol.size()) {
-        pagmo_throw(std::invalid_argument,
-                    "Tolerance vector dimension is detected to be: " + std::to_string(tol.size())
-                        + ", while the fitness dimension is: " + std::to_string(f1.size())
-                        + ", I was expecting the tolerance vector dimension to be: "  + std::to_string(f1.size() - 1u));
+        pagmo_throw(std::invalid_argument, "Tolerance vector dimension is detected to be: " + std::to_string(tol.size())
+                                               + ", while the fitness dimension is: " + std::to_string(f1.size())
+                                               + ", I was expecting the tolerance vector dimension to be: "
+                                               + std::to_string(f1.size() - 1u));
     }
     // 4 - The number of equality constraints must be at most f1.size()-1
     if (neq > f1.size() - 1u) {
@@ -177,8 +177,7 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
  * @throws std::invalid_argument If \p f1 does not have at least size 1
  * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
  */
-inline bool compare_fc(const vector_double& f1, const vector_double& f2, vector_double::size_type neq,
-                       double tol)
+inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double::size_type neq, double tol)
 {
     // 1 - The dimension of the fitness vector must be at least 1 (this check
     // cannot be removed and delegated to the other overload as f1.size()-1u is used)
@@ -202,7 +201,7 @@ inline bool compare_fc(const vector_double& f1, const vector_double& f2, vector_
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
  * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
  *
- * @note: the fitness vectors are assumed to contain exactly one objective, \p neq equality
+ * **NOTE**: the fitness vectors are assumed to contain exactly one objective, \p neq equality
  * constraints and the rest (if any) inequality constraints
  *
  * @param[in] input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
