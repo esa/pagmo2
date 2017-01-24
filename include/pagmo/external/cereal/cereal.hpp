@@ -175,7 +175,7 @@ namespace cereal
 
       Example interface for versioning on a non-member serialize function:
 
-      @code{cpp}
+      @code{.unparsed}{cpp}
       CEREAL_CLASS_VERSION( Mytype, 77 ); // register class version
 
       template <class Archive>

@@ -264,7 +264,7 @@ public:
      * - >0: will print and log one line each objective function improvement, or range reduction
      *
      * Example (verbosity > 0u):
-     * @code
+     * @code{.unparsed}
      * Fevals:          Best:      Violated:    Viol. Norm:         Range:
      *       4        110.785              1        2.40583            0.5
      *      12        110.785              1        2.40583           0.25
@@ -283,7 +283,6 @@ public:
      *     151        95.4502              0              0    1.52588e-05
      *     159        95.4502              0              0    7.62939e-06
      * Exit condition -- range: 7.62939e-06 <= 1e-05
-
      * @endcode
      * Fevals, is the number of function evaluations made, Best is the best fitness
      * Violated and Viol.Norm are the number of constraints violated and the L2 norm of the violation (accounting for

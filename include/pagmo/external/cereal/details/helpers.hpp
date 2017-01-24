@@ -73,7 +73,7 @@ namespace cereal
       can potentially take advantage of the pairing.
 
       In serialization functions, NameValuePairs are usually created like so:
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       struct MyStruct
       {
         int a, b, c, d, e;
@@ -91,7 +91,7 @@ namespace cereal
       @endcode
 
       Alternatively, you can give you data members custom names like so:
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       struct MyStruct
       {
         int a, b, my_embarrassing_variable_name, d, e;
@@ -112,7 +112,7 @@ namespace cereal
       is a third method which will elide the names when they are not used by
       the Archive:
 
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       struct MyStruct
       {
         int a, b;
@@ -270,7 +270,7 @@ namespace cereal
       human readable archives. For example, XML archives will use this wrapper
       to write maps like so:
 
-      @code{.xml}
+      @code{.unparsed}{.xml}
       <mymap>
         <item0>
           <key>MyFirstKey</key>

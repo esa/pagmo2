@@ -99,7 +99,7 @@ namespace cereal
 
         Example usage:
 
-        @code{.cpp}
+        @code{.unparsed}{.cpp}
         T * myActualPointer;
         {
           EnableSharedStateHelper<T> helper( myActualPointer ); // save the state

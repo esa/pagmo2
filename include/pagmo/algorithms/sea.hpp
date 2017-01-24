@@ -220,7 +220,7 @@ public:
      * - >1: will print and log one line each \p level generations.
      *
      * Example (verbosity 1):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:          Best:   Improvement:     Mutations:
      * 632           3797        1464.31        51.0203              1
      * 633           3803        1463.23        13.4503              1

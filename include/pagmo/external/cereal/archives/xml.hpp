@@ -354,7 +354,7 @@ namespace cereal
 
       Consider this simple example where loading of some data is skipped:
 
-      @code{cpp}
+      @code{.unparsed}{cpp}
       // imagine the input file has someData(1-9) saved in order at the top level node
       ar( someData1, someData2, someData3 );        // XML loads in the order it sees in the file
       ar( cereal::make_nvp( "hello", someData6 ) ); // NVP given does not

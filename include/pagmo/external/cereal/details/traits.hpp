@@ -100,7 +100,7 @@ namespace cereal
         This should be used as the las template parameter to a function as
         an unnamed parameter with a default value of cereal::traits::sfinae:
 
-        @code{cpp}
+        @code{.unparsed}{cpp}
         // using by making the last template argument variadic
         template <class T, EnableIf<std::is_same<T, bool>::value> = sfinae>
         void func(T t );
@@ -128,7 +128,7 @@ namespace cereal
         This should be used as the las template parameter to a function as
         an unnamed parameter with a default value of cereal::traits::sfinae:
 
-        @code{cpp}
+        @code{.unparsed}{cpp}
         // using by making the last template argument variadic
         template <class T, DisableIf<std::is_same<T, bool>::value> = sfinae>
         void func(T t );
@@ -1226,7 +1226,7 @@ namespace cereal
         on the Archive template parameter.
 
         Example use:
-        @code{cpp}
+        @code{.unparsed}{cpp}
         // example use to disable a serialization function
         template <class Archive, EnableIf<cereal::traits::is_same_archive<Archive, cereal::BinaryOutputArchive>::value> = sfinae>
         void save( Archive & ar, MyType const & mt );
@@ -1246,7 +1246,7 @@ namespace cereal
 
         For example, if we want to limit a serialize to only work with binary serialization:
 
-        @code{.cpp}
+        @code{.unparsed}{.cpp}
         template <class Archive>
         CEREAL_ARCHIVE_RESTRICT(BinaryInputArchive, BinaryOutputArchive)
         serialize( Archive & ar, MyCoolType & m )

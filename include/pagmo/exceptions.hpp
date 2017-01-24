@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
  */
 
 #include <exception>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -104,16 +105,30 @@ struct ex_thrower {
  *
  * Note that, in order to be fully standard-compliant, for use with exceptions that take no arguments on construction
  * the invocation must include a closing comma. E.g.,
- * @code
+ * @code{.unparsed}
  * pagmo_throw(std::bad_alloc);
  * @endcode
  * is not correct, whereas
- * @code
+ * @code{.unparsed}
  * pagmo_throw(std::bad_alloc,);
  * @endcode
  * is correct.
  */
 #define pagmo_throw(exception_type, ...)                                                                               \
     pagmo::detail::ex_thrower<exception_type>(__FILE__, __LINE__, __func__)(__VA_ARGS__)
+
+namespace pagmo
+{
+
+/// Exception for functionality which has not been implemented.
+/**
+ * This exception is used by pagmo::problem, pagmo::algorithm, etc. to signal that
+ * optional methods in user-defined classes are not implemented.
+ * This class inherits the constructors from \p std::runtime_error.
+ */
+struct not_implemented_error final : std::runtime_error {
+    using std::runtime_error::runtime_error;
+};
+}
 
 #endif

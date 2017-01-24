@@ -428,7 +428,7 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 1):
-     * @code
+     * @code{.unparsed}
      * Gen:      Fevals:          Best:            dx:            df:         sigma:
      * 51           1000    1.15409e-06     0.00205151    3.38618e-05       0.138801
      * 52           1020     3.6735e-07     0.00423372    2.91669e-05        0.13002

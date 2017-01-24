@@ -51,10 +51,10 @@ see https://www.gnu.org/licenses/. */
 
 /// Macro for the registration of the serialization functionality for problems.
 /**
- * This macro should always be invoked after the declaration of a problem: it will register
+ * This macro should always be invoked after the declaration of a user-defined problem: it will register
  * the problem with PaGMO's serialization machinery. The macro should be called in the root namespace
  * and using the fully qualified name of the problem to be registered. For example:
- * @code
+ * @code{.unparsed}
  * namespace my_namespace
  * {
  *
@@ -78,12 +78,18 @@ namespace pagmo
  * This problem is used to implement the default constructors of meta-problems.
  */
 struct null_problem {
-    /// Fitness
+    /// Fitness.
+    /**
+     * @return the vector <tt>[0.]</tt>.
+     */
     vector_double fitness(const vector_double &) const
     {
         return {0.};
     }
-    /// Problem bounds
+    /// Problem bounds.
+    /**
+     * @return the pair <tt>([0.],[1.])</tt>.
+     */
     std::pair<vector_double, vector_double> get_bounds() const
     {
         return {{0.}, {1.}};
@@ -103,7 +109,7 @@ namespace pagmo
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double fitness(const vector_double &) const;
  * @endcode
  * The \p fitness() method is part of the interface for the definition of a problem
@@ -128,7 +134,7 @@ const bool has_fitness<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double::size_type get_nobj() const;
  * @endcode
  * The \p get_nobj() method is part of the interface for the definition of a problem
@@ -153,7 +159,7 @@ const bool has_get_nobj<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  * The \p get_bounds() method is part of the interface for the definition of a problem
@@ -179,7 +185,7 @@ const bool has_bounds<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double::size_type get_nec() const;
  * @endcode
  * The \p get_nec() method is part of the interface for the definition of a problem
@@ -204,7 +210,7 @@ const bool has_e_constraints<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double::size_type get_nic() const;
  * @endcode
  * The \p get_nic() method is part of the interface for the definition of a problem
@@ -229,7 +235,7 @@ const bool has_i_constraints<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * vector_double gradient(const vector_double &) const;
  * @endcode
  * The \p gradient() method is part of the interface for the definition of a problem
@@ -254,7 +260,7 @@ const bool has_gradient<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_gradient() const;
  * @endcode
  * The \p has_gradient() method is part of the interface for the definition of a problem
@@ -279,7 +285,7 @@ const bool override_has_gradient<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * sparsity_pattern gradient_sparsity() const;
  * @endcode
  * The \p gradient_sparsity() method is part of the interface for the definition of a problem
@@ -305,7 +311,7 @@ const bool has_gradient_sparsity<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * std::vector<vector_double> hessians(const vector_double &) const;
  * @endcode
  * The \p hessians() method is part of the interface for the definition of a problem
@@ -331,7 +337,7 @@ const bool has_hessians<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_hessians() const;
  * @endcode
  * The \p has_hessians() method is part of the interface for the definition of a problem
@@ -356,7 +362,7 @@ const bool override_has_hessians<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * std::vector<sparsity_pattern> hessians_sparsity() const;
  * @endcode
  * The \p hessians_sparsity() method is part of the interface for the definition of a problem
@@ -382,7 +388,7 @@ const bool has_hessians_sparsity<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_gradient_sparsity() const;
  * @endcode
  * The \p has_gradient_sparsity() method is part of the interface for the definition of a problem
@@ -407,7 +413,7 @@ const bool override_has_gradient_sparsity<T>::value;
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
- * @code
+ * @code{.unparsed}
  * bool has_hessians_sparsity() const;
  * @endcode
  * The \p has_hessians_sparsity() method is part of the interface for the definition of a problem
@@ -447,8 +453,9 @@ inline void check_problem_bounds(const std::pair<vector_double, vector_double> &
     }
     // 1 - check bounds have equal length
     if (lb.size() != ub.size()) {
-        pagmo_throw(std::invalid_argument, "Length of lower bounds vector is " + std::to_string(lb.size())
-                                               + ", length of upper bound is " + std::to_string(ub.size()));
+        pagmo_throw(std::invalid_argument, "The length of the lower bounds vector is " + std::to_string(lb.size())
+                                               + ", the length of the upper bounds vector is "
+                                               + std::to_string(ub.size()));
     }
     // 2 - checks lower < upper for all values in lb, ub, and check for nans.
     for (decltype(lb.size()) i = 0u; i < lb.size(); ++i) {
@@ -523,11 +530,10 @@ struct prob_inner final : prob_inner_base {
     static_assert(std::is_default_constructible<T>::value && std::is_copy_constructible<T>::value
                       && std::is_move_constructible<T>::value && std::is_destructible<T>::value,
                   "A problem must be default-constructible, copy-constructible, move-constructible and destructible.");
-    static_assert(has_fitness<T>::value,
-                  "A problem must provide a fitness function 'vector_double fitness(const vector_double &x) const'. ");
-    static_assert(
-        has_bounds<T>::value,
-        "A problem must provide getters for its bounds 'std::pair<vector_double, vector_double> get_bounds() const'.");
+    static_assert(has_fitness<T>::value, "A problem must provide a fitness function: the fitness function was either "
+                                         "not provided or not implemented correctly.");
+    static_assert(has_bounds<T>::value, "A problem must provide a getter for its box bounds: the getter was either not "
+                                        "provided or not implemented correctly.");
     // We just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
@@ -551,15 +557,15 @@ struct prob_inner final : prob_inner_base {
     {
         return m_value.fitness(dv);
     }
-    virtual vector_double::size_type get_nobj() const override final
-    {
-        return get_nobj_impl(m_value);
-    }
     virtual std::pair<vector_double, vector_double> get_bounds() const override final
     {
         return m_value.get_bounds();
     }
     // optional methods
+    virtual vector_double::size_type get_nobj() const override final
+    {
+        return get_nobj_impl(m_value);
+    }
     virtual vector_double gradient(const vector_double &dv) const override final
     {
         return gradient_impl(m_value, dv);
@@ -617,165 +623,150 @@ struct prob_inner final : prob_inner_base {
         return get_extra_info_impl(m_value);
     }
     // Implementation of the optional methods.
-    template <typename U, typename std::enable_if<has_get_nobj<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_get_nobj<U>::value, int> = 0>
     static vector_double::size_type get_nobj_impl(const U &value)
     {
         return value.get_nobj();
     }
-    template <typename U, typename std::enable_if<!has_get_nobj<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_get_nobj<U>::value, int> = 0>
     static vector_double::size_type get_nobj_impl(const U &)
     {
         return 1u;
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_gradient<U>::value, int> = 0>
     static vector_double gradient_impl(const U &value, const vector_double &dv)
     {
         return value.gradient(dv);
     }
-    template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_gradient<U>::value, int> = 0>
     static vector_double gradient_impl(const U &, const vector_double &)
     {
-        pagmo_throw(std::logic_error, "gradients have been requested but not implemented\n\n"
-                                      "The expected prototypes are:\n"
-                                      "C++: vector_double gradient(const vector_double &x) const\n"
-                                      "Python: gradient(x)");
+        pagmo_throw(not_implemented_error, "The gradient has been requested but it is not implemented in the UDP");
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value, int> = 0>
     static bool has_gradient_impl(const U &p)
     {
         return p.has_gradient();
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_gradient<U>::value && !pagmo::override_has_gradient<U>::value, int>::type
-        = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_gradient<U>::value && !pagmo::override_has_gradient<U>::value, int> = 0>
     static bool has_gradient_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_gradient<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_gradient<U>::value, int> = 0>
     static bool has_gradient_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value, int>::type = 0>
-    sparsity_pattern gradient_sparsity_impl(const U &p) const
+    template <typename U, enable_if_t<pagmo::has_gradient_sparsity<U>::value, int> = 0>
+    static sparsity_pattern gradient_sparsity_impl(const U &p)
     {
         return p.gradient_sparsity();
     }
-    template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value, int>::type = 0>
-    sparsity_pattern gradient_sparsity_impl(const U &) const
+    template <typename U, enable_if_t<!pagmo::has_gradient_sparsity<U>::value, int> = 0>
+    [[noreturn]] static sparsity_pattern gradient_sparsity_impl(const U &)
     {
-        pagmo_throw(std::logic_error,
-                    "gradient_sparsity() was signalled as present in the user-defined problem, but it is not actually "
-                    "implemented: this "
-                    "indicates a logical error in the implementation of the user-defined problem class");
+        // NOTE: we should never end up here. gradient_sparsity() is called only if m_has_gradient_sparsity
+        // in the problem is set to true, and m_has_gradient_sparsity is unconditionally false if the UDP
+        // does not implement gradient_sparsity() (see implementation of the three overloads below).
+        assert(false);
+        throw;
     }
-    template <typename U, typename std::enable_if<pagmo::override_has_gradient_sparsity<U>::value, int>::type = 0>
+    template <
+        typename U,
+        enable_if_t<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value, int> = 0>
     static bool has_gradient_sparsity_impl(const U &p)
     {
         return p.has_gradient_sparsity();
     }
-    template <typename U, typename std::enable_if<pagmo::has_gradient_sparsity<U>::value
-                                                      && !pagmo::override_has_gradient_sparsity<U>::value,
-                                                  int>::type
-                          = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,
+                          int> = 0>
     static bool has_gradient_sparsity_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_gradient_sparsity<U>::value
-                                                      && !pagmo::override_has_gradient_sparsity<U>::value,
-                                                  int>::type
-                          = 0>
+    template <typename U, enable_if_t<!pagmo::has_gradient_sparsity<U>::value, int> = 0>
     static bool has_gradient_sparsity_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_hessians<U>::value, int> = 0>
     static std::vector<vector_double> hessians_impl(const U &value, const vector_double &dv)
     {
         return value.hessians(dv);
     }
-    template <typename U, typename std::enable_if<!pagmo::has_hessians<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_hessians<U>::value, int> = 0>
     static std::vector<vector_double> hessians_impl(const U &, const vector_double &)
     {
-        pagmo_throw(std::logic_error, "Hessians have been requested but not implemented.\n"
-                                      "A function with prototype 'std::vector<vector_double> hessians(const "
-                                      "vector_double &x)' const was expected.");
+        pagmo_throw(not_implemented_error, "The hessians have been requested but they are not implemented in the UDP");
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value, int> = 0>
     static bool has_hessians_impl(const U &p)
     {
         return p.has_hessians();
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_hessians<U>::value && !pagmo::override_has_hessians<U>::value, int>::type
-        = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_hessians<U>::value && !pagmo::override_has_hessians<U>::value, int> = 0>
     static bool has_hessians_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_hessians<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_hessians<U>::value, int> = 0>
     static bool has_hessians_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value, int>::type = 0>
-    std::vector<sparsity_pattern> hessians_sparsity_impl(const U &value) const
+    template <typename U, enable_if_t<pagmo::has_hessians_sparsity<U>::value, int> = 0>
+    static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &value)
     {
         return value.hessians_sparsity();
     }
-    template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value, int>::type = 0>
-    std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) const
+    template <typename U, enable_if_t<!pagmo::has_hessians_sparsity<U>::value, int> = 0>
+    [[noreturn]] static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &)
     {
-        pagmo_throw(std::logic_error,
-                    "hessians_sparsity() was signalled as present in the user-defined problem, but it is not actually "
-                    "implemented: this "
-                    "indicates a logical error in the implementation of the user-defined problem class");
+        // NOTE: we should never end up here. hessians_sparsity() is called only if m_has_hessians_sparsity
+        // in the problem is set to true, and m_has_hessians_sparsity is unconditionally false if the UDP
+        // does not implement hessians_sparsity() (see implementation of the three overloads below).
+        assert(false);
+        throw;
     }
-    template <typename U, typename std::enable_if<pagmo::override_has_hessians_sparsity<U>::value, int>::type = 0>
+    template <
+        typename U,
+        enable_if_t<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value, int> = 0>
     static bool has_hessians_sparsity_impl(const U &p)
     {
         return p.has_hessians_sparsity();
     }
-    template <typename U, typename std::enable_if<pagmo::has_hessians_sparsity<U>::value
-                                                      && !pagmo::override_has_hessians_sparsity<U>::value,
-                                                  int>::type
-                          = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,
+                          int> = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_hessians_sparsity<U>::value
-                                                      && !pagmo::override_has_hessians_sparsity<U>::value,
-                                                  int>::type
-                          = 0>
+    template <typename U, enable_if_t<!pagmo::has_hessians_sparsity<U>::value, int> = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<has_e_constraints<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_e_constraints<U>::value, int> = 0>
     static vector_double::size_type get_nec_impl(const U &value)
     {
         return value.get_nec();
     }
-    template <typename U, typename std::enable_if<!has_e_constraints<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_e_constraints<U>::value, int> = 0>
     static vector_double::size_type get_nec_impl(const U &)
     {
         return 0u;
     }
-    template <typename U, typename std::enable_if<has_i_constraints<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_i_constraints<U>::value, int> = 0>
     static vector_double::size_type get_nic_impl(const U &value)
     {
         return value.get_nic();
     }
-    template <typename U, typename std::enable_if<!has_i_constraints<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_i_constraints<U>::value, int> = 0>
     static vector_double::size_type get_nic_impl(const U &)
     {
         return 0u;
@@ -785,48 +776,43 @@ struct prob_inner final : prob_inner_base {
     {
         value.set_seed(seed);
     }
-    template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_set_seed<U>::value, int> = 0>
     static void set_seed_impl(U &, unsigned int)
     {
-        pagmo_throw(
-            std::logic_error,
-            "The set_seed method has been called but not implemented by the user.\n"
-            "A function with prototype 'void set_seed(unsigned int)' was expected in the user-defined problem.");
+        pagmo_throw(not_implemented_error,
+                    "The set_seed() method has been invoked but it is not implemented in the UDP");
     }
-    template <typename U, typename std::enable_if<override_has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &p)
     {
         return p.has_set_seed();
     }
-    template <typename U,
-              typename std::enable_if<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return true;
     }
-    template <typename U,
-              typename std::enable_if<!pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int>::type
-              = 0>
+    template <typename U, enable_if_t<!pagmo::has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<has_name<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &value)
     {
         return value.get_name();
     }
-    template <typename U, typename std::enable_if<!has_name<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &)
     {
         return typeid(U).name();
     }
-    template <typename U, typename std::enable_if<has_extra_info<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_extra_info<U>::value, int> = 0>
     static std::string get_extra_info_impl(const U &value)
     {
         return value.get_extra_info();
     }
-    template <typename U, typename std::enable_if<!has_extra_info<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_extra_info<U>::value, int> = 0>
     static std::string get_extra_info_impl(const U &)
     {
         return "";
@@ -865,82 +851,54 @@ struct prob_inner final : prob_inner_base {
  * Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
  * values of any number of stochastic variables. This allows also for stochastic programming
  * tasks to be represented by this class. A tolerance is considered for the verification of the constraints and is set
- * by default to zero, but can be modified via the problem::set_c_tol method
+ * by default to zero, but it can be modified via the problem::set_c_tol() method.
  *
- * To create an instance of the above problem the user is asked to construct a pagmo::problem from
- * a separate object of type \p T where, at least, the implementation of
- * the following methods is provided:
+ * In order to define an optimizaztion problem in PaGMO, the user must first define a class
+ * (or a struct) whose methods describe the properties of the problem and allow to compute
+ * the objective function, the gradient, the constraints, etc. In PaGMO, we refer to such
+ * a class as a **user-defined problem**, or UDP for short. Once defined and instantiated,
+ * a UDP can then be used to construct an instance of this class, pagmo::problem, which
+ * provides a generic interface to optimization problems.
  *
- * @code
- * vector_double fitness(const decision_vector &) const;
+ * Every UDP must implement at least the following two methods:
+ * @code{.unparsed}
+ * vector_double fitness(const vector_double &) const;
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  *
- * - The return value of \p T::fitness() is expected to have a dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
- * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
- * - The return value of \p T::get_bounds() is expected to contain \f$(\mathbf{lb}, \mathbf{ub})\f$.
+ * The \p %fitness() method is expected to return the fitness of the input decision vector, while
+ * \p %get_bounds() is expected to return the box bounds of the problem,
+ * \f$(\mathbf{lb}, \mathbf{ub})\f$, which also implicitly define the dimension of the problem.
+ * The \p %fitness() and \p %get_bounds() methods of the UDP are accessible from the corresponding problem::fitness()
+ * and problem::get_bounds() methods (see their documentation for details).
  *
- * The mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
- * problem.
- * In order to consider more complex cases, the user may implement one or more
- * of the following methods in \p T :
- *   @code
- *   vector_double::size_type get_nobj() const;
- *   vector_double::size_type get_nec() const;
- *   vector_double::size_type get_nic() const;
- *   vector_double get_c_tol() const;
- *   vector_double gradient(const vector_double &x) const;
- *   sparsity_pattern gradient_sparsity() const;
- *   std::vector<vector_double> hessians(const vector_double &x) const;
- *   std::vector<sparsity_pattern> hessians_sparsity() const;
- *   void set_seed(unsigned int s);
- *   std::string get_name() const;
- *   std::string get_extra_info() const;
- *   @endcode
+ * The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
+ * optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following
+ * methods:
+ * @code{.unparsed}
+ * vector_double::size_type get_nobj() const;
+ * vector_double::size_type get_nec() const;
+ * vector_double::size_type get_nic() const;
+ * bool has_gradient() const;
+ * vector_double gradient(const vector_double &) const;
+ * bool has_gradient_sparsity() const;
+ * sparsity_pattern gradient_sparsity() const;
+ * bool has_hessians() const;
+ * std::vector<vector_double> hessians(const vector_double &) const;
+ * bool has_hessians_sparsity() const;
+ * std::vector<sparsity_pattern> hessians_sparsity() const;
+ * bool has_set_seed() const;
+ * void set_seed(unsigned);
+ * std::string get_name() const;
+ * std::string get_extra_info() const;
+ * @endcode
  *
- * - \p T::get_nobj() returns \f$n_{obj}\f$. When not implemented \f$n_{obj} = 1\f$ is assumed, and the
- * pagmo::problem::get_nec() method will return 1.
- * - \p T::get_nec() returns \f$n_{ec}\f$. When not implemented \f$n_{ec} = 0\f$ is assumed, and the
- * pagmo::problem::get_nec() method will return 0.
- * - \p T::get_nic() returns \f$n_{ic}\f$. When not implemented \f$n_{ic} = 0\f$ is assumed, and the
- * pagmo::problem::get_nic() method will return 0.
- * - \p T::gradient() returns a sparse representation of the gradients. The \f$ k\f$-th term
- * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
- * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs) as returned by
- * problem::gradient_sparsity().
- * When not implemented, a call to problem::gradient() throws an \p std::logic_error.
- * - \p T::gradient_sparsity() returns the gradient sparsity pattern, i.e a collection of the non-zero index pairs
- * \f$(i,j)\f$. When
- * not implemented a dense pattern is assumed and a call to problem::gradient_sparsity().
- * returns \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$
- * - \p T::hessians() returns a vector of sparse representations for the hessians. For
- * the \f$l\f$-th value returned by \p T::fitness(), the hessian is defined as \f$ \frac{\partial f^2_l}{\partial
- * x_i\partial x_j}\f$
- * and its sparse representation is in the \f$l\f$-th value returned by \p T::hessians(). Since
- * the hessians are symmetric, their sparse representation only contain lower triangular elements. The indexes
- * \f$(i,j)\f$ are stored in the \f$l\f$-th sparsity pattern (collection of index pairs) returned by
- * problem::hessians_sparsity().
- * When not implemented, a call to problem::hessians() throws an \p std::logic_error.
- * - \p T::hessians_sparsity() returns an \p std::vector of sparsity patterns, each one being
- * a collection of the non-zero index pairs \f$(i,j)\f$ of the corresponding Hessian. Since the Hessian matrix
- * is symmetric, only lower triangular elements are allowed. When
- * not implemented a dense pattern is assumed and a call to problem::hessians_sparsity()
- * returns \f$n_f\f$ sparsity patterns each one being \f$((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\f$.
- * - \p T::set_seed(unsigned int seed) changes the value of the seed \f$s\f$ to be used in the user implemented fitness
- * function to
- * compute stochastic objectives and constraints. When not implemented a call to problem::set_seed() throws an \p
- * std::logic_error.
- * - \p T::get_name() returns a string containing the problem name to be used in output streams.
- * - \p T::get_extra_info() returns a string containing extra human readable information to be used in output streams.
+ * See the documentation of the corresponding methods in this class for details on how the optional
+ * methods in the UDP are used by pagmo::problem.
  *
- * **NOTE** Three counters are defined in the class to keep track of evaluations of the fitness, the gradients and the
- * hessians. At each copy construction and copy assignment these counters are also copied.
- *
- * **NOTE** The only allowed operations on an object belonging to this class, after it has been moved, are assignment
- * and
- * destruction.
+ * **NOTE** the only allowed operations on an object belonging to this class, after it has been moved, are assignment
+ * and destruction.
  */
-
 class problem
 {
     // Enable the generic ctor only if T is not a problem (after removing
@@ -949,44 +907,28 @@ class problem
     using generic_ctor_enabler = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value, int>;
 
 public:
-    /// Constructor from a user problem of type \p T
+    /// Constructor from a user-defined problem of type \p T
     /**
-     * Construct a pagmo::problem from an object of type \p T. In
-     * order for the construction to be successfull \p T needs
-     * to satisfy the following requests:
+     * **NOTE** this constructor is not enabled if, after the removal of cv and reference qualifiers,
+     * \p T is of type pagmo::problem (that is, this constructor does not compete with the copy/move
+     * constructors of pagmo::problem).
      *
-     * - \p T must implement the following mandatory methods:
-     *   @code
-     *   vector_double fitness(const decision_vector &) const;
-     *   std::pair<vector_double, vector_double> get_bounds() const;
-     *   @endcode
-     *   otherwise it will result in a compile-time failure
-     * - \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled
-     * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
-     *   otherwise it will result in a compile-time failure
+     * This constructor will construct a pagmo::problem from the UDP (user-defined problem) \p x of type \p T. In order
+     * for the construction to be successful, the UDP must implement a minimal set of methods,
+     * as described in the documentation of pagmo::problem. The constructor will examine the properties of \p x and
+     * store them as data members of \p this.
      *
-     * **NOTE** The fitness dimension \f$n_f = n_{obj} + n_{ec} + n_{ic}\f$ is defined by the return value of
-     * problem::get_nf(),
-     * while the decision vector dimension \f$n_x\f$ is defined
-     * by the size of the bounds as returned by \p T::get_bounds()
+     * @param x the UDP.
      *
-     * **NOTE** \p T must be not of type pagmo::problem, otherwise this templated constructor is not enabled and the
-     * copy constructor will be called instead.
-     *
-     * @param[in] x The user implemented problem
-     *
-     * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds()
-     * have different length.
-     * @throws std::invalid_argument If the upper and lower bounds returned by the mandatory method \p T::get_bounds()
-     * are not such that \f$lb_i \le ub_i, \forall i\f$
-     * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity() method and this returns an invalid index
-     * pair \f$ (i,j)\f$ having \f$i \ge n_f\f$ or \f$j \ge n_x\f$
-     * @throws std::invalid_argument If \p T has a \p T::gradient_sparsity() method and this contains any repeated index
-     * pair.
-     * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity() method and this returns an invalid index
-     * pair \f$ (i,j)\f$ having \f$i \ge n_x\f$ or \f$j > i\f$
-     * @throws std::invalid_argument If \p T has a \p T::hessians_sparsity() method and this contains any repeated index
-     * pair.
+     * @throws std::invalid_argument in the following cases:
+     * - the number of objectives of the UDP is zero,
+     * - the number of objectives, equality or inequality constraints is larger than an implementation-defined value,
+     * - the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
+     *   different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
+     * - the \p %gradient_sparsity() and \p %hessians_sparsity() methods of the UDP fail basic sanity checks (e.g.,
+     *   they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.).
+     * @throws unspecified any exception thrown by the invoked methods in the UDP or by memory errors in strings
+     * and standard containers.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit problem(T &&x)
@@ -999,9 +941,8 @@ public:
         m_ub = std::move(bounds.second);
         // 2 - Number of objectives.
         m_nobj = ptr()->get_nobj();
-        if (m_nobj == 0u) {
-            pagmo_throw(std::invalid_argument, "The number of objectives must be at least 1, but "
-                                                   + std::to_string(m_nobj) + " was provided instead");
+        if (!m_nobj) {
+            pagmo_throw(std::invalid_argument, "The number of objectives cannot be zero");
         }
         // NOTE: here we check that we can always compute nobj + nec + nic safely.
         if (m_nobj > std::numeric_limits<decltype(m_nobj)>::max() / 3u) {
@@ -1017,6 +958,7 @@ public:
             pagmo_throw(std::invalid_argument, "The number of inequality constraints is too large");
         }
         // 4 - Presence of gradient and its sparsity.
+        // NOTE: all these m_has_* attributes refer to the presence of the features in the UDP.
         m_has_gradient = ptr()->has_gradient();
         m_has_gradient_sparsity = ptr()->has_gradient_sparsity();
         // 5 - Presence of Hessians and their sparsity.
@@ -1024,7 +966,7 @@ public:
         m_has_hessians_sparsity = ptr()->has_hessians_sparsity();
         // 5bis - Is this a stochastic problem?
         m_has_set_seed = ptr()->has_set_seed();
-        // 6 - Name and extra info.
+        // 6 - Name.
         m_name = ptr()->get_name();
         // 7 - Check the sparsities, and cache their sizes.
         if (m_has_gradient_sparsity) {
@@ -1040,8 +982,7 @@ public:
             const auto nx = get_nx();
             const auto nf = get_nf();
             if (nx > std::numeric_limits<vector_double::size_type>::max() / nf) {
-                pagmo_throw(std::invalid_argument, "The size of the (dense) gradient "
-                                                   "sparsity is too large");
+                pagmo_throw(std::invalid_argument, "The size of the (dense) gradient sparsity is too large");
             }
             m_gs_dim = nx * nf;
         }
@@ -1068,10 +1009,19 @@ public:
             }
         }
         // 8 - Constraint tolerance
-        m_c_tol = vector_double(m_nec + m_nic, 0.);
+        m_c_tol.resize(m_nec + m_nic);
     }
 
-    /// Copy constructor
+    /// Copy constructor.
+    /**
+     * The copy constructor will deep copy the input problem \p other.
+     *
+     * @param other the problem to be copied.
+     *
+     * @throws unspecified any exception thrown by:
+     * - memory allocation errors in standard containers,
+     * - the copying of the internal UDP.
+     */
     problem(const problem &other)
         : m_ptr(other.ptr()->clone()), m_fevals(other.m_fevals.load()), m_gevals(other.m_gevals.load()),
           m_hevals(other.m_hevals.load()), m_lb(other.m_lb), m_ub(other.m_ub), m_nobj(other.m_nobj), m_nec(other.m_nec),
@@ -1082,11 +1032,14 @@ public:
     {
     }
 
-    /// Move constructor
+    /// Move constructor.
+    /**
+     * @param other the problem from which \p this will be move-constructed.
+     */
     problem(problem &&other) noexcept
         : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals.load()), m_gevals(other.m_gevals.load()),
           m_hevals(other.m_hevals.load()), m_lb(std::move(other.m_lb)), m_ub(std::move(other.m_ub)),
-          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_c_tol(other.m_c_tol),
+          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_c_tol(std::move(other.m_c_tol)),
           m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
           m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
           m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
@@ -1095,6 +1048,11 @@ public:
     }
 
     /// Move assignment operator
+    /**
+     * @param other the assignment target.
+     *
+     * @return a reference to \p this.
+     */
     problem &operator=(problem &&other) noexcept
     {
         if (this != &other) {
@@ -1107,12 +1065,13 @@ public:
             m_nobj = other.m_nobj;
             m_nec = other.m_nec;
             m_nic = other.m_nic;
-            m_c_tol = other.m_c_tol;
+            m_c_tol = std::move(other.m_c_tol);
             m_has_gradient = other.m_has_gradient;
             m_has_gradient_sparsity = other.m_has_gradient_sparsity;
             m_has_hessians = other.m_has_hessians;
             m_has_hessians_sparsity = other.m_has_hessians_sparsity;
-            m_has_set_seed = other.m_has_set_seed, m_name = std::move(other.m_name);
+            m_has_set_seed = other.m_has_set_seed;
+            m_name = std::move(other.m_name);
             m_gs_dim = other.m_gs_dim;
             m_hs_dim = std::move(other.m_hs_dim);
         }
@@ -1120,20 +1079,28 @@ public:
     }
 
     /// Copy assignment operator
+    /**
+     * Copy assignment is implemented as a copy constructor followed by a move assignment.
+     *
+     * @param other the assignment target.
+     *
+     * @return a reference to \p this.
+     *
+     * @throws unspecified any exception thrown by the copy constructor.
+     */
     problem &operator=(const problem &other)
     {
         // Copy ctor + move assignment.
         return *this = problem(other);
     }
 
-    /// Extracts the user-defined problem
+    /// Extract a pointer to the UDP.
     /**
-     * Extracts the original problem that was provided by the user, thus
-     * granting access to additional resources there implemented.
+     * This method will extract a pointer to the internal instance of the UDP. If \p T is not the same type
+     * as the UDP used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
      *
-     * @tparam T The type of the orignal user-defined problem
-     *
-     * @return a const pointer to the user-defined problem, or \p nullptr
+     * @return a const pointer to the internal UDP, or \p nullptr
      * if \p T does not correspond exactly to the original problem type used
      * in the constructor.
      */
@@ -1141,17 +1108,12 @@ public:
     const T *extract() const
     {
         auto p = dynamic_cast<const detail::prob_inner<T> *>(ptr());
-        if (p == nullptr) {
-            return nullptr;
-        }
-        return &(p->m_value);
+        return p == nullptr ? nullptr : &(p->m_value);
     }
 
-    /// Checks the user defined problem type at run-time
+    /// Check if the UDP is of type \p T.
     /**
-     * @tparam T The type to be checked
-     *
-     * @return \p true if the user defined problem is \p T, \p false othewise.
+     * @return \p true if the UDP is of type \p T, \p false otherwise.
      */
     template <typename T>
     bool is() const
@@ -1159,21 +1121,26 @@ public:
         return extract<T>() != nullptr;
     }
 
-    /// Computes the fitness
+    /// Fitness.
     /**
-     * The fitness, implemented in the user-defined problem,
-     * is expected to be a pagmo::vector_double of dimension \f$n_f\f$ containing
-     * the problem fitness: the concatenation of \f$n_{obj}\f$ objectives
-     * to minimize, \f$n_{ec}\f$ equality constraints and \f$n_{ic}\f$
-     * inequality constraints.
+     * This method will invoke the \p %fitness() method of the UDP to compute the fitness of the
+     * input decision vector \p dv. The return value of the \p %fitness() method of the UDP is expected to have a
+     * dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
+     * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
      *
-     * @param[in] dv The decision vector
+     * In addition to invoking the \p %fitness() method of the UDP, this method will perform sanity checks on \p dv
+     * and on the returned fitness vector. A successful call of this method will increase the internal fitness
+     * evaluation counter (see problem::get_fevals()).
      *
-     * @return The user implemented fitness.
+     * @param dv the decision vector.
      *
-     * @throws std::invalid_argument if the length of the decision vector is not \f$n_x\f$
-     * @throws std::invalid_argument if the length of the fitness returned (as defined in the user defined problem)
-     * is not \f$n_f\f$
+     * @return the fitness of \p dv.
+     *
+     * @throws std::invalid_argument if either
+     * - the length of \p dv differs from the output of get_nx(), or
+     * - the length of the returned fitness vector differs from the output
+     *   of get_nf().
+     * @throws unspecified any exception thrown by the \p %fitness() method of the UDP.
      */
     vector_double fitness(const vector_double &dv) const
     {
@@ -1188,24 +1155,32 @@ public:
         return retval;
     }
 
-    /// Computes the gradient
+    /// Gradient.
     /**
-     * The gradient, optionally implemented in the user-defined problem,
-     * is expected to be a pagmo::vector_double containing the problem
-     * fitness gradients \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$
-     * in the order specified by the gradient sparsity pattern returned by
-     * problem::gradient_sparsity()
-     * (a vector of index pairs \f$(i,j)\f$).
+     * This method will compute the gradient of the input decision vector \p dv by invoking
+     * the \p %gradient() method of the UDP. The \p %gradient() method of the UDP must return
+     * a sparse representation of the gradient: the \f$ k\f$-th term of the gradient vector
+     * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
+     * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs), as returned by
+     * problem::gradient_sparsity().
      *
-     * @param[in] dv The decision vector
+     * If the UDP satisfies pagmo::has_gradient, this method will forward \p dv to the \p %gradient()
+     * method of the UDP after sanity checks. The output of the \p %gradient()
+     * method of the UDP will also be checked before being returned. If the UDP does not satisfy
+     * pagmo::has_gradient, an error will be raised.
      *
-     * @return The gradient as implemented by the user.
+     * A successful call of this method will increase the internal gradient evaluation counter (see
+     * problem::get_gevals()).
      *
-     * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
-     * @throws std::invalid_argument if the length of the gradient returned (as defined in the user defined problem)
-     * does not match the gradient sparsity pattern dimension
-     * @throws std::logic_error if the user defined problem does not implement
-     * the gradient method
+     * @param dv the decision vector whose gradient will be computed.
+     *
+     * @return the gradient of \p dv.
+     *
+     * @throws std::invalid_argument if either:
+     * - the length of \p dv differs from the output of get_nx(), or
+     * - the returned gradient vector does not have the same size as the output of pagmo::sparsity_pattern().
+     * @throws not_implemented_error if the UDP does not satisfy pagmo::has_gradient.
+     * @throws unspecified any exception thrown by the \p %gradient() method of the UDP.
      */
     vector_double gradient(const vector_double &dv) const
     {
@@ -1220,41 +1195,47 @@ public:
         return retval;
     }
 
-    /// Checks if the user-defined problem has a gradient
+    /// Check if the gradient is available in the UDP.
     /**
-     * If the user defined problem implements a gradient, this
-     * will return true, false otherwise. The value returned can
-     * also be directly hard-coded implementing the
-     * method
+     * This method will return \p true if the gradient is available in the UDP, \p false otherwise.
      *
-     * @code
-     * bool has_gradient() const
-     * @endcode
+     * The availability of the gradient is determined as follows:
+     * - if the UDP does not satisfy pagmo::has_gradient, then this method will always return \p false;
+     * - if the UDP satisfies pagmo::has_gradient but it does not satisfy pagmo::override_has_gradient,
+     *   then this method will always return \p true;
+     * - if the UDP satisfies both pagmo::has_gradient and pagmo::override_has_gradient,
+     *   then this method will return the output of the \p %has_gradient() method of the UDP.
      *
-     * in the user-defined problem
-     *
-     * @return a boolean flag
+     * @return a flag signalling the availability of the gradient.
      */
     bool has_gradient() const
     {
         return m_has_gradient;
     }
 
-    /// Computes the gradient sparsity pattern
+    /// Gradient sparsity pattern.
     /**
-     * The gradient sparsity pattern is a collection of the indexes
-     * \f$(i,j)\f$ of the non-zero elements of
-     * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$. By default
-     * PaGMO assumes a dense pattern (all index pairs in the order
-     * \f$(0,0) .. (0,n_x-1), ...(1,0) .. (1,n_x-1) .. (n_f-1,n_x-1)\f$
-     * but this default is overidden if the method gradient_sparsity is
-     * implemented in the user defined problem.
+     * This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a
+     * collection of the indexes \f$(i,j)\f$ of the non-zero elements of
+     * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$.
      *
-     * @return The gradient sparsity pattern.
+     * If problem::has_gradient_sparsity() returns \p true,
+     * then the \p %gradient_sparsity() method of the UDP will be invoked, and its result returned (after sanity
+     * checks). Otherwise, a a dense pattern is assumed and the returned vector will be
+     * \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$.
+     *
+     * @return the gradient sparsity pattern.
+     *
+     * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
+     * it contains duplicate pairs of indices or if the indices in the pattern are incompatible with the properties of
+     * the problem).
+     * @throws not_implemented_error if the \p %gradient_sparsity() method of the UDP is invoked without being
+     * available. This indicates in general an inconsistency in the implementation of the UDP.
+     * @throws unspecified memory errors in standard containers.
      */
     sparsity_pattern gradient_sparsity() const
     {
-        if (m_has_gradient_sparsity) {
+        if (has_gradient_sparsity()) {
             auto retval = ptr()->gradient_sparsity();
             check_gradient_sparsity(retval);
             return retval;
@@ -1262,46 +1243,56 @@ public:
         return detail::dense_gradient(get_nf(), get_nx());
     }
 
-    /// Checks if the user-defined problem has a gradient_sparsity
+    /// Check if the gradient sparsity is available in the UDP.
     /**
-     * If the user defined problem implements a gradient_sparsity, this
-     * will return true, false otherwise. The value returned can
-     * also be directly hard-coded implementing the
-     * method
+     * This method will return \p true if the gradient sparsity is available in the UDP, \p false otherwise.
      *
-     * @code
-     * bool has_gradient_sparsity() const
-     * @endcode
+     * The availability of the gradient sparsity is determined as follows:
+     * - if the UDP does not satisfy pagmo::has_gradient_sparsity, then this method will always return \p false;
+     * - if the UDP satisfies pagmo::has_gradient_sparsity but it does not satisfy
+     *   pagmo::override_has_gradient_sparsity, then this method will always return \p true;
+     * - if the UDP satisfies both pagmo::has_gradient_sparsity and pagmo::override_has_gradient_sparsity,
+     *   then this method will return the output of the \p %has_gradient_sparsity() method of the UDP.
      *
-     * in the user-defined problem
+     * **NOTE** regardless of what this method returns, the problem::gradient_sparsity() method will always return
+     * a sparsity pattern: if the UDP does not provide the gradient sparsity, PaGMO will assume that the sparsity
+     * pattern of the gradient is dense. See problem::gradient_sparsity() for more details.
      *
-     * @return a boolean flag
+     * @return a flag signalling the availability of the gradient sparsity in the UDP.
      */
     bool has_gradient_sparsity() const
     {
         return m_has_gradient_sparsity;
     }
 
-    /// Computes the hessians
+    /// Hessians.
     /**
-     * The hessians, optionally implemented in the user-defined problem,
-     * are expected to be an <tt>std::vector</tt> of pagmo::vector_double.
-     * The element \f$ l\f$ contains the problem hessian:
+     * This method will compute the hessians of the input decision vector \p dv by invoking
+     * the \p %hessians() method of the UDP. The \p %hessians() method of the UDP must return
+     * a sparse representation of the hessians: the element \f$ l\f$ of the returned vector contains
      * \f$ h^l_{ij} = \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
      * in the order specified by the \f$ l\f$-th element of the
      * hessians sparsity pattern (a vector of index pairs \f$(i,j)\f$)
-     * as returned by problem::hessians_sparsity()
+     * as returned by problem::hessians_sparsity(). Since
+     * the hessians are symmetric, their sparse representation contains only lower triangular elements.
      *
-     * @param[in] dv The decision vector
+     * If the UDP satisfies pagmo::has_hessians, this method will forward \p dv to the \p %hessians()
+     * method of the UDP after sanity checks. The output of the \p %hessians()
+     * method of the UDP will also be checked before being returned. If the UDP does not satisfy
+     * pagmo::has_hessians, an error will be raised.
      *
-     * @return The hessians as implemented by the user.
+     * A successful call of this method will increase the internal hessians evaluation counter (see
+     * problem::get_hevals()).
      *
-     * @throws std::invalid_argument if the length of the decision vector \p dv is not \f$n_x\f$
-     * @throws std::invalid_argument if the length of each hessian returned
-     * (as defined in the user defined problem) does not match the corresponding
-     * hessians sparsity pattern dimensions
-     * @throws std::logic_error if the user defined problem does not implement
-     * the hessians method
+     * @param dv the decision vector whose hessians will be computed.
+     *
+     * @return the hessians of \p dv.
+     *
+     * @throws std::invalid_argument if either:
+     * - the length of \p dv differs from the output of get_nx(), or
+     * - the length of each hessian returned does not match the corresponding hessians sparsity pattern dimensions.
+     * @throws not_implemented_error if the UDP does not satisfy pagmo::has_hessians.
+     * @throws unspecified any exception thrown by the \p %hessians() method of the UDP.
      */
     std::vector<vector_double> hessians(const vector_double &dv) const
     {
@@ -1316,38 +1307,44 @@ public:
         return retval;
     }
 
-    /// Check if the user-defined problem implements the hessians
+    /// Check if the hessians are available in the UDP.
     /**
-     * If the user defined problem implements hessians, this
-     * will return true, false otherwise. The value returned can
-     * also be directly hard-coded implementing the
-     * method
+     * This method will return \p true if the hessians are available in the UDP, \p false otherwise.
      *
-     * @code
-     * bool has_hessians() const
-     * @endcode
+     * The availability of the hessians is determined as follows:
+     * - if the UDP does not satisfy pagmo::has_hessians, then this method will always return \p false;
+     * - if the UDP satisfies pagmo::has_hessians but it does not satisfy pagmo::override_has_hessians,
+     *   then this method will always return \p true;
+     * - if the UDP satisfies both pagmo::has_hessians and pagmo::override_has_hessians,
+     *   then this method will return the output of the \p %has_hessians() method of the UDP.
      *
-     * in the user-defined problem
-     *
-     * @return a boolean flag
+     * @return a flag signalling the availability of the hessians.
      */
     bool has_hessians() const
     {
         return m_has_hessians;
     }
 
-    /// Computes the hessians sparsity pattern
+    /// Hessians sparsity pattern.
     /**
-     * Each component \f$ l\f$ of the hessians sparsity pattern is a
-     * collection of the indexes \f$(i,j)\f$ of the non-zero elements of
-     * \f$h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\f$. By default
-     * PaGMO assumes a dense pattern storing a lower triangular representation
-     * (all index pairs in the order
-     * \f$(0,0), (1,0), (1,1), (2,0) ... (n_x-1,n_x-1)\f$
-     * but this default is overidden if the method hessians_sparsity is
-     * implemented in the user defined problem.
+     * This method will return the hessians sparsity pattern of the problem. Each component \f$ l\f$ of the hessians
+     * sparsity pattern is a collection of the indices \f$(i,j)\f$ of the non-zero elements of
+     * \f$h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\f$. Since the Hessian matrix
+     * is symmetric, only lower triangular elements are allowed.
      *
-     * @return The hessians sparsity pattern.
+     * If problem::has_hessians_sparsity() returns \p true,
+     * then the \p %hessians_sparsity() method of the UDP will be invoked, and its result returned (after sanity
+     * checks). Otherwise, a dense pattern is assumed and \f$n_f\f$ sparsity patterns
+     * containing \f$((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\f$ will be returned.
+     *
+     * @return the hessians sparsity pattern.
+     *
+     * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
+     * its size is invalid, if it contains duplicate pairs of indices or if the returned indices do not correspond
+     * to  a lower triangular representation of a symmetric matrix).
+     * @throws not_implemented_error if the \p %hessians_sparsity() method of the UDP is invoked without being
+     * available. This indicates in general an inconsistency in the implementation of the UDP.
+     * @throws unspecified memory errors in standard containers.
      */
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
@@ -1359,51 +1356,55 @@ public:
         return detail::dense_hessians(get_nf(), get_nx());
     }
 
-    /// Check if the user-defined dproblem implements the hessians_sparsity
+    /// Check if the hessians sparsity is available in the UDP.
     /**
-     * If the user defined problem implements a hessians sparsity, this
-     * will return true, false otherwise. The value returned can
-     * also be directly hard-coded implementing the
-     * method
+     * This method will return \p true if the hessians sparsity is available in the UDP, \p false otherwise.
      *
-     * @code
-     * bool has_hessians_sparsity() const
-     * @endcode
+     * The availability of the hessians sparsity is determined as follows:
+     * - if the UDP does not satisfy pagmo::has_hessians_sparsity, then this method will always return \p false;
+     * - if the UDP satisfies pagmo::has_hessians_sparsity but it does not satisfy
+     *   pagmo::override_has_hessians_sparsity, then this method will always return \p true;
+     * - if the UDP satisfies both pagmo::has_hessians_sparsity and pagmo::override_has_hessians_sparsity,
+     *   then this method will return the output of the \p %has_hessians_sparsity() method of the UDP.
      *
-     * in the user-defined problem
+     * **NOTE** regardless of what this method returns, the problem::hessians_sparsity() method will always return
+     * a vector of sparsity patterns: if the UDP does not provide the hessians sparsity, PaGMO will assume that the
+     * sparsity pattern of the hessians is dense. See problem::hessians_sparsity() for more details.
      *
-     * @return a boolean flag
-     *
+     * @return a flag signalling the availability of the hessians sparsity in the UDP.
      */
     bool has_hessians_sparsity() const
     {
         return m_has_hessians_sparsity;
     }
 
-    /// Number of objectives
+    /// Number of objectives.
     /**
-     * @return Returns \f$ n_{obj}\f$, the number of objectives as returned by the
-     * corresponding user-implemented method if present, 1 otherwise
+     * This method will return \f$ n_{obj}\f$, the number of objectives of the optimization
+     * problem. If the UDP satisfies the pagmo::has_get_nobj type traits, then the output of
+     * its \p %get_nobj() method will be returned. Otherwise, this method will return 1.
+     *
+     * @return the number of objectives of the problem.
      */
     vector_double::size_type get_nobj() const
     {
         return m_nobj;
     }
 
-    /// Problem dimension
+    /// Dimension.
     /**
-     * @return Returns \f$ n_{x}\f$, the dimension of the decision vector as implied
-     * by the length of the bounds returned by the user-implemented get_bounds method
+     * @return \f$ n_{x}\f$, the dimension of the problem as established
+     * by the length of the bounds returned by problem::get_bounds().
      */
     vector_double::size_type get_nx() const
     {
         return m_lb.size();
     }
 
-    /// Fitness dimension
+    /// Fitness dimension.
     /**
-     * @return Returns \f$ n_{f}\f$, the dimension of the fitness as the
-     * sum of \f$n_{obj}\f$, \f$n_{ec}\f$, \f$n_{ic}\f$
+     * @return \f$ n_{f}\f$, the dimension of the fitness, which is the
+     * sum of \f$n_{obj}\f$, \f$n_{ec}\f$ and \f$n_{ic}\f$
      */
     vector_double::size_type get_nf() const
     {
@@ -1412,39 +1413,48 @@ public:
 
     /// Box-bounds
     /**
-     * @return Returns \f$ (\mathbf{lb}, \mathbf{ub}) \f$, the box-bounds as returned by
-     * the corresponding user-implemented method
+     * @return \f$ (\mathbf{lb}, \mathbf{ub}) \f$, the box-bounds, as returned by
+     * the \p %get_bounds() method of the UDP. Inifinities in the bounds are allowed.
+     *
+     * @throws unspecified any exception thrown by memory errors in standard containers.
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
         return std::make_pair(m_lb, m_ub);
     }
 
-    /// Number of equality constraints
+    /// Number of equality constraints.
     /**
-     * @return Returns \f$ n_{ec} \f$, the number of inequality constraints
-     * as returned by the the corresponding user-implemented method if present,
-     * zero otherwise
+     * This method will return \f$ n_{ec} \f$, the number of equality constraints of the problem.
+     * If the UDP satisfies pagmo::has_e_constraints, then the output of
+     * its \p %get_nec() method will be returned. Otherwise, this method will return 0.
+     *
+     * @return the number of equality constraints of the problem.
      */
     vector_double::size_type get_nec() const
     {
         return m_nec;
     }
 
-    /// Number of inequality constraints
+    /// Number of inequality constraints.
     /**
-     * @return Returns \f$ n_{ic} \f$, the number of inequality constraints
-     * as returned by the the corresponding user-implemented method if present,
-     * zero otherwise
+     * This method will return \f$ n_{ic} \f$, the number of inequality constraints of the problem.
+     * If the UDP satisfies pagmo::has_i_constraints, then the output of
+     * its \p %get_nic() method will be returned. Otherwise, this method will return 0.
+     *
+     * @return the number of inequality constraints of the problem.
      */
     vector_double::size_type get_nic() const
     {
         return m_nic;
     }
-    /// Sets the constraint tolerance
+    /// Set the constraint tolerance.
     /**
-     * @param[in] c_tol a vector_double containing the tolerances to use when
-     * checking for constraint feasibility
+     * @param c_tol a vector containing the tolerances to use when
+     * checking for constraint feasibility.
+     *
+     * @throws std::invalid_argument if the size of \p c_tol differs from the number of constraints, or if
+     * any of its elements is negative or NaN.
      */
     void set_c_tol(const vector_double &c_tol)
     {
@@ -1453,91 +1463,126 @@ public:
                                                    + ", while a size of: " + std::to_string(c_tol.size())
                                                    + " was detected.");
         }
+        for (decltype(c_tol.size()) i = 0; i < c_tol.size(); ++i) {
+            if (std::isnan(c_tol[i])) {
+                pagmo_throw(std::invalid_argument,
+                            "The tolerance vector has a NaN value at the index " + std::to_string(i));
+            }
+            if (c_tol[i] < 0.) {
+                pagmo_throw(std::invalid_argument,
+                            "The tolerance vector has a negative value at the index " + std::to_string(i));
+            }
+        }
         m_c_tol = c_tol;
     }
-    /// Gets the constraint tolerance
+    /// Get the constraint tolerance.
     /**
-     * @return Returns a vector_double containing the tolerances to use when
-     * checking for constraint feasibility
+     * This method will return a vector of dimension \f$n_{ec} + n_{ic}\f$ containing tolerances to
+     * be used when checking constraint feasibility. The constraint tolerance is zero-filled upon problem
+     * construction, and it can be set via problem::set_c_tol().
+     *
+     * @return a pagmo::vector_double containing the tolerances to use when
+     * checking for constraint feasibility.
      */
     vector_double get_c_tol() const
     {
         return m_c_tol;
     }
 
-    /// Number of constraints
+    /// Total number of constraints
     /**
-     * @return Returns \f$ n_{ic} + n_{ec} \f$, the number of constraints
+     * @return the sum of the output of get_nic() and get_nec() (i.e., the total number of constraints).
      */
     vector_double::size_type get_nc() const
     {
         return m_nec + m_nic;
     }
 
-    /// Number of fitness evaluations
+    /// Number of fitness evaluations.
+    /**
+     * Each time a call to problem::fitness() successfully completes, an internal counter is increased by one.
+     * The counter is initialised to zero upon problem construction and it is never reset. Copy and move operations
+     * copy the counter as well.
+     *
+     * @return the number of times problem::fitness() was successfully called.
+     */
     unsigned long long get_fevals() const
     {
         return m_fevals.load();
     }
 
-    /// Number of gradient evaluations
+    /// Number of gradient evaluations.
+    /**
+     * Each time a call to problem::gradient() successfully completes, an internal counter is increased by one.
+     * The counter is initialised to zero upon problem construction and it is never reset. Copy and move operations
+     * copy the counter as well.
+     *
+     * @return the number of times problem::gradient() was successfully called.
+     */
     unsigned long long get_gevals() const
     {
         return m_gevals.load();
     }
 
-    /// Number of hessians evaluations
+    /// Number of hessians evaluations.
+    /**
+     * Each time a call to problem::hessians() successfully completes, an internal counter is increased by one.
+     * The counter is initialised to zero upon problem construction and it is never reset. Copy and move operations
+     * copy the counter as well.
+     *
+     * @return the number of times problem::hessians() was successfully called.
+     */
     unsigned long long get_hevals() const
     {
         return m_hevals.load();
     }
 
-    /// Sets the seed for the stochastic variables
+    /// Set the seed for the stochastic variables.
     /**
      * Sets the seed to be used in the fitness function to instantiate
-     * all stochastic variables.
+     * all stochastic variables. If the UDP satisfies pagmo::has_set_seed, then
+     * its \p %set_seed() method will be invoked. Otherwise, an error will be raised.
      *
-     * @param[in] seed seed
+     * @param seed seed.
+     *
+     * @throws not_implemented_error if the UDP does not satisfy pagmo::has_set_seed.
+     * @throws unspecified any exception thrown by the \p %set_seed() method of the UDP.
      */
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
-        if (m_has_set_seed) {
-            ptr()->set_seed(seed);
-        } else {
-            pagmo_throw(std::logic_error,
-                        "the user-defined problem does not support seed setting: "
-                        "either it does not provide the 'set_seed()' method or its 'has_set_seed()' method "
-                        "returns false\n\nThe expected prototypes for 'set_seed()' are:\n"
-                        "C++: 'void set_seed(unsigned int)'\n"
-                        "Python: 'set_seed(seed)'");
-        }
+        ptr()->set_seed(seed);
     }
 
-    /// Feasibility of a decision vector
+    /// Feasibility of a decision vector.
     /**
-     * Checks the feasibility of the fitness corresponding to
+     * This method will checks the feasibility of the fitness corresponding to
      * a decision vector \p x against
-     * the tolerances returned by problem::get_c_tol
+     * the tolerances returned by problem::get_c_tol().
      *
-     * **NOTE** This will cause one fitness evaluation
+     * **NOTE** This will cause one fitness evaluation.
      *
-     * @param[in] x decision vector
-     * @return true if the descision vector results in a feasible fitness
+     * @param x a decision vector.
      *
+     * @return \p true if the decision vector results in a feasible fitness, \p false otherwise.
+     *
+     * @throws unspecified any exception thrown by problem::feasibility_f() or problem::fitness().
      */
     bool feasibility_x(const vector_double &x) const
     {
-        // wrong dimensions of x will trigger exceptions in the called functions
+        // Wrong dimensions of x will trigger exceptions in the called functions
         return feasibility_f(fitness(x));
     }
 
-    /// Feasibility of a fitness vector
+    /// Feasibility of a fitness vector.
     /**
-     * Checks the feasibility of a fitness vector \p f against
-     * the tolerances returned by problem::get_c_tol
+     * This method will check the feasibility of a fitness vector \p f against
+     * the tolerances returned by problem::get_c_tol().
      *
-     * @param[in] f fitness vector
-     * @return true if the fitness vector is feasible
+     * @param f a fitness vector.
+     *
+     * @return \p true if the fitness vector is feasible, \p false otherwise.
+     *
+     * @throws std::invalid_argument if the size of \p f is not the same as the output of problem::get_nf().
      */
     bool feasibility_f(const vector_double &f) const
     {
@@ -1553,28 +1598,28 @@ public:
         return feas_eq.first + feas_ineq.first == get_nc();
     }
 
-    /// Check if the user-defined problem implements a set_seed method
+    /// Check if a \p %set_seed() method is available in the UDP.
     /**
-     * If the user defined problem implements a set_seed method, this
-     * will return true, false otherwise. The value returned can
-     * also be forced by the user by implementing the additional
-     * method
+     * This method will return \p true if a \p %set_seed() method is available in the UDP, \p false otherwise.
      *
-     * @code
-     * bool has_set_seed() const
-     * @endcode
+     * The availability of the a \p %set_seed() method is determined as follows:
+     * - if the UDP does not satisfy pagmo::has_set_seed, then this method will always return \p false;
+     * - if the UDP satisfies pagmo::has_set_seed but it does not satisfy pagmo::override_has_set_seed,
+     *   then this method will always return \p true;
+     * - if the UDP satisfies both pagmo::has_set_seed and pagmo::override_has_set_seed,
+     *   then this method will return the output of the \p %has_set_seed() method of the UDP.
      *
-     * in the user-defined problem
-     *
-     * @return a boolean flag
-     *
+     * @return a flag signalling the availability of the \p %set_seed() method.
      */
     bool has_set_seed() const
     {
         return m_has_set_seed;
     }
 
-    /// Alias for problem::has_set_seed
+    /// Alias for problem::has_set_seed().
+    /**
+     * @return the output of problem::has_set_seed().
+     */
     bool is_stochastic() const
     {
         return has_set_seed();
@@ -1582,18 +1627,26 @@ public:
 
     /// Problem's name.
     /**
-     * @return The problem's name as returned by the corresponding
-     * user-implemented method if present, the C++ mingled class name otherwise.
+     * If the UDP satisfies pagmo::has_name, then this method will return the output of its \p %get_name() method.
+     * Otherwise, an implementation-defined name based on the type of the UDP will be returned.
+     *
+     * @return the problem's name.
+     *
+     * @throws unspecified any exception thrown by copying an \p std::string object.
      */
     std::string get_name() const
     {
         return m_name;
     }
 
-    /// Extra info
+    /// Problem's extra info.
     /**
-     * @return The problem's extra info as returned by the corresponding
-     * user-implemented method if present, an empty string otehrwise.
+     * If the UDP satisfies pagmo::has_extra_info, then this method will return the output of its \p %get_extra_info()
+     * method. Otherwise, an empty string will be returned.
+     *
+     * @return extra info about the UDP.
+     *
+     * @throws unspecified any exception thrown by the \p %get_extra_info() method of the UDP.
      */
     std::string get_extra_info() const
     {
@@ -1602,13 +1655,15 @@ public:
 
     /// Streaming operator
     /**
+     * This function will stream to \p os a human-readable representation of the input
+     * problem \p p.
      *
-     * @param os input <tt>std::ostream</tt>
-     * @param p pagmo::problem object to be streamed
+     * @param os input <tt>std::ostream</tt>.
+     * @param p pagmo::problem object to be streamed.
      *
-     * @return An <tt>std::ostream</tt> containing a human-readable
-     * representation of the problem, including the result from
-     * the user-defined method extra_info if implemented.
+     * @return a reference to \p os.
+     *
+     * @throws unspecified any exception thrown by querying various problem properties and streaming them into \p os.
      */
     friend std::ostream &operator<<(std::ostream &os, const problem &p)
     {
@@ -1653,7 +1708,14 @@ public:
         return os;
     }
 
-    /// Serialization: save
+    /// Save to archive.
+    /**
+     * This method will save \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void save(Archive &ar) const
     {
@@ -1662,7 +1724,14 @@ public:
            m_gs_dim, m_hs_dim);
     }
 
-    /// Serialization: load
+    /// Load from archive.
+    /**
+     * This method will deserialize into \p this the content of \p ar.
+     *
+     * @param ar source archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void load(Archive &ar)
     {
@@ -1706,7 +1775,7 @@ private:
         const auto nx = get_nx();
         const auto nf = get_nf();
         // 1 - We check that the gradient sparsity pattern has
-        // valid indexes.
+        // valid indices.
         for (const auto &pair : gs) {
             if ((pair.first >= nf) || (pair.second >= nx)) {
                 pagmo_throw(std::invalid_argument, "Invalid pair detected in the gradient sparsity pattern: ("

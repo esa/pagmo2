@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 
+#include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
@@ -106,8 +107,8 @@ BOOST_AUTO_TEST_CASE(decompose_integration_into_problem_test)
     BOOST_CHECK(p.has_gradient() == false);
     BOOST_CHECK(p.has_hessians() == false);
     BOOST_CHECK(p.get_nobj() == 1u);
-    BOOST_CHECK_THROW(p.gradient({1, 2}), std::logic_error);
-    BOOST_CHECK_THROW(p.hessians({1, 2}), std::logic_error);
+    BOOST_CHECK_THROW(p.gradient({1, 2}), not_implemented_error);
+    BOOST_CHECK_THROW(p.hessians({1, 2}), not_implemented_error);
 }
 
 BOOST_AUTO_TEST_CASE(decompose_fitness_test)

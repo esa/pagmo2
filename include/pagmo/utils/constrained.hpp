@@ -51,8 +51,8 @@ namespace pagmo
 namespace detail
 {
 
-/// Tests equality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm of
-/// the violation
+// Tests equality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm of
+// the violation
 template <typename It1, typename It2>
 std::pair<vector_double::size_type, double> test_eq_constraints(It1 ceq_first, It1 ceq_last, It2 tol_first)
 {
@@ -69,8 +69,8 @@ std::pair<vector_double::size_type, double> test_eq_constraints(It1 ceq_first, I
     return std::pair<vector_double::size_type, double>(n, std::sqrt(l2));
 }
 
-/// Tests inequality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm
-/// of the violation
+// Tests inequality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm
+// of the violation
 template <typename It1, typename It2>
 std::pair<vector_double::size_type, double> test_ineq_constraints(It1 cineq_first, It1 cineq_last, It2 tol_first)
 {

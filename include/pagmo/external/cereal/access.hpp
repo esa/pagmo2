@@ -47,7 +47,7 @@ namespace cereal
 
       The specialization of LoadAndConstruct must be placed within the cereal namespace:
 
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       struct MyType
       {
         MyType( int x ); // note: no default ctor
@@ -109,7 +109,7 @@ namespace cereal
       to a construct object which should be used to perform the allocation once
       data has been appropriately loaded.
 
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       struct MyType
       {
         // note the lack of default constructor
@@ -206,7 +206,7 @@ namespace cereal
   /*! If you desire non-public serialization functions within a class, cereal can only
       access these if you declare cereal::access a friend.
 
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       class MyClass
       {
         private:
@@ -339,7 +339,7 @@ namespace cereal
       and it will not complain about ambiguity in its compile time selection.  However, if cereal detects
       an ambiguity in specializations, it will continue to issue a static assertion.
 
-      @code{.cpp}
+      @code{.unparsed}{.cpp}
       class MyParent
       {
         friend class cereal::access;
@@ -387,7 +387,7 @@ namespace cereal
   /*! This performs specialization for the specific type for all types of archives.
       This macro should be placed at the global namespace.
 
-      @code{cpp}
+      @code{.unparsed}{cpp}
       struct MyType {};
       CEREAL_SPECIALIZE_FOR_ALL_ARCHIVES( MyType, cereal::specialization::member_load_save );
       @endcode
@@ -401,7 +401,7 @@ namespace cereal
   /*! This performs specialization for the specific type for a single type of archive.
       This macro should be placed at the global namespace.
 
-      @code{cpp}
+      @code{.unparsed}{cpp}
       struct MyType {};
       CEREAL_SPECIALIZE_FOR_ARCHIVE( cereal::XMLInputArchive, MyType, cereal::specialization::member_load_save );
       @endcode

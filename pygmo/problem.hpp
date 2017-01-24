@@ -62,16 +62,6 @@ namespace bp = boost::python;
 
 template <>
 struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
-    // These are the mandatory methods that must be present.
-    void check_construction_object() const
-    {
-        if (pygmo::isinstance(m_value, pygmo::builtin().attr("type"))) {
-            pygmo_throw(PyExc_TypeError, "cannot construct a problem from a type: please use an instance "
-                                         "as construction argument");
-        }
-        check_callable_attribute(m_value, "fitness", "problem");
-        check_callable_attribute(m_value, "get_bounds", "problem");
-    }
     // Just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
@@ -82,7 +72,10 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         : // Perform an explicit deep copy of the input object.
           m_value(pygmo::deepcopy(o))
     {
-        check_construction_object();
+        // Check the presence of the mandatory methods (these are static asserts
+        // in the C++ counterpart).
+        check_callable_attribute(m_value, "fitness", "problem");
+        check_callable_attribute(m_value, "get_bounds", "problem");
     }
     virtual prob_inner_base *clone() const override final
     {

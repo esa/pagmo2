@@ -62,7 +62,7 @@ namespace pagmo
  *
  * Example:
  *
- * @code
+ * @code{.unparsed}
  * std::mt19937 r_engine(32u);
  * auto x = uniform_real_from_range(3,5,r_engine); // a random value
  * auto x = uniform_real_from_range(2,2,r_engine); // the value 2.
@@ -115,7 +115,7 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
  *
  * Example:
  *
- * @code
+ * @code{.unparsed}
  * std::mt19937 r_engine(32u);
  * auto x = decision_vector({{1,3},{3,5}}, r_engine); // a random vector
  * auto x = decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
@@ -155,7 +155,7 @@ vector_double decision_vector(const std::pair<vector_double, vector_double> &bou
  *
  * Example:
  *
- * @code
+ * @code{.unparsed}
  * std::mt19937 r_engine(32u);
  * auto x = decision_vector({1,3},{3,5}, r_engine); // a random vector
  * auto x = decision_vector({1,3},{1,3}, r_engine); // the vector {1,3}
@@ -181,7 +181,7 @@ vector_double decision_vector(const vector_double &lb, const vector_double &ub, 
  * Performs a cast between unsigned types throwing if the input cannot be represented in the new type
  *
  * Example:
- * @code
+ * @code{.unparsed}
  * unsigned short s = std::numeric_limits<unsigned short>::max();
  * unsigned long l = std::numeric_limits<unsigned long>::max();
  * auto res1 = safe_cast<unsigned long>(s); // Will always work
@@ -228,7 +228,7 @@ double binomial_coefficient(vector_double::size_type n, vector_double::size_type
  * points and \f$M\f$ their dimensionality
  *
  * Example:
- * @code
+ * @code{.unparsed}
  * auto res = kNN({{1, 1}, {2, 2}, {3.1, 3.1}, {5, 5}}, 2u);
  * @endcode
  *
