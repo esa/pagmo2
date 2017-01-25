@@ -866,10 +866,11 @@ struct prob_inner final : prob_inner_base {
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  *
- * The \p %fitness() method is expected to return the fitness of the input decision vector, while
- * \p %get_bounds() is expected to return the box bounds of the problem,
+ * The <tt>%fitness()</tt> method is expected to return the fitness of the input decision vector, while
+ * <tt>%get_bounds()</tt> is expected to return the box bounds of the problem,
  * \f$(\mathbf{lb}, \mathbf{ub})\f$, which also implicitly define the dimension of the problem.
- * The \p %fitness() and \p %get_bounds() methods of the UDP are accessible from the corresponding problem::fitness()
+ * The <tt>%fitness()</tt> and <tt>%get_bounds()</tt> methods of the UDP are accessible from the corresponding
+ * problem::fitness()
  * and problem::get_bounds() methods (see their documentation for details).
  *
  * The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
@@ -925,7 +926,8 @@ public:
      * - the number of objectives, equality or inequality constraints is larger than an implementation-defined value,
      * - the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
      *   different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
-     * - the \p %gradient_sparsity() and \p %hessians_sparsity() methods of the UDP fail basic sanity checks (e.g.,
+     * - the <tt>%gradient_sparsity()</tt> and <tt>%hessians_sparsity()</tt> methods of the UDP fail basic sanity checks
+     * (e.g.,
      *   they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.).
      * @throws unspecified any exception thrown by the invoked methods in the UDP or by memory errors in strings
      * and standard containers.
@@ -1123,12 +1125,13 @@ public:
 
     /// Fitness.
     /**
-     * This method will invoke the \p %fitness() method of the UDP to compute the fitness of the
-     * input decision vector \p dv. The return value of the \p %fitness() method of the UDP is expected to have a
+     * This method will invoke the <tt>%fitness()</tt> method of the UDP to compute the fitness of the
+     * input decision vector \p dv. The return value of the <tt>%fitness()</tt> method of the UDP is expected to have a
      * dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
      * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
      *
-     * In addition to invoking the \p %fitness() method of the UDP, this method will perform sanity checks on \p dv
+     * In addition to invoking the <tt>%fitness()</tt> method of the UDP, this method will perform sanity checks on \p
+     * dv
      * and on the returned fitness vector. A successful call of this method will increase the internal fitness
      * evaluation counter (see problem::get_fevals()).
      *
@@ -1140,7 +1143,7 @@ public:
      * - the length of \p dv differs from the output of get_nx(), or
      * - the length of the returned fitness vector differs from the output
      *   of get_nf().
-     * @throws unspecified any exception thrown by the \p %fitness() method of the UDP.
+     * @throws unspecified any exception thrown by the <tt>%fitness()</tt> method of the UDP.
      */
     vector_double fitness(const vector_double &dv) const
     {
@@ -1158,14 +1161,14 @@ public:
     /// Gradient.
     /**
      * This method will compute the gradient of the input decision vector \p dv by invoking
-     * the \p %gradient() method of the UDP. The \p %gradient() method of the UDP must return
+     * the <tt>%gradient()</tt> method of the UDP. The <tt>%gradient()</tt> method of the UDP must return
      * a sparse representation of the gradient: the \f$ k\f$-th term of the gradient vector
      * is expected to contain \f$ \frac{\partial f_i}{\partial x_j}\f$, where the pair \f$(i,j)\f$
      * is the \f$k\f$-th element of the sparsity pattern (collection of index pairs), as returned by
      * problem::gradient_sparsity().
      *
-     * If the UDP satisfies pagmo::has_gradient, this method will forward \p dv to the \p %gradient()
-     * method of the UDP after sanity checks. The output of the \p %gradient()
+     * If the UDP satisfies pagmo::has_gradient, this method will forward \p dv to the <tt>%gradient()</tt>
+     * method of the UDP after sanity checks. The output of the <tt>%gradient()</tt>
      * method of the UDP will also be checked before being returned. If the UDP does not satisfy
      * pagmo::has_gradient, an error will be raised.
      *
@@ -1180,7 +1183,7 @@ public:
      * - the length of \p dv differs from the output of get_nx(), or
      * - the returned gradient vector does not have the same size as the output of pagmo::sparsity_pattern().
      * @throws not_implemented_error if the UDP does not satisfy pagmo::has_gradient.
-     * @throws unspecified any exception thrown by the \p %gradient() method of the UDP.
+     * @throws unspecified any exception thrown by the <tt>%gradient()</tt> method of the UDP.
      */
     vector_double gradient(const vector_double &dv) const
     {
@@ -1204,7 +1207,7 @@ public:
      * - if the UDP satisfies pagmo::has_gradient but it does not satisfy pagmo::override_has_gradient,
      *   then this method will always return \p true;
      * - if the UDP satisfies both pagmo::has_gradient and pagmo::override_has_gradient,
-     *   then this method will return the output of the \p %has_gradient() method of the UDP.
+     *   then this method will return the output of the <tt>%has_gradient()</tt> method of the UDP.
      *
      * @return a flag signalling the availability of the gradient.
      */
@@ -1220,7 +1223,7 @@ public:
      * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$.
      *
      * If problem::has_gradient_sparsity() returns \p true,
-     * then the \p %gradient_sparsity() method of the UDP will be invoked, and its result returned (after sanity
+     * then the <tt>%gradient_sparsity()</tt> method of the UDP will be invoked, and its result returned (after sanity
      * checks). Otherwise, a a dense pattern is assumed and the returned vector will be
      * \f$((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\f$.
      *
@@ -1229,7 +1232,7 @@ public:
      * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
      * it contains duplicate pairs of indices or if the indices in the pattern are incompatible with the properties of
      * the problem).
-     * @throws not_implemented_error if the \p %gradient_sparsity() method of the UDP is invoked without being
+     * @throws not_implemented_error if the <tt>%gradient_sparsity()</tt> method of the UDP is invoked without being
      * available. This indicates in general an inconsistency in the implementation of the UDP.
      * @throws unspecified memory errors in standard containers.
      */
@@ -1252,7 +1255,7 @@ public:
      * - if the UDP satisfies pagmo::has_gradient_sparsity but it does not satisfy
      *   pagmo::override_has_gradient_sparsity, then this method will always return \p true;
      * - if the UDP satisfies both pagmo::has_gradient_sparsity and pagmo::override_has_gradient_sparsity,
-     *   then this method will return the output of the \p %has_gradient_sparsity() method of the UDP.
+     *   then this method will return the output of the <tt>%has_gradient_sparsity()</tt> method of the UDP.
      *
      * **NOTE** regardless of what this method returns, the problem::gradient_sparsity() method will always return
      * a sparsity pattern: if the UDP does not provide the gradient sparsity, PaGMO will assume that the sparsity
@@ -1268,7 +1271,7 @@ public:
     /// Hessians.
     /**
      * This method will compute the hessians of the input decision vector \p dv by invoking
-     * the \p %hessians() method of the UDP. The \p %hessians() method of the UDP must return
+     * the <tt>%hessians()</tt> method of the UDP. The <tt>%hessians()</tt> method of the UDP must return
      * a sparse representation of the hessians: the element \f$ l\f$ of the returned vector contains
      * \f$ h^l_{ij} = \frac{\partial f^2_l}{\partial x_i\partial x_j}\f$
      * in the order specified by the \f$ l\f$-th element of the
@@ -1276,8 +1279,8 @@ public:
      * as returned by problem::hessians_sparsity(). Since
      * the hessians are symmetric, their sparse representation contains only lower triangular elements.
      *
-     * If the UDP satisfies pagmo::has_hessians, this method will forward \p dv to the \p %hessians()
-     * method of the UDP after sanity checks. The output of the \p %hessians()
+     * If the UDP satisfies pagmo::has_hessians, this method will forward \p dv to the <tt>%hessians()</tt>
+     * method of the UDP after sanity checks. The output of the <tt>%hessians()</tt>
      * method of the UDP will also be checked before being returned. If the UDP does not satisfy
      * pagmo::has_hessians, an error will be raised.
      *
@@ -1292,7 +1295,7 @@ public:
      * - the length of \p dv differs from the output of get_nx(), or
      * - the length of each hessian returned does not match the corresponding hessians sparsity pattern dimensions.
      * @throws not_implemented_error if the UDP does not satisfy pagmo::has_hessians.
-     * @throws unspecified any exception thrown by the \p %hessians() method of the UDP.
+     * @throws unspecified any exception thrown by the <tt>%hessians()</tt> method of the UDP.
      */
     std::vector<vector_double> hessians(const vector_double &dv) const
     {
@@ -1316,7 +1319,7 @@ public:
      * - if the UDP satisfies pagmo::has_hessians but it does not satisfy pagmo::override_has_hessians,
      *   then this method will always return \p true;
      * - if the UDP satisfies both pagmo::has_hessians and pagmo::override_has_hessians,
-     *   then this method will return the output of the \p %has_hessians() method of the UDP.
+     *   then this method will return the output of the <tt>%has_hessians()</tt> method of the UDP.
      *
      * @return a flag signalling the availability of the hessians.
      */
@@ -1333,7 +1336,7 @@ public:
      * is symmetric, only lower triangular elements are allowed.
      *
      * If problem::has_hessians_sparsity() returns \p true,
-     * then the \p %hessians_sparsity() method of the UDP will be invoked, and its result returned (after sanity
+     * then the <tt>%hessians_sparsity()</tt> method of the UDP will be invoked, and its result returned (after sanity
      * checks). Otherwise, a dense pattern is assumed and \f$n_f\f$ sparsity patterns
      * containing \f$((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\f$ will be returned.
      *
@@ -1342,7 +1345,7 @@ public:
      * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
      * its size is invalid, if it contains duplicate pairs of indices or if the returned indices do not correspond
      * to  a lower triangular representation of a symmetric matrix).
-     * @throws not_implemented_error if the \p %hessians_sparsity() method of the UDP is invoked without being
+     * @throws not_implemented_error if the <tt>%hessians_sparsity()</tt> method of the UDP is invoked without being
      * available. This indicates in general an inconsistency in the implementation of the UDP.
      * @throws unspecified memory errors in standard containers.
      */
@@ -1365,7 +1368,7 @@ public:
      * - if the UDP satisfies pagmo::has_hessians_sparsity but it does not satisfy
      *   pagmo::override_has_hessians_sparsity, then this method will always return \p true;
      * - if the UDP satisfies both pagmo::has_hessians_sparsity and pagmo::override_has_hessians_sparsity,
-     *   then this method will return the output of the \p %has_hessians_sparsity() method of the UDP.
+     *   then this method will return the output of the <tt>%has_hessians_sparsity()</tt> method of the UDP.
      *
      * **NOTE** regardless of what this method returns, the problem::hessians_sparsity() method will always return
      * a vector of sparsity patterns: if the UDP does not provide the hessians sparsity, PaGMO will assume that the
@@ -1382,7 +1385,7 @@ public:
     /**
      * This method will return \f$ n_{obj}\f$, the number of objectives of the optimization
      * problem. If the UDP satisfies the pagmo::has_get_nobj type traits, then the output of
-     * its \p %get_nobj() method will be returned. Otherwise, this method will return 1.
+     * its <tt>%get_nobj()</tt> method will be returned. Otherwise, this method will return 1.
      *
      * @return the number of objectives of the problem.
      */
@@ -1414,7 +1417,7 @@ public:
     /// Box-bounds
     /**
      * @return \f$ (\mathbf{lb}, \mathbf{ub}) \f$, the box-bounds, as returned by
-     * the \p %get_bounds() method of the UDP. Inifinities in the bounds are allowed.
+     * the <tt>%get_bounds()</tt> method of the UDP. Inifinities in the bounds are allowed.
      *
      * @throws unspecified any exception thrown by memory errors in standard containers.
      */
@@ -1427,7 +1430,7 @@ public:
     /**
      * This method will return \f$ n_{ec} \f$, the number of equality constraints of the problem.
      * If the UDP satisfies pagmo::has_e_constraints, then the output of
-     * its \p %get_nec() method will be returned. Otherwise, this method will return 0.
+     * its <tt>%get_nec()</tt> method will be returned. Otherwise, this method will return 0.
      *
      * @return the number of equality constraints of the problem.
      */
@@ -1440,7 +1443,7 @@ public:
     /**
      * This method will return \f$ n_{ic} \f$, the number of inequality constraints of the problem.
      * If the UDP satisfies pagmo::has_i_constraints, then the output of
-     * its \p %get_nic() method will be returned. Otherwise, this method will return 0.
+     * its <tt>%get_nic()</tt> method will be returned. Otherwise, this method will return 0.
      *
      * @return the number of inequality constraints of the problem.
      */
@@ -1541,12 +1544,12 @@ public:
     /**
      * Sets the seed to be used in the fitness function to instantiate
      * all stochastic variables. If the UDP satisfies pagmo::has_set_seed, then
-     * its \p %set_seed() method will be invoked. Otherwise, an error will be raised.
+     * its <tt>%set_seed()</tt> method will be invoked. Otherwise, an error will be raised.
      *
      * @param seed seed.
      *
      * @throws not_implemented_error if the UDP does not satisfy pagmo::has_set_seed.
-     * @throws unspecified any exception thrown by the \p %set_seed() method of the UDP.
+     * @throws unspecified any exception thrown by the <tt>%set_seed()</tt> method of the UDP.
      */
     void set_seed(unsigned seed)
     {
@@ -1598,18 +1601,18 @@ public:
         return feas_eq.first + feas_ineq.first == get_nc();
     }
 
-    /// Check if a \p %set_seed() method is available in the UDP.
+    /// Check if a <tt>%set_seed()</tt> method is available in the UDP.
     /**
-     * This method will return \p true if a \p %set_seed() method is available in the UDP, \p false otherwise.
+     * This method will return \p true if a <tt>%set_seed()</tt> method is available in the UDP, \p false otherwise.
      *
-     * The availability of the a \p %set_seed() method is determined as follows:
+     * The availability of the a <tt>%set_seed()</tt> method is determined as follows:
      * - if the UDP does not satisfy pagmo::has_set_seed, then this method will always return \p false;
      * - if the UDP satisfies pagmo::has_set_seed but it does not satisfy pagmo::override_has_set_seed,
      *   then this method will always return \p true;
      * - if the UDP satisfies both pagmo::has_set_seed and pagmo::override_has_set_seed,
-     *   then this method will return the output of the \p %has_set_seed() method of the UDP.
+     *   then this method will return the output of the <tt>%has_set_seed()</tt> method of the UDP.
      *
-     * @return a flag signalling the availability of the \p %set_seed() method.
+     * @return a flag signalling the availability of the <tt>%set_seed()</tt> method.
      */
     bool has_set_seed() const
     {
@@ -1627,7 +1630,7 @@ public:
 
     /// Problem's name.
     /**
-     * If the UDP satisfies pagmo::has_name, then this method will return the output of its \p %get_name() method.
+     * If the UDP satisfies pagmo::has_name, then this method will return the output of its <tt>%get_name()</tt> method.
      * Otherwise, an implementation-defined name based on the type of the UDP will be returned.
      *
      * @return the problem's name.
@@ -1641,12 +1644,13 @@ public:
 
     /// Problem's extra info.
     /**
-     * If the UDP satisfies pagmo::has_extra_info, then this method will return the output of its \p %get_extra_info()
+     * If the UDP satisfies pagmo::has_extra_info, then this method will return the output of its
+     * <tt>%get_extra_info()</tt>
      * method. Otherwise, an empty string will be returned.
      *
      * @return extra info about the UDP.
      *
-     * @throws unspecified any exception thrown by the \p %get_extra_info() method of the UDP.
+     * @throws unspecified any exception thrown by the <tt>%get_extra_info()</tt> method of the UDP.
      */
     std::string get_extra_info() const
     {
