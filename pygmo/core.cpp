@@ -392,6 +392,21 @@ static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
     return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)), pygmo::v_to_a(std::get<3>(fnds)));
 }
 
+// Helper function to test the to_vd functionality.
+static inline bool test_to_vd(const bp::object &o, unsigned n)
+{
+    auto res = pygmo::to_vd(o);
+    if (res.size() != n) {
+        return false;
+    }
+    for (decltype(res.size()) i = 0; i < res.size(); ++i) {
+        if (res[i] != static_cast<double>(i)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Helper function to test the to_vvd functionality.
 static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 {
@@ -433,6 +448,7 @@ BOOST_PYTHON_MODULE(core)
     bp::def("_deepcopy", &pygmo::deepcopy);
     bp::def("_to_sp", &pygmo::to_sp);
     bp::def("_test_object_serialization", &test_object_serialization);
+    bp::def("_test_to_vd", &test_to_vd);
     bp::def("_test_to_vvd", &test_to_vvd);
 
     // Expose cleanup function.

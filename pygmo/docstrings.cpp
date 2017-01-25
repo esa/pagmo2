@@ -508,28 +508,28 @@ std::string problem_fitness_docstring()
 
 Fitness.
 
-This method will calculate the fitness of the input decision vector *dv*. See :cpp:func:`pagmo::problem::fitness()`.
+This method will invoke the ``fitness()`` method of the UDP to compute the fitness of the
+input decision vector *dv*. The return value of the ``fitness()`` method of the UDP is expected to have a
+dimension of :math:`n_{f} = n_{obj} + n_{ec} + n_{ic}` and to contain the concatenated values of
+:math:`\mathbf f, \mathbf c_e` and :math:`\mathbf c_i` (in this order).
+
+In addition to invoking the ``fitness()`` method of the UDP, this method will perform sanity checks on
+*dv* and on the returned fitness vector. A successful call of this method will increase the internal fitness
+evaluation counter (see :func:`~pygmo.core.problem.get_fevals()`).
+
+The ``fitness()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy array, and it must
+return the fitness vector as an iterable Python object (e.g., 1D NumPy array, list, tuple, etc.).
 
 Args:
-    dv (array or list of floats): the decision vector (chromosome) to be evaluated
+    dv (array-like object): the decision vector (chromosome) to be evaluated
 
 Returns:
-    NumPy array of floats: the fitness of *dv*
+    NumPy array: the fitness of *dv*
 
 Raises:
     ValueError: if the length of *dv* is not equal to the dimension of the problem, or if the size of the returned
         fitness is inconsistent with the fitness dimension of the UDP
     TypeError: if the type of *dv* is invalid
-
-Examples:
-
->>> p = problem(rosenbrock())
->>> p.fitness([1,2])
-array([ 100.])
->>> p.fitness('abc') # doctest: +IGNORE_EXCEPTION_DETAIL
-Traceback (most recent call last):
-  ...
-TypeError: cannot convert the type '<class 'str'>' to a vector of doubles
 
 )";
 }

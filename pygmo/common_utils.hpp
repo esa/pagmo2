@@ -244,12 +244,8 @@ inline pagmo::vector_double a_to_vd(PyArrayObject *o)
 // Convert an arbitrary python object to a vector_double.
 inline pagmo::vector_double to_vd(const bp::object &o)
 {
-    bp::object l = builtin().attr("list");
     bp::object a = bp::import("numpy").attr("ndarray");
-    if (isinstance(o, l)) {
-        bp::stl_input_iterator<double> begin(o), end;
-        return pagmo::vector_double(begin, end);
-    } else if (isinstance(o, a)) {
+    if (isinstance(o, a)) {
         // NOTE: the idea here is that we want to be able to convert
         // from a NumPy array of types other than double. This is useful
         // because one can then create arrays of ints and have them converted
@@ -261,11 +257,9 @@ inline pagmo::vector_double to_vd(const bp::object &o)
         }
         return a_to_vd((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
     }
-    pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
-                                  + "' to a "
-                                    "vector of doubles: only lists of doubles and NumPy arrays of doubles "
-                                    "are supported")
-                                     .c_str());
+    // If o is not a numpy array, just try to iterate over it and extract doubles.
+    bp::stl_input_iterator<double> begin(o), end;
+    return pagmo::vector_double(begin, end);
 }
 
 // Convert a numpy array to a vector of vector_double.
@@ -386,9 +380,7 @@ inline std::vector<unsigned> to_vu(const bp::object &o)
         return a_to_vu((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
     }
     pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
-                                  + "' to a "
-                                    "vector of ints: only lists of ints and NumPy arrays of ints "
-                                    "are supported")
+                                  + "' to a vector of ints: only lists of ints and NumPy arrays of ints are supported")
                                      .c_str());
 }
 
@@ -406,8 +398,7 @@ inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
     }
     auto err_handler = [](const decltype(s[0].first) &n) {
         pygmo_throw(PyExc_OverflowError, ("overflow in the conversion of the sparsity index " + std::to_string(n)
-                                          + " to the "
-                                            "appropriate signed integer type")
+                                          + " to the appropriate signed integer type")
                                              .c_str());
     };
     // NOTE: same as above, avoid asking for the data pointer if size is zero.

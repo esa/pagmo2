@@ -51,13 +51,28 @@ class core_test_case(_ut.TestCase):
 
     def runTest(self):
         import sys
-        from numpy import random, all
-        from .core import _builtin, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
+        from numpy import random, all, array
+        from .core import _builtin, _test_to_vd, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
         if sys.version_info[0] < 3:
             import __builtin__ as b
         else:
             import builtins as b
         self.assertEqual(b, _builtin())
+        self.assert_(_test_to_vd([],0))
+        self.assert_(_test_to_vd((),0))
+        self.assert_(_test_to_vd(array([]),0))
+        self.assert_(_test_to_vd([0],1))
+        self.assert_(_test_to_vd((0,),1))
+        self.assert_(_test_to_vd(array([0]),1))
+        self.assert_(_test_to_vd([0.],1))
+        self.assert_(_test_to_vd((0.,),1))
+        self.assert_(_test_to_vd(array([0.]),1))
+        self.assert_(_test_to_vd([0,1.],2))
+        self.assert_(_test_to_vd([0,1],2))
+        self.assert_(_test_to_vd((0.,1.),2))
+        self.assert_(_test_to_vd((0.,1),2))
+        self.assert_(_test_to_vd(array([0.,1.]),2))
+        self.assert_(_test_to_vd(array([0,1]),2))
         self.assertEqual(type(int), _type(int))
         self.assertEqual(str(123), _str(123))
         self.assertEqual(callable(1), _callable(1))
@@ -230,9 +245,9 @@ class problem_test_case(_ut.TestCase):
                 return (array([0., 0.]), array([1, 1]))
 
             def fitness(self, a):
-                return (42)
+                return 42
         prob = problem(p())
-        self.assertRaises(TypeError, lambda: prob.fitness([1, 2]))
+        self.assertRaises(AttributeError, lambda: prob.fitness([1, 2]))
         # Fitness returned as array.
 
         class p(object):
