@@ -499,24 +499,50 @@ BOOST_PYTHON_MODULE(core)
         // Problem extraction.
         .def("_py_extract", &pygmo::generic_py_extract<problem>)
         // Problem methods.
-        .def("fitness", &pygmo::fitness_wrapper, pygmo::problem_fitness_docstring().c_str(), (bp::arg("dv")))
-        .def("gradient", &pygmo::gradient_wrapper, pygmo::problem_gradient_docstring().c_str(), (bp::arg("dv")))
+        .def("fitness",
+             +[](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.fitness(pygmo::to_vd(dv))); },
+             pygmo::problem_fitness_docstring().c_str(), (bp::arg("dv")))
+        .def("get_bounds",
+             +[](const pagmo::problem &p) -> bp::tuple {
+                 auto retval = p.get_bounds();
+                 return bp::make_tuple(pygmo::v_to_a(retval.first), pygmo::v_to_a(retval.second));
+             },
+             "Get bounds.\n\nThis method will return the problem bounds as a pair "
+             "of arrays of doubles of equal length.")
+        .def("gradient",
+             +[](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv))); },
+             pygmo::problem_gradient_docstring().c_str(), (bp::arg("dv")))
         .def("has_gradient", &problem::has_gradient, "Gradient availability.")
-        .def("gradient_sparsity", &pygmo::gradient_sparsity_wrapper, "Gradient sparsity.")
+        .def("gradient_sparsity", +[](const pagmo::problem &p) { return pygmo::sp_to_a(p.gradient_sparsity()); },
+             "Gradient sparsity.")
         .def("has_gradient_sparsity", &problem::has_gradient_sparsity, "User-provided gradient sparsity availability.")
-        .def("hessians", &pygmo::hessians_wrapper,
+        .def("hessians",
+             +[](const pagmo::problem &p, const bp::object &dv) -> bp::list {
+                 bp::list retval;
+                 const auto h = p.hessians(pygmo::to_vd(dv));
+                 for (const auto &v : h) {
+                     retval.append(pygmo::v_to_a(v));
+                 }
+                 return retval;
+             },
              "Hessians.\n\nThis method will calculate the Hessians of the input "
              "decision vector *dv*. The Hessians are returned as a list of arrays of doubles.",
              (bp::arg("dv")))
         .def("has_hessians", &problem::has_hessians, "Hessians availability.")
-        .def("hessians_sparsity", &pygmo::hessians_sparsity_wrapper, "Hessians sparsity.")
+        .def("hessians_sparsity",
+             +[](const pagmo::problem &p) -> bp::list {
+                 bp::list retval;
+                 const auto hs = p.hessians_sparsity();
+                 for (const auto &sp : hs) {
+                     retval.append(pygmo::sp_to_a(sp));
+                 }
+                 return retval;
+             },
+             "Hessians sparsity.")
         .def("has_hessians_sparsity", &problem::has_hessians_sparsity, "User-provided Hessians sparsity availability.")
         .def("get_nobj", &problem::get_nobj, "Get number of objectives.")
         .def("get_nx", &problem::get_nx, "Get problem dimension.")
         .def("get_nf", &problem::get_nf, "Get fitness dimension.")
-        .def("get_bounds", &pygmo::get_bounds_wrapper,
-             "Get bounds.\n\nThis method will return the problem bounds as a pair "
-             "of arrays of doubles of equal length.")
         .def("get_nec", &problem::get_nec, "Get number of equality constraints.")
         .def("get_nic", &problem::get_nic, "Get number of inequality constraints.")
         .def("get_nc", &problem::get_nc, "Get total number of constraints.")

@@ -355,53 +355,6 @@ struct problem_pickle_suite : bp::pickle_suite {
         }
     }
 };
-
-// Wrapper for the fitness function.
-inline bp::object fitness_wrapper(const pagmo::problem &p, const bp::object &dv)
-{
-    return v_to_a(p.fitness(to_vd(dv)));
-}
-
-// Wrapper for the gradient function.
-inline bp::object gradient_wrapper(const pagmo::problem &p, const bp::object &dv)
-{
-    return v_to_a(p.gradient(to_vd(dv)));
-}
-
-// Wrapper for the bounds getter.
-inline bp::tuple get_bounds_wrapper(const pagmo::problem &p)
-{
-    auto retval = p.get_bounds();
-    return bp::make_tuple(v_to_a(retval.first), v_to_a(retval.second));
-}
-
-// Wrapper for gradient sparsity.
-inline bp::object gradient_sparsity_wrapper(const pagmo::problem &p)
-{
-    return sp_to_a(p.gradient_sparsity());
-}
-
-// Wrapper for Hessians.
-inline bp::list hessians_wrapper(const pagmo::problem &p, const bp::object &dv)
-{
-    bp::list retval;
-    const auto h = p.hessians(to_vd(dv));
-    for (const auto &v : h) {
-        retval.append(v_to_a(v));
-    }
-    return retval;
-}
-
-// Wrapper for Hessians sparsity.
-inline bp::list hessians_sparsity_wrapper(const pagmo::problem &p)
-{
-    bp::list retval;
-    const auto hs = p.hessians_sparsity();
-    for (const auto &sp : hs) {
-        retval.append(sp_to_a(sp));
-    }
-    return retval;
-}
 }
 
 #endif
