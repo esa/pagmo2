@@ -1128,11 +1128,10 @@ public:
      * This method will invoke the <tt>%fitness()</tt> method of the UDP to compute the fitness of the
      * input decision vector \p dv. The return value of the <tt>%fitness()</tt> method of the UDP is expected to have a
      * dimension of \f$n_{f} = n_{obj} + n_{ec} + n_{ic}\f$
-     * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$, (in this order).
+     * and to contain the concatenated values of \f$\mathbf f, \mathbf c_e\f$ and \f$\mathbf c_i\f$ (in this order).
      *
-     * In addition to invoking the <tt>%fitness()</tt> method of the UDP, this method will perform sanity checks on \p
-     * dv
-     * and on the returned fitness vector. A successful call of this method will increase the internal fitness
+     * In addition to invoking the <tt>%fitness()</tt> method of the UDP, this method will perform sanity checks on
+     * \p dv and on the returned fitness vector. A successful call of this method will increase the internal fitness
      * evaluation counter (see problem::get_fevals()).
      *
      * @param dv the decision vector.
