@@ -113,6 +113,12 @@ inline bp::object builtin()
 #endif
 }
 
+// hasattr() wrapper.
+inline bool hasattr(const bp::object &o, const char *name)
+{
+    return bp::extract<bool>(builtin().attr("hasattr")(o, name));
+}
+
 // Get the type of an object.
 inline bp::object type(const bp::object &o)
 {

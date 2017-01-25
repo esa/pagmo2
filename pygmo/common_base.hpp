@@ -45,48 +45,37 @@ namespace bp = boost::python;
 // A common base class with methods useful inthe implementation of
 // the pythonic problem and algorithm.
 struct common_base {
-    // Throw if object does not have a callable attribute.
-    static void check_callable_attribute(const bp::object &o, const char *s, const char *target)
+    // Check if 'o' has a callable attribute (i.e., a method) named 's'. If so, it will
+    // return the attribute, otherwise it will return None.
+    static bp::object callable_attribute(const bp::object &o, const char *s)
     {
-        bp::object a;
-        try {
-            a = o.attr(s);
-        } catch (...) {
-            pygmo_throw(PyExc_TypeError,
-                        ("the mandatory '" + std::string(s) + "()' method is missing from the user-defined Python "
-                         + std::string(target) + " '" + str(o) + "' of type '" + str(type(o)) + "'")
-                            .c_str());
+        if (hasattr(o, s)) {
+            bp::object retval = o.attr(s);
+            if (callable(retval)) {
+                return retval;
+            }
         }
-        if (!pygmo::callable(a)) {
-            pygmo_throw(PyExc_TypeError,
-                        ("the mandatory '" + std::string(s) + "()' method in the user-defined Python "
-                         + std::string(target) + " '" + str(o) + "' of type '" + str(type(o)) + "' is not callable")
-                            .c_str());
-        }
+        return bp::object();
     }
-    // Try to get an attribute from an object. If the call fails,
-    // return a def-cted object.
-    static bp::object try_attr(const bp::object &o, const char *s)
+    static void check_mandatory_method(const bp::object &o, const char *s, const char *target)
     {
-        bp::object a;
-        try {
-            // NOTE: this is not mentioned in the official BP docs,
-            // but this does throw if the attribute is not present.
-            a = o.attr(s);
-        } catch (...) {
-            PyErr_Clear();
+        if (!callable_attribute(o, s)) {
+            pygmo_throw(PyExc_TypeError, ("the mandatory '" + std::string(s)
+                                          + "()' method has not been detected in the user-defined Python "
+                                          + std::string(target) + " '" + str(o) + "' of type '" + str(type(o))
+                                          + "': the method is either not present or not callable")
+                                             .c_str());
         }
-        return a;
     }
     // A simple wrapper for getters. It will try to:
     // - get the attribute "name" from the object o,
     // - call it without arguments,
     // - extract an instance from the ret value and return it.
-    // If the attribute is not there, the value "def_value" will be returned.
+    // If the attribute is not there or it is not callable, the value "def_value" will be returned.
     template <typename RetType>
     static RetType getter_wrapper(const bp::object &o, const char *name, const RetType &def_value)
     {
-        auto a = try_attr(o, name);
+        auto a = callable_attribute(o, name);
         if (a) {
             return bp::extract<RetType>(a());
         }
