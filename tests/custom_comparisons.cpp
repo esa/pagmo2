@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(less_than_f_test)
     auto a_big_double = 1e4;
     auto a_small_double = -1e4;
 
-    // Test the throws
+    // Test all branches on T=double
     BOOST_CHECK((detail::less_than_f(a_nan, a_big_double) == false));
     BOOST_CHECK((detail::less_than_f<double, true>(a_nan, a_big_double) == false));
     BOOST_CHECK((detail::less_than_f<double, false>(a_nan, a_big_double) == true));
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(greater_than_f_test)
     auto a_big_double = 1e4;
     auto a_small_double = -1e4;
 
-    // Test the throws
+    // Test all branches on T=double
     BOOST_CHECK((detail::greater_than_f(a_nan, a_big_double) == true));
     BOOST_CHECK((detail::greater_than_f<double, true>(a_nan, a_big_double) == true));
     BOOST_CHECK((detail::greater_than_f<double, false>(a_nan, a_big_double) == false));
