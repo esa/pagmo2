@@ -927,10 +927,10 @@ public:
      * - the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
      *   different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
      * - the <tt>%gradient_sparsity()</tt> and <tt>%hessians_sparsity()</tt> methods of the UDP fail basic sanity checks
-     * (e.g.,
-     *   they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.).
-     * @throws unspecified any exception thrown by the invoked methods in the UDP or by memory errors in strings
-     * and standard containers.
+     *   (e.g., they return vectors with repeated indices, they contain indices exceeding the problem's dimensions,
+     *   etc.).
+     * @throws unspecified any exception thrown by methods of UDP invoked during construction or by memory errors
+     * in strings and standard containers.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit problem(T &&x)
@@ -1139,9 +1139,8 @@ public:
      * @return the fitness of \p dv.
      *
      * @throws std::invalid_argument if either
-     * - the length of \p dv differs from the output of get_nx(), or
-     * - the length of the returned fitness vector differs from the output
-     *   of get_nf().
+     * - the length of \p dv differs from the value returned by get_nx(), or
+     * - the length of the returned fitness vector differs from the the value returned by get_nf().
      * @throws unspecified any exception thrown by the <tt>%fitness()</tt> method of the UDP.
      */
     vector_double fitness(const vector_double &dv) const
