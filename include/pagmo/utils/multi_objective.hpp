@@ -391,11 +391,11 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
     // Sort the indexes
     std::sort(retval.begin(), retval.end(),
               [&tuple, &crowding](vector_double::size_type idx1, vector_double::size_type idx2) {
-                  if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {     // same non domination rank
+                  if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) { // same non domination rank
 
                       return detail::greater_than_f(crowding[idx1], crowding[idx2]); // crowding distance decides
-                  } else {                                                        // different non domination ranks
-                      return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2]; // non domination rank decides
+                  } else {                                                           // different non domination ranks
+                      return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2];    // non domination rank decides
                   };
               });
     return retval;

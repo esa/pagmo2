@@ -29,42 +29,43 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_CUSTOM_COMPARISONS_HPP
 #define PAGMO_CUSTOM_COMPARISONS_HPP
 
-#include <type_traits>
 #include "../type_traits.hpp"
+#include <type_traits>
 
 namespace pagmo
 {
-    namespace detail{
-        // Less than compares floating point types placing nans after inf or before -inf
-        // It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
-        // and avoid an undefined behaviour
-        template <typename T, bool After = true, enable_if_is_arithmetic<T> = 0>
-        inline bool less_than_f(T a, T b)
-        {
-            if (!std::isnan(a)) {
-                if (!std::isnan(b)) return a<b;         // a < b
-                return After;                           // a < nan
-            } else {
-                if (!std::isnan(b)) return !After;      // nan < b
-                return false;                           // nan < nan
-            }
-        }
-
-        // Greater than compares floating point types placing nans after inf or before -inf
-        // It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
-        // and avoid an undefined behaviour
-        template <typename T, bool After = true, enable_if_is_arithmetic<T> = 0>
-        inline bool greater_than_f(T a, T b)
-        {
-            if (!std::isnan(a)) {
-                if (!std::isnan(b)) return a>b;          // a > b
-                return !After;                           // a > nan
-            } else {
-                if (!std::isnan(b)) return After;       // nan > b
-                return false;                           // nan > nan
-            }
-        }
+namespace detail
+{
+// Less than compares floating point types placing nans after inf or before -inf
+// It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
+// and avoid an undefined behaviour
+template <typename T, bool After = true, enable_if_is_arithmetic<T> = 0>
+inline bool less_than_f(T a, T b)
+{
+    if (!std::isnan(a)) {
+        if (!std::isnan(b)) return a < b; // a < b
+        return After;                     // a < nan
+    } else {
+        if (!std::isnan(b)) return !After; // nan < b
+        return false;                      // nan < nan
     }
+}
+
+// Greater than compares floating point types placing nans after inf or before -inf
+// It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
+// and avoid an undefined behaviour
+template <typename T, bool After = true, enable_if_is_arithmetic<T> = 0>
+inline bool greater_than_f(T a, T b)
+{
+    if (!std::isnan(a)) {
+        if (!std::isnan(b)) return a > b; // a > b
+        return !After;                    // a > nan
+    } else {
+        if (!std::isnan(b)) return After; // nan > b
+        return false;                     // nan > nan
+    }
+}
+}
 }
 
 #endif

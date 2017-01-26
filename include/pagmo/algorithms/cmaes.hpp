@@ -36,12 +36,12 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 
 #include "../algorithm.hpp"
+#include "../detail/custom_comparisons.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
 #include "../rng.hpp"
 #include "../serialization.hpp"
-#include "../detail/custom_comparisons.hpp"
 #include "../utils/generic.hpp"
 
 namespace pagmo

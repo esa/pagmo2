@@ -42,12 +42,12 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
+#include "detail/custom_comparisons.hpp"
 #include "exceptions.hpp"
 #include "io.hpp"
 #include "serialization.hpp"
 #include "type_traits.hpp"
 #include "types.hpp"
-#include "detail/custom_comparisons.hpp"
 #include "utils/constrained.hpp"
 
 /// Macro for the registration of the serialization functionality for problems.
@@ -1767,11 +1767,11 @@ private:
     template <typename U, enable_if_is_arithmetic<U> = 0>
     static bool all_unique(std::vector<U> x)
     {
-        std::sort(x.begin(), x.end(), [](const U& el1, const U& el2){return detail::less_than_f(el1,el2);});
+        std::sort(x.begin(), x.end(), [](const U &el1, const U &el2) { return detail::less_than_f(el1, el2); });
         auto it = std::unique(x.begin(), x.end());
         return it == x.end();
     }
-    // The version for non arithmetic types (e.g std::pair) is not protected vs possible nans 
+    // The version for non arithmetic types (e.g std::pair) is not protected vs possible nans
     template <typename U, enable_if_is_not_arithmetic<U> = 0>
     static bool all_unique(std::vector<U> x)
     {

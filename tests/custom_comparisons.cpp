@@ -33,9 +33,9 @@ see https://www.gnu.org/licenses/. */
 #include <limits>
 #include <tuple>
 
+#include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/detail/custom_comparisons.hpp>
 
 using namespace pagmo;
 
