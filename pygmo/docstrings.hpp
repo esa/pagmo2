@@ -52,6 +52,7 @@ std::string population_get_seed_docstring();
 // problem
 std::string problem_docstring();
 std::string problem_fitness_docstring();
+std::string problem_get_bounds_docstring();
 std::string problem_gradient_docstring();
 std::string problem_get_best_docstring(const std::string &);
 

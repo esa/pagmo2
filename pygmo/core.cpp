@@ -523,8 +523,7 @@ BOOST_PYTHON_MODULE(core)
                  auto retval = p.get_bounds();
                  return bp::make_tuple(pygmo::v_to_a(retval.first), pygmo::v_to_a(retval.second));
              },
-             "Get bounds.\n\nThis method will return the problem bounds as a pair "
-             "of arrays of doubles of equal length.")
+             pygmo::problem_get_bounds_docstring().c_str())
         .def("gradient",
              +[](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv))); },
              pygmo::problem_gradient_docstring().c_str(), (bp::arg("dv")))

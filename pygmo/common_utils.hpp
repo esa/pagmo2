@@ -202,9 +202,10 @@ inline bool isinstance(const bp::object &o, const bp::object &t)
     return bp::extract<bool>(builtin().attr("isinstance")(o, t));
 }
 
-// Convert a numpy array to a vector_double.
-inline pagmo::vector_double a_to_vd(PyArrayObject *o)
+// Convert a numpy array of double to a vector_double.
+inline pagmo::vector_double ad_to_vd(PyArrayObject *o)
 {
+    assert(PyArray_TYPE(o) == NPY_DOUBLE);
     using size_type = pagmo::vector_double::size_type;
     if (!PyArray_ISCARRAY_RO(o)) {
         pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a vector of doubles: "
@@ -213,10 +214,6 @@ inline pagmo::vector_double a_to_vd(PyArrayObject *o)
     if (PyArray_NDIM(o) != 1) {
         pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a vector of doubles: "
                                       "the array must be unidimensional");
-    }
-    if (PyArray_TYPE(o) != NPY_DOUBLE) {
-        pygmo_throw(PyExc_TypeError, "cannot convert NumPy array to a vector of doubles: "
-                                     "the scalar type must be 'double'");
     }
     if (PyArray_STRIDES(o)[0] != sizeof(double)) {
         pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of doubles: "
@@ -255,7 +252,7 @@ inline pagmo::vector_double to_vd(const bp::object &o)
         if (!n) {
             bp::throw_error_already_set();
         }
-        return a_to_vd((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
+        return ad_to_vd((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
     }
     // If o is not a numpy array, just try to iterate over it and extract doubles.
     bp::stl_input_iterator<double> begin(o), end;

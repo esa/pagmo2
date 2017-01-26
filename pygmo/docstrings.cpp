@@ -486,18 +486,30 @@ methods:
 
 See the documentation of the corresponding methods in this class for details on how the optional
 methods in the UDP should be implemented and on how they are used by :class:`~pygmo.core.problem`.
-Note that the :ref:`exposed C++ problems <py_cpp_problems>` can also be used as UDPs.
+Note that the :ref:`exposed C++ problems <py_cpp_problems>` can also be used as UDPs, even if
+they do not expose any of the mandatory or optional methods listed above.
 
-See also the docs of the C++ class :cpp:class:`pagmo::problem` (of which this class is the Python
-counterpart).
+This class is the Python counterpart of the C++ class :cpp:class:`pagmo::problem`.
 
 Args:
     prob: a user-defined problem (either C++ or Python - note that *prob* will be deep-copied
       and stored inside the :class:`~pygmo.core.problem` instance)
 
 Raises:
-    TypeError,ValueError,RuntimeError: if *prob* is not a user-defined problem
-    unspecified: any exception thrown by the constructor of the underlying C++ class
+    ValueError: in the following cases:
+
+      * the number of objectives of the UDP is zero,
+      * the number of objectives, equality or inequality constraints is larger than an implementation-defined value,
+      * the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
+        different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
+      * the ``gradient_sparsity()`` and ``hessians_sparsity()`` methods of the UDP fail basic sanity checks
+        (e.g., they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.)
+    unspecified: any exception thrown by:
+
+      * methods of the UDP invoked during construction,
+      * the constructor of the underlying C++ class,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
 
 )";
 }
@@ -524,15 +536,44 @@ Args:
     dv (array-like object): the decision vector (chromosome) to be evaluated
 
 Returns:
-    NumPy array: the fitness of *dv*
+    1D NumPy array: the fitness of *dv*
 
 Raises:
-    ValueError: if the length of *dv* is not equal to the dimension of the problem, or if the size of the returned
-        fitness is inconsistent with the fitness dimension of the UDP
-    TypeError: if the type of *dv* is invalid
+    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
+      the length of the returned fitness vector differs from the value returned by :func:`~pygmo.core.problem.get_nf()`
+    unspecified: any exception thrown by the ``fitness()`` method of the UDP, or by failures at the intersection
+      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
+
+std::string problem_get_bounds_docstring()
+{
+    return R"(get_bounds()
+
+Box-bounds.
+
+This method will invoke the ``get_bounds()`` method of the UDP to return the box-bounds
+:math:`(\mathbf{lb}, \mathbf{ub})` of the problem. Infinities in the bounds are allowed.
+
+The ``get_bounds()`` method of the UDP must return the box-bounds as a tuple of 2 elements,
+the lower bounds vector and the upper bounds vector, which must be represented as iterable Python objects (e.g.,
+1D NumPy arrays, lists, tuples, etc.).
+
+Returns:
+    tuple: a tuple of two 1D NumPy arrays representing the lower and upper box-bounds of the problem
+
+Raises:
+    unspecified: any exception thrown by:
+
+      * the ``get_bounds()`` method of the UDP,
+      * the invoked method of the underlying C++ class,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
+
+)";
+}
+
 
 std::string problem_gradient_docstring()
 {

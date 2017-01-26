@@ -929,7 +929,7 @@ public:
      * - the <tt>%gradient_sparsity()</tt> and <tt>%hessians_sparsity()</tt> methods of the UDP fail basic sanity checks
      *   (e.g., they return vectors with repeated indices, they contain indices exceeding the problem's dimensions,
      *   etc.).
-     * @throws unspecified any exception thrown by methods of UDP invoked during construction or by memory errors
+     * @throws unspecified any exception thrown by methods of the UDP invoked during construction or by memory errors
      * in strings and standard containers.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
@@ -1412,10 +1412,10 @@ public:
         return m_nobj + m_nic + m_nec;
     }
 
-    /// Box-bounds
+    /// Box-bounds.
     /**
      * @return \f$ (\mathbf{lb}, \mathbf{ub}) \f$, the box-bounds, as returned by
-     * the <tt>%get_bounds()</tt> method of the UDP. Inifinities in the bounds are allowed.
+     * the <tt>%get_bounds()</tt> method of the UDP. Infinities in the bounds are allowed.
      *
      * @throws unspecified any exception thrown by memory errors in standard containers.
      */
