@@ -195,19 +195,19 @@ using enable_if_t = typename std::enable_if<B, T>::type;
 
 /// SFINAE enabler for arithmetic types
 /**
- * A templated method or function with enable_if_is_arithmetic<T> = 0 will only be available for
+ * A templated method or function with enable_if_is_floating_point<T> = 0 will only be available for
  * arithmetic types
  */
 template <typename T>
-using enable_if_is_arithmetic = enable_if_t<std::is_arithmetic<T>::value, int>;
+using enable_if_is_floating_point = enable_if_t<std::is_floating_point<T>::value, int>;
 
 /// SFINAE enabler for non-arithmetic types
 /**
- * A templated method or function with enable_if_is_not_arithmetic<T> = 0 will only be available for
+ * A templated method or function with enable_if_is_not_floating_point<T> = 0 will only be available for
  * non arithmetic types
  */
 template <typename T>
-using enable_if_is_not_arithmetic = enable_if_t<!std::is_arithmetic<T>::value, int>;
+using enable_if_is_not_floating_point = enable_if_t<!std::is_floating_point<T>::value, int>;
 
 /// Remove reference and cv qualifiers from type \p T.
 template <typename T>
