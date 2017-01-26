@@ -61,6 +61,10 @@ BOOST_AUTO_TEST_CASE(less_than_f_test)
     BOOST_CHECK((detail::less_than_f(a_small_double, a_big_double) == true));
     BOOST_CHECK((detail::less_than_f<double, true>(a_small_double, a_big_double) == true));
     BOOST_CHECK((detail::less_than_f<double, false>(a_small_double, a_big_double) == true));
+
+    BOOST_CHECK((detail::less_than_f(a_big_double, a_small_double) == false));
+    BOOST_CHECK((detail::less_than_f<double, true>(a_big_double, a_small_double) == false));
+    BOOST_CHECK((detail::less_than_f<double, false>(a_big_double, a_small_double) == false));
 }
 
 BOOST_AUTO_TEST_CASE(greater_than_f_test)
@@ -85,4 +89,8 @@ BOOST_AUTO_TEST_CASE(greater_than_f_test)
     BOOST_CHECK((detail::greater_than_f(a_small_double, a_big_double) == false));
     BOOST_CHECK((detail::greater_than_f<double, true>(a_small_double, a_big_double) == false));
     BOOST_CHECK((detail::greater_than_f<double, false>(a_small_double, a_big_double) == false));
+
+    BOOST_CHECK((detail::greater_than_f(a_big_double, a_small_double) == true));
+    BOOST_CHECK((detail::greater_than_f<double, true>(a_big_double, a_small_double) == true));
+    BOOST_CHECK((detail::greater_than_f<double, false>(a_big_double, a_small_double) == true));
 }

@@ -44,10 +44,10 @@ inline bool less_than_f(T a, T b)
 {
     if (!std::isnan(a)) {
         if (!std::isnan(b)) return a < b; // a < b
-        return After;                     // a < nan
+        else return After;                // a < nan
     } else {
         if (!std::isnan(b)) return !After; // nan < b
-        return false;                      // nan < nan
+        else return false;                 // nan < nan
     }
 }
 
@@ -59,10 +59,10 @@ inline bool greater_than_f(T a, T b)
 {
     if (!std::isnan(a)) {
         if (!std::isnan(b)) return a > b; // a > b
-        return !After;                    // a > nan
+        else return !After;                    // a > nan
     } else {
         if (!std::isnan(b)) return After; // nan > b
-        return false;                     // nan > nan
+        else return false;                     // nan > nan
     }
 }
 }
