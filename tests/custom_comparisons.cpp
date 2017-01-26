@@ -65,6 +65,13 @@ BOOST_AUTO_TEST_CASE(less_than_f_test)
     BOOST_CHECK((detail::less_than_f(a_big_double, a_small_double) == false));
     BOOST_CHECK((detail::less_than_f<double, true>(a_big_double, a_small_double) == false));
     BOOST_CHECK((detail::less_than_f<double, false>(a_big_double, a_small_double) == false));
+
+    // Test all possible branches on T=int
+    BOOST_CHECK((detail::less_than_f<int, true>(-100, 100) == true));
+    BOOST_CHECK((detail::less_than_f<int, false>(-100, 100) == true));
+
+    BOOST_CHECK((detail::less_than_f<int, true>(100, -100) == false));
+    BOOST_CHECK((detail::less_than_f<int, false>(100, -100) == false));
 }
 
 BOOST_AUTO_TEST_CASE(greater_than_f_test)
@@ -93,4 +100,11 @@ BOOST_AUTO_TEST_CASE(greater_than_f_test)
     BOOST_CHECK((detail::greater_than_f(a_big_double, a_small_double) == true));
     BOOST_CHECK((detail::greater_than_f<double, true>(a_big_double, a_small_double) == true));
     BOOST_CHECK((detail::greater_than_f<double, false>(a_big_double, a_small_double) == true));
+
+    // Test all possible branches on T=int
+    BOOST_CHECK((detail::greater_than_f<int, true>(-100, 100) == false));
+    BOOST_CHECK((detail::greater_than_f<int, false>(-100, 100) == false));
+
+    BOOST_CHECK((detail::greater_than_f<int, true>(100, -100) == true));
+    BOOST_CHECK((detail::greater_than_f<int, false>(100, -100) == true));
 }
