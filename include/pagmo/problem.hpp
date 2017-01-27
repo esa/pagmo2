@@ -1762,17 +1762,18 @@ private:
         return m_ptr.get();
     }
 
-    // A small helper to check if a vector containes unique elements. The version for arithmetic types
-    // is also protected against possible nans
-    template <typename U, enable_if_is_floating_point<U> = 0>
+    // A small helper to check if a vector containes unique elements.
+    // This version for floating point types is also protected against possible nans
+    template <typename U, detail::enable_if_is_floating_point<U> = 0>
     static bool all_unique(std::vector<U> x)
     {
-        std::sort(x.begin(), x.end(), [](const U &el1, const U &el2) { return detail::less_than_f(el1, el2); });
+        std::sort(x.begin(), x.end(), detail::less_than_f<U>);
         auto it = std::unique(x.begin(), x.end());
         return it == x.end();
     }
-    // The version for non floating point types is not protected vs possible nans (e.g when used with std::pair)
-    template <typename U, enable_if_is_not_floating_point<U> = 0>
+    // The version for non floating point types is not protected vs possible nans
+    // (e.g if used with std::pair it would be troublesome)
+    template <typename U, detail::enable_if_is_not_floating_point<U> = 0>
     static bool all_unique(std::vector<U> x)
     {
         std::sort(x.begin(), x.end());

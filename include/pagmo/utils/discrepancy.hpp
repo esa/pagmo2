@@ -23,7 +23,7 @@ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received copies of the GNU General Public License and the
-GNU Lesser General Public Li`cense along with the PaGMO library.  If not,
+GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #ifndef PAGMO_DISCREPANCY_HPP
@@ -82,8 +82,7 @@ inline std::vector<double> sample_from_simplex(std::vector<double> in)
         pagmo_throw(std::invalid_argument, "Input vector must have all elements in [0,1]");
     }
     if (in.size() > 0u) {
-        std::sort(in.begin(), in.end(),
-                  [](const double &el1, const double &el2) { return detail::less_than_f(el1, el2); });
+        std::sort(in.begin(), in.end(), detail::less_than_f<double>);
         in.insert(in.begin(), 0.0);
         in.push_back(1.0);
         for (decltype(in.size()) i = 0u; i < in.size() - 1u; ++i) {
