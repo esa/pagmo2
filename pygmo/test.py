@@ -33,17 +33,6 @@ from __future__ import absolute_import as _ai
 import unittest as _ut
 
 
-class doctests_test_case(_ut.TestCase):
-    """Test case that will run all the doctests.
-
-    """
-
-    def runTest(self):
-        import doctest
-        import pygmo
-        doctest.testmod(pygmo)
-
-
 class core_test_case(_ut.TestCase):
     """Test case for core PyGMO functionality.
 
@@ -434,9 +423,8 @@ def run_test_suite():
 
     """
     retval = 0
-    suite = _ut.TestLoader().loadTestsFromTestCase(doctests_test_case)
+    suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(problem_test_case())
-    suite.addTest(core_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1
