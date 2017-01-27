@@ -152,7 +152,7 @@ void tuple_for_each(Tuple &&t, const F &f)
 {
     apply_to_each_item(std::forward<Tuple>(t), f,
                        make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{});
-};
+}
 
 } // end of detail namespace
 
