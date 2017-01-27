@@ -94,3 +94,22 @@ BOOST_AUTO_TEST_CASE(greater_than_f_test)
     BOOST_CHECK((detail::greater_than_f<double, true>(a_big_double, a_small_double) == true));
     BOOST_CHECK((detail::greater_than_f<double, false>(a_big_double, a_small_double) == true));
 }
+
+BOOST_AUTO_TEST_CASE(equal_to_f_test)
+{
+    auto a_nan = std::nan("");
+    auto a_double = 123.456;
+
+    // Test all branches on T=double
+    BOOST_CHECK((detail::equal_to_f(a_nan, a_double) == false));
+    BOOST_CHECK((detail::equal_to_f<double>(a_nan, a_double) == false));
+
+    BOOST_CHECK((detail::equal_to_f(a_nan, a_nan) == true));
+    BOOST_CHECK((detail::equal_to_f<double>(a_nan, a_nan) == true));
+
+    BOOST_CHECK((detail::equal_to_f(a_double, a_double) == true));
+    BOOST_CHECK((detail::equal_to_f<double>(a_double, a_double) == true));
+
+    BOOST_CHECK((detail::equal_to_f(a_double, a_nan) == false));
+    BOOST_CHECK((detail::equal_to_f<double>(a_double, a_nan) == false));
+}

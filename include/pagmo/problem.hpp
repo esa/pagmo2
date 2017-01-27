@@ -1768,11 +1768,11 @@ private:
     static bool all_unique(std::vector<U> x)
     {
         std::sort(x.begin(), x.end(), detail::less_than_f<U>);
-        auto it = std::unique(x.begin(), x.end());
+        auto it = std::unique(x.begin(), x.end(), detail::equal_to_f<U>);
         return it == x.end();
     }
     // The version for non floating point types is not protected vs possible nans
-    // (e.g if used with std::pair it would be troublesome)
+    // (e.g if used with std::pair it could be troublesome)
     template <typename U, detail::enable_if_is_not_floating_point<U> = 0>
     static bool all_unique(std::vector<U> x)
     {

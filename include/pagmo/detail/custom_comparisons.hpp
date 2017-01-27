@@ -74,6 +74,23 @@ inline bool greater_than_f(T a, T b)
     }
 }
 
+// equal_to than compares floating point types considering nan==nan
+template <typename T, detail::enable_if_is_floating_point<T> = 0>
+inline bool equal_to_f(T a, T b)
+{
+    if (!std::isnan(a)) {
+        if (!std::isnan(b))
+            return a == b; // a == b
+        else
+            return false; // a == nan
+    } else {
+        if (!std::isnan(b))
+            return false; // nan == b
+        else
+            return true; // nan == nan
+    }
+}
+
 } // end of detail namespace
 } // end of pagmo namespace
 
