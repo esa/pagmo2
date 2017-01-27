@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include "../detail/custom_comparisons.hpp"
 #include "../exceptions.hpp"
 #include "../problem.hpp"
 #include "../rng.hpp"
@@ -265,7 +266,7 @@ std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<vector_
         std::vector<vector_double::size_type> idxs(N);
         std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
         std::sort(idxs.begin(), idxs.end(), [&distances](vector_double::size_type idx1, vector_double::size_type idx2) {
-            return distances[idx1] < distances[idx2];
+            return detail::less_than_f(distances[idx1], distances[idx2]);
         });
         // We remove the first element containg the self-distance (0)
         idxs.erase(std::remove(idxs.begin(), idxs.end(), i), idxs.end());

@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
+#include "../detail/custom_comparisons.hpp"
 #include "../detail/prime_numbers.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
@@ -81,7 +82,7 @@ inline std::vector<double> sample_from_simplex(std::vector<double> in)
         pagmo_throw(std::invalid_argument, "Input vector must have all elements in [0,1]");
     }
     if (in.size() > 0u) {
-        std::sort(in.begin(), in.end());
+        std::sort(in.begin(), in.end(), detail::less_than_f<double>);
         in.insert(in.begin(), 0.0);
         in.push_back(1.0);
         for (decltype(in.size()) i = 0u; i < in.size() - 1u; ++i) {

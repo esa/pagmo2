@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include "../detail/custom_comparisons.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../types.hpp"
@@ -155,9 +156,9 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
     auto l2 = std::sqrt(c2eq.second * c2eq.second + c2ineq.second * c2ineq.second);
     if (n1 == n2) {                 // same number of constraints satistfied
         if (n1 == f1.size() - 1u) { // fitness decides
-            return f1[0] < f2[0];
+            return detail::less_than_f(f1[0], f2[0]);
         } else { // l2 norm decides
-            return l1 < l2;
+            return detail::less_than_f(l1, l2);
         }
     } else { // number of constraints satisfied decides
         return n1 > n2;
