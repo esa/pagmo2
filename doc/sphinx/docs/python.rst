@@ -22,8 +22,8 @@ These are the problems implemented in PyGMO.
 .. toctree::
    :maxdepth: 1
 
-   python/py_meta_problems
-   python/py_cpp_problems
+   python/problems/py_meta_problems
+   python/problems/py_cpp_problems
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -32,7 +32,7 @@ These are the algorithms implemented in PyGMO.
 .. toctree::
    :maxdepth: 1
 
-   python/py_cpp_algorithms
+   python/algorithms/py_cpp_algorithms
 
 Various utilities
 ^^^^^^^^^^^^^^^^^
@@ -41,5 +41,5 @@ Various optimization utilities implemented in PyGMO.
 .. toctree::
   :maxdepth: 1
 
-  python/py_mo_utils
-  python/py_plotting
+  python/utils/py_mo_utils
+  python/utils/py_plotting

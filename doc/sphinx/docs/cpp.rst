@@ -12,9 +12,9 @@ we suggest to follow the tutorials / examples.
 .. toctree::
   :maxdepth: 1
 
-  problem
-  population
-  algorithm
+  cpp/problem
+  cpp/population
+  cpp/algorithm
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -25,14 +25,14 @@ code your own algorithm
 .. toctree::
   :maxdepth: 1
 
-  algorithms/sea
-  algorithms/de
-  algorithms/sade
-  algorithms/de1220
-  algorithms/cmaes
-  algorithms/moead
-  algorithms/compass_search
-  algorithms/mbh
+  cpp/algorithms/sea
+  cpp/algorithms/de
+  cpp/algorithms/sade
+  cpp/algorithms/de1220
+  cpp/algorithms/cmaes
+  cpp/algorithms/moead
+  cpp/algorithms/compass_search
+  cpp/algorithms/mbh
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
@@ -43,16 +43,16 @@ problem
 .. toctree::
   :maxdepth: 1
 
-  problems/rosenbrock
-  problems/rastrigin
-  problems/schwefel
-  problems/ackley
-  problems/griewank
-  problems/zdt
-  problems/hock_schittkowsky_71
-  problems/inventory
-  problems/translate
-  problems/decompose
+  cpp/problems/rosenbrock
+  cpp/problems/rastrigin
+  cpp/problems/schwefel
+  cpp/problems/ackley
+  cpp/problems/griewank
+  cpp/problems/zdt
+  cpp/problems/hock_schittkowsky_71
+  cpp/problems/inventory
+  cpp/problems/translate
+  cpp/problems/decompose
 
 Utilities
 ^^^^^^^^^
@@ -61,9 +61,9 @@ Various optimization utilities.
 .. toctree::
   :maxdepth: 1
 
-  utils/multi_objective
-  utils/constrained
-  utils/discrepancy
+  cpp/utils/multi_objective
+  cpp/utils/constrained
+  cpp/utils/discrepancy
 
 Miscellanea
 ^^^^^^^^^^^
@@ -72,5 +72,5 @@ Various coding utilities.
 .. toctree::
   :maxdepth: 1
 
-  miscellanea/generic
-  miscellanea/type_traits
+  cpp/miscellanea/generic
+  cpp/miscellanea/type_traits
