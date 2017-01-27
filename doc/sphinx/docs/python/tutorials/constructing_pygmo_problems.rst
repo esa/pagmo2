@@ -17,7 +17,7 @@ Let us start:
 .. doctest::
 
     >>> import pygmo as pg
-    >>> prob = pg.problem(pg.rosenbrock(5))
+    >>> prob = pg.problem(pg.rosenbrock(dim = 5))
     >>> print(prob) #doctest: +NORMALIZE_WHITESPACE
     Problem name: Multidimensional Rosenbrock Function
     	Global dimension:			5

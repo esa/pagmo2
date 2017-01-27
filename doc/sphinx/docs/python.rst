@@ -45,9 +45,10 @@ Various optimization utilities implemented in PyGMO.
   python/utils/py_plotting
 
 A list of tutorials
-====================
+^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
   :maxdepth: 1
 
-  python/tutorials/constructing_pygmo_problem
+  python/tutorials/constructing_pygmo_problems
+  python/tutorials/constructing_pygmo_algorithms
