@@ -1,0 +1,63 @@
+.. py_tutorial_using_pygmo_UDPs
+
+Constructing a pygmo.problem
+============================
+
+The User Defined Problems (UDPs) are optimization problems (coded by the user) that can
+be used to build a pygmo object of type :class:`~pygmo.core.problem`
+
+Some UDPs (optimization problems) are already provided with pygmo and we refer to them as pygmo UDPs.
+
+For the purpose of this tutorial we are going to use a pygmo UDP called :class:`~pygmo.core.rosenbrock`
+to show the basic construction of a :class:`~pygmo.core.problem`, but the same logic would also
+apply to a custom UDPs, that is a UDP that is actually coded by the user.
+
+Let us start:
+
+.. doctest::
+
+    >>> import pygmo as pg
+    >>> prob = pg.problem(pg.rosenbrock(5))
+    >>> print(prob) #doctest: +NORMALIZE_WHITESPACE
+    Problem name: Multidimensional Rosenbrock Function
+    	Global dimension:			5
+    	Fitness dimension:			1
+    	Number of objectives:			1
+    	Equality constraints dimension:		0
+    	Inequality constraints dimension:	0
+    	Lower bounds: [-5, -5, -5, -5, -5]
+    	Upper bounds: [10, 10, 10, 10, 10]
+    <BLANKLINE>
+    	Has gradient: false
+    	User implemented gradient sparsity: false
+    	Has hessians: false
+    	User implemented hessians sparsity: false
+    <BLANKLINE>
+    	Function evaluations: 0
+    <BLANKLINE>
+
+In the code above, after the trivial import of the pygmo package, we define a variable prob
+by constructing a :class:`~pygmo.core.problem` from :class:`~pygmo.core.rosenbrock`, a multidimensional problem
+constructed from its global dimensions. In the following line we inspect the :class:`~pygmo.core.problem`
+We can see, at a glance, that the UDP :class:`~pygmo.core.rosenbrock` is a five dimensional, single objective, box constrained
+problem for which neither gradients nor hessians nor sparsity information is provided in the UDP.
+
+We also see that its fitness function has never been called hence the counter for fitness evaluations is
+zero.
+
+All of the information contained in the :class:`~pygmo.core.problem` print out can be retreived using
+the appropriate methods, for example:
+
+.. doctest::
+
+    >>> prob.get_fevals()
+    0
+
+Lets conclude by checking how a fitness computation increases the counter:
+
+.. doctest::
+
+    >>> prob.fitness([1,2,3,4,5])
+    array([ 14814.])
+    >>> prob.get_fevals()
+    1
