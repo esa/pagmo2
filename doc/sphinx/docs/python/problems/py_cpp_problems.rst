@@ -1,7 +1,7 @@
 .. _py_cpp_problems:
 
-Exposed C++ problems
-====================
+Problems exposed from C++
+=========================
 
 .. autoclass:: pygmo.core.rosenbrock
    :members:

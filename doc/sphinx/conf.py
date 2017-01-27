@@ -36,6 +36,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'breathe',
     'sphinx.ext.napoleon',
+    'sphinx.ext.doctest',
 ]
 
 autoclass_content = 'both'
@@ -45,6 +46,8 @@ autoclass_content = 'both'
 breathe_projects = { "pagmo": "../doxygen/xml" }
 breathe_default_project = "pagmo"
 breathe_default_members = ('members',)
+
+doctest_test_doctest_blocks = ""
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
