@@ -58,21 +58,21 @@ class core_test_case(_ut.TestCase):
         else:
             import builtins as b
         self.assertEqual(b, _builtin())
-        self.assert_(_test_to_vd([],0))
-        self.assert_(_test_to_vd((),0))
-        self.assert_(_test_to_vd(array([]),0))
-        self.assert_(_test_to_vd([0],1))
-        self.assert_(_test_to_vd((0,),1))
-        self.assert_(_test_to_vd(array([0]),1))
-        self.assert_(_test_to_vd([0.],1))
-        self.assert_(_test_to_vd((0.,),1))
-        self.assert_(_test_to_vd(array([0.]),1))
-        self.assert_(_test_to_vd([0,1.],2))
-        self.assert_(_test_to_vd([0,1],2))
-        self.assert_(_test_to_vd((0.,1.),2))
-        self.assert_(_test_to_vd((0.,1),2))
-        self.assert_(_test_to_vd(array([0.,1.]),2))
-        self.assert_(_test_to_vd(array([0,1]),2))
+        self.assert_(_test_to_vd([], 0))
+        self.assert_(_test_to_vd((), 0))
+        self.assert_(_test_to_vd(array([]), 0))
+        self.assert_(_test_to_vd([0], 1))
+        self.assert_(_test_to_vd((0,), 1))
+        self.assert_(_test_to_vd(array([0]), 1))
+        self.assert_(_test_to_vd([0.], 1))
+        self.assert_(_test_to_vd((0.,), 1))
+        self.assert_(_test_to_vd(array([0.]), 1))
+        self.assert_(_test_to_vd([0, 1.], 2))
+        self.assert_(_test_to_vd([0, 1], 2))
+        self.assert_(_test_to_vd((0., 1.), 2))
+        self.assert_(_test_to_vd((0., 1), 2))
+        self.assert_(_test_to_vd(array([0., 1.]), 2))
+        self.assert_(_test_to_vd(array([0, 1]), 2))
         self.assertEqual(type(int), _type(int))
         self.assertEqual(str(123), _str(123))
         self.assertEqual(callable(1), _callable(1))
@@ -106,7 +106,7 @@ class problem_test_case(_ut.TestCase):
         self.assertRaises(TypeError, lambda: problem("hello world"))
         self.assertRaises(TypeError, lambda: problem([]))
         self.assertRaises(TypeError, lambda: problem(int))
-        # Some problems missing methods.
+        # Some problems missing methods, wrong arity, etc.
 
         class np0(object):
 
@@ -119,6 +119,24 @@ class problem_test_case(_ut.TestCase):
             def get_bounds(self):
                 return ([0], [1])
         self.assertRaises(TypeError, lambda: problem(np1))
+
+        class np2(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a, b):
+                return [42]
+        self.assertRaises(TypeError, lambda: problem(np2))
+
+        class np3(object):
+
+            def get_bounds(self, a):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        self.assertRaises(TypeError, lambda: problem(np3))
         # The minimal good citizen.
         glob = []
 
@@ -215,6 +233,18 @@ class problem_test_case(_ut.TestCase):
         prob = problem(p())
         self.assert_(all(prob.get_bounds()[0] == [0, 0]))
         self.assert_(all(prob.get_bounds()[1] == [1, 1]))
+        # Bounds returned as mixed types.
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0., 1], (2., 3.))
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assert_(all(prob.get_bounds()[0] == [0, 1]))
+        self.assert_(all(prob.get_bounds()[1] == [2, 3]))
         # Invalid fitness size.
 
         class p(object):
@@ -223,6 +253,7 @@ class problem_test_case(_ut.TestCase):
                 return (array([0., 0.]), array([1, 1]))
 
             def fitness(self, a):
+                assert(type(a) == type(array([1.])))
                 return [42, 43]
         prob = problem(p())
         self.assertRaises(ValueError, lambda: prob.fitness([1, 2]))
@@ -257,6 +288,17 @@ class problem_test_case(_ut.TestCase):
 
             def fitness(self, a):
                 return array([42])
+        prob = problem(p())
+        self.assert_(all(prob.fitness([1, 2]) == array([42])))
+        # Fitness returned as tuple.
+
+        class p(object):
+
+            def get_bounds(self):
+                return (array([0., 0.]), array([1, 1]))
+
+            def fitness(self, a):
+                return (42,)
         prob = problem(p())
         self.assert_(all(prob.fitness([1, 2]) == array([42])))
 
