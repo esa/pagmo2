@@ -194,7 +194,8 @@ using decay_t = typename std::decay<T>::type;
 template <bool B, typename T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
 
-namespace detail {
+namespace detail
+{
 /// SFINAE enabler for floating point types
 /**
  * A templated method or function with enable_if_is_floating_point<T> = 0 will only be available for
