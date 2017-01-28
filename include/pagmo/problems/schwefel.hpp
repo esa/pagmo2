@@ -63,7 +63,14 @@ struct schwefel {
                         "Schwefel Function must have minimum 1 dimension, " + std::to_string(dim) + " requested");
         }
     };
-    /// Fitness
+    /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
     vector_double fitness(const vector_double &x) const
     {
         vector_double f(1, 0.);
@@ -74,7 +81,13 @@ struct schwefel {
         f[0] = 418.9828872724338 * static_cast<double>(n) - f[0];
         return f;
     }
-    /// Problem bounds
+    /// Box-bounds
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the box-bounds for this UDP.
+     *
+     * @return the lower and upper bounds for each of the decision vector components
+     */
     std::pair<vector_double, vector_double> get_bounds() const
     {
         vector_double lb(m_dim, -500);
@@ -82,6 +95,9 @@ struct schwefel {
         return {lb, ub};
     }
     /// Problem name
+    /**
+     * @return a string containing the problem name
+     */
     std::string get_name() const
     {
         return "Schwefel Function";
@@ -91,7 +107,14 @@ struct schwefel {
     {
         return vector_double(m_dim, 420.9687);
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

@@ -342,7 +342,14 @@ public:
         stream(ss, "\n", static_cast<const algorithm *>(this)->get_extra_info());
         return ss.str();
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

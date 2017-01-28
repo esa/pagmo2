@@ -60,7 +60,14 @@ namespace pagmo
  *
  */
 struct hock_schittkowsky_71 {
-    /// Fitness
+    /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
     vector_double fitness(const vector_double &x) const
     {
         return {
@@ -68,12 +75,6 @@ struct hock_schittkowsky_71 {
             x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3] - 40., // equality con.
             25. - x[0] * x[1] * x[2] * x[3]                              // inequality con.
         };
-    }
-
-    /// Number of objectives (one)
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
     }
 
     /// Equality constraint dimension (one)
@@ -88,13 +89,30 @@ struct hock_schittkowsky_71 {
         return 1u;
     }
 
-    /// Problem bounds
+    /// Box-bounds
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the box-bounds for this UDP.
+     *
+     * @return the lower and upper bounds for each of the decision vector components
+     */
     std::pair<vector_double, vector_double> get_bounds() const
     {
         return {{1., 1., 1., 1.}, {5., 5., 5., 5.}};
     }
 
-    /// Gradients (dense)
+    /// Gradients
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the fitness gradient for this UDP.
+     *
+     * The gradient is represented in a sparse form as required by
+     * problem::gradient().
+     *
+     * @param x the decision vector.
+     *
+     * @return the gradient of the fitness function
+     */
     vector_double gradient(const vector_double &x) const
     {
         return {x[0] * x[3] + x[3] * (x[0] + x[1] + x[2]),
@@ -111,7 +129,18 @@ struct hock_schittkowsky_71 {
                 -x[0] * x[1] * x[2]};
     }
 
-    /// Hessians (sparse)
+    /// Hessians
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the hessians for this UDP.
+     *
+     * The hessians are represented in a sparse form as required by
+     * problem::hessians().
+     *
+     * @param x the decision vector.
+     *
+     * @return the hessians of the fitness function
+     */
     std::vector<vector_double> hessians(const vector_double &x) const
     {
         return {{2 * x[3], x[3], x[3], 2 * x[0] + x[1] + x[2], x[0], x[0]},
@@ -128,6 +157,9 @@ struct hock_schittkowsky_71 {
     }
 
     /// Problem name
+    /**
+     * @return a string containing the problem name
+     */
     std::string get_name() const
     {
         return "Hock Schittkowsky 71";
@@ -145,9 +177,16 @@ struct hock_schittkowsky_71 {
         return {1., 4.74299963, 3.82114998, 1.37940829};
     }
 
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
-    void serialize(Archive &)
+    void serialize(Archive & ar)
     {
     }
 };

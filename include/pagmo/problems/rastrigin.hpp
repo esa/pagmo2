@@ -68,6 +68,13 @@ namespace pagmo
  */
 struct rastrigin {
     /// Constructor from dimension
+    /**
+     * Constructs a Rastrigin problem
+     *
+     * @param dim the problem dimensions.
+     *
+     * @throw std::invalid_argument if \p dim is < 1
+     */
     rastrigin(unsigned int dim = 1u) : m_dim(dim)
     {
         if (dim < 1u) {
@@ -75,7 +82,14 @@ struct rastrigin {
                         "Rastrigin Function must have minimum 1 dimension, " + std::to_string(dim) + " requested");
         }
     };
-    /// Fitness
+    /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
     vector_double fitness(const vector_double &x) const
     {
         vector_double f(1, 0.);
@@ -88,7 +102,13 @@ struct rastrigin {
         return f;
     }
 
-    /// Problem bounds
+    /// Box-bounds
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the box-bounds for this UDP.
+     *
+     * @return the lower and upper bounds for each of the decision vector components
+     */
     std::pair<vector_double, vector_double> get_bounds() const
     {
         vector_double lb(m_dim, -5.12);
@@ -96,7 +116,18 @@ struct rastrigin {
         return {lb, ub};
     }
 
-    /// Gradients (dense)
+    /// Gradients
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the fitness gradient for this UDP.
+     *
+     * The gradient is represented in a sparse form as required by
+     * problem::gradient().
+     *
+     * @param x the decision vector.
+     *
+     * @return the gradient of the fitness function
+     */
     vector_double gradient(const vector_double &x) const
     {
         auto n = x.size();
@@ -108,7 +139,18 @@ struct rastrigin {
         return g;
     }
 
-    /// Hessians (sparse) only the diagonal elements are non zero
+    /// Hessians
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the hessians for this UDP.
+     *
+     * The hessians are represented in a sparse form as required by
+     * problem::hessians().
+     *
+     * @param x the decision vector.
+     *
+     * @return the hessians of the fitness function
+     */
     std::vector<vector_double> hessians(const vector_double &x) const
     {
         auto n = x.size();
@@ -120,7 +162,16 @@ struct rastrigin {
         return {h};
     }
 
-    /// Hessian sparsity
+    /// Hessians sparsity (only the diagonal elements are non zero)
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the hessian sparisty structure for this UDP.
+     *
+     * The hessian sparisty is represented in the form required by
+     * problem::hessians_sparsity().
+     *
+     * @return the hessians of the fitness function
+     */
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
         sparsity_pattern hs;
@@ -132,16 +183,29 @@ struct rastrigin {
     }
 
     /// Problem name
+    /**
+     * @return a string containing the problem name
+     */
     std::string get_name() const
     {
         return "Rastrigin Function";
     }
     /// Optimal solution
+    /**
+     * @return the decision vector corresponding to the best solution for this problem.
+     */
     vector_double best_known() const
     {
         return vector_double(m_dim, 0.);
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {
