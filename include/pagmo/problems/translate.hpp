@@ -142,6 +142,8 @@ public:
 
     /// Problem name
     /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
      * @return a string containing the problem name
      */
     std::string get_name() const
@@ -150,6 +152,11 @@ public:
     }
 
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @return a string containing extra informations on the problem
+     */
     std::string get_extra_info() const
     {
         std::ostringstream oss;
@@ -158,6 +165,9 @@ public:
     }
 
     /// Gets the translation vector
+    /**
+     * @return the translation vector
+     */
     const vector_double &get_translation() const
     {
         return m_translation;

@@ -101,6 +101,8 @@ struct rosenbrock {
     }
     /// Problem name
     /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
      * @return a string containing the problem name
      */
     std::string get_name() const
@@ -108,6 +110,9 @@ struct rosenbrock {
         return "Multidimensional Rosenbrock Function";
     }
     /// Optimal solution
+    /**
+     * @return the decision vector corresponding to the best solution for this problem.
+     */
     vector_double best_known() const
     {
         return vector_double(m_dim, 1.);

@@ -90,7 +90,6 @@ public:
         : m_weeks(weeks), m_sample_size(sample_size), m_e(seed), m_seed(seed)
     {
     }
-
     /// Fitness computation
     /**
      * Computes the fitness for this UDP
@@ -120,7 +119,6 @@ public:
         }
         return {retval / m_sample_size};
     }
-
     /// Box-bounds
     /**
      * One of the optional methods of any user-defined problem (UDP).
@@ -134,23 +132,32 @@ public:
         vector_double ub(m_weeks, 200.);
         return {lb, ub};
     }
-
     /// Sets the seed
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @param seed the random number generator seed
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     }
-
     /// Problem name
     /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
      * @return a string containing the problem name
      */
     std::string get_name() const
     {
         return "Inventory problem";
     }
-
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @return a string containing extra informations on the problem
+     */
     std::string get_extra_info() const
     {
         std::ostringstream ss;

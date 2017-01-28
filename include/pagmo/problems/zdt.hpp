@@ -237,6 +237,8 @@ public:
     }
     /// Problem name
     /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
      * @return a string containing the problem name
      */
     std::string get_name() const

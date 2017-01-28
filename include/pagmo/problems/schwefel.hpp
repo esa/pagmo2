@@ -56,6 +56,13 @@ namespace pagmo
  */
 struct schwefel {
     /// Constructor from dimension
+    /**
+     * Constructs a Schwefel problem
+     *
+     * @param dim the problem dimensions.
+     *
+     * @throw std::invalid_argument if \p dim is < 1
+     */
     schwefel(unsigned int dim = 1u) : m_dim(dim)
     {
         if (dim < 1u) {
@@ -96,6 +103,8 @@ struct schwefel {
     }
     /// Problem name
     /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
      * @return a string containing the problem name
      */
     std::string get_name() const
@@ -103,6 +112,9 @@ struct schwefel {
         return "Schwefel Function";
     }
     /// Optimal solution
+    /**
+     * @return the decision vector corresponding to the best solution for this problem.
+     */
     vector_double best_known() const
     {
         return vector_double(m_dim, 420.9687);

@@ -297,22 +297,38 @@ public:
         return 1u;
     }
     /// Returns a dense gradient_sparsity for the decomposed problem
+    /**
+     * @return a dense gradient sparsity pattern for the problem
+     */
     sparsity_pattern gradient_sparsity() const
     {
         return detail::dense_gradient(1u, static_cast<const problem *>(this)->get_nx());
     }
     /// Returns a dense hessians_sparsity for the decomposed problem
+    /**
+     * @return a dense hessian sparsity pattern for the problem
+     */
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
         return detail::dense_hessians(1u, static_cast<const problem *>(this)->get_nx());
     }
-    /// Gets the current reference point (may be different from the one the object was constructed with)
+    /// Gets the current reference point
+    /**
+     * The reference point to be used for the decomposition. This is only
+     * used for Tchebycheff and boundary interception decomposition methods.
+     *
+     * **NOTE** The reference point is adapted at each call of the fitness.
+     *
+     * @return the refernce point
+     */
     vector_double get_z() const
     {
         return m_z;
     }
     /// Problem name
     /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
      * @return a string containing the problem name
      */
     std::string get_name() const
@@ -320,6 +336,11 @@ public:
         return static_cast<const problem *>(this)->get_name() + " [decomposed]";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @return a string containing extra informations on the problem
+     */
     std::string get_extra_info() const
     {
         std::ostringstream oss;
