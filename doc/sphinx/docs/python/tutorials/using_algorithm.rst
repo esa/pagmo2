@@ -1,10 +1,15 @@
-.. py_tutorial_using_pygmo_UDAs
+.. py_tutorial_using_algorithm
 
-Constructing a pygmo.algorithm
-==============================
+Use of the class :class:`~pygmo.core.algorithm`
+===============================================
 
-The User Defined Algorithms (UDAs) are optimization algorithms (coded by the user) that can
-be used to build a pygmo object of type :class:`~pygmo.core.algorithm`
+The :class:`~pygmo.core.algorithm` class represents a generic optimization
+algorithm. The user codes the details of such an algorithm in a separate class (the
+user-defined algorithm, or UDA) which is then passed to :class:`~pygmo.core.algorithm`
+that provides a single unified interface.
+
+.. note::  The User Defined Algorithms (UDAs) are optimization algorithms (coded by the user) that can
+           be used to build a pygmo object of type :class:`~pygmo.core.algorithm`
 
 Some UDAs (optimization algorithms) are already provided with pygmo and we refer to them as pygmo UDAs.
 

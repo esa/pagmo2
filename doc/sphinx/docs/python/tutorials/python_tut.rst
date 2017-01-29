@@ -9,6 +9,7 @@ Getting Started
 .. toctree::
   :maxdepth: 2
 
-  constructing_pygmo_problems
-  constructing_pygmo_algorithms
-  constructing_population
+  using_problem
+  using_algorithm
+  using_population
+  evolving_a_population

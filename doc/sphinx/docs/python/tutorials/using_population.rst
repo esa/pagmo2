@@ -1,7 +1,7 @@
-.. py_tutorial_using_pygmo_UDAs
+.. py_tutorial_using_population
 
-Constructing a population
-==============================
+Use of the class :class:`~pygmo.core.population`
+================================================
 
 In pygmo, a :class:`~pygmo.core.population` is a storage for candidate solutions
 to some :class:`~pygmo.core.problem` (sometimes called individuals).

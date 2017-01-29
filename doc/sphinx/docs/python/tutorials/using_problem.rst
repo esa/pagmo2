@@ -1,10 +1,15 @@
-.. py_tutorial_using_pygmo_UDPs
+.. py_tutorial_using_problem
 
-Constructing a pygmo.problem
-============================
+Use of the class :class:`~pygmo.core.problem`
+=============================================
 
-The User Defined Problems (UDPs) are optimization problems (coded by the user) that can
-be used to build a pygmo object of type :class:`~pygmo.core.problem`
+The :class:`~pygmo.core.problem` class represents a generic optimization
+problem. The user codes the details of such a problem in a separate class (the
+user-defined problem, or UDP) which is then passed to :class:`~pygmo.core.problem`
+that provides a single unified interface.
+
+.. note:: The User Defined Problems (UDPs) are optimization problems (coded by the user) that can
+          be used to build a pygmo object of type :class:`~pygmo.core.problem`
 
 Some UDPs (optimization problems) are already provided with pygmo and we refer to them as pygmo UDPs.
 
