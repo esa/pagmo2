@@ -458,7 +458,10 @@ public:
     {
         return m_verbosity;
     }
-    /// Get generations
+    /// Gets the generations
+    /**
+     * @return the number of generations to evolve for
+     */
     unsigned int get_gen() const
     {
         return m_gen;

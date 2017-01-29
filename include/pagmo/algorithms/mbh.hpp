@@ -306,11 +306,19 @@ public:
         return m_verbosity;
     }
     /// Gets the perturbation vector
+    /**
+     * @return the perturbation vector
+     */
     const vector_double &get_perturb() const
     {
         return m_perturb;
     }
     /// Sets the perturbation vector
+    /**
+     * @param perturb the perturbation vector
+     *
+     * @throw std::invalid_argument if some components of the perturbation vector are not in (0,1]
+     */
     void set_perturb(const vector_double &perturb)
     {
         if (!std::all_of(perturb.begin(), perturb.end(),

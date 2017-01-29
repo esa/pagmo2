@@ -303,26 +303,34 @@ public:
     {
         return m_verbosity;
     }
-
     /// Gets the maximum number of iterations allowed
+    /**
+     * @return the maximum number of iterations allowed
+     */
     double get_max_fevals() const
     {
         return m_max_fevals;
     }
-
     /// Gets the stop_range
+    /**
+     * @return the stop range
+     */
     double get_stop_range() const
     {
         return m_stop_range;
     }
-
     /// Get the start range
+    /**
+     * @return the start range
+     */
     double get_start_range() const
     {
         return m_start_range;
     }
-
     /// Get the reduction_coeff
+    /**
+     * @return the reduction coefficient
+     */
     double get_reduction_coeff() const
     {
         return m_reduction_coeff;
