@@ -181,7 +181,6 @@ struct rastrigin {
         }
         return {hs};
     }
-
     /// Problem name
     /**
      * One of the optional methods of any user-defined problem (UDP).
@@ -192,7 +191,6 @@ struct rastrigin {
     {
         return "Rastrigin Function";
     }
-
     /// Optimal solution
     /**
      * @return the decision vector corresponding to the best solution for this problem.
@@ -201,7 +199,6 @@ struct rastrigin {
     {
         return vector_double(m_dim, 0.);
     }
-
     /// Object serialization
     /**
      * This method will save/load \p this into the archive \p ar.
