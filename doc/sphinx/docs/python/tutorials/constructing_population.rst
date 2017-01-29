@@ -85,7 +85,7 @@ its ``push_pack`` method:
     where: /Users/darioizzo/Documents/pagmo2/include/pagmo/problem.hpp, 1835
     what: Length of decision vector is 3, should be 4
 
-Consistency checks are done by ``push_pack``, e.g. on the decision vector
+Some consistency checks are done by ``push_pack``, e.g. on the decision vector
 length.
 
 .. note:: Decision vectors that are outside of the box bounds are allowed to be
