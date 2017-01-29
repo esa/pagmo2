@@ -217,7 +217,7 @@ struct hock_schittkowsky_71 {
      * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
      */
     template <typename Archive>
-    void serialize(Archive & ar)
+    void serialize(Archive &ar)
     {
     }
 };
