@@ -206,11 +206,6 @@ public:
         }
         return pop;
     };
-    /// Sets the algorithm seed
-    void set_seed(unsigned int seed)
-    {
-        m_seed = seed;
-    };
     /// Sets the algorithm verbosity
     /**
      * Sets the verbosity level of the screen output and of the
@@ -238,22 +233,46 @@ public:
     {
         m_verbosity = level;
     };
-    /// Gets the seed
-    unsigned int get_seed() const
-    {
-        return m_seed;
-    }
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
+    void set_seed(unsigned int seed)
+    {
+        m_seed = seed;
+    };
+    /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
+    unsigned int get_seed() const
+    {
+        return m_seed;
+    }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "(N+1)-EA Simple Evolutionary Algorithm";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         return "\tGenerations: " + std::to_string(m_gen) + "\n\tVerbosity: " + std::to_string(m_verbosity)

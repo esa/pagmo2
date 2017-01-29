@@ -296,6 +296,9 @@ public:
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
@@ -324,14 +327,22 @@ public:
     {
         return m_reduction_coeff;
     }
-
-    /// Problem name
+    /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "Compass Search";
     }
-
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         std::ostringstream ss;

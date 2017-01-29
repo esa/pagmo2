@@ -406,13 +406,18 @@ public:
         }
         return pop;
     }
-
-    /// Sets the algorithm seed
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     };
     /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned int get_seed() const
     {
         return m_seed;
@@ -446,6 +451,9 @@ public:
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
@@ -456,11 +464,21 @@ public:
         return m_gen;
     }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "Differential Evolution";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         return "\tGenerations: " + std::to_string(m_gen) + "\n\tParameter F: " + std::to_string(m_F)

@@ -148,6 +148,9 @@ public:
         }
     }
     /// Returns the next number in the sequence
+    /**
+     * @return the next number in the sequence
+     */
     double operator()()
     {
         double retval = 0.;
@@ -161,7 +164,14 @@ public:
         ++m_counter;
         return retval;
     }
-    /// Serialization.
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {
@@ -215,7 +225,10 @@ public:
             m_vdc.push_back(van_der_corput(detail::prime(i + 1), n));
         }
     }
-    /// Returns the next point in the sequence
+    /// Returns the next number in the sequence
+    /**
+     * @return the next number in the sequence
+     */
     std::vector<double> operator()()
     {
         std::vector<double> retval;
@@ -224,7 +237,14 @@ public:
         }
         return retval;
     }
-    /// Serialization.
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {
