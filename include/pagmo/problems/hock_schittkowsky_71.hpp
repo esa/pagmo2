@@ -210,14 +210,10 @@ struct hock_schittkowsky_71 {
 
     /// Object serialization
     /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * This method is needed by the cereal serialization pipeline
      */
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &)
     {
     }
 };
