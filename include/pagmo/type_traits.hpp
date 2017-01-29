@@ -153,7 +153,8 @@ void tuple_for_each(Tuple &&t, const F &f)
     apply_to_each_item(std::forward<Tuple>(t), f,
                        make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{});
 }
-}
+
+} // end of detail namespace
 
 /// Implementation of \p std::is_detected.
 /**
@@ -192,6 +193,23 @@ using decay_t = typename std::decay<T>::type;
  */
 template <bool B, typename T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
+
+namespace detail {
+/// SFINAE enabler for floating point types
+/**
+ * A templated method or function with enable_if_is_floating_point<T> = 0 will only be available for
+ * floating point types
+ */
+template <typename T>
+using enable_if_is_floating_point = enable_if_t<std::is_floating_point<T>::value, int>;
+/// SFINAE enabler for floating point types
+/**
+ * A templated method or function with enable_if_is_not_floating_point<T> = 0 will only be available for
+ * non floating point types
+ */
+template <typename T>
+using enable_if_is_not_floating_point = enable_if_t<!std::is_floating_point<T>::value, int>;
+}
 
 /// Remove reference and cv qualifiers from type \p T.
 template <typename T>

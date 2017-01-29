@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 
 #include "../algorithm.hpp"
+#include "../detail/custom_comparisons.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
@@ -355,7 +356,7 @@ public:
             std::vector<population::size_type> best_idx(lam);
             std::iota(best_idx.begin(), best_idx.end(), population::size_type(0));
             std::sort(best_idx.begin(), best_idx.end(), [&pop](population::size_type idx1, population::size_type idx2) {
-                return pop.get_f()[idx1][0] < pop.get_f()[idx2][0];
+                return detail::less_than_f(pop.get_f()[idx1][0], pop.get_f()[idx2][0]);
             });
             best_idx.resize(mu); // not needed?
             for (decltype(mu) i = 0u; i < mu; ++i) {

@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
+#include "../detail/custom_comparisons.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
@@ -162,9 +163,9 @@ std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<v
     std::sort(indexes.begin(), indexes.end(),
               [&input_objs](vector_double::size_type idx1, vector_double::size_type idx2) {
                   if (input_objs[idx1][0] == input_objs[idx2][0]) {
-                      return input_objs[idx1][1] < input_objs[idx2][1];
+                      return detail::less_than_f(input_objs[idx1][1], input_objs[idx2][1]);
                   }
-                  return input_objs[idx1][0] < input_objs[idx2][0];
+                  return detail::less_than_f(input_objs[idx1][0], input_objs[idx2][0]);
               });
     for (auto i : indexes) {
         bool flag = false;
@@ -318,7 +319,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
     for (decltype(M) i = 0u; i < M; ++i) {
         std::sort(indexes.begin(), indexes.end(),
                   [i, &non_dom_front](vector_double::size_type idx1, vector_double::size_type idx2) {
-                      return non_dom_front[idx1][i] < non_dom_front[idx2][i];
+                      return detail::less_than_f(non_dom_front[idx1][i], non_dom_front[idx2][i]);
                   });
         retval[indexes[0]] = std::numeric_limits<double>::infinity();
         retval[indexes[N - 1u]] = std::numeric_limits<double>::infinity();
@@ -390,10 +391,10 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
     // Sort the indexes
     std::sort(retval.begin(), retval.end(),
               [&tuple, &crowding](vector_double::size_type idx1, vector_double::size_type idx2) {
-                  if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {     // same non domination rank
-                      return crowding[idx1] > crowding[idx2];                     // crowding distance decides
-                  } else {                                                        // different non domination ranks
-                      return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2]; // non domination rank decides
+                  if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) { // same non domination rank
+                      return detail::greater_than_f(crowding[idx1], crowding[idx2]); // crowding distance decides
+                  } else {                                                           // different non domination ranks
+                      return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2];    // non domination rank decides
                   };
               });
     return retval;
@@ -472,7 +473,7 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
     std::vector<vector_double::size_type> idxs(front.size());
     std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
     std::sort(idxs.begin(), idxs.end(), [&cds](vector_double::size_type idx1, vector_double::size_type idx2) {
-        return (cds[idx1] > cds[idx2]);
+        return detail::greater_than_f(cds[idx1], cds[idx2]);
     }); // Descending order1
     auto remaining = N - retval.size();
     for (decltype(remaining) i = 0u; i < remaining; ++i) {
