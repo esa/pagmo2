@@ -11,3 +11,4 @@ Getting Started
 
   constructing_pygmo_problems
   constructing_pygmo_algorithms
+  constructing_population
