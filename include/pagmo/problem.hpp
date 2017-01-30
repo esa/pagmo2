@@ -1097,9 +1097,9 @@ public:
         return *this = problem(other);
     }
 
-    /// Extract a pointer to the UDP.
+    /// Extract a const pointer to the UDP.
     /**
-     * This method will extract a pointer to the internal instance of the UDP. If \p T is not the same type
+     * This method will extract a const pointer to the internal instance of the UDP. If \p T is not the same type
      * as the UDP used during construction (after removal of cv and reference qualifiers), this method will
      * return \p nullptr.
      *
@@ -1111,6 +1111,23 @@ public:
     const T *extract() const
     {
         auto p = dynamic_cast<const detail::prob_inner<T> *>(ptr());
+        return p == nullptr ? nullptr : &(p->m_value);
+    }
+
+    /// Extract a pointer to the UDP.
+    /**
+     * This method will extract a pointer to the internal instance of the UDP. If \p T is not the same type
+     * as the UDP used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
+     *
+     * @return a pointer to the internal UDP, or \p nullptr
+     * if \p T does not correspond exactly to the original problem type used
+     * in the constructor.
+     */
+    template <typename T>
+    T *extract()
+    {
+        auto p = dynamic_cast<detail::prob_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
     }
 
