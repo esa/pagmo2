@@ -48,7 +48,14 @@ namespace pagmo
  * This algorithm is used to implement the default constructors of meta-algorithms.
  */
 struct null_algorithm {
-    /// Algorithm implementation
+    /// Algorithm evolve method (juice implementation of the algorithm)
+    /**
+     *
+     * Evolves the population for the requested number of generations.
+     *
+     * @param pop population to be evolved
+     * @return evolved population
+     */
     population evolve(const population &pop) const
     {
         return pop;
@@ -382,7 +389,7 @@ public:
      * **NOTE** \p T must be not of type pagmo::algorithm, otherwise this templated constructor is not enabled and the
      * copy constructor will be called instead.
      *
-     * @param[in] x The user implemented algorithm
+     * @param x The user implemented algorithm
      *
      */
     template <typename T, generic_ctor_enabler<T> = 0>
@@ -477,7 +484,7 @@ public:
      * all stochastic variables. This is assuming that the user implemented in his algorithm random generators
      * controlled by the optional set_seed method.
      *
-     * @param[in] seed seed
+     * @param seed seed
      */
     void set_seed(unsigned int seed)
     {
@@ -516,7 +523,7 @@ public:
      * Sets the level of verbosity. This is assuming that the user implemented in his algorithm a verbosity
      * control controlled by a set_verbosity method.
      *
-     * @param[in] level verbosity level
+     * @param level verbosity level
      */
     void set_verbosity(unsigned int level)
     {

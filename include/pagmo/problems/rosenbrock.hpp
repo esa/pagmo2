@@ -59,7 +59,7 @@ namespace pagmo
 struct rosenbrock {
     /// Constructor from dimension
     /**
-     * @param[in] dim problem dimension
+     * @param dim problem dimension
      * @throw std::invalid_argument if \p dim is less than 2
      */
     rosenbrock(unsigned int dim = 2u) : m_dim(dim)
@@ -69,7 +69,14 @@ struct rosenbrock {
                         "Rosenbrock Function must have minimum 2 dimensions, " + std::to_string(dim) + " requested");
         }
     };
-    /// Fitness
+    /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
     vector_double fitness(const vector_double &x) const
     {
         vector_double f(1, 0.);
@@ -79,7 +86,13 @@ struct rosenbrock {
         return f;
     }
 
-    /// Problem bounds
+    /// Box-bounds
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the box-bounds for this UDP.
+     *
+     * @return the lower and upper bounds for each of the decision vector components
+     */
     std::pair<vector_double, vector_double> get_bounds() const
     {
         vector_double lb(m_dim, -5.);
@@ -87,16 +100,31 @@ struct rosenbrock {
         return {lb, ub};
     }
     /// Problem name
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @return a string containing the problem name
+     */
     std::string get_name() const
     {
         return "Multidimensional Rosenbrock Function";
     }
     /// Optimal solution
+    /**
+     * @return the decision vector corresponding to the best solution for this problem.
+     */
     vector_double best_known() const
     {
         return vector_double(m_dim, 1.);
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

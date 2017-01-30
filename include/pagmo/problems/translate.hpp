@@ -59,8 +59,8 @@ public:
      * pagmo::translate objects can be used as user-defined problems in the construction of a pagmo::problem.
      *
      * @tparam T Any type from which pagmo::problem is constructable
-     * @param[in] p The user defined problem.
-     * @param[in] translation An <tt>std::vector</tt> containing the translation to apply.
+     * @param p The user defined problem.
+     * @param translation An <tt>std::vector</tt> containing the translation to apply.
      *
      * @throws std::invalid_argument if the length of \p translation is
      * not equal to the problem dimension \f$ n_x\f$.
@@ -77,41 +77,86 @@ public:
         }
     }
 
-    /// Fitness of the translated problem
+    /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
     vector_double fitness(const vector_double &x) const
     {
         vector_double x_deshifted = translate_back(x);
         return static_cast<const problem *>(this)->fitness(x_deshifted);
     }
 
-    /// Problem bounds of the translated problem
+    /// Box-bounds
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the box-bounds for this UDP.
+     *
+     * @return the lower and upper bounds for each of the decision vector components
+     */
     std::pair<vector_double, vector_double> get_bounds() const
     {
         auto b_sh = static_cast<const problem *>(this)->get_bounds();
         return {apply_translation(b_sh.first), apply_translation(b_sh.second)};
     }
 
-    /// Gradients of the translated problem
+    /// Gradients
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the fitness gradient for this UDP.
+     *
+     * The gradient is represented in a sparse form as required by
+     * problem::gradient().
+     *
+     * @param x the decision vector.
+     *
+     * @return the gradient of the fitness function
+     */
     vector_double gradient(const vector_double &x) const
     {
         vector_double x_deshifted = translate_back(x);
         return static_cast<const problem *>(this)->gradient(x_deshifted);
     }
 
-    /// Hessians of the translated problem
+    /// Hessians
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the hessians for this UDP.
+     *
+     * The hessians are represented in a sparse form as required by
+     * problem::hessians().
+     *
+     * @param x the decision vector.
+     *
+     * @return the hessians of the fitness function
+     */
     std::vector<vector_double> hessians(const vector_double &x) const
     {
         vector_double x_deshifted = translate_back(x);
         return static_cast<const problem *>(this)->hessians(x_deshifted);
     }
 
-    /// Appends "[translated]" to the user-defined problem name
+    /// Problem name
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @return a string containing the problem name
+     */
     std::string get_name() const
     {
         return static_cast<const problem *>(this)->get_name() + " [translated]";
     }
 
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @return a string containing extra informations on the problem
+     */
     std::string get_extra_info() const
     {
         std::ostringstream oss;
@@ -120,12 +165,22 @@ public:
     }
 
     /// Gets the translation vector
+    /**
+     * @return the translation vector
+     */
     const vector_double &get_translation() const
     {
         return m_translation;
     }
 
-    /// Serialize
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

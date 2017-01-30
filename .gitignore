@@ -4,6 +4,7 @@ build*
 # Temp files.
 *~
 *.bak
+.DS_Store
 
 # .orig files from patch.
 *.orig
@@ -23,4 +24,3 @@ doc/doxygen/latex/*
 doc/doxygen/xml/*
 
 doc/sphinx/_build
-

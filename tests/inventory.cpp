@@ -52,8 +52,7 @@ BOOST_AUTO_TEST_CASE(inventory_test)
     BOOST_CHECK(f1 == f3);
     BOOST_CHECK(f1 != f2);
 
-    // Checking bounds and objective dimensions
-    BOOST_CHECK(prob.get_nobj() == 1u);
+    // Checking bounds
     BOOST_CHECK((prob.get_bounds()
                  == std::pair<vector_double, vector_double>({{0., 0., 0., 0., 0}, {200., 200., 200., 200., 200.}})));
 
