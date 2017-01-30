@@ -29,8 +29,8 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_CUSTOM_COMPARISONS_HPP
 #define PAGMO_CUSTOM_COMPARISONS_HPP
 
-#include "../type_traits.hpp"
 #include <type_traits>
+#include "../type_traits.hpp"
 
 namespace pagmo
 {
