@@ -36,6 +36,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'breathe',
     'sphinx.ext.napoleon',
+    'sphinx.ext.doctest',
 ]
 
 autoclass_content = 'both'
@@ -45,6 +46,8 @@ autoclass_content = 'both'
 breathe_projects = { "pagmo": "../doxygen/xml" }
 breathe_default_project = "pagmo"
 breathe_default_members = ('members',)
+
+doctest_test_doctest_blocks = ""
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -151,8 +154,8 @@ html_theme_options = {
     # an arbitrary url.
     'navbar_links': [
         ("Home", "index"),
-        ("C++ docs", "docs/cpp"),
-        ("Python docs", "docs/python")
+        ("C++ docs", "docs/cpp/cpp_docs"),
+        ("Python docs", "docs/python/python_docs")
     ],
 
     # Render the next and previous page links in navbar. (Default: true)

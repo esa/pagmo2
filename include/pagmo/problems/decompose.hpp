@@ -103,11 +103,11 @@ public:
      * pagmo::translate objects can be used as user-defined problems in the construction of a pagmo::problem.
      *
      * @tparam T Any type from which pagmo::problem is constructable
-     * @param[in] p The input problem.
-     * @param[in] method an std::string containing the decomposition method chosen
-     * @param[in] weight the vector of weights \f$\boldsymbol \lambda\f$
-     * @param[in] z the reference point \f$\mathbf z^*\f$
-     * @param[in] adapt_ideal when true the reference point is adapted at each fitness evaluation to be the ideal point
+     * @param p The input problem.
+     * @param method an std::string containing the decomposition method chosen
+     * @param weight the vector of weights \f$\boldsymbol \lambda\f$
+     * @param z the reference point \f$\mathbf z^*\f$
+     * @param adapt_ideal when true the reference point is adapted at each fitness evaluation to be the ideal point
      *
      * @throws std::invalid_argument if the problem of type \p T is single objective
      * @throws std::invalid_argument if the problem of type \p T is constrained
@@ -184,7 +184,14 @@ public:
             }
         }
     }
-    /// Fitness of the decomposed problem
+    /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
     vector_double fitness(const vector_double &x) const
     {
         // we compute the fitness of the original multiobjective problem
@@ -206,7 +213,7 @@ public:
      *
      * **NOTE** This is *not* the fitness of the decomposed problem, that is returned by calling decompose::fitness()
      *
-     * @param[in] x Input decision vector
+     * @param x Input decision vector
      *
      * @returns the fitness of the original multi-objective problem
      */
@@ -219,9 +226,9 @@ public:
     /**
      * Returns the decomposed fitness vector.
      *
-     * @param[in] f Input fitness
-     * @param[in] weight the weight to be used in the decomposition
-     * @param[in] ref_point the reference point to be used if either "tchebycheff" or "bi"
+     * @param f Input fitness
+     * @param weight the weight to be used in the decomposition
+     * @param ref_point the reference point to be used if either "tchebycheff" or "bi"
      * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
      * @returns the decomposed fitness vector
      * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes
@@ -278,32 +285,62 @@ public:
         }
         return {fd};
     }
-    /// A decomposed problem has one objective
+    /// Number of objectives
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the number of objectives
+     *
+     * @return the number of objectives
+     */
     vector_double::size_type get_nobj() const
     {
         return 1u;
     }
     /// Returns a dense gradient_sparsity for the decomposed problem
+    /**
+     * @return a dense gradient sparsity pattern for the problem
+     */
     sparsity_pattern gradient_sparsity() const
     {
         return detail::dense_gradient(1u, static_cast<const problem *>(this)->get_nx());
     }
     /// Returns a dense hessians_sparsity for the decomposed problem
+    /**
+     * @return a dense hessian sparsity pattern for the problem
+     */
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
         return detail::dense_hessians(1u, static_cast<const problem *>(this)->get_nx());
     }
-    /// Gets the current reference point (may be different from the one the object was constructed with)
+    /// Gets the current reference point
+    /**
+     * The reference point to be used for the decomposition. This is only
+     * used for Tchebycheff and boundary interception decomposition methods.
+     *
+     * **NOTE** The reference point is adapted at each call of the fitness.
+     *
+     * @return the refernce point
+     */
     vector_double get_z() const
     {
         return m_z;
     }
-    /// Appends "[decomposed]" to the user-defined problem name
+    /// Problem name
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @return a string containing the problem name
+     */
     std::string get_name() const
     {
         return static_cast<const problem *>(this)->get_name() + " [decomposed]";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @return a string containing extra informations on the problem
+     */
     std::string get_extra_info() const
     {
         std::ostringstream oss;
@@ -312,7 +349,14 @@ public:
         return static_cast<const problem *>(this)->get_extra_info() + oss.str();
     }
 
-    /// Serialize
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

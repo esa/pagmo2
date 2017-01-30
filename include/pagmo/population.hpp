@@ -90,9 +90,9 @@ public:
      * to \p seed. In order for the construction to be succesfull, \p x
      * must be such that a pagmo::problem can be constructed from it.
      *
-     * @param[in] x the user problem the population refers to
-     * @param[in] pop_size population size (i.e. number of individuals therein)
-     * @param[in] seed seed of the random number generator used, for example, to
+     * @param x the user problem the population refers to
+     * @param pop_size population size (i.e. number of individuals therein)
+     * @param seed seed of the random number generator used, for example, to
      * create new random individuals within the bounds
      *
      * @throws unspecified any exception thrown by decision_vector() or by push_back()
@@ -116,7 +116,7 @@ public:
     /**
      * Copy assignment is implemented via copy+move.
      *
-     * @param[in] other assignment argument.
+     * @param other assignment argument.
      *
      * @return a reference to \p this.
      *
@@ -151,7 +151,7 @@ public:
      *
      * In case of exceptions, the population will not be altered.
      *
-     * @param[in] x decision vector to be added to the population.
+     * @param x decision vector to be added to the population.
      *
      * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
      * Wrong dimensions for the input decision vector or the output fitness will trigger an exception.
@@ -199,7 +199,7 @@ public:
      * this case the user can still obtain a strict ordering of the population
      * individuals by calling the pagmo::sort_population_mo() function.
      *
-     * @param[in] tol vector of tolerances to be applied to each constraints
+     * @param tol vector of tolerances to be applied to each constraints
      *
      * @returns the index of the best individual
      *
@@ -228,7 +228,7 @@ public:
 
     /// Index of best individual (accounting for a scalar tolerance)
     /**
-     * @param[in] tol scalar tolerance to be considered for each constraint
+     * @param tol scalar tolerance to be considered for each constraint
      *
      * @return index of the best individual
      */
@@ -248,7 +248,7 @@ public:
      * this case the user can still obtain a strict ordering of the population
      * individuals by calling the pagmo::sort_population_mo() function.
      *
-     * @param[in] tol vector of tolerances to be applied to each constraints
+     * @param tol vector of tolerances to be applied to each constraints
      *
      * @returns the index of the best individual
      *
@@ -277,7 +277,7 @@ public:
 
     /// Index of worst individual (accounting for a scalar tolerance)
     /**
-     * @param[in] tol scalar tolerance to be considered for each constraint
+     * @param tol scalar tolerance to be considered for each constraint
      *
      * @return index of the best individual
      */
@@ -303,9 +303,9 @@ public:
      * **NOTE**: The user must make sure that the input fitness \p f makes sense
      * as pagmo will only check its dimension.
      *
-     * @param[in] i individual's index in the population
-     * @param[in] x a decision vector (chromosome)
-     * @param[in] f a fitness vector
+     * @param i individual's index in the population
+     * @param x a decision vector (chromosome)
+     * @param f a fitness vector
      *
      * @throws std::invalid_argument if \p i is invalid (i.e. larger or equal to the population size)
      * @throws std::invalid_argument if \p x has not the correct dimension
@@ -343,8 +343,8 @@ public:
      *
      * **NOTE** a call to this method triggers one fitness function evaluation
      *
-     * @param[in] i individual's index in the population
-     * @param[in] x decision vector
+     * @param i individual's index in the population
+     * @param x decision vector
      *
      * @throws unspecified any exception thrown by set_xf
      */

@@ -95,8 +95,8 @@ void reksum(std::vector<std::vector<double>> &retval, const std::vector<populati
  * elements in \p obj1 are less or equal to the corresponding element in \p obj2,
  * but at least one is different, \p true will be returned. Otherwise, \p false will be returned.
  *
- * @param[in] obj1 first vector of objectives.
- * @param[in] obj2 second vector of objectives.
+ * @param obj1 first vector of objectives.
+ * @param obj2 second vector of objectives.
  *
  * @return \p true if \p obj1 is dominating \p obj2, \p false otherwise.
  *
@@ -131,7 +131,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
  * @see Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
  * IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
  *
- * @param[in] input_objs an <tt>std::vector</tt> containing the points (i.e. vector of objectives)
+ * @param input_objs an <tt>std::vector</tt> containing the points (i.e. vector of objectives)
  *
  * @return A <tt>std::vector</tt> containing the indexes of the points in the non-dominated front
  *
@@ -197,7 +197,7 @@ using fnds_return_type
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg,
  * 2000.
  *
- * @param[in] points An std::vector containing the objectives of different individuals. Example
+ * @param points An std::vector containing the objectives of different individuals. Example
  * {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
  *
  * @return an std::tuple containing:
@@ -284,7 +284,7 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg,
  * 2000.
  *
- * @param[in] non_dom_front An <tt>std::vector<vector_double></tt> containing a non dominated front. Example
+ * @param non_dom_front An <tt>std::vector<vector_double></tt> containing a non dominated front. Example
  * {{0,0},{-1,1},{2,-2}}
  *
  * @returns a vector_double containing the crowding distances. Example: {2, inf, inf}
@@ -351,7 +351,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  * std::sort(idx.begin(), idx.end(), [] (auto a, auto b) {return input_f[a][0] < input_f[b][0];});
  * @endcode
  *
- * @param[in] input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
+ * @param input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
  *
  * @returns an <tt>std::vector</tt> containing the indexes of the sorted objectives vectors. Example {1,2,0}
  *
@@ -419,8 +419,8 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
  * computes
  * it for the last non-dominated front that contains individuals included in the best N.
  *
- * @param[in] input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
- * @param[in] N Number of best individuals to return
+ * @param input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
+ * @param N Number of best individuals to return
  *
  * @returns an <tt>std::vector</tt> containing the indexes of the best N objective vectors. Example {2,1}
  *
@@ -489,7 +489,7 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
  *
  * Complexity is \f$ O(MN)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @param[in] input_f Input objectives vectors. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
+ * @param input_f Input objectives vectors. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
  *
  * @returns A vector_double containing the ideal point. Example: {-1,-2,231}
  *
@@ -528,7 +528,7 @@ vector_double ideal(const std::vector<vector_double> &input_f)
  *
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @param[in] input_f Input objective vectors. Example {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{6,6},{9,15}}
+ * @param input_f Input objective vectors. Example {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{6,6},{9,15}}
  *
  * @returns A vector_double containing the nadir point. Example: {10,7}
  *
@@ -581,11 +581,11 @@ vector_double nadir(const std::vector<vector_double> &input_f)
  * auto lambdas = decomposition_weights(3u, 10u, "low discrepancy", r_engine);
  * @endcode
  *
- * @param[in] n_f dimension of each weight vector (i.e. fitness dimension)
- * @param[in] n_w number of weights to be generated
- * @param[in] weight_generation methods to generate the weights of the decomposed problems. One of "grid", "random",
+ * @param n_f dimension of each weight vector (i.e. fitness dimension)
+ * @param n_w number of weights to be generated
+ * @param weight_generation methods to generate the weights of the decomposed problems. One of "grid", "random",
  *"low discrepancy"
- * @param[in] r_engine random engine
+ * @param r_engine random engine
  *
  * @returns an <tt>std:vector</tt> containing the weight vectors
  *

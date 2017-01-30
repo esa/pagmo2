@@ -11,5 +11,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   docs/cpp
-   docs/python
+   docs/cpp/cpp_docs
+   docs/python/python_docs
+   docs/python/tutorials/python_tut

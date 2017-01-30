@@ -79,19 +79,19 @@ public:
     /**
      * Constructs cmaes
      *
-     * @param[in] gen number of generations.
-     * @param[in] cc backward time horizon for the evolution path (by default is automatically assigned)
-     * @param[in] cs makes partly up for the small variance loss in case the indicator is zero (by default is
+     * @param gen number of generations.
+     * @param cc backward time horizon for the evolution path (by default is automatically assigned)
+     * @param cs makes partly up for the small variance loss in case the indicator is zero (by default is
      automatically assigned)
-     * @param[in] c1  learning rate for the rank-one update of the covariance matrix (by default is automatically
+     * @param c1  learning rate for the rank-one update of the covariance matrix (by default is automatically
      assigned)
-     * @param[in] cmu learning rate for the rank-\f$\mu\f$  update of the covariance matrix (by default is automatically
+     * @param cmu learning rate for the rank-\f$\mu\f$  update of the covariance matrix (by default is automatically
      assigned)
-     * @param[in] sigma0 initial step-size
-     * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
-     * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
-     * @param[in] memory when true the adapted parameters are not reset between successive calls to the evolve method
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param sigma0 initial step-size
+     * @param ftol stopping criteria on the x tolerance (default is 1e-6)
+     * @param xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param memory when true the adapted parameters are not reset between successive calls to the evolve method
+     * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if cc, cs, c1 and cmu are not in [0, 1]
      */
@@ -142,7 +142,7 @@ public:
      * Evolves the population for a maximum number of generations, until one of
      * tolerances set on the population flatness (x_tol, f_tol) are met.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained
      * @throws std::invalid_argument if the problem is unbounded
@@ -410,13 +410,18 @@ public:
         }
         return pop;
     }
-
-    /// Sets the algorithm seed
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     };
     /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned int get_seed() const
     {
         return m_seed;
@@ -446,28 +451,44 @@ public:
      * the mutant vectors, df is the population flatness evaluated as the distance between the fitness
      * of the best and of the worst individual and sigma is the current step-size
      *
-     * @param[in] level verbosity level
+     * @param level verbosity level
      */
     void set_verbosity(unsigned int level)
     {
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
-    /// Get generations
+    /// Gets the generations
+    /**
+     * @return the number of generations to evolve for
+     */
     unsigned int get_gen() const
     {
         return m_gen;
     }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "CMA-ES: Covariance Matrix Adaptation Evolutionary Strategy";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         return "\tGenerations: " + std::to_string(m_gen) + "\n\tcc: " + ((m_cc == -1) ? "auto" : std::to_string(m_cc))
@@ -490,7 +511,14 @@ public:
     {
         return m_log;
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

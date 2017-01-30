@@ -92,14 +92,14 @@ public:
     /**
      * Constructs Monotonic Basin Hopping using a scalar perturbation
      *
-     * @param[in] a Any object that can construct a pagmo::algorithm and that will
+     * @param a Any object that can construct a pagmo::algorithm and that will
      * then be used as inner algorithm for the generalized mbh.
-     * @param[in] stop consecutive runs of the inner algorithm that need to
+     * @param stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop
-     * @param[in] perturb the perturbation to be applied to each component
+     * @param perturb the perturbation to be applied to each component
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param seed seed used by the internal random number generator (default is random)
      * @throws std::invalid_argument if \p stop is not in (0,1]
      */
     template <typename T>
@@ -116,14 +116,14 @@ public:
     /**
      * Constructs Monotonic Basin Hopping using a vector perturbation
      *
-     * @param[in] a Any object that can construct a pagmo::algorithm and that will
+     * @param a Any object that can construct a pagmo::algorithm and that will
      * then be used as inner algorithm for the generalized mbh.
-     * @param[in] stop consecutive runs of the inner algorithm that need to
+     * @param stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop
-     * @param[in] perturb a vector_double with the perturbations to be applied to each component
+     * @param perturb a vector_double with the perturbations to be applied to each component
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param seed seed used by the internal random number generator (default is random)
      * @throws std::invalid_argument if \p stop is not in (0,1]
      */
     template <typename T>
@@ -142,7 +142,7 @@ public:
      * Evolves the population up to when \p stop consecutve runs of the internal
      * algorithm do not improve the solution.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or stochastic
      * @throws std::invalid_argument if the perturbation vector size does not equal the problem size
@@ -248,12 +248,18 @@ public:
         // We extract chromosomes and fitnesses
         return pop;
     }
-    /// Sets the algorithm seed
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     }
     /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned int get_seed() const
     {
         return m_seed;
@@ -292,16 +298,27 @@ public:
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
     /// Gets the perturbation vector
+    /**
+     * @return the perturbation vector
+     */
     const vector_double &get_perturb() const
     {
         return m_perturb;
     }
     /// Sets the perturbation vector
+    /**
+     * @param perturb the perturbation vector
+     *
+     * @throw std::invalid_argument if some components of the perturbation vector are not in (0,1]
+     */
     void set_perturb(const vector_double &perturb)
     {
         if (!std::all_of(perturb.begin(), perturb.end(),
@@ -325,11 +342,21 @@ public:
         return m_log;
     }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "Monotonic Basin Hopping (MBH) - Generalized";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         std::ostringstream ss;
@@ -342,7 +369,14 @@ public:
         stream(ss, "\n", static_cast<const algorithm *>(this)->get_extra_info());
         return ss.str();
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {
