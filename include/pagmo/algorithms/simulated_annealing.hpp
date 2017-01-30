@@ -73,10 +73,10 @@ namespace pagmo
 class simulated_annealing
 {
 public:
-    /// Single entry of the log (gen, fevals, best, improvement, mutations)
-    // typedef std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type> log_line_type;
+    /// Single entry of the log (fevals, best, current, avg_range, temperature)
+    typedef std::tuple<unsigned int, double, double, double, double> log_line_type;
     /// The log
-    // typedef std::vector<log_line_type> log_type;
+    typedef std::vector<log_line_type> log_type;
 
     /// Constructor
     /**
@@ -94,7 +94,7 @@ public:
                         unsigned int bin_size = 20u, double start_range = 1.,
                         unsigned int seed = pagmo::random_device::next())
         : m_Ts(Ts), m_Tf(Tf), m_n_T_adj(n_T_adj), m_n_range_adj(n_range_adj), m_bin_size(bin_size),
-          m_start_range(start_range), m_e(seed), m_seed(seed), m_verbosity(0u) //, m_log()
+          m_start_range(start_range), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (Ts <= 0. || !std::isfinite(Ts)) {
             pagmo_throw(std::invalid_argument, "The starting temperature must be finite and positive, while a value of "
@@ -149,7 +149,7 @@ public:
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
-        // m_log.clear();
+        m_log.clear();
 
         std::uniform_real_distribution<double> drng(0., 1.); // to generate a number in [0, 1)
 
@@ -162,8 +162,11 @@ public:
         // Stores the current and new points
         auto xNEW = x0;
         auto xOLD = x0;
+        auto best_x = x0;
         auto fNEW = fit0;
-        auto fOLD = fNEW;
+        auto fOLD = fit0;
+        auto best_f = fit0;
+
         // Stores the adaptive ranges for each component
         vector_double step(dim, m_start_range);
 
@@ -198,6 +201,8 @@ public:
                             xOLD[nter] = xNEW[nter];
                             fOLD = fNEW;
                             acp[nter]++; // Increase the number of accepted values
+                            best_f = fNEW;
+                            best_x = xNEW;
                         } else {
                             // test it with Boltzmann to decide the acceptance
                             probab = std::exp(-std::abs(fOLD[0] - fNEW[0]) / currentT);
@@ -227,6 +232,23 @@ public:
                     };
                     // And if it becomes too large, reset it to its initial value
                     if (step[iter] > m_start_range) step[iter] = m_start_range;
+                }
+                // We log to screen
+                if (m_verbosity > 0u) {
+                    // Prints a log line after each range adjustment
+                    // 1 - Every 50 lines print the column names
+                    if (count % 50u == 1u) {
+                        print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Current:",
+                              std::setw(15), "Range:", std::setw(15), "Temperature:", '\n');
+                    }
+                    auto avg_range = std::accumulate( step.begin(), step.end(), 0.) / step.size();
+                    // 2 - Print
+                    print(std::setw(7), prob.get_fevals() - fevals0, std::setw(15), best_f[0], std::setw(15), fOLD[0],
+                          std::setw(15), avg_range, std::setw(15), currentT);
+                    ++count;
+                    std::cout << std::endl; // we flush here as we want the user to read in real time ...
+                    // Logs
+                    m_log.push_back(log_line_type(prob.get_fevals() - fevals0, best_f[0], fOLD[0], avg_range, currentT));
                 }
             }
             // Cooling schedule
@@ -340,7 +362,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_Ts, m_Tf, m_n_T_adj, m_n_range_adj, m_bin_size, m_start_range, m_e, m_seed, m_verbosity); // add m_log
+        ar(m_Ts, m_Tf, m_n_T_adj, m_n_range_adj, m_bin_size, m_start_range, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -360,7 +382,7 @@ private:
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;
-    // mutable log_type m_log;
+    mutable log_type m_log;
 };
 
 } // namespace pagmo
