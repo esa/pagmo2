@@ -1104,7 +1104,7 @@ public:
      * return \p nullptr.
      *
      * @return a const pointer to the internal UDP, or \p nullptr
-     * if \p T does not correspond exactly to the original problem type used
+     * if \p T does not correspond exactly to the original UDP type used
      * in the constructor.
      */
     template <typename T>
@@ -1121,7 +1121,7 @@ public:
      * return \p nullptr.
      *
      * @return a pointer to the internal UDP, or \p nullptr
-     * if \p T does not correspond exactly to the original problem type used
+     * if \p T does not correspond exactly to the original UDP type used
      * in the constructor.
      */
     template <typename T>

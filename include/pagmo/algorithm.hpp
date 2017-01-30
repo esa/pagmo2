@@ -432,25 +432,38 @@ public:
         return *this = algorithm(other);
     }
 
-    /// Extracts the user-defined algorithm
+    /// Extract a const pointer to the UDA.
     /**
-     * Extracts the original algorithm that was provided by the user, thus
-     * granting access to additional resources there implemented.
+     * This method will extract a const pointer to the internal instance of the UDA. If \p T is not the same type
+     * as the UDA used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
      *
-     * @tparam T The type of the orignal user-defined algorithm
-     *
-     * @return a const pointer to the user-defined algorithm, or \p nullptr
-     * if \p T does not correspond exactly to the original algorithm type used
+     * @return a const pointer to the internal UDA, or \p nullptr
+     * if \p T does not correspond exactly to the original UDA type used
      * in the constructor.
      */
     template <typename T>
     const T *extract() const
     {
         auto p = dynamic_cast<const detail::algo_inner<T> *>(ptr());
-        if (p == nullptr) {
-            return nullptr;
-        }
-        return &(p->m_value);
+        return p == nullptr ? nullptr : &(p->m_value);
+    }
+
+    /// Extract a pointer to the UDA.
+    /**
+     * This method will extract a pointer to the internal instance of the UDA. If \p T is not the same type
+     * as the UDA used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
+     *
+     * @return a pointer to the internal UDA, or \p nullptr
+     * if \p T does not correspond exactly to the original UDA type used
+     * in the constructor.
+     */
+    template <typename T>
+    T *extract()
+    {
+        auto p = dynamic_cast<detail::algo_inner<T> *>(ptr());
+        return p == nullptr ? nullptr : &(p->m_value);
     }
 
     /// Checks the user defined algorithm type at run-time
