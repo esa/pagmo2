@@ -219,8 +219,9 @@ public:
                             if (fevals_count >= (count - 1u) * m_verbosity) {
                                 // 1 - Every 50 lines print the column names
                                 if (count % 50u == 1u) {
-                                    print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Current:",
-                                          std::setw(15), "Mean range:", std::setw(15), "Temperature:", '\n');
+                                    print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15),
+                                          "Current:", std::setw(15), "Mean range:", std::setw(15), "Temperature:",
+                                          '\n');
                                 }
                                 auto avg_range = std::accumulate(step.begin(), step.end(), 0.) / step.size();
                                 // 2 - Print
