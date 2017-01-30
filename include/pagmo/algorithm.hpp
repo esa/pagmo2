@@ -438,6 +438,9 @@ public:
      * as the UDA used during construction (after removal of cv and reference qualifiers), this method will
      * return \p nullptr.
      *
+     * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     * of \p this and \p delete must never be called on the pointer.
+     *
      * @return a const pointer to the internal UDA, or \p nullptr
      * if \p T does not correspond exactly to the original UDA type used
      * in the constructor.
@@ -454,6 +457,9 @@ public:
      * This method will extract a pointer to the internal instance of the UDA. If \p T is not the same type
      * as the UDA used during construction (after removal of cv and reference qualifiers), this method will
      * return \p nullptr.
+     *
+     * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     * of \p this and \p delete must never be called on the pointer.
      *
      * @return a pointer to the internal UDA, or \p nullptr
      * if \p T does not correspond exactly to the original UDA type used
