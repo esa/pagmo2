@@ -1132,7 +1132,7 @@ std::string simulated_annealing_get_log_docstring()
 
 Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
 parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will try to produce a log with one entry
+constructed with a :class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
 each verbosity function evaluations
 
 Returns:

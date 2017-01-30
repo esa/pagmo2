@@ -734,8 +734,8 @@ BOOST_PYTHON_MODULE(core)
     auto simulated_annealing_ = pygmo::expose_algorithm<simulated_annealing>(
         "simulated_annealing", pygmo::simulated_annealing_docstring().c_str());
     simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double>(
-        (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 10u,
-         bp::arg("bin_size") = 10u, bp::arg("start_range") = 1.)));
+        (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 1u,
+         bp::arg("bin_size") = 20u, bp::arg("start_range") = 1.)));
     simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double>(
         (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 10u,
          bp::arg("bin_size") = 10u, bp::arg("start_range") = 1., bp::arg("seed"))));

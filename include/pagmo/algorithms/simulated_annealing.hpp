@@ -63,8 +63,8 @@ namespace pagmo
  * **NOTE** The algorithm does not work for multi-objective problems, stochastic problems nor for
  * constrained problems
  *
- * **NOTE** At each call of the evolve method the number of function evaluations is guaranteed to be less
- * than \p max_iter as when a point is produced out of the bounds that iteration is skipped
+ * **NOTE** At each call of the evolve method the number of function evaluations will be
+ * \p n_T_adj * \p n_range_adj * \p bin_size times the problem dimension
  *
  * @see Corana, A., Marchesi, M., Martini, C., & Ridella, S. (1987). Minimizing multimodal
  * functions of continuous variables with the “simulated annealing” algorithm Corrigenda
@@ -183,20 +183,12 @@ public:
                     auto nter = std::uniform_int_distribution<vector_double::size_type>(0u, dim - 1u)(m_e);
                     for (decltype(dim) numb = 0u; numb < dim; ++numb) {
                         nter = (nter + 1u) % dim;
-                        // We modify the current point by mutating its nter component within
-                        // a step that we will later adapt
-                        xNEW[nter]
-                            = xOLD[nter]
-                              + std::uniform_real_distribution<>(-1, 1)(m_e) * step[nter] * (ub[nter] - lb[nter]);
-
-                        // If new solution produced is infeasible ignore it
-                        if ((xNEW[nter] > ub[nter]) || (xNEW[nter] < lb[nter])) {
-                            xNEW[nter] = xOLD[nter];
-                            continue;
-                        }
+                        // We modify the current point by mutating its nter component within the adaptive step
+                        auto width = step[nter] * (ub[nter] - lb[nter]);
+                        xNEW[nter] = std::uniform_real_distribution<>(std::max(xOLD[nter] - width, lb[nter]),
+                                                                      std::min(xOLD[nter] + width, ub[nter]))(m_e);
                         // And we valuate the objective function for the new point
                         fNEW = prob.fitness(xNEW);
-
                         // We decide wether to accept or discard the point
                         if (fNEW[0] <= fOLD[0]) {
                             // accept
@@ -220,6 +212,26 @@ public:
                                 xNEW[nter] = xOLD[nter];
                             }
                         }
+                        // 2 - We log to screen
+                        if (m_verbosity > 0u) {
+                            // Prints a log line every m_verbosity function evaluations
+                            auto fevals_count = prob.get_fevals() - fevals0;
+                            if (fevals_count >= (count - 1u) * m_verbosity) {
+                                // 1 - Every 50 lines print the column names
+                                if (count % 50u == 1u) {
+                                    print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Current:",
+                                          std::setw(15), "Mean range:", std::setw(15), "Temperature:", '\n');
+                                }
+                                auto avg_range = std::accumulate(step.begin(), step.end(), 0.) / step.size();
+                                // 2 - Print
+                                print(std::setw(7), fevals_count, std::setw(15), best_f[0], std::setw(15), fOLD[0],
+                                      std::setw(15), avg_range, std::setw(15), currentT);
+                                ++count;
+                                std::cout << std::endl; // we flush here as we want the user to read in real time ...
+                                // Logs
+                                m_log.push_back(log_line_type(fevals_count, best_f[0], fOLD[0], avg_range, currentT));
+                            }
+                        }
                     } // end for(nter = 0; ...
                 }     // end for(kter = 0; ...
                 // adjust the step (adaptively)
@@ -237,26 +249,6 @@ public:
                     };
                     // And if it becomes too large, reset it to its initial value
                     if (step[iter] > m_start_range) step[iter] = m_start_range;
-                }
-                // 2 - We log to screen
-                if (m_verbosity > 0u) {
-                    // Prints a log line maximum every m_verbosity function evaluations
-                    auto fevals_count = prob.get_fevals() - fevals0;
-                    if (fevals_count >= count * m_verbosity || count == 1u || jter * mter == (m_n_T_adj-1u)*(m_n_range_adj-1u)) {
-                        // 1 - Every 50 lines print the column names
-                        if (count % 50u == 1u) {
-                            print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Current:",
-                                  std::setw(15), "Mean range:", std::setw(15), "Temperature:", '\n');
-                        }
-                        auto avg_range = std::accumulate(step.begin(), step.end(), 0.) / step.size();
-                        // 2 - Print
-                        print(std::setw(7), fevals_count, std::setw(15), best_f[0], std::setw(15), fOLD[0],
-                              std::setw(15), avg_range, std::setw(15), currentT);
-                        ++count;
-                        std::cout << std::endl; // we flush here as we want the user to read in real time ...
-                        // Logs
-                        m_log.push_back(log_line_type(fevals_count, best_f[0], fOLD[0], avg_range, currentT));
-                    }
                 }
             }
             // Cooling schedule

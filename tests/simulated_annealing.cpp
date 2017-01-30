@@ -68,13 +68,13 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_evolve_test)
     problem prob1{rosenbrock{10u}};
     population pop1{prob1, 5u, 23u};
     simulated_annealing user_algo1{10., 1e-5, 100u, 10u, 10u, 1., 23u};
-    user_algo1.set_verbosity(1u);
+    user_algo1.set_verbosity(200u);
     pop1 = user_algo1.evolve(pop1);
 
     problem prob2{rosenbrock{10u}};
     population pop2{prob2, 5u, 23u};
     simulated_annealing user_algo2{10., 1e-5, 100u, 10u, 10u, 1., 23u};
-    user_algo2.set_verbosity(1u);
+    user_algo2.set_verbosity(200u);
     pop2 = user_algo2.evolve(pop2);
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 
@@ -89,8 +89,8 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_evolve_test)
 BOOST_AUTO_TEST_CASE(sea_setters_getters_test)
 {
     simulated_annealing user_algo{10., 1e-5, 100u, 10u, 10u, 1., 123u};
-    user_algo.set_verbosity(23u);
-    BOOST_CHECK(user_algo.get_verbosity() == 23u);
+    user_algo.set_verbosity(200u);
+    BOOST_CHECK(user_algo.get_verbosity() == 200u);
     user_algo.set_seed(23u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK(user_algo.get_name().find("Simulated Annealing (Corana's)") != std::string::npos);
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_serialization_test)
     problem prob{rosenbrock{25u}};
     population pop{prob, 5u, 23u};
     algorithm algo{simulated_annealing{10., 1e-5, 100u, 10u, 10u, 1., 23u}};
-    algo.set_verbosity(1u);
+    algo.set_verbosity(200u);
     pop = algo.evolve(pop);
 
     // Store the string representation of p.
