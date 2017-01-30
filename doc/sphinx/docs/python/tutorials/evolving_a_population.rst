@@ -22,7 +22,7 @@ method :class:`~pygmo.core.algorithm.evolve`
     >>> prob = pg.problem(pg.rosenbrock(dim = 10))
     >>> # The initial population
     >>> pop = pg.population(prob, size = 20)
-    >>> # The algorithm (a self-adaptive form of Differential Evolution called jDE)
+    >>> # The algorithm (a self-adaptive form of Differential Evolution (sade, jDE variant)
     >>> algo = pg.algorithm(pg.sade(gen = 1000))
     >>> # The actual optimization process
     >>> pop = algo.evolve(pop)
