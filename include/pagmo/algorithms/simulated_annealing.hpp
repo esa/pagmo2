@@ -178,27 +178,7 @@ public:
         // Main SA loops
         for (decltype(m_n_T_adj) jter = 0u; jter < m_n_T_adj; ++jter) {
             for (decltype(m_n_range_adj) mter = 0u; mter < m_n_range_adj; ++mter) {
-                // 1 - We log to screen
-                if (m_verbosity > 0u) {
-                    // Prints a log line maximum every m_verbosity function evaluations
-                    auto fevals_count = prob.get_fevals() - fevals0;
-                    if (fevals_count >= count * m_verbosity || count == 1u) {
-                        // 1 - Every 50 lines print the column names
-                        if (count % 50u == 1u) {
-                            print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Current:",
-                                  std::setw(15), "Mean range:", std::setw(15), "Temperature:", '\n');
-                        }
-                        auto avg_range = std::accumulate(step.begin(), step.end(), 0.) / step.size();
-                        // 2 - Print
-                        print(std::setw(7), fevals_count, std::setw(15), best_f[0], std::setw(15), fOLD[0],
-                              std::setw(15), avg_range, std::setw(15), currentT);
-                        ++count;
-                        std::cout << std::endl; // we flush here as we want the user to read in real time ...
-                        // Logs
-                        m_log.push_back(log_line_type(fevals_count, best_f[0], fOLD[0], avg_range, currentT));
-                    }
-                }
-                // 2 - Annealing
+                // 1 - Annealing
                 for (decltype(m_bin_size) kter = 0u; kter < m_bin_size; ++kter) {
                     auto nter = std::uniform_int_distribution<vector_double::size_type>(0u, dim - 1u)(m_e);
                     for (decltype(dim) numb = 0u; numb < dim; ++numb) {
@@ -257,6 +237,26 @@ public:
                     };
                     // And if it becomes too large, reset it to its initial value
                     if (step[iter] > m_start_range) step[iter] = m_start_range;
+                }
+                // 2 - We log to screen
+                if (m_verbosity > 0u) {
+                    // Prints a log line maximum every m_verbosity function evaluations
+                    auto fevals_count = prob.get_fevals() - fevals0;
+                    if (fevals_count >= count * m_verbosity || count == 1u || jter * mter == (m_n_T_adj-1u)*(m_n_range_adj-1u)) {
+                        // 1 - Every 50 lines print the column names
+                        if (count % 50u == 1u) {
+                            print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Current:",
+                                  std::setw(15), "Mean range:", std::setw(15), "Temperature:", '\n');
+                        }
+                        auto avg_range = std::accumulate(step.begin(), step.end(), 0.) / step.size();
+                        // 2 - Print
+                        print(std::setw(7), fevals_count, std::setw(15), best_f[0], std::setw(15), fOLD[0],
+                              std::setw(15), avg_range, std::setw(15), currentT);
+                        ++count;
+                        std::cout << std::endl; // we flush here as we want the user to read in real time ...
+                        // Logs
+                        m_log.push_back(log_line_type(fevals_count, best_f[0], fOLD[0], avg_range, currentT));
+                    }
                 }
             }
             // Cooling schedule
