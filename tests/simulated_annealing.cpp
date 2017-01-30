@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_construction)
     simulated_annealing user_algo{10, 0.1, 10u, 10u, 10u, 1., 23u};
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
-    //BOOST_CHECK((user_algo.get_log() == cmaes::log_type{}));
+    // BOOST_CHECK((user_algo.get_log() == cmaes::log_type{}));
 
     BOOST_CHECK_THROW((simulated_annealing{-1., .1, 10u, 10u, 10u, 1., 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((simulated_annealing{std::nan(""), 0.1, 10u, 10u, 10u, 1., 23u}), std::invalid_argument);
@@ -63,6 +63,7 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_construction)
     // We check that the problem is checked to be suitable
     BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{zdt{}}, 5u, 23u})), std::invalid_argument);
     BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{inventory{}}, 5u, 23u})), std::invalid_argument);
-    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{hock_schittkowsky_71{}}, 5u, 23u})), std::invalid_argument);
+    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{hock_schittkowsky_71{}}, 5u, 23u})),
+                      std::invalid_argument);
     BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{rosenbrock{}}})), std::invalid_argument);
 }

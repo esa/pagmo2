@@ -121,7 +121,7 @@ public:
         // We store some useful properties
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                               // allowed (pop.set_problem_seed is)
-        const auto dim = prob.get_nx();
+        auto dim = prob.get_nx();             // not const as used type for counters
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
@@ -149,8 +149,92 @@ public:
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
-        //m_log.clear();
+        // m_log.clear();
 
+        std::uniform_real_distribution<double> drng(0., 1.); // to generate a number in [0, 1)
+
+        // Starting point is the best individual
+        auto best_idx = pop.best_idx();
+        const auto &x0 = pop.get_x()[best_idx];
+        const auto &fit0 = pop.get_f()[best_idx];
+        // Determines the coefficient to decrease the temperature
+        const double Tcoeff = std::pow(m_Tf / m_Ts, 1.0 / static_cast<double>(m_n_T_adj));
+        // Stores the current and new points
+        auto xNEW = x0;
+        auto xOLD = x0;
+        auto fNEW = fit0;
+        auto fOLD = fNEW;
+        // Stores the adaptive ranges for each component
+        vector_double step(dim, m_start_range);
+
+        // Stores the number of accepted points for each component
+        std::vector<int> acp(dim, 0u);
+        double ratio = 0., currentT = m_Ts, probab = 0.;
+
+        // Main SA loops
+        for (decltype(m_n_T_adj) jter = 0u; jter < m_n_T_adj; ++jter) {
+            for (decltype(m_n_range_adj) mter = 0u; mter < m_n_range_adj; ++mter) {
+                for (decltype(m_bin_size) kter = 0u; kter < m_bin_size; ++kter) {
+                    auto nter = std::uniform_int_distribution<vector_double::size_type>(0u, dim - 1u)(m_e);
+                    for (decltype(dim) numb = 0u; numb < dim; ++numb) {
+                        nter = (nter + 1u) % dim;
+                        // We modify the current point by mutating its nter component within
+                        // a step that we will later adapt
+                        xNEW[nter]
+                            = xOLD[nter]
+                              + std::uniform_real_distribution<>(-1, 1)(m_e) * step[nter] * (ub[nter] - lb[nter]);
+
+                        // If new solution produced is infeasible ignore it
+                        if ((xNEW[nter] > ub[nter]) || (xNEW[nter] < lb[nter])) {
+                            xNEW[nter] = xOLD[nter];
+                            continue;
+                        }
+                        // And we valuate the objective function for the new point
+                        fNEW = prob.fitness(xNEW);
+
+                        // We decide wether to accept or discard the point
+                        if (fNEW[0] <= fOLD[0]) {
+                            // accept
+                            xOLD[nter] = xNEW[nter];
+                            fOLD = fNEW;
+                            acp[nter]++; // Increase the number of accepted values
+                        } else {
+                            // test it with Boltzmann to decide the acceptance
+                            probab = std::exp(-std::abs(fOLD[0] - fNEW[0]) / currentT);
+                            // we compare prob with a random probability.
+                            if (probab > drng(m_e)) {
+                                xOLD[nter] = xNEW[nter];
+                                fOLD = fNEW;
+                                acp[nter]++; // Increase the number of accepted values
+                            } else {
+                                xNEW[nter] = xOLD[nter];
+                            }
+                        } // end if
+                    }     // end for(nter = 0; ...
+                }         // end for(kter = 0; ...
+                // adjust the step (adaptively)
+                for (decltype(dim) iter = 0u; iter < dim; ++iter) {
+                    ratio = static_cast<double>(acp[iter]) / static_cast<double>(m_bin_size);
+                    acp[iter] = 0u; // reset the counter
+                    if (ratio > .6) {
+                        // too many acceptances, increase the step by a factor 3 maximum
+                        step[iter] = step[iter] * (1. + 2. * (ratio - .6) / .4);
+                    } else {
+                        if (ratio < .4) {
+                            // too few acceptance, decrease the step by a factor 3 maximum
+                            step[iter] = step[iter] / (1. + 2. * ((.4 - ratio) / .4));
+                        };
+                    };
+                    // And if it becomes too large, reset it to its initial value
+                    if (step[iter] > m_start_range) step[iter] = m_start_range;
+                }
+            }
+            // Cooling schedule
+            currentT *= Tcoeff;
+        }
+        if (fOLD[0] <= fit0[0]) {
+            pop.set_xf(best_idx, xOLD, fOLD);
+        }
         return pop;
     };
     /// Sets the algorithm verbosity
