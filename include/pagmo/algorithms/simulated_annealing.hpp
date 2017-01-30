@@ -75,7 +75,7 @@ class simulated_annealing
 {
 public:
     /// Single entry of the log (fevals, best, current, avg_range, temperature)
-    typedef std::tuple<unsigned int, double, double, double, double> log_line_type;
+    typedef std::tuple<unsigned long long, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
