@@ -1,4 +1,4 @@
-.. python_tutorials
+.. _python_tutorials:
 
 Python tutorials
 ================

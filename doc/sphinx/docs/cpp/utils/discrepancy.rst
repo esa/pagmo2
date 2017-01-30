@@ -1,4 +1,4 @@
-.. cpp_constrained_optimization
+.. _cpp_low_discrepancy_utils:
 
 Low-discrepancy sequences
 =========================

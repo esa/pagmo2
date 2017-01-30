@@ -1,5 +1,3 @@
-.. cpp_decompose
-
 Decompose
 =====================
 

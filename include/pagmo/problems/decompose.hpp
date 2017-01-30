@@ -103,11 +103,11 @@ public:
      * pagmo::translate objects can be used as user-defined problems in the construction of a pagmo::problem.
      *
      * @tparam T Any type from which pagmo::problem is constructable
-     * @param[in] p The input problem.
-     * @param[in] method an std::string containing the decomposition method chosen
-     * @param[in] weight the vector of weights \f$\boldsymbol \lambda\f$
-     * @param[in] z the reference point \f$\mathbf z^*\f$
-     * @param[in] adapt_ideal when true the reference point is adapted at each fitness evaluation to be the ideal point
+     * @param p The input problem.
+     * @param method an std::string containing the decomposition method chosen
+     * @param weight the vector of weights \f$\boldsymbol \lambda\f$
+     * @param z the reference point \f$\mathbf z^*\f$
+     * @param adapt_ideal when true the reference point is adapted at each fitness evaluation to be the ideal point
      *
      * @throws std::invalid_argument if the problem of type \p T is single objective
      * @throws std::invalid_argument if the problem of type \p T is constrained
@@ -213,7 +213,7 @@ public:
      *
      * **NOTE** This is *not* the fitness of the decomposed problem, that is returned by calling decompose::fitness()
      *
-     * @param[in] x Input decision vector
+     * @param x Input decision vector
      *
      * @returns the fitness of the original multi-objective problem
      */
@@ -226,9 +226,9 @@ public:
     /**
      * Returns the decomposed fitness vector.
      *
-     * @param[in] f Input fitness
-     * @param[in] weight the weight to be used in the decomposition
-     * @param[in] ref_point the reference point to be used if either "tchebycheff" or "bi"
+     * @param f Input fitness
+     * @param weight the weight to be used in the decomposition
+     * @param ref_point the reference point to be used if either "tchebycheff" or "bi"
      * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
      * @returns the decomposed fitness vector
      * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes

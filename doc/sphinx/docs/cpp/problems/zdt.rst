@@ -1,5 +1,3 @@
-.. cpp_zdt
-
 ZDT test suite
 ==============
 

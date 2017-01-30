@@ -96,10 +96,10 @@ public:
     /**
      * Constructs compass_search
      *
-     * @param[in] max_fevals maximum number of function evaluations
-     * @param[in] start_range start range
-     * @param[in] stop_range stop range
-     * @param[in] reduction_coeff range reduction coefficient
+     * @param max_fevals maximum number of function evaluations
+     * @param start_range start range
+     * @param stop_range stop range
+     * @param reduction_coeff range reduction coefficient
      * @throws std::invalid_argument if \p start_range is not in (0,1]
      * @throws std::invalid_argument if \p stop_range is not in (start_range,1]
      * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
@@ -128,7 +128,7 @@ public:
      * Evolves the population up to when the search range becomes smaller than
      * the defined stop_range
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or stochastic
      * @throws std::invalid_argument if the population is empty

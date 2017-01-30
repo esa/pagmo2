@@ -1,5 +1,3 @@
-.. cpp_problem_class
-
 Population
 ==========
 

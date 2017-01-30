@@ -1,4 +1,4 @@
-.. py_plotting
+.. _py_plotting:
 
 Plotting utilities
 ==================

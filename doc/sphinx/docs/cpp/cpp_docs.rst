@@ -1,5 +1,3 @@
-.. cpp
-
 C++ Documentation
 =================
 The full, stand-alone, detailed, documentation of the c++ code.

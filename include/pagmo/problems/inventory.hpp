@@ -80,10 +80,10 @@ public:
      * approximate the expected value and a starting random seed, we construct
      * the inventory prolem
      *
-     * @param[in] weeks dimension of the problem corresponding to the numer of weeks
+     * @param weeks dimension of the problem corresponding to the numer of weeks
      * to plan the inventory for.
-     * @param[in] sample_size dimension of the sample used to approximate the expected value
-     * @param[in] seed starting random seed to build the pseudorandom sequences used to
+     * @param sample_size dimension of the sample used to approximate the expected value
+     * @param seed starting random seed to build the pseudorandom sequences used to
      * generate the sample
      */
     inventory(unsigned int weeks = 4u, unsigned int sample_size = 10u, unsigned int seed = pagmo::random_device::next())

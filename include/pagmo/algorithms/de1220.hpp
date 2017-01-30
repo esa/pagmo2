@@ -125,14 +125,14 @@ public:
      * The first ten are the classical variants introduced in the orginal DE algorithm, the remaining ones are,
      * instead, introduced in the work by Elsayed et al.
      *
-     * @param[in] gen number of generations.
-     * @param[in] allowed_variants the subset of mutation variants to be considered (default is {2u ,3u ,7u ,10u ,13u
+     * @param gen number of generations.
+     * @param allowed_variants the subset of mutation variants to be considered (default is {2u ,3u ,7u ,10u ,13u
      ,14u ,15u ,16u})
-     * @param[in] variant_adptv parameter adaptation scheme to be used (one of 1..2)
-     * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
-     * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
-     * @param[in] memory when true the parameters CR anf F are not reset between successive calls to the evolve method
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param variant_adptv parameter adaptation scheme to be used (one of 1..2)
+     * @param ftol stopping criteria on the x tolerance (default is 1e-6)
+     * @param xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param memory when true the parameters CR anf F are not reset between successive calls to the evolve method
+     * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if \p variant_adptv is not in [0,1]
      * @throws std::invalid_argument if \p allowed_variants contains a number not in 1..18
@@ -168,7 +168,7 @@ public:
      * Evolves the population for a maximum number of generations, until one of
      * tolerances set on the population flatness (x_tol, f_tol) are met.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
      * @throws std::invalid_argument if the population size is not at least 7

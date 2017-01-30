@@ -1,4 +1,4 @@
-.. py_tutorial_using_problem
+.. _py_tutorial_using_problem:
 
 Use of the class :class:`~pygmo.core.problem`
 =============================================
@@ -50,7 +50,7 @@ problem for which neither gradients nor hessians nor sparsity information is pro
 We also see that its fitness function has never been called hence the counter for fitness evaluations is
 zero.
 
-All of the information contained in the :class:`~pygmo.core.problem` print out can be retreived using
+All of the information contained in the :class:`~pygmo.core.problem` print out can be retrieved using
 the appropriate methods, for example:
 
 .. doctest::
@@ -67,8 +67,8 @@ Lets check how a fitness computation increases the counter:
     >>> prob.get_fevals()
     1
 
-We may also get back a copy of the UDP, and thus access all the methods not exposed in the
-:class:`~pygmo.core.problem` interface, at any time via the extract method:
+We may also get back the UDP, and thus access all the methods not exposed in the
+:class:`~pygmo.core.problem` interface at any time via the :class:`~pygmo.core.problem.extract` method:
 
 .. doctest::
 
@@ -79,4 +79,4 @@ We may also get back a copy of the UDP, and thus access all the methods not expo
     >>> type(udp)
     <class 'NoneType'>
 
-Such an extraction will only work if the correct UDP type is passed as argument.
+Such an *extraction* will only work if the correct UDP type is passed as argument.

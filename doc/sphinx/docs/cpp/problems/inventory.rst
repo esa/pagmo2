@@ -1,5 +1,3 @@
-.. cpp_inventory
-
 News-vendor problem
 ===================
 

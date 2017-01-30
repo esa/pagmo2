@@ -134,8 +134,8 @@ public:
      *
      * Will construct one problem from the ZDT test-suite.
      *
-     * @param[in] id problem number. Must be in [1, .., 6]
-     * @param[in] param problem parameter, representing the problem dimension
+     * @param id problem number. Must be in [1, .., 6]
+     * @param param problem parameter, representing the problem dimension
      * except for ZDT5 where it represents the number of binary strings
      *
      * @throws std::invalid_argument if \p id is not in [1,..,6]

@@ -1,5 +1,3 @@
-.. cpp_algorithm_class
-
 Algorithm
 =========
 

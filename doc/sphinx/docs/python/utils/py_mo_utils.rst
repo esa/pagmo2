@@ -1,4 +1,4 @@
-.. py_mo_utils
+.. _py_mo_utils:
 
 Multi-objective optimization utilities
 ======================================

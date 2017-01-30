@@ -1,4 +1,4 @@
-.. cpp_constrained_optimization
+.. _cpp_constrained_utils:
 
 Constrained optimization utilities
 ======================================

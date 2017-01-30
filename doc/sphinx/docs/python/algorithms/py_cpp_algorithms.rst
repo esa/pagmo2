@@ -1,4 +1,4 @@
-.. py_cpp_algorithms
+.. _py_cpp_algorithms:
 
 Algorithms exposed from C++
 ===========================

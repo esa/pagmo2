@@ -1,4 +1,4 @@
-.. py_tutorial_using_population
+.. _py_tutorial_using_population:
 
 Use of the class :class:`~pygmo.core.population`
 ================================================
@@ -65,7 +65,7 @@ via its methods or glancing to the screen print of the entire class:
     	Fitness vector:		[487030]
 
 Individuals, i.e. new candidate solutions can be put into a population calling
-its ``push_pack`` method:
+its :class:`~pygmo.core.population.push_back` method:
 
 .. doctest::
 
@@ -85,7 +85,7 @@ its ``push_pack`` method:
     where: /Users/darioizzo/Documents/pagmo2/include/pagmo/problem.hpp, 1835
     what: Length of decision vector is 3, should be 4
 
-Some consistency checks are done by ``push_pack``, e.g. on the decision vector
+Some consistency checks are done by :class:`~pygmo.core.population.push_back`, e.g. on the decision vector
 length.
 
 .. note:: Decision vectors that are outside of the box bounds are allowed to be
@@ -111,7 +111,7 @@ some individual decision vector:
     >>> print(pop1.get_f()[0])
     [ 8.43469444]
 
-.. note:: Using the method ``set_xf`` it is possible to avoid triggering the fitness
-          function evaluation, but it is also possible to inject spurious information
-          into the population (i.e. breaking the relation between decision vectors
-          and fitness vectors imposed by the problem)
+.. note:: Using the method :class:`~pygmo.core.population.set_xf` it is possible to avoid
+          triggering the fitness function evaluation, but it is also possible to inject
+          spurious information into the population (i.e. breaking the relation between
+          decision vectors and fitness vectors imposed by the problem)

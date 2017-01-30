@@ -1,4 +1,4 @@
-.. cpp_multi_objective_optimization
+.. :cpp_multi_objective_utils:
 
 Multi-objective optimization utilities
 ======================================

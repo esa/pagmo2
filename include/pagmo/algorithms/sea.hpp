@@ -83,8 +83,8 @@ public:
     /**
      * Constructs sea
      *
-     * @param[in] gen Number of generations to consider. Each generation will compute the objective function once
-     * @param[in] seed seed used by the internal random number generator
+     * @param gen Number of generations to consider. Each generation will compute the objective function once
+     * @param seed seed used by the internal random number generator
      */
     sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next())
         : m_gen(gen), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
@@ -93,7 +93,7 @@ public:
 
     /// Algorithm evolve method (juice implementation of the algorithm)
     /**
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained
      */

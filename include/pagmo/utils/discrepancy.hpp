@@ -68,7 +68,7 @@ namespace pagmo
  * }
  * @endcode
  *
- * @param[in] in a <tt>std::vector</tt> containing a point in \f$n+1\f$ dimensions.
+ * @param in a <tt>std::vector</tt> containing a point in \f$n+1\f$ dimensions.
  * @return a <tt>std::vector</tt> containing the projected point of \f$n\f$ dimensions.
  *
  * @throws std::invalid_argument if the input vector elements are not in [0,1]
@@ -135,8 +135,8 @@ public:
      * Consruct a van der Corput lowp-discrepancy sequence with base
      * \p b and starting element position \p n
      *
-     * @param[in] b base
-     * @param[in] n position of the starting element
+     * @param b base
+     * @param n position of the starting element
      *
      * @throws std::invalid_argument if the base is 0u or 1u
      *
@@ -200,8 +200,8 @@ private:
  * \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\}
  * \f]
  *
- * @param[in] n selects which element of the sequence to return
- * @param[in] dim dimensions of the returned point
+ * @param n selects which element of the sequence to return
+ * @param dim dimensions of the returned point
  *
  * @see https://en.wikipedia.org/wiki/Halton_sequence
  *
@@ -214,8 +214,8 @@ public:
      * Consruct a Halton low-discrepancy sequence with dimension
      * \p dim and starting element position \p n
      *
-     * @param[in] dim dimension
-     * @param[in] n position of the starting element
+     * @param dim dimension
+     * @param n position of the starting element
      *
      * @throws unspecified all exceptions thrown by pagmo::van_der_corput
      *

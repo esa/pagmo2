@@ -1,5 +1,3 @@
-.. cpp_mbh
-
 Monotonic Basin Hopping (MBH) - Generalized
 ===========================================================
 

@@ -1,5 +1,3 @@
-.. py_algorithm
-
 Algorithm class
 ===============
 

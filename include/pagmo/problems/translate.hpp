@@ -59,8 +59,8 @@ public:
      * pagmo::translate objects can be used as user-defined problems in the construction of a pagmo::problem.
      *
      * @tparam T Any type from which pagmo::problem is constructable
-     * @param[in] p The user defined problem.
-     * @param[in] translation An <tt>std::vector</tt> containing the translation to apply.
+     * @param p The user defined problem.
+     * @param translation An <tt>std::vector</tt> containing the translation to apply.
      *
      * @throws std::invalid_argument if the length of \p translation is
      * not equal to the problem dimension \f$ n_x\f$.

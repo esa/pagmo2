@@ -1,4 +1,4 @@
-.. py_tutorial_using_algorithm
+.. _py_tutorial_using_algorithm:
 
 Use of the class :class:`~pygmo.core.algorithm`
 ===============================================
@@ -41,14 +41,14 @@ Let us start:
 In the code above, after the trivial import of the pygmo package, we define a variable algo
 by constructing a :class:`~pygmo.core.algorithm` from :class:`~pygmo.core.cmaes`, our implementation
 of the Covariance Matrix Adaptation Evolutionary Strategy. To construct the pygmo UDA we also pass
-some parameters (gen and sigma0) whose meaning is documented in :class:`~pygmo.core.cmaes`.
+some parameters (``gen`` and ``sigma0``) whose meaning is documented in :class:`~pygmo.core.cmaes`.
 In the following line we inspect the :class:`~pygmo.core.algorithm`. We can see, at a glance, the
 name of the :class:`~pygmo.core.algorithm` and some extra info that indicate the user (in this case us),
 has implemented, in the UDA (in this case :class:`~pygmo.core.cmaes`), the optional method
-get_extra_info that prints to screen some fundamental parameters defining the UDA.
+``get_extra_info()`` that prints to screen some fundamental parameters defining the UDA.
 
-We may also get back a copy of the UDA, and thus access also its methods not exposed in the
-:class:`~pygmo.core.algorithm` interface, at any time via the extract method:
+We may also get access to the UDA, and thus to its methods not exposed in the
+:class:`~pygmo.core.algorithm` interface, at any time via the :class:`~pygmo.core.algorithm.extract` method:
 
 .. doctest::
 

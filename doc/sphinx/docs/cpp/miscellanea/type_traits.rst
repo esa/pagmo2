@@ -1,4 +1,4 @@
-.. cpp_type_traits
+.. _cpp_type_traits:
 
 Type traits
 ===========

@@ -1,4 +1,4 @@
-.. py_meta_problems
+.. _py_meta_problems:
 
 Meta-problems
 =============

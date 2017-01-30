@@ -92,14 +92,14 @@ public:
     /**
      * Constructs Monotonic Basin Hopping using a scalar perturbation
      *
-     * @param[in] a Any object that can construct a pagmo::algorithm and that will
+     * @param a Any object that can construct a pagmo::algorithm and that will
      * then be used as inner algorithm for the generalized mbh.
-     * @param[in] stop consecutive runs of the inner algorithm that need to
+     * @param stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop
-     * @param[in] perturb the perturbation to be applied to each component
+     * @param perturb the perturbation to be applied to each component
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param seed seed used by the internal random number generator (default is random)
      * @throws std::invalid_argument if \p stop is not in (0,1]
      */
     template <typename T>
@@ -116,14 +116,14 @@ public:
     /**
      * Constructs Monotonic Basin Hopping using a vector perturbation
      *
-     * @param[in] a Any object that can construct a pagmo::algorithm and that will
+     * @param a Any object that can construct a pagmo::algorithm and that will
      * then be used as inner algorithm for the generalized mbh.
-     * @param[in] stop consecutive runs of the inner algorithm that need to
+     * @param stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop
-     * @param[in] perturb a vector_double with the perturbations to be applied to each component
+     * @param perturb a vector_double with the perturbations to be applied to each component
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param seed seed used by the internal random number generator (default is random)
      * @throws std::invalid_argument if \p stop is not in (0,1]
      */
     template <typename T>
@@ -142,7 +142,7 @@ public:
      * Evolves the population up to when \p stop consecutve runs of the internal
      * algorithm do not improve the solution.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or stochastic
      * @throws std::invalid_argument if the perturbation vector size does not equal the problem size

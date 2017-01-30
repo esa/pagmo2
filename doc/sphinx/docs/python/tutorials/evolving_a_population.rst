@@ -1,4 +1,4 @@
-.. py_tutorial_evolving_population
+.. _py_tutorial_evolving_population:
 
 Evolving a population
 =====================
@@ -9,11 +9,11 @@ discussion has developed over the past decades on whether evolution is or not a 
 optimization. In pygmo we take the opposite standpoint and we regard optimization,
 of all types, as a form of evolution. Regardless on whether you will be using an SQP,
 an interior point optimizer or an evolutionary startegy solver, in pygmo you will
-always have to call a method called ``evolve`` to improve over your initial solutions,
+always have to call a method called ``evolve()`` to improve over your initial solutions,
 i.e. your *population*.
 
 The simplest way to evolve a population is to use directly the :class:`~pygmo.core.algorithm`
-method called ``evolve``:
+method :class:`~pygmo.core.algorithm.evolve`
 
 .. doctest::
 
@@ -41,12 +41,13 @@ method called ``evolve``:
     :alt: alternate text
     :align: right
 
-Clearly, as :class:`~pygmo.core.sade` is a stochastic optimization algorithm, each time
-we repeat the evolution on a different population we will get different results. One could
-want to monitor multiple runs and see how, for example, the final best fitness is achieved as the
-number of fitness evaluations increase. Most pygmo UDAs allow to do this as they maintain an
-internal log that can be accessed after the UDA has been extracted. This allows, for example to
-obtain plots such as that on right, where multiple trials are monitored:
+Clearly, as :class:`~pygmo.core.sade` is a stochastic optimization algorithm, should we repeat the
+evolution starting from the same population, we would obtain different results. If we
+want to monitor multiple runs from different initial populations and see how the final best fitness
+is achieved as the number of fitness evaluations increase. Most pygmo UDAs allow to do this
+as they maintain an internal log that can be accessed after the UDA has been
+extracted (see :class:`~pygmo.core.algorithm.extract`). This allows, for example to obtain
+plots such as those on the right, where multiple trials are monitored:
 
 .. doctest::
 

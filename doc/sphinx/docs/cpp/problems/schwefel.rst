@@ -1,5 +1,3 @@
-.. cpp_rastrigin
-
 Schwefel
 ==========
 

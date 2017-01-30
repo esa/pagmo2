@@ -1,4 +1,4 @@
-.. cpp_generic_utilities
+.. _cpp_generic_utilities:
 
 Generic utilities
 =================

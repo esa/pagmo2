@@ -110,14 +110,14 @@ public:
      * The first ten are the classical mutation variants introduced in the orginal DE algorithm, the remaining ones are,
      * instead, considered in the work by Elsayed et al.
      *
-     * @param[in] gen number of generations.
-     * @param[in] variant mutation variant (dafault variant is 2: /rand/1/exp)
-     * @param[in] variant_adptv F and CR parameter adaptation scheme to be used (one of 1..2)
-     * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
-     * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
-     * @param[in] memory when true the adapted parameters CR anf F are not reset between successive calls to the evolve
+     * @param gen number of generations.
+     * @param variant mutation variant (dafault variant is 2: /rand/1/exp)
+     * @param variant_adptv F and CR parameter adaptation scheme to be used (one of 1..2)
+     * @param ftol stopping criteria on the x tolerance (default is 1e-6)
+     * @param xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param memory when true the adapted parameters CR anf F are not reset between successive calls to the evolve
      method
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if \p variant_adptv is not one of 0,1
      * @throws std::invalid_argument if variant is not one of 1, .., 18
@@ -144,7 +144,7 @@ public:
      * Evolves the population for a maximum number of generations, until one of
      * tolerances set on the population flatness (x_tol, f_tol) are met.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
      * @throws std::invalid_argument if the population size is not at least 7

@@ -1,4 +1,4 @@
-.. python_docs
+.. _python_docs:
 
 Python Documentation
 ====================
