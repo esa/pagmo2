@@ -30,7 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_ALGORITHMS_SIMULATED_ANNEALING_HPP
 
 #include <algorithm> //std::accumulate
-#include <cmath> //std::is_finite
+#include <cmath>     //std::is_finite
 #include <iomanip>
 #include <random>
 #include <string>
@@ -178,17 +178,17 @@ public:
         // Main SA loops
         for (decltype(m_n_T_adj) jter = 0u; jter < m_n_T_adj; ++jter) {
             for (decltype(m_n_range_adj) mter = 0u; mter < m_n_range_adj; ++mter) {
-                // We log to screen
+                // 1 - We log to screen
                 if (m_verbosity > 0u) {
                     // Prints a log line maximum every m_verbosity function evaluations
                     auto fevals_count = prob.get_fevals() - fevals0;
-                    if (fevals_count > count * m_verbosity || count == 1u  ) {
+                    if (fevals_count >= count * m_verbosity || count == 1u) {
                         // 1 - Every 50 lines print the column names
                         if (count % 50u == 1u) {
                             print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Current:",
-                                  std::setw(15), "Range:", std::setw(15), "Temperature:", '\n');
+                                  std::setw(15), "Mean range:", std::setw(15), "Temperature:", '\n');
                         }
-                        auto avg_range = std::accumulate( step.begin(), step.end(), 0.) / step.size();
+                        auto avg_range = std::accumulate(step.begin(), step.end(), 0.) / step.size();
                         // 2 - Print
                         print(std::setw(7), fevals_count, std::setw(15), best_f[0], std::setw(15), fOLD[0],
                               std::setw(15), avg_range, std::setw(15), currentT);
@@ -198,6 +198,7 @@ public:
                         m_log.push_back(log_line_type(fevals_count, best_f[0], fOLD[0], avg_range, currentT));
                     }
                 }
+                // 2 - Annealing
                 for (decltype(m_bin_size) kter = 0u; kter < m_bin_size; ++kter) {
                     auto nter = std::uniform_int_distribution<vector_double::size_type>(0u, dim - 1u)(m_e);
                     for (decltype(dim) numb = 0u; numb < dim; ++numb) {
@@ -223,8 +224,7 @@ public:
                             fOLD = fNEW;
                             acp[nter]++; // Increase the number of accepted values
                             // We update the best
-                            if (fNEW[0] <= best_f[0])
-                            {
+                            if (fNEW[0] <= best_f[0]) {
                                 best_f = fNEW;
                                 best_x = xNEW;
                             }
@@ -240,8 +240,8 @@ public:
                                 xNEW[nter] = xOLD[nter];
                             }
                         }
-                    }     // end for(nter = 0; ...
-                }         // end for(kter = 0; ...
+                    } // end for(nter = 0; ...
+                }     // end for(kter = 0; ...
                 // adjust the step (adaptively)
                 for (decltype(dim) iter = 0u; iter < dim; ++iter) {
                     ratio = static_cast<double>(acp[iter]) / static_cast<double>(m_bin_size);
@@ -262,6 +262,7 @@ public:
             // Cooling schedule
             currentT *= Tcoeff;
         }
+        // We update the decision vector in pop
         if (best_f[0] <= fit0[0]) {
             pop.set_xf(best_idx, best_x, best_f);
         }
@@ -272,21 +273,28 @@ public:
      * Sets the verbosity level of the screen output and of the
      * log returned by get_log(). \p level can be:
      * - 0: no verbosity
-     * - 1: will only print and log when the population is improved
-     * - >1: will print and log one line each \p level generations.
+     * - >=1: will print and log one line at minimum every \p level function evaluations.
      *
-     * Example (verbosity 1):
+     * Example (verbosity 5000):
      * @code{.unparsed}
-     * Gen:        Fevals:          Best:   Improvement:     Mutations:
-     * 632           3797        1464.31        51.0203              1
-     * 633           3803        1463.23        13.4503              1
-     * 635           3815        1562.02        31.0434              3
-     * 667           4007         1481.6        24.1889              1
-     * 668           4013        1487.34        73.2677              2
+     * Fevals:          Best:       Current:    Mean range:   Temperature:
+     *  ...
+     *  45035      0.0700823       0.135928     0.00116657      0.0199526
+     *  50035      0.0215442      0.0261641    0.000770297           0.01
+     *  55035     0.00551839      0.0124842    0.000559839     0.00501187
+     *  60035     0.00284761     0.00703856    0.000314098     0.00251189
+     *  65035     0.00264808      0.0114764    0.000314642     0.00125893
+     *  70035      0.0011007     0.00293813    0.000167859    0.000630957
+     *  75035    0.000435798     0.00184352    0.000126954    0.000316228
+     *  80035    0.000287984    0.000825294    8.91823e-05    0.000158489
+     *  85035     9.5885e-05    0.000330647    6.49981e-05    7.94328e-05
+     *  90035     4.7986e-05    0.000148512    4.24692e-05    3.98107e-05
+     *  95035    2.43633e-05    2.43633e-05    2.90025e-05    1.99526e-05
      * @endcode
-     * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
-     * function currently in the population, Improvement is the improvement made by the las mutation and Mutations
-     * is the number of mutated componnets of the decision vector
+     *
+     * Fevals is the number of function evaluation used, Best is the best fitness
+     * function found, Current is the last fitness sampled, Mean range is the Mean
+     * search range across the decision vector components, Temperature is the current temperature.
      *
      * @param level verbosity level
      */
@@ -350,22 +358,24 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a sea::log_line_type containing: Gen, Fevals, Best, Improvement, Mutations as described
-     * in sea::set_verbosity
-     * @return an <tt> std::vector </tt> of sea::log_line_type containing the logged values Gen, Fevals, Best,
+     * <tt> std::vector </tt> is a simulated_annealing::log_line_type containing: Fevals  Best Current Mean range
+     * Temperature as described
+     * in simulated_annealing::set_verbosity
+     * @return an <tt> std::vector </tt> of simulated_annealing::log_line_type containing the logged values Gen, Fevals,
+     * Best,
      * Improvement, Mutations
      */
-    // const log_type &get_log() const
-    //{
-    //    return m_log;
-    //}
+    const log_type &get_log() const
+    {
+        return m_log;
+    }
     /// Object serialization
     /**
      * This method will save/load \p this into the archive \p ar.
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
      */
     template <typename Archive>
     void serialize(Archive &ar)
