@@ -1101,11 +1101,6 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log`.
 )";
 }
 
-
-
-
-
-
 std::string simulated_annealing_docstring()
 {
     return R"(__init__(Ts = 10., Tf = .1, n_T_adj = 10, n_range_adj = 10, bin_size = 10, start_range = 1., seed = random)
@@ -1193,29 +1188,6 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_anneali
 
 )";
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 std::string decompose_decompose_fitness_docstring()
 {
