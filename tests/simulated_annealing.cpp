@@ -67,3 +67,12 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{rosenbrock{}}})), std::invalid_argument);
 }
+
+BOOST_AUTO_TEST_CASE(simulated_annealing_algorithm_evolve)
+{
+    simulated_annealing user_algo{10, 0.00001, 100u, 10u, 10u, 1.};
+    algorithm algo{user_algo};
+    population pop{rosenbrock{10u}, 20u};
+    algo.set_verbosity(5000u);
+    pop = algo.evolve(pop);
+}

@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_SIMULATED_ANNEALING_HPP
 #define PAGMO_ALGORITHMS_SIMULATED_ANNEALING_HPP
 
+#include <algorithm> //std::accumulate
 #include <cmath> //std::is_finite
 #include <iomanip>
 #include <random>
@@ -177,6 +178,26 @@ public:
         // Main SA loops
         for (decltype(m_n_T_adj) jter = 0u; jter < m_n_T_adj; ++jter) {
             for (decltype(m_n_range_adj) mter = 0u; mter < m_n_range_adj; ++mter) {
+                // We log to screen
+                if (m_verbosity > 0u) {
+                    // Prints a log line maximum every m_verbosity function evaluations
+                    auto fevals_count = prob.get_fevals() - fevals0;
+                    if (fevals_count > count * m_verbosity || count == 1u  ) {
+                        // 1 - Every 50 lines print the column names
+                        if (count % 50u == 1u) {
+                            print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Current:",
+                                  std::setw(15), "Range:", std::setw(15), "Temperature:", '\n');
+                        }
+                        auto avg_range = std::accumulate( step.begin(), step.end(), 0.) / step.size();
+                        // 2 - Print
+                        print(std::setw(7), fevals_count, std::setw(15), best_f[0], std::setw(15), fOLD[0],
+                              std::setw(15), avg_range, std::setw(15), currentT);
+                        ++count;
+                        std::cout << std::endl; // we flush here as we want the user to read in real time ...
+                        // Logs
+                        m_log.push_back(log_line_type(fevals_count, best_f[0], fOLD[0], avg_range, currentT));
+                    }
+                }
                 for (decltype(m_bin_size) kter = 0u; kter < m_bin_size; ++kter) {
                     auto nter = std::uniform_int_distribution<vector_double::size_type>(0u, dim - 1u)(m_e);
                     for (decltype(dim) numb = 0u; numb < dim; ++numb) {
@@ -201,8 +222,12 @@ public:
                             xOLD[nter] = xNEW[nter];
                             fOLD = fNEW;
                             acp[nter]++; // Increase the number of accepted values
-                            best_f = fNEW;
-                            best_x = xNEW;
+                            // We update the best
+                            if (fNEW[0] <= best_f[0])
+                            {
+                                best_f = fNEW;
+                                best_x = xNEW;
+                            }
                         } else {
                             // test it with Boltzmann to decide the acceptance
                             probab = std::exp(-std::abs(fOLD[0] - fNEW[0]) / currentT);
@@ -214,7 +239,7 @@ public:
                             } else {
                                 xNEW[nter] = xOLD[nter];
                             }
-                        } // end if
+                        }
                     }     // end for(nter = 0; ...
                 }         // end for(kter = 0; ...
                 // adjust the step (adaptively)
@@ -233,29 +258,12 @@ public:
                     // And if it becomes too large, reset it to its initial value
                     if (step[iter] > m_start_range) step[iter] = m_start_range;
                 }
-                // We log to screen
-                if (m_verbosity > 0u) {
-                    // Prints a log line after each range adjustment
-                    // 1 - Every 50 lines print the column names
-                    if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Current:",
-                              std::setw(15), "Range:", std::setw(15), "Temperature:", '\n');
-                    }
-                    auto avg_range = std::accumulate( step.begin(), step.end(), 0.) / step.size();
-                    // 2 - Print
-                    print(std::setw(7), prob.get_fevals() - fevals0, std::setw(15), best_f[0], std::setw(15), fOLD[0],
-                          std::setw(15), avg_range, std::setw(15), currentT);
-                    ++count;
-                    std::cout << std::endl; // we flush here as we want the user to read in real time ...
-                    // Logs
-                    m_log.push_back(log_line_type(prob.get_fevals() - fevals0, best_f[0], fOLD[0], avg_range, currentT));
-                }
             }
             // Cooling schedule
             currentT *= Tcoeff;
         }
-        if (fOLD[0] <= fit0[0]) {
-            pop.set_xf(best_idx, xOLD, fOLD);
+        if (best_f[0] <= fit0[0]) {
+            pop.set_xf(best_idx, best_x, best_f);
         }
         return pop;
     };
