@@ -222,7 +222,7 @@ public:
         // Initialise the minimum and maximum velocity
         for (decltype(dim) i = 0u; i < dim; ++i) {
             vwidth = (ub[i] - lb[i]) * m_max_vel;
-            minv[i] = -1.0 * vwidth;
+            minv[i] = -1. * vwidth;
             maxv[i] = vwidth;
         }
 
@@ -393,12 +393,12 @@ public:
                     // to the newly corrected feasible position)
                     if (new_x < lb[d]) {
                         new_x = lb[d];
-                        m_V[p][d] = 0.0;
+                        m_V[p][d] = 0.;
                         //					new_x = boost::uniform_real<double>(lb[d],ub[d])(m_drng);
                         //					V[p][d] = new_x - X[p][d];
                     } else if (new_x > ub[d]) {
                         new_x = ub[d];
-                        m_V[p][d] = 0.0;
+                        m_V[p][d] = 0.;
                         //					new_x = boost::uniform_real<double>(lb[d],ub[d])(m_drng);
                         //					V[p][d] = new_x - X[p][d];
                     }
@@ -515,7 +515,7 @@ public:
         stream(ss, "\n\tMaximum velocity: ", m_max_vel);
         stream(ss, "\n\tVariant: ", m_variant);
         stream(ss, "\n\tTopology: ", m_neighb_type);
-        if (m_neighb_type == 2 || m_neighb_type == 4) {
+        if (m_neighb_type == 2u || m_neighb_type == 4u) {
             stream(ss, "\n\tTopology parameter: ", m_neighb_param);
         }
         stream(ss, "\n\tSeed: ", m_seed);
@@ -620,11 +620,10 @@ private:
          * is discouraged. However, because a user might still configure such a setup, we must ensure FIPS has access to
          * the list of indices of particles' neighbours:
          */
-        if (m_variant == 6) {
-            unsigned int i;
-            for (i = 0; i < neighb.size(); i++)
+        if (m_variant == 6u) {
+            for (decltype(neighb.size()) i = 0u; i < neighb.size(); i++)
                 neighb[0].push_back(i);
-            for (i = 1; i < neighb.size(); i++)
+            for (decltype(neighb.size()) i = 0u; i < neighb.size(); i++)
                 neighb[i] = neighb[0];
         }
     }
@@ -645,16 +644,13 @@ private:
     void initialize_topology__lbest(std::vector<std::vector<int>> &neighb) const
     {
         int swarm_size = neighb.size();
-        int pidx;    // for iterating over particles
-        int nidx, j; // for iterating over particles' neighbours
-
         int radius = m_neighb_param / 2;
 
-        for (pidx = 0; pidx < swarm_size; pidx++) {
-            for (j = -radius; j <= radius; j++) {
-                if (j == 0) j++;
-                nidx = (pidx + j) % swarm_size;
-                if (nidx < 0) nidx = swarm_size + nidx;
+        for (decltype(swarm_size) pidx = 0u; pidx < swarm_size; pidx++) {
+            for (decltype(radius) j = -radius; j <= radius; j++) {
+                if (j == 0u) j++;
+                auto nidx = (pidx + j) % swarm_size;
+                if (nidx < 0u) nidx = swarm_size + nidx;
                 neighb[pidx].push_back(nidx);
             }
         }
@@ -693,20 +689,19 @@ private:
     {
         int swarm_size = neighb.size();
         int cols, rows; // lattice structure
-        int pidx, nidx; // particle and neighbour indices, in the swarm and neighbourhood vectors
         int p_x, p_y;   // particle's coordinates in the lattice
         int n_x, n_y;   // particle neighbor's coordinates in the lattice
 
         rows = std::sqrt(swarm_size);
-        while (swarm_size % rows != 0)
+        while (swarm_size % rows != 0u)
             rows -= 1;
         cols = swarm_size / rows;
 
-        for (pidx = 0; pidx < swarm_size; pidx++) {
+        for (decltype(swarm_size) pidx = 0u; pidx < swarm_size; pidx++) {
             p_x = pidx % cols;
             p_y = pidx / cols;
 
-            for (nidx = 0; nidx < 4; nidx++) {
+            for (unsigned int nidx = 0u; nidx < 4u; nidx++) {
                 n_x = (p_x + vonNeumann_neighb_diff[nidx][0]) % cols;
                 if (n_x < 0)
                     n_x = cols + n_x; // sign of remainder(%) in a division when at least one of the operands is
