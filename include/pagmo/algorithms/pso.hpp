@@ -83,10 +83,10 @@ namespace pagmo
 class pso
 {
 public:
-    /// Single entry of the log (fevals, best, current, avg_range, temperature)
-    // typedef std::tuple<unsigned long long, double, double, double, double> log_line_type;
+    /// Single entry of the log (gen, fevals, best, velocity, lb_avg, cur_avg)
+    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
     /// The log
-    // typedef std::vector<log_line_type> log_type;
+    typedef std::vector<log_line_type> log_type;
 
     /// Constructor.
     /**
@@ -119,7 +119,7 @@ public:
         unsigned int seed = pagmo::random_device::next())
         : m_gen(gen), m_omega(omega), m_eta1(eta1), m_eta2(eta2), m_max_vel(max_vel), m_variant(variant),
           m_neighb_type(neighb_type), m_neighb_param(neighb_param), m_memory(memory), m_V(), m_e(seed), m_seed(seed),
-          m_verbosity(0u) //, m_log()
+          m_verbosity(0u), m_log()
     {
         if (m_omega < 0. || m_omega > 1.) {
             // variants using Inertia weight
@@ -189,9 +189,8 @@ public:
                                                    + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
-
         // No throws, all valid: we clear the logs
-        // m_log.clear();
+        m_log.clear();
 
         auto swarm_size = pop.size();
         // Some vectors used are allocated here.
@@ -530,10 +529,10 @@ public:
      * @return an <tt> std::vector </tt> of simulated_annealing::log_line_type containing the logged values Gen, Fevals,
      * Best, Improvement, Mutations
      */
-    // const log_type &get_log() const
-    //{
-    //    return m_log;
-    //}
+    const log_type &get_log() const
+    {
+        return m_log;
+    }
     /// Object serialization
     /**
      * This method will save/load \p this into the archive \p ar.
@@ -546,7 +545,7 @@ public:
     void serialize(Archive &ar)
     {
         ar(m_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param, m_e, m_seed,
-           m_verbosity); //, m_log);
+           m_verbosity, m_log);
     }
 
 private:
@@ -561,9 +560,8 @@ private:
      *  @return best position already visited by any of the considered particle's neighbours
      */
     vector_double particle__get_best_neighbor(population::size_type pidx, std::vector<std::vector<int>> &neighb,
-                                                     const std::vector<vector_double> &lbX,
-                                                     const std::vector<vector_double> &lbfit,
-                                                     const problem &prob) const
+                                              const std::vector<vector_double> &lbX,
+                                              const std::vector<vector_double> &lbfit, const problem &prob) const
     {
         population::size_type bnidx; // neighbour index; best neighbour index
 
@@ -571,7 +569,8 @@ private:
             case 1: // { gbest }
                 // ERROR: execution should not reach this point, as the global best position is not tracked using the
                 // neighb vector
-                pagmo_throw(std::invalid_argument, "particle__get_best_neighbor() invoked while using a gbest swarm topology");
+                pagmo_throw(std::invalid_argument,
+                            "particle__get_best_neighbor() invoked while using a gbest swarm topology");
                 break;
             case 2: // { lbest }
             case 3: // { von }
@@ -580,8 +579,7 @@ private:
                 // iterate over indexes of the particle's neighbours, and identify the best
                 bnidx = neighb[pidx][0];
                 for (decltype(neighb[pidx].size()) nidx = 1u; nidx < neighb[pidx].size(); ++nidx)
-                    if (lbfit[neighb[pidx][nidx]] <= lbfit[bnidx])
-                    {
+                    if (lbfit[neighb[pidx][nidx]] <= lbfit[bnidx]) {
                         bnidx = neighb[pidx][nidx];
                     }
                 return lbX[bnidx];
@@ -609,7 +607,7 @@ private:
      *  @param[out] neighb definition of the swarm's topology
      */
     void initialize_topology__gbest(const population &pop, vector_double &gbX, vector_double &gbfit,
-                                         std::vector<std::vector<int>> &neighb) const
+                                    std::vector<std::vector<int>> &neighb) const
     {
         // The best position already visited by the swarm will be tracked in pso::evolve() as particles are evaluated.
         // Here we define the initial values of the variables that will do that tracking.
@@ -786,7 +784,7 @@ private:
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;
-    // mutable log_type m_log;
+    mutable log_type m_log;
 };
 
 } // namespace pagmo
