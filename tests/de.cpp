@@ -54,11 +54,15 @@ BOOST_AUTO_TEST_CASE(de_algorithm_construction)
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK((user_algo.get_log() == de::log_type{}));
 
-    BOOST_CHECK_THROW((de{1234u, 1.2}), std::invalid_argument);
-    BOOST_CHECK_THROW((de{1234u, -0.4}), std::invalid_argument);
-    BOOST_CHECK_THROW((de{1234u, 0.7, 1.2}), std::invalid_argument);
-    BOOST_CHECK_THROW((de{1234u, 0.7, -1.2}), std::invalid_argument);
-    BOOST_CHECK_THROW((de{1234u, 0.7, 0.5, 12u}), std::invalid_argument);
+    BOOST_CHECK_THROW((de{1234u, 1.2, 0.5, 0u, 1e-6, 1e-6, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((de{1234u, 1.2, 0.5, 10u, 1e-6, 1e-6, 23u}), std::invalid_argument);
+
+    BOOST_CHECK_THROW((de{1234u, 1.2, 0.5, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((de{1234u, -0.7, 0.5, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
+
+    BOOST_CHECK_THROW((de{1234u, 0.7, 1.5, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((de{1234u, 0.7, -0.5, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
+
 }
 
 BOOST_AUTO_TEST_CASE(de_evolve_test)

@@ -306,7 +306,7 @@ public:
     void serialize(Archive &ar)
     {
         ar(m_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param, m_e, m_seed,
-           m_verbosity) //, m_log);
+           m_verbosity); //, m_log);
     }
 
 private:
