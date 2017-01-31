@@ -62,7 +62,6 @@ BOOST_AUTO_TEST_CASE(de_algorithm_construction)
 
     BOOST_CHECK_THROW((de{1234u, 0.7, 1.5, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((de{1234u, 0.7, -0.5, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
-
 }
 
 BOOST_AUTO_TEST_CASE(de_evolve_test)
