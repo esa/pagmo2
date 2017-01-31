@@ -574,7 +574,6 @@ Raises:
 )";
 }
 
-
 std::string problem_gradient_docstring()
 {
     return R"(gradient(dv)

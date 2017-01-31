@@ -53,6 +53,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
+#include <boost/python/return_internal_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 #include <boost/python/scope.hpp>
 #include <boost/python/self.hpp>
@@ -415,6 +416,27 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
            && std::all_of(res.begin(), res.end(), [m](const vector_double &v) { return v.size() == m; });
 }
 
+// A test problem.
+struct test_problem {
+    vector_double fitness(const vector_double &) const
+    {
+        return {1.};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    void set_n(int n)
+    {
+        m_n = n;
+    }
+    int get_n() const
+    {
+        return m_n;
+    }
+    int m_n = 1;
+};
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -631,18 +653,20 @@ BOOST_PYTHON_MODULE(core)
     auto &tp = *pygmo::translate_ptr;
     // Constructor from Python user-defined problem and translation vector (allows to translate Python problems).
     tp.def("__init__", pygmo::make_translate_init<bp::object>())
+        .def("__init__", pygmo::make_translate_init<problem>())
         // Constructor of translate from translate and translation vector. This allows to apply the
         // translation multiple times.
         .def("__init__", pygmo::make_translate_init<translate>())
         // Problem extraction.
         .def("_py_extract", &pygmo::generic_py_extract<translate>)
-        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>);
+        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>());
     // Mark it as a cpp problem.
     tp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from translate.
     pygmo::problem_prob_init<translate>();
     // Extract a translated problem from the problem class.
-    problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, translate>);
+    problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, translate>,
+                      bp::return_internal_reference<>());
     // Add it to the the problems submodule.
     bp::scope().attr("problems").attr("translate") = tp;
 
@@ -663,7 +687,8 @@ BOOST_PYTHON_MODULE(core)
     // Ctor of problem from decompose.
     pygmo::problem_prob_init<decompose>();
     // Extract a decomposed problem from the problem class.
-    problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, decompose>);
+    problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, decompose>,
+                      bp::return_internal_reference<>());
     // Add it to the problems submodule.
     bp::scope().attr("problems").attr("decompose") = dp;
 
@@ -672,13 +697,17 @@ BOOST_PYTHON_MODULE(core)
     // Construct translate from decompose.
     tp.def("__init__", pygmo::make_translate_init<decompose>());
     // Extract decompose from translate.
-    tp.def("_cpp_extract", &pygmo::generic_cpp_extract<translate, decompose>);
+    tp.def("_cpp_extract", &pygmo::generic_cpp_extract<translate, decompose>, bp::return_internal_reference<>());
     // Construct decompose from translate.
     dp.def("__init__", pygmo::make_decompose_init<translate>());
     // Extract translate from decompose.
-    dp.def("_cpp_extract", &pygmo::generic_cpp_extract<decompose, translate>);
+    dp.def("_cpp_extract", &pygmo::generic_cpp_extract<decompose, translate>, bp::return_internal_reference<>());
 
     // Exposition of C++ problems.
+    // Test problem.
+    auto test_p = pygmo::expose_problem<test_problem>("_test_problem", "A test problem.");
+    test_p.def("get_n", &test_problem::get_n);
+    test_p.def("set_n", &test_problem::set_n);
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>(
         "null_problem",

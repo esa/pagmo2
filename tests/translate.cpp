@@ -125,3 +125,10 @@ BOOST_AUTO_TEST_CASE(translate_stochastic_test)
     problem p{translate{p0, {0.1, -0.2, 0.3, 0.4}}};
     BOOST_CHECK(!p.is_stochastic());
 }
+
+BOOST_AUTO_TEST_CASE(translate_extract_test)
+{
+    hock_schittkowsky_71 p0{};
+    translate t{problem{p0}, {0.1, -0.2, 0.3, 0.4}};
+    BOOST_CHECK(t.extract<problem>() == nullptr);
+}

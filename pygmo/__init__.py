@@ -43,14 +43,14 @@ from . import plotting
 def _problem_extract(self, t):
     """Extract user-defined problem instance.
 
-    If *t* is the same type of the user-defined problem used to construct this problem, then a deep copy of
-    the user-defined problem will be returned. Otherwise, ``None`` will be returned.
+    If *t* is the same type of the user-defined problem used to construct this problem, then a reference to
+    the internal user-defined problem will be returned. Otherwise, ``None`` will be returned.
 
     Args:
         t (type): the type of the user-defined problem to extract
 
     Returns:
-        a deep-copy of the internal user-defined problem if it is of type *t*, or ``None`` otherwise
+        a reference to the internal user-defined problem if it is of type *t*, or ``None`` otherwise
 
     Raises:
         TypeError: if *t* is not a type
@@ -59,14 +59,8 @@ def _problem_extract(self, t):
     if not isinstance(t, type):
         raise TypeError("the 't' parameter must be a type")
     if hasattr(t, "_pygmo_cpp_problem"):
-        try:
-            return self._cpp_extract(t())
-        except TypeError:
-            return None
-    try:
-        return self._py_extract(t)
-    except TypeError:
-        return None
+        return self._cpp_extract(t())
+    return self._py_extract(t)
 
 
 def _problem_is(self, t):

@@ -586,28 +586,19 @@ inline T generic_deepcopy_wrapper(const T &x, bp::dict)
 
 // Generic extract() wrappers.
 template <typename C, typename T>
-inline T generic_cpp_extract(const C &c, const T &)
+inline T *generic_cpp_extract(C &c, const T &)
 {
-    auto ptr = c.template extract<T>();
-    if (!ptr) {
-        // TODO: demangler?
-        pygmo_throw(PyExc_TypeError, "");
-    }
-    return *ptr;
+    return c.template extract<T>();
 }
 
 template <typename C>
-inline bp::object generic_py_extract(const C &c, const bp::object &t)
+inline bp::object generic_py_extract(C &c, const bp::object &t)
 {
     auto ptr = c.template extract<bp::object>();
-    if (!ptr) {
-        pygmo_throw(PyExc_TypeError, "could not extract a Python object: "
-                                     "the inner object is a C++ exposed type");
+    if (!ptr || type(*ptr) != t) {
+        return bp::object{};
     }
-    if (type(*ptr) != t) {
-        pygmo_throw(PyExc_TypeError, ("the inner object is not of type " + str(t)).c_str());
-    }
-    return deepcopy(*ptr);
+    return *ptr;
 }
 
 // Detail implementation of the tuple conversion below.
