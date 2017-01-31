@@ -507,6 +507,7 @@ Raises:
     unspecified: any exception thrown by:
 
       * methods of the UDP invoked during construction,
+      * the deep copy of the UDP,
       * the constructor of the underlying C++ class,
       * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
         signatures, etc.)
@@ -558,18 +559,15 @@ This method will invoke the ``get_bounds()`` method of the UDP to return the box
 
 The ``get_bounds()`` method of the UDP must return the box-bounds as a tuple of 2 elements,
 the lower bounds vector and the upper bounds vector, which must be represented as iterable Python objects (e.g.,
-1D NumPy arrays, lists, tuples, etc.).
+1D NumPy arrays, lists, tuples, etc.). The box-bounds returned by the UDP are checked upon the construction
+of a :class:`~pygmo.core.problem`.
 
 Returns:
-    tuple: a tuple of two 1D NumPy arrays representing the lower and upper box-bounds of the problem
+    ``tuple``: a tuple of two 1D NumPy arrays representing the lower and upper box-bounds of the problem
 
 Raises:
-    unspecified: any exception thrown by:
-
-      * the ``get_bounds()`` method of the UDP,
-      * the invoked method of the underlying C++ class,
-      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
+    unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
+      intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }

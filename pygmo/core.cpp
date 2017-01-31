@@ -426,6 +426,7 @@ struct test_problem {
     {
         return {{0.}, {1.}};
     }
+    // Set/get an internal value to test extraction semantics.
     void set_n(int n)
     {
         m_n = n;
@@ -653,7 +654,6 @@ BOOST_PYTHON_MODULE(core)
     auto &tp = *pygmo::translate_ptr;
     // Constructor from Python user-defined problem and translation vector (allows to translate Python problems).
     tp.def("__init__", pygmo::make_translate_init<bp::object>())
-        .def("__init__", pygmo::make_translate_init<problem>())
         // Constructor of translate from translate and translation vector. This allows to apply the
         // translation multiple times.
         .def("__init__", pygmo::make_translate_init<translate>())

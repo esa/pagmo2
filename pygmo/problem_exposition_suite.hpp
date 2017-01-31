@@ -69,6 +69,19 @@ inline pagmo::translate *translate_init(const Prob &p, const bp::object &o)
     return ::new pagmo::translate(p, to_vd(o));
 }
 
+// NOTE: we specialise this as we need to avoid that we end up using a pagmo::problem
+// wrapped in a bp::object as a UDP. This is needed in order to make consistent the behaviour
+// between C++ (where translate cannot be cted from pagmo::problem) and Python.
+template <>
+inline pagmo::translate *translate_init<bp::object>(const bp::object &p, const bp::object &o)
+{
+    if (type(p) == *problem_ptr) {
+        pygmo_throw(PyExc_TypeError, "a pygmo.problem is not a user-defined problem, and it cannot be used "
+                                     "as a construction argument for pygmo.translate");
+    }
+    return ::new pagmo::translate(p, to_vd(o));
+}
+
 // Make Python init from ctor above.
 template <typename Prob>
 inline auto make_translate_init()
