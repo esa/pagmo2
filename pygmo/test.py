@@ -83,6 +83,7 @@ class problem_test_case(_ut.TestCase):
 
     def runTest(self):
         self.run_basic_tests()
+        self.run_extract_tests()
         self.run_nobj_tests()
         self.run_nec_nic_tests()
 
@@ -345,6 +346,75 @@ class problem_test_case(_ut.TestCase):
                 return [42]
         prob = problem(p())
         self.assertRaises(ValueError, lambda: prob.fitness([1, 2]))
+
+    def run_extract_tests(self):
+        from .core import problem, translate, _test_problem
+        import sys
+
+        # First we try with a C++ test problem.
+        p = problem(_test_problem())
+        # Verify the refcount of p is increased after extract().
+        rc = sys.getrefcount(p)
+        tprob = p.extract(_test_problem)
+        self.assert_(sys.getrefcount(p) == rc + 1)
+        del tprob
+        self.assert_(sys.getrefcount(p) == rc)
+        # Verify we are modifying the inner object.
+        p.extract(_test_problem).set_n(5)
+        self.assert_(p.extract(_test_problem).get_n() == 5)
+        # Chain extracts.
+        t = translate(_test_problem(), [0])
+        pt = problem(t)
+        rc = sys.getrefcount(pt)
+        tprob = pt.extract(translate)
+        # Verify that extracrion of translate from the problem
+        # increases the refecount of pt.
+        self.assert_(sys.getrefcount(pt) == rc + 1)
+        # Extract the _test_problem from translate.
+        rc2 = sys.getrefcount(tprob)
+        ttprob = tprob.extract(_test_problem)
+        # The refcount of pt is not affected.
+        self.assert_(sys.getrefcount(pt) == rc + 1)
+        # The refcount of tprob has increased.
+        self.assert_(sys.getrefcount(tprob) == rc2 + 1)
+        del tprob
+        # We can still access ttprob.
+        self.assert_(ttprob.get_n() == 1)
+        self.assert_(sys.getrefcount(pt) == rc + 1)
+        del ttprob
+        # Now the refcount of pt decreases, because deleting
+        # ttprob eliminates the last ref to tprob, which in turn
+        # decreases the refcount of pt.
+        self.assert_(sys.getrefcount(pt) == rc)
+
+        class tproblem(object):
+
+            def __init__(self):
+                self._n = 1
+
+            def get_n(self):
+                return self._n
+
+            def set_n(self, n):
+                self._n = n
+
+            def fitness(self, dv):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        # Test with Python problem.
+        p = problem(tproblem())
+        rc = sys.getrefcount(p)
+        tprob = p.extract(tproblem)
+        # Reference count does not increase because
+        # tproblem is stored as a proper Python object
+        # with its own refcount.
+        self.assert_(sys.getrefcount(p) == rc)
+        self.assert_(tprob.get_n() == 1)
+        tprob.set_n(12)
+        self.assert_(p.extract(tproblem).get_n() == 12)
 
     def run_nec_nic_tests(self):
         from .core import problem
