@@ -572,6 +572,88 @@ Raises:
 )";
 }
 
+std::string problem_get_nobj_docstring()
+{
+    return R"(get_nobj()
+
+Number of objectives.
+
+This method will return :math:`n_{obj}`, the number of objectives of the problem.
+
+The optional ``get_nobj()`` method of the UDP must return the number of objectives as an ``int``.
+If the UDP does not implement the ``get_nobj()`` method, a single-objective optimizaztion problem
+will be assumed. The number of objectives returned by the UDP is checked upon the construction
+of a :class:`~pygmo.core.problem`.
+
+Returns:
+    ``int``: the number of objectives of the problem
+
+)";
+}
+
+std::string problem_get_nec_docstring()
+{
+    return R"(get_nec()
+
+Number of equality constraints.
+
+This method will return :math:`n_{ec}`, the number of equality constraints of the problem.
+
+The optional ``get_nec()`` method of the UDP must return the number of equality constraints as an ``int``.
+If the UDP does not implement the ``get_nec()`` method, zero equality constraints will be assumed.
+The number of equality constraints returned by the UDP is checked upon the construction
+of a :class:`~pygmo.core.problem`.
+
+Returns:
+    ``int``: the number of equality constraints of the problem
+
+)";
+}
+
+std::string problem_get_nic_docstring()
+{
+    return R"(get_nic()
+
+Number of inequality constraints.
+
+This method will return :math:`n_{ic}`, the number of inequality constraints of the problem.
+
+The optional ``get_nic()`` method of the UDP must return the number of inequality constraints as an ``int``.
+If the UDP does not implement the ``get_nic()`` method, zero inequality constraints will be assumed.
+The number of inequality constraints returned by the UDP is checked upon the construction
+of a :class:`~pygmo.core.problem`.
+
+Returns:
+    ``int``: the number of inequality constraints of the problem
+
+)";
+}
+
+std::string problem_has_gradient_docstring()
+{
+    return R"(has_gradient()
+
+Check if the gradient is available in the UDP.
+
+This method will return ``True`` if the gradient is available in the UDP, ``False`` otherwise.
+
+The availability of the gradient is determined as follows:
+
+* if the UDP does not provide a ``gradient()`` method, then this method will always return ``False``;
+* if the UDP provides a ``gradient()`` method but it does not provide a ``has_gradient()`` method,
+  then this method will always return ``True``;
+* if the UDP provides both a ``gradient()`` and a ``has_gradient()`` method, then this method will return
+  the output of the ``has_gradient()`` method of the UDP.
+
+The optional ``has_gradient()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``gradient()`` method of the UDP, see :func:`~pygmo.core.problem.gradient()`.
+
+Returns:
+    ``bool``: a flag signalling the availability of the gradient in the UDP
+
+)";
+}
+
 std::string problem_gradient_docstring()
 {
     return R"(gradient(dv)

@@ -47,7 +47,7 @@ def _problem_extract(self, t):
     the internal user-defined problem will be returned. Otherwise, ``None`` will be returned.
 
     Args:
-        t (type): the type of the user-defined problem to extract
+        t (``type``): the type of the user-defined problem to extract
 
     Returns:
         a reference to the internal user-defined problem if it is of type *t*, or ``None`` otherwise

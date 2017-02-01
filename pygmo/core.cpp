@@ -550,7 +550,7 @@ BOOST_PYTHON_MODULE(core)
         .def("gradient",
              +[](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv))); },
              pygmo::problem_gradient_docstring().c_str(), (bp::arg("dv")))
-        .def("has_gradient", &problem::has_gradient, "Gradient availability.")
+        .def("has_gradient", &problem::has_gradient, pygmo::problem_has_gradient_docstring().c_str())
         .def("gradient_sparsity", +[](const pagmo::problem &p) { return pygmo::sp_to_a(p.gradient_sparsity()); },
              "Gradient sparsity.")
         .def("has_gradient_sparsity", &problem::has_gradient_sparsity, "User-provided gradient sparsity availability.")
@@ -578,11 +578,11 @@ BOOST_PYTHON_MODULE(core)
              },
              "Hessians sparsity.")
         .def("has_hessians_sparsity", &problem::has_hessians_sparsity, "User-provided Hessians sparsity availability.")
-        .def("get_nobj", &problem::get_nobj, "Get number of objectives.")
+        .def("get_nobj", &problem::get_nobj, pygmo::problem_get_nobj_docstring().c_str())
         .def("get_nx", &problem::get_nx, "Get problem dimension.")
         .def("get_nf", &problem::get_nf, "Get fitness dimension.")
-        .def("get_nec", &problem::get_nec, "Get number of equality constraints.")
-        .def("get_nic", &problem::get_nic, "Get number of inequality constraints.")
+        .def("get_nec", &problem::get_nec, pygmo::problem_get_nec_docstring().c_str())
+        .def("get_nic", &problem::get_nic, pygmo::problem_get_nic_docstring().c_str())
         .def("get_nc", &problem::get_nc, "Get total number of constraints.")
         .add_property("c_tol", &prob_get_c_tol_wrapper, &prob_set_c_tol_wrapper)
         .def("get_fevals", &problem::get_fevals, "Get total number of objective function evaluations.")
