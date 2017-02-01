@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(construction)
     pso user_algo{100, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
-    // BOOST_CHECK((user_algo.get_log() == cmaes::log_type{}));
+    BOOST_CHECK((user_algo.get_log() == pso::log_type{}));
 
     BOOST_CHECK_NO_THROW((pso{100, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}));
 
@@ -83,6 +83,9 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     BOOST_CHECK_THROW(pso{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
     BOOST_CHECK_THROW(pso{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
-    population pop{rosenbrock{25u}, 10u};
+    population pop{rosenbrock{20u}, 20u};
     BOOST_CHECK(pso{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
+    pso uda{500u};
+    uda.set_verbosity(10u);
+    pop = uda.evolve(pop);
 }

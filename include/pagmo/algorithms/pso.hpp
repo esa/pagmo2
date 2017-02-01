@@ -117,7 +117,7 @@ public:
     pso(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05, double max_vel = 0.5,
         unsigned int variant = 5u, unsigned int neighb_type = 2u, unsigned int neighb_param = 4u, bool memory = false,
         unsigned int seed = pagmo::random_device::next())
-        : m_gen(gen), m_omega(omega), m_eta1(eta1), m_eta2(eta2), m_max_vel(max_vel), m_variant(variant),
+        : m_max_gen(gen), m_omega(omega), m_eta1(eta1), m_eta2(eta2), m_max_vel(max_vel), m_variant(variant),
           m_neighb_type(neighb_type), m_neighb_param(neighb_param), m_memory(memory), m_V(), m_e(seed), m_seed(seed),
           m_verbosity(0u), m_log()
     {
@@ -203,7 +203,7 @@ public:
         std::vector<vector_double> lbfit(swarm_size);      // particles' fitness values at their previous best positions
 
         // swarm topology (iterators over indexes of each particle's neighbors in the swarm)
-        std::vector<std::vector<int>> neighb(swarm_size);
+        std::vector<std::vector<decltype(swarm_size)>> neighb(swarm_size);
         // search space position of particles' best neighbor
         vector_double best_neighb(dim, 0.);
         // fitness at the best found search space position (tracked only when using topologies 1 or 4)
@@ -261,6 +261,7 @@ public:
             default:
                 initialize_topology__lbest(neighb);
         }
+        print(neighb);
 
         // auxiliary variables specific to the Fully Informed Particle Swarm variant
         double acceleration_coefficient = m_eta1 + m_eta2;
@@ -272,10 +273,8 @@ public:
         /* --- Main PSO loop ---
          */
         // For each generation
-        for (decltype(m_gen) g = 0u; g < m_gen; ++g) {
-
+        for (decltype(m_max_gen) gen = 0u; gen < m_max_gen; ++gen) {
             best_fit_improved = false;
-
             // For each particle in the swarm
             for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
 
@@ -284,7 +283,7 @@ public:
                 // . not needed if m_variant == 6 (FIPS): all neighbours are considered, no need to identify the best
                 // one
                 if (m_neighb_type != 1u && m_variant != 6u)
-                    best_neighb = particle__get_best_neighbor(p, neighb, lbX, lbfit, prob);
+                    best_neighb = particle__get_best_neighbor(p, neighb, lbX, lbfit);
 
                 /*-------PSO canonical (with inertia weight) ---------------------------------------------*/
                 /*-------Original algorithm used in the first PaGMO paper (~2007) ------------------------*/
@@ -368,7 +367,7 @@ public:
                         for (decltype(neighb[p].size()) n = 0u; n < neighb[p].size(); ++n) {
                             sum_forces += drng(m_e) * acceleration_coefficient * (lbX[neighb[p][n]][d] - X[p][d]);
                         }
-                        m_V[p][d] = m_omega * (m_V[p][d] + sum_forces / neighb[p].size());
+                        m_V[p][d] = m_omega * (m_V[p][d] + sum_forces / static_cast<double>(neighb[p].size()));
                     }
                 }
 
@@ -422,6 +421,51 @@ public:
             } // End of loop on the population members
             // reset swarm topology if no improvement was observed in the best found fitness value
             if (m_neighb_type == 4u && !best_fit_improved) initialize_topology__adaptive_random(neighb);
+            // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
+            if (m_verbosity > 0u) {
+                // Every m_verbosity generations print a log line
+                if (gen % m_verbosity == 1u || m_verbosity == 1u) {
+                    // We compute the number of function evaluations made
+                    auto feval_count = prob.get_fevals() - fevals0;
+                    // We compute the average across the swarm of the best fitness encountered
+                    vector_double local_fits(swarm_size);
+                    for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
+                        local_fits[i] = lbfit[i][0];
+                    }
+                    auto lb_avg = std::accumulate(local_fits.begin(), local_fits.end(), 0.)
+                                  / static_cast<double>(local_fits.size());
+                    // We compute the average across the swarm of the current fitness
+                    vector_double current_fits(swarm_size);
+                    for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
+                        current_fits[i] = fit[i][0];
+                    }
+                    auto cur_avg = std::accumulate(current_fits.begin(), current_fits.end(), 0.)
+                                   / static_cast<double>(current_fits.size());
+                    // We compute the best fitness encounterd so far across generations and across the swarm
+                    auto best = local_fits[std::distance(
+                        std::begin(local_fits), std::min_element(std::begin(local_fits), std::end(local_fits)))];
+                    // We compute a measure for the average particle velocity across the swarm
+                    auto mean_velocity = 0.;
+                    for (decltype(m_V.size()) i = 0u; i < m_V.size(); ++i) {
+                        for (decltype(m_V[i].size()) j = 0u; j < m_V[i].size(); ++j) {
+                            mean_velocity += std::abs(m_V[i][j] / (ub[j] - lb[j]));
+                        }
+                        mean_velocity = mean_velocity / static_cast<double>(m_V[i].size());
+                    }
+                    // We start printing
+                    // Every 50 lines print the column names
+                    if (count % 50u == 1u) {
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
+                              std::setw(15), "Mean Vel.:", std::setw(15), "Mean lbest:", std::setw(15), "Mean fitness:",
+                              '\n');
+                    }
+                    print(std::setw(7), gen, std::setw(15), feval_count, std::setw(15), best, std::setw(15),
+                          mean_velocity, std::setw(15), lb_avg, std::setw(15), cur_avg, '\n');
+                    ++count;
+                    // Logs
+                    m_log.push_back(log_line_type(gen, feval_count, best, mean_velocity, lb_avg, cur_avg));
+                }
+            }
         } // end of main PSO loop
 
         // copy particles' positions & velocities back to the main population
@@ -507,7 +551,7 @@ public:
     std::string get_extra_info() const
     {
         std::ostringstream ss;
-        stream(ss, "\tGenerations: ", m_gen);
+        stream(ss, "\tGenerations: ", m_max_gen);
         stream(ss, "\n\tomega: ", m_omega);
         stream(ss, "\n\teta1: ", m_eta1);
         stream(ss, "\n\teta2: ", m_eta2);
@@ -544,7 +588,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param, m_e, m_seed,
+        ar(m_max_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param, m_e, m_seed,
            m_verbosity, m_log);
     }
 
@@ -559,9 +603,10 @@ private:
      *  @param[in] prob problem undergoing optimization
      *  @return best position already visited by any of the considered particle's neighbours
      */
-    vector_double particle__get_best_neighbor(population::size_type pidx, std::vector<std::vector<int>> &neighb,
+    vector_double particle__get_best_neighbor(population::size_type pidx,
+                                              std::vector<std::vector<vector_double::size_type>> &neighb,
                                               const std::vector<vector_double> &lbX,
-                                              const std::vector<vector_double> &lbfit, const problem &prob) const
+                                              const std::vector<vector_double> &lbfit) const
     {
         population::size_type bnidx; // neighbour index; best neighbour index
 
@@ -578,10 +623,11 @@ private:
             default:
                 // iterate over indexes of the particle's neighbours, and identify the best
                 bnidx = neighb[pidx][0];
-                for (decltype(neighb[pidx].size()) nidx = 1u; nidx < neighb[pidx].size(); ++nidx)
-                    if (lbfit[neighb[pidx][nidx]] <= lbfit[bnidx]) {
+                for (decltype(neighb[pidx].size()) nidx = 1u; nidx < neighb[pidx].size(); ++nidx) {
+                    if (lbfit[neighb[pidx][nidx]][0] <= lbfit[bnidx][0]) {
                         bnidx = neighb[pidx][nidx];
                     }
+                }
                 return lbX[bnidx];
         }
     }
@@ -607,7 +653,7 @@ private:
      *  @param[out] neighb definition of the swarm's topology
      */
     void initialize_topology__gbest(const population &pop, vector_double &gbX, vector_double &gbfit,
-                                    std::vector<std::vector<int>> &neighb) const
+                                    std::vector<std::vector<vector_double::size_type>> &neighb) const
     {
         // The best position already visited by the swarm will be tracked in pso::evolve() as particles are evaluated.
         // Here we define the initial values of the variables that will do that tracking.
@@ -619,10 +665,12 @@ private:
          * the list of indices of particles' neighbours:
          */
         if (m_variant == 6u) {
-            for (decltype(neighb.size()) i = 0u; i < neighb.size(); i++)
+            for (decltype(neighb.size()) i = 0u; i < neighb.size(); i++) {
                 neighb[0].push_back(i);
-            for (decltype(neighb.size()) i = 0u; i < neighb.size(); i++)
+            }
+            for (decltype(neighb.size()) i = 0u; i < neighb.size(); i++) {
                 neighb[i] = neighb[0];
+            }
         }
     }
 
@@ -639,17 +687,24 @@ private:
      *
      *  @param[out] neighb definition of the swarm's topology
      */
-    void initialize_topology__lbest(std::vector<std::vector<int>> &neighb) const
+    void initialize_topology__lbest(std::vector<std::vector<vector_double::size_type>> &neighb) const
     {
-        int swarm_size = neighb.size();
-        int radius = m_neighb_param / 2;
-
-        for (decltype(swarm_size) pidx = 0u; pidx < swarm_size; pidx++) {
-            for (decltype(radius) j = -radius; j <= radius; j++) {
-                if (j == 0u) j++;
-                auto nidx = (pidx + j) % swarm_size;
-                if (nidx < 0u) nidx = swarm_size + nidx;
-                neighb[pidx].push_back(nidx);
+        auto swarm_size = neighb.size();
+        auto radius = m_neighb_param / 2u;
+        for (decltype(swarm_size) pidx = 0u; pidx < swarm_size; ++pidx) {
+            for (decltype(radius) j = radius; j > 0u; j--) {
+                if (pidx < j) {
+                    neighb[pidx].push_back(pidx - j + swarm_size);
+                } else {
+                    neighb[pidx].push_back(pidx - j);
+                }
+            }
+            for (decltype(radius) j = 1u; j <= radius; j++) {
+                if (pidx + j >= swarm_size) {
+                    neighb[pidx].push_back(pidx + j - swarm_size);
+                } else {
+                    neighb[pidx].push_back(pidx + j);
+                }
             }
         }
     }
@@ -683,14 +738,14 @@ private:
      *
      *  @param[out] neighb definition of the swarm's topology
      */
-    void initialize_topology__von(std::vector<std::vector<int>> &neighb) const
+    void initialize_topology__von(std::vector<std::vector<vector_double::size_type>> &neighb) const
     {
-        int swarm_size = neighb.size();
+        int swarm_size = static_cast<int>(neighb.size());
         int cols, rows; // lattice structure
         int p_x, p_y;   // particle's coordinates in the lattice
         int n_x, n_y;   // particle neighbor's coordinates in the lattice
 
-        rows = std::sqrt(swarm_size);
+        rows = static_cast<int>(std::sqrt(swarm_size));
         while (swarm_size % rows != 0u)
             rows -= 1;
         cols = swarm_size / rows;
@@ -736,9 +791,9 @@ private:
      *
      *  @param[out] neighb definition of the swarm's topology
      */
-    void initialize_topology__adaptive_random(std::vector<std::vector<int>> &neighb) const
+    void initialize_topology__adaptive_random(std::vector<std::vector<vector_double::size_type>> &neighb) const
     {
-        int swarm_size = neighb.size();
+        int swarm_size = static_cast<int>(neighb.size());
 
         std::uniform_real_distribution<double> drng(0., 1.);
 
@@ -746,16 +801,15 @@ private:
         for (decltype(swarm_size) pidx = 0u; pidx < swarm_size; ++pidx) {
             neighb[pidx].clear();
         }
-
         // define new topology
         for (decltype(swarm_size) pidx = 0u; pidx < swarm_size; ++pidx) {
-
             // the particle always connects back to itself, thus guaranteeing a minimum indegree of 1
             neighb[pidx].push_back(pidx);
 
             for (decltype(m_neighb_param) j = 1u; j < m_neighb_param; ++j) {
-                auto nidx = drng(m_e) * swarm_size;
-                neighb[nidx].push_back(pidx);
+                std::uniform_int_distribution<int> dis(0, swarm_size - 1u);
+                // auto nidx = drng(m_e) * swarm_size;
+                neighb[dis(m_e)].push_back(pidx);
                 // No check performed to see whether pidx is already in neighb[nidx],
                 // leading to a performance penalty in particle__get_best_neighbor() when it occurs.
             }
@@ -763,7 +817,7 @@ private:
     }
 
     // Generations
-    unsigned int m_gen;
+    unsigned int m_max_gen;
     // Inertia (or constriction) coefficient
     double m_omega;
     double m_eta1;
