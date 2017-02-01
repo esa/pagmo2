@@ -1231,7 +1231,7 @@ public:
      * - if the UDP satisfies both pagmo::has_gradient and pagmo::override_has_gradient,
      *   then this method will return the output of the <tt>%has_gradient()</tt> method of the UDP.
      *
-     * @return a flag signalling the availability of the gradient.
+     * @return a flag signalling the availability of the gradient in the UDP.
      */
     bool has_gradient() const
     {
@@ -1343,7 +1343,7 @@ public:
      * - if the UDP satisfies both pagmo::has_hessians and pagmo::override_has_hessians,
      *   then this method will return the output of the <tt>%has_hessians()</tt> method of the UDP.
      *
-     * @return a flag signalling the availability of the hessians.
+     * @return a flag signalling the availability of the hessians in the UDP.
      */
     bool has_hessians() const
     {
@@ -1473,6 +1473,7 @@ public:
     {
         return m_nic;
     }
+
     /// Set the constraint tolerance.
     /**
      * @param c_tol a vector containing the tolerances to use when
@@ -1500,6 +1501,7 @@ public:
         }
         m_c_tol = c_tol;
     }
+
     /// Get the constraint tolerance.
     /**
      * This method will return a vector of dimension \f$n_{ec} + n_{ic}\f$ containing tolerances to
@@ -1634,7 +1636,7 @@ public:
      * - if the UDP satisfies both pagmo::has_set_seed and pagmo::override_has_set_seed,
      *   then this method will return the output of the <tt>%has_set_seed()</tt> method of the UDP.
      *
-     * @return a flag signalling the availability of the <tt>%set_seed()</tt> method.
+     * @return a flag signalling the availability of the <tt>%set_seed()</tt> method in the UDP.
      */
     bool has_set_seed() const
     {
