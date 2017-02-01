@@ -794,8 +794,7 @@ private:
     void initialize_topology__adaptive_random(std::vector<std::vector<vector_double::size_type>> &neighb) const
     {
         int swarm_size = static_cast<int>(neighb.size());
-
-        std::uniform_real_distribution<double> drng(0., 1.);
+        std::uniform_int_distribution<int> dis(0, swarm_size - 1);
 
         // clear previously defined topology
         for (decltype(swarm_size) pidx = 0u; pidx < swarm_size; ++pidx) {
@@ -807,7 +806,7 @@ private:
             neighb[pidx].push_back(pidx);
 
             for (decltype(m_neighb_param) j = 1u; j < m_neighb_param; ++j) {
-                std::uniform_int_distribution<int> dis(0, swarm_size - 1u);
+
                 // auto nidx = drng(m_e) * swarm_size;
                 neighb[dis(m_e)].push_back(pidx);
                 // No check performed to see whether pidx is already in neighb[nidx],
