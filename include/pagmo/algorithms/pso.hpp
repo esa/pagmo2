@@ -434,7 +434,7 @@ public:
                     }
                     auto lb_avg = std::accumulate(local_fits.begin(), local_fits.end(), 0.)
                                   / static_cast<double>(local_fits.size());
-                    // We compute the average across the swarm of the current fitness
+                    // We compute the average current fitness across the swarm of the
                     vector_double current_fits(swarm_size);
                     for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
                         current_fits[i] = fit[i][0];
@@ -451,6 +451,14 @@ public:
                             mean_velocity += std::abs(m_V[i][j] / (ub[j] - lb[j]));
                         }
                         mean_velocity = mean_velocity / static_cast<double>(m_V[i].size());
+                    }
+                    // We compute the average distance across particles
+                    for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
+                        for (decltype(X.size()) y = i + 1u; j < X.size(); ++j) {
+                            x1 = X[i];
+                            x2 = X[j];
+                            auto avg_dist+=
+                        }
                     }
                     // We start printing
                     // Every 50 lines print the column names
@@ -593,6 +601,17 @@ public:
     }
 
 private:
+
+    template<class Iter_T, class Iter2_T>
+    double vectorDistance(Iter_T first, Iter_T last, Iter2_T first2) {
+      double ret = 0.0;
+      while (first != last) {
+        double dist = (*first++) - (*first2++);
+        ret += dist * dist;
+      }
+      return ret > 0.0 ? sqrt(ret) : 0.0;
+    }
+
     /**
      *  @brief Get information on the best position already visited by any of a particle's neighbours
      *
