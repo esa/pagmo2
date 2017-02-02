@@ -1103,8 +1103,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log`.
 
 std::string pso_docstring()
 {
-    return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5u,
-    neighb_type = 2u, neighb_param = 4u, memory = False, seed = random)
+    return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5u, neighb_type = 2u, neighb_param = 4u, memory = False, seed = random)
 
 Particle Swarm Optimization
 
@@ -1123,11 +1122,11 @@ Args:
 Raises:
     OverflowError: if *gen* or *seed* is negative or greater than an implementation-defined value
     ValueError: if *omega* is not in the [0,1] interval
-    Value Error: if *eta1*, *eta2* are not in the [0,1] interval
-    Value Error: *max_vel* is not in ]0,1]
-    Value Error: *variant* is not one of 1 .. 6
-    Value Error: *neighb_type* is not one of 1 .. 4
-    Value Error: *neighb_param* is zero
+    ValueError: if *eta1*, *eta2* are not in the [0,1] interval
+    ValueError: *max_vel* is not in ]0,1]
+    ValueError: *variant* is not one of 1 .. 6
+    ValueError: *neighb_type* is not one of 1 .. 4
+    ValueError: *neighb_param* is zero
 
 The following variants can be selected via the *variant* parameter:
 
@@ -1147,6 +1146,9 @@ The following topologies are selected by *neighb_type*:
 +--------------------------------------+--------------------------------------+
 | 3 - Von Neumann                      | 4 - Adaptive random                  |
 +--------------------------------------+--------------------------------------+
+
+The topology determines (together with the topology parameter) which particles need to be considered
+when computing the social component of the velocity update.
 
 )";
 }

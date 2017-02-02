@@ -45,3 +45,8 @@ Algorithms exposed from C++
 
 .. autoclass:: pygmo.core.simulated_annealing
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.pso
+   :members:
