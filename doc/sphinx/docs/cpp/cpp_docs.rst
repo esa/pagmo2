@@ -23,14 +23,15 @@ code your own algorithm
 .. toctree::
   :maxdepth: 1
 
-  algorithms/sea
-  algorithms/de
-  algorithms/sade
-  algorithms/de1220
   algorithms/cmaes
-  algorithms/moead
   algorithms/compass_search
+  algorithms/de
+  algorithms/de1220
+  algorithms/moead
   algorithms/mbh
+  algorithms/sade
+  algorithms/sea
+  algorithms/simulated_annealing
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^

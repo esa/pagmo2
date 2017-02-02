@@ -72,6 +72,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
+#include <pagmo/algorithms/simulated_annealing.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/ackley.hpp>
@@ -729,6 +730,17 @@ BOOST_PYTHON_MODULE(core)
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     pygmo::expose_algo_log(sea_, "");
     sea_.def("get_seed", &sea::get_seed);
+    // SIMULATED ANNEALING
+    auto simulated_annealing_ = pygmo::expose_algorithm<simulated_annealing>(
+        "simulated_annealing", pygmo::simulated_annealing_docstring().c_str());
+    simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double>(
+        (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 1u,
+         bp::arg("bin_size") = 20u, bp::arg("start_range") = 1.)));
+    simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double>(
+        (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 10u,
+         bp::arg("bin_size") = 10u, bp::arg("start_range") = 1., bp::arg("seed"))));
+    pygmo::expose_algo_log(simulated_annealing_, pygmo::simulated_annealing_get_log_docstring().c_str());
+    simulated_annealing_.def("get_seed", &simulated_annealing::get_seed);
     // SADE
     auto sade_ = pygmo::expose_algorithm<sade>("sade", pygmo::sade_docstring().c_str());
     sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool>(

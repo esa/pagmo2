@@ -1101,6 +1101,91 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log`.
 )";
 }
 
+std::string simulated_annealing_docstring()
+{
+    return R"(__init__(Ts = 10., Tf = .1, n_T_adj = 10, n_range_adj = 10, bin_size = 10, start_range = 1., seed = random)
+
+Simulated Annealing (Corana's version)
+
+Args:
+    Ts (``float``): starting temperature
+    Tf (``float``): final temperature
+    n_T_adj (``int``): number of temperature adjustments in the annealing schedule
+    n_range_adj (``int``): number of adjustments of the search range performed at a constant temperature
+    bin_size (``int``): number of mutations that are used to compute the acceptance rate
+    start_range (``float``): starting range for mutating the decision vector
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *n_T_adj*, *n_range_adj* or *bin_size* are negative or greater than an implementation-defined value
+    ValueError: if *Ts* is not in (0, inf)
+    ValueError: if *Tf* is not in (0, inf)
+    ValueError: if *Tf* > *Ts*
+    ValueError: if *start_range* is not in (0,1]
+    ValueError: if *n_T_adj* is not strictly positive
+    ValueError: if *n_range_adj* is not strictly positive
+
+See also the docs of the C++ class :cpp:class:`pagmo::simulated_annealing`.
+)";
+}
+
+std::string simulated_annealing_get_log_docstring()
+{
+    return R"(simulated_annealing.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
+each verbosity function evaluations
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values Fevals, Best, Current, Mean range, Temperature
+
+Where:
+    * Fevals (``int``), number of functions evaluation made.
+    * Best (``float``), the best fitness function found so far.
+    * Current (``float``), last fitness sampled.
+    * Mean range (``float``), the Mean search range across the decision vector components (relative to the box bounds width).
+    * Temperature (``float``), the current temperature.
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(simulated_annealing(Ts=10., Tf=1e-5, n_T_adj = 100))
+    >>> algo.set_verbosity(5000)
+    >>> prob = problem(rosenbrock(dim = 10))
+    >>> pop = population(prob, 1)
+    >>> pop = algo.evolve(pop)
+    Fevals:          Best:       Current:    Mean range:   Temperature:
+         57           5937           5937           0.48             10
+      10033        9.50937        28.6775      0.0325519        2.51189
+      15033        7.87389        14.3951      0.0131132        1.25893
+      20033        7.87389        8.68616      0.0120491       0.630957
+      25033        2.90084        4.43344     0.00676893       0.316228
+      30033       0.963616        1.36471     0.00355931       0.158489
+      35033       0.265868        0.63457     0.00202753      0.0794328
+      40033        0.13894       0.383283     0.00172611      0.0398107
+      45033       0.108051       0.169876    0.000870499      0.0199526
+      50033      0.0391731      0.0895308     0.00084195           0.01
+      55033      0.0217027      0.0303561    0.000596116     0.00501187
+      60033     0.00670073     0.00914824    0.000342754     0.00251189
+      65033      0.0012298     0.00791511    0.000275182     0.00125893
+      70033     0.00112816     0.00396297    0.000192117    0.000630957
+      75033    0.000183055     0.00139717    0.000135137    0.000316228
+      80033    0.000174868     0.00192479    0.000109781    0.000158489
+      85033       7.83e-05    0.000494225    8.20723e-05    7.94328e-05
+      90033    5.35153e-05    0.000120148    5.76009e-05    3.98107e-05
+      95033    5.35153e-05    9.10958e-05    3.18624e-05    1.99526e-05
+      99933    2.34849e-05    8.72206e-05    2.59215e-05    1.14815e-05
+
+    >>> uda = algo.extract(simulated_annealing)
+    >>> uda.get_log()
+    [(57, 5936.999957947842, 5936.999957947842, 0.47999999999999987, 10.0), (10033, ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_annealing::get_log`.
+
+)";
+}
+
 std::string decompose_decompose_fitness_docstring()
 {
     return R"(decompose_fitness(f, weights, ref_point)

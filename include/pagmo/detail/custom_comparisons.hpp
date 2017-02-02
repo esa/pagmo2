@@ -79,7 +79,7 @@ template <typename T, detail::enable_if_is_floating_point<T> = 0>
 inline bool equal_to_f(T a, T b)
 {
     if (!std::isnan(a) && !std::isnan(b)) {
-      return a == b;
+        return a == b;
     }
     return std::isnan(a) && std::isnan(b);
 }
