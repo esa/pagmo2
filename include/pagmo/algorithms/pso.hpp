@@ -83,7 +83,7 @@ namespace pagmo
 class pso
 {
 public:
-    /// Single entry of the log (gen, fevals, best, velocity, lb_avg, cur_avg)
+    /// Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.)
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
@@ -434,44 +434,49 @@ public:
                     }
                     auto lb_avg = std::accumulate(local_fits.begin(), local_fits.end(), 0.)
                                   / static_cast<double>(local_fits.size());
-                    // We compute the average current fitness across the swarm of the
-                    vector_double current_fits(swarm_size);
-                    for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
-                        current_fits[i] = fit[i][0];
-                    }
-                    auto cur_avg = std::accumulate(current_fits.begin(), current_fits.end(), 0.)
-                                   / static_cast<double>(current_fits.size());
                     // We compute the best fitness encounterd so far across generations and across the swarm
-                    auto best = local_fits[std::distance(
-                        std::begin(local_fits), std::min_element(std::begin(local_fits), std::end(local_fits)))];
+                    auto idx_best = std::distance(
+                        std::begin(local_fits), std::min_element(std::begin(local_fits), std::end(local_fits)));
+                    auto best = local_fits[static_cast<unsigned int>(idx_best)];
                     // We compute a measure for the average particle velocity across the swarm
                     auto mean_velocity = 0.;
                     for (decltype(m_V.size()) i = 0u; i < m_V.size(); ++i) {
                         for (decltype(m_V[i].size()) j = 0u; j < m_V[i].size(); ++j) {
-                            mean_velocity += std::abs(m_V[i][j] / (ub[j] - lb[j]));
+                            if (ub[j] > lb[j]) {
+                                mean_velocity += std::abs(m_V[i][j] / (ub[j] - lb[j]));
+                            } // else 0
                         }
                         mean_velocity = mean_velocity / static_cast<double>(m_V[i].size());
                     }
-                    // We compute the average distance across particles
+                    // We compute the average distance across particles (NOTE: N^2 complexity)
+                    auto avg_dist = 0.;
                     for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
-                        for (decltype(X.size()) y = i + 1u; j < X.size(); ++j) {
-                            x1 = X[i];
-                            x2 = X[j];
-                            auto avg_dist+=
+                        for (decltype(X.size()) j = i + 1u; j < X.size(); ++j) {
+                            auto x1 = X[i];
+                            auto x2 = X[j];
+                            double acc=0.;
+                            for (decltype(x1.size()) k = 0u; k < x1.size(); ++k)
+                            {
+                                if (ub[j] > lb[j]) {
+                                    acc += (x1[k] - x2[k]) * (x1[k] - x2[k]) / (ub[k] - lb[k]) / (ub[k] - lb[k]);
+                                } // else 0
+                            }
+                            avg_dist+=std::sqrt(acc);
                         }
                     }
+                    avg_dist /= ((X.size()-1u) * X.size()) / 2.;
                     // We start printing
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
-                              std::setw(15), "Mean Vel.:", std::setw(15), "Mean lbest:", std::setw(15), "Mean fitness:",
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "gbest:",
+                              std::setw(15), "Mean Vel.:", std::setw(15), "Mean lbest:", std::setw(15), "Avg. Dist.:",
                               '\n');
                     }
                     print(std::setw(7), gen, std::setw(15), feval_count, std::setw(15), best, std::setw(15),
-                          mean_velocity, std::setw(15), lb_avg, std::setw(15), cur_avg, '\n');
+                          mean_velocity, std::setw(15), lb_avg, std::setw(15), avg_dist, '\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, feval_count, best, mean_velocity, lb_avg, cur_avg));
+                    m_log.push_back(log_line_type(gen, feval_count, best, mean_velocity, lb_avg, avg_dist));
                 }
             }
         } // end of main PSO loop
@@ -486,29 +491,28 @@ public:
     /**
      * Sets the verbosity level of the screen output and of the
      * log returned by get_log(). \p level can be:
-     * - 0: no verbosity
-     * - >=1: will print and log one line at minimum every \p level function evaluations.
+     * - 0u: no verbosity
+     * - >=1u: will print and log one line each \p level generations
      *
-     * Example (verbosity 5000):
+     * Example (verbosity 50u):
      * @code{.unparsed}
-     * Fevals:          Best:       Current:    Mean range:   Temperature:
-     *  ...
-     *  45035      0.0700823       0.135928     0.00116657      0.0199526
-     *  50035      0.0215442      0.0261641    0.000770297           0.01
-     *  55035     0.00551839      0.0124842    0.000559839     0.00501187
-     *  60035     0.00284761     0.00703856    0.000314098     0.00251189
-     *  65035     0.00264808      0.0114764    0.000314642     0.00125893
-     *  70035      0.0011007     0.00293813    0.000167859    0.000630957
-     *  75035    0.000435798     0.00184352    0.000126954    0.000316228
-     *  80035    0.000287984    0.000825294    8.91823e-05    0.000158489
-     *  85035     9.5885e-05    0.000330647    6.49981e-05    7.94328e-05
-     *  90035     4.7986e-05    0.000148512    4.24692e-05    3.98107e-05
-     *  95035    2.43633e-05    2.43633e-05    2.90025e-05    1.99526e-05
+     * Gen:        Fevals:         gbest:     Mean Vel.:    Mean lbest:    Avg. Dist.:
+     *    1             40        2.01917       0.298551        1855.03       0.394038
+    *    51           1040     0.00436298      0.0407766         1.0704         0.1288
+    *   101           2040    0.000228898      0.0110884       0.282699      0.0488969
+    *   151           3040    5.53426e-05     0.00231688       0.106807      0.0167147
+    *   201           4040    3.88181e-06    0.000972132      0.0315856     0.00988859
+    *   251           5040    1.25676e-06    0.000330553     0.00146805     0.00397989
+    *   301           6040    3.76784e-08    0.000118192    0.000738972      0.0018789
+    *   351           7040    2.35193e-09    5.39387e-05    0.000532189     0.00253805
+    *   401           8040    3.24364e-10     2.2936e-05    9.02879e-06    0.000178279
+    *   451           9040    2.31237e-10    5.01558e-06    8.12575e-07    9.77163e-05
      * @endcode
      *
-     * Fevals is the number of function evaluation used, Best is the best fitness
-     * function found, Current is the last fitness sampled, Mean range is the Mean
-     * search range across the decision vector components, Temperature is the current temperature.
+     * Gen is the generation number, Fevals the number of fitness evaluation made, gbest the global best,
+     * Mean Vel. the average mean normalized velocity of particles, Mean lbest the average of the local best
+     * fitness of particles and Avg. Dist. the average normalized distance among particles. Normalization is made
+     * with respect to the problem bounds.
      *
      * @param level verbosity level
      */
@@ -601,17 +605,6 @@ public:
     }
 
 private:
-
-    template<class Iter_T, class Iter2_T>
-    double vectorDistance(Iter_T first, Iter_T last, Iter2_T first2) {
-      double ret = 0.0;
-      while (first != last) {
-        double dist = (*first++) - (*first2++);
-        ret += dist * dist;
-      }
-      return ret > 0.0 ? sqrt(ret) : 0.0;
-    }
-
     /**
      *  @brief Get information on the best position already visited by any of a particle's neighbours
      *
@@ -782,7 +775,7 @@ private:
                 n_y = (p_y + vonNeumann_neighb_diff[nidx][1]) % rows;
                 if (n_y < 0) n_y = rows + n_y;
 
-                neighb[pidx].push_back(n_y * cols + n_x);
+                neighb[static_cast<unsigned int>(pidx)].push_back(static_cast<unsigned int>(n_y * cols + n_x));
             }
         }
     }
@@ -812,8 +805,9 @@ private:
      */
     void initialize_topology__adaptive_random(std::vector<std::vector<vector_double::size_type>> &neighb) const
     {
-        int swarm_size = static_cast<int>(neighb.size());
-        std::uniform_int_distribution<int> dis(0, swarm_size - 1);
+        auto swarm_size = neighb.size();
+
+        std::uniform_int_distribution<decltype(swarm_size)> dis(0u, swarm_size - 1u);
 
         // clear previously defined topology
         for (decltype(swarm_size) pidx = 0u; pidx < swarm_size; ++pidx) {
@@ -833,7 +827,6 @@ private:
             }
         }
     }
-
     // Generations
     unsigned int m_max_gen;
     // Inertia (or constriction) coefficient

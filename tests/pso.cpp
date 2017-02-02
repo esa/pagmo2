@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(construction)
     BOOST_CHECK_THROW((pso{100, 0.79, 2., 5., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
 
     BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., -2.3, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
-    BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., 1.1, 5u, 2u, 4u, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., 1.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
 
     BOOST_CHECK_THROW((pso{100, -0.79, 2., 2., 0.1, 8u, 2u, 4u, false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((pso{100, -0.79, 2., 2., 0.1, 0u, 2u, 4u, false, 23u}), std::invalid_argument);
@@ -83,9 +83,9 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     BOOST_CHECK_THROW(pso{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
     BOOST_CHECK_THROW(pso{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
-    population pop{rosenbrock{20u}, 20u};
+    population pop{rosenbrock{2u}, 20u};
     BOOST_CHECK(pso{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
     pso uda{500u};
-    uda.set_verbosity(10u);
+    uda.set_verbosity(50u);
     pop = uda.evolve(pop);
 }
