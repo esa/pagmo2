@@ -75,11 +75,16 @@ namespace pagmo
  * allowed (normalized with respect ot the bounds). The user can specify one of five variants where the velocity
  * update rule differs on the definition of the random vectors \f$r_1\f$ and \f$r_2\f$:
  *
- * \li Variant 1: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\f$ ... (inertia weight)
- * \li Variant 2: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{11}, r_{11}, ..., r_{1n}]\f$ ... (inertia weight)
- * \li Variant 3: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_2, r_2, ..., r_2]\f$ ... (inertia weight)
- * \li Variant 4: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_1, r_1, ..., r_1]\f$ ... (inertia weight)
- * \li Variant 5: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\f$ ... (constriction coefficient)
+ * \li Variant 1: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\f$
+ *... (inertia weight)
+ * \li Variant 2: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{11}, r_{11}, ..., r_{1n}]\f$
+ *... (inertia weight)
+ * \li Variant 3: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_2, r_2, ..., r_2]\f$ ... (inertia
+ *weight)
+ * \li Variant 4: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_1, r_1, ..., r_1]\f$ ... (inertia
+ *weight)
+ * \li Variant 5: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\f$
+ *... (constriction coefficient)
  * \li Variant 6: Fully Informed Particle Swarm (FIPS)
  *
  * **NOTE** The default variant in PaGMO is n. 5 corresponding to the canonical PSO and thus using the
@@ -582,6 +587,7 @@ public:
         if (m_neighb_type == 2u || m_neighb_type == 4u) {
             stream(ss, "\n\tTopology parameter: ", m_neighb_param);
         }
+        stream(ss, "\n\tMemory: ", m_memory);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
         return ss.str();
