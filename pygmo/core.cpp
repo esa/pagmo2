@@ -740,7 +740,7 @@ BOOST_PYTHON_MODULE(core)
         (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 10u,
          bp::arg("bin_size") = 10u, bp::arg("start_range") = 1., bp::arg("seed"))));
     pygmo::expose_algo_log(simulated_annealing_, pygmo::simulated_annealing_get_log_docstring().c_str());
-    simulated_annealing_.def("get_seed", &sea::get_seed);
+    simulated_annealing_.def("get_seed", &simulated_annealing::get_seed);
     // SADE
     auto sade_ = pygmo::expose_algorithm<sade>("sade", pygmo::sade_docstring().c_str());
     sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool>(

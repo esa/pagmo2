@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_construction)
     simulated_annealing user_algo{10, 0.1, 10u, 10u, 10u, 1., 23u};
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
-    // BOOST_CHECK((user_algo.get_log() == cmaes::log_type{}));
+    BOOST_CHECK((user_algo.get_log() == simulated_annealing::log_type{}));
 
     BOOST_CHECK_THROW((simulated_annealing{-1., .1, 10u, 10u, 10u, 1., 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((simulated_annealing{std::nan(""), 0.1, 10u, 10u, 10u, 1., 23u}), std::invalid_argument);
@@ -59,6 +59,9 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_construction)
     BOOST_CHECK_THROW((simulated_annealing{10, std::nan(""), 10u, 10u, 10u, 1., 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((simulated_annealing{10, .1, 10u, 10u, 10u, 1.1, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((simulated_annealing{10, .1, 10u, 10u, 10u, -1.1, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((simulated_annealing{10, .1, 0u, 10u, 10u, 1., 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((simulated_annealing{10, .1, 10u, 0u, 10u, 1., 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((simulated_annealing{.1, 10, 10u, 10u, 10u, 1., 23u}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(simulated_annealing_evolve_test)

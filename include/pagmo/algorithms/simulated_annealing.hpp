@@ -90,6 +90,10 @@ public:
      * @param bin_size number of mutations that are used to compute the acceptance rate
      * @param start_range starting range for mutating the decision vector
      * @param seed seed used by the internal random number generator
+     *
+     * @throws std::invalid_argument if \p Ts or \p Tf are not finite and positive, \p start_range is not in (0,1],
+     * \p n_T_adj or n_range_adj \p are not strictly positive
+     * @throws if \p Tf > \p Ts
      */
     simulated_annealing(double Ts = 10., double Tf = .1, unsigned int n_T_adj = 10u, unsigned int n_range_adj = 1u,
                         unsigned int bin_size = 20u, double start_range = 1.,
@@ -105,9 +109,19 @@ public:
             pagmo_throw(std::invalid_argument, "The final temperature must be finite and positive, while a value of "
                                                    + std::to_string(Tf) + " was detected.");
         }
+        if (Tf > Ts) {
+            pagmo_throw(std::invalid_argument, "The final temperature must be smaller than the initial temperature, while a value of "
+                                                   + std::to_string(Tf) + " >= " + std::to_string(Ts)+ " was detected.");
+        }
         if (start_range <= 0. || start_range > 1.) {
             pagmo_throw(std::invalid_argument, "The start range must be in (0,1], while a value of "
                                                    + std::to_string(start_range) + " was detected.");
+        }
+        if (n_T_adj == 0u) {
+            pagmo_throw(std::invalid_argument, "The number of temperature adjustments must be strictly positive, while a value of " + std::to_string(n_T_adj) + " was detected.");
+        }
+        if (n_range_adj == 0u) {
+            pagmo_throw(std::invalid_argument, "The number of range adjustments must be strictly positive, while a value of " + std::to_string(n_range_adj) + " was detected.");
         }
     }
 
@@ -115,7 +129,8 @@ public:
     /**
      * @param pop population to be evolved
      * @return evolved population
-     * @throws std::invalid_argument if the problem is multi-objective or constrained
+     * @throws std::invalid_argument if the problem is multi-objective, constrained or stochastic
+     * @throws std::invalid_argument if the population size is < 1u
      */
     population evolve(population pop) const
     {

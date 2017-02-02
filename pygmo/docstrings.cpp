@@ -1120,7 +1120,10 @@ Raises:
     OverflowError: if *n_T_adj*, *n_range_adj* or *bin_size* are negative or greater than an implementation-defined value
     ValueError: if *Ts* is not in (0, inf)
     ValueError: if *Tf* is not in (0, inf)
+    ValueError: if *Tf* > *Ts*
     ValueError: if *start_range* is not in (0,1]
+    ValueError: if *n_T_adj* is not strictly positive
+    ValueError: if *n_range_adj* is not strictly positive
 
 See also the docs of the C++ class :cpp:class:`pagmo::simulated_annealing`.
 )";
