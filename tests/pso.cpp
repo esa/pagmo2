@@ -85,7 +85,21 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     // And a clean exit for 0 generations
     population pop{rosenbrock{2u}, 20u};
     BOOST_CHECK(pso{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
-    pso uda{500u};
-    uda.set_verbosity(50u);
-    pop = uda.evolve(pop);
+
+    // We check that evolution is deterministic if the
+    // seed is controlled and for all algoritmic variants:
+    problem prob1{rosenbrock{10u}};
+    population pop1{prob1, 5u, 23u};
+    pso user_algo1{10u};
+    user_algo1.set_verbosity(1u);
+    pop1 = user_algo1.evolve(pop1);
+
+    problem prob2{rosenbrock{10u}};
+    population pop2{prob2, 5u, 23u};
+    pso user_algo2{10u};
+    user_algo2.set_verbosity(1u);
+    pop2 = user_algo2.evolve(pop2);
+    BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+
 }

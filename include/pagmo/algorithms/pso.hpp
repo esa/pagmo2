@@ -44,34 +44,46 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Particle Swarm optimization
+/// Particle Swarm Optimization
 /**
- * \image html sea.png
+ * \image html pso.png width=5cm
  *
  * Particle swarm optimization (PSO) is a population based algorithm inspired by the foraging behaviour of swarms.
  * In PSO each point has memory of the position where it achieved the best performance \f$\mathbf x^l_i\f$ (local
- *memory)
- * and of the swarm best decision vector \f$ \mathbf x^g \f$ (global memory) and uses this information to update
- * its position using the equation:
+ * memory)
+ * and of the best decision vector \f$ \mathbf x^g \f$ in a certain neighbourhood, and uses this information to update
+ * its position using the equations (constriction coefficient):
  * \f[
+ * \begin{array}{l}
+ *	\mathbf v_{i+1} = \omega \left( \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right)
+ *	+ \eta_2 \mathbf r_2 \cdot \left(  \mathbf x_i - \mathbf x^g \right) \right)
+ * \\
+ *	\mathbf x_{i+1} = \mathbf x_i + \mathbf v_i
+ *	\end{array}
+ * \f]
+ * or (inertia weight):
+ * \f[
+ * \begin{array}{l}
  *	\mathbf v_{i+1} = \omega \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right)
  *	+ \eta_2 \mathbf r_2 \cdot \left(  \mathbf x_i - \mathbf x^g \right)
- * \f]
- * \f[
+ * \\
  *	\mathbf x_{i+1} = \mathbf x_i + \mathbf v_i
+ *	\end{array}
  * \f]
  *
  * The user can specify the values for \f$\omega, \eta_1, \eta_2\f$ and the magnitude of the maximum velocity
- * allowed. this last value is evaluated for each search direction as the product of \f$ vcoeff\f$ and the
- * search space width along that direction. The user can also specify one of four variants where the velocity
+ * allowed (normalized with respect ot the bounds). The user can specify one of five variants where the velocity
  * update rule differs on the definition of the random vectors \f$r_1\f$ and \f$r_2\f$:
  *
- * \li Variant 1: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\f$
- * \li Variant 2: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{11}, r_{11}, ..., r_{1n}]\f$
- * \li Variant 3: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_2, r_2, ..., r_2]\f$
- * \li Variant 4: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_1, r_1, ..., r_1]\f$
- * \li Variant 5: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_1, r_1, ..., r_1]\f$
+ * \li Variant 1: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\f$ ... (inertia weight)
+ * \li Variant 2: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{11}, r_{11}, ..., r_{1n}]\f$ ... (inertia weight)
+ * \li Variant 3: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_2, r_2, ..., r_2]\f$ ... (inertia weight)
+ * \li Variant 4: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_1, r_1, ..., r_1]\f$ ... (inertia weight)
+ * \li Variant 5: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\f$ ... (constriction coefficient)
+ * \li Variant 6: Fully Informed Particle Swarm (FIPS)
  *
+ * **NOTE** The default variant in PaGMO is n. 5 corresponding to the canonical PSO and thus using the
+ * constriction coefficient velocity update formula
  *
  * **NOTE** The algorithm does not work for multi-objective problems, nor for
  * constrained or stochastic optimization
@@ -111,7 +123,7 @@ public:
      * @param memory when true the particle velocities are not reset between successive calls to evolve
      * @param seed seed used by the internal random number generator (default is random)
      *
-     * @throws std::invalid_argument if m_omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval,
+     * @throws std::invalid_argument if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval,
      * vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero
      */
     pso(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05, double max_vel = 0.5,
@@ -435,8 +447,8 @@ public:
                     auto lb_avg = std::accumulate(local_fits.begin(), local_fits.end(), 0.)
                                   / static_cast<double>(local_fits.size());
                     // We compute the best fitness encounterd so far across generations and across the swarm
-                    auto idx_best = std::distance(
-                        std::begin(local_fits), std::min_element(std::begin(local_fits), std::end(local_fits)));
+                    auto idx_best = std::distance(std::begin(local_fits),
+                                                  std::min_element(std::begin(local_fits), std::end(local_fits)));
                     auto best = local_fits[static_cast<unsigned int>(idx_best)];
                     // We compute a measure for the average particle velocity across the swarm
                     auto mean_velocity = 0.;
@@ -454,17 +466,16 @@ public:
                         for (decltype(X.size()) j = i + 1u; j < X.size(); ++j) {
                             auto x1 = X[i];
                             auto x2 = X[j];
-                            double acc=0.;
-                            for (decltype(x1.size()) k = 0u; k < x1.size(); ++k)
-                            {
+                            double acc = 0.;
+                            for (decltype(x1.size()) k = 0u; k < x1.size(); ++k) {
                                 if (ub[j] > lb[j]) {
                                     acc += (x1[k] - x2[k]) * (x1[k] - x2[k]) / (ub[k] - lb[k]) / (ub[k] - lb[k]);
                                 } // else 0
                             }
-                            avg_dist+=std::sqrt(acc);
+                            avg_dist += std::sqrt(acc);
                         }
                     }
-                    avg_dist /= ((X.size()-1u) * X.size()) / 2.;
+                    avg_dist /= ((X.size() - 1u) * X.size()) / 2.;
                     // We start printing
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
@@ -580,10 +591,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a simulated_annealing::log_line_type containing: Fevals, Best, Current, Mean range
-     * Temperature as described in simulated_annealing::set_verbosity
-     * @return an <tt> std::vector </tt> of simulated_annealing::log_line_type containing the logged values Gen, Fevals,
-     * Best, Improvement, Mutations
+     * <tt> std::vector </tt> is a pso::log_line_type containing: Gen, Fevals, gbest,
+     * Mean Vel., Mean lbest, Avg. Dist. as described in pso::set_verbosity
+     * @return an <tt> std::vector </tt> of pso::log_line_type containing the logged values
      */
     const log_type &get_log() const
     {
@@ -608,11 +618,10 @@ private:
     /**
      *  @brief Get information on the best position already visited by any of a particle's neighbours
      *
-     *  @param[in] pidx index to the particle under consideration
-     *  @param[in] neighb definition of the swarm's topology
-     *  @param[in] lbX particles' previous best positions
-     *  @param[in] lbfit particles' fitness values at their previous best positions
-     *  @param[in] prob problem undergoing optimization
+     *  @param pidx index to the particle under consideration
+     *  @param neighb definition of the swarm's topology
+     *  @param lbX particles' previous best positions
+     *  @param lbfit particles' fitness values at their previous best positions
      *  @return best position already visited by any of the considered particle's neighbours
      */
     vector_double particle__get_best_neighbor(population::size_type pidx,
@@ -659,7 +668,7 @@ private:
      *  rushes unanimously toward the first good solution found.'' \n
      *  [Kennedy and Mendes, 2006] http://dx.doi.org/10.1109/TSMCC.2006.875410
      *
-     *  @param[in] pop pagmo::population being evolved
+     *  @param pop pagmo::population being evolved
      *  @param[out] gbX best search space position already visited by the swarm
      *  @param[out] gbfit best fitness value in the swarm
      *  @param[out] neighb definition of the swarm's topology
