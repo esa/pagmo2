@@ -40,3 +40,8 @@ Algorithms exposed from C++
 
 .. autoclass:: pygmo.core.compass_search
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.simulated_annealing
+   :members:
