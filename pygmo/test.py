@@ -86,6 +86,7 @@ class problem_test_case(_ut.TestCase):
         self.run_extract_tests()
         self.run_nobj_tests()
         self.run_nec_nic_tests()
+        self.run_has_gradient_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -484,6 +485,60 @@ class problem_test_case(_ut.TestCase):
                 return [42]
         prob = problem(p())
         self.assertEqual(prob.get_nf(), 6)
+    def run_has_gradient_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        self.assert_(not problem(p()).has_gradient())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def has_gradient(self):
+                return True
+
+        self.assert_(not problem(p()).has_gradient())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient(self, dv):
+                return [0]
+
+            def has_gradient(self):
+                return False
+
+        self.assert_(not problem(p()).has_gradient())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient(self, dv):
+                return [0]
+
+        self.assert_(problem(p()).has_gradient())
 
 
 def run_test_suite():

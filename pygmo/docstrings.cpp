@@ -660,30 +660,29 @@ std::string problem_gradient_docstring()
 
 Gradient.
 
-This method will calculate the gradient of the input decision vector *dv*. See :cpp:func:`pagmo::problem::gradient()`.
+This method will invoke the ``gradient()`` method of the UDP to compute the gradient of the
+input decision vector *dv*. The return value of the ``fitness()`` method of the UDP is expected to have a
+dimension of :math:`n_{f} = n_{obj} + n_{ec} + n_{ic}` and to contain the concatenated values of
+:math:`\mathbf f, \mathbf c_e` and :math:`\mathbf c_i` (in this order).
+
+In addition to invoking the ``fitness()`` method of the UDP, this method will perform sanity checks on
+*dv* and on the returned fitness vector. A successful call of this method will increase the internal fitness
+evaluation counter (see :func:`~pygmo.core.problem.get_fevals()`).
+
+The ``fitness()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy array, and it must
+return the fitness vector as an iterable Python object (e.g., 1D NumPy array, list, tuple, etc.).
 
 Args:
-    dv (array or list of floats): the decision vector (chromosome) to be evaluated
+    dv (array-like object): the decision vector (chromosome) to be evaluated
 
 Returns:
-    NumPy array of floats: the gradient of *dv*
+    1D NumPy array: the fitness of *dv*
 
 Raises:
-    ValueError: if the length of *dv* is not equal to the dimension of the problem, or if the size of the returned
-        value does not match the gradient sparsity pattern dimension
-    TypeError: if the type of *dv* is invalid
-    RuntimeError: if the user-defined problem does not implement the gradient method
-
-Examples:
-
->>> p = problem(hock_schittkowsky_71())
->>> p.gradient([1,2,3,4])
-array([ 28.,   4.,   5.,   6.,   2.,   4.,   6.,   8., -24., -12.,  -8.,
-        -6.])
->>> p = problem(rosenbrock())
->>> p.gradient([1,2]) # doctest: +IGNORE_EXCEPTION_DETAIL
-  ...
-RuntimeError: gradients have been requested but not implemented.
+    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
+      the length of the returned fitness vector differs from the value returned by :func:`~pygmo.core.problem.get_nf()`
+    unspecified: any exception thrown by the ``fitness()`` method of the UDP, or by failures at the intersection
+      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
