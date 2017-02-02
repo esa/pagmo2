@@ -273,8 +273,6 @@ public:
             default:
                 initialize_topology__lbest(neighb);
         }
-        print(neighb);
-
         // auxiliary variables specific to the Fully Informed Particle Swarm variant
         double acceleration_coefficient = m_eta1 + m_eta2;
         double sum_forces;
