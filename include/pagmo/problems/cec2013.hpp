@@ -54,11 +54,10 @@ namespace pagmo
  * The 28 problems of the competition on real-parameter single objective optimization problems that
  * was organized for the 2013 IEEE Congress on Evolutionary Computation.
  *
- * **NOTE**: This set of UDAs require the data files that can be downloaded from the link below.
- * Upon construction, it expects to find two files named "M_Dx.txt" and "shift_data.txt" (where "x" is
- * the problem dimension) in the directory \p dir
+ * **NOTE**: the code for these UDAs is adapted from the original C code distributed during the competition and
+ * linked below.
  *
- * NOTE All problems are box-bounded, continuous, single objective problems.
+ * **NOTE** All problems are box-bounded, continuous, single objective problems.
  *
  * @see http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC2013/CEC2013.htm
  * @see http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip
@@ -66,23 +65,12 @@ namespace pagmo
 class cec2013
 {
 public:
-    /// Default Constructor
-    /**
-     * Will construct an empty object
-     *
-     * **NOTE** This constructor should never be used and is here only for serialization
-     */
-    cec2013() : m_prob_id(1), m_rotation_matrix(), m_origin_shift(), m_y(2), m_z(2) {}
     /// Constructor
     /**
      * Will construct one of the 28 CEC2013 problems
      *
      * @param[in] prob_id The problem id. One of [1,2,...,28]
      * @param[in] dim problem dimension. One of [2,5,10,20,30,...,100]
-     * @param[in] data_dir The path where the CEC2013 data files are located.
-     *
-     * **NOTE** Two files are expected to be in \p dir "M_Dx.txt" and "shift_data.txt", where "x" is
-     * the problem dimension \p dim
      *
      * @see http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip to find
      * the files
@@ -91,7 +79,7 @@ public:
      * [2,5,10,20,30,40,50,60,70,80,90,100]
      * @throws std::ios_base::failure if the files are not found
      */
-    cec2013(unsigned int prob_id, unsigned int dim)
+    cec2013(unsigned int prob_id = 1u, unsigned int dim = 2u)
         : m_prob_id(prob_id), m_y(dim), m_z(dim)
     {
         if (!(dim == 2u || dim == 5u || dim == 10u || dim == 20u || dim == 30u || dim == 40u || dim == 50u || dim == 60u
@@ -121,7 +109,7 @@ public:
      */
     vector_double fitness(const vector_double &x) const
     {
-        auto nx = m_z.size();
+        unsigned int nx = static_cast<unsigned int>(m_z.size()); // maximum is 100
         vector_double f(1);
         switch (m_prob_id) {
             case 1:
@@ -251,7 +239,7 @@ public:
         // all CEC 2013 problems have the same bounds
         vector_double lb(m_z.size(), -100.);
         vector_double ub(m_z.size(), 100.);
-        return {std::move(lb), std::move(ub)};
+        return std::make_pair(std::move(lb), std::move(ub));
     }
     /// Problem name
     /**
@@ -366,7 +354,7 @@ public:
     }
 
 private:
-    void sphere_func(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void sphere_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
                      int r_flag) const /* Sphere */
     {
         shiftfunc(x, &m_y[0], nx, Os);
@@ -381,7 +369,7 @@ private:
         }
     }
 
-    void ellips_func(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void ellips_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
                      int r_flag) const /* Ellipsoidal */
     {
         unsigned int i;
@@ -398,7 +386,7 @@ private:
         }
     }
 
-    void bent_cigar_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void bent_cigar_func(const double *x, double *f, const unsigned int nx, const double *Os,
                          const double *Mr, int r_flag) const /* Bent_Cigar */
     {
         unsigned int i;
@@ -422,7 +410,7 @@ private:
         }
     }
 
-    void discus_func(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void discus_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
                      int r_flag) const /* Discus */
     {
         unsigned int i;
@@ -440,7 +428,7 @@ private:
         }
     }
 
-    void dif_powers_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void dif_powers_func(const double *x, double *f, const unsigned int nx, const double *Os,
                          const double *Mr, int r_flag) const /* Different Powers */
     {
         unsigned int i;
@@ -457,7 +445,7 @@ private:
         f[0] = std::pow(f[0], 0.5);
     }
 
-    void rosenbrock_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void rosenbrock_func(const double *x, double *f, const unsigned int nx, const double *Os,
                          const double *Mr, int r_flag) const /* Rosenbrock's */
     {
         unsigned int i;
@@ -485,7 +473,7 @@ private:
         }
     }
 
-    void schaffer_F7_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void schaffer_F7_func(const double *x, double *f, const unsigned int nx, const double *Os,
                           const double *Mr, int r_flag) const /* Schwefel's 1.2  */
     {
         unsigned int i;
@@ -515,7 +503,7 @@ private:
         f[0] = f[0] * f[0] / (nx - 1) / (nx - 1);
     }
 
-    void ackley_func(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void ackley_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
                      int r_flag) const /* Ackley's  */
     {
         unsigned int i;
@@ -548,7 +536,7 @@ private:
         f[0] = E - 20.0 * std::exp(sum1) - std::exp(sum2) + 20.0;
     }
 
-    void weierstrass_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void weierstrass_func(const double *x, double *f, const unsigned int nx, const double *Os,
                           const double *Mr, int r_flag) const /* Weierstrass's  */
     {
         unsigned int i, j, k_max;
@@ -590,7 +578,7 @@ private:
         f[0] -= nx * sum2;
     }
 
-    void griewank_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void griewank_func(const double *x, double *f, const unsigned int nx, const double *Os,
                        const double *Mr, int r_flag) const /* Griewank's  */
     {
         unsigned int i;
@@ -619,7 +607,7 @@ private:
         f[0] = 1.0 + s / 4000.0 - p;
     }
 
-    void rastrigin_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os,
                         const double *Mr, int r_flag) const /* Rastrigin's  */
     {
         unsigned int i;
@@ -661,7 +649,7 @@ private:
         }
     }
 
-    void step_rastrigin_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void step_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os,
                              const double *Mr, int r_flag) const /* Noncontinuous Rastrigin's  */
     {
         unsigned int i;
@@ -707,7 +695,7 @@ private:
         }
     }
 
-    void schwefel_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void schwefel_func(const double *x, double *f, const unsigned int nx, const double *Os,
                        const double *Mr, int r_flag) const /* Schwefel's  */
     {
         unsigned int i;
@@ -746,7 +734,7 @@ private:
         f[0] = 4.189828872724338e+002 * nx + f[0];
     }
 
-    void katsuura_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void katsuura_func(const double *x, double *f, const unsigned int nx, const double *Os,
                        const double *Mr, int r_flag) const /* Katsuura  */
     {
         unsigned int i, j;
@@ -786,7 +774,7 @@ private:
         f[0] = f[0] * tmp1 - tmp1;
     }
 
-    void bi_rastrigin_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void bi_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os,
                            const double *Mr, int r_flag) const /* Lunacek Bi_rastrigin Function */
     {
         unsigned int i;
@@ -848,7 +836,7 @@ private:
         free(tmpx);
     }
 
-    void grie_rosen_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void grie_rosen_func(const double *x, double *f, const unsigned int nx, const double *Os,
                          const double *Mr, int r_flag) const /* Griewank-Rosenbrock  */
     {
         unsigned int i;
@@ -884,7 +872,7 @@ private:
         f[0] += (temp * temp) / 4000.0 - std::cos(temp) + 1.0;
     }
 
-    void escaffer6_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+    void escaffer6_func(const double *x, double *f, const unsigned int nx, const double *Os,
                         const double *Mr, int r_flag) const /* Expanded Scaffer¡¯s F6  */
     {
         unsigned int i;
@@ -916,7 +904,7 @@ private:
         f[0] += 0.5 + (temp1 - 0.5) / (temp2 * temp2);
     }
 
-    void cf01(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void cf01(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 1 */
     {
         unsigned int i, cf_num = 5;
@@ -942,7 +930,7 @@ private:
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf02(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void cf02(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 2 */
     {
         unsigned int i, cf_num = 3u;
@@ -955,7 +943,7 @@ private:
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf03(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void cf03(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 3 */
     {
         unsigned int i, cf_num = 3u;
@@ -968,7 +956,7 @@ private:
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf04(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void cf04(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 4 */
     {
         unsigned int i, cf_num = 3u;
@@ -987,7 +975,7 @@ private:
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf05(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void cf05(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 4 */
     {
         unsigned int i, cf_num = 3u;
@@ -1006,7 +994,7 @@ private:
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf06(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void cf06(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 6 */
     {
         unsigned int i, cf_num = 5u;
@@ -1031,7 +1019,7 @@ private:
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf07(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void cf07(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 7 */
     {
         unsigned int i, cf_num = 5u;
@@ -1056,7 +1044,7 @@ private:
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf08(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
+    void cf08(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 8 */
     {
         unsigned int i, cf_num = 5u;
@@ -1081,7 +1069,7 @@ private:
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void shiftfunc(const double *x, double *xshift, const vector_double::size_type nx, const double *Os) const
+    void shiftfunc(const double *x, double *xshift, const unsigned int nx, const double *Os) const
     {
         unsigned int i;
         for (i = 0u; i < nx; ++i) {
@@ -1089,7 +1077,7 @@ private:
         }
     }
 
-    void rotatefunc(const double *x, double *xrot, const vector_double::size_type nx, const double *Mr) const
+    void rotatefunc(const double *x, double *xrot, const unsigned int nx, const double *Mr) const
     {
         unsigned int i, j;
         for (i = 0u; i < nx; ++i) {
@@ -1100,7 +1088,7 @@ private:
         }
     }
 
-    void asyfunc(const double *x, double *xasy, const vector_double::size_type nx, double beta) const
+    void asyfunc(const double *x, double *xasy, const unsigned int nx, double beta) const
     {
         unsigned int i;
         for (i = 0u; i < nx; ++i) {
@@ -1108,7 +1096,7 @@ private:
         }
     }
 
-    void oszfunc(const double *x, double *xosz, const vector_double::size_type nx) const
+    void oszfunc(const double *x, double *xosz, const unsigned int nx) const
     {
         unsigned int i;
         int sx;
@@ -1135,7 +1123,7 @@ private:
         }
     }
 
-    void cf_cal(const double *x, double *f, const vector_double::size_type nx, const double *Os, double *delta,
+    void cf_cal(const double *x, double *f, const unsigned int nx, const double *Os, double *delta,
                 double *bias, double *fit, unsigned int cf_num) const
     {
         unsigned int i, j;

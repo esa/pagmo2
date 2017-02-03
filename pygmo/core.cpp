@@ -697,10 +697,10 @@ BOOST_PYTHON_MODULE(core)
         bp::init<unsigned, unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u, bp::arg("seed"))));
     // CEC 2013.
     auto cec2013_ = pygmo::expose_problem<cec2013>(
-        "cec2013", "__init__(prob_id = 1, dim = 2, data_dir = 'input_data/')\n\nThe CEC 2013 problem suite.\n\n"
+        "cec2013", "__init__(prob_id = 1, dim = 2)\n\nThe CEC 2013 problem suite.\n\n"
                    "See :cpp:class:`pagmo::cec2013`.\n\n");
-    cec2013_.def(bp::init<unsigned, unsigned, std::string>(
-        (bp::arg("prob_id") = 1, bp::arg("dim") = 2, bp::arg("data_dir") = std::string("input_data/"))));
+    cec2013_.def(bp::init<unsigned, unsigned>(
+        (bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
     // Exposition of C++ algorithms.
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm",
