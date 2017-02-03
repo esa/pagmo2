@@ -59,7 +59,9 @@ namespace pagmo
  * @see http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip
  */
 
-class cec2013 {
+class cec2013
+{
+public:
     /// Constructor
     /**
      * Will construct one of the 28 CEC2013 problems
@@ -76,42 +78,46 @@ class cec2013 {
      *
      * @throws io_error if the files are not found
      */
-    cec2013(unsigned int prob_id, unsigned int dim, const std::string& dir): m_prob_id(fun_id), m_y(dim), m_z(dim)
+    cec2013(unsigned int prob_id = 1u, unsigned int dim = 2u, const std::string &dir = "cec2013_data/") : m_prob_id(prob_id), m_y(dim), m_z(dim)
     {
-    	if (!(dim==2u||dim==5u||dim==10u||dim==20u||dim==30u||dim==40u||dim==50u||dim==60u||dim==70u||dim==80u||dim==90u||dim==100u))
-    	{
-    		pagmo_throw(std::invalid_argument, "Error: CEC2013 Test functions are only defined for dimensions 2,5,10,20,30,40,50,60,70,80,90,100.");
-    	}
+        if (!(dim == 2u || dim == 5u || dim == 10u || dim == 20u || dim == 30u || dim == 40u || dim == 50u || dim == 60u
+              || dim == 70u || dim == 80u || dim == 90u || dim == 100u)) {
+            pagmo_throw(
+                std::invalid_argument,
+                "Error: CEC2013 Test functions are only defined for dimensions 2,5,10,20,30,40,50,60,70,80,90,100.");
+        }
 
-    	// We create the full file name for the rotation matrix
-    	std::string data_file_name(dir);
-    	data_file_name.append("M_D");
-    	data_file_name.append(std::to_string(dim));
-    	data_file_name.append(".txt");
-    	// And we read all datas into m_rotation_matrix
-    	{
-    	std::ifstream data_file(data_file_name.c_str());
-    	if (!data_file.is_open()) {
-    		pagmo_throw(std::ios_base::failure, std::string("Error: file not found. I was looking for (") + data_file_name.c_str() + ")");
-    	}
-    	std::istream_iterator<double> start(data_file), end;
-    	m_rotation_matrix = std::vector<double>(start,end);
-    	data_file.close();
-    	}
+        std::string data_file_name(dir);
+        // We create the full file name for the shift vector
+        data_file_name.append("shift_data.txt");
+        // And we read all data into m_origin_shift
+        {
+            std::ifstream data_file(data_file_name.c_str());
+            if (!data_file.is_open()) {
+                pagmo_throw(std::ios_base::failure,
+                            std::string("Error: file not found. I was looking for ").append(data_file_name.c_str()));
+            }
+            std::istream_iterator<double> start(data_file), end;
+            m_origin_shift = std::vector<double>(start, end);
+            data_file.close();
+        }
 
-    	// We create the full file name for the shift vector
-    	data_file_name = dir;
-    	data_file_name.append("shift_data.txt");
-    	// And we read all data into m_origin_shift
-    	{
-    	std::ifstream data_file(data_file_name.c_str());
-    	if (!data_file.is_open()) {
-    		pagmo_throw(io_error, std::string("Error: file not found. I was looking for ").append(data_file_name.c_str()));
-    	}
-    	std::istream_iterator<double> start(data_file), end;
-    	m_origin_shift = std::vector<double>(start,end);
-    	data_file.close();
-    	}
+        // We create the full file name for the rotation matrix
+        data_file_name = dir;
+        data_file_name.append("M_D");
+        data_file_name.append(std::to_string(dim));
+        data_file_name.append(".txt");
+        // And we read all datas into m_rotation_matrix
+        {
+            std::ifstream data_file(data_file_name.c_str());
+            if (!data_file.is_open()) {
+                pagmo_throw(std::ios_base::failure,
+                            std::string("Error: file not found. I was looking for (") + data_file_name.c_str() + ")");
+            }
+            std::istream_iterator<double> start(data_file), end;
+            m_rotation_matrix = std::vector<double>(start, end);
+            data_file.close();
+        }
     }
     /// Fitness computation
     /**
@@ -167,12 +173,12 @@ private:
     // problem id
     unsigned int m_prob_id;
     // problem data
-	std::vector<double> m_rotation_matrix;
-	std::vector<double> m_origin_shift;
+    std::vector<double> m_rotation_matrix;
+    std::vector<double> m_origin_shift;
 
-	// pre-allocated stuff for speed
-	mutable std::vector<double> m_y;
-	mutable std::vector<double> m_z;
+    // pre-allocated stuff for speed
+    mutable std::vector<double> m_y;
+    mutable std::vector<double> m_z;
 };
 
 } // namespace pagmo

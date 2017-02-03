@@ -10,10 +10,13 @@ function(ADD_PAGMO_TESTCASE arg1)
     add_test(${arg1} ${arg1})
 endfunction()
 
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/cec2013_data/" DESTINATION "${CMAKE_BINARY_DIR}/tests/cec2013_data/")
+
 # Tests requiring no dependencies (in alphabetical order)
 ADD_PAGMO_TESTCASE(ackley)
 ADD_PAGMO_TESTCASE(algorithm)
 ADD_PAGMO_TESTCASE(algorithm_type_traits)
+ADD_PAGMO_TESTCASE(cec2013)
 ADD_PAGMO_TESTCASE(compass_search)
 ADD_PAGMO_TESTCASE(constrained)
 ADD_PAGMO_TESTCASE(custom_comparisons)
