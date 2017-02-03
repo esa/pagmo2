@@ -494,7 +494,7 @@ public:
                 }
             }
             if (m_verbosity) {
-                std::cout << "Exit condition -- generations = " << m_gen << std::endl;
+                std::cout << "Exit condition -- generations = " << m_max_gen << std::endl;
             }
         } // end of main PSO loop
 

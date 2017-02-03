@@ -702,9 +702,7 @@ Args:
 
 Raises:
     OverflowError: if *max_fevals* is negative or greater than an implementation-defined value
-    ValueError: if *start_range* is not in (0, 1]
-    ValueError: if *stop_range* is not in (*start_range*, 1]
-    ValueError: if *reduction_coeff* is not in (0,1)
+    ValueError: if *start_range* is not in (0, 1], if *stop_range* is not in (*start_range*, 1] or if *reduction_coeff* is not in (0,1)
 
 See also the docs of the C++ class :cpp:class:`pagmo::compass_search`.
 
@@ -888,8 +886,7 @@ Args:
 Raises:
     OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
     ValueError: if *weight_generation* is not one of 'random', 'low discrepancy', 'grid'
-    ValueError: if *CR* or *F* or *realb* are not in [0.,1.]
-    ValueError: if *eta_m* is negative
+    ValueError: if *CR* or *F* or *realb* are not in [0.,1.] or if *eta_m* is negative
 
 See also the docs of the C++ class :cpp:class:`pagmo::moead`.
 
@@ -1121,12 +1118,8 @@ Args:
 
 Raises:
     OverflowError: if *gen* or *seed* is negative or greater than an implementation-defined value
-    ValueError: if *omega* is not in the [0,1] interval
-    ValueError: if *eta1*, *eta2* are not in the [0,1] interval
-    ValueError: *max_vel* is not in ]0,1]
-    ValueError: *variant* is not one of 1 .. 6
-    ValueError: *neighb_type* is not one of 1 .. 4
-    ValueError: *neighb_param* is zero
+    ValueError: if *omega* is not in the [0,1] interval, if *eta1*, *eta2* are not in the [0,1] interval, if *max_vel* is not in ]0,1]
+    ValueError: *variant* is not one of 1 .. 6, if *neighb_type* is not one of 1 .. 4 or if *neighb_param* is zero
 
 The following variants can be selected via the *variant* parameter:
 
@@ -1216,12 +1209,8 @@ Args:
 
 Raises:
     OverflowError: if *n_T_adj*, *n_range_adj* or *bin_size* are negative or greater than an implementation-defined value
-    ValueError: if *Ts* is not in (0, inf)
-    ValueError: if *Tf* is not in (0, inf)
-    ValueError: if *Tf* > *Ts*
-    ValueError: if *start_range* is not in (0,1]
-    ValueError: if *n_T_adj* is not strictly positive
-    ValueError: if *n_range_adj* is not strictly positive
+    ValueError: if *Ts* is not in (0, inf), if *Tf* is not in (0, inf), if *Tf* > *Ts* or if *start_range* is not in (0,1]
+    ValueError: if *n_T_adj* is not strictly positive or if *n_range_adj* is not strictly positive
 
 See also the docs of the C++ class :cpp:class:`pagmo::simulated_annealing`.
 )";
