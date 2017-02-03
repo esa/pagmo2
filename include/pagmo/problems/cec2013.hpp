@@ -66,6 +66,13 @@ namespace pagmo
 class cec2013
 {
 public:
+    /// Default Constructor
+    /**
+     * Will construct an empty object
+     *
+     * **NOTE** This constructor should never be used and is here only for serialization
+     */
+    cec2013() : m_prob_id(1), m_y(2), m_z(2), m_rotation_matrix(), m_origin_shift() {}
     /// Constructor
     /**
      * Will construct one of the 28 CEC2013 problems
@@ -84,7 +91,7 @@ public:
      * [2,5,10,20,30,40,50,60,70,80,90,100]
      * @throws io_error if the files are not found
      */
-    cec2013(unsigned int prob_id = 1u, unsigned int dim = 2u, const std::string &data_dir = "input_data/")
+    cec2013(unsigned int prob_id, unsigned int dim, const std::string &data_dir = "input_data/")
         : m_prob_id(prob_id), m_y(dim), m_z(dim)
     {
         if (!(dim == 2u || dim == 5u || dim == 10u || dim == 20u || dim == 30u || dim == 40u || dim == 50u || dim == 60u

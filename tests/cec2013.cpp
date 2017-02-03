@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(cec2013_test)
 
 BOOST_AUTO_TEST_CASE(cec2013_serialization_test)
 {
-    problem p{cec2013{}};
+    problem p{cec2013{1u, 2u, "cec2013_data/"}};
     // Call objfun to increase the internal counters.
     p.fitness(vector_double(2u, 0.));
     // Store the string representation of p.

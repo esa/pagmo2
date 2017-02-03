@@ -138,8 +138,8 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
     population pop_lb{problem{unbounded_lb{}}};
     population pop_ub{problem{unbounded_ub{}}};
     for (auto i = 0u; i < 20u; ++i) {
-        pop_lb.push_back(pagmo::decision_vector({0.}, {1.}, r_engine));
-        pop_ub.push_back(pagmo::decision_vector({0.}, {1.}, r_engine));
+        pop_lb.push_back(pagmo::random_decision_vector({0.}, {1.}, r_engine));
+        pop_ub.push_back(pagmo::random_decision_vector({0.}, {1.}, r_engine));
     }
     BOOST_CHECK_THROW(cmaes{10u}.evolve(pop_lb), std::invalid_argument);
     BOOST_CHECK_THROW(cmaes{10u}.evolve(pop_ub), std::invalid_argument);
