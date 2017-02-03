@@ -1,15 +1,43 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #define BOOST_TEST_MODULE hypervolume_utilities_test
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
 #include <exception>
 #include <tuple>
 
-#include "../include/detail/hypervolume_all.hpp"
-#include "../include/population.hpp"
-#include "../include/problem.hpp"
-#include "../include/types.hpp"
-#include "../include/io.hpp"
-#include "../include/problems/zdt.hpp"
-#include "../include/problems/rosenbrock.hpp"
+#include <pagmo/detail/hypervolume_all.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/problems/zdt.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
 
 using namespace pagmo;
 
@@ -35,12 +63,12 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
 	std::vector<vector_double> x1{ { 1,2 },{ 3,4 } };
 	hv = hypervolume(x1, true);
 	BOOST_CHECK(hv.get_points() == x1);
-	
+
 	// by list constructor
 	hv = hypervolume{ { 6,4 },{ 3,5 } };
 	std::vector<vector_double> x2{ { 6,4 },{ 3,5 } };
 	BOOST_CHECK((hv.get_points() == x2));
-	
+
 		// by population
 	population pop1{ problem{ zdt{ 1,5 } }, 2 };
 	hv = hypervolume(pop1, true);
@@ -219,7 +247,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributions_test) {
 	ref = { 0, 0, 0 };
 	answers = { 0, 0, 0 };
 	assertContribs(points, ref, answers);
-	
+
 
 	// Adding a point far away
 	points.push_back({-1000,-1000,-1000});
@@ -306,7 +334,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_exclusive_test) {
 
 	// index out of bounds
 	BOOST_CHECK_THROW(hv.exclusive(200, ref), std::invalid_argument);
-	
+
 	// picking the wrong algorithm
 	std::shared_ptr<hv_algorithm> hv_algo_3d = hv3d().clone();
 	BOOST_CHECK_THROW(hv.exclusive(0, ref, hv_algo_3d), std::invalid_argument);
@@ -321,5 +349,5 @@ BOOST_AUTO_TEST_CASE(hypervolume_refpoint_test) {
 	BOOST_CHECK((hv.refpoint(0) == vector_double{ 3, 3 }));
 	BOOST_CHECK((hv.refpoint(-0) == vector_double{ 3, 3 }));
 	BOOST_CHECK((hv.refpoint(-1) == vector_double{ 2, 2 }));
-	
+
 }
