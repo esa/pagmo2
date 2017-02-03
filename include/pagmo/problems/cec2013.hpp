@@ -41,7 +41,6 @@ see https://www.gnu.org/licenses/. */
 #include "../problem.hpp" // needed for cereal registration macro
 #include "../types.hpp"
 
-#define INF 1.0e99
 #define E 2.7182818284590452353602874713526625
 
 namespace pagmo
@@ -89,7 +88,7 @@ public:
      *
      * @throws invalid_argument if \p prob_id is not in [1,18] or if \p dim is not one of
      * [2,5,10,20,30,40,50,60,70,80,90,100]
-     * @throws io_error if the files are not found
+     * @throws std::ios_base::failure if the files are not found
      */
     cec2013(unsigned int prob_id, unsigned int dim, const std::string &data_dir = "input_data/")
         : m_prob_id(prob_id), m_y(dim), m_z(dim)
@@ -118,7 +117,6 @@ public:
             }
             std::istream_iterator<double> start(data_file), end;
             m_origin_shift = std::vector<double>(start, end);
-            data_file.close();
         }
 
         // We create the full file name for the rotation matrix
@@ -135,7 +133,6 @@ public:
             }
             std::istream_iterator<double> start(data_file), end;
             m_rotation_matrix = std::vector<double>(start, end);
-            data_file.close();
         }
     }
     /// Fitness computation
@@ -264,7 +261,7 @@ public:
                 f[0] += 1400.0;
                 break;
         }
-        return f;
+        return std::move(f);
     }
     /// Box-bounds
     /**
@@ -278,7 +275,7 @@ public:
         // all CEC 2013 problems have the same bounds
         vector_double lb(m_z.size(), -100.);
         vector_double ub(m_z.size(), 100.);
-        return {lb, ub};
+        return {std::move(lb), std::move(ub)}
     }
     /// Problem name
     /**
@@ -400,10 +397,10 @@ private:
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (unsigned int i = 0; i < nx; ++i)
+            for (unsigned int i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
         f[0] = 0.0;
-        for (unsigned int i = 0; i < nx; ++i) {
+        for (unsigned int i = 0u; i < nx; ++i) {
             f[0] += m_z[i] * m_z[i];
         }
     }
@@ -416,12 +413,12 @@ private:
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; ++i)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
         oszfunc(&m_z[0], &m_y[0], nx);
         f[0] = 0.0;
-        for (i = 0; i < nx; ++i) {
-            f[0] += std::pow(10.0, 6.0 * i / (nx - 1u)) * m_y[i] * m_y[i];
+        for (i = 0u; i < nx; ++i) {
+            f[0] += std::pow(10.0, (6. * i) / (nx - 1u)) * m_y[i] * m_y[i];
         }
     }
 
@@ -440,7 +437,7 @@ private:
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; ++i)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         f[0] = m_z[0] * m_z[0];
@@ -499,7 +496,7 @@ private:
         else
             for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
-        for (i = 0; i < nx; ++i) // shift to orgin
+        for (i = 0u; i < nx; ++i) // shift to orgin
         {
             m_z[i] = m_z[i] + 1;
         }
@@ -524,7 +521,7 @@ private:
             for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
         asyfunc(&m_z[0], &m_y[0], nx, 0.5);
-        for (i = 0; i < nx; ++i)
+        for (i = 0u; i < nx; ++i)
             m_z[i] = m_y[i] * std::pow(10.0, 1.0 * i / (nx - 1) / 2.0);
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, &Mr[nx * nx]);
@@ -566,7 +563,7 @@ private:
 
         sum1 = 0.0;
         sum2 = 0.0;
-        for (i = 0; i < nx; ++i) {
+        for (i = 0u; i < nx; ++i) {
             sum1 += m_y[i] * m_y[i];
             sum2 += std::cos(2.0 * detail::pi() * m_y[i]);
         }
@@ -718,7 +715,7 @@ private:
             for (i = 0u; i < nx; ++i)
                 m_y[i] = m_z[i];
 
-        for (i = 0; i < nx; ++i) {
+        for (i = 0u; i < nx; ++i) {
             m_y[i] *= std::pow(alpha, (1. * i) / (nx - 1u) / 2.);
         }
 
@@ -892,7 +889,7 @@ private:
             for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
-        for (i = 0; i < nx; ++i) // shift to orgin
+        for (i = 0u; i < nx; ++i) // shift to orgin
         {
             m_z[i] = m_y[i] + 1;
         }
@@ -1090,7 +1087,7 @@ private:
         double fit[5];
         double delta[5] = {10, 20, 30, 40, 50};
         double bias[5] = {0, 100, 200, 300, 400};
-        i = 0;
+        i = 0u;
         grie_rosen_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 4e+3;
         i = 1u;
@@ -1178,7 +1175,7 @@ private:
             if (w[i] != 0)
                 w[i] = std::pow(1.0 / w[i], 0.5) * std::exp(-w[i] / 2.0 / nx / std::pow(delta[i], 2.0));
             else
-                w[i] = INF;
+                w[i] = 1.0e99;
             if (w[i] > w_max) w_max = w[i];
         }
 
@@ -1186,7 +1183,7 @@ private:
             w_sum = w_sum + w[i];
         }
         if (w_max == 0) {
-            for (i = 0; i < cf_num; ++i)
+            for (i = 0u; i < cf_num; ++i)
                 w[i] = 1;
             w_sum = cf_num;
         }
@@ -1213,6 +1210,5 @@ private:
 PAGMO_REGISTER_PROBLEM(pagmo::cec2013)
 
 #undef E
-#undef INF
 
 #endif
