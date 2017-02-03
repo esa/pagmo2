@@ -493,6 +493,9 @@ public:
                     m_log.push_back(log_line_type(gen, feval_count, best, mean_velocity, lb_avg, avg_dist));
                 }
             }
+            if (m_verbosity) {
+                std::cout << "Exit condition -- generations = " << m_gen << std::endl;
+            }
         } // end of main PSO loop
 
         // copy particles' positions & velocities back to the main population

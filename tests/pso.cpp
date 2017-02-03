@@ -66,8 +66,8 @@ BOOST_AUTO_TEST_CASE(construction)
     BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., -2.3, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., 1.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
 
-    BOOST_CHECK_THROW((pso{100, -0.79, 2., 2., 0.1, 8u, 2u, 4u, false, 23u}), std::invalid_argument);
-    BOOST_CHECK_THROW((pso{100, -0.79, 2., 2., 0.1, 0u, 2u, 4u, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., 0.1, 8u, 2u, 4u, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., 0.1, 0u, 2u, 4u, false, 23u}), std::invalid_argument);
 
     BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., 0.1, 5u, 6u, 4u, false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., 0.1, 5u, 0u, 4u, false, 23u}), std::invalid_argument);
@@ -99,6 +99,23 @@ BOOST_AUTO_TEST_CASE(evolve_test)
             problem prob2{rosenbrock{10u}};
             population pop2{prob2, 5u, 23u};
             pso user_algo2{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
+            user_algo2.set_verbosity(1u);
+            pop2 = user_algo2.evolve(pop2);
+            BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+        }
+    }
+    // And with active memory
+    for (unsigned int variant = 1u; variant <= 6u; ++variant) {
+        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
+            problem prob1{rosenbrock{10u}};
+            population pop1{prob1, 5u, 23u};
+            pso user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
+            user_algo1.set_verbosity(1u);
+            pop1 = user_algo1.evolve(pop1);
+
+            problem prob2{rosenbrock{10u}};
+            population pop2{prob2, 5u, 23u};
+            pso user_algo2{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
             user_algo2.set_verbosity(1u);
             pop2 = user_algo2.evolve(pop2);
             BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
