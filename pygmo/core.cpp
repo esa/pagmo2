@@ -77,6 +77,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/ackley.hpp>
+#include <pagmo/problems/cec2013.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
@@ -249,9 +250,9 @@ static inline void pop_push_back_wrapper(population &pop, const bp::object &x)
 }
 
 // decision_vector().
-static inline bp::object pop_decision_vector_wrapper(const population &pop)
+static inline bp::object pop_random_decision_vector_wrapper(const population &pop)
 {
-    return pygmo::v_to_a(pop.decision_vector());
+    return pygmo::v_to_a(pop.random_decision_vector());
 }
 
 // Various best_idx() overloads.
@@ -469,7 +470,8 @@ BOOST_PYTHON_MODULE(core)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<population>)
         .def_pickle(population_pickle_suite())
         .def("push_back", &pop_push_back_wrapper, pygmo::population_push_back_docstring().c_str())
-        .def("decision_vector", &pop_decision_vector_wrapper, pygmo::population_decision_vector_docstring().c_str())
+        .def("decision_vector", &pop_random_decision_vector_wrapper,
+             pygmo::population_decision_vector_docstring().c_str())
         .def("best_idx", &pop_best_idx_wrapper_0)
         .def("best_idx", &pop_best_idx_wrapper_1)
         .def("best_idx", &pop_best_idx_wrapper_2, pygmo::population_best_idx_docstring().c_str())
@@ -693,7 +695,12 @@ BOOST_PYTHON_MODULE(core)
     inv.def(bp::init<unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u)));
     inv.def(
         bp::init<unsigned, unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u, bp::arg("seed"))));
-
+    // CEC 2013.
+    auto cec2013_ = pygmo::expose_problem<cec2013>(
+        "cec2013", "__init__(prob_id = 1, dim = 2, data_dir = 'input_data')\n\nThe CEC 2013 problem suite.\n\n"
+                   "See :cpp:class:`pagmo::cec2013`.\n\n");
+    cec2013_.def(bp::init<unsigned, unsigned, std::string>(
+        (bp::arg("prob_id") = 1, bp::arg("dim") = 2, bp::arg("data_dir") = std::string("input_data/"))));
     // Exposition of C++ algorithms.
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm",

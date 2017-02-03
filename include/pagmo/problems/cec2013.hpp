@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_PROBLEM_CEC2013_HPP
 
 #include <exception>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <utility>
@@ -40,28 +41,28 @@ see https://www.gnu.org/licenses/. */
 #include "../problem.hpp" // needed for cereal registration macro
 #include "../types.hpp"
 
+#define INF 1.0e99
+#define E 2.7182818284590452353602874713526625
+
 namespace pagmo
 {
-
 /// The CEC 2013 problems: Real-Parameter Single Objective Optimization Competition
 /**
+ *
  * \image html cec2013.png
+ *
  * The 28 problems of the competition on real-parameter single objective optimization problems that
  * was organized for the 2013 IEEE Congress on Evolutionary Computation.
  *
  * **NOTE**: This set of UDAs require the data files that can be downloaded from the link below.
- * Upon construction, it expects to find two files named M_Dxx.txt and shift_data.txt in the folder indicated by
- * the constructor argument \p dir
+ * Upon construction, it expects to find two files named "M_Dx.txt" and "shift_data.txt" (where "x" is
+ * the problem dimension) in the directory \p dir
  *
  * NOTE All problems are box-bounded, continuous, single objective problems.
  *
  * @see http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC2013/CEC2013.htm
  * @see http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip
  */
-
- #define INF 1.0e99
- #define E  2.7182818284590452353602874713526625
-
 class cec2013
 {
 public:
@@ -71,17 +72,19 @@ public:
      *
      * @param[in] prob_id The problem id. One of [1,2,...,28]
      * @param[in] dim problem dimension. One of [2,5,10,20,30,...,100]
-     * @param[in] dir The path where the CEC2013 input files are located.
+     * @param[in] data_dir The path where the CEC2013 data files are located.
      *
-     * **NOTE** Two files are expected to be in \p dir: "M_Dx.txt" and "shift_data.txt", where "x" is
-     * the problem dimension
+     * **NOTE** Two files are expected to be in \p dir "M_Dx.txt" and "shift_data.txt", where "x" is
+     * the problem dimension \p dim
      *
      * @see http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip to find
      * the files
      *
+     * @throws invalid_argument if \p prob_id is not in [1,18] or if \p dim is not one of
+     * [2,5,10,20,30,40,50,60,70,80,90,100]
      * @throws io_error if the files are not found
      */
-    cec2013(unsigned int prob_id = 1u, unsigned int dim = 2u, const std::string &dir = "cec2013_data/")
+    cec2013(unsigned int prob_id = 1u, unsigned int dim = 2u, const std::string &data_dir = "input_data/")
         : m_prob_id(prob_id), m_y(dim), m_z(dim)
     {
         if (!(dim == 2u || dim == 5u || dim == 10u || dim == 20u || dim == 30u || dim == 40u || dim == 50u || dim == 60u
@@ -96,7 +99,7 @@ public:
                             + std::to_string(prob_id) + " was detected.");
         }
 
-        std::string data_file_name(dir);
+        std::string data_file_name(data_dir);
         // We create the full file name for the shift vector
         data_file_name.append("shift_data.txt");
         // And we read all data into m_origin_shift
@@ -112,7 +115,7 @@ public:
         }
 
         // We create the full file name for the rotation matrix
-        data_file_name = dir;
+        data_file_name = data_dir;
         data_file_name.append("M_D");
         data_file_name.append(std::to_string(dim));
         data_file_name.append(".txt");
@@ -383,180 +386,180 @@ public:
     }
 
 private:
-    void sphere_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void sphere_func(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
                      int r_flag) const /* Sphere */
     {
         shiftfunc(x, &m_y[0], nx, Os);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (int i = 0; i < nx; i++)
+            for (unsigned int i = 0; i < nx; ++i)
                 m_z[i] = m_y[i];
         f[0] = 0.0;
-        for (int i = 0; i < nx; i++) {
+        for (unsigned int i = 0; i < nx; ++i) {
             f[0] += m_z[i] * m_z[i];
         }
     }
 
-    void ellips_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void ellips_func(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
                      int r_flag) const /* Ellipsoidal */
     {
-        int i;
+        unsigned int i;
         shiftfunc(x, &m_y[0], nx, Os);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0; i < nx; ++i)
                 m_z[i] = m_y[i];
         oszfunc(&m_z[0], &m_y[0], nx);
         f[0] = 0.0;
-        for (i = 0; i < nx; i++) {
-            f[0] += std::pow(10.0, 6.0 * i / (nx - 1)) * m_y[i] * m_y[i];
+        for (i = 0; i < nx; ++i) {
+            f[0] += std::pow(10.0, 6.0 * i / (nx - 1u)) * m_y[i] * m_y[i];
         }
     }
 
-    void bent_cigar_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                         int r_flag) const /* Bent_Cigar */
+    void bent_cigar_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                         const double *Mr, int r_flag) const /* Bent_Cigar */
     {
-        int i;
+        unsigned int i;
         double beta = 0.5;
         shiftfunc(x, &m_y[0], nx, Os);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
         asyfunc(&m_z[0], &m_y[0], nx, beta);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         f[0] = m_z[0] * m_z[0];
-        for (i = 1; i < nx; i++) {
+        for (i = 1u; i < nx; ++i) {
             f[0] += std::pow(10.0, 6.0) * m_z[i] * m_z[i];
         }
     }
 
-    void discus_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void discus_func(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
                      int r_flag) const /* Discus */
     {
-        int i;
+        unsigned int i;
         shiftfunc(x, &m_y[0], nx, Os);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
         oszfunc(&m_z[0], &m_y[0], nx);
 
         f[0] = std::pow(10.0, 6.0) * m_y[0] * m_y[0];
-        for (i = 1; i < nx; i++) {
+        for (i = 1u; i < nx; ++i) {
             f[0] += m_y[i] * m_y[i];
         }
     }
 
-    void dif_powers_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                         int r_flag) const /* Different Powers */
+    void dif_powers_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                         const double *Mr, int r_flag) const /* Different Powers */
     {
-        int i;
+        unsigned int i;
         shiftfunc(x, &m_y[0], nx, Os);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
         f[0] = 0.0;
-        for (i = 0; i < nx; i++) {
-            f[0] += std::pow(std::abs(m_z[i]), 2 + 4 * i / (nx - 1));
+        for (i = 0u; i < nx; ++i) {
+            f[0] += std::pow(std::abs(m_z[i]), 2. + (4. * i) / (nx - 1u));
         }
         f[0] = std::pow(f[0], 0.5);
     }
 
-    void rosenbrock_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                         int r_flag) const /* Rosenbrock's */
+    void rosenbrock_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                         const double *Mr, int r_flag) const /* Rosenbrock's */
     {
-        int i;
+        unsigned int i;
         double tmp1, tmp2;
         shiftfunc(x, &m_y[0], nx, Os); // shift
-        for (i = 0; i < nx; i++)       // shrink to the orginal search range
+        for (i = 0u; i < nx; ++i)      // shrink to the orginal search range
         {
-            m_y[i] = m_y[i] * 2.048 / 100;
+            m_y[i] = m_y[i] * 2.048 / 100.;
         }
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr); // rotate
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
-        for (i = 0; i < nx; i++) // shift to orgin
+        for (i = 0; i < nx; ++i) // shift to orgin
         {
             m_z[i] = m_z[i] + 1;
         }
 
         f[0] = 0.0;
-        for (i = 0; i < nx - 1; i++) {
+        for (i = 0u; i < nx - 1; ++i) {
             tmp1 = m_z[i] * m_z[i] - m_z[i + 1];
             tmp2 = m_z[i] - 1.0;
             f[0] += 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
         }
     }
 
-    void schaffer_F7_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                          int r_flag) const /* Schwefel's 1.2  */
+    void schaffer_F7_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                          const double *Mr, int r_flag) const /* Schwefel's 1.2  */
     {
-        int i;
+        unsigned int i;
         double tmp;
         shiftfunc(x, &m_y[0], nx, Os);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
         asyfunc(&m_z[0], &m_y[0], nx, 0.5);
-        for (i = 0; i < nx; i++)
+        for (i = 0; i < nx; ++i)
             m_z[i] = m_y[i] * std::pow(10.0, 1.0 * i / (nx - 1) / 2.0);
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_y[i] = m_z[i];
 
-        for (i = 0; i < nx - 1; i++)
+        for (i = 0u; i < nx - 1u; ++i)
             m_z[i] = std::pow(m_y[i] * m_y[i] + m_y[i + 1] * m_y[i + 1], 0.5);
         f[0] = 0.0;
-        for (i = 0; i < nx - 1; i++) {
+        for (i = 0u; i < nx - 1u; ++i) {
             tmp = std::sin(50.0 * std::pow(m_z[i], 0.2));
             f[0] += std::pow(m_z[i], 0.5) + std::pow(m_z[i], 0.5) * tmp * tmp;
         }
         f[0] = f[0] * f[0] / (nx - 1) / (nx - 1);
     }
 
-    void ackley_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void ackley_func(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
                      int r_flag) const /* Ackley's  */
     {
-        int i;
+        unsigned int i;
         double sum1, sum2;
 
         shiftfunc(x, &m_y[0], nx, Os);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         asyfunc(&m_z[0], &m_y[0], nx, 0.5);
-        for (i = 0; i < nx; i++)
-            m_z[i] = m_y[i] * std::pow(10.0, 1.0 * i / (nx - 1) / 2.0);
+        for (i = 0u; i < nx; ++i)
+            m_z[i] = m_y[i] * std::pow(10.0, (1. * i) / (nx - 1u) / 2.0);
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_y[i] = m_z[i];
 
         sum1 = 0.0;
         sum2 = 0.0;
-        for (i = 0; i < nx; i++) {
+        for (i = 0; i < nx; ++i) {
             sum1 += m_y[i] * m_y[i];
             sum2 += std::cos(2.0 * detail::pi() * m_y[i]);
         }
@@ -565,40 +568,40 @@ private:
         f[0] = E - 20.0 * std::exp(sum1) - std::exp(sum2) + 20.0;
     }
 
-    void weierstrass_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                          int r_flag) const /* Weierstrass's  */
+    void weierstrass_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                          const double *Mr, int r_flag) const /* Weierstrass's  */
     {
-        int i, j, k_max;
+        unsigned int i, j, k_max;
         double sum = 0, sum2 = 0, a, b;
 
         shiftfunc(x, &m_y[0], nx, Os);
-        for (i = 0; i < nx; i++) // shrink to the orginal search range
+        for (i = 0u; i < nx; ++i) // shrink to the orginal search range
         {
             m_y[i] = m_y[i] * 0.5 / 100;
         }
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         asyfunc(&m_z[0], &m_y[0], nx, 0.5);
-        for (i = 0; i < nx; i++)
-            m_z[i] = m_y[i] * std::pow(10.0, 1.0 * i / (nx - 1) / 2.0);
+        for (i = 0u; i < nx; ++i)
+            m_z[i] = m_y[i] * std::pow(10.0, (1. * i) / (nx - 1u) / 2.0);
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_y[i] = m_z[i];
 
         a = 0.5;
         b = 3.0;
         k_max = 20;
         f[0] = 0.0;
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             sum = 0.0;
             sum2 = 0.0;
-            for (j = 0; j <= k_max; j++) {
+            for (j = 0u; j <= k_max; ++j) {
                 sum += std::pow(a, j) * std::cos(2.0 * detail::pi() * std::pow(b, j) * (m_y[i] + 0.5));
                 sum2 += std::pow(a, j) * std::cos(2.0 * detail::pi() * std::pow(b, j) * 0.5);
             }
@@ -607,42 +610,42 @@ private:
         f[0] -= nx * sum2;
     }
 
-    void griewank_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                       int r_flag) const /* Griewank's  */
+    void griewank_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                       const double *Mr, int r_flag) const /* Griewank's  */
     {
-        int i;
+        unsigned int i;
         double s, p;
 
         shiftfunc(x, &m_y[0], nx, Os);
-        for (i = 0; i < nx; i++) // shrink to the orginal search range
+        for (i = 0u; i < nx; ++i) // shrink to the orginal search range
         {
             m_y[i] = m_y[i] * 600.0 / 100.0;
         }
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
-        for (i = 0; i < nx; i++)
-            m_z[i] = m_z[i] * std::pow(100.0, 1.0 * i / (nx - 1) / 2.0);
+        for (i = 0u; i < nx; ++i)
+            m_z[i] = m_z[i] * std::pow(100.0, (1. * i) / (nx - 1u) / 2.0);
 
         s = 0.0;
         p = 1.0;
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             s += m_z[i] * m_z[i];
             p *= std::cos(m_z[i] / std::sqrt(1.0 + i));
         }
         f[0] = 1.0 + s / 4000.0 - p;
     }
 
-    void rastrigin_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                        int r_flag) const /* Rastrigin's  */
+    void rastrigin_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                        const double *Mr, int r_flag) const /* Rastrigin's  */
     {
-        int i;
+        unsigned int i;
         double alpha = 10.0, beta = 0.2;
         shiftfunc(x, &m_y[0], nx, Os);
-        for (i = 0; i < nx; i++) // shrink to the orginal search range
+        for (i = 0u; i < nx; ++i) // shrink to the orginal search range
         {
             m_y[i] = m_y[i] * 5.12 / 100;
         }
@@ -650,7 +653,7 @@ private:
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         oszfunc(&m_z[0], &m_y[0], nx);
@@ -659,32 +662,32 @@ private:
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_y[i] = m_z[i];
 
-        for (i = 0; i < nx; i++) {
-            m_y[i] *= std::pow(alpha, 1.0 * i / (nx - 1) / 2);
+        for (i = 0u; i < nx; ++i) {
+            m_y[i] *= std::pow(alpha, (1. * i) / (nx - 1u) / 2);
         }
 
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         f[0] = 0.0;
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             f[0] += (m_z[i] * m_z[i] - 10.0 * std::cos(2.0 * detail::pi() * m_z[i]) + 10.0);
         }
     }
 
-    void step_rastrigin_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                             int r_flag) const /* Noncontinuous Rastrigin's  */
+    void step_rastrigin_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                             const double *Mr, int r_flag) const /* Noncontinuous Rastrigin's  */
     {
-        int i;
+        unsigned int i;
         double alpha = 10.0, beta = 0.2;
         shiftfunc(x, &m_y[0], nx, Os);
-        for (i = 0; i < nx; i++) // shrink to the orginal search range
+        for (i = 0u; i < nx; ++i) // shrink to the orginal search range
         {
             m_y[i] = m_y[i] * 5.12 / 100;
         }
@@ -692,11 +695,11 @@ private:
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
-        for (i = 0; i < nx; i++) {
-            if (std::abs(m_z[i]) > 0.5) m_z[i] = std::floor(2 * m_z[i] + 0.5) / 2;
+        for (i = 0u; i < nx; ++i) {
+            if (std::abs(m_z[i]) > 0.5) m_z[i] = std::floor(2. * m_z[i] + 0.5) / 2.;
         }
 
         oszfunc(&m_z[0], &m_y[0], nx);
@@ -705,55 +708,56 @@ private:
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_y[i] = m_z[i];
 
-        for (i = 0; i < nx; i++) {
-            m_y[i] *= std::pow(alpha, 1.0 * i / (nx - 1) / 2);
+        for (i = 0; i < nx; ++i) {
+            m_y[i] *= std::pow(alpha, (1. * i) / (nx - 1u) / 2.);
         }
 
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         f[0] = 0.0;
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             f[0] += (m_z[i] * m_z[i] - 10.0 * std::cos(2.0 * detail::pi() * m_z[i]) + 10.0);
         }
     }
 
-    void schwefel_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                       int r_flag) const /* Schwefel's  */
+    void schwefel_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                       const double *Mr, int r_flag) const /* Schwefel's  */
     {
-        int i;
+        unsigned int i;
         double tmp;
         shiftfunc(x, &m_y[0], nx, Os);
-        for (i = 0; i < nx; i++) // shrink to the orginal search range
+        for (i = 0u; i < nx; ++i) // shrink to the orginal search range
         {
-            m_y[i] *= 1000 / 100;
+            m_y[i] *= 1000. / 100.;
         }
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
-        for (i = 0; i < nx; i++)
-            m_y[i] = m_z[i] * std::pow(10.0, 1.0 * i / (nx - 1) / 2.0);
+        for (i = 0u; i < nx; ++i)
+            m_y[i] = m_z[i] * std::pow(10.0, (1. * i) / (nx - 1u) / 2.0);
 
-        for (i = 0; i < nx; i++)
+        for (i = 0u; i < nx; ++i)
             m_z[i] = m_y[i] + 4.209687462275036e+002;
 
         f[0] = 0;
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             if (m_z[i] > 500) {
                 f[0] -= (500.0 - std::fmod(m_z[i], 500)) * std::sin(std::pow(500.0 - std::fmod(m_z[i], 500), 0.5));
                 tmp = (m_z[i] - 500.0) / 100;
                 f[0] += tmp * tmp / nx;
             } else if (m_z[i] < -500) {
-                f[0] -= (-500.0 + std::fmod(std::abs(m_z[i]), 500)) * std::sin(std::pow(500.0 - std::fmod(std::abs(m_z[i]), 500), 0.5));
+                f[0] -= (-500.0 + std::fmod(std::abs(m_z[i]), 500))
+                        * std::sin(std::pow(500.0 - std::fmod(std::abs(m_z[i]), 500), 0.5));
                 tmp = (m_z[i] + 500.0) / 100;
                 f[0] += tmp * tmp / nx;
             } else
@@ -762,50 +766,50 @@ private:
         f[0] = 4.189828872724338e+002 * nx + f[0];
     }
 
-    void katsuura_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                       int r_flag) const /* Katsuura  */
+    void katsuura_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                       const double *Mr, int r_flag) const /* Katsuura  */
     {
-        int i, j;
+        unsigned int i, j;
         double temp, tmp1, tmp2, tmp3;
         tmp3 = std::pow(1.0 * nx, 1.2);
         shiftfunc(x, &m_y[0], nx, Os);
-        for (i = 0; i < nx; i++) // shrink to the orginal search range
+        for (i = 0u; i < nx; ++i) // shrink to the orginal search range
         {
             m_y[i] *= 5.0 / 100.0;
         }
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
-        for (i = 0; i < nx; i++)
+        for (i = 0u; i < nx; ++i)
             m_z[i] *= std::pow(100.0, 1.0 * i / (nx - 1) / 2.0);
 
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_y[i] = m_z[i];
 
         f[0] = 1.0;
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             temp = 0.0;
-            for (j = 1; j <= 32; j++) {
+            for (j = 1u; j <= 32u; ++j) {
                 tmp1 = std::pow(2.0, j);
                 tmp2 = tmp1 * m_y[i];
                 temp += std::abs(tmp2 - std::floor(tmp2 + 0.5)) / tmp1;
             }
-            f[0] *= std::pow(1.0 + (i + 1) * temp, 10.0 / tmp3);
+            f[0] *= std::pow(1.0 + (i + 1u) * temp, 10.0 / tmp3);
         }
         tmp1 = 10.0 / nx / nx;
         f[0] = f[0] * tmp1 - tmp1;
     }
 
-    void bi_rastrigin_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                           int r_flag) const /* Lunacek Bi_rastrigin Function */
+    void bi_rastrigin_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                           const double *Mr, int r_flag) const /* Lunacek Bi_rastrigin Function */
     {
-        int i;
+        unsigned int i;
         double mu0 = 2.5, d = 1.0, s, mu1, tmp, tmp1, tmp2;
         double *tmpx;
         tmpx = (double *)malloc(sizeof(double) * nx);
@@ -813,37 +817,37 @@ private:
         mu1 = -std::pow((mu0 * mu0 - d) / s, 0.5);
 
         shiftfunc(x, &m_y[0], nx, Os);
-        for (i = 0; i < nx; i++) // shrink to the orginal search range
+        for (i = 0u; i < nx; ++i) // shrink to the orginal search range
         {
             m_y[i] *= 10.0 / 100.0;
         }
 
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             tmpx[i] = 2 * m_y[i];
             if (Os[i] < 0.) tmpx[i] *= -1.;
         }
 
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             m_z[i] = tmpx[i];
             tmpx[i] += mu0;
         }
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_y[i] = m_z[i];
 
-        for (i = 0; i < nx; i++)
-            m_y[i] *= std::pow(100.0, 1.0 * i / (nx - 1) / 2.0);
+        for (i = 0u; i < nx; ++i)
+            m_y[i] *= std::pow(100.0, (1. * i) / (nx - 1u) / 2.0);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         tmp1 = 0.0;
         tmp2 = 0.0;
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             tmp = tmpx[i] - mu0;
             tmp1 += tmp * tmp;
             tmp = tmpx[i] - mu1;
@@ -852,7 +856,7 @@ private:
         tmp2 *= s;
         tmp2 += d * nx;
         tmp = 0;
-        for (i = 0; i < nx; i++) {
+        for (i = 0u; i < nx; ++i) {
             tmp += std::cos(2.0 * detail::pi() * m_z[i]);
         }
 
@@ -864,30 +868,30 @@ private:
         free(tmpx);
     }
 
-    void grie_rosen_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                         int r_flag) const /* Griewank-Rosenbrock  */
+    void grie_rosen_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                         const double *Mr, int r_flag) const /* Griewank-Rosenbrock  */
     {
-        int i;
+        unsigned int i;
         double temp, tmp1, tmp2;
 
         shiftfunc(x, &m_y[0], nx, Os);
-        for (i = 0; i < nx; i++) // shrink to the orginal search range
+        for (i = 0u; i < nx; ++i) // shrink to the orginal search range
         {
             m_y[i] = m_y[i] * 5 / 100;
         }
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
-        for (i = 0; i < nx; i++) // shift to orgin
+        for (i = 0; i < nx; ++i) // shift to orgin
         {
             m_z[i] = m_y[i] + 1;
         }
 
         f[0] = 0.0;
-        for (i = 0; i < nx - 1; i++) {
+        for (i = 0u; i < nx - 1u; ++i) {
             tmp1 = m_z[i] * m_z[i] - m_z[i + 1];
             tmp2 = m_z[i] - 1.0;
             temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
@@ -900,27 +904,27 @@ private:
         f[0] += (temp * temp) / 4000.0 - cos(temp) + 1.0;
     }
 
-    void escaffer6_func(const double *x, double *f, int nx, const double *Os, const double *Mr,
-                        int r_flag) const /* Expanded Scaffer¡¯s F6  */
+    void escaffer6_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
+                        const double *Mr, int r_flag) const /* Expanded Scaffer¡¯s F6  */
     {
-        int i;
+        unsigned int i;
         double temp1, temp2;
         shiftfunc(x, &m_y[0], nx, Os);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, Mr);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         asyfunc(&m_z[0], &m_y[0], nx, 0.5);
         if (r_flag == 1)
             rotatefunc(&m_y[0], &m_z[0], nx, &Mr[nx * nx]);
         else
-            for (i = 0; i < nx; i++)
+            for (i = 0u; i < nx; ++i)
                 m_z[i] = m_y[i];
 
         f[0] = 0.0;
-        for (i = 0; i < nx - 1; i++) {
+        for (i = 0u; i < nx - 1u; ++i) {
             temp1 = std::sin(std::sqrt(m_z[i] * m_z[i] + m_z[i + 1] * m_z[i + 1]));
             temp1 = temp1 * temp1;
             temp2 = 1.0 + 0.001 * (m_z[i] * m_z[i] + m_z[i + 1] * m_z[i + 1]);
@@ -932,204 +936,205 @@ private:
         f[0] += 0.5 + (temp1 - 0.5) / (temp2 * temp2);
     }
 
-    void cf01(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void cf01(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 1 */
     {
-        int i, cf_num = 5;
+        unsigned int i, cf_num = 5;
         double fit[5];
         double delta[5] = {10, 20, 30, 40, 50};
         double bias[5] = {0, 100, 200, 300, 400};
 
-        i = 0;
+        i = 0u;
         rosenbrock_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 1e+4;
-        i = 1;
+        i = 1u;
         dif_powers_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 1e+10;
-        i = 2;
+        i = 2u;
         bent_cigar_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 1e+30;
-        i = 3;
+        i = 3u;
         discus_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 1e+10;
-        i = 4;
+        i = 4u;
         sphere_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], 0);
         fit[i] = 10000 * fit[i] / 1e+5;
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf02(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void cf02(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 2 */
     {
-        int i, cf_num = 3;
+        unsigned int i, cf_num = 3u;
         double fit[3];
         double delta[3] = {20, 20, 20};
         double bias[3] = {0, 100, 200};
-        for (i = 0; i < cf_num; i++) {
+        for (i = 0u; i < cf_num; ++i) {
             schwefel_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         }
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf03(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void cf03(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 3 */
     {
-        int i, cf_num = 3;
+        unsigned int i, cf_num = 3u;
         double fit[3];
         double delta[3] = {20, 20, 20};
         double bias[3] = {0, 100, 200};
-        for (i = 0; i < cf_num; i++) {
+        for (i = 0u; i < cf_num; ++i) {
             schwefel_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         }
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf04(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void cf04(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 4 */
     {
-        int i, cf_num = 3;
+        unsigned int i, cf_num = 3u;
         double fit[3];
         double delta[3] = {20, 20, 20};
         double bias[3] = {0, 100, 200};
-        i = 0;
+        i = 0u;
         schwefel_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 4e+3;
-        i = 1;
+        i = 1u;
         rastrigin_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 1e+3;
-        i = 2;
+        i = 2u;
         weierstrass_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 400;
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf05(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void cf05(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 4 */
     {
-        int i, cf_num = 3;
+        unsigned int i, cf_num = 3u;
         double fit[3];
         double delta[3] = {10, 30, 50};
         double bias[3] = {0, 100, 200};
-        i = 0;
+        i = 0u;
         schwefel_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 4e+3;
-        i = 1;
+        i = 1u;
         rastrigin_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 1e+3;
-        i = 2;
+        i = 2u;
         weierstrass_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 400;
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf06(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void cf06(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 6 */
     {
-        int i, cf_num = 5;
+        unsigned int i, cf_num = 5u;
         double fit[5];
         double delta[5] = {10, 10, 10, 10, 10};
         double bias[5] = {0, 100, 200, 300, 400};
-        i = 0;
+        i = 0u;
         schwefel_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 4e+3;
-        i = 1;
+        i = 1u;
         rastrigin_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 1e+3;
-        i = 2;
+        i = 2u;
         ellips_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 1e+10;
-        i = 3;
+        i = 3u;
         weierstrass_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 400;
-        i = 4;
+        i = 4u;
         griewank_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 1000 * fit[i] / 100;
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf07(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void cf07(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 7 */
     {
-        int i, cf_num = 5;
+        unsigned int i, cf_num = 5u;
         double fit[5];
         double delta[5] = {10, 10, 10, 20, 20};
         double bias[5] = {0, 100, 200, 300, 400};
-        i = 0;
+        i = 0u;
         griewank_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 100;
-        i = 1;
+        i = 1u;
         rastrigin_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 1e+3;
-        i = 2;
+        i = 2u;
         schwefel_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 4e+3;
-        i = 3;
+        i = 3u;
         weierstrass_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 400;
-        i = 4;
+        i = 4u;
         sphere_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], 0);
         fit[i] = 10000 * fit[i] / 1e+5;
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void cf08(const double *x, double *f, int nx, const double *Os, const double *Mr,
+    void cf08(const double *x, double *f, const vector_double::size_type nx, const double *Os, const double *Mr,
               int r_flag) const /* Composition Function 8 */
     {
-        int i, cf_num = 5;
+        unsigned int i, cf_num = 5u;
         double fit[5];
         double delta[5] = {10, 20, 30, 40, 50};
         double bias[5] = {0, 100, 200, 300, 400};
         i = 0;
         grie_rosen_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 4e+3;
-        i = 1;
+        i = 1u;
         schaffer_F7_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 4e+6;
-        i = 2;
+        i = 2u;
         schwefel_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 4e+3;
-        i = 3;
+        i = 3u;
         escaffer6_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], r_flag);
         fit[i] = 10000 * fit[i] / 2e+7;
-        i = 4;
+        i = 4u;
         sphere_func(x, &fit[i], nx, &Os[i * nx], &Mr[i * nx * nx], 0);
         fit[i] = 10000 * fit[i] / 1e+5;
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void shiftfunc(const double *x, double *xshift, int nx, const double *Os) const
+    void shiftfunc(const double *x, double *xshift, const vector_double::size_type nx, const double *Os) const
     {
-        int i;
-        for (i = 0; i < nx; i++) {
+        unsigned int i;
+        for (i = 0u; i < nx; ++i) {
             xshift[i] = x[i] - Os[i];
         }
     }
 
-    void rotatefunc(const double *x, double *xrot, int nx, const double *Mr) const
+    void rotatefunc(const double *x, double *xrot, const vector_double::size_type nx, const double *Mr) const
     {
-        int i, j;
-        for (i = 0; i < nx; i++) {
+        unsigned int i, j;
+        for (i = 0u; i < nx; ++i) {
             xrot[i] = 0;
-            for (j = 0; j < nx; j++) {
+            for (j = 0u; j < nx; ++j) {
                 xrot[i] = xrot[i] + x[j] * Mr[i * nx + j];
             }
         }
     }
 
-    void asyfunc(const double *x, double *xasy, int nx, double beta) const
+    void asyfunc(const double *x, double *xasy, const vector_double::size_type nx, double beta) const
     {
-        int i;
-        for (i = 0; i < nx; i++) {
-            if (x[i] > 0) xasy[i] = std::pow(x[i], 1.0 + beta * i / (nx - 1) * std::pow(x[i], 0.5));
+        unsigned int i;
+        for (i = 0u; i < nx; ++i) {
+            if (x[i] > 0) xasy[i] = std::pow(x[i], 1.0 + (beta * i) / (nx - 1u) * std::pow(x[i], 0.5));
         }
     }
 
-    void oszfunc(const double *x, double *xosz, int nx) const
+    void oszfunc(const double *x, double *xosz, const vector_double::size_type nx) const
     {
-        int i, sx;
+        unsigned int i;
+        int sx;
         double c1, c2, xx = 0;
-        for (i = 0; i < nx; i++) {
-            if (i == 0 || i == nx - 1) {
+        for (i = 0u; i < nx; ++i) {
+            if (i == 0u || i == nx - 1u) {
                 if (x[i] != 0) xx = std::log(std::abs(x[i]));
                 if (x[i] > 0) {
                     c1 = 10;
@@ -1150,17 +1155,17 @@ private:
         }
     }
 
-    void cf_cal(const double *x, double *f, int nx, const double *Os, double *delta, double *bias, double *fit,
-                int cf_num) const
+    void cf_cal(const double *x, double *f, const vector_double::size_type nx, const double *Os, double *delta,
+                double *bias, double *fit, unsigned int cf_num) const
     {
-        int i, j;
+        unsigned int i, j;
         double *w;
         double w_max = 0, w_sum = 0;
         w = (double *)malloc(cf_num * sizeof(double));
-        for (i = 0; i < cf_num; i++) {
+        for (i = 0u; i < cf_num; ++i) {
             fit[i] += bias[i];
             w[i] = 0;
-            for (j = 0; j < nx; j++) {
+            for (j = 0u; j < nx; ++j) {
                 w[i] += std::pow(x[j] - Os[i * nx + j], 2.0);
             }
             if (w[i] != 0)
@@ -1170,16 +1175,16 @@ private:
             if (w[i] > w_max) w_max = w[i];
         }
 
-        for (i = 0; i < cf_num; i++) {
+        for (i = 0u; i < cf_num; ++i) {
             w_sum = w_sum + w[i];
         }
         if (w_max == 0) {
-            for (i = 0; i < cf_num; i++)
+            for (i = 0; i < cf_num; ++i)
                 w[i] = 1;
             w_sum = cf_num;
         }
         f[0] = 0.0;
-        for (i = 0; i < cf_num; i++) {
+        for (i = 0u; i < cf_num; ++i) {
             f[0] = f[0] + w[i] / w_sum * fit[i];
         }
         free(w);

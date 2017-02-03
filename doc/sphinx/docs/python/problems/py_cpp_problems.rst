@@ -3,6 +3,9 @@
 Problems exposed from C++
 =========================
 
+.. autoclass:: pygmo.core.cec2013
+   :members:
+
 .. autoclass:: pygmo.core.rosenbrock
    :members:
 
