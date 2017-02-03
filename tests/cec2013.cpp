@@ -42,12 +42,14 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(cec2013_test)
 {
-    // We check that all problems can be constructed at all dimensions
+    // We check that all problems can be constructed at all dimensions and that the name returned makes sense
+    // (only for dim =2 for speed)
     std::vector<unsigned int> allowed_dims = {2u, 5u, 10u, 20u, 30u, 40u, 50u, 60u, 70u, 80u, 90u, 100u};
-    for (unsigned int i=1u ; i<=18u; ++i) {
+    for (unsigned int i = 1u; i <= 18u; ++i) {
         for (auto dim : allowed_dims) {
             BOOST_CHECK_NO_THROW((cec2013{i, dim, "cec2013_data/"}));
         }
+        BOOST_CHECK((cec2013{i, 2u, "cec2013_data/"}.get_name().find("CEC2013 - f")) != std::string::npos);
     }
     // We check that wrong problem ids and dimensions cannot be constructed
     BOOST_CHECK_THROW((cec2013{0u, 2u, "cec2013_data/"}), std::invalid_argument);
