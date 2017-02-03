@@ -44,10 +44,10 @@ see https://www.gnu.org/licenses/. */
 
 #define E 2.7182818284590452353602874713526625
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
+//#if defined(__GNUC__)
+//#pragma GCC diagnostic push
+//#pragma GCC diagnostic ignored "-Wconversion"
+//#endif
 
 namespace pagmo
 {
@@ -1180,8 +1180,8 @@ PAGMO_REGISTER_PROBLEM(pagmo::cec2013)
 
 #undef E
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+//#if defined(__GNUC__)
+//#pragma GCC diagnostic pop
+//#endif
 
 #endif
