@@ -522,7 +522,7 @@ private:
                 m_z[i] = m_y[i];
         asyfunc(&m_z[0], &m_y[0], nx, 0.5);
         for (i = 0u; i < nx; ++i)
-            m_z[i] = m_y[i] * std::pow(10.0, 1.0 * i / (nx - 1) / 2.0);
+            m_z[i] = m_y[i] * std::pow(10.0, (1. * i) / (nx - 1u) / 2.0);
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, &Mr[nx * nx]);
         else
@@ -788,7 +788,7 @@ private:
                 m_z[i] = m_y[i];
 
         for (i = 0u; i < nx; ++i)
-            m_z[i] *= std::pow(100.0, 1.0 * i / (nx - 1) / 2.0);
+            m_z[i] *= std::pow(100.0, (1. * i) / (nx - 1u) / 2.0);
 
         if (r_flag == 1)
             rotatefunc(&m_z[0], &m_y[0], nx, &Mr[nx * nx]);
@@ -899,13 +899,13 @@ private:
             tmp1 = m_z[i] * m_z[i] - m_z[i + 1];
             tmp2 = m_z[i] - 1.0;
             temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
-            f[0] += (temp * temp) / 4000.0 - cos(temp) + 1.0;
+            f[0] += (temp * temp) / 4000.0 - std::cos(temp) + 1.0;
         }
         tmp1 = m_z[nx - 1] * m_z[nx - 1] - m_z[0];
         tmp2 = m_z[nx - 1] - 1.0;
         temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
         ;
-        f[0] += (temp * temp) / 4000.0 - cos(temp) + 1.0;
+        f[0] += (temp * temp) / 4000.0 - std::cos(temp) + 1.0;
     }
 
     void escaffer6_func(const double *x, double *f, const vector_double::size_type nx, const double *Os,
