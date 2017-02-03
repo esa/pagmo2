@@ -1,15 +1,43 @@
-#define BOOST_TEST_MODULE pagmo_zdt_test
-#include <boost/test/unit_test.hpp>
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
+#define BOOST_TEST_MODULE zdt_test
+#include <boost/test/included/unit_test.hpp>
+
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <exception>
 #include <iostream>
 #include <string>
 
-#include "../include/problem.hpp"
-#include "../include/problems/zdt.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/types.hpp"
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/zdt.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 
@@ -31,113 +59,113 @@ BOOST_AUTO_TEST_CASE(zdt_construction_test)
 BOOST_AUTO_TEST_CASE(zdt1_fitness_test)
 {
     {
-    zdt zdt1{1,30};
-    vector_double x(30,0.25);
-    BOOST_CHECK_CLOSE(zdt1.fitness(x)[0], 0.25, 1e-13);
-    BOOST_CHECK_CLOSE(zdt1.fitness(x)[1], 2.3486121811340026, 1e-13);
+        zdt zdt1{1, 30};
+        vector_double x(30, 0.25);
+        BOOST_CHECK_CLOSE(zdt1.fitness(x)[0], 0.25, 1e-13);
+        BOOST_CHECK_CLOSE(zdt1.fitness(x)[1], 2.3486121811340026, 1e-13);
     }
-    zdt zdt1{1,13};
+    zdt zdt1{1, 13};
     {
-    vector_double x(13,0.33);
-    BOOST_CHECK_CLOSE(zdt1.fitness(x)[0], 0.33, 1e-13);
-    BOOST_CHECK_CLOSE(zdt1.fitness(x)[1], 2.825404001404863, 1e-13);
+        vector_double x(13, 0.33);
+        BOOST_CHECK_CLOSE(zdt1.fitness(x)[0], 0.33, 1e-13);
+        BOOST_CHECK_CLOSE(zdt1.fitness(x)[1], 2.825404001404863, 1e-13);
     }
 }
 
 BOOST_AUTO_TEST_CASE(zdt2_fitness_test)
 {
     {
-    zdt zdt2{2,30};
-    vector_double x(30,0.25);
-    BOOST_CHECK_CLOSE(zdt2.fitness(x)[0], 0.25, 1e-13);
-    BOOST_CHECK_CLOSE(zdt2.fitness(x)[1], 3.230769230769231, 1e-13);
+        zdt zdt2{2, 30};
+        vector_double x(30, 0.25);
+        BOOST_CHECK_CLOSE(zdt2.fitness(x)[0], 0.25, 1e-13);
+        BOOST_CHECK_CLOSE(zdt2.fitness(x)[1], 3.230769230769231, 1e-13);
     }
-    zdt zdt2{2,13};
+    zdt zdt2{2, 13};
     {
-    vector_double x(13,0.33);
-    BOOST_CHECK_CLOSE(zdt2.fitness(x)[0], 0.33, 1e-13);
-    BOOST_CHECK_CLOSE(zdt2.fitness(x)[1], 3.9425692695214107, 1e-13);
+        vector_double x(13, 0.33);
+        BOOST_CHECK_CLOSE(zdt2.fitness(x)[0], 0.33, 1e-13);
+        BOOST_CHECK_CLOSE(zdt2.fitness(x)[1], 3.9425692695214107, 1e-13);
     }
 }
 
 BOOST_AUTO_TEST_CASE(zdt3_fitness_test)
 {
     {
-    zdt zdt3{3,30};
-    vector_double x(30,0.25);
-    BOOST_CHECK_CLOSE(zdt3.fitness(x)[0], 0.25, 1e-13);
-    BOOST_CHECK_CLOSE(zdt3.fitness(x)[1], 2.0986121811340026, 1e-13);
+        zdt zdt3{3, 30};
+        vector_double x(30, 0.25);
+        BOOST_CHECK_CLOSE(zdt3.fitness(x)[0], 0.25, 1e-13);
+        BOOST_CHECK_CLOSE(zdt3.fitness(x)[1], 2.0986121811340026, 1e-13);
     }
-    zdt zdt3{3,13};
+    zdt zdt3{3, 13};
     {
-    vector_double x(13,0.33);
-    BOOST_CHECK_CLOSE(zdt3.fitness(x)[0], 0.33, 1e-13);
-    BOOST_CHECK_CLOSE(zdt3.fitness(x)[1], 3.092379609548596, 1e-13);
+        vector_double x(13, 0.33);
+        BOOST_CHECK_CLOSE(zdt3.fitness(x)[0], 0.33, 1e-13);
+        BOOST_CHECK_CLOSE(zdt3.fitness(x)[1], 3.092379609548596, 1e-13);
     }
 }
 
 BOOST_AUTO_TEST_CASE(zdt4_fitness_test)
 {
     {
-    zdt zdt4{4,30};
-    vector_double x(30,0.25);
-    BOOST_CHECK_CLOSE(zdt4.fitness(x)[0], 0.25, 1e-13);
-    BOOST_CHECK_CLOSE(zdt4.fitness(x)[1], 570.7417450526075, 1e-13);
+        zdt zdt4{4, 30};
+        vector_double x(30, 0.25);
+        BOOST_CHECK_CLOSE(zdt4.fitness(x)[0], 0.25, 1e-13);
+        BOOST_CHECK_CLOSE(zdt4.fitness(x)[1], 570.7417450526075, 1e-13);
     }
-    zdt zdt4{4,13};
+    zdt zdt4{4, 13};
     {
-    vector_double x(13,0.33);
-    BOOST_CHECK_CLOSE(zdt4.fitness(x)[0], 0.33, 1e-13);
-    BOOST_CHECK_CLOSE(zdt4.fitness(x)[1], 178.75872382132619, 1e-13);
+        vector_double x(13, 0.33);
+        BOOST_CHECK_CLOSE(zdt4.fitness(x)[0], 0.33, 1e-13);
+        BOOST_CHECK_CLOSE(zdt4.fitness(x)[1], 178.75872382132619, 1e-13);
     }
 }
 
 BOOST_AUTO_TEST_CASE(zdt5_fitness_test)
 {
     {
-    zdt zdt5{5,30};
-    vector_double x(175, 1.);
-    std::fill(x.begin()+100,x.end(),0.);
-    BOOST_CHECK_CLOSE(zdt5.fitness(x)[0], 31., 1e-13);
-    BOOST_CHECK_CLOSE(zdt5.fitness(x)[1], 1.4193548387096775, 1e-13);
+        zdt zdt5{5, 30};
+        vector_double x(175, 1.);
+        std::fill(x.begin() + 100, x.end(), 0.);
+        BOOST_CHECK_CLOSE(zdt5.fitness(x)[0], 31., 1e-13);
+        BOOST_CHECK_CLOSE(zdt5.fitness(x)[1], 1.4193548387096775, 1e-13);
     }
     {
-    zdt zdt5{5,13};
-    vector_double x(90, 1.);
-    std::fill(x.begin()+45,x.end(),0.);
-    BOOST_CHECK_CLOSE(zdt5.fitness(x)[0], 31., 1e-13);
-    BOOST_CHECK_CLOSE(zdt5.fitness(x)[1], 0.6774193548387096, 1e-13);
+        zdt zdt5{5, 13};
+        vector_double x(90, 1.);
+        std::fill(x.begin() + 45, x.end(), 0.);
+        BOOST_CHECK_CLOSE(zdt5.fitness(x)[0], 31., 1e-13);
+        BOOST_CHECK_CLOSE(zdt5.fitness(x)[1], 0.6774193548387096, 1e-13);
     }
     // Test with double relaxation
     {
-    zdt zdt5{5,30};
-    vector_double x(175, 1.35422);
-    std::fill(x.begin()+100,x.end(),0.1534567);
-    BOOST_CHECK_CLOSE(zdt5.fitness(x)[0], 31., 1e-13);
-    BOOST_CHECK_CLOSE(zdt5.fitness(x)[1], 1.4193548387096775, 1e-13);
+        zdt zdt5{5, 30};
+        vector_double x(175, 1.35422);
+        std::fill(x.begin() + 100, x.end(), 0.1534567);
+        BOOST_CHECK_CLOSE(zdt5.fitness(x)[0], 31., 1e-13);
+        BOOST_CHECK_CLOSE(zdt5.fitness(x)[1], 1.4193548387096775, 1e-13);
     }
     {
-    zdt zdt5{5,13};
-    vector_double x(90, 1.34677824);
-    std::fill(x.begin()+45,x.end(),0.345345);
-    BOOST_CHECK_CLOSE(zdt5.fitness(x)[0], 31., 1e-13);
-    BOOST_CHECK_CLOSE(zdt5.fitness(x)[1], 0.6774193548387096, 1e-13);
+        zdt zdt5{5, 13};
+        vector_double x(90, 1.34677824);
+        std::fill(x.begin() + 45, x.end(), 0.345345);
+        BOOST_CHECK_CLOSE(zdt5.fitness(x)[0], 31., 1e-13);
+        BOOST_CHECK_CLOSE(zdt5.fitness(x)[1], 0.6774193548387096, 1e-13);
     }
 }
 
 BOOST_AUTO_TEST_CASE(zdt6_fitness_test)
 {
     {
-    zdt zdt6{6,30};
-    vector_double x(30,0.25);
-    BOOST_CHECK_CLOSE(zdt6.fitness(x)[0], 0.6321205588285577, 1e-13);
-    BOOST_CHECK_CLOSE(zdt6.fitness(x)[1], 7.309699961231513, 1e-13);
+        zdt zdt6{6, 30};
+        vector_double x(30, 0.25);
+        BOOST_CHECK_CLOSE(zdt6.fitness(x)[0], 0.6321205588285577, 1e-13);
+        BOOST_CHECK_CLOSE(zdt6.fitness(x)[1], 7.309699961231513, 1e-13);
     }
     {
-    zdt zdt6{6,13};
-    vector_double x(13,0.33);
-    BOOST_CHECK_CLOSE(zdt6.fitness(x)[0], 0.999999983628226, 1e-13);
-    BOOST_CHECK_CLOSE(zdt6.fitness(x)[1], 7.693505388431892, 1e-13);
+        zdt zdt6{6, 13};
+        vector_double x(13, 0.33);
+        BOOST_CHECK_CLOSE(zdt6.fitness(x)[0], 0.999999983628226, 1e-13);
+        BOOST_CHECK_CLOSE(zdt6.fitness(x)[1], 7.693505388431892, 1e-13);
     }
 }
 
@@ -150,8 +178,8 @@ BOOST_AUTO_TEST_CASE(zdt_p_distance_test)
     zdt zdt5{5, 11};
     zdt zdt6{6, 10};
     vector_double x(30, 0.143);
-    vector_double xi(175,1.);
-    std::fill(xi.begin()+100,xi.end(),0.);
+    vector_double xi(175, 1.);
+    std::fill(xi.begin() + 100, xi.end(), 0.);
     BOOST_CHECK_CLOSE(zdt1.p_distance(x), 1.2869999999999997, 1e-13);
     BOOST_CHECK_CLOSE(zdt2.p_distance(x), 1.2869999999999997, 1e-13);
     BOOST_CHECK_CLOSE(zdt3.p_distance(x), 1.2869999999999997, 1e-13);
@@ -187,20 +215,20 @@ BOOST_AUTO_TEST_CASE(zdt_serialization_test)
 {
     problem p{zdt{4, 4}};
     // Call objfun to increase the internal counters.
-    p.fitness({1.,1.,1.,1.});
+    p.fitness({1., 1., 1., 1.});
     // Store the string representation of p.
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(p);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(p);
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

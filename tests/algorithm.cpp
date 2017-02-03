@@ -1,31 +1,73 @@
-#define BOOST_TEST_MODULE pagmo_problem_test
-#include <boost/test/unit_test.hpp>
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
+#define BOOST_TEST_MODULE algorithm_test
+#include <boost/test/included/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
-#include <sstream>
 #include <exception>
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "../include/algorithm.hpp"
-#include "../include/algorithms/null_algorithm.hpp"
-#include "../include/problems/rosenbrock.hpp"
-#include "../include/population.hpp"
-#include "../include/serialization.hpp"
-#include "../include/types.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/de.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 
 // Complete algorithm stochastic
-struct al_01
-{
-    al_01() {};
-    population evolve(population pop) const {return pop;};
-    std::string get_name() const {return "name";};
-    std::string get_extra_info() const {return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);};
-    void set_seed(unsigned int seed) {m_seed = seed;};
-    void set_verbosity(unsigned int level) {m_verbosity = level;};
+struct al_01 {
+    al_01(){};
+    population evolve(population pop) const
+    {
+        return pop;
+    };
+    std::string get_name() const
+    {
+        return "name";
+    };
+    std::string get_extra_info() const
+    {
+        return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);
+    };
+    void set_seed(unsigned int seed)
+    {
+        m_seed = seed;
+    };
+    void set_verbosity(unsigned int level)
+    {
+        m_verbosity = level;
+    };
     template <typename Archive>
     void serialize(Archive &ar)
     {
@@ -37,13 +79,16 @@ struct al_01
 PAGMO_REGISTER_ALGORITHM(al_01)
 
 // Minimal algorithm deterministic
-struct al_02
-{
-    al_02() {};
-    population evolve(population pop) const {return pop;};
+struct al_02 {
+    al_02(){};
+    population evolve(population pop) const
+    {
+        return pop;
+    };
     template <typename Archive>
     void serialize(Archive &)
-    {}
+    {
+    }
 };
 PAGMO_REGISTER_ALGORITHM(al_02)
 
@@ -65,7 +110,7 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_test)
     BOOST_CHECK_THROW(algo_minimal.set_seed(1u), std::logic_error);
     BOOST_CHECK_THROW(algo_minimal.set_verbosity(1u), std::logic_error);
     // We check that at construction the name has been assigned
-    BOOST_CHECK(algo_full.get_name()== "name");
+    BOOST_CHECK(algo_full.get_name() == "name");
     BOOST_CHECK(algo_minimal.get_name().find("al_02") != std::string::npos);
 }
 
@@ -85,9 +130,9 @@ BOOST_AUTO_TEST_CASE(algorithm_copy_constructor_test)
     auto a2 = algo_copy.extract<al_01>();
 
     // 1 - We check the resources pointed to by m_ptr have different address
-    BOOST_CHECK(a1!=0);
-    BOOST_CHECK(a2!=0);
-    BOOST_CHECK(a1!=a2);
+    BOOST_CHECK(a1 != 0);
+    BOOST_CHECK(a2 != 0);
+    BOOST_CHECK(a1 != a2);
     // 2 - We check that the other members are copied
     BOOST_CHECK(algo.get_name() == algo_copy.get_name());
     BOOST_CHECK(algo.has_set_seed() == algo_copy.has_set_seed());
@@ -114,24 +159,44 @@ BOOST_AUTO_TEST_CASE(algorithm_move_constructor_test)
     // And the string representation of the moved algo
     auto moved_algo_string = boost::lexical_cast<std::string>(moved_algo);
     // 1 - We check the resource pointed by m_ptr has been moved from algo to moved_algo
-    BOOST_CHECK(a1==a2);
+    BOOST_CHECK(a1 == a2);
     // 2 - We check that the two string representations are identical
-    BOOST_CHECK(algo_string==moved_algo_string);
+    BOOST_CHECK(algo_string == moved_algo_string);
 }
 
 // Algorithm with overrides
-struct al_03
-{
-    al_03() {};
-    population evolve(population pop) const {return pop;};
-    std::string get_name() const {return "name";};
-    std::string get_extra_info() const {return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);};
-    void set_seed(unsigned int seed) {m_seed = seed;};
-    void set_verbosity(unsigned int level) {m_verbosity = level;};
+struct al_03 {
+    al_03(){};
+    population evolve(population pop) const
+    {
+        return pop;
+    };
+    std::string get_name() const
+    {
+        return "name";
+    };
+    std::string get_extra_info() const
+    {
+        return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);
+    };
+    void set_seed(unsigned int seed)
+    {
+        m_seed = seed;
+    };
+    void set_verbosity(unsigned int level)
+    {
+        m_verbosity = level;
+    };
     unsigned int m_seed = 0u;
     unsigned int m_verbosity = 0u;
-    bool has_set_seed() const {return false;};
-    bool has_set_verbosity() const {return false;};
+    bool has_set_seed() const
+    {
+        return false;
+    };
+    bool has_set_verbosity() const
+    {
+        return false;
+    };
 };
 
 BOOST_AUTO_TEST_CASE(algorithm_override_mechanics_test)
@@ -162,9 +227,9 @@ BOOST_AUTO_TEST_CASE(algorithm_move_assignment_test)
     // And the string representation of the moved algo
     auto moved_algo_string = boost::lexical_cast<std::string>(moved_algo);
     // 1 - We check the resource pointed by m_ptr has been moved from algo to moved_algo
-    BOOST_CHECK(a1==a2);
+    BOOST_CHECK(a1 == a2);
     // 2 - We check that the two string representations are identical
-    BOOST_CHECK(algo_string==moved_algo_string);
+    BOOST_CHECK(algo_string == moved_algo_string);
 }
 
 BOOST_AUTO_TEST_CASE(algorithm_copy_assignment_test)
@@ -184,9 +249,9 @@ BOOST_AUTO_TEST_CASE(algorithm_copy_assignment_test)
     auto a2 = algo_copy.extract<al_01>();
 
     // 1 - We check the resources pointed to by m_ptr have different address
-    BOOST_CHECK(a1!=0);
-    BOOST_CHECK(a2!=0);
-    BOOST_CHECK(a1!=a2);
+    BOOST_CHECK(a1 != 0);
+    BOOST_CHECK(a2 != 0);
+    BOOST_CHECK(a1 != a2);
     // 2 - We check that the other members are copied
     BOOST_CHECK(algo.get_name() == algo_copy.get_name());
     BOOST_CHECK(algo.has_set_seed() == algo_copy.has_set_seed());
@@ -223,7 +288,6 @@ BOOST_AUTO_TEST_CASE(algorithm_evolve_test)
     BOOST_CHECK(pop.get_x() == pop_out.get_x());
     BOOST_CHECK(pop.get_f() == pop_out.get_f());
     BOOST_CHECK(pop.get_ID() == pop_out.get_ID());
-
 }
 
 BOOST_AUTO_TEST_CASE(algorithm_setters_test)
@@ -245,9 +309,14 @@ BOOST_AUTO_TEST_CASE(algorithm_has_test)
 
 BOOST_AUTO_TEST_CASE(algorithm_getters_test)
 {
-    algorithm algo{al_01{}};
-    BOOST_CHECK(algo.get_name() == "name");
-    BOOST_CHECK(algo.get_extra_info().find("Seed") != std::string::npos);
+    {
+        algorithm algo{al_01{}};
+        BOOST_CHECK(algo.get_name() == "name");
+        BOOST_CHECK(algo.get_extra_info().find("Seed") != std::string::npos);
+    }
+    algorithm algo{al_02{}};
+    BOOST_CHECK(algo.get_name().find("al_02") != std::string::npos);
+    BOOST_CHECK(algo.get_extra_info().find("") != std::string::npos);
 }
 
 BOOST_AUTO_TEST_CASE(algorithm_serialization_test)
@@ -262,18 +331,49 @@ BOOST_AUTO_TEST_CASE(algorithm_serialization_test)
     auto before = boost::lexical_cast<std::string>(algo);
     // Now serialize, deserialize and compare the result.
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(algo);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
     }
     // Create a new algorithm object
     auto algo2 = algorithm{al_02{}};
+    boost::lexical_cast<std::string>(algo2); // triggers the streaming operator for a deterministic algo
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(algo2);
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo2);
     }
     auto after = boost::lexical_cast<std::string>(algo2);
     BOOST_CHECK_EQUAL(before, after);
     // Check explicitly that the properties of base_p where restored as well.
     BOOST_CHECK_EQUAL(algo.extract<al_01>()->m_seed, algo2.extract<al_01>()->m_seed);
     BOOST_CHECK_EQUAL(algo.extract<al_01>()->m_verbosity, algo2.extract<al_01>()->m_verbosity);
+}
+
+BOOST_AUTO_TEST_CASE(null_algorithm_construction_and_evolve)
+{
+    // Trivial checks
+    null_algorithm user_algo{};
+    // Evolve check (population does not change)
+    rosenbrock user_prob{};
+    population pop(user_prob, 20u);
+    auto evolved_pop = user_algo.evolve(pop);
+    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+        BOOST_CHECK(pop.get_x()[i] == evolved_pop.get_x()[i]);
+        BOOST_CHECK(pop.get_f()[i] == evolved_pop.get_f()[i]);
+        BOOST_CHECK(pop.get_ID()[i] == evolved_pop.get_ID()[i]);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(serialization_test)
+{
+    algorithm algo{null_algorithm{}};
+    std::stringstream ss;
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
+    }
+    algo = algorithm{de{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo);
+    }
 }

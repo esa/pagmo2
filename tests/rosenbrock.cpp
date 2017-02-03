@@ -1,14 +1,42 @@
-#define BOOST_TEST_MODULE pagmo_rosenbrock_test
-#include <boost/test/unit_test.hpp>
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
+#define BOOST_TEST_MODULE rosenbrock_test
+#include <boost/test/included/unit_test.hpp>
+
 #include <boost/lexical_cast.hpp>
 #include <exception>
 #include <iostream>
 #include <string>
 
-#include "../include/problem.hpp"
-#include "../include/problems/rosenbrock.hpp"
-#include "../include/problems/null_problem.hpp"
-#include "../include/types.hpp"
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 
@@ -24,38 +52,35 @@ BOOST_AUTO_TEST_CASE(rosenbrock_test)
     vector_double x2 = {1., 1.};
     vector_double x5 = {1., 1., 1., 1., 1.};
     // Fitness test
-    BOOST_CHECK((ros2.fitness({1.,1.}) == vector_double{0.}));
-    BOOST_CHECK((ros5.fitness({1.,1.,1.,1.,1.}) == vector_double{0.}));
+    BOOST_CHECK((ros2.fitness({1., 1.}) == vector_double{0.}));
+    BOOST_CHECK((ros5.fitness({1., 1., 1., 1., 1.}) == vector_double{0.}));
     // Bounds Test
-    BOOST_CHECK((ros2.get_bounds() == std::pair<vector_double, vector_double>{{-5.,-5.},{1.,1.}}));
-    // nobj test
-    BOOST_CHECK(ros5.get_nobj() == 1u);
+    BOOST_CHECK((ros2.get_bounds() == std::pair<vector_double, vector_double>{{-5., -5.}, {10., 10.}}));
     // Name and extra info tests
     BOOST_CHECK(ros5.get_name().find("Rosenbrock") != std::string::npos);
     // Best known test
     auto x_best = ros2.best_known();
     BOOST_CHECK((x_best == vector_double{1., 1.}));
-
 }
 
 BOOST_AUTO_TEST_CASE(rosenbrock_serialization_test)
 {
     problem p{rosenbrock{4u}};
     // Call objfun to increase the internal counters.
-    p.fitness({1.,1.,1.,1.});
+    p.fitness({1., 1., 1., 1.});
     // Store the string representation of p.
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-    cereal::JSONOutputArchive oarchive(ss);
-    oarchive(p);
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-    cereal::JSONInputArchive iarchive(ss);
-    iarchive(p);
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
