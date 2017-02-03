@@ -72,7 +72,7 @@ public:
      *
      * **NOTE** This constructor should never be used and is here only for serialization
      */
-    cec2013() : m_prob_id(1), m_y(2), m_z(2), m_rotation_matrix(), m_origin_shift() {}
+    cec2013() : m_prob_id(1), m_rotation_matrix(), m_origin_shift(), m_y(2), m_z(2) {}
     /// Constructor
     /**
      * Will construct one of the 28 CEC2013 problems
