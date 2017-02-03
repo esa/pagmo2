@@ -1011,7 +1011,7 @@ The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
 Args:
     gen (``int``): number of generations
     allowed_variants (``NumPy array or list of floats``): allowed mutation variants, each one being a number in [1, 18]
-    variant_adptv (``int``): F and CR parameter adaptation scheme to be used (one of 1..2)
+    variant_adptv (``int``): *F* and *CR* parameter adaptation scheme to be used (one of 1..2)
     ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
     xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
     memory (``bool``): when true the adapted parameters *CR* anf *F* are not reset between successive calls to the evolve method
