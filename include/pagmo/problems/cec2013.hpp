@@ -91,7 +91,7 @@ public:
      * [2,5,10,20,30,40,50,60,70,80,90,100]
      * @throws std::ios_base::failure if the files are not found
      */
-    cec2013(unsigned int prob_id, unsigned int dim, const std::string &data_dir = "input_data/")
+    cec2013(unsigned int prob_id, unsigned int dim)
         : m_prob_id(prob_id), m_y(dim), m_z(dim)
     {
         if (!(dim == 2u || dim == 5u || dim == 10u || dim == 20u || dim == 30u || dim == 40u || dim == 50u || dim == 60u
@@ -237,7 +237,7 @@ public:
                 f[0] += 1400.0;
                 break;
         }
-        return std::move(f);
+        return f;
     }
     /// Box-bounds
     /**
@@ -251,7 +251,7 @@ public:
         // all CEC 2013 problems have the same bounds
         vector_double lb(m_z.size(), -100.);
         vector_double ub(m_z.size(), 100.);
-        return {std::move(lb), std::move(ub)}
+        return {std::move(lb), std::move(ub)};
     }
     /// Problem name
     /**

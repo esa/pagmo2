@@ -49,24 +49,22 @@ BOOST_AUTO_TEST_CASE(cec2013_test)
     std::vector<unsigned int> allowed_dims = {2u, 5u, 10u, 20u, 30u, 40u, 50u, 60u, 70u, 80u, 90u, 100u};
     for (unsigned int i = 1u; i <= 18u; ++i) {
         for (auto dim : allowed_dims) {
-            cec2013 udp{i, dim, "cec2013_data/"};
+            cec2013 udp{i, dim};
             auto x = random_decision_vector({vector_double(dim, -100.), vector_double(dim, 100.)},
                                             r_engine); // a random vector
             BOOST_CHECK_NO_THROW(udp.fitness(x));
         }
-        BOOST_CHECK((cec2013{i, 2u, "cec2013_data/"}.get_name().find("CEC2013 - f")) != std::string::npos);
+        BOOST_CHECK((cec2013{i, 2u}.get_name().find("CEC2013 - f")) != std::string::npos);
     }
     // We check that wrong problem ids and dimensions cannot be constructed
-    BOOST_CHECK_THROW((cec2013{0u, 2u, "cec2013_data/"}), std::invalid_argument);
-    BOOST_CHECK_THROW((cec2013{19u, 2u, "cec2013_data/"}), std::invalid_argument);
-    BOOST_CHECK_THROW((cec2013{10u, 3u, "cec2013_data/"}), std::invalid_argument);
-    BOOST_CHECK_THROW((cec2013{10u, 3u, "cec2013_data_mispelled/"}), std::invalid_argument);
-    BOOST_CHECK_THROW((cec2013{10u, 3u, "cec2013_data/only_shift/"}), std::invalid_argument);
+    BOOST_CHECK_THROW((cec2013{0u, 2u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cec2013{19u, 2u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cec2013{10u, 3u}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(cec2013_serialization_test)
 {
-    problem p{cec2013{1u, 2u, "cec2013_data/"}};
+    problem p{cec2013{1u, 2u}};
     // Call objfun to increase the internal counters.
     p.fitness(vector_double(2u, 0.));
     // Store the string representation of p.
