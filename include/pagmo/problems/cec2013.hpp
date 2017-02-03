@@ -29,14 +29,15 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_PROBLEM_CEC2013_HPP
 #define PAGMO_PROBLEM_CEC2013_HPP
 
+#include <cassert>
 #include <exception>
-#include <fstream>
 #include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
 
 #include "../detail/constants.hpp"
+#include "../detail/cec2013_data.hpp"
 #include "../exceptions.hpp"
 #include "../problem.hpp" // needed for cereal registration macro
 #include "../types.hpp"
@@ -106,37 +107,10 @@ public:
                             + std::to_string(prob_id) + " was detected.");
         }
 
-        std::string data_file_name(data_dir);
-        // We create the full file name for the shift vector
-        data_file_name.append("shift_data.txt");
-        // And we read all data into m_origin_shift
-        {
-            std::ifstream data_file(data_file_name.c_str());
-            if (!data_file.is_open()) {
-                pagmo_throw(std::ios_base::failure,
-                            std::string("Error: file not found. I was looking for ").append(data_file_name.c_str()));
-            }
-            std::istream_iterator<double> start(data_file), end;
-            m_origin_shift = std::vector<double>(start, end);
-            data_file.close();
-        }
-
-        // We create the full file name for the rotation matrix
-        data_file_name = data_dir;
-        data_file_name.append("M_D");
-        data_file_name.append(std::to_string(dim));
-        data_file_name.append(".txt");
-        // And we read all datas into m_rotation_matrix
-        {
-            std::ifstream data_file(data_file_name.c_str());
-            if (!data_file.is_open()) {
-                pagmo_throw(std::ios_base::failure,
-                            std::string("Error: file not found. I was looking for (") + data_file_name.c_str() + ")");
-            }
-            std::istream_iterator<double> start(data_file), end;
-            m_rotation_matrix = std::vector<double>(start, end);
-            data_file.close();
-        }
+        m_origin_shift = detail::cec2013_data::shift_data;
+        auto it = detail::cec2013_data::MD.find(dim);
+        assert(it != detail::cec2013_data::MD.end());
+        m_rotation_matrix = it->second;
     }
     /// Fitness computation
     /**
