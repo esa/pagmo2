@@ -71,6 +71,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
 #include <pagmo/algorithms/moead.hpp>
+#include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
@@ -793,6 +794,18 @@ BOOST_PYTHON_MODULE(core)
     compass_search_.def("get_reduction_coeff", &compass_search::get_reduction_coeff);
     compass_search_.def("get_verbosity", &compass_search::get_verbosity);
     compass_search_.def("set_verbosity", &compass_search::set_verbosity);
+    // PSO
+    auto pso_ = pygmo::expose_algorithm<pso>("pso", pygmo::pso_docstring().c_str());
+    pso_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(
+        (bp::arg("gen") = 1u, bp::arg("omega") = 0.7298, bp::arg("eta1") = 2.05, bp::arg("eta2") = 2.05,
+         bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
+         bp::arg("memory") = false)));
+    pso_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("omega") = 0.7298, bp::arg("eta1") = 2.05, bp::arg("eta2") = 2.05,
+         bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
+         bp::arg("memory") = false, bp::arg("seed"))));
+    pygmo::expose_algo_log(pso_, pygmo::pso_get_log_docstring().c_str());
+    pso_.def("get_seed", &pso::get_seed);
     // SEA
     auto sea_ = pygmo::expose_algorithm<sea>("sea", "__init__(gen = 1, seed = random)\n\n"
                                                     "(N+1)-ES simple evolutionary algorithm.\n\n");
@@ -806,7 +819,7 @@ BOOST_PYTHON_MODULE(core)
     simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double>(
         (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 1u,
          bp::arg("bin_size") = 20u, bp::arg("start_range") = 1.)));
-    simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double>(
+    simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double, unsigned>(
         (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 10u,
          bp::arg("bin_size") = 10u, bp::arg("start_range") = 1., bp::arg("seed"))));
     pygmo::expose_algo_log(simulated_annealing_, pygmo::simulated_annealing_get_log_docstring().c_str());

@@ -110,18 +110,23 @@ public:
                                                    + std::to_string(Tf) + " was detected.");
         }
         if (Tf > Ts) {
-            pagmo_throw(std::invalid_argument, "The final temperature must be smaller than the initial temperature, while a value of "
-                                                   + std::to_string(Tf) + " >= " + std::to_string(Ts)+ " was detected.");
+            pagmo_throw(std::invalid_argument,
+                        "The final temperature must be smaller than the initial temperature, while a value of "
+                            + std::to_string(Tf) + " >= " + std::to_string(Ts) + " was detected.");
         }
         if (start_range <= 0. || start_range > 1.) {
             pagmo_throw(std::invalid_argument, "The start range must be in (0,1], while a value of "
                                                    + std::to_string(start_range) + " was detected.");
         }
         if (n_T_adj == 0u) {
-            pagmo_throw(std::invalid_argument, "The number of temperature adjustments must be strictly positive, while a value of " + std::to_string(n_T_adj) + " was detected.");
+            pagmo_throw(std::invalid_argument,
+                        "The number of temperature adjustments must be strictly positive, while a value of "
+                            + std::to_string(n_T_adj) + " was detected.");
         }
         if (n_range_adj == 0u) {
-            pagmo_throw(std::invalid_argument, "The number of range adjustments must be strictly positive, while a value of " + std::to_string(n_range_adj) + " was detected.");
+            pagmo_throw(std::invalid_argument,
+                        "The number of range adjustments must be strictly positive, while a value of "
+                            + std::to_string(n_range_adj) + " was detected.");
         }
     }
 

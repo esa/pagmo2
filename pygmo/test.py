@@ -541,6 +541,46 @@ class problem_test_case(_ut.TestCase):
         self.assert_(problem(p()).has_gradient())
 
 
+class pso_test_case(_ut.TestCase):
+	"""Test case for the UDA pso
+
+	"""
+	def runTest(self):
+		from .core import pso
+		uda = pso()
+		log = uda.get_log()
+		seed = uda.get_seed()
+
+class sa_test_case(_ut.TestCase):
+	"""Test case for the UDA simulated annealing
+
+	"""
+	def runTest(self):
+		from .core import simulated_annealing
+		uda = simulated_annealing()
+		log = uda.get_log()
+		seed = uda.get_seed()
+
+class compass_search_test_case(_ut.TestCase):
+	"""Test case for the UDA compass search
+
+	"""
+	def runTest(self):
+		from .core import compass_search
+		uda = compass_search()
+		log = uda.get_log()
+
+class cmaes_test_case(_ut.TestCase):
+	"""Test case for the UDA cmaes
+
+	"""
+	def runTest(self):
+		from .core import cmaes
+		uda = cmaes()
+		log = uda.get_log()
+		seed = uda.get_seed()
+
+
 def run_test_suite():
     """Run the full test suite.
 
@@ -550,6 +590,9 @@ def run_test_suite():
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(problem_test_case())
+	suite.addTest(pso_test_case())
+	suite.addTest(cmaes_test_case())
+	suite.addTest(compass_search_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

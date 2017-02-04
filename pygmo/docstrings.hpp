@@ -79,6 +79,8 @@ std::string de1220_docstring();
 std::string de1220_get_log_docstring();
 std::string moead_docstring();
 std::string moead_get_log_docstring();
+std::string pso_docstring();
+std::string pso_get_log_docstring();
 std::string sade_docstring();
 std::string sade_get_log_docstring();
 std::string simulated_annealing_docstring();
