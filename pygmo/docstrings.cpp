@@ -702,9 +702,7 @@ Args:
 
 Raises:
     OverflowError: if *max_fevals* is negative or greater than an implementation-defined value
-    ValueError: if *start_range* is not in (0, 1]
-    ValueError: if *stop_range* is not in (*start_range*, 1]
-    ValueError: if *reduction_coeff* is not in (0,1)
+    ValueError: if *start_range* is not in (0, 1], if *stop_range* is not in (*start_range*, 1] or if *reduction_coeff* is not in (0,1)
 
 See also the docs of the C++ class :cpp:class:`pagmo::compass_search`.
 
@@ -888,8 +886,7 @@ Args:
 Raises:
     OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
     ValueError: if *weight_generation* is not one of 'random', 'low discrepancy', 'grid'
-    ValueError: if *CR* or *F* or *realb* are not in [0.,1.]
-    ValueError: if *eta_m* is negative
+    ValueError: if *CR* or *F* or *realb* are not in [0.,1.] or if *eta_m* is negative
 
 See also the docs of the C++ class :cpp:class:`pagmo::moead`.
 
@@ -1014,10 +1011,10 @@ The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
 Args:
     gen (``int``): number of generations
     allowed_variants (``NumPy array or list of floats``): allowed mutation variants, each one being a number in [1, 18]
-    variant_adptv (``int``): F and CR parameter adaptation scheme to be used (one of 1..2)
+    variant_adptv (``int``): *F* and *CR* parameter adaptation scheme to be used (one of 1..2)
     ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
     xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
-    memory (``bool``): when true the adapted parameters CR anf F are not reset between successive calls to the evolve method
+    memory (``bool``): when true the adapted parameters *CR* anf *F* are not reset between successive calls to the evolve method
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
@@ -1046,7 +1043,7 @@ The following variants (mutation variants) can be put into *allowed_variants*:
 | 17 - rand-to-best-and-current/2/exp  | 18 - rand-to-best-and-current/2/bin  |
 +--------------------------------------+--------------------------------------+
 
-The following adaptation schemes for the parameters F and CR are available:
+The following adaptation schemes for the parameters *F* and *CR* are available:
 
 +--------------------------------------+--------------------------------------+
 | 1 - jDE                              | 2 - iDE                              |
@@ -1101,6 +1098,100 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log`.
 )";
 }
 
+std::string pso_docstring()
+{
+    return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5u, neighb_type = 2u, neighb_param = 4u, memory = False, seed = random)
+
+Particle Swarm Optimization
+
+Args:
+    gen (``int``): number of generations
+    omega (``float``): inertia weight (or constriction factor)
+    eta1 (``float``): social component
+    eta2 (``float``): cognitive component
+    max_vel (``float``): maximum allowed particle velocities (normalized with respect to the bounds width)
+    variant (``int``): algoritmic variant
+    neighb_type (``int``): swarm topology (defining each particle's neighbours)
+    neighb_param (``int``): topology parameter (defines how many neighbours to consider)
+    memory (``bool``): when true the velocities are not reset between successive calls to the evolve method
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* or *seed* is negative or greater than an implementation-defined value
+    ValueError: if *omega* is not in the [0,1] interval, if *eta1*, *eta2* are not in the [0,1] interval, if *max_vel* is not in ]0,1]
+    ValueError: *variant* is not one of 1 .. 6, if *neighb_type* is not one of 1 .. 4 or if *neighb_param* is zero
+
+The following variants can be selected via the *variant* parameter:
+
++-----------------------------------------+-----------------------------------------+
+| 1 - Canonical (with inertia weight)     | 2 - Same social and cognitive rand.     |
++-----------------------------------------+-----------------------------------------+
+| 3 - Same rand. for all components       | 4 - Only one rand.                      |
++-----------------------------------------+-----------------------------------------+
+| 5 - Canonical (with constriction fact.) | 6 - Fully Informed (FIPS)               |
++-----------------------------------------+-----------------------------------------+
+
+
+The following topologies are selected by *neighb_type*:
+
++--------------------------------------+--------------------------------------+
+| 1 - gbest                            | 2 - lbest                            |
++--------------------------------------+--------------------------------------+
+| 3 - Von Neumann                      | 4 - Adaptive random                  |
++--------------------------------------+--------------------------------------+
+
+The topology determines (together with the topology parameter) which particles need to be considered
+when computing the social component of the velocity update.
+
+)";
+}
+
+std::string pso_get_log_docstring()
+{
+    return R"(de1220.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.de1220`. A verbosity of N implies a log line each N generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.
+
+Where:
+    * Gen (``int``), generation number
+    * Fevals (``int``), number of functions evaluation made.
+    * gbest (``float``), the best fitness function found so far by the the swarm
+    * Mean Vel. (``float``), the average particle velocity (normalized)
+    * Mean lbest (``float``), the average fitness of the current particle locations
+    * Avg. Dist. (``float``), the average distance between particles (normalized)
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(pso(gen = 500))
+    >>> algo.set_verbosity(50)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop)
+    Gen:        Fevals:         gbest:     Mean Vel.:    Mean lbest:    Avg. Dist.:
+       1             40        72473.3       0.173892         677427       0.281744
+      51           1040        135.867      0.0183806        748.001       0.065826
+     101           2040        12.6726     0.00291046        84.9531      0.0339452
+     151           3040         8.4405    0.000852588        33.5161      0.0191379
+     201           4040        7.56943    0.000778264         28.213     0.00789202
+     251           5040         6.8089     0.00435521        22.7988     0.00107112
+     301           6040         6.3692    0.000289725        17.3763     0.00325571
+     351           7040        6.09414    0.000187343        16.8875     0.00172307
+     401           8040        5.78415    0.000524536        16.5073     0.00234197
+     451           9040         5.4662     0.00018305        16.2339    0.000958182
+    >>> al = algo.extract(de1220)
+    >>> al.get_log()
+    [(1,40,72473.32713790605,0.1738915144248373,677427.3504996448,0.2817443174278134), (51,1040,...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log`.
+
+)";
+}
+
 std::string simulated_annealing_docstring()
 {
     return R"(__init__(Ts = 10., Tf = .1, n_T_adj = 10, n_range_adj = 10, bin_size = 10, start_range = 1., seed = random)
@@ -1118,12 +1209,8 @@ Args:
 
 Raises:
     OverflowError: if *n_T_adj*, *n_range_adj* or *bin_size* are negative or greater than an implementation-defined value
-    ValueError: if *Ts* is not in (0, inf)
-    ValueError: if *Tf* is not in (0, inf)
-    ValueError: if *Tf* > *Ts*
-    ValueError: if *start_range* is not in (0,1]
-    ValueError: if *n_T_adj* is not strictly positive
-    ValueError: if *n_range_adj* is not strictly positive
+    ValueError: if *Ts* is not in (0, inf), if *Tf* is not in (0, inf), if *Tf* > *Ts* or if *start_range* is not in (0,1]
+    ValueError: if *n_T_adj* is not strictly positive or if *n_range_adj* is not strictly positive
 
 See also the docs of the C++ class :cpp:class:`pagmo::simulated_annealing`.
 )";

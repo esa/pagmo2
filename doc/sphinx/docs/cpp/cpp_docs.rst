@@ -29,6 +29,7 @@ code your own algorithm
   algorithms/de1220
   algorithms/moead
   algorithms/mbh
+  algorithms/pso
   algorithms/sade
   algorithms/sea
   algorithms/simulated_annealing
