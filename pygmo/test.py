@@ -579,7 +579,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient(self, a):
-                return [0, 1]
+                return (0, 1)
 
         self.assert_(all(array([0., 1.]) == problem(p()).gradient([1, 2])))
         self.assertRaises(ValueError, lambda: problem(p()).gradient([1]))
