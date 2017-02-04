@@ -225,13 +225,12 @@ public:
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
         }
-
         // copy the initial set of points, as the algorithm may alter its contents
         if (m_copy_points) {
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
             return hv_algo->compute(points_cpy, r_point);
         } else {
-            return hv_algo->compute(const_cast<std::vector<vector_double> &>(m_points), r_point);
+            return hv_algo->compute(m_points, r_point);
         }
     }
 
@@ -261,7 +260,7 @@ public:
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
             return hv_algo->exclusive(p_idx, points_cpy, r_point);
         } else {
-            return hv_algo->exclusive(p_idx, const_cast<std::vector<vector_double> &>(m_points), r_point);
+            return hv_algo->exclusive(p_idx, m_points, r_point);
         }
     }
 
@@ -308,7 +307,7 @@ public:
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
             return hv_algo->contributions(points_cpy, r_point);
         } else {
-            return hv_algo->contributions(const_cast<std::vector<vector_double> &>(m_points), r_point);
+            return hv_algo->contributions(m_points, r_point);
         }
     }
 
@@ -352,7 +351,7 @@ public:
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
             return hv_algo->least_contributor(points_cpy, r_point);
         } else {
-            return hv_algo->least_contributor(const_cast<std::vector<vector_double> &>(m_points), r_point);
+            return hv_algo->least_contributor(m_points, r_point);
         }
     }
 
@@ -390,7 +389,7 @@ public:
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
             return hv_algo->greatest_contributor(points_cpy, r_point);
         } else {
-            return hv_algo->greatest_contributor(const_cast<std::vector<vector_double> &>(m_points), r_point);
+            return hv_algo->greatest_contributor(m_points, r_point);
         }
     }
 
@@ -409,7 +408,7 @@ public:
     }
 
 private:
-    std::vector<vector_double> m_points;
+    mutable std::vector<vector_double> m_points;
     bool m_copy_points;
     bool m_verify;
 

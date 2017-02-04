@@ -78,7 +78,7 @@ public:
         }
 
         if (m_initial_sorting) {
-            std::sort(points, points + n_points, hv2d::cmp_double_2d);
+            std::sort(points, points + n_points, [](double* a, double* b){return a[1] < b[1];});
         }
 
         double hypervolume = 0.0;
@@ -138,24 +138,5 @@ public:
 private:
     // Flag stating whether the points should be sorted in the first step of the algorithm.
     const bool m_initial_sorting;
-
-    /// Comparison function for sorting of pairs (point, index)
-    /**
-    * Required for hv2d::extreme_contributor method for keeping track of the original indices when sorting.
-    */
-    static bool point_pairs_cmp(const std::pair<vector_double, unsigned int> &a,
-                                const std::pair<vector_double, unsigned int> &b)
-    {
-        return a.first[1] > b.first[1];
-    }
-
-    /// Comparison function for arrays of double.
-    /**
-    * Required by the hv2d::compute method for the sorting of arrays of double*.
-    */
-    static bool cmp_double_2d(double *a, double *b)
-    {
-        return a[1] < b[1];
-    }
 };
 }
