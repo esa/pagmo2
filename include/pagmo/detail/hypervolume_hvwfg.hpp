@@ -15,7 +15,7 @@ class hvwfg : public hv_algorithm
 {
 public:
 	/// Constructor
-	hvwfg(const unsigned int stop_dimension = 2u) : hv_algorithm(), m_current_slice(0u), m_stop_dimension(stop_dimension)
+	hvwfg(const unsigned int stop_dimension = 2u) : hv_algorithm(), m_current_slice(0), m_stop_dimension(stop_dimension)
 	{
 		if (stop_dimension < 2u) {
 			pagmo_throw(std::invalid_argument, "Stop dimension for WFG must be greater than or equal to 2");
@@ -34,7 +34,7 @@ public:
 	double compute(std::vector<vector_double> &points, const vector_double &r_point) const
 	{
 		allocate_wfg_members(points, r_point);
-		double hv = compute_hv(1u);
+		double hv = compute_hv(1);
 		free_wfg_members();
 		return hv;
 	}
@@ -62,16 +62,16 @@ public:
 
 		// Prepare the memory for first front
 		double** fr = new double*[m_max_points];
-		for (unsigned int i = 0u; i < m_max_points; ++i) {
+		for (unsigned int i = 0; i < m_max_points; ++i) {
 			fr[i] = new double[m_current_slice];
 		}
 		m_frames[m_n_frames] = fr;
-		m_frames_size[m_n_frames] = 0u;
+		m_frames_size[m_n_frames] = 0;
 		++m_n_frames;
 
 		for (unsigned int p_idx = 0u; p_idx < m_max_points; ++p_idx) {
-			limitset(0u, p_idx, 1u);
-			c.push_back(exclusive_hv(p_idx, 1u));
+			limitset(0, p_idx, 1);
+			c.push_back(exclusive_hv(p_idx, 1));
 		}
 
 		// Free the contributions and the remaining WFG members
@@ -109,10 +109,10 @@ private:
 	/// Limit the set of points to point at p_idx
 	void limitset(const unsigned int begin_idx, const unsigned int p_idx, const unsigned int rec_level) const
 	{
-		double **points = m_frames[rec_level - 1u];
-		auto n_points = m_frames_size[rec_level - 1u];
+		double **points = m_frames[rec_level - 1];
+		auto n_points = m_frames_size[rec_level - 1];
 
-		int no_points = 0u;
+		int no_points = 0;
 
 		double* p = points[p_idx];
 		double** frame = m_frames[rec_level];
@@ -133,7 +133,7 @@ private:
 			bool keep_s = true;
 
 			// Check whether any point is dominating the point 's'.
-			for (int q_idx = 0u; q_idx < no_points; ++q_idx) {
+			for (int q_idx = 0; q_idx < no_points; ++q_idx) {
 				cmp_results[q_idx] = hv_algorithm::dom_cmp(s, frame[q_idx], m_current_slice);
 				if (cmp_results[q_idx] == hv_algorithm::DOM_CMP_B_DOMINATES_A) {
 					keep_s = false;
