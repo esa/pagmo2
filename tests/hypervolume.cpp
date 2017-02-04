@@ -503,7 +503,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_test_instances) {
 		ifs.close();
 	} else {
 		// The testcase file is missing
-		//BOOST_CHECK((false));
+		BOOST_CHECK((false));
 	}
 }
 
