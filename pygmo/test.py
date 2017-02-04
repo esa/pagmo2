@@ -87,6 +87,7 @@ class problem_test_case(_ut.TestCase):
         self.run_nobj_tests()
         self.run_nec_nic_tests()
         self.run_has_gradient_tests()
+        self.run_gradient_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -485,6 +486,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
         prob = problem(p())
         self.assertEqual(prob.get_nf(), 6)
+
     def run_has_gradient_tests(self):
         from .core import problem
 
@@ -540,45 +542,94 @@ class problem_test_case(_ut.TestCase):
 
         self.assert_(problem(p()).has_gradient())
 
+    def run_gradient_tests(self):
+        from numpy import array
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        self.assertRaises(NotImplementedError,
+                          lambda: problem(p()).gradient([1, 2]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient(self, a):
+                return [0]
+
+        self.assertRaises(ValueError, lambda: problem(p()).gradient([1, 2]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient(self, a):
+                return [0, 1]
+
+        self.assert_(all(array([0., 1.]) == problem(p()).gradient([1, 2])))
+        self.assertRaises(ValueError, lambda: problem(p()).gradient([1]))
+
 
 class pso_test_case(_ut.TestCase):
-	"""Test case for the UDA pso
+    """Test case for the UDA pso
 
-	"""
-	def runTest(self):
-		from .core import pso
-		uda = pso()
-		log = uda.get_log()
-		seed = uda.get_seed()
+    """
+
+    def runTest(self):
+        from .core import pso
+        uda = pso()
+        log = uda.get_log()
+        seed = uda.get_seed()
+
 
 class sa_test_case(_ut.TestCase):
-	"""Test case for the UDA simulated annealing
+    """Test case for the UDA simulated annealing
 
-	"""
-	def runTest(self):
-		from .core import simulated_annealing
-		uda = simulated_annealing()
-		log = uda.get_log()
-		seed = uda.get_seed()
+    """
+
+    def runTest(self):
+        from .core import simulated_annealing
+        uda = simulated_annealing()
+        log = uda.get_log()
+        seed = uda.get_seed()
+
 
 class compass_search_test_case(_ut.TestCase):
-	"""Test case for the UDA compass search
+    """Test case for the UDA compass search
 
-	"""
-	def runTest(self):
-		from .core import compass_search
-		uda = compass_search()
-		log = uda.get_log()
+    """
+
+    def runTest(self):
+        from .core import compass_search
+        uda = compass_search()
+        log = uda.get_log()
+
 
 class cmaes_test_case(_ut.TestCase):
-	"""Test case for the UDA cmaes
+    """Test case for the UDA cmaes
 
-	"""
-	def runTest(self):
-		from .core import cmaes
-		uda = cmaes()
-		log = uda.get_log()
-		seed = uda.get_seed()
+    """
+
+    def runTest(self):
+        from .core import cmaes
+        uda = cmaes()
+        log = uda.get_log()
+        seed = uda.get_seed()
 
 
 def run_test_suite():
@@ -590,9 +641,10 @@ def run_test_suite():
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(problem_test_case())
-	suite.addTest(pso_test_case())
-	suite.addTest(cmaes_test_case())
-	suite.addTest(compass_search_test_case())
+    suite.addTest(pso_test_case())
+    suite.addTest(cmaes_test_case())
+    suite.addTest(compass_search_test_case())
+    suite.addTest(sa_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1
