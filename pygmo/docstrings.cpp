@@ -37,7 +37,7 @@ std::string population_docstring()
 {
     return R"(The population class.
 
-This class represents a population of individuals, i.e., potential candidate solutions to a given problem. In PaGMO an
+This class represents a population of individuals, i.e., potential candidate solutions to a given problem. In pygmo an
 individual is determined:
 
 * by a unique ID used to track him across generations and migrations,
@@ -423,9 +423,9 @@ Note that the objectives and constraints may also depend from an added value :ma
 values of any number of stochastic variables. This allows also for stochastic programming
 tasks to be represented by this class.
 
-In order to define an optimizaztion problem in PyGMO, the user must first define a class
+In order to define an optimizaztion problem in pygmo, the user must first define a class
 whose methods describe the properties of the problem and allow to compute
-the objective function, the gradient, the constraints, etc. In PyGMO, we refer to such
+the objective function, the gradient, the constraints, etc. In pygmo, we refer to such
 a class as a **user-defined problem**, or UDP for short. Once defined and instantiated,
 a UDP can then be used to construct an instance of this class, :class:`~pygmo.core.problem`, which
 provides a generic interface to optimization problems.
@@ -694,6 +694,35 @@ Raises:
 )";
 }
 
+std::string problem_has_gradient_sparsity_docstring()
+{
+    return R"(has_gradient_sparsity()
+
+Check if the gradient sparsity is available in the UDP.
+
+This method will return ``True`` if the gradient sparsity is available in the UDP, ``False`` otherwise.
+
+The availability of the gradient sparsity is determined as follows:
+
+* if the UDP does not provide a ``gradient_sparsity()`` method, then this method will always return ``False``;
+* if the UDP provides a ``gradient_sparsity()`` method but it does not provide a ``has_gradient_sparsity()``
+  method, then this method will always return ``True``;
+* if the UDP provides both a ``gradient_sparsity()`` method and a ``has_gradient_sparsity()`` method,
+  then this method will return the output of the ``has_gradient_sparsity()`` method of the UDP.
+
+The optional ``has_gradient_sparsity()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``gradient_sparsity()`` method of the UDP, see :func:`~pygmo.core.problem.gradient_sparsity()`.
+
+**NOTE** regardless of what this method returns, the :func:`~pygmo.core.problem.gradient_sparsity()` method will always
+return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
+pattern of the gradient is dense. See :func:`~pygmo.core.problem.gradient_sparsity()` for more details.
+
+Returns:
+    ``bool``: a flag signalling the availability of the gradient sparsity in the UDP
+
+)";
+}
+
 std::string problem_get_best_docstring(const std::string &name)
 {
     return R"(best_known()
@@ -702,7 +731,7 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    ``array`` of ``floats``: the best known solution for the )"
+    1D NumPy array: the best known solution for the )"
            + name + R"( problem
 
 )";
@@ -1131,7 +1160,7 @@ std::string de1220_docstring()
 {
     return R"(__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
 
-Self-adaptive Differential Evolution, PaGMO flavour (pDE).
+Self-adaptive Differential Evolution, pygmo flavour (pDE).
 The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
 
 Args:

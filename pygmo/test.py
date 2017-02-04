@@ -88,6 +88,7 @@ class problem_test_case(_ut.TestCase):
         self.run_nec_nic_tests()
         self.run_has_gradient_tests()
         self.run_gradient_tests()
+        self.run_has_gradient_sparsity_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -583,6 +584,77 @@ class problem_test_case(_ut.TestCase):
 
         self.assert_(all(array([0., 1.]) == problem(p()).gradient([1, 2])))
         self.assertRaises(ValueError, lambda: problem(p()).gradient([1]))
+
+    def run_has_gradient_sparsity_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        self.assert_(not problem(p()).has_gradient_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [(0,0)]
+
+        self.assert_(problem(p()).has_gradient_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def has_gradient_sparsity(self):
+                return True
+
+        self.assert_(not problem(p()).has_gradient_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [(0,0)]
+
+            def has_gradient_sparsity(self):
+                return True
+
+        self.assert_(problem(p()).has_gradient_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [(0,0)]
+
+            def has_gradient_sparsity(self):
+                return False
+
+        self.assert_(not problem(p()).has_gradient_sparsity())
 
 
 class pso_test_case(_ut.TestCase):
