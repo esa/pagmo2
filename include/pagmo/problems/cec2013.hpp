@@ -85,7 +85,7 @@ public:
      * @throws std::ios_base::failure if the files are not found
      */
     cec2013(unsigned int prob_id = 1u, unsigned int dim = 2u)
-        : m_prob_id(prob_id), m_y(dim), m_z(dim)
+        : m_prob_id(prob_id), m_rotation_matrix(), m_origin_shift(), m_y(dim), m_z(dim)
     {
         if (!(dim == 2u || dim == 5u || dim == 10u || dim == 20u || dim == 30u || dim == 40u || dim == 50u || dim == 60u
               || dim == 70u || dim == 80u || dim == 90u || dim == 100u)) {
@@ -98,7 +98,6 @@ public:
                         "Error: CEC2013 Test functions are only defined for prob_id in [1, 18], a prob_id of "
                             + std::to_string(prob_id) + " was detected.");
         }
-
         m_origin_shift = detail::cec2013_data::shift_data;
         auto it = detail::cec2013_data::MD.find(dim);
         assert(it != detail::cec2013_data::MD.end());
