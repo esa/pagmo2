@@ -78,7 +78,7 @@ public:
         }
 
         if (m_initial_sorting) {
-            std::sort(points, points + n_points, [](double* a, double* b){return a[1] < b[1];});
+            std::sort(points, points + n_points, [](double *a, double *b) { return a[1] < b[1]; });
         }
 
         double hypervolume = 0.0;

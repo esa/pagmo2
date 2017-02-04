@@ -125,13 +125,16 @@ public:
 
         std::vector<std::pair<vector_double, unsigned int>> point_pairs;
         point_pairs.reserve(p.size());
-        for (unsigned int i = 0u; i < p.size(); ++i) {
+        for (decltype(p.size()) i = 0u; i < p.size(); ++i) {
             point_pairs.push_back(std::make_pair(p[i], i));
         }
         if (m_initial_sorting) {
-            sort(point_pairs.begin(), point_pairs.end(), hycon3d_sort_cmp);
+            sort(point_pairs.begin(), point_pairs.end(),
+                 [](const std::pair<vector_double, unsigned int> &a, const std::pair<vector_double, unsigned int> &b) {
+                     return a.first[2] < b.first[2];
+                 });
         }
-        for (unsigned int i = 0u; i < p.size(); ++i) {
+        for (decltype(p.size()) i = 0u; i < p.size(); ++i) {
             p[i] = point_pairs[i].first;
         }
 
@@ -311,13 +314,6 @@ private:
             return a.first[0] > b.first[0];
         }
     };
-
-    /// Comparator method for the hycon3d algorithm's sorting procedure
-    static bool hycon3d_sort_cmp(const std::pair<vector_double, unsigned int> &a,
-                                 const std::pair<vector_double, unsigned int> &b)
-    {
-        return a.first[2] < b.first[2];
-    }
 
     /// Box volume method
     /**
