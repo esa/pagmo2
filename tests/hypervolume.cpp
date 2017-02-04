@@ -86,7 +86,7 @@ public:
 		m_input >> m_num_tests;
 
 		//int OK_counter = 0;
-		for (int t = 0; t < m_num_tests; ++t) {
+		for (unsigned int t = 0u; t < m_num_tests; ++t) {
 			load_common();
 			hypervolume hv_obj = hypervolume(m_points, true);
 
@@ -120,13 +120,13 @@ private:
 		m_input >> m_f_dim >> m_num_points;
 		m_points = std::vector<vector_double>(m_num_points, vector_double(m_f_dim, 0.0));
 		m_ref_point = vector_double(m_f_dim, 0.0);
-		
-		for (int d = 0; d < m_f_dim; ++d) {
+
+		for (unsigned int d = 0u; d < m_f_dim; ++d) {
 			m_input >> m_ref_point[d];
 		}
-		
-		for (int i = 0; i < m_num_points; ++i) {
-			for (int d = 0; d < m_f_dim; ++d) {
+
+		for (unsigned int i = 0u; i < m_num_points; ++i) {
+			for (unsigned int d = 0u; d < m_f_dim; ++d) {
 				m_input >> m_points[i][d];
 			}
 		}
@@ -148,7 +148,7 @@ private:
 		m_input >> m_idx_ans;
 	}
 
-	int m_num_tests, m_f_dim, m_num_points, m_p_idx;
+	unsigned int m_num_tests, m_f_dim, m_num_points, m_p_idx;
 	unsigned int m_idx_ans;
 	double m_hv_ans;
 	vector_double m_ref_point;
@@ -175,7 +175,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
 	hv = hypervolume{ { 6,4 },{ 3,5 } };
 	std::vector<vector_double> x2{ { 6,4 },{ 3,5 } };
 	BOOST_CHECK((hv.get_points() == x2));
-	
+
 	// by population
 	population pop1{ problem{ zdt{ 1,5 } }, 2 };
 	hv = hypervolume(pop1, true);
@@ -187,7 +187,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
 	// 2d computation of hypervolume indicator
 	hv = hypervolume{ {1, 2},{2, 1} };
 	BOOST_CHECK((hv.compute({ 3,3 }) == 3));
-	
+
 	// point on the border of refpoint(2D)
 	BOOST_CHECK((hv.compute({ 2,2 }) == 0));
 
@@ -465,14 +465,14 @@ BOOST_AUTO_TEST_CASE(hypervolume_test_instances) {
 
 	// root directory of the hypervolume data
 	std::string input_data_dir("./hypervolume_test_data/");
-		
+
 	// root directory of the testcases
 	std::string input_data_testcases_dir(input_data_dir + "testcases/");
-	
+
 	// load list of testcases
 	std::ifstream ifs;
 	ifs.open((input_data_dir + "testcases_list.txt").c_str());
-		
+
 
 	if (ifs.is_open()) {
 		while (ifs.good()) {
@@ -480,12 +480,12 @@ BOOST_AUTO_TEST_CASE(hypervolume_test_instances) {
 			if (line == "" || line[0] == '#')
 				continue;
 			std::stringstream ss(line);
-			
+
 			std::string test_type;
 			std::string method_name;
 			std::string test_name;
 			double eps;
-			
+
 			ss >> test_type;
 			ss >> method_name;
 			ss >> test_name;
@@ -506,4 +506,3 @@ BOOST_AUTO_TEST_CASE(hypervolume_test_instances) {
 		BOOST_CHECK((false));
 	}
 }
-
