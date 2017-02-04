@@ -1202,8 +1202,9 @@ public:
      * @return the gradient of \p dv.
      *
      * @throws std::invalid_argument if either:
-     * - the length of \p dv differs from the output of get_nx(), or
-     * - the returned gradient vector does not have the same size as the output of pagmo::sparsity_pattern().
+     * - the length of \p dv differs from the value returned by get_nx(), or
+     * - the returned gradient vector does not have the same size as the vector returned by
+     *   problem::gradient_sparsity().
      * @throws not_implemented_error if the UDP does not satisfy pagmo::has_gradient.
      * @throws unspecified any exception thrown by the <tt>%gradient()</tt> method of the UDP.
      */
