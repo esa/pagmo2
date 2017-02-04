@@ -123,14 +123,14 @@ public:
         // Make a copy of the original set of points
         std::vector<vector_double> p(points.begin(), points.end());
 
-        std::vector<std::pair<vector_double, unsigned int>> point_pairs;
+        std::vector<std::pair<vector_double, vector_double::size_type>> point_pairs;
         point_pairs.reserve(p.size());
         for (decltype(p.size()) i = 0u; i < p.size(); ++i) {
             point_pairs.push_back(std::make_pair(p[i], i));
         }
         if (m_initial_sorting) {
             sort(point_pairs.begin(), point_pairs.end(),
-                 [](const std::pair<vector_double, unsigned int> &a, const std::pair<vector_double, unsigned int> &b) {
+                 [](const std::pair<vector_double, vector_double::size_type> &a, const std::pair<vector_double, vector_double::size_type> &b) {
                      return a.first[2] < b.first[2];
                  });
         }
