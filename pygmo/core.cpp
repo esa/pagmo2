@@ -365,16 +365,6 @@ static inline bp::list de1220_allowed_variants()
     return retval;
 }
 
-// moead needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
-inline bp::list expose_moead_log(const moead &a)
-{
-    bp::list retval;
-    for (const auto &t : a.get_log()) {
-        retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), pygmo::v_to_a(std::get<3>(t))));
-    }
-    return retval;
-}
-
 // Wrappers for utils/multi_objective stuff
 // fast_non_dominated_sorting
 static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
@@ -872,7 +862,18 @@ BOOST_PYTHON_MODULE(core)
         (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1.,
          bp::arg("F") = 0.5, bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u,
          bp::arg("preserve_diversity") = true, bp::arg("seed"))));
-    moead_.def("get_log", expose_moead_log, pygmo::moead_get_log_docstring().c_str());
+    // moead needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+    moead_.def("get_log",
+               +[](const moead &a) -> bp::list {
+                   bp::list retval;
+                   for (const auto &t : a.get_log()) {
+                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t),
+                                                    pygmo::v_to_a(std::get<3>(t))));
+                   }
+                   return retval;
+               },
+               pygmo::moead_get_log_docstring().c_str());
+
     moead_.def("get_seed", &moead::get_seed);
 
     // Exposition of stand alone functions
