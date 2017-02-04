@@ -68,8 +68,8 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
 	hv = hypervolume{ { 6,4 },{ 3,5 } };
 	std::vector<vector_double> x2{ { 6,4 },{ 3,5 } };
 	BOOST_CHECK((hv.get_points() == x2));
-
-		// by population
+	
+	// by population
 	population pop1{ problem{ zdt{ 1,5 } }, 2 };
 	hv = hypervolume(pop1, true);
 
