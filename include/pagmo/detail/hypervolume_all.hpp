@@ -6,7 +6,7 @@
 #endif
 
 // clang-format off
-#include "../utils/hv_algorithms/hv_algorithm.hpp"
+#include "../utils/hypervolume.hpp"
 #include "hypervolume_class.hpp"
 #include "hypervolume_hv2d.hpp"
 #include "hypervolume_hvwfg.hpp"

@@ -79,8 +79,6 @@ endif()
 
 if(PAGMO_BUILD_TESTS)
     add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
-    
-	file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/tests/hypervolume_test_data/" DESTINATION "${CMAKE_BINARY_DIR}/tests/hypervolume_test_data/")
 endif()
 
 if(PAGMO_BUILD_TUTORIALS)
