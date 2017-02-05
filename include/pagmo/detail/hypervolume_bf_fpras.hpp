@@ -26,6 +26,13 @@ public:
     bf_fpras(const double eps = 1e-2, const double delta = 1e-2, unsigned int seed = pagmo::random_device::next())
         : m_eps(eps), m_delta(delta), m_e(seed)
     {
+		if (eps < 0 || eps > 1) {
+			pagmo_throw(std::invalid_argument, "Epsilon needs to be a probability.");
+		}
+		if (delta < 0 || delta > 1) {
+			pagmo_throw(std::invalid_argument, "Delta needs to be a probability.");
+		}
+
     }
 
     /// Verify before compute

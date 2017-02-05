@@ -31,7 +31,15 @@ public:
 	bf_approx(const bool use_exact = true, const unsigned int trivial_subcase_size = 1, const double eps = 1e-2, const double delta = 1e-6, 
 			  const double delta_multiplier = 0.775, const double alpha = 0.2, const double initial_delta_coeff = 0.1, const double gamma = 0.25, unsigned int seed = pagmo::random_device::next()) :
 			  m_use_exact(use_exact), m_trivial_subcase_size(trivial_subcase_size), m_eps(eps), m_delta(delta), m_delta_multiplier(delta_multiplier), 
-			  m_alpha(alpha), m_initial_delta_coeff(initial_delta_coeff), m_gamma(gamma), m_e(seed) { }
+			  m_alpha(alpha), m_initial_delta_coeff(initial_delta_coeff), m_gamma(gamma), m_e(seed) 
+	{ 
+		if (eps < 0 || eps > 1) {
+			pagmo_throw(std::invalid_argument, "Epsilon needs to be a probability.");
+		}
+		if (delta < 0 || delta > 1) {
+			pagmo_throw(std::invalid_argument, "Delta needs to be a probability.");
+		}
+	}
 
 	/// Compute hypervolume
 	/**
