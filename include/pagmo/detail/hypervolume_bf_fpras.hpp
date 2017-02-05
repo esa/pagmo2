@@ -3,12 +3,12 @@ namespace pagmo
 
 /// Bringmann-Friedrich approximation method
 /**
- * This class contains the implementation of the Bringmann-Friedrich approximation scheme (FPRAS), 
+ * This class contains the implementation of the Bringmann-Friedrich approximation scheme (FPRAS),
  * reduced to a special case of approximating the hypervolume indicator.
  * @see "Approximating the volume of unions and intersections of high-dimensional geometric objects", Karl Bringmann, Tobias Friedrich.
  *
  * @author Krzysztof Nowak (kn@kiryx.net)
- * @author Marcus Märtens (mmarcusx@gmail.com)
+ * @author Marcus Mï¿½rtens (mmarcusx@gmail.com)
  */
 
 
@@ -52,8 +52,8 @@ public:
 	*/
 	double compute(std::vector<vector_double> &points, const vector_double &r_point) const
 	{
-		unsigned int n = points.size();
-		unsigned int dim = r_point.size();
+		auto n = points.size();
+		auto dim = r_point.size();
 
 		// We do not want to continue if the floating point operations on eps and delta result in NaNs
 		if (!(std::isfinite(12. * std::log(1. / m_delta) / std::log(2.) * n / m_eps / m_eps))) {
@@ -86,13 +86,13 @@ public:
 
 		while (true) {
 			// Get the random volume in-between [0, V] range, in order to choose the box with probability sums[i] / V
-			
+
 			auto V_dist = std::uniform_real_distribution<double>(0.0, V);
 			auto r = V_dist(m_e);
 
 			// Find the contributor using binary search
 			it_sums = std::lower_bound(sums.begin(), sums.end(), r);
-			i = std::distance(sums.begin(), it_sums);
+			i = static_cast<unsigned int>(std::distance(sums.begin(), it_sums));
 
 			// Sample a point inside the 'box' (r_point, points[i])
 			for (unsigned int d_idx = 0u; d_idx < dim; ++d_idx) {
@@ -152,7 +152,7 @@ public:
 	/**
 	* As of yet, this algorithm does not support this method, even in its naive form, due to a poor handling of the dominated points.
 	*/
-	vector_double bf_fpras::contributions(std::vector<vector_double> &points, const vector_double &r_point) const
+	vector_double contributions(std::vector<vector_double> &points, const vector_double &r_point) const
 	{
 		(void)points;
 		(void)r_point;
@@ -178,7 +178,7 @@ private:
 	const double m_eps;
 	// probabiltiy of error
 	const double m_delta;
-	
+
 	mutable detail::random_engine_type m_e;
 };
 
