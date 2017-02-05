@@ -53,7 +53,7 @@ public:
     double compute(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         if (m_initial_sorting) {
-            sort(points.begin(), points.end(), [](vector_double a, vector_double b) { return a[2] < b[2]; });
+            sort(points.begin(), points.end(), [](const vector_double &a, const vector_double &b) { return a[2] < b[2]; });
         }
         double V = 0.0; // hypervolume
         double A = 0.0; // area of the sweeping plane
@@ -123,16 +123,15 @@ public:
         // Make a copy of the original set of points
         std::vector<vector_double> p(points.begin(), points.end());
 
-        std::vector<std::pair<vector_double, unsigned int>> point_pairs;
+        std::vector<std::pair<vector_double, vector_double::size_type>> point_pairs;
         point_pairs.reserve(p.size());
         for (decltype(p.size()) i = 0u; i < p.size(); ++i) {
             point_pairs.push_back(std::make_pair(p[i], i));
         }
         if (m_initial_sorting) {
             sort(point_pairs.begin(), point_pairs.end(),
-                 [](const std::pair<vector_double, unsigned int> &a, const std::pair<vector_double, unsigned int> &b) {
-                     return a.first[2] < b.first[2];
-                 });
+                 [](const std::pair<vector_double, vector_double::size_type> &a,
+                    const std::pair<vector_double, vector_double::size_type> &b) { return a.first[2] < b.first[2]; });
         }
         for (decltype(p.size()) i = 0u; i < p.size(); ++i) {
             p[i] = point_pairs[i].first;

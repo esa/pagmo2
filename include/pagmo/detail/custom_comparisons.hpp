@@ -29,62 +29,63 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_CUSTOM_COMPARISONS_HPP
 #define PAGMO_CUSTOM_COMPARISONS_HPP
 
-#include "../type_traits.hpp"
 #include <type_traits>
 
-namespace pagmo
-{
-namespace detail
-{
-// Less than compares floating point types placing nans after inf or before -inf
-// It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
-// and avoid an undefined behaviour
-template <typename T, bool After = true, enable_if_is_floating_point<T> = 0>
-inline bool less_than_f(T a, T b)
-{
-    if (!std::isnan(a)) {
-        if (!std::isnan(b))
-            return a < b; // a < b
-        else
-            return After; // a < nan
-    } else {
-        if (!std::isnan(b))
-            return !After; // nan < b
-        else
-            return false; // nan < nan
-    }
-}
+#include "../type_traits.hpp"
 
-// Greater than compares floating point types placing nans after inf or before -inf
-// It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
-// and avoid an undefined behaviour
-template <typename T, bool After = true, detail::enable_if_is_floating_point<T> = 0>
-inline bool greater_than_f(T a, T b)
+    namespace pagmo
 {
-    if (!std::isnan(a)) {
-        if (!std::isnan(b))
-            return a > b; // a > b
-        else
-            return !After; // a > nan
-    } else {
-        if (!std::isnan(b))
-            return After; // nan > b
-        else
-            return false; // nan > nan
+    namespace detail
+    {
+    // Less than compares floating point types placing nans after inf or before -inf
+    // It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
+    // and avoid an undefined behaviour
+    template <typename T, bool After = true, enable_if_is_floating_point<T> = 0>
+    inline bool less_than_f(T a, T b)
+    {
+        if (!std::isnan(a)) {
+            if (!std::isnan(b))
+                return a < b; // a < b
+            else
+                return After; // a < nan
+        } else {
+            if (!std::isnan(b))
+                return !After; // nan < b
+            else
+                return false; // nan < nan
+        }
     }
-}
 
-// equal_to than compares floating point types considering nan==nan
-template <typename T, detail::enable_if_is_floating_point<T> = 0>
-inline bool equal_to_f(T a, T b)
-{
-    if (!std::isnan(a) && !std::isnan(b)) {
-        return a == b;
+    // Greater than compares floating point types placing nans after inf or before -inf
+    // It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
+    // and avoid an undefined behaviour
+    template <typename T, bool After = true, detail::enable_if_is_floating_point<T> = 0>
+    inline bool greater_than_f(T a, T b)
+    {
+        if (!std::isnan(a)) {
+            if (!std::isnan(b))
+                return a > b; // a > b
+            else
+                return !After; // a > nan
+        } else {
+            if (!std::isnan(b))
+                return After; // nan > b
+            else
+                return false; // nan > nan
+        }
     }
-    return std::isnan(a) && std::isnan(b);
-}
 
-} // end of detail namespace
+    // equal_to than compares floating point types considering nan==nan
+    template <typename T, detail::enable_if_is_floating_point<T> = 0>
+    inline bool equal_to_f(T a, T b)
+    {
+        if (!std::isnan(a) && !std::isnan(b)) {
+            return a == b;
+        }
+        return std::isnan(a) && std::isnan(b);
+    }
+
+    } // end of detail namespace
 } // end of pagmo namespace
 
 #endif
