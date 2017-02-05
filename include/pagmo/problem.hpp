@@ -1104,7 +1104,7 @@ public:
      * return \p nullptr.
      *
      * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     * of \p this and \p delete must never be called on the pointer.
+     * of \p this, and \p delete must never be called on the pointer.
      *
      * @return a const pointer to the internal UDP, or \p nullptr
      * if \p T does not correspond exactly to the original UDP type used
@@ -1124,7 +1124,7 @@ public:
      * return \p nullptr.
      *
      * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     * of \p this and \p delete must never be called on the pointer.
+     * of \p this, and \p delete must never be called on the pointer.
      *
      * @return a pointer to the internal UDP, or \p nullptr
      * if \p T does not correspond exactly to the original UDP type used
