@@ -136,12 +136,11 @@ private:
 		// We check whether given point at 'idx' is DOMINATED (strong domination) by 'p_idx' in exactly one objective, and DOMINATING (weak domination) in the remaining ones.
 		const vector_double& p = points[p_idx];
 		int worse_dim_idx;
-		unsigned int f_dim = r_point.size();
-		for (std::vector<vector_double>::size_type idx = 0; idx < points.size(); ++idx) {
-
+		auto f_dim = r_point.size();
+		for (decltype(points.size()) idx = 0u; idx < points.size(); ++idx) {
 			worse_dim_idx = -1; // initiate the possible opposite point dimension by -1 (no candidate)
 
-			for (vector_double::size_type f_idx = 0; f_idx < f_dim; ++f_idx) {
+			for (unsigned int f_idx = 0u; f_idx < f_dim; ++f_idx) {
 				if (points[idx][f_idx] >= p[f_idx]) { // if any point is worse by given dimension, it's the potential dimension in which we reduce the box
 					if (worse_dim_idx != -1) { // if given point is already worse in any previous dimension, skip to next point as it's a bad candidate
 						worse_dim_idx = -1; // set the result to "no candidate" and break
@@ -207,8 +206,8 @@ private:
 
 					std::vector<vector_double> sub_front(bp.size(), vector_double(f_dim, 0.0));
 
-					for (unsigned int p_idx = 0u; p_idx < sub_front.size(); ++p_idx) {
-						for (unsigned int d_idx = 0u; d_idx < sub_front[0].size(); ++d_idx) {
+					for (decltype(sub_front.size()) p_idx = 0u; p_idx < sub_front.size(); ++p_idx) {
+						for (decltype(sub_front[0].size()) d_idx = 0u; d_idx < sub_front[0].size(); ++d_idx) {
 							sub_front[p_idx][d_idx] = std::max(p[d_idx], points[bp[p_idx]][d_idx]);
 						}
 					}
@@ -248,12 +247,12 @@ private:
 		const vector_double &ub = m_boxes[idx];
 		vector_double rnd_p(lb.size(), 0.0);
 		
-		for (unsigned int i = 0; i < lb.size(); ++i) {
+		for (decltype(lb.size()) i = 0u; i < lb.size(); ++i) {
 			auto V_dist = std::uniform_real_distribution<double>(lb[i], ub[i]);
 			rnd_p[i] = V_dist(m_e);
 		}
 
-		for (unsigned int i = 0; i < m_box_points[idx].size(); ++i) {
+		for (decltype(m_box_points[idx].size()) i = 0u; i < m_box_points[idx].size(); ++i) {
 
 			// box_p is a point overlapping the bounding box volume
 			const vector_double &box_p = points[m_box_points[idx][i]];
@@ -263,7 +262,7 @@ private:
 
 			// increase the number of operations by the dimension size
 			m_no_ops[idx] += box_p.size() + 1;
-			for (unsigned int d_idx = 0u; d_idx < box_p.size(); ++d_idx) {
+			for (decltype(box_p.size()) d_idx = 0u; d_idx < box_p.size(); ++d_idx) {
 				if (rnd_p[d_idx] < box_p[d_idx]) { // box_p does not dominate rnd_p
 					dominates = false;
 					break;
@@ -311,9 +310,9 @@ private:
 		m_no_succ_samples = std::vector<unsigned long long>(points.size(), 0);
 		m_no_ops = std::vector<unsigned long long>(points.size(), 1);
 		m_point_set = std::vector<unsigned int>(points.size(), 0);
-		m_box_volume = std::vector<double>(points.size(), 0.0);
-		m_approx_volume = std::vector<double>(points.size(), 0.0);
-		m_point_delta = std::vector<double>(points.size(), 0.0);
+		m_box_volume = vector_double(points.size(), 0.0);
+		m_approx_volume = vector_double(points.size(), 0.0);
+		m_point_delta = vector_double(points.size(), 0.0);
 		m_boxes = std::vector<vector_double>(points.size());
 		m_box_points = std::vector<std::vector<unsigned int> >(points.size());
 
@@ -332,20 +331,21 @@ private:
 		unsigned int EC = 0u;
 
 		// put every point into the set
-		for (unsigned int i = 0u; i < m_point_set.size(); ++i) {
+		for (decltype(m_point_set.size()) i = 0u; i < m_point_set.size(); ++i) {
 			m_point_set[i] = i;
 		}
+
 
 		// Initial computation
 		// - compute bounding boxes and their hypervolume
 		// - set round Delta as max of hypervolumes
 		// - determine points overlapping with each bounding box
-		for (std::vector<vector_double>::size_type idx = 0; idx < points.size(); ++idx) {
+		for (decltype(points.size()) idx = 0; idx < points.size(); ++idx) {
 			m_boxes[idx] = compute_bounding_box(points, r_point, idx);
 			m_box_volume[idx] = hv_algorithm::volume_between(points[idx], m_boxes[idx]);
 			r_delta = std::max(r_delta, m_box_volume[idx]);
 
-			for (std::vector<vector_double>::size_type idx2 = 0; idx2 < points.size(); ++idx2) {
+			for (decltype(points.size()) idx2 = 0; idx2 < points.size(); ++idx2) {
 				if (idx == idx2) {
 					continue;
 				}
@@ -377,7 +377,7 @@ private:
 			r_delta *= m_delta_multiplier;
 			++round_no;
 
-			for (unsigned int _i = 0u; _i < m_point_set.size(); ++_i) {
+			for (decltype(m_point_set.size()) _i = 0u; _i < m_point_set.size(); ++_i) {
 				unsigned int idx = m_point_set[_i];
 				sampling_round(points, r_delta, round_no, idx, log_factor);
 			}
@@ -386,7 +386,7 @@ private:
 			sampling_round(points, m_alpha * r_delta, round_no, EC, log_factor);
 
 			// find the new extreme contributor
-			for (unsigned int _i = 0u; _i < m_point_set.size(); ++_i) {
+			for (decltype(m_point_set.size()) _i = 0u; _i < m_point_set.size(); ++_i) {
 				unsigned int idx = m_point_set[_i];
 				if (cmp_func(m_approx_volume[idx], m_approx_volume[EC])) {
 					EC = idx;
@@ -394,7 +394,8 @@ private:
 			}
 
 			// erase known non-extreme contributors
-			std::vector<unsigned int>::iterator it = m_point_set.begin();
+			//std::vector<unsigned int>::iterator it = m_point_set.begin();
+			auto it = m_point_set.begin();
 			while (it != m_point_set.end()) {
 				unsigned int idx = *it;
 				if ((idx != EC) && erase_condition(idx, EC, m_approx_volume, m_point_delta)) {
@@ -412,7 +413,7 @@ private:
 			}
 			else {
 				stop_condition = true;
-				for (unsigned int _i = 0; _i < m_point_set.size(); ++_i) {
+				for (decltype(m_point_set.size()) _i = 0; _i < m_point_set.size(); ++_i) {
 					unsigned int idx = m_point_set[_i];
 					if (idx == EC) {
 						continue;
