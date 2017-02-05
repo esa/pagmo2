@@ -25,10 +25,10 @@
 #ifndef PAGMO_UTIL_HV_ALGORITHMS_HV_ALGORITHM_H
 #define PAGMO_UTIL_HV_ALGORITHMS_HV_ALGORITHM_H
 
+#include <cmath>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
-#include <cmath>
 #include <string>
 #include <typeinfo>
 

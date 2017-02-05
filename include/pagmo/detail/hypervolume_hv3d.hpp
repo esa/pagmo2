@@ -53,7 +53,8 @@ public:
     double compute(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         if (m_initial_sorting) {
-            sort(points.begin(), points.end(), [](const vector_double &a, const vector_double &b) { return a[2] < b[2]; });
+            sort(points.begin(), points.end(),
+                 [](const vector_double &a, const vector_double &b) { return a[2] < b[2]; });
         }
         double V = 0.0; // hypervolume
         double A = 0.0; // area of the sweeping plane

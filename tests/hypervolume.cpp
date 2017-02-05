@@ -465,37 +465,37 @@ BOOST_AUTO_TEST_CASE(hypervolume_refpoint_test)
 
 BOOST_AUTO_TEST_CASE(hypervolume_approximation_test)
 {
-	hypervolume hv;
-	double correct;
+    hypervolume hv;
+    double correct;
 
-	// Calling specific algorithms
-	double epsilon = 1e-2;
-	double delta = 1e-2;
-	unsigned int seed = 42u;
+    // Calling specific algorithms
+    double epsilon = 1e-2;
+    double delta = 1e-2;
+    unsigned int seed = 42u;
 
-	/* bf_fpras is a random algorithm which will not always produce a result within the given quality range.
-	   This means that there is very small probability (delta), that a run of this test will fail.
-	   To avoid this behavior, the test ist derandomized by fixing the seed.
-	   However, fixing the seed does not guarantee the same random numbers on all platforms.
-	   Thus, it remains a very small chance, that the test will fail on some platforms. However, it will
-	   do so consistently and not in a random way. So when in doubt: change the seed! */
-	std::shared_ptr<hv_algorithm> hv_bf_fpras = bf_fpras(epsilon, delta, seed).clone();
-	
-	hv = hypervolume{ { 2.3, 4.5 },{ 3.4, 3.4 },{ 6.0, 1.2 } };
-	correct = 17.91;
-	BOOST_CHECK(((hv.compute({ 7.0, 7.0 }, hv_bf_fpras) <= correct * (1.0 +  epsilon)) && (hv.compute({ 7.0, 7.0 }, hv_bf_fpras) >= correct * (1.0 - epsilon))));
+    /* bf_fpras is a random algorithm which will not always produce a result within the given quality range.
+       This means that there is very small probability (delta), that a run of this test will fail.
+       To avoid this behavior, the test ist derandomized by fixing the seed.
+       However, fixing the seed does not guarantee the same random numbers on all platforms.
+       Thus, it remains a very small chance, that the test will fail on some platforms. However, it will
+       do so consistently and not in a random way. So when in doubt: change the seed! */
+    std::shared_ptr<hv_algorithm> hv_bf_fpras = bf_fpras(epsilon, delta, seed).clone();
 
-	hv = hypervolume{ { 2.3, 4.5, 3.2 },{ 3.4, 3.4, 3.4 },{ 6.0, 1.2, 3.6 } };
-	correct = 66.386;
-	BOOST_CHECK(((hv.compute({ 7.0, 7.0, 7.0 }, hv_bf_fpras) <= correct * (1.0 + epsilon)) && (hv.compute({ 7.0, 7.0, 7.0 }, hv_bf_fpras) >= correct * (1.0 - epsilon))));
+    hv = hypervolume{{2.3, 4.5}, {3.4, 3.4}, {6.0, 1.2}};
+    correct = 17.91;
+    BOOST_CHECK(((hv.compute({7.0, 7.0}, hv_bf_fpras) <= correct * (1.0 + epsilon))
+                 && (hv.compute({7.0, 7.0}, hv_bf_fpras) >= correct * (1.0 - epsilon))));
 
-	hv = hypervolume{ { 2.3, 4.5, 3.2, 1.9, 6.0 },{ 3.4, 3.4, 3.4, 2.1, 5.8 },{ 6.0, 1.2, 3.6, 3.0, 6.0 } };
-	correct = 373.21228;
-	BOOST_CHECK(((hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_bf_fpras) <= correct * (1.0 + epsilon)) && (hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_bf_fpras) >= correct * (1.0 - epsilon))));
+    hv = hypervolume{{2.3, 4.5, 3.2}, {3.4, 3.4, 3.4}, {6.0, 1.2, 3.6}};
+    correct = 66.386;
+    BOOST_CHECK(((hv.compute({7.0, 7.0, 7.0}, hv_bf_fpras) <= correct * (1.0 + epsilon))
+                 && (hv.compute({7.0, 7.0, 7.0}, hv_bf_fpras) >= correct * (1.0 - epsilon))));
 
+    hv = hypervolume{{2.3, 4.5, 3.2, 1.9, 6.0}, {3.4, 3.4, 3.4, 2.1, 5.8}, {6.0, 1.2, 3.6, 3.0, 6.0}};
+    correct = 373.21228;
+    BOOST_CHECK(((hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_bf_fpras) <= correct * (1.0 + epsilon))
+                 && (hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_bf_fpras) >= correct * (1.0 - epsilon))));
 }
-
-
 
 BOOST_AUTO_TEST_CASE(hypervolume_test_instances)
 {
