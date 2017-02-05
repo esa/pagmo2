@@ -31,6 +31,10 @@
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
+#include <algorithm>
+#include <iterator>
+#include <vector>
+
 
 #include "../exceptions.hpp"
 #include "../io.hpp"

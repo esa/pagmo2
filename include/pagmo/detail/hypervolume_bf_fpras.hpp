@@ -21,7 +21,7 @@ public:
     *
     * @param[in] eps accuracy of the approximation
     * @param[in] delta confidence of the approximation
-    * @param[in] seed Seeding for the pseudo-random number generator
+    * @param[in] seed seeding for the pseudo-random number generator
     */
     bf_fpras(const double eps = 1e-2, const double delta = 1e-2, unsigned int seed = pagmo::random_device::next())
         : m_eps(eps), m_delta(delta), m_e(seed)
