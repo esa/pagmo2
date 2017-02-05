@@ -1242,7 +1242,7 @@ public:
     /// Gradient sparsity pattern.
     /**
      * This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a
-     * collection of the indexes \f$(i,j)\f$ of the non-zero elements of
+     * collection of the indices \f$(i,j)\f$ of the non-zero elements of
      * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$.
      *
      * If problem::has_gradient_sparsity() returns \p true,
@@ -1255,8 +1255,6 @@ public:
      * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
      * it contains duplicate pairs of indices or if the indices in the pattern are incompatible with the properties of
      * the problem).
-     * @throws not_implemented_error if the <tt>%gradient_sparsity()</tt> method of the UDP is invoked without being
-     * available. This indicates in general an inconsistency in the implementation of the UDP.
      * @throws unspecified memory errors in standard containers.
      */
     sparsity_pattern gradient_sparsity() const
