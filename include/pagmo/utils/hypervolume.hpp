@@ -195,7 +195,7 @@ public:
     *
     * @return index of the least contributor
     */
-    virtual unsigned int least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+    virtual unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         return extreme_contributor(points, r_point, cmp_least);
     }
@@ -211,7 +211,7 @@ public:
     *
     * @return index of the greatest contributor
     */
-    virtual unsigned int greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+    virtual unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         return extreme_contributor(points, r_point, cmp_greatest);
     }

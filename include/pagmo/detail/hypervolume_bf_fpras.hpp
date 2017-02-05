@@ -139,7 +139,7 @@ public:
     /**
     * This algorithm does not support this method.
     */
-    unsigned int least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+    unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         (void)points;
         (void)r_point;
@@ -150,7 +150,7 @@ public:
     /**
     * This algorithm does not support this method.
     */
-    unsigned int greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+    unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         (void)points;
         (void)r_point;

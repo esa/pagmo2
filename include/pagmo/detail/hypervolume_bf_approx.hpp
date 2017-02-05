@@ -3,13 +3,13 @@ namespace pagmo {
 /// Bringmann-Friedrich approximation method
 /**
  * This is the class containing the implementation of the Bringmann-Friedrich approximation method for the computation of the least contributor to the hypervolume.
- * Default values for the parameters of the algorithm were obtained from the shark implementation of the 
+ * Default values for the parameters of the algorithm were obtained from the shark implementation of the
  * algorithm (http://image.diku.dk/shark/doxygen_pages/html/_least_contributor_approximator_8hpp_source.html)
  *
  * @see "Approximating the least hypervolume contributor: NP-hard in general, but fast in practice", Karl Bringmann, Tobias Friedrich.
  *
  * @author Krzysztof Nowak (kn@kiryx.net)
- * @author Marcus Märtens (mmarcusx@gmail.com)
+ * @author Marcus Mï¿½rtens (mmarcusx@gmail.com)
  */
 class bf_approx : public hv_algorithm
 {
@@ -28,11 +28,11 @@ public:
 	* @param[in] alpha coefficicient stating how accurately current lowest contributor should be sampled
 	* @param[in] seed seeding for the pseudo-random number generator
 	*/
-	bf_approx(const bool use_exact = true, const unsigned int trivial_subcase_size = 1, const double eps = 1e-2, const double delta = 1e-6, 
+	bf_approx(const bool use_exact = true, const unsigned int trivial_subcase_size = 1, const double eps = 1e-2, const double delta = 1e-6,
 			  const double delta_multiplier = 0.775, const double alpha = 0.2, const double initial_delta_coeff = 0.1, const double gamma = 0.25, unsigned int seed = pagmo::random_device::next()) :
-			  m_use_exact(use_exact), m_trivial_subcase_size(trivial_subcase_size), m_eps(eps), m_delta(delta), m_delta_multiplier(delta_multiplier), 
-			  m_alpha(alpha), m_initial_delta_coeff(initial_delta_coeff), m_gamma(gamma), m_e(seed) 
-	{ 
+			  m_use_exact(use_exact), m_trivial_subcase_size(trivial_subcase_size), m_eps(eps), m_delta(delta), m_delta_multiplier(delta_multiplier),
+			  m_alpha(alpha), m_initial_delta_coeff(initial_delta_coeff), m_gamma(gamma), m_e(seed)
+	{
 		if (eps < 0 || eps > 1) {
 			pagmo_throw(std::invalid_argument, "Epsilon needs to be a probability.");
 		}
@@ -66,7 +66,7 @@ public:
 	*
 	* @return index of the least contributing point
 	*/
-	unsigned int least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+	unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
 	{
 		return approx_extreme_contributor(points, r_point, LEAST, hv_algorithm::cmp_least, lc_erase_condition, lc_end_condition);
 	}
@@ -80,11 +80,11 @@ public:
 	*
 	* @return index of the greatest contributing point
 	*/
-	unsigned int greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+	unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
 	{
 		return approx_extreme_contributor(points, r_point, GREATEST, hv_algorithm::cmp_greatest, gc_erase_condition, gc_end_condition);
 	}
-	
+
 	/// Verify before compute method
 	/**
 	* Verifies whether given algorithm suits the requested data.
@@ -117,7 +117,7 @@ private:
 	* Uses chernoff inequality as it was proposed in the article by Bringmann and Friedrich
 	* The parameters of the method are taked from the Shark implementation of the algorithm.
 	*/
-	inline double compute_point_delta(const unsigned int round_no, const unsigned int idx, const double log_factor) const
+	inline double compute_point_delta(const unsigned int round_no, const unsigned long long idx, const double log_factor) const
 	{
 		return std::sqrt(
 			0.5 * ((1. + m_gamma) * std::log(static_cast<double>(round_no)) + log_factor)
@@ -135,7 +135,7 @@ private:
 	*
 	* @return fitness_vector describing the opposite corner of the bounding box
 	*/
-	inline vector_double compute_bounding_box(const std::vector<vector_double> &points, const vector_double &r_point, const unsigned int p_idx) const
+	inline vector_double compute_bounding_box(const std::vector<vector_double> &points, const vector_double &r_point, const vector_double::size_type p_idx) const
 	{
 		// z is the opposite corner of the bounding box (reference point as a 'safe' first candidate - this is the MAXIMAL bounding box as of yet)
 		vector_double z(r_point);
@@ -163,7 +163,7 @@ private:
 		}
 		return z;
 	}
-	
+
 	/// Determine whether point 'p' influences the volume of box (a, b)
 	/**
 	* return 0 - box (p, R) has no overlapping volume with box (a, b)
@@ -190,9 +190,9 @@ private:
 			return 0;
 		}
 	}
-	
+
 	/// Performs a single round of sampling for given point at index 'idx'
-	inline void sampling_round(const std::vector<vector_double> &points, const double delta, const unsigned int round, const unsigned int idx, const double log_factor) const
+	inline void sampling_round(const std::vector<vector_double> &points, const double delta, const unsigned int round, const unsigned long long idx, const double log_factor) const
 	{
 		if (m_use_exact) {
 			// if the sampling for given point was already resolved using exact method
@@ -202,13 +202,13 @@ private:
 
 			// if the exact computation is trivial OR when the sampling takes too long in terms of elementary operations
 			if (m_box_points[idx].size() <= m_trivial_subcase_size || static_cast<double>(m_no_ops[idx]) >= hypervolume::get_expected_operations(m_box_points[idx].size(), points[0].size())) {
-				const std::vector<unsigned int> &bp = m_box_points[idx];
-				if (bp.size() == 0) {
+				const std::vector<unsigned long long> &bp = m_box_points[idx];
+				if (bp.size() == 0u) {
 					m_approx_volume[idx] = m_box_volume[idx];
 				}
 				else {
 
-					int f_dim = points[0].size();
+					auto f_dim = points[0].size();
 
 					const vector_double &p = points[idx];
 
@@ -249,12 +249,12 @@ private:
 	}
 
 	/// samples the bounding box and returns true if it fell into the exclusive hypervolume
-	bool sample_successful(const std::vector<vector_double> &points, const unsigned int idx) const
+	bool sample_successful(const std::vector<vector_double> &points, const unsigned long long idx) const
 	{
 		const vector_double &lb = points[idx];
 		const vector_double &ub = m_boxes[idx];
 		vector_double rnd_p(lb.size(), 0.0);
-		
+
 		for (decltype(lb.size()) i = 0u; i < lb.size(); ++i) {
 			auto V_dist = std::uniform_real_distribution<double>(lb[i], ub[i]);
 			rnd_p[i] = V_dist(m_e);
@@ -283,12 +283,12 @@ private:
 		}
 		return true;
 	}
-	
+
 	enum extreme_contrib_type {
 		LEAST = 1,
 		GREATEST = 2
 	};
-	
+
 	/// Approximated extreme contributor method
 	/**
 	* Compute the extreme contributor using the approximated algorithm.
@@ -311,18 +311,18 @@ private:
 	*   Determines whether given extreme contributor guarantees be accurate withing provided epsilon error.
 	*   The return value of the function is the ratio, stating the estimated error.
 	*/
-	unsigned int approx_extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point, extreme_contrib_type ec_type, bool(*cmp_func)(double, double),
-		bool(*erase_condition)(unsigned int, unsigned int, vector_double &, vector_double &), double(*end_condition)(unsigned int, unsigned int, vector_double &, vector_double &)) const
+	unsigned long long approx_extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point, extreme_contrib_type ec_type, bool(*cmp_func)(double, double),
+		bool(*erase_condition)(unsigned long long, unsigned long long, vector_double &, vector_double &), double(*end_condition)(unsigned long long, unsigned long long, vector_double &, vector_double &)) const
 	{
 		m_no_samples = std::vector<unsigned long long>(points.size(), 0);
 		m_no_succ_samples = std::vector<unsigned long long>(points.size(), 0);
 		m_no_ops = std::vector<unsigned long long>(points.size(), 1);
-		m_point_set = std::vector<unsigned int>(points.size(), 0);
+		m_point_set = std::vector<unsigned long long>(points.size(), 0);
 		m_box_volume = vector_double(points.size(), 0.0);
 		m_approx_volume = vector_double(points.size(), 0.0);
 		m_point_delta = vector_double(points.size(), 0.0);
 		m_boxes = std::vector<vector_double>(points.size());
-		m_box_points = std::vector<std::vector<unsigned int> >(points.size());
+		m_box_points = std::vector<std::vector<unsigned long long>>(points.size());
 
 		// precomputed log factor for the point delta computation
 		const double log_factor = std::log(2. * points.size() * (1. + m_gamma) / (m_delta * m_gamma));
@@ -336,7 +336,7 @@ private:
 		bool stop_condition = false;
 
 		// index of extreme contributor
-		unsigned int EC = 0u;
+		unsigned long long EC = 0u;
 
 		// put every point into the set
 		for (decltype(m_point_set.size()) i = 0u; i < m_point_set.size(); ++i) {
@@ -348,12 +348,12 @@ private:
 		// - compute bounding boxes and their hypervolume
 		// - set round Delta as max of hypervolumes
 		// - determine points overlapping with each bounding box
-		for (decltype(points.size()) idx = 0; idx < points.size(); ++idx) {
+		for (decltype(points.size()) idx = 0u; idx < points.size(); ++idx) {
 			m_boxes[idx] = compute_bounding_box(points, r_point, idx);
 			m_box_volume[idx] = hv_algorithm::volume_between(points[idx], m_boxes[idx]);
 			r_delta = std::max(r_delta, m_box_volume[idx]);
 
-			for (decltype(points.size()) idx2 = 0; idx2 < points.size(); ++idx2) {
+			for (decltype(points.size()) idx2 = 0u; idx2 < points.size(); ++idx2) {
 				if (idx == idx2) {
 					continue;
 				}
@@ -386,7 +386,7 @@ private:
 			++round_no;
 
 			for (decltype(m_point_set.size()) _i = 0u; _i < m_point_set.size(); ++_i) {
-				unsigned int idx = m_point_set[_i];
+				auto idx = m_point_set[_i];
 				sampling_round(points, r_delta, round_no, idx, log_factor);
 			}
 
@@ -395,7 +395,7 @@ private:
 
 			// find the new extreme contributor
 			for (decltype(m_point_set.size()) _i = 0u; _i < m_point_set.size(); ++_i) {
-				unsigned int idx = m_point_set[_i];
+				auto idx = m_point_set[_i];
 				if (cmp_func(m_approx_volume[idx], m_approx_volume[EC])) {
 					EC = idx;
 				}
@@ -405,7 +405,7 @@ private:
 			//std::vector<unsigned int>::iterator it = m_point_set.begin();
 			auto it = m_point_set.begin();
 			while (it != m_point_set.end()) {
-				unsigned int idx = *it;
+				auto idx = *it;
 				if ((idx != EC) && erase_condition(idx, EC, m_approx_volume, m_point_delta)) {
 					it = m_point_set.erase(it);
 				}
@@ -422,7 +422,7 @@ private:
 			else {
 				stop_condition = true;
 				for (decltype(m_point_set.size()) _i = 0; _i < m_point_set.size(); ++_i) {
-					unsigned int idx = m_point_set[_i];
+					auto idx = m_point_set[_i];
 					if (idx == EC) {
 						continue;
 					}
@@ -439,22 +439,22 @@ private:
 	}
 
 	// ----------------
-	static double lc_end_condition(unsigned int idx, unsigned int LC, vector_double &approx_volume, vector_double &point_delta)
+	static double lc_end_condition(unsigned long long idx, unsigned long long LC, vector_double &approx_volume, vector_double &point_delta)
 	{
 		return (approx_volume[LC] + point_delta[LC]) / (approx_volume[idx] - point_delta[idx]);
 	}
 
-	static double gc_end_condition(unsigned int idx, unsigned int GC, vector_double &approx_volume, vector_double &point_delta)
+	static double gc_end_condition(unsigned long long idx, unsigned long long GC, vector_double &approx_volume, vector_double &point_delta)
 	{
 		return (approx_volume[idx] + point_delta[idx]) / (approx_volume[GC] - point_delta[GC]);
 	}
 
-	static bool lc_erase_condition(unsigned int idx, unsigned int LC, vector_double &approx_volume, vector_double &point_delta)
+	static bool lc_erase_condition(unsigned long long idx, unsigned long long LC, vector_double &approx_volume, vector_double &point_delta)
 	{
 		return (approx_volume[idx] - point_delta[idx]) > (approx_volume[LC] + point_delta[LC]);
 	}
 
-	static bool gc_erase_condition(unsigned int idx, unsigned int GC, vector_double &approx_volume, vector_double &point_delta)
+	static bool gc_erase_condition(unsigned long long idx, unsigned long long GC, vector_double &approx_volume, vector_double &point_delta)
 	{
 		return (approx_volume[idx] + point_delta[idx]) < (approx_volume[GC] - point_delta[GC]);
 	}
@@ -462,7 +462,7 @@ private:
 
 	// flag stating whether BF approximation should use exact computation for some exclusive hypervolumes
 	const bool m_use_exact;
-	
+
 	// if the number of points overlapping the bounding box is small enough we can just compute that exactly
 	// following variable states the number of points for which we perform the optimization
 	const unsigned int m_trivial_subcase_size;
@@ -470,7 +470,7 @@ private:
 	// accuracy of the approximation
 	const double m_eps;
 
-	// confidence of the approximation 
+	// confidence of the approximation
 	const double m_delta;
 
 	// multiplier of the round delta value
@@ -503,7 +503,7 @@ private:
 	mutable std::vector<unsigned long long> m_no_succ_samples;
 
 	// stores the indices of points that were not yet removed during the progress of the algorithm
-	mutable std::vector<unsigned int> m_point_set;
+	mutable std::vector<unsigned long long> m_point_set;
 
 	// exact hypervolumes of the bounding boxes
 	mutable vector_double m_box_volume;
@@ -519,7 +519,7 @@ private:
 
 	// list of indices of points that overlap the bounding box of each point
 	// during monte carlo sampling it suffices to check only these points when deciding whether the sampling was "successful"
-	mutable std::vector<std::vector<unsigned int> > m_box_points;
+	mutable std::vector<std::vector<unsigned long long> > m_box_points;
 	/**
 	 * End of 'least_contributor' method variables section
 	 */

@@ -132,7 +132,7 @@ public:
     *
     * @return expected number of operations for given n and d
     */
-    static double get_expected_operations(const unsigned int n, const unsigned int d)
+    static double get_expected_operations(const vector_double::size_type n, const vector_double::size_type d)
     {
         if (d <= 3) {
             return d * n * std::log(n); // hv3d
@@ -335,7 +335,7 @@ public:
     *
     * @return index of the least contributing point
     */
-    unsigned int least_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+    unsigned long long least_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -364,7 +364,7 @@ public:
     *
     * @return index of the least contributing point
     */
-    unsigned int least_contributor(const vector_double &r_point) const
+    unsigned long long least_contributor(const vector_double &r_point) const
     {
         return least_contributor(r_point, get_best_contributions(r_point));
     }
@@ -378,7 +378,7 @@ public:
     *
     * @return index of the most contributing point
     */
-    unsigned int greatest_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+    unsigned long long greatest_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -402,7 +402,7 @@ public:
     *
     * @return index of the most contributing point
     */
-    unsigned int greatest_contributor(const vector_double &r_point) const
+    unsigned long long greatest_contributor(const vector_double &r_point) const
     {
         return greatest_contributor(r_point, get_best_contributions(r_point));
     }

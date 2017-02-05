@@ -53,7 +53,7 @@ void assertContribs(const std::vector<vector_double> &points, std::vector<double
 {
     hypervolume hv = hypervolume(points, true);
     BOOST_CHECK((hv.contributions(ref) == answers));
-    for (unsigned int i = 0; i < answers.size(); i++) {
+    for (unsigned int i = 0u; i < answers.size(); i++) {
         BOOST_CHECK((hv.exclusive(i, ref) == answers[i]));
     }
 }
@@ -98,11 +98,11 @@ public:
                 BOOST_CHECK((std::abs(hypvol - m_hv_ans) < m_eps));
             } else if (m_test_type == "least_contributor") {
                 load_least_contributor();
-                unsigned int point_idx = hv_obj.least_contributor(m_ref_point, m_method);
+                auto point_idx = hv_obj.least_contributor(m_ref_point, m_method);
                 BOOST_CHECK((point_idx == m_idx_ans));
             } else if (m_test_type == "greatest_contributor") {
                 load_least_contributor(); // loads the same data as least contributor
-                unsigned int point_idx = hv_obj.greatest_contributor(m_ref_point, m_method);
+                auto point_idx = hv_obj.greatest_contributor(m_ref_point, m_method);
                 BOOST_CHECK((point_idx == m_idx_ans));
             } else {
                 // The specified computational method is not available (what do you want to compute?)
@@ -527,7 +527,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributor_approximation_test)
 
 	hv = hypervolume({ { 3, 1 },{ 2, 2 },{ 1, 3.5 } });
 	BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 2));
-	
+
 	BOOST_CHECK_THROW(bf_approx(true, 1, epsilon, 5000.0, 0.775, 0.2, 0.1, 0.25, seed), std::invalid_argument);
 	BOOST_CHECK_THROW(bf_approx(true, 1, -1.0, delta, 0.775, 0.2, 0.1, 0.25, seed), std::invalid_argument);
 
