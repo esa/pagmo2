@@ -25,16 +25,15 @@
 #ifndef PAGMO_UTIL_HV_ALGORITHMS_HV_ALGORITHM_H
 #define PAGMO_UTIL_HV_ALGORITHMS_HV_ALGORITHM_H
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <iterator>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
-#include <algorithm>
-#include <iterator>
 #include <vector>
-
 
 #include "../exceptions.hpp"
 #include "../io.hpp"
@@ -211,7 +210,8 @@ public:
     *
     * @return index of the greatest contributor
     */
-    virtual unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+    virtual unsigned long long greatest_contributor(std::vector<vector_double> &points,
+                                                    const vector_double &r_point) const
     {
         return extreme_contributor(points, r_point, cmp_greatest);
     }

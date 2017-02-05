@@ -496,43 +496,42 @@ BOOST_AUTO_TEST_CASE(hypervolume_approximation_test)
     BOOST_CHECK(((hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_bf_fpras) <= correct * (1.0 + epsilon))
                  && (hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_bf_fpras) >= correct * (1.0 - epsilon))));
 
-	BOOST_CHECK_THROW(bf_fpras(1.1, delta, seed), std::invalid_argument);
-	BOOST_CHECK_THROW(bf_fpras(epsilon, -2.0, seed), std::invalid_argument);
+    BOOST_CHECK_THROW(bf_fpras(1.1, delta, seed), std::invalid_argument);
+    BOOST_CHECK_THROW(bf_fpras(epsilon, -2.0, seed), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(hypervolume_contributor_approximation_test)
 {
-	hypervolume hv;
-	std::vector<double> ref = { 4, 4 };
-	double epsilon = 1e-2;
-	double delta = 1e-6;
-	unsigned int seed = 42u;
+    hypervolume hv;
+    std::vector<double> ref = {4, 4};
+    double epsilon = 1e-2;
+    double delta = 1e-6;
+    unsigned int seed = 42u;
 
-	/* bf_approx is a random algorithm which will not always produce a result within the given quality range.
-	This means that there is very small probability (delta), that a run of this test will fail.
-	To avoid this behavior, the test ist derandomized by fixing the seed.
-	However, fixing the seed does not guarantee the same random numbers on all platforms.
-	Thus, it remains a very small chance, that the test will fail on some platforms. However, it will
-	do so consistently and not in a random way. So when in doubt: change the seed! */
-	std::shared_ptr<hv_algorithm> hv_bf_approx = bf_approx(true, 1, epsilon, delta, 0.775, 0.2, 0.1, 0.25, seed).clone();
+    /* bf_approx is a random algorithm which will not always produce a result within the given quality range.
+    This means that there is very small probability (delta), that a run of this test will fail.
+    To avoid this behavior, the test ist derandomized by fixing the seed.
+    However, fixing the seed does not guarantee the same random numbers on all platforms.
+    Thus, it remains a very small chance, that the test will fail on some platforms. However, it will
+    do so consistently and not in a random way. So when in doubt: change the seed! */
+    std::shared_ptr<hv_algorithm> hv_bf_approx
+        = bf_approx(true, 1, epsilon, delta, 0.775, 0.2, 0.1, 0.25, seed).clone();
 
-	hv = hypervolume({ { 2.5, 1 },{ 2, 2 },{ 1, 3 } });
-	BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 1));
+    hv = hypervolume({{2.5, 1}, {2, 2}, {1, 3}});
+    BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 1));
 
-	hv = hypervolume({ { 3.5, 1 },{ 2, 2 },{ 1, 3 } });
-	BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 0));
+    hv = hypervolume({{3.5, 1}, {2, 2}, {1, 3}});
+    BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 0));
 
-	hv = hypervolume({ { 3, 1 },{ 2.5, 2.5 },{ 1, 3 } });
-	BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 1));
+    hv = hypervolume({{3, 1}, {2.5, 2.5}, {1, 3}});
+    BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 1));
 
-	hv = hypervolume({ { 3, 1 },{ 2, 2 },{ 1, 3.5 } });
-	BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 2));
+    hv = hypervolume({{3, 1}, {2, 2}, {1, 3.5}});
+    BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 2));
 
-	BOOST_CHECK_THROW(bf_approx(true, 1, epsilon, 5000.0, 0.775, 0.2, 0.1, 0.25, seed), std::invalid_argument);
-	BOOST_CHECK_THROW(bf_approx(true, 1, -1.0, delta, 0.775, 0.2, 0.1, 0.25, seed), std::invalid_argument);
-
+    BOOST_CHECK_THROW(bf_approx(true, 1, epsilon, 5000.0, 0.775, 0.2, 0.1, 0.25, seed), std::invalid_argument);
+    BOOST_CHECK_THROW(bf_approx(true, 1, -1.0, delta, 0.775, 0.2, 0.1, 0.25, seed), std::invalid_argument);
 }
-
 
 BOOST_AUTO_TEST_CASE(hypervolume_test_instances)
 {
