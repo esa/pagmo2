@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include "python_includes.hpp"
 
 #include <algorithm>
+#include <array>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/dict.hpp>
 #include <boost/python/errors.hpp>
@@ -212,8 +213,10 @@ inline pagmo::vector_double ad_to_vd(PyArrayObject *o)
                                         "data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 1) {
-        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a vector of doubles: "
-                                      "the array must be unidimensional");
+        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a vector of doubles: "
+                                       "the array must be unidimensional, but the dimension is "
+                                       + std::to_string(PyArray_NDIM(o)) + " instead")
+                                          .c_str());
     }
     if (PyArray_STRIDES(o)[0] != sizeof(double)) {
         pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of doubles: "
@@ -393,6 +396,8 @@ inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
     if (!ret) {
         pygmo_throw(PyExc_RuntimeError, "couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
     }
+    // Hand over to BP for exception-safe behaviour.
+    bp::object retval{bp::handle<>(ret)};
     auto err_handler = [](const decltype(s[0].first) &n) {
         pygmo_throw(PyExc_OverflowError, ("overflow in the conversion of the sparsity index " + std::to_string(n)
                                           + " to the appropriate signed integer type")
@@ -414,8 +419,7 @@ inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
             }
         }
     }
-    // Hand over to boost python.
-    return bp::object(bp::handle<>(ret));
+    return retval;
 }
 
 // Convert a numpy array of std::make_signed<vector_double::size_type>::type into a sparsity pattern.
@@ -424,12 +428,14 @@ inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
     using size_type = pagmo::vector_double::size_type;
     using int_type = std::make_signed<size_type>::type;
     if (!PyArray_ISCARRAY_RO(o)) {
-        pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a sparsity pattern: "
-                                        "data must be C-style contiguous, aligned, and in machine byte-order");
+        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a sparsity pattern: "
+                                      "data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 2) {
-        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a sparsity pattern: "
-                                      "the array must be bidimensional");
+        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a sparsity pattern: "
+                                       "the array must be bidimensional, but its dimension is "
+                                       + std::to_string(PyArray_NDIM(o)) + " instead")
+                                          .c_str());
     }
     if (PyArray_SHAPE(o)[1] != 2) {
         pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a sparsity pattern: "
@@ -443,21 +449,20 @@ inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
                     "the scalar type must be the signed counterpart of 'pagmo::vector_double::size_type'");
     }
     if (PyArray_STRIDES(o)[0] != sizeof(int_type) * 2u || PyArray_STRIDES(o)[1] != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a sparsity pattern: "
-                                        "invalid strides detected");
+        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a sparsity pattern: "
+                                      "invalid strides detected");
     }
     if (PyArray_ITEMSIZE(o) != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a sparsity pattern: "
-                                         "the size of the scalar type must be "
-                                         + std::to_string(sizeof(int_type)))
-                                            .c_str());
+        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a sparsity pattern: "
+                                       "the size of the scalar type must be "
+                                       + std::to_string(sizeof(int_type)))
+                                          .c_str());
     }
     const auto size = boost::numeric_cast<pagmo::sparsity_pattern::size_type>(PyArray_SHAPE(o)[0]);
     // Error handler for nice Python error messages.
     auto err_handler = [](int_type n) {
         pygmo_throw(PyExc_OverflowError, ("overflow in the conversion of the sparsity index " + std::to_string(n)
-                                          + " to the "
-                                            "appropriate unsigned integer type")
+                                          + " to the appropriate unsigned integer type")
                                              .c_str());
     };
     if (size) {
@@ -486,58 +491,14 @@ inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
 inline pagmo::sparsity_pattern to_sp(const bp::object &o)
 {
     using size_type = pagmo::vector_double::size_type;
-    bp::object l = builtin().attr("list");
-    bp::object a = bp::import("numpy").attr("ndarray");
-    if (isinstance(o, l)) {
-        // Case 0: input object is a list.
-        pagmo::sparsity_pattern retval;
-        bp::stl_input_iterator<bp::tuple> begin(o), end;
-        // Error handler to make better error messages in Python.
-        auto err_handler = [](const bp::object &obj) {
-            pygmo_throw(PyExc_RuntimeError, ("couldn't extract a suitable sparsity index value from the object '"
-                                             + str(obj) + "' of type '" + str(type(obj)) + "'.")
-                                                .c_str());
-        };
-        // Iterate over the list, trying to extract first a generic tuple from each element and then a pair
-        // of appropriate integral values from each tuple's elements.
-        bp::tuple tup;
-        for (; begin != end; ++begin) {
-            try {
-                tup = *begin;
-            } catch (...) {
-                pygmo_throw(PyExc_TypeError, "a sparsity pattern represented as a list must be a list of tuples, "
-                                             "but a non-tuple element was encountered");
-            }
-            if (len(tup) != 2) {
-                pygmo_throw(PyExc_ValueError, ("invalid tuple size detected in sparsity pattern: it should be 2, "
-                                               "but it is "
-                                               + std::to_string(len(tup)) + " instead")
-                                                  .c_str());
-            }
-            size_type i, j;
-            try {
-                i = bp::extract<size_type>((tup)[0]);
-            } catch (...) {
-                err_handler((tup)[0]);
-            }
-            try {
-                j = bp::extract<size_type>((tup)[1]);
-            } catch (...) {
-                err_handler((tup)[1]);
-            }
-            retval.emplace_back(i, j);
-        }
-        return retval;
-    } else if (isinstance(o, a)) {
-        // Case 1: input object is a NumPy array of some kind.
+    if (isinstance(o, bp::import("numpy").attr("ndarray"))) {
+        // Input object is a NumPy array of some kind.
         // NOTE: the idea here is the following: we try to build a NumPy array of the signed counterpart of
-        // vector_double::size_type
-        // (most likely long or long long) from whatever type of NumPy array was passed as input, and then we will
-        // convert
-        // the elements to the appropriate size_type inside the a_to_sp routine. The reason for doing this is that
-        // in typical usage Python integers are converted so signed integers when used inside NumPy arrays, so we want
-        // to work with signed ints here as well in order no to force the user to create sparsity patterns
-        // like array(...,dtype='ulonglong').
+        // vector_double::size_type (most likely long or long long) from whatever type of NumPy array was passed as
+        // input, and then we will convert the elements to the appropriate size_type inside the a_to_sp routine. The
+        // reason for doing this is that in typical usage Python integers are converted to signed integers when used
+        // inside NumPy arrays, so we want to work with signed ints here as well in order no to force the user to create
+        // sparsity patterns like array(...,dtype='ulonglong').
         auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<std::make_signed<size_type>::type>::value, NPY_ARRAY_IN_ARRAY);
         if (!n) {
             // NOTE: PyArray_FROM_OTF already sets the exception at the Python level with an appropriate message,
@@ -548,11 +509,41 @@ inline pagmo::sparsity_pattern to_sp(const bp::object &o)
         auto bp_n = bp::object(bp::handle<>(n));
         return a_to_sp((PyArrayObject *)bp_n.ptr());
     }
-    pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
-                                  + "' to a "
-                                    "sparsity pattern: only lists of pairs of ints and NumPy arrays of ints "
-                                    "are supported")
-                                     .c_str());
+    pagmo::sparsity_pattern retval;
+    // We will try to interpret o as a collection of generic python objects, and each element
+    // of o as another collection of python objects.
+    bp::stl_input_iterator<bp::object> begin(o), end;
+    std::array<size_type, 2> tmp_arr;
+    for (; begin != end; ++begin) {
+        // Inside each element of the collection, we try to iterate over 2 elements.
+        bp::stl_input_iterator<bp::object> begin2(*begin), end2;
+        std::size_t i = 0;
+        for (; begin2 != end2; ++begin2, ++i) {
+            if (i == 2u) {
+                // This means that the element of the sparsity pattern is not a pair (i,j) of 2 values,
+                // it contains > 2 values.
+                pygmo_throw(PyExc_ValueError,
+                            ("in the construction of a sparsity pattern, the sparsity pattern element '" + str(*begin)
+                             + "' of type '" + str(type(*begin))
+                             + "' was detected to contain more than 2 values, but elements of "
+                               "sparsity patterns need to consist exactly of 2 values")
+                                .c_str());
+            }
+            tmp_arr[i] = bp::extract<size_type>(*begin2);
+        }
+        if (i < 2u) {
+            // This means that the sparsity pattern element containes 0 or 1 values, whereas
+            // it needs to contain exactly 2 values.
+            pygmo_throw(PyExc_ValueError,
+                        ("in the construction of a sparsity pattern, the sparsity pattern element '" + str(*begin)
+                         + "' of type '" + str(type(*begin)) + "' was detected to contain " + std::to_string(i)
+                         + " values, but elements of sparsity patterns need to consist exactly of 2 values")
+                            .c_str());
+        }
+        // Add the sparsity pattern element to the retval.
+        retval.emplace_back(tmp_arr[0], tmp_arr[1]);
+    }
+    return retval;
 }
 
 // Wrapper around the CPython function to create a bytes object from raw data.

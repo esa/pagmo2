@@ -537,7 +537,7 @@ Args:
     dv (array-like object): the decision vector (chromosome) to be evaluated
 
 Returns:
-    1D NumPy array: the fitness of *dv*
+    1D NumPy float array: the fitness of *dv*
 
 Raises:
     ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
@@ -563,7 +563,7 @@ the lower bounds vector and the upper bounds vector, which must be represented a
 of a :class:`~pygmo.core.problem`.
 
 Returns:
-    ``tuple``: a tuple of two 1D NumPy arrays representing the lower and upper box-bounds of the problem
+    ``tuple``: a tuple of two 1D NumPy float arrays representing the lower and upper box-bounds of the problem
 
 Raises:
     unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
@@ -681,7 +681,7 @@ Args:
     dv (array-like object): the decision vector (chromosome) to be evaluated
 
 Returns:
-    1D NumPy array: the gradient of *dv*
+    1D NumPy float array: the gradient of *dv*
 
 Raises:
     ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
@@ -723,6 +723,50 @@ Returns:
 )";
 }
 
+std::string problem_gradient_sparsity_docstring()
+{
+    return R"(gradient_sparsity()
+
+Gradient sparsity pattern.
+
+This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a
+collection of the indices :math:`(i,j)` of the non-zero elements of :math:`g_{ij} = \frac{\partial f_i}{\partial x_j}`.
+
+If :func:`~pygmo.core.problem.has_gradient_sparsity()` returns ``True``, then the ``gradient_sparsity()`` method of the
+UDP will be invoked, and its result returned (after sanity checks). Otherwise, a a dense pattern is assumed and the
+returned vector will be :math:`((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))`.
+
+The ``gradient_sparsity()`` method of the UDP must return either a 2D NumPy array of integers, or an iterable
+Python object of any kind. Specifically:
+
+* if the returned value is a NumPy array, its shape must be :math:`(n,2)` (with :math:`n \geq 0`),
+* if the returned value is an iterable Python object, then its elements must in turn be iterable Python objects
+  containing each exactly 2 elements representing the indices :math:`(i,j)`.
+
+Returns:
+    2D Numpy int array: the gradient sparsity pattern
+
+Raises:
+    ValueError: in the following cases:
+
+      * the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
+        shape, dimensions, etc.),
+      * at least one element of the returned iterable Python object does not consist of a collection of exactly
+        2 elements,
+      * if the sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
+        or if the indices in the pattern are incompatible with the properties of the problem)
+    OverflowError: if the NumPy array returned by the UDP contains integer values which are negative or outside an
+      implementation-defined range
+    unspecified: any exception thrown by:
+
+      * the underlying C++ function,
+      * the ``PyArray_FROM_OTF()`` function from the NumPy C API,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
+
+)";
+}
+
 std::string problem_get_best_docstring(const std::string &name)
 {
     return R"(best_known()
@@ -731,7 +775,7 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    1D NumPy array: the best known solution for the )"
+    1D NumPy float array: the best known solution for the )"
            + name + R"( problem
 
 )";

@@ -89,6 +89,7 @@ class problem_test_case(_ut.TestCase):
         self.run_has_gradient_tests()
         self.run_gradient_tests()
         self.run_has_gradient_sparsity_tests()
+        self.run_gradient_sparsity_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -607,7 +608,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient_sparsity(self):
-                return [(0,0)]
+                return [(0, 0)]
 
         self.assert_(problem(p()).has_gradient_sparsity())
 
@@ -633,7 +634,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient_sparsity(self):
-                return [(0,0)]
+                return [(0, 0)]
 
             def has_gradient_sparsity(self):
                 return True
@@ -649,12 +650,251 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient_sparsity(self):
-                return [(0,0)]
+                return [(0, 0)]
 
             def has_gradient_sparsity(self):
                 return False
 
         self.assert_(not problem(p()).has_gradient_sparsity())
+
+    def run_gradient_sparsity_tests(self):
+        from .core import problem
+        from numpy import array, ndarray
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return ()
+
+        self.assert_(problem(p()).has_gradient_sparsity())
+        self.assert_(isinstance(problem(p()).gradient_sparsity(), ndarray))
+        self.assert_(problem(p()).gradient_sparsity().shape == (0, 2))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return []
+
+        self.assert_(problem(p()).has_gradient_sparsity())
+        self.assert_(isinstance(problem(p()).gradient_sparsity(), ndarray))
+        self.assert_(problem(p()).gradient_sparsity().shape == (0, 2))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return {}
+
+        self.assert_(problem(p()).has_gradient_sparsity())
+        self.assert_(isinstance(problem(p()).gradient_sparsity(), ndarray))
+        self.assert_(problem(p()).gradient_sparsity().shape == (0, 2))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [[0, 0]]
+
+        self.assert_(problem(p()).has_gradient_sparsity())
+        self.assert_(isinstance(problem(p()).gradient_sparsity(), ndarray))
+        self.assert_(problem(p()).gradient_sparsity().shape == (1, 2))
+        self.assert_((problem(p()).gradient_sparsity()
+                      == array([[0, 0]])).all())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [[0, 0], (0, 1)]
+
+        self.assert_(problem(p()).has_gradient_sparsity())
+        self.assert_(isinstance(problem(p()).gradient_sparsity(), ndarray))
+        self.assert_(problem(p()).gradient_sparsity().shape == (2, 2))
+        self.assert_((problem(p()).gradient_sparsity()
+                      == array([[0, 0], [0, 1]])).all())
+        self.assertEqual(problem(p()).gradient_sparsity()[0][0], 0)
+        self.assertEqual(problem(p()).gradient_sparsity()[0][1], 0)
+        self.assertEqual(problem(p()).gradient_sparsity()[1][0], 0)
+        self.assertEqual(problem(p()).gradient_sparsity()[1][1], 1)
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [[0, 0], (0,)]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [[0, 0], (0, 0)]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [[0, 0], (0, 123)]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return array([[0, 0], [0, 1]])
+
+        self.assert_(problem(p()).has_gradient_sparsity())
+        self.assert_(isinstance(problem(p()).gradient_sparsity(), ndarray))
+        self.assert_(problem(p()).gradient_sparsity().shape == (2, 2))
+        self.assert_((problem(p()).gradient_sparsity()
+                      == array([[0, 0], [0, 1]])).all())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return array([[0, 0], [0, 123]])
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return array([[0, 0, 0], [0, 1, 0]])
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return array([[[0], [1], [2]]])
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [[[0], 0], [0, 1]]
+
+        self.assertRaises(TypeError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return array([[0, 0], [0, -1]])
+
+        self.assertRaises(OverflowError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                a = array([[0, 0, 0], [0, 1, 0]])
+                return a[:, :2]
+
+        self.assert_(problem(p()).has_gradient_sparsity())
+        self.assert_(isinstance(problem(p()).gradient_sparsity(), ndarray))
+        self.assert_(problem(p()).gradient_sparsity().shape == (2, 2))
+        self.assert_((problem(p()).gradient_sparsity()
+                      == array([[0, 0], [0, 1]])).all())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return array([[0, 0], [0, 1.]])
+
+        self.assertRaises(TypeError, lambda: problem(p()))
 
 
 class pso_test_case(_ut.TestCase):

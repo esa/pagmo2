@@ -59,6 +59,7 @@ std::string problem_get_nobj_docstring();
 std::string problem_has_gradient_docstring();
 std::string problem_gradient_docstring();
 std::string problem_has_gradient_sparsity_docstring();
+std::string problem_gradient_sparsity_docstring();
 std::string problem_get_best_docstring(const std::string &);
 
 // algorithm

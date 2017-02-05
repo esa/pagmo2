@@ -544,7 +544,7 @@ BOOST_PYTHON_MODULE(core)
              pygmo::problem_gradient_docstring().c_str(), (bp::arg("dv")))
         .def("has_gradient", &problem::has_gradient, pygmo::problem_has_gradient_docstring().c_str())
         .def("gradient_sparsity", +[](const pagmo::problem &p) { return pygmo::sp_to_a(p.gradient_sparsity()); },
-             "Gradient sparsity.")
+             pygmo::problem_gradient_sparsity_docstring().c_str())
         .def("has_gradient_sparsity", &problem::has_gradient_sparsity,
              pygmo::problem_has_gradient_sparsity_docstring().c_str())
         .def("hessians",
