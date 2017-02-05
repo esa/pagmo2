@@ -28,7 +28,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
-#include <string>
+#include <cmath>
 #include <string>
 #include <typeinfo>
 
