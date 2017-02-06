@@ -102,7 +102,7 @@ public:
         : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
     {
         for (size_type i = 0u; i < pop_size; ++i) {
-            push_back(decision_vector());
+            push_back(random_decision_vector());
         }
     }
 
@@ -178,15 +178,15 @@ public:
     /// Creates a random decision vector
     /**
      * Creates a random decision vector within the problem's bounds.
-     * It calls internally pagmo::decision_vector().
+     * It calls internally pagmo::random_decision_vector().
      *
      * @returns a random decision vector
      *
      * @throws unspecified all exceptions thrown by pagmo::decision_vector()
      */
-    vector_double decision_vector() const
+    vector_double random_decision_vector() const
     {
-        return pagmo::decision_vector(m_prob.get_bounds(), m_e);
+        return pagmo::random_decision_vector(m_prob.get_bounds(), m_e);
     }
 
     /// Index of best individual (accounting for a vector tolerance)

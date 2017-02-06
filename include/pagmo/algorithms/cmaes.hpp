@@ -203,7 +203,7 @@ public:
         std::normal_distribution<double> normally_distributed_number(
             0., 1.); // to generate a normally distributed number        // Setting coefficients for Selection
         Eigen::VectorXd weights(_(mu));
-        for (decltype(weights.rows()) i = 0u; i < weights.rows(); ++i) {
+        for (decltype(weights.rows()) i = 0; i < weights.rows(); ++i) {
             weights(i) = std::log(static_cast<double>(mu) + 0.5) - std::log(static_cast<double>(i) + 1.);
         }
         weights /= weights.sum();                            // weights for the weighted recombination
@@ -252,8 +252,8 @@ public:
 
             // We define the starting B,D,C
             B = Eigen::MatrixXd::Identity(_(dim), _(dim)); // B defines the coordinate system
-            D = Eigen::MatrixXd::Identity(
-                _(dim), _(dim)); // diagonal D defines the scaling. By default this is the witdh of the box bounds.
+            D = Eigen::MatrixXd::Identity(_(dim), _(dim));
+            // diagonal D defines the scaling. By default this is the witdh of the box bounds.
             // If this is too small... then 1e-6 is used
             for (decltype(dim) j = 0u; j < dim; ++j) {
                 D(_(j), _(j)) = std::max((ub[j] - lb[j]), 1e-6);
@@ -269,9 +269,20 @@ public:
             counteval = 0u;
             eigeneval = 0u;
         }
+
+        if (m_verbosity > 0u) {
+            std::cout << "CMAES 4 PaGMO: " << std::endl;
+            std::cout << "mu: " << mu << " - lambda: " << lam << " - mueff: " << mueff << " - N: " << N << std::endl;
+            std::cout << "cc: " << cc << " - cs: " << cs << " - c1: " << c1 << " - cmu: " << cmu
+                      << " - sigma: " << sigma << " - damps: " << damps << " - chiN: " << chiN << std::endl;
+        }
+
         // ----------------------------------------------//
         // HERE WE START THE JUICE OF THE ALGORITHM      //
         // ----------------------------------------------//
+        auto best_x = pop.get_x()[pop.best_idx()];
+        auto best_f = pop.get_f()[pop.best_idx()];
+
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(_(dim));
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
             // 1 - We generate and evaluate lam new individuals
@@ -292,6 +303,11 @@ public:
                     if (m_verbosity > 0u) {
                         std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
                     }
+                    // If the problem is not stochastic we reinsert the best individual found as not to loose that
+                    // information (TODO: do we want this?)
+                    if (!prob.is_stochastic()) {
+                        pop.set_xf(pop.worst_idx(), best_x, best_f);
+                    }
                     return pop;
                 }
                 // Exit condition on ftol
@@ -301,6 +317,11 @@ public:
                 if (delta_f < m_ftol) {
                     if (m_verbosity) {
                         std::cout << "Exit condition -- ftol < " << m_ftol << std::endl;
+                    }
+                    // If the problem is not stochastic we reinsert the best individual found as not to loose that
+                    // information (TODO: do we want this?)
+                    if (!prob.is_stochastic()) {
+                        pop.set_xf(pop.worst_idx(), best_x, best_f);
                     }
                     return pop;
                 }
@@ -321,11 +342,11 @@ public:
                               std::setw(15), "dx:", std::setw(15), "df:", std::setw(15), "sigma:", '\n');
                     }
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
-                          pop.get_f()[idx_b][0], std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
+                          best_f[0], std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
                     ++count;
                     // Logs
                     m_log.push_back(
-                        log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[idx_b][0], dx, df, sigma));
+                        log_line_type(gen, prob.get_fevals() - fevals0, best_f[0], dx, df, sigma));
                 }
             }
             // 2 - we fix the bounds. We cannot use the utils::generic::force_bounds_random as we here represent a
@@ -350,6 +371,10 @@ public:
                     dumb[j] = newpop[i](_(j));
                 }
                 pop.set_x(i, dumb);
+                if (pop.get_f()[i][0] <= best_f[0]) {
+                    best_f = pop.get_f()[i];
+                    best_x = pop.get_x()[i];
+                }
             }
             counteval += lam;
             // 4 - We extract the elite from this generation.
@@ -373,7 +398,7 @@ public:
             // 6 - Update evolution paths
             ps = (1. - cs) * ps + std::sqrt(cs * (2. - cs) * mueff) * invsqrtC * (mean - meanold) / sigma;
             double hsig = 0.;
-            hsig = (ps.squaredNorm() / N / (1. - std::pow((1. - cs), (2. * static_cast<double>(counteval / lam)))))
+            hsig = (ps.squaredNorm() / N / (1. - std::pow((1. - cs), (2. * counteval / static_cast<double>(lam)))))
                    < (2. + 4. / (N + 1.));
             pc = (1. - cc) * pc + hsig * std::sqrt(cc * (2. - cc) * mueff) * (mean - meanold) / sigma;
             // 7 - Adapt Covariance Matrix
@@ -388,7 +413,7 @@ public:
             sigma *= std::exp(std::min(0.6, (cs / damps) * (ps.norm() / chiN - 1.)));
             // 9 - Perform eigen-decomposition of C
             if (static_cast<double>(counteval - eigeneval)
-                > (static_cast<double>(lam) / (c1 + cmu) / N / 10u)) { // achieve O(N^2)
+                > (static_cast<double>(lam) / (c1 + cmu) / N / 10.)) { // achieve O(N^2)
                 eigeneval = counteval;
                 C = (C + C.transpose()) / 2.; // enforce symmetry
                 es.compute(C);                // eigen decomposition
@@ -407,6 +432,11 @@ public:
         } // end of generation loop
         if (m_verbosity) {
             std::cout << "Exit condition -- generations = " << m_gen << std::endl;
+            // If the problem is not stochastic we reinsert the best individual found as not to loose that
+            // information (TODO: do we want this?)
+            if (!prob.is_stochastic()) {
+                pop.set_xf(pop.worst_idx(), best_x, best_f);
+            }
         }
         return pop;
     }
@@ -491,13 +521,35 @@ public:
      */
     std::string get_extra_info() const
     {
-        return "\tGenerations: " + std::to_string(m_gen) + "\n\tcc: " + ((m_cc == -1) ? "auto" : std::to_string(m_cc))
-               + "\n\tcs: " + ((m_cs == -1) ? "auto" : std::to_string(m_cs)) + "\n\tc1: "
-               + ((m_c1 == -1) ? "auto" : std::to_string(m_c1)) + "\n\tcmu: "
-               + ((m_cmu == -1) ? "auto" : std::to_string(m_cmu)) + "\n\tsigma0: " + std::to_string(m_sigma0)
-               + "\n\tStopping xtol: " + std::to_string(m_xtol) + "\n\tStopping ftol: " + std::to_string(m_ftol)
-               + "\n\tMemory: " + std::to_string(m_memory) + "\n\tVerbosity: " + std::to_string(m_verbosity)
-               + "\n\tSeed: " + std::to_string(m_seed);
+        std::ostringstream ss;
+        stream(ss, "\tGenerations: ", m_gen);
+        stream(ss, "\n\tcc: ");
+        if (m_cc == -1)
+            stream(ss, "auto");
+        else
+            stream(ss, m_cc);
+        stream(ss, "\n\tcs: ");
+        if (m_cs == -1)
+            stream(ss, "auto");
+        else
+            stream(ss, m_cs);
+        stream(ss, "\n\tc1: ");
+        if (m_c1 == -1)
+            stream(ss, "auto");
+        else
+            stream(ss, m_c1);
+        stream(ss, "\n\tcmu: ");
+        if (m_cmu == -1)
+            stream(ss, "auto");
+        else
+            stream(ss, m_cmu);
+        stream(ss, "\n\tsigma0: ", m_sigma0);
+        stream(ss, "\n\tStopping xtol: ", m_xtol);
+        stream(ss, "\n\tStopping ftol: ", m_ftol);
+        stream(ss, "\n\tMemory: ", m_memory);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
+        stream(ss, "\n\tSeed: ", m_seed);
+        return ss.str();
     }
     /// Get log
     /**

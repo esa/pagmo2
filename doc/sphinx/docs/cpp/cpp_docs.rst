@@ -53,6 +53,7 @@ problem
   problems/inventory
   problems/translate
   problems/decompose
+  problems/cec2013
 
 Utilities
 ^^^^^^^^^

@@ -288,7 +288,7 @@ public:
         /* --- Main PSO loop ---
          */
         // For each generation
-        for (decltype(m_max_gen) gen = 0u; gen < m_max_gen; ++gen) {
+        for (decltype(m_max_gen) gen = 1u; gen <= m_max_gen; ++gen) {
             best_fit_improved = false;
             // For each particle in the swarm
             for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
@@ -493,10 +493,10 @@ public:
                     m_log.push_back(log_line_type(gen, feval_count, best, mean_velocity, lb_avg, avg_dist));
                 }
             }
-            if (m_verbosity) {
-                std::cout << "Exit condition -- generations = " << m_max_gen << std::endl;
-            }
         } // end of main PSO loop
+        if (m_verbosity) {
+            std::cout << "Exit condition -- generations = " << m_max_gen << std::endl;
+        }
 
         // copy particles' positions & velocities back to the main population
         for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
