@@ -274,24 +274,16 @@ public:
         // ----------------------------------------------//
         //
         // ----------------------------------------------//
-    	// HERE WE START THE REAL ALGORITHM              //
-    	// ----------------------------------------------//
+        // HERE WE START THE REAL ALGORITHM              //
+        // ----------------------------------------------//
 
-    	if (m_verbosity > 0u) {
-    		std::cout << "CMAES 4 PaGMO: " << std::endl;
-    		std::cout << "mu: " << mu
-    			<< " - lambda: " << lam
-    			<< " - mueff: " << mueff
-    			<< " - N: " << N << std::endl;
+        if (m_verbosity > 0u) {
+            std::cout << "CMAES 4 PaGMO: " << std::endl;
+            std::cout << "mu: " << mu << " - lambda: " << lam << " - mueff: " << mueff << " - N: " << N << std::endl;
 
-    		std::cout << "cc: " << cc
-    			<< " - cs: " << cs
-    			<< " - c1: " << c1
-    			<< " - cmu: " << cmu
-    			<< " - sigma: " << sigma
-    			<< " - damps: " << damps
-    			<< " - chiN: " << chiN << std::endl;
-    	}
+            std::cout << "cc: " << cc << " - cs: " << cs << " - c1: " << c1 << " - cmu: " << cmu
+                      << " - sigma: " << sigma << " - damps: " << damps << " - chiN: " << chiN << std::endl;
+        }
         //
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(_(dim));
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
