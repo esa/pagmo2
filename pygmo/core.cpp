@@ -556,10 +556,8 @@ BOOST_PYTHON_MODULE(core)
                  }
                  return retval;
              },
-             "Hessians.\n\nThis method will calculate the Hessians of the input "
-             "decision vector *dv*. The Hessians are returned as a list of arrays of doubles.",
-             (bp::arg("dv")))
-        .def("has_hessians", &problem::has_hessians, "Hessians availability.")
+             pygmo::problem_hessians_docstring().c_str(), (bp::arg("dv")))
+        .def("has_hessians", &problem::has_hessians, pygmo::problem_has_hessians_docstring().c_str())
         .def("hessians_sparsity",
              +[](const pagmo::problem &p) -> bp::list {
                  bp::list retval;

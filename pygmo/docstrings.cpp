@@ -767,6 +767,71 @@ Raises:
 )";
 }
 
+std::string problem_has_hessians_docstring()
+{
+    return R"(has_hessians()
+
+Check if the hessians are available in the UDP.
+
+This method will return ``True`` if the hessians are available in the UDP, ``False`` otherwise.
+
+The availability of the hessians is determined as follows:
+
+* if the UDP does not provide a ``hessians()`` method, then this method will always return ``False``;
+* if the UDP provides a ``hessians()`` method but it does not provide a ``has_hessians()`` method,
+  then this method will always return ``True``;
+* if the UDP provides both a ``hessians()`` and a ``has_hessians()`` method, then this method will return
+  the output of the ``has_hessians()`` method of the UDP.
+
+The optional ``has_hessians()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``hessians()`` method of the UDP, see :func:`~pygmo.core.problem.hessians()`.
+
+Returns:
+    ``bool``: a flag signalling the availability of the hessians in the UDP
+
+)";
+}
+
+std::string problem_hessians_docstring()
+{
+    return R"(gradient(dv)
+
+Gradient.
+
+This method will compute the gradient of the input decision vector *dv* by invoking
+the ``gradient()`` method of the UDP. The ``gradient()`` method of the UDP must return
+a sparse representation of the gradient: the :math:`k`-th term of the gradient vector
+is expected to contain :math:`\frac{\partial f_i}{\partial x_j}`, where the pair :math:`(i,j)`
+is the :math:`k`-th element of the sparsity pattern (collection of index pairs), as returned by
+:func:`~pygmo.core.problem.gradient_sparsity()`.
+
+If the UDP provides a ``gradient()`` method, this method will forward *dv* to the ``gradient()``
+method of the UDP after sanity checks. The output of the ``gradient()`` method of the UDP will
+also be checked before being returned. If the UDP does not provide a ``gradient()`` method, an
+error will be raised. A successful call of this method will increase the internal gradient
+evaluation counter (see :func:`~pygmo.core.problem.get_gevals()`).
+
+The ``gradient()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy
+array, and it must return the gradient vector as an iterable Python object (e.g., 1D NumPy array,
+list, tuple, etc.).
+
+Args:
+    dv (array-like object): the decision vector (chromosome) to be evaluated
+
+Returns:
+    1D NumPy float array: the gradient of *dv*
+
+Raises:
+    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
+      the returned gradient vector does not have the same size as the vector returned by
+      :func:`~pygmo.core.problem.gradient_sparsity()`.
+    NotImplementedError: if the UDP does not provide a ``gradient()`` method.
+    unspecified: any exception thrown by the ``gradient()`` method of the UDP, or by failures at the intersection
+      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
 std::string problem_get_best_docstring(const std::string &name)
 {
     return R"(best_known()

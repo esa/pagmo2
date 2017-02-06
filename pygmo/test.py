@@ -90,6 +90,7 @@ class problem_test_case(_ut.TestCase):
         self.run_gradient_tests()
         self.run_has_gradient_sparsity_tests()
         self.run_gradient_sparsity_tests()
+        self.run_has_hessians_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -895,6 +896,62 @@ class problem_test_case(_ut.TestCase):
                 return array([[0, 0], [0, 1.]])
 
         self.assertRaises(TypeError, lambda: problem(p()))
+
+    def run_has_hessians_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        self.assert_(not problem(p()).has_gradient())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def has_gradient(self):
+                return True
+
+        self.assert_(not problem(p()).has_gradient())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient(self, dv):
+                return [0]
+
+            def has_gradient(self):
+                return False
+
+        self.assert_(not problem(p()).has_gradient())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient(self, dv):
+                return [0]
+
+        self.assert_(problem(p()).has_gradient())
+
 
 
 class pso_test_case(_ut.TestCase):
