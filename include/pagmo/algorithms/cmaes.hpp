@@ -269,13 +269,6 @@ public:
             counteval = 0u;
             eigeneval = 0u;
         }
-        // ----------------------------------------------//
-        // HERE WE START THE JUICE OF THE ALGORITHM      //
-        // ----------------------------------------------//
-        //
-        // ----------------------------------------------//
-        // HERE WE START THE REAL ALGORITHM              //
-        // ----------------------------------------------//
 
         if (m_verbosity > 0u) {
             std::cout << "CMAES 4 PaGMO: " << std::endl;
@@ -284,6 +277,9 @@ public:
                       << " - sigma: " << sigma << " - damps: " << damps << " - chiN: " << chiN << std::endl;
         }
 
+        // ----------------------------------------------//
+        // HERE WE START THE JUICE OF THE ALGORITHM      //
+        // ----------------------------------------------//
         auto best_x = pop.get_x()[pop.best_idx()];
         auto best_f = pop.get_f()[pop.best_idx()];
 
