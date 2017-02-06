@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(cec2013_test)
     }
     // We check that wrong problem ids and dimensions cannot be constructed
     BOOST_CHECK_THROW((cec2013{0u, 2u}), std::invalid_argument);
-    BOOST_CHECK_THROW((cec2013{19u, 2u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cec2013{29u, 2u}), std::invalid_argument);
     BOOST_CHECK_THROW((cec2013{10u, 3u}), std::invalid_argument);
 }
 
