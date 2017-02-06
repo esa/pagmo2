@@ -491,13 +491,35 @@ public:
      */
     std::string get_extra_info() const
     {
-        return "\tGenerations: " + std::to_string(m_gen) + "\n\tcc: " + ((m_cc == -1) ? "auto" : std::to_string(m_cc))
-               + "\n\tcs: " + ((m_cs == -1) ? "auto" : std::to_string(m_cs)) + "\n\tc1: "
-               + ((m_c1 == -1) ? "auto" : std::to_string(m_c1)) + "\n\tcmu: "
-               + ((m_cmu == -1) ? "auto" : std::to_string(m_cmu)) + "\n\tsigma0: " + std::to_string(m_sigma0)
-               + "\n\tStopping xtol: " + std::to_string(m_xtol) + "\n\tStopping ftol: " + std::to_string(m_ftol)
-               + "\n\tMemory: " + std::to_string(m_memory) + "\n\tVerbosity: " + std::to_string(m_verbosity)
-               + "\n\tSeed: " + std::to_string(m_seed);
+        std::ostringstream ss;
+        stream(ss, "\tGenerations: ", m_gen);
+        stream(ss, "\n\tcc: ");
+        if (m_cc == -1)
+            stream(ss, "auto");
+        else
+            stream(ss, m_cc);
+        stream(ss, "\n\tcs: ");
+        if (m_cs == -1)
+            stream(ss, "auto");
+        else
+            stream(ss, m_cs);
+        stream(ss, "\n\tc1: ");
+        if (m_c1 == -1)
+            stream(ss, "auto");
+        else
+            stream(ss, m_c1);
+        stream(ss, "\n\tcmu: ");
+        if (m_cmu == -1)
+            stream(ss, "auto");
+        else
+            stream(ss, m_cmu);
+        stream(ss, "\n\tsigma0: ", m_sigma0);
+        stream(ss, "\n\tStopping xtol: ", m_xtol);
+        stream(ss, "\n\tStopping ftol: ", m_ftol);
+        stream(ss, "\n\tMemory: ", m_memory);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
+        stream(ss, "\n\tSeed: ", m_seed);
+        return ss.str();
     }
     /// Get log
     /**

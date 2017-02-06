@@ -36,8 +36,8 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include "../detail/constants.hpp"
 #include "../detail/cec2013_data.hpp"
+#include "../detail/constants.hpp"
 #include "../exceptions.hpp"
 #include "../problem.hpp" // needed for cereal registration macro
 #include "../types.hpp"
@@ -93,9 +93,9 @@ public:
                                                "2,5,10,20,30,40,50,60,70,80,90,100, a dimension of "
                                                    + std::to_string(dim) + " was detected.");
         }
-        if (prob_id < 1u || prob_id > 18u) {
+        if (prob_id < 1u || prob_id > 28u) {
             pagmo_throw(std::invalid_argument,
-                        "Error: CEC2013 Test functions are only defined for prob_id in [1, 18], a prob_id of "
+                        "Error: CEC2013 Test functions are only defined for prob_id in [1, 28], a prob_id of "
                             + std::to_string(prob_id) + " was detected.");
         }
         m_origin_shift = detail::cec2013_data::shift_data;
@@ -390,8 +390,8 @@ private:
         }
     }
 
-    void bent_cigar_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                         const double *Mr, int r_flag) const /* Bent_Cigar */
+    void bent_cigar_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                         int r_flag) const /* Bent_Cigar */
     {
         unsigned int i;
         double beta = 0.5;
@@ -432,8 +432,8 @@ private:
         }
     }
 
-    void dif_powers_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                         const double *Mr, int r_flag) const /* Different Powers */
+    void dif_powers_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                         int r_flag) const /* Different Powers */
     {
         unsigned int i;
         shiftfunc(x, &m_y[0], nx, Os);
@@ -449,8 +449,8 @@ private:
         f[0] = std::pow(f[0], 0.5);
     }
 
-    void rosenbrock_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                         const double *Mr, int r_flag) const /* Rosenbrock's */
+    void rosenbrock_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                         int r_flag) const /* Rosenbrock's */
     {
         unsigned int i;
         double tmp1, tmp2;
@@ -477,8 +477,8 @@ private:
         }
     }
 
-    void schaffer_F7_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                          const double *Mr, int r_flag) const /* Schwefel's 1.2  */
+    void schaffer_F7_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                          int r_flag) const /* Schwefel's 1.2  */
     {
         unsigned int i;
         double tmp;
@@ -540,8 +540,8 @@ private:
         f[0] = E - 20.0 * std::exp(sum1) - std::exp(sum2) + 20.0;
     }
 
-    void weierstrass_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                          const double *Mr, int r_flag) const /* Weierstrass's  */
+    void weierstrass_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                          int r_flag) const /* Weierstrass's  */
     {
         unsigned int i, j, k_max;
         double sum = 0, sum2 = 0, a, b;
@@ -582,8 +582,8 @@ private:
         f[0] -= nx * sum2;
     }
 
-    void griewank_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                       const double *Mr, int r_flag) const /* Griewank's  */
+    void griewank_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                       int r_flag) const /* Griewank's  */
     {
         unsigned int i;
         double s, p;
@@ -611,8 +611,8 @@ private:
         f[0] = 1.0 + s / 4000.0 - p;
     }
 
-    void rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                        const double *Mr, int r_flag) const /* Rastrigin's  */
+    void rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                        int r_flag) const /* Rastrigin's  */
     {
         unsigned int i;
         double alpha = 10.0, beta = 0.2;
@@ -653,8 +653,8 @@ private:
         }
     }
 
-    void step_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                             const double *Mr, int r_flag) const /* Noncontinuous Rastrigin's  */
+    void step_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                             int r_flag) const /* Noncontinuous Rastrigin's  */
     {
         unsigned int i;
         double alpha = 10.0, beta = 0.2;
@@ -699,8 +699,8 @@ private:
         }
     }
 
-    void schwefel_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                       const double *Mr, int r_flag) const /* Schwefel's  */
+    void schwefel_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                       int r_flag) const /* Schwefel's  */
     {
         unsigned int i;
         double tmp;
@@ -738,8 +738,8 @@ private:
         f[0] = 4.189828872724338e+002 * nx + f[0];
     }
 
-    void katsuura_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                       const double *Mr, int r_flag) const /* Katsuura  */
+    void katsuura_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                       int r_flag) const /* Katsuura  */
     {
         unsigned int i, j;
         double temp, tmp1, tmp2, tmp3;
@@ -778,8 +778,8 @@ private:
         f[0] = f[0] * tmp1 - tmp1;
     }
 
-    void bi_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                           const double *Mr, int r_flag) const /* Lunacek Bi_rastrigin Function */
+    void bi_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                           int r_flag) const /* Lunacek Bi_rastrigin Function */
     {
         unsigned int i;
         double mu0 = 2.5, d = 1.0, s, mu1, tmp, tmp1, tmp2;
@@ -840,8 +840,8 @@ private:
         free(tmpx);
     }
 
-    void grie_rosen_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                         const double *Mr, int r_flag) const /* Griewank-Rosenbrock  */
+    void grie_rosen_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                         int r_flag) const /* Griewank-Rosenbrock  */
     {
         unsigned int i;
         double temp, tmp1, tmp2;
@@ -876,8 +876,8 @@ private:
         f[0] += (temp * temp) / 4000.0 - std::cos(temp) + 1.0;
     }
 
-    void escaffer6_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                        const double *Mr, int r_flag) const /* Expanded Scaffer¡¯s F6  */
+    void escaffer6_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+                        int r_flag) const /* Expanded Scaffer¡¯s F6  */
     {
         unsigned int i;
         double temp1, temp2;
@@ -1127,8 +1127,8 @@ private:
         }
     }
 
-    void cf_cal(const double *x, double *f, const unsigned int nx, const double *Os, double *delta,
-                double *bias, double *fit, unsigned int cf_num) const
+    void cf_cal(const double *x, double *f, const unsigned int nx, const double *Os, double *delta, double *bias,
+                double *fit, unsigned int cf_num) const
     {
         unsigned int i, j;
         double *w;

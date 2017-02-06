@@ -77,7 +77,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/ackley.hpp>
+#if !defined(_MSC_VER)
 #include <pagmo/problems/cec2013.hpp>
+#endif
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
@@ -695,12 +697,14 @@ BOOST_PYTHON_MODULE(core)
     inv.def(bp::init<unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u)));
     inv.def(
         bp::init<unsigned, unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u, bp::arg("seed"))));
+// excluded in MSVC
+#if !defined(_MSC_VER)
     // CEC 2013.
-    auto cec2013_ = pygmo::expose_problem<cec2013>(
-        "cec2013", "__init__(prob_id = 1, dim = 2)\n\nThe CEC 2013 problem suite.\n\n"
-                   "See :cpp:class:`pagmo::cec2013`.\n\n");
-    cec2013_.def(bp::init<unsigned, unsigned>(
-        (bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
+    auto cec2013_
+        = pygmo::expose_problem<cec2013>("cec2013", "__init__(prob_id = 1, dim = 2)\n\nThe CEC 2013 problem suite.\n\n"
+                                                    "See :cpp:class:`pagmo::cec2013`.\n\n");
+    cec2013_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
+#endif
     // Exposition of C++ algorithms.
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm",

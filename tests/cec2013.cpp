@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(cec2013_test)
     // We check that all problems can be constructed at all dimensions and that the name returned makes sense
     // (only for dim =2 for speed). We also perform a fitness test (we only check no throws, not correctness)
     std::vector<unsigned int> allowed_dims = {2u, 5u, 10u, 20u, 30u, 40u, 50u, 60u, 70u, 80u, 90u, 100u};
-    for (unsigned int i = 1u; i <= 18u; ++i) {
+    for (unsigned int i = 1u; i <= 28u; ++i) {
         for (auto dim : allowed_dims) {
             cec2013 udp{i, dim};
             auto x = random_decision_vector({vector_double(dim, -100.), vector_double(dim, 100.)},
