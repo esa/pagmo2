@@ -303,11 +303,6 @@ public:
                     if (m_verbosity > 0u) {
                         std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
                     }
-                    // If the problem is not stochastic we reinsert the best individual found as not to loose that
-                    // information (TODO: do we want this?)
-                    if (!prob.is_stochastic()) {
-                        pop.set_xf(pop.worst_idx(), best_x, best_f);
-                    }
                     return pop;
                 }
                 // Exit condition on ftol
@@ -317,11 +312,6 @@ public:
                 if (delta_f < m_ftol) {
                     if (m_verbosity) {
                         std::cout << "Exit condition -- ftol < " << m_ftol << std::endl;
-                    }
-                    // If the problem is not stochastic we reinsert the best individual found as not to loose that
-                    // information (TODO: do we want this?)
-                    if (!prob.is_stochastic()) {
-                        pop.set_xf(pop.worst_idx(), best_x, best_f);
                     }
                     return pop;
                 }
@@ -432,11 +422,6 @@ public:
         } // end of generation loop
         if (m_verbosity) {
             std::cout << "Exit condition -- generations = " << m_gen << std::endl;
-            // If the problem is not stochastic we reinsert the best individual found as not to loose that
-            // information (TODO: do we want this?)
-            if (!prob.is_stochastic()) {
-                pop.set_xf(pop.worst_idx(), best_x, best_f);
-            }
         }
         return pop;
     }

@@ -229,7 +229,7 @@ BOOST_AUTO_TEST_CASE(cmaes_serialization_test)
     }
 }
 
-/**BOOST_AUTO_TEST_CASE(cmaes_memory_test)
+BOOST_AUTO_TEST_CASE(cmaes_memory_test)
 {
     // We check here that when memory is true calling evolve(pop) two times on 1 gen
     // is the same as calling 1 time evolve with 2 gens
@@ -253,5 +253,4 @@ BOOST_AUTO_TEST_CASE(cmaes_serialization_test)
     BOOST_CHECK_CLOSE(std::get<3>(log[0]), std::get<3>(log2[1]), 1e-8);
     BOOST_CHECK_CLOSE(std::get<2>(log[0]), std::get<2>(log2[1]), 1e-8);
     // the 1 and 0 will be different as fevals is reset at each evolve
-}*/ // This test can be restored if population champion is implemented (in which case it should also go
-// in the other algorithms with memory)
+}
