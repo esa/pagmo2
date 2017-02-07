@@ -61,9 +61,6 @@ BOOST_AUTO_TEST_CASE(cmaes_algorithm_construction)
     BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1.2, -1, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1, -1.2, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1, -1.2, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
-
-
-
 }
 
 struct unbounded_lb {
@@ -116,7 +113,7 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
     {
         // Here we only test that evolution is deterministic if the
         // seed is controlled and the problem is stochastic
-        problem prob{inventory{4u,10u,23u}};
+        problem prob{inventory{4u, 10u, 23u}};
         population pop1{prob, 5u, 23u};
         population pop2{prob, 5u, 23u};
 
@@ -150,7 +147,6 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
         pop = user_algo.evolve(pop);
         BOOST_CHECK(user_algo.get_log().size() < 5000u);
     }
-
 
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{rosenbrock{}}, 4u}), std::invalid_argument);

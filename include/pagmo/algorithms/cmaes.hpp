@@ -331,12 +331,11 @@ public:
                         print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
                               std::setw(15), "dx:", std::setw(15), "df:", std::setw(15), "sigma:", '\n');
                     }
-                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
-                          best_f[0], std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
+                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), best_f[0],
+                          std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
                     ++count;
                     // Logs
-                    m_log.push_back(
-                        log_line_type(gen, prob.get_fevals() - fevals0, best_f[0], dx, df, sigma));
+                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, best_f[0], dx, df, sigma));
                 }
             }
             // 2 - we fix the bounds. We cannot use the utils::generic::force_bounds_random as we here represent a

@@ -358,6 +358,8 @@ public:
     }
 
 private:
+    // For the coverage analysis we do not cover the code below as its derived from a third party source
+    // LCOV_EXCL_START
     void sphere_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
                      int r_flag) const /* Sphere */
     {
@@ -1161,6 +1163,7 @@ private:
         }
         free(w);
     }
+    // LCOV_EXCL_STOP
 
     // problem id
     unsigned int m_prob_id;
