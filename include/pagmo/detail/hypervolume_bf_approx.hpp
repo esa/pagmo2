@@ -75,7 +75,7 @@ public:
     *
     * @return index of the least contributing point
     */
-    unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+	unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         return approx_extreme_contributor(points, r_point, LEAST, hv_algorithm::cmp_least, lc_erase_condition,
                                           lc_end_condition);
@@ -91,7 +91,7 @@ public:
     *
     * @return index of the greatest contributing point
     */
-    unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+	unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         return approx_extreme_contributor(points, r_point, GREATEST, hv_algorithm::cmp_greatest, gc_erase_condition,
                                           gc_end_condition);
@@ -129,7 +129,7 @@ private:
     * Uses chernoff inequality as it was proposed in the article by Bringmann and Friedrich
     * The parameters of the method are taked from the Shark implementation of the algorithm.
     */
-    inline double compute_point_delta(const unsigned int round_no, const unsigned long long idx,
+    inline double compute_point_delta(const unsigned int round_no, const vector_double::size_type idx,
                                       const double log_factor) const
     {
         return std::sqrt(0.5 * ((1. + m_gamma) * std::log(static_cast<double>(round_no)) + log_factor)
@@ -209,7 +209,7 @@ private:
 
     /// Performs a single round of sampling for given point at index 'idx'
     inline void sampling_round(const std::vector<vector_double> &points, const double delta, const unsigned int round,
-                               const unsigned long long idx, const double log_factor) const
+                               const vector_double::size_type idx, const double log_factor) const
     {
         if (m_use_exact) {
             // if the sampling for given point was already resolved using exact method
@@ -221,7 +221,7 @@ private:
             if (m_box_points[idx].size() <= m_trivial_subcase_size
                 || static_cast<double>(m_no_ops[idx])
                        >= hypervolume::get_expected_operations(m_box_points[idx].size(), points[0].size())) {
-                const std::vector<unsigned long long> &bp = m_box_points[idx];
+                const std::vector<vector_double::size_type> &bp = m_box_points[idx];
                 if (bp.size() == 0u) {
                     m_approx_volume[idx] = m_box_volume[idx];
                 } else {
@@ -268,7 +268,7 @@ private:
     }
 
     /// samples the bounding box and returns true if it fell into the exclusive hypervolume
-    bool sample_successful(const std::vector<vector_double> &points, const unsigned long long idx) const
+    bool sample_successful(const std::vector<vector_double> &points, const vector_double::size_type idx) const
     {
         const vector_double &lb = points[idx];
         const vector_double &ub = m_boxes[idx];
@@ -329,22 +329,22 @@ private:
     *   Determines whether given extreme contributor guarantees be accurate withing provided epsilon error.
     *   The return value of the function is the ratio, stating the estimated error.
     */
-    unsigned long long approx_extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
+    vector_double::size_type approx_extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
                                                   extreme_contrib_type ec_type, bool (*cmp_func)(double, double),
-                                                  bool (*erase_condition)(unsigned long long, unsigned long long,
+                                                  bool (*erase_condition)(vector_double::size_type, vector_double::size_type,
                                                                           vector_double &, vector_double &),
-                                                  double (*end_condition)(unsigned long long, unsigned long long,
+                                                  double (*end_condition)(vector_double::size_type, vector_double::size_type,
                                                                           vector_double &, vector_double &)) const
     {
-        m_no_samples = std::vector<unsigned long long>(points.size(), 0);
-        m_no_succ_samples = std::vector<unsigned long long>(points.size(), 0);
-        m_no_ops = std::vector<unsigned long long>(points.size(), 1);
-        m_point_set = std::vector<unsigned long long>(points.size(), 0);
+        m_no_samples = std::vector<vector_double::size_type>(points.size(), 0);
+        m_no_succ_samples = std::vector<vector_double::size_type>(points.size(), 0);
+        m_no_ops = std::vector<vector_double::size_type>(points.size(), 1);
+        m_point_set = std::vector<vector_double::size_type>(points.size(), 0);
         m_box_volume = vector_double(points.size(), 0.0);
         m_approx_volume = vector_double(points.size(), 0.0);
         m_point_delta = vector_double(points.size(), 0.0);
         m_boxes = std::vector<vector_double>(points.size());
-        m_box_points = std::vector<std::vector<unsigned long long>>(points.size());
+        m_box_points = std::vector<std::vector<vector_double::size_type>>(points.size());
 
         // precomputed log factor for the point delta computation
         const double log_factor = std::log(2. * points.size() * (1. + m_gamma) / (m_delta * m_gamma));
@@ -358,7 +358,7 @@ private:
         bool stop_condition = false;
 
         // index of extreme contributor
-        unsigned long long EC = 0u;
+        vector_double::size_type EC = 0u;
 
         // put every point into the set
         for (decltype(m_point_set.size()) i = 0u; i < m_point_set.size(); ++i) {
@@ -459,25 +459,25 @@ private:
     }
 
     // ----------------
-    static double lc_end_condition(unsigned long long idx, unsigned long long LC, vector_double &approx_volume,
+    static double lc_end_condition(vector_double::size_type idx, vector_double::size_type LC, vector_double &approx_volume,
                                    vector_double &point_delta)
     {
         return (approx_volume[LC] + point_delta[LC]) / (approx_volume[idx] - point_delta[idx]);
     }
 
-    static double gc_end_condition(unsigned long long idx, unsigned long long GC, vector_double &approx_volume,
+    static double gc_end_condition(vector_double::size_type idx, vector_double::size_type GC, vector_double &approx_volume,
                                    vector_double &point_delta)
     {
         return (approx_volume[idx] + point_delta[idx]) / (approx_volume[GC] - point_delta[GC]);
     }
 
-    static bool lc_erase_condition(unsigned long long idx, unsigned long long LC, vector_double &approx_volume,
+    static bool lc_erase_condition(vector_double::size_type idx, vector_double::size_type LC, vector_double &approx_volume,
                                    vector_double &point_delta)
     {
         return (approx_volume[idx] - point_delta[idx]) > (approx_volume[LC] + point_delta[LC]);
     }
 
-    static bool gc_erase_condition(unsigned long long idx, unsigned long long GC, vector_double &approx_volume,
+    static bool gc_erase_condition(vector_double::size_type idx, vector_double::size_type GC, vector_double &approx_volume,
                                    vector_double &point_delta)
     {
         return (approx_volume[idx] + point_delta[idx]) < (approx_volume[GC] - point_delta[GC]);
@@ -517,16 +517,16 @@ private:
      * They are not serialized as the members below are irrelevant outside of that scope.
      */
     // number of elementary operations performed for each point
-    mutable std::vector<unsigned long long> m_no_ops;
+    mutable std::vector<vector_double::size_type> m_no_ops;
 
     // number of samples for given box
-    mutable std::vector<unsigned long long> m_no_samples;
+    mutable std::vector<vector_double::size_type> m_no_samples;
 
     // number of "successful" samples that fell into the exclusive hypervolume
-    mutable std::vector<unsigned long long> m_no_succ_samples;
+    mutable std::vector<vector_double::size_type> m_no_succ_samples;
 
     // stores the indices of points that were not yet removed during the progress of the algorithm
-    mutable std::vector<unsigned long long> m_point_set;
+    mutable std::vector<vector_double::size_type> m_point_set;
 
     // exact hypervolumes of the bounding boxes
     mutable vector_double m_box_volume;
@@ -543,7 +543,7 @@ private:
     // list of indices of points that overlap the bounding box of each point
     // during monte carlo sampling it suffices to check only these points when deciding whether the sampling was
     // "successful"
-    mutable std::vector<std::vector<unsigned long long>> m_box_points;
+    mutable std::vector<std::vector<vector_double::size_type>> m_box_points;
     /**
      * End of 'least_contributor' method variables section
      */
