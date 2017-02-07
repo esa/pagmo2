@@ -649,7 +649,7 @@ private:
             case 1: // { gbest }
                 // ERROR: execution should not reach this point, as the global best position is not tracked using the
                 // neighb vector
-                pagmo_throw(
+                pagmo_throw(                                                                     // LCOV_EXCL_LINE
                     std::invalid_argument,                                                       // LCOV_EXCL_LINE
                     "particle__get_best_neighbor() invoked while using a gbest swarm topology"); // LCOV_EXCL_LINE
                 break;
