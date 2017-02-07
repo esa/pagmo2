@@ -628,7 +628,6 @@ See also the docs of the C++ class :cpp:class:`pagmo::cec2013`.
 )";
 }
 
-
 std::string de_docstring()
 {
     return R"(__init__(gen = 1, F = 0.8, CR = 0.9, variant = 2, ftol = 1e-6, xtol = 1e-6, seed = random)
@@ -954,7 +953,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log`.
 
 std::string cmaes_docstring()
 {
-    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = false, seed = random)
+    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
 
 Covariance Matrix Evolutionary Strategy (CMA-ES).
 
@@ -1120,7 +1119,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log`.
 
 std::string pso_docstring()
 {
-    return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5u, neighb_type = 2u, neighb_param = 4u, memory = False, seed = random)
+    return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = random)
 
 Particle Swarm Optimization
 

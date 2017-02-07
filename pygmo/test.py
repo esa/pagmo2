@@ -293,8 +293,10 @@ class pso_test_case(_ut.TestCase):
 	def runTest(self):
 		from .core import pso
 		uda = pso()
+		uda = pso(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False)
+		uda = pso(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = 32)
+		self.assertEqual(uda.get_seed(),32)
 		log = uda.get_log()
-		seed = uda.get_seed()
 
 class sa_test_case(_ut.TestCase):
 	"""Test case for the UDA simulated annealing
@@ -303,7 +305,10 @@ class sa_test_case(_ut.TestCase):
 	def runTest(self):
 		from .core import simulated_annealing
 		uda = simulated_annealing()
+		uda = simulated_annealing(Ts = 10., Tf = .1, n_T_adj = 10, n_range_adj = 10, bin_size = 10, start_range = 1.)
+		uda = simulated_annealing(Ts = 10., Tf = .1, n_T_adj = 10, n_range_adj = 10, bin_size = 10, start_range = 1., seed = 32)
 		log = uda.get_log()
+		self.assertEqual(uda.get_seed(),32)
 		seed = uda.get_seed()
 
 class compass_search_test_case(_ut.TestCase):
@@ -313,6 +318,7 @@ class compass_search_test_case(_ut.TestCase):
 	def runTest(self):
 		from .core import compass_search
 		uda = compass_search()
+		uda = compass_search(max_fevals = 1, start_range = .1, stop_range = .01, reduction_coeff = .5)
 		log = uda.get_log()
 
 class cmaes_test_case(_ut.TestCase):
@@ -322,7 +328,9 @@ class cmaes_test_case(_ut.TestCase):
 	def runTest(self):
 		from .core import cmaes
 		uda = cmaes()
-		log = uda.get_log()
+		uda = cmaes(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False)
+		uda = cmaes(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, seed = 32)
+		self.assertEqual(uda.get_seed(),32)
 		seed = uda.get_seed()
 
 
@@ -337,6 +345,7 @@ def run_test_suite():
 	suite.addTest(problem_test_case())
 	suite.addTest(core_test_case())
 	suite.addTest(pso_test_case())
+	suite.addTest(sa_test_case())
 	suite.addTest(cmaes_test_case())
 	suite.addTest(compass_search_test_case())
 	test_result = _ut.TextTestRunner(verbosity=2).run(suite)
