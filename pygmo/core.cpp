@@ -700,9 +700,7 @@ BOOST_PYTHON_MODULE(core)
 // excluded in MSVC
 #if !defined(_MSC_VER)
     // CEC 2013.
-    auto cec2013_
-        = pygmo::expose_problem<cec2013>("cec2013", "__init__(prob_id = 1, dim = 2)\n\nThe CEC 2013 problem suite.\n\n"
-                                                    "See :cpp:class:`pagmo::cec2013`.\n\n");
+    auto cec2013_ = pygmo::expose_problem<cec2013>("cec2013", pygmo::cec2013_docstring().c_str());
     cec2013_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
 #endif
     // Exposition of C++ algorithms.
