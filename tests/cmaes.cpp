@@ -53,14 +53,14 @@ BOOST_AUTO_TEST_CASE(cmaes_algorithm_construction)
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK((user_algo.get_log() == cmaes::log_type{}));
 
-    BOOST_CHECK_THROW((cmaes{1234u, 1.2}), std::invalid_argument);
-    BOOST_CHECK_THROW((cmaes{1234u, -0.4}), std::invalid_argument);
-    BOOST_CHECK_THROW((cmaes{1234u, -1, 1.2}), std::invalid_argument);
-    BOOST_CHECK_THROW((cmaes{1234u, -1, -1.2}), std::invalid_argument);
-    BOOST_CHECK_THROW((cmaes{1234u, -1, -1, 1.2}), std::invalid_argument);
-    BOOST_CHECK_THROW((cmaes{1234u, -1, -1, -1.2}), std::invalid_argument);
-    BOOST_CHECK_THROW((cmaes{1234u, -1, -1, -1, 1.2}), std::invalid_argument);
-    BOOST_CHECK_THROW((cmaes{1234u, -1, -1, -1, -1.2}), std::invalid_argument);
+    BOOST_CHECK_THROW((cmaes{10u, 1.2, -1, -1, -1, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cmaes{10u, -2.3, -1, -1, -1, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cmaes{10u, -1, 1.2, -1, -1, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cmaes{10u, -1, -1.2, -1, -1, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1.2, -1, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1.2, -1, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1, -1.2, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1, -1.2, 0.5, 1e-6, 1e-6, false, 23u}), std::invalid_argument);
 }
 
 struct unbounded_lb {
@@ -110,6 +110,25 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
         BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
     }
 
+    {
+        // Here we only test that evolution is deterministic if the
+        // seed is controlled and the problem is stochastic
+        problem prob{inventory{4u, 10u, 23u}};
+        population pop1{prob, 5u, 23u};
+        population pop2{prob, 5u, 23u};
+
+        cmaes user_algo1{10u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, 23u};
+        user_algo1.set_verbosity(1u);
+        pop1 = user_algo1.evolve(pop1);
+
+        cmaes user_algo2{10u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, 23u};
+        user_algo2.set_verbosity(1u);
+        pop2 = user_algo2.evolve(pop2);
+
+        BOOST_CHECK(user_algo1.get_log().size() > 0u);
+        BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+    }
+
     // Here we check that the exit condition of ftol and xtol actually provoke an exit within 5000 gen (rosenbrock{2} is
     // used)
     {
@@ -138,8 +157,8 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
     population pop_lb{problem{unbounded_lb{}}};
     population pop_ub{problem{unbounded_ub{}}};
     for (auto i = 0u; i < 20u; ++i) {
-        pop_lb.push_back(pagmo::decision_vector({0.}, {1.}, r_engine));
-        pop_ub.push_back(pagmo::decision_vector({0.}, {1.}, r_engine));
+        pop_lb.push_back(pagmo::random_decision_vector({0.}, {1.}, r_engine));
+        pop_ub.push_back(pagmo::random_decision_vector({0.}, {1.}, r_engine));
     }
     BOOST_CHECK_THROW(cmaes{10u}.evolve(pop_lb), std::invalid_argument);
     BOOST_CHECK_THROW(cmaes{10u}.evolve(pop_ub), std::invalid_argument);
@@ -154,12 +173,15 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
 BOOST_AUTO_TEST_CASE(cmaes_setters_getters_test)
 {
     cmaes user_algo{10u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, 23u};
+    cmaes user_algo2{10u, .5, .5, .5, .5, 0.5, 1e-6, 1e-6, false, 23u};
     user_algo.set_verbosity(23u);
     BOOST_CHECK(user_algo.get_verbosity() == 23u);
     user_algo.set_seed(23u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK(user_algo.get_name().find("CMA-ES") != std::string::npos);
     BOOST_CHECK(user_algo.get_extra_info().find("cmu") != std::string::npos);
+    BOOST_CHECK(user_algo.get_extra_info().find("auto") != std::string::npos);
+    BOOST_CHECK(user_algo2.get_extra_info().find("auto") == std::string::npos);
     BOOST_CHECK_NO_THROW(user_algo.get_log());
 }
 
