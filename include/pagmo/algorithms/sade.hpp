@@ -747,11 +747,16 @@ public:
      */
     std::string get_extra_info() const
     {
-        return "\tGenerations: " + std::to_string(m_gen) + "\n\tVariant: " + std::to_string(m_variant)
-               + "\n\tSelf adaptation variant: " + std::to_string(m_variant_adptv) + "\n\tStopping xtol: "
-               + std::to_string(m_xtol) + "\n\tStopping ftol: " + std::to_string(m_Ftol) + "\n\tMemory: "
-               + std::to_string(m_memory) + "\n\tVerbosity: " + std::to_string(m_verbosity) + "\n\tSeed: "
-               + std::to_string(m_seed);
+        std::ostringstream ss;
+        stream(ss, "\tGenerations: ", m_gen);
+        stream(ss, "\n\tVariant: ", m_variant);
+        stream(ss, "\n\tSelf adaptation variant: ", m_variant_adptv);
+        stream(ss, "\n\tStopping xtol: ", m_ftol);
+        stream(ss, "\n\tStopping ftol: ", m_ftol);
+        stream(ss, "\n\tMemory: ", m_memory);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
+        stream(ss, "\n\tSeed: ", m_seed);
+        return ss.str();
     }
     /// Get log
     /**
