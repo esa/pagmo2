@@ -79,7 +79,7 @@ public:
      * Constructs an empty population with a pagmo::null_problem.
      * The random seed is initialised to zero.
      */
-    population() : m_prob(null_problem{}), m_e(0u), m_seed(0u)
+    population() : m_prob(null_problem{}), m_ID(), m_x(), m_f(), m_champion_x(), m_champion_f(), m_e(0u), m_seed(0u)
     {
     }
 
@@ -99,7 +99,7 @@ public:
      */
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit population(T &&x, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next())
-        : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
+        : m_prob(std::forward<T>(x)), m_ID(), m_x(), m_f(), m_champion_x(), m_champion_f(), m_e(seed), m_seed(seed)
     {
         for (size_type i = 0u; i < pop_size; ++i) {
             push_back(decision_vector());
@@ -170,6 +170,7 @@ public:
         m_x.reserve(m_x.size() + 1u);
         m_f.reserve(m_f.size() + 1u);
         // The rest is noexcept.
+        update_champion(x, f);
         m_ID.push_back(new_id);
         m_x.push_back(std::move(x_copy));
         m_f.push_back(std::move(f));
@@ -287,6 +288,24 @@ public:
         return worst_idx(tol_vector);
     }
 
+    /// Gets the champion decision vector
+    vector_double get_champion_x() const {
+        if (m_prob.get_nobj() > 1u) {
+            pagmo_throw(std::invalid_argument,
+                        "The Champion of a population can only be extracted in single objective problems");
+        }
+        return m_champion_x;
+    }
+
+    /// Gets the champion fitness
+    vector_double get_champion_f() const {
+        if (m_prob.get_nobj() > 1u) {
+            pagmo_throw(std::invalid_argument,
+                        "The Champion of a population can only be extracted in single objective problems");
+        }
+        return m_champion_f;
+    }
+
     /// Number of individuals in the population
     size_type size() const
     {
@@ -329,6 +348,8 @@ public:
         }
         assert(m_x[i].size() == x.size());
         assert(m_f[i].size() == f.size());
+
+        update_champion(x, f);
         // Use std::copy in order to make sure we are not allocating and
         // potentially throw.
         std::copy(x.begin(), x.end(), m_x[i].begin());
@@ -411,6 +432,23 @@ public:
     }
 
 private:
+    // Short routine tp update the champion. Does nothing if the problem is MO
+    inline void update_champion(const vector_double& x, const vector_double& f)
+    {
+        assert(f.size() > 0u);
+        // If the problem has multiple objectives do nothing
+        if (m_prob.get_nobj() == 1u) {
+            // If the champion does not exist create it
+            if (m_champion_x.size() == 0u) {
+                m_champion_x = x;
+                m_champion_f = f;
+            }
+            if (f[0] < m_champion_f[0]) {
+                m_champion_x = x;
+                m_champion_f = f;
+            }
+        }
+    }
     // Problem.
     problem m_prob;
     // ID of the various decision vectors
@@ -419,6 +457,10 @@ private:
     std::vector<vector_double> m_x;
     // Fitness vectors.
     std::vector<vector_double> m_f;
+    // The Champion chromosome
+    vector_double m_champion_x;
+    // The Champion fitness
+    vector_double m_champion_f;
     // Random engine.
     mutable detail::random_engine_type m_e;
     // Seed.
