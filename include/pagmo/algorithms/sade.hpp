@@ -133,8 +133,9 @@ public:
                             + std::to_string(variant) + " was detected.");
         }
         if (variant_adptv < 1u || variant_adptv > 2u) {
-            pagmo_throw(std::invalid_argument, "The variant for self-adaptation mus be in [1,2], while a value of "
-                                                   + std::to_string(variant_adptv) + " was detected.");
+            pagmo_throw(std::invalid_argument,
+                        "The variant for self-adaptation mus be in [1,2], while a value of "
+                            + std::to_string(variant_adptv) + " was detected.");
         }
     }
 
@@ -167,12 +168,14 @@ public:
         // We start by checking that the problem is suitable for this
         // particular algorithm.
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob_f_dimension != 1u) {
-            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
@@ -183,8 +186,9 @@ public:
             return pop;
         }
         if (pop.size() < 7u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 7 individuals in the population, "
-                                                   + std::to_string(pop.size()) + " detected");
+            pagmo_throw(std::invalid_argument,
+                        prob.get_name() + " needs at least 7 individuals in the population, "
+                            + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -751,8 +755,8 @@ public:
         stream(ss, "\tGenerations: ", m_gen);
         stream(ss, "\n\tVariant: ", m_variant);
         stream(ss, "\n\tSelf adaptation variant: ", m_variant_adptv);
-        stream(ss, "\n\tStopping xtol: ", m_ftol);
-        stream(ss, "\n\tStopping ftol: ", m_ftol);
+        stream(ss, "\n\tStopping xtol: ", m_xtol);
+        stream(ss, "\n\tStopping ftol: ", m_Ftol);
         stream(ss, "\n\tMemory: ", m_memory);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
         stream(ss, "\n\tSeed: ", m_seed);

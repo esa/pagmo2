@@ -13,3 +13,11 @@ Getting Started
   using_algorithm
   using_population
   evolving_a_population
+
+Advanced Examples
+^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 2
+
+  cec2013_comp
