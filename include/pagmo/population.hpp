@@ -63,6 +63,15 @@ namespace pagmo
  * and thus including objectives, equality constraints and inequality
  * constraints if present.
  *
+ * A special mechanism is implemented to track the best individual that has ever
+ * been part of the population. Such an individual is called *champion* and its
+ * decision vector and fitness vector are automatically kept updated. The *champion* is
+ * not necessarily an individual currently in the population. The *champion* is
+ * only defined and accessible via the population interface if the pagmo::problem
+ * currently contained in the pagmo::population is single objective (i.e. the population::get_problem().get_nobj())
+ * returns exactly 1.
+ *
+ *
  */
 class population
 {
@@ -288,8 +297,14 @@ public:
         return worst_idx(tol_vector);
     }
 
-    /// Gets the champion decision vector
-    vector_double get_champion_x() const {
+    /// Champion decision vector
+    /**
+     * @return the champion decision vector
+     *
+     * @throw std::invalid_argument if the current problem is not single objective
+     */
+    vector_double champion_x() const
+    {
         if (m_prob.get_nobj() > 1u) {
             pagmo_throw(std::invalid_argument,
                         "The Champion of a population can only be extracted in single objective problems");
@@ -297,8 +312,14 @@ public:
         return m_champion_x;
     }
 
-    /// Gets the champion fitness
-    vector_double get_champion_f() const {
+    /// Champion fitness
+    /**
+     * @return the champion fitness
+     *
+     * @throw std::invalid_argument if the current problem is not single objective
+     */
+    vector_double champion_f() const
+    {
         if (m_prob.get_nobj() > 1u) {
             pagmo_throw(std::invalid_argument,
                         "The Champion of a population can only be extracted in single objective problems");
@@ -307,6 +328,9 @@ public:
     }
 
     /// Number of individuals in the population
+    /**
+     * @return the Number of individuals in the population
+     */
     size_type size() const
     {
         assert(m_f.size() == m_ID.size());
@@ -333,18 +357,19 @@ public:
     void set_xf(size_type i, const vector_double &x, const vector_double &f)
     {
         if (i >= size()) {
-            pagmo_throw(std::invalid_argument, "Trying to access individual at position: " + std::to_string(i)
-                                                   + ", while population has size: " + std::to_string(size()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to access individual at position: " + std::to_string(i)
+                            + ", while population has size: " + std::to_string(size()));
         }
         if (f.size() != m_prob.get_nf()) {
-            pagmo_throw(std::invalid_argument, "Trying to set a fitness of dimension: " + std::to_string(f.size())
-                                                   + ", while problem get_nf returns: "
-                                                   + std::to_string(m_prob.get_nf()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to set a fitness of dimension: " + std::to_string(f.size())
+                            + ", while problem get_nf returns: " + std::to_string(m_prob.get_nf()));
         }
         if (x.size() != m_prob.get_nx()) {
-            pagmo_throw(std::invalid_argument, "Trying to set a decision vector of dimension: "
-                                                   + std::to_string(x.size()) + ", while problem get_nx returns: "
-                                                   + std::to_string(m_prob.get_nx()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to set a decision vector of dimension: " + std::to_string(x.size())
+                            + ", while problem get_nx returns: " + std::to_string(m_prob.get_nx()));
         }
         assert(m_x[i].size() == x.size());
         assert(m_f[i].size() == f.size());
@@ -422,30 +447,31 @@ public:
             stream(os, "\tDecision vector:\t", p.m_x[i], '\n');
             stream(os, "\tFitness vector:\t\t", p.m_f[i], '\n');
         }
+        stream(os, "\nChampion decision vector: ", p.champion_x(), '\n');
+        stream(os, "Champion fitness: ", p.champion_f(), '\n');
         return os;
     }
     /// Serialization.
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_prob, m_ID, m_x, m_f, m_e, m_seed);
+        ar(m_prob, m_ID, m_x, m_f, m_champion_x, m_champion_f, m_e, m_seed);
     }
 
 private:
-    // Short routine tp update the champion. Does nothing if the problem is MO
-    inline void update_champion(const vector_double& x, const vector_double& f)
+    // Short routine to update the champion. Does nothing if the problem is MO
+    void update_champion(vector_double x, vector_double f)
     {
         assert(f.size() > 0u);
         // If the problem has multiple objectives do nothing
         if (m_prob.get_nobj() == 1u) {
-            // If the champion does not exist create it
+            // If the champion does not exist create it, otherwise update it if worse than the new solution
             if (m_champion_x.size() == 0u) {
-                m_champion_x = x;
-                m_champion_f = f;
-            }
-            if (f[0] < m_champion_f[0]) {
-                m_champion_x = x;
-                m_champion_f = f;
+                m_champion_x = std::move(x);
+                m_champion_f = std::move(f);
+            } else if (f[0] < m_champion_f[0]) {
+                m_champion_x = std::move(x);
+                m_champion_f = std::move(f);
             }
         }
     }

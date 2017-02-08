@@ -115,3 +115,28 @@ some individual decision vector:
           triggering the fitness function evaluation, but it is also possible to inject
           spurious information into the population (i.e. breaking the relation between
           decision vectors and fitness vectors imposed by the problem)
+
+The best individual in a population can be extracted as:
+
+.. doctest::
+
+    >>> # The decision vector
+    >>> pop1.get_x()[pop1.best_idx()]
+    array([ 1.,  2.,  3.,  4.])
+    >>> # The fitness vector
+    >>> pop1.get_f()[pop1.best_idx()]
+    array([ 8.43469444])
+
+The best individual that ever lived in a population, i.e. the *champion* can also be extracted as:
+
+.. doctest::
+
+    >>> # The decision vector
+    >>> pop1.champion_x
+    array([ 1.,  2.,  3.,  4.])
+    >>> # The fitness vector
+    >>> pop1.champion_f
+    array([ 8.43469444])
+
+.. note:: The *champion* is not necessarily identical to the best individual in the current population
+          as it actually keeps the memory of all past individuals that were at some point in the population
