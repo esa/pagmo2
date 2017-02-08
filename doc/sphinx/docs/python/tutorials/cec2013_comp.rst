@@ -44,6 +44,26 @@ imlements as user-defined algorithm the Covariance Matrix Adaptation Evolutionar
 :class:`~pygmo.core.cec2013` problem suite at dimension D=2. Since the competition rules allowed D * 10000
 function evaluation, we choose a population of 50 and 400 generations:
 
+.. image:: ../../images/cec2013_2_jde.png
+    :scale: 50 %
+    :alt: CEC2013-JDE-2D
+    :align: right
+
+.. image:: ../../images/cec2013_2_cmaes.png
+    :scale: 50 %
+    :alt: CEC2013-CMAES-2D
+    :align: right
+
+.. image:: ../../images/cec2013_2_sa.png
+    :scale: 50 %
+    :alt: CEC2013-SIMANNEAL-2D
+    :align: right
+
+.. image:: ../../images/cec2013_2_pso.png
+    :scale: 50 %
+    :alt: CEC2013-PSO-2D
+    :align: right
+
 .. doctest::
 
     >>> # The cmaes pygmo algorithm
@@ -60,26 +80,36 @@ function evaluation, we choose a population of 50 and 400 generations:
     ... 		pop = algo.evolve(pop)
     ... 		error.append(pop.get_f()[pop.best_idx()] + 1400 - 100*i - 100*(i>13))
 
-At the end of the script above, a matplotlib boxplot can be easily produced reporting the results:
+At the end of the script, a matplotlib boxplot can be easily produced reporting the results:
 
 .. doctest::
 
     >>> import matplotlib.pyplot as plt # doctest: +SKIP
     >>> res = plt.boxplot([error[s::28] for s in range(28)]) # doctest: +SKIP
-    >>> plt.text(1, 105, algo.__repr__(), fontsize=8) # doctest: +SKIP
+    >>> plt.text(5, 80, algo.__repr__(), fontsize=8) # doctest: +SKIP
+    >>> fig = plt.gcf() # doctest: +SKIP
+    >>> fig.set_size_inches(10,3, forward=True) # doctest: +SKIP
     >>> plt.ylim([-1,350]) # doctest: +SKIP
     >>> plt.title("CEC2013: dimension = 2") # doctest: +SKIP
     >>> plt.show() # doctest: +SKIP
 
-.. image:: ../../images/cec2013_2_cmaes.png
+The same can be done for different user-defined algorithms. In the various figures on the right
+we have reported only a few available from pygmo's core. At this low dimension it can be seen how
+the particular instances choosen for :class:`~pygmo.core.cmaes` and :class:`~pygmo.core.sade` (jDE) are
+performing particularly well. It has to be noted here that :class:`~pygmo.core.cmaes` results, in general,
+to spend less than the available budget of function evaluations so that a proper comparison at these low
+dimensionality should allow for restarts as to properly make use of the allowed budget.
+
+The script above can be run again for higher problem dimensions, so that, for example, at D = 10 and using a larger
+population size as to allow for the larger available budget of function evaluations, the following plots are obtained for
+the chosen instances of :class:`~pygmo.core.cmaes` and :class:`~pygmo.core.sade`:
+
+.. image:: ../../images/cec2013_10_cmaes.png
     :scale: 100 %
-    :alt: CEC2013-CMAES-2D
+    :alt: CEC2013-CMAES-10D
     :align: center
 
-From the image above we see immediately that the problems from 1 to 20 are significantly easier to solve for
-CMA-ES than the last eight. Note that the number of function evaluation used will, in this easy case, be
-smaller than the allowed one as the algorithm may converge before the maximum number of generation allowed.
-
-We may now try to do the same with a larger number of dimensions, say D=10. As we can now take advantage
-of an increased number of function evaluations (100000), we set up CMA-ES differently (i.e. we use
-a larger population and more maximum iterations):
+.. image:: ../../images/cec2013_10_jde.png
+    :scale: 100 %
+    :alt: CEC2013-JDE-10D
+    :align: center

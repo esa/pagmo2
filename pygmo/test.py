@@ -32,343 +32,441 @@ from __future__ import absolute_import as _ai
 
 import unittest as _ut
 
-class doctests_test_case(_ut.TestCase):
-	"""Test case that will run all the doctests.
 
-	"""
-	def runTest(self):
-		import doctest
-		import pygmo
-		doctest.testmod(pygmo)
+class doctests_test_case(_ut.TestCase):
+    """Test case that will run all the doctests.
+
+    """
+
+    def runTest(self):
+        import doctest
+        import pygmo
+        doctest.testmod(pygmo)
+
 
 class core_test_case(_ut.TestCase):
-	"""Test case for core PyGMO functionality.
+    """Test case for core PyGMO functionality.
 
-	"""
-	def runTest(self):
-		import sys
-		from numpy import random, all
-		from .core import _builtin, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
-		if sys.version_info[0] < 3:
-			import __builtin__ as b
-		else:
-			import builtins as b
-		self.assertEqual(b,_builtin())
-		self.assertEqual(type(int),_type(int))
-		self.assertEqual(str(123),_str(123))
-		self.assertEqual(callable(1),_callable(1))
-		self.assertEqual(callable(lambda _: None),_callable(lambda _: None))
-		l = [1,2,3,["abc"]]
-		self.assert_(id(l) != id(_deepcopy(l)))
-		self.assert_(id(l[3]) != id(_deepcopy(l)[3]))
-		self.assertEqual(tos(l),l)
-		self.assertEqual(tos({'a':l,3:"Hello world"}),{'a':l,3:"Hello world"})
-		a = random.rand(3,2)
-		self.assert_(all(tos(a) == a))
+    """
+
+    def runTest(self):
+        import sys
+        from numpy import random, all
+        from .core import _builtin, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
+        if sys.version_info[0] < 3:
+            import __builtin__ as b
+        else:
+            import builtins as b
+        self.assertEqual(b, _builtin())
+        self.assertEqual(type(int), _type(int))
+        self.assertEqual(str(123), _str(123))
+        self.assertEqual(callable(1), _callable(1))
+        self.assertEqual(callable(lambda _: None), _callable(lambda _: None))
+        l = [1, 2, 3, ["abc"]]
+        self.assert_(id(l) != id(_deepcopy(l)))
+        self.assert_(id(l[3]) != id(_deepcopy(l)[3]))
+        self.assertEqual(tos(l), l)
+        self.assertEqual(tos({'a': l, 3: "Hello world"}), {'a': l, 3: "Hello world"})
+        a = random.rand(3, 2)
+        self.assert_(all(tos(a) == a))
+
 
 class problem_test_case(_ut.TestCase):
-	"""Test case for the :class:`~pygmo.core.problem` class.
+    """Test case for the :class:`~pygmo.core.problem` class.
 
-	"""
-	def runTest(self):
-		self.run_basic_tests()
-		self.run_nobj_tests()
-		self.run_nec_nic_tests()
-	def run_basic_tests(self):
-		# Tests for minimal problem, and mandatory methods.
-		from numpy import all, array
-		from .core import problem
-		# First a few non-problems.
-		self.assertRaises(TypeError,lambda : problem(1))
-		self.assertRaises(TypeError,lambda : problem("hello world"))
-		self.assertRaises(TypeError,lambda : problem([]))
-		self.assertRaises(TypeError,lambda : problem(int))
-		# Some problems missing methods.
-		class np0(object):
-			def fitness(self,a):
-				return [1]
-		self.assertRaises(TypeError,lambda : problem(np0))
-		class np1(object):
-			def get_bounds(self):
-				return ([0],[1])
-		self.assertRaises(TypeError,lambda : problem(np1))
-		# The minimal good citizen.
-		glob = []
-		class p(object):
-			def __init__(self,g):
-				self.g = g
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				self.g.append(1)
-				return [42]
-		p_inst = p(glob)
-		prob = problem(p_inst)
-		# Check a few problem properties.
-		self.assertEqual(prob.get_nobj(),1)
-		self.assert_(isinstance(prob.get_bounds(),tuple))
-		self.assert_(all(prob.get_bounds()[0] == [0,0]))
-		self.assert_(all(prob.get_bounds()[1] == [1,1]))
-		self.assertEqual(prob.get_nx(),2)
-		self.assertEqual(prob.get_nf(),1)
-		self.assertEqual(prob.get_nec(),0)
-		self.assertEqual(prob.get_nic(),0)
-		self.assert_(not prob.has_gradient())
-		self.assert_(not prob.has_hessians())
-		self.assert_(not prob.has_gradient_sparsity())
-		self.assert_(not prob.has_hessians_sparsity())
-		self.assert_(not prob.is_stochastic())
-		self.assert_(prob.is_(p))
-		self.assert_(not prob.is_(int))
-		self.assert_(id(prob.extract(p)) != id(p_inst))
-		self.assert_(prob.extract(int) is None)
-		# Fitness.
-		self.assert_(all(prob.fitness([0,0]) == [42]))
-		# Run fitness a few more times.
-		prob.fitness([0,0])
-		prob.fitness([0,0])
-		# Assert that the global variable was copied into p, not simply referenced.
-		self.assertEqual(len(glob),0)
-		self.assertEqual(len(prob.extract(p).g),3)
-		# Non-finite bounds.
-		class p(object):
-			def get_bounds(self):
-				return ([0,0],[1,float('inf')])
-			def fitness(self,a):
-				return [42]
-		prob = problem(p())
-		self.assert_(all(prob.get_bounds()[0] == [0,0]))
-		self.assert_(all(prob.get_bounds()[1] == [1,float('inf')]))
-		class p(object):
-			def get_bounds(self):
-				return ([0,0],[1,float('nan')])
-			def fitness(self,a):
-				return [42]
-		self.assertRaises(ValueError,lambda: problem(p()))
-		# Wrong bounds.
-		class p(object):
-			def get_bounds(self):
-				return ([0,0],[-1,-1])
-			def fitness(self,a):
-				return [42]
-		self.assertRaises(ValueError,lambda: problem(p()))
-		# Wrong bounds type.
-		class p(object):
-			def get_bounds(self):
-				return [[0,0],[-1,-1]]
-			def fitness(self,a):
-				return [42]
-		self.assertRaises(TypeError,lambda: problem(p()))
-		# Bounds returned as numpy arrays.
-		class p(object):
-			def get_bounds(self):
-				return (array([0.,0.]),array([1,1]))
-			def fitness(self,a):
-				return [42]
-		prob = problem(p())
-		self.assert_(all(prob.get_bounds()[0] == [0,0]))
-		self.assert_(all(prob.get_bounds()[1] == [1,1]))
-		# Invalid fitness size.
-		class p(object):
-			def get_bounds(self):
-				return (array([0.,0.]),array([1,1]))
-			def fitness(self,a):
-				return [42,43]
-		prob = problem(p())
-		self.assertRaises(ValueError,lambda: prob.fitness([1,2]))
-		# Invalid fitness dimensions.
-		class p(object):
-			def get_bounds(self):
-				return (array([0.,0.]),array([1,1]))
-			def fitness(self,a):
-				return array([[42],[43]])
-		prob = problem(p())
-		self.assertRaises(ValueError,lambda: prob.fitness([1,2]))
-		# Invalid fitness type.
-		class p(object):
-			def get_bounds(self):
-				return (array([0.,0.]),array([1,1]))
-			def fitness(self,a):
-				return (42)
-		prob = problem(p())
-		self.assertRaises(TypeError,lambda: prob.fitness([1,2]))
-		# Fitness returned as array.
-		class p(object):
-			def get_bounds(self):
-				return (array([0.,0.]),array([1,1]))
-			def fitness(self,a):
-				return array([42])
-		prob = problem(p())
-		self.assert_(all(prob.fitness([1,2]) == array([42])))
-	def run_nobj_tests(self):
-		from .core import problem
-		class p(object):
-			def get_nobj(self):
-				return 2
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				return [42,43]
-		prob = problem(p())
-		self.assertEqual(prob.get_nobj(),2)
-		# Wrong number of nobj.
-		class p(object):
-			def get_nobj(self):
-				return 0
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				return [42,43]
-		self.assertRaises(ValueError,lambda : problem(p()))
-		class p(object):
-			def get_nobj(self):
-				return -1
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				return [42,43]
-		self.assertRaises(OverflowError,lambda : problem(p()))
-		# Inconsistent nobj.
-		class p(object):
-			def get_nobj(self):
-				return 2
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				return [42]
-		prob = problem(p())
-		self.assertRaises(ValueError,lambda : prob.fitness([1,2]))
-	def run_nec_nic_tests(self):
-		from .core import problem
-		class p(object):
-			def get_nec(self):
-				return 2
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				return [42]
-		prob = problem(p())
-		self.assertEqual(prob.get_nf(),3)
-		class p(object):
-			def get_nec(self):
-				return -1
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				return [42]
-		self.assertRaises(OverflowError,lambda : problem(p()))
-		class p(object):
-			def get_nic(self):
-				return 2
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				return [42]
-		prob = problem(p())
-		self.assertEqual(prob.get_nf(),3)
-		class p(object):
-			def get_nic(self):
-				return -1
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				return [42]
-		self.assertRaises(OverflowError,lambda : problem(p()))
-		class p(object):
-			def get_nec(self):
-				return 2
-			def get_nic(self):
-				return 3
-			def get_bounds(self):
-				return ([0,0],[1,1])
-			def fitness(self,a):
-				return [42]
-		prob = problem(p())
-		self.assertEqual(prob.get_nf(),6)
+    """
+
+    def runTest(self):
+        self.run_basic_tests()
+        self.run_nobj_tests()
+        self.run_nec_nic_tests()
+
+    def run_basic_tests(self):
+        # Tests for minimal problem, and mandatory methods.
+        from numpy import all, array
+        from .core import problem
+        # First a few non-problems.
+        self.assertRaises(TypeError, lambda: problem(1))
+        self.assertRaises(TypeError, lambda: problem("hello world"))
+        self.assertRaises(TypeError, lambda: problem([]))
+        self.assertRaises(TypeError, lambda: problem(int))
+        # Some problems missing methods.
+
+        class np0(object):
+
+            def fitness(self, a):
+                return [1]
+        self.assertRaises(TypeError, lambda: problem(np0))
+
+        class np1(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+        self.assertRaises(TypeError, lambda: problem(np1))
+        # The minimal good citizen.
+        glob = []
+
+        class p(object):
+
+            def __init__(self, g):
+                self.g = g
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                self.g.append(1)
+                return [42]
+        p_inst = p(glob)
+        prob = problem(p_inst)
+        # Check a few problem properties.
+        self.assertEqual(prob.get_nobj(), 1)
+        self.assert_(isinstance(prob.get_bounds(), tuple))
+        self.assert_(all(prob.get_bounds()[0] == [0, 0]))
+        self.assert_(all(prob.get_bounds()[1] == [1, 1]))
+        self.assertEqual(prob.get_nx(), 2)
+        self.assertEqual(prob.get_nf(), 1)
+        self.assertEqual(prob.get_nec(), 0)
+        self.assertEqual(prob.get_nic(), 0)
+        self.assert_(not prob.has_gradient())
+        self.assert_(not prob.has_hessians())
+        self.assert_(not prob.has_gradient_sparsity())
+        self.assert_(not prob.has_hessians_sparsity())
+        self.assert_(not prob.is_stochastic())
+        self.assert_(prob.is_(p))
+        self.assert_(not prob.is_(int))
+        self.assert_(id(prob.extract(p)) != id(p_inst))
+        self.assert_(prob.extract(int) is None)
+        # Fitness.
+        self.assert_(all(prob.fitness([0, 0]) == [42]))
+        # Run fitness a few more times.
+        prob.fitness([0, 0])
+        prob.fitness([0, 0])
+        # Assert that the global variable was copied into p, not simply referenced.
+        self.assertEqual(len(glob), 0)
+        self.assertEqual(len(prob.extract(p).g), 3)
+        # Non-finite bounds.
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, float('inf')])
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assert_(all(prob.get_bounds()[0] == [0, 0]))
+        self.assert_(all(prob.get_bounds()[1] == [1, float('inf')]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, float('nan')])
+
+            def fitness(self, a):
+                return [42]
+        self.assertRaises(ValueError, lambda: problem(p()))
+        # Wrong bounds.
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [-1, -1])
+
+            def fitness(self, a):
+                return [42]
+        self.assertRaises(ValueError, lambda: problem(p()))
+        # Wrong bounds type.
+
+        class p(object):
+
+            def get_bounds(self):
+                return [[0, 0], [-1, -1]]
+
+            def fitness(self, a):
+                return [42]
+        self.assertRaises(TypeError, lambda: problem(p()))
+        # Bounds returned as numpy arrays.
+
+        class p(object):
+
+            def get_bounds(self):
+                return (array([0., 0.]), array([1, 1]))
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assert_(all(prob.get_bounds()[0] == [0, 0]))
+        self.assert_(all(prob.get_bounds()[1] == [1, 1]))
+        # Invalid fitness size.
+
+        class p(object):
+
+            def get_bounds(self):
+                return (array([0., 0.]), array([1, 1]))
+
+            def fitness(self, a):
+                return [42, 43]
+        prob = problem(p())
+        self.assertRaises(ValueError, lambda: prob.fitness([1, 2]))
+        # Invalid fitness dimensions.
+
+        class p(object):
+
+            def get_bounds(self):
+                return (array([0., 0.]), array([1, 1]))
+
+            def fitness(self, a):
+                return array([[42], [43]])
+        prob = problem(p())
+        self.assertRaises(ValueError, lambda: prob.fitness([1, 2]))
+        # Invalid fitness type.
+
+        class p(object):
+
+            def get_bounds(self):
+                return (array([0., 0.]), array([1, 1]))
+
+            def fitness(self, a):
+                return (42)
+        prob = problem(p())
+        self.assertRaises(TypeError, lambda: prob.fitness([1, 2]))
+        # Fitness returned as array.
+
+        class p(object):
+
+            def get_bounds(self):
+                return (array([0., 0.]), array([1, 1]))
+
+            def fitness(self, a):
+                return array([42])
+        prob = problem(p())
+        self.assert_(all(prob.fitness([1, 2]) == array([42])))
+
+    def run_nobj_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+        prob = problem(p())
+        self.assertEqual(prob.get_nobj(), 2)
+        # Wrong number of nobj.
+
+        class p(object):
+
+            def get_nobj(self):
+                return 0
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_nobj(self):
+                return -1
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+        self.assertRaises(OverflowError, lambda: problem(p()))
+        # Inconsistent nobj.
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assertRaises(ValueError, lambda: prob.fitness([1, 2]))
+
+    def run_nec_nic_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_nec(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assertEqual(prob.get_nf(), 3)
+
+        class p(object):
+
+            def get_nec(self):
+                return -1
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        self.assertRaises(OverflowError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_nic(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assertEqual(prob.get_nf(), 3)
+
+        class p(object):
+
+            def get_nic(self):
+                return -1
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        self.assertRaises(OverflowError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_nec(self):
+                return 2
+
+            def get_nic(self):
+                return 3
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assertEqual(prob.get_nf(), 6)
+
 
 class population_test_case(_ut.TestCase):
-	"""Test case for the :class:`~pygmo.core.population` class.
+    """Test case for the :class:`~pygmo.core.population` class.
 
-	"""
-	def runTest(self):
-		self.run_champion_test()
-	def run_champion_test(self):
-		from .core import population, null_problem, problem
-		from numpy import array
-		udp = null_problem()
-		prob = problem(udp)
-		pop = population(prob)
-		self.assertEqual(len(pop.champion_f), 0)
-		self.assertEqual(len(pop.champion_x), 0)
-		pop.push_back([1.])
-		self.assertEqual(pop.champion_f[0], 0.)
-		self.assertEqual(pop.champion_x[0], 1.)
+    """
+
+    def runTest(self):
+        self.run_champion_test()
+
+    def run_champion_test(self):
+        from .core import population, null_problem, problem
+        from numpy import array
+        udp = null_problem()
+        prob = problem(udp)
+        pop = population(prob)
+        self.assertEqual(len(pop.champion_f), 0)
+        self.assertEqual(len(pop.champion_x), 0)
+        pop.push_back([1.])
+        self.assertEqual(pop.champion_f[0], 0.)
+        self.assertEqual(pop.champion_x[0], 1.)
+
 
 class pso_test_case(_ut.TestCase):
-	"""Test case for the UDA pso
+    """Test case for the UDA pso
 
-	"""
-	def runTest(self):
-		from .core import pso
-		uda = pso()
-		uda = pso(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False)
-		uda = pso(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = 32)
-		self.assertEqual(uda.get_seed(),32)
-		log = uda.get_log()
+    """
+
+    def runTest(self):
+        from .core import pso
+        uda = pso()
+        uda = pso(gen=1, omega=0.7298, eta1=2.05, eta2=2.05, max_vel=0.5,
+                  variant=5, neighb_type=2, neighb_param=4, memory=False)
+        uda = pso(gen=1, omega=0.7298, eta1=2.05, eta2=2.05, max_vel=0.5,
+                  variant=5, neighb_type=2, neighb_param=4, memory=False, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        log = uda.get_log()
+
 
 class sa_test_case(_ut.TestCase):
-	"""Test case for the UDA simulated annealing
+    """Test case for the UDA simulated annealing
 
-	"""
-	def runTest(self):
-		from .core import simulated_annealing
-		uda = simulated_annealing()
-		uda = simulated_annealing(Ts = 10., Tf = .1, n_T_adj = 10, n_range_adj = 10, bin_size = 10, start_range = 1.)
-		uda = simulated_annealing(Ts = 10., Tf = .1, n_T_adj = 10, n_range_adj = 10, bin_size = 10, start_range = 1., seed = 32)
-		log = uda.get_log()
-		self.assertEqual(uda.get_seed(),32)
-		seed = uda.get_seed()
+    """
+
+    def runTest(self):
+        from .core import simulated_annealing
+        uda = simulated_annealing()
+        uda = simulated_annealing(Ts=10., Tf=.1, n_T_adj=10,
+                                  n_range_adj=10, bin_size=10, start_range=1.)
+        uda = simulated_annealing(Ts=10., Tf=.1, n_T_adj=10, n_range_adj=10,
+                                  bin_size=10, start_range=1., seed=32)
+        log = uda.get_log()
+        self.assertEqual(uda.get_seed(), 32)
+        seed = uda.get_seed()
+
 
 class compass_search_test_case(_ut.TestCase):
-	"""Test case for the UDA compass search
+    """Test case for the UDA compass search
 
-	"""
-	def runTest(self):
-		from .core import compass_search
-		uda = compass_search()
-		uda = compass_search(max_fevals = 1, start_range = .1, stop_range = .01, reduction_coeff = .5)
-		log = uda.get_log()
+    """
+
+    def runTest(self):
+        from .core import compass_search
+        uda = compass_search()
+        uda = compass_search(max_fevals=1, start_range=.1, stop_range=.01, reduction_coeff=.5)
+        log = uda.get_log()
+
 
 class cmaes_test_case(_ut.TestCase):
-	"""Test case for the UDA cmaes
+    """Test case for the UDA cmaes
 
-	"""
-	def runTest(self):
-		from .core import cmaes
-		uda = cmaes()
-		uda = cmaes(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False)
-		uda = cmaes(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, seed = 32)
-		self.assertEqual(uda.get_seed(),32)
-		seed = uda.get_seed()
+    """
+
+    def runTest(self):
+        from .core import cmaes
+        uda = cmaes()
+        uda = cmaes(gen=1, cc=-1, cs=-1, c1=-1, cmu=-1,
+                    sigma0=0.5, ftol=1e-6, xtol=1e-6, memory=False)
+        uda = cmaes(gen=1, cc=-1, cs=-1, c1=-1, cmu=-1, sigma0=0.5,
+                    ftol=1e-6, xtol=1e-6, memory=False, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        seed = uda.get_seed()
 
 
 def run_test_suite():
-	"""Run the full test suite.
+    """Run the full test suite.
 
-	This function will raise an exception if at least one test fails.
+    This function will raise an exception if at least one test fails.
 
-	"""
-	retval = 0
-	suite = _ut.TestLoader().loadTestsFromTestCase(doctests_test_case)
-	suite.addTest(problem_test_case())
-	suite.addTest(core_test_case())
-	suite.addTest(population_test_case())
-	suite.addTest(pso_test_case())
-	suite.addTest(sa_test_case())
-	suite.addTest(cmaes_test_case())
-	suite.addTest(compass_search_test_case())
-	test_result = _ut.TextTestRunner(verbosity=2).run(suite)
-	if len(test_result.failures) > 0:
-		retval = 1
-	if retval != 0:
-		raise RuntimeError('One or more tests failed.')
+    """
+    retval = 0
+    suite = _ut.TestLoader().loadTestsFromTestCase(doctests_test_case)
+    suite.addTest(problem_test_case())
+    suite.addTest(core_test_case())
+    suite.addTest(population_test_case())
+    suite.addTest(pso_test_case())
+    suite.addTest(sa_test_case())
+    suite.addTest(cmaes_test_case())
+    suite.addTest(compass_search_test_case())
+    test_result = _ut.TextTestRunner(verbosity=2).run(suite)
+    if len(test_result.failures) > 0:
+        retval = 1
+    if retval != 0:
+        raise RuntimeError('One or more tests failed.')

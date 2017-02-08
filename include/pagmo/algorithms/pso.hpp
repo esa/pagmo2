@@ -581,9 +581,9 @@ public:
     {
         std::ostringstream ss;
         stream(ss, "\tGenerations: ", m_max_gen);
-        stream(ss, "\n\tomega: ", m_omega);
-        stream(ss, "\n\teta1: ", m_eta1);
-        stream(ss, "\n\teta2: ", m_eta2);
+        stream(ss, "\n\tOmega: ", m_omega);
+        stream(ss, "\n\tEta1: ", m_eta1);
+        stream(ss, "\n\tEta2: ", m_eta2);
         stream(ss, "\n\tMaximum velocity: ", m_max_vel);
         stream(ss, "\n\tVariant: ", m_variant);
         stream(ss, "\n\tTopology: ", m_neighb_type);
