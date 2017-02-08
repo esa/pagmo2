@@ -286,6 +286,24 @@ class problem_test_case(_ut.TestCase):
 		prob = problem(p())
 		self.assertEqual(prob.get_nf(),6)
 
+class population_test_case(_ut.TestCase):
+	"""Test case for the :class:`~pygmo.core.population` class.
+
+	"""
+	def runTest(self):
+		self.run_champion_test()
+	def run_champion_test(self):
+		from .core import population, null_problem, problem
+		from numpy import array
+		udp = null_problem()
+		prob = problem(udp)
+		pop = population(prob)
+		self.assertEqual(len(pop.champion_f), 0)
+		self.assertEqual(len(pop.champion_x), 0)
+		pop.push_back([1.])
+		self.assertEqual(pop.champion_f[0], 0.)
+		self.assertEqual(pop.champion_x[0], 1.)
+
 class pso_test_case(_ut.TestCase):
 	"""Test case for the UDA pso
 
@@ -344,6 +362,7 @@ def run_test_suite():
 	suite = _ut.TestLoader().loadTestsFromTestCase(doctests_test_case)
 	suite.addTest(problem_test_case())
 	suite.addTest(core_test_case())
+	suite.addTest(population_test_case())
 	suite.addTest(pso_test_case())
 	suite.addTest(sa_test_case())
 	suite.addTest(cmaes_test_case())

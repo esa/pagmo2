@@ -245,6 +245,17 @@ static inline void population_prob_init(bp::class_<population> &pop_class)
         .def(bp::init<const Prob &, population::size_type, unsigned>());
 }
 
+// champion_x()
+static inline bp::object pop_champion_x_wrapper(population &pop)
+{
+    return pygmo::v_to_a(pop.champion_x());
+}
+// champion_f()
+static inline bp::object pop_champion_f_wrapper(population &pop)
+{
+    return pygmo::v_to_a(pop.champion_f());
+}
+
 // push_back().
 static inline void pop_push_back_wrapper(population &pop, const bp::object &x)
 {
@@ -474,6 +485,8 @@ BOOST_PYTHON_MODULE(core)
         .def("push_back", &pop_push_back_wrapper, pygmo::population_push_back_docstring().c_str())
         .def("decision_vector", &pop_random_decision_vector_wrapper,
              pygmo::population_decision_vector_docstring().c_str())
+        .add_property("champion_x", &pop_champion_x_wrapper)
+        .add_property("champion_f", &pop_champion_f_wrapper)
         .def("best_idx", &pop_best_idx_wrapper_0)
         .def("best_idx", &pop_best_idx_wrapper_1)
         .def("best_idx", &pop_best_idx_wrapper_2, pygmo::population_best_idx_docstring().c_str())
