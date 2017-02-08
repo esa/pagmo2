@@ -91,6 +91,7 @@ class problem_test_case(_ut.TestCase):
         self.run_has_gradient_sparsity_tests()
         self.run_gradient_sparsity_tests()
         self.run_has_hessians_tests()
+        self.run_hessians_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -952,24 +953,124 @@ class problem_test_case(_ut.TestCase):
 
         self.assert_(problem(p()).has_hessians())
 
+    def run_hessians_tests(self):
+        from numpy import array
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        self.assertRaises(NotImplementedError,
+                          lambda: problem(p()).hessians([1, 2]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians(self, a):
+                return [0]
+
+        # Rasies AttributeError because we are trying to iterate over
+        # the element of the returned hessians, which, in this case, is
+        # an int.
+        self.assertRaises(
+            AttributeError, lambda: problem(p()).hessians([1, 2]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians(self, a):
+                return [(1, 2, 3)]
+
+        self.assert_(all(array([1., 2., 3.]) ==
+                         problem(p()).hessians([1, 2])[0]))
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians(self, a):
+                return ([1, 2, 3],)
+
+        self.assert_(all(array([1., 2., 3.]) ==
+                         problem(p()).hessians([1, 2])[0]))
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians(self, a):
+                return (array([1, 2, 3]),)
+
+        self.assert_(all(array([1., 2., 3.]) ==
+                         problem(p()).hessians([1, 2])[0]))
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, -42]
+
+            def get_nobj(self):
+                return 2
+
+            def hessians(self, a):
+                return (array([1, 2, 3]), (4, 5, 6))
+
+        self.assert_(all(array([1., 2., 3.]) ==
+                         problem(p()).hessians([1, 2])[0]))
+        self.assert_(all(array([4., 5., 6.]) ==
+                         problem(p()).hessians([1, 2])[1]))
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]))
+
 
 class population_test_case(_ut.TestCase):
-	"""Test case for the :class:`~pygmo.core.population` class.
+    """Test case for the :class:`~pygmo.core.population` class.
 
-	"""
-	def runTest(self):
-		self.run_champion_test()
-	def run_champion_test(self):
-		from .core import population, null_problem, problem
-		from numpy import array
-		udp = null_problem()
-		prob = problem(udp)
-		pop = population(prob)
-		self.assertEqual(len(pop.champion_f), 0)
-		self.assertEqual(len(pop.champion_x), 0)
-		pop.push_back([1.])
-		self.assertEqual(pop.champion_f[0], 0.)
-		self.assertEqual(pop.champion_x[0], 1.)
+    """
+
+    def runTest(self):
+        self.run_champion_test()
+
+    def run_champion_test(self):
+        from .core import population, null_problem, problem
+        from numpy import array
+        udp = null_problem()
+        prob = problem(udp)
+        pop = population(prob)
+        self.assertEqual(len(pop.champion_f), 0)
+        self.assertEqual(len(pop.champion_x), 0)
+        pop.push_back([1.])
+        self.assertEqual(pop.champion_f[0], 0.)
+        self.assertEqual(pop.champion_x[0], 1.)
+
 
 class pso_test_case(_ut.TestCase):
     """Test case for the UDA pso
