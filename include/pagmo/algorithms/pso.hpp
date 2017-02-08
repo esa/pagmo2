@@ -146,26 +146,30 @@ public:
                     + std::to_string(m_variant) + " was detected");
         }
         if (m_eta1 < 0. || m_eta2 < 0. || m_eta1 > 4. || m_eta2 > 4.) {
-            pagmo_throw(std::invalid_argument, "The eta parameters must be in the [0,4] range, while eta1 = "
-                                                   + std::to_string(m_eta1) + ", eta2 = " + std::to_string(m_eta2)
-                                                   + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The eta parameters must be in the [0,4] range, while eta1 = " + std::to_string(m_eta1)
+                            + ", eta2 = " + std::to_string(m_eta2) + " was detected");
         }
         if (m_max_vel <= 0. || m_max_vel > 1.) {
-            pagmo_throw(std::invalid_argument, "The maximum particle velocity (as a fraction of the bounds) should be "
-                                               "in the (0,1] range, while a value of "
-                                                   + std::to_string(m_max_vel) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The maximum particle velocity (as a fraction of the bounds) should be "
+                        "in the (0,1] range, while a value of "
+                            + std::to_string(m_max_vel) + " was detected");
         }
         if (m_variant < 1u || m_variant > 6u) {
-            pagmo_throw(std::invalid_argument, "The PSO variant must be in [1,6], while a value of "
-                                                   + std::to_string(m_variant) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The PSO variant must be in [1,6], while a value of " + std::to_string(m_variant)
+                            + " was detected");
         }
         if (m_neighb_type < 1u || m_neighb_type > 4u) {
-            pagmo_throw(std::invalid_argument, "The swarm topology variant must be in [1,4], while a value of "
-                                                   + std::to_string(m_neighb_type) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The swarm topology variant must be in [1,4], while a value of " + std::to_string(m_neighb_type)
+                            + " was detected");
         }
         if (m_neighb_param < 1u) {
-            pagmo_throw(std::invalid_argument, "The neighborhood parameter must be in (0, inf), while a value of "
-                                                   + std::to_string(m_neighb_param) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The neighborhood parameter must be in (0, inf), while a value of "
+                            + std::to_string(m_neighb_param) + " was detected");
         }
     }
 
@@ -190,20 +194,23 @@ public:
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this particular algorithm.
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob.get_nf() != 1u) {
-            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
         if (pop.size() < 1u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 1 individual in the population, "
-                                                   + std::to_string(pop.size()) + " detected");
+            pagmo_throw(std::invalid_argument,
+                        prob.get_name() + " needs at least 1 individual in the population, "
+                            + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
         // No throws, all valid: we clear the logs
@@ -288,7 +295,7 @@ public:
         /* --- Main PSO loop ---
          */
         // For each generation
-        for (decltype(m_max_gen) gen = 0u; gen < m_max_gen; ++gen) {
+        for (decltype(m_max_gen) gen = 1u; gen <= m_max_gen; ++gen) {
             best_fit_improved = false;
             // For each particle in the swarm
             for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
@@ -493,10 +500,10 @@ public:
                     m_log.push_back(log_line_type(gen, feval_count, best, mean_velocity, lb_avg, avg_dist));
                 }
             }
-            if (m_verbosity) {
-                std::cout << "Exit condition -- generations = " << m_max_gen << std::endl;
-            }
         } // end of main PSO loop
+        if (m_verbosity) {
+            std::cout << "Exit condition -- generations = " << m_max_gen << std::endl;
+        }
 
         // copy particles' positions & velocities back to the main population
         for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
@@ -642,8 +649,9 @@ private:
             case 1: // { gbest }
                 // ERROR: execution should not reach this point, as the global best position is not tracked using the
                 // neighb vector
-                pagmo_throw(std::invalid_argument,
-                            "particle__get_best_neighbor() invoked while using a gbest swarm topology");
+                pagmo_throw(                                                                     // LCOV_EXCL_LINE
+                    std::invalid_argument,                                                       // LCOV_EXCL_LINE
+                    "particle__get_best_neighbor() invoked while using a gbest swarm topology"); // LCOV_EXCL_LINE
                 break;
             case 2: // { lbest }
             case 3: // { von }

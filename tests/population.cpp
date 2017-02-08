@@ -120,13 +120,13 @@ BOOST_AUTO_TEST_CASE(population_push_back_test)
     BOOST_CHECK_THROW(pop2.push_back({1.}), std::invalid_argument);
 }
 
-BOOST_AUTO_TEST_CASE(population_decision_vector_test)
+BOOST_AUTO_TEST_CASE(population_random_decision_vector_test)
 {
     // Create an empty population
     population pop{problem{null_problem{}}};
     auto bounds = pop.get_problem().get_bounds();
     // Generate a random decision_vector
-    auto x = pop.decision_vector();
+    auto x = pop.random_decision_vector();
     // Check that the decision_vector is indeed within bounds
     for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
         BOOST_CHECK(x[i] < bounds.second[i]);

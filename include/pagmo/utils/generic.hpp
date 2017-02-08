@@ -132,8 +132,8 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
  *
  * @returns a vector_double containing a random decision vector
  */
-vector_double decision_vector(const std::pair<vector_double, vector_double> &bounds,
-                              detail::random_engine_type &r_engine)
+vector_double random_decision_vector(const std::pair<vector_double, vector_double> &bounds,
+                                     detail::random_engine_type &r_engine)
 {
     // This will check for consistent vector lengths, non-null sizes, lb <= ub and no NaNs.
     detail::check_problem_bounds(bounds);
@@ -172,9 +172,10 @@ vector_double decision_vector(const std::pair<vector_double, vector_double> &bou
  *
  * @returns a vector_double containing a random decision vector
  */
-vector_double decision_vector(const vector_double &lb, const vector_double &ub, detail::random_engine_type &r_engine)
+vector_double random_decision_vector(const vector_double &lb, const vector_double &ub,
+                                     detail::random_engine_type &r_engine)
 {
-    return decision_vector({lb, ub}, r_engine);
+    return random_decision_vector({lb, ub}, r_engine);
 }
 
 /// Safely cast between unsigned types
