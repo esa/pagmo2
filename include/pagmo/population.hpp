@@ -357,19 +357,18 @@ public:
     void set_xf(size_type i, const vector_double &x, const vector_double &f)
     {
         if (i >= size()) {
-            pagmo_throw(std::invalid_argument,
-                        "Trying to access individual at position: " + std::to_string(i)
-                            + ", while population has size: " + std::to_string(size()));
+            pagmo_throw(std::invalid_argument, "Trying to access individual at position: " + std::to_string(i)
+                                                   + ", while population has size: " + std::to_string(size()));
         }
         if (f.size() != m_prob.get_nf()) {
-            pagmo_throw(std::invalid_argument,
-                        "Trying to set a fitness of dimension: " + std::to_string(f.size())
-                            + ", while problem get_nf returns: " + std::to_string(m_prob.get_nf()));
+            pagmo_throw(std::invalid_argument, "Trying to set a fitness of dimension: " + std::to_string(f.size())
+                                                   + ", while problem get_nf returns: "
+                                                   + std::to_string(m_prob.get_nf()));
         }
         if (x.size() != m_prob.get_nx()) {
-            pagmo_throw(std::invalid_argument,
-                        "Trying to set a decision vector of dimension: " + std::to_string(x.size())
-                            + ", while problem get_nx returns: " + std::to_string(m_prob.get_nx()));
+            pagmo_throw(std::invalid_argument, "Trying to set a decision vector of dimension: "
+                                                   + std::to_string(x.size()) + ", while problem get_nx returns: "
+                                                   + std::to_string(m_prob.get_nx()));
         }
         assert(m_x[i].size() == x.size());
         assert(m_f[i].size() == f.size());
