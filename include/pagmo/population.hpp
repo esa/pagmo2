@@ -88,7 +88,7 @@ public:
      * Constructs an empty population with a pagmo::null_problem.
      * The random seed is initialised to zero.
      */
-    population() : m_prob(null_problem{}), m_ID(), m_x(), m_f(), m_champion_x(), m_champion_f(), m_e(0u), m_seed(0u)
+    population() : m_prob(null_problem{}), m_e(0u), m_seed(0u)
     {
     }
 
@@ -108,7 +108,7 @@ public:
      */
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit population(T &&x, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next())
-        : m_prob(std::forward<T>(x)), m_ID(), m_x(), m_f(), m_champion_x(), m_champion_f(), m_e(seed), m_seed(seed)
+        : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
     {
         for (size_type i = 0u; i < pop_size; ++i) {
             push_back(random_decision_vector());
@@ -178,7 +178,7 @@ public:
         m_ID.reserve(m_ID.size() + 1u);
         m_x.reserve(m_x.size() + 1u);
         m_f.reserve(m_f.size() + 1u);
-        // The rest is noexcept.
+        // update champion either throws before modfying anything, or completes successfully. The rest is noexcept.
         update_champion(x, f);
         m_ID.push_back(new_id);
         m_x.push_back(std::move(x_copy));
