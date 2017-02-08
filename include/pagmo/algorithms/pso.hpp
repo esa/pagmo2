@@ -389,7 +389,7 @@ public:
                         for (decltype(neighb[p].size()) n = 0u; n < neighb[p].size(); ++n) {
                             sum_forces += drng(m_e) * acceleration_coefficient * (lbX[neighb[p][n]][d] - X[p][d]);
                         }
-                        m_V[p][d] = m_omega * (m_V[p][d] + sum_forces / neighb[p].size());
+                        m_V[p][d] = m_omega * (m_V[p][d] + sum_forces / static_cast<double>(neighb[p].size()));
                     }
                 }
 
@@ -454,7 +454,8 @@ public:
                     for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
                         local_fits[i] = lbfit[i][0];
                     }
-                    auto lb_avg = std::accumulate(local_fits.begin(), local_fits.end(), 0.) / local_fits.size();
+                    auto lb_avg = std::accumulate(local_fits.begin(), local_fits.end(), 0.)
+                                  / static_cast<double>(local_fits.size());
                     // We compute the best fitness encounterd so far across generations and across the swarm
                     // TODO: distance returns a signed type that can be overflown by the local_fits::size_type
                     auto idx_best = std::distance(std::begin(local_fits),
@@ -468,7 +469,7 @@ public:
                                 mean_velocity += std::abs(m_V[i][j] / (ub[j] - lb[j]));
                             } // else 0
                         }
-                        mean_velocity /= m_V[i].size();
+                        mean_velocity /= static_cast<double>(m_V[i].size());
                     }
                     // We compute the average distance across particles (NOTE: N^2 complexity)
                     auto avg_dist = 0.;
@@ -485,7 +486,7 @@ public:
                             avg_dist += std::sqrt(acc);
                         }
                     }
-                    avg_dist /= ((X.size() - 1u) * X.size()) / 2.;
+                    avg_dist /= ((static_cast<double>(X.size()) - 1u) * static_cast<double>(X.size())) / 2.;
                     // We start printing
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {

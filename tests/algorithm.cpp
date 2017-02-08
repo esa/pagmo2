@@ -377,3 +377,17 @@ BOOST_AUTO_TEST_CASE(serialization_test)
         iarchive(algo);
     }
 }
+
+BOOST_AUTO_TEST_CASE(extract_test)
+{
+    algorithm p{null_algorithm{}};
+    BOOST_CHECK(p.is<null_algorithm>());
+    BOOST_CHECK(!p.is<const null_algorithm>());
+    BOOST_CHECK((std::is_same<null_algorithm *, decltype(p.extract<null_algorithm>())>::value));
+    BOOST_CHECK((std::is_same<null_algorithm const *,
+                              decltype(static_cast<const algorithm &>(p).extract<null_algorithm>())>::value));
+    BOOST_CHECK(p.extract<null_algorithm>() != nullptr);
+    BOOST_CHECK(static_cast<const algorithm &>(p).extract<null_algorithm>() != nullptr);
+    BOOST_CHECK(p.extract<const null_algorithm>() == nullptr);
+    BOOST_CHECK(static_cast<const algorithm &>(p).extract<const null_algorithm>() == nullptr);
+}

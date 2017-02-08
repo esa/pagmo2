@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/class.hpp>
 #include <boost/python/init.hpp>
 #include <boost/python/list.hpp>
+#include <boost/python/return_internal_reference.hpp>
 #include <boost/python/scope.hpp>
 #include <cassert>
 
@@ -86,7 +87,8 @@ inline bp::class_<Algo> expose_algorithm(const char *name, const char *descr)
     // Expose the algorithm constructor from Algo.
     algorithm_algo_init<Algo>();
     // Expose extract.
-    algorithm_class.def("_cpp_extract", &generic_cpp_extract<pagmo::algorithm, Algo>);
+    algorithm_class.def("_cpp_extract", &generic_cpp_extract<pagmo::algorithm, Algo>,
+                        bp::return_internal_reference<>());
 
     // Add the algorithm to the algorithms submodule.
     bp::scope().attr("algorithms").attr(name) = c;
