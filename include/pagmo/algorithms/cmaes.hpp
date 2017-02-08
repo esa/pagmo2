@@ -387,7 +387,8 @@ public:
             // 6 - Update evolution paths
             ps = (1. - cs) * ps + std::sqrt(cs * (2. - cs) * mueff) * invsqrtC * (mean - meanold) / sigma;
             double hsig = 0.;
-            hsig = (ps.squaredNorm() / N / (1. - std::pow((1. - cs), (2. * counteval / static_cast<double>(lam)))))
+            hsig = (ps.squaredNorm() / N
+                    / (1. - std::pow((1. - cs), (2. * static_cast<double>(counteval) / static_cast<double>(lam)))))
                    < (2. + 4. / (N + 1.));
             pc = (1. - cc) * pc + hsig * std::sqrt(cc * (2. - cc) * mueff) * (mean - meanold) / sigma;
             // 7 - Adapt Covariance Matrix
