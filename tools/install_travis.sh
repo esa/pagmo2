@@ -33,7 +33,7 @@ elif [[ "${PAGMO_BUILD}" == "ReleaseClang38" ]]; then
     make -j2 VERBOSE=1;
     ctest -V;
 elif [[ "${PAGMO_BUILD}" == "OSXDebug" ]]; then
-    CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes ../;
+    CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
     make -j2 VERBOSE=1;
     ctest -V;
 elif [[ "${PAGMO_BUILD}" == "OSXRelease" ]]; then
