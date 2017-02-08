@@ -69,6 +69,19 @@ inline pagmo::translate *translate_init(const Prob &p, const bp::object &o)
     return ::new pagmo::translate(p, to_vd(o));
 }
 
+// NOTE: we specialise this as we need to avoid that we end up using a pagmo::problem
+// wrapped in a bp::object as a UDP. This is needed in order to make consistent the behaviour
+// between C++ (where translate cannot be cted from pagmo::problem) and Python.
+template <>
+inline pagmo::translate *translate_init<bp::object>(const bp::object &p, const bp::object &o)
+{
+    if (type(p) == *problem_ptr) {
+        pygmo_throw(PyExc_TypeError, "a pygmo.problem is not a user-defined problem, and it cannot be used "
+                                     "as a construction argument for pygmo.translate");
+    }
+    return ::new pagmo::translate(p, to_vd(o));
+}
+
 // Make Python init from ctor above.
 template <typename Prob>
 inline auto make_translate_init()
@@ -102,6 +115,7 @@ inline auto make_decompose_init()
 }
 
 // Expose a problem ctor from a user-defined problem.
+// NOTE: abstracted in a separate wrapper because it is re-used in core.cpp.
 template <typename Prob>
 inline void problem_prob_init()
 {
@@ -128,19 +142,19 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
     // Expose the problem constructor from Prob.
     problem_prob_init<Prob>();
     // Expose extract.
-    problem_class.def("_cpp_extract", &generic_cpp_extract<pagmo::problem, Prob>);
+    problem_class.def("_cpp_extract", &generic_cpp_extract<pagmo::problem, Prob>, bp::return_internal_reference<>());
 
     // Expose translate's constructor from Prob and translation vector.
     tp_class
         .def("__init__", make_translate_init<Prob>())
         // Extract.
-        .def("_cpp_extract", &generic_cpp_extract<pagmo::translate, Prob>);
+        .def("_cpp_extract", &generic_cpp_extract<pagmo::translate, Prob>, bp::return_internal_reference<>());
 
     // Expose decompose's constructor from Prob.
     dp_class
         .def("__init__", make_decompose_init<Prob>())
         // Extract.
-        .def("_cpp_extract", &generic_cpp_extract<pagmo::decompose, Prob>);
+        .def("_cpp_extract", &generic_cpp_extract<pagmo::decompose, Prob>, bp::return_internal_reference<>());
 
     // Add the problem to the problems submodule.
     bp::scope().attr("problems").attr(name) = c;
