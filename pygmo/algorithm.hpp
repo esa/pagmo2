@@ -64,7 +64,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
             pygmo_throw(PyExc_TypeError, "cannot construct an algorithm from a type: please use an instance "
                                          "as construction argument");
         }
-        check_callable_attribute(m_value, "evolve", "algorithm");
+        check_mandatory_method(m_value, "evolve", "algorithm");
     }
     // Just need the def ctor, delete everything else.
     algo_inner() = default;
@@ -91,7 +91,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     // Optional methods.
     virtual void set_seed(unsigned n) override final
     {
-        auto a = try_attr(m_value, "set_seed");
+        auto a = callable_attribute(m_value, "set_seed");
         if (a) {
             a(n);
         } else {
@@ -100,7 +100,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     }
     virtual bool has_set_seed() const override final
     {
-        return getter_wrapper<bool>(m_value, "has_set_seed", try_attr(m_value, "set_seed"));
+        return getter_wrapper<bool>(m_value, "has_set_seed", callable_attribute(m_value, "set_seed"));
     }
     virtual std::string get_name() const override final
     {
@@ -112,7 +112,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     }
     virtual void set_verbosity(unsigned n) override final
     {
-        auto a = try_attr(m_value, "set_verbosity");
+        auto a = callable_attribute(m_value, "set_verbosity");
         if (a) {
             a(n);
         } else {
@@ -121,7 +121,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     }
     virtual bool has_set_verbosity() const override final
     {
-        return getter_wrapper<bool>(m_value, "has_set_verbosity", try_attr(m_value, "set_verbosity"));
+        return getter_wrapper<bool>(m_value, "has_set_verbosity", callable_attribute(m_value, "set_verbosity"));
     }
     bp::object m_value;
 };

@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <limits>
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -983,4 +984,21 @@ BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
+}
+
+BOOST_AUTO_TEST_CASE(extract_test)
+{
+    problem p{null_problem{}};
+    BOOST_CHECK(p.is<null_problem>());
+    BOOST_CHECK(!p.is<const null_problem>());
+    BOOST_CHECK(!p.is<base_p>());
+    BOOST_CHECK((std::is_same<null_problem *, decltype(p.extract<null_problem>())>::value));
+    BOOST_CHECK(
+        (std::is_same<null_problem const *, decltype(static_cast<const problem &>(p).extract<null_problem>())>::value));
+    BOOST_CHECK(p.extract<null_problem>() != nullptr);
+    BOOST_CHECK(static_cast<const problem &>(p).extract<null_problem>() != nullptr);
+    BOOST_CHECK(p.extract<const null_problem>() == nullptr);
+    BOOST_CHECK(static_cast<const problem &>(p).extract<const null_problem>() == nullptr);
+    BOOST_CHECK(p.extract<base_p>() == nullptr);
+    BOOST_CHECK(static_cast<const problem &>(p).extract<base_p>() == nullptr);
 }

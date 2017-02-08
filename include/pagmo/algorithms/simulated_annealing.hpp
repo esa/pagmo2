@@ -243,7 +243,8 @@ public:
                                           "Current:", std::setw(15), "Mean range:", std::setw(15), "Temperature:",
                                           '\n');
                                 }
-                                auto avg_range = std::accumulate(step.begin(), step.end(), 0.) / step.size();
+                                auto avg_range
+                                    = std::accumulate(step.begin(), step.end(), 0.) / static_cast<double>(step.size());
                                 // 2 - Print
                                 print(std::setw(7), fevals_count, std::setw(15), best_f[0], std::setw(15), fOLD[0],
                                       std::setw(15), avg_range, std::setw(15), currentT);
