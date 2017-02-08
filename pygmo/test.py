@@ -953,6 +953,24 @@ class problem_test_case(_ut.TestCase):
         self.assert_(problem(p()).has_gradient())
 
 
+class population_test_case(_ut.TestCase):
+	"""Test case for the :class:`~pygmo.core.population` class.
+
+	"""
+	def runTest(self):
+		self.run_champion_test()
+	def run_champion_test(self):
+		from .core import population, null_problem, problem
+		from numpy import array
+		udp = null_problem()
+		prob = problem(udp)
+		pop = population(prob)
+		self.assertEqual(len(pop.champion_f), 0)
+		self.assertEqual(len(pop.champion_x), 0)
+		pop.push_back([1.])
+		self.assertEqual(pop.champion_f[0], 0.)
+		self.assertEqual(pop.champion_x[0], 1.)
+
 class pso_test_case(_ut.TestCase):
     """Test case for the UDA pso
 
