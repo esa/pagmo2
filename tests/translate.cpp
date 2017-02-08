@@ -64,9 +64,11 @@ BOOST_AUTO_TEST_CASE(translate_functional_test)
 {
     // Then we check that the hock_schittkowsky_71 problem is actually translated
     {
-        problem p0{hock_schittkowsky_71{}};
-        problem p1{translate{p0, {0.1, -0.2, 0.3, 0.4}}};
-        problem p2{translate{p1, {-0.1, 0.2, -0.3, -0.4}}};
+        hock_schittkowsky_71 hs;
+        problem p0{hs};
+        translate t1{hs, {0.1, -0.2, 0.3, 0.4}};
+        problem p1{t1};
+        problem p2{translate{t1, {-0.1, 0.2, -0.3, -0.4}}};
         vector_double x{3., 3., 3., 3.};
         // Fitness gradients and hessians are the same if the translation  is zero
         BOOST_CHECK(p0.fitness(x) == p2.fitness(x));
@@ -124,4 +126,11 @@ BOOST_AUTO_TEST_CASE(translate_stochastic_test)
     hock_schittkowsky_71 p0{};
     problem p{translate{p0, {0.1, -0.2, 0.3, 0.4}}};
     BOOST_CHECK(!p.is_stochastic());
+}
+
+BOOST_AUTO_TEST_CASE(translate_extract_test)
+{
+    hock_schittkowsky_71 p0{};
+    translate t{p0, {0.1, -0.2, 0.3, 0.4}};
+    BOOST_CHECK(t.extract<hock_schittkowsky_71>() != nullptr);
 }

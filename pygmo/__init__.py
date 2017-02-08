@@ -35,23 +35,22 @@ from __future__ import absolute_import as _ai
 from .core import *
 from .plotting import *
 
-# And we explicitly import the submudules
+# And we explicitly import the submodules
 from . import core
 from . import plotting
 
 
-# Problem extract functionality.
 def _problem_extract(self, t):
     """Extract user-defined problem instance.
 
-    If *t* is the same type of the user-defined problem used to construct this problem, then a deep copy of
-    the user-defined problem will be returned. Otherwise, ``None`` will be returned.
+    If *t* is the same type of the user-defined problem used to construct this problem, then a reference to
+    the internal user-defined problem will be returned. Otherwise, ``None`` will be returned.
 
     Args:
-        t (type): the type of the user-defined problem to extract
+        t (``type``): the type of the user-defined problem to extract
 
     Returns:
-        a deep-copy of the internal user-defined problem if it is of type *t*, or ``None`` otherwise
+        a reference to the internal user-defined problem if it is of type *t*, or ``None`` otherwise
 
     Raises:
         TypeError: if *t* is not a type
@@ -60,14 +59,8 @@ def _problem_extract(self, t):
     if not isinstance(t, type):
         raise TypeError("the 't' parameter must be a type")
     if hasattr(t, "_pygmo_cpp_problem"):
-        try:
-            return self._cpp_extract(t())
-        except TypeError:
-            return None
-    try:
-        return self._py_extract(t)
-    except TypeError:
-        return None
+        return self._cpp_extract(t())
+    return self._py_extract(t)
 
 
 def _problem_is(self, t):
@@ -87,8 +80,6 @@ def _problem_is(self, t):
 
     """
     return not self.extract(t) is None
-
-# Algorithm extract functionality.
 
 
 def _algorithm_extract(self, t):
@@ -141,13 +132,12 @@ def _algorithm_is(self, t):
 # Override of the population constructor.
 __original_population_init = population.__init__
 
-# NOTE: the idea of having the pop init here instead of exposed from C++ is that like this we don't need
-# to expose a new pop ctor each time we expose a new problem: in this method we will use the problem ctor
-# from a C++ problem, and on the C++ exposition side we need only to
-# expose the ctor of pop from pagmo::problem.
-
 
 def _population_init(self, prob=None, size=0, seed=None):
+    # NOTE: the idea of having the pop init here instead of exposed from C++ is that like this we don't need
+    # to expose a new pop ctor each time we expose a new problem: in this method we will use the problem ctor
+    # from a C++ problem, and on the C++ exposition side we need only to
+    # expose the ctor of pop from pagmo::problem.
     """
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`

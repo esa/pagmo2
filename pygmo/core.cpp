@@ -53,6 +53,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
+#include <boost/python/return_internal_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 #include <boost/python/scope.hpp>
 #include <boost/python/self.hpp>
@@ -378,16 +379,6 @@ static inline bp::list de1220_allowed_variants()
     return retval;
 }
 
-// moead needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
-inline bp::list expose_moead_log(const moead &a)
-{
-    bp::list retval;
-    for (const auto &t : a.get_log()) {
-        retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), pygmo::v_to_a(std::get<3>(t))));
-    }
-    return retval;
-}
-
 // Wrappers for utils/multi_objective stuff
 // fast_non_dominated_sorting
 static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
@@ -408,6 +399,21 @@ static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
     return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)), pygmo::v_to_a(std::get<3>(fnds)));
 }
 
+// Helper function to test the to_vd functionality.
+static inline bool test_to_vd(const bp::object &o, unsigned n)
+{
+    auto res = pygmo::to_vd(o);
+    if (res.size() != n) {
+        return false;
+    }
+    for (decltype(res.size()) i = 0; i < res.size(); ++i) {
+        if (res[i] != static_cast<double>(i)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Helper function to test the to_vvd functionality.
 static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 {
@@ -415,6 +421,28 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
     return res.size() == n
            && std::all_of(res.begin(), res.end(), [m](const vector_double &v) { return v.size() == m; });
 }
+
+// A test problem.
+struct test_problem {
+    vector_double fitness(const vector_double &) const
+    {
+        return {1.};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    // Set/get an internal value to test extraction semantics.
+    void set_n(int n)
+    {
+        m_n = n;
+    }
+    int get_n() const
+    {
+        return m_n;
+    }
+    int m_n = 1;
+};
 
 BOOST_PYTHON_MODULE(core)
 {
@@ -449,6 +477,7 @@ BOOST_PYTHON_MODULE(core)
     bp::def("_deepcopy", &pygmo::deepcopy);
     bp::def("_to_sp", &pygmo::to_sp);
     bp::def("_test_object_serialization", &test_object_serialization);
+    bp::def("_test_to_vd", &test_to_vd);
     bp::def("_test_to_vvd", &test_to_vvd);
 
     // Expose cleanup function.
@@ -518,26 +547,50 @@ BOOST_PYTHON_MODULE(core)
         // Problem extraction.
         .def("_py_extract", &pygmo::generic_py_extract<problem>)
         // Problem methods.
-        .def("fitness", &pygmo::fitness_wrapper, pygmo::problem_fitness_docstring().c_str(), (bp::arg("dv")))
-        .def("gradient", &pygmo::gradient_wrapper, pygmo::problem_gradient_docstring().c_str(), (bp::arg("dv")))
-        .def("has_gradient", &problem::has_gradient, "Gradient availability.")
-        .def("gradient_sparsity", &pygmo::gradient_sparsity_wrapper, "Gradient sparsity.")
-        .def("has_gradient_sparsity", &problem::has_gradient_sparsity, "User-provided gradient sparsity availability.")
-        .def("hessians", &pygmo::hessians_wrapper,
-             "Hessians.\n\nThis method will calculate the Hessians of the input "
-             "decision vector *dv*. The Hessians are returned as a list of arrays of doubles.",
-             (bp::arg("dv")))
-        .def("has_hessians", &problem::has_hessians, "Hessians availability.")
-        .def("hessians_sparsity", &pygmo::hessians_sparsity_wrapper, "Hessians sparsity.")
+        .def("fitness",
+             +[](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.fitness(pygmo::to_vd(dv))); },
+             pygmo::problem_fitness_docstring().c_str(), (bp::arg("dv")))
+        .def("get_bounds",
+             +[](const pagmo::problem &p) -> bp::tuple {
+                 auto retval = p.get_bounds();
+                 return bp::make_tuple(pygmo::v_to_a(retval.first), pygmo::v_to_a(retval.second));
+             },
+             pygmo::problem_get_bounds_docstring().c_str())
+        .def("gradient",
+             +[](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv))); },
+             pygmo::problem_gradient_docstring().c_str(), (bp::arg("dv")))
+        .def("has_gradient", &problem::has_gradient, pygmo::problem_has_gradient_docstring().c_str())
+        .def("gradient_sparsity", +[](const pagmo::problem &p) { return pygmo::sp_to_a(p.gradient_sparsity()); },
+             pygmo::problem_gradient_sparsity_docstring().c_str())
+        .def("has_gradient_sparsity", &problem::has_gradient_sparsity,
+             pygmo::problem_has_gradient_sparsity_docstring().c_str())
+        .def("hessians",
+             +[](const pagmo::problem &p, const bp::object &dv) -> bp::list {
+                 bp::list retval;
+                 const auto h = p.hessians(pygmo::to_vd(dv));
+                 for (const auto &v : h) {
+                     retval.append(pygmo::v_to_a(v));
+                 }
+                 return retval;
+             },
+             pygmo::problem_hessians_docstring().c_str(), (bp::arg("dv")))
+        .def("has_hessians", &problem::has_hessians, pygmo::problem_has_hessians_docstring().c_str())
+        .def("hessians_sparsity",
+             +[](const pagmo::problem &p) -> bp::list {
+                 bp::list retval;
+                 const auto hs = p.hessians_sparsity();
+                 for (const auto &sp : hs) {
+                     retval.append(pygmo::sp_to_a(sp));
+                 }
+                 return retval;
+             },
+             "Hessians sparsity.")
         .def("has_hessians_sparsity", &problem::has_hessians_sparsity, "User-provided Hessians sparsity availability.")
-        .def("get_nobj", &problem::get_nobj, "Get number of objectives.")
+        .def("get_nobj", &problem::get_nobj, pygmo::problem_get_nobj_docstring().c_str())
         .def("get_nx", &problem::get_nx, "Get problem dimension.")
         .def("get_nf", &problem::get_nf, "Get fitness dimension.")
-        .def("get_bounds", &pygmo::get_bounds_wrapper,
-             "Get bounds.\n\nThis method will return the problem bounds as a pair "
-             "of arrays of doubles of equal length.")
-        .def("get_nec", &problem::get_nec, "Get number of equality constraints.")
-        .def("get_nic", &problem::get_nic, "Get number of inequality constraints.")
+        .def("get_nec", &problem::get_nec, pygmo::problem_get_nec_docstring().c_str())
+        .def("get_nic", &problem::get_nic, pygmo::problem_get_nic_docstring().c_str())
         .def("get_nc", &problem::get_nc, "Get total number of constraints.")
         .add_property("c_tol", &prob_get_c_tol_wrapper, &prob_set_c_tol_wrapper)
         .def("get_fevals", &problem::get_fevals, "Get total number of objective function evaluations.")
@@ -614,13 +667,14 @@ BOOST_PYTHON_MODULE(core)
         .def("__init__", pygmo::make_translate_init<translate>())
         // Problem extraction.
         .def("_py_extract", &pygmo::generic_py_extract<translate>)
-        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>);
+        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>());
     // Mark it as a cpp problem.
     tp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from translate.
     pygmo::problem_prob_init<translate>();
     // Extract a translated problem from the problem class.
-    problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, translate>);
+    problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, translate>,
+                      bp::return_internal_reference<>());
     // Add it to the the problems submodule.
     bp::scope().attr("problems").attr("translate") = tp;
 
@@ -641,7 +695,8 @@ BOOST_PYTHON_MODULE(core)
     // Ctor of problem from decompose.
     pygmo::problem_prob_init<decompose>();
     // Extract a decomposed problem from the problem class.
-    problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, decompose>);
+    problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, decompose>,
+                      bp::return_internal_reference<>());
     // Add it to the problems submodule.
     bp::scope().attr("problems").attr("decompose") = dp;
 
@@ -650,13 +705,17 @@ BOOST_PYTHON_MODULE(core)
     // Construct translate from decompose.
     tp.def("__init__", pygmo::make_translate_init<decompose>());
     // Extract decompose from translate.
-    tp.def("_cpp_extract", &pygmo::generic_cpp_extract<translate, decompose>);
+    tp.def("_cpp_extract", &pygmo::generic_cpp_extract<translate, decompose>, bp::return_internal_reference<>());
     // Construct decompose from translate.
     dp.def("__init__", pygmo::make_decompose_init<translate>());
     // Extract translate from decompose.
-    dp.def("_cpp_extract", &pygmo::generic_cpp_extract<decompose, translate>);
+    dp.def("_cpp_extract", &pygmo::generic_cpp_extract<decompose, translate>, bp::return_internal_reference<>());
 
     // Exposition of C++ problems.
+    // Test problem.
+    auto test_p = pygmo::expose_problem<test_problem>("_test_problem", "A test problem.");
+    test_p.def("get_n", &test_problem::get_n);
+    test_p.def("set_n", &test_problem::set_n);
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>(
         "null_problem",
@@ -823,7 +882,18 @@ BOOST_PYTHON_MODULE(core)
         (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1.,
          bp::arg("F") = 0.5, bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u,
          bp::arg("preserve_diversity") = true, bp::arg("seed"))));
-    moead_.def("get_log", expose_moead_log, pygmo::moead_get_log_docstring().c_str());
+    // moead needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+    moead_.def("get_log",
+               +[](const moead &a) -> bp::list {
+                   bp::list retval;
+                   for (const auto &t : a.get_log()) {
+                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t),
+                                                    pygmo::v_to_a(std::get<3>(t))));
+                   }
+                   return retval;
+               },
+               pygmo::moead_get_log_docstring().c_str());
+
     moead_.def("get_seed", &moead::get_seed);
 
     // Exposition of stand alone functions

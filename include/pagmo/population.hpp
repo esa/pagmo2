@@ -142,7 +142,7 @@ public:
     /// Defaulted move assignment operator.
     population &operator=(population &&) = default;
 
-    /// Trivial destructor.
+    /// Destructor.
     /**
      * The destructor will run sanity checks in debug mode.
      */
