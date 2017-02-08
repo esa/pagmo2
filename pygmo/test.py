@@ -908,7 +908,7 @@ class problem_test_case(_ut.TestCase):
             def fitness(self, a):
                 return [42]
 
-        self.assert_(not problem(p()).has_gradient())
+        self.assert_(not problem(p()).has_hessians())
 
         class p(object):
 
@@ -918,10 +918,10 @@ class problem_test_case(_ut.TestCase):
             def fitness(self, a):
                 return [42]
 
-            def has_gradient(self):
+            def has_hessians(self):
                 return True
 
-        self.assert_(not problem(p()).has_gradient())
+        self.assert_(not problem(p()).has_hessians())
 
         class p(object):
 
@@ -931,13 +931,13 @@ class problem_test_case(_ut.TestCase):
             def fitness(self, a):
                 return [42]
 
-            def gradient(self, dv):
+            def hessians(self, dv):
                 return [0]
 
-            def has_gradient(self):
+            def has_hessians(self):
                 return False
 
-        self.assert_(not problem(p()).has_gradient())
+        self.assert_(not problem(p()).has_hessians())
 
         class p(object):
 
@@ -947,10 +947,10 @@ class problem_test_case(_ut.TestCase):
             def fitness(self, a):
                 return [42]
 
-            def gradient(self, dv):
+            def hessians(self, dv):
                 return [0]
 
-        self.assert_(problem(p()).has_gradient())
+        self.assert_(problem(p()).has_hessians())
 
 
 class population_test_case(_ut.TestCase):
