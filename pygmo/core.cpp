@@ -246,17 +246,6 @@ static inline void population_prob_init(bp::class_<population> &pop_class)
         .def(bp::init<const Prob &, population::size_type, unsigned>());
 }
 
-// champion_x()
-static inline bp::object pop_champion_x_wrapper(population &pop)
-{
-    return pygmo::v_to_a(pop.champion_x());
-}
-// champion_f()
-static inline bp::object pop_champion_f_wrapper(population &pop)
-{
-    return pygmo::v_to_a(pop.champion_f());
-}
-
 // push_back().
 static inline void pop_push_back_wrapper(population &pop, const bp::object &x)
 {
