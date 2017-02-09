@@ -51,15 +51,25 @@ std::string population_get_seed_docstring();
 
 // problem
 std::string problem_docstring();
-std::string problem_fitness_docstring();
-std::string problem_gradient_docstring();
 std::string problem_get_best_docstring(const std::string &);
+std::string problem_fitness_docstring();
+std::string problem_get_bounds_docstring();
+std::string problem_get_nec_docstring();
+std::string problem_get_nic_docstring();
+std::string problem_get_nobj_docstring();
+std::string problem_has_gradient_docstring();
+std::string problem_gradient_docstring();
+std::string problem_has_gradient_sparsity_docstring();
+std::string problem_gradient_sparsity_docstring();
+std::string problem_has_hessians_docstring();
+std::string problem_hessians_docstring();
 
 // algorithm
 std::string algorithm_docstring();
 
 // user - problems
 std::string rosenbrock_docstring();
+std::string cec2013_docstring();
 std::string decompose_decompose_fitness_docstring();
 std::string get_best_docstring(const std::string &);
 
@@ -74,8 +84,12 @@ std::string de1220_docstring();
 std::string de1220_get_log_docstring();
 std::string moead_docstring();
 std::string moead_get_log_docstring();
+std::string pso_docstring();
+std::string pso_get_log_docstring();
 std::string sade_docstring();
 std::string sade_get_log_docstring();
+std::string simulated_annealing_docstring();
+std::string simulated_annealing_get_log_docstring();
 
 // stand alone functions
 std::string fast_non_dominated_sorting_docstring();

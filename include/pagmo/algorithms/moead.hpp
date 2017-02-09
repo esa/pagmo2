@@ -85,18 +85,18 @@ public:
     /**
     * Constructs MOEA/D-DE
     *
-    * @param[in] gen number of generations
-    * @param[in] weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
-    * @param[in] neighbours size of the weight's neighborhood
-    * @param[in] CR crossover parameter in the Differential Evolution operator
-    * @param[in] F parameter for the Differential Evolution operator
-    * @param[in] eta_m distribution index used by the polynomial mutation
-    * @param[in] realb chance that the neighbourhood is considered at each generation, rather than the whole population
+    * @param gen number of generations
+    * @param weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
+    * @param neighbours size of the weight's neighborhood
+    * @param CR crossover parameter in the Differential Evolution operator
+    * @param F parameter for the Differential Evolution operator
+    * @param eta_m distribution index used by the polynomial mutation
+    * @param realb chance that the neighbourhood is considered at each generation, rather than the whole population
     * (only if preserve_diversity is true)
-    * @param[in] limit maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
-    * @param[in] preserve_diversity when true activates the two diversity preservation mechanisms described in Li, Hui,
+    * @param limit maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
+    * @param preserve_diversity when true activates the two diversity preservation mechanisms described in Li, Hui,
     * and Qingfu Zhang paper
-    * @param[in] seed seed used by the internal random number generator (default is random)
+    * @param seed seed used by the internal random number generator (default is random)
     * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not
     * in [1.0] or m_eta is < 0
     */
@@ -144,7 +144,7 @@ public:
      *
      * Evolves the population for the requested number of generations.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      */
     population evolve(population pop) const
@@ -332,13 +332,18 @@ public:
         }
         return pop;
     }
-
-    /// Sets the algorithm seed
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     };
     /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned int get_seed() const
     {
         return m_seed;
@@ -369,28 +374,44 @@ public:
      * along the corresponding direction. The ideal point of the current population follows cropped to its 5th
      * component.
      *
-     * @param[in] level verbosity level
+     * @param level verbosity level
      */
     void set_verbosity(unsigned int level)
     {
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
-    /// Get generations
+    /// Gets the generations
+    /**
+     * @return the number of generations to evolve for
+     */
     unsigned int get_gen() const
     {
         return m_gen;
     }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "MOEA/D - DE";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         return "\tGenerations: " + std::to_string(m_gen) + "\n\tWeight generation: " + m_weight_generation
@@ -411,7 +432,14 @@ public:
     {
         return m_log;
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

@@ -48,7 +48,14 @@ namespace pagmo
  * This algorithm is used to implement the default constructors of meta-algorithms.
  */
 struct null_algorithm {
-    /// Algorithm implementation
+    /// Algorithm evolve method (juice implementation of the algorithm)
+    /**
+     *
+     * Evolves the population for the requested number of generations.
+     *
+     * @param pop population to be evolved
+     * @return evolved population
+     */
     population evolve(const population &pop) const
     {
         return pop;
@@ -382,7 +389,7 @@ public:
      * **NOTE** \p T must be not of type pagmo::algorithm, otherwise this templated constructor is not enabled and the
      * copy constructor will be called instead.
      *
-     * @param[in] x The user implemented algorithm
+     * @param x The user implemented algorithm
      *
      */
     template <typename T, generic_ctor_enabler<T> = 0>
@@ -425,25 +432,44 @@ public:
         return *this = algorithm(other);
     }
 
-    /// Extracts the user-defined algorithm
+    /// Extract a const pointer to the UDA.
     /**
-     * Extracts the original algorithm that was provided by the user, thus
-     * granting access to additional resources there implemented.
+     * This method will extract a const pointer to the internal instance of the UDA. If \p T is not the same type
+     * as the UDA used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
      *
-     * @tparam T The type of the orignal user-defined algorithm
+     * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     * of \p this and \p delete must never be called on the pointer.
      *
-     * @return a const pointer to the user-defined algorithm, or \p nullptr
-     * if \p T does not correspond exactly to the original algorithm type used
+     * @return a const pointer to the internal UDA, or \p nullptr
+     * if \p T does not correspond exactly to the original UDA type used
      * in the constructor.
      */
     template <typename T>
     const T *extract() const
     {
         auto p = dynamic_cast<const detail::algo_inner<T> *>(ptr());
-        if (p == nullptr) {
-            return nullptr;
-        }
-        return &(p->m_value);
+        return p == nullptr ? nullptr : &(p->m_value);
+    }
+
+    /// Extract a pointer to the UDA.
+    /**
+     * This method will extract a pointer to the internal instance of the UDA. If \p T is not the same type
+     * as the UDA used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
+     *
+     * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     * of \p this and \p delete must never be called on the pointer.
+     *
+     * @return a pointer to the internal UDA, or \p nullptr
+     * if \p T does not correspond exactly to the original UDA type used
+     * in the constructor.
+     */
+    template <typename T>
+    T *extract()
+    {
+        auto p = dynamic_cast<detail::algo_inner<T> *>(ptr());
+        return p == nullptr ? nullptr : &(p->m_value);
     }
 
     /// Checks the user defined algorithm type at run-time
@@ -477,7 +503,7 @@ public:
      * all stochastic variables. This is assuming that the user implemented in his algorithm random generators
      * controlled by the optional set_seed method.
      *
-     * @param[in] seed seed
+     * @param seed seed
      */
     void set_seed(unsigned int seed)
     {
@@ -516,7 +542,7 @@ public:
      * Sets the level of verbosity. This is assuming that the user implemented in his algorithm a verbosity
      * control controlled by a set_verbosity method.
      *
-     * @param[in] level verbosity level
+     * @param level verbosity level
      */
     void set_verbosity(unsigned int level)
     {

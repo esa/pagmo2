@@ -37,7 +37,7 @@ std::string population_docstring()
 {
     return R"(The population class.
 
-This class represents a population of individuals, i.e., potential candidate solutions to a given problem. In PaGMO an
+This class represents a population of individuals, i.e., potential candidate solutions to a given problem. In pygmo an
 individual is determined:
 
 * by a unique ID used to track him across generations and migrations,
@@ -423,9 +423,9 @@ Note that the objectives and constraints may also depend from an added value :ma
 values of any number of stochastic variables. This allows also for stochastic programming
 tasks to be represented by this class.
 
-In order to define an optimizaztion problem in PyGMO, the user must first define a class
+In order to define an optimizaztion problem in pygmo, the user must first define a class
 whose methods describe the properties of the problem and allow to compute
-the objective function, the gradient, the constraints, etc. In PyGMO, we refer to such
+the objective function, the gradient, the constraints, etc. In pygmo, we refer to such
 a class as a **user-defined problem**, or UDP for short. Once defined and instantiated,
 a UDP can then be used to construct an instance of this class, :class:`~pygmo.core.problem`, which
 provides a generic interface to optimization problems.
@@ -486,18 +486,31 @@ methods:
 
 See the documentation of the corresponding methods in this class for details on how the optional
 methods in the UDP should be implemented and on how they are used by :class:`~pygmo.core.problem`.
-Note that the :ref:`exposed C++ problems <py_cpp_problems>` can also be used as UDPs.
+Note that the :ref:`exposed C++ problems <py_cpp_problems>` can also be used as UDPs, even if
+they do not expose any of the mandatory or optional methods listed above.
 
-See also the docs of the C++ class :cpp:class:`pagmo::problem` (of which this class is the Python
-counterpart).
+This class is the Python counterpart of the C++ class :cpp:class:`pagmo::problem`.
 
 Args:
     prob: a user-defined problem (either C++ or Python - note that *prob* will be deep-copied
       and stored inside the :class:`~pygmo.core.problem` instance)
 
 Raises:
-    TypeError,ValueError,RuntimeError: if *prob* is not a user-defined problem
-    unspecified: any exception thrown by the constructor of the underlying C++ class
+    ValueError: in the following cases:
+
+      * the number of objectives of the UDP is zero,
+      * the number of objectives, equality or inequality constraints is larger than an implementation-defined value,
+      * the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
+        different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
+      * the ``gradient_sparsity()`` and ``hessians_sparsity()`` methods of the UDP fail basic sanity checks
+        (e.g., they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.)
+    unspecified: any exception thrown by:
+
+      * methods of the UDP invoked during construction,
+      * the deep copy of the UDP,
+      * the constructor of the underlying C++ class,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
 
 )";
 }
@@ -508,28 +521,135 @@ std::string problem_fitness_docstring()
 
 Fitness.
 
-This method will calculate the fitness of the input decision vector *dv*. See :cpp:func:`pagmo::problem::fitness()`.
+This method will invoke the ``fitness()`` method of the UDP to compute the fitness of the
+input decision vector *dv*. The return value of the ``fitness()`` method of the UDP is expected to have a
+dimension of :math:`n_{f} = n_{obj} + n_{ec} + n_{ic}` and to contain the concatenated values of
+:math:`\mathbf f, \mathbf c_e` and :math:`\mathbf c_i` (in this order).
+
+In addition to invoking the ``fitness()`` method of the UDP, this method will perform sanity checks on
+*dv* and on the returned fitness vector. A successful call of this method will increase the internal fitness
+evaluation counter (see :func:`~pygmo.core.problem.get_fevals()`).
+
+The ``fitness()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy array, and it must
+return the fitness vector as an iterable Python object (e.g., 1D NumPy array, list, tuple, etc.).
 
 Args:
-    dv (array or list of floats): the decision vector (chromosome) to be evaluated
+    dv (array-like object): the decision vector (chromosome) to be evaluated
 
 Returns:
-    NumPy array of floats: the fitness of *dv*
+    1D NumPy float array: the fitness of *dv*
 
 Raises:
-    ValueError: if the length of *dv* is not equal to the dimension of the problem, or if the size of the returned
-        fitness is inconsistent with the fitness dimension of the UDP
-    TypeError: if the type of *dv* is invalid
+    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
+      the length of the returned fitness vector differs from the value returned by :func:`~pygmo.core.problem.get_nf()`
+    unspecified: any exception thrown by the ``fitness()`` method of the UDP, or by failures at the intersection
+      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
-Examples:
+)";
+}
 
->>> p = problem(rosenbrock())
->>> p.fitness([1,2])
-array([ 100.])
->>> p.fitness('abc') # doctest: +IGNORE_EXCEPTION_DETAIL
-Traceback (most recent call last):
-  ...
-TypeError: cannot convert the type '<class 'str'>' to a vector of doubles
+std::string problem_get_bounds_docstring()
+{
+    return R"(get_bounds()
+
+Box-bounds.
+
+This method will invoke the ``get_bounds()`` method of the UDP to return the box-bounds
+:math:`(\mathbf{lb}, \mathbf{ub})` of the problem. Infinities in the bounds are allowed.
+
+The ``get_bounds()`` method of the UDP must return the box-bounds as a tuple of 2 elements,
+the lower bounds vector and the upper bounds vector, which must be represented as iterable Python objects (e.g.,
+1D NumPy arrays, lists, tuples, etc.). The box-bounds returned by the UDP are checked upon the construction
+of a :class:`~pygmo.core.problem`.
+
+Returns:
+    ``tuple``: a tuple of two 1D NumPy float arrays representing the lower and upper box-bounds of the problem
+
+Raises:
+    unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
+      intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_get_nobj_docstring()
+{
+    return R"(get_nobj()
+
+Number of objectives.
+
+This method will return :math:`n_{obj}`, the number of objectives of the problem.
+
+The optional ``get_nobj()`` method of the UDP must return the number of objectives as an ``int``.
+If the UDP does not implement the ``get_nobj()`` method, a single-objective optimizaztion problem
+will be assumed. The number of objectives returned by the UDP is checked upon the construction
+of a :class:`~pygmo.core.problem`.
+
+Returns:
+    ``int``: the number of objectives of the problem
+
+)";
+}
+
+std::string problem_get_nec_docstring()
+{
+    return R"(get_nec()
+
+Number of equality constraints.
+
+This method will return :math:`n_{ec}`, the number of equality constraints of the problem.
+
+The optional ``get_nec()`` method of the UDP must return the number of equality constraints as an ``int``.
+If the UDP does not implement the ``get_nec()`` method, zero equality constraints will be assumed.
+The number of equality constraints returned by the UDP is checked upon the construction
+of a :class:`~pygmo.core.problem`.
+
+Returns:
+    ``int``: the number of equality constraints of the problem
+
+)";
+}
+
+std::string problem_get_nic_docstring()
+{
+    return R"(get_nic()
+
+Number of inequality constraints.
+
+This method will return :math:`n_{ic}`, the number of inequality constraints of the problem.
+
+The optional ``get_nic()`` method of the UDP must return the number of inequality constraints as an ``int``.
+If the UDP does not implement the ``get_nic()`` method, zero inequality constraints will be assumed.
+The number of inequality constraints returned by the UDP is checked upon the construction
+of a :class:`~pygmo.core.problem`.
+
+Returns:
+    ``int``: the number of inequality constraints of the problem
+
+)";
+}
+
+std::string problem_has_gradient_docstring()
+{
+    return R"(has_gradient()
+
+Check if the gradient is available in the UDP.
+
+This method will return ``True`` if the gradient is available in the UDP, ``False`` otherwise.
+
+The availability of the gradient is determined as follows:
+
+* if the UDP does not provide a ``gradient()`` method, then this method will always return ``False``;
+* if the UDP provides a ``gradient()`` method but it does not provide a ``has_gradient()`` method,
+  then this method will always return ``True``;
+* if the UDP provides both a ``gradient()`` and a ``has_gradient()`` method, then this method will return
+  the output of the ``has_gradient()`` method of the UDP.
+
+The optional ``has_gradient()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``gradient()`` method of the UDP, see :func:`~pygmo.core.problem.gradient()`.
+
+Returns:
+    ``bool``: a flag signalling the availability of the gradient in the UDP
 
 )";
 }
@@ -540,30 +660,174 @@ std::string problem_gradient_docstring()
 
 Gradient.
 
-This method will calculate the gradient of the input decision vector *dv*. See :cpp:func:`pagmo::problem::gradient()`.
+This method will compute the gradient of the input decision vector *dv* by invoking
+the ``gradient()`` method of the UDP. The ``gradient()`` method of the UDP must return
+a sparse representation of the gradient: the :math:`k`-th term of the gradient vector
+is expected to contain :math:`\frac{\partial f_i}{\partial x_j}`, where the pair :math:`(i,j)`
+is the :math:`k`-th element of the sparsity pattern (collection of index pairs), as returned by
+:func:`~pygmo.core.problem.gradient_sparsity()`.
+
+If the UDP provides a ``gradient()`` method, this method will forward *dv* to the ``gradient()``
+method of the UDP after sanity checks. The output of the ``gradient()`` method of the UDP will
+also be checked before being returned. If the UDP does not provide a ``gradient()`` method, an
+error will be raised. A successful call of this method will increase the internal gradient
+evaluation counter (see :func:`~pygmo.core.problem.get_gevals()`).
+
+The ``gradient()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy
+array, and it must return the gradient vector as an iterable Python object (e.g., 1D NumPy array,
+list, tuple, etc.).
 
 Args:
-    dv (array or list of floats): the decision vector (chromosome) to be evaluated
+    dv (array-like object): the decision vector (chromosome) to be evaluated
 
 Returns:
-    NumPy array of floats: the gradient of *dv*
+    1D NumPy float array: the gradient of *dv*
 
 Raises:
-    ValueError: if the length of *dv* is not equal to the dimension of the problem, or if the size of the returned
-        value does not match the gradient sparsity pattern dimension
-    TypeError: if the type of *dv* is invalid
-    RuntimeError: if the user-defined problem does not implement the gradient method
+    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
+      the returned gradient vector does not have the same size as the vector returned by
+      :func:`~pygmo.core.problem.gradient_sparsity()`.
+    NotImplementedError: if the UDP does not provide a ``gradient()`` method.
+    unspecified: any exception thrown by the ``gradient()`` method of the UDP, or by failures at the intersection
+      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
-Examples:
+)";
+}
 
->>> p = problem(hock_schittkowsky_71())
->>> p.gradient([1,2,3,4])
-array([ 28.,   4.,   5.,   6.,   2.,   4.,   6.,   8., -24., -12.,  -8.,
-        -6.])
->>> p = problem(rosenbrock())
->>> p.gradient([1,2]) # doctest: +IGNORE_EXCEPTION_DETAIL
-  ...
-RuntimeError: gradients have been requested but not implemented.
+std::string problem_has_gradient_sparsity_docstring()
+{
+    return R"(has_gradient_sparsity()
+
+Check if the gradient sparsity is available in the UDP.
+
+This method will return ``True`` if the gradient sparsity is available in the UDP, ``False`` otherwise.
+
+The availability of the gradient sparsity is determined as follows:
+
+* if the UDP does not provide a ``gradient_sparsity()`` method, then this method will always return ``False``;
+* if the UDP provides a ``gradient_sparsity()`` method but it does not provide a ``has_gradient_sparsity()``
+  method, then this method will always return ``True``;
+* if the UDP provides both a ``gradient_sparsity()`` method and a ``has_gradient_sparsity()`` method,
+  then this method will return the output of the ``has_gradient_sparsity()`` method of the UDP.
+
+The optional ``has_gradient_sparsity()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``gradient_sparsity()`` method of the UDP, see :func:`~pygmo.core.problem.gradient_sparsity()`.
+
+**NOTE** regardless of what this method returns, the :func:`~pygmo.core.problem.gradient_sparsity()` method will always
+return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
+pattern of the gradient is dense. See :func:`~pygmo.core.problem.gradient_sparsity()` for more details.
+
+Returns:
+    ``bool``: a flag signalling the availability of the gradient sparsity in the UDP
+
+)";
+}
+
+std::string problem_gradient_sparsity_docstring()
+{
+    return R"(gradient_sparsity()
+
+Gradient sparsity pattern.
+
+This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a
+collection of the indices :math:`(i,j)` of the non-zero elements of :math:`g_{ij} = \frac{\partial f_i}{\partial x_j}`.
+
+If :func:`~pygmo.core.problem.has_gradient_sparsity()` returns ``True``, then the ``gradient_sparsity()`` method of the
+UDP will be invoked, and its result returned (after sanity checks). Otherwise, a a dense pattern is assumed and the
+returned vector will be :math:`((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))`.
+
+The ``gradient_sparsity()`` method of the UDP must return either a 2D NumPy array of integers, or an iterable
+Python object of any kind. Specifically:
+
+* if the returned value is a NumPy array, its shape must be :math:`(n,2)` (with :math:`n \geq 0`),
+* if the returned value is an iterable Python object, then its elements must in turn be iterable Python objects
+  containing each exactly 2 elements representing the indices :math:`(i,j)`.
+
+Returns:
+    2D Numpy int array: the gradient sparsity pattern
+
+Raises:
+    ValueError: in the following cases:
+
+      * the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
+        shape, dimensions, etc.),
+      * at least one element of the returned iterable Python object does not consist of a collection of exactly
+        2 elements,
+      * if the sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
+        or if the indices in the pattern are incompatible with the properties of the problem)
+    OverflowError: if the NumPy array returned by the UDP contains integer values which are negative or outside an
+      implementation-defined range
+    unspecified: any exception thrown by:
+
+      * the underlying C++ function,
+      * the ``PyArray_FROM_OTF()`` function from the NumPy C API,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
+
+)";
+}
+
+std::string problem_has_hessians_docstring()
+{
+    return R"(has_hessians()
+
+Check if the hessians are available in the UDP.
+
+This method will return ``True`` if the hessians are available in the UDP, ``False`` otherwise.
+
+The availability of the hessians is determined as follows:
+
+* if the UDP does not provide a ``hessians()`` method, then this method will always return ``False``;
+* if the UDP provides a ``hessians()`` method but it does not provide a ``has_hessians()`` method,
+  then this method will always return ``True``;
+* if the UDP provides both a ``hessians()`` and a ``has_hessians()`` method, then this method will return
+  the output of the ``has_hessians()`` method of the UDP.
+
+The optional ``has_hessians()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``hessians()`` method of the UDP, see :func:`~pygmo.core.problem.hessians()`.
+
+Returns:
+    ``bool``: a flag signalling the availability of the hessians in the UDP
+
+)";
+}
+
+std::string problem_hessians_docstring()
+{
+    return R"(gradient(dv)
+
+Gradient.
+
+This method will compute the gradient of the input decision vector *dv* by invoking
+the ``gradient()`` method of the UDP. The ``gradient()`` method of the UDP must return
+a sparse representation of the gradient: the :math:`k`-th term of the gradient vector
+is expected to contain :math:`\frac{\partial f_i}{\partial x_j}`, where the pair :math:`(i,j)`
+is the :math:`k`-th element of the sparsity pattern (collection of index pairs), as returned by
+:func:`~pygmo.core.problem.gradient_sparsity()`.
+
+If the UDP provides a ``gradient()`` method, this method will forward *dv* to the ``gradient()``
+method of the UDP after sanity checks. The output of the ``gradient()`` method of the UDP will
+also be checked before being returned. If the UDP does not provide a ``gradient()`` method, an
+error will be raised. A successful call of this method will increase the internal gradient
+evaluation counter (see :func:`~pygmo.core.problem.get_gevals()`).
+
+The ``gradient()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy
+array, and it must return the gradient vector as an iterable Python object (e.g., 1D NumPy array,
+list, tuple, etc.).
+
+Args:
+    dv (array-like object): the decision vector (chromosome) to be evaluated
+
+Returns:
+    1D NumPy float array: the gradient of *dv*
+
+Raises:
+    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
+      the returned gradient vector does not have the same size as the vector returned by
+      :func:`~pygmo.core.problem.gradient_sparsity()`.
+    NotImplementedError: if the UDP does not provide a ``gradient()`` method.
+    unspecified: any exception thrown by the ``gradient()`` method of the UDP, or by failures at the intersection
+      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
@@ -576,7 +840,7 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    ``array`` of ``floats``: the best known solution for the )"
+    1D NumPy float array: the best known solution for the )"
            + name + R"( problem
 
 )";
@@ -605,6 +869,25 @@ Raises:
     ValueError: if *dim* is less than 2
 
 See also the docs of the C++ class :cpp:class:`pagmo::rosenbrock`.
+
+)";
+}
+
+std::string cec2013_docstring()
+{
+    return R"(__init__(prob_id = 1, dim = 2)
+
+The CEC 2013 problem suite (continuous, box-bounded, single-objective problems)
+
+Args:
+    prob_id (``int``): problem id (one of [1..28])
+    dim (``int``): number of dimensions (one of [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+
+Raises:
+    OverflowError: if *dim* or *prob_id* are negative or greater than an implementation-defined value
+    ValueError: if *prob_id* is not in [1..28] or if *dim* is not in [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+See also the docs of the C++ class :cpp:class:`pagmo::cec2013`.
 
 )";
 }
@@ -702,9 +985,7 @@ Args:
 
 Raises:
     OverflowError: if *max_fevals* is negative or greater than an implementation-defined value
-    ValueError: if *start_range* is not in (0, 1]
-    ValueError: if *stop_range* is not in (*start_range*, 1]
-    ValueError: if *reduction_coeff* is not in (0,1)
+    ValueError: if *start_range* is not in (0, 1], if *stop_range* is not in (*start_range*, 1] or if *reduction_coeff* is not in (0,1)
 
 See also the docs of the C++ class :cpp:class:`pagmo::compass_search`.
 
@@ -888,8 +1169,7 @@ Args:
 Raises:
     OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
     ValueError: if *weight_generation* is not one of 'random', 'low discrepancy', 'grid'
-    ValueError: if *CR* or *F* or *realb* are not in [0.,1.]
-    ValueError: if *eta_m* is negative
+    ValueError: if *CR* or *F* or *realb* are not in [0.,1.] or if *eta_m* is negative
 
 See also the docs of the C++ class :cpp:class:`pagmo::moead`.
 
@@ -937,7 +1217,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log`.
 
 std::string cmaes_docstring()
 {
-    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = false, seed = random)
+    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
 
 Covariance Matrix Evolutionary Strategy (CMA-ES).
 
@@ -1008,16 +1288,16 @@ std::string de1220_docstring()
 {
     return R"(__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
 
-Self-adaptive Differential Evolution, PaGMO flavour (pDE).
+Self-adaptive Differential Evolution, pygmo flavour (pDE).
 The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
 
 Args:
     gen (``int``): number of generations
     allowed_variants (``NumPy array or list of floats``): allowed mutation variants, each one being a number in [1, 18]
-    variant_adptv (``int``): F and CR parameter adaptation scheme to be used (one of 1..2)
+    variant_adptv (``int``): *F* and *CR* parameter adaptation scheme to be used (one of 1..2)
     ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
     xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
-    memory (``bool``): when true the adapted parameters CR anf F are not reset between successive calls to the evolve method
+    memory (``bool``): when true the adapted parameters *CR* anf *F* are not reset between successive calls to the evolve method
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
@@ -1046,7 +1326,7 @@ The following variants (mutation variants) can be put into *allowed_variants*:
 | 17 - rand-to-best-and-current/2/exp  | 18 - rand-to-best-and-current/2/bin  |
 +--------------------------------------+--------------------------------------+
 
-The following adaptation schemes for the parameters F and CR are available:
+The following adaptation schemes for the parameters *F* and *CR* are available:
 
 +--------------------------------------+--------------------------------------+
 | 1 - jDE                              | 2 - iDE                              |
@@ -1097,6 +1377,181 @@ Examples:
     [(1, 20, 285652.7928977573, 0.551350234239449, 0.4415510963067054, 16, 43.97185788345982, 2023791.5123259544), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log`.
+
+)";
+}
+
+std::string pso_docstring()
+{
+    return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = random)
+
+Particle Swarm Optimization
+
+Args:
+    gen (``int``): number of generations
+    omega (``float``): inertia weight (or constriction factor)
+    eta1 (``float``): social component
+    eta2 (``float``): cognitive component
+    max_vel (``float``): maximum allowed particle velocities (normalized with respect to the bounds width)
+    variant (``int``): algoritmic variant
+    neighb_type (``int``): swarm topology (defining each particle's neighbours)
+    neighb_param (``int``): topology parameter (defines how many neighbours to consider)
+    memory (``bool``): when true the velocities are not reset between successive calls to the evolve method
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* or *seed* is negative or greater than an implementation-defined value
+    ValueError: if *omega* is not in the [0,1] interval, if *eta1*, *eta2* are not in the [0,1] interval, if *max_vel* is not in ]0,1]
+    ValueError: *variant* is not one of 1 .. 6, if *neighb_type* is not one of 1 .. 4 or if *neighb_param* is zero
+
+The following variants can be selected via the *variant* parameter:
+
++-----------------------------------------+-----------------------------------------+
+| 1 - Canonical (with inertia weight)     | 2 - Same social and cognitive rand.     |
++-----------------------------------------+-----------------------------------------+
+| 3 - Same rand. for all components       | 4 - Only one rand.                      |
++-----------------------------------------+-----------------------------------------+
+| 5 - Canonical (with constriction fact.) | 6 - Fully Informed (FIPS)               |
++-----------------------------------------+-----------------------------------------+
+
+
+The following topologies are selected by *neighb_type*:
+
++--------------------------------------+--------------------------------------+
+| 1 - gbest                            | 2 - lbest                            |
++--------------------------------------+--------------------------------------+
+| 3 - Von Neumann                      | 4 - Adaptive random                  |
++--------------------------------------+--------------------------------------+
+
+The topology determines (together with the topology parameter) which particles need to be considered
+when computing the social component of the velocity update.
+
+)";
+}
+
+std::string pso_get_log_docstring()
+{
+    return R"(de1220.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.de1220`. A verbosity of N implies a log line each N generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.
+
+Where:
+    * Gen (``int``), generation number
+    * Fevals (``int``), number of functions evaluation made.
+    * gbest (``float``), the best fitness function found so far by the the swarm
+    * Mean Vel. (``float``), the average particle velocity (normalized)
+    * Mean lbest (``float``), the average fitness of the current particle locations
+    * Avg. Dist. (``float``), the average distance between particles (normalized)
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(pso(gen = 500))
+    >>> algo.set_verbosity(50)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop)
+    Gen:        Fevals:         gbest:     Mean Vel.:    Mean lbest:    Avg. Dist.:
+       1             40        72473.3       0.173892         677427       0.281744
+      51           1040        135.867      0.0183806        748.001       0.065826
+     101           2040        12.6726     0.00291046        84.9531      0.0339452
+     151           3040         8.4405    0.000852588        33.5161      0.0191379
+     201           4040        7.56943    0.000778264         28.213     0.00789202
+     251           5040         6.8089     0.00435521        22.7988     0.00107112
+     301           6040         6.3692    0.000289725        17.3763     0.00325571
+     351           7040        6.09414    0.000187343        16.8875     0.00172307
+     401           8040        5.78415    0.000524536        16.5073     0.00234197
+     451           9040         5.4662     0.00018305        16.2339    0.000958182
+    >>> al = algo.extract(de1220)
+    >>> al.get_log()
+    [(1,40,72473.32713790605,0.1738915144248373,677427.3504996448,0.2817443174278134), (51,1040,...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log`.
+
+)";
+}
+
+std::string simulated_annealing_docstring()
+{
+    return R"(__init__(Ts = 10., Tf = .1, n_T_adj = 10, n_range_adj = 10, bin_size = 10, start_range = 1., seed = random)
+
+Simulated Annealing (Corana's version)
+
+Args:
+    Ts (``float``): starting temperature
+    Tf (``float``): final temperature
+    n_T_adj (``int``): number of temperature adjustments in the annealing schedule
+    n_range_adj (``int``): number of adjustments of the search range performed at a constant temperature
+    bin_size (``int``): number of mutations that are used to compute the acceptance rate
+    start_range (``float``): starting range for mutating the decision vector
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *n_T_adj*, *n_range_adj* or *bin_size* are negative or greater than an implementation-defined value
+    ValueError: if *Ts* is not in (0, inf), if *Tf* is not in (0, inf), if *Tf* > *Ts* or if *start_range* is not in (0,1]
+    ValueError: if *n_T_adj* is not strictly positive or if *n_range_adj* is not strictly positive
+
+See also the docs of the C++ class :cpp:class:`pagmo::simulated_annealing`.
+)";
+}
+
+std::string simulated_annealing_get_log_docstring()
+{
+    return R"(simulated_annealing.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
+each verbosity function evaluations
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values Fevals, Best, Current, Mean range, Temperature
+
+Where:
+    * Fevals (``int``), number of functions evaluation made.
+    * Best (``float``), the best fitness function found so far.
+    * Current (``float``), last fitness sampled.
+    * Mean range (``float``), the Mean search range across the decision vector components (relative to the box bounds width).
+    * Temperature (``float``), the current temperature.
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(simulated_annealing(Ts=10., Tf=1e-5, n_T_adj = 100))
+    >>> algo.set_verbosity(5000)
+    >>> prob = problem(rosenbrock(dim = 10))
+    >>> pop = population(prob, 1)
+    >>> pop = algo.evolve(pop)
+    Fevals:          Best:       Current:    Mean range:   Temperature:
+         57           5937           5937           0.48             10
+      10033        9.50937        28.6775      0.0325519        2.51189
+      15033        7.87389        14.3951      0.0131132        1.25893
+      20033        7.87389        8.68616      0.0120491       0.630957
+      25033        2.90084        4.43344     0.00676893       0.316228
+      30033       0.963616        1.36471     0.00355931       0.158489
+      35033       0.265868        0.63457     0.00202753      0.0794328
+      40033        0.13894       0.383283     0.00172611      0.0398107
+      45033       0.108051       0.169876    0.000870499      0.0199526
+      50033      0.0391731      0.0895308     0.00084195           0.01
+      55033      0.0217027      0.0303561    0.000596116     0.00501187
+      60033     0.00670073     0.00914824    0.000342754     0.00251189
+      65033      0.0012298     0.00791511    0.000275182     0.00125893
+      70033     0.00112816     0.00396297    0.000192117    0.000630957
+      75033    0.000183055     0.00139717    0.000135137    0.000316228
+      80033    0.000174868     0.00192479    0.000109781    0.000158489
+      85033       7.83e-05    0.000494225    8.20723e-05    7.94328e-05
+      90033    5.35153e-05    0.000120148    5.76009e-05    3.98107e-05
+      95033    5.35153e-05    9.10958e-05    3.18624e-05    1.99526e-05
+      99933    2.34849e-05    8.72206e-05    2.59215e-05    1.14815e-05
+
+    >>> uda = algo.extract(simulated_annealing)
+    >>> uda.get_log()
+    [(57, 5936.999957947842, 5936.999957947842, 0.47999999999999987, 10.0), (10033, ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_annealing::get_log`.
 
 )";
 }

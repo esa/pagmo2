@@ -102,7 +102,7 @@ public:
      * following calls to random_device::next() will always repeat the same
      * numbers.
      *
-     * @param[in] seed The new seed to be used
+     * @param seed The new seed to be used
      */
     static void set_seed(unsigned int seed)
     {

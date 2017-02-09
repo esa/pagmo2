@@ -69,9 +69,9 @@ namespace pagmo
  * auto x = uniform_real_from_range(2,2,r_engine); // the value 2.
  * @endcode
  *
- * @param[in] lb lower bound
- * @param[in] ub upper bound
- * @param[in] r_engine a <tt>std::mt19937</tt> random engine
+ * @param lb lower bound
+ * @param ub upper bound
+ * @param r_engine a <tt>std::mt19937</tt> random engine
  *
  * @throws std::invalid_argument if:
  * - the bounds contain NaNs or infs,
@@ -122,8 +122,8 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
  * auto x = decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
  * @endcode
  *
- * @param[in] bounds an <tt>std::pair</tt> containing the bounds
- * @param[in] r_engine a <tt>std::mt19937</tt> random engine
+ * @param bounds an <tt>std::pair</tt> containing the bounds
+ * @param r_engine a <tt>std::mt19937</tt> random engine
  *
  * @throws std::invalid_argument if:
  * - the bounds are not of equal length, they have zero size, they contain NaNs or infs,
@@ -132,8 +132,8 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
  *
  * @returns a vector_double containing a random decision vector
  */
-vector_double decision_vector(const std::pair<vector_double, vector_double> &bounds,
-                              detail::random_engine_type &r_engine)
+vector_double random_decision_vector(const std::pair<vector_double, vector_double> &bounds,
+                                     detail::random_engine_type &r_engine)
 {
     // This will check for consistent vector lengths, non-null sizes, lb <= ub and no NaNs.
     detail::check_problem_bounds(bounds);
@@ -162,9 +162,9 @@ vector_double decision_vector(const std::pair<vector_double, vector_double> &bou
  * auto x = decision_vector({1,3},{1,3}, r_engine); // the vector {1,3}
  * @endcode
  *
- * @param[in] lb a vector_double containing the lower bounds
- * @param[in] ub a vector_double containing the upper bounds
- * @param[in] r_engine a <tt>std::mt19937</tt> random engine
+ * @param lb a vector_double containing the lower bounds
+ * @param ub a vector_double containing the upper bounds
+ * @param r_engine a <tt>std::mt19937</tt> random engine
  *
  * @throws std::invalid_argument if:
  * - the bounds are not of equal length, they contain NaNs or infs, or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
@@ -172,9 +172,10 @@ vector_double decision_vector(const std::pair<vector_double, vector_double> &bou
  *
  * @returns a vector_double containing a random decision vector
  */
-vector_double decision_vector(const vector_double &lb, const vector_double &ub, detail::random_engine_type &r_engine)
+vector_double random_decision_vector(const vector_double &lb, const vector_double &ub,
+                                     detail::random_engine_type &r_engine)
 {
-    return decision_vector({lb, ub}, r_engine);
+    return random_decision_vector({lb, ub}, r_engine);
 }
 
 /// Safely cast between unsigned types
@@ -189,7 +190,7 @@ vector_double decision_vector(const vector_double &lb, const vector_double &ub, 
  * auto res2 = safe_cast<unsigned short>(l); // Will throw an std::overflow_error if precision is lost
  * @endcode
  *
- * @param[in] x an unsigned value \p x to be casted to \p T
+ * @param x an unsigned value \p x to be casted to \p T
  * @return the input \p x safey casted to \p T
  * @throws std::overflow_error if \p x cannot be represented by the new type
  */
@@ -233,8 +234,8 @@ double binomial_coefficient(vector_double::size_type n, vector_double::size_type
  * auto res = kNN({{1, 1}, {2, 2}, {3.1, 3.1}, {5, 5}}, 2u);
  * @endcode
  *
- * @param[in] points the \f$N\f$ points having dimension \f$M\f$
- * @param[in] k number of neighbours to detect
+ * @param points the \f$N\f$ points having dimension \f$M\f$
+ * @param k number of neighbours to detect
  * @return An <tt>std::vector<std::vector<population::size_type> > </tt> containing the indexes of the k nearest
  * neighbours sorted by distance
  * @throws std::invalid_argument If the points do not all have the same dimension.

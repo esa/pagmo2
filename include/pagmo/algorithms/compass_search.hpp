@@ -96,10 +96,10 @@ public:
     /**
      * Constructs compass_search
      *
-     * @param[in] max_fevals maximum number of function evaluations
-     * @param[in] start_range start range
-     * @param[in] stop_range stop range
-     * @param[in] reduction_coeff range reduction coefficient
+     * @param max_fevals maximum number of function evaluations
+     * @param start_range start range
+     * @param stop_range stop range
+     * @param reduction_coeff range reduction coefficient
      * @throws std::invalid_argument if \p start_range is not in (0,1]
      * @throws std::invalid_argument if \p stop_range is not in (start_range,1]
      * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
@@ -128,7 +128,7 @@ public:
      * Evolves the population up to when the search range becomes smaller than
      * the defined stop_range
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or stochastic
      * @throws std::invalid_argument if the population is empty
@@ -296,42 +296,61 @@ public:
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
-
     /// Gets the maximum number of iterations allowed
+    /**
+     * @return the maximum number of iterations allowed
+     */
     double get_max_fevals() const
     {
         return m_max_fevals;
     }
-
     /// Gets the stop_range
+    /**
+     * @return the stop range
+     */
     double get_stop_range() const
     {
         return m_stop_range;
     }
-
     /// Get the start range
+    /**
+     * @return the start range
+     */
     double get_start_range() const
     {
         return m_start_range;
     }
-
     /// Get the reduction_coeff
+    /**
+     * @return the reduction coefficient
+     */
     double get_reduction_coeff() const
     {
         return m_reduction_coeff;
     }
-
-    /// Problem name
+    /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "Compass Search";
     }
-
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         std::ostringstream ss;
@@ -356,7 +375,14 @@ public:
         return m_log;
     }
 
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

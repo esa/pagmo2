@@ -120,13 +120,13 @@ BOOST_AUTO_TEST_CASE(population_push_back_test)
     BOOST_CHECK_THROW(pop2.push_back({1.}), std::invalid_argument);
 }
 
-BOOST_AUTO_TEST_CASE(population_decision_vector_test)
+BOOST_AUTO_TEST_CASE(population_random_decision_vector_test)
 {
     // Create an empty population
     population pop{problem{null_problem{}}};
     auto bounds = pop.get_problem().get_bounds();
     // Generate a random decision_vector
-    auto x = pop.decision_vector();
+    auto x = pop.random_decision_vector();
     // Check that the decision_vector is indeed within bounds
     for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
         BOOST_CHECK(x[i] < bounds.second[i]);
@@ -192,6 +192,40 @@ BOOST_AUTO_TEST_CASE(population_getters_test)
     auto pop_string = boost::lexical_cast<std::string>(pop);
     auto prob_string = boost::lexical_cast<std::string>(pop.get_problem());
     BOOST_CHECK(pop_string.find(prob_string) != std::string::npos);
+}
+
+BOOST_AUTO_TEST_CASE(population_champion_test)
+{
+    population pop{problem{rosenbrock{2u}}};
+    // Upon construction of an empty population the Champion is empty
+    BOOST_CHECK((pop.champion_x() == vector_double{}));
+    BOOST_CHECK((pop.champion_f() == vector_double{}));
+    // We push back the origin, in Rosenbrock this has a fitness of 1.
+    pop.push_back({0., 0.});
+    BOOST_CHECK((pop.champion_x() == vector_double{0., 0.}));
+    BOOST_CHECK((pop.champion_f() == vector_double{1.}));
+    // We push back .1,.1, in Rosenbrock this has a fitness of 1.62 and thus should not trigger the champion update
+    pop.push_back({0.1, 0.1});
+    BOOST_CHECK((pop.champion_x() == vector_double{0., 0.}));
+    BOOST_CHECK((pop.champion_f() == vector_double{1.}));
+    // We push back 0.01,0.01, in Rosenbrock this has a fitness of 0.989901 and thus should trigger the champion update
+    pop.push_back({0.01, 0.01});
+    BOOST_CHECK((pop.champion_x() == vector_double{0.01, 0.01}));
+    BOOST_CHECK_CLOSE(pop.champion_f()[0], 0.989901, 1e-6);
+    // We set the chromosome of this last individual to something worse, the champion does not change
+    pop.set_x(2u, {0.1, 0.1});
+    BOOST_CHECK((pop.champion_x() == vector_double{0.01, 0.01}));
+    BOOST_CHECK_CLOSE(pop.champion_f()[0], 0.989901, 1e-6);
+    // We set the chromosome of this last individual to something better, the champion does change
+    pop.set_xf(2u, {0.123, 0.123}, {0.12});
+    BOOST_CHECK((pop.champion_x() == vector_double{0.123, 0.123}));
+    BOOST_CHECK((pop.champion_f() == vector_double{0.12}));
+
+    // We check that requests to the champion cannot be made if the population
+    // contains a problem with more than 1 objective
+    population pop_mo{problem{zdt{}}, 2u};
+    BOOST_CHECK_THROW(pop_mo.champion_f(), std::invalid_argument);
+    BOOST_CHECK_THROW(pop_mo.champion_x(), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(population_serialization_test)

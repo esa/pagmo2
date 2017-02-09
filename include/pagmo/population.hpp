@@ -63,6 +63,15 @@ namespace pagmo
  * and thus including objectives, equality constraints and inequality
  * constraints if present.
  *
+ * A special mechanism is implemented to track the best individual that has ever
+ * been part of the population. Such an individual is called *champion* and its
+ * decision vector and fitness vector are automatically kept updated. The *champion* is
+ * not necessarily an individual currently in the population. The *champion* is
+ * only defined and accessible via the population interface if the pagmo::problem
+ * currently contained in the pagmo::population is single objective (i.e. the population::get_problem().get_nobj())
+ * returns exactly 1.
+ *
+ *
  */
 class population
 {
@@ -90,9 +99,9 @@ public:
      * to \p seed. In order for the construction to be succesfull, \p x
      * must be such that a pagmo::problem can be constructed from it.
      *
-     * @param[in] x the user problem the population refers to
-     * @param[in] pop_size population size (i.e. number of individuals therein)
-     * @param[in] seed seed of the random number generator used, for example, to
+     * @param x the user problem the population refers to
+     * @param pop_size population size (i.e. number of individuals therein)
+     * @param seed seed of the random number generator used, for example, to
      * create new random individuals within the bounds
      *
      * @throws unspecified any exception thrown by decision_vector() or by push_back()
@@ -102,7 +111,7 @@ public:
         : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
     {
         for (size_type i = 0u; i < pop_size; ++i) {
-            push_back(decision_vector());
+            push_back(random_decision_vector());
         }
     }
 
@@ -116,7 +125,7 @@ public:
     /**
      * Copy assignment is implemented via copy+move.
      *
-     * @param[in] other assignment argument.
+     * @param other assignment argument.
      *
      * @return a reference to \p this.
      *
@@ -151,7 +160,7 @@ public:
      *
      * In case of exceptions, the population will not be altered.
      *
-     * @param[in] x decision vector to be added to the population.
+     * @param x decision vector to be added to the population.
      *
      * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
      * Wrong dimensions for the input decision vector or the output fitness will trigger an exception.
@@ -169,7 +178,8 @@ public:
         m_ID.reserve(m_ID.size() + 1u);
         m_x.reserve(m_x.size() + 1u);
         m_f.reserve(m_f.size() + 1u);
-        // The rest is noexcept.
+        // update champion either throws before modfying anything, or completes successfully. The rest is noexcept.
+        update_champion(x, f);
         m_ID.push_back(new_id);
         m_x.push_back(std::move(x_copy));
         m_f.push_back(std::move(f));
@@ -178,15 +188,15 @@ public:
     /// Creates a random decision vector
     /**
      * Creates a random decision vector within the problem's bounds.
-     * It calls internally pagmo::decision_vector().
+     * It calls internally pagmo::random_decision_vector().
      *
      * @returns a random decision vector
      *
      * @throws unspecified all exceptions thrown by pagmo::decision_vector()
      */
-    vector_double decision_vector() const
+    vector_double random_decision_vector() const
     {
-        return pagmo::decision_vector(m_prob.get_bounds(), m_e);
+        return pagmo::random_decision_vector(m_prob.get_bounds(), m_e);
     }
 
     /// Index of best individual (accounting for a vector tolerance)
@@ -199,7 +209,7 @@ public:
      * this case the user can still obtain a strict ordering of the population
      * individuals by calling the pagmo::sort_population_mo() function.
      *
-     * @param[in] tol vector of tolerances to be applied to each constraints
+     * @param tol vector of tolerances to be applied to each constraints
      *
      * @returns the index of the best individual
      *
@@ -228,7 +238,7 @@ public:
 
     /// Index of best individual (accounting for a scalar tolerance)
     /**
-     * @param[in] tol scalar tolerance to be considered for each constraint
+     * @param tol scalar tolerance to be considered for each constraint
      *
      * @return index of the best individual
      */
@@ -248,7 +258,7 @@ public:
      * this case the user can still obtain a strict ordering of the population
      * individuals by calling the pagmo::sort_population_mo() function.
      *
-     * @param[in] tol vector of tolerances to be applied to each constraints
+     * @param tol vector of tolerances to be applied to each constraints
      *
      * @returns the index of the best individual
      *
@@ -277,7 +287,7 @@ public:
 
     /// Index of worst individual (accounting for a scalar tolerance)
     /**
-     * @param[in] tol scalar tolerance to be considered for each constraint
+     * @param tol scalar tolerance to be considered for each constraint
      *
      * @return index of the best individual
      */
@@ -287,7 +297,40 @@ public:
         return worst_idx(tol_vector);
     }
 
+    /// Champion decision vector
+    /**
+     * @return the champion decision vector
+     *
+     * @throw std::invalid_argument if the current problem is not single objective
+     */
+    vector_double champion_x() const
+    {
+        if (m_prob.get_nobj() > 1u) {
+            pagmo_throw(std::invalid_argument,
+                        "The Champion of a population can only be extracted in single objective problems");
+        }
+        return m_champion_x;
+    }
+
+    /// Champion fitness
+    /**
+     * @return the champion fitness
+     *
+     * @throw std::invalid_argument if the current problem is not single objective
+     */
+    vector_double champion_f() const
+    {
+        if (m_prob.get_nobj() > 1u) {
+            pagmo_throw(std::invalid_argument,
+                        "The Champion of a population can only be extracted in single objective problems");
+        }
+        return m_champion_f;
+    }
+
     /// Number of individuals in the population
+    /**
+     * @return the Number of individuals in the population
+     */
     size_type size() const
     {
         assert(m_f.size() == m_ID.size());
@@ -303,9 +346,9 @@ public:
      * **NOTE**: The user must make sure that the input fitness \p f makes sense
      * as pagmo will only check its dimension.
      *
-     * @param[in] i individual's index in the population
-     * @param[in] x a decision vector (chromosome)
-     * @param[in] f a fitness vector
+     * @param i individual's index in the population
+     * @param x a decision vector (chromosome)
+     * @param f a fitness vector
      *
      * @throws std::invalid_argument if \p i is invalid (i.e. larger or equal to the population size)
      * @throws std::invalid_argument if \p x has not the correct dimension
@@ -314,21 +357,24 @@ public:
     void set_xf(size_type i, const vector_double &x, const vector_double &f)
     {
         if (i >= size()) {
-            pagmo_throw(std::invalid_argument, "Trying to access individual at position: " + std::to_string(i)
-                                                   + ", while population has size: " + std::to_string(size()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to access individual at position: " + std::to_string(i)
+                            + ", while population has size: " + std::to_string(size()));
         }
         if (f.size() != m_prob.get_nf()) {
-            pagmo_throw(std::invalid_argument, "Trying to set a fitness of dimension: " + std::to_string(f.size())
-                                                   + ", while problem get_nf returns: "
-                                                   + std::to_string(m_prob.get_nf()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to set a fitness of dimension: " + std::to_string(f.size())
+                            + ", while problem get_nf returns: " + std::to_string(m_prob.get_nf()));
         }
         if (x.size() != m_prob.get_nx()) {
-            pagmo_throw(std::invalid_argument, "Trying to set a decision vector of dimension: "
-                                                   + std::to_string(x.size()) + ", while problem get_nx returns: "
-                                                   + std::to_string(m_prob.get_nx()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to set a decision vector of dimension: " + std::to_string(x.size())
+                            + ", while problem get_nx returns: " + std::to_string(m_prob.get_nx()));
         }
         assert(m_x[i].size() == x.size());
         assert(m_f[i].size() == f.size());
+
+        update_champion(x, f);
         // Use std::copy in order to make sure we are not allocating and
         // potentially throw.
         std::copy(x.begin(), x.end(), m_x[i].begin());
@@ -343,8 +389,8 @@ public:
      *
      * **NOTE** a call to this method triggers one fitness function evaluation
      *
-     * @param[in] i individual's index in the population
-     * @param[in] x decision vector
+     * @param i individual's index in the population
+     * @param x decision vector
      *
      * @throws unspecified any exception thrown by set_xf
      */
@@ -401,16 +447,34 @@ public:
             stream(os, "\tDecision vector:\t", p.m_x[i], '\n');
             stream(os, "\tFitness vector:\t\t", p.m_f[i], '\n');
         }
+        stream(os, "\nChampion decision vector: ", p.champion_x(), '\n');
+        stream(os, "Champion fitness: ", p.champion_f(), '\n');
         return os;
     }
     /// Serialization.
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_prob, m_ID, m_x, m_f, m_e, m_seed);
+        ar(m_prob, m_ID, m_x, m_f, m_champion_x, m_champion_f, m_e, m_seed);
     }
 
 private:
+    // Short routine to update the champion. Does nothing if the problem is MO
+    void update_champion(vector_double x, vector_double f)
+    {
+        assert(f.size() > 0u);
+        // If the problem has multiple objectives do nothing
+        if (m_prob.get_nobj() == 1u) {
+            // If the champion does not exist create it, otherwise update it if worse than the new solution
+            if (m_champion_x.size() == 0u) {
+                m_champion_x = std::move(x);
+                m_champion_f = std::move(f);
+            } else if (f[0] < m_champion_f[0]) {
+                m_champion_x = std::move(x);
+                m_champion_f = std::move(f);
+            }
+        }
+    }
     // Problem.
     problem m_prob;
     // ID of the various decision vectors
@@ -419,6 +483,10 @@ private:
     std::vector<vector_double> m_x;
     // Fitness vectors.
     std::vector<vector_double> m_f;
+    // The Champion chromosome
+    vector_double m_champion_x;
+    // The Champion fitness
+    vector_double m_champion_f;
     // Random engine.
     mutable detail::random_engine_type m_e;
     // Seed.

@@ -105,10 +105,10 @@ std::pair<vector_double::size_type, double> test_ineq_constraints(It1 cineq_firs
  * **NOTE**: the fitness vectors are assumed to contain exactly one objective, \p neq equality
  * constraints and the rest (if any) inequality constraints
  *
- * @param[in] f1 first fitness vector
- * @param[in] f2 second fitness vector
- * @param[in] neq number of equality constraints
- * @param[in] tol a vector_double containing the tolerances to be accounted for in the constraints
+ * @param f1 first fitness vector
+ * @param f2 second fitness vector
+ * @param neq number of equality constraints
+ * @param tol a vector_double containing the tolerances to be accounted for in the constraints
  *
  * @return true if \p f1 is "better" than \p f2
  *
@@ -167,10 +167,10 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
 
 /** Compares two fitness vectors in a single-objective, constrained, case (from a scalar tolerance)
  *
- * @param[in] f1 first fitness vector
- * @param[in] f2 second fitness vector
- * @param[in] neq number of equality constraints
- * @param[in] tol a vector_double containing the tolerances to be accounted for in the constraints
+ * @param f1 first fitness vector
+ * @param f2 second fitness vector
+ * @param neq number of equality constraints
+ * @param tol a vector_double containing the tolerances to be accounted for in the constraints
  *
  * @return true if \p f1 is "better" than \p f2
  *
@@ -205,9 +205,9 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
  * **NOTE**: the fitness vectors are assumed to contain exactly one objective, \p neq equality
  * constraints and the rest (if any) inequality constraints
  *
- * @param[in] input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
- * @param[in] neq number of equality constraints
- * @param[in] tol a vector_double containing tolerances to be accouted for in the constraints
+ * @param input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
+ * @param neq number of equality constraints
+ * @param tol a vector_double containing tolerances to be accouted for in the constraints
  *
  * @return an <tt>std::vector</tt> of indexes containing the sorted population
  *
@@ -244,9 +244,9 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
 /// Sorts a population in a single-objective, constrained, case (from a scalar tolerance)
 /**
  *
- * @param[in] input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
- * @param[in] neq number of equality constraints
- * @param[in] tol scalar tolerance to be accouted for in the constraints
+ * @param input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
+ * @param neq number of equality constraints
+ * @param tol scalar tolerance to be accouted for in the constraints
  *
  * @return an <tt>std::vector</tt> of indexes containing the sorted population
  *
