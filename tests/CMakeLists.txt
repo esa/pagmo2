@@ -53,3 +53,11 @@ if(PAGMO_WITH_EIGEN3)
     ADD_PAGMO_TESTCASE(cmaes)
     ADD_PAGMO_TESTCASE(eigen3_serialization)
 endif()
+
+# Here are problematic tests for MSVC.
+if(NOT YACMA_COMPILER_IS_MSVC)
+    # This test compiles but MSVC seems to have troubles in
+    # dealing with the cec2013_data.hpp .... resulting in a segfault of the test on the CI (Feb. 2017)
+    # To be tried again when they update the compiler?
+    ADD_PAGMO_TESTCASE(cec2013)
+endif()

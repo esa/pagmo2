@@ -51,15 +51,25 @@ std::string population_get_seed_docstring();
 
 // problem
 std::string problem_docstring();
-std::string problem_fitness_docstring();
-std::string problem_gradient_docstring();
 std::string problem_get_best_docstring(const std::string &);
+std::string problem_fitness_docstring();
+std::string problem_get_bounds_docstring();
+std::string problem_get_nec_docstring();
+std::string problem_get_nic_docstring();
+std::string problem_get_nobj_docstring();
+std::string problem_has_gradient_docstring();
+std::string problem_gradient_docstring();
+std::string problem_has_gradient_sparsity_docstring();
+std::string problem_gradient_sparsity_docstring();
+std::string problem_has_hessians_docstring();
+std::string problem_hessians_docstring();
 
 // algorithm
 std::string algorithm_docstring();
 
 // user - problems
 std::string rosenbrock_docstring();
+std::string cec2013_docstring();
 std::string decompose_decompose_fitness_docstring();
 std::string get_best_docstring(const std::string &);
 
