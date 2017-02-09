@@ -68,13 +68,17 @@ namespace pagmo
 * If no other method than 'compute' is implemented, the base class will use a naive approach to provide the other
 * functionalities:
 *
-* 'hv_algorithm::exclusive' method relies on 'compute' method, by computing the hypervolume twice (e.g. ExclusiveHV = HV(P) -
+* 'hv_algorithm::exclusive' method relies on 'compute' method, by computing the hypervolume twice (e.g. ExclusiveHV =
+* HV(P) -
 * HV(P/{p}))
-* 'hv_algorithm::contributions' method relies on 'compute' method as well, by computing the exclusive volume for each point
+* 'hv_algorithm::contributions' method relies on 'compute' method as well, by computing the exclusive volume for each
+* point
 * using the approach above.
-* 'hv_algorithm::extreme_contributor' (private method) relies on the 'hv_algorithm::contributions' method in order to elicit the correct
+* 'hv_algorithm::extreme_contributor' (private method) relies on the 'hv_algorithm::contributions' method in order to
+* elicit the correct
 * extreme individual.
-* 'hv_algorithm::least_contributor' and 'hv_algorithm::greatest_contributor' methods rely on 'hv_algorithm::extreme_contributor' method by
+* 'hv_algorithm::least_contributor' and 'hv_algorithm::greatest_contributor' methods rely on
+* 'hv_algorithm::extreme_contributor' method by
 * providing the correct comparator.
 *
 * Thanks to that, any newly implemented hypervolume algorithm that overloads the 'compute' method, gets the
@@ -84,7 +88,8 @@ namespace pagmo
 * method with an efficient implementation will automatically speed up the 'least_contributor' and the
 * 'greatest_contributor' methods as well.
 *
-* Additionally, any newly implemented hypervolume algorithm should overload the 'hv_algorithm::verify_before_compute' method in
+* Additionally, any newly implemented hypervolume algorithm should overload the 'hv_algorithm::verify_before_compute'
+* method in
 * order to prevent
 * the computation in case of incompatible data.
 *
@@ -196,7 +201,7 @@ public:
     */
     virtual unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
-        return extreme_contributor(points, r_point, [](double a, double b){return a < b;});
+        return extreme_contributor(points, r_point, [](double a, double b) { return a < b; });
     }
 
     /// Greatest contributor method
@@ -213,7 +218,7 @@ public:
     virtual unsigned long long greatest_contributor(std::vector<vector_double> &points,
                                                     const vector_double &r_point) const
     {
-        return extreme_contributor(points, r_point, [](double a, double b){return a > b;});
+        return extreme_contributor(points, r_point, [](double a, double b) { return a > b; });
     }
 
     /// Contributions method

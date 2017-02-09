@@ -77,8 +77,8 @@ public:
     */
     unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
-        return approx_extreme_contributor(points, r_point, LEAST, [](double a, double b){return a < b;}, lc_erase_condition,
-                                          lc_end_condition);
+        return approx_extreme_contributor(points, r_point, LEAST, [](double a, double b) { return a < b; },
+                                          lc_erase_condition, lc_end_condition);
     }
 
     /// Greatest contributor method
@@ -93,8 +93,8 @@ public:
     */
     unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
-        return approx_extreme_contributor(points, r_point, GREATEST, [](double a, double b){return a > b;}, gc_erase_condition,
-                                          gc_end_condition);
+        return approx_extreme_contributor(points, r_point, GREATEST, [](double a, double b) { return a > b; },
+                                          gc_erase_condition, gc_end_condition);
     }
 
     /// Verify before compute method

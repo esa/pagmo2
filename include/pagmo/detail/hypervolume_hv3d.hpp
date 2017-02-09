@@ -58,7 +58,7 @@ public:
         }
         double V = 0.0; // hypervolume
         double A = 0.0; // area of the sweeping plane
-        auto cmp_zero_comp = [](const vector_double &v1, const vector_double &v2){return v1[0] > v2[0];};
+        auto cmp_zero_comp = [](const vector_double &v1, const vector_double &v2) { return v1[0] > v2[0]; };
         std::multiset<vector_double, decltype(cmp_zero_comp)> T(cmp_zero_comp);
         // std::multiset<vector_double, vector_double_cmp> T(vector_double_cmp(0, '>'));
 

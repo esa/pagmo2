@@ -38,7 +38,8 @@ public:
         }
 
         if (m_initial_sorting) {
-            sort(points.begin(), points.end(), [](const vector_double& v1, const vector_double& v2){return v1[1] < v2[1];});
+            sort(points.begin(), points.end(),
+                 [](const vector_double &v1, const vector_double &v2) { return v1[1] < v2[1]; });
         }
 
         double hypervolume = 0.0;
