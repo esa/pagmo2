@@ -1032,7 +1032,6 @@ class cmaes_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 
-
 def run_test_suite():
     """Run the full test suite.
 
@@ -1046,6 +1045,7 @@ def run_test_suite():
     suite.addTest(cmaes_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
+    suite.addTest(population_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

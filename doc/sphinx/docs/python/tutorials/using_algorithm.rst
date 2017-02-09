@@ -31,10 +31,10 @@ Let us start:
     	cs: auto
     	c1: auto
     	cmu: auto
-    	sigma0: 0.300000
-    	Stopping xtol: 0.000001
-    	Stopping ftol: 0.000001
-    	Memory: 0
+    	sigma0: 0.3
+    	Stopping xtol: 1e-06
+    	Stopping ftol: 1e-06
+    	Memory: false
     	Verbosity: 0
     	Seed: ...
 
