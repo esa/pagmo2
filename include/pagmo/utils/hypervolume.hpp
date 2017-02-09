@@ -196,7 +196,7 @@ public:
     */
     virtual unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
-        return extreme_contributor(points, r_point, cmp_least);
+        return extreme_contributor(points, r_point, [](double a, double b){return a < b;});
     }
 
     /// Greatest contributor method
@@ -213,7 +213,7 @@ public:
     virtual unsigned long long greatest_contributor(std::vector<vector_double> &points,
                                                     const vector_double &r_point) const
     {
-        return extreme_contributor(points, r_point, cmp_greatest);
+        return extreme_contributor(points, r_point, [](double a, double b){return a > b;});
     }
 
     /// Contributions method
@@ -366,39 +366,6 @@ protected:
         return idx_extreme;
     }
 
-    /// Comparison method for the least contributor
-    /**
-    * This method is used as a comparison function for the extreme contributor method which may be overloaded by hv
-    * algorithms.
-    * In such case, this method can determine, given two contributions of points, which one is the "smaller"
-    * contributor.
-    *
-    * @param[in] a first contribution of a point
-    * @param[in] b second contribution of a point
-    *
-    * @return true if contribution 'a' is lesser than contribution 'b'
-    */
-    static bool cmp_least(const double a, const double b)
-    {
-        return a < b;
-    }
-
-    /**
-    * This method is used as a comparison function for the extreme contributor method which may be overloaded by hv
-    * algorithms.
-    * In such case, this method can determine, given two contributions of points, which one is the "greater"
-    * contributor.
-    *
-    * @param[in] a first contribution of a point
-    * @param[in] b second contribution of a point
-    *
-    * @return true if contribution 'a' is greater than contribution 'b'
-    */
-    static bool cmp_greatest(const double a, const double b)
-    {
-        return a > b;
-    }
-
     // Domination results of the 'dom_cmp' methods
     enum {
         DOM_CMP_B_DOMINATES_A = 1, // second argument dominates the first one
@@ -471,85 +438,6 @@ protected:
         }
         return DOM_CMP_A_B_EQUAL;
     }
-};
-
-/// Vector comparator class
-/**
-* This is a helper class that allows for the generation of comparator objects.
-* Many hypervolume algorithms use comparator functions for sorting, or data structures handling.
-* In most cases the difference between the comparator functions differ either by the dimension number, or the inequality
-* sign ('>' or '<').
-* We provide a general comparator class for that purpose.
-*/
-class vector_double_cmp
-{
-public:
-    /// Constructor of the comparator object
-    /**
-    * Create a comparator object, that compares items by given dimension, according to given inequality function.
-    *
-    * @param[in] dim dimension index by which we compare the vectors
-    * @param[in] cmp_type inequality expression used for comparison, either character '<' or '>'
-    */
-    vector_double_cmp(int dim, char cmp_type)
-    {
-        if (cmp_type == '<') {
-            m_cmp_obj = std::shared_ptr<cmp_fun>(new cmp_le(dim));
-        } else {
-            m_cmp_obj = std::shared_ptr<cmp_fun>(new cmp_ge(dim));
-        }
-    }
-
-    /// Overloaded operator()
-    /**
-    * Overloading call operator is required for all sorting and data structure key comparators in stl library.
-    *
-    * @param[in] lhs vector_double on the left hand side
-    * @param[in] rhs vector_double on the right hand side
-    *
-    * @return Boolean variable stating whether given expression is true for vector_doubles.
-    */
-    inline bool operator()(const vector_double &lhs, const vector_double &rhs)
-    {
-        return (*m_cmp_obj)(lhs, rhs);
-    }
-
-private:
-    struct cmp_fun {
-        int m_dim;
-        cmp_fun(int dim) : m_dim(dim)
-        {
-        }
-        virtual ~cmp_fun(){};
-        /// virtual operator() - It is never called anyway, so we could have gone with pure virtual, yet then we would
-        /// not be able to use inline.
-        virtual inline bool operator()(const vector_double &lhs, const vector_double &rhs)
-        {
-            return lhs[0] < rhs[0];
-        }
-    };
-
-    struct cmp_le : cmp_fun {
-        cmp_le(int dim) : cmp_fun(dim)
-        {
-        }
-        inline bool operator()(const vector_double &lhs, const vector_double &rhs)
-        {
-            return lhs[m_dim] < rhs[m_dim];
-        }
-    };
-
-    struct cmp_ge : cmp_fun {
-        cmp_ge(int dim) : cmp_fun(dim)
-        {
-        }
-        inline bool operator()(const vector_double &lhs, const vector_double &rhs)
-        {
-            return lhs[m_dim] > rhs[m_dim];
-        }
-    };
-
-    std::shared_ptr<cmp_fun> m_cmp_obj;
 };
 
 } // namespace pagmo

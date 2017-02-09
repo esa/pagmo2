@@ -77,7 +77,7 @@ public:
     */
     unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
-        return approx_extreme_contributor(points, r_point, LEAST, hv_algorithm::cmp_least, lc_erase_condition,
+        return approx_extreme_contributor(points, r_point, LEAST, [](double a, double b){return a < b;}, lc_erase_condition,
                                           lc_end_condition);
     }
 
@@ -93,7 +93,7 @@ public:
     */
     unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
-        return approx_extreme_contributor(points, r_point, GREATEST, hv_algorithm::cmp_greatest, gc_erase_condition,
+        return approx_extreme_contributor(points, r_point, GREATEST, [](double a, double b){return a > b;}, gc_erase_condition,
                                           gc_end_condition);
     }
 

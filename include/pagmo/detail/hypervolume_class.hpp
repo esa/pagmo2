@@ -1,6 +1,7 @@
 namespace pagmo
 {
 
+/// Hypervolume
 class hypervolume
 {
 public:
@@ -15,9 +16,10 @@ public:
 
     /// Constructor from initializer list
     /**
-    *  Constructs a hypervolume object from an initializer list, provided by curly-braces syntax
-    *  @example	hypervolume hv{{2,3},{3,4}};
-    *
+    * Constructs a hypervolume object from an initializer list, provided by curly-braces syntax
+    * @code
+    * hypervolume hv{{2,3},{3,4}};
+    * @endcode
     */
     hypervolume(std::initializer_list<std::vector<double>> points)
         : m_points(points), m_copy_points(true), m_verify(true)
