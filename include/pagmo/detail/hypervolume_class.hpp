@@ -2,6 +2,10 @@ namespace pagmo
 {
 
 /// Hypervolume
+/**
+ * This class encapsulate all the various utilities that are used to compute the hyervolume of a set of
+ * points.
+ */
 class hypervolume
 {
 public:

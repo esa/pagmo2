@@ -57,34 +57,34 @@ namespace pagmo
 * - 'greatest_contributor' - returns the index of the point contributing the most volume
 * - 'contributions' - returns the vector of exclusive contributions for each of the points.
 *
-* Additionally, a private method 'base::extreme_contributor' can be overloaded:
+* Additionally, the private method extreme_contributor can be overloaded:
 * - 'extreme_contributor' - returns an index of a single individual that contributes either the least or the greatest
 *  amount of the volume. The distinction between the extreme contributors is made using a comparator function.
 *  Purpose of this method is to avoid repeating a similar code for the least and the greatest contributor methods.
 *  In many cases it's just a matter of a single alteration in a comparison sign '<' to '>'.
 *
-* This base class provides an interface for any hv_algorithm that may be added.
+* This class provides a base for an interface for any hv_algorithm that may be added.
 * The most important method to implement is the 'compute' method, as the remaining methods can be derived from it.
 * If no other method than 'compute' is implemented, the base class will use a naive approach to provide the other
 * functionalities:
 *
-* 'base::exclusive' method relies on 'compute' method, by computing the hypervolume twice (e.g. ExclusiveHV = HV(P) -
+* 'hv_algorithm::exclusive' method relies on 'compute' method, by computing the hypervolume twice (e.g. ExclusiveHV = HV(P) -
 * HV(P/{p}))
-* 'base::contributions' method relies on 'compute' method as well, by computing the exclusive volume for each point
+* 'hv_algorithm::contributions' method relies on 'compute' method as well, by computing the exclusive volume for each point
 * using the approach above.
-* 'base::extreme_contributor' (private method) relies on the 'base::contributions' method in order to elicit the correct
+* 'hv_algorithm::extreme_contributor' (private method) relies on the 'hv_algorithm::contributions' method in order to elicit the correct
 * extreme individual.
-* 'base::least_contributor' and 'base::greatest_contributor' methods rely on 'base::extreme_contributor' method by
+* 'hv_algorithm::least_contributor' and 'hv_algorithm::greatest_contributor' methods rely on 'hv_algorithm::extreme_contributor' method by
 * providing the correct comparator.
 *
 * Thanks to that, any newly implemented hypervolume algorithm that overloads the 'compute' method, gets the
 * functionalities above as well.
 * It is often the case that the algorithm may provide a better solution for each of the features above, e.g. overloading
-* the 'base::extreme_contributor'
+* the 'hv_algorithm::extreme_contributor'
 * method with an efficient implementation will automatically speed up the 'least_contributor' and the
 * 'greatest_contributor' methods as well.
 *
-* Additionally, any newly implemented hypervolume algorithm should overload the 'base::verify_before_compute' method in
+* Additionally, any newly implemented hypervolume algorithm should overload the 'hv_algorithm::verify_before_compute' method in
 * order to prevent
 * the computation in case of incompatible data.
 *
