@@ -75,7 +75,7 @@ public:
     *
     * @return index of the least contributing point
     */
-	unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+    unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         return approx_extreme_contributor(points, r_point, LEAST, hv_algorithm::cmp_least, lc_erase_condition,
                                           lc_end_condition);
@@ -91,7 +91,7 @@ public:
     *
     * @return index of the greatest contributing point
     */
-	unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+    unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         return approx_extreme_contributor(points, r_point, GREATEST, hv_algorithm::cmp_greatest, gc_erase_condition,
                                           gc_end_condition);
@@ -329,12 +329,12 @@ private:
     *   Determines whether given extreme contributor guarantees be accurate withing provided epsilon error.
     *   The return value of the function is the ratio, stating the estimated error.
     */
-    vector_double::size_type approx_extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
-                                                  extreme_contrib_type ec_type, bool (*cmp_func)(double, double),
-                                                  bool (*erase_condition)(vector_double::size_type, vector_double::size_type,
-                                                                          vector_double &, vector_double &),
-                                                  double (*end_condition)(vector_double::size_type, vector_double::size_type,
-                                                                          vector_double &, vector_double &)) const
+    vector_double::size_type approx_extreme_contributor(
+        std::vector<vector_double> &points, const vector_double &r_point, extreme_contrib_type ec_type,
+        bool (*cmp_func)(double, double),
+        bool (*erase_condition)(vector_double::size_type, vector_double::size_type, vector_double &, vector_double &),
+        double (*end_condition)(vector_double::size_type, vector_double::size_type, vector_double &,
+                                vector_double &)) const
     {
         m_no_samples = std::vector<vector_double::size_type>(points.size(), 0);
         m_no_succ_samples = std::vector<vector_double::size_type>(points.size(), 0);
@@ -459,26 +459,26 @@ private:
     }
 
     // ----------------
-    static double lc_end_condition(vector_double::size_type idx, vector_double::size_type LC, vector_double &approx_volume,
-                                   vector_double &point_delta)
+    static double lc_end_condition(vector_double::size_type idx, vector_double::size_type LC,
+                                   vector_double &approx_volume, vector_double &point_delta)
     {
         return (approx_volume[LC] + point_delta[LC]) / (approx_volume[idx] - point_delta[idx]);
     }
 
-    static double gc_end_condition(vector_double::size_type idx, vector_double::size_type GC, vector_double &approx_volume,
-                                   vector_double &point_delta)
+    static double gc_end_condition(vector_double::size_type idx, vector_double::size_type GC,
+                                   vector_double &approx_volume, vector_double &point_delta)
     {
         return (approx_volume[idx] + point_delta[idx]) / (approx_volume[GC] - point_delta[GC]);
     }
 
-    static bool lc_erase_condition(vector_double::size_type idx, vector_double::size_type LC, vector_double &approx_volume,
-                                   vector_double &point_delta)
+    static bool lc_erase_condition(vector_double::size_type idx, vector_double::size_type LC,
+                                   vector_double &approx_volume, vector_double &point_delta)
     {
         return (approx_volume[idx] - point_delta[idx]) > (approx_volume[LC] + point_delta[LC]);
     }
 
-    static bool gc_erase_condition(vector_double::size_type idx, vector_double::size_type GC, vector_double &approx_volume,
-                                   vector_double &point_delta)
+    static bool gc_erase_condition(vector_double::size_type idx, vector_double::size_type GC,
+                                   vector_double &approx_volume, vector_double &point_delta)
     {
         return (approx_volume[idx] + point_delta[idx]) < (approx_volume[GC] - point_delta[GC]);
     }
