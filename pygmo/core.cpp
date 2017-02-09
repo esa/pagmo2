@@ -890,69 +890,52 @@ BOOST_PYTHON_MODULE(core)
     // Hypervolume class
     bp::class_<hypervolume>("hypervolume", "Hypervolume class.", bp::no_init)
         .def(bp::init<population, const bool>((bp::arg("pop"), bp::arg("verify") = true)))
-        .def("__init__", bp::make_constructor(
-             +[](const bp::object &points, const bool verify) {
+        .def("__init__", bp::make_constructor(+[](const bp::object &points, const bool verify) {
                  return ::new hypervolume(pygmo::to_vvd(points), verify);
-             })
-            )
+             }))
         .def("compute", +[](hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); },
-             "Computes the hypervolume.",
-             (bp::arg("ref_point"))
-            )
+             "Computes the hypervolume.", (bp::arg("ref_point")))
         .def("compute",
              +[](hypervolume &hv, const bp::object &r_point, std::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.compute(pygmo::to_vd(r_point), hv_algo);
              },
              "Computes the hypervolume using the provided hypervolume algorithm.",
-             (bp::arg("ref_point"), bp::arg("hv_algo"))
-            )
+             (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("exclusive", +[](hypervolume &hv, const unsigned int p_idx,
                               const bp::object &r_point) { return hv.exclusive(p_idx, pygmo::to_vd(r_point)); },
-             "Computes the exclusive hypervolume.",
-             (bp::arg("idx"), bp::arg("ref_point"))
-            )
+             "Computes the exclusive hypervolume.", (bp::arg("idx"), bp::arg("ref_point")))
         .def("exclusive",
              +[](hypervolume &hv, const unsigned int p_idx, const bp::object &r_point,
                  std::shared_ptr<hv_algorithm> hv_algo) { return hv.exclusive(p_idx, pygmo::to_vd(r_point), hv_algo); },
              "Computes the hypervolume using the provided hypervolume algorithm.",
-             (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo"))
-            )
+             (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("least_contributor",
              +[](hypervolume &hv, const bp::object &r_point) { return hv.least_contributor(pygmo::to_vd(r_point)); },
-             "Computes the least_contributor.",
-             (bp::arg("ref_point"))
-            )
+             "Computes the least_contributor.", (bp::arg("ref_point")))
         .def("least_contributor",
              +[](hypervolume &hv, const bp::object &r_point, std::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.least_contributor(pygmo::to_vd(r_point), hv_algo);
              },
              "Computes the least_contributor using the provided hypervolume algorithm.",
-             (bp::arg("ref_point"), bp::arg("hv_algo"))
-            )
+             (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("greatest_contributor",
              +[](hypervolume &hv, const bp::object &r_point) { return hv.greatest_contributor(pygmo::to_vd(r_point)); },
-             "Computes the greatest_contributor.",
-             (bp::arg("ref_point"))
-            )
+             "Computes the greatest_contributor.", (bp::arg("ref_point")))
         .def("greatest_contributor",
              +[](hypervolume &hv, const bp::object &r_point, std::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.greatest_contributor(pygmo::to_vd(r_point), hv_algo);
              },
              "Computes the greatest_contributor using the provided hypervolume algorithm.",
-             (bp::arg("ref_point"), bp::arg("hv_algo"))
-            )
+             (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("contributions",
              +[](hypervolume &hv, const bp::object &r_point) { return hv.contributions(pygmo::to_vd(r_point)); },
-             "Get the contributions to the hypervolume by each point.",
-             (bp::arg("ref_point"))
-            )
+             "Get the contributions to the hypervolume by each point.", (bp::arg("ref_point")))
         .def("contributions",
              +[](hypervolume &hv, const bp::object &r_point, std::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.contributions(pygmo::to_vd(r_point), hv_algo);
              },
              "Get the contributions to the hypervolume by each point using provided hypervolume algorithm..",
-             (bp::arg("ref_point"), bp::arg("hv_algo"))
-            )
+             (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("set_copy_points", &hypervolume::set_copy_points)
         .def("get_copy_points", &hypervolume::get_copy_points)
         .def("get_points", +[](hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); })
