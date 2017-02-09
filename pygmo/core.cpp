@@ -890,9 +890,10 @@ BOOST_PYTHON_MODULE(core)
     // Hypervolume class
     bp::class_<hypervolume>("hypervolume", "Hypervolume class.", bp::no_init)
         .def(bp::init<population, const bool>((bp::arg("pop"), bp::arg("verify") = true)))
-        .def("__init__", bp::make_constructor(+[](const bp::object &points, const bool verify) {
-                 return ::new hypervolume(pygmo::to_vvd(points), verify);
-             }))
+        .def("__init__",
+             bp::make_constructor(+[](const bp::object &points,
+                                      const bool verify) { return ::new hypervolume(pygmo::to_vvd(points), verify); },
+                                  bp::default_call_policies(), (bp::arg("points"), bp::arg("verify") = true)))
         .def("compute", +[](hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); },
              "Computes the hypervolume.", (bp::arg("ref_point")))
         .def("compute",
@@ -943,12 +944,14 @@ BOOST_PYTHON_MODULE(core)
         .def("get_verify", &hypervolume::get_verify);
     // Hypervolume algorithms
     bp::class_<hv_algorithm, boost::noncopyable>("_hv_algorithm", bp::no_init).def("get_name", &hv_algorithm::get_name);
-    bp::class_<hvwfg, bp::bases<hv_algorithm>>("wfg", "WFG algorithm.", bp::init<const unsigned int>());
-    bp::class_<bf_approx, bp::bases<hv_algorithm>>("bf_approx", "Bringmann-Friedrich approximated algorithm.",
-                                                   bp::init<const bool, const unsigned int, const double, const double,
-                                                            const double, const double, const double, const double>());
-    bp::class_<bf_fpras, bp::bases<hv_algorithm>>("bf_fpras", "Hypervolume approximation based on FPRAS",
-                                                  bp::init<const double, const double>());
+    bp::class_<hvwfg, bp::bases<hv_algorithm>>("wfg", "WFG algorithm.")
+        .def(bp::init<const unsigned int>((bp::arg("stop_dimension") = 2)));
+    bp::class_<bf_approx, bp::bases<hv_algorithm>>("bf_approx", "Bringmann-Friedrich approximated algorithm.")
+        .def(bp::init<const bool, const unsigned int, const double, const double,const double, const double, const double, const double>()));
+    bp::class_<bf_fpras, bp::bases<hv_algorithm>>("bf_fpras", "Hypervolume approximation based on FPRAS")
+        .def(bp::init<const double, const double>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2)))
+        .def(bp::init<const double, const double, unsigned int>(
+            (bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2, bp::arg("seed"))));
     bp::class_<hv2d, bp::bases<hv_algorithm>>("hv2d", "hv2d algorithm", bp::init<>());
     bp::class_<hv3d, bp::bases<hv_algorithm>>("hv3d", "hv3d algorithm", bp::init<>());
 
