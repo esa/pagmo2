@@ -35,13 +35,19 @@ see https://www.gnu.org/licenses/. */
 #include <sstream>
 #include <string>
 
-#include <pagmo/detail/hypervolume_all.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
+#include <pagmo/utils/hv_algorithm.hpp>
+#include <pagmo/utils/hypervolume.hpp>
+#include <pagmo/utils/hypervolume_bf_approx.hpp>
+#include <pagmo/utils/hypervolume_bf_fpras.hpp>
+#include <pagmo/utils/hypervolume_hv2d.hpp>
+#include <pagmo/utils/hypervolume_hv3d.hpp>
+#include <pagmo/utils/hypervolume_hvwfg.hpp>
 
 using namespace pagmo;
 

@@ -81,7 +81,6 @@ see https://www.gnu.org/licenses/. */
 #if !defined(_MSC_VER)
 #include <pagmo/problems/cec2013.hpp>
 #endif
-#include <pagmo/detail/hypervolume_all.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
@@ -92,6 +91,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/utils/hv_algorithm.hpp>
+#include <pagmo/utils/hypervolume.hpp>
+#include <pagmo/utils/hypervolume_bf_approx.hpp>
+#include <pagmo/utils/hypervolume_bf_fpras.hpp>
+#include <pagmo/utils/hypervolume_hv2d.hpp>
+#include <pagmo/utils/hypervolume_hv3d.hpp>
+#include <pagmo/utils/hypervolume_hvwfg.hpp>
 
 #include "algorithm.hpp"
 #include "algorithm_exposition_suite.hpp"
@@ -947,7 +953,8 @@ BOOST_PYTHON_MODULE(core)
     bp::class_<hvwfg, bp::bases<hv_algorithm>>("wfg", "WFG algorithm.")
         .def(bp::init<const unsigned int>((bp::arg("stop_dimension") = 2)));
     bp::class_<bf_approx, bp::bases<hv_algorithm>>("bf_approx", "Bringmann-Friedrich approximated algorithm.")
-        .def(bp::init<const bool, const unsigned int, const double, const double,const double, const double, const double, const double>()));
+        .def(bp::init<const bool, const unsigned int, const double, const double, const double, const double,
+                      const double, const double>());
     bp::class_<bf_fpras, bp::bases<hv_algorithm>>("bf_fpras", "Hypervolume approximation based on FPRAS")
         .def(bp::init<const double, const double>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2)))
         .def(bp::init<const double, const double, unsigned int>(
