@@ -573,8 +573,9 @@ BOOST_PYTHON_MODULE(core)
                  }
                  return retval;
              },
-             "Hessians sparsity.")
-        .def("has_hessians_sparsity", &problem::has_hessians_sparsity, "User-provided Hessians sparsity availability.")
+             pygmo::problem_hessians_sparsity_docstring().c_str())
+        .def("has_hessians_sparsity", &problem::has_hessians_sparsity,
+             pygmo::problem_has_hessians_sparsity_docstring().c_str())
         .def("get_nobj", &problem::get_nobj, pygmo::problem_get_nobj_docstring().c_str())
         .def("get_nx", &problem::get_nx, "Get problem dimension.")
         .def("get_nf", &problem::get_nf, "Get fitness dimension.")

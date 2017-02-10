@@ -831,6 +831,82 @@ Raises:
 )";
 }
 
+std::string problem_has_hessians_sparsity_docstring()
+{
+    return R"(has_hessians_sparsity()
+
+Check if the hessians sparsity is available in the UDP.
+
+This method will return ``True`` if the hessians sparsity is available in the UDP, ``False`` otherwise.
+
+The availability of the hessians sparsity is determined as follows:
+
+* if the UDP does not provide a ``hessians_sparsity()`` method, then this method will always return ``False``;
+* if the UDP provides a ``hessians_sparsity()`` method but it does not provide a ``has_hessians_sparsity()``
+  method, then this method will always return ``True``;
+* if the UDP provides both a ``hessians_sparsity()`` method and a ``has_hessians_sparsity()`` method,
+  then this method will return the output of the ``has_hessians_sparsity()`` method of the UDP.
+
+The optional ``has_hessians_sparsity()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``hessians_sparsity()`` method of the UDP, see :func:`~pygmo.core.problem.hessians_sparsity()`.
+
+**NOTE** regardless of what this method returns, the :func:`~pygmo.core.problem.hessians_sparsity()` method will always
+return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
+pattern of the hessians is dense. See :func:`~pygmo.core.problem.hessians_sparsity()` for more details.
+
+Returns:
+    ``bool``: a flag signalling the availability of the hessians sparsity in the UDP
+
+)";
+}
+
+std::string problem_hessians_sparsity_docstring()
+{
+    return R"(hessians_sparsity()
+
+Hessians sparsity pattern.
+
+This method will return the hessians sparsity pattern of the problem. Each component :math:`l` of the hessians
+sparsity pattern is a collection of the indices :math:`(i,j)` of the non-zero elements of
+:math:`h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}`. Since the Hessian matrix is symmetric, only
+lower triangular elements are allowed.
+
+If :func:`~pygmo.core.problem.has_hessians_sparsity()` returns ``True``, then the ``hessians_sparsity()`` method of the
+UDP will be invoked, and its result returned (after sanity checks). Otherwise, a dense pattern is assumed and
+:math:`n_f` sparsity patterns containing :math:`((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))` will be returned.
+
+The ``hessians_sparsity()`` method of the UDP must return an iterable Python object of any kind. Each element of the
+returned object will then be interpreted as a sparsity pattern in the same way as described in
+:func:`~pygmo.core.problem.gradient_sparsity()`. Specifically:
+
+* if the element is a NumPy array, its shape must be :math:`(n,2)` (with :math:`n \geq 0`),
+* if the element is itself an iterable Python object, then its elements must in turn be iterable Python objects
+  containing each exactly 2 elements representing the indices :math:`(i,j)`.
+
+Returns:
+    ``list`` of 2D Numpy int array: the hessians sparsity patterns
+
+Raises:
+    ValueError: in the following cases:
+
+      * the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
+        shape, dimensions, etc.),
+      * at least one element of a returned iterable Python object does not consist of a collection of exactly
+        2 elements,
+      * if a sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
+        or if the indices in the pattern are incompatible with the properties of the problem)
+    OverflowError: if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
+      implementation-defined range
+    unspecified: any exception thrown by:
+
+      * the underlying C++ function,
+      * the ``PyArray_FROM_OTF()`` function from the NumPy C API,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
+
+)";
+}
+
 std::string problem_get_best_docstring(const std::string &name)
 {
     return R"(best_known()

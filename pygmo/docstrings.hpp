@@ -63,6 +63,8 @@ std::string problem_has_gradient_sparsity_docstring();
 std::string problem_gradient_sparsity_docstring();
 std::string problem_has_hessians_docstring();
 std::string problem_hessians_docstring();
+std::string problem_has_hessians_sparsity_docstring();
+std::string problem_hessians_sparsity_docstring();
 
 // algorithm
 std::string algorithm_docstring();
