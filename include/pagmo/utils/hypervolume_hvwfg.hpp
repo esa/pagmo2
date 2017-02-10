@@ -160,7 +160,7 @@ private:
         double **points = m_frames[rec_level - 1];
         auto n_points = m_frames_size[rec_level - 1];
 
-        int no_points = 0;
+        vector_double::size_type no_points = 0u;
 
         double *p = points[p_idx];
         double **frame = m_frames[rec_level];
@@ -181,7 +181,7 @@ private:
             bool keep_s = true;
 
             // Check whether any point is dominating the point 's'.
-            for (int q_idx = 0; q_idx < no_points; ++q_idx) {
+            for (decltype(no_points) q_idx = 0u; q_idx < no_points; ++q_idx) {
                 cmp_results[q_idx] = hv_algorithm::dom_cmp(s, frame[q_idx], m_current_slice);
                 if (cmp_results[q_idx] == hv_algorithm::DOM_CMP_B_DOMINATES_A) {
                     keep_s = false;
@@ -191,8 +191,8 @@ private:
 
             // If neither is, remove points dominated by 's' (we store that during the first loop).
             if (keep_s) {
-                int prev = 0;
-                int next = 0;
+                vector_double::size_type prev = 0u;
+                vector_double::size_type next = 0u;
                 while (next < no_points) {
                     if (cmp_results[next] != hv_algorithm::DOM_CMP_A_DOMINATES_B
                         && cmp_results[next] != hv_algorithm::DOM_CMP_A_B_EQUAL) {

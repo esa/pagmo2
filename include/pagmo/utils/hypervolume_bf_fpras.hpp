@@ -38,6 +38,11 @@
 #include "hv_algorithm.hpp"
 #include "hypervolume.hpp"
 
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
+
 namespace pagmo
 {
 
@@ -48,8 +53,6 @@ namespace pagmo
  * @see "Approximating the volume of unions and intersections of high-dimensional geometric objects", Karl Bringmann,
  * Tobias Friedrich.
  *
- * @author Krzysztof Nowak (kn@kiryx.net)
- * @author Marcus M�rtens (mmarcusx@gmail.com)
  */
 
 class bf_fpras : public hv_algorithm
@@ -229,5 +232,9 @@ private:
     mutable detail::random_engine_type m_e;
 };
 }
+
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif

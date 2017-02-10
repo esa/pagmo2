@@ -38,6 +38,11 @@
 #include "hv_algorithm.hpp"
 #include "hypervolume.hpp"
 
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
+
 namespace pagmo
 {
 
@@ -51,8 +56,6 @@ namespace pagmo
  * @see "Approximating the least hypervolume contributor: NP-hard in general, but fast in practice", Karl Bringmann,
  * Tobias Friedrich.
  *
- * @author Krzysztof Nowak (kn@kiryx.net)
- * @author Marcus M�rtens (mmarcusx@gmail.com)
  */
 class bf_approx : public hv_algorithm
 {
@@ -589,4 +592,9 @@ private:
      */
 };
 }
+
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
 #endif

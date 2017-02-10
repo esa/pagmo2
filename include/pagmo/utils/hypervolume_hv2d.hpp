@@ -47,7 +47,6 @@ namespace pagmo
  * This method achieves the lower bound of n*log(n) time by sorting the initial set of points and then computing the
  * partial areas linearly.
  *
- * @author Krzysztof Nowak (kn@kiryx.net)
  */
 class hv2d : public hv_algorithm
 {

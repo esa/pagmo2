@@ -39,6 +39,11 @@
 #include "hypervolume.hpp"
 #include "hypervolume_hvwfg.hpp"
 
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
+
 namespace pagmo
 {
 
@@ -421,5 +426,9 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_contributions(const v
     }
 }
 }
+
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif
