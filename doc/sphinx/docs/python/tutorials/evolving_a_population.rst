@@ -33,12 +33,12 @@ method :class:`~pygmo.core.algorithm.evolve`
 
 .. image:: ../../images/sade_rosenbrock_10.png
    :scale: 50 %
-   :alt: alternate text
+   :alt: sade performance
    :align: right
 
 .. image:: ../../images/sade_CR_over_rosenbrock_10.png
     :scale: 50 %
-    :alt: alternate text
+    :alt: sade CR adaptation
     :align: right
 
 Clearly, as :class:`~pygmo.core.sade` is a stochastic optimization algorithm, should we repeat the
@@ -75,6 +75,6 @@ plots such as those on the right, where multiple trials are monitored:
      Exit condition -- generations = 1500
     >>> uda = algo.extract(pg.sade)
     >>> log = uda.get_log()
-    >>> import matplotlib.pyplot as plt
+    >>> import matplotlib.pyplot as plt # doctest: +SKIP
     >>> plt.semilogy([entry[0] for entry in log],[entry[2]for entry in log], 'k--') # doctest: +SKIP
-    >>> plt.show()
+    >>> plt.show() # doctest: +SKIP
