@@ -40,7 +40,7 @@ as usual, we can quickly inspect the :class:`~pygmo.core.problem` printing it to
     <BLANKLINE>
 
 Let us assume we want to assess the performance of (say) the optimization algorithm :class:`~pygmo.core.cmaes` (which
-imlements as user-defined algorithm the Covariance Matrix Adaptation Evolutionary Strategy) on the whole
+implements as user-defined algorithm the Covariance Matrix Adaptation Evolutionary Strategy) on the whole
 :class:`~pygmo.core.cec2013` problem suite at dimension D=2. Since the competition rules allowed D * 10000
 function evaluation, we choose a population of 50 and 400 generations:
 
