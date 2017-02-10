@@ -263,7 +263,7 @@ private:
             // if the exact computation is trivial OR when the sampling takes too long in terms of elementary operations
             if (m_box_points[idx].size() <= m_trivial_subcase_size
                 || static_cast<double>(m_no_ops[idx])
-                       >= hypervolume::get_expected_operations(m_box_points[idx].size(), points[0].size())) {
+                       >= detail::expected_hv_operations(m_box_points[idx].size(), points[0].size())) {
                 const std::vector<vector_double::size_type> &bp = m_box_points[idx];
                 if (bp.size() == 0u) {
                     m_approx_volume[idx] = m_box_volume[idx];

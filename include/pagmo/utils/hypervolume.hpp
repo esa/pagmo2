@@ -35,15 +35,15 @@
 #include "../io.hpp"
 #include "../population.hpp"
 #include "../types.hpp"
-#include "hv_algorithm.hpp"
+#include "hv_algos/hv_algorithm.hpp"
 
 namespace pagmo
 {
 
 /// Hypervolume
 /**
- * This class encapsulate all the various utilities that are used to compute the hyervolume of a set of
- * points.
+ * This class encapsulate various utilities that are used to compute the hyervolume of a set of
+ * points. The
  */
 class hypervolume
 {
@@ -165,27 +165,6 @@ public:
     bool get_verify() const
     {
         return m_verify;
-    }
-
-    /// Get expected number of operations
-    /**
-    * Returns the expected average amount of elementary operations for given front size (n) and dimension size (d).
-    * This method is used by the approximated algorithms that fall back to exact computation.
-    *
-    * @param[in] n size of the front
-    * @param[in] d dimension size
-    *
-    * @return expected number of operations for given n and d
-    */
-    static double get_expected_operations(const vector_double::size_type n, const vector_double::size_type d)
-    {
-        if (d <= 3) {
-            return d * n * std::log(n); // hv3d
-        } else if (d == 4) {
-            return 4.0 * n * n; // hv4d
-        } else {
-            return 0.0005 * d * std::pow(n, d * 0.5); // exponential complexity
-        }
     }
 
     /// Calculate the default reference point
@@ -495,6 +474,30 @@ private:
         hv_algo->verify_before_compute(m_points, r_point);
     }
 };
+
+namespace detail {
+/// Expected number of operations
+/**
+* Returns the expected average amount of elementary operations necessary to compute the hypervolume for given front size
+* \f$n\f$ and dimension size \f$d\f$
+* This method is used by the approximated algorithms that fall back to exact computation.
+*
+* @param[in] n size of the front
+* @param[in] d dimension size
+*
+* @return expected number of operations
+*/
+double expected_hv_operations(const vector_double::size_type n, const vector_double::size_type d)
+{
+    if (d <= 3) {
+        return d * n * std::log(n); // hv3d
+    } else if (d == 4) {
+        return 4.0 * n * n; // hv4d
+    } else {
+        return 0.0005 * d * std::pow(n, d * 0.5); // exponential complexity
+    }
 }
+} // end namespace detail
+} // end namespace pagmo
 
 #endif
