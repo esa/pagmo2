@@ -1581,7 +1581,7 @@ public:
 
     /// Feasibility of a decision vector.
     /**
-     * This method will checks the feasibility of the fitness corresponding to
+     * This method will check the feasibility of the fitness corresponding to
      * a decision vector \p x against
      * the tolerances returned by problem::get_c_tol().
      *

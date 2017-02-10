@@ -591,6 +591,36 @@ Returns:
 )";
 }
 
+std::string problem_get_nx_docstring()
+{
+    return R"(get_nx()
+
+Dimension of the problem.
+
+This method will return :math:`n_{x}`, the dimension of the problem as established by the length of
+the bounds returned by :func:`~pygmo.core.problem.get_bounds()`.
+
+Returns:
+    ``int``: the dimension of the problem
+
+)";
+}
+
+std::string problem_get_nf_docstring()
+{
+    return R"(get_nf()
+
+Dimension of the fitness.
+
+This method will return :math:`n_{f}`, the dimension of the fitness, which is the sum of
+:math:`n_{obj}`, :math:`n_{ec}` and :math:`n_{ic}`.
+
+Returns:
+    ``int``: the dimension of the fitness
+
+)";
+}
+
 std::string problem_get_nec_docstring()
 {
     return R"(get_nec()
@@ -625,6 +655,83 @@ of a :class:`~pygmo.core.problem`.
 
 Returns:
     ``int``: the number of inequality constraints of the problem
+
+)";
+}
+
+std::string problem_get_nc_docstring()
+{
+    return R"(get_nc()
+
+Total number of constraints.
+
+This method will return the sum of the output of :func:`~pygmo.core.problem.get_nic()` and
+:func:`~pygmo.core.problem.get_nec()` (i.e., the total number of constraints).
+
+Returns:
+    ``int``: the total number of constraints of the problem
+
+)";
+}
+
+std::string problem_c_tol_docstring()
+{
+    return R"(Constraints tolerance.
+
+This property contains an array of ``float`` that are used when checking for constraint feasibility.
+The dimension of the array is :math:`n_{ec} + n_{ic}`, and the array is zero-filled on problem
+construction.
+
+Returns:
+    1D NumPy float array: the constraints tolerance
+
+Raises:
+    ValueError: if, when setting this property, the size of the input array differs from the number
+      of constraints of the problem or if any element of the array is negative or NaN
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_get_fevals_docstring()
+{
+    return R"(Number of fitness evaluations.
+
+Each time a call to :func:`~pygmo.core.problem.fitness()` successfully completes, an internal counter
+is increased by one. The counter is initialised to zero upon problem construction and it is never
+reset. Copy operations copy the counter as well.
+
+Returns:
+    ``int`` : the number of times :func:`~pygmo.core.problem.fitness()` was successfully called
+
+)";
+}
+
+std::string problem_get_gevals_docstring()
+{
+    return R"(Number of gradient evaluations.
+
+Each time a call to :func:`~pygmo.core.problem.gradient()` successfully completes, an internal counter
+is increased by one. The counter is initialised to zero upon problem construction and it is never
+reset. Copy operations copy the counter as well.
+
+Returns:
+    ``int`` : the number of times :func:`~pygmo.core.problem.gradient()` was successfully called
+
+)";
+}
+
+std::string problem_get_hevals_docstring()
+{
+    return R"(Number of hessians evaluations.
+
+Each time a call to :func:`~pygmo.core.problem.hessians()` successfully completes, an internal counter
+is increased by one. The counter is initialised to zero upon problem construction and it is never
+reset. Copy operations copy the counter as well.
+
+Returns:
+    ``int`` : the number of times :func:`~pygmo.core.problem.hessians()` was successfully called
 
 )";
 }
@@ -686,8 +793,8 @@ Returns:
 Raises:
     ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
       the returned gradient vector does not have the same size as the vector returned by
-      :func:`~pygmo.core.problem.gradient_sparsity()`.
-    NotImplementedError: if the UDP does not provide a ``gradient()`` method.
+      :func:`~pygmo.core.problem.gradient_sparsity()`
+    NotImplementedError: if the UDP does not provide a ``gradient()`` method
     unspecified: any exception thrown by the ``gradient()`` method of the UDP, or by failures at the intersection
       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
@@ -824,7 +931,7 @@ Returns:
 Raises:
     ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
       the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions
-    NotImplementedError: if the UDP does not provide a ``hessians()`` method.
+    NotImplementedError: if the UDP does not provide a ``hessians()`` method
     unspecified: any exception thrown by the ``hessians()`` method of the UDP, or by failures at the intersection
       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
@@ -903,6 +1010,96 @@ Raises:
       * the ``PyArray_FROM_OTF()`` function from the NumPy C API,
       * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
         signatures, etc.)
+
+)";
+}
+
+std::string problem_set_seed_docstring()
+{
+    return R"(set_seed(seed)
+
+This method will set the seed to be used in the fitness function to instantiate
+all stochastic variables. If the UDP provides a ``set_seed()`` method, then
+its ``set_seed()`` method will be invoked. Otherwise, an error will be raised.
+The *seed* parameter must be non-negative.
+
+The ``set_seed()`` method of the UDP must be able to take an ``int`` as input parameter.
+
+Args:
+    seed (``int``): the desired seed value
+
+Raises:
+    NotImplementedError: if the UDP does not provide a ``set_seed()`` method
+    OverflowError: if *seed* is negative
+    unspecified: any exception raised by the ``set_seed()`` method of the UDP or failures at the intersection
+      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_has_set_seed_docstring()
+{
+    return R"(has_set_seed()
+
+Check if the ``set_seed()`` method is available in the UDP.
+
+This method will return ``True`` if the ``set_seed()`` method is available in the UDP, ``False`` otherwise.
+
+The availability of the ``set_seed()`` method is determined as follows:
+
+* if the UDP does not provide a ``set_seed()`` method, then this method will always return ``False``;
+* if the UDP provides a ``set_seed()`` method but it does not provide a ``has_set_seed()`` method,
+  then this method will always return ``True``;
+* if the UDP provides both a ``set_seed()`` and a ``has_set_seed()`` method, then this method will return
+  the output of the ``has_set_seed()`` method of the UDP.
+
+The optional ``has_set_seed()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``set_seed()`` method of the UDP, see :func:`~pygmo.core.problem.set_seed()`.
+
+Returns:
+    ``bool``: a flag signalling the availability of the ``set_seed()`` method in the UDP
+
+)";
+}
+
+std::string problem_feasibility_f_docstring()
+{
+    return R"(feasibility_f(f)
+
+This method will check the feasibility of a fitness vector *f* against the tolerances returned by
+:attr:`~pygmo.core.problem.c_tol`.
+
+Args:
+    f (array-like object): a fitness vector
+
+Returns:
+    ``bool``: ``True`` if the fitness vector is feasible, ``False`` otherwise
+
+Raises:
+    ValueError: if the size of *f* is not the same as the output of
+      :func:`~pymog.core.problem.get_nf()`
+
+)";
+}
+
+std::string problem_feasibility_x_docstring()
+{
+    return R"(feasibility_x(x)
+
+This method will check the feasibility of the fitness corresponding to a decision vector *x* against
+the tolerances returned by :attr:`~pygmo.core.problem.c_tol`.
+
+**NOTE** This will cause one fitness evaluation.
+
+Args:
+    dv (array-like object): a decision vector
+
+Returns:
+    ``bool``: ``True`` if *x* results in a feasible fitness, ``False`` otherwise
+
+Raises:
+     unspecified: any exception thrown by :func:`~pygmo.core.problem.feasibility_f()` or
+       :func:`~pygmo.core.problem.fitness()`
 
 )";
 }
