@@ -351,7 +351,7 @@ private:
 
     struct hycon3d_tree_cmp {
         //	bool operator()(const std::pair<vector_double, int> &, const std::pair<vector_double, int> &);
-        bool operator()(const std::pair<vector_double, int> &a, const std::pair<vector_double, int> &b) const
+        bool operator()(const std::pair<vector_double, vector_double::size_type> &a, const std::pair<vector_double, vector_double::size_type> &b) const
         {
             return a.first[0] > b.first[0];
         }
