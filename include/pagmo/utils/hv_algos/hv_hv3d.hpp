@@ -31,13 +31,13 @@
 #include <string>
 #include <vector>
 
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../types.hpp"
+#include "../../exceptions.hpp"
+#include "../../io.hpp"
+#include "../../population.hpp"
+#include "../../types.hpp"
+#include "../hypervolume.hpp"
 #include "hv_algorithm.hpp"
-#include "hypervolume.hpp"
-#include "hypervolume_hvwfg.hpp"
+#include "hv_hvwfg.hpp"
 
 #if defined(__clang__) || defined(__GNUC__)
 #pragma GCC diagnostic push

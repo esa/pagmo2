@@ -41,13 +41,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/utils/hv_algorithm.hpp>
+#include <pagmo/utils/hv_algos/hv_algorithm.hpp>
+#include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
+#include <pagmo/utils/hv_algos/hv_bf_fpras.hpp>
+#include <pagmo/utils/hv_algos/hv_hv2d.hpp>
+#include <pagmo/utils/hv_algos/hv_hv3d.hpp>
+#include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
 #include <pagmo/utils/hypervolume.hpp>
-#include <pagmo/utils/hypervolume_bf_approx.hpp>
-#include <pagmo/utils/hypervolume_bf_fpras.hpp>
-#include <pagmo/utils/hypervolume_hv2d.hpp>
-#include <pagmo/utils/hypervolume_hv3d.hpp>
-#include <pagmo/utils/hypervolume_hvwfg.hpp>
 
 using namespace pagmo;
 

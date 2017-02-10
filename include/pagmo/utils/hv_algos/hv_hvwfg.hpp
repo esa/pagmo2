@@ -31,12 +31,12 @@
 #include <string>
 #include <vector>
 
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../types.hpp"
+#include "../../exceptions.hpp"
+#include "../../io.hpp"
+#include "../../population.hpp"
+#include "../../types.hpp"
+#include "../hypervolume.hpp"
 #include "hv_algorithm.hpp"
-#include "hypervolume.hpp"
 
 namespace pagmo
 {

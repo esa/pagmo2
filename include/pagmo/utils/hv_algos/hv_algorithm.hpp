@@ -36,10 +36,10 @@
 #include <typeinfo>
 #include <vector>
 
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../types.hpp"
+#include "../../exceptions.hpp"
+#include "../../io.hpp"
+#include "../../population.hpp"
+#include "../../types.hpp"
 
 namespace pagmo
 {

@@ -92,12 +92,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/utils/hv_algorithm.hpp>
+#include <pagmo/utils/hv_algos/hypervolume_bf_approx.hpp>
+#include <pagmo/utils/hv_algos/hypervolume_bf_fpras.hpp>
+#include <pagmo/utils/hv_algos/hypervolume_hv2d.hpp>
+#include <pagmo/utils/hv_algos/hypervolume_hv3d.hpp>
+#include <pagmo/utils/hv_algos/hypervolume_hvwfg.hpp>
 #include <pagmo/utils/hypervolume.hpp>
-#include <pagmo/utils/hypervolume_bf_approx.hpp>
-#include <pagmo/utils/hypervolume_bf_fpras.hpp>
-#include <pagmo/utils/hypervolume_hv2d.hpp>
-#include <pagmo/utils/hypervolume_hv3d.hpp>
-#include <pagmo/utils/hypervolume_hvwfg.hpp>
 
 #include "algorithm.hpp"
 #include "algorithm_exposition_suite.hpp"

@@ -475,7 +475,8 @@ private:
     }
 };
 
-namespace detail {
+namespace detail
+{
 /// Expected number of operations
 /**
 * Returns the expected average amount of elementary operations necessary to compute the hypervolume for given front size
