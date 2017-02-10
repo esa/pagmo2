@@ -197,7 +197,7 @@ private:
         // We check whether given point at 'idx' is DOMINATED (strong domination) by 'p_idx' in exactly one objective,
         // and DOMINATING (weak domination) in the remaining ones.
         const vector_double &p = points[p_idx];
-        vector_double::size_type worse_dim_idx;
+        vector_double::size_type worse_dim_idx = 0u;
         auto f_dim = r_point.size();
         for (decltype(points.size()) idx = 0u; idx < points.size(); ++idx) {
             auto flag = false; // initiate the possible opposite point dimension by -1 (no candidate)
