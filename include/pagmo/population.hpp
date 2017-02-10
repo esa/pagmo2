@@ -178,6 +178,7 @@ public:
         m_ID.reserve(m_ID.size() + 1u);
         m_x.reserve(m_x.size() + 1u);
         m_f.reserve(m_f.size() + 1u);
+
         // update champion either throws before modfying anything, or completes successfully. The rest is noexcept.
         update_champion(x, f);
         m_ID.push_back(new_id);
