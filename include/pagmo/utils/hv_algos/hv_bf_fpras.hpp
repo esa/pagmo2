@@ -38,11 +38,6 @@
 #include "../hypervolume.hpp"
 #include "hv_algorithm.hpp"
 
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#endif
-
 namespace pagmo
 {
 
@@ -232,9 +227,5 @@ private:
     mutable detail::random_engine_type m_e;
 };
 }
-
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 #endif

@@ -38,11 +38,6 @@
 #include "../hypervolume.hpp"
 #include "hv_algorithm.hpp"
 
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#endif
-
 namespace pagmo
 {
 
@@ -202,24 +197,25 @@ private:
         // We check whether given point at 'idx' is DOMINATED (strong domination) by 'p_idx' in exactly one objective,
         // and DOMINATING (weak domination) in the remaining ones.
         const vector_double &p = points[p_idx];
-        int worse_dim_idx;
+        vector_double::size_type worse_dim_idx;
         auto f_dim = r_point.size();
         for (decltype(points.size()) idx = 0u; idx < points.size(); ++idx) {
-            worse_dim_idx = -1; // initiate the possible opposite point dimension by -1 (no candidate)
+            auto flag = false; // initiate the possible opposite point dimension by -1 (no candidate)
 
-            for (unsigned int f_idx = 0u; f_idx < f_dim; ++f_idx) {
+            for (decltype(f_dim) f_idx = 0u; f_idx < f_dim; ++f_idx) {
                 if (points[idx][f_idx] >= p[f_idx]) { // if any point is worse by given dimension, it's the potential
                                                       // dimension in which we reduce the box
-                    if (worse_dim_idx != -1) { // if given point is already worse in any previous dimension, skip to
-                                               // next point as it's a bad candidate
-                        worse_dim_idx = -1;    // set the result to "no candidate" and break
+                    if (flag) {       // if given point is already worse in any previous dimension, skip to
+                                      // next point as it's a bad candidate
+                        flag = false; // set the result to "no candidate" and break
                         break;
                     }
                     worse_dim_idx = f_idx;
+                    flag = true;
                 }
             }
-            if (worse_dim_idx != -1) { // if given point was worse only in one dimension it's the potential candidate
-                                       // for the bouding box reductor
+            if (flag) { // if given point was worse only in one dimension it's the potential candidate
+                        // for the bouding box reductor
                 z[worse_dim_idx] = std::min(z[worse_dim_idx], points[idx][worse_dim_idx]); // reduce the bounding box
             }
         }
@@ -592,9 +588,5 @@ private:
      */
 };
 }
-
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 #endif

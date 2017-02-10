@@ -39,11 +39,6 @@
 #include "hv_algorithm.hpp"
 #include "hv_hvwfg.hpp"
 
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#endif
-
 namespace pagmo
 {
 
@@ -185,9 +180,9 @@ public:
             p[i] = point_pairs[i].first;
         }
 
-        typedef std::multiset<std::pair<vector_double, int>, hycon3d_tree_cmp> tree_t;
+        typedef std::multiset<std::pair<vector_double, vector_double::size_type>, hycon3d_tree_cmp> tree_t;
 
-        int n = (int)p.size();
+        auto n = p.size();
         const double INF = std::numeric_limits<double>::max();
 
         // Placeholder value for undefined lower z value.
@@ -219,8 +214,8 @@ public:
         box3d b0(r_point[0], r_point[1], NaN, p[0][0], p[0][1], p[0][2]);
         L[0].push_front(b0);
 
-        for (int i = 1; i < n + 1; ++i) {
-            std::pair<vector_double, int> pi(p[i], i);
+        for (decltype(n) i = 1u; i < n + 1u; ++i) {
+            std::pair<vector_double, vector_double::size_type> pi(p[i], i);
 
             tree_t::iterator it = T.lower_bound(pi);
 
@@ -231,15 +226,15 @@ public:
 
             tree_t::reverse_iterator r_it(it);
 
-            std::vector<int> d;
+            std::vector<vector_double::size_type> d;
 
             while ((*r_it).first[1] > p[i][1]) {
                 d.push_back((*r_it).second);
                 ++r_it;
             }
 
-            int r = (*it).second;
-            int t = (*r_it).second;
+            auto r = (*it).second;
+            auto t = (*r_it).second;
 
             T.erase(r_it.base(), it);
 
@@ -264,10 +259,10 @@ public:
 
             // Process dominated points, region M
             double xleft = p[t][0];
-            std::vector<int>::reverse_iterator r_it_idx = d.rbegin();
-            std::vector<int>::reverse_iterator r_it_idx_e = d.rend();
+            std::vector<vector_double::size_type>::reverse_iterator r_it_idx = d.rbegin();
+            std::vector<vector_double::size_type>::reverse_iterator r_it_idx_e = d.rend();
             for (; r_it_idx != r_it_idx_e; ++r_it_idx) {
-                int jdom = *r_it_idx;
+                auto jdom = *r_it_idx;
                 while (!L[jdom].empty()) {
                     box3d &bm = L[jdom].front();
                     bm.lz = p[i][2];
@@ -426,9 +421,5 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_contributions(const v
     }
 }
 }
-
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 #endif
