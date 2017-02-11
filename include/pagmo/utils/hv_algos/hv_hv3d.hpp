@@ -67,7 +67,7 @@ public:
     * If the input is already sorted, user can skip this step using "initial_sorting = false" option, saving some extra
     * time.
     *
-    * @param[in] initial_sorting when set to true (default), algorithm will sort the points ascending by third dimension
+    * @param initial_sorting when set to true (default), algorithm will sort the points ascending by third dimension
     */
     hv3d(const bool initial_sorting = true) : m_initial_sorting(initial_sorting)
     {
@@ -86,8 +86,8 @@ public:
     * self-balancing) of both structures and the asymptotic times (O(log n) updates) are guaranteed.
     * Computational complexity: O(n*log(n))
     *
-    * @param[in] points vector of points containing the 3-dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the points
+    * @param points vector of points containing the 3-dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the points
     *
     * @return hypervolume.
     */
@@ -157,8 +157,8 @@ public:
     * @see "Computing hypervolume contribution in low dimensions: asymptotically optimal algorithm and complexity
     * results", Michael T. M. Emmerich, Carlos M. Fonseca
     *
-    * @param[in] points vector of points containing the 3-dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the points
+    * @param points vector of points containing the 3-dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the points
     * @return vector of exclusive contributions by every point
     */
     std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
@@ -305,8 +305,8 @@ public:
     /**
     * Verifies whether given algorithm suits the requested data.
     *
-    * @param[in] points vector of points containing the d dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the vector of points
+    * @param points vector of points containing the d dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the vector of points
     *
     * @throws value_error when trying to compute the hypervolume for the dimension other than 3 or non-maximal reference
     * point
@@ -351,7 +351,8 @@ private:
 
     struct hycon3d_tree_cmp {
         //	bool operator()(const std::pair<vector_double, int> &, const std::pair<vector_double, int> &);
-        bool operator()(const std::pair<vector_double, vector_double::size_type> &a, const std::pair<vector_double, vector_double::size_type> &b) const
+        bool operator()(const std::pair<vector_double, vector_double::size_type> &a,
+                        const std::pair<vector_double, vector_double::size_type> &b) const
         {
             return a.first[0] > b.first[0];
         }
@@ -382,10 +383,14 @@ inline std::vector<double> hv2d::contributions(std::vector<vector_double> &point
     return hv3d(false).contributions(new_points, new_r);
 }
 
-/// Choose the best hypervolume algorithm for given task
+/// Chooses the best algorithm to compute the hypervolume
 /**
 * Returns the best method for given hypervolume computation problem.
 * As of yet, only the dimension size is taken into account.
+*
+* @param r_point reference point for the vector of points
+*
+* @return an std::shared_ptr to the selected algorithm
 */
 inline std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_double &r_point) const
 {
@@ -400,6 +405,16 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_
     }
 }
 
+/// Chooses the best algorithm to compute the hypervolume
+/**
+* Returns the best method for given hypervolume computation problem.
+* As of yet, only the dimension size is taken into account.
+*
+* @param p_idx index of the point for which the exclusive contribution is to be computed
+* @param r_point reference point for the vector of points
+*
+* @return an std::shared_ptr to the selected algorithm
+*/
 inline std::shared_ptr<hv_algorithm> hypervolume::get_best_exclusive(const unsigned int p_idx,
                                                                      const vector_double &r_point) const
 {
@@ -408,6 +423,15 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_exclusive(const unsig
     return hypervolume::get_best_compute(r_point);
 }
 
+/// Chooses the best algorithm to compute the hypervolume
+/**
+* Returns the best method for given hypervolume computation problem.
+* As of yet, only the dimension size is taken into account.
+*
+* @param r_point reference point for the vector of points
+*
+* @return an std::shared_ptr to the selected algorithm
+*/
 inline std::shared_ptr<hv_algorithm> hypervolume::get_best_contributions(const vector_double &r_point) const
 {
     auto fdim = r_point.size();

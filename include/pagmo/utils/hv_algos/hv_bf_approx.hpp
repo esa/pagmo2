@@ -59,16 +59,16 @@ public:
     /**
     * Constructs an instance of the algorithm
     *
-    * @param[in] use_exact boolean flag stating whether algorithm is allowed to use exact algorithms for the computation
-    * @param[in] trivial_subcase_size size of the sub-front (points overlapping the bounding box) for which algorithm
+    * @param use_exact boolean flag stating whether algorithm is allowed to use exact algorithms for the computation
+    * @param trivial_subcase_size size of the sub-front (points overlapping the bounding box) for which algorithm
     * skips to the exact computation right away
-    * @param[in] eps accuracy of the approximation
-    * @param[in] delta confidence of the approximation
-    * @param[in] gamma constant used for computation of delta for each of the points during the sampling
-    * @param[in] delta_multiplier factor with which delta diminishes each round
-    * @param[in] initial_delta_coeff initial coefficient multiplied by the delta at round 0
-    * @param[in] alpha coefficicient stating how accurately current lowest contributor should be sampled
-    * @param[in] seed seeding for the pseudo-random number generator
+    * @param eps accuracy of the approximation
+    * @param delta confidence of the approximation
+    * @param gamma constant used for computation of delta for each of the points during the sampling
+    * @param delta_multiplier factor with which delta diminishes each round
+    * @param initial_delta_coeff initial coefficient multiplied by the delta at round 0
+    * @param alpha coefficicient stating how accurately current lowest contributor should be sampled
+    * @param seed seeding for the pseudo-random number generator
     */
     bf_approx(const bool use_exact = true, const unsigned int trivial_subcase_size = 1, const double eps = 1e-2,
               const double delta = 1e-6, const double delta_multiplier = 0.775, const double alpha = 0.2,
@@ -90,8 +90,8 @@ public:
     /**
     * This method is overloaded to throw an exception in case a hypervolume indicator computation is requested.
     *
-    * @param[in] points vector of points containing the 3-dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the points
+    * @param points vector of points containing the 3-dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the points
     *
     * @return hypervolume.
     */
@@ -108,8 +108,8 @@ public:
     * This method establishes the individual that contributes the least to the hypervolume (approximately withing given
     * epsilon and delta).
     *
-    * @param[in] points vector of fitness_vectors for which the hypervolume is computed
-    * @param[in] r_point distinguished "reference point".
+    * @param points vector of fitness_vectors for which the hypervolume is computed
+    * @param r_point distinguished "reference point".
     *
     * @return index of the least contributing point
     */
@@ -124,8 +124,8 @@ public:
     * This method establishes the individual that contributes the most to the hypervolume (approximately withing given
     * epsilon and delta).
     *
-    * @param[in] points vector of fitness_vectors for which the hypervolume is computed
-    * @param[in] r_point distinguished "reference point".
+    * @param points vector of fitness_vectors for which the hypervolume is computed
+    * @param r_point distinguished "reference point".
     *
     * @return index of the greatest contributing point
     */
@@ -139,8 +139,8 @@ public:
     /**
     * Verifies whether given algorithm suits the requested data.
     *
-    * @param[in] points vector of points containing the d dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the vector of points
+    * @param points vector of points containing the d dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the vector of points
     *
     * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
     */
@@ -180,9 +180,9 @@ private:
     * Thus obtained point 'z' and the original point 'points[p_idx]' form a box in which we perform the monte carlo
     * sampling
     *
-    * @param[in] points pareto front points
-    * @param[in] r_point reference point
-    * @param[in] p_idx index of point for which we compute the bounding box
+    * @param points pareto front points
+    * @param r_point reference point
+    * @param p_idx index of point for which we compute the bounding box
     *
     * @return fitness_vector describing the opposite corner of the bounding box
     */

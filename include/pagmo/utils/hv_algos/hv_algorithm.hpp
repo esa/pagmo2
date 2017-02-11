@@ -112,9 +112,9 @@ public:
     /**
     * Calculates the volume between points a and b (as defined for n-dimensional Euclidean spaces).
     *
-    * @param[in] a first point defining the hypercube
-    * @param[in] b second point defining the hypercube
-    * @param[in] dim_bound dimension boundary for the volume. If equal to 0 (default value), then compute the volume of
+    * @param a first point defining the hypercube
+    * @param b second point defining the hypercube
+    * @param dim_bound dimension boundary for the volume. If equal to 0 (default value), then compute the volume of
     * whole vector. Any positive number limits the computation from dimension 1 to dim_bound INCLUSIVE.
     *
     * @return volume of hypercube defined by points a and b
@@ -135,9 +135,9 @@ public:
     /**
     * Calculates the volume between points a and b (as defined for n-dimensional Euclidean spaces).
     *
-    * @param[in] a first point defining the hypercube
-    * @param[in] b second point defining the hypercube
-    * @param[in] size dimension of the vectors.
+    * @param a first point defining the hypercube
+    * @param b second point defining the hypercube
+    * @param size dimension of the vectors.
     *
     * @return volume of hypercube defined by points a and b
     */
@@ -157,8 +157,8 @@ public:
     * Hypervolume is then computed as a joint hypervolume of hypercubes, generated pairwise with the reference point and
     * each point from the set.
     *
-    * @param[in] points - vector of points for which the hypervolume is computed
-    * @param[in] r_point - reference point.
+    * @param points - vector of points for which the hypervolume is computed
+    * @param r_point - reference point.
     */
     virtual double compute(std::vector<vector_double> &points, const vector_double &r_point) const = 0;
 
@@ -169,9 +169,9 @@ public:
     * Hypervolume is then computed as a joint hypervolume of hypercubes, generated pairwise with the reference point and
     * each point from the set.
     *
-    * @param[in] p_idx index of the individual
-    * @param[in] points vector of vector_doubles for which the hypervolume is computed
-    * @param[in] r_point distinguished "reference point".
+    * @param p_idx index of the individual
+    * @param points vector of vector_doubles for which the hypervolume is computed
+    * @param r_point distinguished "reference point".
     *
     * @return exlusive hypervolume contributed by the individual at index p_idx
     */
@@ -195,8 +195,8 @@ public:
     * By default it computes each individual contribution, and chooses the one with the lowest contribution.
     * Other algorithms may overload this method for a more efficient solution.
     *
-    * @param[in] points vector of vector_doubles for which the hypervolume is computed
-    * @param[in] r_point distinguished "reference point".
+    * @param points vector of vector_doubles for which the hypervolume is computed
+    * @param r_point distinguished "reference point".
     *
     * @return index of the least contributor
     */
@@ -211,8 +211,8 @@ public:
     * By default it computes each individual contribution, and chooses the one with the highest contribution.
     * Other algorithms may overload this method for a more efficient solution.
     *
-    * @param[in] points vector of vector_doubles for which the hypervolume is computed
-    * @param[in] r_point distinguished "reference point".
+    * @param points vector of vector_doubles for which the hypervolume is computed
+    * @param r_point distinguished "reference point".
     *
     * @return index of the greatest contributor
     */
@@ -232,8 +232,8 @@ public:
     * This base method uses a very naive approach, which in fact is only slightly more efficient than calling
     * "exclusive" method successively.
     *
-    * @param[in] points vector of vector_doubles for which the contributions are computed
-    * @param[in] r_point distinguished "reference point".
+    * @param points vector of vector_doubles for which the contributions are computed
+    * @param r_point distinguished "reference point".
     * @return vector of exclusive contributions by every point
     */
     virtual std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
@@ -277,8 +277,8 @@ public:
     * This method serves as a verification method.
     * Not every algorithm is suited of every type of problem.
     *
-    * @param[in] points - vector of vector_doubles for which the hypervolume is computed
-    * @param[in] r_point - distinguished "reference point".
+    * @param points - vector of vector_doubles for which the hypervolume is computed
+    * @param r_point - distinguished "reference point".
     */
     virtual void verify_before_compute(const std::vector<vector_double> &points,
                                        const vector_double &r_point) const = 0;
@@ -307,8 +307,8 @@ protected:
     * The method checks whether the provided reference point fits the minimisation assumption, e.g.,
     * reference point must be "no worse" and in at least one objective and "better" for each of the points from the set.
     *
-    * @param[in] points - vector of vector_doubles for which the hypervolume is computed
-    * @param[in] r_point - distinguished "reference point".
+    * @param points - vector of vector_doubles for which the hypervolume is computed
+    * @param r_point - distinguished "reference point".
     */
     void assert_minimisation(const std::vector<vector_double> &points, const vector_double &r_point) const
     {

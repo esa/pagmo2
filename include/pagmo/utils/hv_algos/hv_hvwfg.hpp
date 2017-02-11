@@ -68,8 +68,8 @@ public:
     /**
     * Computes the hypervolume using the WFG algorithm.
     *
-    * @param[in] points vector of points containing the D-dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the points
+    * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the points
     *
     * @return hypervolume.
     */
@@ -96,8 +96,8 @@ public:
     * @see "Lyndon While and Lucas Bradstreet. Applying the WFG Algorithm To Calculate Incremental Hypervolumes. 2012
     * IEEE Congress on Evolutionary Computation. CEC 2012, pages 489-496. IEEE, June 2012."
     *
-    * @param[in] points vector of points containing the D-dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the points
+    * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the points
     */
     std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
     {
@@ -131,8 +131,8 @@ public:
     /**
     * Verifies whether given algorithm suits the requested data.
     *
-    * @param[in] points vector of points containing the D-dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the vector of points
+    * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the vector of points
     *
     * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
     */

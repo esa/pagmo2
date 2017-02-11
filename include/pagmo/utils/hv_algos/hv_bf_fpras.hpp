@@ -57,9 +57,9 @@ public:
     /**
     * Constructs an instance of the algorithm
     *
-    * @param[in] eps accuracy of the approximation
-    * @param[in] delta confidence of the approximation
-    * @param[in] seed seeding for the pseudo-random number generator
+    * @param eps accuracy of the approximation
+    * @param delta confidence of the approximation
+    * @param seed seeding for the pseudo-random number generator
     */
     bf_fpras(const double eps = 1e-2, const double delta = 1e-2, unsigned int seed = pagmo::random_device::next())
         : m_eps(eps), m_delta(delta), m_e(seed)
@@ -76,8 +76,8 @@ public:
     /**
     * Verifies whether given algorithm suits the requested data.
     *
-    * @param[in] points vector of points containing the d dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the vector of points
+    * @param points vector of points containing the d dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the vector of points
     *
     * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
     */
@@ -93,8 +93,8 @@ public:
     * @see "Approximating the volume of unions and intersections of high-dimensional geometric objects", Karl Bringmann,
     * Tobias Friedrich.
     *
-    * @param[in] points vector of fitness_vectors for which the hypervolume is computed
-    * @param[in] r_point distinguished "reference point".
+    * @param points vector of fitness_vectors for which the hypervolume is computed
+    * @param r_point distinguished "reference point".
     *
     * @return approximated hypervolume
     */

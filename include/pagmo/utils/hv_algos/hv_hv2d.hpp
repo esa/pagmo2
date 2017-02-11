@@ -63,8 +63,8 @@ public:
     *
     * Computational complexity: n*log(n)
     *
-    * @param[in] points vector of points containing the 2-dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the points
+    * @param points vector of points containing the 2-dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the points
     *
     * @return hypervolume
     */
@@ -103,9 +103,9 @@ public:
     *
     * Computational complexity: n*log(n)
     *
-    * @param[in] points array of 2-dimensional points
-    * @param[in] n_points number of points
-    * @param[in] r_point 2-dimensional reference point for the points
+    * @param points array of 2-dimensional points
+    * @param n_points number of points
+    * @param r_point 2-dimensional reference point for the points
     *
     * @return hypervolume
     */
@@ -138,8 +138,8 @@ public:
     /**
     * Computes the contributions of each point by invoking the HV3D algorithm with mock third dimension.
     *
-    * @param[in] points vector of points containing the 2-dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the points
+    * @param points vector of points containing the 2-dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the points
     * @return vector of exclusive contributions by every point
     */
     std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const;
@@ -154,8 +154,8 @@ public:
     /**
     * Verifies whether the requested data suits the hv2d algorithm.
     *
-    * @param[in] points vector of points containing the d dimensional points for which we compute the hypervolume
-    * @param[in] r_point reference point for the vector of points
+    * @param points vector of points containing the d dimensional points for which we compute the hypervolume
+    * @param r_point reference point for the vector of points
     *
     * @throws value_error when trying to compute the hypervolume for the dimension other than 3 or non-maximal reference
     * point

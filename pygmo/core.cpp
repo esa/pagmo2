@@ -912,7 +912,10 @@ BOOST_PYTHON_MODULE(core)
                               const bp::object &r_point) { return hv.exclusive(p_idx, pygmo::to_vd(r_point)); },
              "Computes the exclusive hypervolume.", (bp::arg("idx"), bp::arg("ref_point")))
         .def("exclusive",
-             +[](hypervolume &hv, const unsigned int p_idx, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) { return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo); },
+             +[](hypervolume &hv, const unsigned int p_idx, const bp::object &r_point,
+                 boost::shared_ptr<hv_algorithm> hv_algo) {
+                 return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo);
+             },
              "Computes the hypervolume using the provided hypervolume algorithm.",
              (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("least_contributor",

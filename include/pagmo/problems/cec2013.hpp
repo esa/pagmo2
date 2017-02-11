@@ -74,8 +74,8 @@ public:
     /**
      * Will construct one of the 28 CEC2013 problems
      *
-     * @param[in] prob_id The problem id. One of [1,2,...,28]
-     * @param[in] dim problem dimension. One of [2,5,10,20,30,...,100]
+     * @param prob_id The problem id. One of [1,2,...,28]
+     * @param dim problem dimension. One of [2,5,10,20,30,...,100]
      *
      * @see http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip to find
      * the files
