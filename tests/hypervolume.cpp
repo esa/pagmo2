@@ -96,19 +96,19 @@ public:
             // run correct test
             if (m_test_type == "compute") {
                 load_compute();
-                double hypvol = hv_obj.compute(m_ref_point, m_method);
+                double hypvol = hv_obj.compute(m_ref_point, *m_method);
                 BOOST_CHECK((std::abs(hypvol - m_hv_ans) < m_eps));
             } else if (m_test_type == "exclusive") {
                 load_exclusive();
-                double hypvol = hv_obj.exclusive(m_p_idx, m_ref_point, m_method);
+                double hypvol = hv_obj.exclusive(m_p_idx, m_ref_point, *m_method);
                 BOOST_CHECK((std::abs(hypvol - m_hv_ans) < m_eps));
             } else if (m_test_type == "least_contributor") {
                 load_least_contributor();
-                auto point_idx = hv_obj.least_contributor(m_ref_point, m_method);
+                auto point_idx = hv_obj.least_contributor(m_ref_point, *m_method);
                 BOOST_CHECK((point_idx == m_idx_ans));
             } else if (m_test_type == "greatest_contributor") {
                 load_least_contributor(); // loads the same data as least contributor
-                auto point_idx = hv_obj.greatest_contributor(m_ref_point, m_method);
+                auto point_idx = hv_obj.greatest_contributor(m_ref_point, *m_method);
                 BOOST_CHECK((point_idx == m_idx_ans));
             } else {
                 // The specified computational method is not available (what do you want to compute?)
@@ -232,9 +232,9 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
     BOOST_CHECK_THROW(hv = hypervolume({{2.3, 3.4, 5.6}, {1.0, 2.0, 3.0, 4.0}}), std::invalid_argument);
 
     // Calling specific algorithms
-    std::shared_ptr<hv_algorithm> hv_algo_2d = hv2d().clone();
-    std::shared_ptr<hv_algorithm> hv_algo_3d = hv3d().clone();
-    std::shared_ptr<hv_algorithm> hv_algo_nd = hvwfg().clone();
+    hv2d hv_algo_2d;
+    hv3d hv_algo_3d;
+    hvwfg hv_algo_nd;
 
     hv = hypervolume{{2.3, 4.5}, {3.4, 3.4}, {6.0, 1.2}};
     BOOST_CHECK((hv.compute({7.0, 7.0}) == 17.91));
@@ -454,7 +454,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_exclusive_test)
     BOOST_CHECK_THROW(hv.exclusive(200, ref), std::invalid_argument);
 
     // picking the wrong algorithm
-    std::shared_ptr<hv_algorithm> hv_algo_3d = hv3d().clone();
+    hv3d hv_algo_3d;
     BOOST_CHECK_THROW(hv.exclusive(0, ref, hv_algo_3d), std::invalid_argument);
 }
 
@@ -485,7 +485,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_approximation_test)
        However, fixing the seed does not guarantee the same random numbers on all platforms.
        Thus, it remains a very small chance, that the test will fail on some platforms. However, it will
        do so consistently and not in a random way. So when in doubt: change the seed! */
-    std::shared_ptr<hv_algorithm> hv_bf_fpras = bf_fpras(epsilon, delta, seed).clone();
+    bf_fpras hv_bf_fpras(epsilon, delta, seed);
 
     hv = hypervolume{{2.3, 4.5}, {3.4, 3.4}, {6.0, 1.2}};
     correct = 17.91;
@@ -520,8 +520,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributor_approximation_test)
     However, fixing the seed does not guarantee the same random numbers on all platforms.
     Thus, it remains a very small chance, that the test will fail on some platforms. However, it will
     do so consistently and not in a random way. So when in doubt: change the seed! */
-    std::shared_ptr<hv_algorithm> hv_bf_approx
-        = bf_approx(true, 1, epsilon, delta, 0.775, 0.2, 0.1, 0.25, seed).clone();
+    bf_approx hv_bf_approx(true, 1, epsilon, delta, 0.775, 0.2, 0.1, 0.25, seed);
 
     hv = hypervolume({{2.5, 1}, {2, 2}, {1, 3}});
     BOOST_CHECK((hv.least_contributor(ref, hv_bf_approx) == 1));

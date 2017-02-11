@@ -232,7 +232,7 @@ public:
     */
     double compute(const vector_double &r_point) const
     {
-        return compute(r_point, get_best_compute(r_point));
+        return compute(r_point, *get_best_compute(r_point));
     }
 
     /// Compute hypervolume
@@ -244,7 +244,7 @@ public:
     *
     * @return value representing the hypervolume
     */
-    double compute(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+    double compute(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -252,9 +252,9 @@ public:
         // copy the initial set of points, as the algorithm may alter its contents
         if (m_copy_points) {
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
-            return hv_algo->compute(points_cpy, r_point);
+            return hv_algo.compute(points_cpy, r_point);
         } else {
-            return hv_algo->compute(m_points, r_point);
+            return hv_algo.compute(m_points, r_point);
         }
     }
 
@@ -269,7 +269,7 @@ public:
     * @return value representing the hypervolume
     */
     double exclusive(const unsigned int p_idx, const vector_double &r_point,
-                     std::shared_ptr<hv_algorithm> hv_algo) const
+                     hv_algorithm &hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -282,9 +282,9 @@ public:
         // copy the initial set of points, as the algorithm may alter its contents
         if (m_copy_points) {
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
-            return hv_algo->exclusive(p_idx, points_cpy, r_point);
+            return hv_algo.exclusive(p_idx, points_cpy, r_point);
         } else {
-            return hv_algo->exclusive(p_idx, m_points, r_point);
+            return hv_algo.exclusive(p_idx, m_points, r_point);
         }
     }
 
@@ -300,7 +300,7 @@ public:
     */
     double exclusive(const unsigned int p_idx, const vector_double &r_point) const
     {
-        return exclusive(p_idx, r_point, get_best_exclusive(p_idx, r_point));
+        return exclusive(p_idx, r_point, *get_best_exclusive(p_idx, r_point));
     }
 
     /// Contributions method
@@ -313,7 +313,7 @@ public:
     * @param[in] hv_algorithm instance of the algorithm object used for the computation
     * @return vector of exclusive contributions by every point
     */
-    std::vector<double> contributions(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+    std::vector<double> contributions(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -329,11 +329,12 @@ public:
         // copy the initial set of points, as the algorithm may alter its contents
         if (m_copy_points) {
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
-            return hv_algo->contributions(points_cpy, r_point);
+            return hv_algo.contributions(points_cpy, r_point);
         } else {
-            return hv_algo->contributions(m_points, r_point);
+            return hv_algo.contributions(m_points, r_point);
         }
     }
+
 
     /// Contributions method
     /**
@@ -347,7 +348,7 @@ public:
     */
     std::vector<double> contributions(const vector_double &r_point) const
     {
-        return contributions(r_point, get_best_contributions(r_point));
+        return contributions(r_point, *get_best_contributions(r_point));
     }
 
     /// Find the least contributing individual
@@ -359,7 +360,7 @@ public:
     *
     * @return index of the least contributing point
     */
-    unsigned long long least_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+    unsigned long long least_contributor(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -373,9 +374,9 @@ public:
         // copy the initial set of points, as the algorithm may alter its contents
         if (m_copy_points) {
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
-            return hv_algo->least_contributor(points_cpy, r_point);
+            return hv_algo.least_contributor(points_cpy, r_point);
         } else {
-            return hv_algo->least_contributor(m_points, r_point);
+            return hv_algo.least_contributor(m_points, r_point);
         }
     }
 
@@ -390,7 +391,7 @@ public:
     */
     unsigned long long least_contributor(const vector_double &r_point) const
     {
-        return least_contributor(r_point, get_best_contributions(r_point));
+        return least_contributor(r_point, *get_best_contributions(r_point));
     }
 
     /// Find the most contributing individual
@@ -402,7 +403,7 @@ public:
     *
     * @return index of the most contributing point
     */
-    unsigned long long greatest_contributor(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+    unsigned long long greatest_contributor(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -411,9 +412,9 @@ public:
         // copy the initial set of points, as the algorithm may alter its contents
         if (m_copy_points) {
             std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
-            return hv_algo->greatest_contributor(points_cpy, r_point);
+            return hv_algo.greatest_contributor(points_cpy, r_point);
         } else {
-            return hv_algo->greatest_contributor(m_points, r_point);
+            return hv_algo.greatest_contributor(m_points, r_point);
         }
     }
 
@@ -428,7 +429,7 @@ public:
     */
     unsigned long long greatest_contributor(const vector_double &r_point) const
     {
-        return greatest_contributor(r_point, get_best_contributions(r_point));
+        return greatest_contributor(r_point, *get_best_contributions(r_point));
     }
 
 private:
@@ -466,12 +467,12 @@ private:
     *
     * @throws value_error if reference point's and point set dimension do not agree
     */
-    void verify_before_compute(const vector_double &r_point, std::shared_ptr<hv_algorithm> hv_algo) const
+    void verify_before_compute(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_points[0].size() != r_point.size()) {
             pagmo_throw(std::invalid_argument, "Point set dimensions and reference point dimension must be equal.");
         }
-        hv_algo->verify_before_compute(m_points, r_point);
+        hv_algo.verify_before_compute(m_points, r_point);
     }
 };
 
