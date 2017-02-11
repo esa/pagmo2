@@ -57,6 +57,28 @@ public:
     {
     }
 
+    /// Constructor from population
+    /**
+    * Constructs a hypervolume object, where points are elicited from the referenced population object.
+    *
+    * @param[in] reference parameter for the population object
+    * @param[in] verify flag stating whether the points should be verified after the construction.
+    *			 This turns off the validation for the further computation as well, use 'set_verify' flag to alter it
+    *later.
+    */
+    hypervolume(const pagmo::population &pop, const bool verify) : m_copy_points(true), m_verify(verify)
+    {
+        if (pop.get_problem().get_nc() == 0) {
+            m_points = pop.get_f();
+        } else {
+            pagmo_throw(std::invalid_argument, "The problem of the population is not unconstrained. Only unconstrained "
+                                               "populations can be used to constructs hypervolumes.");
+        }
+        if (m_verify) {
+            verify_after_construct();
+        }
+    }
+
     /// Constructor from initializer list
     /**
     * Constructs a hypervolume object from an initializer list, provided by curly-braces syntax
@@ -99,28 +121,6 @@ public:
 
     /// Defaulted copy assignment operator.
     hypervolume &operator=(const hypervolume &) = default;
-
-    /// Constructor from population
-    /**
-    * Constructs a hypervolume object, where points are elicited from the referenced population object.
-    *
-    * @param[in] reference parameter for the population object
-    * @param[in] verify flag stating whether the points should be verified after the construction.
-    *			 This turns off the validation for the further computation as well, use 'set_verify' flag to alter it
-    *later.
-    */
-    hypervolume(const pagmo::population &pop, const bool verify) : m_copy_points(true), m_verify(verify)
-    {
-        if (pop.get_problem().get_nc() == 0) {
-            m_points = pop.get_f();
-        } else {
-            pagmo_throw(std::invalid_argument, "The problem of the population is not unconstrained. Only unconstrained "
-                                               "populations can be used to constructs hypervolumes.");
-        }
-        if (m_verify) {
-            verify_after_construct();
-        }
-    }
 
     /// Setter for 'copy_points' flag
     /**

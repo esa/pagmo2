@@ -601,3 +601,8 @@ BOOST_AUTO_TEST_CASE(hypervolume_test_instances)
         BOOST_CHECK((false));
     }
 }
+
+BOOST_AUTO_TEST_CASE(hypervolume_construction_test)
+{
+    
+}
