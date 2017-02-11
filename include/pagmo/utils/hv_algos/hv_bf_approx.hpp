@@ -150,12 +150,18 @@ public:
     }
 
     /// Clone method.
+    /**
+     * @return a pointer to a new object cloning this
+     */
     std::shared_ptr<hv_algorithm> clone() const
     {
         return std::shared_ptr<hv_algorithm>(new bf_approx(*this));
     }
 
     /// Algorithm name
+    /**
+     * @return The name of this particular algorithm
+     */
     std::string get_name() const
     {
         return "Bringmann-Friedrich approximation method";

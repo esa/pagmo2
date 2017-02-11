@@ -42,8 +42,22 @@ namespace pagmo
 
 /// Hypervolume
 /**
- * This class encapsulate various utilities that are used to compute the hyervolume of a set of
- * points. The
+ * This class encapsulate various utilities used to compute the hyervolume of a set of
+ * points or their specific contributions to it.
+ *
+ * The main API consists of the five methods:
+ *
+ * - hypervolume::compute - returns the total hypervolume of the set of points
+ * - hypervolume::exclusive - returns the exclusive volume contributed by a given point
+ * - hypervolume::least_contributor - returns the index of the point contributing the least volume
+ * - hypervolume::greatest_contributor - returns the index of the point contributing the most volume
+ * - hypervolume::contributions - returns the vector of exclusive contributions for each of the points.
+ *
+ * Each of the methods can be called passing to them a reference point (and an index where needed)
+ * and will, internally, select the most efficient exact Hypervolume algorithm able to compute
+ * the requested quantity. A pagmo::hv_algorithm can also be passed as optional argument, in which case
+ * this will be used to perform the computations.
+ *
  */
 class hypervolume
 {
@@ -62,11 +76,9 @@ public:
     * Constructs a hypervolume object, where points are elicited from a pagmo::population object.
     *
     * @param pop a pagmo::population
-    * @param verify flag stating whether the points should be verified after the construction.
-    *        This turns off the validation for the further computation as well,
-    *        use 'set_verify' flag to alter it later.
+    * @param verify flag stating whether the points should be verified for consistency after the construction.
     */
-    hypervolume(const pagmo::population &pop, const bool verify) : m_copy_points(true), m_verify(verify)
+    hypervolume(const pagmo::population &pop, const bool verify = false) : m_copy_points(true), m_verify(verify)
     {
         if (pop.get_problem().get_nc() == 0u) {
             m_points = pop.get_f();
@@ -112,7 +124,6 @@ public:
 
     /// Defaulted copy assignment operator.
     /**
-     * @param hypervolume the object
      * @return the copy
      */
     hypervolume &operator=(const hypervolume &) = default;
@@ -217,8 +228,8 @@ public:
         return m_points;
     }
 
-    //Choose the best algorithm to compute the hypervolume the actual implementation is given
-    //in another headers as to not create a circular dependency problem
+    // Choose the best algorithm to compute the hypervolume the actual implementation is given
+    // in another headers as to not create a circular dependency problem
     std::shared_ptr<hv_algorithm> get_best_compute(const vector_double &r_point) const;
     std::shared_ptr<hv_algorithm> get_best_exclusive(const unsigned int p_idx, const vector_double &r_point) const;
     std::shared_ptr<hv_algorithm> get_best_contributions(const vector_double &r_point) const;

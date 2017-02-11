@@ -52,6 +52,9 @@ class hv2d : public hv_algorithm
 {
 public:
     /// Constructor
+    /**
+     * @param initial_sorting Turn initial sorting on-off
+     */
     hv2d(const bool initial_sorting = true) : m_initial_sorting(initial_sorting)
     {
     }
@@ -145,6 +148,9 @@ public:
     std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const;
 
     /// Clone method.
+    /**
+     * @return a pointer to a new object cloning this
+     */
     std::shared_ptr<hv_algorithm> clone() const
     {
         return std::shared_ptr<hv_algorithm>(new hv2d(*this));
@@ -170,6 +176,9 @@ public:
     }
 
     /// Algorithm name
+    /**
+     * @return The name of this particular algorithm
+     */
     std::string get_name() const
     {
         return "hv2d algorithm";

@@ -34,8 +34,8 @@ These are the algorithms implemented in PyGMO.
 
    algorithms/py_cpp_algorithms
 
-Various utilities
-^^^^^^^^^^^^^^^^^
+Utilities
+^^^^^^^^^
 Various optimization utilities implemented in PyGMO.
 
 .. toctree::

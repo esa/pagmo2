@@ -57,6 +57,9 @@ class hvwfg : public hv_algorithm
 {
 public:
     /// Constructor
+    /**
+     * @param stop_dimension The stop dimension
+     */
     hvwfg(const unsigned int stop_dimension = 2u) : hv_algorithm(), m_current_slice(0), m_stop_dimension(stop_dimension)
     {
         if (stop_dimension < 2u) {
@@ -98,6 +101,8 @@ public:
     *
     * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
     * @param r_point reference point for the points
+    *
+    * @return the single contributions
     */
     std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
     {
@@ -142,12 +147,18 @@ public:
     }
 
     /// Clone method.
+    /**
+     * @return a pointer to a new object cloning this
+     */
     std::shared_ptr<hv_algorithm> clone() const
     {
         return std::shared_ptr<hv_algorithm>(new hvwfg(*this));
     }
 
     /// Algorithm name
+    /**
+     * @return The name of this particular algorithm
+     */
     std::string get_name() const
     {
         return "WFG algorithm";

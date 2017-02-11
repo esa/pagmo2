@@ -94,8 +94,6 @@ namespace pagmo
 * order to prevent
 * the computation in case of incompatible data.
 *
-* @author Krzysztof Nowak (kn@linux.net)
-* @author Marcus Maertens (mmarcusx@gmail.com)
 */
 class hv_algorithm
 {
@@ -105,7 +103,9 @@ public:
     virtual ~hv_algorithm()
     {
     }
+    /// Default copy constructor
     hv_algorithm(const hv_algorithm &) = default;
+    /// Default move constructor
     hv_algorithm(hv_algorithm &&) = default;
 
     /// Compute volume between two points
@@ -159,6 +159,8 @@ public:
     *
     * @param points - vector of points for which the hypervolume is computed
     * @param r_point - reference point.
+    *
+    * @return The value of the hypervolume
     */
     virtual double compute(std::vector<vector_double> &points, const vector_double &r_point) const = 0;
 
@@ -345,39 +347,12 @@ protected:
         }
     }
 
-    /// compute the extreme contributor
-    /**
-    * Computes the index of the individual that contributes the most or the least to the hypervolume (depending on the
-    * prodivded comparison function)
-    */
-    virtual unsigned int extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
-                                             bool (*cmp_func)(double, double)) const
-    {
-        // Trivial case
-        if (points.size() == 1u) {
-            return 0;
-        }
-
-        std::vector<double> c = contributions(points, r_point);
-
-        unsigned int idx_extreme = 0u;
-
-        // Check the remaining ones using the provided comparison function
-        for (unsigned int idx = 1u; idx < c.size(); ++idx) {
-            if (cmp_func(c[idx], c[idx_extreme])) {
-                idx_extreme = idx;
-            }
-        }
-
-        return idx_extreme;
-    }
-
-    // Domination results of the 'dom_cmp' methods
+    /*! Possible result of a comparison between points */
     enum {
-        DOM_CMP_B_DOMINATES_A = 1, // second argument dominates the first one
-        DOM_CMP_A_DOMINATES_B = 2, // first argument dominates the second one
-        DOM_CMP_A_B_EQUAL = 3,     // both points are equal
-        DOM_CMP_INCOMPARABLE = 4   // points are incomparable
+        DOM_CMP_B_DOMINATES_A = 1, ///< second argument dominates the first one
+        DOM_CMP_A_DOMINATES_B = 2, ///< first argument dominates the second one
+        DOM_CMP_A_B_EQUAL = 3,     ///< both points are equal
+        DOM_CMP_INCOMPARABLE = 4   ///< points are incomparable
     };
 
     /// Dominance comparison method
@@ -388,6 +363,12 @@ protected:
     * returns DOM_CMP_A_DOMINATES_B if point 'a' DOMINATES point 'b'
     * returns DOM_CMP_A_B_EQUAL if point 'a' IS EQUAL TO 'b'
     * returns DOM_CMP_INCOMPARABLE otherwise
+    *
+    * @param a first point
+    * @param b second point
+    * @param size size of the points
+    *
+    * @return the comparison result (1 - b dom a,2 - a dom b, 3 - a == b,4 - not comparable)
     */
     static int dom_cmp(double *a, double *b, vector_double::size_type size)
     {
@@ -419,6 +400,12 @@ protected:
     * returns DOM_CMP_A_DOMINATES_B if point 'a' DOMINATES point 'b'
     * returns DOM_CMP_A_B_EQUAL if point 'a' IS EQUAL TO 'b'
     * returns DOM_CMP_INCOMPARABLE otherwise
+    *
+    * @param a first point
+    * @param b second point
+    * @param dim_bound maximum dimension to be considered
+    *
+    * @return the comparison result (1 - b dom a,2 - a dom b, 3 - a == b,4 - not comparable)
     */
     static int dom_cmp(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound)
     {
@@ -443,6 +430,34 @@ protected:
             }
         }
         return DOM_CMP_A_B_EQUAL;
+    }
+
+private:
+    /// Compute the extreme contributor
+    /**
+    * Computes the index of the individual that contributes the most or the least to the
+    * hypervolume (depending on the  prodivded comparison function)
+    */
+    unsigned int extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
+                                     bool (*cmp_func)(double, double)) const
+    {
+        // Trivial case
+        if (points.size() == 1u) {
+            return 0;
+        }
+
+        std::vector<double> c = contributions(points, r_point);
+
+        unsigned int idx_extreme = 0u;
+
+        // Check the remaining ones using the provided comparison function
+        for (unsigned int idx = 1u; idx < c.size(); ++idx) {
+            if (cmp_func(c[idx], c[idx_extreme])) {
+                idx_extreme = idx;
+            }
+        }
+
+        return idx_extreme;
     }
 };
 

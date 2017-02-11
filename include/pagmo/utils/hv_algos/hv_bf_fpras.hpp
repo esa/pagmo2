@@ -163,34 +163,31 @@ public:
     /// Exclusive method
     /**
     * This algorithm does not support this method.
+    * @return Nothing as it throws before
     */
-    double exclusive(const unsigned int p_idx, std::vector<vector_double> &points, const vector_double &r_point) const
+    double exclusive(const unsigned int, std::vector<vector_double> &, const vector_double &) const
     {
-        (void)p_idx;
-        (void)points;
-        (void)r_point;
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }
 
     /// Least contributor method
     /**
     * This algorithm does not support this method.
+    *
+    * @return Nothing as it throws before
     */
-    unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+    unsigned long long least_contributor(std::vector<vector_double> &, const vector_double &) const
     {
-        (void)points;
-        (void)r_point;
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }
 
     /// Greatest contributor method
     /**
     * This algorithm does not support this method.
+    * @return Nothing as it throws before
     */
-    unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
+    unsigned long long greatest_contributor(std::vector<vector_double> &, const vector_double &) const
     {
-        (void)points;
-        (void)r_point;
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }
 
@@ -198,21 +195,26 @@ public:
     /**
     * As of yet, this algorithm does not support this method, even in its naive form, due to a poor handling of the
     * dominated points.
+    * @return Nothing as it throws before
     */
-    vector_double contributions(std::vector<vector_double> &points, const vector_double &r_point) const
+    vector_double contributions(std::vector<vector_double> &, const vector_double &) const
     {
-        (void)points;
-        (void)r_point;
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }
 
     /// Clone method.
+    /**
+     * @return a pointer to a new object cloning this
+     */
     std::shared_ptr<hv_algorithm> clone() const
     {
         return std::shared_ptr<hv_algorithm>(new bf_fpras(*this));
     }
 
     /// Algorithm name
+    /**
+     * @return The name of this particular algorithm
+     */
     std::string get_name() const
     {
         return "bf_fpras algorithm";
