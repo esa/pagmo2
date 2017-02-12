@@ -78,7 +78,7 @@ public:
     * @param pop a pagmo::population
     * @param verify flag stating whether the points should be verified for consistency after the construction.
     */
-    hypervolume(const pagmo::population &pop, const bool verify = false) : m_copy_points(true), m_verify(verify)
+    hypervolume(const pagmo::population &pop, bool verify = false) : m_copy_points(true), m_verify(verify)
     {
         if (pop.get_problem().get_nc() == 0u) {
             m_points = pop.get_f();
@@ -106,7 +106,7 @@ public:
     * @endcode
     *
     */
-    hypervolume(const std::vector<vector_double> &points, const bool verify = true)
+    hypervolume(const std::vector<vector_double> &points, bool verify = true)
         : m_points(points), m_copy_points(true), m_verify(verify)
     {
         if (m_verify) {
@@ -167,7 +167,7 @@ public:
     *
     * @param verify boolean value stating whether the hypervolume computation is to be executed without verification
     */
-    void set_verify(const bool verify)
+    void set_verify(bool verify)
     {
         m_verify = verify;
     }
@@ -194,7 +194,7 @@ public:
     *
     * @return reference point
     */
-    vector_double refpoint(const double offset = 0.0) const
+    vector_double refpoint(double offset = 0.0) const
     {
         // Corner case
         if (m_points.size() == 0u) {
@@ -281,7 +281,7 @@ public:
     *
     * @return value representing the hypervolume
     */
-    double exclusive(const unsigned int p_idx, const vector_double &r_point, hv_algorithm &hv_algo) const
+    double exclusive(unsigned int p_idx, const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -310,7 +310,7 @@ public:
     *
     * @return value representing the hypervolume
     */
-    double exclusive(const unsigned int p_idx, const vector_double &r_point) const
+    double exclusive(unsigned int p_idx, const vector_double &r_point) const
     {
         return exclusive(p_idx, r_point, *get_best_exclusive(p_idx, r_point));
     }
@@ -501,7 +501,7 @@ namespace detail
 *
 * @return expected number of operations
 */
-double expected_hv_operations(const vector_double::size_type n, const vector_double::size_type d)
+double expected_hv_operations(vector_double::size_type n, vector_double::size_type d)
 {
     if (d <= 3) {
         return d * n * std::log(n); // hv3d

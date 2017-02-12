@@ -1,7 +1,7 @@
 find_package(Boost 1.55.0 REQUIRED)
 
 # We move the test files into the testing directory
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/hypervolume_test_data/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/tests/hypervolume_test_data/")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/hypervolume_test_data/" DESTINATION "${CMAKE_BINARY_DIR}/tests/hypervolume_test_data/")
 
 function(ADD_PAGMO_TESTCASE arg1)
     add_executable(${arg1} ${arg1}.cpp)

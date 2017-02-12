@@ -61,7 +61,7 @@ public:
     * @param delta confidence of the approximation
     * @param seed seeding for the pseudo-random number generator
     */
-    bf_fpras(const double eps = 1e-2, const double delta = 1e-2, unsigned int seed = pagmo::random_device::next())
+    bf_fpras(double eps = 1e-2, double delta = 1e-2, unsigned int seed = pagmo::random_device::next())
         : m_eps(eps), m_delta(delta), m_e(seed)
     {
         if (eps < 0 || eps > 1) {
@@ -165,7 +165,7 @@ public:
     * This algorithm does not support this method.
     * @return Nothing as it throws before
     */
-    double exclusive(const unsigned int, std::vector<vector_double> &, const vector_double &) const
+    double exclusive(unsigned int, std::vector<vector_double> &, const vector_double &) const
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }

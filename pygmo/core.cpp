@@ -39,6 +39,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/copy_const_reference.hpp>
@@ -894,53 +895,52 @@ BOOST_PYTHON_MODULE(core)
 
     // Exposition of various structured utilities
     // Hypervolume class
-    bp::class_<hypervolume>("hypervolume", "Hypervolume class.", bp::no_init)
-        .def(bp::init<population, const bool>((bp::arg("pop"), bp::arg("verify") = true)))
+    bp::class_<hypervolume>("hypervolume", "Hypervolume class.", bp::init<population, const bool>((bp::arg("pop"), bp::arg("verify") = true)))
         .def("__init__",
              bp::make_constructor(+[](const bp::object &points,
                                       const bool verify) { return ::new hypervolume(pygmo::to_vvd(points), verify); },
                                   bp::default_call_policies(), (bp::arg("points"), bp::arg("verify") = true)))
-        .def("compute", +[](hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); },
+        .def("compute", +[](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); },
              "Computes the hypervolume.", (bp::arg("ref_point")))
         .def("compute",
-             +[](hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.compute(pygmo::to_vd(r_point), *hv_algo);
              },
              "Computes the hypervolume using the provided hypervolume algorithm.",
              (bp::arg("ref_point"), bp::arg("hv_algo")))
-        .def("exclusive", +[](hypervolume &hv, const unsigned int p_idx,
+        .def("exclusive", +[](const hypervolume &hv, const unsigned int p_idx,
                               const bp::object &r_point) { return hv.exclusive(p_idx, pygmo::to_vd(r_point)); },
              "Computes the exclusive hypervolume.", (bp::arg("idx"), bp::arg("ref_point")))
         .def("exclusive",
-             +[](hypervolume &hv, const unsigned int p_idx, const bp::object &r_point,
+             +[](const hypervolume &hv, const unsigned int p_idx, const bp::object &r_point,
                  boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo);
              },
              "Computes the hypervolume using the provided hypervolume algorithm.",
              (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("least_contributor",
-             +[](hypervolume &hv, const bp::object &r_point) { return hv.least_contributor(pygmo::to_vd(r_point)); },
+             +[](const hypervolume &hv, const bp::object &r_point) { return hv.least_contributor(pygmo::to_vd(r_point)); },
              "Computes the least_contributor.", (bp::arg("ref_point")))
         .def("least_contributor",
-             +[](hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.least_contributor(pygmo::to_vd(r_point), *hv_algo);
              },
              "Computes the least_contributor using the provided hypervolume algorithm.",
              (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("greatest_contributor",
-             +[](hypervolume &hv, const bp::object &r_point) { return hv.greatest_contributor(pygmo::to_vd(r_point)); },
+             +[](const hypervolume &hv, const bp::object &r_point) { return hv.greatest_contributor(pygmo::to_vd(r_point)); },
              "Computes the greatest_contributor.", (bp::arg("ref_point")))
         .def("greatest_contributor",
-             +[](hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.greatest_contributor(pygmo::to_vd(r_point), *hv_algo);
              },
              "Computes the greatest_contributor using the provided hypervolume algorithm.",
              (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("contributions",
-             +[](hypervolume &hv, const bp::object &r_point) { return hv.contributions(pygmo::to_vd(r_point)); },
+             +[](const hypervolume &hv, const bp::object &r_point) { return hv.contributions(pygmo::to_vd(r_point)); },
              "Get the contributions to the hypervolume by each point.", (bp::arg("ref_point")))
         .def("contributions",
-             +[](hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.contributions(pygmo::to_vd(r_point), *hv_algo);
              },
              "Get the contributions to the hypervolume by each point using provided hypervolume algorithm..",
@@ -953,13 +953,13 @@ BOOST_PYTHON_MODULE(core)
     // Hypervolume algorithms
     bp::class_<hv_algorithm, boost::noncopyable>("_hv_algorithm", bp::no_init).def("get_name", &hv_algorithm::get_name);
     bp::class_<hvwfg, bp::bases<hv_algorithm>>("wfg", "WFG algorithm.")
-        .def(bp::init<const unsigned int>((bp::arg("stop_dimension") = 2)));
+        .def(bp::init<unsigned int>((bp::arg("stop_dimension") = 2)));
     bp::class_<bf_approx, bp::bases<hv_algorithm>>("bf_approx", "Bringmann-Friedrich approximated algorithm.")
-        .def(bp::init<const bool, const unsigned int, const double, const double, const double, const double,
-                      const double, const double>());
+        .def(bp::init< bool,  unsigned int,  double,  double,  double,  double,
+                       double,  double>());
     bp::class_<bf_fpras, bp::bases<hv_algorithm>>("bf_fpras", "Hypervolume approximation based on FPRAS")
-        .def(bp::init<const double, const double>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2)))
-        .def(bp::init<const double, const double, unsigned int>(
+        .def(bp::init< double,  double>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2)))
+        .def(bp::init< double,  double, unsigned int>(
             (bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2, bp::arg("seed"))));
     bp::class_<hv2d, bp::bases<hv_algorithm>>("hv2d", "hv2d algorithm", bp::init<>());
     bp::class_<hv3d, bp::bases<hv_algorithm>>("hv3d", "hv3d algorithm", bp::init<>());
