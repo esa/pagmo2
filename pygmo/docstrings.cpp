@@ -1104,6 +1104,43 @@ Raises:
 )";
 }
 
+std::string problem_get_name_docstring()
+{
+    return R"(get_name()
+
+Problem's name.
+
+If the UDP provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
+Otherwise, an implementation-defined name based on the type of the UDP will be returned.
+
+The ``get_name()`` method of the UDP must return a ``str``.
+
+Returns:
+    ``str``: the problem's name
+
+)";
+}
+
+std::string problem_get_extra_info_docstring()
+{
+    return R"(get_extra_info()
+
+Problem's extra info.
+
+If the UDP provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
+method. Otherwise, an empty string will be returned.
+
+The ``get_extra_info()`` method of the UDP must return a ``str``.
+
+Returns:
+  ``str``: extra info about the UDP
+
+Raises:
+  unspecified: any exception thrown by the ``get_extra_info()`` method of the UDP
+
+)";
+}
+
 std::string problem_get_best_docstring(const std::string &name)
 {
     return R"(best_known()
