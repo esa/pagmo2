@@ -91,6 +91,15 @@ std::string sade_get_log_docstring();
 std::string simulated_annealing_docstring();
 std::string simulated_annealing_get_log_docstring();
 
+// utilities
+// hypervolume
+std::string hv_init1_docstring();
+std::string hv_init2_docstring();
+std::string hv_compute_docstring();
+std::string hv_contributions_docstring();
+std::string hv_exclusive_docstring();
+std::string hv_greatest_contributor_docstring();
+std::string hv_least_contributor_docstring();
 // stand alone functions
 std::string fast_non_dominated_sorting_docstring();
 }

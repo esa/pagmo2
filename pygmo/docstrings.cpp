@@ -1293,7 +1293,7 @@ The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
 
 Args:
     gen (``int``): number of generations
-    allowed_variants (``NumPy array or list of floats``): allowed mutation variants, each one being a number in [1, 18]
+    allowed_variants (``NumPy array or list of int``): allowed mutation variants, each one being a number in [1, 18]
     variant_adptv (``int``): *F* and *CR* parameter adaptation scheme to be used (one of 1..2)
     ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
     xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
@@ -1625,6 +1625,159 @@ Examples:
     [3 1 0 2 0]
     >>> print(ndr)
     [2 1 0 2 0]
+
+)";
+}
+
+std::string hv_init1_docstring()
+{
+    return R"(__init__(pop, verify = True)
+
+Constructor from population
+
+Args:
+    pop (``pygmo.population``): a pygmo.population
+    verify (``bool``): points verification
+
+Raises:
+    ValueError: if *pop* contains a single-objective or a constrained problem
+
+Examples:
+    >>> from pygmo import *
+    >>> pop = population(prob = zdt(id = 1), size = 20)
+    >>> hv = hypervolume(pop = pop, verify = True)
+
+See also the docs of the C++ class :cpp:class:`pagmo::hypervolume`.
+
+)";
+}
+
+std::string hv_init2_docstring()
+{
+    return R"(__init__(points, verify = True)
+
+Constructor from points
+
+Args:
+    points (``list`` of ``arrays``): the points
+    verify (``bool``): points verification
+
+Raises:
+    ValueError: if *verify* and *points* are inconsistent
+
+Examples:
+    >>> from pygmo import *
+    >>> points = [[1,2],[0.5, 3],[0.1,3.1]]
+    >>> hv = hypervolume(points = points, verify = True)
+
+See also the docs of the C++ class :cpp:class:`pagmo::hypervolume`.
+
+)";
+}
+
+std::string hv_compute_docstring()
+{
+    return R"(hypervolume.compute(ref_point, hv_algo = auto)
+
+Computes the hypervolume with the supplied algorithm. If no algorithm
+is supplied,  then an exact hypervolume algorithm is automatically selected
+specific for the point dimension.
+
+Args:
+    ref_point (``list`` of ``arrays``): the points
+    hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
+
+Returns:
+    ``float``: the computed hypervolume assuming *ref_point* as reference point
+
+Raises:
+    ValueError: if *ref_point* is not dominated by the nadir point
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::compute`.
+
+)";
+}
+
+std::string hv_contributions_docstring()
+{
+    return R"(hypervolume.contributions(ref_point, hv_algo = auto)
+
+This method returns the exclusive contribution to the hypervolume of every point.
+According to *hv_algo* this computation can be implemented optimally (as opposed to calling
+for :func:`~pygmo.hypervolume.exclusive` in a loop).
+
+Args:
+    ref_point (``list`` of ``arrays``): the points
+    hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
+
+Returns:
+    ``Numpy array``: the contribution of all points to the hypervolume
+
+Raises:
+    ValueError: if *ref_point* is not suitable
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::contributions`.
+
+)";
+}
+
+std::string hv_exclusive_docstring()
+{
+    return R"(hypervolume.exclusive(idx, ref_point, hv_algo = auto)
+
+Computes the exclusive contribution to the hypervolume of a particular point.
+
+Args:
+    idx (``int``): index of the point
+    ref_point (``list`` of ``arrays``): the reference points
+    hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
+
+
+Returns:
+    ``Numpy array``: the contribution of all points to the hypervolume
+
+Raises:
+    ValueError: if *ref_point* is not suitable
+    ValueError: if *idx* is out of bounds
+    OverflowError: if *idx* is negative or greater than an implementation-defined value
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::exclusive`.
+
+)";
+}
+
+std::string hv_greatest_contributor_docstring()
+{
+    return R"(hypervolume.greatest_contributor(ref_point, hv_algo = auto)
+
+Computes the point contributing the most to the total hypervolume.
+
+Args:
+    ref_point (``list`` of ``arrays``): the points
+    hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
+
+Raises:
+    ValueError: if *ref_point* is not suitable
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::greatest_contributor`.
+
+)";
+}
+
+std::string hv_least_contributor_docstring()
+{
+    return R"(hypervolume.least_contributor(ref_point, hv_algo = auto)
+
+Computes the point contributing the least to the total hypervolume.
+
+Args:
+    ref_point (``list`` of ``arrays``): the points
+    hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
+
+Raises:
+    ValueError: if *ref_point* is not suitable
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::least_contributor`.
 
 )";
 }

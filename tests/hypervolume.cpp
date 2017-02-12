@@ -602,9 +602,9 @@ BOOST_AUTO_TEST_CASE(hypervolume_test_instances)
 BOOST_AUTO_TEST_CASE(hypervolume_serialization_test)
 {
     // Construct the object
-    hypervolume hv({{1.,1.},{-1.,3.}}, false);
+    hypervolume hv({{1., 1.}, {-1., 3.}}, false);
     hv.set_copy_points(false);
-    auto before = hv.compute({4.,4.});
+    auto before = hv.compute({4., 4.});
     // Now serialize, deserialize and compare the result.
     std::stringstream ss;
     {
@@ -612,13 +612,13 @@ BOOST_AUTO_TEST_CASE(hypervolume_serialization_test)
         oarchive(hv);
     }
     // Change the content of p before deserializing.
-    hv = hypervolume({{23.,11.},{-12.,-23}}, true);
+    hv = hypervolume({{23., 11.}, {-12., -23}}, true);
     hv.set_copy_points(true);
     {
         cereal::JSONInputArchive iarchive(ss);
         iarchive(hv);
     }
-    auto after = hv.compute({4.,4.});
+    auto after = hv.compute({4., 4.});
     BOOST_CHECK_EQUAL(before, after);
     BOOST_CHECK_EQUAL(hv.get_copy_points(), false);
     BOOST_CHECK_EQUAL(hv.get_verify(), false);

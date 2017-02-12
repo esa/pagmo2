@@ -85,15 +85,20 @@ public:
     * hypervolume hv(pop);
     * hypervolume hv2(pop, false);
     * @endcode
+    *
+    * @throw std::invalid_argument if the population contains a problem that is constrained or single-objective
     */
     hypervolume(const pagmo::population &pop, bool verify = false) : m_copy_points(true), m_verify(verify)
     {
-        if (pop.get_problem().get_nc() == 0u) {
-            m_points = pop.get_f();
-        } else {
-            pagmo_throw(std::invalid_argument, "The problem of the population is not unconstrained. Only unconstrained "
-                                               "populations can be used to constructs hypervolumes.");
+        if (pop.get_problem().get_nc() > 0u) {
+            pagmo_throw(std::invalid_argument, "The problem of the population is not unconstrained."
+            "Only unconstrained populations can be used to constructs hypervolumes.");
         }
+        if (pop.get_problem().get_nobj() < 2u) {
+            pagmo_throw(std::invalid_argument, "The problem of the population is not multiobjective."
+            "Only multi-objective populations can be used to constructs hypervolumes.");
+        }
+        m_points = pop.get_f();
         if (m_verify) {
             verify_after_construct();
         }
@@ -139,7 +144,7 @@ public:
      *
      * @return a reference to \p this.
      */
-    hypervolume &operator=(const other &) = default;
+    hypervolume &operator=(const hypervolume &other) = default;
 
     /// Setter for 'copy_points' flag
     /**
@@ -295,7 +300,7 @@ public:
     * @param r_point fitness vector describing the reference point
     * @param hv_algo instance of the algorithm object used for the computation
     *
-    * @return the hypervolume
+    * @return the exclusive contribution to the hypervolume
     */
     double exclusive(unsigned int p_idx, const vector_double &r_point, hv_algorithm &hv_algo) const
     {
@@ -324,7 +329,7 @@ public:
     * @param p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
     * @param r_point fitness vector describing the reference point
     *
-    * @return the hypervolume
+    * @return the exclusive contribution to the hypervolume
     */
     double exclusive(unsigned int p_idx, const vector_double &r_point) const
     {
