@@ -77,6 +77,14 @@ public:
     *
     * @param pop a pagmo::population
     * @param verify flag stating whether the points should be verified for consistency after the construction.
+    *
+    * Example:
+    *
+    * @code
+    * population pop(zdt{1u}, 20u);
+    * hypervolume hv(pop);
+    * hypervolume hv2(pop, false);
+    * @endcode
     */
     hypervolume(const pagmo::population &pop, bool verify = false) : m_copy_points(true), m_verify(verify)
     {
@@ -103,8 +111,8 @@ public:
     * Example:
     * @code
     * hypervolume hv({{2,3},{3,4}});
+    * hypervolume hv2({{2,3},{3,4}}, false);
     * @endcode
-    *
     */
     hypervolume(const std::vector<vector_double> &points, bool verify = true)
         : m_points(points), m_copy_points(true), m_verify(verify)
@@ -114,28 +122,36 @@ public:
         }
     }
 
-    /// Copy constructor.
+    /// Default copy constructor.
     /**
-    * Will perform a deep copy of hypervolume object
-    *
-    * @param hv hypervolume object to be copied
-    */
-    hypervolume(const hypervolume &hv) = default;
-
-    /// Defaulted copy assignment operator.
-    /**
-     * @return the copy
+     * The copy constructor will deep copy the input problem \p other.
+     *
+     * @param other the hypervolume object to be copied.
+     *
+     * @throws unspecified any exception thrown by:
+     * - memory allocation errors in standard containers,
      */
-    hypervolume &operator=(const hypervolume &) = default;
+    hypervolume(const hypervolume &other) = default;
+
+    /// Default copy assignment operator
+    /**
+     * @param other the assignment target.
+     *
+     * @return a reference to \p this.
+     */
+    hypervolume &operator=(const other &) = default;
 
     /// Setter for 'copy_points' flag
     /**
-    * Sets the hypervolume as a single use object.
-    * It is used in cases where we are certain that we can alter the original set of points from the hypervolume object.
-    * This is useful when we don't want to make a copy of the points first, as most algorithms alter the original set.
     *
-    * This may result in unexpected behaviour when used incorrectly (e.g. requesting the computation twice out of the
-    * same object)
+    * It is used in cases where we are certain that we can alter the original set of points
+    * from the hypervolume object.
+    * This is useful when we don't want to make a copy of the points first, as most algorithms
+    * alter the original set, but may result in unexpected behaviour when used incorrectly
+    * (e.g. requesting the computation twice out of the same object)
+    *
+    * **NOTE** When this flag is set to true the object can raliably be used only once to compute
+    * the hypervolume
     *
     * @param copy_points boolean value stating whether the hypervolume computation may use original set
     */
@@ -158,12 +174,12 @@ public:
     /// Setter for the 'verify' flag
     /**
     * Turns off the verification phase.
-    * By default, the hypervolume object verifies whether certain characteristics of the point set hold, such as valid
-    * dimension sizes or a reference point that suits the minimisation.
+    * By default, the hypervolume object verifies whether certain characteristics of the point set hold,
+    * such as valid dimension sizes or a reference point that suits the minimisation.
     * In order to optimize the computation when the rules above are certain, we can turn off that phase.
     *
-    * This may result in unexpected behaviour when used incorrectly (e.g. requesting the computation of empty set of
-    * points)
+    * This may result in unexpected behaviour when used incorrectly (e.g. requesting the computation
+    * of empty set of points)
     *
     * @param verify boolean value stating whether the hypervolume computation is to be executed without verification
     */
@@ -185,12 +201,12 @@ public:
 
     /// Calculate the default reference point
     /**
-    * Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume
-    * object.
-    * The result is a point that is necessarily dominated by all other points, frequently used for hypervolume
-    * computations.
+    * Calculates a mock refpoint by taking the maximum in each dimension over all points saved
+    * in the hypervolume object.
+    * The result is a point that is necessarily dominated by all other points, frequently used
+    * for hypervolume computations.
     *
-    * @param offset value that is to be added to each objective to assure strict domination
+    * @param offset value that can be added to each objective to assure strict domination
     *
     * @return reference point
     */
@@ -250,12 +266,12 @@ public:
 
     /// Compute hypervolume
     /**
-    * Computes hypervolume for given reference point, using given algorithm object.
+    * Computes hypervolume for given reference point, using given pagmo::hv_algorithm object.
     *
     * @param r_point fitness vector describing the reference point
     * @param hv_algo instance of the algorithm object used for the computation
     *
-    * @return value representing the hypervolume
+    * @return the hypervolume
     */
     double compute(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
@@ -279,7 +295,7 @@ public:
     * @param r_point fitness vector describing the reference point
     * @param hv_algo instance of the algorithm object used for the computation
     *
-    * @return value representing the hypervolume
+    * @return the hypervolume
     */
     double exclusive(unsigned int p_idx, const vector_double &r_point, hv_algorithm &hv_algo) const
     {
@@ -308,7 +324,7 @@ public:
     * @param p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
     * @param r_point fitness vector describing the reference point
     *
-    * @return value representing the hypervolume
+    * @return the hypervolume
     */
     double exclusive(unsigned int p_idx, const vector_double &r_point) const
     {
@@ -323,6 +339,7 @@ public:
     *
     * @param r_point fitness vector describing the reference point
     * @param hv_algo instance of the algorithm object used for the computation
+    *
     * @return vector of exclusive contributions by every point
     */
     std::vector<double> contributions(const vector_double &r_point, hv_algorithm &hv_algo) const
@@ -332,7 +349,7 @@ public:
         }
 
         // Trivial case
-        if (m_points.size() == 1) {
+        if (m_points.size() == 1u) {
             std::vector<double> c;
             c.push_back(hv_algorithm::volume_between(m_points[0], r_point));
             return c;
@@ -506,8 +523,8 @@ namespace detail
 {
 /// Expected number of operations
 /**
-* Returns the expected average amount of elementary operations necessary to compute the hypervolume for given front size
-* \f$n\f$ and dimension size \f$d\f$
+* Returns the expected average amount of elementary operations necessary to compute the hypervolume
+* for a given front size \f$n\f$ and dimension size \f$d\f$
 * This method is used by the approximated algorithms that fall back to exact computation.
 *
 * @param n size of the front
@@ -517,9 +534,9 @@ namespace detail
 */
 double expected_hv_operations(vector_double::size_type n, vector_double::size_type d)
 {
-    if (d <= 3) {
+    if (d <= 3u) {
         return d * n * std::log(n); // hv3d
-    } else if (d == 4) {
+    } else if (d == 4u) {
         return 4.0 * n * n; // hv4d
     } else {
         return 0.0005 * d * std::pow(n, d * 0.5); // exponential complexity
