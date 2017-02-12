@@ -119,7 +119,8 @@ public:
     *
     * @return volume of hypercube defined by points a and b
     */
-    static double volume_between(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound = 0u)
+    static double volume_between(const vector_double &a, const vector_double &b,
+                                 vector_double::size_type dim_bound = 0u)
     {
         if (dim_bound == 0) {
             dim_bound = a.size();
@@ -177,8 +178,7 @@ public:
     *
     * @return exlusive hypervolume contributed by the individual at index p_idx
     */
-    virtual double exclusive(unsigned int p_idx, std::vector<vector_double> &points,
-                             const vector_double &r_point) const
+    virtual double exclusive(unsigned int p_idx, std::vector<vector_double> &points, const vector_double &r_point) const
     {
         if (points.size() == 1) {
             return compute(points, r_point);

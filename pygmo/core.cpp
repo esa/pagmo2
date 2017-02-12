@@ -39,7 +39,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/copy_const_reference.hpp>
@@ -59,6 +58,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/scope.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
+#include <boost/shared_ptr.hpp>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -895,12 +895,14 @@ BOOST_PYTHON_MODULE(core)
 
     // Exposition of various structured utilities
     // Hypervolume class
-    bp::class_<hypervolume>("hypervolume", "Hypervolume class.", bp::init<population, const bool>((bp::arg("pop"), bp::arg("verify") = true)))
+    bp::class_<hypervolume>("hypervolume", "Hypervolume class.",
+                            bp::init<population, const bool>((bp::arg("pop"), bp::arg("verify") = true)))
         .def("__init__",
              bp::make_constructor(+[](const bp::object &points,
                                       const bool verify) { return ::new hypervolume(pygmo::to_vvd(points), verify); },
                                   bp::default_call_policies(), (bp::arg("points"), bp::arg("verify") = true)))
-        .def("compute", +[](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); },
+        .def("compute",
+             +[](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); },
              "Computes the hypervolume.", (bp::arg("ref_point")))
         .def("compute",
              +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
@@ -919,7 +921,9 @@ BOOST_PYTHON_MODULE(core)
              "Computes the hypervolume using the provided hypervolume algorithm.",
              (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("least_contributor",
-             +[](const hypervolume &hv, const bp::object &r_point) { return hv.least_contributor(pygmo::to_vd(r_point)); },
+             +[](const hypervolume &hv, const bp::object &r_point) {
+                 return hv.least_contributor(pygmo::to_vd(r_point));
+             },
              "Computes the least_contributor.", (bp::arg("ref_point")))
         .def("least_contributor",
              +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
@@ -928,7 +932,9 @@ BOOST_PYTHON_MODULE(core)
              "Computes the least_contributor using the provided hypervolume algorithm.",
              (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("greatest_contributor",
-             +[](const hypervolume &hv, const bp::object &r_point) { return hv.greatest_contributor(pygmo::to_vd(r_point)); },
+             +[](const hypervolume &hv, const bp::object &r_point) {
+                 return hv.greatest_contributor(pygmo::to_vd(r_point));
+             },
              "Computes the greatest_contributor.", (bp::arg("ref_point")))
         .def("greatest_contributor",
              +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
@@ -955,12 +961,10 @@ BOOST_PYTHON_MODULE(core)
     bp::class_<hvwfg, bp::bases<hv_algorithm>>("wfg", "WFG algorithm.")
         .def(bp::init<unsigned int>((bp::arg("stop_dimension") = 2)));
     bp::class_<bf_approx, bp::bases<hv_algorithm>>("bf_approx", "Bringmann-Friedrich approximated algorithm.")
-        .def(bp::init< bool,  unsigned int,  double,  double,  double,  double,
-                       double,  double>());
+        .def(bp::init<bool, unsigned int, double, double, double, double, double, double>());
     bp::class_<bf_fpras, bp::bases<hv_algorithm>>("bf_fpras", "Hypervolume approximation based on FPRAS")
-        .def(bp::init< double,  double>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2)))
-        .def(bp::init< double,  double, unsigned int>(
-            (bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2, bp::arg("seed"))));
+        .def(bp::init<double, double>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2)))
+        .def(bp::init<double, double, unsigned int>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2, bp::arg("seed"))));
     bp::class_<hv2d, bp::bases<hv_algorithm>>("hv2d", "hv2d algorithm", bp::init<>());
     bp::class_<hv3d, bp::bases<hv_algorithm>>("hv3d", "hv3d algorithm", bp::init<>());
 

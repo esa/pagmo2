@@ -70,10 +70,9 @@ public:
     * @param alpha coefficicient stating how accurately current lowest contributor should be sampled
     * @param seed seeding for the pseudo-random number generator
     */
-    bf_approx(bool use_exact = true, unsigned int trivial_subcase_size = 1, double eps = 1e-2,
-              double delta = 1e-6, double delta_multiplier = 0.775, double alpha = 0.2,
-              double initial_delta_coeff = 0.1, double gamma = 0.25,
-              unsigned int seed = pagmo::random_device::next())
+    bf_approx(bool use_exact = true, unsigned int trivial_subcase_size = 1, double eps = 1e-2, double delta = 1e-6,
+              double delta_multiplier = 0.775, double alpha = 0.2, double initial_delta_coeff = 0.1,
+              double gamma = 0.25, unsigned int seed = pagmo::random_device::next())
         : m_use_exact(use_exact), m_trivial_subcase_size(trivial_subcase_size), m_eps(eps), m_delta(delta),
           m_delta_multiplier(delta_multiplier), m_alpha(alpha), m_initial_delta_coeff(initial_delta_coeff),
           m_gamma(gamma), m_e(seed)
@@ -173,8 +172,7 @@ private:
     * Uses chernoff inequality as it was proposed in the article by Bringmann and Friedrich
     * The parameters of the method are taked from the Shark implementation of the algorithm.
     */
-    inline double compute_point_delta(unsigned int round_no, vector_double::size_type idx,
-                                      double log_factor) const
+    inline double compute_point_delta(unsigned int round_no, vector_double::size_type idx, double log_factor) const
     {
         return std::sqrt(0.5 * ((1. + m_gamma) * std::log(static_cast<double>(round_no)) + log_factor)
                          / (static_cast<double>(m_no_samples[idx])));
@@ -254,7 +252,7 @@ private:
 
     /// Performs a single round of sampling for given point at index 'idx'
     inline void sampling_round(const std::vector<vector_double> &points, double delta, unsigned int round,
-                                vector_double::size_type idx, double log_factor) const
+                               vector_double::size_type idx, double log_factor) const
     {
         if (m_use_exact) {
             // if the sampling for given point was already resolved using exact method
