@@ -43,7 +43,7 @@ namespace pagmo
 /// Hypervolume
 /**
  * This class encapsulate various utilities used to compute the hyervolume of a set of
- * points or their specific contributions to it.
+ * points or the various exclusive contributions.
  *
  * The main API consists of the five methods:
  *
@@ -53,10 +53,10 @@ namespace pagmo
  * - hypervolume::greatest_contributor - returns the index of the point contributing the most volume
  * - hypervolume::contributions - returns the vector of exclusive contributions for each of the points.
  *
- * Each of the methods can be called passing to them a reference point (and an index where needed)
+ * Each of the methods can be called passing them a reference point (and an index where needed)
  * and will, internally, select the most efficient exact Hypervolume algorithm able to compute
  * the requested quantity. A pagmo::hv_algorithm can also be passed as optional argument, in which case
- * this will be used to perform the computations.
+ * it will be used to perform the computations.
  *
  */
 class hypervolume
@@ -441,6 +441,20 @@ public:
     unsigned long long greatest_contributor(const vector_double &r_point) const
     {
         return greatest_contributor(r_point, *get_best_contributions(r_point));
+    }
+
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_points, m_copy_points, m_verify);
     }
 
 private:
