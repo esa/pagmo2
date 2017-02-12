@@ -159,9 +159,7 @@ public:
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
         if (pop.size() == 0u) {
-            pagmo_throw(std::invalid_argument, prob.get_name()
-                                                   + " does not work on an empty population, a population size of "
-                                                   + std::to_string(pop.size()) + " was, instead, detected");
+            pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
         }
         // Get out if there is nothing to do.
         if (m_max_fevals == 0u) {

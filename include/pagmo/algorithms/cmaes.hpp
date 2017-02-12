@@ -174,7 +174,7 @@ public:
                                                    + get_name() + " cannot deal with them");
         }
         if (lam < 5u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 5 individuals in the population, "
+            pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
                                                    + std::to_string(lam) + " detected");
         }
         for (auto num : lb) {

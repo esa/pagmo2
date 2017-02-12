@@ -183,7 +183,7 @@ public:
             return pop;
         }
         if (pop.size() < 7u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 7 individuals in the population, "
+            pagmo_throw(std::invalid_argument, get_name() + " needs at least 7 individuals in the population, "
                                                    + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------

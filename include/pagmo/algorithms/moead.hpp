@@ -164,6 +164,9 @@ public:
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
         // particular algorithm.
+        if (!NP) {
+            pagmo_throw(std::invalid_argument, get_name() + " cannot work on an empty population");
+        }
         if (prob.get_nf() < 2u) {
             pagmo_throw(std::invalid_argument, "The number of objectives detected in the instance of '"
                                                    + prob.get_name() + "' is " + std::to_string(prob.get_nf()) + ". "
