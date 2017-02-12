@@ -954,17 +954,24 @@ BOOST_PYTHON_MODULE(core)
              },
              pygmo::hv_contributions_docstring().c_str(),
              (bp::arg("ref_point"), bp::arg("hv_algo")))
-        .def("set_copy_points", &hypervolume::set_copy_points)
-        .def("get_copy_points", &hypervolume::get_copy_points)
-        .def("get_points", +[](hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); })
-        .def("set_verify", &hypervolume::set_verify)
-        .def("get_verify", &hypervolume::get_verify);
+        .add_property("copy_points", &hypervolume::get_copy_points, &hypervolume::set_copy_points)
+        .add_property("verify", &hypervolume::get_verify, &hypervolume::set_verify)
+        .def("get_points", +[](hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); });
+        
     // Hypervolume algorithms
     bp::class_<hv_algorithm, boost::noncopyable>("_hv_algorithm", bp::no_init).def("get_name", &hv_algorithm::get_name);
     bp::class_<hvwfg, bp::bases<hv_algorithm>>("wfg", "WFG algorithm.")
         .def(bp::init<unsigned>((bp::arg("stop_dimension") = 2)));
     bp::class_<bf_approx, bp::bases<hv_algorithm>>("bf_approx", "Bringmann-Friedrich approximated algorithm.")
-        .def(bp::init<bool, unsigned, double, double, double, double, double, double>());
+        .def(bp::init<bool, unsigned, double, double, double, double, double, double>(
+        (bp::arg("use_exact") = true, bp::arg("trivial_subcase_size") = 1u,bp::arg("eps") = 1e-2,
+        bp::arg("delta") = 1e-6, bp::arg("delta_multiplier") = 0.775, bp::arg("alpha") = 0.2,
+        bp::arg("initial_delta_coeff") = 0.1, bp::arg("gamma") = 0.25)))
+        .def(bp::init<bool, unsigned, double, double, double, double, double, double, unsigned>(
+        (bp::arg("use_exact") = true, bp::arg("trivial_subcase_size") = 1u,bp::arg("eps") = 1e-2,
+        bp::arg("delta") = 1e-6, bp::arg("delta_multiplier") = 0.775, bp::arg("alpha") = 0.2,
+        bp::arg("initial_delta_coeff") = 0.1, bp::arg("gamma") = 0.25,  bp::arg("seed"))
+        ));
     bp::class_<bf_fpras, bp::bases<hv_algorithm>>("bf_fpras", "Hypervolume approximation based on FPRAS")
         .def(bp::init<double, double>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2)))
         .def(bp::init<double, double, unsigned>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2, bp::arg("seed"))));

@@ -1032,6 +1032,50 @@ class cmaes_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 
+class hypervolume_test_case(_ut.TestCase):
+    """Test case for the hypervolume utilities
+
+    """
+
+    def runTest(self):
+        from .core import hypervolume, hv2d, hv3d, wfg, bf_fpras, bf_approx
+        from .core import population, zdt
+        pop  = population(prob = zdt(id = 1, param = 10), size = 20)
+        hv1 = hypervolume(pop = pop, verify = True)
+        hv2 = hypervolume(points = [[0,0],[-1,1],[-2,2]], verify = True)
+        hv2.copy_points = True
+        hv2.verify = True
+        points = hv2.get_points()
+        res0 = hv2.compute([3,3])
+
+        algo1 = hv2d()
+        algo2 = wfg()
+        algo3 = bf_fpras()
+        algo4 = bf_approx()
+
+        res = hv2.compute(ref_point = [3,3], hv_algo = algo1)
+        res = hv2.exclusive(idx = 0, ref_point = [3,3], hv_algo = algo1)
+        res = hv2.least_contributor(ref_point = [3,3], hv_algo = algo1)
+        res = hv2.greatest_contributor(ref_point = [3,3], hv_algo = algo1)
+        res = hv2.contributions(ref_point = [3,3], hv_algo = algo1)
+        res = hv2.compute(ref_point = [3,3], hv_algo = algo2)
+        res = hv2.exclusive(idx = 0, ref_point = [3,3], hv_algo = algo2)
+        res = hv2.least_contributor(ref_point = [3,3], hv_algo = algo2)
+        res = hv2.greatest_contributor(ref_point = [3,3], hv_algo = algo2)
+        res = hv2.contributions(ref_point = [3,3], hv_algo = algo2)
+        res = hv2.compute(ref_point = [3,3], hv_algo = algo3)
+
+        res = hv2.least_contributor(ref_point = [3,3], hv_algo = algo4)
+        res = hv2.greatest_contributor(ref_point = [3,3], hv_algo = algo4)
+
+        res = hv2.compute(ref_point = [3,3])
+        res = hv2.exclusive(idx = 0, ref_point = [3,3])
+        res = hv2.least_contributor(ref_point = [3,3])
+        res = hv2.greatest_contributor(ref_point = [3,3])
+        res = hv2.contributions(ref_point = [3,3])
+
+
+
 def run_test_suite():
     """Run the full test suite.
 
@@ -1046,6 +1090,7 @@ def run_test_suite():
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(population_test_case())
+    suite.addTest(hypervolume_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1
