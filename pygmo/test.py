@@ -101,6 +101,7 @@ class problem_test_case(_ut.TestCase):
         self.run_hessians_sparsity_tests()
         self.run_seed_tests()
         self.run_feas_tests()
+        self.run_name_info_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -358,18 +359,22 @@ class problem_test_case(_ut.TestCase):
                 return 1
         prob = problem(p())
         self.assertTrue(all(prob.c_tol == array([0., 0.])))
+
         def raiser():
             prob.c_tol = []
         self.assertRaises(ValueError, raiser)
         self.assertTrue(all(prob.c_tol == array([0., 0.])))
+
         def raiser():
             prob.c_tol = [1, 2, 3]
         self.assertRaises(ValueError, raiser)
         self.assertTrue(all(prob.c_tol == array([0., 0.])))
+
         def raiser():
             prob.c_tol = [1., float("NaN")]
         self.assertRaises(ValueError, raiser)
         self.assertTrue(all(prob.c_tol == array([0., 0.])))
+
         def raiser():
             prob.c_tol = [1., -1.]
         self.assertRaises(ValueError, raiser)
@@ -1712,6 +1717,7 @@ class problem_test_case(_ut.TestCase):
         problem(p()).set_seed(0)
         problem(p()).set_seed(87)
         self.assertRaises(OverflowError, lambda: problem(p()).set_seed(-1))
+
     def run_feas_tests(self):
         from .core import problem
 
@@ -1724,11 +1730,74 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
         prob = problem(p())
-        self.assert_(prob.feasibility_x([0,0]))
+        self.assert_(prob.feasibility_x([0, 0]))
         self.assertEqual(1, prob.get_fevals())
         self.assert_(prob.feasibility_f([0]))
         self.assertEqual(1, prob.get_fevals())
-        self.assertRaises(ValueError, lambda: prob.feasibility_f([0,1]))
+        self.assertRaises(ValueError, lambda: prob.feasibility_f([0, 1]))
+
+    def run_name_info_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        prob = problem(p())
+        self.assert_(prob.get_name() != '')
+        self.assert_(prob.get_extra_info() == '')
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def get_name(self):
+                return 'pippo'
+
+        prob = problem(p())
+        self.assert_(prob.get_name() == 'pippo')
+        self.assert_(prob.get_extra_info() == '')
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def get_extra_info(self):
+                return 'pluto'
+
+        prob = problem(p())
+        self.assert_(prob.get_name() != '')
+        self.assert_(prob.get_extra_info() == 'pluto')
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def get_name(self):
+                return 'pippo'
+
+            def get_extra_info(self):
+                return 'pluto'
+
+        prob = problem(p())
+        self.assert_(prob.get_name() == 'pippo')
+        self.assert_(prob.get_extra_info() == 'pluto')
 
 
 class population_test_case(_ut.TestCase):
