@@ -124,9 +124,8 @@ public:
         if (m_gen == 0u) {
             return pop;
         }
-        if (pop.size() < 1u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 1 individual in the population, "
-                                                   + std::to_string(pop.size()) + " detected");
+        if (!pop.size()) {
+            pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
         }
         // ---------------------------------------------------------------------------------------------------------
 

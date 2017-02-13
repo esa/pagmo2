@@ -142,6 +142,8 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 
     // We then check that the method evolve fails when called on unsuitable problems (populations)
+    // Empty population.
+    BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     // Single objective problem
     BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{rosenbrock{}}, 20u}), std::invalid_argument);
     // Multi-objective problem with constraints
