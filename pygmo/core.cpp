@@ -254,18 +254,6 @@ static inline void population_prob_init(bp::class_<population> &pop_class)
         .def(bp::init<const Prob &, population::size_type, unsigned>());
 }
 
-// push_back().
-static inline void pop_push_back_wrapper(population &pop, const bp::object &x)
-{
-    pop.push_back(pygmo::to_vd(x));
-}
-
-// decision_vector().
-static inline bp::object pop_random_decision_vector_wrapper(const population &pop)
-{
-    return pygmo::v_to_a(pop.random_decision_vector());
-}
-
 // Various best_idx() overloads.
 static inline vector_double::size_type pop_best_idx_wrapper_0(const population &pop, const bp::object &tol)
 {
@@ -327,18 +315,6 @@ static inline bp::object pop_get_x_wrapper(const population &pop)
 static inline bp::object pop_get_ID_wrapper(const population &pop)
 {
     return pygmo::v_to_a(pop.get_ID());
-}
-
-// get_c_tol
-static inline bp::object prob_get_c_tol_wrapper(const problem &prob)
-{
-    return pygmo::v_to_a(prob.get_c_tol());
-}
-
-// set_c_tol
-static inline void prob_set_c_tol_wrapper(problem &prob, const bp::object &c_tol)
-{
-    prob.set_c_tol(pygmo::to_vd(c_tol));
 }
 
 // Decompose methods wrappers
@@ -508,8 +484,9 @@ BOOST_PYTHON_MODULE(core)
         .def("__copy__", &pygmo::generic_copy_wrapper<population>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<population>)
         .def_pickle(population_pickle_suite())
-        .def("push_back", &pop_push_back_wrapper, pygmo::population_push_back_docstring().c_str())
-        .def("decision_vector", &pop_random_decision_vector_wrapper,
+        .def("push_back", +[](population &pop, const bp::object &x) { pop.push_back(pygmo::to_vd(x)); },
+             pygmo::population_push_back_docstring().c_str(), (bp::arg("x")))
+        .def("decision_vector", +[](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); },
              pygmo::population_decision_vector_docstring().c_str())
         .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); })
         .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); })
@@ -581,32 +558,31 @@ BOOST_PYTHON_MODULE(core)
                  }
                  return retval;
              },
-             "Hessians sparsity.")
-        .def("has_hessians_sparsity", &problem::has_hessians_sparsity, "User-provided Hessians sparsity availability.")
+             pygmo::problem_hessians_sparsity_docstring().c_str())
+        .def("has_hessians_sparsity", &problem::has_hessians_sparsity,
+             pygmo::problem_has_hessians_sparsity_docstring().c_str())
         .def("get_nobj", &problem::get_nobj, pygmo::problem_get_nobj_docstring().c_str())
-        .def("get_nx", &problem::get_nx, "Get problem dimension.")
-        .def("get_nf", &problem::get_nf, "Get fitness dimension.")
+        .def("get_nx", &problem::get_nx, pygmo::problem_get_nx_docstring().c_str())
+        .def("get_nf", &problem::get_nf, pygmo::problem_get_nf_docstring().c_str())
         .def("get_nec", &problem::get_nec, pygmo::problem_get_nec_docstring().c_str())
         .def("get_nic", &problem::get_nic, pygmo::problem_get_nic_docstring().c_str())
-        .def("get_nc", &problem::get_nc, "Get total number of constraints.")
-        .add_property("c_tol", &prob_get_c_tol_wrapper, &prob_set_c_tol_wrapper)
-        .def("get_fevals", &problem::get_fevals, "Get total number of objective function evaluations.")
-        .def("get_gevals", &problem::get_gevals, "Get total number of gradient evaluations.")
-        .def("get_hevals", &problem::get_hevals, "Get total number of Hessians evaluations.")
-        .def("set_seed", &problem::set_seed,
-             "set_seed(seed)\n\nSet problem seed.\n\n:param seed: the desired seed\n:type seed: ``int``\n"
-             ":raises: :exc:`RuntimeError` if the user-defined problem does not support seed setting\n"
-             ":raises: :exc:`OverflowError` if *seed* is negative or too large\n\n",
-             (bp::arg("seed")))
-        .def("has_set_seed", &problem::has_set_seed,
-             "has_set_seed()\n\nDetect the presence of the ``set_seed()`` method in the user-defined problem.\n\n"
-             ":returns: ``True`` if the user-defined problem has the ability of setting a random seed, ``False`` "
-             "otherwise\n"
-             ":rtype: ``bool``\n\n")
+        .def("get_nc", &problem::get_nc, pygmo::problem_get_nc_docstring().c_str())
+        .add_property("c_tol", +[](const problem &prob) { return pygmo::v_to_a(prob.get_c_tol()); },
+                      +[](problem &prob, const bp::object &c_tol) { prob.set_c_tol(pygmo::to_vd(c_tol)); },
+                      pygmo::problem_c_tol_docstring().c_str())
+        .def("get_fevals", &problem::get_fevals, pygmo::problem_get_fevals_docstring().c_str())
+        .def("get_gevals", &problem::get_gevals, pygmo::problem_get_gevals_docstring().c_str())
+        .def("get_hevals", &problem::get_hevals, pygmo::problem_get_hevals_docstring().c_str())
+        .def("set_seed", &problem::set_seed, pygmo::problem_set_seed_docstring().c_str(), (bp::arg("seed")))
+        .def("has_set_seed", &problem::has_set_seed, pygmo::problem_has_set_seed_docstring().c_str())
         .def("is_stochastic", &problem::is_stochastic,
-             "is_stochastic()\n\nAlias for :func:`~pygmo.core.problem.has_set_seed`.")
-        .def("get_name", &problem::get_name, "Get problem's name.")
-        .def("get_extra_info", &problem::get_extra_info, "Get problem's extra info.");
+             "is_stochastic()\n\nAlias for :func:`~pygmo.core.problem.has_set_seed()`.\n")
+        .def("feasibility_x", +[](const problem &p, const bp::object &x) { return p.feasibility_x(pygmo::to_vd(x)); },
+             pygmo::problem_feasibility_x_docstring().c_str())
+        .def("feasibility_f", +[](const problem &p, const bp::object &f) { return p.feasibility_f(pygmo::to_vd(f)); },
+             pygmo::problem_feasibility_f_docstring().c_str())
+        .def("get_name", &problem::get_name, pygmo::problem_get_name_docstring().c_str())
+        .def("get_extra_info", &problem::get_extra_info, pygmo::problem_get_extra_info_docstring().c_str());
 
     // Algorithm class.
     pygmo::algorithm_ptr

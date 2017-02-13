@@ -7,7 +7,7 @@ In this tutorial we will show how to use pygmo to run algorithms on the test pro
 Special Session & Competition on Real-Parameter Single Objective Optimization at CEC-2013, Cancun, Mexico 21-23 June 2013.
 
 All of the CEC 2013 problems are box-bounded, continuous, single objective problems and are provided as UDP (user-defined
-problems) by pygmo in the class :class:`~pygmo.core.cec2013`. Instantiating one of these problem is easy:
+problems) by pygmo in the class :class:`~pygmo.core.cec2013`. Instantiating one of these problems is easy:
 
 .. doctest::
 
@@ -40,9 +40,9 @@ as usual, we can quickly inspect the :class:`~pygmo.core.problem` printing it to
     <BLANKLINE>
 
 Let us assume we want to assess the performance of (say) the optimization algorithm :class:`~pygmo.core.cmaes` (which
-imlements as user-defined algorithm the Covariance Matrix Adaptation Evolutionary Strategy) on the whole
+implements as user-defined algorithm the Covariance Matrix Adaptation Evolutionary Strategy) on the whole
 :class:`~pygmo.core.cec2013` problem suite at dimension D=2. Since the competition rules allowed D * 10000
-function evaluation, we choose a population of 50 and 400 generations:
+function evaluations, we choose a population of 50 and 400 generations:
 
 .. image:: ../../images/cec2013_2_jde.png
     :scale: 50 %

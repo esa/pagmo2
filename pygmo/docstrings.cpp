@@ -591,6 +591,36 @@ Returns:
 )";
 }
 
+std::string problem_get_nx_docstring()
+{
+    return R"(get_nx()
+
+Dimension of the problem.
+
+This method will return :math:`n_{x}`, the dimension of the problem as established by the length of
+the bounds returned by :func:`~pygmo.core.problem.get_bounds()`.
+
+Returns:
+    ``int``: the dimension of the problem
+
+)";
+}
+
+std::string problem_get_nf_docstring()
+{
+    return R"(get_nf()
+
+Dimension of the fitness.
+
+This method will return :math:`n_{f}`, the dimension of the fitness, which is the sum of
+:math:`n_{obj}`, :math:`n_{ec}` and :math:`n_{ic}`.
+
+Returns:
+    ``int``: the dimension of the fitness
+
+)";
+}
+
 std::string problem_get_nec_docstring()
 {
     return R"(get_nec()
@@ -625,6 +655,83 @@ of a :class:`~pygmo.core.problem`.
 
 Returns:
     ``int``: the number of inequality constraints of the problem
+
+)";
+}
+
+std::string problem_get_nc_docstring()
+{
+    return R"(get_nc()
+
+Total number of constraints.
+
+This method will return the sum of the output of :func:`~pygmo.core.problem.get_nic()` and
+:func:`~pygmo.core.problem.get_nec()` (i.e., the total number of constraints).
+
+Returns:
+    ``int``: the total number of constraints of the problem
+
+)";
+}
+
+std::string problem_c_tol_docstring()
+{
+    return R"(Constraints tolerance.
+
+This property contains an array of ``float`` that are used when checking for constraint feasibility.
+The dimension of the array is :math:`n_{ec} + n_{ic}`, and the array is zero-filled on problem
+construction.
+
+Returns:
+    1D NumPy float array: the constraints tolerance
+
+Raises:
+    ValueError: if, when setting this property, the size of the input array differs from the number
+      of constraints of the problem or if any element of the array is negative or NaN
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_get_fevals_docstring()
+{
+    return R"(Number of fitness evaluations.
+
+Each time a call to :func:`~pygmo.core.problem.fitness()` successfully completes, an internal counter
+is increased by one. The counter is initialised to zero upon problem construction and it is never
+reset. Copy operations copy the counter as well.
+
+Returns:
+    ``int`` : the number of times :func:`~pygmo.core.problem.fitness()` was successfully called
+
+)";
+}
+
+std::string problem_get_gevals_docstring()
+{
+    return R"(Number of gradient evaluations.
+
+Each time a call to :func:`~pygmo.core.problem.gradient()` successfully completes, an internal counter
+is increased by one. The counter is initialised to zero upon problem construction and it is never
+reset. Copy operations copy the counter as well.
+
+Returns:
+    ``int`` : the number of times :func:`~pygmo.core.problem.gradient()` was successfully called
+
+)";
+}
+
+std::string problem_get_hevals_docstring()
+{
+    return R"(Number of hessians evaluations.
+
+Each time a call to :func:`~pygmo.core.problem.hessians()` successfully completes, an internal counter
+is increased by one. The counter is initialised to zero upon problem construction and it is never
+reset. Copy operations copy the counter as well.
+
+Returns:
+    ``int`` : the number of times :func:`~pygmo.core.problem.hessians()` was successfully called
 
 )";
 }
@@ -678,7 +785,7 @@ array, and it must return the gradient vector as an iterable Python object (e.g.
 list, tuple, etc.).
 
 Args:
-    dv (array-like object): the decision vector (chromosome) to be evaluated
+    dv (array-like object): the decision vector whose gradient will be computed
 
 Returns:
     1D NumPy float array: the gradient of *dv*
@@ -686,8 +793,8 @@ Returns:
 Raises:
     ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
       the returned gradient vector does not have the same size as the vector returned by
-      :func:`~pygmo.core.problem.gradient_sparsity()`.
-    NotImplementedError: if the UDP does not provide a ``gradient()`` method.
+      :func:`~pygmo.core.problem.gradient_sparsity()`
+    NotImplementedError: if the UDP does not provide a ``gradient()`` method
     unspecified: any exception thrown by the ``gradient()`` method of the UDP, or by failures at the intersection
       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
@@ -794,40 +901,242 @@ Returns:
 
 std::string problem_hessians_docstring()
 {
-    return R"(gradient(dv)
+    return R"(hessians(dv)
 
-Gradient.
+Hessians.
 
-This method will compute the gradient of the input decision vector *dv* by invoking
-the ``gradient()`` method of the UDP. The ``gradient()`` method of the UDP must return
-a sparse representation of the gradient: the :math:`k`-th term of the gradient vector
-is expected to contain :math:`\frac{\partial f_i}{\partial x_j}`, where the pair :math:`(i,j)`
-is the :math:`k`-th element of the sparsity pattern (collection of index pairs), as returned by
-:func:`~pygmo.core.problem.gradient_sparsity()`.
+This method will compute the hessians of the input decision vector *dv* by invoking
+the ``hessians()`` method of the UDP. The ``hessians()`` method of the UDP must return
+a sparse representation of the hessians: the element :math:`l` of the returned vector contains
+:math:`h^l_{ij} = \frac{\partial f^2_l}{\partial x_i\partial x_j}` in the order specified by the
+:math:`l`-th element of the hessians sparsity pattern (a vector of index pairs :math:`(i,j)`)
+as returned by :func:`~pygmo.core.problem.hessians_sparsity()`. Since
+the hessians are symmetric, their sparse representation contains only lower triangular elements.
 
-If the UDP provides a ``gradient()`` method, this method will forward *dv* to the ``gradient()``
-method of the UDP after sanity checks. The output of the ``gradient()`` method of the UDP will
-also be checked before being returned. If the UDP does not provide a ``gradient()`` method, an
-error will be raised. A successful call of this method will increase the internal gradient
-evaluation counter (see :func:`~pygmo.core.problem.get_gevals()`).
+If the UDP provides a ``hessians()`` method, this method will forward *dv* to the ``hessians()``
+method of the UDP after sanity checks. The output of the ``hessians()`` method of the UDP will
+also be checked before being returned. If the UDP does not provide a ``hessians()`` method, an
+error will be raised. A successful call of this method will increase the internal hessians
+evaluation counter (see :func:`~pygmo.core.problem.get_hevals()`).
 
-The ``gradient()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy
-array, and it must return the gradient vector as an iterable Python object (e.g., 1D NumPy array,
-list, tuple, etc.).
+The ``hessians()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy
+array, and it must return the hessians vector as an iterable Python object (e.g., list, tuple, etc.).
 
 Args:
-    dv (array-like object): the decision vector (chromosome) to be evaluated
+    dv (array-like object): the decision vector whose hessians will be computed
 
 Returns:
-    1D NumPy float array: the gradient of *dv*
+    ``list`` of 1D NumPy float array: the hessians of *dv*
 
 Raises:
     ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
-      the returned gradient vector does not have the same size as the vector returned by
-      :func:`~pygmo.core.problem.gradient_sparsity()`.
-    NotImplementedError: if the UDP does not provide a ``gradient()`` method.
-    unspecified: any exception thrown by the ``gradient()`` method of the UDP, or by failures at the intersection
+      the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions
+    NotImplementedError: if the UDP does not provide a ``hessians()`` method
+    unspecified: any exception thrown by the ``hessians()`` method of the UDP, or by failures at the intersection
       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_has_hessians_sparsity_docstring()
+{
+    return R"(has_hessians_sparsity()
+
+Check if the hessians sparsity is available in the UDP.
+
+This method will return ``True`` if the hessians sparsity is available in the UDP, ``False`` otherwise.
+
+The availability of the hessians sparsity is determined as follows:
+
+* if the UDP does not provide a ``hessians_sparsity()`` method, then this method will always return ``False``;
+* if the UDP provides a ``hessians_sparsity()`` method but it does not provide a ``has_hessians_sparsity()``
+  method, then this method will always return ``True``;
+* if the UDP provides both a ``hessians_sparsity()`` method and a ``has_hessians_sparsity()`` method,
+  then this method will return the output of the ``has_hessians_sparsity()`` method of the UDP.
+
+The optional ``has_hessians_sparsity()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``hessians_sparsity()`` method of the UDP, see :func:`~pygmo.core.problem.hessians_sparsity()`.
+
+**NOTE** regardless of what this method returns, the :func:`~pygmo.core.problem.hessians_sparsity()` method will always
+return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
+pattern of the hessians is dense. See :func:`~pygmo.core.problem.hessians_sparsity()` for more details.
+
+Returns:
+    ``bool``: a flag signalling the availability of the hessians sparsity in the UDP
+
+)";
+}
+
+std::string problem_hessians_sparsity_docstring()
+{
+    return R"(hessians_sparsity()
+
+Hessians sparsity pattern.
+
+This method will return the hessians sparsity pattern of the problem. Each component :math:`l` of the hessians
+sparsity pattern is a collection of the indices :math:`(i,j)` of the non-zero elements of
+:math:`h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}`. Since the Hessian matrix is symmetric, only
+lower triangular elements are allowed.
+
+If :func:`~pygmo.core.problem.has_hessians_sparsity()` returns ``True``, then the ``hessians_sparsity()`` method of the
+UDP will be invoked, and its result returned (after sanity checks). Otherwise, a dense pattern is assumed and
+:math:`n_f` sparsity patterns containing :math:`((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))` will be returned.
+
+The ``hessians_sparsity()`` method of the UDP must return an iterable Python object of any kind. Each element of the
+returned object will then be interpreted as a sparsity pattern in the same way as described in
+:func:`~pygmo.core.problem.gradient_sparsity()`. Specifically:
+
+* if the element is a NumPy array, its shape must be :math:`(n,2)` (with :math:`n \geq 0`),
+* if the element is itself an iterable Python object, then its elements must in turn be iterable Python objects
+  containing each exactly 2 elements representing the indices :math:`(i,j)`.
+
+Returns:
+    ``list`` of 2D Numpy int array: the hessians sparsity patterns
+
+Raises:
+    ValueError: in the following cases:
+
+      * the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
+        shape, dimensions, etc.),
+      * at least one element of a returned iterable Python object does not consist of a collection of exactly
+        2 elements,
+      * if a sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
+        or if the indices in the pattern are incompatible with the properties of the problem)
+    OverflowError: if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
+      implementation-defined range
+    unspecified: any exception thrown by:
+
+      * the underlying C++ function,
+      * the ``PyArray_FROM_OTF()`` function from the NumPy C API,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
+
+)";
+}
+
+std::string problem_set_seed_docstring()
+{
+    return R"(set_seed(seed)
+
+This method will set the seed to be used in the fitness function to instantiate
+all stochastic variables. If the UDP provides a ``set_seed()`` method, then
+its ``set_seed()`` method will be invoked. Otherwise, an error will be raised.
+The *seed* parameter must be non-negative.
+
+The ``set_seed()`` method of the UDP must be able to take an ``int`` as input parameter.
+
+Args:
+    seed (``int``): the desired seed value
+
+Raises:
+    NotImplementedError: if the UDP does not provide a ``set_seed()`` method
+    OverflowError: if *seed* is negative
+    unspecified: any exception raised by the ``set_seed()`` method of the UDP or failures at the intersection
+      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_has_set_seed_docstring()
+{
+    return R"(has_set_seed()
+
+Check if the ``set_seed()`` method is available in the UDP.
+
+This method will return ``True`` if the ``set_seed()`` method is available in the UDP, ``False`` otherwise.
+
+The availability of the ``set_seed()`` method is determined as follows:
+
+* if the UDP does not provide a ``set_seed()`` method, then this method will always return ``False``;
+* if the UDP provides a ``set_seed()`` method but it does not provide a ``has_set_seed()`` method,
+  then this method will always return ``True``;
+* if the UDP provides both a ``set_seed()`` and a ``has_set_seed()`` method, then this method will return
+  the output of the ``has_set_seed()`` method of the UDP.
+
+The optional ``has_set_seed()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``set_seed()`` method of the UDP, see :func:`~pygmo.core.problem.set_seed()`.
+
+Returns:
+    ``bool``: a flag signalling the availability of the ``set_seed()`` method in the UDP
+
+)";
+}
+
+std::string problem_feasibility_f_docstring()
+{
+    return R"(feasibility_f(f)
+
+This method will check the feasibility of a fitness vector *f* against the tolerances returned by
+:attr:`~pygmo.core.problem.c_tol`.
+
+Args:
+    f (array-like object): a fitness vector
+
+Returns:
+    ``bool``: ``True`` if the fitness vector is feasible, ``False`` otherwise
+
+Raises:
+    ValueError: if the size of *f* is not the same as the output of
+      :func:`~pymog.core.problem.get_nf()`
+
+)";
+}
+
+std::string problem_feasibility_x_docstring()
+{
+    return R"(feasibility_x(x)
+
+This method will check the feasibility of the fitness corresponding to a decision vector *x* against
+the tolerances returned by :attr:`~pygmo.core.problem.c_tol`.
+
+**NOTE** This will cause one fitness evaluation.
+
+Args:
+    dv (array-like object): a decision vector
+
+Returns:
+    ``bool``: ``True`` if *x* results in a feasible fitness, ``False`` otherwise
+
+Raises:
+     unspecified: any exception thrown by :func:`~pygmo.core.problem.feasibility_f()` or
+       :func:`~pygmo.core.problem.fitness()`
+
+)";
+}
+
+std::string problem_get_name_docstring()
+{
+    return R"(get_name()
+
+Problem's name.
+
+If the UDP provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
+Otherwise, an implementation-defined name based on the type of the UDP will be returned.
+
+The ``get_name()`` method of the UDP must return a ``str``.
+
+Returns:
+    ``str``: the problem's name
+
+)";
+}
+
+std::string problem_get_extra_info_docstring()
+{
+    return R"(get_extra_info()
+
+Problem's extra info.
+
+If the UDP provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
+method. Otherwise, an empty string will be returned.
+
+The ``get_extra_info()`` method of the UDP must return a ``str``.
+
+Returns:
+  ``str``: extra info about the UDP
+
+Raises:
+  unspecified: any exception thrown by the ``get_extra_info()`` method of the UDP
 
 )";
 }

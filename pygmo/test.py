@@ -86,11 +86,22 @@ class problem_test_case(_ut.TestCase):
         self.run_extract_tests()
         self.run_nobj_tests()
         self.run_nec_nic_tests()
+        self.run_nc_tests()
+        self.run_nx_tests()
+        self.run_nf_tests()
+        self.run_ctol_tests()
+        self.run_evals_tests()
         self.run_has_gradient_tests()
         self.run_gradient_tests()
         self.run_has_gradient_sparsity_tests()
         self.run_gradient_sparsity_tests()
         self.run_has_hessians_tests()
+        self.run_hessians_tests()
+        self.run_has_hessians_sparsity_tests()
+        self.run_hessians_sparsity_tests()
+        self.run_seed_tests()
+        self.run_feas_tests()
+        self.run_name_info_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -297,6 +308,207 @@ class problem_test_case(_ut.TestCase):
         prob = problem(p())
         self.assert_(all(prob.fitness([1, 2]) == array([42])))
 
+    def run_ctol_tests(self):
+        from .core import problem
+        from numpy import array
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+        prob = problem(p())
+        self.assertTrue(all(prob.c_tol == array([])))
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43, 44]
+
+            def get_nec(self):
+                return 1
+        prob = problem(p())
+        self.assertTrue(all(prob.c_tol == array([0.])))
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43, 44, 45]
+
+            def get_nec(self):
+                return 1
+
+            def get_nic(self):
+                return 1
+        prob = problem(p())
+        self.assertTrue(all(prob.c_tol == array([0., 0.])))
+
+        def raiser():
+            prob.c_tol = []
+        self.assertRaises(ValueError, raiser)
+        self.assertTrue(all(prob.c_tol == array([0., 0.])))
+
+        def raiser():
+            prob.c_tol = [1, 2, 3]
+        self.assertRaises(ValueError, raiser)
+        self.assertTrue(all(prob.c_tol == array([0., 0.])))
+
+        def raiser():
+            prob.c_tol = [1., float("NaN")]
+        self.assertRaises(ValueError, raiser)
+        self.assertTrue(all(prob.c_tol == array([0., 0.])))
+
+        def raiser():
+            prob.c_tol = [1., -1.]
+        self.assertRaises(ValueError, raiser)
+        self.assertTrue(all(prob.c_tol == array([0., 0.])))
+        prob.c_tol = [1e-8, 1e-6]
+        self.assertTrue(all(prob.c_tol == array([1e-8, 1e-6])))
+
+    def run_evals_tests(self):
+        from .core import problem
+        from numpy import array
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+
+            def gradient(self, a):
+                return [1, 2, 3, 4]
+
+            def hessians(self, a):
+                return [[1, 2, 3], [4, 5, 6]]
+        prob = problem(p())
+        self.assertEqual(prob.get_fevals(), 0)
+        self.assertEqual(prob.get_gevals(), 0)
+        self.assertEqual(prob.get_hevals(), 0)
+        prob.fitness([1, 2])
+        self.assertEqual(prob.get_fevals(), 1)
+        prob.gradient([1, 2])
+        self.assertEqual(prob.get_gevals(), 1)
+        prob.hessians([1, 2])
+        self.assertEqual(prob.get_hevals(), 1)
+
+    def run_nx_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+        prob = problem(p())
+        self.assertEqual(prob.get_nx(), 2)
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0, 1], [1, 1, 2])
+
+            def fitness(self, a):
+                return [42, 43]
+        prob = problem(p())
+        self.assertEqual(prob.get_nx(), 3)
+
+    def run_nf_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+        prob = problem(p())
+        self.assertEqual(prob.get_nf(), 2)
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_nec(self):
+                return 1
+
+            def get_bounds(self):
+                return ([0, 0, 1], [1, 1, 2])
+
+            def fitness(self, a):
+                return [42, 43, 44]
+        prob = problem(p())
+        self.assertEqual(prob.get_nf(), 3)
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_nic(self):
+                return 1
+
+            def get_bounds(self):
+                return ([0, 0, 1], [1, 1, 2])
+
+            def fitness(self, a):
+                return [42, 43, 44]
+        prob = problem(p())
+        self.assertEqual(prob.get_nf(), 3)
+
+        class p(object):
+
+            def get_nobj(self):
+                return 2
+
+            def get_nic(self):
+                return 1
+
+            def get_nec(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0, 1], [1, 1, 2])
+
+            def fitness(self, a):
+                return [42, 43, 44]
+        prob = problem(p())
+        self.assertEqual(prob.get_nf(), 5)
+
     def run_nobj_tests(self):
         from .core import problem
 
@@ -489,6 +701,48 @@ class problem_test_case(_ut.TestCase):
                 return [42]
         prob = problem(p())
         self.assertEqual(prob.get_nf(), 6)
+
+    def run_nc_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_nec(self):
+                return 2
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assertEqual(prob.get_nc(), 2)
+
+        class p(object):
+
+            def get_nec(self):
+                return 2
+
+            def get_nic(self):
+                return 3
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assertEqual(prob.get_nc(), 5)
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+        prob = problem(p())
+        self.assertEqual(prob.get_nc(), 0)
 
     def run_has_gradient_tests(self):
         from .core import problem
@@ -908,7 +1162,7 @@ class problem_test_case(_ut.TestCase):
             def fitness(self, a):
                 return [42]
 
-        self.assert_(not problem(p()).has_gradient())
+        self.assert_(not problem(p()).has_hessians())
 
         class p(object):
 
@@ -918,10 +1172,10 @@ class problem_test_case(_ut.TestCase):
             def fitness(self, a):
                 return [42]
 
-            def has_gradient(self):
+            def has_hessians(self):
                 return True
 
-        self.assert_(not problem(p()).has_gradient())
+        self.assert_(not problem(p()).has_hessians())
 
         class p(object):
 
@@ -931,13 +1185,13 @@ class problem_test_case(_ut.TestCase):
             def fitness(self, a):
                 return [42]
 
-            def gradient(self, dv):
+            def hessians(self, dv):
                 return [0]
 
-            def has_gradient(self):
+            def has_hessians(self):
                 return False
 
-        self.assert_(not problem(p()).has_gradient())
+        self.assert_(not problem(p()).has_hessians())
 
         class p(object):
 
@@ -947,29 +1201,625 @@ class problem_test_case(_ut.TestCase):
             def fitness(self, a):
                 return [42]
 
-            def gradient(self, dv):
+            def hessians(self, dv):
                 return [0]
 
-        self.assert_(problem(p()).has_gradient())
+        self.assert_(problem(p()).has_hessians())
+
+    def run_hessians_tests(self):
+        from numpy import array
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        self.assertRaises(NotImplementedError,
+                          lambda: problem(p()).hessians([1, 2]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians(self, a):
+                return [0]
+
+        # Rasies AttributeError because we are trying to iterate over
+        # the element of the returned hessians, which, in this case, is
+        # an int.
+        self.assertRaises(
+            AttributeError, lambda: problem(p()).hessians([1, 2]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians(self, a):
+                return [(1, 2, 3)]
+
+        self.assert_(all(array([1., 2., 3.]) ==
+                         problem(p()).hessians([1, 2])[0]))
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians(self, a):
+                return ([1, 2, 3],)
+
+        self.assert_(all(array([1., 2., 3.]) ==
+                         problem(p()).hessians([1, 2])[0]))
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians(self, a):
+                return (array([1, 2, 3]),)
+
+        self.assert_(all(array([1., 2., 3.]) ==
+                         problem(p()).hessians([1, 2])[0]))
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, -42]
+
+            def get_nobj(self):
+                return 2
+
+            def hessians(self, a):
+                return (array([1, 2, 3]), (4, 5, 6))
+
+        self.assert_(all(array([1., 2., 3.]) ==
+                         problem(p()).hessians([1, 2])[0]))
+        self.assert_(all(array([4., 5., 6.]) ==
+                         problem(p()).hessians([1, 2])[1]))
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]))
+
+    def run_has_hessians_sparsity_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        self.assert_(not problem(p()).has_hessians_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [[(0, 0)]]
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def has_hessians_sparsity(self):
+                return True
+
+        self.assert_(not problem(p()).has_hessians_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return ([(0, 0)],)
+
+            def has_hessians_sparsity(self):
+                return True
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [array([[0, 0]])]
+
+            def has_hessians_sparsity(self):
+                return False
+
+        self.assert_(not problem(p()).has_hessians_sparsity())
+
+    def run_hessians_sparsity_tests(self):
+        from .core import problem
+        from numpy import array, ndarray
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return ([],)
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+        self.assert_(isinstance(problem(p()).hessians_sparsity(), list))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return ([],)
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+        self.assert_(isinstance(problem(p()).hessians_sparsity(), list))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return {()}
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+        self.assert_(isinstance(problem(p()).hessians_sparsity(), list))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [[(0, 0)]]
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+        self.assert_(isinstance(problem(p()).hessians_sparsity(), list))
+        self.assert_(isinstance(problem(p()).hessians_sparsity()[0], ndarray))
+        self.assert_(problem(p()).hessians_sparsity()[0].shape == (1, 2))
+        self.assert_((problem(p()).hessians_sparsity()[0]
+                      == array([[0, 0]])).all())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [[[0, 0], (1, 0)]]
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+        self.assert_(isinstance(problem(p()).hessians_sparsity(), list))
+        self.assert_(isinstance(problem(p()).hessians_sparsity()[0], ndarray))
+        self.assert_(problem(p()).hessians_sparsity()[0].shape == (2, 2))
+        self.assert_((problem(p()).hessians_sparsity()[0]
+                      == array([[0, 0], [1, 0]])).all())
+        self.assertEqual(problem(p()).hessians_sparsity()[0][0][0], 0)
+        self.assertEqual(problem(p()).hessians_sparsity()[0][0][1], 0)
+        self.assertEqual(problem(p()).hessians_sparsity()[0][1][1], 0)
+        self.assertEqual(problem(p()).hessians_sparsity()[0][1][0], 1)
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return ([[0, 0], (0,)],)
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [[[0, 0], (0, 0)]]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [[[0, 0], (0, 123)]]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [array([[0, 0], [1, 1]])]
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+        self.assert_(isinstance(problem(p()).hessians_sparsity(), list))
+        self.assert_(isinstance(problem(p()).hessians_sparsity()[0], ndarray))
+        self.assert_(problem(p()).hessians_sparsity()[0].shape == (2, 2))
+        self.assert_((problem(p()).hessians_sparsity()[0]
+                      == array([[0, 0], [1, 1]])).all())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return array([[0, 0], [0, 123]])
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return (array([[0, 0, 0], [0, 1, 0]]),)
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [array([[[0], [1], [2]]])]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [[[[0], 0], [0, 1]]]
+
+        self.assertRaises(TypeError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [array([[0, 0], [0, -1]])]
+
+        self.assertRaises(OverflowError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                a = array([[0, 0, 0], [1, 1, 0]])
+                return [a[:, :2]]
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+        self.assert_(isinstance(problem(p()).hessians_sparsity(), list))
+        self.assert_(isinstance(problem(p()).hessians_sparsity()[0], ndarray))
+        self.assert_(problem(p()).hessians_sparsity()[0].shape == (2, 2))
+        self.assert_((problem(p()).hessians_sparsity()[0]
+                      == array([[0, 0], [1, 1]])).all())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def hessians_sparsity(self):
+                return [array([[0, 0], [0, 1.]])]
+
+        self.assertRaises(TypeError, lambda: problem(p()))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+
+            def get_nobj(self):
+                return 2
+
+            def hessians_sparsity(self):
+                return [array([[0, 0], [1, 1]]), array([[0, 0], [1, 0]])]
+
+        self.assert_(problem(p()).has_hessians_sparsity())
+        self.assert_(isinstance(problem(p()).hessians_sparsity(), list))
+        self.assert_(isinstance(problem(p()).hessians_sparsity()[0], ndarray))
+        self.assert_(isinstance(problem(p()).hessians_sparsity()[1], ndarray))
+        self.assert_(problem(p()).hessians_sparsity()[0].shape == (2, 2))
+        self.assert_(problem(p()).hessians_sparsity()[1].shape == (2, 2))
+        self.assert_((problem(p()).hessians_sparsity()[0]
+                      == array([[0, 0], [1, 1]])).all())
+        self.assert_((problem(p()).hessians_sparsity()[1]
+                      == array([[0, 0], [1, 0]])).all())
+
+    def run_seed_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        self.assert_(not problem(p()).has_set_seed())
+        self.assertRaises(NotImplementedError,
+                          lambda: problem(p()).set_seed(12))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def has_set_seed(self):
+                return True
+
+        self.assert_(not problem(p()).has_set_seed())
+        self.assertRaises(NotImplementedError,
+                          lambda: problem(p()).set_seed(12))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def set_seed(self, seed):
+                pass
+
+        self.assert_(problem(p()).has_set_seed())
+        problem(p()).set_seed(87)
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def set_seed(self, seed):
+                pass
+
+            def has_set_seed(self):
+                return False
+
+        self.assert_(not problem(p()).has_set_seed())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def set_seed(self, seed):
+                pass
+
+            def has_set_seed(self):
+                return True
+
+        self.assert_(problem(p()).has_set_seed())
+        problem(p()).set_seed(0)
+        problem(p()).set_seed(87)
+        self.assertRaises(OverflowError, lambda: problem(p()).set_seed(-1))
+
+    def run_feas_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        prob = problem(p())
+        self.assert_(prob.feasibility_x([0, 0]))
+        self.assertEqual(1, prob.get_fevals())
+        self.assert_(prob.feasibility_f([0]))
+        self.assertEqual(1, prob.get_fevals())
+        self.assertRaises(ValueError, lambda: prob.feasibility_f([0, 1]))
+
+    def run_name_info_tests(self):
+        from .core import problem
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        prob = problem(p())
+        self.assert_(prob.get_name() != '')
+        self.assert_(prob.get_extra_info() == '')
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def get_name(self):
+                return 'pippo'
+
+        prob = problem(p())
+        self.assert_(prob.get_name() == 'pippo')
+        self.assert_(prob.get_extra_info() == '')
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def get_extra_info(self):
+                return 'pluto'
+
+        prob = problem(p())
+        self.assert_(prob.get_name() != '')
+        self.assert_(prob.get_extra_info() == 'pluto')
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def get_name(self):
+                return 'pippo'
+
+            def get_extra_info(self):
+                return 'pluto'
+
+        prob = problem(p())
+        self.assert_(prob.get_name() == 'pippo')
+        self.assert_(prob.get_extra_info() == 'pluto')
 
 
 class population_test_case(_ut.TestCase):
-	"""Test case for the :class:`~pygmo.core.population` class.
+    """Test case for the :class:`~pygmo.core.population` class.
 
-	"""
-	def runTest(self):
-		self.run_champion_test()
-	def run_champion_test(self):
-		from .core import population, null_problem, problem
-		from numpy import array
-		udp = null_problem()
-		prob = problem(udp)
-		pop = population(prob)
-		self.assertEqual(len(pop.champion_f), 0)
-		self.assertEqual(len(pop.champion_x), 0)
-		pop.push_back([1.])
-		self.assertEqual(pop.champion_f[0], 0.)
-		self.assertEqual(pop.champion_x[0], 1.)
+    """
+
+    def runTest(self):
+        self.run_champion_test()
+
+    def run_champion_test(self):
+        from .core import population, null_problem, problem
+        from numpy import array
+        udp = null_problem()
+        prob = problem(udp)
+        pop = population(prob)
+        self.assertEqual(len(pop.champion_f), 0)
+        self.assertEqual(len(pop.champion_x), 0)
+        pop.push_back([1.])
+        self.assertEqual(pop.champion_f[0], 0.)
+        self.assertEqual(pop.champion_x[0], 1.)
+
 
 class pso_test_case(_ut.TestCase):
     """Test case for the UDA pso
@@ -1031,6 +1881,7 @@ class cmaes_test_case(_ut.TestCase):
                     ftol=1e-6, xtol=1e-6, memory=False, seed=32)
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
+
 
 class hypervolume_test_case(_ut.TestCase):
     """Test case for the hypervolume utilities
