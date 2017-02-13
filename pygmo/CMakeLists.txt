@@ -9,7 +9,7 @@ if(NOT YACMA_NUMPY_INCLUDES_DIR)
 	message(FATAL_ERROR "The NumPy headers could not be located.")
 endif()
 
-find_package(Boost 1.56 REQUIRED COMPONENTS python)
+include(PagmoFindBoost)
 
 YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp)
 target_link_libraries(core PRIVATE Boost::boost Boost::python Boost::disable_autolinking pagmo)
