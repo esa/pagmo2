@@ -57,12 +57,27 @@ std::string problem_get_bounds_docstring();
 std::string problem_get_nec_docstring();
 std::string problem_get_nic_docstring();
 std::string problem_get_nobj_docstring();
+std::string problem_get_nx_docstring();
+std::string problem_get_nf_docstring();
+std::string problem_get_nc_docstring();
+std::string problem_c_tol_docstring();
+std::string problem_get_fevals_docstring();
+std::string problem_get_gevals_docstring();
+std::string problem_get_hevals_docstring();
+std::string problem_has_set_seed_docstring();
+std::string problem_set_seed_docstring();
+std::string problem_feasibility_x_docstring();
+std::string problem_feasibility_f_docstring();
 std::string problem_has_gradient_docstring();
 std::string problem_gradient_docstring();
 std::string problem_has_gradient_sparsity_docstring();
 std::string problem_gradient_sparsity_docstring();
 std::string problem_has_hessians_docstring();
 std::string problem_hessians_docstring();
+std::string problem_has_hessians_sparsity_docstring();
+std::string problem_hessians_sparsity_docstring();
+std::string problem_get_name_docstring();
+std::string problem_get_extra_info_docstring();
 
 // algorithm
 std::string algorithm_docstring();

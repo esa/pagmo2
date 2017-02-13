@@ -66,7 +66,8 @@ inline bp::object best_known_wrapper(const Prob &p)
 template <typename Prob>
 inline pagmo::translate *translate_init(const Prob &p, const bp::object &o)
 {
-    return ::new pagmo::translate(p, to_vd(o));
+    auto vd = to_vd(o);
+    return ::new pagmo::translate(p, vd);
 }
 
 // NOTE: we specialise this as we need to avoid that we end up using a pagmo::problem
@@ -79,7 +80,8 @@ inline pagmo::translate *translate_init<bp::object>(const bp::object &p, const b
         pygmo_throw(PyExc_TypeError, "a pygmo.problem is not a user-defined problem, and it cannot be used "
                                      "as a construction argument for pygmo.translate");
     }
-    return ::new pagmo::translate(p, to_vd(o));
+    auto vd = to_vd(o);
+    return ::new pagmo::translate(p, vd);
 }
 
 // Make Python init from ctor above.
@@ -97,7 +99,9 @@ template <typename Prob>
 inline pagmo::decompose *decompose_init(const Prob &p, const bp::object &weight, const bp::object &z,
                                         const std::string &method, bool adapt_ideal)
 {
-    return ::new pagmo::decompose(p, to_vd(weight), to_vd(z), method, adapt_ideal);
+    auto vd_w = to_vd(weight);
+    auto vd_z = to_vd(z);
+    return ::new pagmo::decompose(p, vd_w, vd_z, method, adapt_ideal);
 }
 
 // Make a python init from the above ctor.

@@ -1314,7 +1314,7 @@ public:
      *
      * @throws std::invalid_argument if either:
      * - the length of \p dv differs from the output of get_nx(), or
-     * - the length of each hessian returned does not match the corresponding hessians sparsity pattern dimensions.
+     * - the length of the returned hessians does not match the corresponding hessians sparsity pattern dimensions.
      * @throws not_implemented_error if the UDP does not satisfy pagmo::has_hessians.
      * @throws unspecified any exception thrown by the <tt>%hessians()</tt> method of the UDP.
      */
@@ -1581,7 +1581,7 @@ public:
 
     /// Feasibility of a decision vector.
     /**
-     * This method will checks the feasibility of the fitness corresponding to
+     * This method will check the feasibility of the fitness corresponding to
      * a decision vector \p x against
      * the tolerances returned by problem::get_c_tol().
      *
