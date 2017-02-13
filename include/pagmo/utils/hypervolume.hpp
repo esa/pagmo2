@@ -92,11 +92,11 @@ public:
     {
         if (pop.get_problem().get_nc() > 0u) {
             pagmo_throw(std::invalid_argument, "The problem of the population is not unconstrained."
-            "Only unconstrained populations can be used to constructs hypervolumes.");
+            "Only unconstrained populations can be used to construct hypervolume objects.");
         }
         if (pop.get_problem().get_nobj() < 2u) {
             pagmo_throw(std::invalid_argument, "The problem of the population is not multiobjective."
-            "Only multi-objective populations can be used to constructs hypervolumes.");
+            "Only multi-objective populations can be used to construct hypervolume objects.");
         }
         m_points = pop.get_f();
         if (m_verify) {
