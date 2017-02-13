@@ -636,7 +636,7 @@ BOOST_PYTHON_MODULE(core)
     // Mark it as a cpp problem.
     tp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from translate.
-    pygmo::problem_prob_init<translate>();
+    pygmo::problem_expose_init_cpp_udp<translate>();
     // Extract a translated problem from the problem class.
     problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, translate>,
                       bp::return_internal_reference<>());
@@ -658,7 +658,7 @@ BOOST_PYTHON_MODULE(core)
     // Mark it as a cpp problem.
     dp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from decompose.
-    pygmo::problem_prob_init<decompose>();
+    pygmo::problem_expose_init_cpp_udp<decompose>();
     // Extract a decomposed problem from the problem class.
     problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, decompose>,
                       bp::return_internal_reference<>());

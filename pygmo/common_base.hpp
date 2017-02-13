@@ -45,18 +45,6 @@ namespace bp = boost::python;
 // A common base class with methods useful inthe implementation of
 // the pythonic problem and algorithm.
 struct common_base {
-    // Check if 'o' has a callable attribute (i.e., a method) named 's'. If so, it will
-    // return the attribute, otherwise it will return None.
-    static bp::object callable_attribute(const bp::object &o, const char *s)
-    {
-        if (hasattr(o, s)) {
-            bp::object retval = o.attr(s);
-            if (callable(retval)) {
-                return retval;
-            }
-        }
-        return bp::object();
-    }
     static void check_mandatory_method(const bp::object &o, const char *s, const char *target)
     {
         if (!callable_attribute(o, s)) {

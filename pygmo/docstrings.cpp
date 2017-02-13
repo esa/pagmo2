@@ -400,7 +400,7 @@ Examples:
 
 std::string problem_docstring()
 {
-    return R"(__init__(prob)
+    return R"(__init__(udp)
 
 Problem class.
 
@@ -492,7 +492,7 @@ they do not expose any of the mandatory or optional methods listed above.
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::problem`.
 
 Args:
-    prob: a user-defined problem (either C++ or Python - note that *prob* will be deep-copied
+    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
       and stored inside the :class:`~pygmo.core.problem` instance)
 
 Raises:
