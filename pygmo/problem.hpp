@@ -79,14 +79,14 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     prob_inner(prob_inner &&) = delete;
     prob_inner &operator=(const prob_inner &) = delete;
     prob_inner &operator=(prob_inner &&) = delete;
-    explicit prob_inner(bp::object o)
-        : // Perform an explicit deep copy of the input object.
-          m_value(pygmo::deepcopy(o))
+    explicit prob_inner(const bp::object &o)
     {
         // Check the presence of the mandatory methods (these are static asserts
         // in the C++ counterpart).
-        check_mandatory_method(m_value, "fitness", "problem");
-        check_mandatory_method(m_value, "get_bounds", "problem");
+        check_mandatory_method(o, "fitness", "problem");
+        check_mandatory_method(o, "get_bounds", "problem");
+        // The Python UDP looks alright, let's deepcopy it into m_value.
+        m_value = pygmo::deepcopy(o);
     }
     virtual prob_inner_base *clone() const override final
     {

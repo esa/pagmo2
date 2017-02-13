@@ -31,7 +31,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <cassert>
 #include <exception>
-#include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -43,11 +42,6 @@ see https://www.gnu.org/licenses/. */
 #include "../types.hpp"
 
 #define E 2.7182818284590452353602874713526625
-
-//#if defined(__GNUC__)
-//#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wconversion"
-//#endif
 
 namespace pagmo
 {
@@ -77,12 +71,8 @@ public:
      * @param[in] prob_id The problem id. One of [1,2,...,28]
      * @param[in] dim problem dimension. One of [2,5,10,20,30,...,100]
      *
-     * @see http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip to find
-     * the files
-     *
      * @throws invalid_argument if \p prob_id is not in [1,18] or if \p dim is not one of
      * [2,5,10,20,30,40,50,60,70,80,90,100]
-     * @throws std::ios_base::failure if the files are not found
      */
     cec2013(unsigned int prob_id = 1u, unsigned int dim = 2u)
         : m_prob_id(prob_id), m_rotation_matrix(), m_origin_shift(), m_y(dim), m_z(dim)
@@ -349,7 +339,7 @@ public:
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of primitive types.
      */
     template <typename Archive>
     void serialize(Archive &ar)
@@ -1181,9 +1171,5 @@ private:
 PAGMO_REGISTER_PROBLEM(pagmo::cec2013)
 
 #undef E
-
-//#if defined(__GNUC__)
-//#pragma GCC diagnostic pop
-//#endif
 
 #endif
