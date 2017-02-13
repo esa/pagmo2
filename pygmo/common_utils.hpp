@@ -141,6 +141,19 @@ inline bool callable(const bp::object &o)
     return bp::extract<bool>(builtin().attr("callable")(o));
 }
 
+// Check if 'o' has a callable attribute (i.e., a method) named 's'. If so, it will
+// return the attribute, otherwise it will return None.
+inline bp::object callable_attribute(const bp::object &o, const char *s)
+{
+    if (hasattr(o, s)) {
+        bp::object retval = o.attr(s);
+        if (callable(retval)) {
+            return retval;
+        }
+    }
+    return bp::object();
+}
+
 // Convert a vector of arithmetic types into a 1D numpy array.
 template <typename T>
 using v_to_a_enabler = pagmo::enable_if_t<std::is_arithmetic<T>::value, int>;

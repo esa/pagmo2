@@ -138,11 +138,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - without a gradient() method, return false;
         // - with a gradient() and no override, return true;
         // - with a gradient() and override, return the value from the override.
-        auto g = callable_attribute(m_value, "gradient");
+        auto g = pygmo::callable_attribute(m_value, "gradient");
         if (!g) {
             return false;
         }
-        auto hg = callable_attribute(m_value, "has_gradient");
+        auto hg = pygmo::callable_attribute(m_value, "has_gradient");
         if (!hg) {
             return true;
         }
@@ -150,7 +150,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     }
     virtual vector_double gradient(const vector_double &dv) const override final
     {
-        auto g = callable_attribute(m_value, "gradient");
+        auto g = pygmo::callable_attribute(m_value, "gradient");
         if (g) {
             return pygmo::to_vd(g(pygmo::v_to_a(dv)));
         }
@@ -166,11 +166,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - without a gradient_sparsity() method, return false;
         // - with a gradient_sparsity() and no override, return true;
         // - with a gradient_sparsity() and override, return the value from the override.
-        auto gs = callable_attribute(m_value, "gradient_sparsity");
+        auto gs = pygmo::callable_attribute(m_value, "gradient_sparsity");
         if (!gs) {
             return false;
         }
-        auto hgs = callable_attribute(m_value, "has_gradient_sparsity");
+        auto hgs = pygmo::callable_attribute(m_value, "has_gradient_sparsity");
         if (!hgs) {
             return true;
         }
@@ -178,7 +178,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     }
     virtual sparsity_pattern gradient_sparsity() const override final
     {
-        auto gs = callable_attribute(m_value, "gradient_sparsity");
+        auto gs = pygmo::callable_attribute(m_value, "gradient_sparsity");
         if (gs) {
             return pygmo::to_sp(gs());
         }
@@ -203,11 +203,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - without a hessians() method, return false;
         // - with a hessians() and no override, return true;
         // - with a hessians() and override, return the value from the override.
-        auto h = callable_attribute(m_value, "hessians");
+        auto h = pygmo::callable_attribute(m_value, "hessians");
         if (!h) {
             return false;
         }
-        auto hh = callable_attribute(m_value, "has_hessians");
+        auto hh = pygmo::callable_attribute(m_value, "has_hessians");
         if (!hh) {
             return true;
         }
@@ -215,7 +215,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     }
     virtual std::vector<vector_double> hessians(const vector_double &dv) const override final
     {
-        auto h = callable_attribute(m_value, "hessians");
+        auto h = pygmo::callable_attribute(m_value, "hessians");
         if (h) {
             // Invoke the method, getting out a generic Python object.
             bp::object tmp = h(pygmo::v_to_a(dv));
@@ -237,11 +237,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - without a hessians_sparsity() method, return false;
         // - with a hessians_sparsity() and no override, return true;
         // - with a hessians_sparsity() and override, return the value from the override.
-        auto hs = callable_attribute(m_value, "hessians_sparsity");
+        auto hs = pygmo::callable_attribute(m_value, "hessians_sparsity");
         if (!hs) {
             return false;
         }
-        auto hhs = callable_attribute(m_value, "has_hessians_sparsity");
+        auto hhs = pygmo::callable_attribute(m_value, "has_hessians_sparsity");
         if (!hhs) {
             return true;
         }
@@ -249,7 +249,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     }
     virtual std::vector<sparsity_pattern> hessians_sparsity() const override final
     {
-        auto hs = callable_attribute(m_value, "hessians_sparsity");
+        auto hs = pygmo::callable_attribute(m_value, "hessians_sparsity");
         if (hs) {
             bp::object tmp = hs();
             std::vector<sparsity_pattern> retval;
@@ -267,7 +267,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     }
     virtual void set_seed(unsigned n) override final
     {
-        auto ss = callable_attribute(m_value, "set_seed");
+        auto ss = pygmo::callable_attribute(m_value, "set_seed");
         if (ss) {
             ss(n);
         } else {
@@ -285,11 +285,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - without a set_seed() method, return false;
         // - with a set_seed() and no override, return true;
         // - with a set_seed() and override, return the value from the override.
-        auto ss = callable_attribute(m_value, "set_seed");
+        auto ss = pygmo::callable_attribute(m_value, "set_seed");
         if (!ss) {
             return false;
         }
-        auto hss = callable_attribute(m_value, "has_set_seed");
+        auto hss = pygmo::callable_attribute(m_value, "has_set_seed");
         if (!hss) {
             return true;
         }
