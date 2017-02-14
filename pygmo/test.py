@@ -1892,10 +1892,9 @@ class hypervolume_test_case(_ut.TestCase):
         from .core import hypervolume, hv2d, hv3d, wfg, bf_fpras, bf_approx
         from .core import population, zdt
         pop  = population(prob = zdt(id = 1, param = 10), size = 20)
-        hv1 = hypervolume(pop = pop, verify = True)
-        hv2 = hypervolume(points = [[0,0],[-1,1],[-2,2]], verify = True)
+        hv1 = hypervolume(pop = pop)
+        hv2 = hypervolume(points = [[0,0],[-1,1],[-2,2]])
         hv2.copy_points = True
-        hv2.verify = True
         points = hv2.get_points()
         res0 = hv2.compute([3,3])
 
@@ -1937,11 +1936,15 @@ def run_test_suite():
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(problem_test_case())
     suite.addTest(pso_test_case())
-    suite.addTest(cmaes_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(population_test_case())
     suite.addTest(hypervolume_test_case())
+    try:
+        from .core import cmaes
+        suite.addTest(cmaes_test_case())
+    except ImportError:
+        pass
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

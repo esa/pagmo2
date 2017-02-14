@@ -872,12 +872,18 @@ BOOST_PYTHON_MODULE(core)
     // Exposition of various structured utilities
     // Hypervolume class
     bp::class_<hypervolume>("hypervolume", "Hypervolume Class")
-        .def(bp::init<population, bool>((bp::arg("pop"), bp::arg("verify") = true), pygmo::hv_init1_docstring().c_str()))
         .def("__init__",
              bp::make_constructor(
-                +[](const bp::object &points, bool verify) { return ::new hypervolume(pygmo::to_vvd(points), verify); },
+                +[](const population &pop) { return ::new hypervolume(pop, true); },
                 bp::default_call_policies(),
-                (bp::arg("points"), bp::arg("verify") = true)),
+                (bp::arg("pop"))),
+                pygmo::hv_init2_docstring().c_str()
+            )
+        .def("__init__",
+             bp::make_constructor(
+                +[](const bp::object &points) { return ::new hypervolume(pygmo::to_vvd(points), true); },
+                bp::default_call_policies(),
+                (bp::arg("points"))),
                 pygmo::hv_init2_docstring().c_str()
             )
         .def("compute",
@@ -931,9 +937,8 @@ BOOST_PYTHON_MODULE(core)
              pygmo::hv_contributions_docstring().c_str(),
              (bp::arg("ref_point"), bp::arg("hv_algo")))
         .add_property("copy_points", &hypervolume::get_copy_points, &hypervolume::set_copy_points)
-        .add_property("verify", &hypervolume::get_verify, &hypervolume::set_verify)
         .def("get_points", +[](hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); });
-        
+
     // Hypervolume algorithms
     bp::class_<hv_algorithm, boost::noncopyable>("_hv_algorithm", bp::no_init).def("get_name", &hv_algorithm::get_name);
     bp::class_<hvwfg, bp::bases<hv_algorithm>>("wfg", "WFG algorithm.")

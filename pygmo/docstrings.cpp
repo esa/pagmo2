@@ -1940,13 +1940,12 @@ Examples:
 
 std::string hv_init1_docstring()
 {
-    return R"(__init__(pop, verify = True)
+    return R"(__init__(pop)
 
 Constructor from population
 
 Args:
     pop (``pygmo.population``): a pygmo.population
-    verify (``bool``): points verification
 
 Raises:
     ValueError: if *pop* contains a single-objective or a constrained problem
@@ -1954,7 +1953,7 @@ Raises:
 Examples:
     >>> from pygmo import *
     >>> pop = population(prob = zdt(id = 1), size = 20)
-    >>> hv = hypervolume(pop = pop, verify = True)
+    >>> hv = hypervolume(pop = pop)
 
 See also the docs of the C++ class :cpp:class:`pagmo::hypervolume`.
 
@@ -1963,21 +1962,20 @@ See also the docs of the C++ class :cpp:class:`pagmo::hypervolume`.
 
 std::string hv_init2_docstring()
 {
-    return R"(__init__(points, verify = True)
+    return R"(__init__(points)
 
 Constructor from points
 
 Args:
     points (``list`` of ``arrays``): the points
-    verify (``bool``): points verification
 
 Raises:
-    ValueError: if *verify* and *points* are inconsistent
+    ValueError: if *points* is inconsistent
 
 Examples:
     >>> from pygmo import *
     >>> points = [[1,2],[0.5, 3],[0.1,3.1]]
-    >>> hv = hypervolume(points = points, verify = True)
+    >>> hv = hypervolume(points = points)
 
 See also the docs of the C++ class :cpp:class:`pagmo::hypervolume`.
 
