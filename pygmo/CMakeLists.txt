@@ -1,16 +1,3 @@
-include(YACMAPythonSetup)
-
-# Python version check.
-if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
-	message(FATAL_ERROR "Minimum supported Python version is 2.7.")
-endif()
-
-if(NOT YACMA_NUMPY_INCLUDES_DIR)
-	message(FATAL_ERROR "The NumPy headers could not be located.")
-endif()
-
-include(PagmoFindBoost)
-
 YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp)
 target_link_libraries(core PRIVATE Boost::boost Boost::python Boost::disable_autolinking pagmo)
 target_include_directories(core SYSTEM PRIVATE "${YACMA_NUMPY_INCLUDES_DIR}")
