@@ -67,7 +67,6 @@ see https://www.gnu.org/licenses/. */
 #ifdef PAGMO_WITH_EIGEN3
 #include <pagmo/algorithms/cmaes.hpp>
 #endif
-
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
@@ -248,69 +247,6 @@ static inline void population_prob_init(bp::class_<population> &pop_class)
         .def(bp::init<const Prob &, population::size_type, unsigned>());
 }
 
-// Various best_idx() overloads.
-static inline vector_double::size_type pop_best_idx_wrapper_0(const population &pop, const bp::object &tol)
-{
-    return pop.best_idx(pygmo::to_vd(tol));
-}
-
-static inline vector_double::size_type pop_best_idx_wrapper_1(const population &pop, double tol)
-{
-    return pop.best_idx(tol);
-}
-
-static inline vector_double::size_type pop_best_idx_wrapper_2(const population &pop)
-{
-    return pop.best_idx();
-}
-
-// Various worst_idx() overloads.
-static inline vector_double::size_type pop_worst_idx_wrapper_0(const population &pop, const bp::object &tol)
-{
-    return pop.worst_idx(pygmo::to_vd(tol));
-}
-
-static inline vector_double::size_type pop_worst_idx_wrapper_1(const population &pop, double tol)
-{
-    return pop.worst_idx(tol);
-}
-
-static inline vector_double::size_type pop_worst_idx_wrapper_2(const population &pop)
-{
-    return pop.worst_idx();
-}
-
-// set_xf().
-static inline void pop_set_xf_wrapper(population &pop, population::size_type i, const bp::object &x,
-                                      const bp::object &f)
-{
-    pop.set_xf(i, pygmo::to_vd(x), pygmo::to_vd(f));
-}
-
-// set_x().
-static inline void pop_set_x_wrapper(population &pop, population::size_type i, const bp::object &x)
-{
-    pop.set_x(i, pygmo::to_vd(x));
-}
-
-// get_f().
-static inline bp::object pop_get_f_wrapper(const population &pop)
-{
-    return pygmo::vv_to_a(pop.get_f());
-}
-
-// get_x().
-static inline bp::object pop_get_x_wrapper(const population &pop)
-{
-    return pygmo::vv_to_a(pop.get_x());
-}
-
-// get_ID().
-static inline bp::object pop_get_ID_wrapper(const population &pop)
-{
-    return pygmo::v_to_a(pop.get_ID());
-}
-
 // Decompose methods wrappers
 static inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decompose &p, const bp::object &f,
                                                              const bp::object &weights, const bp::object &z_ref)
@@ -318,23 +254,19 @@ static inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decomp
     return pygmo::v_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weights), pygmo::to_vd(z_ref)));
 }
 
-// ZDT wrappers.
-static inline double zdt_p_distance_wrapper(const zdt &z, const bp::object &x)
-{
-    return z.p_distance(pygmo::to_vd(x));
-}
-
 // DE1220 ctors.
 static inline de1220 *de1220_init_0(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory)
 {
-    return ::new de1220(gen, pygmo::to_vu(allowed_variants), variant_adptv, ftol, xtol, memory);
+    auto av = pygmo::to_vu(allowed_variants);
+    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory);
 }
 
 static inline de1220 *de1220_init_1(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory, unsigned seed)
 {
-    return ::new de1220(gen, pygmo::to_vu(allowed_variants), variant_adptv, ftol, xtol, memory, seed);
+    auto av = pygmo::to_vu(allowed_variants);
+    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory, seed);
 }
 
 static inline bp::list de1220_allowed_variants()
@@ -344,26 +276,6 @@ static inline bp::list de1220_allowed_variants()
         retval.append(n);
     }
     return retval;
-}
-
-// Wrappers for utils/multi_objective stuff
-// fast_non_dominated_sorting
-static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
-{
-    auto fnds = fast_non_dominated_sorting(pygmo::to_vvd(x));
-    // the non-dominated fronts
-    auto ndf = std::get<0>(fnds);
-    bp::list ndf_py;
-    for (const std::vector<vector_double::size_type> &front : ndf) {
-        ndf_py.append(pygmo::v_to_a(front));
-    }
-    // the domination list
-    auto dl = std::get<1>(fnds);
-    bp::list dl_py;
-    for (const auto &item : dl) {
-        dl_py.append(pygmo::v_to_a(item));
-    }
-    return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)), pygmo::v_to_a(std::get<3>(fnds)));
 }
 
 // Helper function to test the to_vd functionality.
@@ -503,23 +415,33 @@ BOOST_PYTHON_MODULE(core)
              pygmo::population_decision_vector_docstring().c_str())
         .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); })
         .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); })
-        .def("best_idx", &pop_best_idx_wrapper_0)
-        .def("best_idx", &pop_best_idx_wrapper_1)
-        .def("best_idx", &pop_best_idx_wrapper_2, pygmo::population_best_idx_docstring().c_str())
-        .def("worst_idx", &pop_worst_idx_wrapper_0)
-        .def("worst_idx", &pop_worst_idx_wrapper_1)
-        .def("worst_idx", &pop_worst_idx_wrapper_2, pygmo::population_worst_idx_docstring().c_str())
+        .def("best_idx", +[](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); })
+        .def("best_idx", +[](const population &pop, double tol) { return pop.best_idx(tol); })
+        .def("best_idx", +[](const population &pop) { return pop.best_idx(); },
+             pygmo::population_best_idx_docstring().c_str())
+        .def("worst_idx",
+             +[](const population &pop, const bp::object &tol) { return pop.worst_idx(pygmo::to_vd(tol)); })
+        .def("worst_idx", +[](const population &pop, double tol) { return pop.worst_idx(tol); })
+        .def("worst_idx", +[](const population &pop) { return pop.worst_idx(); },
+             pygmo::population_worst_idx_docstring().c_str())
         .def("size", &population::size, pygmo::population_size_docstring().c_str())
         .def("__len__", &population::size)
-        .def("set_xf", &pop_set_xf_wrapper, pygmo::population_set_xf_docstring().c_str())
-        .def("set_x", &pop_set_x_wrapper, pygmo::population_set_x_docstring().c_str())
+        .def("set_xf", +[](population &pop, population::size_type i, const bp::object &x,
+                           const bp::object &f) { pop.set_xf(i, pygmo::to_vd(x), pygmo::to_vd(f)); },
+             pygmo::population_set_xf_docstring().c_str())
+        .def("set_x",
+             +[](population &pop, population::size_type i, const bp::object &x) { pop.set_x(i, pygmo::to_vd(x)); },
+             pygmo::population_set_x_docstring().c_str())
         .def("set_problem_seed", &population::set_problem_seed, pygmo::population_set_problem_seed_docstring().c_str(),
              (bp::arg("seed")))
         .def("get_problem", &population::get_problem, pygmo::population_get_problem_docstring().c_str(),
              bp::return_value_policy<bp::copy_const_reference>())
-        .def("get_f", &pop_get_f_wrapper, pygmo::population_get_f_docstring().c_str())
-        .def("get_x", &pop_get_x_wrapper, pygmo::population_get_x_docstring().c_str())
-        .def("get_ID", &pop_get_ID_wrapper, pygmo::population_get_ID_docstring().c_str())
+        .def("get_f", +[](const population &pop) { return pygmo::vv_to_a(pop.get_f()); },
+             pygmo::population_get_f_docstring().c_str())
+        .def("get_x", +[](const population &pop) { return pygmo::vv_to_a(pop.get_x()); },
+             pygmo::population_get_x_docstring().c_str())
+        .def("get_ID", +[](const population &pop) { return pygmo::v_to_a(pop.get_ID()); },
+             pygmo::population_get_ID_docstring().c_str())
         .def("get_seed", &population::get_seed, pygmo::population_get_seed_docstring().c_str());
 
     // Problem class.
@@ -750,7 +672,7 @@ BOOST_PYTHON_MODULE(core)
     auto zdt_p = pygmo::expose_problem<zdt>("zdt", "__init__(id = 1, param = 30)\n\nThe ZDT problem.\n\n"
                                                    "See :cpp:class:`pagmo::zdt`.\n\n");
     zdt_p.def(bp::init<unsigned, unsigned>((bp::arg("id") = 1u, bp::arg("param") = 30u)));
-    zdt_p.def("p_distance", &zdt_p_distance_wrapper);
+    zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); });
     // Inventory.
     auto inv = pygmo::expose_problem<inventory>(
         "inventory", "__init__(weeks = 4,sample_size = 10,seed = random)\n\nThe inventory problem.\n\n"
@@ -887,6 +809,23 @@ BOOST_PYTHON_MODULE(core)
 
     // Exposition of stand alone functions
     // Multi-objective utilities
-    bp::def("fast_non_dominated_sorting", fast_non_dominated_sorting_wrapper,
+    bp::def("fast_non_dominated_sorting",
+            +[](const bp::object &x) -> bp::object {
+                auto fnds = fast_non_dominated_sorting(pygmo::to_vvd(x));
+                // the non-dominated fronts
+                auto ndf = std::get<0>(fnds);
+                bp::list ndf_py;
+                for (const std::vector<vector_double::size_type> &front : ndf) {
+                    ndf_py.append(pygmo::v_to_a(front));
+                }
+                // the domination list
+                auto dl = std::get<1>(fnds);
+                bp::list dl_py;
+                for (const auto &item : dl) {
+                    dl_py.append(pygmo::v_to_a(item));
+                }
+                return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)),
+                                      pygmo::v_to_a(std::get<3>(fnds)));
+            },
             pygmo::fast_non_dominated_sorting_docstring().c_str(), boost::python::arg("points"));
 }
