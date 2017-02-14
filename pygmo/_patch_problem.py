@@ -64,10 +64,10 @@ def _problem_is(self, t):
     returned. Otherwise, ``False`` will be returned.
 
     Args:
-        t (type): the type of the user-defined problem to extract
+        t (``type``): the type of the user-defined problem to extract
 
     Returns:
-        bool: whether the user-defined problem is of type *t* or not
+        ``bool``: whether the user-defined problem is of type *t* or not
 
     Raises:
         TypeError: if *t* is not a type
