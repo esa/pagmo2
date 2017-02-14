@@ -36,6 +36,8 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 #include <utility>
 
+#include "threading.hpp"
+
 namespace pagmo
 {
 
@@ -315,6 +317,31 @@ public:
 
 template <typename T>
 const bool has_extra_info<T>::value;
+
+/// Detect \p get_thread_safety() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code{.unparsed}
+ * pagmo::thread_safety get_thread_safety() const;
+ * @endcode
+ * The \p get_thread_safety() method is part of the interface for the definition of problems and algorithms
+ * (see pagmo::problem and pagmo::algorithm).
+ */
+template <typename T>
+class has_get_thread_safety
+{
+    template <typename U>
+    using get_thread_safety_t = decltype(std::declval<const U &>().get_thread_safety());
+    static const bool implementation_defined = std::is_same<thread_safety, detected_t<get_thread_safety_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_get_thread_safety<T>::value;
 
 } // namespace pagmo
 

@@ -102,6 +102,7 @@ class problem_test_case(_ut.TestCase):
         self.run_seed_tests()
         self.run_feas_tests()
         self.run_name_info_tests()
+        self.run_thread_safety_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -1801,6 +1802,29 @@ class problem_test_case(_ut.TestCase):
         prob = problem(p())
         self.assert_(prob.get_name() == 'pippo')
         self.assert_(prob.get_extra_info() == 'pluto')
+
+    def run_thread_safety_tests(self):
+        from .core import problem, rosenbrock, _tu_test_problem, translate
+        from . import thread_safety as ts
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        self.assertTrue(problem(p()).get_thread_safety() == ts.none)
+        self.assertTrue(problem(rosenbrock()).get_thread_safety() == ts.basic)
+        self.assertTrue(
+            problem(_tu_test_problem()).get_thread_safety() == ts.none)
+        self.assertTrue(
+            problem(translate(_tu_test_problem(), [0])).get_thread_safety() == ts.none)
+        self.assertTrue(
+            problem(translate(p(), [0, 1])).get_thread_safety() == ts.none)
+        self.assertTrue(
+            problem(translate(rosenbrock(), [0, 1])).get_thread_safety() == ts.basic)
 
 
 class population_test_case(_ut.TestCase):

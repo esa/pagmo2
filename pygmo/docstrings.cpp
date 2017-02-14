@@ -1141,6 +1141,26 @@ Raises:
 )";
 }
 
+std::string problem_get_thread_safety_docstring()
+{
+    return R"(get_thread_safety()
+
+Problem's thread safety level.
+
+This method will return a value of the enum :class:`pygmo.thread_safety` which indicates the thread safety level
+of the UDP. Unlike in C++, in Python it is not possible to re-implement this method in the UDP. That is, for C++
+UDPs, the returned value will be the value returned by the ``get_thread_safety()`` method of the UDP. For Python
+UDPs, the returned value will be unconditionally :attr:`pygmo.thread_safety.none`.
+
+Returns:
+    a value of :class:`pygmo.thread_safety`: the thread safety level of the UDP
+
+Raises:
+    unspecified: any exception thrown by the ``get_thread_safety()`` method of the UDP
+
+)";
+}
+
 std::string problem_get_best_docstring(const std::string &name)
 {
     return R"(best_known()

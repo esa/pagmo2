@@ -43,6 +43,19 @@ from . import plotting
 from . import _patch_problem
 
 
+class thread_safety(object):
+    """Thread safety level.
+
+    This enum defines a set of values that can be used to specify the thread safety of problems, algorithms, etc.
+
+    """
+
+    #: No thread safety: concurrent operations on distinct instances are unsafe
+    none = core._thread_safety.none
+    #: Basic thread safety: concurrent operations on distinct instances are safe
+    basic = core._thread_safety.basic
+
+
 def _algorithm_extract(self, t):
     """Extract user-defined algorithm instance.
 

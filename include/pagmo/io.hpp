@@ -33,6 +33,8 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include "threading.hpp"
+
 #define PAGMO_MAX_OUTPUT_LENGTH 5u
 
 namespace pagmo
@@ -57,6 +59,15 @@ inline void stream_impl(std::ostream &os, const bool &b)
         os << "true";
     } else {
         os << "false";
+    }
+}
+
+inline void stream_impl(std::ostream &os, thread_safety ts)
+{
+    if (ts == thread_safety::none) {
+        os << "none";
+    } else {
+        os << "basic";
     }
 }
 

@@ -45,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/def.hpp>
 #include <boost/python/default_call_policies.hpp>
 #include <boost/python/docstring_options.hpp>
+#include <boost/python/enum.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/import.hpp>
@@ -91,6 +92,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 
 #include "algorithm.hpp"
 #include "algorithm_exposition_suite.hpp"
@@ -116,9 +118,6 @@ static inline std::unique_ptr<T> make_unique(Args &&... args)
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
-namespace bp = boost::python;
-using namespace pagmo;
-
 // This is necessary because the NumPy macro import_array() has different return values
 // depending on the Python version.
 #if PY_MAJOR_VERSION < 3
@@ -133,6 +132,9 @@ static inline void *wrap_import_array()
     return nullptr;
 }
 #endif
+
+namespace bp = boost::python;
+using namespace pagmo;
 
 // Test that the cereal serialization of BP objects works as expected.
 // The object returned by this function should be identical to the input
@@ -409,6 +411,22 @@ struct test_problem {
     int m_n = 1;
 };
 
+// A thread-unsafe test problem.
+struct tu_test_problem {
+    vector_double fitness(const vector_double &) const
+    {
+        return {1.};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -433,6 +451,9 @@ BOOST_PYTHON_MODULE(core)
         pygmo_throw(PyExc_ImportError, "");
     }
     wrap_import_array();
+
+    // The thread_safety enum.
+    bp::enum_<thread_safety>("_thread_safety").value("none", thread_safety::none).value("basic", thread_safety::basic);
 
     // Expose utility functions for testing purposes.
     bp::def("_builtin", &pygmo::builtin);
@@ -574,7 +595,8 @@ BOOST_PYTHON_MODULE(core)
         .def("feasibility_f", +[](const problem &p, const bp::object &f) { return p.feasibility_f(pygmo::to_vd(f)); },
              pygmo::problem_feasibility_f_docstring().c_str())
         .def("get_name", &problem::get_name, pygmo::problem_get_name_docstring().c_str())
-        .def("get_extra_info", &problem::get_extra_info, pygmo::problem_get_extra_info_docstring().c_str());
+        .def("get_extra_info", &problem::get_extra_info, pygmo::problem_get_extra_info_docstring().c_str())
+        .def("get_thread_safety", &problem::get_thread_safety, pygmo::problem_get_thread_safety_docstring().c_str());
 
     // Algorithm class.
     pygmo::algorithm_ptr
@@ -681,6 +703,8 @@ BOOST_PYTHON_MODULE(core)
     auto test_p = pygmo::expose_problem<test_problem>("_test_problem", "A test problem.");
     test_p.def("get_n", &test_problem::get_n);
     test_p.def("set_n", &test_problem::set_n);
+    // Thread unsafe test problem.
+    pygmo::expose_problem<tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>(
         "null_problem",

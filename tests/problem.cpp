@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/exceptions.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -1001,4 +1002,56 @@ BOOST_AUTO_TEST_CASE(extract_test)
     BOOST_CHECK(static_cast<const problem &>(p).extract<const null_problem>() == nullptr);
     BOOST_CHECK(p.extract<base_p>() == nullptr);
     BOOST_CHECK(static_cast<const problem &>(p).extract<base_p>() == nullptr);
+}
+
+struct ts1 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+};
+
+struct ts2 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+struct ts3 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    int get_thread_safety() const
+    {
+        return 2;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(thread_safety_test)
+{
+    BOOST_CHECK(problem{null_problem{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(problem{ts1{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(problem{ts2{}}.get_thread_safety() == thread_safety::none);
+    BOOST_CHECK(problem{ts3{}}.get_thread_safety() == thread_safety::basic);
+    std::cout << problem{ts1{}} << '\n';
+    std::cout << problem{ts2{}} << '\n';
+    std::cout << problem{ts3{}} << '\n';
 }
