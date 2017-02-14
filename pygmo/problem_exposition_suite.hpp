@@ -92,7 +92,7 @@ inline auto make_translate_init()
                                      (bp::arg(std::declval<const char *>()), bp::arg(std::declval<const char *>()))))
 {
     return bp::make_constructor(&translate_init<Prob>, bp::default_call_policies(),
-                                (bp::arg("prob"), bp::arg("translation")));
+                                (bp::arg("udp"), bp::arg("translation")));
 }
 
 // Constructor of decompose from problem and weight, z, method and bool flag.

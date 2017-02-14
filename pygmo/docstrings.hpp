@@ -80,6 +80,10 @@ std::string problem_get_name_docstring();
 std::string problem_get_extra_info_docstring();
 std::string problem_get_thread_safety_docstring();
 
+// translate
+std::string translate_docstring();
+std::string translate_translation_docstring();
+
 // algorithm
 std::string algorithm_docstring();
 

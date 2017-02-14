@@ -566,8 +566,8 @@ BOOST_PYTHON_MODULE(core)
         .def("get_extra_info", &algorithm::get_extra_info, "Get algorithm's extra info.");
 
     // Translate meta-problem.
-    pygmo::translate_ptr = make_unique<bp::class_<translate>>(
-        "translate", "The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:", bp::init<>());
+    pygmo::translate_ptr
+        = make_unique<bp::class_<translate>>("translate", pygmo::translate_docstring().c_str(), bp::init<>());
     auto &tp = *pygmo::translate_ptr;
     // Constructor from Python user-defined problem and translation vector (allows to translate Python problems).
     tp.def("__init__", pygmo::make_translate_init<bp::object>())
@@ -576,7 +576,9 @@ BOOST_PYTHON_MODULE(core)
         .def("__init__", pygmo::make_translate_init<translate>())
         // Problem extraction.
         .def("_py_extract", &pygmo::generic_py_extract<translate>)
-        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>());
+        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>())
+        .add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
+                      pygmo::translate_translation_docstring().c_str());
     // Mark it as a cpp problem.
     tp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from translate.

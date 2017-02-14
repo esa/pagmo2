@@ -103,6 +103,7 @@ class problem_test_case(_ut.TestCase):
         self.run_feas_tests()
         self.run_name_info_tests()
         self.run_thread_safety_tests()
+        self.run_translate_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -1825,6 +1826,38 @@ class problem_test_case(_ut.TestCase):
             problem(translate(p(), [0, 1])).get_thread_safety() == ts.none)
         self.assertTrue(
             problem(translate(rosenbrock(), [0, 1])).get_thread_safety() == ts.basic)
+
+    def run_translate_tests(self):
+        from .core import problem, rosenbrock, translate, null_problem
+        from numpy import array
+
+        t = translate()
+        self.assertFalse(t.extract(null_problem) is None)
+        self.assertTrue(all(t.translation == array([0.])))
+        t = translate(udp=rosenbrock(), translation=[1, 2])
+        self.assertFalse(t.extract(rosenbrock) is None)
+        self.assertTrue(all(t.translation == array([1., 2.])))
+        t = translate(rosenbrock(), [1, 2])
+        self.assertFalse(t.extract(rosenbrock) is None)
+        self.assertTrue(all(t.translation == array([1., 2.])))
+        t = translate(translation=[1, 2], udp=rosenbrock())
+        self.assertFalse(t.extract(rosenbrock) is None)
+        self.assertTrue(all(t.translation == array([1., 2.])))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        t = translate(p(), [-1, -1])
+        self.assertFalse(t.extract(p) is None)
+        self.assertTrue(all(t.translation == array([-1., -1.])))
+        t = translate(translation=[-1, -1], udp=p())
+        self.assertFalse(t.extract(p) is None)
+        self.assertTrue(all(t.translation == array([-1., -1.])))
 
 
 class population_test_case(_ut.TestCase):

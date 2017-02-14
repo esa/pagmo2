@@ -1175,6 +1175,54 @@ Returns:
 )";
 }
 
+std::string translate_docstring()
+{
+    return R"(__init__(udp = null_problem, translation = [0.])
+
+The translate meta-problem.
+
+This meta-problem translates the whole search space of an input user-defined problem (UDP) by a fixed
+translation vector. :class:`~pygmo.core.translate` objects are user-defined problems that
+can be used in the definition of a :class:`pygmo.core.problem`.
+
+The constructor admits two forms:
+
+* no arguments (in which case the :class:`~pygmo.core.translate` object will contain a non-translated
+  :class:`~pygmo.core.null_problem`),
+* exactly two arguments, that is, the UDP to be translated and its translation vector.
+
+Any other combination of arguments will raise an exception.
+
+Args:
+    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
+      and stored inside the :class:`~pygmo.core.translate` instance)
+    translation (array-like object): an array containing the translation to be applied
+
+Raises:
+    ValueError: if the length of *translation* is not equal to the dimension of *udp*
+    unspecified: any exception thrown by:
+
+      * the constructor of :class:`pygmo.core.problem`,
+      * the constructor of the underlying C++ class,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
+
+)";
+}
+
+std::string translate_translation_docstring()
+{
+    return R"(Translation vector.
+
+This read-only property contains an array of ``float`` representing the translation vector used in the
+construction of this problem.
+
+Returns:
+    1D NumPy float array: the translation vector
+
+)";
+}
+
 std::string algorithm_docstring()
 {
     return R"(The main algorithm class.
