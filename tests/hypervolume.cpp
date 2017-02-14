@@ -308,6 +308,11 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributions_test)
                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     assertContribs(points, ref, answers);
 
+	// some test especially for the base-method of hv-algo (which should be called from hv2d
+	hypervolume hv = hypervolume(points, true);
+	hv2d hv2dalgo = hv2d();
+	BOOST_CHECK((hv.contributions(ref, hv2dalgo) == answers));
+
     // Gradually adding duplicate points to the set, making sure the contribution change accordingly.
     points = {{1, 1}};
     ref = {2, 2};
