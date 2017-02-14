@@ -38,9 +38,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
@@ -172,6 +172,26 @@ private:
     double m_eps;
 };
 
+// only here to access and test protected members of hv_algorithm
+class hv_fake_algo : public hv_algorithm
+{
+public:
+    hv_fake_algo() = default;
+    static int accessible_cmp(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound = 0u)
+    {
+        return hv_algorithm::dom_cmp(a, b, dim_bound);
+    }
+    double compute(std::vector<vector_double> &points, const vector_double &r_point) const
+    {
+        return 0;
+    };
+    void verify_before_compute(const std::vector<vector_double> &, const vector_double &) const {};
+    std::shared_ptr<hv_algorithm> clone() const
+    {
+        return std::shared_ptr<hv_algorithm>(new hv_fake_algo(*this));
+    }
+};
+
 BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
 {
     hypervolume hv;
@@ -245,36 +265,36 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
     // Calling specific algorithms
     hv2d hv_algo_2d;
     hv3d hv_algo_3d;
-    hvwfg hv_algo_nd;				// stop-dimension 2 by default
-	hvwfg hv_algo_nd2 = hvwfg(3u);  // stop-dimension 3
+    hvwfg hv_algo_nd;              // stop-dimension 2 by default
+    hvwfg hv_algo_nd2 = hvwfg(3u); // stop-dimension 3
 
     hv = hypervolume({{2.3, 4.5}, {3.4, 3.4}, {6.0, 1.2}});
     BOOST_CHECK((hv.compute({7.0, 7.0}) == 17.91));
     BOOST_CHECK((hv.compute({7.0, 7.0}, hv_algo_2d) == 17.91));
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0}, hv_algo_3d), std::invalid_argument);
     BOOST_CHECK((hv.compute({7.0, 7.0}, hv_algo_nd) == 17.91));
-	BOOST_CHECK((hv.compute({ 7.0, 7.0 }, hv_algo_nd2) == 17.91));
+    BOOST_CHECK((hv.compute({7.0, 7.0}, hv_algo_nd2) == 17.91));
 
     hv = hypervolume({{2.3, 4.5, 3.2}, {3.4, 3.4, 3.4}, {6.0, 1.2, 3.6}});
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}) == 66.386));
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0, 7.0}, hv_algo_2d), std::invalid_argument);
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_3d) == 66.386));
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_nd) == 66.386));
-	BOOST_CHECK((hv.compute({ 7.0, 7.0, 7.0 }, hv_algo_nd2) == 66.386));
+    BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_nd2) == 66.386));
 
     hv = hypervolume({{2.3, 4.5, 3.2}, {3.4, 3.4, 3.4}, {6.0, 1.2, 3.6}});
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}) == 66.386));
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0, 7.0}, hv_algo_2d), std::invalid_argument);
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_3d) == 66.386));
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_nd) == 66.386));
-	BOOST_CHECK((hv.compute({ 7.0, 7.0, 7.0 }, hv_algo_nd2) == 66.386));
+    BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_nd2) == 66.386));
 
     hv = hypervolume({{2.3, 4.5, 3.2, 1.9, 6.0}, {3.4, 3.4, 3.4, 2.1, 5.8}, {6.0, 1.2, 3.6, 3.0, 6.0}});
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}) == 373.21228));
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_algo_2d), std::invalid_argument);
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_algo_3d), std::invalid_argument);
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_algo_nd) == 373.21228));
-	BOOST_CHECK((hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_algo_nd2) == 373.21228));
+    BOOST_CHECK((hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_algo_nd2) == 373.21228));
 
     BOOST_CHECK_THROW(hvwfg(0), std::invalid_argument);
     BOOST_CHECK_THROW(hvwfg(1), std::invalid_argument);
@@ -313,10 +333,10 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributions_test)
                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     assertContribs(points, ref, answers);
 
-	// some test especially for the base-method of hv-algo (which should be called from hv2d
-	hypervolume hv = hypervolume(points, true);
-	hv2d hv2dalgo = hv2d();
-	BOOST_CHECK((hv.contributions(ref, hv2dalgo) == answers));
+    // some test especially for the base-method of hv-algo (which should be called from hv2d
+    hypervolume hv = hypervolume(points, true);
+    hv2d hv2dalgo = hv2d();
+    BOOST_CHECK((hv.contributions(ref, hv2dalgo) == answers));
 
     // Gradually adding duplicate points to the set, making sure the contribution change accordingly.
     points = {{1, 1}};
@@ -454,6 +474,12 @@ BOOST_AUTO_TEST_CASE(hypervolume_least_contribution_test)
     hv.set_copy_points(false);
     BOOST_CHECK((hv.least_contributor(ref) >= 0 && hv.least_contributor(ref) <= 2));
     BOOST_CHECK((hv.greatest_contributor(ref) >= 0 && hv.greatest_contributor(ref) <= 2));
+
+    // Call corner case
+    hv = hypervolume({{1, 2}}, true);
+    hv_fake_algo al;
+    BOOST_CHECK((hv.least_contributor(ref, al)) == 0u);
+    BOOST_CHECK((hv.greatest_contributor(ref, al)) == 0u);
 
     hv = hypervolume({{2.5, 1}, {2, 2}, {1, 3}});
     BOOST_CHECK((hv.least_contributor(ref) == 1));
@@ -693,12 +719,51 @@ BOOST_AUTO_TEST_CASE(hypervolume_construction_test)
     auto hv = hypervolume{pop_ok, true};
     BOOST_CHECK(points == hv.get_points());
     BOOST_CHECK_THROW((hypervolume(std::vector<vector_double>{}, true)), std::invalid_argument);
-    BOOST_CHECK_THROW((hypervolume{{{1.},{2.}}, true}), std::invalid_argument);
+    BOOST_CHECK_THROW((hypervolume{{{1.}, {2.}}, true}), std::invalid_argument);
 }
 
-BOOST_AUTO_TEST_CASE(hypervolume_functions_test)
+BOOST_AUTO_TEST_CASE(hypervolume_cmp_test)
 {
+    // expected_hv_operations
     BOOST_CHECK_CLOSE(detail::expected_hv_operations(10u, 1u), 10. * std::log(10), 1e-12);
     BOOST_CHECK_CLOSE(detail::expected_hv_operations(10u, 4u), 4. * 100., 1e-12);
     BOOST_CHECK_CLOSE(detail::expected_hv_operations(10u, 5u), 0.0005 * 5. * std::pow(10, 5. * 0.5), 1e-12);
+    // dom_cmp
+    vector_double a, b;
+    a = {1, 2};
+    b = {1, 2};
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 0u) == 3);
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 2u) == 3);
+    a = {1, 2};
+    b = {2, 1};
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 0u) == 4);
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 2u) == 4);
+    a = {2, 1};
+    b = {1, 2};
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 0u) == 4);
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 2u) == 4);
+    a = {1, 1};
+    b = {2, 2};
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 0u) == 2);
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 2u) == 2);
+    a = {3, 3};
+    b = {2, 2};
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 0u) == 1);
+    BOOST_CHECK(hv_fake_algo::accessible_cmp(a, b, 2u) == 1);
+}
+
+BOOST_AUTO_TEST_CASE(hypervolume_name_getters_test)
+{
+    hv_fake_algo al;
+    BOOST_CHECK(al.get_name().find("hv_fake") != std::string::npos);
+    hv2d al1;
+    BOOST_CHECK(al1.get_name().find("hv2d") != std::string::npos);
+    hv3d al2;
+    BOOST_CHECK(al2.get_name().find("hv3d") != std::string::npos);
+    hvwfg al3;
+    BOOST_CHECK(al3.get_name().find("WFG") != std::string::npos);
+    bf_approx al4;
+    BOOST_CHECK(al4.get_name().find("Bringmann-Friedrich") != std::string::npos);
+    bf_fpras al5;
+    BOOST_CHECK(al5.get_name().find("bf_fpras") != std::string::npos);
 }

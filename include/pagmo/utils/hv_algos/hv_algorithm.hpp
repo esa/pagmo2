@@ -407,12 +407,12 @@ protected:
     *
     * @return the comparison result (1 - b dom a,2 - a dom b, 3 - a == b,4 - not comparable)
     */
-    static int dom_cmp(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound)
+    static int dom_cmp(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound = 0u)
     {
-        if (dim_bound == 0) {
+        if (dim_bound == 0u) {
             dim_bound = a.size();
         }
-        for (vector_double::size_type i = 0; i < dim_bound; ++i) {
+        for (vector_double::size_type i = 0u; i < dim_bound; ++i) {
             if (a[i] > b[i]) {
                 for (vector_double::size_type j = i + 1; j < dim_bound; ++j) {
                     if (a[j] < b[j]) {
@@ -443,7 +443,7 @@ private:
     {
         // Trivial case
         if (points.size() == 1u) {
-            return 0;
+            return 0u;
         }
 
         std::vector<double> c = contributions(points, r_point);
