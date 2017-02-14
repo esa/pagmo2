@@ -102,12 +102,11 @@ class problem_test_case(_ut.TestCase):
         self.run_seed_tests()
         self.run_feas_tests()
         self.run_name_info_tests()
-        self.run_udp_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
         from numpy import all, array
-        from .core import problem
+        from .core import problem, rosenbrock
         # First a few non-problems.
         self.assertRaises(TypeError, lambda: problem(1))
         self.assertRaises(TypeError, lambda: problem("hello world"))
@@ -160,8 +159,8 @@ class problem_test_case(_ut.TestCase):
                 return [42]
         p_inst = p(glob)
         prob = problem(p_inst)
-        self.assertEqual(p, prob._udp_type)
         # Test the keyword arg.
+        prob = problem(udp=rosenbrock())
         prob = problem(udp=p_inst)
         # Check a few problem properties.
         self.assertEqual(prob.get_nobj(), 1)
@@ -1802,29 +1801,6 @@ class problem_test_case(_ut.TestCase):
         prob = problem(p())
         self.assert_(prob.get_name() == 'pippo')
         self.assert_(prob.get_extra_info() == 'pluto')
-
-    def run_udp_tests(self):
-        from .core import problem, rosenbrock
-
-        class p(object):
-
-            def __init__(self):
-                self.n = 45
-
-            def get_bounds(self):
-                return ([0, 0], [1, 1])
-
-            def fitness(self, a):
-                return [42]
-
-        prob = problem(p())
-        self.assertEqual(type(prob.udp), p)
-        self.assertEqual(prob.udp.n, 45)
-        prob.udp.n = 186
-        self.assertEqual(prob.udp.n, 186)
-
-        prob = problem(rosenbrock())
-        self.assertEqual(type(prob.udp), rosenbrock)
 
 
 class population_test_case(_ut.TestCase):

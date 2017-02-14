@@ -126,7 +126,7 @@ inline void problem_expose_init_cpp_udp()
 {
     assert(problem_ptr.get() != nullptr);
     auto &prob_class = *problem_ptr;
-    prob_class.def(bp::init<const Prob &>((bp::arg("p"))));
+    prob_class.def(bp::init<const Prob &>((bp::arg("udp"))));
 }
 
 // Main problem exposition function.

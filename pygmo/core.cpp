@@ -504,7 +504,7 @@ BOOST_PYTHON_MODULE(core)
     // Problem class.
     pygmo::problem_ptr = make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::no_init);
     auto &problem_class = *pygmo::problem_ptr;
-    problem_class.def(bp::init<const bp::object &>((bp::arg("prob"))))
+    problem_class.def(bp::init<const bp::object &>((bp::arg("udp"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
         // Copy and deepcopy.
