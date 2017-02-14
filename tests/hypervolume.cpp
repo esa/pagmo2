@@ -245,31 +245,36 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
     // Calling specific algorithms
     hv2d hv_algo_2d;
     hv3d hv_algo_3d;
-    hvwfg hv_algo_nd;
+    hvwfg hv_algo_nd;				// stop-dimension 2 by default
+	hvwfg hv_algo_nd2 = hvwfg(3u);  // stop-dimension 3
 
     hv = hypervolume({{2.3, 4.5}, {3.4, 3.4}, {6.0, 1.2}});
     BOOST_CHECK((hv.compute({7.0, 7.0}) == 17.91));
     BOOST_CHECK((hv.compute({7.0, 7.0}, hv_algo_2d) == 17.91));
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0}, hv_algo_3d), std::invalid_argument);
     BOOST_CHECK((hv.compute({7.0, 7.0}, hv_algo_nd) == 17.91));
+	BOOST_CHECK((hv.compute({ 7.0, 7.0 }, hv_algo_nd2) == 17.91));
 
     hv = hypervolume({{2.3, 4.5, 3.2}, {3.4, 3.4, 3.4}, {6.0, 1.2, 3.6}});
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}) == 66.386));
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0, 7.0}, hv_algo_2d), std::invalid_argument);
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_3d) == 66.386));
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_nd) == 66.386));
+	BOOST_CHECK((hv.compute({ 7.0, 7.0, 7.0 }, hv_algo_nd2) == 66.386));
 
     hv = hypervolume({{2.3, 4.5, 3.2}, {3.4, 3.4, 3.4}, {6.0, 1.2, 3.6}});
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}) == 66.386));
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0, 7.0}, hv_algo_2d), std::invalid_argument);
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_3d) == 66.386));
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0}, hv_algo_nd) == 66.386));
+	BOOST_CHECK((hv.compute({ 7.0, 7.0, 7.0 }, hv_algo_nd2) == 66.386));
 
     hv = hypervolume({{2.3, 4.5, 3.2, 1.9, 6.0}, {3.4, 3.4, 3.4, 2.1, 5.8}, {6.0, 1.2, 3.6, 3.0, 6.0}});
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}) == 373.21228));
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_algo_2d), std::invalid_argument);
     BOOST_CHECK_THROW(hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_algo_3d), std::invalid_argument);
     BOOST_CHECK((hv.compute({7.0, 7.0, 7.0, 7.0, 7.0}, hv_algo_nd) == 373.21228));
+	BOOST_CHECK((hv.compute({ 7.0, 7.0, 7.0, 7.0, 7.0 }, hv_algo_nd2) == 373.21228));
 
     BOOST_CHECK_THROW(hvwfg(0), std::invalid_argument);
     BOOST_CHECK_THROW(hvwfg(1), std::invalid_argument);
