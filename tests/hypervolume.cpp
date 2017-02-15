@@ -181,7 +181,7 @@ public:
     {
         return hv_algorithm::dom_cmp(a, b, dim_bound);
     }
-    double compute(std::vector<vector_double> &points, const vector_double &r_point) const
+    double compute(std::vector<vector_double> &, const vector_double &) const
     {
         return 0;
     };
