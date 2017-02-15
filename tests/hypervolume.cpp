@@ -181,9 +181,9 @@ public:
     {
         return hv_algorithm::dom_cmp(a, b, dim_bound);
     }
-    double compute(std::vector<vector_double> &, const vector_double &) const
+    double compute(std::vector<vector_double> &points, const vector_double &ref) const
     {
-        return 0;
+        return hv2d().compute(points, ref);
     };
     void verify_before_compute(const std::vector<vector_double> &, const vector_double &) const {};
     std::shared_ptr<hv_algorithm> clone() const
@@ -337,6 +337,14 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributions_test)
     hypervolume hv = hypervolume(points, true);
     hv2d hv2dalgo = hv2d();
     BOOST_CHECK((hv.contributions(ref, hv2dalgo) == answers));
+
+    // testing the default implementation
+    hv_fake_algo fa{};
+    BOOST_CHECK((hv_fake_algo{}.contributions(points, ref) == answers));
+    BOOST_CHECK((hv.contributions(ref, fa) == answers));
+
+    points = std::vector<vector_double>{{1, 1}};
+    BOOST_CHECK((hv_fake_algo{}.contributions(points, vector_double{3, 3}) == vector_double{4}));
 
     // Gradually adding duplicate points to the set, making sure the contribution change accordingly.
     points = {{1, 1}};
