@@ -258,16 +258,12 @@ public:
         c.push_back(hv_total - compute(points_cpy, r_point));
 
         // Check the remaining ones using the provided comparison function
-        for (unsigned int idx = 1; idx < points.size(); ++idx) {
+        for (unsigned int idx = 1u; idx < points.size(); ++idx) {
             std::vector<vector_double> points_less;
             points_less.reserve(points.size() - 1);
             copy(points.begin(), points.begin() + idx, back_inserter(points_less));
             copy(points.begin() + idx + 1, points.end(), back_inserter(points_less));
             double delta = hv_total - compute(points_less, r_point);
-
-            if (std::abs(delta) < 1e-8) {
-                delta = 0.0;
-            }
             c.push_back(delta);
         }
 

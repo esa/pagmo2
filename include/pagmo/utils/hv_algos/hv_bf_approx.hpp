@@ -89,15 +89,11 @@ public:
     /**
     * This method is overloaded to throw an exception in case a hypervolume indicator computation is requested.
     *
-    * @param points vector of points containing the 3-dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the points
-    *
-    * @return hypervolume.
+    * @return Nothing as it throws before.
+    * @throws std::invalid_argument whenever called
     */
-    double compute(std::vector<vector_double> &points, const vector_double &r_point) const
+    double compute(std::vector<vector_double> &, const vector_double &) const
     {
-        (void)points;
-        (void)r_point;
         pagmo_throw(std::invalid_argument,
                     "This algorithm can just approximate extreme contributions but not the hypervolume itself.");
     }
@@ -172,7 +168,7 @@ private:
     * Uses chernoff inequality as it was proposed in the article by Bringmann and Friedrich
     * The parameters of the method are taked from the Shark implementation of the algorithm.
     */
-    inline double compute_point_delta(unsigned int round_no, vector_double::size_type idx, double log_factor) const
+    double compute_point_delta(unsigned int round_no, vector_double::size_type idx, double log_factor) const
     {
         return std::sqrt(0.5 * ((1. + m_gamma) * std::log(static_cast<double>(round_no)) + log_factor)
                          / (static_cast<double>(m_no_samples[idx])));
@@ -190,8 +186,8 @@ private:
     *
     * @return fitness_vector describing the opposite corner of the bounding box
     */
-    inline vector_double compute_bounding_box(const std::vector<vector_double> &points, const vector_double &r_point,
-                                              vector_double::size_type p_idx) const
+    vector_double compute_bounding_box(const std::vector<vector_double> &points, const vector_double &r_point,
+                                       vector_double::size_type p_idx) const
     {
         // z is the opposite corner of the bounding box (reference point as a 'safe' first candidate - this is the
         // MAXIMAL bounding box as of yet)
@@ -233,7 +229,7 @@ private:
     * return 2 - point p dominates the point a (in which case, contribution by box (a, b) is guaranteed to be 0)
     * return 3 - point p is equal to point a (box (a, b) also contributes 0 hypervolume)
     */
-    inline int point_in_box(const vector_double &p, const vector_double &a, const vector_double &b) const
+    int point_in_box(const vector_double &p, const vector_double &a, const vector_double &b) const
     {
         int cmp_a_p = hv_algorithm::dom_cmp(a, p, 0);
 
@@ -251,8 +247,8 @@ private:
     }
 
     /// Performs a single round of sampling for given point at index 'idx'
-    inline void sampling_round(const std::vector<vector_double> &points, double delta, unsigned int round,
-                               vector_double::size_type idx, double log_factor) const
+    void sampling_round(const std::vector<vector_double> &points, double delta, unsigned int round,
+                        vector_double::size_type idx, double log_factor) const
     {
         if (m_use_exact) {
             // if the sampling for given point was already resolved using exact method
