@@ -64,11 +64,11 @@ public:
     bf_fpras(double eps = 1e-2, double delta = 1e-2, unsigned int seed = pagmo::random_device::next())
         : m_eps(eps), m_delta(delta), m_e(seed)
     {
-        if (eps < 0 || eps > 1) {
-            pagmo_throw(std::invalid_argument, "Epsilon needs to be a probability.");
+        if (eps <= 0 || eps > 1) {
+            pagmo_throw(std::invalid_argument, "Epsilon needs to be a probability greater then zero");
         }
-        if (delta < 0 || delta > 1) {
-            pagmo_throw(std::invalid_argument, "Delta needs to be a probability.");
+        if (delta <= 0 || delta > 1) {
+            pagmo_throw(std::invalid_argument, "Delta needs to be a probability greater than zero");
         }
     }
 
@@ -103,12 +103,7 @@ public:
         auto n = points.size();
         auto dim = r_point.size();
 
-        // We do not want to continue if the floating point operations on eps and delta result in NaNs
-        if (!(std::isfinite(12. * std::log(1. / m_delta) / std::log(2.) * n / m_eps / m_eps))) {
-            pagmo_throw(std::invalid_argument, "Check the parameters of your call. There was NaN detected.");
-        }
-        boost::uint_fast64_t T
-            = static_cast<boost::uint_fast64_t>(12. * std::log(1. / m_delta) / std::log(2.) * n / m_eps / m_eps);
+        auto T = std::floor(12. * std::log(1. / m_delta) / std::log(2.) * n / m_eps / m_eps);
 
         // Partial sums of consecutive boxes
         vector_double sums(n, 0.0);
@@ -127,8 +122,8 @@ public:
             V = (sums[i++] = V + hv_algorithm::volume_between(*it_p, r_point));
         }
 
-        unsigned long long M = 0;     // Round counter
-        unsigned long long M_sum = 0; // Total number of samples over every round so far
+        double M = 0.;     // Round counter
+        double M_sum = 0.; // Total number of samples over every round so far
 
         vector_double rnd_point(dim, 0.0); // Container for the random point
         auto unireal_dist = std::uniform_real_distribution<double>(0.0, 1.0);
@@ -144,7 +139,7 @@ public:
             i = static_cast<unsigned int>(std::distance(sums.begin(), it_sums));
 
             // Sample a point inside the 'box' (r_point, points[i])
-            for (unsigned int d_idx = 0u; d_idx < dim; ++d_idx) {
+            for (decltype(dim) d_idx = 0u; d_idx < dim; ++d_idx) {
                 rnd_point[d_idx] = (points[i][d_idx] + unireal_dist(m_e) * (r_point[d_idx] - points[i][d_idx]));
             }
 

@@ -49,9 +49,6 @@ namespace pagmo
  * Computation, IEEE Transactions on 16.1 (2012): 86-95."
  * @see "Lyndon While and Lucas Bradstreet. Applying the WFG Algorithm To Calculate Incremental Hypervolumes. 2012 IEEE
  * Congress on Evolutionary Computation. CEC 2012, pages 489-496. IEEE, June 2012."
- *
- * @author Krzysztof Nowak (kn@linux.com)
- * @author Marcus Maertens (mmarcusx@gmail.com)
  */
 class hvwfg : public hv_algorithm
 {

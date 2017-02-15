@@ -54,9 +54,6 @@ namespace pagmo
  * 2009
  * @see "Computing hypervolume contribution in low dimensions: asymptotically optimal algorithm and complexity results",
  * Michael T. M. Emmerich, Carlos M. Fonseca
- *
- * @author Krzysztof Nowak (kn@linux.com)
- * @author Marcus Maertens (mmarcusx@gmail.com)
  */
 class hv3d : public hv_algorithm
 {

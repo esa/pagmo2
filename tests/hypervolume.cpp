@@ -786,3 +786,16 @@ BOOST_AUTO_TEST_CASE(hypervolume_bf_approx_test)
     auto al_clone = al.clone();
     BOOST_CHECK(al_clone->get_name().find("Bringmann-Friedrich") != std::string::npos);
 }
+
+BOOST_AUTO_TEST_CASE(hypervolume_bf_pras_test)
+{
+    bf_fpras al;
+    std::vector<vector_double> points;
+    vector_double ref;
+    BOOST_CHECK_THROW(al.exclusive(0u, points, ref), std::invalid_argument);
+    BOOST_CHECK_THROW(al.least_contributor(points, ref), std::invalid_argument);
+    BOOST_CHECK_THROW(al.greatest_contributor(points, ref), std::invalid_argument);
+    BOOST_CHECK_THROW(al.contributions(points, ref), std::invalid_argument);
+    auto al_clone = al.clone();
+    BOOST_CHECK(al_clone->get_name().find("bf_fpras") != std::string::npos);
+}

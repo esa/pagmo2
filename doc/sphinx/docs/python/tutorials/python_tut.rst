@@ -14,6 +14,14 @@ Getting Started
   using_population
   evolving_a_population
 
+Optimization Utilities
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 2
+
+  hypervolume
+
 Advanced Examples
 ^^^^^^^^^^^^^^^^^
 
