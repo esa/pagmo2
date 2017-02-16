@@ -80,13 +80,25 @@ namespace pagmo
  * This problem is used to implement the default constructors of meta-problems.
  */
 struct null_problem {
+    /// Constructor from number of objectives.
+    /**
+     * @param nobj the desired number of objectives.
+     *
+     * @throws std::invalid_argument if \p nobj is zero.
+     */
+    null_problem(vector_double::size_type nobj = 1) : m_nobj(nobj)
+    {
+        if (!nobj) {
+            pagmo_throw(std::invalid_argument, "The null problem must have a non-zero number of objectives");
+        }
+    }
     /// Fitness.
     /**
-     * @return the vector <tt>[0.]</tt>.
+     * @return a zero-filled vector of size equal to the number of objectives.
      */
     vector_double fitness(const vector_double &) const
     {
-        return {0.};
+        return vector_double(get_nobj(), 0.);
     }
     /// Problem bounds.
     /**
@@ -96,11 +108,26 @@ struct null_problem {
     {
         return {{0.}, {1.}};
     }
-    /// Serialization
-    template <typename Archive>
-    void serialize(Archive &)
+    /// Number of objectives.
+    /**
+     * @return the number of objectives of the problem (as specified upon construction).
+     */
+    vector_double::size_type get_nobj() const
     {
+        return m_nobj;
     }
+    /// Serialization
+    /**
+     * @param ar the target serialization archive.
+     */
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar &m_nobj;
+    }
+
+private:
+    vector_double::size_type m_nobj;
 };
 }
 
