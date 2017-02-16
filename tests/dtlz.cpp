@@ -36,7 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/zdt.hpp>
+#include <pagmo/problems/dtlz.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
