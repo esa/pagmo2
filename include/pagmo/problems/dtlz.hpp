@@ -108,8 +108,8 @@ public:
     * larger than an implementation defiend value
     *
     */
-    dtlz::dtlz(unsigned int prob_id = 1u, vector_double::size_type dim_param = 5u, vector_double::size_type fdim = 3u,
-               unsigned int alpha = 100u)
+    dtlz(unsigned int prob_id = 1u, vector_double::size_type dim_param = 5u, vector_double::size_type fdim = 3u,
+         unsigned int alpha = 100u)
         : m_prob_id(prob_id), m_alpha(alpha), m_dim_param(dim_param), m_fdim(fdim)
     {
         if (prob_id == 0u || prob_id > 7u) {
@@ -180,7 +180,7 @@ public:
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        auto dim = dim_param + fdim - 1u;
+        auto dim = m_dim_param + m_fdim - 1u;
         std::pair<vector_double, vector_double> retval{vector_double(dim, 0.), vector_double(dim, 1.)};
         return retval;
     }
@@ -209,7 +209,7 @@ public:
     }
 
 private:
-    /// Convergence metric for a decision_vector (0 = converged to the optimal front)
+    /// Convergence metric for a dv (0 = converged to the optimal front)
     double g_func(const vector_double &x) const
     {
         switch (m_prob_id) { // We start with the 6-7 cases as for absurd reasons behind my comprehension this is
@@ -232,12 +232,12 @@ private:
     {
         double y = 0.;
         for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
-            y += std::pow(x[i] - 0.5, 2) - std::cos(20. * details::pi() * (x[i] - 0.5));
+            y += std::pow(x[i] - 0.5, 2) - std::cos(20. * detail::pi() * (x[i] - 0.5));
         }
         return 100. * (y + static_cast<double>(x.size()));
     }
 
-    double dtlz::g245_func(const vector_double &x) const
+    double g245_func(const vector_double &x) const
     {
         double y = 0.;
         for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
@@ -246,7 +246,7 @@ private:
         return y;
     }
 
-    double dtlz::g6_func(const vector_double &x) const
+    double g6_func(const vector_double &x) const
     {
         double y = 0.0;
         for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
@@ -255,7 +255,7 @@ private:
         return y;
     }
 
-    double dtlz::g7_func(const vector_double &x) const
+    double g7_func(const vector_double &x) const
     {
         // NOTE: the original g-function should return 1 + (9.0 / x.size()) * y but we drop the 1
         // to have the minimum at 0.0 so we can use the p_distance implementation in base_dtlz
@@ -264,7 +264,18 @@ private:
         for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
             y += x[i];
         }
-        return (9. / static_case<double>(x.size())) * y;
+        return (9. / static_cast<double>(x.size())) * y;
+    }
+    /// Implementation of the distribution function h
+    double h7_func(const vector_double &f, const double g) const
+    {
+        // NOTE: we intentionally ignore the last element of the vector to make things easier
+        double y = 0.;
+
+        for (decltype(f.size()) i = 0u; i < f.size() - 1; ++i) {
+            y += (f[i] / (1.0 + g)) * (1.0 + std::sin(3 * detail::pi() * f[i]));
+        }
+        return m_fdim - y;
     }
     /// Implementation of the objective functions.
     /* The chomosome: x_1, x_2, ........, x_M-1, x_M, .........., x_M+k
@@ -289,7 +300,7 @@ private:
         }
         for (decltype(f.size()) i = 1u; i < f.size() - 1u; ++i) {
             f[i] = 0.5 * (1.0 + g);
-            for (decltype(f.size()) ju = 0; j < f.size() - (i + 1u); ++j) {
+            for (decltype(f.size()) j = 0u; j < f.size() - (i + 1u); ++j) {
                 f[i] *= x[j];
             }
             f[i] *= 1. - x[f.size() - (i + 1u)];
@@ -302,7 +313,7 @@ private:
     {
         vector_double f(m_fdim);
         // computing distance-function
-        decision_vector x_M;
+        vector_double x_M;
         for (decltype(x.size()) i = f.size() - 1u; i < x.size(); ++i) {
             x_M.push_back(x[i]);
         }
@@ -397,8 +408,9 @@ private:
         return f;
     }
 
-    vector_double f7_objfun_impl(const decision_vector &x) const
+    vector_double f7_objfun_impl(const vector_double &x) const
     {
+        vector_double f(m_fdim);
         // computing distance-function
         vector_double x_M;
         double g;
