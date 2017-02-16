@@ -334,13 +334,15 @@ static inline double zdt_p_distance_wrapper(const zdt &z, const bp::object &x)
 static inline de1220 *de1220_init_0(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory)
 {
-    return ::new de1220(gen, pygmo::to_vu(allowed_variants), variant_adptv, ftol, xtol, memory);
+    auto allowed_variants_vu = pygmo::to_vu(allowed_variants);
+    return ::new de1220(gen, allowed_variants_vu, variant_adptv, ftol, xtol, memory);
 }
 
 static inline de1220 *de1220_init_1(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory, unsigned seed)
 {
-    return ::new de1220(gen, pygmo::to_vu(allowed_variants), variant_adptv, ftol, xtol, memory, seed);
+    auto allowed_variants_vu = pygmo::to_vu(allowed_variants);
+    return ::new de1220(gen, allowed_variants_vu, variant_adptv, ftol, xtol, memory, seed);
 }
 
 static inline bp::list de1220_allowed_variants()
@@ -876,7 +878,10 @@ BOOST_PYTHON_MODULE(core)
                                               bp::default_call_policies(), (bp::arg("pop"))),
              pygmo::hv_init2_docstring().c_str())
         .def("__init__", bp::make_constructor(
-                             +[](const bp::object &points) { return ::new hypervolume(pygmo::to_vvd(points), true); },
+                             +[](const bp::object &points) {
+                                 auto vvd_points = pygmo::to_vvd(points);
+                                 return ::new hypervolume(vvd_points, true);
+                             },
                              bp::default_call_policies(), (bp::arg("points"))),
              pygmo::hv_init2_docstring().c_str())
         .def("compute",

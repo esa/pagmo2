@@ -1602,7 +1602,7 @@ The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
 
 Args:
     gen (``int``): number of generations
-    allowed_variants (``NumPy array or list of int``): allowed mutation variants, each one being a number in [1, 18]
+    allowed_variants (array-like object): allowed mutation variants, each one being a number in [1, 18]
     variant_adptv (``int``): *F* and *CR* parameter adaptation scheme to be used (one of 1..2)
     ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
     xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
@@ -1908,7 +1908,7 @@ std::string fast_non_dominated_sorting_docstring()
 Runs the fast non dominated sorting algorithm on the input *points*
 
 Args:
-    points (``array`` [or ``list``] of ``arrays`` [or ``lists``] of ``floats``): the input points
+    points (2d-array like object): the input points
 
 Raises:
     ValueError: if *points* is malformed
@@ -1945,7 +1945,7 @@ std::string hv_init1_docstring()
 Constructor from population
 
 Args:
-    pop (``pygmo.population``): a pygmo.population
+    pop (:class:`~pygmo.core.population`): the input population
 
 Raises:
     ValueError: if *pop* contains a single-objective or a constrained problem
@@ -1967,7 +1967,7 @@ std::string hv_init2_docstring()
 Constructor from points
 
 Args:
-    points (``list`` of ``arrays``): the points
+    points (2d-array like object): the points
 
 Raises:
     ValueError: if *points* is inconsistent
@@ -1991,7 +1991,7 @@ is supplied,  then an exact hypervolume algorithm is automatically selected
 specific for the point dimension.
 
 Args:
-    ref_point (``list`` of ``arrays``): the points
+    ref_point (2d-array like object): the points
     hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
 
 Returns:
@@ -2014,7 +2014,7 @@ According to *hv_algo* this computation can be implemented optimally (as opposed
 for :func:`~pygmo.hypervolume.exclusive` in a loop).
 
 Args:
-    ref_point (``list`` of ``arrays``): the points
+    ref_point (2d-array like object): the points
     hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
 
 Returns:
@@ -2036,7 +2036,7 @@ Computes the exclusive contribution to the hypervolume of a particular point.
 
 Args:
     idx (``int``): index of the point
-    ref_point (``list`` of ``arrays``): the reference points
+    ref_point (array like object): the reference point
     hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
 
 
@@ -2044,8 +2044,7 @@ Returns:
     ``Numpy array``: the contribution of all points to the hypervolume
 
 Raises:
-    ValueError: if *ref_point* is not suitable
-    ValueError: if *idx* is out of bounds
+    ValueError: if *ref_point* is not suitable or if *idx* is out of bounds
     OverflowError: if *idx* is negative or greater than an implementation-defined value
 
 See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::exclusive`.
@@ -2060,7 +2059,7 @@ std::string hv_greatest_contributor_docstring()
 Computes the point contributing the most to the total hypervolume.
 
 Args:
-    ref_point (``list`` of ``arrays``): the points
+    ref_point (array like object): the reference point
     hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
 
 Raises:
@@ -2078,7 +2077,7 @@ std::string hv_least_contributor_docstring()
 Computes the point contributing the least to the total hypervolume.
 
 Args:
-    ref_point (``list`` of ``arrays``): the points
+    ref_point (array like object): the reference point
     hv_algo (``pygmo.hv_algorithm``): hypervolume algorithm to be used
 
 Raises:
