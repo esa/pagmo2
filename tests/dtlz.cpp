@@ -51,8 +51,9 @@ BOOST_AUTO_TEST_CASE(zdt_construction_test)
     BOOST_CHECK_THROW((dtlz{1u, 7u, 1u, 100u}), std::invalid_argument);
     BOOST_CHECK_THROW((dtlz{1u, 7u, std::numeric_limits<vector_double::size_type>::max() - 1u, 100u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((dtlz{1u, std::numeric_limits<vector_double::size_type>::max() - 1u, 3, 100u}),
+    BOOST_CHECK_THROW((dtlz{1u, std::numeric_limits<vector_double::size_type>::max() - 1u, 3u, 100u}),
                       std::invalid_argument);
+    BOOST_CHECK_THROW((dtlz{1u, 3u, 3u, 100u}), std::invalid_argument);
 
     BOOST_CHECK_NO_THROW(problem{dtlz_default});
     BOOST_CHECK_NO_THROW(problem{dtlz5});

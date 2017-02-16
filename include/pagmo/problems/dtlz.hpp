@@ -128,6 +128,9 @@ public:
         if (dim > std::numeric_limits<decltype(dim)>::max() / 3u) {
             pagmo_throw(std::invalid_argument, "The problem dimension is too large");
         }
+        if (dim <= fdim) {
+            pagmo_throw(std::invalid_argument, "The problem dimension has to be larger than the number of objectives.");
+        }
     }
     /// Fitness computation
     /**
@@ -330,13 +333,13 @@ private:
         auto g = g_func(x_M);
 
         // computing shape-functions
-        f[0] = 0.5 * (1.0 + g);
+        f[0] = 0.5 * (1. + g);
 
         for (decltype(f.size()) i = 0u; i < f.size() - 1u; ++i) {
             f[0] *= x[i];
         }
         for (decltype(f.size()) i = 1u; i < f.size() - 1u; ++i) {
-            f[i] = 0.5 * (1.0 + g);
+            f[i] = 0.5 * (1. + g);
             for (decltype(f.size()) j = 0u; j < f.size() - (i + 1u); ++j) {
                 f[i] *= x[j];
             }
