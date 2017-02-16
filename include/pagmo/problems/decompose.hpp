@@ -48,7 +48,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Decompose meta-problem
+/// The decompose meta-problem.
 /**
  * \image html decompose.png "Decomposition." width=3cm
  *
@@ -63,8 +63,8 @@ namespace pagmo
  *
  * In the case of \f$n\f$ objectives, we indicate with: \f$ \mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots, f_n(\mathbf
  * x)] \f$ the vector containing the original multiple objectives, with: \f$ \boldsymbol \lambda = (\lambda_1, \ldots,
- * \lambda_n) \f$ a \f$n\f$-dimensional weight vector and with: \f$ \mathbf z^* = (z^*_1, \ldots, z^*_n) \f$
- * a-\f$n\f$ dimensional reference point. We also ussume \f$\lambda_i > 0, \forall i=1..n\f$ and \f$\sum_i \lambda_i =
+ * \lambda_n) \f$ an \f$n\f$-dimensional weight vector and with: \f$ \mathbf z^* = (z^*_1, \ldots, z^*_n) \f$
+ * an \f$n\f$-dimensional reference point. We also ussume \f$\lambda_i > 0, \forall i=1..n\f$ and \f$\sum_i \lambda_i =
  * 1\f$.
  *
  * The decomposed problem is thus a single objective optimization problem having the following single objective,
@@ -122,7 +122,7 @@ public:
      * @param weight the vector of weights \f$\boldsymbol \lambda\f$.
      * @param z the reference point \f$\mathbf z^*\f$.
      * @param method an \p std::string containing the decomposition method chosen.
-     * @param adapt_ideal when true the reference point is adapted at each fitness evaluation to be the ideal point.
+     * @param adapt_ideal when \p true, the reference point is adapted at each fitness evaluation to be the ideal point.
      *
      * @throws std::invalid_argument if either:
      * - \p p is single objective or constrained,
