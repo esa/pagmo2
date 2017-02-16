@@ -66,6 +66,29 @@ if(PAGMO_WITH_EIGEN3)
     message(STATUS "Eigen version detected: ${EIGEN3_VERSION}")
 endif()
 
+# Python setup.
+# NOTE: we do it here because we need to detect the Python bits *before*
+# looking for boost.python.
+if(PAGMO_BUILD_PYGMO)
+    include(YACMAPythonSetup)
+
+    # Python version check.
+    if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
+        message(FATAL_ERROR "Minimum supported Python version is 2.7.")
+    endif()
+
+    if(NOT YACMA_NUMPY_INCLUDES_DIR)
+        message(FATAL_ERROR "The NumPy headers could not be located.")
+    endif()
+endif()
+
+# Boost setup.
+# We need Boost if we are building pygmo (boost.python) or the tests
+# (boost testing framework, header only).
+if(PAGMO_BUILD_PYGMO OR PAGMO_BUILD_TESTS)
+    include(PagmoFindBoost)
+endif()
+
 # Setup of the header-only pagmo library.
 add_library(pagmo INTERFACE)
 target_link_libraries(pagmo INTERFACE Threads::Threads)
