@@ -101,7 +101,7 @@ public:
     * Will construct a problem of the DTLZ test-suite.
     *
     * @param prob_id problem id
-    * @param dim_param paramter controlling the problem dimension as \f$dim_param + fdim - 1\f$
+    * @param dim the problem dimension (size of the decision vector)
     * @param fdim number of objectives
     * @param alpha controls density of solutions (used only by DTLZ4)
     *
@@ -109,9 +109,9 @@ public:
     * larger than an implementation defiend value
     *
     */
-    dtlz(unsigned int prob_id = 1u, vector_double::size_type dim_param = 5u, vector_double::size_type fdim = 3u,
+    dtlz(unsigned int prob_id = 1u, vector_double::size_type dim = 7u, vector_double::size_type fdim = 3u,
          unsigned int alpha = 100u)
-        : m_prob_id(prob_id), m_alpha(alpha), m_dim_param(dim_param), m_fdim(fdim)
+        : m_prob_id(prob_id), m_alpha(alpha), m_dim(dim), m_fdim(fdim)
     {
         if (prob_id == 0u || prob_id > 7u) {
             pagmo_throw(std::invalid_argument, "DTLZ test suite contains seven (prob_id = [1 ... 7]) problems, prob_id="
@@ -125,8 +125,8 @@ public:
         if (fdim > std::numeric_limits<decltype(fdim)>::max() / 3u) {
             pagmo_throw(std::invalid_argument, "The number of objectives is too large");
         }
-        if (dim_param > std::numeric_limits<decltype(dim_param)>::max() / 3u) {
-            pagmo_throw(std::invalid_argument, "The problem dimension parameter is too large");
+        if (dim > std::numeric_limits<decltype(dim)>::max() / 3u) {
+            pagmo_throw(std::invalid_argument, "The problem dimension is too large");
         }
     }
     /// Fitness computation
@@ -181,8 +181,7 @@ public:
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        auto dim = m_dim_param + m_fdim - 1u;
-        std::pair<vector_double, vector_double> retval{vector_double(dim, 0.), vector_double(dim, 1.)};
+        std::pair<vector_double, vector_double> retval{vector_double(m_dim, 0.), vector_double(m_dim, 1.)};
         return retval;
     }
     /// Distance from the Pareto front (of a population)
@@ -242,7 +241,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_prob_id, m_dim_param, m_fdim, m_alpha);
+        ar(m_prob_id, m_dim, m_fdim, m_alpha);
     }
 
 private:
@@ -484,7 +483,7 @@ private:
     // used only for DTLZ4
     unsigned int m_alpha;
     // dimension parameter
-    vector_double::size_type m_dim_param;
+    vector_double::size_type m_dim;
     // number of objectives
     vector_double::size_type m_fdim;
 };

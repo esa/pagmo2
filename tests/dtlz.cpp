@@ -44,4 +44,39 @@ using namespace pagmo;
 BOOST_AUTO_TEST_CASE(zdt_construction_test)
 {
     dtlz dtlz_default{};
+    dtlz dtlz5{5u, 7u, 3u, 100u};
+
+    BOOST_CHECK_THROW((dtlz{0u, 7u, 3u, 100u}), std::invalid_argument);
+    BOOST_CHECK_THROW((dtlz{9u, 7u, 3u, 100u}), std::invalid_argument);
+    BOOST_CHECK_THROW((dtlz{1u, 7u, 1u, 100u}), std::invalid_argument);
+    BOOST_CHECK_THROW((dtlz{1u, 7u, std::numeric_limits<vector_double::size_type>::max() - 1u, 100u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((dtlz{1u, std::numeric_limits<vector_double::size_type>::max() - 1u, 3, 100u}),
+                      std::invalid_argument);
+
+    BOOST_CHECK_NO_THROW(problem{dtlz_default});
+    BOOST_CHECK_NO_THROW(problem{dtlz5});
+    // We also test get_nobj() here as not to add one more small test
+    BOOST_CHECK(dtlz_default.get_nobj() == 3u);
+    // We also test get_name()
+    BOOST_CHECK(dtlz5.get_name().find("DTLZ5") != std::string::npos);
+
+    BOOST_CHECK(problem{dtlz5}.get_nx() == 7u);
+    BOOST_CHECK(dtlz5.get_bounds().first.size() == 7u);
+}
+
+BOOST_AUTO_TEST_CASE(dtlz1_fitness_test)
+{
+    vector_double dv1{0.5, 0.5, 0.5, 0.5, 0.5};
+    vector_double dv2{0.1, 0.2, 0.3, 0.4, 0.5};
+    vector_double f1, f2;
+    // dtlz1
+    dtlz udp{1u, 5u, 3u};
+    f1 = {0.125, 0.125, 0.25};
+    f2 = {0.059999999999999824, 0.17999999999999947, 2.099999999999994};
+    BOOST_CHECK(udp.fitness(dv1) == f1);
+    for (unsigned int i = 0u; i < 3; ++i) {
+        BOOST_CHECK_CLOSE(udp.fitness(dv2)[i], f2[i], 1e-12);
+    }
+    print(udp.fitness(dv2));
 }
