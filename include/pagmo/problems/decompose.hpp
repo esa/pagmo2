@@ -367,8 +367,6 @@ public:
 private:
     // Delete all that we do not want to inherit from problem
     // A - Common to all meta
-    template <typename T>
-    bool is() const = delete;
     vector_double::size_type get_nx() const = delete;
     vector_double::size_type get_nf() const = delete;
     vector_double::size_type get_nc() const = delete;

@@ -78,6 +78,12 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     // built by the explicit constructor.
     BOOST_CHECK(p0_string == p1_string);
 
+    // Check extract/is.
+    BOOST_CHECK(decompose{}.extract<null_problem>() != nullptr);
+    BOOST_CHECK(decompose{}.extract<zdt>() == nullptr);
+    BOOST_CHECK(decompose{}.is<null_problem>());
+    BOOST_CHECK(!decompose{}.is<zdt>());
+
     // We check the throws
     auto inf = std::numeric_limits<double>::infinity();
     auto nan = std::numeric_limits<double>::quiet_NaN();
