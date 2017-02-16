@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include "../detail/constants.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
+#include "../population.hpp"
 #include "../problem.hpp"
 #include "../types.hpp"
 
@@ -184,6 +185,42 @@ public:
         std::pair<vector_double, vector_double> retval{vector_double(dim, 0.), vector_double(dim, 1.)};
         return retval;
     }
+    /// Distance from the Pareto front (of a population)
+    /**
+     * Will return the average across the entire population of the convergence metric
+     *
+     * @param[in] pop population to be assigned a pareto distance
+     *
+     * @see problem::base_unc_mo::p_distance virtual method.
+     */
+    double p_distance(const pagmo::population &pop) const
+    {
+        double c = 0.0;
+        for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+            c += convergence_metric(pop.get_x()[i]);
+        }
+
+        return c / pop.size();
+    }
+    /// Distance from the Pareto front
+    /**
+     * Convergence metric for a given decision_vector (0 = on the optimal front)
+     *
+     * Introduced by Martens and Izzo, this metric is able
+     * to measure "a distance" of any point from the pareto front of any ZDT
+     * problem analytically without the need to precompute the front.
+     *
+     * @param x input decision vector
+     * @return the p_distance
+     *
+     * @see Märtens, Marcus, and Dario Izzo. "The asynchronous island model
+     * and NSGA-II: study of a new migration operator and its performance."
+     * Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013.
+     */
+    double p_distance(const vector_double &x) const
+    {
+        return convergence_metric(x);
+    }
     /// Problem name
     /**
      * One of the optional methods of any user-defined problem (UDP).
@@ -192,7 +229,7 @@ public:
      */
     std::string get_name() const
     {
-        return "ZDT" + std::to_string(m_prob_id);
+        return "DTLZ" + std::to_string(m_prob_id);
     }
     /// Object serialization
     /**
@@ -226,6 +263,7 @@ private:
             case 5:
                 return g245_func(x);
         }
+        return -1;
     }
     /// Implementations of the different g-functions used
     double g13_func(const vector_double &x) const
@@ -428,6 +466,17 @@ private:
 
         f[f.size() - 1u] = (1. + g) * h7_func(f, g);
         return f;
+    }
+    /// Gives a convergence metric for the population (0 = converged to the optimal front)
+    double convergence_metric(const vector_double &x) const
+    {
+        double c = 0.;
+        vector_double x_M;
+        for (decltype(x.size()) j = m_fdim - 1u; j < x.size(); ++j) {
+            x_M.push_back(x[j]);
+        }
+        c += g_func(x_M);
+        return c;
     }
 
     // Problem dimensions
