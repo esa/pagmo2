@@ -209,6 +209,63 @@ public:
     }
 
 private:
+    /// Convergence metric for a decision_vector (0 = converged to the optimal front)
+    double g_func(const vector_double &x) const
+    {
+        switch (m_prob_id) { // We start with the 6-7 cases as for absurd reasons behind my comprehension this is
+                             // way more efficient
+            case 6:
+                return g6_func(x);
+            case 7:
+                return g7_func(x);
+            case 1:
+            case 3:
+                return g13_func(x);
+            case 2:
+            case 4:
+            case 5:
+                return g245_func(x);
+        }
+    }
+    /// Implementations of the different g-functions used
+    double g13_func(const vector_double &x) const
+    {
+        double y = 0.;
+        for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
+            y += std::pow(x[i] - 0.5, 2) - std::cos(20. * details::pi() * (x[i] - 0.5));
+        }
+        return 100. * (y + static_cast<double>(x.size()));
+    }
+
+    double dtlz::g245_func(const vector_double &x) const
+    {
+        double y = 0.;
+        for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
+            y += std::pow(x[i] - 0.5, 2);
+        }
+        return y;
+    }
+
+    double dtlz::g6_func(const vector_double &x) const
+    {
+        double y = 0.0;
+        for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
+            y += std::pow(x[i], 0.1);
+        }
+        return y;
+    }
+
+    double dtlz::g7_func(const vector_double &x) const
+    {
+        // NOTE: the original g-function should return 1 + (9.0 / x.size()) * y but we drop the 1
+        // to have the minimum at 0.0 so we can use the p_distance implementation in base_dtlz
+        // to have the p_distance converging towards 0.0 rather then towards 1.0
+        double y = 0.;
+        for (decltype(x.size()) i = 0u; i < x.size(); ++i) {
+            y += x[i];
+        }
+        return (9. / static_case<double>(x.size())) * y;
+    }
     /// Implementation of the objective functions.
     /* The chomosome: x_1, x_2, ........, x_M-1, x_M, .........., x_M+k
      *											 [------- Vector x_M -------]

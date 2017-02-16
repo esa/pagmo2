@@ -43,5 +43,5 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(zdt_construction_test)
 {
-    zdt zdt_default{};
+    dtlz dtlz_default{};
 }
