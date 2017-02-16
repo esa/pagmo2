@@ -1,0 +1,377 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
+#ifndef PAGMO_PROBLEM_DTLZ_HPP
+#define PAGMO_PROBLEM_DTLZ_HPP
+
+#include <algorithm>
+#include <cmath>
+#include <exception>
+#include <iostream>
+#include <iterator>
+#include <limits>
+#include <string>
+#include <vector>
+
+#include "../detail/constants.hpp"
+#include "../exceptions.hpp"
+#include "../io.hpp"
+#include "../problem.hpp"
+#include "../types.hpp"
+
+namespace pagmo
+{
+
+/// DTLZ problem test suite
+/**
+ * This widespread test suite was conceived for multiobjective problems with scalable fitness dimensions
+ * and takes its name from its authors Deb, Thiele, Laumanns and Zitzler
+ *
+ * All problems in this test suite are box-constrained continuous n-dimensional multi-objective problems, scalable in
+ * fitness dimension. The dimension of the decision space is \f$ k + fdim - 1 \f$, whereas fdim is the number of
+ * objectives and k a paramter. Properties of the decision space and the Pareto-front of each problems are as follow:
+ *
+ * DTLZ1:
+ *
+ * The optimal pareto front lies on a linear hyperplane \f$ \sum_{m=1}^M f_m = 0.5 \f$ .
+ *
+ * DTLZ2:
+ *
+ * The search space is continous, unimodal and the problem is not deceptive.
+ *
+ * DTLZ3:
+ *
+ * The search space is continous, unimodal and the problem is not deceptive.
+ * It is supposed to be harder to converge towards the optimal pareto front than DTLZ2
+ *
+ * DTLZ4:
+ *
+ * The search space contains a dense area of solutions next to the \f$ f_M / f_1\f$ plane.
+ *
+ * DTLZ5:
+ *
+ * This problem will test an MOEA's ability to converge to a cruve and will also allow an easier way to visually
+ * demonstrate (just by plotting f_M with any other objective function) the performance of an MOEA. Since there is a
+ * natural bias for solutions close to this Pareto-optimal curve, this problem may be easy for an algorithmn to solve.
+ * Because of its simplicity its recommended to use a higher number of objectives \f$ M \in [5, 10]\f$.
+ *
+ * DTLZ6:
+ *
+ * A more difficult version of the DTLZ5 problem: the non-linear distance function g makes it harder to convergence
+ * against the pareto optimal curve.
+ *
+ * DTLZ7:
+ *
+ * This problem has disconnected Pareto-optimal regions in the search space.
+ *
+ * @see K. Deb, L. Thiele, M. Laumanns, E. Zitzler, Scalable test problems for evolutionary multiobjective optimization
+ */
+
+class dtlz
+{
+public:
+    /** Constructor
+    *
+    * Will construct a problem of the DTLZ test-suite.
+    *
+    * @param prob_id problem id
+    * @param dim_param paramter controlling the problem dimension as \f$dim_param + fdim - 1\f$
+    * @param fdim number of objectives
+    * @param alpha controls density of solutions (used only by DTLZ4)
+    *
+    * @throw std::invalid_argument if the prob_id is not in [1 .. 7], if fdim is less than 2 or if fdim or dim_param are
+    * larger than an implementation defiend value
+    *
+    */
+    dtlz::dtlz(unsigned int prob_id = 1u, vector_double::size_type dim_param = 5u, vector_double::size_type fdim = 3u,
+               unsigned int alpha = 100u)
+        : m_prob_id(prob_id), m_alpha(alpha), m_dim_param(dim_param), m_fdim(fdim)
+    {
+        if (prob_id == 0u || prob_id > 7u) {
+            pagmo_throw(std::invalid_argument, "DTLZ test suite contains seven (prob_id = [1 ... 7]) problems, prob_id="
+                                                   + std::to_string(prob_id) + " was detected");
+        }
+        if (fdim < 2u) {
+            pagmo_throw(std::invalid_argument, "DTLZ test problem have a minimum of 2 objectives: fdim="
+                                                   + std::to_string(fdim) + " was detected");
+        }
+        // We conservatively limit these dimensions to avoid checking overflows later
+        if (fdim > std::numeric_limits<decltype(fdim)>::max() / 3u) {
+            pagmo_throw(std::invalid_argument, "The number of objectives is too large");
+        }
+        if (dim_param > std::numeric_limits<decltype(dim_param)>::max() / 3u) {
+            pagmo_throw(std::invalid_argument, "The problem dimension parameter is too large");
+        }
+    }
+    /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
+    vector_double fitness(const vector_double &x) const
+    {
+        vector_double retval;
+        switch (m_prob_id) {
+            case 1:
+                retval = f1_objfun_impl(x);
+                break;
+            case 2:
+            case 3:
+                retval = f23_objfun_impl(x);
+                break;
+            case 4:
+                retval = f4_objfun_impl(x);
+                break;
+            case 5:
+            case 6:
+                retval = f56_objfun_impl(x);
+                break;
+            case 7:
+                retval = f7_objfun_impl(x);
+                break;
+        }
+        return retval;
+    }
+    /// Number of objectives
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the number of objectives.
+     *
+     * @return the number of objectives
+     */
+    vector_double::size_type get_nobj() const
+    {
+        return m_fdim;
+    }
+    /// Box-bounds
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     * It returns the box-bounds for this UDP.
+     *
+     * @return the lower and upper bounds for each of the decision vector components
+     */
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        auto dim = dim_param + fdim - 1u;
+        std::pair<vector_double, vector_double> retval{vector_double(dim, 0.), vector_double(dim, 1.)};
+        return retval;
+    }
+    /// Problem name
+    /**
+     * One of the optional methods of any user-defined problem (UDP).
+     *
+     * @return a string containing the problem name
+     */
+    std::string get_name() const
+    {
+        return "ZDT" + std::to_string(m_prob_id);
+    }
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_prob_id, m_dim_param, m_fdim, m_alpha);
+    }
+
+private:
+    /// Implementation of the objective functions.
+    /* The chomosome: x_1, x_2, ........, x_M-1, x_M, .........., x_M+k
+     *											 [------- Vector x_M -------]
+     *               x[0], x[1], ... ,x[fdim-2], x[fdim-1], ... , x[fdim+k-1] */
+    vector_double f1_objfun_impl(const vector_double &x) const
+    {
+        vector_double f(m_fdim);
+        // computing distance-function
+        vector_double x_M;
+        for (decltype(x.size()) i = f.size() - 1u; i < x.size(); ++i) {
+            x_M.push_back(x[i]);
+        }
+
+        auto g = g_func(x_M);
+
+        // computing shape-functions
+        f[0] = 0.5 * (1.0 + g);
+
+        for (decltype(f.size()) i = 0u; i < f.size() - 1u; ++i) {
+            f[0] *= x[i];
+        }
+        for (decltype(f.size()) i = 1u; i < f.size() - 1u; ++i) {
+            f[i] = 0.5 * (1.0 + g);
+            for (decltype(f.size()) ju = 0; j < f.size() - (i + 1u); ++j) {
+                f[i] *= x[j];
+            }
+            f[i] *= 1. - x[f.size() - (i + 1u)];
+        }
+        f[f.size() - 1u] = 0.5 * (1. - x[0]) * (1. + g);
+        return f;
+    }
+
+    vector_double f23_objfun_impl(const vector_double &x) const
+    {
+        vector_double f(m_fdim);
+        // computing distance-function
+        decision_vector x_M;
+        for (decltype(x.size()) i = f.size() - 1u; i < x.size(); ++i) {
+            x_M.push_back(x[i]);
+        }
+
+        auto g = g_func(x_M);
+
+        // computing shape-functions
+        f[0] = (1. + g);
+        for (decltype(f.size()) i = 0u; i < f.size() - 1u; ++i) {
+            f[0] *= cos(x[i] * detail::pi_half());
+        }
+
+        for (decltype(f.size()) i = 1u; i < f.size() - 1u; ++i) {
+            f[i] = (1. + g);
+            for (decltype(f.size()) j = 0u; j < f.size() - (i + 1u); ++j) {
+                f[i] *= cos(x[j] * detail::pi_half());
+            }
+            f[i] *= std::sin(x[f.size() - (i + 1u)] * detail::pi_half());
+        }
+
+        f[f.size() - 1u] = (1. + g) * std::sin(x[0] * detail::pi_half());
+        return f;
+    }
+
+    vector_double f4_objfun_impl(const vector_double &x) const
+    {
+        vector_double f(m_fdim);
+        // computing distance-function
+        vector_double x_M;
+        for (decltype(x.size()) i = f.size() - 1; i < x.size(); ++i) {
+            x_M.push_back(x[i]);
+        }
+
+        auto g = g_func(x_M);
+
+        // computing shape-functions
+        f[0] = (1. + g);
+        for (decltype(f.size()) i = 0u; i < f.size() - 1u; ++i) {
+            f[0] *= cos(std::pow(x[i], m_alpha) * detail::pi_half());
+        }
+
+        for (decltype(f.size()) i = 1u; i < f.size() - 1u; ++i) {
+            f[i] = (1.0 + g);
+            for (decltype(f.size()) j = 0u; j < f.size() - (i + 1u); ++j) {
+                f[i] *= cos(std::pow(x[j], m_alpha) * detail::pi_half());
+            }
+            f[i] *= std::sin(std::pow(x[f.size() - (i + 1u)], m_alpha) * detail::pi_half());
+        }
+
+        f[f.size() - 1u] = (1. + g) * std::sin(std::pow(x[0], m_alpha) * detail::pi_half());
+        return f;
+    }
+
+    vector_double f56_objfun_impl(const vector_double &x) const
+    {
+        vector_double f(m_fdim);
+        // computing distance-function
+        vector_double x_M;
+
+        for (decltype(x.size()) i = f.size() - 1u; i < x.size(); ++i) {
+            x_M.push_back(x[i]);
+        }
+
+        auto g = g_func(x_M);
+
+        // computing meta-variables
+        vector_double theta(f.size(), 0.);
+        double t;
+
+        theta[0] = x[0];
+        t = 1. / (2. * (1. + g));
+
+        for (decltype(f.size()) i = 1u; i < f.size(); ++i) {
+            theta[i] = t + ((g * x[i]) / (1.0 + g));
+        }
+
+        // computing shape-functions
+        f[0] = (1. + g);
+        for (decltype(f.size()) i = 0u; i < f.size() - 1u; ++i) {
+            f[0] *= cos(theta[i] * detail::pi_half());
+        }
+
+        for (decltype(f.size()) i = 1u; i < f.size() - 1u; ++i) {
+            f[i] = (1. + g);
+            for (decltype(f.size()) j = 0u; j < f.size() - (i + 1u); ++j) {
+                f[i] *= cos(theta[j] * detail::pi_half());
+            }
+            f[i] *= std::sin(theta[f.size() - (i + 1u)] * detail::pi_half());
+        }
+
+        f[f.size() - 1u] = (1. + g) * std::sin(theta[0] * detail::pi_half());
+        return f;
+    }
+
+    vector_double f7_objfun_impl(const decision_vector &x) const
+    {
+        // computing distance-function
+        vector_double x_M;
+        double g;
+
+        for (decltype(x.size()) i = f.size() - 1u; i < x.size(); ++i) {
+            x_M.push_back(x[i]);
+        }
+
+        g = 1. + g_func(x_M); // +1.0 according to the original definition of the g-function for DTLZ7
+
+        // computing shape-functions
+        for (decltype(f.size()) i = 0u; i < f.size() - 1u; ++i) {
+            f[i] = x[i];
+        }
+
+        f[f.size() - 1u] = (1. + g) * h7_func(f, g);
+        return f;
+    }
+
+    // Problem dimensions
+    unsigned int m_prob_id;
+    // used only for DTLZ4
+    unsigned int m_alpha;
+    // dimension parameter
+    vector_double::size_type m_dim_param;
+    // number of objectives
+    vector_double::size_type m_fdim;
+};
+}
+
+PAGMO_REGISTER_PROBLEM(pagmo::dtlz)
+
+#endif
