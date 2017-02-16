@@ -68,11 +68,11 @@ public:
 
     /// Constructor from UDP and translation vector
     /**
-     * Wraps a user-defined problem so that its fitness , bounds, etc. will be shifted by a
-     * translation vector.
-     *
      * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem,
      * and \p T is not pagmo::problem.
+     *
+     * Wraps a user-defined problem so that its fitness , bounds, etc. will be shifted by a
+     * translation vector.
      *
      * @param p a user-defined problem.
      * @param translation an <tt>std::vector</tt> containing the translation to apply.
