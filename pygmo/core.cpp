@@ -630,9 +630,8 @@ BOOST_PYTHON_MODULE(core)
     // Thread unsafe test problem.
     pygmo::expose_problem<tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
     // Null problem.
-    auto np = pygmo::expose_problem<null_problem>(
-        "null_problem",
-        "__init__()\n\nThe null problem.\n\nA problem used only in the initialization of meta-problems.\n\n");
+    auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
+    np.def(bp::init<vector_double::size_type>((bp::arg("nobj"))));
     // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
     // serialization of the problem. Not necessary for any other problem type.
     // NOTE: this is needed because problem does not have a def ctor.

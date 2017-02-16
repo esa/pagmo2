@@ -1943,6 +1943,22 @@ class cmaes_test_case(_ut.TestCase):
         seed = uda.get_seed()
 
 
+class null_problem_test_case(_ut.TestCase):
+    """Test case for the null problem
+
+    """
+
+    def runTest(self):
+        from .core import null_problem as np, problem
+        n = np()
+        n = np(1)
+        n = np(nobj = 2)
+        self.assertRaises(ValueError, lambda : np(0))
+        self.assertTrue(problem(np()).get_nobj() == 1)
+        self.assertTrue(problem(np(23)).get_nobj() == 23)
+
+
+
 def run_test_suite():
     """Run the full test suite.
 
@@ -1957,6 +1973,7 @@ def run_test_suite():
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(population_test_case())
+    suite.addTest(null_problem_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

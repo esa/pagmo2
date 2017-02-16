@@ -1232,6 +1232,23 @@ See also :cpp:class:`pagmo::algorithm`.
 )";
 }
 
+std::string null_problem_docstring()
+{
+    return R"(__init__(nobj = 1)
+
+The null problem.
+
+A problem used in the default-initialization of :class:`pygmo.core.problem` and of the meta-problems.
+
+Args:
+    nobj (``int``): the number of objectives
+
+Raises:
+    ValueError: if *nobj* is not strictly positive
+
+)";
+}
+
 std::string rosenbrock_docstring()
 {
     return R"(__init__(dim = 2)

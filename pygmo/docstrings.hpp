@@ -88,6 +88,7 @@ std::string translate_translation_docstring();
 std::string algorithm_docstring();
 
 // user - problems
+std::string null_problem_docstring();
 std::string rosenbrock_docstring();
 std::string cec2013_docstring();
 std::string decompose_decompose_fitness_docstring();
