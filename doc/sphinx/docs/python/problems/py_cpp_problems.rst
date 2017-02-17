@@ -24,6 +24,9 @@ Problems exposed from C++
 .. autoclass:: pygmo.core.zdt
    :members:
 
+.. autoclass:: pygmo.core.dtlz
+   :members:
+
 .. autoclass:: pygmo.core.inventory
    :members:
 

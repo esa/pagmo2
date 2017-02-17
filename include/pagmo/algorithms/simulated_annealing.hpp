@@ -66,7 +66,7 @@ namespace pagmo
  * **NOTE** At each call of the evolve method the number of function evaluations will be
  * \p n_T_adj * \p n_range_adj * \p bin_size times the problem dimension
  *
- * @see Corana, A., Marchesi, M., Martini, C., & Ridella, S. (1987). Minimizing multimodal
+ * See: Corana, A., Marchesi, M., Martini, C., & Ridella, S. (1987). Minimizing multimodal
  * functions of continuous variables with the “simulated annealing” algorithm Corrigenda
  * for this article is available here. ACM Transactions on Mathematical Software (TOMS), 13(3), 262-280.
  * http://people.sc.fsu.edu/~inavon/5420a/corana.pdf

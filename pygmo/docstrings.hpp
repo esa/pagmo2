@@ -96,6 +96,7 @@ std::string algorithm_docstring();
 // user - problems
 std::string null_problem_docstring();
 std::string rosenbrock_docstring();
+std::string dtlz_docstring();
 std::string cec2013_docstring();
 std::string get_best_docstring(const std::string &);
 

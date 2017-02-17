@@ -29,8 +29,8 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_PROBLEM_GRIEWANK_HPP
 #define PAGMO_PROBLEM_GRIEWANK_HPP
 
-#include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -98,7 +98,7 @@ struct griewank {
     }
     /// Box-bounds
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -111,7 +111,7 @@ struct griewank {
     }
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */

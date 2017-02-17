@@ -128,7 +128,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
  * the
  * complexity of calling pagmo::fast_non_dominated_sorting
  *
- * @see Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
+ * See: Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
  * IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
  *
  * @param input_objs an <tt>std::vector</tt> containing the points (i.e. vector of objectives)
@@ -193,7 +193,7 @@ using fnds_return_type
  * number of objectives
  * and \f$N\f$ is the number of individuals.
  *
- * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
+ * See: Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg,
  * 2000.
  *
@@ -280,7 +280,7 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
  * condition
  * will result in undefined behaviour.
  *
- * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
+ * See: Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg,
  * 2000.
  *

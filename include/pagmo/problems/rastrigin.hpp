@@ -29,8 +29,8 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_PROBLEM_RASTRIGIN_HPP
 #define PAGMO_PROBLEM_RASTRIGIN_HPP
 
-#include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -104,7 +104,7 @@ struct rastrigin {
 
     /// Box-bounds
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -118,7 +118,7 @@ struct rastrigin {
 
     /// Gradients
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the fitness gradient for this UDP.
      *
      * The gradient is represented in a sparse form as required by
@@ -141,7 +141,7 @@ struct rastrigin {
 
     /// Hessians
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the hessians for this UDP.
      *
      * The hessians are represented in a sparse form as required by
@@ -164,7 +164,7 @@ struct rastrigin {
 
     /// Hessians sparsity (only the diagonal elements are non zero)
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the hessian sparisty structure for this UDP.
      *
      * The hessian sparisty is represented in the form required by
@@ -183,7 +183,7 @@ struct rastrigin {
     }
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */

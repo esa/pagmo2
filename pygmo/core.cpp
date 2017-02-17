@@ -82,6 +82,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/cec2013.hpp>
 #endif
 #include <pagmo/problems/decompose.hpp>
+#include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
@@ -678,6 +679,12 @@ BOOST_PYTHON_MODULE(core)
                                                    "See :cpp:class:`pagmo::zdt`.\n\n");
     zdt_p.def(bp::init<unsigned, unsigned>((bp::arg("id") = 1u, bp::arg("param") = 30u)));
     zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); });
+    // DTLZ.
+    auto dtlz_p = pygmo::expose_problem<dtlz>("dtlz", pygmo::dtlz_docstring().c_str());
+    dtlz_p.def(bp::init<unsigned, unsigned, unsigned, unsigned>(
+        (bp::arg("id") = 1u, bp::arg("dim") = 5u, bp::arg("fdim") = 3u, bp::arg("alpha") = 100u)));
+    dtlz_p.def("p_distance", +[](const dtlz &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); });
+    dtlz_p.def("p_distance", +[](const dtlz &z, const population &pop) { return z.p_distance(pop); });
     // Inventory.
     auto inv = pygmo::expose_problem<inventory>(
         "inventory", "__init__(weeks = 4,sample_size = 10,seed = random)\n\nThe inventory problem.\n\n"
@@ -685,7 +692,8 @@ BOOST_PYTHON_MODULE(core)
     inv.def(bp::init<unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u)));
     inv.def(
         bp::init<unsigned, unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u, bp::arg("seed"))));
-// excluded in MSVC
+// excluded in MSVC (Dec. - 2016) because of troubles to deal with the big static array defining the problem data. To be
+// reassesed in future versions of the compiler
 #if !defined(_MSC_VER)
     // CEC 2013.
     auto cec2013_ = pygmo::expose_problem<cec2013>("cec2013", pygmo::cec2013_docstring().c_str());
