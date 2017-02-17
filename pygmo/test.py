@@ -569,7 +569,7 @@ class problem_test_case(_ut.TestCase):
         self.assertRaises(ValueError, lambda: prob.fitness([1, 2]))
 
     def run_extract_tests(self):
-        from .core import problem, translate, _test_problem
+        from .core import problem, translate, _test_problem, decompose
         import sys
 
         # First we try with a C++ test problem.
@@ -636,6 +636,68 @@ class problem_test_case(_ut.TestCase):
         self.assert_(tprob.get_n() == 1)
         tprob.set_n(12)
         self.assert_(p.extract(tproblem).get_n() == 12)
+
+        # Do the same with decompose.
+        p = problem(_test_problem(2))
+        # Verify the refcount of p is increased after extract().
+        rc = sys.getrefcount(p)
+        tprob = p.extract(_test_problem)
+        self.assert_(sys.getrefcount(p) == rc + 1)
+        del tprob
+        self.assert_(sys.getrefcount(p) == rc)
+        # Verify we are modifying the inner object.
+        p.extract(_test_problem).set_n(5)
+        self.assert_(p.extract(_test_problem).get_n() == 5)
+        # Chain extracts.
+        t = decompose(_test_problem(2), [.2, .8], [0., 0.])
+        pt = problem(t)
+        rc = sys.getrefcount(pt)
+        tprob = pt.extract(decompose)
+        # Verify that extraction of decompose from the problem
+        # increases the refecount of pt.
+        self.assert_(sys.getrefcount(pt) == rc + 1)
+        # Extract the _test_problem from decompose.
+        rc2 = sys.getrefcount(tprob)
+        ttprob = tprob.extract(_test_problem)
+        # The refcount of pt is not affected.
+        self.assert_(sys.getrefcount(pt) == rc + 1)
+        # The refcount of tprob has increased.
+        self.assert_(sys.getrefcount(tprob) == rc2 + 1)
+        del tprob
+        # We can still access ttprob.
+        self.assert_(ttprob.get_n() == 1)
+        self.assert_(sys.getrefcount(pt) == rc + 1)
+        del ttprob
+        # Now the refcount of pt decreases, because deleting
+        # ttprob eliminates the last ref to tprob, which in turn
+        # decreases the refcount of pt.
+        self.assert_(sys.getrefcount(pt) == rc)
+
+        # Try chaining decompose and translate.
+        p = problem(
+            translate(decompose(_test_problem(2), [.2, .8], [0., 0.]), [1.]))
+        rc = sys.getrefcount(p)
+        tprob = p.extract(translate)
+        self.assertFalse(tprob is None)
+        self.assert_(sys.getrefcount(p) == rc + 1)
+        tmp = sys.getrefcount(tprob)
+        dprob = tprob.extract(decompose)
+        self.assertFalse(dprob is None)
+        self.assert_(sys.getrefcount(tprob) == tmp + 1)
+        self.assert_(sys.getrefcount(p) == rc + 1)
+        tmp2 = sys.getrefcount(dprob)
+        test_prob = dprob.extract(_test_problem)
+        self.assertFalse(test_prob is None)
+        self.assert_(sys.getrefcount(dprob) == tmp2 + 1)
+        self.assert_(sys.getrefcount(p) == rc + 1)
+        del tprob
+        # We can still access dprob and test_prob.
+        dprob.z
+        self.assertTrue(test_prob.get_n() == 1)
+        del dprob
+        del test_prob
+        # Verify the refcount of p drops back.
+        self.assert_(sys.getrefcount(p) == rc)
 
     def run_nec_nic_tests(self):
         from .core import problem
@@ -1943,7 +2005,7 @@ class translate_test_case(_ut.TestCase):
     """
 
     def runTest(self):
-        from .core import problem, rosenbrock, translate, null_problem
+        from .core import problem, rosenbrock, translate, null_problem, decompose
         from numpy import array
 
         t = translate()
@@ -1974,6 +2036,62 @@ class translate_test_case(_ut.TestCase):
         self.assertFalse(t.extract(p) is None)
         self.assertTrue(all(t.translation == array([-1., -1.])))
 
+        # Verify construction from problem is forbidden.
+        self.assertRaises(TypeError, lambda: translate(
+            problem(null_problem()), [0.]))
+
+        # Verify translation of decompose.
+        t = translate(decompose(null_problem(2), [0.2, 0.8], [0., 0.]), [0.])
+        self.assertFalse(t.extract(decompose) is None)
+        self.assertFalse(t.extract(decompose).extract(null_problem) is None)
+
+
+class decompose_test_case(_ut.TestCase):
+    """Test case for the decompose meta-problem
+
+    """
+
+    def runTest(self):
+        from .core import zdt, decompose, null_problem, problem, translate
+        from numpy import array
+
+        d = decompose()
+        self.assertFalse(d.extract(null_problem) is None)
+        self.assertTrue(all(d.z == array([0., 0.])))
+        d = decompose(zdt(1, 2), [0.5, 0.5], [0.1, 0.1], "weighted", False)
+        self.assertFalse(d.extract(zdt) is None)
+        self.assertTrue(all(d.z == array([0.1, 0.1])))
+        self.assertTrue(all(d.original_fitness(
+            [1., 1.]) == problem(zdt(1, 2)).fitness([1., 1.])))
+        f = problem(zdt(1, 2)).fitness([1., 1.])
+        fdw = d.decompose_fitness(f, [0.2, 0.8], [0.1, 0.1])
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+
+            def get_nobj(self):
+                return 2
+
+        d = decompose(p(), [0.5, 0.5], [0.1, 0.1], "weighted", False)
+        self.assertFalse(d.extract(p) is None)
+        self.assertTrue(all(d.z == array([0.1, 0.1])))
+        self.assertTrue(all(d.original_fitness([1., 1.]) == array([42, 43])))
+        d.decompose_fitness([42, 43], [0.2, 0.8], [0.1, 0.1])
+
+        # Verify construction from problem is forbidden.
+        self.assertRaises(TypeError, lambda: decompose(
+            problem(null_problem(2)), [0.2, 0.8], [0., 0.]))
+
+        # Verify decomposition of translate.
+        t = decompose(translate(null_problem(2), [0.]), [0.2, 0.8], [0., 0.])
+        self.assertFalse(t.extract(translate) is None)
+        self.assertFalse(t.extract(translate).extract(null_problem) is None)
+
 
 def run_test_suite():
     """Run the full test suite.
@@ -1992,6 +2110,7 @@ def run_test_suite():
     suite.addTest(null_problem_test_case())
     suite.addTest(dtlz_test_case())
     suite.addTest(translate_test_case())
+    suite.addTest(decompose_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

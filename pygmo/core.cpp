@@ -297,6 +297,9 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 
 // A test problem.
 struct test_problem {
+    test_problem(unsigned nobj = 1) : m_nobj(nobj)
+    {
+    }
     vector_double fitness(const vector_double &) const
     {
         return {1.};
@@ -314,7 +317,12 @@ struct test_problem {
     {
         return m_n;
     }
+    vector_double::size_type get_nobj() const
+    {
+        return m_nobj;
+    }
     int m_n = 1;
+    unsigned m_nobj;
 };
 
 // A thread-unsafe test problem.
@@ -630,6 +638,7 @@ BOOST_PYTHON_MODULE(core)
     // Exposition of C++ problems.
     // Test problem.
     auto test_p = pygmo::expose_problem<test_problem>("_test_problem", "A test problem.");
+    test_p.def(bp::init<unsigned>((bp::arg("nobj"))));
     test_p.def("get_n", &test_problem::get_n);
     test_p.def("set_n", &test_problem::set_n);
     // Thread unsafe test problem.
