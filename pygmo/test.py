@@ -1891,39 +1891,50 @@ class hypervolume_test_case(_ut.TestCase):
     def runTest(self):
         from .core import hypervolume, hv2d, hv3d, wfg, bf_fpras, bf_approx
         from .core import population, zdt
-        pop  = population(prob = zdt(id = 1, param = 10), size = 20)
-        hv1 = hypervolume(pop = pop)
-        hv2 = hypervolume(points = [[0,0],[-1,1],[-2,2]])
+        pop = population(prob=zdt(id=1, param=10), size=20)
+        hv1 = hypervolume(pop=pop)
+        hv2 = hypervolume(points=[[0, 0], [-1, 1], [-2, 2]])
         hv2.copy_points = True
         points = hv2.get_points()
-        res0 = hv2.compute([3,3])
+        res0 = hv2.compute([3, 3])
 
         algo1 = hv2d()
         algo2 = wfg()
         algo3 = bf_fpras()
         algo4 = bf_approx()
 
-        res = hv2.compute(ref_point = [3,3], hv_algo = algo1)
-        res = hv2.exclusive(idx = 0, ref_point = [3,3], hv_algo = algo1)
-        res = hv2.least_contributor(ref_point = [3,3], hv_algo = algo1)
-        res = hv2.greatest_contributor(ref_point = [3,3], hv_algo = algo1)
-        res = hv2.contributions(ref_point = [3,3], hv_algo = algo1)
-        res = hv2.compute(ref_point = [3,3], hv_algo = algo2)
-        res = hv2.exclusive(idx = 0, ref_point = [3,3], hv_algo = algo2)
-        res = hv2.least_contributor(ref_point = [3,3], hv_algo = algo2)
-        res = hv2.greatest_contributor(ref_point = [3,3], hv_algo = algo2)
-        res = hv2.contributions(ref_point = [3,3], hv_algo = algo2)
-        res = hv2.compute(ref_point = [3,3], hv_algo = algo3)
+        res = hv2.compute(ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.exclusive(idx=0, ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.least_contributor(ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.greatest_contributor(ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.contributions(ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.compute(ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.exclusive(idx=0, ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.least_contributor(ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.greatest_contributor(ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.contributions(ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.compute(ref_point=[3, 3], hv_algo=algo3)
 
-        res = hv2.least_contributor(ref_point = [3,3], hv_algo = algo4)
-        res = hv2.greatest_contributor(ref_point = [3,3], hv_algo = algo4)
+        res = hv2.least_contributor(ref_point=[3, 3], hv_algo=algo4)
+        res = hv2.greatest_contributor(ref_point=[3, 3], hv_algo=algo4)
 
-        res = hv2.compute(ref_point = [3,3])
-        res = hv2.exclusive(idx = 0, ref_point = [3,3])
-        res = hv2.least_contributor(ref_point = [3,3])
-        res = hv2.greatest_contributor(ref_point = [3,3])
-        res = hv2.contributions(ref_point = [3,3])
+        res = hv2.compute(ref_point=[3, 3])
+        res = hv2.exclusive(idx=0, ref_point=[3, 3])
+        res = hv2.least_contributor(ref_point=[3, 3])
+        res = hv2.greatest_contributor(ref_point=[3, 3])
+        res = hv2.contributions(ref_point=[3, 3])
 
+
+class dtlz_test_case(_ut.TestCase):
+    """Test case for the UDP dtlz
+
+    """
+
+    def runTest(self):
+        from .core import dtlz, population
+        udp = dtlz(id=3, dim=9, fdim=3, alpha=5)
+        udp.p_distance([0.2] * 9)
+        udp.p_distance(population(udp, 20))
 
 
 def run_test_suite():
@@ -1945,6 +1956,7 @@ def run_test_suite():
         suite.addTest(cmaes_test_case())
     except ImportError:
         pass
+    suite.addTest(dtlz_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

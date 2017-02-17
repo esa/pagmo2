@@ -29,10 +29,10 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_PROBLEM_INVENTORY_HPP
 #define PAGMO_PROBLEM_INVENTORY_HPP
 
-#include <exception>
 #include <iostream>
 #include <random>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -68,7 +68,7 @@ namespace pagmo
  * d_i]_+
  * \f]
  *
- * @see www2.isye.gatech.edu/people/faculty/Alex_Shapiro/SPbook.pdf
+ * See: www2.isye.gatech.edu/people/faculty/Alex_Shapiro/SPbook.pdf
  *
  */
 class inventory
@@ -121,7 +121,7 @@ public:
     }
     /// Box-bounds
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -134,7 +134,7 @@ public:
     }
     /// Sets the seed
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @param seed the random number generator seed
      */
@@ -144,7 +144,7 @@ public:
     }
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */
@@ -154,7 +154,7 @@ public:
     }
     /// Extra informations
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing extra informations on the problem
      */

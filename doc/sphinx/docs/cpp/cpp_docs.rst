@@ -49,6 +49,7 @@ problem
   problems/ackley
   problems/griewank
   problems/zdt
+  problems/dtlz
   problems/hock_schittkowsky_71
   problems/inventory
   problems/translate

@@ -74,7 +74,7 @@ namespace pagmo
  * @throws std::invalid_argument if the input vector elements are not in [0,1]
  * @throws std::invalid_argument if the input vector has size 0 or 1.
  *
- * @see Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134.
+ * See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134.
  */
 inline std::vector<double> sample_from_simplex(std::vector<double> in)
 {
@@ -124,7 +124,7 @@ inline std::vector<double> sample_from_simplex(std::vector<double> in)
  * \tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16},
  * \tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \f$
  *
- * @see http://en.wikipedia.org/wiki/Van_der_Corput_sequence
+ * See: http://en.wikipedia.org/wiki/Van_der_Corput_sequence
  *
  */
 class van_der_corput
@@ -203,7 +203,7 @@ private:
  * @param n selects which element of the sequence to return
  * @param dim dimensions of the returned point
  *
- * @see https://en.wikipedia.org/wiki/Halton_sequence
+ * See: https://en.wikipedia.org/wiki/Halton_sequence
  *
  */
 class halton

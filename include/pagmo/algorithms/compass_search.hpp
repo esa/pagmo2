@@ -79,10 +79,10 @@ namespace pagmo
  * is
  * called from two identical populations.
  *
- * @see Kolda, Lewis, Torczon: 'Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods'
+ * See: Kolda, Lewis, Torczon: 'Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods'
  * published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)
  *
- * @see http://www.cs.wm.edu/~va/research/sirev.pdf
+ * See: http://www.cs.wm.edu/~va/research/sirev.pdf
  */
 class compass_search
 {
