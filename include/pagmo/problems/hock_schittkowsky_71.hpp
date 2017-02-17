@@ -55,7 +55,7 @@ namespace pagmo
  *    \end{array}
  * \f]
  *
- * @see W. Hock and K. Schittkowski. Test examples for nonlinear programming codes.
+ * See: W. Hock and K. Schittkowski. Test examples for nonlinear programming codes.
  * Lecture Notes in Economics and Mathematical Systems, 187, 1981. doi: 10.1007/978-3-642-48320-2.
  *
  */
@@ -79,7 +79,7 @@ struct hock_schittkowsky_71 {
 
     /// Equality constraint dimension
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the number of equality constraints
      *
      * @return the number of equality constraints
@@ -91,7 +91,7 @@ struct hock_schittkowsky_71 {
 
     /// Inequality constraint dimension
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the number of inequality constraints
      *
      * @return the number of inequality constraints
@@ -103,7 +103,7 @@ struct hock_schittkowsky_71 {
 
     /// Box-bounds
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -115,7 +115,7 @@ struct hock_schittkowsky_71 {
 
     /// Gradients
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the fitness gradient for this UDP.
      *
      * The gradient is represented in a sparse form as required by
@@ -143,7 +143,7 @@ struct hock_schittkowsky_71 {
 
     /// Hessians
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the hessians for this UDP.
      *
      * The hessians are represented in a sparse form as required by
@@ -162,7 +162,7 @@ struct hock_schittkowsky_71 {
 
     /// Hessians sparsity (only the diagonal elements are non zero)
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the hessian sparisty structure for this UDP.
      *
      * The hessian sparisty is represented in the form required by
@@ -179,7 +179,7 @@ struct hock_schittkowsky_71 {
 
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */
@@ -190,7 +190,7 @@ struct hock_schittkowsky_71 {
 
     /// Extra informations
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing extra informations on the problem
      */

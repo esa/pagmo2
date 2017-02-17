@@ -1883,6 +1883,18 @@ class cmaes_test_case(_ut.TestCase):
         seed = uda.get_seed()
 
 
+class dtlz_test_case(_ut.TestCase):
+    """Test case for the UDP dtlz
+
+    """
+
+    def runTest(self):
+        from .core import dtlz, population
+        udp = dtlz(id=3, dim=9, fdim=3, alpha=5)
+        udp.p_distance([0.2] * 9)
+        udp.p_distance(population(udp, 20))
+
+
 def run_test_suite():
     """Run the full test suite.
 
@@ -1897,6 +1909,7 @@ def run_test_suite():
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(population_test_case())
+    suite.addTest(dtlz_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

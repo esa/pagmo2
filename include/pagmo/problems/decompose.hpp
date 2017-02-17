@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <cassert>
 #include <limits>
 #include <numeric>
+#include <stdexcept>
 #include <string>
 
 #include "../exceptions.hpp"
@@ -87,8 +88,8 @@ namespace pagmo
  * the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
  * derivative-free optimization.
  *
- * @see "Q. Zhang -- MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition"
- * @see https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems
+ * See: "Q. Zhang -- MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition"
+ * See: https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems
  */
 class decompose : public problem
 {
@@ -287,7 +288,7 @@ public:
     }
     /// Number of objectives
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the number of objectives
      *
      * @return the number of objectives
@@ -327,7 +328,7 @@ public:
     }
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */
@@ -337,7 +338,7 @@ public:
     }
     /// Extra informations
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing extra informations on the problem
      */

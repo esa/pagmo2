@@ -29,8 +29,8 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_PROBLEM_ROSENBROCK_HPP
 #define PAGMO_PROBLEM_ROSENBROCK_HPP
 
-#include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -88,7 +88,7 @@ struct rosenbrock {
 
     /// Box-bounds
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -101,7 +101,7 @@ struct rosenbrock {
     }
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */

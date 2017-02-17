@@ -63,8 +63,8 @@ namespace pagmo
  * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
  * the allowed box-bounds, is here done by creating a random number in the bounds.
  *
- * @see http://www.icsi.berkeley.edu/~storn/code.html for the official DE web site
- * @see http://www.springerlink.com/content/x555692233083677/ for the paper that introduces Differential Evolution
+ * See: http://www.icsi.berkeley.edu/~storn/code.html for the official DE web site
+ * See: http://www.springerlink.com/content/x555692233083677/ for the paper that introduces Differential Evolution
  */
 class de
 {

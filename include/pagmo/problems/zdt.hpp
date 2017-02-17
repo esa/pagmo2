@@ -31,9 +31,9 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cmath>
-#include <exception>
 #include <iostream>
 #include <iterator>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -61,7 +61,7 @@ namespace pagmo
  * **NOTE** The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
  * via std::floor().
  *
- * @see Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:
+ * See: Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:
  * Empirical results." Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848
  *
  * ZDT1:
@@ -134,23 +134,23 @@ public:
      *
      * Will construct one problem from the ZDT test-suite.
      *
-     * @param id problem number. Must be in [1, .., 6]
+     * @param prob_id problem number. Must be in [1, .., 6]
      * @param param problem parameter, representing the problem dimension
      * except for ZDT5 where it represents the number of binary strings
      *
      * @throws std::invalid_argument if \p id is not in [1,..,6]
      * @throws std::invalid_argument if \p param is not at least 2.
      */
-    zdt(unsigned int id = 1u, unsigned int param = 30u) : m_id(id), m_param(param)
+    zdt(unsigned int prob_id = 1u, unsigned int param = 30u) : m_prob_id(prob_id), m_param(param)
     {
         if (param < 2u) {
             pagmo_throw(std::invalid_argument, "ZDT test problems must have a minimum value of 2 for the constructing "
                                                "parameter (representing the dimension except for ZDT5), "
                                                    + std::to_string(param) + " requested");
         }
-        if (id == 0u || id > 6u) {
-            pagmo_throw(std::invalid_argument,
-                        "ZDT test suite contains six (id=[1 ... 6]) problems, id=" + std::to_string(id) + " requested");
+        if (prob_id == 0u || prob_id > 6u) {
+            pagmo_throw(std::invalid_argument, "ZDT test suite contains six (prob_id=[1 ... 6]) problems, prob_id="
+                                                   + std::to_string(prob_id) + " was detected");
         }
     };
     /// Fitness computation
@@ -164,7 +164,7 @@ public:
     vector_double fitness(const vector_double &x) const
     {
         vector_double retval;
-        switch (m_id) {
+        switch (m_prob_id) {
             case 1u:
                 retval = zdt1_fitness(x);
                 break;
@@ -188,7 +188,7 @@ public:
     }
     /// Number of objectives
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the number of objectives.
      *
      * @return the number of objectives
@@ -200,7 +200,7 @@ public:
 
     /// Box-bounds
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -208,7 +208,7 @@ public:
     std::pair<vector_double, vector_double> get_bounds() const
     {
         std::pair<vector_double, vector_double> retval;
-        switch (m_id) {
+        switch (m_prob_id) {
             case 1u:
             case 2u:
             case 3u:
@@ -237,13 +237,13 @@ public:
     }
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */
     std::string get_name() const
     {
-        return "ZDT" + std::to_string(m_id);
+        return "ZDT" + std::to_string(m_prob_id);
     }
     /// Distance from the Pareto front
     /**
@@ -256,14 +256,14 @@ public:
      * @param x input decision vector
      * @return the p_distance
      *
-     * @see Märtens, Marcus, and Dario Izzo. "The asynchronous island model
+     * See: Märtens, Marcus, and Dario Izzo. "The asynchronous island model
      * and NSGA-II: study of a new migration operator and its performance."
      * Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013.
      */
     double p_distance(const vector_double &x) const
     {
         double retval = 0.;
-        switch (m_id) {
+        switch (m_prob_id) {
             case 1u:
             case 2u:
             case 3u:
@@ -292,7 +292,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_id, m_param);
+        ar(m_prob_id, m_param);
     }
 
 private:
@@ -501,7 +501,7 @@ private:
 
 private:
     // Problem dimensions
-    unsigned int m_id;
+    unsigned int m_prob_id;
     unsigned int m_param;
 };
 }

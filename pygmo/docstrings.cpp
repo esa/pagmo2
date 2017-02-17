@@ -1171,13 +1171,34 @@ std::string rosenbrock_docstring()
 The Rosenbrock problem.
 
 Args:
-    dim (``int``): number of dimensions
+    dim (``int``): problem dimension
 
 Raises:
     OverflowError: if *dim* is negative or greater than an implementation-defined value
     ValueError: if *dim* is less than 2
 
 See also the docs of the C++ class :cpp:class:`pagmo::rosenbrock`.
+
+)";
+}
+
+std::string dtlz_docstring()
+{
+    return R"(__init__(id = 1, dim = 5, fdim = 3, alpha = 100)
+
+The DTLZ problem suite problem.
+
+Args:
+    id (``int``): DTLZ problem id 
+    dim (``int``): problem dimension
+    fdim (``int``): number of objectives
+    alpha (``int``): controls density of solutions (used only by DTLZ4)
+
+Raises:
+    OverflowError: if *id*, *dim*, *fdim* or *alpha* are negative or greater than an implementation-defined value
+    ValueError: if *id* is not in [1..7], *fdim* is smaller than 2, *dim* is smaller or equal to *fdim*.
+
+See also the docs of the C++ class :cpp:class:`pagmo::dtlz`.
 
 )";
 }
