@@ -255,7 +255,7 @@ private:
     /// Convergence metric for a dv (0 = converged to the optimal front)
     double g_func(const vector_double &x) const
     {
-        double retval;
+        double retval = 0.;
         switch (m_prob_id) { // We start with the 6-7 cases as for absurd reasons behind my comprehension this is
                              // way more efficient
             case 6:
