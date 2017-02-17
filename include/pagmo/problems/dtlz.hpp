@@ -31,10 +31,10 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cmath>
-#include <exception>
 #include <iostream>
 #include <iterator>
 #include <limits>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -47,14 +47,14 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-/// DTLZ problem test suite
+/// DTLZ problem test suite.
 /**
  * This widespread test suite was conceived for multiobjective problems with scalable fitness dimensions
  * and takes its name from its authors Deb, Thiele, Laumanns and Zitzler
  *
  * All problems in this test suite are box-constrained continuous n-dimensional multi-objective problems, scalable in
  * fitness dimension. The dimension of the decision space is \f$ k + fdim - 1 \f$, whereas fdim is the number of
- * objectives and k a paramter. Properties of the decision space and the Pareto-front of each problems are as follow:
+ * objectives and k a paramter. Properties of the decision space and the Pareto-front of each problems are as follows:
  *
  * DTLZ1:
  *
@@ -89,7 +89,7 @@ namespace pagmo
  *
  * This problem has disconnected Pareto-optimal regions in the search space.
  *
- * @see K. Deb, L. Thiele, M. Laumanns, E. Zitzler, Scalable test problems for evolutionary multiobjective optimization
+ * See: K. Deb, L. Thiele, M. Laumanns, E. Zitzler, Scalable test problems for evolutionary multiobjective optimization
  */
 
 class dtlz
@@ -165,7 +165,7 @@ public:
     }
     /// Number of objectives
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the number of objectives.
      *
      * @return the number of objectives
@@ -176,15 +176,14 @@ public:
     }
     /// Box-bounds
     /**
-     * One of the optional methods of any user-defined problem (UDP).
-     * It returns the box-bounds for this UDP.
+     *
+     * It returns the box-bounds for this UDP, [0,1] for each component
      *
      * @return the lower and upper bounds for each of the decision vector components
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        std::pair<vector_double, vector_double> retval{vector_double(m_dim, 0.), vector_double(m_dim, 1.)};
-        return retval;
+        return {vector_double(m_dim, 0.), vector_double(m_dim, 1.)};
     }
     /// Distance from the Pareto front (of a population)
     /**
@@ -195,7 +194,7 @@ public:
      * @param pop population to be assigned a pareto distance
      * @return the p_distance
      *
-     * @see problem::base_unc_mo::p_distance virtual method.
+     * See: problem::base_unc_mo::p_distance virtual method.
      */
     double p_distance(const pagmo::population &pop) const
     {
@@ -217,7 +216,7 @@ public:
      * @param x input decision vector
      * @return the p_distance
      *
-     * @see Märtens, Marcus, and Dario Izzo. "The asynchronous island model
+     * See: Märtens, Marcus, and Dario Izzo. "The asynchronous island model
      * and NSGA-II: study of a new migration operator and its performance."
      * Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013.
      */
@@ -231,7 +230,7 @@ public:
     }
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */
@@ -318,7 +317,7 @@ private:
         return (9. / static_cast<double>(x.size())) * y;
     }
     /// Implementation of the distribution function h
-    double h7_func(const vector_double &f, const double g) const
+    double h7_func(const vector_double &f, double g) const
     {
         // NOTE: we intentionally ignore the last element of the vector to make things easier
         double y = 0.;

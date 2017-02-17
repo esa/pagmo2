@@ -31,9 +31,9 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cmath>
-#include <exception>
 #include <iostream>
 #include <iterator>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -61,7 +61,7 @@ namespace pagmo
  * **NOTE** The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
  * via std::floor().
  *
- * @see Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:
+ * See: Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:
  * Empirical results." Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848
  *
  * ZDT1:
@@ -188,7 +188,7 @@ public:
     }
     /// Number of objectives
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the number of objectives.
      *
      * @return the number of objectives
@@ -200,7 +200,7 @@ public:
 
     /// Box-bounds
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -237,7 +237,7 @@ public:
     }
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */
@@ -256,7 +256,7 @@ public:
      * @param x input decision vector
      * @return the p_distance
      *
-     * @see Märtens, Marcus, and Dario Izzo. "The asynchronous island model
+     * See: Märtens, Marcus, and Dario Izzo. "The asynchronous island model
      * and NSGA-II: study of a new migration operator and its performance."
      * Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013.
      */

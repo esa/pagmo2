@@ -68,9 +68,9 @@ namespace pagmo
  * to have MOEA/D-DE
   * work on populations having arbitrary size, while preserving a nice coverage of the final non-dominated front.
   *
-  * @see Zhang, Qingfu, and Hui Li. "MOEA/D: A multiobjective evolutionary algorithm based on decomposition."
+  * See: Zhang, Qingfu, and Hui Li. "MOEA/D: A multiobjective evolutionary algorithm based on decomposition."
  * Evolutionary Computation, IEEE Transactions on 11.6 (2007): 712-731.
-  * @see Li, Hui, and Qingfu Zhang. "Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
+  * See: Li, Hui, and Qingfu Zhang. "Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
  * NSGA-II." Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
  */
 class moead

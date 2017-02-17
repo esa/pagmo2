@@ -93,9 +93,9 @@ namespace pagmo
  * **NOTE** The algorithm does not work for multi-objective problems, nor for
  * constrained or stochastic optimization
  *
- * @see http://www.particleswarm.info/ for a repository of information related to PSO
- * @see http://dx.doi.org/10.1007/s11721-007-0002-0 for a survey
- * @see http://www.engr.iupui.edu/~shi/Coference/psopap4.html for the first paper on this algorithm
+ * See: http://www.particleswarm.info/ for a repository of information related to PSO
+ * See: http://dx.doi.org/10.1007/s11721-007-0002-0 for a survey
+ * See: http://www.engr.iupui.edu/~shi/Coference/psopap4.html for the first paper on this algorithm
  */
 class pso
 {

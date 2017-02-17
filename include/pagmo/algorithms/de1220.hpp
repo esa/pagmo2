@@ -85,7 +85,7 @@ std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u, 3u, 7u, 10u
  * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
  * the allowed box-bounds, is here done by creating a random number in the bounds.
  *
- * @see pagmo::de, pagmo::sade For other available algorithms based on Differential Evolution
+ * See: pagmo::de, pagmo::sade For other available algorithms based on Differential Evolution
  */
 
 class de1220
@@ -137,10 +137,10 @@ public:
      * @throws std::invalid_argument if \p variant_adptv is not in [0,1]
      * @throws std::invalid_argument if \p allowed_variants contains a number not in 1..18
      *
-     * @see (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control
+     * See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control
      parameters in differential evolution: a comparative study on numerical benchmark problems. Evolutionary
      Computation, IEEE Transactions on, 10(6), 646-657. Chicago
-     * @see (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple
+     * See: (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple
      strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011
      IEEE Congress on (pp. 1041-1048). IEEE.
      */
