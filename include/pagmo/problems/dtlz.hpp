@@ -199,7 +199,7 @@ public:
     {
         double c = 0.0;
         for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
-            c += convergence_metric(pop.get_x()[i]);
+            c += p_distance(pop.get_x()[i]);
         }
 
         return c / pop.size();
@@ -221,6 +221,10 @@ public:
      */
     double p_distance(const vector_double &x) const
     {
+        if (x.size() != m_dim) {
+            pagmo_throw(std::invalid_argument, "The size of the decision vector should be " + std::to_string(m_dim)
+                                                   + " while " + std::to_string(x.size()) + " was detected");
+        }
         return convergence_metric(x);
     }
     /// Problem name
@@ -326,11 +330,12 @@ private:
         vector_double f(m_fdim);
         // computing distance-function
         vector_double x_M;
+
         for (decltype(x.size()) i = f.size() - 1u; i < x.size(); ++i) {
             x_M.push_back(x[i]);
         }
 
-        auto g = g_func(x_M);
+        double g = g_func(x_M);
 
         // computing shape-functions
         f[0] = 0.5 * (1. + g);
@@ -338,13 +343,15 @@ private:
         for (decltype(f.size()) i = 0u; i < f.size() - 1u; ++i) {
             f[0] *= x[i];
         }
-        for (decltype(f.size()) i = 1u; i < f.size() - 1u; ++i) {
-            f[i] = 0.5 * (1. + g);
-            for (decltype(f.size()) j = 0u; j < f.size() - (i + 1u); ++j) {
+
+        for (decltype(f.size()) i = 1u; i < f.size() - 1; ++i) {
+            f[i] = 0.5 * (1.0 + g);
+            for (decltype(f.size()) j = 0u; j < f.size() - (i + 1); ++j) {
                 f[i] *= x[j];
             }
             f[i] *= 1. - x[f.size() - (i + 1u)];
         }
+
         f[f.size() - 1u] = 0.5 * (1. - x[0]) * (1. + g);
         return f;
     }
