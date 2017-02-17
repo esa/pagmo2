@@ -2015,11 +2015,18 @@ class translate_test_case(_ut.TestCase):
         self.assertFalse(t.extract(rosenbrock) is None)
         self.assertTrue(all(t.translation == array([1., 2.])))
         t = translate(rosenbrock(), [1, 2])
+        self.assertTrue(t.is_(rosenbrock))
         self.assertFalse(t.extract(rosenbrock) is None)
         self.assertTrue(all(t.translation == array([1., 2.])))
         t = translate(translation=[1, 2], udp=rosenbrock())
         self.assertFalse(t.extract(rosenbrock) is None)
         self.assertTrue(all(t.translation == array([1., 2.])))
+
+        # Nested translation.
+        t = translate(translate(rosenbrock(), [1, 2]), [1, 2])
+        self.assertTrue(t.is_(translate))
+        self.assertFalse(t.extract(translate) is None)
+        self.assertFalse(t.extract(translate).extract(rosenbrock) is None)
 
         class p(object):
 
@@ -2033,6 +2040,7 @@ class translate_test_case(_ut.TestCase):
         self.assertFalse(t.extract(p) is None)
         self.assertTrue(all(t.translation == array([-1., -1.])))
         t = translate(translation=[-1, -1], udp=p())
+        self.assertTrue(t.is_(p))
         self.assertFalse(t.extract(p) is None)
         self.assertTrue(all(t.translation == array([-1., -1.])))
 
@@ -2042,6 +2050,7 @@ class translate_test_case(_ut.TestCase):
 
         # Verify translation of decompose.
         t = translate(decompose(null_problem(2), [0.2, 0.8], [0., 0.]), [0.])
+        self.assertTrue(t.is_(decompose))
         self.assertFalse(t.extract(decompose) is None)
         self.assertFalse(t.extract(decompose).extract(null_problem) is None)
 
@@ -2059,6 +2068,7 @@ class decompose_test_case(_ut.TestCase):
         self.assertFalse(d.extract(null_problem) is None)
         self.assertTrue(all(d.z == array([0., 0.])))
         d = decompose(zdt(1, 2), [0.5, 0.5], [0.1, 0.1], "weighted", False)
+        self.assertTrue(d.is_(zdt))
         self.assertFalse(d.extract(zdt) is None)
         self.assertTrue(all(d.z == array([0.1, 0.1])))
         self.assertTrue(all(d.original_fitness(
@@ -2078,6 +2088,7 @@ class decompose_test_case(_ut.TestCase):
                 return 2
 
         d = decompose(p(), [0.5, 0.5], [0.1, 0.1], "weighted", False)
+        self.assertTrue(d.is_(p))
         self.assertFalse(d.extract(p) is None)
         self.assertTrue(all(d.z == array([0.1, 0.1])))
         self.assertTrue(all(d.original_fitness([1., 1.]) == array([42, 43])))
@@ -2089,6 +2100,7 @@ class decompose_test_case(_ut.TestCase):
 
         # Verify decomposition of translate.
         t = decompose(translate(null_problem(2), [0.]), [0.2, 0.8], [0., 0.])
+        self.assertTrue(t.is_(translate))
         self.assertFalse(t.extract(translate) is None)
         self.assertFalse(t.extract(translate).extract(null_problem) is None)
 
