@@ -597,7 +597,14 @@ BOOST_PYTHON_MODULE(core)
                  return pygmo::v_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weight), pygmo::to_vd(z_ref)));
              },
              pygmo::decompose_decompose_fitness_docstring().c_str(),
-             (bp::arg("f"), bp::arg("weight"), bp::arg("ref_point")));
+             (bp::arg("f"), bp::arg("weight"), bp::arg("ref_point")))
+        .def("original_fitness",
+             +[](const pagmo::decompose &p, const bp::object &x) {
+                 return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x)));
+             },
+             pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")))
+        .add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
+                      pygmo::decompose_z_docstring().c_str());
     // Mark it as a cpp problem.
     dp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from decompose.

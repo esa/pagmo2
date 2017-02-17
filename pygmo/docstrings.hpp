@@ -87,6 +87,8 @@ std::string translate_translation_docstring();
 // decompose
 std::string decompose_docstring();
 std::string decompose_decompose_fitness_docstring();
+std::string decompose_original_fitness_docstring();
+std::string decompose_z_docstring();
 
 // algorithm
 std::string algorithm_docstring();

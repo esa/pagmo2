@@ -2015,7 +2015,7 @@ Raises:
     ValueError: if either:
 
       * *udp* is single objective or constrained,
-      * *method* is not one of ['weighted', 'tchebycheff', 'bi'],
+      * *method* is not one of [``'weighted'``, ``'tchebycheff'``, ``'bi'``],
       * *weight* is not of size :math:`n`,
       * *z* is not of size :math:`n`,
       * *weight* is not such that :math:`\lambda_i > 0, \forall i=1..n`,
@@ -2039,14 +2039,54 @@ Returns the decomposed fitness vector.
 Args:
     f (array-like object): fitness vector
     weight (array-like object): the weight to be used in the decomposition
-    ref_point (array-like object): the reference point to be used if either 'tchebycheff' or 'bi' was
-      indicated as a decomposition method (its value is ignored if 'weighted' was indicated)
+    ref_point (array-like object): the reference point to be used if either ``'tchebycheff'`` or ``'bi'`` was
+      indicated as a decomposition method (its value is ignored if ``'weighted'`` was indicated)
 
 Returns:
     1D NumPy float array: the decomposed fitness vector
 
 Raises:
     ValueError: if *f*, *weight* and *ref_point* have different sizes
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string decompose_original_fitness_docstring()
+{
+    return R"(original_fitness(x)
+
+Fitness of the original problem.
+
+Returns the fitness of the original multi-objective problem used to construct the decomposed problem.
+
+Args:
+    x (array-like object): input decision vector
+
+Returns:
+    1D NumPy float array: the fitness of the original multi-objective problem
+
+Raises:
+    unspecified: any exception thrown by the original fitness computation, or by failures at the
+      intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string decompose_z_docstring()
+{
+    return R"(Current reference point.
+
+This read-only property contains the reference point to be used for the decomposition. This is only
+used for Tchebycheff and boundary interception decomposition methods.
+
+**NOTE** The reference point is adapted at each call of the fitness.
+
+Returns:
+    1D NumPy float array: the reference point
+
+Raises:
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
 
