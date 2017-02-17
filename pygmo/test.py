@@ -103,7 +103,6 @@ class problem_test_case(_ut.TestCase):
         self.run_feas_tests()
         self.run_name_info_tests()
         self.run_thread_safety_tests()
-        self.run_translate_tests()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -1827,38 +1826,6 @@ class problem_test_case(_ut.TestCase):
         self.assertTrue(
             problem(translate(rosenbrock(), [0, 1])).get_thread_safety() == ts.basic)
 
-    def run_translate_tests(self):
-        from .core import problem, rosenbrock, translate, null_problem
-        from numpy import array
-
-        t = translate()
-        self.assertFalse(t.extract(null_problem) is None)
-        self.assertTrue(all(t.translation == array([0.])))
-        t = translate(udp=rosenbrock(), translation=[1, 2])
-        self.assertFalse(t.extract(rosenbrock) is None)
-        self.assertTrue(all(t.translation == array([1., 2.])))
-        t = translate(rosenbrock(), [1, 2])
-        self.assertFalse(t.extract(rosenbrock) is None)
-        self.assertTrue(all(t.translation == array([1., 2.])))
-        t = translate(translation=[1, 2], udp=rosenbrock())
-        self.assertFalse(t.extract(rosenbrock) is None)
-        self.assertTrue(all(t.translation == array([1., 2.])))
-
-        class p(object):
-
-            def get_bounds(self):
-                return ([0, 0], [1, 1])
-
-            def fitness(self, a):
-                return [42]
-
-        t = translate(p(), [-1, -1])
-        self.assertFalse(t.extract(p) is None)
-        self.assertTrue(all(t.translation == array([-1., -1.])))
-        t = translate(translation=[-1, -1], udp=p())
-        self.assertFalse(t.extract(p) is None)
-        self.assertTrue(all(t.translation == array([-1., -1.])))
-
 
 class population_test_case(_ut.TestCase):
     """Test case for the :class:`~pygmo.core.population` class.
@@ -1952,8 +1919,8 @@ class null_problem_test_case(_ut.TestCase):
         from .core import null_problem as np, problem
         n = np()
         n = np(1)
-        n = np(nobj = 2)
-        self.assertRaises(ValueError, lambda : np(0))
+        n = np(nobj=2)
+        self.assertRaises(ValueError, lambda: np(0))
         self.assertTrue(problem(np()).get_nobj() == 1)
         self.assertTrue(problem(np(23)).get_nobj() == 23)
 
@@ -1968,6 +1935,44 @@ class dtlz_test_case(_ut.TestCase):
         udp = dtlz(id=3, dim=9, fdim=3, alpha=5)
         udp.p_distance([0.2] * 9)
         udp.p_distance(population(udp, 20))
+
+
+class translate_test_case(_ut.TestCase):
+    """Test case for the translate meta-problem
+
+    """
+
+    def runTest(self):
+        from .core import problem, rosenbrock, translate, null_problem
+        from numpy import array
+
+        t = translate()
+        self.assertFalse(t.extract(null_problem) is None)
+        self.assertTrue(all(t.translation == array([0.])))
+        t = translate(udp=rosenbrock(), translation=[1, 2])
+        self.assertFalse(t.extract(rosenbrock) is None)
+        self.assertTrue(all(t.translation == array([1., 2.])))
+        t = translate(rosenbrock(), [1, 2])
+        self.assertFalse(t.extract(rosenbrock) is None)
+        self.assertTrue(all(t.translation == array([1., 2.])))
+        t = translate(translation=[1, 2], udp=rosenbrock())
+        self.assertFalse(t.extract(rosenbrock) is None)
+        self.assertTrue(all(t.translation == array([1., 2.])))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        t = translate(p(), [-1, -1])
+        self.assertFalse(t.extract(p) is None)
+        self.assertTrue(all(t.translation == array([-1., -1.])))
+        t = translate(translation=[-1, -1], udp=p())
+        self.assertFalse(t.extract(p) is None)
+        self.assertTrue(all(t.translation == array([-1., -1.])))
 
 
 def run_test_suite():
@@ -1986,6 +1991,7 @@ def run_test_suite():
     suite.addTest(population_test_case())
     suite.addTest(null_problem_test_case())
     suite.addTest(dtlz_test_case())
+    suite.addTest(translate_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1
