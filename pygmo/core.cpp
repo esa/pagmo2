@@ -247,13 +247,6 @@ static inline void population_prob_init(bp::class_<population> &pop_class)
         .def(bp::init<const Prob &, population::size_type, unsigned>());
 }
 
-// Decompose methods wrappers
-static inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decompose &p, const bp::object &f,
-                                                             const bp::object &weights, const bp::object &z_ref)
-{
-    return pygmo::v_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weights), pygmo::to_vd(z_ref)));
-}
-
 // DE1220 ctors.
 static inline de1220 *de1220_init_0(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory)
@@ -574,9 +567,10 @@ BOOST_PYTHON_MODULE(core)
         // Constructor of translate from translate and translation vector. This allows to apply the
         // translation multiple times.
         .def("__init__", pygmo::make_translate_init<translate>())
-        // Problem extraction.
-        .def("_py_extract", &pygmo::generic_py_extract<translate>)
+        // Allow to extract a nested translate udp.
         .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>())
+        // Python udp extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<translate>)
         .add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
                       pygmo::translate_translation_docstring().c_str());
     // Mark it as a cpp problem.
@@ -591,16 +585,19 @@ BOOST_PYTHON_MODULE(core)
 
     // Decompose meta-problem.
     pygmo::decompose_ptr
-        = make_unique<bp::class_<decompose>>("decompose", "The decompose meta-problem.\n\n", bp::init<>());
+        = make_unique<bp::class_<decompose>>("decompose", pygmo::decompose_docstring().c_str(), bp::init<>());
     auto &dp = *pygmo::decompose_ptr;
     // Constructor from Python user-defined problem.
     dp.def("__init__", pygmo::make_decompose_init<bp::object>())
-        // Problem extraction.
+        // Python udp extraction.
         .def("_py_extract", &pygmo::generic_py_extract<decompose>)
         // Returns the decomposed fitness with an arbitrary weight and reference point
-        .def("decompose_fitness", &decompose_decompose_fitness_wrapper,
+        .def("decompose_fitness",
+             +[](const pagmo::decompose &p, const bp::object &f, const bp::object &weight, const bp::object &z_ref) {
+                 return pygmo::v_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weight), pygmo::to_vd(z_ref)));
+             },
              pygmo::decompose_decompose_fitness_docstring().c_str(),
-             (bp::arg("f"), bp::arg("weights"), bp::arg("ref_point")));
+             (bp::arg("f"), bp::arg("weight"), bp::arg("ref_point")));
     // Mark it as a cpp problem.
     dp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from decompose.

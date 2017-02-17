@@ -105,6 +105,19 @@ inline pagmo::decompose *decompose_init(const Prob &p, const bp::object &weight,
     return ::new pagmo::decompose(p, vd_w, vd_z, method, adapt_ideal);
 }
 
+template <>
+inline pagmo::decompose *decompose_init<bp::object>(const bp::object &p, const bp::object &weight, const bp::object &z,
+                                                    const std::string &method, bool adapt_ideal)
+{
+    if (type(p) == *problem_ptr) {
+        pygmo_throw(PyExc_TypeError, "a pygmo problem is not a user-defined problem, and it cannot be used "
+                                     "as a construction argument for the decompose meta-problem");
+    }
+    auto vd_w = to_vd(weight);
+    auto vd_z = to_vd(z);
+    return ::new pagmo::decompose(p, vd_w, vd_z, method, adapt_ideal);
+}
+
 // Make a python init from the above ctor.
 template <typename Prob>
 inline auto make_decompose_init()
@@ -115,7 +128,7 @@ inline auto make_decompose_init()
                                       bp::arg(std::declval<const char *>()) = false)))
 {
     return bp::make_constructor(&decompose_init<Prob>, bp::default_call_policies(),
-                                (bp::arg("prob"), bp::arg("weight"), bp::arg("z"),
+                                (bp::arg("udp"), bp::arg("weight"), bp::arg("z"),
                                  bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false));
 }
 

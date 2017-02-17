@@ -84,6 +84,10 @@ std::string problem_get_thread_safety_docstring();
 std::string translate_docstring();
 std::string translate_translation_docstring();
 
+// decompose
+std::string decompose_docstring();
+std::string decompose_decompose_fitness_docstring();
+
 // algorithm
 std::string algorithm_docstring();
 
@@ -91,7 +95,6 @@ std::string algorithm_docstring();
 std::string null_problem_docstring();
 std::string rosenbrock_docstring();
 std::string cec2013_docstring();
-std::string decompose_decompose_fitness_docstring();
 std::string get_best_docstring(const std::string &);
 
 // user - algorithms
