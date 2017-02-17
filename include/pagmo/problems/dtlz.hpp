@@ -255,21 +255,26 @@ private:
     /// Convergence metric for a dv (0 = converged to the optimal front)
     double g_func(const vector_double &x) const
     {
+        double retval;
         switch (m_prob_id) { // We start with the 6-7 cases as for absurd reasons behind my comprehension this is
                              // way more efficient
             case 6:
-                return g6_func(x);
+                retval = g6_func(x);
+                break;
             case 7:
-                return g7_func(x);
+                retval = g7_func(x);
+                break;
             case 1:
             case 3:
-                return g13_func(x);
+                retval = g13_func(x);
+                break;
             case 2:
             case 4:
             case 5:
-                return g245_func(x);
+                retval = g245_func(x);
+                break;
         }
-        return -1;
+        return retval;
     }
     /// Implementations of the different g-functions used
     double g13_func(const vector_double &x) const

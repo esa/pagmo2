@@ -198,6 +198,7 @@ BOOST_AUTO_TEST_CASE(dtlz_p_distance_test)
 {
     vector_double x(4u, 0.231);
     vector_double x_wrong(3u, 0.231);
+    // The following numbers were computed in PyGMO legacy
     vector_double res = {288.09711053693565,  0.14472200000000002, 288.09711053693565, 0.14472200000000002,
                          0.14472200000000002, 1.7273931523406256,  2.0790000000000002};
     for (unsigned int i = 1u; i <= 7u; ++i) {
