@@ -1804,7 +1804,6 @@ class population_test_case(_ut.TestCase):
     """Test case for the :class:`~pygmo.core.population` class.
 
     """
-
     def runTest(self):
         self.run_champion_test()
 
@@ -1825,7 +1824,6 @@ class pso_test_case(_ut.TestCase):
     """Test case for the UDA pso
 
     """
-
     def runTest(self):
         from .core import pso
         uda = pso()
@@ -1841,7 +1839,6 @@ class sa_test_case(_ut.TestCase):
     """Test case for the UDA simulated annealing
 
     """
-
     def runTest(self):
         from .core import simulated_annealing
         uda = simulated_annealing()
@@ -1858,7 +1855,6 @@ class compass_search_test_case(_ut.TestCase):
     """Test case for the UDA compass search
 
     """
-
     def runTest(self):
         from .core import compass_search
         uda = compass_search()
@@ -1871,7 +1867,6 @@ class cmaes_test_case(_ut.TestCase):
     """Test case for the UDA cmaes
 
     """
-
     def runTest(self):
         from .core import cmaes
         uda = cmaes()
@@ -1881,6 +1876,17 @@ class cmaes_test_case(_ut.TestCase):
                     ftol=1e-6, xtol=1e-6, memory=False, seed=32)
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
+
+
+class dtlz_test_case(_ut.TestCase):
+    """Test case for the UDP dtlz
+
+    """
+    def runTest(self):
+        from .core import dtlz, population
+        udp = dtlz(id = 3, dim = 9, fdim = 3, alpha = 5)
+        udp.p_distance([0.2]*9)
+        udp.p_distance(population(udp, 20))
 
 
 def run_test_suite():
@@ -1897,6 +1903,7 @@ def run_test_suite():
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(population_test_case())
+    suite.addTest(dtlz_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

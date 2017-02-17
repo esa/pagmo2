@@ -220,7 +220,6 @@ BOOST_AUTO_TEST_CASE(population_champion_test)
     pop.set_xf(2u, {0.123, 0.123}, {0.12});
     BOOST_CHECK((pop.champion_x() == vector_double{0.123, 0.123}));
     BOOST_CHECK((pop.champion_f() == vector_double{0.12}));
-
     // We check that requests to the champion cannot be made if the population
     // contains a problem with more than 1 objective
     population pop_mo{problem{zdt{}}, 2u};

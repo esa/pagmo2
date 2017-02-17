@@ -47,7 +47,6 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-
 /// DTLZ problem test suite
 /**
  * This widespread test suite was conceived for multiobjective problems with scalable fitness dimensions
@@ -109,7 +108,7 @@ public:
     * larger than an implementation defiend value
     *
     */
-    dtlz(unsigned int prob_id = 1u, vector_double::size_type dim = 7u, vector_double::size_type fdim = 3u,
+    dtlz(unsigned int prob_id = 1u, vector_double::size_type dim = 5u, vector_double::size_type fdim = 3u,
          unsigned int alpha = 100u)
         : m_prob_id(prob_id), m_alpha(alpha), m_dim(dim), m_fdim(fdim)
     {
@@ -189,9 +188,12 @@ public:
     }
     /// Distance from the Pareto front (of a population)
     /**
-     * Will return the average across the entire population of the convergence metric
+     * Convergence metric for a given population (0 = on the optimal front)
      *
-     * @param[in] pop population to be assigned a pareto distance
+     * Takes the average across the input population of the p_distance
+     *
+     * @param pop population to be assigned a pareto distance
+     * @return the p_distance
      *
      * @see problem::base_unc_mo::p_distance virtual method.
      */
@@ -349,7 +351,7 @@ private:
             f[0] *= x[i];
         }
 
-        for (decltype(f.size()) i = 1u; i < f.size() - 1; ++i) {
+        for (decltype(f.size()) i = 1u; i < f.size() - 1u; ++i) {
             f[i] = 0.5 * (1.0 + g);
             for (decltype(f.size()) j = 0u; j < f.size() - (i + 1); ++j) {
                 f[i] *= x[j];
