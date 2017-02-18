@@ -1,7 +1,8 @@
 .. _py_tutorial_hypervolume:
 
-The hypervolume indicator
-=========================
+=================================
+Getting started with hypervolumes
+=================================
 
 .. image:: ../../images/hypervolume.png
     :scale: 50 %
@@ -19,20 +20,13 @@ and related quantities are provided by the class :class:`~pygmo.core.hypervolume
 :class:`~pygmo.core.population` or simply from a NumPy array will allow to compute the hypervolume indicator or
 the exclusive contributions of single points using exact or approximated algorithms.
 
-.. _py_getting_started_with_hyper_volumes:
-
-================================================================
-Getting started with hypervolumes
-================================================================
-
 This tutorial will cover the features introduced by the hypervolume functionality of pygmo.
 First, we will describe how the user interface was designed and point out important notions that ought to be taken into account.
 Later, we will give several examples in order to get you started with the basic hypervolume computations.
 
-================================================================
-Hypervolume interface and construction
-================================================================
 
+Hypervolume interface and construction
+======================================
 The main class used for the computation of the hypervolume indicator (also known as Lebesgue Measure or S-Metric) and
 hypervolume contributions is class :class:`~pygmo.core.hypervolume`. You can import the hypervolume class using the following:
 
@@ -71,7 +65,7 @@ This type of construction is especially useful when you have an explicit geometr
 rather than implicit coordinates by the fitness values of a population that rely on the objective
 function of the corresponding problem.
 
-=================================================================
+
 Computing the hypervolume indicator and hypervolume contributions
 =================================================================
 
