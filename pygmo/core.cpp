@@ -938,9 +938,10 @@ BOOST_PYTHON_MODULE(core)
 
     // Hypervolume algorithms
     bp::class_<hv_algorithm, boost::noncopyable>("_hv_algorithm", bp::no_init).def("get_name", &hv_algorithm::get_name);
-    bp::class_<hvwfg, bp::bases<hv_algorithm>>("wfg", "WFG algorithm.")
+    bp::class_<hvwfg, bp::bases<hv_algorithm>>("hvwfg", "WFG hypervolume algorithm.")
         .def(bp::init<unsigned>((bp::arg("stop_dimension") = 2)));
-    bp::class_<bf_approx, bp::bases<hv_algorithm>>("bf_approx", "Bringmann-Friedrich approximated algorithm.")
+    bp::class_<bf_approx, bp::bases<hv_algorithm>>("bf_approx",
+                                                   "Bringmann-Friedrich approximated hypervolume algorithm.")
         .def(bp::init<bool, unsigned, double, double, double, double, double, double>(
             (bp::arg("use_exact") = true, bp::arg("trivial_subcase_size") = 1u, bp::arg("eps") = 1e-2,
              bp::arg("delta") = 1e-6, bp::arg("delta_multiplier") = 0.775, bp::arg("alpha") = 0.2,
@@ -952,8 +953,8 @@ BOOST_PYTHON_MODULE(core)
     bp::class_<bf_fpras, bp::bases<hv_algorithm>>("bf_fpras", "Hypervolume approximation based on FPRAS")
         .def(bp::init<double, double>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2)))
         .def(bp::init<double, double, unsigned>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2, bp::arg("seed"))));
-    bp::class_<hv2d, bp::bases<hv_algorithm>>("hv2d", "hv2d algorithm", bp::init<>());
-    bp::class_<hv3d, bp::bases<hv_algorithm>>("hv3d", "hv3d algorithm", bp::init<>());
+    bp::class_<hv2d, bp::bases<hv_algorithm>>("hv2d", "hv2d hypervolume algorithm", bp::init<>());
+    bp::class_<hv3d, bp::bases<hv_algorithm>>("hv3d", "hv3d hypervolume algorithm", bp::init<>());
 
     // Exposition of stand alone functions
     // Multi-objective utilities
