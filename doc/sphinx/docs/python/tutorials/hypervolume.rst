@@ -156,35 +156,28 @@ is defined as the part of the space dominated exclusively by one point and is al
 Since all of the methods above require a reference point, it is useful to generate
 one automatically using the :class:`~pygmo.core.nadir`
 
-This following short script presents all features mentioned above:
+This following short script makes use of some of the features mentioned above to show the hypervolume
+increase after the evolution of a :class:`~pygmo.core.population`.
 
-.. code-block:: python
+.. doctest::
 
-  from PyGMO import *
-  from PyGMO.util import *
-
-  # Initiate a 4-objective problem
-  # and a population of 100 individuals
-  prob = problem.dtlz(prob_id=4, k = 12, fdim=4)
-  pop = population(prob, 100)
-
-  # Construct the hypervolume object
-  # and get the reference point off-setted by 10 in each objective
-  hv = hypervolume(pop)
-  ref_point = hv.get_nadir_point(10)
-
-  print hv.compute(ref_point)
-  print hv.exclusive(0, ref_point)
-  print hv.least_contributor(ref_point)
-  print hv.greatest_contributor(ref_point)
-  print hv.contributions(ref_point)
-
-  # Evolve the population some generations
-  algo = algorithm.sms_emoa(gen=2000)
-  pop = algo.evolve(pop)
-
-  # Compute the hypervolume indicator again. 
-  # This time we expect a higher value as SMS-EMOA evolves the population
-  # by trying to maximize the hypervolume indicator.
-  hv = hypervolume(pop)
-  print hv.compute(ref_point)
+    >>> import pygmo as pg
+    >>> # Instantiates a 4-objectives problem
+    >>> prob = pg.problem(pg.dtlz(id=4, dim = 12, fdim=4))
+    >>> pop = pg.population(prob, 100)
+    >>> # Construct the hypervolume object
+    >>> # and get the reference point off-setted by 10 in each objective
+    >>> hv = pg.hypervolume(pop)
+    >>> offset = 0.1
+    >>> ref_point = [max(pop.get_f(), key = lambda x: x[it])[it] + offset for it in [0,1,2,3]]
+    >>> print(hv.compute(ref_point)) # doctest: +SKIP
+    10.75643
+    >>> # Evolve the population some generations
+    >>> algo = pg.algorithm(pg.moead(gen=2000))
+    >>> pop = algo.evolve(pop)
+    >>> # Compute the hypervolume indicator again. 
+    >>> # This time we expect a higher value as SMS-EMOA evolves the population
+    >>> # by trying to maximize the hypervolume indicator.
+    >>> hv = pg.hypervolume(pop)
+    >>> print(hv.compute(ref_point))
+    18.73422 # doctest: +SKIP
