@@ -1959,6 +1959,58 @@ Examples:
 )";
 }
 
+std::string nadir_docstring()
+{
+    return R"(nadir(points)
+
+Computes the nadir point of a set of points, i.e objective vectors. The nadir is that point that has the maximum
+value of the objective function in the points of the non-dominated front.
+
+Complexity is :math:`O(MN^2)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
+
+Args:
+    points (2d-array like object): the input points
+
+Raises:
+    ValueError: if *points* is malformed
+    TypeError: if *points* cannot be converted to a vector of vector floats
+
+Returns:
+    (1D NumPy array of ``floats``): the nadir point
+
+Examples:
+    >>> fimport pygmo as pg
+    >>> nadir_point = pg.nadir([[0,7],[1,5],[2,3],[4,2],[7,1],[10,0],[6,6],[9,15]])
+    >>> [10, 7]
+)";
+}
+
+std::string ideal_docstring()
+{
+    return R"(ideal(points)
+
+ Computes the ideal point of a set of points, i.e objective vectors. The ideal poitn is that point that has, in each 
+ component, the minimum value of the objective functions of the input points.
+
+Complexity is :math:`O(MN)` where :math:`M` is the number of objectives and :math:`N:math:` is the number of points.
+
+Args:
+    points (2d-array like object): the input points
+
+Raises:
+    ValueError: if *points* is malformed
+    TypeError: if *points* cannot be converted to a vector of vector floats
+
+Returns:
+    (1D NumPy array of ``floats``): the ideal point
+
+Examples:
+    >>> fimport pygmo as pg
+    >>> nadir_point = pg.ideal([[-1,3,597],[1,2,3645],[2,9,789],[0,0,231],[6,-2,4576]])
+    [-1,-2,231]
+)";
+}
+
 std::string hv_init1_docstring()
 {
     return R"(__init__(pop)

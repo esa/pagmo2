@@ -960,4 +960,8 @@ BOOST_PYTHON_MODULE(core)
     // Multi-objective utilities
     bp::def("fast_non_dominated_sorting", fast_non_dominated_sorting_wrapper,
             pygmo::fast_non_dominated_sorting_docstring().c_str(), bp::arg("points"));
+    bp::def("nadir", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); },
+            pygmo::nadir_docstring().c_str(), bp::arg("points"));
+    bp::def("ideal", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); },
+            pygmo::ideal_docstring().c_str(), bp::arg("points"));
 }

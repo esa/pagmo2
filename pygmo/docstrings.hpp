@@ -118,6 +118,8 @@ std::string hv_greatest_contributor_docstring();
 std::string hv_least_contributor_docstring();
 // stand alone functions
 std::string fast_non_dominated_sorting_docstring();
+std::string ideal_docstring();
+std::string nadir_docstring();
 }
 
 #endif
