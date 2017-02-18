@@ -50,7 +50,7 @@ The first one uses the fitness values of the individuals of a population for the
 
     >>> import pygmo as pg
     >>> # Construct a DTLZ-2 problem with 3-dimensional fitness space and 10 dimensions
-    >>> udp = pg.problem(pg.dtlz(prob_id = 2, dim = 10, fdim = 3))  
+    >>> udp = pg.problem(pg.dtlz(id = 2, dim = 10, fdim = 3))  
     >>> pop = pg.population(udp, 50) 
     >>> hv = hypervolume(pop)
   
@@ -91,9 +91,9 @@ For simplicity, we will use a simple 2-dimensional front as an example to show t
 
 .. doctest::
 
-  >>> hv = hypervolume( ((1, 0), (0.5, 0.5), (0, 1), (1.5, 0.75)) )
-  >>> ref_point = (2,2)
-  >>> hv.compute(r=ref_point)  
+  >>> hv = hypervolume([[1, 0], [0.5, 0.5], [0, 1], [1.5, 0.75]] )
+  >>> ref_point = [2,2]
+  >>> hv.compute(ref_point)  
   3.25
 
 We will refer to each point by it's position on the x-axis, e.g. first point is the point (0,1), fourth point is (1.5, 0.75) etc. The plot below shows you the overall geometry of the example with the reference point painted red.
@@ -109,7 +109,7 @@ Once the hypervolume object is created, it allows for the computation of the fol
 .. doctest::
 
     >>> # hv and ref_point refer to the data above
-    >>> hv.compute(r=ref_point)
+    >>> hv.compute(ref_point)
     3.25
 
 2. ``exclusive`` - Returns the exclusive hypervolume by the point at given index. The exclusive hypervolume 
@@ -118,9 +118,9 @@ is defined as the part of the space dominated exclusively by one point and is al
 .. doctest::
 
     >>> # hv and ref_point refer to the data above
-    >>> hv.exclusive(1, r=ref_point)
+    >>> hv.exclusive(1, ref_point)
     0.25
-    >>> hv.exclusive(3, r=ref_point)
+    >>> hv.exclusive(3, ref_point)
     0.0
 
 3. ``least_contributor`` - Returns the index of a point contributing the least to the hypervolume.
@@ -128,7 +128,7 @@ is defined as the part of the space dominated exclusively by one point and is al
 .. doctest::
 
   >>> # hv and ref_point refer to the data above
-  >>> hv.least_contributor(r=ref_point)
+  >>> hv.least_contributor(ref_point)
   3
 
 4. ``greatest_contributor`` - Returns the index of a point contributing the most to the hypervolume.
@@ -136,7 +136,7 @@ is defined as the part of the space dominated exclusively by one point and is al
 .. doctest::
 
     >>> # hv and ref_point refer to the data above
-    >>> hv.greatest_contributor(r=ref_point) # doctest: +SKIP
+    >>> hv.greatest_contributor(ref_point) # doctest: +SKIP
     0
 
 .. note::
@@ -150,8 +150,8 @@ is defined as the part of the space dominated exclusively by one point and is al
 .. doctest::
 
   >>> # hv and ref_point refer to the data above
-  >>> hv.contributions(r=ref_point) 
-  (0.5, 0.25, 0.5, 0.0)
+  >>> hv.contributions(ref_point) 
+  array([ 0.5 ,  0.25,  0.5 ,  0.  ])
 
 Since all of the methods above require a reference point, it is useful to generate
 one automatically using the :class:`~pygmo.core.nadir`
@@ -164,13 +164,13 @@ increase after the evolution of a :class:`~pygmo.core.population`.
     >>> import pygmo as pg
     >>> # Instantiates a 4-objectives problem
     >>> prob = pg.problem(pg.dtlz(id=4, dim = 12, fdim=4))
-    >>> pop = pg.population(prob, 100)
+    >>> pop = pg.population(prob, 84)
     >>> # Construct the hypervolume object
     >>> # and get the reference point off-setted by 10 in each objective
     >>> hv = pg.hypervolume(pop)
-    >>> offset = 0.1
+    >>> offset = 5
     >>> ref_point = [max(pop.get_f(), key = lambda x: x[it])[it] + offset for it in [0,1,2,3]]
-    >>> print(hv.compute(ref_point)) # doctest: +SKIP
+    >>> hv.compute(ref_point) # doctest: +SKIP
     10.75643
     >>> # Evolve the population some generations
     >>> algo = pg.algorithm(pg.moead(gen=2000))
@@ -179,5 +179,5 @@ increase after the evolution of a :class:`~pygmo.core.population`.
     >>> # This time we expect a higher value as SMS-EMOA evolves the population
     >>> # by trying to maximize the hypervolume indicator.
     >>> hv = pg.hypervolume(pop)
-    >>> print(hv.compute(ref_point))
-    18.73422 # doctest: +SKIP
+    >>> hv.compute(ref_point) # doctest: +SKIP
+    18.73422
