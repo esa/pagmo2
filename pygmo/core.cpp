@@ -885,7 +885,7 @@ BOOST_PYTHON_MODULE(core)
              pygmo::hv_init2_docstring().c_str())
         .def("__init__", bp::make_constructor(+[](const population &pop) { return ::new hypervolume(pop, true); },
                                               bp::default_call_policies(), (bp::arg("pop"))),
-             pygmo::hv_init2_docstring().c_str())
+             pygmo::hv_init1_docstring().c_str())
         .def("compute",
              +[](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); },
              (bp::arg("ref_point")))

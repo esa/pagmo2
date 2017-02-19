@@ -56,19 +56,10 @@ orders of magnitude. At the same time, these are NOT accurate within **eps = 0.0
 Running time
 ------------------
 
-.. image:: ../../images/hv_compute_fpras_runtime.png
-    :scale: 30 %
-    :align: right
+.. image:: ../../images/hv_fpras.png
+    :align: center
 
-.. image:: ../../images/hv_MAX_compute_fpras_runtime.png
-    :scale: 30 %
-    :align: right
-
-.. image:: ../../images/hv_fpras_extreme.png
-    :scale: 30 %
-    :align: right
-
-Plot below presents the measured running time (average and MAX out of 10) of FPRAS for varying ``Front size`` and ``Dimension``.
+The plots presents the measured running time (average and MAX out of 10) of FPRAS for varying ``Front size`` and ``Dimension``.
 The algorithm is instantiated with **eps=0.1** and **delta=0.1**.
 Notice the lack of any exponential increase in time as the dimension increases.
 
