@@ -39,47 +39,21 @@ from .plotting import *
 from . import core
 from . import plotting
 
+# Patch the problem class.
+from . import _patch_problem
 
-def _problem_extract(self, t):
-    """Extract user-defined problem instance.
 
-    If *t* is the same type of the user-defined problem used to construct this problem, then a reference to
-    the internal user-defined problem will be returned. Otherwise, ``None`` will be returned.
+class thread_safety(object):
+    """Thread safety level.
 
-    Args:
-        t (``type``): the type of the user-defined problem to extract
-
-    Returns:
-        a reference to the internal user-defined problem if it is of type *t*, or ``None`` otherwise
-
-    Raises:
-        TypeError: if *t* is not a type
+    This enum defines a set of values that can be used to specify the thread safety of problems, algorithms, etc.
 
     """
-    if not isinstance(t, type):
-        raise TypeError("the 't' parameter must be a type")
-    if hasattr(t, "_pygmo_cpp_problem"):
-        return self._cpp_extract(t())
-    return self._py_extract(t)
 
-
-def _problem_is(self, t):
-    """Check the type of the user-defined problem instance.
-
-    If *t* is the same type of the user-defined problem used to construct this problem, then ``True`` will be
-    returned. Otherwise, ``False`` will be returned.
-
-    Args:
-        t (type): the type of the user-defined problem to extract
-
-    Returns:
-        bool: whether the user-defined problem is of type *t* or not
-
-    Raises:
-        TypeError: if *t* is not a type
-
-    """
-    return not self.extract(t) is None
+    #: No thread safety: concurrent operations on distinct instances are unsafe
+    none = core._thread_safety.none
+    #: Basic thread safety: concurrent operations on distinct instances are safe
+    basic = core._thread_safety.basic
 
 
 def _algorithm_extract(self, t):
@@ -179,14 +153,6 @@ def _population_init(self, prob=None, size=0, seed=None):
         __original_population_init(self, prob_arg, size, seed)
 
 setattr(population, "__init__", _population_init)
-
-# Setup the extract and is methods for problem and meta-problems.
-setattr(problem, "extract", _problem_extract)
-setattr(problem, "is_", _problem_is)
-setattr(translate, "extract", _problem_extract)
-setattr(translate, "is_", _problem_is)
-setattr(decompose, "extract", _problem_extract)
-setattr(decompose, "is_", _problem_is)
 
 # Same for algorithm and meta-algorithms.
 setattr(algorithm, "extract", _algorithm_extract)

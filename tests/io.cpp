@@ -36,6 +36,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
+#include <pagmo/threading.hpp>
+
 using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(stream_print_test)
@@ -85,4 +87,11 @@ BOOST_AUTO_TEST_CASE(stream_print_test)
     BOOST_CHECK_EQUAL(ss1.str(), ss2.str());
     // Go for the print as well, yay.
     print(std::vector<int>{1, 2, 3, 4, 5, 6});
+    // Thread safety levels.
+    ss1.str("");
+    stream(ss1, thread_safety::none);
+    BOOST_CHECK_EQUAL(ss1.str(), "none");
+    ss1.str("");
+    stream(ss1, thread_safety::basic);
+    BOOST_CHECK_EQUAL(ss1.str(), "basic");
 }

@@ -31,53 +31,53 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <initializer_list>
 #include <limits>
 #include <numeric>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 
 #include "../exceptions.hpp"
 #include "../problem.hpp"
 #include "../serialization.hpp"
+#include "../type_traits.hpp"
 #include "../types.hpp"
-#include "zdt.hpp"
 
 namespace pagmo
 {
 
-/// Decompose meta-problem
+/// The decompose meta-problem.
 /**
  * \image html decompose.png "Decomposition." width=3cm
  *
- * This meta-problem *decomposes* a multi-objective input problem (user-defined or a pagmo::problem),
- * resulting in a single-objective pagmo::problem with a fitness function combining the original fitness functions.
- * In particular, three different *decomposition methods* are here made available:
+ * This meta-problem *decomposes* a multi-objective input user-defined problem,
+ * resulting in a single-objective user-defined problem with a fitness function combining the
+ * original fitness functions. In particular, three different *decomposition methods* are here
+ * made available:
  *
- * - weighted decomposition
- * - Tchebycheff decomposition
- * - boundary interception method (with penalty constraint)
+ * - weighted decomposition,
+ * - Tchebycheff decomposition,
+ * - boundary interception method (with penalty constraint).
  *
  * In the case of \f$n\f$ objectives, we indicate with: \f$ \mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots, f_n(\mathbf
- * x)] \f$
- * the vector containing the original multiple objectives, with: \f$ \boldsymbol \lambda = (\lambda_1, \ldots,
- * \lambda_n) \f$
- * a \f$n\f$-dimensional weight vector and with: \f$ \mathbf z^* = (z^*_1, \ldots, z^*_n) \f$
- * a-\f$n\f$ dimensional reference point. We also ussume \f$\lambda_i > 0, \forall i=1..n\f$ and \f$\sum_i \lambda_i =
- * 1\f$
+ * x)] \f$ the vector containing the original multiple objectives, with: \f$ \boldsymbol \lambda = (\lambda_1, \ldots,
+ * \lambda_n) \f$ an \f$n\f$-dimensional weight vector and with: \f$ \mathbf z^* = (z^*_1, \ldots, z^*_n) \f$
+ * an \f$n\f$-dimensional reference point. We also ussume \f$\lambda_i > 0, \forall i=1..n\f$ and \f$\sum_i \lambda_i =
+ * 1\f$.
  *
  * The decomposed problem is thus a single objective optimization problem having the following single objective,
  * according to the decomposition method chosen:
  *
- * - weighted decomposition: \f$ f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f \f$
- *
+ * - weighted decomposition: \f$ f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f \f$,
  * - Tchebycheff decomposition: \f$ f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i \vert
- * \f$
- *
- * - boundary interception method (with penalty constraint): \f$ f_d(\mathbf x) = d_1 + \theta d_2\f$
+ * \f$,
+ * - boundary interception method (with penalty constraint): \f$ f_d(\mathbf x) = d_1 + \theta d_2\f$,
  *
  * where \f$d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}\f$,
  * \f$d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\f$ and
- * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$
+ * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$.
  *
  * **NOTE** The reference point \f$z^*\f$ is often taken as the ideal point and as such
  * it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
@@ -89,47 +89,58 @@ namespace pagmo
  * derivative-free optimization.
  *
  * See: "Q. Zhang -- MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition"
+ *
  * See: https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems
  */
 class decompose : public problem
 {
+    template <typename T>
+    using ctor_enabler
+        = enable_if_t<std::is_constructible<problem, T &&>::value && !std::is_same<uncvref_t<T>, problem>::value, int>;
+
 public:
-    // default Constructor, only for serialization
-    decompose() : problem(zdt(1u, 2u)), m_weight({0.5, 0.5}), m_z({0., 0.}), m_method("weighted"), m_adapt_ideal(false)
+    // Default constructor.
+    /**
+     * The default constructor will initialize \p this with a 2-objectives pagmo::null_problem,
+     * weight vector <tt>[0.5, 0.5]</tt> and reference point <tt>[0., 0.]</tt>.
+     *
+     * @throws unspecified any exception thrown by the other constructor.
+     */
+    decompose() : decompose(null_problem{2u}, {0.5, 0.5}, {0., 0.})
     {
     }
-    /// Constructor from problem
+    /// Constructor from UDP.
     /**
-     * Wraps a user-defined problem so that its fitness will be decomposed using one of three decomposition methods.
-     * pagmo::translate objects can be used as user-defined problems in the construction of a pagmo::problem.
+     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem,
+     * and \p T is not pagmo::problem.
      *
-     * @tparam T Any type from which pagmo::problem is constructable
-     * @param p The input problem.
-     * @param method an std::string containing the decomposition method chosen
-     * @param weight the vector of weights \f$\boldsymbol \lambda\f$
-     * @param z the reference point \f$\mathbf z^*\f$
-     * @param adapt_ideal when true the reference point is adapted at each fitness evaluation to be the ideal point
+     * Wraps a user-defined problem (UDP) so that its fitness will be decomposed using one of three
+     * decomposition methods. pagmo::decompose objects are user-defined problems that can be used
+     * to define a pagmo::problem.
      *
-     * @throws std::invalid_argument if the problem of type \p T is single objective
-     * @throws std::invalid_argument if the problem of type \p T is constrained
-     * @throws std::invalid_argument if \p method is not one of ["weighted", "tchebycheff" or "bi"]
-     * @throws std::invalid_argument if \p weight is not of size \f$n\f$
-     * @throws std::invalid_argument if \p z is not of size \f$n\f$
-     * @throws std::invalid_argument if \p weight is not such that \f$\lambda_i > 0, \forall i=1..n\f$
-     * @throws std::invalid_argument if \p weight is not such that \f$\sum_i \lambda_i = 1\f$
+     * @param p the input UDP.
+     * @param weight the vector of weights \f$\boldsymbol \lambda\f$.
+     * @param z the reference point \f$\mathbf z^*\f$.
+     * @param method an \p std::string containing the decomposition method chosen.
+     * @param adapt_ideal when \p true, the reference point is adapted at each fitness evaluation to be the ideal point.
      *
+     * @throws std::invalid_argument if either:
+     * - \p p is single objective or constrained,
+     * - \p method is not one of <tt>["weighted", "tchebycheff", "bi"]</tt>,
+     * - \p weight is not of size \f$n\f$,
+     * - \p z is not of size \f$n\f$,
+     * - \p weight is not such that \f$\lambda_i > 0, \forall i=1..n\f$,
+     * - \p weight is not such that \f$\sum_i \lambda_i = 1\f$.
      */
-    template <typename T>
+    template <typename T, ctor_enabler<T> = 0>
     explicit decompose(T &&p, const vector_double &weight, const vector_double &z,
                        const std::string &method = "weighted", bool adapt_ideal = false)
         : problem(std::forward<T>(p)), m_weight(weight), m_z(z), m_method(method), m_adapt_ideal(adapt_ideal)
     {
-        auto original_fitness_dimension = static_cast<const problem *>(this)->get_nobj();
+        const auto original_fitness_dimension = static_cast<const problem *>(this)->get_nobj();
         // 0 - we check that the problem is multiobjective and unconstrained
         if (original_fitness_dimension < 2u) {
-            pagmo_throw(std::invalid_argument, "Decomposition can only be applied to multi-objective problems, it "
-                                               "seems you are trying to decompose a problem with "
-                                                   + std::to_string(original_fitness_dimension) + " objectives");
+            pagmo_throw(std::invalid_argument, "Decomposition can only be applied to multi-objective problems");
         }
         if (static_cast<const problem *>(this)->get_nc() != 0u) {
             pagmo_throw(std::invalid_argument, "Decomposition can only be applied to unconstrained problems, it seems "
@@ -141,7 +152,7 @@ public:
         if (method != "weighted" && method != "tchebycheff" && method != "bi") {
             pagmo_throw(std::invalid_argument,
                         "Decomposition method requested is: " + method
-                            + " while only one of ['weighted', 'tchebycheff' or 'bi'] are allowed");
+                            + " while only one of ['weighted', 'tchebycheff', 'bi'] are allowed");
         }
         // 2 - we check the sizes of the input weight vector and of the reference point and forbids inf and nan
         if (weight.size() != original_fitness_dimension) {
@@ -185,13 +196,16 @@ public:
             }
         }
     }
-    /// Fitness computation
+    /// Fitness computation.
     /**
-     * Computes the fitness for this UDP
+     * The fitness values of the original UDP will be combined using the decomposition method selected during
+     * construction.
      *
      * @param x the decision vector.
      *
-     * @return the fitness of \p x.
+     * @return the decomposed fitness of \p x.
+     *
+     * @throws unspecified any exception thrown by decompose::original_fitness(), or by the fitness decomposition.
      */
     vector_double fitness(const vector_double &x) const
     {
@@ -208,30 +222,34 @@ public:
         // we return the decomposed fitness
         return decompose_fitness(f, m_weight, m_z);
     }
-    /// Fitness of the original problem
+    /// Fitness of the original problem.
     /**
      * Returns the fitness of the original multi-objective problem used to construct the decomposed problem.
      *
-     * **NOTE** This is *not* the fitness of the decomposed problem, that is returned by calling decompose::fitness()
+     * **NOTE** This is *not* the fitness of the decomposed problem, that is returned by calling decompose::fitness().
      *
-     * @param x Input decision vector
+     * @param x input decision vector.
      *
-     * @returns the fitness of the original multi-objective problem
+     * @returns the fitness of the original multi-objective problem.
+     *
+     * @throws unspecified any exception thrown by the original fitness computation.
      */
     vector_double original_fitness(const vector_double &x) const
     {
         // We call the fitness of the original multiobjective problem
         return static_cast<const problem *>(this)->fitness(x);
     }
-    /// Decomposes a fitness vector
+    /// Decomposes a fitness vector.
     /**
      * Returns the decomposed fitness vector.
      *
-     * @param f Input fitness
-     * @param weight the weight to be used in the decomposition
-     * @param ref_point the reference point to be used if either "tchebycheff" or "bi"
+     * @param f input fitness.
+     * @param weight the weight to be used in the decomposition.
+     * @param ref_point the reference point to be used if either "tchebycheff" or "bi".
      * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
-     * @returns the decomposed fitness vector
+     *
+     * @return the decomposed fitness vector.
+     *
      * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes
      */
     vector_double decompose_fitness(const vector_double &f, const vector_double &weight,
@@ -286,61 +304,43 @@ public:
         }
         return {fd};
     }
-    /// Number of objectives
+    /// Number of objectives.
     /**
-     *
-     * It returns the number of objectives
-     *
-     * @return the number of objectives
+     * @return one.
      */
     vector_double::size_type get_nobj() const
     {
         return 1u;
     }
-    /// Returns a dense gradient_sparsity for the decomposed problem
-    /**
-     * @return a dense gradient sparsity pattern for the problem
-     */
-    sparsity_pattern gradient_sparsity() const
-    {
-        return detail::dense_gradient(1u, static_cast<const problem *>(this)->get_nx());
-    }
-    /// Returns a dense hessians_sparsity for the decomposed problem
-    /**
-     * @return a dense hessian sparsity pattern for the problem
-     */
-    std::vector<sparsity_pattern> hessians_sparsity() const
-    {
-        return detail::dense_hessians(1u, static_cast<const problem *>(this)->get_nx());
-    }
-    /// Gets the current reference point
+    /// Gets the current reference point.
     /**
      * The reference point to be used for the decomposition. This is only
      * used for Tchebycheff and boundary interception decomposition methods.
      *
      * **NOTE** The reference point is adapted at each call of the fitness.
      *
-     * @return the refernce point
+     * @return the reference point.
      */
     vector_double get_z() const
     {
         return m_z;
     }
-    /// Problem name
+    /// Problem name.
     /**
+     * This method will append <tt>[decomposed]</tt> to the name of the UDP.
      *
-     *
-     * @return a string containing the problem name
+     * @return a string containing the problem name.
      */
     std::string get_name() const
     {
         return static_cast<const problem *>(this)->get_name() + " [decomposed]";
     }
-    /// Extra informations
+    /// Extra information.
     /**
+     * This method will add info about the decomposition method to the extra info provided
+     * by the UDP.
      *
-     *
-     * @return a string containing extra informations on the problem
+     * @return a string containing extra information on the problem.
      */
     std::string get_extra_info() const
     {
@@ -367,8 +367,6 @@ public:
 private:
     // Delete all that we do not want to inherit from problem
     // A - Common to all meta
-    template <typename T>
-    bool is() const = delete;
     vector_double::size_type get_nx() const = delete;
     vector_double::size_type get_nf() const = delete;
     vector_double::size_type get_nc() const = delete;
@@ -395,26 +393,33 @@ private:
     // A decomposed problem does not have gradients (Tchebycheff is not differentiable)
     vector_double gradient(const vector_double &dv) const = delete;
     // deleting has_gradient allows the automatic detection of gradients to see that decompose does not have any
-    // regardless
-    // of whether the class its build from has them. A decompose problem will thus never have gradients
+    // regardless of whether the class its build from has them. A decompose problem will thus never have gradients
     bool has_gradient() const = delete;
-    // deleting has_gradient_sparsity allows the automatic detection of gradient_sparsisty to see that decompose does
-    // have an
-    // implementation for it. The sparsity will thus always be dense (decompose::gradient_sparsity) and referred to
-    // a problem with one objective
+    // deleting has_gradient_sparsity/gradient_sparsity allows the automatic detection of gradient_sparsity to see that
+    // decompose does have an implementation for it. The sparsity will thus always be dense and referred to a problem
+    // with one objective
     bool has_gradient_sparsity() const = delete;
+    sparsity_pattern gradient_sparsity() const = delete;
     // A decomposed problem does not have hessians (Tchebycheff is not differentiable)
     std::vector<vector_double> hessians(const vector_double &dv) const = delete;
     // deleting has_hessians allows the automatic detection of hessians to see that decompose does not have any
-    // regardless
-    // of whether the class its build from has them. A decompose problem will thus never have hessians
+    // regardless of whether the class its build from has them. A decompose problem will thus never have hessians
     bool has_hessians() const = delete;
-    // deleting has_hessians_sparsity allows the automatic detection of hessians_sparsisty to see that decompose does
-    // have an
-    // implementation for it. The hessians_sparsisty will thus always be dense (decompose::hessians_sparsisty) and
-    // referred to
-    // a problem with one objective
+    // deleting has_hessians_sparsity/hessians_sparsity allows the automatic detection of hessians_sparsity to see that
+    // decompose does have an implementation for it. The hessians_sparsity will thus always be dense
+    // (decompose::hessians_sparsity) and referred to a problem with one objective
     bool has_hessians_sparsity() const = delete;
+    std::vector<sparsity_pattern> hessians_sparsity() const = delete;
+    // No need for these either: decompose does not support constraints, and the default implementation
+    // of these in pagmo::problem already returns zero.
+    vector_double::size_type get_nec() const = delete;
+    vector_double::size_type get_nic() const = delete;
+    // These are methods brought in by the inheritance from pagmo::problem: they do not have any effect
+    // and they are just confusing to see.
+    void set_c_tol(const vector_double &) = delete;
+    vector_double get_c_tol() const = delete;
+    bool feasibility_x(const vector_double &) const = delete;
+    bool feasibility_f(const vector_double &) const = delete;
 
     // decomposition weight
     vector_double m_weight;

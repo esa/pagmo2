@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
 {
     // First we check directly the two constructors
     problem p0{decompose{}};
-    problem p1{decompose{zdt{1u, 2u}, {0.5, 0.5}, {0., 0.}, "weighted", false}};
+    problem p1{decompose{null_problem{2}, {0.5, 0.5}, {0., 0.}, "weighted", false}};
 
     auto p0_string = boost::lexical_cast<std::string>(p0);
     auto p1_string = boost::lexical_cast<std::string>(p1);
@@ -77,6 +77,12 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     // which has an identical representation to the problem
     // built by the explicit constructor.
     BOOST_CHECK(p0_string == p1_string);
+
+    // Check extract/is.
+    BOOST_CHECK(decompose{}.extract<null_problem>() != nullptr);
+    BOOST_CHECK(decompose{}.extract<zdt>() == nullptr);
+    BOOST_CHECK(decompose{}.is<null_problem>());
+    BOOST_CHECK(!decompose{}.is<zdt>());
 
     // We check the throws
     auto inf = std::numeric_limits<double>::infinity();

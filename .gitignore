@@ -1,6 +1,9 @@
 # Build dirs.
 build*
 
+# Editor config files.
+.vscode
+
 # Temp files.
 *~
 *.bak

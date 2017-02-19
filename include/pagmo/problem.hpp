@@ -46,6 +46,7 @@ see https://www.gnu.org/licenses/. */
 #include "exceptions.hpp"
 #include "io.hpp"
 #include "serialization.hpp"
+#include "threading.hpp"
 #include "type_traits.hpp"
 #include "types.hpp"
 #include "utils/constrained.hpp"
@@ -79,13 +80,25 @@ namespace pagmo
  * This problem is used to implement the default constructors of meta-problems.
  */
 struct null_problem {
+    /// Constructor from number of objectives.
+    /**
+     * @param nobj the desired number of objectives.
+     *
+     * @throws std::invalid_argument if \p nobj is zero.
+     */
+    null_problem(vector_double::size_type nobj = 1) : m_nobj(nobj)
+    {
+        if (!nobj) {
+            pagmo_throw(std::invalid_argument, "The null problem must have a non-zero number of objectives");
+        }
+    }
     /// Fitness.
     /**
-     * @return the vector <tt>[0.]</tt>.
+     * @return a zero-filled vector of size equal to the number of objectives.
      */
     vector_double fitness(const vector_double &) const
     {
-        return {0.};
+        return vector_double(get_nobj(), 0.);
     }
     /// Problem bounds.
     /**
@@ -95,11 +108,26 @@ struct null_problem {
     {
         return {{0.}, {1.}};
     }
-    /// Serialization
-    template <typename Archive>
-    void serialize(Archive &)
+    /// Number of objectives.
+    /**
+     * @return the number of objectives of the problem (as specified upon construction).
+     */
+    vector_double::size_type get_nobj() const
     {
+        return m_nobj;
     }
+    /// Serialization
+    /**
+     * @param ar the target serialization archive.
+     */
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar &m_nobj;
+    }
+
+private:
+    vector_double::size_type m_nobj;
 };
 }
 
@@ -519,6 +547,7 @@ struct prob_inner_base {
     virtual bool has_set_seed() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
+    virtual thread_safety get_thread_safety() const = 0;
     template <typename Archive>
     void serialize(Archive &)
     {
@@ -622,6 +651,10 @@ struct prob_inner final : prob_inner_base {
     virtual std::string get_extra_info() const override final
     {
         return get_extra_info_impl(m_value);
+    }
+    virtual thread_safety get_thread_safety() const override final
+    {
+        return get_thread_safety_impl(m_value);
     }
     // Implementation of the optional methods.
     template <typename U, enable_if_t<has_get_nobj<U>::value, int> = 0>
@@ -818,6 +851,16 @@ struct prob_inner final : prob_inner_base {
     {
         return "";
     }
+    template <typename U, enable_if_t<has_get_thread_safety<U>::value, int> = 0>
+    static thread_safety get_thread_safety_impl(const U &value)
+    {
+        return value.get_thread_safety();
+    }
+    template <typename U, enable_if_t<!has_get_thread_safety<U>::value, int> = 0>
+    static thread_safety get_thread_safety_impl(const U &)
+    {
+        return thread_safety::basic;
+    }
 
     // Serialization.
     template <typename Archive>
@@ -893,6 +936,7 @@ struct prob_inner final : prob_inner_base {
  * void set_seed(unsigned);
  * std::string get_name() const;
  * std::string get_extra_info() const;
+ * thread_safety get_thread_safety() const;
  * @endcode
  *
  * See the documentation of the corresponding methods in this class for details on how the optional
@@ -1680,6 +1724,21 @@ public:
         return ptr()->get_extra_info();
     }
 
+    /// Problem's thread safety level.
+    /**
+     * If the UDP satisfies pagmo::has_get_thread_safety, then this method will return the output of its
+     * <tt>%get_thread_safety()</tt> method. Otherwise, thread_safety::basic will be returned.
+     * That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDP instances.
+     *
+     * @return the thread safety level of the UDP.
+     *
+     * @throws unspecified any exception thrown by the <tt>%get_thread_safety()</tt> method of the UDP.
+     */
+    thread_safety get_thread_safety() const
+    {
+        return ptr()->get_thread_safety();
+    }
+
     /// Streaming operator
     /**
      * This function will stream to \p os a human-readable representation of the input
@@ -1727,6 +1786,7 @@ public:
         if (p.has_hessians()) {
             stream(os, "\tHessians evaluations: ", p.get_hevals(), '\n');
         }
+        stream(os, "\n\tThread safety: ", p.get_thread_safety(), '\n');
 
         const auto extra_str = p.get_extra_info();
         if (!extra_str.empty()) {

@@ -203,7 +203,7 @@ public:
             c += p_distance(pop.get_x()[i]);
         }
 
-        return c / pop.size();
+        return c / static_cast<double>(pop.size());
     }
     /// Distance from the Pareto front
     /**
@@ -325,7 +325,7 @@ private:
         for (decltype(f.size()) i = 0u; i < f.size() - 1; ++i) {
             y += (f[i] / (1.0 + g)) * (1.0 + std::sin(3 * detail::pi() * f[i]));
         }
-        return m_fdim - y;
+        return static_cast<double>(m_fdim) - y;
     }
     /// Implementation of the objective functions.
     /* The chomosome: x_1, x_2, ........, x_M-1, x_M, .........., x_M+k

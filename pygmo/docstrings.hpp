@@ -78,17 +78,28 @@ std::string problem_has_hessians_sparsity_docstring();
 std::string problem_hessians_sparsity_docstring();
 std::string problem_get_name_docstring();
 std::string problem_get_extra_info_docstring();
+std::string problem_get_thread_safety_docstring();
+
+// translate
+std::string translate_docstring();
+std::string translate_translation_docstring();
+
+// decompose
+std::string decompose_docstring();
+std::string decompose_decompose_fitness_docstring();
+std::string decompose_original_fitness_docstring();
+std::string decompose_z_docstring();
 
 // algorithm
 std::string algorithm_docstring();
 
 // user - problems
+std::string null_problem_docstring();
 std::string rosenbrock_docstring();
 std::string dtlz_docstring();
 std::string dtlz_p_distance_docstring();
 std::string zdt_p_distance_docstring();
 std::string cec2013_docstring();
-std::string decompose_decompose_fitness_docstring();
 std::string get_best_docstring(const std::string &);
 
 // user - algorithms

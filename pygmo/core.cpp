@@ -45,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/def.hpp>
 #include <boost/python/default_call_policies.hpp>
 #include <boost/python/docstring_options.hpp>
+#include <boost/python/enum.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/import.hpp>
@@ -67,7 +68,6 @@ see https://www.gnu.org/licenses/. */
 #ifdef PAGMO_WITH_EIGEN3
 #include <pagmo/algorithms/cmaes.hpp>
 #endif
-
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
@@ -93,6 +93,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_fpras.hpp>
@@ -125,9 +126,6 @@ static inline std::unique_ptr<T> make_unique(Args &&... args)
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
-namespace bp = boost::python;
-using namespace pagmo;
-
 // This is necessary because the NumPy macro import_array() has different return values
 // depending on the Python version.
 #if PY_MAJOR_VERSION < 3
@@ -142,6 +140,9 @@ static inline void *wrap_import_array()
     return nullptr;
 }
 #endif
+
+namespace bp = boost::python;
+using namespace pagmo;
 
 // Test that the cereal serialization of BP objects works as expected.
 // The object returned by this function should be identical to the input
@@ -255,89 +256,19 @@ static inline void population_prob_init(bp::class_<population> &pop_class)
         .def(bp::init<const Prob &, population::size_type, unsigned>());
 }
 
-// Various best_idx() overloads.
-static inline vector_double::size_type pop_best_idx_wrapper_0(const population &pop, const bp::object &tol)
-{
-    return pop.best_idx(pygmo::to_vd(tol));
-}
-
-static inline vector_double::size_type pop_best_idx_wrapper_1(const population &pop, double tol)
-{
-    return pop.best_idx(tol);
-}
-
-static inline vector_double::size_type pop_best_idx_wrapper_2(const population &pop)
-{
-    return pop.best_idx();
-}
-
-// Various worst_idx() overloads.
-static inline vector_double::size_type pop_worst_idx_wrapper_0(const population &pop, const bp::object &tol)
-{
-    return pop.worst_idx(pygmo::to_vd(tol));
-}
-
-static inline vector_double::size_type pop_worst_idx_wrapper_1(const population &pop, double tol)
-{
-    return pop.worst_idx(tol);
-}
-
-static inline vector_double::size_type pop_worst_idx_wrapper_2(const population &pop)
-{
-    return pop.worst_idx();
-}
-
-// set_xf().
-static inline void pop_set_xf_wrapper(population &pop, population::size_type i, const bp::object &x,
-                                      const bp::object &f)
-{
-    pop.set_xf(i, pygmo::to_vd(x), pygmo::to_vd(f));
-}
-
-// set_x().
-static inline void pop_set_x_wrapper(population &pop, population::size_type i, const bp::object &x)
-{
-    pop.set_x(i, pygmo::to_vd(x));
-}
-
-// get_f().
-static inline bp::object pop_get_f_wrapper(const population &pop)
-{
-    return pygmo::vv_to_a(pop.get_f());
-}
-
-// get_x().
-static inline bp::object pop_get_x_wrapper(const population &pop)
-{
-    return pygmo::vv_to_a(pop.get_x());
-}
-
-// get_ID().
-static inline bp::object pop_get_ID_wrapper(const population &pop)
-{
-    return pygmo::v_to_a(pop.get_ID());
-}
-
-// Decompose methods wrappers
-static inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decompose &p, const bp::object &f,
-                                                             const bp::object &weights, const bp::object &z_ref)
-{
-    return pygmo::v_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weights), pygmo::to_vd(z_ref)));
-}
-
 // DE1220 ctors.
 static inline de1220 *de1220_init_0(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory)
 {
-    auto allowed_variants_vu = pygmo::to_vu(allowed_variants);
-    return ::new de1220(gen, allowed_variants_vu, variant_adptv, ftol, xtol, memory);
+    auto av = pygmo::to_vu(allowed_variants);
+    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory);
 }
 
 static inline de1220 *de1220_init_1(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory, unsigned seed)
 {
-    auto allowed_variants_vu = pygmo::to_vu(allowed_variants);
-    return ::new de1220(gen, allowed_variants_vu, variant_adptv, ftol, xtol, memory, seed);
+    auto av = pygmo::to_vu(allowed_variants);
+    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory, seed);
 }
 
 static inline bp::list de1220_allowed_variants()
@@ -347,26 +278,6 @@ static inline bp::list de1220_allowed_variants()
         retval.append(n);
     }
     return retval;
-}
-
-// Wrappers for utils/multi_objective stuff
-// fast_non_dominated_sorting
-static inline bp::object fast_non_dominated_sorting_wrapper(const bp::object &x)
-{
-    auto fnds = fast_non_dominated_sorting(pygmo::to_vvd(x));
-    // the non-dominated fronts
-    auto ndf = std::get<0>(fnds);
-    bp::list ndf_py;
-    for (const std::vector<vector_double::size_type> &front : ndf) {
-        ndf_py.append(pygmo::v_to_a(front));
-    }
-    // the domination list
-    auto dl = std::get<1>(fnds);
-    bp::list dl_py;
-    for (const auto &item : dl) {
-        dl_py.append(pygmo::v_to_a(item));
-    }
-    return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)), pygmo::v_to_a(std::get<3>(fnds)));
 }
 
 // Helper function to test the to_vd functionality.
@@ -394,6 +305,9 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 
 // A test problem.
 struct test_problem {
+    test_problem(unsigned nobj = 1) : m_nobj(nobj)
+    {
+    }
     vector_double fitness(const vector_double &) const
     {
         return {1.};
@@ -411,7 +325,28 @@ struct test_problem {
     {
         return m_n;
     }
+    vector_double::size_type get_nobj() const
+    {
+        return m_nobj;
+    }
     int m_n = 1;
+    unsigned m_nobj;
+};
+
+// A thread-unsafe test problem.
+struct tu_test_problem {
+    vector_double fitness(const vector_double &) const
+    {
+        return {1.};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
 };
 
 BOOST_PYTHON_MODULE(core)
@@ -438,6 +373,9 @@ BOOST_PYTHON_MODULE(core)
         pygmo_throw(PyExc_ImportError, "");
     }
     wrap_import_array();
+
+    // The thread_safety enum.
+    bp::enum_<thread_safety>("_thread_safety").value("none", thread_safety::none).value("basic", thread_safety::basic);
 
     // Expose utility functions for testing purposes.
     bp::def("_builtin", &pygmo::builtin);
@@ -487,29 +425,39 @@ BOOST_PYTHON_MODULE(core)
              pygmo::population_decision_vector_docstring().c_str())
         .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); })
         .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); })
-        .def("best_idx", &pop_best_idx_wrapper_0)
-        .def("best_idx", &pop_best_idx_wrapper_1)
-        .def("best_idx", &pop_best_idx_wrapper_2, pygmo::population_best_idx_docstring().c_str())
-        .def("worst_idx", &pop_worst_idx_wrapper_0)
-        .def("worst_idx", &pop_worst_idx_wrapper_1)
-        .def("worst_idx", &pop_worst_idx_wrapper_2, pygmo::population_worst_idx_docstring().c_str())
+        .def("best_idx", +[](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); })
+        .def("best_idx", +[](const population &pop, double tol) { return pop.best_idx(tol); })
+        .def("best_idx", +[](const population &pop) { return pop.best_idx(); },
+             pygmo::population_best_idx_docstring().c_str())
+        .def("worst_idx",
+             +[](const population &pop, const bp::object &tol) { return pop.worst_idx(pygmo::to_vd(tol)); })
+        .def("worst_idx", +[](const population &pop, double tol) { return pop.worst_idx(tol); })
+        .def("worst_idx", +[](const population &pop) { return pop.worst_idx(); },
+             pygmo::population_worst_idx_docstring().c_str())
         .def("size", &population::size, pygmo::population_size_docstring().c_str())
         .def("__len__", &population::size)
-        .def("set_xf", &pop_set_xf_wrapper, pygmo::population_set_xf_docstring().c_str())
-        .def("set_x", &pop_set_x_wrapper, pygmo::population_set_x_docstring().c_str())
+        .def("set_xf", +[](population &pop, population::size_type i, const bp::object &x,
+                           const bp::object &f) { pop.set_xf(i, pygmo::to_vd(x), pygmo::to_vd(f)); },
+             pygmo::population_set_xf_docstring().c_str())
+        .def("set_x",
+             +[](population &pop, population::size_type i, const bp::object &x) { pop.set_x(i, pygmo::to_vd(x)); },
+             pygmo::population_set_x_docstring().c_str())
         .def("set_problem_seed", &population::set_problem_seed, pygmo::population_set_problem_seed_docstring().c_str(),
              (bp::arg("seed")))
         .def("get_problem", &population::get_problem, pygmo::population_get_problem_docstring().c_str(),
              bp::return_value_policy<bp::copy_const_reference>())
-        .def("get_f", &pop_get_f_wrapper, pygmo::population_get_f_docstring().c_str())
-        .def("get_x", &pop_get_x_wrapper, pygmo::population_get_x_docstring().c_str())
-        .def("get_ID", &pop_get_ID_wrapper, pygmo::population_get_ID_docstring().c_str())
+        .def("get_f", +[](const population &pop) { return pygmo::vv_to_a(pop.get_f()); },
+             pygmo::population_get_f_docstring().c_str())
+        .def("get_x", +[](const population &pop) { return pygmo::vv_to_a(pop.get_x()); },
+             pygmo::population_get_x_docstring().c_str())
+        .def("get_ID", +[](const population &pop) { return pygmo::v_to_a(pop.get_ID()); },
+             pygmo::population_get_ID_docstring().c_str())
         .def("get_seed", &population::get_seed, pygmo::population_get_seed_docstring().c_str());
 
     // Problem class.
     pygmo::problem_ptr = make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::no_init);
     auto &problem_class = *pygmo::problem_ptr;
-    problem_class.def(bp::init<const bp::object &>((bp::arg("prob"))))
+    problem_class.def(bp::init<const bp::object &>((bp::arg("udp"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
         // Copy and deepcopy.
@@ -579,7 +527,8 @@ BOOST_PYTHON_MODULE(core)
         .def("feasibility_f", +[](const problem &p, const bp::object &f) { return p.feasibility_f(pygmo::to_vd(f)); },
              pygmo::problem_feasibility_f_docstring().c_str())
         .def("get_name", &problem::get_name, pygmo::problem_get_name_docstring().c_str())
-        .def("get_extra_info", &problem::get_extra_info, pygmo::problem_get_extra_info_docstring().c_str());
+        .def("get_extra_info", &problem::get_extra_info, pygmo::problem_get_extra_info_docstring().c_str())
+        .def("get_thread_safety", &problem::get_thread_safety, pygmo::problem_get_thread_safety_docstring().c_str());
 
     // Algorithm class.
     pygmo::algorithm_ptr
@@ -627,21 +576,24 @@ BOOST_PYTHON_MODULE(core)
         .def("get_extra_info", &algorithm::get_extra_info, "Get algorithm's extra info.");
 
     // Translate meta-problem.
-    pygmo::translate_ptr = make_unique<bp::class_<translate>>(
-        "translate", "The translate meta-problem.\n\nBlah blah blah blah.\n\nAdditional constructors:", bp::init<>());
+    pygmo::translate_ptr
+        = make_unique<bp::class_<translate>>("translate", pygmo::translate_docstring().c_str(), bp::init<>());
     auto &tp = *pygmo::translate_ptr;
     // Constructor from Python user-defined problem and translation vector (allows to translate Python problems).
     tp.def("__init__", pygmo::make_translate_init<bp::object>())
         // Constructor of translate from translate and translation vector. This allows to apply the
         // translation multiple times.
         .def("__init__", pygmo::make_translate_init<translate>())
-        // Problem extraction.
+        // Allow to extract a nested translate udp.
+        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>())
+        // Python udp extraction.
         .def("_py_extract", &pygmo::generic_py_extract<translate>)
-        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>());
+        .add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
+                      pygmo::translate_translation_docstring().c_str());
     // Mark it as a cpp problem.
     tp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from translate.
-    pygmo::problem_prob_init<translate>();
+    pygmo::problem_expose_init_cpp_udp<translate>();
     // Extract a translated problem from the problem class.
     problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, translate>,
                       bp::return_internal_reference<>());
@@ -650,20 +602,30 @@ BOOST_PYTHON_MODULE(core)
 
     // Decompose meta-problem.
     pygmo::decompose_ptr
-        = make_unique<bp::class_<decompose>>("decompose", "The decompose meta-problem.\n\n", bp::init<>());
+        = make_unique<bp::class_<decompose>>("decompose", pygmo::decompose_docstring().c_str(), bp::init<>());
     auto &dp = *pygmo::decompose_ptr;
     // Constructor from Python user-defined problem.
     dp.def("__init__", pygmo::make_decompose_init<bp::object>())
-        // Problem extraction.
+        // Python udp extraction.
         .def("_py_extract", &pygmo::generic_py_extract<decompose>)
         // Returns the decomposed fitness with an arbitrary weight and reference point
-        .def("decompose_fitness", &decompose_decompose_fitness_wrapper,
+        .def("decompose_fitness",
+             +[](const pagmo::decompose &p, const bp::object &f, const bp::object &weight, const bp::object &z_ref) {
+                 return pygmo::v_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weight), pygmo::to_vd(z_ref)));
+             },
              pygmo::decompose_decompose_fitness_docstring().c_str(),
-             (bp::arg("f"), bp::arg("weights"), bp::arg("ref_point")));
+             (bp::arg("f"), bp::arg("weight"), bp::arg("ref_point")))
+        .def("original_fitness",
+             +[](const pagmo::decompose &p, const bp::object &x) {
+                 return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x)));
+             },
+             pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")))
+        .add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
+                      pygmo::decompose_z_docstring().c_str());
     // Mark it as a cpp problem.
     dp.attr("_pygmo_cpp_problem") = true;
     // Ctor of problem from decompose.
-    pygmo::problem_prob_init<decompose>();
+    pygmo::problem_expose_init_cpp_udp<decompose>();
     // Extract a decomposed problem from the problem class.
     problem_class.def("_cpp_extract", &pygmo::generic_cpp_extract<problem, decompose>,
                       bp::return_internal_reference<>());
@@ -684,12 +646,14 @@ BOOST_PYTHON_MODULE(core)
     // Exposition of C++ problems.
     // Test problem.
     auto test_p = pygmo::expose_problem<test_problem>("_test_problem", "A test problem.");
+    test_p.def(bp::init<unsigned>((bp::arg("nobj"))));
     test_p.def("get_n", &test_problem::get_n);
     test_p.def("set_n", &test_problem::set_n);
+    // Thread unsafe test problem.
+    pygmo::expose_problem<tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
     // Null problem.
-    auto np = pygmo::expose_problem<null_problem>(
-        "null_problem",
-        "__init__()\n\nThe null problem.\n\nA problem used only in the initialization of meta-problems.\n\n");
+    auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
+    np.def(bp::init<vector_double::size_type>((bp::arg("nobj"))));
     // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
     // serialization of the problem. Not necessary for any other problem type.
     // NOTE: this is needed because problem does not have a def ctor.
@@ -959,8 +923,25 @@ BOOST_PYTHON_MODULE(core)
 
     // Exposition of stand alone functions
     // Multi-objective utilities
-    bp::def("fast_non_dominated_sorting", fast_non_dominated_sorting_wrapper,
-            pygmo::fast_non_dominated_sorting_docstring().c_str(), bp::arg("points"));
+    bp::def("fast_non_dominated_sorting",
+            +[](const bp::object &x) -> bp::object {
+                auto fnds = fast_non_dominated_sorting(pygmo::to_vvd(x));
+                // the non-dominated fronts
+                auto ndf = std::get<0>(fnds);
+                bp::list ndf_py;
+                for (const std::vector<vector_double::size_type> &front : ndf) {
+                    ndf_py.append(pygmo::v_to_a(front));
+                }
+                // the domination list
+                auto dl = std::get<1>(fnds);
+                bp::list dl_py;
+                for (const auto &item : dl) {
+                    dl_py.append(pygmo::v_to_a(item));
+                }
+                return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)),
+                                      pygmo::v_to_a(std::get<3>(fnds)));
+            },
+            pygmo::fast_non_dominated_sorting_docstring().c_str(), boost::python::arg("points"));
     bp::def("nadir", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); },
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); },

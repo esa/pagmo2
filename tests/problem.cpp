@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/exceptions.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -961,11 +962,17 @@ BOOST_AUTO_TEST_CASE(null_problem_test)
     // Fitness test
     BOOST_CHECK((p.fitness(x1) == vector_double{0}));
     BOOST_CHECK((p.fitness(x2) == vector_double{0}));
+    p = problem{null_problem{2}};
+    BOOST_CHECK(null_problem{2}.get_nobj() == 2u);
+    BOOST_CHECK(p.get_nobj() == 2u);
+    BOOST_CHECK((p.fitness(x1) == vector_double{0, 0}));
+    BOOST_CHECK((p.fitness(x2) == vector_double{0, 0}));
+    BOOST_CHECK_THROW(p = problem{null_problem{0}}, std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
 {
-    problem p{null_problem{}};
+    problem p{null_problem{2}};
     // Call objfun to increase the internal counter.
     p.fitness({1});
     // Store the string representation of p.
@@ -978,12 +985,15 @@ BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
+    BOOST_CHECK_EQUAL(p.get_nobj(), 1u);
     {
         cereal::JSONInputArchive iarchive(ss);
         iarchive(p);
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
+    BOOST_CHECK_EQUAL(p.get_nobj(), 2u);
+    BOOST_CHECK_EQUAL(p.fitness({1.}).size(), 2u);
 }
 
 BOOST_AUTO_TEST_CASE(extract_test)
@@ -1001,4 +1011,53 @@ BOOST_AUTO_TEST_CASE(extract_test)
     BOOST_CHECK(static_cast<const problem &>(p).extract<const null_problem>() == nullptr);
     BOOST_CHECK(p.extract<base_p>() == nullptr);
     BOOST_CHECK(static_cast<const problem &>(p).extract<base_p>() == nullptr);
+}
+
+struct ts1 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+};
+
+struct ts2 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+struct ts3 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    int get_thread_safety() const
+    {
+        return 2;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(thread_safety_test)
+{
+    BOOST_CHECK(problem{null_problem{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(problem{ts1{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(problem{ts2{}}.get_thread_safety() == thread_safety::none);
+    BOOST_CHECK(problem{ts3{}}.get_thread_safety() == thread_safety::basic);
 }

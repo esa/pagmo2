@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
+#include "../problem.hpp"
 #include "../problems/decompose.hpp"
 #include "../rng.hpp"
 #include "../utils/generic.hpp"         // safe_cast, kNN
@@ -210,7 +211,7 @@ public:
         vector_double ideal_point = ideal(pop.get_f());
         // We create a decompose problem which will be used only to access its decompose_fitness(f) method
         // (the construction parameter weights, ideal_point and false are thus irrelevant).
-        decompose prob_decomposed{prob, weights[0], ideal_point, "tchebycheff", false};
+        decompose prob_decomposed{null_problem{prob.get_nobj()}, weights[0], ideal_point, "tchebycheff", false};
         // We create the container that will represent a pseudo-random permutation of the population indexes 1..NP
         std::vector<population::size_type> shuffle(NP);
         std::iota(shuffle.begin(), shuffle.end(), std::vector<population::size_type>::size_type(0u));

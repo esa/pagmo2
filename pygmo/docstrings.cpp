@@ -400,7 +400,7 @@ Examples:
 
 std::string problem_docstring()
 {
-    return R"(__init__(prob)
+    return R"(__init__(udp)
 
 Problem class.
 
@@ -492,7 +492,7 @@ they do not expose any of the mandatory or optional methods listed above.
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::problem`.
 
 Args:
-    prob: a user-defined problem (either C++ or Python - note that *prob* will be deep-copied
+    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
       and stored inside the :class:`~pygmo.core.problem` instance)
 
 Raises:
@@ -1141,6 +1141,26 @@ Raises:
 )";
 }
 
+std::string problem_get_thread_safety_docstring()
+{
+    return R"(get_thread_safety()
+
+Problem's thread safety level.
+
+This method will return a value of the enum :class:`pygmo.thread_safety` which indicates the thread safety level
+of the UDP. Unlike in C++, in Python it is not possible to re-implement this method in the UDP. That is, for C++
+UDPs, the returned value will be the value returned by the ``get_thread_safety()`` method of the UDP. For Python
+UDPs, the returned value will be unconditionally :attr:`pygmo.thread_safety.none`.
+
+Returns:
+    a value of :class:`pygmo.thread_safety`: the thread safety level of the UDP
+
+Raises:
+    unspecified: any exception thrown by the ``get_thread_safety()`` method of the UDP
+
+)";
+}
+
 std::string problem_get_best_docstring(const std::string &name)
 {
     return R"(best_known()
@@ -1155,11 +1175,75 @@ Returns:
 )";
 }
 
+std::string translate_docstring()
+{
+    return R"(__init__(udp = null_problem(), translation = [0.])
+
+The translate meta-problem.
+
+This meta-problem translates the whole search space of an input user-defined problem (UDP) by a fixed
+translation vector. :class:`~pygmo.core.translate` objects are user-defined problems that
+can be used in the definition of a :class:`pygmo.core.problem`.
+
+The constructor admits two forms,
+
+* no arguments,
+* exactly two arguments.
+
+Any other combination of arguments will raise an error.
+
+Args:
+    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
+      and stored inside the :class:`~pygmo.core.translate` instance)
+    translation (array-like object): an array containing the translation to be applied
+
+Raises:
+    ValueError: if the length of *translation* is not equal to the dimension of *udp*
+    unspecified: any exception thrown by:
+
+      * the constructor of :class:`pygmo.core.problem`,
+      * the constructor of the underlying C++ class,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
+
+)";
+}
+
+std::string translate_translation_docstring()
+{
+    return R"(Translation vector.
+
+This read-only property contains an array of ``float`` representing the translation vector used in the
+construction of this problem.
+
+Returns:
+    1D NumPy float array: the translation vector
+
+)";
+}
+
 std::string algorithm_docstring()
 {
     return R"(The main algorithm class.
 
 See also :cpp:class:`pagmo::algorithm`.
+
+)";
+}
+
+std::string null_problem_docstring()
+{
+    return R"(__init__(nobj = 1)
+
+The null problem.
+
+A problem used in the default-initialization of :class:`pygmo.core.problem` and of the meta-problems.
+
+Args:
+    nobj (``int``): the number of objectives
+
+Raises:
+    ValueError: if *nobj* is not strictly positive
 
 )";
 }
@@ -1930,38 +2014,146 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_anneali
 )";
 }
 
-std::string decompose_decompose_fitness_docstring()
+std::string decompose_docstring()
 {
-    return R"(decompose_fitness(f, weights, ref_point)
+    return R"(__init__(udp = null_problem(nobj = 2), weight = [0.5, 0.5], z = [0., 0.], method = 'weighted', adapt_ideal = False)
 
-Returns the original fitness of the multi-objective problem
+The decompose meta-problem.
+
+This meta-problem *decomposes* a multi-objective input user-defined problem,
+resulting in a single-objective user-defined problem with a fitness function combining the
+original fitness functions. In particular, three different *decomposition methods* are here
+made available:
+
+* weighted decomposition,
+* Tchebycheff decomposition,
+* boundary interception method (with penalty constraint).
+
+In the case of :math:`n` objectives, we indicate with: :math:`\mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots, f_n(\mathbf
+x)]` the vector containing the original multiple objectives, with: :math:`\boldsymbol \lambda = (\lambda_1, \ldots,
+\lambda_n)` an :math:`n`-dimensional weight vector and with: :math:`\mathbf z^* = (z^*_1, \ldots, z^*_n)`
+an :math:`n`-dimensional reference point. We also ussume :math:`\lambda_i > 0, \forall i=1..n` and :math:`\sum_i \lambda_i =
+1`.
+
+The decomposed problem is thus a single objective optimization problem having the following single objective,
+according to the decomposition method chosen:
+
+* weighted decomposition: :math:`f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f`,
+* Tchebycheff decomposition: :math:`f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i \vert`,
+* boundary interception method (with penalty constraint): :math:`f_d(\mathbf x) = d_1 + \theta d_2`,
+
+
+where :math:`d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}`,
+:math:`d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert` and
+:math:`\hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}`.
+
+**NOTE** The reference point :math:`z^*` is often taken as the ideal point and as such
+it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
+this behaviour so that whenever a new ideal point is found :math:`z^*` is adapted accordingly.
+
+**NOTE** The use of :class:`~pygmo.core.decompose` discards gradients and hessians so that if the original user defined problem
+implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
+the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
+derivative-free optimization.
+
+See: "Q. Zhang -- MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition"
+
+See: https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems
+
+The constructor admits two forms:
+
+* no arguments,
+* two mandatory arguments and three optional arguments.
+
+Any other combination of arguments will raise an exception.
 
 Args:
-    f (``array`` or ``list`` of ``floats``): fitness vector to be decomposed
-    weights (``array`` or ``list`` of ``floats``): weights of the decomposition
-    ref_point (``array`` or ``list`` of ``floats``): reference point for the decomposition (only for tchebycheff and bi)
-
-Returns:
-    ``array`` of ``floats``: one single value representing the decomposed fitness
+    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
+      and stored inside the :class:`~pygmo.core.translate` instance)
+    weight (array-like object): the vector of weights :math:`\boldsymbol \lambda`
+    z (array-like object): the reference point :math:`\mathbf z^*`
+    method (``str``): a string containing the decomposition method chosen
+    adapt_ideal (``bool``): when ``True``, the reference point is adapted at each fitness evaluation
+      to be the ideal point
 
 Raises:
-    ValueError: if the dimensions of *f*, *weights* or *ref_point* are inconsistent
-    TypeError: if *f*, *weights* or *ref_point* cannot be converted to vectors of floats
+    ValueError: if either:
 
-Examples:
->>> from pygmo import *
->>> prob = problem(zdt(id=1, param=30))
->>> prob_d = problem(decompose(prob, [0.5,0.5], [0,0], "weighted", False))
->>> fit = prob.fitness([0.5]*30)
->>> fit_d = prob_d.fitness([0.5]*30)
->>> print(fit)
-[ 0.5        3.8416876]
->>> print(fit_d)
-[ 2.1708438]
->>> prob_d.extract(decompose).decompose_fitness(fit, [0.5,0.5],[0,0])
-array([ 2.1708438])
->>> prob_d.extract(decompose).decompose_fitness(fit, [0.4,0.6],[0,0])
-array([ 2.50501256])
+      * *udp* is single objective or constrained,
+      * *method* is not one of [``'weighted'``, ``'tchebycheff'``, ``'bi'``],
+      * *weight* is not of size :math:`n`,
+      * *z* is not of size :math:`n`,
+      * *weight* is not such that :math:`\lambda_i > 0, \forall i=1..n`,
+      * *weight* is not such that :math:`\sum_i \lambda_i = 1`
+    unspecified: any exception thrown by:
+
+      * the constructor of :class:`pygmo.core.problem`,
+      * the constructor of the underlying C++ class,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
+
+)";
+}
+
+std::string decompose_decompose_fitness_docstring()
+{
+    return R"(decompose_fitness(f, weight, ref_point)
+
+Returns the decomposed fitness vector.
+
+Args:
+    f (array-like object): fitness vector
+    weight (array-like object): the weight to be used in the decomposition
+    ref_point (array-like object): the reference point to be used if either ``'tchebycheff'`` or ``'bi'`` was
+      indicated as a decomposition method (its value is ignored if ``'weighted'`` was indicated)
+
+Returns:
+    1D NumPy float array: the decomposed fitness vector
+
+Raises:
+    ValueError: if *f*, *weight* and *ref_point* have different sizes
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string decompose_original_fitness_docstring()
+{
+    return R"(original_fitness(x)
+
+Fitness of the original problem.
+
+Returns the fitness of the original multi-objective problem used to construct the decomposed problem.
+
+Args:
+    x (array-like object): input decision vector
+
+Returns:
+    1D NumPy float array: the fitness of the original multi-objective problem
+
+Raises:
+    unspecified: any exception thrown by the original fitness computation, or by failures at the
+      intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string decompose_z_docstring()
+{
+    return R"(Current reference point.
+
+This read-only property contains the reference point to be used for the decomposition. This is only
+used for Tchebycheff and boundary interception decomposition methods.
+
+**NOTE** The reference point is adapted at each call of the fitness.
+
+Returns:
+    1D NumPy float array: the reference point
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
 
 )";
 }

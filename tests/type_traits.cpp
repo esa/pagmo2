@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 #include <utility>
 
+#include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 
 using namespace pagmo;
@@ -61,4 +62,26 @@ BOOST_AUTO_TEST_CASE(type_traits_test_00)
     BOOST_CHECK((!is_detected<foo_t, s3>::value));
     BOOST_CHECK((!is_detected<foo_t, s4>::value));
     BOOST_CHECK((std::is_same<detected_t<foo_t, s4>, detail::nonesuch>::value));
+}
+
+struct ngts1 {
+    int get_thread_safety() const;
+};
+
+struct ngts2 {
+    thread_safety get_thread_safety();
+};
+
+struct ygts1 {
+    thread_safety get_thread_safety() const;
+};
+
+BOOST_AUTO_TEST_CASE(type_traits_has_get_thread_safety_test)
+{
+    BOOST_CHECK((!has_get_thread_safety<s1>::value));
+    BOOST_CHECK((!has_get_thread_safety<s2>::value));
+    BOOST_CHECK((!has_get_thread_safety<s3>::value));
+    BOOST_CHECK((!has_get_thread_safety<ngts1>::value));
+    BOOST_CHECK((!has_get_thread_safety<ngts2>::value));
+    BOOST_CHECK((has_get_thread_safety<ygts1>::value));
 }

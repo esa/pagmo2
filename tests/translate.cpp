@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/translate.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -54,6 +55,12 @@ BOOST_AUTO_TEST_CASE(translate_construction_test)
     // which has an identical representation to the problem
     // built by the explicit constructor.
     BOOST_CHECK(p0_string == p1_string);
+
+    // Check extract/is.
+    BOOST_CHECK(translate{}.extract<null_problem>() != nullptr);
+    BOOST_CHECK(translate{}.extract<hock_schittkowsky_71>() == nullptr);
+    BOOST_CHECK(translate{}.is<null_problem>());
+    BOOST_CHECK(!translate{}.is<hock_schittkowsky_71>());
 
     // We check that wrong size for translation results in an invalid_argument
     // exception
@@ -133,4 +140,27 @@ BOOST_AUTO_TEST_CASE(translate_extract_test)
     hock_schittkowsky_71 p0{};
     translate t{p0, {0.1, -0.2, 0.3, 0.4}};
     BOOST_CHECK(t.extract<hock_schittkowsky_71>() != nullptr);
+}
+
+struct ts2 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(translate_thread_safety_test)
+{
+    hock_schittkowsky_71 p0{};
+    translate t{p0, {0.1, -0.2, 0.3, 0.4}};
+    BOOST_CHECK(t.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK((translate{ts2{}, {1}}.get_thread_safety() == thread_safety::none));
 }
