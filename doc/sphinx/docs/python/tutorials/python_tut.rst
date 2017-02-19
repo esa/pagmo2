@@ -3,7 +3,7 @@
 Python tutorials
 ================
 
-Getting Started
+Basics
 ^^^^^^^^^^^^^^^
 
 .. toctree::
@@ -13,6 +13,16 @@ Getting Started
   using_algorithm
   using_population
   evolving_a_population
+
+Hypervolumes
+^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  hypervolume
+  hypervolume_advanced
+  hypervolume_approx
 
 Advanced Examples
 ^^^^^^^^^^^^^^^^^

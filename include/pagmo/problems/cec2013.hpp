@@ -68,8 +68,8 @@ public:
     /**
      * Will construct one of the 28 CEC2013 problems
      *
-     * @param[in] prob_id The problem id. One of [1,2,...,28]
-     * @param[in] dim problem dimension. One of [2,5,10,20,30,...,100]
+     * @param prob_id The problem id. One of [1,2,...,28]
+     * @param dim problem dimension. One of [2,5,10,20,30,...,100]
      *
      * @throws invalid_argument if \p prob_id is not in [1,18] or if \p dim is not one of
      * [2,5,10,20,30,40,50,60,70,80,90,100]

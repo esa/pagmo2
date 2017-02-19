@@ -1,3 +1,6 @@
+# We move the test files into the testing directory
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/hypervolume_test_data/" DESTINATION "${CMAKE_BINARY_DIR}/tests/hypervolume_test_data/")
+
 function(ADD_PAGMO_TESTCASE arg1)
     add_executable(${arg1} ${arg1}.cpp)
     target_link_libraries(${arg1} pagmo Boost::boost)
@@ -21,6 +24,7 @@ ADD_PAGMO_TESTCASE(decompose)
 ADD_PAGMO_TESTCASE(discrepancy)
 ADD_PAGMO_TESTCASE(generic)
 ADD_PAGMO_TESTCASE(griewank)
+ADD_PAGMO_TESTCASE(hypervolume)
 ADD_PAGMO_TESTCASE(hock_schittkowsky_71)
 ADD_PAGMO_TESTCASE(inventory)
 ADD_PAGMO_TESTCASE(io)

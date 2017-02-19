@@ -489,22 +489,22 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
  *
  * Complexity is \f$ O(MN)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @param input_f Input objectives vectors. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
+ * @param points Input objectives vectors. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
  *
  * @returns A vector_double containing the ideal point. Example: {-1,-2,231}
  *
  * @throws std::invalid_argument if the input objective vectors are not all of the same size
  */
-vector_double ideal(const std::vector<vector_double> &input_f)
+vector_double ideal(const std::vector<vector_double> &points)
 {
     // Corner case
-    if (input_f.size() == 0u) {
+    if (points.size() == 0u) {
         return {};
     }
 
     // Sanity checks
-    auto M = input_f[0].size();
-    for (const auto &f : input_f) {
+    auto M = points[0].size();
+    for (const auto &f : points) {
         if (f.size() != M) {
             pagmo_throw(std::invalid_argument,
                         "Input vector of objectives must contain fitness vector of equal dimension "
@@ -515,7 +515,7 @@ vector_double ideal(const std::vector<vector_double> &input_f)
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
         retval[i]
-            = (*std::min_element(input_f.begin(), input_f.end(),
+            = (*std::min_element(points.begin(), points.end(),
                                  [i](const vector_double &f1, const vector_double &f2) { return f1[i] < f2[i]; }))[i];
     }
     return retval;
@@ -528,30 +528,30 @@ vector_double ideal(const std::vector<vector_double> &input_f)
  *
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @param input_f Input objective vectors. Example {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{6,6},{9,15}}
+ * @param points Input objective vectors. Example {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{6,6},{9,15}}
  *
  * @returns A vector_double containing the nadir point. Example: {10,7}
  *
  */
-vector_double nadir(const std::vector<vector_double> &input_f)
+vector_double nadir(const std::vector<vector_double> &points)
 {
     // Corner case
-    if (input_f.size() == 0u) {
+    if (points.size() == 0u) {
         return {};
     }
     // Sanity checks
-    auto M = input_f[0].size();
+    auto M = points[0].size();
     // We extract all objective vectors belonging to the first non dominated front (the Pareto front)
-    auto pareto_idx = std::get<0>(fast_non_dominated_sorting(input_f))[0];
-    std::vector<vector_double> nd_fits;
+    auto pareto_idx = std::get<0>(fast_non_dominated_sorting(points))[0];
+    std::vector<vector_double> nd_points;
     for (auto idx : pareto_idx) {
-        nd_fits.push_back(input_f[idx]);
+        nd_points.push_back(points[idx]);
     }
     // And compute the nadir over them
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
         retval[i]
-            = (*std::max_element(nd_fits.begin(), nd_fits.end(),
+            = (*std::max_element(nd_points.begin(), nd_points.end(),
                                  [i](const vector_double &f1, const vector_double &f2) { return f1[i] < f2[i]; }))[i];
     }
     return retval;

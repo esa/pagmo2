@@ -83,3 +83,78 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
 
     plt.show()
     return plt.gca()
+
+
+def _mo3d_plot(self, pop, az=40, comp=[0, 1, 2]):
+    """
+    Generic plot-method for multi-objective optimization problems with more then 2 objectives
+    USAGE: prob.plot(pop, comp[0,2,3])
+    * pop: population of solutions to the problem
+    * az: angle of view on which the 3d-plot is created
+    * comp: indexes the fitness dimension for x,y and z axis in that order
+    """
+    from mpl_toolkits.mplot3d import axes3d
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+
+    fit = np.transpose(pop.get_f())
+    try:
+        ax.plot(fit[comp[0]], fit[comp[1]], fit[comp[2]], 'ro')
+    except IndexError:
+        print('Error. Please choose correct fitness dimensions for printing!')
+
+    ax.view_init(azim=az)
+    plt.show()
+    return plt.gca()
+
+
+def _dtlz234_plot(pop, az=40, comp=[0, 1, 2]):
+    """
+    Specific plot-method for the DTLZ2, DTLZ3 and DTLZ4 - plotting also the optimal pareto-front
+    USAGE: prob.plot(pop, comp[0,2,3])
+    * pop: population of solutions to the problem
+    * az: angle of view on which the 3d-plot is created
+    * comp: indexes the fitness dimension for x,y and z axis in that order
+    """
+
+    from mpl_toolkits.mplot3d import axes3d
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+
+    # plot the wireframe of the known optimal pareto front
+    thetas = np.linspace(0, (np.pi / 2.0), 30)
+    # gammas = np.linspace(-np.pi / 4, np.pi / 4, 30)
+    gammas = np.linspace(0, (np.pi / 2.0), 30)
+
+    x_frame = np.outer(np.cos(thetas), np.cos(gammas))
+    y_frame = np.outer(np.cos(thetas), np.sin(gammas))
+    z_frame = np.outer(np.sin(thetas), np.ones(np.size(gammas)))
+
+    ax.view_init(azim=a)
+
+    ax.set_autoscalex_on(False)
+    ax.set_autoscaley_on(False)
+    ax.set_autoscalez_on(False)
+
+    ax.set_xlim(0, 1.8)
+    ax.set_ylim(0, 1.8)
+    ax.set_zlim(0, 1.8)
+
+    ax.plot_wireframe(x_frame, y_frame, z_frame)
+
+    # plot the individuals of the population
+    fit = np.transpose(pop.get_f())
+    try:
+        ax.plot(fit[comp[0]], fit[comp[1]], fit[comp[2]], 'ro')
+    except IndexError:
+        print('Error. Please choose correct fitness dimensions for printing!')
+    return ax
+
+from ..core import dtlz
+dtlz.plot = _mo3d_plot

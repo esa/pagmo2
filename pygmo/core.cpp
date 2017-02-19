@@ -58,6 +58,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/scope.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
+#include <boost/shared_ptr.hpp>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -92,6 +93,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/utils/hv_algos/hv_algorithm.hpp>
+#include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
+#include <pagmo/utils/hv_algos/hv_bf_fpras.hpp>
+#include <pagmo/utils/hv_algos/hv_hv2d.hpp>
+#include <pagmo/utils/hv_algos/hv_hv3d.hpp>
+#include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
+#include <pagmo/utils/hypervolume.hpp>
 
 #include "algorithm.hpp"
 #include "algorithm_exposition_suite.hpp"
@@ -321,13 +329,15 @@ static inline bp::object decompose_decompose_fitness_wrapper(const pagmo::decomp
 static inline de1220 *de1220_init_0(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory)
 {
-    return ::new de1220(gen, pygmo::to_vu(allowed_variants), variant_adptv, ftol, xtol, memory);
+    auto allowed_variants_vu = pygmo::to_vu(allowed_variants);
+    return ::new de1220(gen, allowed_variants_vu, variant_adptv, ftol, xtol, memory);
 }
 
 static inline de1220 *de1220_init_1(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory, unsigned seed)
 {
-    return ::new de1220(gen, pygmo::to_vu(allowed_variants), variant_adptv, ftol, xtol, memory, seed);
+    auto allowed_variants_vu = pygmo::to_vu(allowed_variants);
+    return ::new de1220(gen, allowed_variants_vu, variant_adptv, ftol, xtol, memory, seed);
 }
 
 static inline bp::list de1220_allowed_variants()
@@ -721,13 +731,15 @@ BOOST_PYTHON_MODULE(core)
     auto zdt_p = pygmo::expose_problem<zdt>("zdt", "__init__(id = 1, param = 30)\n\nThe ZDT problem.\n\n"
                                                    "See :cpp:class:`pagmo::zdt`.\n\n");
     zdt_p.def(bp::init<unsigned, unsigned>((bp::arg("id") = 1u, bp::arg("param") = 30u)));
-    zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); });
+    zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); },
+              pygmo::zdt_p_distance_docstring().c_str());
     // DTLZ.
     auto dtlz_p = pygmo::expose_problem<dtlz>("dtlz", pygmo::dtlz_docstring().c_str());
     dtlz_p.def(bp::init<unsigned, unsigned, unsigned, unsigned>(
         (bp::arg("id") = 1u, bp::arg("dim") = 5u, bp::arg("fdim") = 3u, bp::arg("alpha") = 100u)));
     dtlz_p.def("p_distance", +[](const dtlz &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); });
-    dtlz_p.def("p_distance", +[](const dtlz &z, const population &pop) { return z.p_distance(pop); });
+    dtlz_p.def("p_distance", +[](const dtlz &z, const population &pop) { return z.p_distance(pop); },
+               pygmo::dtlz_p_distance_docstring().c_str());
     // Inventory.
     auto inv = pygmo::expose_problem<inventory>(
         "inventory", "__init__(weeks = 4,sample_size = 10,seed = random)\n\nThe inventory problem.\n\n"
@@ -863,8 +875,94 @@ BOOST_PYTHON_MODULE(core)
 
     moead_.def("get_seed", &moead::get_seed);
 
+    // Exposition of various structured utilities
+    // Hypervolume class
+    bp::class_<hypervolume>("hypervolume", "Hypervolume Class")
+        .def("__init__", bp::make_constructor(
+                             +[](const bp::object &points) {
+                                 auto vvd_points = pygmo::to_vvd(points);
+                                 return ::new hypervolume(vvd_points, true);
+                             },
+                             bp::default_call_policies(), (bp::arg("points"))),
+             pygmo::hv_init2_docstring().c_str())
+        .def("__init__", bp::make_constructor(+[](const population &pop) { return ::new hypervolume(pop, true); },
+                                              bp::default_call_policies(), (bp::arg("pop"))),
+             pygmo::hv_init1_docstring().c_str())
+        .def("compute",
+             +[](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); },
+             (bp::arg("ref_point")))
+        .def("compute",
+             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+                 return hv.compute(pygmo::to_vd(r_point), *hv_algo);
+             },
+             pygmo::hv_compute_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
+        .def("exclusive", +[](const hypervolume &hv, unsigned p_idx,
+                              const bp::object &r_point) { return hv.exclusive(p_idx, pygmo::to_vd(r_point)); },
+             (bp::arg("idx"), bp::arg("ref_point")))
+        .def("exclusive",
+             +[](const hypervolume &hv, unsigned int p_idx, const bp::object &r_point,
+                 boost::shared_ptr<hv_algorithm> hv_algo) {
+                 return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo);
+             },
+             pygmo::hv_exclusive_docstring().c_str(), (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
+        .def("least_contributor",
+             +[](const hypervolume &hv, const bp::object &r_point) {
+                 return hv.least_contributor(pygmo::to_vd(r_point));
+             },
+             (bp::arg("ref_point")))
+        .def("least_contributor",
+             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+                 return hv.least_contributor(pygmo::to_vd(r_point), *hv_algo);
+             },
+             pygmo::hv_least_contributor_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
+        .def("greatest_contributor",
+             +[](const hypervolume &hv, const bp::object &r_point) {
+                 return hv.greatest_contributor(pygmo::to_vd(r_point));
+             },
+             (bp::arg("ref_point")))
+        .def("greatest_contributor",
+             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+                 return hv.greatest_contributor(pygmo::to_vd(r_point), *hv_algo);
+             },
+             pygmo::hv_greatest_contributor_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
+        .def("contributions",
+             +[](const hypervolume &hv, const bp::object &r_point) {
+                 return pygmo::v_to_a(hv.contributions(pygmo::to_vd(r_point)));
+             },
+             (bp::arg("ref_point")))
+        .def("contributions",
+             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+                 return pygmo::v_to_a(hv.contributions(pygmo::to_vd(r_point), *hv_algo));
+             },
+             pygmo::hv_contributions_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
+        .add_property("copy_points", &hypervolume::get_copy_points, &hypervolume::set_copy_points)
+        .def("get_points", +[](hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); });
+
+    // Hypervolume algorithms
+    bp::class_<hv_algorithm, boost::noncopyable>("_hv_algorithm", bp::no_init).def("get_name", &hv_algorithm::get_name);
+    bp::class_<hvwfg, bp::bases<hv_algorithm>>("hvwfg", pygmo::hvwfg_docstring().c_str())
+        .def(bp::init<unsigned>((bp::arg("stop_dimension") = 2)));
+    bp::class_<bf_approx, bp::bases<hv_algorithm>>("bf_approx", pygmo::bf_approx_docstring().c_str())
+        .def(bp::init<bool, unsigned, double, double, double, double, double, double>(
+            (bp::arg("use_exact") = true, bp::arg("trivial_subcase_size") = 1u, bp::arg("eps") = 1e-2,
+             bp::arg("delta") = 1e-6, bp::arg("delta_multiplier") = 0.775, bp::arg("alpha") = 0.2,
+             bp::arg("initial_delta_coeff") = 0.1, bp::arg("gamma") = 0.25)))
+        .def(bp::init<bool, unsigned, double, double, double, double, double, double, unsigned>(
+            (bp::arg("use_exact") = true, bp::arg("trivial_subcase_size") = 1u, bp::arg("eps") = 1e-2,
+             bp::arg("delta") = 1e-6, bp::arg("delta_multiplier") = 0.775, bp::arg("alpha") = 0.2,
+             bp::arg("initial_delta_coeff") = 0.1, bp::arg("gamma") = 0.25, bp::arg("seed"))));
+    bp::class_<bf_fpras, bp::bases<hv_algorithm>>("bf_fpras", pygmo::bf_fpras_docstring().c_str())
+        .def(bp::init<double, double>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2)))
+        .def(bp::init<double, double, unsigned>((bp::arg("eps") = 1e-2, bp::arg("delta") = 1e-2, bp::arg("seed"))));
+    bp::class_<hv2d, bp::bases<hv_algorithm>>("hv2d", pygmo::hv2d_docstring().c_str(), bp::init<>());
+    bp::class_<hv3d, bp::bases<hv_algorithm>>("hv3d", pygmo::hv3d_docstring().c_str(), bp::init<>());
+
     // Exposition of stand alone functions
     // Multi-objective utilities
     bp::def("fast_non_dominated_sorting", fast_non_dominated_sorting_wrapper,
-            pygmo::fast_non_dominated_sorting_docstring().c_str(), boost::python::arg("points"));
+            pygmo::fast_non_dominated_sorting_docstring().c_str(), bp::arg("points"));
+    bp::def("nadir", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); },
+            pygmo::nadir_docstring().c_str(), bp::arg("points"));
+    bp::def("ideal", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); },
+            pygmo::ideal_docstring().c_str(), bp::arg("points"));
 }
