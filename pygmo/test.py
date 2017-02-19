@@ -1976,7 +1976,6 @@ class null_problem_test_case(_ut.TestCase):
     """Test case for the null problem
 
     """
-
     def runTest(self):
         from .core import null_problem as np, problem
         n = np()
@@ -1985,6 +1984,46 @@ class null_problem_test_case(_ut.TestCase):
         self.assertRaises(ValueError, lambda: np(0))
         self.assertTrue(problem(np()).get_nobj() == 1)
         self.assertTrue(problem(np(23)).get_nobj() == 23)
+
+class hypervolume_test_case(_ut.TestCase):
+    """Test case for the hypervolume utilities
+    
+    """
+    def runTest(self):
+        from .core import hypervolume, hv2d, hv3d, wfg, bf_fpras, bf_approx
+        from .core import population, zdt
+        pop = population(prob=zdt(id=1, param=10), size=20)
+        hv1 = hypervolume(pop=pop)
+        hv2 = hypervolume(points=[[0, 0], [-1, 1], [-2, 2]])
+        hv2.copy_points = True
+        points = hv2.get_points()
+        res0 = hv2.compute([3, 3])
+
+        algo1 = hv2d()
+        algo2 = wfg()
+        algo3 = bf_fpras()
+        algo4 = bf_approx()
+
+        res = hv2.compute(ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.exclusive(idx=0, ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.least_contributor(ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.greatest_contributor(ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.contributions(ref_point=[3, 3], hv_algo=algo1)
+        res = hv2.compute(ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.exclusive(idx=0, ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.least_contributor(ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.greatest_contributor(ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.contributions(ref_point=[3, 3], hv_algo=algo2)
+        res = hv2.compute(ref_point=[3, 3], hv_algo=algo3)
+
+        res = hv2.least_contributor(ref_point=[3, 3], hv_algo=algo4)
+        res = hv2.greatest_contributor(ref_point=[3, 3], hv_algo=algo4)
+
+        res = hv2.compute(ref_point=[3, 3])
+        res = hv2.exclusive(idx=0, ref_point=[3, 3])
+        res = hv2.least_contributor(ref_point=[3, 3])
+        res = hv2.greatest_contributor(ref_point=[3, 3])
+        res = hv2.contributions(ref_point=[3, 3])
 
 
 class dtlz_test_case(_ut.TestCase):
@@ -2119,11 +2158,16 @@ def run_test_suite():
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(problem_test_case())
     suite.addTest(pso_test_case())
-    suite.addTest(cmaes_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(population_test_case())
     suite.addTest(null_problem_test_case())
+    suite.addTest(hypervolume_test_case())
+    try:
+        from .core import cmaes
+        suite.addTest(cmaes_test_case())
+    except ImportError:
+        pass
     suite.addTest(dtlz_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())

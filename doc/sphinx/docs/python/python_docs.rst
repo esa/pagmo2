@@ -35,12 +35,13 @@ These are the algorithms implemented in PyGMO.
 
    algorithms/py_cpp_algorithms
 
-Various utilities
-^^^^^^^^^^^^^^^^^
+Utilities
+^^^^^^^^^
 Various optimization utilities implemented in PyGMO.
 
 .. toctree::
   :maxdepth: 1
 
   utils/py_mo_utils
+  utils/py_hv_utils
   utils/py_plotting

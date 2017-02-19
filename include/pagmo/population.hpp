@@ -447,8 +447,10 @@ public:
             stream(os, "\tDecision vector:\t", p.m_x[i], '\n');
             stream(os, "\tFitness vector:\t\t", p.m_f[i], '\n');
         }
-        stream(os, "\nChampion decision vector: ", p.champion_x(), '\n');
-        stream(os, "Champion fitness: ", p.champion_f(), '\n');
+        if (p.get_problem().get_nobj() == 1u) {
+            stream(os, "\nChampion decision vector: ", p.champion_x(), '\n');
+            stream(os, "Champion fitness: ", p.champion_f(), '\n');
+        }
         return os;
     }
     /// Serialization.

@@ -1266,6 +1266,49 @@ See also the docs of the C++ class :cpp:class:`pagmo::rosenbrock`.
 )";
 }
 
+std::string zdt_p_distance_docstring()
+{
+    return R"(p_distance(point)
+
+Convergence metric for a decision vectors (0 = on the optimal front)
+
+Introduced by Martens and Izzo, this metric is able to measure "a distance" of any point from
+the pareto front of any ZDT problem analytically.
+
+Args:
+    point (array-like object): decision vector for which the p distance is requested
+
+Returns:
+    ``float``: the distance (or average distance) from the Pareto front
+
+See also the docs of the C++ class :func:`~pygmo.core.zdt.p_distance()`
+
+)";
+}
+
+std::string dtlz_p_distance_docstring()
+{
+    return R"(p_distance(point)
+
+p_distance(pop)
+
+Convergence metric for decision vectors (0 = on the optimal front)
+
+Introduced by Martens and Izzo, this metric is able to measure "a distance" of any point from
+the pareto front of any DTLZ problem analytically.
+
+Args:
+    point (array-like object): decision vector for which the p distance is requested
+    pop (:class:`~pygmo.core.population`): population for which the average p distance is requested
+
+Returns:
+    ``float``: the distance (or average distance) from the Pareto front
+
+See also the docs of the C++ class :func:`~pygmo.core.dtlz.p_distance()`
+
+)";
+}
+
 std::string dtlz_docstring()
 {
     return R"(__init__(id = 1, dim = 5, fdim = 3, alpha = 100)
@@ -1707,7 +1750,7 @@ The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
 
 Args:
     gen (``int``): number of generations
-    allowed_variants (``NumPy array or list of floats``): allowed mutation variants, each one being a number in [1, 18]
+    allowed_variants (array-like object): allowed mutation variants, each one being a number in [1, 18]
     variant_adptv (``int``): *F* and *CR* parameter adaptation scheme to be used (one of 1..2)
     ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
     xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
@@ -1917,9 +1960,10 @@ std::string simulated_annealing_get_log_docstring()
 {
     return R"(simulated_annealing.get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. 
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method set_verbosity on an object :class:`~pygmo.core.algorithm` constructed with a
+:class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
 each verbosity function evaluations
 
 Returns:
@@ -2121,7 +2165,7 @@ std::string fast_non_dominated_sorting_docstring()
 Runs the fast non dominated sorting algorithm on the input *points*
 
 Args:
-    points (``array`` [or ``list``] of ``arrays`` [or ``lists``] of ``floats``): the input points
+    points (2d-array like object): the input points
 
 Raises:
     ValueError: if *points* is malformed
@@ -2131,10 +2175,10 @@ Returns:
     (``tuple``): (*ndf*, *dl*, *dc*, *ndr*)
 
 Where:
-    * *ndf* (``list`` of ``arrays``): the non dominated fronts
-    * *dl* (``list`` of ``arrays``): the domination list
-    * *dc* (``array``): the domination count
-    * *ndr* (``array``): the non domination ranks
+    * *ndf* (``list`` of 1D NumPy array of ``float``): the non dominated fronts
+    * *dl* (``list`` of 1D NumPy array of ``float``): the domination list
+    * *dc* (1D NumPy array of ``int``): the domination count
+    * *ndr* (1D NumPy array of ``int``): the non domination ranks
 
 Examples:
     >>> from pygmo import *
@@ -2147,6 +2191,311 @@ Examples:
     [3 1 0 2 0]
     >>> print(ndr)
     [2 1 0 2 0]
+
+)";
+}
+
+std::string nadir_docstring()
+{
+    return R"(nadir(points)
+
+Computes the nadir point of a set of points, i.e objective vectors. The nadir is that point that has the maximum
+value of the objective function in the points of the non-dominated front.
+
+Complexity is :math:`O(MN^2)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
+
+Args:
+    points (2d-array like object): the input points
+
+Raises:
+    ValueError: if *points* is malformed
+    TypeError: if *points* cannot be converted to a vector of vector floats
+
+Returns:
+    (1D NumPy array of ``floats``): the nadir point
+
+Examples:
+    >>> fimport pygmo as pg
+    >>> nadir_point = pg.nadir([[0,7],[1,5],[2,3],[4,2],[7,1],[10,0],[6,6],[9,15]])
+    >>> [10, 7]
+)";
+}
+
+std::string ideal_docstring()
+{
+    return R"(ideal(points)
+
+ Computes the ideal point of a set of points, i.e objective vectors. The ideal poitn is that point that has, in each 
+ component, the minimum value of the objective functions of the input points.
+
+Complexity is :math:`O(MN)` where :math:`M` is the number of objectives and :math:`N:math:` is the number of points.
+
+Args:
+    points (2d-array like object): the input points
+
+Raises:
+    ValueError: if *points* is malformed
+    TypeError: if *points* cannot be converted to a vector of vector floats
+
+Returns:
+    (1D NumPy array of ``floats``): the ideal point
+
+Examples:
+    >>> fimport pygmo as pg
+    >>> ideal_point = pg.ideal([[-1,3,597],[1,2,3645],[2,9,789],[0,0,231],[6,-2,4576]])
+    [-1,-2,231]
+)";
+}
+
+std::string hvwfg_docstring()
+{
+    return R"(__init__(stop_dimension = 2)
+
+The hypervolume algorithm from the Walking Fish Group (2011 version).
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Args:
+    stop_dimension (```int```): the input population
+
+Raises:
+    OverflowError: if *stop_dimension* is negative or greater than an implementation-defined value
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.hvwfg(stop_dimension = 2)
+
+See also the docs of the C++ class :cpp:class:`pagmo::hvwfg`.
+
+)";
+}
+
+std::string hv2d_docstring()
+{
+    return R"(__init__()
+
+Exact hypervolume algorithm for two dimensional points.
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.hv2d()
+
+See also the docs of the C++ class :cpp:class:`pagmo::hv2d`.
+
+)";
+}
+
+std::string hv3d_docstring()
+{
+    return R"(__init__()
+
+Exact hypervolume algorithm for three dimensional points.
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.hv3d()
+
+See also the docs of the C++ class :cpp:class:`pagmo::hv3d`.
+
+)";
+}
+
+std::string bf_approx_docstring()
+{
+    return R"(__init__()
+
+Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedrich approximation scheme (FPRAS),
+reduced to the special case of approximating the least contributor.
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.bf_approx()
+
+See also the docs of the C++ class :cpp:class:`pagmo::bf_approx`.
+
+)";
+}
+
+std::string bf_fpras_docstring()
+{
+    return R"(__init__(eps = 1e-2, delta = 1e-2, seed = random)
+
+Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedrich approximation scheme (FPRAS),
+reduced to the special case of approximating the hypervolume indicator.
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.bf_fpras(eps = 1e-2, delta = 1e-2)
+
+See also the docs of the C++ class :cpp:class:`pagmo::bf_fpras`.
+
+)";
+}
+
+std::string hv_init1_docstring()
+{
+    return R"(__init__(pop)
+
+Constructor from population
+
+Args:
+    pop (:class:`~pygmo.core.population`): the input population
+
+Raises:
+    ValueError: if *pop* contains a single-objective or a constrained problem
+
+Examples:
+    >>> from pygmo import *
+    >>> pop = population(prob = zdt(id = 1), size = 20)
+    >>> hv = hypervolume(pop = pop)
+
+See also the docs of the C++ class :cpp:class:`pagmo::hypervolume`.
+
+)";
+}
+
+std::string hv_init2_docstring()
+{
+    return R"(__init__(points)
+
+Constructor from points
+
+Args:
+    points (2d array-like object): the points
+
+Raises:
+    ValueError: if *points* is inconsistent
+
+Examples:
+    >>> from pygmo import *
+    >>> points = [[1,2],[0.5, 3],[0.1,3.1]]
+    >>> hv = hypervolume(points = points)
+
+See also the docs of the C++ class :cpp:class:`pagmo::hypervolume`.
+
+)";
+}
+
+std::string hv_compute_docstring()
+{
+    return R"(hypervolume.compute(ref_point, hv_algo = auto)
+
+Computes the hypervolume with the supplied algorithm. If no algorithm
+is supplied,  then an exact hypervolume algorithm is automatically selected
+specific for the point dimension.
+
+Args:
+    ref_point (2d array-like object): the points
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+
+Returns:
+    ``float``: the computed hypervolume assuming *ref_point* as reference point
+
+Raises:
+    ValueError: if *ref_point* is not dominated by the nadir point
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::compute`.
+
+)";
+}
+
+std::string hv_contributions_docstring()
+{
+    return R"(hypervolume.contributions(ref_point, hv_algo = auto)
+
+This method returns the exclusive contribution to the hypervolume of every point.
+According to *hv_algo* this computation can be implemented optimally (as opposed to calling
+for :func:`~pygmo.hypervolume.exclusive` in a loop).
+
+Args:
+    ref_point (2d array-like object): the points
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+
+Returns:
+    1D NumPy array of ``float``: the contribution of all points to the hypervolume
+
+Raises:
+    ValueError: if *ref_point* is not suitable
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::contributions`.
+
+)";
+}
+
+std::string hv_exclusive_docstring()
+{
+    return R"(hypervolume.exclusive(idx, ref_point, hv_algo = auto)
+
+Computes the exclusive contribution to the hypervolume of a particular point.
+
+Args:
+    idx (``int``): index of the point
+    ref_point (array-like object): the reference point
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+
+
+Returns:
+    1D NumPy array of ``float``: the contribution of all points to the hypervolume
+
+Raises:
+    ValueError: if *ref_point* is not suitable or if *idx* is out of bounds
+    OverflowError: if *idx* is negative or greater than an implementation-defined value
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::exclusive`.
+
+)";
+}
+
+std::string hv_greatest_contributor_docstring()
+{
+    return R"(hypervolume.greatest_contributor(ref_point, hv_algo = auto)
+
+Computes the point contributing the most to the total hypervolume.
+
+Args:
+    ref_point (array-like object): the reference point
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+
+Raises:
+    ValueError: if *ref_point* is not suitable
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::greatest_contributor`.
+
+)";
+}
+
+std::string hv_least_contributor_docstring()
+{
+    return R"(hypervolume.least_contributor(ref_point, hv_algo = auto)
+
+Computes the point contributing the least to the total hypervolume.
+
+Args:
+    ref_point (array-like object): the reference point
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+
+Raises:
+    ValueError: if *ref_point* is not suitable
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::least_contributor`.
 
 )";
 }
