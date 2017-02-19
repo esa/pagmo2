@@ -897,9 +897,9 @@ struct prob_inner final : prob_inner_base {
  * tasks to be represented by this class. A tolerance is considered for the verification of the constraints and is set
  * by default to zero, but it can be modified via the problem::set_c_tol() method.
  *
- * In order to define an optimizaztion problem in PaGMO, the user must first define a class
+ * In order to define an optimizaztion problem in pagmo, the user must first define a class
  * (or a struct) whose methods describe the properties of the problem and allow to compute
- * the objective function, the gradient, the constraints, etc. In PaGMO, we refer to such
+ * the objective function, the gradient, the constraints, etc. In pagmo, we refer to such
  * a class as a **user-defined problem**, or UDP for short. Once defined and instantiated,
  * a UDP can then be used to construct an instance of this class, pagmo::problem, which
  * provides a generic interface to optimization problems.
@@ -914,8 +914,7 @@ struct prob_inner final : prob_inner_base {
  * <tt>%get_bounds()</tt> is expected to return the box bounds of the problem,
  * \f$(\mathbf{lb}, \mathbf{ub})\f$, which also implicitly define the dimension of the problem.
  * The <tt>%fitness()</tt> and <tt>%get_bounds()</tt> methods of the UDP are accessible from the corresponding
- * problem::fitness()
- * and problem::get_bounds() methods (see their documentation for details).
+ * problem::fitness() and problem::get_bounds() methods (see their documentation for details).
  *
  * The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
  * optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following
@@ -1712,8 +1711,7 @@ public:
     /// Problem's extra info.
     /**
      * If the UDP satisfies pagmo::has_extra_info, then this method will return the output of its
-     * <tt>%get_extra_info()</tt>
-     * method. Otherwise, an empty string will be returned.
+     * <tt>%get_extra_info()</tt> method. Otherwise, an empty string will be returned.
      *
      * @return extra info about the UDP.
      *
