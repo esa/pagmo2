@@ -14,7 +14,7 @@ hypervolumes to be computed efficiently at all dimensions. More information on t
 of the algorithms implemented and their performance can be found in the publication:
 
 :Title: "Empirical performance of the approximation of the least hypervolume contributor."
-:Authors: Nowak, Krzysztof, Marcus Märtens, and Dario Izzo.
+:Authors: Krzysztof Nowak, Marcus Märtens, and Dario Izzo.
 :Published in: International Conference on Parallel Problem Solving from Nature. Springer International Publishing, 2014.
 
 --------------------------------------------------------------------------
