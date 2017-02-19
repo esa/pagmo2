@@ -103,7 +103,7 @@ public:
         auto n = points.size();
         auto dim = r_point.size();
 
-        auto T = std::floor(12. * std::log(1. / m_delta) / std::log(2.) * n / m_eps / m_eps);
+        auto T = std::floor(12. * std::log(1. / m_delta) / std::log(2.) * static_cast<double>(n) / m_eps / m_eps);
 
         // Partial sums of consecutive boxes
         vector_double sums(n, 0.0);
@@ -146,9 +146,9 @@ public:
             unsigned int j = 0u;
             do {
                 if (M_sum >= T) {
-                    return (T * V) / static_cast<double>(n * M);
+                    return (T * V) / (static_cast<double>(n) * M);
                 }
-                j = static_cast<unsigned int>(n * unireal_dist(m_e));
+                j = static_cast<unsigned int>(static_cast<double>(n) * unireal_dist(m_e));
                 ++M_sum;
             } while (!(hv_algorithm::dom_cmp(rnd_point, points[j], 0) == hv_algorithm::DOM_CMP_B_DOMINATES_A));
             ++M;

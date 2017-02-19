@@ -91,12 +91,14 @@ public:
     hypervolume(const pagmo::population &pop, bool verify = false) : m_copy_points(true), m_verify(verify)
     {
         if (pop.get_problem().get_nc() > 0u) {
-            pagmo_throw(std::invalid_argument, "The problem of the population is not unconstrained."
-            "Only unconstrained populations can be used to construct hypervolume objects.");
+            pagmo_throw(std::invalid_argument,
+                        "The problem of the population is not unconstrained."
+                        "Only unconstrained populations can be used to construct hypervolume objects.");
         }
         if (pop.get_problem().get_nobj() < 2u) {
-            pagmo_throw(std::invalid_argument, "The problem of the population is not multiobjective."
-            "Only multi-objective populations can be used to construct hypervolume objects.");
+            pagmo_throw(std::invalid_argument,
+                        "The problem of the population is not multiobjective."
+                        "Only multi-objective populations can be used to construct hypervolume objects.");
         }
         m_points = pop.get_f();
         if (m_verify) {
@@ -540,11 +542,12 @@ namespace detail
 double expected_hv_operations(vector_double::size_type n, vector_double::size_type d)
 {
     if (d <= 3u) {
-        return d * n * std::log(n); // hv3d
+        return static_cast<double>(d) * static_cast<double>(n) * std::log(n); // hv3d
     } else if (d == 4u) {
-        return 4.0 * n * n; // hv4d
+        return 4.0 * static_cast<double>(n) * static_cast<double>(n); // hv4d
     } else {
-        return 0.0005 * d * std::pow(n, d * 0.5); // exponential complexity
+        return 0.0005 * static_cast<double>(d)
+               * std::pow(static_cast<double>(n), static_cast<double>(d) * 0.5); // exponential complexity
     }
 }
 } // end namespace detail

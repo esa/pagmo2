@@ -48,13 +48,14 @@ namespace pagmo
  * This algorithm is used to implement the default constructors of meta-algorithms.
  */
 struct null_algorithm {
-    /// Algorithm evolve method (juice implementation of the algorithm)
+    /// Evolve method.
     /**
+     * In the null algorithm, the evolve method just returns the input
+     * population.
      *
-     * Evolves the population for the requested number of generations.
+     * @param pop input population.
      *
-     * @param pop population to be evolved
-     * @return evolved population
+     * @return a copy of the input population.
      */
     population evolve(const population &pop) const
     {
