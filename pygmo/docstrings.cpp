@@ -1833,9 +1833,10 @@ std::string simulated_annealing_get_log_docstring()
 {
     return R"(simulated_annealing.get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. 
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method set_verbosity on an object :class:`~pygmo.core.algorithm` constructed with a
+:class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
 each verbosity function evaluations
 
 Returns:
@@ -2006,8 +2007,111 @@ Returns:
 
 Examples:
     >>> fimport pygmo as pg
-    >>> nadir_point = pg.ideal([[-1,3,597],[1,2,3645],[2,9,789],[0,0,231],[6,-2,4576]])
+    >>> ideal_point = pg.ideal([[-1,3,597],[1,2,3645],[2,9,789],[0,0,231],[6,-2,4576]])
     [-1,-2,231]
+)";
+}
+
+std::string hvwfg_docstring()
+{
+    return R"(__init__(stop_dimension = 2)
+
+The hypervolume algorithm from the Walking Fish Group (2011 version).
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Args:
+    stop_dimension (```int```): the input population
+
+Raises:
+    OverflowError: if *stop_dimension* is negative or greater than an implementation-defined value
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.hvwfg(stop_dimension = 2)
+
+See also the docs of the C++ class :cpp:class:`pagmo::hvwfg`.
+
+)";
+}
+
+std::string hv2d_docstring()
+{
+    return R"(__init__()
+
+Exact hypervolume algorithm for two dimensional points.
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.hv2d()
+
+See also the docs of the C++ class :cpp:class:`pagmo::hv2d`.
+
+)";
+}
+
+std::string hv3d_docstring()
+{
+    return R"(__init__()
+
+Exact hypervolume algorithm for three dimensional points.
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.hv3d()
+
+See also the docs of the C++ class :cpp:class:`pagmo::hv3d`.
+
+)";
+}
+
+std::string bf_approx_docstring()
+{
+    return R"(__init__()
+
+Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedrich approximation scheme (FPRAS),
+reduced to the special case of approximating the least contributor.
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.bf_approx()
+
+See also the docs of the C++ class :cpp:class:`pagmo::bf_approx`.
+
+)";
+}
+
+std::string bf_fpras_docstring()
+{
+    return R"(__init__(eps = 1e-2, delta = 1e-2, seed = random)
+
+Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedrich approximation scheme (FPRAS),
+reduced to the special case of approximating the hypervolume indicator.
+
+This object can be passed as parameter to the various methods of the 
+class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
+class :class:`~pygmo.core._hv_algorithm`
+
+Examples:
+    >>> import pygmo as pg
+    >>> hv_algo = pg.bf_fpras(eps = 1e-2, delta = 1e-2)
+
+See also the docs of the C++ class :cpp:class:`pagmo::bf_fpras`.
+
 )";
 }
 
@@ -2065,7 +2169,7 @@ specific for the point dimension.
 
 Args:
     ref_point (2d array-like object): the points
-    hv_algo (:class:`~pygmo.core.hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
 
 Returns:
     ``float``: the computed hypervolume assuming *ref_point* as reference point
@@ -2088,7 +2192,7 @@ for :func:`~pygmo.hypervolume.exclusive` in a loop).
 
 Args:
     ref_point (2d array-like object): the points
-    hv_algo (:class:`~pygmo.core.hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
 
 Returns:
     1D NumPy array of ``float``: the contribution of all points to the hypervolume
@@ -2110,7 +2214,7 @@ Computes the exclusive contribution to the hypervolume of a particular point.
 Args:
     idx (``int``): index of the point
     ref_point (array-like object): the reference point
-    hv_algo (:class:`~pygmo.core.hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
 
 
 Returns:
@@ -2133,7 +2237,7 @@ Computes the point contributing the most to the total hypervolume.
 
 Args:
     ref_point (array-like object): the reference point
-    hv_algo (:class:`~pygmo.core.hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
 
 Raises:
     ValueError: if *ref_point* is not suitable
@@ -2151,7 +2255,7 @@ Computes the point contributing the least to the total hypervolume.
 
 Args:
     ref_point (array-like object): the reference point
-    hv_algo (:class:`~pygmo.core.hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
 
 Raises:
     ValueError: if *ref_point* is not suitable

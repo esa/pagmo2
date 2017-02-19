@@ -116,6 +116,11 @@ std::string hv_contributions_docstring();
 std::string hv_exclusive_docstring();
 std::string hv_greatest_contributor_docstring();
 std::string hv_least_contributor_docstring();
+std::string hvwfg_docstring();
+std::string hv2d_docstring();
+std::string hv3d_docstring();
+std::string bf_approx_docstring();
+std::string bf_fpras_docstring();
 // stand alone functions
 std::string fast_non_dominated_sorting_docstring();
 std::string ideal_docstring();

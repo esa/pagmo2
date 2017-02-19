@@ -33,11 +33,11 @@ algorithm, whereas
 would use (by default) the hv3d algorithm, since it is expected by pygmo to be faster for three dimensions. The following
 algorithms are available in pygmo:
 
-#. hv2d()
-#. hv3d()
-#. wfg()
-#. bf_approx() - Returning approximate results
-#. bf_fpras() - Returning approximate results
+#. :class:`~pygmo.core.hv2d`
+#. :class:`~pygmo.core.hv3d`
+#. :class:`~pygmo.core.hvwfg`
+#. :class:`~pygmo.core.bf_fpras`
+#. :class:`~pygmo.core.bf_approx` 
 
 .. note::
    Some algorithms may not provide certain functionalities, e.g.: *bf_fpras* algorithm is designed for efficient approxmation
@@ -99,9 +99,9 @@ for the default set of algorithms. Since in many cases, multiple objective probl
 it was important to have a dedicated algorithm for each of these scenarios. At the moment, there are
 three exact algorithms in PyGMO, two of which are dedicated for certain dimensions:
 
-#. `PyGMO.util.hv_algorithm.hv2d`
-#. `PyGMO.util.hv_algorithm.hv3d`
-#. `PyGMO.util.hv_algorithm.wfg`
+#. :class:`~pygmo.core.hv2d`
+#. :class:`~pygmo.core.hv3d`
+#. :class:`~pygmo.core.hvwfg`
 
 Even though WFG is regarded one of the state of the art algorithms for hypervolume computation, dedicated algorithms
 for 2 and 3 dimensions perform better than general purpose ones in terms of running time as shown by the plot
@@ -117,21 +117,21 @@ Short summary of algorithms
 
 The default algorithm used by pygmo, if not specified otherwise, will be:
 
-======================= ==== ==== ==== =========
-hypervolume method      2D   3D   4D   5D and up
-======================= ==== ==== ==== =========
-``compute``             hv2d hv3d wfg  wfg
-``contribution-based*`` hv2d hv3d wfg  wfg
-======================= ==== ==== ==== =========
+======================= ========================= ========================= =========
+hypervolume method      2D                        3D                        4D and up
+======================= ========================= ========================= =========
+``compute``             :class:`~pygmo.core.hv2d` :class:`~pygmo.core.hv3d` :class:`~pygmo.core.hvwfg`
+``contribution-based*`` :class:`~pygmo.core.hv2d` :class:`~pygmo.core.hv3d` :class:`~pygmo.core.hvwfg`
+======================= ========================= ========================= =========
 
 The methods supported by the specific algorithms are listed below:
 
-============= ======= ========= ================= ==================== =============
-hv_algorithm  compute exclusive least_contributor greatest_contributor contributions
-============= ======= ========= ================= ==================== =============
-``hv2d``      Yes     Yes       Yes               Yes                  Yes
-``hv3d``      Yes     Yes       Yes               Yes                  Yes
-``wfg``       Yes     Yes       Yes               Yes                  Yes
-``bf_approx`` No      No        Yes               Yes                  No
-``bf_fpras``  Yes     No        No                No                   No
-============= ======= ========= ================= ==================== =============
+================================ ======= ========= ================= ==================== =============
+hv_algorithm                     compute exclusive least_contributor greatest_contributor contributions
+================================ ======= ========= ================= ==================== =============
+:class:`~pygmo.core.hv2d`        Yes     Yes       Yes               Yes                  Yes
+:class:`~pygmo.core.hv3d`        Yes     Yes       Yes               Yes                  Yes
+:class:`~pygmo.core.hvwfg`       Yes     Yes       Yes               Yes                  Yes
+:class:`~pygmo.core.bf_fpras`    No      No        Yes               Yes                  No
+:class:`~pygmo.core.bf_approx`   Yes     No        No                No                   No
+================================ ======= ========= ================= ==================== =============
