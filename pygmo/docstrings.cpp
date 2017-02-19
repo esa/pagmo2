@@ -1182,6 +1182,49 @@ See also the docs of the C++ class :cpp:class:`pagmo::rosenbrock`.
 )";
 }
 
+std::string zdt_p_distance_docstring()
+{
+    return R"(p_distance(point)
+
+Convergence metric for a decision vectors (0 = on the optimal front)
+
+Introduced by Martens and Izzo, this metric is able to measure "a distance" of any point from
+the pareto front of any ZDT problem analytically.
+
+Args:
+    point (array-like object): decision vector for which the p distance is requested
+
+Returns:
+    ``float``: the distance (or average distance) from the Pareto front
+
+See also the docs of the C++ class :func:`~pygmo.core.zdt.p_distance()`
+
+)";
+}
+
+std::string dtlz_p_distance_docstring()
+{
+    return R"(p_distance(point)
+
+p_distance(pop)
+
+Convergence metric for decision vectors (0 = on the optimal front)
+
+Introduced by Martens and Izzo, this metric is able to measure "a distance" of any point from
+the pareto front of any DTLZ problem analytically.
+
+Args:
+    point (array-like object): decision vector for which the p distance is requested
+    pop (:class:`~pygmo.core.population`): population for which the average p distance is requested
+
+Returns:
+    ``float``: the distance (or average distance) from the Pareto front
+
+See also the docs of the C++ class :func:`~pygmo.core.dtlz.p_distance()`
+
+)";
+}
+
 std::string dtlz_docstring()
 {
     return R"(__init__(id = 1, dim = 5, fdim = 3, alpha = 100)

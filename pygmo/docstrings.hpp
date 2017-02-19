@@ -85,6 +85,8 @@ std::string algorithm_docstring();
 // user - problems
 std::string rosenbrock_docstring();
 std::string dtlz_docstring();
+std::string dtlz_p_distance_docstring();
+std::string zdt_p_distance_docstring();
 std::string cec2013_docstring();
 std::string decompose_decompose_fitness_docstring();
 std::string get_best_docstring(const std::string &);
