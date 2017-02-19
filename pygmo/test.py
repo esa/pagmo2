@@ -1990,7 +1990,7 @@ class hypervolume_test_case(_ut.TestCase):
     
     """
     def runTest(self):
-        from .core import hypervolume, hv2d, hv3d, wfg, bf_fpras, bf_approx
+        from .core import hypervolume, hv2d, hv3d, hvwfg, bf_fpras, bf_approx
         from .core import population, zdt
         pop = population(prob=zdt(id=1, param=10), size=20)
         hv1 = hypervolume(pop=pop)
@@ -2000,7 +2000,7 @@ class hypervolume_test_case(_ut.TestCase):
         res0 = hv2.compute([3, 3])
 
         algo1 = hv2d()
-        algo2 = wfg()
+        algo2 = hvwfg()
         algo3 = bf_fpras()
         algo4 = bf_approx()
 
