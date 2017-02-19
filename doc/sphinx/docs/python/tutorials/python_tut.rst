@@ -22,6 +22,7 @@ Hypervolumes
 
   hypervolume
   hypervolume_advanced
+  hypervolume_approx
 
 Advanced Examples
 ^^^^^^^^^^^^^^^^^

@@ -37,8 +37,8 @@ hypervolume contributions is class :class:`~pygmo.core.hypervolume`. You can imp
     True
     
 Since the computation of the hypervolume indicator and the hypervolume contributions are bound tightly
-to multi-objective optimization, we provide two ways of constructing a hypervolume object.
-The first one uses the fitness values of the individuals of a population for the input point set:
+to multi-objective optimization, we provide two ways of constructing :class:`~pygmo.core.hypervolume`.
+The first one uses the fitness values of the individuals of a :class:`~pygmo.core.population` for the input point set:
 
 .. doctest::
 
@@ -50,8 +50,8 @@ The first one uses the fitness values of the individuals of a population for the
   
 .. note::
 
-   You need to reconstruct the hypervolume object if the fitness values of the population are changing. 
-   The point set which is saved in the hypervolume object is copied once upon contruction.
+   You need to reconstruct the :class:`~pygmo.core.hypervolume` if the fitness values of the population are changing. 
+   The point set is saved in the :class:`~pygmo.core.hypervolume` and copied there once upon contruction.
 
 The second way of construction uses an explicit representation of coordinates for the input point set:
 
@@ -90,7 +90,8 @@ For simplicity, we will use a simple 2-dimensional front as an example to show t
   >>> hv.compute(ref_point)  
   3.25
 
-We will refer to each point by it's position on the x-axis, e.g. first point is the point (0,1), fourth point is (1.5, 0.75) etc. The plot below shows you the overall geometry of the example with the reference point painted red.
+We will refer to each point by it's position on the x-axis, e.g. first point is the point (0,1), fourth
+point is (1.5, 0.75) etc. The plot below shows you the overall geometry of the example with the reference point painted red.
 
 .. image:: ../../images/hv_front_2d_simple.png
   :width: 600px
@@ -98,7 +99,7 @@ We will refer to each point by it's position on the x-axis, e.g. first point is 
 
 Once the hypervolume object is created, it allows for the computation of the following figures:
 
-1. ``compute`` - Returns the joint hypervolume of the set of points (S-Metric).
+1. :class:`~pygmo.core.hypervolume.compute` - Returns the joint hypervolume of the set of points (S-Metric).
 
 .. doctest::
 
@@ -106,8 +107,9 @@ Once the hypervolume object is created, it allows for the computation of the fol
     >>> hv.compute(ref_point)
     3.25
 
-2. ``exclusive`` - Returns the exclusive hypervolume by the point at given index. The exclusive hypervolume 
-is defined as the part of the space dominated exclusively by one point and is also called its (hypervolume) contribution.
+2. :class:`~pygmo.core.hypervolume.exclusive` - Returns the exclusive hypervolume by the point at given index.
+   The exclusive hypervolume 
+   is defined as the part of the space dominated exclusively by one point and is also called its (hypervolume) contribution.
 
 .. doctest::
 
@@ -117,15 +119,15 @@ is defined as the part of the space dominated exclusively by one point and is al
     >>> hv.exclusive(3, ref_point)
     0.0
 
-3. ``least_contributor`` - Returns the index of a point contributing the least to the hypervolume.
+3. :class:`~pygmo.core.hypervolume.least_contributor` - Returns the index of a point contributing the least to the hypervolume.
 
 .. doctest::
 
-  >>> # hv and ref_point refer to the data above
-  >>> hv.least_contributor(ref_point)
-  3
+    >>> # hv and ref_point refer to the data above
+    >>> hv.least_contributor(ref_point)
+    3
 
-4. ``greatest_contributor`` - Returns the index of a point contributing the most to the hypervolume.
+4. :class:`~pygmo.core.hypervolume.greatest_contributor` - Returns the index of a point contributing the most to the hypervolume.
 
 .. doctest::
 
@@ -136,10 +138,11 @@ is defined as the part of the space dominated exclusively by one point and is al
 .. note::
   In case of several least/greatest contributors, pygmo returns only one contributor out of all candidates arbitrarily.
 
-5. ``contributions`` - Returns a list of contributions for all points in the set.
-   This returns the same results as the successive call to the *exclusive* method 
-   for each of the points. Due to the implementation, calling *contributions* once can
-   be much faster (up to a linear factor) than computing all contributions separately by using *exclusive*.
+5. :class:`~pygmo.core.hypervolume.contributions` - Returns a list of contributions for all points in the set.
+   This returns the same results as the successive call to the :class:`~pygmo.core.hypervolume.exclusive` method 
+   for each of the points. Due to the implementation, calling :class:`~pygmo.core.hypervolume.contributions` once can
+   be much faster (up to a linear factor) than computing all contributions separately 
+   by using :class:`~pygmo.core.hypervolume.exclusive`.
 
 .. doctest::
 
