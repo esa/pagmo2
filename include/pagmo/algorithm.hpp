@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include "exceptions.hpp"
 #include "population.hpp"
 #include "serialization.hpp"
+#include "threading.hpp"
 #include "type_traits.hpp"
 
 #define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, #algo)
@@ -164,6 +165,7 @@ struct algo_inner_base {
     virtual bool has_set_verbosity() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
+    virtual thread_safety get_thread_safety() const = 0;
     template <typename Archive>
     void serialize(Archive &)
     {
@@ -226,6 +228,10 @@ struct algo_inner final : algo_inner_base {
     virtual std::string get_extra_info() const override final
     {
         return get_extra_info_impl(m_value);
+    }
+    virtual thread_safety get_thread_safety() const override final
+    {
+        return get_thread_safety_impl(m_value);
     }
     // Implementation of the optional methods.
     template <typename U, enable_if_t<pagmo::has_set_seed<U>::value, int> = 0>
@@ -302,6 +308,17 @@ struct algo_inner final : algo_inner_base {
     {
         return "";
     }
+    template <typename U, enable_if_t<has_get_thread_safety<U>::value, int> = 0>
+    static thread_safety get_thread_safety_impl(const U &value)
+    {
+        return value.get_thread_safety();
+    }
+    template <typename U, enable_if_t<!has_get_thread_safety<U>::value, int> = 0>
+    static thread_safety get_thread_safety_impl(const U &)
+    {
+        return thread_safety::basic;
+    }
+
     // Serialization
     template <typename Archive>
     void serialize(Archive &ar)
@@ -345,6 +362,7 @@ struct algo_inner final : algo_inner_base {
  * bool has_set_verbosity() const;
  * std::string get_name() const;
  * std::string get_extra_info() const;
+ * thread_safety get_thread_safety() const;
  * @endcode
  *
  * See the documentation of the corresponding methods in this class for details on how the optional
@@ -610,6 +628,21 @@ public:
         return ptr()->get_extra_info();
     }
 
+    /// Algorithm's thread safety level.
+    /**
+     * If the UDA satisfies pagmo::has_get_thread_safety, then this method will return the output of its
+     * <tt>%get_thread_safety()</tt> method. Otherwise, thread_safety::basic will be returned.
+     * That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDA instances.
+     *
+     * @return the thread safety level of the UDA.
+     *
+     * @throws unspecified any exception thrown by the <tt>%get_thread_safety()</tt> method of the UDA.
+     */
+    thread_safety get_thread_safety() const
+    {
+        return ptr()->get_thread_safety();
+    }
+
     /// Streaming operator
     /**
      * This function will stream to \p os a human-readable representation of the input
@@ -630,6 +663,7 @@ public:
         } else {
             stream(os, " [stochastic]");
         }
+        stream(os, "\n\tThread safety: ", a.get_thread_safety(), '\n');
         const auto extra_str = a.get_extra_info();
         if (!extra_str.empty()) {
             stream(os, "\nExtra info:\n", extra_str);
