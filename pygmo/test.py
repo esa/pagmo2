@@ -1976,6 +1976,7 @@ class null_problem_test_case(_ut.TestCase):
     """Test case for the null problem
 
     """
+
     def runTest(self):
         from .core import null_problem as np, problem
         n = np()
@@ -1985,10 +1986,12 @@ class null_problem_test_case(_ut.TestCase):
         self.assertTrue(problem(np()).get_nobj() == 1)
         self.assertTrue(problem(np(23)).get_nobj() == 23)
 
+
 class hypervolume_test_case(_ut.TestCase):
     """Test case for the hypervolume utilities
-    
+
     """
+
     def runTest(self):
         from .core import hypervolume, hv2d, hv3d, hvwfg, bf_fpras, bf_approx
         from .core import population, zdt
