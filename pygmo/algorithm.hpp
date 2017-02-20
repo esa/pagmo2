@@ -66,7 +66,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     algo_inner &operator=(algo_inner &&) = delete;
     explicit algo_inner(const bp::object &o)
     {
-        check_mandatory_method(m_value, "evolve", "algorithm");
+        check_mandatory_method(o, "evolve", "algorithm");
         m_value = pygmo::deepcopy(o);
     }
     virtual algo_inner_base *clone() const override final
