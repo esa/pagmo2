@@ -336,7 +336,7 @@ struct algo_inner final : algo_inner_base {
  *
  * This class represents an optimization algorithm. An algorithm can be
  * stochastic, deterministic, population based, derivative-free, using hessians,
- * using gradients, a meta-heuristic, evolutionary, etc.. Via this class PaGMO offers a common interface to
+ * using gradients, a meta-heuristic, evolutionary, etc.. Via this class pagmo offers a common interface to
  * all types of algorithms that can be applied to find solution to a generic matematical
  * programming problem as represented by the pagmo::problem class.
  *
