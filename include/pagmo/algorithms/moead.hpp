@@ -83,6 +83,7 @@ public:
     *
     * @param gen number of generations
     * @param weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
+    * @param decomposition decomposition method: one of "weighted", "tchebycheff" or "bi"
     * @param neighbours size of the weight's neighborhood
     * @param CR crossover parameter in the Differential Evolution operator
     * @param F parameter for the Differential Evolution operator

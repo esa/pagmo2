@@ -1270,13 +1270,16 @@ std::string zdt_p_distance_docstring()
 {
     return R"(p_distance(point)
 
-Convergence metric for a decision vectors (0 = on the optimal front)
+p_distance(pop)
+
+Convergence metric for decision vectors (0 = on the optimal front)
 
 Introduced by Martens and Izzo, this metric is able to measure "a distance" of any point from
-the pareto front of any ZDT problem analytically.
+the pareto front of any DTLZ problem analytically.
 
 Args:
     point (array-like object): decision vector for which the p distance is requested
+    pop (:class:`~pygmo.core.population`): population for which the average p distance is requested
 
 Returns:
     ``float``: the distance (or average distance) from the Pareto front

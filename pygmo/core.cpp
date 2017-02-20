@@ -689,7 +689,8 @@ BOOST_PYTHON_MODULE(core)
     auto zdt_p = pygmo::expose_problem<zdt>("zdt", "__init__(id = 1, param = 30)\n\nThe ZDT problem.\n\n"
                                                    "See :cpp:class:`pagmo::zdt`.\n\n");
     zdt_p.def(bp::init<unsigned, unsigned>((bp::arg("id") = 1u, bp::arg("param") = 30u)));
-    zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); },
+    zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); });
+    zdt_p.def("p_distance", +[](const zdt &z, const population &pop) { return z.p_distance(pop); },
               pygmo::zdt_p_distance_docstring().c_str());
     // DTLZ.
     auto dtlz_p = pygmo::expose_problem<dtlz>("dtlz", pygmo::dtlz_docstring().c_str());

@@ -715,6 +715,8 @@ std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, v
     * @param weight the weight to be used in the decomposition.
     * @param ref_point the reference point to be used if either "tchebycheff" or "bi".
     * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
+    * @param method decomposition method: one of "weighted", "tchebycheff" or "bi"
+
     *
     * @return the decomposed objective.
     *
