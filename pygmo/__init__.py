@@ -38,6 +38,7 @@ from .plotting import *
 # And we explicitly import the submodules
 from . import core
 from . import plotting
+from . import test
 
 # Patch the problem class.
 from . import _patch_problem

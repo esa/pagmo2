@@ -17,4 +17,4 @@ install(TARGETS core
 ADD_SUBDIRECTORY(plotting)
 
 # Add the Python files.
-install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py DESTINATION ${PYGMO_INSTALL_PATH})
+install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py _problem_test.py DESTINATION ${PYGMO_INSTALL_PATH})
