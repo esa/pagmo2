@@ -553,7 +553,9 @@ BOOST_PYTHON_MODULE(core)
         .def("is_stochastic", &algorithm::is_stochastic,
              "is_stochastic()\n\nAlias for :func:`~pygmo.core.algorithm.has_set_seed()`.\n")
         .def("get_name", &algorithm::get_name, pygmo::algorithm_get_name_docstring().c_str())
-        .def("get_extra_info", &algorithm::get_extra_info, pygmo::algorithm_get_extra_info_docstring().c_str());
+        .def("get_extra_info", &algorithm::get_extra_info, pygmo::algorithm_get_extra_info_docstring().c_str())
+        .def("get_thread_safety", &algorithm::get_thread_safety,
+             pygmo::algorithm_get_thread_safety_docstring().c_str());
 
     // Translate meta-problem.
     pygmo::translate_ptr

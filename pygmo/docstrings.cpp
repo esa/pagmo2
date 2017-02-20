@@ -1449,6 +1449,26 @@ Raises:
 )";
 }
 
+std::string algorithm_get_thread_safety_docstring()
+{
+    return R"(get_thread_safety()
+
+Algorithm's thread safety level.
+
+This method will return a value of the enum :class:`pygmo.thread_safety` which indicates the thread safety level
+of the UDA. Unlike in C++, in Python it is not possible to re-implement this method in the UDA. That is, for C++
+UDAs, the returned value will be the value returned by the ``get_thread_safety()`` method of the UDA. For Python
+UDAs, the returned value will be unconditionally :attr:`pygmo.thread_safety.none`.
+
+Returns:
+    a value of :class:`pygmo.thread_safety`: the thread safety level of the UDA
+
+Raises:
+    unspecified: any exception thrown by the ``get_thread_safety()`` method of the UDA
+
+)";
+}
+
 std::string null_problem_docstring()
 {
     return R"(__init__(nobj = 1)
