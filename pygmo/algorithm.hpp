@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 
 #include "common_base.hpp"
 #include "common_utils.hpp"
@@ -57,26 +58,16 @@ namespace bp = boost::python;
 
 template <>
 struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
-    // These are the mandatory methods that must be present.
-    void check_construction_object() const
-    {
-        if (pygmo::isinstance(m_value, pygmo::builtin().attr("type"))) {
-            pygmo_throw(PyExc_TypeError, "cannot construct an algorithm from a type: please use an instance "
-                                         "as construction argument");
-        }
-        check_mandatory_method(m_value, "evolve", "algorithm");
-    }
     // Just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;
     algo_inner(algo_inner &&) = delete;
     algo_inner &operator=(const algo_inner &) = delete;
     algo_inner &operator=(algo_inner &&) = delete;
-    explicit algo_inner(bp::object o)
-        : // Perform an explicit deep copy of the input object.
-          m_value(pygmo::deepcopy(o))
+    explicit algo_inner(const bp::object &o)
     {
-        check_construction_object();
+        check_mandatory_method(m_value, "evolve", "algorithm");
+        m_value = pygmo::deepcopy(o);
     }
     virtual algo_inner_base *clone() const override final
     {
@@ -91,16 +82,33 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     // Optional methods.
     virtual void set_seed(unsigned n) override final
     {
-        auto a = pygmo::callable_attribute(m_value, "set_seed");
-        if (a) {
-            a(n);
+        auto ss = pygmo::callable_attribute(m_value, "set_seed");
+        if (ss) {
+            ss(n);
         } else {
-            pygmo_throw(PyExc_RuntimeError, "'set_seed()' has been called but it is not implemented");
+            pygmo_throw(PyExc_NotImplementedError,
+                        ("set_seed() has been invoked but it is not implemented "
+                         "in the user-defined Python algorithm '"
+                         + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
+                         + "': the method is either not present or not callable")
+                            .c_str());
         }
     }
     virtual bool has_set_seed() const override final
     {
-        return getter_wrapper<bool>(m_value, "has_set_seed", pygmo::callable_attribute(m_value, "set_seed"));
+        auto ss = pygmo::callable_attribute(m_value, "set_seed");
+        if (!ss) {
+            return false;
+        }
+        auto hss = pygmo::callable_attribute(m_value, "has_set_seed");
+        if (!hss) {
+            return true;
+        }
+        return bp::extract<bool>(hss());
+    }
+    virtual pagmo::thread_safety get_thread_safety() const override final
+    {
+        return pagmo::thread_safety::none;
     }
     virtual std::string get_name() const override final
     {
@@ -112,16 +120,29 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     }
     virtual void set_verbosity(unsigned n) override final
     {
-        auto a = pygmo::callable_attribute(m_value, "set_verbosity");
-        if (a) {
-            a(n);
+        auto sv = pygmo::callable_attribute(m_value, "set_verbosity");
+        if (sv) {
+            sv(n);
         } else {
-            pygmo_throw(PyExc_RuntimeError, "'set_verbosity()' has been called but it is not implemented");
+            pygmo_throw(PyExc_NotImplementedError,
+                        ("set_verbosity() has been invoked but it is not implemented "
+                         "in the user-defined Python algorithm '"
+                         + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
+                         + "': the method is either not present or not callable")
+                            .c_str());
         }
     }
     virtual bool has_set_verbosity() const override final
     {
-        return getter_wrapper<bool>(m_value, "has_set_verbosity", pygmo::callable_attribute(m_value, "set_verbosity"));
+        auto sv = pygmo::callable_attribute(m_value, "set_verbosity");
+        if (!sv) {
+            return false;
+        }
+        auto hsv = pygmo::callable_attribute(m_value, "has_set_verbosity");
+        if (!hsv) {
+            return true;
+        }
+        return bp::extract<bool>(hsv());
     }
     bp::object m_value;
 };

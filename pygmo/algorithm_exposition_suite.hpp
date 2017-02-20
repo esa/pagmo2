@@ -47,13 +47,13 @@ namespace pygmo
 
 namespace bp = boost::python;
 
-// Expose an algorithm ctor from a user-defined algorithm.
+// Expose an algorithm ctor from a C++ UDA.
 template <typename Algo>
-inline void algorithm_algo_init()
+inline void algorithm_expose_init_cpp_uda()
 {
     assert(algorithm_ptr.get() != nullptr);
     auto &algo_class = *algorithm_ptr;
-    algo_class.def(bp::init<const Algo &>((bp::arg("a"))));
+    algo_class.def(bp::init<const Algo &>((bp::arg("uda"))));
 }
 
 // Utils to expose algo log.
@@ -85,7 +85,7 @@ inline bp::class_<Algo> expose_algorithm(const char *name, const char *descr)
     c.attr("_pygmo_cpp_algorithm") = true;
 
     // Expose the algorithm constructor from Algo.
-    algorithm_algo_init<Algo>();
+    algorithm_expose_init_cpp_uda<Algo>();
     // Expose extract.
     algorithm_class.def("_cpp_extract", &generic_cpp_extract<pagmo::algorithm, Algo>,
                         bp::return_internal_reference<>());

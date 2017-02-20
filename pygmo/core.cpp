@@ -71,6 +71,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
+#include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/sade.hpp>
