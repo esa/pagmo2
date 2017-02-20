@@ -42,3 +42,7 @@ more in general, to multi-objective optimization tasks.
 --------------------------------------------------------------------------
 
 .. doxygenfunction:: pagmo::decomposition_weights
+
+--------------------------------------------------------------------------
+
+.. doxygenfunction:: pagmo::decompose_objectives

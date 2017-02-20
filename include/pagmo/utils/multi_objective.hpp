@@ -678,5 +678,107 @@ std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, v
     return retval;
 }
 
+/// Decomposes a vector of objectives.
+/**
+    * A vector of objectives is reduced to one only objective using a decomposition
+    * technique.
+    *
+    * Three different *decomposition methods* are here
+    * made available:
+    *
+    * - weighted decomposition,
+    * - Tchebycheff decomposition,
+    * - boundary interception method (with penalty constraint).
+    *
+    * In the case of \f$n\f$ objectives, we indicate with: \f$ \mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots,
+ * f_n(\mathbf
+    * x)] \f$ the vector containing the original multiple objectives, with: \f$ \boldsymbol \lambda = (\lambda_1,
+ * \ldots,
+    * \lambda_n) \f$ an \f$n\f$-dimensional weight vector and with: \f$ \mathbf z^* = (z^*_1, \ldots, z^*_n) \f$
+    * an \f$n\f$-dimensional reference point. We also ussume \f$\lambda_i > 0, \forall i=1..n\f$ and \f$\sum_i \lambda_i
+ * =
+    * 1\f$.
+    *
+    * The resulting single objective is thus defined as:
+    *
+    * - weighted decomposition: \f$ f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f \f$,
+    * - Tchebycheff decomposition: \f$ f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i
+ * \vert
+    * \f$,
+    * - boundary interception method (with penalty constraint): \f$ f_d(\mathbf x) = d_1 + \theta d_2\f$,
+    *
+    * where \f$d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}\f$,
+    * \f$d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\f$ and
+    * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$.
+    *
+    * @param f input vector of objectives.
+    * @param weight the weight to be used in the decomposition.
+    * @param ref_point the reference point to be used if either "tchebycheff" or "bi".
+    * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
+    *
+    * @return the decomposed objective.
+    *
+    * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes
+    * @throws std::invalid_argument if \p method is not one of "weighted", "tchebycheff" or "bi"
+    */
+vector_double decompose_objectives(const vector_double &f, const vector_double &weight, const vector_double &ref_point,
+                                   const std::string &method)
+{
+    if (weight.size() != f.size()) {
+        pagmo_throw(std::invalid_argument,
+                    "Weight vector size must be equal to the number of objectives. The size of the weight vector is "
+                        + std::to_string(weight.size()) + " while " + std::to_string(f.size())
+                        + " objectives were detected");
+    }
+    if (ref_point.size() != f.size()) {
+        pagmo_throw(
+            std::invalid_argument,
+            "Reference point size must be equal to the number of objectives. The size of the reference point is "
+                + std::to_string(ref_point.size()) + " while " + std::to_string(f.size())
+                + " objectives were detected");
+    }
+    if (f.size() == 0u) {
+        pagmo_throw(std::invalid_argument, "The number of objectives detected is: " + std::to_string(f.size())
+                                               + ". Cannot decompose this into anything.");
+    }
+    double fd = 0.;
+    if (method == "weighted") {
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            fd += weight[i] * f[i];
+        }
+    } else if (method == "tchebycheff") {
+        double tmp, fixed_weight;
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            (weight[i] == 0.) ? (fixed_weight = 1e-4)
+                              : (fixed_weight = weight[i]); // fixes the numerical problem of 0 weights
+            tmp = fixed_weight * std::abs(f[i] - ref_point[i]);
+            if (tmp > fd) {
+                fd = tmp;
+            }
+        }
+    } else if (method == "bi") { // BI method
+        const double THETA = 5.;
+        double d1 = 0.;
+        double weight_norm = 0.;
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            d1 += (f[i] - ref_point[i]) * weight[i];
+            weight_norm += std::pow(weight[i], 2);
+        }
+        weight_norm = std::sqrt(weight_norm);
+        d1 = d1 / weight_norm;
+
+        double d2 = 0.;
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            d2 += std::pow(f[i] - (ref_point[i] + d1 * weight[i] / weight_norm), 2);
+        }
+        d2 = std::sqrt(d2);
+        fd = d1 + THETA * d2;
+    } else {
+        pagmo_throw(std::invalid_argument, "The decomposition method chosen was: " + method
+                                               + R"(, but only "weighted", "tchebycheff" or "bi" are allowed)");
+    }
+    return {fd};
+}
+
 } // namespace pagmo
 #endif
