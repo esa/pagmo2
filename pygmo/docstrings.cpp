@@ -1607,13 +1607,14 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log`.
 
 std::string moead_docstring()
 {
-    return R"(__init__(gen = 1, weight_generation = "grid", neighbours = 20, CR = 1, F = 0.5, eta_m = 20, realb = 0.9, limit = 2, preserve_diversity = true, seed = random)
+    return R"(__init__(gen = 1, weight_generation = "grid", decomposition = "tchebycheff", neighbours = 20, CR = 1, F = 0.5, eta_m = 20, realb = 0.9, limit = 2, preserve_diversity = true, seed = random)
 
 Multi Objective Evolutionary Algorithms by Decomposition (the DE variant)
 
 Args:
     gen (``int``): number of generations
     weight_generation (``str``): method used to generate the weights, one of "grid", "low discrepancy" or "random"
+    decomposition (``str``): method used to decompose the objectives, one of "tchebycheff", "weighted" or "bi"
     neighbours (``int``): size of the weight's neighborhood
     CR (``float``): crossover parameter in the Differential Evolution operator
     F (``float``): parameter for the Differential Evolution operator
@@ -1625,7 +1626,8 @@ Args:
 
 Raises:
     OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
-    ValueError: if *weight_generation* is not one of 'random', 'low discrepancy', 'grid'
+    ValueError: if *decomposition* is not one of 'tchebycheff', 'weighted' or 'bi'
+    ValueError: if *weight_generation* is not one of 'random', 'low discrepancy' or 'grid'
     ValueError: if *CR* or *F* or *realb* are not in [0.,1.] or if *eta_m* is negative
 
 See also the docs of the C++ class :cpp:class:`pagmo::moead`.

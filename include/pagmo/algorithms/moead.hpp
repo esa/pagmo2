@@ -96,11 +96,11 @@ public:
     * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not
     * in [1.0] or m_eta is < 0
     */
-    moead(unsigned int gen = 1u, std::string weight_generation = "grid", std::string dec_method = "tchebycheff",
+    moead(unsigned int gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
           population::size_type neighbours = 20u, double CR = 1.0, double F = 0.5, double eta_m = 20.,
           double realb = 0.9, unsigned int limit = 2u, bool preserve_diversity = true,
           unsigned int seed = pagmo::random_device::next())
-        : m_gen(gen), m_weight_generation(weight_generation), m_dec_method(dec_method), m_neighbours(neighbours),
+        : m_gen(gen), m_weight_generation(weight_generation), m_decomposition(decomposition), m_neighbours(neighbours),
           m_CR(CR), m_F(F), m_eta_m(eta_m), m_realb(realb), m_limit(limit), m_preserve_diversity(preserve_diversity),
           m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
@@ -111,8 +111,8 @@ public:
                         "Weight generation method requested is '" + m_weight_generation
                             + "', but only one of 'random', 'low discrepancy', 'grid' is allowed");
         }
-        if (m_dec_method != "tchebycheff" && m_dec_method != "weighted" && m_dec_method != "bi") {
-            pagmo_throw(std::invalid_argument, "Weight generation method requested is '" + m_dec_method
+        if (m_decomposition != "tchebycheff" && m_decomposition != "weighted" && m_decomposition != "bi") {
+            pagmo_throw(std::invalid_argument, "Weight generation method requested is '" + m_decomposition
                                                    + "', but only one of 'tchebycheff', 'weighted', 'bi' is allowed");
         }
         if (CR > 1.0 || CR < 0.) {
@@ -222,7 +222,7 @@ public:
                     // We compute the average decomposed fitness (ADF)
                     auto adf = 0.;
                     for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
-                        adf += decompose_objectives(pop.get_f()[i], weights[i], ideal_point, m_dec_method)[0];
+                        adf += decompose_objectives(pop.get_f()[i], weights[i], ideal_point, m_decomposition)[0];
                     }
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
@@ -295,8 +295,8 @@ public:
                 // 9 - We insert the newly found solution into the population
                 decltype(NP) size, time = 0;
                 // First try on problem n
-                auto f1 = decompose_objectives(pop.get_f()[n], weights[n], ideal_point, m_dec_method);
-                auto f2 = decompose_objectives(new_f, weights[n], ideal_point, m_dec_method);
+                auto f1 = decompose_objectives(pop.get_f()[n], weights[n], ideal_point, m_decomposition);
+                auto f2 = decompose_objectives(new_f, weights[n], ideal_point, m_decomposition);
                 if (f2[0] < f1[0]) {
                     pop.set_xf(n, candidate, new_f);
                     time++;
@@ -317,8 +317,8 @@ public:
                     } else {
                         pick = neigh_idxs[n][shuffle2[k]];
                     }
-                    f1 = decompose_objectives(pop.get_f()[pick], weights[pick], ideal_point, m_dec_method);
-                    f2 = decompose_objectives(new_f, weights[pick], ideal_point, m_dec_method);
+                    f1 = decompose_objectives(pop.get_f()[pick], weights[pick], ideal_point, m_decomposition);
+                    f2 = decompose_objectives(new_f, weights[pick], ideal_point, m_decomposition);
                     if (f2[0] < f1[0]) {
                         pop.set_xf(pick, candidate, new_f);
                         time++;
@@ -418,7 +418,7 @@ public:
         std::ostringstream ss;
         stream(ss, "\tGenerations: ", m_gen);
         stream(ss, "\n\tWeight generation: ", m_weight_generation);
-        stream(ss, "\n\tDecomposition method: ", m_dec_method);
+        stream(ss, "\n\tDecomposition method: ", m_decomposition);
         stream(ss, "\n\tNeighbourhood size: ", m_neighbours);
         stream(ss, "\n\tParameter CR: ", m_F);
         stream(ss, "\n\tParameter F: ", m_F);
@@ -451,7 +451,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_weight_generation, m_dec_method, m_neighbours, m_CR, m_F, m_eta_m, m_realb, m_limit,
+        ar(m_gen, m_weight_generation, m_decomposition, m_neighbours, m_CR, m_F, m_eta_m, m_realb, m_limit,
            m_preserve_diversity, m_e, m_seed, m_verbosity, m_log);
     }
 
@@ -527,7 +527,7 @@ private:
 
     unsigned int m_gen;
     std::string m_weight_generation;
-    std::string m_dec_method;
+    std::string m_decomposition;
     population::size_type m_neighbours;
     double m_CR;
     double m_F;

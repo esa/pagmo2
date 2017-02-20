@@ -46,22 +46,33 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(moead_algorithm_construction)
 {
-    moead user_algo{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
-    BOOST_CHECK(user_algo.get_verbosity() == 0u);
-    BOOST_CHECK(user_algo.get_seed() == 23u);
-    BOOST_CHECK((user_algo.get_log() == moead::log_type{}));
+    moead uda{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
+    BOOST_CHECK(uda.get_verbosity() == 0u);
+    BOOST_CHECK(uda.get_seed() == 23u);
+    BOOST_CHECK((uda.get_log() == moead::log_type{}));
 
     // Check the throws
     // Wrong weight generation type
-    BOOST_CHECK_THROW((moead{1234u, "random_typo"}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "typo", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
     // Wrong CR
-    BOOST_CHECK_THROW((moead{1234u, "grid", "tchebycheff", 20u, 2.}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1.1, 0.5, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, -0.3, 0.5, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
     // Wrong F
-    BOOST_CHECK_THROW((moead{1234u, "grid", "tchebycheff", 20u, 0.5, 2.}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 1.1, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., -0.3, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
     // Wrong eta_m
-    BOOST_CHECK_THROW((moead{1234u, "grid", "tchebycheff", 20u, 0.5, 0.5, -2.}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 0.5, -20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
     // Wrong realb
-    BOOST_CHECK_THROW((moead{1234u, "grid", "tchebycheff", 20u, 0.5, 0.5, 20., 2.}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 1.1, 2u, true, 23u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., -0.34, 2u, true, 23u}),
+                      std::invalid_argument);
 }
 
 struct mo_con {
