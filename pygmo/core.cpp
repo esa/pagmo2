@@ -535,7 +535,7 @@ BOOST_PYTHON_MODULE(core)
     pygmo::algorithm_ptr
         = make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::no_init);
     auto &algorithm_class = *pygmo::algorithm_ptr;
-    algorithm_class.def(bp::init<const bp::object &>((bp::arg("a"))))
+    algorithm_class.def(bp::init<const bp::object &>((bp::arg("uda"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::algorithm_pickle_suite())
         // Copy and deepcopy.
@@ -544,37 +544,16 @@ BOOST_PYTHON_MODULE(core)
         // Algorithm extraction.
         .def("_py_extract", &pygmo::generic_py_extract<algorithm>)
         // Algorithm methods.
-        .def("evolve", &algorithm::evolve, "evolve(pop)\n\nEvolve population.\n\n:param pop: the population to evolve\n"
-                                           ":type pop: :class:`pygmo.core.population`\n"
-                                           ":returns: the evolved population\n"
-                                           ":rtype: :class:`pygmo.core.population`\n\n",
-             (bp::arg("pop")))
-        .def("set_seed", &algorithm::set_seed,
-             "set_seed(seed)\n\nSet algorithm seed.\n\n:param seed: the desired seed\n:type seed: ``int``\n"
-             ":raises: :exc:`RuntimeError` if the user-defined algorithm does not support seed setting\n"
-             ":raises: :exc:`OverflowError` if *seed* is negative or too large\n\n",
-             (bp::arg("seed")))
-        .def("has_set_seed", &algorithm::has_set_seed,
-             "has_set_seed()\n\nDetect the presence of the ``set_seed()`` method in the user-defined algorithm.\n\n"
-             ":returns: ``True`` if the user-defined algorithm has the ability of setting a random seed, ``False`` "
-             "otherwise\n"
-             ":rtype: ``bool``\n\n")
-        .def("set_verbosity", &algorithm::set_verbosity,
-             "set_verbosity(level)\n\nSet algorithm verbosity.\n\n:param level: the desired verbosity level\n:type "
-             "level: ``int``\n"
-             ":raises: :exc:`RuntimeError` if the user-defined algorithm does not support verbosity setting\n"
-             ":raises: :exc:`OverflowError` if *level* is negative or too large\n\n",
+        .def("evolve", &algorithm::evolve, pygmo::algorithm_evolve_docstring().c_str(), (bp::arg("pop")))
+        .def("set_seed", &algorithm::set_seed, pygmo::algorithm_set_seed_docstring().c_str(), (bp::arg("seed")))
+        .def("has_set_seed", &algorithm::has_set_seed, pygmo::algorithm_has_set_seed_docstring().c_str())
+        .def("set_verbosity", &algorithm::set_verbosity, pygmo::algorithm_set_verbosity_docstring().c_str(),
              (bp::arg("level")))
-        .def("has_set_verbosity", &algorithm::has_set_verbosity,
-             "has_set_verbosity()\n\nDetect the presence of the ``set_verbosity()`` method in the user-defined "
-             "algorithm.\n\n"
-             ":returns: ``True`` if the user-defined algorithm has the ability of setting a verbosity level, ``False`` "
-             "otherwise\n"
-             ":rtype: ``bool``\n\n")
+        .def("has_set_verbosity", &algorithm::has_set_verbosity, pygmo::algorithm_has_set_verbosity_docstring().c_str())
         .def("is_stochastic", &algorithm::is_stochastic,
-             "is_stochastic()\n\nAlias for :func:`~pygmo.core.algorithm.has_set_seed`.")
-        .def("get_name", &algorithm::get_name, "Get algorithm's name.")
-        .def("get_extra_info", &algorithm::get_extra_info, "Get algorithm's extra info.");
+             "is_stochastic()\n\nAlias for :func:`~pygmo.core.algorithm.has_set_seed()`.\n")
+        .def("get_name", &algorithm::get_name, pygmo::algorithm_get_name_docstring().c_str())
+        .def("get_extra_info", &algorithm::get_extra_info, pygmo::algorithm_get_extra_info_docstring().c_str());
 
     // Translate meta-problem.
     pygmo::translate_ptr

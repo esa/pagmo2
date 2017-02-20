@@ -92,6 +92,13 @@ std::string decompose_z_docstring();
 
 // algorithm
 std::string algorithm_docstring();
+std::string algorithm_evolve_docstring();
+std::string algorithm_set_seed_docstring();
+std::string algorithm_has_set_seed_docstring();
+std::string algorithm_set_verbosity_docstring();
+std::string algorithm_has_set_verbosity_docstring();
+std::string algorithm_get_name_docstring();
+std::string algorithm_get_extra_info_docstring();
 
 // user - problems
 std::string null_problem_docstring();

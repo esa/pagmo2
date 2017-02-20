@@ -109,23 +109,23 @@ class problem_test_case(_ut.TestCase):
         from numpy import all, array
         from .core import problem, rosenbrock
         # First a few non-problems.
-        self.assertRaises(TypeError, lambda: problem(1))
-        self.assertRaises(TypeError, lambda: problem("hello world"))
-        self.assertRaises(TypeError, lambda: problem([]))
-        self.assertRaises(TypeError, lambda: problem(int))
+        self.assertRaises(NotImplementedError, lambda: problem(1))
+        self.assertRaises(NotImplementedError, lambda: problem("hello world"))
+        self.assertRaises(NotImplementedError, lambda: problem([]))
+        self.assertRaises(NotImplementedError, lambda: problem(int))
         # Some problems missing methods, wrong arity, etc.
 
         class np0(object):
 
             def fitness(self, a):
                 return [1]
-        self.assertRaises(TypeError, lambda: problem(np0))
+        self.assertRaises(NotImplementedError, lambda: problem(np0))
 
         class np1(object):
 
             def get_bounds(self):
                 return ([0], [1])
-        self.assertRaises(TypeError, lambda: problem(np1))
+        self.assertRaises(NotImplementedError, lambda: problem(np1))
 
         class np2(object):
 
