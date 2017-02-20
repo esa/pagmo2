@@ -43,6 +43,10 @@ from . import plotting
 from . import _patch_problem
 
 
+# Patch the algorithm class.
+from . import _patch_algorithm
+
+
 class thread_safety(object):
     """Thread safety level.
 
@@ -55,53 +59,6 @@ class thread_safety(object):
     #: Basic thread safety: concurrent operations on distinct instances are safe
     basic = core._thread_safety.basic
 
-
-def _algorithm_extract(self, t):
-    """Extract user-defined algorithm instance.
-
-    If *t* is the same type of the user-defined algorithm used to construct this algorithm, then a deep copy of
-    the user-defined algorithm will be returned. Otherwise, ``None`` will be returned.
-
-    Args:
-        t (type): the type of the user-defined algorithm to extract
-
-    Returns:
-        a deep-copy of the internal user-defined algorithm if it is of type *t*, or ``None`` otherwise
-
-    Rsies:
-        TypeError" if *t* is not a type
-
-    """
-    if not isinstance(t, type):
-        raise TypeError("the 't' parameter must be a type")
-    if hasattr(t, "_pygmo_cpp_algorithm"):
-        try:
-            return self._cpp_extract(t())
-        except TypeError:
-            return None
-    try:
-        return self._py_extract(t)
-    except TypeError:
-        return None
-
-
-def _algorithm_is(self, t):
-    """Check the type of the user-defined algorithm instance.
-
-    If *t* is the same type of the user-defined algorithm used to construct this algorithm, then ``True`` will be
-    returned. Otherwise, ``False`` will be returned.
-
-    Args:
-        t (type): the type of the user-defined algorithm to extract
-
-    Returns:
-        bool: whether the user-defined algorithm is of type *t* or not
-
-    Raises:
-        TypeError: if *t* is not a type
-
-    """
-    return not self.extract(t) is None
 
 # Override of the population constructor.
 __original_population_init = population.__init__
@@ -153,10 +110,6 @@ def _population_init(self, prob=None, size=0, seed=None):
         __original_population_init(self, prob_arg, size, seed)
 
 setattr(population, "__init__", _population_init)
-
-# Same for algorithm and meta-algorithms.
-setattr(algorithm, "extract", _algorithm_extract)
-setattr(algorithm, "is_", _algorithm_is)
 
 # Register the cleanup function.
 import atexit as _atexit
