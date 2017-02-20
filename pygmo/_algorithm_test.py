@@ -33,8 +33,8 @@ from __future__ import absolute_import as _ai
 import unittest as _ut
 
 
-class problem_test_case(_ut.TestCase):
-    """Test case for the :class:`~pygmo.core.problem` class.
+class algorithm_test_case(_ut.TestCase):
+    """Test case for the :class:`~pygmo.core.algorithm` class.
 
     """
 
@@ -62,35 +62,36 @@ class problem_test_case(_ut.TestCase):
         self.run_thread_safety_tests()
 
     def run_basic_tests(self):
-        # Tests for minimal problem, and mandatory methods.
+        # Tests for minimal algorithm, and mandatory methods.
         from numpy import all, array
-        from .core import problem, rosenbrock
-        # First a few non-problems.
-        self.assertRaises(NotImplementedError, lambda: problem(1))
-        self.assertRaises(NotImplementedError, lambda: problem("hello world"))
-        self.assertRaises(NotImplementedError, lambda: problem([]))
-        self.assertRaises(NotImplementedError, lambda: problem(int))
-        # Some problems missing methods, wrong arity, etc.
+        from .core import algorithm, de
+        # First a few non-algos.
+        self.assertRaises(NotImplementedError, lambda: algorithm(1))
+        self.assertRaises(NotImplementedError,
+                          lambda: algorithm("hello world"))
+        self.assertRaises(NotImplementedError, lambda: algorithm([]))
+        self.assertRaises(NotImplementedError, lambda: algorithm(int))
+        # Some algorithms missing methods, wrong arity, etc.
 
-        class np0(object):
+        class na0(object):
+            pass
+        self.assertRaises(NotImplementedError, lambda: algorithm(na0()))
 
-            def fitness(self, a):
-                return [1]
-        self.assertRaises(NotImplementedError, lambda: problem(np0()))
+        class na1(object):
 
-        class np1(object):
+            evolve = 45
+        self.assertRaises(NotImplementedError, lambda: algorithm(na1()))
 
-            def get_bounds(self):
-                return ([0], [1])
-        self.assertRaises(NotImplementedError, lambda: problem(np1()))
+        return
 
         class np2(object):
 
             def get_bounds(self):
                 return ([0, 0], [1, 1])
 
-            fitness = 42
-        self.assertRaises(NotImplementedError, lambda: problem(np2()))
+            def fitness(self, a, b):
+                return [42]
+        self.assertRaises(TypeError, lambda: problem(np2))
 
         class np3(object):
 
@@ -99,7 +100,7 @@ class problem_test_case(_ut.TestCase):
 
             def fitness(self, a):
                 return [42]
-        self.assertRaises(TypeError, lambda: problem(np3()))
+        self.assertRaises(TypeError, lambda: problem(np3))
         # The minimal good citizen.
         glob = []
 

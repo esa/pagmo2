@@ -344,10 +344,11 @@ def run_test_suite():
     This function will raise an exception if at least one test fails.
 
     """
-    from . import _problem_test
+    from . import _problem_test, _algorithm_test
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(_problem_test.problem_test_case())
+    suite.addTest(_algorithm_test.algorithm_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
