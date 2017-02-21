@@ -896,7 +896,9 @@ BOOST_PYTHON_MODULE(core)
              },
              pygmo::hv_contributions_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
         .add_property("copy_points", &hypervolume::get_copy_points, &hypervolume::set_copy_points)
-        .def("get_points", +[](hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); });
+        .def("get_points", +[](const hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); })
+        .def("refpoint", +[](const hypervolume &hv, double offset) { return pygmo::v_to_a(hv.refpoint(offset)); },
+             pygmo::hv_refpoint_docstring().c_str(), (bp::arg("offset") = 0));
 
     // Hypervolume algorithms
     bp::class_<hv_algorithm, boost::noncopyable>("_hv_algorithm", bp::no_init).def("get_name", &hv_algorithm::get_name);

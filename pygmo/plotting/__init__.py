@@ -128,6 +128,24 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
     except IndexError:
         print('Error. Please choose correct fitness dimensions for printing!')
 
+    # Plot pareto front for dtlz 1
+    if (pop.get_problem().get_name()[-1] in ["1"]):
+
+        X, Y = np.meshgrid(np.linspace(0, 0.5, 100), np.linspace(0, 0.5, 100))
+        Z = - X - Y + 0.5
+        # remove points not in the simplex
+        for i in range(100):
+            for j in range(100):
+                if X[i, j] < 0 or Y[i, j] < 0 or Z[i, j] < 0:
+                    Z[i, j] = float('nan')
+
+        ax.set_xlim(0, 1.)
+        ax.set_ylim(0, 1.)
+        ax.set_zlim(0, 1.)
+
+        ax.plot_wireframe(X, Y, Z, rstride=10, cstride=10)
+        plt.plot([0, 0.5], [0.5, 0], [0, 0])
+
     # Plot pareto fronts for dtlz 2,3,4
     if (pop.get_problem().get_name()[-1] in ["2", "3", "4"]):
         # plot the wireframe of the known optimal pareto front
@@ -138,8 +156,6 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
         x_frame = np.outer(np.cos(thetas), np.cos(gammas))
         y_frame = np.outer(np.cos(thetas), np.sin(gammas))
         z_frame = np.outer(np.sin(thetas), np.ones(np.size(gammas)))
-
-        ax.view_init(azim=az)
 
         ax.set_autoscalex_on(False)
         ax.set_autoscaley_on(False)

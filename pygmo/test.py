@@ -2011,6 +2011,7 @@ class hypervolume_test_case(_ut.TestCase):
     def runTest(self):
         from .core import hypervolume, hv2d, hv3d, hvwfg, bf_fpras, bf_approx
         from .core import population, zdt
+        import numpy as np
         pop = population(prob=zdt(id=1, param=10), size=20)
         hv1 = hypervolume(pop=pop)
         hv2 = hypervolume(points=[[0, 0], [-1, 1], [-2, 2]])
@@ -2043,6 +2044,9 @@ class hypervolume_test_case(_ut.TestCase):
         res = hv2.least_contributor(ref_point=[3, 3])
         res = hv2.greatest_contributor(ref_point=[3, 3])
         res = hv2.contributions(ref_point=[3, 3])
+
+        self.assertTrue((hv2.refpoint(offset = 0) == np.array([0.,2.])).all() == True)
+        self.assertTrue((hv2.refpoint(offset = .1) == np.array([0.1,2.1])).all() == True)
 
 
 class dtlz_test_case(_ut.TestCase):

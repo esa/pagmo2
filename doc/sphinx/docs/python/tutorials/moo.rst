@@ -83,8 +83,8 @@ implemented called *p_distance*. We can check how well the non dominated front i
     >>> udp.p_distance(pop) # doctest: +SKIP
     0.03926512747685471
 
-If we are not happy on the value of such a metric, we can evolve the population for some more generation to 
-improve such a figure:
+If we are not happy on the value of such a metric, we can evolve the population for some more generations to 
+improve the figure:
 
 .. doctest::
    

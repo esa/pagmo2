@@ -2505,4 +2505,25 @@ See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::least_contribu
 )";
 }
 
+std::string hv_refpoint_docstring()
+{
+    return R"(hypervolume.refpoint(offset = 0)
+
+Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
+The result is a point that is necessarily dominated by all other points, and thus can be used for hypervolume computations.
+
+**NOTE** This point is different from the one computed by pagmo::nadir as only the non dominated front is considered
+in that method (also its complexity is thus higher)
+
+Args:
+    offset (``float``): the reference point
+
+Returns:
+    1D NumPy array of ``float``: the reference point
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::refpoint`.
+
+)";
+}
+
 } // namespace
