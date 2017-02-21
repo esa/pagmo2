@@ -680,51 +680,45 @@ std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, v
 
 /// Decomposes a vector of objectives.
 /**
-    * A vector of objectives is reduced to one only objective using a decomposition
-    * technique.
-    *
-    * Three different *decomposition methods* are here
-    * made available:
-    *
-    * - weighted decomposition,
-    * - Tchebycheff decomposition,
-    * - boundary interception method (with penalty constraint).
-    *
-    * In the case of \f$n\f$ objectives, we indicate with: \f$ \mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots,
- * f_n(\mathbf
-    * x)] \f$ the vector containing the original multiple objectives, with: \f$ \boldsymbol \lambda = (\lambda_1,
- * \ldots,
-    * \lambda_n) \f$ an \f$n\f$-dimensional weight vector and with: \f$ \mathbf z^* = (z^*_1, \ldots, z^*_n) \f$
-    * an \f$n\f$-dimensional reference point. We also ussume \f$\lambda_i > 0, \forall i=1..n\f$ and \f$\sum_i \lambda_i
- * =
-    * 1\f$.
-    *
-    * The resulting single objective is thus defined as:
-    *
-    * - weighted decomposition: \f$ f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f \f$,
-    * - Tchebycheff decomposition: \f$ f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i
- * \vert
-    * \f$,
-    * - boundary interception method (with penalty constraint): \f$ f_d(\mathbf x) = d_1 + \theta d_2\f$,
-    *
-    * where \f$d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}\f$,
-    * \f$d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\f$ and
-    * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$.
-    *
-    * @param f input vector of objectives.
-    * @param weight the weight to be used in the decomposition.
-    * @param ref_point the reference point to be used if either "tchebycheff" or "bi".
-    * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
-    * @param method decomposition method: one of "weighted", "tchebycheff" or "bi"
-
-    *
-    * @return the decomposed objective.
-    *
-    * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes
-    * @throws std::invalid_argument if \p method is not one of "weighted", "tchebycheff" or "bi"
-    */
-vector_double decompose_objectives(const vector_double &f, const vector_double &weight, const vector_double &ref_point,
-                                   const std::string &method)
+ * A vector of objectives is reduced to one only objective using a decomposition
+ * technique.
+ *
+ * Three different *decomposition methods* are here made available:
+ *
+ * - weighted decomposition,
+ * - Tchebycheff decomposition,
+ * - boundary interception method (with penalty constraint).
+ *
+ * In the case of \f$n\f$ objectives, we indicate with: \f$ \mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots,
+ * f_n(\mathbf x)] \f$ the vector containing the original multiple objectives, with: \f$ \boldsymbol \lambda =
+ * (\lambda_1, \ldots, \lambda_n) \f$ an \f$n\f$-dimensional weight vector and with: \f$ \mathbf z^* = (z^*_1, \ldots,
+ * z^*_n) \f$ an \f$n\f$-dimensional reference point. We also ussume \f$\lambda_i > 0, \forall i=1..n\f$ and \f$\sum_i
+ * \lambda_i = 1\f$.
+ *
+ * The resulting single objective is thus defined as:
+ *
+ * - weighted decomposition: \f$ f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f \f$,
+ * - Tchebycheff decomposition: \f$ f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i \vert
+ * \f$,
+ * - boundary interception method (with penalty constraint): \f$ f_d(\mathbf x) = d_1 + \theta d_2\f$,
+ *
+ * where \f$d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}\f$,
+ * \f$d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\f$ and
+ * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$.
+ *
+ * @param f input vector of objectives.
+ * @param weight the weight to be used in the decomposition.
+ * @param ref_point the reference point to be used if either "tchebycheff" or "bi".
+ * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
+ * @param method decomposition method: one of "weighted", "tchebycheff" or "bi"
+ *
+ * @return the decomposed objective.
+ *
+ * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes
+ * @throws std::invalid_argument if \p method is not one of "weighted", "tchebycheff" or "bi"
+ */
+inline vector_double decompose_objectives(const vector_double &f, const vector_double &weight,
+                                          const vector_double &ref_point, const std::string &method)
 {
     if (weight.size() != f.size()) {
         pagmo_throw(std::invalid_argument,

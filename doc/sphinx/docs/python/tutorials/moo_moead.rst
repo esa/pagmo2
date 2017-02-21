@@ -5,7 +5,7 @@ Using pygmo's :class:`~pygmo.core.moead`
 ================================================================
 
 In this tutorial we will see how to use the user-defined algorithm :class:`~pygmo.core.moead` 
-provided by pygmo. In particular we will take as test cases, problems from the DTLZ suite implemented
+provided by pygmo. In particular we will take as test cases problems from the DTLZ suite implemented
 in pygmo as the user-defined problem :class:`~pygmo.core.dtlz`.
 
 The first, quick idea would be to instantiate the problem (say DTLZ1) and run :class:`~pygmo.core.moead`
@@ -68,7 +68,7 @@ particular the **weight_generation** kwarg was set to **grid** and the **decompo
         Verbosity: 0
 
 The **weight_generation** method **grid** offers a uniform distribution of the decomposed weights, but is 
-limiting the population size as it only allows for certaing sizes accoridng to the number of objectives. This 
+limiting the population size as it only allows for certaing sizes according to the number of objectives. This 
 can reveal to be limiting when using :class:`~pygmo.core.moead` in comparisons or in other advanced setups. In these 
 cases pygmo provides alternative methods for weight generation. In particular, the original **low discrepancy** method
 makes sure that any number of weights can be generated while ensuring a low discrepancy spread over the objective space.
