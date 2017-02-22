@@ -293,8 +293,8 @@ public:
     /**
      * This method will sets the verbosity level of the screen output and of the
      * log returned by get_log(). \p level can be:
-     * - 0: no verbosity
-     * - >0: will print and log one line at the end of each call to the inner algorithm
+     * - 0: no verbosity,
+     * - >0: will print and log one line at the end of each call to the inner algorithm.
      *
      * Example (verbosity 100):
      * @code
@@ -310,13 +310,14 @@ public:
      *     937         111.33              1      0.0149418              4 i
      *    1045         111.33              1      0.0149418              5 i
      * @endcode
-     * Fevals, is the number of fitness evaluations, Best is the objective function of the best
-     * fitness currently in the population, Violated is the number of constraints currently violated
-     * by the best solution, Viol. Norm is the norm of the violation (discounted already by the constraints
-     * tolerance) and Trial is the trial number (which will determine the algorithm stop).
-     * The small i appearing at the end of the line stands for "infeasible" and will disappear only once Violated is 0.
+     * \p Fevals is the number of fitness evaluations, \p Best is the objective function of the best
+     * fitness currently in the population, \p Violated is the number of constraints currently violated
+     * by the best solution, <tt>Viol. Norm</tt> is the norm of the violation (discounted already by the constraints
+     * tolerance) and \p Trial is the trial number (which will determine the algorithm stop).
+     * The small \p i appearing at the end of the line stands for "infeasible" and will disappear only
+     * once \p Violated is 0.
      *
-     * @param level verbosity level
+     * @param level verbosity level.
      */
     void set_verbosity(unsigned level)
     {
