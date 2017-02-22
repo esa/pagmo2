@@ -82,6 +82,7 @@ public:
     * @param[in] eta_m Distribution index for mutation.
     * @param int_dim the dimension of the decision vector to be considered as integer (the last int_dim entries will be
     * treated as integers when mutation and crossover are applied)
+    * @param seed seed used by the internal random number generator (default is random)
     * @throws std::invalid_argument if crossover probability is not \f$ \in [0,1[\f$, mutation probability or mutation
     * width is
     * not \f$ \in [0,1]\f$.
@@ -125,9 +126,6 @@ public:
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                               // allowed (pop.set_problem_seed is)
         auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
-        const auto bounds = prob.get_bounds();
-        const auto &lb = bounds.first;
-        const auto &ub = bounds.second;
         auto NP = pop.size();
 
         auto fevals0 = prob.get_fevals(); // discount for the fevals already made
@@ -520,7 +518,6 @@ private:
         // declarations
         double rnd, delta1, delta2, mut_pow, deltaq;
         double y, yl, yu, val, xy;
-        int gen_num;
         // Random distributions
         std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
 
@@ -555,7 +552,7 @@ private:
             if (drng(m_e) <= m_m) {
                 std::uniform_int_distribution<vector_double::size_type> ra_num(
                     static_cast<vector_double::size_type>(lb[j]), static_cast<vector_double::size_type>(ub[j]));
-                child[j] = ra_num(m_e);
+                child[j] = static_cast<double>(ra_num(m_e));
             }
         }
     }
