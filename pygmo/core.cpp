@@ -350,6 +350,36 @@ struct tu_test_problem {
     }
 };
 
+// A test algo.
+struct test_algorithm {
+    population evolve(const population &pop) const
+    {
+        return pop;
+    }
+    // Set/get an internal value to test extraction semantics.
+    void set_n(int n)
+    {
+        m_n = n;
+    }
+    int get_n() const
+    {
+        return m_n;
+    }
+    int m_n = 1;
+};
+
+// A thread unsafe test algo.
+struct tu_test_algorithm {
+    population evolve(const population &pop) const
+    {
+        return pop;
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
 BOOST_PYTHON_MODULE(core)
 {
     // Setup doc options
@@ -696,6 +726,12 @@ BOOST_PYTHON_MODULE(core)
     cec2013_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
 #endif
     // Exposition of C++ algorithms.
+    // Test algo.
+    auto test_a = pygmo::expose_algorithm<test_algorithm>("_test_algorithm", "A test algorithm.");
+    test_a.def("get_n", &test_algorithm::get_n);
+    test_a.def("set_n", &test_algorithm::set_n);
+    // Thread unsafe test algo.
+    pygmo::expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm",
                                                       "__init__()\n\nThe null algorithm.\n\nA test algorithm.\n\n");

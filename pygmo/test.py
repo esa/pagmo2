@@ -232,8 +232,10 @@ class hypervolume_test_case(_ut.TestCase):
         res = hv2.greatest_contributor(ref_point=[3, 3])
         res = hv2.contributions(ref_point=[3, 3])
 
-        self.assertTrue((hv2.refpoint(offset = 0) == np.array([0.,2.])).all() == True)
-        self.assertTrue((hv2.refpoint(offset = .1) == np.array([0.1,2.1])).all() == True)
+        self.assertTrue((hv2.refpoint(offset=0) ==
+                         np.array([0., 2.])).all() == True)
+        self.assertTrue((hv2.refpoint(offset=.1) ==
+                         np.array([0.1, 2.1])).all() == True)
 
 
 class dtlz_test_case(_ut.TestCase):
