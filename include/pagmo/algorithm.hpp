@@ -559,6 +559,9 @@ public:
     }
 
     /// Alias for algorithm::has_set_seed.
+    /**
+     * @return the output of pagmo::algorithm::has_set_seed().
+     */
     bool is_stochastic() const
     {
         return has_set_seed();
