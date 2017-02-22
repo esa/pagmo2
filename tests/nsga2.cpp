@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/io.hpp>
+#include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -83,13 +84,28 @@ BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
     // wrong integer dimension
     BOOST_CHECK_THROW((nsga2{1u, 0.95, 10., 0.01, 50., 100u, 32u}.evolve(population{zdt{}, 10u, 23u})),
                       std::invalid_argument);
+    // wrong population size
+    BOOST_CHECK_THROW((nsga2{}.evolve(population{zdt{}, 3u, 23u})), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga2{}.evolve(population{zdt{}, 50u, 23u})), std::invalid_argument);
 
-    population pop{zdt{1u}, 100u};
-    algorithm algo{nsga2{1000u}};
-    algo.set_verbosity(10u);
-    print(pop.get_problem().extract<zdt>()->p_distance(pop), "\n");
-    pop = algo.evolve(pop);
-    print(pop.get_problem().extract<zdt>()->p_distance(pop));
+    // We check for deterministic behaviour if the seed is controlled
+    // we treat the last three components of the decision vector as integers
+    // to trigger all cases
+    dtlz udp{1u, 10u, 3u};
+
+    population pop1{udp, 52u, 23u};
+    population pop2{udp, 52u, 23u};
+
+    nsga2 user_algo1{10u, 0.95, 10., 0.01, 50., 3u, 32u};
+    user_algo1.set_verbosity(1u);
+    pop1 = user_algo1.evolve(pop1);
+
+    nsga2 user_algo2{10u, 0.95, 10., 0.01, 50., 3u, 32u};
+    user_algo2.set_verbosity(1u);
+    pop2 = user_algo2.evolve(pop2);
+
+    BOOST_CHECK(user_algo1.get_log().size() > 0u);
+    BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 }
 
 BOOST_AUTO_TEST_CASE(nsga2_setters_getters_test)
@@ -102,4 +118,43 @@ BOOST_AUTO_TEST_CASE(nsga2_setters_getters_test)
     BOOST_CHECK(user_algo.get_name().find("NSGA-II") != std::string::npos);
     BOOST_CHECK(user_algo.get_extra_info().find("Verbosity") != std::string::npos);
     // BOOST_CHECK_NO_THROW(user_algo.get_log());
+}
+
+BOOST_AUTO_TEST_CASE(nsga2_serialization_test)
+{
+    // Make one evolution
+    problem prob{zdt{1u, 30u}};
+    population pop{prob, 40u, 23u};
+    algorithm algo{nsga2{100u, 0.95, 10., 0.01, 50., 2u, 32u}};
+    algo.set_verbosity(1u);
+    pop = algo.evolve(pop);
+
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before_text = boost::lexical_cast<std::string>(algo);
+    auto before_log = algo.extract<nsga2>()->get_log();
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
+    }
+    // Change the content of p before deserializing.
+    algo = algorithm{null_algorithm{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo);
+    }
+    auto after_text = boost::lexical_cast<std::string>(algo);
+    auto after_log = algo.extract<nsga2>()->get_log();
+    BOOST_CHECK_EQUAL(before_text, after_text);
+    // BOOST_CHECK(before_log == after_log); // This fails because of floating point problems when using JSON and cereal
+    // so we implement a close check
+    BOOST_CHECK(before_log.size() > 0u);
+    for (auto i = 0u; i < before_log.size(); ++i) {
+        BOOST_CHECK_EQUAL(std::get<0>(before_log[i]), std::get<0>(after_log[i]));
+        BOOST_CHECK_EQUAL(std::get<1>(before_log[i]), std::get<1>(after_log[i]));
+        for (auto j = 0u; j < 2u; ++j) {
+            BOOST_CHECK_CLOSE(std::get<2>(before_log[i])[j], std::get<2>(after_log[i])[j], 1e-8);
+        }
+    }
 }

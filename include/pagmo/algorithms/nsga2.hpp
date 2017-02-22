@@ -49,7 +49,7 @@ namespace pagmo
 {
 /// Nondominated Sorting genetic algorithm II (NSGA-II)
 /**
- * \image html moead.png "Solving by decomposition" width=3cm
+ * \image html nsga2.jpg "The NSGA-II flowchart" width=3cm
 
  * NSGA-II is a solid multi-objective algorithm, widely used in many real-world applications.
  * While today it can be considered as an outdated approach, nsga2 has still a great value, if not
@@ -158,6 +158,12 @@ public:
                 "The problem dimension is: " + std::to_string(dim)
                     + ", while this instance of NSGA-II has been instantiated requesting an integer dimension of: "
                     + std::to_string(m_int_dim));
+        }
+        if (NP < 5u || (NP % 4 != 0u)) {
+            pagmo_throw(std::invalid_argument,
+                        "for NSGA-II at least 5 individuals in the population are needed and the "
+                        "population size must be a multiple of 4. Detected input population size is: "
+                            + std::to_string(NP));
         }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
@@ -307,22 +313,20 @@ public:
      *
      * Example (verbosity 1):
      * @code{.unparsed}
-     * Gen:        Fevals:           ADF:        ideal1:        ideal2:
-     *   1              0        24.9576       0.117748        2.77748
-     *   2             40        19.2461      0.0238826        2.51403
-     *   3             80        12.4375      0.0238826        2.51403
-     *   4            120        9.08406     0.00389182        2.51403
-     *   5            160        7.10407       0.002065        2.51403
-     *   6            200        6.11242     0.00205598        2.51403
-     *   7            240        8.79749     0.00205598        2.25538
-     *   8            280        7.23155    7.33914e-05        2.25538
-     *   9            320        6.83249    7.33914e-05        2.25538
-     *  10            360        6.55125    7.33914e-05        2.25538
+     * Gen:        Fevals:        ideal1:        ideal2:        ideal3:
+     *   1              0      0.0257554       0.267768       0.974592
+     *   2             52      0.0257554       0.267768       0.908174
+     *   3            104      0.0257554       0.124483       0.822804
+     *   4            156      0.0130094       0.121889       0.650099
+     *   5            208     0.00182705      0.0987425       0.650099
+     *   6            260      0.0018169      0.0873995       0.509662
+     *   7            312     0.00154273      0.0873995       0.492973
+     *   8            364     0.00154273      0.0873995       0.471251
+     *   9            416    0.000379582      0.0873995       0.471251
+     *  10            468    0.000336743      0.0855247       0.432144
      * @endcode
-     * Gen, is the generation number, Fevals the number of function evaluation used. ADF is the Average
-     * Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness
-     * along the corresponding direction. The ideal point of the current population follows cropped to its 5th
-     * component.
+     * Gen, is the generation number, Fevals the number of function evaluation used. The ideal point of the current
+     * population follows cropped to its 5th component.
      *
      * @param level verbosity level
      */
@@ -370,15 +374,15 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a moead::log_line_type containing: Gen, Fevals, ADR, ideal_point
-     * as described in moead::set_verbosity
-     * @return an <tt> std::vector </tt> of moead::log_line_type containing the logged values Gen, Fevals, ADR,
+     * <tt> std::vector </tt> is a nsga2::log_line_type containing: Gen, Fevals, ideal_point
+     * as described in nsga2::set_verbosity
+     * @return an <tt> std::vector </tt> of nsga2::log_line_type containing the logged values Gen, Fevals,
      * ideal_point
      */
-    // const log_type &get_log() const
-    //{
-    //    return m_log;
-    //}
+    const log_type &get_log() const
+    {
+        return m_log;
+    }
     /// Object serialization
     /**
      * This method will save/load \p this into the archive \p ar.
