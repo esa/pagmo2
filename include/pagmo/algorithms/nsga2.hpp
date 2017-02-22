@@ -164,6 +164,79 @@ public:
             return pop;
         }
         // ---------------------------------------------------------------------------------------------------------
+
+        // Declarations
+        std::vector<vector_double::size_type> best_idx(NP), shuffle1(NP), shuffle2(NP);
+        vector_double::size_type parent1_idx, parent2_idx;
+        vector_double child1(dim), child2(dim);
+
+        std::iota(shuffle1.begin(), shuffle1.end(), 0u);
+        std::iota(shuffle2.begin(), shuffle2.end(), 0u);
+
+        // Main NSGA-II loop
+        for (int g = 0; g < m_gen; g++) {
+            // At each generation we make a copy of the population into popnew
+            population popnew(pop);
+
+            // We create some pseudo-random permutation of the poulation indexes
+            std::shuffle(shuffle1.begin(), shuffle1.end(), m_e);
+            std::shuffle(shuffle2.begin(), shuffle2.end(), m_e);
+
+            // We compute crowding distance and non dominated rank for the current population
+            auto fnds_res = fast_non_dominated_sorting(pop.get_f());
+            auto ndf = std::get<0>(fnds_res); // non dominated fronts [[0,3,2],[1,5,6],[4],...]
+            vector_double pop_cd(NP);         // crowding distances of the whole population
+            auto ndr = std::get<3>(fnds_res); // non domination rank [0,1,0,0,2,1,1, ... ]
+            for (const auto &front_idxs : ndf) {
+                if (front_idxs.size() == 1u) { // handles the case where the front has collapsed to one point
+                    pop_cd[front_idxs[0]] = std::numeric_limits<double>::infinity();
+                } else {
+                    if (front_idxs.size() == 2u) { // handles the case where the front has collapsed to one point
+                        pop_cd[front_idxs[0]] = std::numeric_limits<double>::infinity();
+                        pop_cd[front_idxs[1]] = std::numeric_limits<double>::infinity();
+                    } else {
+                        std::vector<vector_double> front;
+                        for (auto idx : front_idxs) {
+                            front.push_back(pop.get_f()[idx]);
+                        }
+                        auto cd = crowding_distance(front);
+                        for (decltype(cd.size()) i = 0u; i < cd.size(); ++i) {
+                            pop_cd[front_idxs[i]] = cd[i];
+                        }
+                    }
+                }
+            }
+
+            // We then loop thorugh all individuals with increment 4 to select two pairs of parents that will
+            // each create 2 new offspring
+            for (decltype(NP) i = 0u; i < NP; i += 4) {
+                // We create two offsprings using the shuffled list 1
+                parent1_idx = tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd);
+                parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
+                crossover(child1, child2, parent1_idx, parent2_idx, pop);
+                mutate(child1, pop);
+                mutate(child2, pop);
+                popnew.push_back(child1);
+                popnew.push_back(child2);
+
+                // We repeat with the shuffled list 2
+                parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
+                parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
+                crossover(child1, child2, parent1_idx, parent2_idx, pop);
+                mutate(child1, pop);
+                mutate(child2, pop);
+                popnew.push_back(child1);
+                popnew.push_back(child2);
+            } // popnew now contains 2NP individuals
+
+            // This method returns the sorted N best individuals in the population according to the crowded comparison
+            // operator defined in population.cpp
+            best_idx = select_best_N_mo(popnew.get_f(), NP);
+            // We reset the population
+            for (population::size_type i = 0; i < NP; ++i) {
+                pop.set_xf(i, popnew.get_x()[best_idx[i]], popnew.get_f()[best_idx[i]]);
+            }
+        } // end of main NSGAII loop
         return pop;
     }
     /// Sets the seed
@@ -278,6 +351,17 @@ public:
     }
 
 private:
+    vector_double::size_type tournament_selection(vector_double::size_type idx1, vector_double::size_type idx2,
+                                                  const std::vector<vector_double::size_type> &non_domination_rank,
+                                                  std::vector<double> &crowding_d) const
+    {
+        if (non_domination_rank[idx1] < non_domination_rank[idx2]) return idx1;
+        if (non_domination_rank[idx1] > non_domination_rank[idx2]) return idx2;
+        if (crowding_d[idx1] > crowding_d[idx2]) return idx1;
+        if (crowding_d[idx1] < crowding_d[idx2]) return idx2;
+        std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
+        return ((drng(m_e) > 0.5) ? idx1 : idx2);
+    }
     void crossover(vector_double &child1, vector_double &child2, vector_double::size_type parent1_idx,
                    vector_double::size_type parent2_idx, const pagmo::population &pop) const
     {

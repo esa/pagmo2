@@ -83,6 +83,10 @@ BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
     // wrong integer dimension
     BOOST_CHECK_THROW((nsga2{1u, 0.95, 10., 0.01, 50., 100u, 32u}.evolve(population{zdt{}, 10u, 23u})),
                       std::invalid_argument);
+
+    population pop{zdt{1u}, 100u};
+    algorithm algo{nsga2{100u}};
+    pop = algo.evolve(pop);
 }
 
 BOOST_AUTO_TEST_CASE(nsga2_setters_getters_test)

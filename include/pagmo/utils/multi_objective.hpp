@@ -209,8 +209,7 @@ using fnds_return_type
  *  - the domination count, an <tt>std::vector<vector_double::size_type></tt> containing the number of individuals
  * that dominate the individual at position \f$i\f$. Example {2, 0, 0, 1}
  *  - the non domination rank, an <tt>std::vector<vector_double::size_type></tt> containing the index of the non
- * dominated
- * front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
+ * dominated front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
  *
  * @throws std::invalid_argument If the size of \p points is not at least 2
  */
