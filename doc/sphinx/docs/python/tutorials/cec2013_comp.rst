@@ -38,6 +38,8 @@ as usual, we can quickly inspect the :class:`~pygmo.core.problem` printing it to
     <BLANKLINE>
     	Function evaluations: 0
     <BLANKLINE>
+    	Thread safety: basic
+    <BLANKLINE>
 
 Let us assume we want to assess the performance of (say) the optimization algorithm :class:`~pygmo.core.cmaes` (which
 implements as user-defined algorithm the Covariance Matrix Adaptation Evolutionary Strategy) on the whole

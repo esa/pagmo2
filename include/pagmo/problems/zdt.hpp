@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include "../detail/constants.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
+#include "../population.hpp"
 #include "../problem.hpp"
 #include "../types.hpp"
 
@@ -244,6 +245,25 @@ public:
     std::string get_name() const
     {
         return "ZDT" + std::to_string(m_prob_id);
+    }
+    /// Distance from the Pareto front (of a population)
+    /**
+     * Convergence metric for a given population (0 = on the optimal front)
+     *
+     * Takes the average across the input population of the p_distance
+     *
+     * @param pop population to be assigned a pareto distance
+     * @return the p_distance
+     *
+     */
+    double p_distance(const pagmo::population &pop) const
+    {
+        double c = 0.0;
+        for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+            c += p_distance(pop.get_x()[i]);
+        }
+
+        return c / static_cast<double>(pop.size());
     }
     /// Distance from the Pareto front
     /**

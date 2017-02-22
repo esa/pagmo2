@@ -14,6 +14,15 @@ Basics
   using_population
   evolving_a_population
 
+Multi-objective optimization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  moo
+  moo_moead
+
 Hypervolumes
 ^^^^^^^^^^^^^^^^^
 

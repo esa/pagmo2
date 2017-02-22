@@ -1270,13 +1270,16 @@ std::string zdt_p_distance_docstring()
 {
     return R"(p_distance(point)
 
-Convergence metric for a decision vectors (0 = on the optimal front)
+p_distance(pop)
+
+Convergence metric for decision vectors (0 = on the optimal front)
 
 Introduced by Martens and Izzo, this metric is able to measure "a distance" of any point from
-the pareto front of any ZDT problem analytically.
+the pareto front of any DTLZ problem analytically.
 
 Args:
     point (array-like object): decision vector for which the p distance is requested
+    pop (:class:`~pygmo.core.population`): population for which the average p distance is requested
 
 Returns:
     ``float``: the distance (or average distance) from the Pareto front
@@ -1607,13 +1610,14 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log`.
 
 std::string moead_docstring()
 {
-    return R"(__init__(gen = 1, weight_generation = "grid", neighbours = 20, CR = 1, F = 0.5, eta_m = 20, realb = 0.9, limit = 2, preserve_diversity = true, seed = random)
+    return R"(__init__(gen = 1, weight_generation = "grid", decomposition = "tchebycheff", neighbours = 20, CR = 1, F = 0.5, eta_m = 20, realb = 0.9, limit = 2, preserve_diversity = true, seed = random)
 
 Multi Objective Evolutionary Algorithms by Decomposition (the DE variant)
 
 Args:
     gen (``int``): number of generations
     weight_generation (``str``): method used to generate the weights, one of "grid", "low discrepancy" or "random"
+    decomposition (``str``): method used to decompose the objectives, one of "tchebycheff", "weighted" or "bi"
     neighbours (``int``): size of the weight's neighborhood
     CR (``float``): crossover parameter in the Differential Evolution operator
     F (``float``): parameter for the Differential Evolution operator
@@ -1625,8 +1629,12 @@ Args:
 
 Raises:
     OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
-    ValueError: if *weight_generation* is not one of 'random', 'low discrepancy', 'grid'
-    ValueError: if *CR* or *F* or *realb* are not in [0.,1.] or if *eta_m* is negative
+    ValueError: if either:
+    
+      * *decomposition* is not one of 'tchebycheff', 'weighted' or 'bi'.
+      * *weight_generation* is not one of 'random', 'low discrepancy' or 'grid'.
+      * *CR* or *F* or *realb* are not in [0.,1.] 
+      * *eta_m* is negative
 
 See also the docs of the C++ class :cpp:class:`pagmo::moead`.
 
@@ -2496,6 +2504,27 @@ Raises:
     ValueError: if *ref_point* is not suitable
 
 See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::least_contributor`.
+
+)";
+}
+
+std::string hv_refpoint_docstring()
+{
+    return R"(hypervolume.refpoint(offset = 0)
+
+Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
+The result is a point that is necessarily dominated by all other points, and thus can be used for hypervolume computations.
+
+**NOTE** This point is different from the one computed by pagmo::nadir as only the non dominated front is considered
+in that method (also its complexity is thus higher)
+
+Args:
+    offset (``float``): the reference point
+
+Returns:
+    1D NumPy array of ``float``: the reference point
+
+See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::refpoint`.
 
 )";
 }
