@@ -10,6 +10,7 @@ we suggest to follow the tutorials / examples.
 .. toctree::
   :maxdepth: 1
 
+  types
   problem
   population
   algorithm
