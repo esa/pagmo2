@@ -194,7 +194,6 @@ public:
      * @param pop population to be assigned a pareto distance
      * @return the p_distance
      *
-     * See: problem::base_unc_mo::p_distance virtual method.
      */
     double p_distance(const pagmo::population &pop) const
     {

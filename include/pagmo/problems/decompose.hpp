@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include "../serialization.hpp"
 #include "../type_traits.hpp"
 #include "../types.hpp"
+#include "../utils/multi_objective.hpp" // pagmo::decompose_objectives
 
 namespace pagmo
 {
@@ -220,7 +221,7 @@ public:
             }
         }
         // we return the decomposed fitness
-        return decompose_fitness(f, m_weight, m_z);
+        return decompose_objectives(f, m_weight, m_z, m_method);
     }
     /// Fitness of the original problem.
     /**
@@ -238,71 +239,6 @@ public:
     {
         // We call the fitness of the original multiobjective problem
         return static_cast<const problem *>(this)->fitness(x);
-    }
-    /// Decomposes a fitness vector.
-    /**
-     * Returns the decomposed fitness vector.
-     *
-     * @param f input fitness.
-     * @param weight the weight to be used in the decomposition.
-     * @param ref_point the reference point to be used if either "tchebycheff" or "bi".
-     * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
-     *
-     * @return the decomposed fitness vector.
-     *
-     * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes
-     */
-    vector_double decompose_fitness(const vector_double &f, const vector_double &weight,
-                                    const vector_double &ref_point) const
-    {
-        if (weight.size() != f.size()) {
-            pagmo_throw(
-                std::invalid_argument,
-                "Weight vector size must be equal to the number of objectives. The size of the weight vector is "
-                    + std::to_string(weight.size()) + " while " + std::to_string(f.size())
-                    + " objectives were detected");
-        }
-        if (ref_point.size() != f.size()) {
-            pagmo_throw(
-                std::invalid_argument,
-                "Reference point size must be equal to the number of objectives. The size of the reference point is "
-                    + std::to_string(ref_point.size()) + " while " + std::to_string(f.size())
-                    + " objectives were detected");
-        }
-        double fd = 0.;
-        if (m_method == "weighted") {
-            for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
-                fd += weight[i] * f[i];
-            }
-        } else if (m_method == "tchebycheff") {
-            double tmp, fixed_weight;
-            for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
-                (weight[i] == 0.) ? (fixed_weight = 1e-4)
-                                  : (fixed_weight = weight[i]); // fixes the numerical problem of 0 weights
-                tmp = fixed_weight * std::abs(f[i] - ref_point[i]);
-                if (tmp > fd) {
-                    fd = tmp;
-                }
-            }
-        } else if (m_method == "bi") { // BI method
-            const double THETA = 5.;
-            double d1 = 0.;
-            double weight_norm = 0.;
-            for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
-                d1 += (f[i] - ref_point[i]) * weight[i];
-                weight_norm += std::pow(weight[i], 2);
-            }
-            weight_norm = std::sqrt(weight_norm);
-            d1 = d1 / weight_norm;
-
-            double d2 = 0.;
-            for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
-                d2 += std::pow(f[i] - (ref_point[i] + d1 * weight[i] / weight_norm), 2);
-            }
-            d2 = std::sqrt(d2);
-            fd = d1 + THETA * d2;
-        }
-        return {fd};
     }
     /// Number of objectives.
     /**

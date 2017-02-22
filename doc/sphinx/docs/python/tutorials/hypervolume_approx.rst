@@ -35,7 +35,7 @@ for the computation of the hypervolume indicator. You can invoke the FPRAS as fo
     >>> fpras = pg.bf_fpras(eps=0.1, delta=0.1)
     >>> hv = pg.hypervolume(pop)
     >>> offset = 5
-    >>> ref_point = [max(pop.get_f(), key = lambda x: x[it])[it] + offset for it in [0,1,2,3]]
+    >>> ref_point = hv.refpoint(offset = 0.1)
     >>> hv.compute(ref, hv_algo=fpras) # doctest: +SKIP
 
 To influence the accuracy of the FPRAS, it is possible to provide the following keyword arguments to its constructor:
@@ -83,7 +83,7 @@ problems has many objectives.
   >>> hv_algo = pg.bf_approx(eps=0.1, delta=0.1)
   >>> hv = pg.hypervolume(pop)
   >>> offset = 5
-  >>> ref_point = [max(pop.get_f(), key = lambda x: x[it])[it] + offset for it in [0,1,2,3]]
+  >>> ref_point = hv.refpoint(offset = 0.1)
   >>> hv.least_contributor(ref_point, hv_algo=hv_algo) # doctest: +SKIP
 
 .. note::

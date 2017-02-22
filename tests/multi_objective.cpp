@@ -379,3 +379,32 @@ BOOST_AUTO_TEST_CASE(decomposition_weights_test)
         check_weights(ws, 5u);
     }
 }
+
+BOOST_AUTO_TEST_CASE(decompose_objectives_test)
+{
+    vector_double weight{0.5, 0.5};
+    vector_double ref_point{0., 0.};
+    vector_double f{1.234, -1.345};
+    auto fw = decompose_objectives(f, weight, ref_point, "weighted")[0];
+    auto ft = decompose_objectives(f, weight, ref_point, "tchebycheff")[0];
+    auto fb = decompose_objectives(f, weight, ref_point, "bi")[0];
+
+    BOOST_CHECK_CLOSE(f[0] * weight[0] + f[1] * weight[1], fw, 1e-8);
+    BOOST_CHECK_CLOSE(std::max(weight[0] * std::abs(f[0] - ref_point[0]), weight[1] * std::abs(f[1] - ref_point[1])),
+                      ft, 1e-8);
+    double lnorm = std::sqrt(weight[0] * weight[0] + weight[1] * weight[1]);
+    vector_double ilambda{weight[0] / lnorm, weight[1] / lnorm};
+    double d1 = (f[0] - ref_point[0]) * ilambda[0] + (f[1] - ref_point[1]) * ilambda[1];
+    double d20 = f[0] - (ref_point[0] + d1 * ilambda[0]);
+    double d21 = f[1] - (ref_point[1] + d1 * ilambda[1]);
+    d20 *= d20;
+    d21 *= d21;
+    double d2 = std::sqrt(d20 + d21);
+    BOOST_CHECK_CLOSE(d1 + 5.0 * d2, fb, 1e-8);
+
+    // We check the throws
+    BOOST_CHECK_THROW(decompose_objectives(f, {1., 2., 3., 4.}, ref_point, "weighted"), std::invalid_argument);
+    BOOST_CHECK_THROW(decompose_objectives(f, weight, {1.}, "weighted"), std::invalid_argument);
+    BOOST_CHECK_THROW(decompose_objectives(f, weight, ref_point, "pippo"), std::invalid_argument);
+    BOOST_CHECK_THROW(decompose_objectives({}, {}, {}, "weighted"), std::invalid_argument);
+}
