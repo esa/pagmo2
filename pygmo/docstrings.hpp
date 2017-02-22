@@ -137,6 +137,7 @@ std::string hv_contributions_docstring();
 std::string hv_exclusive_docstring();
 std::string hv_greatest_contributor_docstring();
 std::string hv_least_contributor_docstring();
+std::string hv_refpoint_docstring();
 std::string hvwfg_docstring();
 std::string hv2d_docstring();
 std::string hv3d_docstring();

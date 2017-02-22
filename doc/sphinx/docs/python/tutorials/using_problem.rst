@@ -40,6 +40,9 @@ Let us start:
     <BLANKLINE>
     	Function evaluations: 0
     <BLANKLINE>
+    	Thread safety: basic
+    <BLANKLINE>
+
 
 In the code above, after the trivial import of the pygmo package, we define a variable prob
 by constructing a :class:`~pygmo.core.problem` from :class:`~pygmo.core.rosenbrock`, a multidimensional problem

@@ -113,6 +113,22 @@ class pso_test_case(_ut.TestCase):
         log = uda.get_log()
 
 
+class moead_test_case(_ut.TestCase):
+    """Test case for the UDA moead
+
+    """
+
+    def runTest(self):
+        from .core import moead
+        uda = moead()
+        uda = moead(gen=1, weight_generation="grid", decomposition="tchebycheff",
+                    neighbours=20, CR=1, F=0.5, eta_m=20, realb=0.9, limit=2, preserve_diversity=True)
+        uda = moead(gen=1, weight_generation="grid", decomposition="tchebycheff", neighbours=20,
+                    CR=1, F=0.5, eta_m=20, realb=0.9, limit=2, preserve_diversity=True, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        log = uda.get_log()
+
+
 class sa_test_case(_ut.TestCase):
     """Test case for the UDA simulated annealing
 
@@ -182,6 +198,7 @@ class hypervolume_test_case(_ut.TestCase):
     def runTest(self):
         from .core import hypervolume, hv2d, hv3d, hvwfg, bf_fpras, bf_approx
         from .core import population, zdt
+        import numpy as np
         pop = population(prob=zdt(id=1, param=10), size=20)
         hv1 = hypervolume(pop=pop)
         hv2 = hypervolume(points=[[0, 0], [-1, 1], [-2, 2]])
@@ -214,6 +231,9 @@ class hypervolume_test_case(_ut.TestCase):
         res = hv2.least_contributor(ref_point=[3, 3])
         res = hv2.greatest_contributor(ref_point=[3, 3])
         res = hv2.contributions(ref_point=[3, 3])
+
+        self.assertTrue((hv2.refpoint(offset = 0) == np.array([0.,2.])).all() == True)
+        self.assertTrue((hv2.refpoint(offset = .1) == np.array([0.1,2.1])).all() == True)
 
 
 class dtlz_test_case(_ut.TestCase):
@@ -307,7 +327,6 @@ class decompose_test_case(_ut.TestCase):
         self.assertTrue(all(d.original_fitness(
             [1., 1.]) == problem(zdt(1, 2)).fitness([1., 1.])))
         f = problem(zdt(1, 2)).fitness([1., 1.])
-        fdw = d.decompose_fitness(f, [0.2, 0.8], [0.1, 0.1])
 
         class p(object):
 
@@ -325,7 +344,6 @@ class decompose_test_case(_ut.TestCase):
         self.assertFalse(d.extract(p) is None)
         self.assertTrue(all(d.z == array([0.1, 0.1])))
         self.assertTrue(all(d.original_fitness([1., 1.]) == array([42, 43])))
-        d.decompose_fitness([42, 43], [0.2, 0.8], [0.1, 0.1])
 
         # Verify construction from problem is forbidden.
         self.assertRaises(TypeError, lambda: decompose(
@@ -352,6 +370,7 @@ def run_test_suite():
     suite.addTest(pso_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
+    suite.addTest(moead_test_case())
     suite.addTest(population_test_case())
     suite.addTest(null_problem_test_case())
     suite.addTest(hypervolume_test_case())

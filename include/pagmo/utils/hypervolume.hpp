@@ -206,12 +206,15 @@ public:
         return m_verify;
     }
 
-    /// Calculate the default reference point
+    /// Calculate a default reference point
     /**
     * Calculates a mock refpoint by taking the maximum in each dimension over all points saved
     * in the hypervolume object.
     * The result is a point that is necessarily dominated by all other points, frequently used
     * for hypervolume computations.
+    *
+    * **NOTE** This point is different from the one computed by pagmo::nadir as only the non dominated front
+    * is considered in that method (also its complexity is thus higher)
     *
     * @param offset value that can be added to each objective to assure strict domination
     *
@@ -228,7 +231,7 @@ public:
         vector_double ref_point(m_points[0].begin(), m_points[0].end());
 
         for (decltype(fdim) f_idx = 0u; f_idx < fdim; ++f_idx) {
-            for (std::vector<vector_double>::size_type idx = 1; idx < m_points.size(); ++idx) {
+            for (std::vector<vector_double>::size_type idx = 1u; idx < m_points.size(); ++idx) {
                 ref_point[f_idx] = std::max(ref_point[f_idx], m_points[idx][f_idx]);
             }
         }

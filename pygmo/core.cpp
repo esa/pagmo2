@@ -590,13 +590,7 @@ BOOST_PYTHON_MODULE(core)
     dp.def("__init__", pygmo::make_decompose_init<bp::object>())
         // Python udp extraction.
         .def("_py_extract", &pygmo::generic_py_extract<decompose>)
-        // Returns the decomposed fitness with an arbitrary weight and reference point
-        .def("decompose_fitness",
-             +[](const pagmo::decompose &p, const bp::object &f, const bp::object &weight, const bp::object &z_ref) {
-                 return pygmo::v_to_a(p.decompose_fitness(pygmo::to_vd(f), pygmo::to_vd(weight), pygmo::to_vd(z_ref)));
-             },
-             pygmo::decompose_decompose_fitness_docstring().c_str(),
-             (bp::arg("f"), bp::arg("weight"), bp::arg("ref_point")))
+        // Returns the original multi-objective fitness
         .def("original_fitness",
              +[](const pagmo::decompose &p, const bp::object &x) {
                  return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x)));
@@ -677,7 +671,8 @@ BOOST_PYTHON_MODULE(core)
     auto zdt_p = pygmo::expose_problem<zdt>("zdt", "__init__(id = 1, param = 30)\n\nThe ZDT problem.\n\n"
                                                    "See :cpp:class:`pagmo::zdt`.\n\n");
     zdt_p.def(bp::init<unsigned, unsigned>((bp::arg("id") = 1u, bp::arg("param") = 30u)));
-    zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); },
+    zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); });
+    zdt_p.def("p_distance", +[](const zdt &z, const population &pop) { return z.p_distance(pop); },
               pygmo::zdt_p_distance_docstring().c_str());
     // DTLZ.
     auto dtlz_p = pygmo::expose_problem<dtlz>("dtlz", pygmo::dtlz_docstring().c_str());
@@ -799,14 +794,15 @@ BOOST_PYTHON_MODULE(core)
 #endif
     // MOEA/D - DE
     auto moead_ = pygmo::expose_algorithm<moead>("moead", pygmo::moead_docstring().c_str());
-    moead_.def(bp::init<unsigned, std::string, unsigned, double, double, double, double, unsigned, bool>(
-        (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1.,
-         bp::arg("F") = 0.5, bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u,
-         bp::arg("preserve_diversity") = true)));
-    moead_.def(bp::init<unsigned, std::string, unsigned, double, double, double, double, unsigned, bool, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("neighbours") = 20u, bp::arg("CR") = 1.,
-         bp::arg("F") = 0.5, bp::arg("eta_m") = 20, bp::arg("realb") = 0.9, bp::arg("limit") = 2u,
-         bp::arg("preserve_diversity") = true, bp::arg("seed"))));
+    moead_.def(bp::init<unsigned, std::string, std::string, unsigned, double, double, double, double, unsigned, bool>(
+        (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("decomposition") = "tchebycheff",
+         bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5, bp::arg("eta_m") = 20,
+         bp::arg("realb") = 0.9, bp::arg("limit") = 2u, bp::arg("preserve_diversity") = true)));
+    moead_.def(bp::init<unsigned, std::string, std::string, unsigned, double, double, double, double, unsigned, bool,
+                        unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("decomposition") = "tchebycheff",
+         bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5, bp::arg("eta_m") = 20,
+         bp::arg("realb") = 0.9, bp::arg("limit") = 2u, bp::arg("preserve_diversity") = true, bp::arg("seed"))));
     // moead needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
     moead_.def("get_log",
                +[](const moead &a) -> bp::list {
@@ -882,7 +878,9 @@ BOOST_PYTHON_MODULE(core)
              },
              pygmo::hv_contributions_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
         .add_property("copy_points", &hypervolume::get_copy_points, &hypervolume::set_copy_points)
-        .def("get_points", +[](hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); });
+        .def("get_points", +[](const hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); })
+        .def("refpoint", +[](const hypervolume &hv, double offset) { return pygmo::v_to_a(hv.refpoint(offset)); },
+             pygmo::hv_refpoint_docstring().c_str(), (bp::arg("offset") = 0));
 
     // Hypervolume algorithms
     bp::class_<hv_algorithm, boost::noncopyable>("_hv_algorithm", bp::no_init).def("get_name", &hv_algorithm::get_name);

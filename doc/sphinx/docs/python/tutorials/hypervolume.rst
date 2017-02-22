@@ -166,7 +166,7 @@ increase after the evolution of a :class:`~pygmo.core.population`.
     >>> # and get the reference point off-setted by 10 in each objective
     >>> hv = pg.hypervolume(pop)
     >>> offset = 5
-    >>> ref_point = [max(pop.get_f(), key = lambda x: x[it])[it] + offset for it in [0,1,2,3]]
+    >>> ref_point = hv.refpoint(offset = 0.1)
     >>> hv.compute(ref_point) # doctest: +SKIP
     10.75643
     >>> # Evolve the population some generations
