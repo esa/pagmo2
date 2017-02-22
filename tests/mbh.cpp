@@ -45,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -170,4 +171,40 @@ BOOST_AUTO_TEST_CASE(mbh_serialization_test)
         BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
         BOOST_CHECK_EQUAL(std::get<4>(before_log[i]), std::get<4>(after_log[i]));
     }
+}
+
+struct ts1 {
+    population evolve(const population &pop) const
+    {
+        return pop;
+    }
+};
+
+struct ts2 {
+    population evolve(const population &pop) const
+    {
+        return pop;
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+struct ts3 {
+    population evolve(const population &pop) const
+    {
+        return pop;
+    }
+    thread_safety get_thread_safety()
+    {
+        return thread_safety::none;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(mbh_threading_test)
+{
+    BOOST_CHECK((algorithm{mbh{ts1{}, 5u, 1e-2, 23u}}.get_thread_safety() == thread_safety::basic));
+    BOOST_CHECK((algorithm{mbh{ts2{}, 5u, 1e-2, 23u}}.get_thread_safety() == thread_safety::none));
+    BOOST_CHECK((algorithm{mbh{ts3{}, 5u, 1e-2, 23u}}.get_thread_safety() == thread_safety::basic));
 }

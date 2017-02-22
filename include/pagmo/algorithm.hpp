@@ -498,9 +498,9 @@ public:
         return p == nullptr ? nullptr : &(p->m_value);
     }
 
-    /// Checks the user defined algorithm type at run-time
+    /// Checks the user-defined algorithm type at run-time.
     /**
-     * @return \p true if the user defined algorithm is \p T, \p false otherwise.
+     * @return \p true if the user-defined algorithm is \p T, \p false otherwise.
      */
     template <typename T>
     bool is() const
