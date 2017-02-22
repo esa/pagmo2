@@ -86,7 +86,9 @@ BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
 
     population pop{zdt{1u}, 100u};
     algorithm algo{nsga2{100u}};
+    print(pop.get_problem().extract<zdt>()->p_distance(pop), "\n");
     pop = algo.evolve(pop);
+    print(pop.get_problem().extract<zdt>()->p_distance(pop));
 }
 
 BOOST_AUTO_TEST_CASE(nsga2_setters_getters_test)
