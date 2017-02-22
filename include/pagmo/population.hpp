@@ -167,11 +167,29 @@ public:
      */
     void push_back(const vector_double &x)
     {
+        // This line will throw if dv dimensions are wrong, or fitness dimensions are worng
+        auto f = m_prob.fitness(x);
+        push_back(x, f);
+    }
+
+    /// Adds one decision vector/fitness vector to the population
+    /**
+     * Appends a new decision vectorome \p x to the population, and sets
+     * its fitness to \p f creating a new unique identifier for the newly
+     * born individual.
+     *
+     * In case of exceptions, the population will not be altered.
+     *
+     * @param x decision vector to be added to the population.
+     * @param f fitness vector corresponding to the decision vector
+     *
+     * @throws unspecified any exception thrown by memory errors in standard containers.
+     */
+    void push_back(const vector_double &x, const vector_double &f)
+    {
         // Prepare quantities to be appended to the internal vectors.
         const auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
         auto x_copy(x);
-        // This line will throw if dv dimensions are wrong, or fitness dimensions are worng
-        auto f = m_prob.fitness(x);
         // Reserve space in the vectors.
         // NOTE: in face of overflow here, reserve(0) will be called, which is fine.
         // The first push_back below will then fail, with no modifications to the class taking place.

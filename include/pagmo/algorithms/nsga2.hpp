@@ -66,10 +66,10 @@ namespace pagmo
 class nsga2
 {
 public:
-    /// Single entry of the log (gen, fevals, adf, ideal_point)
-    /// typedef std::tuple<unsigned int, unsigned long long, double, vector_double> log_line_type;
+    /// Single entry of the log (gen, fevals, ideal_point)
+    typedef std::tuple<unsigned int, unsigned long long, vector_double> log_line_type;
     /// The log
-    /// typedef std::vector<log_line_type> log_type;
+    typedef std::vector<log_line_type> log_type;
 
     /// Constructor
     /**
@@ -89,7 +89,7 @@ public:
     nsga2(unsigned int gen = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
           vector_double::size_type int_dim = 0u, unsigned int seed = pagmo::random_device::next())
         : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_int_dim(int_dim), m_e(seed), m_seed(seed),
-          m_verbosity(0u) // , m_log()
+          m_verbosity(0u), m_log()
     {
         if (cr >= 1. || cr < 0.) {
             pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1[ range, while a value of "
@@ -165,6 +165,9 @@ public:
         }
         // ---------------------------------------------------------------------------------------------------------
 
+        // No throws, all valid: we clear the logs
+        m_log.clear();
+
         // Declarations
         std::vector<vector_double::size_type> best_idx(NP), shuffle1(NP), shuffle2(NP);
         vector_double::size_type parent1_idx, parent2_idx;
@@ -174,7 +177,39 @@ public:
         std::iota(shuffle2.begin(), shuffle2.end(), 0u);
 
         // Main NSGA-II loop
-        for (int g = 0; g < m_gen; g++) {
+        for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++) {
+            // 0 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
+            if (m_verbosity > 0u) {
+                // Every m_verbosity generations print a log line
+                if (gen % m_verbosity == 1u || m_verbosity == 1u) {
+                    // We compute the ideal point
+                    vector_double ideal_point = ideal(pop.get_f());
+                    // Every 50 lines print the column names
+                    if (count % 50u == 1u) {
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:");
+                        for (decltype(ideal_point.size()) i = 0u; i < ideal_point.size(); ++i) {
+                            if (i >= 5u) {
+                                print(std::setw(15), "... :");
+                                break;
+                            }
+                            print(std::setw(15), "ideal" + std::to_string(i + 1u) + ":");
+                        }
+                        print('\n');
+                    }
+                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0);
+                    for (decltype(ideal_point.size()) i = 0u; i < ideal_point.size(); ++i) {
+                        if (i >= 5u) {
+                            break;
+                        }
+                        print(std::setw(15), ideal_point[i]);
+                    }
+                    print('\n');
+                    ++count;
+                    // Logs
+                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, ideal_point));
+                }
+            }
+
             // At each generation we make a copy of the population into popnew
             population popnew(pop);
 
@@ -182,7 +217,7 @@ public:
             std::shuffle(shuffle1.begin(), shuffle1.end(), m_e);
             std::shuffle(shuffle2.begin(), shuffle2.end(), m_e);
 
-            // We compute crowding distance and non dominated rank for the current population
+            // 1 - We compute crowding distance and non dominated rank for the current population
             auto fnds_res = fast_non_dominated_sorting(pop.get_f());
             auto ndf = std::get<0>(fnds_res); // non dominated fronts [[0,3,2],[1,5,6],[4],...]
             vector_double pop_cd(NP);         // crowding distances of the whole population
@@ -207,7 +242,7 @@ public:
                 }
             }
 
-            // We then loop thorugh all individuals with increment 4 to select two pairs of parents that will
+            // 3 - We then loop thorugh all individuals with increment 4 to select two pairs of parents that will
             // each create 2 new offspring
             for (decltype(NP) i = 0u; i < NP; i += 4) {
                 // We create two offsprings using the shuffled list 1
@@ -216,8 +251,12 @@ public:
                 crossover(child1, child2, parent1_idx, parent2_idx, pop);
                 mutate(child1, pop);
                 mutate(child2, pop);
-                popnew.push_back(child1);
-                popnew.push_back(child2);
+                // we use prob to evaluate the fitness so
+                // that its feval counter is correctly updated
+                auto f1 = prob.fitness(child1);
+                auto f2 = prob.fitness(child2);
+                popnew.push_back(child1, f1);
+                popnew.push_back(child2, f2);
 
                 // We repeat with the shuffled list 2
                 parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
@@ -225,14 +264,18 @@ public:
                 crossover(child1, child2, parent1_idx, parent2_idx, pop);
                 mutate(child1, pop);
                 mutate(child2, pop);
-                popnew.push_back(child1);
-                popnew.push_back(child2);
+                // we use prob to evaluate the fitness so
+                // that its feval counter is correctly updated
+                f1 = prob.fitness(child1);
+                f2 = prob.fitness(child2);
+                popnew.push_back(child1, f1);
+                popnew.push_back(child2, f2);
             } // popnew now contains 2NP individuals
 
             // This method returns the sorted N best individuals in the population according to the crowded comparison
-            // operator defined in population.cpp
+            // operator
             best_idx = select_best_N_mo(popnew.get_f(), NP);
-            // We reset the population
+            // We insert into the population
             for (population::size_type i = 0; i < NP; ++i) {
                 pop.set_xf(i, popnew.get_x()[best_idx[i]], popnew.get_f()[best_idx[i]]);
             }
@@ -347,7 +390,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_cr, m_eta_c, m_m, m_eta_m, m_e, m_int_dim, m_seed, m_verbosity);
+        ar(m_gen, m_cr, m_eta_c, m_m, m_eta_m, m_e, m_int_dim, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -522,7 +565,7 @@ private:
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;
-    // mutable log_type m_log;
+    mutable log_type m_log;
 };
 
 } // namespace pagmo
