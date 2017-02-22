@@ -278,6 +278,157 @@ public:
     }
 
 private:
+    void crossover(vector_double &child1, vector_double &child2, vector_double::size_type parent1_idx,
+                   vector_double::size_type parent2_idx, const pagmo::population &pop) const
+    {
+        // Decision vector dimensions
+        auto D = pop.get_problem().get_nx();
+        auto Di = m_int_dim;
+        auto Dc = D - Di;
+        // Problem bounds
+        const auto bounds = pop.get_problem().get_bounds();
+        const auto &lb = bounds.first;
+        const auto &ub = bounds.second;
+        // Parents decision vectors
+        vector_double parent1 = pop.get_x()[parent1_idx];
+        vector_double parent2 = pop.get_x()[parent2_idx];
+        // declarations
+        double y1, y2, yl, yu, rand01, beta, alpha, betaq, c1, c2;
+        vector_double::size_type site1, site2;
+        // Initialize the child decision vectors
+        child1 = parent1;
+        child2 = parent2;
+        // Random distributions
+        std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
+
+        // This implements a Simulated Binary Crossover SBX and applies it to the non integer part of the decision
+        // vector
+        if (drng(m_e) <= m_cr) {
+            for (decltype(Dc) i = 0u; i < Dc; i++) {
+                if ((drng(m_e) <= 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
+                    if (parent1[i] < parent2[i]) {
+                        y1 = parent1[i];
+                        y2 = parent2[i];
+                    } else {
+                        y1 = parent2[i];
+                        y2 = parent1[i];
+                    }
+                    yl = lb[i];
+                    yu = ub[i];
+                    rand01 = drng(m_e);
+                    beta = 1. + (2. * (y1 - yl) / (y2 - y1));
+                    alpha = 2. - std::pow(beta, -(m_eta_c + 1.));
+                    if (rand01 <= (1. / alpha)) {
+                        betaq = std::pow((rand01 * alpha), (1. / (m_eta_c + 1.)));
+                    } else {
+                        betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
+                    }
+                    c1 = 0.5 * ((y1 + y2) - betaq * (y2 - y1));
+
+                    beta = 1. + (2. * (yu - y2) / (y2 - y1));
+                    alpha = 2. - std::pow(beta, -(m_eta_c + 1.));
+                    if (rand01 <= (1. / alpha)) {
+                        betaq = std::pow((rand01 * alpha), (1. / (m_eta_c + 1.)));
+                    } else {
+                        betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
+                    }
+                    c2 = 0.5 * ((y1 + y2) + betaq * (y2 - y1));
+
+                    if (c1 < lb[i]) c1 = lb[i];
+                    if (c2 < lb[i]) c2 = lb[i];
+                    if (c1 > ub[i]) c1 = ub[i];
+                    if (c2 > ub[i]) c2 = ub[i];
+                    if (drng(m_e) <= .5) {
+                        child1[i] = c1;
+                        child2[i] = c2;
+                    } else {
+                        child1[i] = c2;
+                        child2[i] = c1;
+                    }
+                }
+            }
+        }
+        // This implements two-point binary crossover and applies it to the integer part of the chromosome
+        for (decltype(Dc) i = Dc; i < D; ++i) {
+            // in this loop we are sure Di is at least 1
+            std::uniform_int_distribution<vector_double::size_type> ra_num(0, Di - 1u);
+            if (drng(m_e) <= m_cr) {
+                site1 = ra_num(m_e);
+                site2 = ra_num(m_e);
+                if (site1 > site2) {
+                    std::swap(site1, site2);
+                }
+                for (decltype(site1) j = 0u; j < site1; ++j) {
+                    child1[j] = parent1[j];
+                    child2[j] = parent2[j];
+                }
+                for (decltype(site2) j = site1; j < site2; ++j) {
+                    child1[j] = parent2[j];
+                    child2[j] = parent1[j];
+                }
+                for (decltype(Di) j = site2; j < Di; ++j) {
+                    child1[j] = parent1[j];
+                    child2[j] = parent2[j];
+                }
+            } else {
+                child1[i] = parent1[i];
+                child2[i] = parent2[i];
+            }
+        }
+    }
+    void mutate(vector_double &child, const pagmo::population &pop) const
+    {
+        // Decision vector dimensions
+        auto D = pop.get_problem().get_nx();
+        auto Di = m_int_dim;
+        auto Dc = D - Di;
+        // Problem bounds
+        const auto bounds = pop.get_problem().get_bounds();
+        const auto &lb = bounds.first;
+        const auto &ub = bounds.second;
+        // declarations
+        double rnd, delta1, delta2, mut_pow, deltaq;
+        double y, yl, yu, val, xy;
+        int gen_num;
+        // Random distributions
+        std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
+
+        // This implements the real polinomial mutation and applies it to the non integer part of the decision vector
+        for (decltype(Dc) j = 0u; j < Dc; ++j) {
+            if (drng(m_e) <= m_m && lb[j] != ub[j]) {
+                y = child[j];
+                yl = lb[j];
+                yu = ub[j];
+                delta1 = (y - yl) / (yu - yl);
+                delta2 = (yu - y) / (yu - yl);
+                rnd = drng(m_e);
+                mut_pow = 1. / (m_eta_m + 1.);
+                if (rnd <= 0.5) {
+                    xy = 1. - delta1;
+                    val = 2. * rnd + (1. - 2. * rnd) * (std::pow(xy, (m_eta_m + 1.)));
+                    deltaq = std::pow(val, mut_pow) - 1.;
+                } else {
+                    xy = 1. - delta2;
+                    val = 2. * (1. - rnd) + 2. * (rnd - 0.5) * (std::pow(xy, (m_eta_m + 1.)));
+                    deltaq = 1. - (std::pow(val, mut_pow));
+                }
+                y = y + deltaq * (yu - yl);
+                if (y < yl) y = yl;
+                if (y > yu) y = yu;
+                child[j] = y;
+            }
+        }
+
+        // This implements the integer mutation for an individual
+        for (decltype(D) j = Dc; j < D; ++j) {
+            if (drng(m_e) <= m_m) {
+                std::uniform_int_distribution<vector_double::size_type> ra_num(
+                    static_cast<vector_double::size_type>(lb[j]), static_cast<vector_double::size_type>(ub[j]));
+                child[j] = ra_num(m_e);
+            }
+        }
+    }
+
     unsigned int m_gen;
     double m_cr;
     double m_eta_c;
