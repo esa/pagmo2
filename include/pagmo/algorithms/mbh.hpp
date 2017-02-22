@@ -98,12 +98,15 @@ public:
      * - inner algorithm: pagmo::compass_search;
      * - consecutive runs of the inner algorithm that need to result in no improvement for pagmo::mbh to stop: 5;
      * - scalar perturbation: 1E-2;
-     * - seed: 0.
+     * - seed: random.
      *
      * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
      */
-    mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_e(0u), m_seed(0u), m_verbosity(0u)
+    mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_verbosity(0u)
     {
+        const auto rnd = pagmo::random_device::next();
+        m_seed = rnd;
+        m_e.seed(rnd);
     }
     /// Constructor (scalar perturbation).
     /**
