@@ -2317,7 +2317,7 @@ Any other combination of arguments will raise an exception.
 
 Args:
     udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
-      and stored inside the :class:`~pygmo.core.translate` instance)
+      and stored inside the :class:`~pygmo.core.decompose` instance)
     weight (array-like object): the vector of weights :math:`\boldsymbol \lambda`
     z (array-like object): the reference point :math:`\mathbf z^*`
     method (``str``): a string containing the decomposition method chosen
