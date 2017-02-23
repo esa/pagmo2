@@ -2035,19 +2035,18 @@ See also the docs of the C++ class :cpp:class:`pagmo::nsga2`.
 
 std::string nsga2_get_log_docstring()
 {
-    return R"(nsga2.get_log()
+    return R"(get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.moead`. A verbosity of N implies a log line each N generations.
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.nsga2`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, ideal_point.
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
 
-Where:
-    * Gen (``int``), generation number
-    * Fevals (``int``), number of functions evaluation made
-    * ideal_point (1D numpy array), The ideal point of the current population (cropped to max 5 dimensions only in the screen output)
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``ideal_point`` (1D numpy array), the ideal point of the current population (cropped to max 5 dimensions only in the screen output)
 
 Examples:
     >>> from pygmo import *
