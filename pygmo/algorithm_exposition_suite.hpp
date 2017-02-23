@@ -134,7 +134,9 @@ template <typename Algo>
 inline bp::class_<Algo> expose_algorithm(const char *name, const char *descr)
 {
     assert(algorithm_ptr.get() != nullptr);
+    assert(mbh_ptr.get() != nullptr);
     auto &algorithm_class = *algorithm_ptr;
+    auto &mbh_class = *mbh_ptr;
     // We require all algorithms to be def-ctible at the bare minimum.
     bp::class_<Algo> c(name, descr, bp::init<>());
     // Mark it as a C++ algorithm.
@@ -145,6 +147,11 @@ inline bp::class_<Algo> expose_algorithm(const char *name, const char *descr)
     // Expose extract.
     algorithm_class.def("_cpp_extract", &generic_cpp_extract<pagmo::algorithm, Algo>,
                         bp::return_internal_reference<>());
+
+    // Expose mbh's constructors from Algo.
+    make_mbh_inits<Algo>(mbh_class);
+    // Extract.
+    mbh_class.def("_cpp_extract", &generic_cpp_extract<pagmo::mbh, Algo>, bp::return_internal_reference<>());
 
     // Add the algorithm to the algorithms submodule.
     bp::scope().attr("algorithms").attr(name) = c;
