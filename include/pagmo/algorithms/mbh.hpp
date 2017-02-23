@@ -76,8 +76,8 @@ namespace pagmo
  * > > > i = 0
  * @endcode
  *
- * See: http://arxiv.org/pdf/cond-mat/9803344 for the paper inroducing the basin hopping idea for a Lennard-Jones
- * cluster optimization
+ * See: http://arxiv.org/pdf/cond-mat/9803344 for the paper introducing the basin hopping idea for a Lennard-Jones
+ * cluster optimization.
  */
 class mbh : public algorithm
 {
