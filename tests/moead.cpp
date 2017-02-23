@@ -55,6 +55,8 @@ BOOST_AUTO_TEST_CASE(moead_algorithm_construction)
     // Wrong weight generation type
     BOOST_CHECK_THROW((moead{10u, "typo", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}),
                       std::invalid_argument);
+    // Wrong decomposition method
+    BOOST_CHECK_THROW((moead{10u, "grid", "typo", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}), std::invalid_argument);
     // Wrong CR
     BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1.1, 0.5, 20., 0.9, 2u, true, 23u}),
                       std::invalid_argument);
