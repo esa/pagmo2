@@ -1608,6 +1608,73 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log`.
 )";
 }
 
+std::string nsga2_docstring()
+{
+    return R"(__init__(gen = 1, cr = 0.95, eta_c = 10, m = 0.01, eta_m = 10, int_dim = 0, seed = random)
+
+Non dominated Sorting Genetic Algorithm (NSGA-II)
+
+Args:
+    gen (``int``): number of generations
+    cr (``float``): crossover probability
+    eta_c (``float``): distribution index for crossover
+    m (``float``): mutation probability
+    eta_m (``float``): distribution index for mutation
+    int_dim (``int``): the dimension of the decision vector to be considered as integer (the last int_dim entries will be treated as integers when mutation and crossover are applied)
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    ValueError: if either:
+
+      * *cr* is not in [0,1[.
+      * *eta_c* is not in [0,100[.
+      * *m* is not in [0,1].
+      * *eta_m* is not in [0,100[.
+    
+See also the docs of the C++ class :cpp:class:`pagmo::nsga2`.
+
+)";
+}
+
+std::string nsga2_get_log_docstring()
+{
+    return R"(nsga2.get_log()
+
+Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.moead`. A verbosity of N implies a log line each N generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, ideal_point.
+
+Where:
+    * Gen (``int``), generation number
+    * Fevals (``int``), number of functions evaluation made
+    * ideal_point (1D numpy array), The ideal point of the current population (cropped to max 5 dimensions only in the screen output)
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(nsga2(gen=100))
+    >>> algo.set_verbosity(20)
+    >>> pop = population(zdt(1), 40)
+    >>> pop = algo.evolve(pop)
+    Gen:        Fevals:        ideal1:        ideal2:
+       1              0      0.0033062        2.44966
+      21            800    0.000275601       0.893137
+      41           1600    3.15834e-05        0.44117
+      61           2400     2.3664e-05       0.206365
+      81           3200     2.3664e-05       0.133305
+
+    >>> al = algo.extract(nsga2)
+    >>> al.get_log()
+    [(1, 0, array([ 0.0033062 ,  2.44965599])), (21, 800, array([  2.75601086e-04 ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::nsga2::get_log`.
+
+)";
+}
+
 std::string moead_docstring()
 {
     return R"(__init__(gen = 1, weight_generation = "grid", decomposition = "tchebycheff", neighbours = 20, CR = 1, F = 0.5, eta_m = 20, realb = 0.9, limit = 2, preserve_diversity = true, seed = random)

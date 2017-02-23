@@ -83,9 +83,8 @@ public:
     * @param int_dim the dimension of the decision vector to be considered as integer (the last int_dim entries will be
     * treated as integers when mutation and crossover are applied)
     * @param seed seed used by the internal random number generator (default is random)
-    * @throws std::invalid_argument if crossover probability is not \f$ \in [0,1[\f$, mutation probability or mutation
-    * width is
-    * not \f$ \in [0,1]\f$.
+    * @throws std::invalid_argument if \p cr is not \f$ \in [0,1[\f$, \p m is not \f$ \in [0,1]\f$, \p eta_c is not in
+    * [1,100[ or \p eta_m is not in [1,100[.
     */
     nsga2(unsigned int gen = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
           vector_double::size_type int_dim = 0u, unsigned int seed = pagmo::random_device::next())
@@ -102,12 +101,12 @@ public:
         }
         if (eta_c < 1. || eta_c >= 100.) {
             pagmo_throw(std::invalid_argument,
-                        "The distribution index for crossover must be in [1, 100], while a value of "
+                        "The distribution index for crossover must be in [1, 100[, while a value of "
                             + std::to_string(eta_c) + " was detected");
         }
         if (eta_m < 1. || eta_m >= 100.) {
             pagmo_throw(std::invalid_argument,
-                        "The distribution index for mutation must be in [1, 100], while a value of "
+                        "The distribution index for mutation must be in [1, 100[, while a value of "
                             + std::to_string(eta_m) + " was detected");
         }
     }

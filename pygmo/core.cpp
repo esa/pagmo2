@@ -72,6 +72,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
 #include <pagmo/algorithms/moead.hpp>
+#include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
@@ -834,6 +835,26 @@ BOOST_PYTHON_MODULE(core)
                pygmo::moead_get_log_docstring().c_str());
 
     moead_.def("get_seed", &moead::get_seed);
+    // NSGA2
+    auto nsga2_ = pygmo::expose_algorithm<nsga2>("nsga2", pygmo::nsga2_docstring().c_str());
+    nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
+         bp::arg("int_dim") = 0)));
+    nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
+         bp::arg("int_dim") = 0, bp::arg("seed"))));
+    // nsga2 needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+    nsga2_.def("get_log",
+               +[](const nsga2 &a) -> bp::list {
+                   bp::list retval;
+                   for (const auto &t : a.get_log()) {
+                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), pygmo::v_to_a(std::get<2>(t))));
+                   }
+                   return retval;
+               },
+               pygmo::nsga2_get_log_docstring().c_str());
+
+    nsga2_.def("get_seed", &nsga2::get_seed);
 
     // Exposition of various structured utilities
     // Hypervolume class
