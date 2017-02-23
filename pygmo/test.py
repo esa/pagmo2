@@ -1988,6 +1988,21 @@ class cmaes_test_case(_ut.TestCase):
         seed = uda.get_seed()
 
 
+class nsga2_test_case(_ut.TestCase):
+    """Test case for the UDA nsga2
+
+    """
+
+    def runTest(self):
+        from .core import nsga2
+        uda = nsga2()
+        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01, eta_m=10, int_dim=0)
+        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01,
+                    eta_m=10, int_dim=0, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        seed = uda.get_seed()
+
+
 class null_problem_test_case(_ut.TestCase):
     """Test case for the null problem
 
@@ -2045,8 +2060,10 @@ class hypervolume_test_case(_ut.TestCase):
         res = hv2.greatest_contributor(ref_point=[3, 3])
         res = hv2.contributions(ref_point=[3, 3])
 
-        self.assertTrue((hv2.refpoint(offset = 0) == np.array([0.,2.])).all() == True)
-        self.assertTrue((hv2.refpoint(offset = .1) == np.array([0.1,2.1])).all() == True)
+        self.assertTrue((hv2.refpoint(offset=0) ==
+                         np.array([0., 2.])).all() == True)
+        self.assertTrue((hv2.refpoint(offset=.1) ==
+                         np.array([0.1, 2.1])).all() == True)
 
 
 class dtlz_test_case(_ut.TestCase):
