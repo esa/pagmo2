@@ -359,9 +359,9 @@ public:
     }
     /// Get log.
     /**
-     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a mbh::log_line_type containing: Fevals, Best, Violated, Viol.Norm and
-     * Trial as described in mbh::set_verbosity().
+     * A log containing relevant quantities monitoring the last call to mbh::evolve(). Each element of the returned
+     * <tt>std::vector</tt> is a mbh::log_line_type containing: \p Fevals, \p Best, \p Violated, <tt>Viol. Norm</tt> and
+     * \p Trial as described in mbh::set_verbosity().
      *
      * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals,
      * Violated, Viol.Norm and Trial.
