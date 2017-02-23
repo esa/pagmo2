@@ -73,8 +73,6 @@ BOOST_AUTO_TEST_CASE(nsga2_algorithm_construction)
 BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
 {
     // We check that the problem is checked to be suitable
-    // empty pop
-    BOOST_CHECK_THROW((nsga2{}.evolve(population{zdt{}})), std::invalid_argument);
     // stochastic
     BOOST_CHECK_THROW((nsga2{}.evolve(population{inventory{}, 5u, 23u})), std::invalid_argument);
     // constrained prob

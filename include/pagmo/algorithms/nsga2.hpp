@@ -58,7 +58,7 @@ namespace pagmo
  * generation according to nondominated-sorting and crowding distance comparison.
  *
  * The version implemented in pagmo can be applied to box-bounded multiple-objective optimization. It also
- * deals with integer chromosomes treating the last /p int_dim entries in the decision vector as integers.
+ * deals with integer chromosomes treating the last \p int_dim entries in the decision vector as integers.
  *
  * See:  Deb, K., Pratap, A., Agarwal, S., & Meyarivan, T. A. M. T. (2002). A fast and elitist multiobjective genetic
  * algorithm: NSGA-II. IEEE transactions on evolutionary computation, 6(2), 182-197.
@@ -118,6 +118,9 @@ public:
      *
      * @param pop population to be evolved
      * @return evolved population
+     * @throw std::invalid_argument if pop.get_problem() is stochastic, single objective or has non linear constraints.
+     * If \p int_dim is larger than the problem dimension. If the population size is smaller than 5 or not a multiple of
+     * 4.
      */
     population evolve(population pop) const
     {
@@ -133,9 +136,6 @@ public:
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
         // particular algorithm.
-        if (!NP) {
-            pagmo_throw(std::invalid_argument, get_name() + " cannot work on an empty population");
-        }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");
