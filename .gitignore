@@ -25,6 +25,5 @@ include/external/cereal/*
 doc/doxygen/html/*
 doc/doxygen/latex/*
 doc/doxygen/xml/*
-doc/doxygen/images/*
 
 doc/sphinx/_build
