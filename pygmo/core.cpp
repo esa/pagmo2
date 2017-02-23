@@ -556,9 +556,9 @@ BOOST_PYTHON_MODULE(core)
         .def("is_stochastic", &problem::is_stochastic,
              "is_stochastic()\n\nAlias for :func:`~pygmo.core.problem.has_set_seed()`.\n")
         .def("feasibility_x", +[](const problem &p, const bp::object &x) { return p.feasibility_x(pygmo::to_vd(x)); },
-             pygmo::problem_feasibility_x_docstring().c_str())
+             pygmo::problem_feasibility_x_docstring().c_str(), (bp::arg("x")))
         .def("feasibility_f", +[](const problem &p, const bp::object &f) { return p.feasibility_f(pygmo::to_vd(f)); },
-             pygmo::problem_feasibility_f_docstring().c_str())
+             pygmo::problem_feasibility_f_docstring().c_str(), (bp::arg("f")))
         .def("get_name", &problem::get_name, pygmo::problem_get_name_docstring().c_str())
         .def("get_extra_info", &problem::get_extra_info, pygmo::problem_get_extra_info_docstring().c_str())
         .def("get_thread_safety", &problem::get_thread_safety, pygmo::problem_get_thread_safety_docstring().c_str());
