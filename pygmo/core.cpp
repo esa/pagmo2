@@ -741,6 +741,14 @@ BOOST_PYTHON_MODULE(core)
     pygmo::algorithm_expose_init_cpp_uda<mbh>();
     // Extract mbh from the algorithm class.
     algorithm_class.def("_cpp_extract", &pygmo::generic_cpp_extract<algorithm, mbh>, bp::return_internal_reference<>());
+    // MBH-specific methods.
+    mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
+    mbh_.def("get_verbosity", &mbh::get_verbosity, pygmo::mbh_get_verbosity_docstring().c_str());
+    mbh_.def("set_perturb", +[](mbh &a, const bp::object &o) { a.set_perturb(pygmo::to_vd(o)); },
+             pygmo::mbh_set_perturb_docstring().c_str(), (bp::arg("perturb")));
+    pygmo::expose_algo_log(mbh_, pygmo::mbh_get_log_docstring().c_str());
+    mbh_.def("get_perturb", +[](const mbh &a) { return pygmo::v_to_a(a.get_perturb()); },
+             pygmo::mbh_get_perturb_docstring().c_str());
     // Add it to the the algos submodule.
     bp::scope().attr("algorithms").attr("mbh") = mbh_;
 
@@ -751,8 +759,7 @@ BOOST_PYTHON_MODULE(core)
     // Thread unsafe test algo.
     pygmo::expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
-    auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm",
-                                                      "__init__()\n\nThe null algorithm.\n\nA test algorithm.\n\n");
+    auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm", pygmo::null_algorithm_docstring().c_str());
     // NOTE: this is needed only for the null_algorithm, as it is used in the implementation of the
     // serialization of the algorithm. Not necessary for any other algorithm type.
     na.def_pickle(null_algorithm_pickle_suite());

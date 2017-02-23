@@ -1500,6 +1500,8 @@ The pseudo code of our generalized version is:
    > > else
    > > > i = 0
 
+:class:`pygmo.core.mbh` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.core.algorithm` objects.
+
 See: http://arxiv.org/pdf/cond-mat/9803344 for the paper introducing the basin hopping idea for a Lennard-Jones
 cluster optimization.
 
@@ -1517,7 +1519,7 @@ Args:
       and stored inside the :class:`~pygmo.core.mbh` instance)
     stop (``int``): consecutive runs of the inner algorithm that need to result in no improvement for
       :class:`~pygmo.core.mbh` to stop
-    perturb (``float`` or an array-like object): perturb the perturbation to be applied to each component
+    perturb (``float`` or array-like object): perturb the perturbation to be applied to each component
     seed (``int``): seed used by the internal random number generator
 
 Raises:
@@ -1526,6 +1528,91 @@ Raises:
     unspecified: any exception thrown by the constructor of :class:`pygmo.core.algorithm`, or by
       failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
       signatures, etc.)
+
+)";
+}
+
+std::string mbh_get_seed_docstring()
+{
+    return R"(get_seed()
+
+Get the seed value that was used for the construction of this :class:`~pygmo.core.mbh`.
+
+Returns:
+    ``int``: the seed value
+
+)";
+}
+
+std::string mbh_get_verbosity_docstring()
+{
+    return R"(get_verbosity()
+
+Get the verbosity level value that was used for the construction of this :class:`~pygmo.core.mbh`.
+
+Returns:
+    ``int``: the verbosity level
+
+)";
+}
+
+std::string mbh_set_perturb_docstring()
+{
+    return R"(set_perturb(perturb)
+
+Set the perturbation vector.
+
+Args:
+    perturb (array-like object): perturb the perturbation to be applied to each component
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+      mismatched function signatures, etc.)
+
+)";
+}
+
+std::string mbh_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity parameter
+(by default nothing is logged) which can be set calling :func:`~pygmo.core.algorithm.set_verbosity()` on a :class:`~pygmo.core.algorithm` constructed
+with an :class:`~pygmo.core.mbh`. A verbosity level ``N > 0`` will log one line at the end of each call to the inner algorithm.
+
+Returns:
+    ``list`` of ``tuples``: at each call of the inner algorithm, the values ``Fevals``, ``Best``, ``Violated``, ``Viol. Norm`` and ``Trial``, where:
+
+    * ``Fevals`` (``int``), the number of fitness evaluations made
+    * ``Best`` (``float``), the objective function of the best fitness currently in the population
+    * ``Violated`` (``int``), the number of constraints currently violated by the best solution
+    * ``Viol. Norm`` (``float``), the norm of the violation (discounted already by the constraints tolerance)
+    * ``Trial`` (``int``), the trial number (which will determine the algorithm stop)
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::mbh::get_log()`.
+
+)";
+}
+
+std::string mbh_get_perturb_docstring()
+{
+    return R"(get_perturb()
+
+Get the perturbation vector.
+
+Returns:
+    1D NumPy float array: the perturbation vector
+
+)";
+}
+
+std::string null_algorithm_docstring()
+{
+    return R"(__init__()
+
+The null algorithm.
+
+An algorithm used in the default-initialization of :class:`pygmo.core.algorithm` and of the meta-algorithms.
 
 )";
 }
@@ -1693,21 +1780,20 @@ See also the docs of the C++ class :cpp:class:`pagmo::de`.
 
 std::string de_get_log_docstring()
 {
-    return R"(de.get_log()
+    return R"(get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.de`. A verbosity of N implies a log line each N generations.
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.de`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, Best, dx, df
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``dx``, ``df``, where:
 
-Where:
-    * Gen (``int``), generation number
-    * Fevals (``int``), number of functions evaluation made.
-    * Best (``float``), the best fitness function currently in the population
-    * dx (``float``), the norm of the distance to the population mean of the mutant vectors
-    * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``Best`` (``float``), the best fitness function currently in the population
+    * ``dx`` (``float``), the norm of the distance to the population mean of the mutant vectors
+    * ``df`` (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
 
 Examples:
     >>> from pygmo import *
@@ -1727,7 +1813,7 @@ Examples:
     >>> al.get_log()
     [(1, 20, 162446.0185265718, 65.28911664703388, 1786857.8926660626), ...
 
-See also the docs of the relevant C++ method :cpp:func:`pagmo::de::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::de::get_log()`.
 
 )";
 }
@@ -1755,20 +1841,19 @@ See also the docs of the C++ class :cpp:class:`pagmo::compass_search`.
 
 std::string compass_search_get_log_docstring()
 {
-    return R"(compass_search.get_log()
+    return R"(get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
 constructed with a :class:`~pygmo.core.compass_search`. A verbosity larger than 0 implies one log line at each improvment of the fitness or
 change in the search range.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values Fevals, Best, Range
+    ``list`` of ``tuples``: at each logged epoch, the values``Fevals``, ``Best``, ``Range``, where:
 
-Where:
-    * Fevals (``int``), number of functions evaluation made.
-    * Best (``float``), the best fitness function currently in the population
-    * Range (``float``), the range used to vary the chromosome (relative to the box bounds width)
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``Best`` (``float``), the best fitness function currently in the population
+    * ``Range`` (``float``), the range used to vary the chromosome (relative to the box bounds width)
 
 Examples:
     >>> from pygmo import *
@@ -1809,7 +1894,7 @@ Examples:
     >>> al.get_log()
     [(4, 110.785345345, 1, 2.405833534534, 0.5), (12, 110.785345345, 1, 2.405833534534, 0.25) ...
 
-See also the docs of the relevant C++ method :cpp:func:`pagmo::compass_search::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::compass_search::get_log()`.
 
 )";
 }
@@ -1818,7 +1903,7 @@ std::string sade_docstring()
 {
     return R"(__init__(gen = 1, variant = 2, variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
 
-Self-adaptive Differential Evolution
+Self-adaptive Differential Evolution.
 
 Args:
     gen (``int``): number of generations
@@ -1868,23 +1953,22 @@ See also the docs of the C++ class :cpp:class:`pagmo::sade`.
 
 std::string sade_get_log_docstring()
 {
-    return R"(sade.get_log()
+    return R"(get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.sade`. A verbosity of N implies a log line each N generations.
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.sade`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, Best, F, CR, dx, df
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``F``, ``CR``, ``dx``, ``df``, where:
 
-Where:
-    * Gen (``int``), generation number
-    * Fevals (``int``), number of functions evaluation made.
-    * Best (``float``), the best fitness function currently in the population
-    * F (``float``), the value of the adapted paramter F used to create the best so far
-    * CR (``float``), the value of the adapted paramter CR used to create the best so far
-    * dx (``float``), the norm of the distance to the population mean of the mutant vectors
-    * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``Best`` (``float``), the best fitness function currently in the population
+    * ``F`` (``float``), the value of the adapted paramter F used to create the best so far
+    * ``CR`` (``float``), the value of the adapted paramter CR used to create the best so far
+    * ``dx`` (``float``), the norm of the distance to the population mean of the mutant vectors
+    * ``df`` (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
 
 Examples:
     >>> from pygmo import *
@@ -1904,7 +1988,7 @@ Examples:
     >>> al.get_log()
     [(1, 20, 297059.6296130389, 0.690031071850855, 0.29476914701127666, 44.14940516578547, 2305836.7422693395), ...
 
-See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log()`.
 
 )";
 }
@@ -1944,20 +2028,19 @@ See also the docs of the C++ class :cpp:class:`pagmo::moead`.
 
 std::string moead_get_log_docstring()
 {
-    return R"(moead.get_log()
+    return R"(get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.moead`. A verbosity of N implies a log line each N generations.
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.moead`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, ADR, ideal_point.
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ADR``, ``ideal_point``, where:
 
-Where:
-    * Gen (``int``), generation number
-    * Fevals (``int``), number of functions evaluation made.
-    * ADF (``float``), Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness along the corresponding direction.
-    * ideal_point (``array``), The ideal point of the current population (cropped to max 5 dimensions only in the screen output)
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``ADF`` (``float``), Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness along the corresponding direction
+    * ``ideal_point`` (``array``), the ideal point of the current population (cropped to max 5 dimensions only in the screen output)
 
 Examples:
     >>> from pygmo import *
@@ -1976,7 +2059,7 @@ Examples:
     >>> al.get_log()
     [(1, 0, 32.574745630075874, array([  1.90532430e-03,   2.65684834e+00])), ...
 
-See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log()`.
 
 )";
 }
@@ -2010,22 +2093,21 @@ See also the docs of the C++ class :cpp:class:`pagmo::cmaes`.
 
 std::string cmaes_get_log_docstring()
 {
-    return R"(cmaes.get_log()
+    return R"(get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.cmaes`. A verbosity of N implies a log line each N generations.
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.cmaes`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, Best, dx, df, sigma
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``dx``, ``df``, ``sigma``, where:
 
-Where:
-    * Gen (``int``), generation number
-    * Fevals (``int``), number of functions evaluation made.
-    * Best (``float``), the best fitness function currently in the population
-    * dx (``float``), the norm of the distance to the population mean of the mutant vectors
-    * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
-    * sigma (``float``), the current step-size
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``Best`` (``float``), the best fitness function currently in the population
+    * ``dx`` (``float``), the norm of the distance to the population mean of the mutant vectors
+    * ``df`` (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+    * ``sigma`` (``float``), the current step-size
 
 Examples:
     >>> from pygmo import *
@@ -2045,7 +2127,7 @@ Examples:
     >>> al.get_log()
     [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
 
-See also the docs of the relevant C++ method :cpp:func:`pagmo::cmaes::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::cmaes::get_log()`.
 
 )";
 }
@@ -2105,24 +2187,23 @@ See also the docs of the C++ class :cpp:class:`pagmo::de1220`.
 
 std::string de1220_get_log_docstring()
 {
-    return R"(de1220.get_log()
+    return R"(get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
 constructed with a :class:`~pygmo.core.de1220`. A verbosity of N implies a log line each N generations.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, Best, F, CR, Variant, dx, df
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``F``, ``CR``, ``Variant``, ``dx``, ``df``, where:
 
-Where:
-    * Gen (``int``), generation number
-    * Fevals (``int``), number of functions evaluation made.
-    * Best (``float``), the best fitness function currently in the population
-    * F (``float``), the value of the adapted paramter F used to create the best so far
-    * CR (``float``), the value of the adapted paramter CR used to create the best so far
-    * Variant (``int``), the mutation variant used to create the best so far
-    * dx (``float``), the norm of the distance to the population mean of the mutant vectors
-    * df (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``Best`` (``float``), the best fitness function currently in the population
+    * ``F`` (``float``), the value of the adapted paramter F used to create the best so far
+    * ``CR`` (``float``), the value of the adapted paramter CR used to create the best so far
+    * ``Variant`` (``int``), the mutation variant used to create the best so far
+    * ``dx`` (``float``), the norm of the distance to the population mean of the mutant vectors
+    * ``df`` (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
 
 Examples:
     >>> from pygmo import *
@@ -2142,7 +2223,7 @@ Examples:
     >>> al.get_log()
     [(1, 20, 285652.7928977573, 0.551350234239449, 0.4415510963067054, 16, 43.97185788345982, 2023791.5123259544), ...
 
-See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log()`.
 
 )";
 }
@@ -2197,22 +2278,21 @@ when computing the social component of the velocity update.
 
 std::string pso_get_log_docstring()
 {
-    return R"(de1220.get_log()
+    return R"(get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method set_verbosity on an object :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.de1220`. A verbosity of N implies a log line each N generations.
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.de1220`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``gbest``, ``Mean Vel.``, ``Mean lbest``, ``Avg. Dist.``, where:
 
-Where:
-    * Gen (``int``), generation number
-    * Fevals (``int``), number of functions evaluation made.
-    * gbest (``float``), the best fitness function found so far by the the swarm
-    * Mean Vel. (``float``), the average particle velocity (normalized)
-    * Mean lbest (``float``), the average fitness of the current particle locations
-    * Avg. Dist. (``float``), the average distance between particles (normalized)
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``gbest`` (``float``), the best fitness function found so far by the the swarm
+    * ``Mean Vel.`` (``float``), the average particle velocity (normalized)
+    * ``Mean lbest`` (``float``), the average fitness of the current particle locations
+    * ``Avg. Dist.`` (``float``), the average distance between particles (normalized)
 
 Examples:
     >>> from pygmo import *
@@ -2236,7 +2316,7 @@ Examples:
     >>> al.get_log()
     [(1,40,72473.32713790605,0.1738915144248373,677427.3504996448,0.2817443174278134), (51,1040,...
 
-See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log()`.
 
 )";
 }
@@ -2267,23 +2347,22 @@ See also the docs of the C++ class :cpp:class:`pagmo::simulated_annealing`.
 
 std::string simulated_annealing_get_log_docstring()
 {
-    return R"(simulated_annealing.get_log()
+    return R"(get_log()
 
-Returns a log containing relevant parameters recorded during the last call to evolve and printed to screen. 
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. 
 The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
-the method set_verbosity on an object :class:`~pygmo.core.algorithm` constructed with a
+the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm` constructed with a
 :class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
-each verbosity function evaluations
+each verbosity function evaluations.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values Fevals, Best, Current, Mean range, Temperature
+    ``list`` of ``tuples``: at each logged epoch, the values ``Fevals``, ``Best``, ``Current``, ``Mean range``, ``Temperature``, where:
 
-Where:
-    * Fevals (``int``), number of functions evaluation made.
-    * Best (``float``), the best fitness function found so far.
-    * Current (``float``), last fitness sampled.
-    * Mean range (``float``), the Mean search range across the decision vector components (relative to the box bounds width).
-    * Temperature (``float``), the current temperature.
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``Best`` (``float``), the best fitness function found so far
+    * ``Current`` (``float``), last fitness sampled
+    * ``Mean range`` (``float``), the mean search range across the decision vector components (relative to the box bounds width)
+    * ``Temperature`` (``float``), the current temperature
 
 Examples:
     >>> from pygmo import *
@@ -2318,7 +2397,7 @@ Examples:
     >>> uda.get_log()
     [(57, 5936.999957947842, 5936.999957947842, 0.47999999999999987, 10.0), (10033, ...
 
-See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_annealing::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_annealing::get_log()`.
 
 )";
 }

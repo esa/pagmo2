@@ -103,6 +103,11 @@ std::string algorithm_get_thread_safety_docstring();
 
 // mbh.
 std::string mbh_docstring();
+std::string mbh_get_seed_docstring();
+std::string mbh_get_verbosity_docstring();
+std::string mbh_set_perturb_docstring();
+std::string mbh_get_log_docstring();
+std::string mbh_get_perturb_docstring();
 
 // user - problems
 std::string null_problem_docstring();
@@ -114,6 +119,7 @@ std::string cec2013_docstring();
 std::string get_best_docstring(const std::string &);
 
 // user - algorithms
+std::string null_algorithm_docstring();
 std::string cmaes_docstring();
 std::string cmaes_get_log_docstring();
 std::string compass_search_docstring();
