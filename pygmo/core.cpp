@@ -594,12 +594,12 @@ BOOST_PYTHON_MODULE(core)
         = make_unique<bp::class_<translate>>("translate", pygmo::translate_docstring().c_str(), bp::init<>());
     auto &tp = *pygmo::translate_ptr;
     // Constructor from Python user-defined problem and translation vector (allows to translate Python problems).
-    tp.def("__init__", pygmo::make_translate_init<bp::object>())
-        // Constructor of translate from translate and translation vector. This allows to apply the
-        // translation multiple times.
-        .def("__init__", pygmo::make_translate_init<translate>())
-        // Allow to extract a nested translate udp.
-        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>())
+    pygmo::make_translate_init<bp::object>(tp);
+    // Constructor of translate from translate and translation vector. This allows to apply the
+    // translation multiple times.
+    pygmo::make_translate_init<translate>(tp);
+    // Allow to extract a nested translate udp.
+    tp.def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>())
         // Python udp extraction.
         .def("_py_extract", &pygmo::generic_py_extract<translate>)
         .add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
@@ -619,9 +619,9 @@ BOOST_PYTHON_MODULE(core)
         = make_unique<bp::class_<decompose>>("decompose", pygmo::decompose_docstring().c_str(), bp::init<>());
     auto &dp = *pygmo::decompose_ptr;
     // Constructor from Python user-defined problem.
-    dp.def("__init__", pygmo::make_decompose_init<bp::object>())
-        // Python udp extraction.
-        .def("_py_extract", &pygmo::generic_py_extract<decompose>)
+    pygmo::make_decompose_init<bp::object>(dp);
+    // Python udp extraction.
+    dp.def("_py_extract", &pygmo::generic_py_extract<decompose>)
         // Returns the original multi-objective fitness
         .def("original_fitness",
              +[](const pagmo::decompose &p, const bp::object &x) {
@@ -643,11 +643,11 @@ BOOST_PYTHON_MODULE(core)
     // Before moving to the user-defined C++ problems, we need to expose the interoperability between
     // meta-problems.
     // Construct translate from decompose.
-    tp.def("__init__", pygmo::make_translate_init<decompose>());
+    pygmo::make_translate_init<decompose>(tp);
     // Extract decompose from translate.
     tp.def("_cpp_extract", &pygmo::generic_cpp_extract<translate, decompose>, bp::return_internal_reference<>());
     // Construct decompose from translate.
-    dp.def("__init__", pygmo::make_decompose_init<translate>());
+    pygmo::make_decompose_init<translate>(dp);
     // Extract translate from decompose.
     dp.def("_cpp_extract", &pygmo::generic_cpp_extract<decompose, translate>, bp::return_internal_reference<>());
 
