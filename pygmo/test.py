@@ -175,6 +175,21 @@ class cmaes_test_case(_ut.TestCase):
         seed = uda.get_seed()
 
 
+class nsga2_test_case(_ut.TestCase):
+    """Test case for the UDA nsga2
+
+    """
+
+    def runTest(self):
+        from .core import nsga2
+        uda = nsga2()
+        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01, eta_m=10, int_dim=0)
+        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01,
+                    eta_m=10, int_dim=0, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        seed = uda.get_seed()
+
+
 class null_problem_test_case(_ut.TestCase):
     """Test case for the null problem
 

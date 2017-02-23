@@ -82,11 +82,11 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_evolve_test)
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 
     // We check that the problem is checked to be suitable
-    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{zdt{}}, 5u, 23u})), std::invalid_argument);
-    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{inventory{}}, 5u, 23u})), std::invalid_argument);
-    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{hock_schittkowsky_71{}}, 5u, 23u})),
+    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{zdt{}, 5u, 23u})), std::invalid_argument);
+    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{inventory{}, 5u, 23u})), std::invalid_argument);
+    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{hock_schittkowsky_71{}, 5u, 23u})),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{problem{rosenbrock{}}})), std::invalid_argument);
+    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{rosenbrock{}})), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(sea_setters_getters_test)

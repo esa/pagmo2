@@ -226,11 +226,11 @@ public:
             }
             case 5u: {
                 auto dim = 30u + 5u * (m_param - 1u);
-                retval = {
-                    vector_double(dim, 0.),
-                    vector_double(
-                        dim,
-                        2.)}; // the bounds [0,2] guarantee that floor(x) will be in [0,1] as the rng generates in [0,2)
+                retval
+                    = {vector_double(dim, 0.),
+                       vector_double(
+                           dim,
+                           1.)}; // the bounds [0,1] imply that round(x) will be in [0,1] as the rng generates in [0,1)
                 break;
             }
         }
@@ -392,10 +392,10 @@ private:
         std::vector<vector_double::size_type> u(n_vectors, 0u);
         std::vector<vector_double::size_type> v(n_vectors);
 
-        // Convert the input vector into floored values (integers)
+        // Convert the input vector into rounded values (integers)
         vector_double x;
         std::transform(x_double.begin(), x_double.end(), std::back_inserter(x),
-                       [](double item) { return std::floor(item); });
+                       [](double item) { return std::round(item); });
         f[0] = x[0];
 
         // Counts how many 1s are there in the first (30 dim)

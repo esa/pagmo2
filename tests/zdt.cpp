@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE(zdt_get_bounds_test)
     zdt zdt6{6, 10};
     std::pair<vector_double, vector_double> bounds123({vector_double(30, 0.), vector_double(30, 1.)});
     std::pair<vector_double, vector_double> bounds4({vector_double(10, -5.), vector_double(10, 5.)});
-    std::pair<vector_double, vector_double> bounds5({vector_double(80, 0.), vector_double(80, 2.)});
+    std::pair<vector_double, vector_double> bounds5({vector_double(80, 0.), vector_double(80, 1.)});
     std::pair<vector_double, vector_double> bounds6({vector_double(10, 0.), vector_double(10, 1.)});
     bounds4.first[0] = 0.;
     bounds4.second[0] = 1.;
