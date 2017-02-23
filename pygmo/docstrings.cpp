@@ -1352,6 +1352,17 @@ See also the docs of the C++ class :cpp:class:`pagmo::cec2013`.
 )";
 }
 
+std::string generic_uda_get_seed_docstring()
+{
+    return R"(get_seed()
+
+This method will return the random seed used internally by this uda.
+
+Returns:
+    ``int``: the random seed of the population
+)";
+}
+
 std::string de_docstring()
 {
     return R"(__init__(gen = 1, F = 0.8, CR = 0.9, variant = 2, ftol = 1e-6, xtol = 1e-6, seed = random)
@@ -1612,7 +1623,7 @@ std::string nsga2_docstring()
 {
     return R"(__init__(gen = 1, cr = 0.95, eta_c = 10, m = 0.01, eta_m = 10, int_dim = 0, seed = random)
 
-Non dominated Sorting Genetic Algorithm (NSGA-II)
+Non dominated Sorting Genetic Algorithm (NSGA-II).
 
 Args:
     gen (``int``): number of generations

@@ -121,6 +121,7 @@ std::string sade_docstring();
 std::string sade_get_log_docstring();
 std::string simulated_annealing_docstring();
 std::string simulated_annealing_get_log_docstring();
+std::string generic_uda_get_seed_docstring();
 
 // utilities
 // hypervolume

@@ -190,6 +190,7 @@ public:
         // Prepare quantities to be appended to the internal vectors.
         const auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
         auto x_copy(x);
+        auto f_copy(f);
         // Reserve space in the vectors.
         // NOTE: in face of overflow here, reserve(0) will be called, which is fine.
         // The first push_back below will then fail, with no modifications to the class taking place.
@@ -201,7 +202,7 @@ public:
         update_champion(x, f);
         m_ID.push_back(new_id);
         m_x.push_back(std::move(x_copy));
-        m_f.push_back(std::move(f));
+        m_f.push_back(std::move(f_copy));
     }
 
     /// Creates a random decision vector
