@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
@@ -50,6 +51,7 @@ extern std::unique_ptr<bp::class_<pagmo::decompose>> decompose_ptr;
 
 // pagmo::algorithm and meta-algorithms.
 extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
+extern std::unique_ptr<bp::class_<pagmo::mbh>> mbh_ptr;
 }
 
 #endif

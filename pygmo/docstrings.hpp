@@ -101,6 +101,9 @@ std::string algorithm_get_name_docstring();
 std::string algorithm_get_extra_info_docstring();
 std::string algorithm_get_thread_safety_docstring();
 
+// mbh.
+std::string mbh_docstring();
+
 // user - problems
 std::string null_problem_docstring();
 std::string rosenbrock_docstring();

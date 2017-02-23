@@ -196,6 +196,7 @@ std::unique_ptr<bp::class_<decompose>> decompose_ptr(nullptr);
 
 // Algorithm and meta-algorithm classes.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr(nullptr);
+std::unique_ptr<bp::class_<mbh>> mbh_ptr(nullptr);
 }
 
 // The cleanup function.
@@ -209,6 +210,7 @@ static inline void cleanup()
     pygmo::decompose_ptr.reset();
 
     pygmo::algorithm_ptr.reset();
+    pygmo::mbh_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -725,7 +727,23 @@ BOOST_PYTHON_MODULE(core)
     auto cec2013_ = pygmo::expose_problem<cec2013>("cec2013", pygmo::cec2013_docstring().c_str());
     cec2013_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
 #endif
-    // Exposition of C++ algorithms.
+
+    // MBH meta-algo.
+    pygmo::mbh_ptr = make_unique<bp::class_<mbh>>("mbh", pygmo::mbh_docstring().c_str(), bp::init<>());
+    auto &mbh_ = *pygmo::mbh_ptr;
+    // Constructors from Python user-defined algo.
+    pygmo::make_mbh_inits<bp::object>(mbh_);
+    // Python udp extraction.
+    mbh_.def("_py_extract", &pygmo::generic_py_extract<mbh>);
+    // Mark it as a cpp algo.
+    mbh_.attr("_pygmo_cpp_algorithm") = true;
+    // Ctor of algorithm from mbh.
+    pygmo::algorithm_expose_init_cpp_uda<mbh>();
+    // Extract mbh from the algorithm class.
+    algorithm_class.def("_cpp_extract", &pygmo::generic_cpp_extract<algorithm, mbh>, bp::return_internal_reference<>());
+    // Add it to the the algos submodule.
+    bp::scope().attr("algorithms").attr("mbh") = mbh_;
+
     // Test algo.
     auto test_a = pygmo::expose_algorithm<test_algorithm>("_test_algorithm", "A test algorithm.");
     test_a.def("get_n", &test_algorithm::get_n);

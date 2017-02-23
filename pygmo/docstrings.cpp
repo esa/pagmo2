@@ -1469,6 +1469,60 @@ Raises:
 )";
 }
 
+std::string mbh_docstring()
+{
+    return R"(__init__(uda = compass_search(), stop = 5, perturb = 1e-2, seed = random)
+
+Monotonic Basin Hopping (generalized).
+
+Monotonic basin hopping, or simply, basin hopping, is an algorithm rooted in the idea of mapping
+the objective function :math:`f(\mathbf x_0)` into the local minima found starting from :math:`\mathbf x_0`.
+This simple idea allows a substantial increase of efficiency in solving problems, such as the Lennard-Jones
+cluster or the MGA-1DSM interplanetary trajectory problem that are conjectured to have a so-called
+funnel structure.
+
+In pygmo we provide an original generalization of this concept resulting in a meta-algorithm that operates
+on any :class:`pygmo.core.population` using any suitable user-defined algorithm (UDA). When a population containing a single
+individual is used and coupled with a local optimizer, the original method is recovered.
+The pseudo code of our generalized version is:
+
+.. code-block:: none
+
+   > Select a pygmo population
+   > Select a UDA
+   > Store best individual
+   > while i < stop_criteria
+   > > Perturb the population in a selected neighbourhood
+   > > Evolve the population using the algorithm
+   > > if the best individual is improved
+   > > > increment i
+   > > > update best individual
+   > > else
+   > > > i = 0
+
+See: http://arxiv.org/pdf/cond-mat/9803344 for the paper introducing the basin hopping idea for a Lennard-Jones
+cluster optimization.
+
+See also the docs of the C++ class :cpp:class:`pagmo::mbh`.
+
+Args:
+    uda: a user-defined algorithm (either C++ or Python - note that *uda* will be deep-copied
+      and stored inside the :class:`~pygmo.core.mbh` instance)
+    stop (``int``): consecutive runs of the inner algorithm that need to result in no improvement for
+      :class:`~pygmo.core.mbh` to stop
+    perturb (``float`` or an array-like object): perturb the perturbation to be applied to each component
+    seed (``int``): seed used by the internal random number generator
+
+Raises:
+    ValueError: if *perturb* (or one of its components, if *perturb* is an array) is not in the
+      (0,1] range
+    unspecified: any exception thrown by the constructor of :class:`pygmo.core.algorithm`, or by
+      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)
+
+)";
+}
+
 std::string null_problem_docstring()
 {
     return R"(__init__(nobj = 1)
