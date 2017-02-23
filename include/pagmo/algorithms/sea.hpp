@@ -64,11 +64,11 @@ namespace pagmo
  * **NOTE** The mutation is uniform within box-bounds. Hence, unbounded problems
  * will produce an error.
  *
- * @see Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for
+ * See: Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for
  * combinatorial optimization: A decade of results." International Journal of Automation and Computing
  * 4.3 (2007): 281-293.
  *
- * @see http://www.scholarpedia.org/article/Evolution_strategies
+ * See: http://www.scholarpedia.org/article/Evolution_strategies
  *
  */
 class sea

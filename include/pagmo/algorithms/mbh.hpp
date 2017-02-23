@@ -34,19 +34,21 @@ see https://www.gnu.org/licenses/. */
 #include <random>
 #include <string>
 #include <tuple>
+#include <vector>
 
 #include "../algorithm.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
 #include "../rng.hpp"
+#include "../type_traits.hpp"
 #include "../utils/constrained.hpp"
 #include "../utils/generic.hpp" // pagmo::uniform_real_from_range
 
 namespace pagmo
 {
 
-/// Monotonic Basin Hopping (generalized)
+/// Monotonic Basin Hopping (generalized).
 /**
  * \image html mbh.png "A schematic diagram illustrating the fitness landscape as seen by basin hopping" width=3cm
  *
@@ -57,12 +59,12 @@ namespace pagmo
  * funnel structure.
  *
  * In pagmo we provide an original generalization of this concept resulting in a meta-algorithm that operates
- * on any pagmo::population using any suitable pagmo::algorithm. When a population containing a single
+ * on any pagmo::population using any suitable user-defined algorithm (UDA). When a population containing a single
  * individual is used and coupled with a local optimizer, the original method is recovered.
  * The pseudo code of our generalized version is:
- * @code
+ * @code{.unparsed}
  * > Select a pagmo::population
- * > Select a pagmo::algorithm
+ * > Select a UDA
  * > Store best individual
  * > while i < stop_criteria
  * > > Perturb the population in a selected neighbourhood
@@ -74,62 +76,88 @@ namespace pagmo
  * > > > i = 0
  * @endcode
  *
- * @see http://arxiv.org/pdf/cond-mat/9803344 for the paper inroducing the basin hopping idea for a Lennard-Jones
- * cluster optimization
+ * pagmo::mbh is a user-defined algorithm (UDA) that can be used to construct pagmo::algorithm objects.
+ *
+ * See: http://arxiv.org/pdf/cond-mat/9803344 for the paper introducing the basin hopping idea for a Lennard-Jones
+ * cluster optimization.
  */
 class mbh : public algorithm
 {
+    // Enabler for the ctor from UDA.
+    template <typename T>
+    using ctor_enabler
+        = enable_if_t<std::is_constructible<algorithm, T &&>::value && !std::is_same<uncvref_t<T>, algorithm>::value,
+                      int>;
+
 public:
-    /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, trial)
-    typedef std::tuple<unsigned long long, double, vector_double::size_type, double, unsigned int> log_line_type;
-    /// The log
+    /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, trial).
+    typedef std::tuple<unsigned long long, double, vector_double::size_type, double, unsigned> log_line_type;
+    /// The log.
     typedef std::vector<log_line_type> log_type;
-    /// Default constructor, only here as serialization requires it
-    mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_e(0u), m_seed(0u), m_verbosity(0u), m_log()
-    {
-    }
-    /// Constructor
+    /// Default constructor.
     /**
-     * Constructs Monotonic Basin Hopping using a scalar perturbation
+     * The default constructor will initialize the algorithm with the following parameters:
+     * - inner algorithm: pagmo::compass_search;
+     * - consecutive runs of the inner algorithm that need to result in no improvement for pagmo::mbh to stop: 5;
+     * - scalar perturbation: 1E-2;
+     * - seed: random.
      *
-     * @param a Any object that can construct a pagmo::algorithm and that will
-     * then be used as inner algorithm for the generalized mbh.
+     * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
+     */
+    mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_verbosity(0u)
+    {
+        const auto rnd = pagmo::random_device::next();
+        m_seed = rnd;
+        m_e.seed(rnd);
+    }
+    /// Constructor (scalar perturbation).
+    /**
+     * **NOTE** This constructor is enabled only if \p T, after the removal of cv/reference qualifiers,
+     * is not pagmo::algorithm.
+     *
+     * This constructor will construct a monotonic basin hopping algorithm using a scalar perturbation.
+     *
+     * @param a a user-defined algorithm (UDA) that will be used to construct the inner algorithm.
      * @param stop consecutive runs of the inner algorithm that need to
-     * result in no improvement for pagmo::mbh to stop
+     * result in no improvement for pagmo::mbh to stop.
      * @param perturb the perturbation to be applied to each component
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
-     * @param seed seed used by the internal random number generator (default is random)
-     * @throws std::invalid_argument if \p stop is not in (0,1]
+     * @param seed seed used by the internal random number generator (default is random).
+     *
+     * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
+     * @throws std::invalid_argument if \p perturb is not in the (0,1] range.
      */
-    template <typename T>
-    explicit mbh(T &&a, unsigned int stop, double perturb, unsigned int seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
-          m_log()
+    template <typename T, ctor_enabler<T> = 0>
+    explicit mbh(T &&a, unsigned stop, double perturb, unsigned seed = pagmo::random_device::next())
+        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
     {
         if (perturb > 1. || perturb <= 0. || std::isnan(perturb)) {
             pagmo_throw(std::invalid_argument, "The scalar perturbation must be in (0, 1], while a value of "
                                                    + std::to_string(perturb) + " was detected.");
         }
     }
-    /// Constructor
+    /// Constructor (vector perturbation).
     /**
-     * Constructs Monotonic Basin Hopping using a vector perturbation
+     * **NOTE** This constructor is enabled only if \p T, after the removal of cv/reference qualifiers,
+     * is not pagmo::algorithm.
      *
-     * @param a Any object that can construct a pagmo::algorithm and that will
-     * then be used as inner algorithm for the generalized mbh.
+     * This constructor will construct a monotonic basin hopping algorithm using a vector perturbation.
+     *
+     * @param a a user-defined algorithm (UDA) that will be used to construct the inner algorithm.
      * @param stop consecutive runs of the inner algorithm that need to
-     * result in no improvement for pagmo::mbh to stop
-     * @param perturb a vector_double with the perturbations to be applied to each component
+     * result in no improvement for pagmo::mbh to stop.
+     * @param perturb a pagmo::vector_double with the perturbations to be applied to each component
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
-     * @param seed seed used by the internal random number generator (default is random)
-     * @throws std::invalid_argument if \p stop is not in (0,1]
+     * @param seed seed used by the internal random number generator (default is random).
+     *
+     * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
+     * @throws std::invalid_argument if not all the elements of \p perturb are in the (0,1] range.
      */
-    template <typename T>
-    explicit mbh(T &&a, unsigned int stop, vector_double perturb, unsigned int seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
-          m_log()
+    template <typename T, ctor_enabler<T> = 0>
+    explicit mbh(T &&a, unsigned stop, vector_double perturb, unsigned seed = pagmo::random_device::next())
+        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
     {
         if (!std::all_of(perturb.begin(), perturb.end(),
                          [](double item) { return (item > 0. && item <= 1. && !std::isnan(item)); })) {
@@ -137,15 +165,17 @@ public:
                         "The perturbation must have all components in (0, 1], while that is not the case.");
         }
     }
-    /// Algorithm evolve method (juice implementation of the algorithm)
+    /// Evolve method.
     /**
-     * Evolves the population up to when \p stop consecutve runs of the internal
+     * This method will evolve the input population up to when \p stop consecutve runs of the internal
      * algorithm do not improve the solution.
      *
-     * @param pop population to be evolved
-     * @return evolved population
-     * @throws std::invalid_argument if the problem is multi-objective or stochastic
-     * @throws std::invalid_argument if the perturbation vector size does not equal the problem size
+     * @param pop population to be evolved.
+     *
+     * @return evolved population.
+     *
+     * @throws std::invalid_argument if the problem is multi-objective or stochastic, or if the perturbation vector size
+     * does not equal the problem size.
      */
     population evolve(population pop) const
     {
@@ -160,7 +190,7 @@ public:
         auto NP = pop.size();
 
         auto fevals0 = prob.get_fevals(); // discount for the already made fevals
-        unsigned int count = 1u;          // regulates the screen output
+        unsigned count = 1u;              // regulates the screen output
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
         if (prob.get_nobj() != 1u) {
@@ -168,8 +198,8 @@ public:
                                                    + get_name() + " cannot deal with them");
         }
         if (prob.is_stochastic()) {
-            pagmo_throw(std::invalid_argument,
-                        "The problem appears to be stochastic " + get_name() + " cannot deal with it");
+            pagmo_throw(std::invalid_argument, "The input problem " + prob.get_name() + " appears to be stochastic, "
+                                                   + get_name() + " cannot deal with it");
         }
         // Get out if there is nothing to do.
         if (m_stop == 0u) {
@@ -193,7 +223,7 @@ public:
         // No throws, all valid: we clear the logs
         m_log.clear();
         // mbh main loop
-        unsigned int i = 0u;
+        unsigned i = 0u;
         while (i < m_stop) {
             // 1 - We make a copy of the current population
             population pop_old(pop);
@@ -248,28 +278,28 @@ public:
         // We extract chromosomes and fitnesses
         return pop;
     }
-    /// Sets the seed
+    /// Set the seed.
     /**
-     * @param seed the seed controlling the algorithm stochastic behaviour
+     * @param seed the seed controlling the algorithm's stochastic behaviour.
      */
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     }
-    /// Gets the seed
+    /// Get the seed.
     /**
-     * @return the seed controlling the algorithm stochastic behaviour
+     * @return the seed controlling the algorithm's stochastic behaviour.
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
-    /// Sets the algorithm verbosity
+    /// Set the algorithm verbosity.
     /**
-     * Sets the verbosity level of the screen output and of the
+     * This method will sets the verbosity level of the screen output and of the
      * log returned by get_log(). \p level can be:
-     * - 0: no verbosity
-     * - >0: will print and log one line at the end of each call to the inner algorithm
+     * - 0: no verbosity,
+     * - >0: will print and log one line at the end of each call to the inner algorithm.
      *
      * Example (verbosity 100):
      * @code
@@ -285,39 +315,40 @@ public:
      *     937         111.33              1      0.0149418              4 i
      *    1045         111.33              1      0.0149418              5 i
      * @endcode
-     * Fevals, is the number of fitness evaluations, Best is the objective function of the best
-     * fitness currently in the population, Violated is the number of constraints currently violated
-     * by the best solution, Viol. Norm is the norm of the violation (discounted already by the constraints
-     * tolerance) and Trial is the trial number (which will determine the algorithm stop).
-     * The small i appearing at the end of the line stands for "infeasible" and will disappear only once Violated is 0.
+     * \p Fevals is the number of fitness evaluations, \p Best is the objective function of the best
+     * fitness currently in the population, \p Violated is the number of constraints currently violated
+     * by the best solution, <tt>Viol. Norm</tt> is the norm of the violation (discounted already by the constraints
+     * tolerance) and \p Trial is the trial number (which will determine the algorithm stop).
+     * The small \p i appearing at the end of the line stands for "infeasible" and will disappear only
+     * once \p Violated is 0.
      *
-     * @param level verbosity level
+     * @param level verbosity level.
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     };
-    /// Gets the verbosity level
+    /// Get the verbosity level.
     /**
-     * @return the verbosity level
+     * @return the verbosity level.
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
-    /// Gets the perturbation vector
+    /// Get the perturbation vector.
     /**
-     * @return the perturbation vector
+     * @return a const reference to the perturbation vector.
      */
     const vector_double &get_perturb() const
     {
         return m_perturb;
     }
-    /// Sets the perturbation vector
+    /// Set the perturbation vector.
     /**
-     * @param perturb the perturbation vector
+     * @param perturb the perturbation vector.
      *
-     * @throw std::invalid_argument if some components of the perturbation vector are not in (0,1]
+     * @throws std::invalid_argument if not all the components of the perturbation vector are in the (0,1] range.
      */
     void set_perturb(const vector_double &perturb)
     {
@@ -328,14 +359,14 @@ public:
         }
         m_perturb = perturb;
     }
-    /// Get log
+    /// Get log.
     /**
-     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a mbh::log_line_type containing: Fevals, Best, Violated, Viol.Norm and
-     * Trial as described in mbh::set_verbosity
+     * A log containing relevant quantities monitoring the last call to mbh::evolve(). Each element of the returned
+     * <tt>std::vector</tt> is a mbh::log_line_type containing: \p Fevals, \p Best, \p Violated, <tt>Viol. Norm</tt> and
+     * \p Trial as described in mbh::set_verbosity().
+     *
      * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals,
-     * Violated, Viol.Norm and
-     * Trial
+     * Violated, Viol.Norm and Trial.
      */
     const log_type &get_log() const
     {
@@ -343,9 +374,7 @@ public:
     }
     /// Algorithm name
     /**
-     * One of the optional methods of any user-defined algorithm (UDA).
-     *
-     * @return a string containing the algorithm name
+     * @return a string containing the algorithm name.
      */
     std::string get_name() const
     {
@@ -353,9 +382,7 @@ public:
     }
     /// Extra informations
     /**
-     * One of the optional methods of any user-defined algorithm (UDA).
-     *
-     * @return a string containing extra informations on the algorithm
+     * @return a string containing extra informations on the algorithm.
      */
     std::string get_extra_info() const
     {
@@ -375,7 +402,7 @@ public:
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
      */
     template <typename Archive>
     void serialize(Archive &ar)
@@ -384,10 +411,8 @@ public:
     }
 
 private:
-    // Delete all that we do not want to inherit from problem
+    // Delete all that we do not want to inherit from algorithm.
     // A - Common to all meta
-    template <typename T>
-    bool is() const = delete;
     bool has_set_seed() const = delete;
     bool is_stochastic() const = delete;
     bool has_set_verbosity() const = delete;
@@ -400,7 +425,7 @@ private:
     friend std::ostream &operator<<(std::ostream &, const mbh &) = delete;
 #endif
 
-    unsigned int m_stop;
+    unsigned m_stop;
     // The member m_perturb is mutable as to allow to construct mbh also using a perturbation defined as a scalar
     // (in which case upon the first call to evolve it is expanded to the problem dimension)
     // and as a vector (in which case mbh will only operate on problem having the correct dimension)
@@ -409,11 +434,12 @@ private:
     // upon the first call to evolve.
     mutable std::vector<double> m_perturb;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 }
+
 PAGMO_REGISTER_ALGORITHM(pagmo::mbh)
 
 #endif

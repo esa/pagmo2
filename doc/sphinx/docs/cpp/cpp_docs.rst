@@ -10,6 +10,7 @@ we suggest to follow the tutorials / examples.
 .. toctree::
   :maxdepth: 1
 
+  types
   problem
   population
   algorithm
@@ -29,6 +30,7 @@ code your own algorithm
   algorithms/de1220
   algorithms/moead
   algorithms/mbh
+  algorithms/nsga2
   algorithms/pso
   algorithms/sade
   algorithms/sea
@@ -49,6 +51,7 @@ problem
   problems/ackley
   problems/griewank
   problems/zdt
+  problems/dtlz
   problems/hock_schittkowsky_71
   problems/inventory
   problems/translate
@@ -65,6 +68,7 @@ Various optimization utilities.
   utils/multi_objective
   utils/constrained
   utils/discrepancy
+  utils/hypervolume
 
 Miscellanea
 ^^^^^^^^^^^
@@ -75,3 +79,4 @@ Various coding utilities.
 
   miscellanea/generic
   miscellanea/type_traits
+  miscellanea/exceptions

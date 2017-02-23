@@ -85,14 +85,13 @@ inline pagmo::translate *translate_init<bp::object>(const bp::object &p, const b
     return ::new pagmo::translate(p, vd);
 }
 
-// Make Python init from ctor above.
+// Make python inits for mbh from the above ctors.
 template <typename Prob>
-inline auto make_translate_init()
-    -> decltype(bp::make_constructor(&translate_init<Prob>, bp::default_call_policies(),
-                                     (bp::arg(std::declval<const char *>()), bp::arg(std::declval<const char *>()))))
+inline void make_translate_init(bp::class_<pagmo::translate> &tp)
 {
-    return bp::make_constructor(&translate_init<Prob>, bp::default_call_policies(),
-                                (bp::arg("prob"), bp::arg("translation")));
+    tp.def("__init__", bp::make_constructor(
+                           +[](const Prob &p, const bp::object &translation) { return translate_init(p, translation); },
+                           bp::default_call_policies(), (bp::arg("udp"), bp::arg("translation"))));
 }
 
 // Constructor of decompose from problem and weight, z, method and bool flag.
@@ -105,18 +104,29 @@ inline pagmo::decompose *decompose_init(const Prob &p, const bp::object &weight,
     return ::new pagmo::decompose(p, vd_w, vd_z, method, adapt_ideal);
 }
 
+template <>
+inline pagmo::decompose *decompose_init<bp::object>(const bp::object &p, const bp::object &weight, const bp::object &z,
+                                                    const std::string &method, bool adapt_ideal)
+{
+    if (type(p) == *problem_ptr) {
+        pygmo_throw(PyExc_TypeError, "a pygmo problem is not a user-defined problem, and it cannot be used "
+                                     "as a construction argument for the decompose meta-problem");
+    }
+    auto vd_w = to_vd(weight);
+    auto vd_z = to_vd(z);
+    return ::new pagmo::decompose(p, vd_w, vd_z, method, adapt_ideal);
+}
+
 // Make a python init from the above ctor.
 template <typename Prob>
-inline auto make_decompose_init()
-    -> decltype(bp::make_constructor(&decompose_init<Prob>, bp::default_call_policies(),
-                                     (bp::arg(std::declval<const char *>()), bp::arg(std::declval<const char *>()),
-                                      bp::arg(std::declval<const char *>()),
-                                      bp::arg(std::declval<const char *>()) = std::string(std::declval<const char *>()),
-                                      bp::arg(std::declval<const char *>()) = false)))
+inline void make_decompose_init(bp::class_<pagmo::decompose> &dp)
 {
-    return bp::make_constructor(&decompose_init<Prob>, bp::default_call_policies(),
-                                (bp::arg("prob"), bp::arg("weight"), bp::arg("z"),
-                                 bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false));
+    dp.def("__init__", bp::make_constructor(
+                           +[](const Prob &p, const bp::object &weight, const bp::object &z, const std::string &method,
+                               bool adapt_ideal) { return decompose_init(p, weight, z, method, adapt_ideal); },
+                           bp::default_call_policies(),
+                           (bp::arg("udp"), bp::arg("weight"), bp::arg("z"),
+                            bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false)));
 }
 
 // Expose a problem ctor from a C++ UDP.
@@ -126,7 +136,7 @@ inline void problem_expose_init_cpp_udp()
 {
     assert(problem_ptr.get() != nullptr);
     auto &prob_class = *problem_ptr;
-    prob_class.def(bp::init<const Prob &>((bp::arg("p"))));
+    prob_class.def(bp::init<const Prob &>((bp::arg("udp"))));
 }
 
 // Main problem exposition function.
@@ -150,16 +160,14 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
     problem_class.def("_cpp_extract", &generic_cpp_extract<pagmo::problem, Prob>, bp::return_internal_reference<>());
 
     // Expose translate's constructor from Prob and translation vector.
-    tp_class
-        .def("__init__", make_translate_init<Prob>())
-        // Extract.
-        .def("_cpp_extract", &generic_cpp_extract<pagmo::translate, Prob>, bp::return_internal_reference<>());
+    make_translate_init<Prob>(tp_class);
+    // Extract.
+    tp_class.def("_cpp_extract", &generic_cpp_extract<pagmo::translate, Prob>, bp::return_internal_reference<>());
 
     // Expose decompose's constructor from Prob.
-    dp_class
-        .def("__init__", make_decompose_init<Prob>())
-        // Extract.
-        .def("_cpp_extract", &generic_cpp_extract<pagmo::decompose, Prob>, bp::return_internal_reference<>());
+    make_decompose_init<Prob>(dp_class);
+    // Extract.
+    dp_class.def("_cpp_extract", &generic_cpp_extract<pagmo::decompose, Prob>, bp::return_internal_reference<>());
 
     // Add the problem to the problems submodule.
     bp::scope().attr("problems").attr(name) = c;

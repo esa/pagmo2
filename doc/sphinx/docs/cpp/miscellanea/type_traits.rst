@@ -1,9 +1,11 @@
 .. _cpp_type_traits:
 
-Type traits
-===========
+Type traits and enums
+=====================
 
-Type traits used in PaGMO
+Type traits and enums used in PaGMO
+
+.. doxygenenum:: pagmo::thread_safety
 
 .. doxygenclass:: pagmo::has_fitness
    :members:
@@ -21,6 +23,9 @@ Type traits used in PaGMO
    :members:
 
 .. doxygenclass:: pagmo::has_extra_info
+   :members:
+
+.. doxygenclass:: pagmo::has_get_thread_safety
    :members:
 
 .. doxygenclass:: pagmo::has_gradient
@@ -54,4 +59,13 @@ Type traits used in PaGMO
    :members:
 
 .. doxygenclass:: pagmo::has_evolve
+   :members:
+
+.. doxygenclass:: pagmo::has_get_nobj
+   :members:
+
+.. doxygenclass:: pagmo::has_set_seed
+   :members:
+
+.. doxygenclass:: pagmo::override_has_set_seed
    :members:

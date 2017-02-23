@@ -78,17 +78,48 @@ std::string problem_has_hessians_sparsity_docstring();
 std::string problem_hessians_sparsity_docstring();
 std::string problem_get_name_docstring();
 std::string problem_get_extra_info_docstring();
+std::string problem_get_thread_safety_docstring();
+
+// translate
+std::string translate_docstring();
+std::string translate_translation_docstring();
+
+// decompose
+std::string decompose_docstring();
+std::string decompose_decompose_fitness_docstring();
+std::string decompose_original_fitness_docstring();
+std::string decompose_z_docstring();
 
 // algorithm
 std::string algorithm_docstring();
+std::string algorithm_evolve_docstring();
+std::string algorithm_set_seed_docstring();
+std::string algorithm_has_set_seed_docstring();
+std::string algorithm_set_verbosity_docstring();
+std::string algorithm_has_set_verbosity_docstring();
+std::string algorithm_get_name_docstring();
+std::string algorithm_get_extra_info_docstring();
+std::string algorithm_get_thread_safety_docstring();
+
+// mbh.
+std::string mbh_docstring();
+std::string mbh_get_seed_docstring();
+std::string mbh_get_verbosity_docstring();
+std::string mbh_set_perturb_docstring();
+std::string mbh_get_log_docstring();
+std::string mbh_get_perturb_docstring();
 
 // user - problems
+std::string null_problem_docstring();
 std::string rosenbrock_docstring();
+std::string dtlz_docstring();
+std::string dtlz_p_distance_docstring();
+std::string zdt_p_distance_docstring();
 std::string cec2013_docstring();
-std::string decompose_decompose_fitness_docstring();
 std::string get_best_docstring(const std::string &);
 
 // user - algorithms
+std::string null_algorithm_docstring();
 std::string cmaes_docstring();
 std::string cmaes_get_log_docstring();
 std::string compass_search_docstring();
@@ -99,15 +130,35 @@ std::string de1220_docstring();
 std::string de1220_get_log_docstring();
 std::string moead_docstring();
 std::string moead_get_log_docstring();
+std::string nsga2_docstring();
+std::string nsga2_get_log_docstring();
 std::string pso_docstring();
 std::string pso_get_log_docstring();
 std::string sade_docstring();
 std::string sade_get_log_docstring();
 std::string simulated_annealing_docstring();
 std::string simulated_annealing_get_log_docstring();
+std::string generic_uda_get_seed_docstring();
 
+// utilities
+// hypervolume
+std::string hv_init1_docstring();
+std::string hv_init2_docstring();
+std::string hv_compute_docstring();
+std::string hv_contributions_docstring();
+std::string hv_exclusive_docstring();
+std::string hv_greatest_contributor_docstring();
+std::string hv_least_contributor_docstring();
+std::string hv_refpoint_docstring();
+std::string hvwfg_docstring();
+std::string hv2d_docstring();
+std::string hv3d_docstring();
+std::string bf_approx_docstring();
+std::string bf_fpras_docstring();
 // stand alone functions
 std::string fast_non_dominated_sorting_docstring();
+std::string ideal_docstring();
+std::string nadir_docstring();
 }
 
 #endif

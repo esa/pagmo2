@@ -64,7 +64,7 @@ namespace pagmo
  * The
  * mutable members make such an operation result in an undefined behaviour in terms of algorithmic convergence.
  *
- * @see Hansen, Nikolaus. "The CMA evolution strategy: a comparing review." Towards a new evolutionary computation.
+ * See: Hansen, Nikolaus. "The CMA evolution strategy: a comparing review." Towards a new evolutionary computation.
  * Springer Berlin Heidelberg, 2006. 75-102.
  */
 class cmaes

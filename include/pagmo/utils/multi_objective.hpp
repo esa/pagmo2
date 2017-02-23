@@ -128,7 +128,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
  * the
  * complexity of calling pagmo::fast_non_dominated_sorting
  *
- * @see Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
+ * See: Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
  * IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
  *
  * @param input_objs an <tt>std::vector</tt> containing the points (i.e. vector of objectives)
@@ -193,7 +193,7 @@ using fnds_return_type
  * number of objectives
  * and \f$N\f$ is the number of individuals.
  *
- * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
+ * See: Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg,
  * 2000.
  *
@@ -209,8 +209,7 @@ using fnds_return_type
  *  - the domination count, an <tt>std::vector<vector_double::size_type></tt> containing the number of individuals
  * that dominate the individual at position \f$i\f$. Example {2, 0, 0, 1}
  *  - the non domination rank, an <tt>std::vector<vector_double::size_type></tt> containing the index of the non
- * dominated
- * front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
+ * dominated front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
  *
  * @throws std::invalid_argument If the size of \p points is not at least 2
  */
@@ -280,7 +279,7 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
  * condition
  * will result in undefined behaviour.
  *
- * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
+ * See: Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg,
  * 2000.
  *
@@ -489,22 +488,22 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
  *
  * Complexity is \f$ O(MN)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @param input_f Input objectives vectors. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
+ * @param points Input objectives vectors. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
  *
  * @returns A vector_double containing the ideal point. Example: {-1,-2,231}
  *
  * @throws std::invalid_argument if the input objective vectors are not all of the same size
  */
-vector_double ideal(const std::vector<vector_double> &input_f)
+vector_double ideal(const std::vector<vector_double> &points)
 {
     // Corner case
-    if (input_f.size() == 0u) {
+    if (points.size() == 0u) {
         return {};
     }
 
     // Sanity checks
-    auto M = input_f[0].size();
-    for (const auto &f : input_f) {
+    auto M = points[0].size();
+    for (const auto &f : points) {
         if (f.size() != M) {
             pagmo_throw(std::invalid_argument,
                         "Input vector of objectives must contain fitness vector of equal dimension "
@@ -515,7 +514,7 @@ vector_double ideal(const std::vector<vector_double> &input_f)
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
         retval[i]
-            = (*std::min_element(input_f.begin(), input_f.end(),
+            = (*std::min_element(points.begin(), points.end(),
                                  [i](const vector_double &f1, const vector_double &f2) { return f1[i] < f2[i]; }))[i];
     }
     return retval;
@@ -528,30 +527,30 @@ vector_double ideal(const std::vector<vector_double> &input_f)
  *
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @param input_f Input objective vectors. Example {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{6,6},{9,15}}
+ * @param points Input objective vectors. Example {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{6,6},{9,15}}
  *
  * @returns A vector_double containing the nadir point. Example: {10,7}
  *
  */
-vector_double nadir(const std::vector<vector_double> &input_f)
+vector_double nadir(const std::vector<vector_double> &points)
 {
     // Corner case
-    if (input_f.size() == 0u) {
+    if (points.size() == 0u) {
         return {};
     }
     // Sanity checks
-    auto M = input_f[0].size();
+    auto M = points[0].size();
     // We extract all objective vectors belonging to the first non dominated front (the Pareto front)
-    auto pareto_idx = std::get<0>(fast_non_dominated_sorting(input_f))[0];
-    std::vector<vector_double> nd_fits;
+    auto pareto_idx = std::get<0>(fast_non_dominated_sorting(points))[0];
+    std::vector<vector_double> nd_points;
     for (auto idx : pareto_idx) {
-        nd_fits.push_back(input_f[idx]);
+        nd_points.push_back(points[idx]);
     }
     // And compute the nadir over them
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
         retval[i]
-            = (*std::max_element(nd_fits.begin(), nd_fits.end(),
+            = (*std::max_element(nd_points.begin(), nd_points.end(),
                                  [i](const vector_double &f1, const vector_double &f2) { return f1[i] < f2[i]; }))[i];
     }
     return retval;
@@ -676,6 +675,104 @@ std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, v
                         + " is unknown. One of 'grid', 'random' or 'low discrepancy' was expected");
     }
     return retval;
+}
+
+/// Decomposes a vector of objectives.
+/**
+ * A vector of objectives is reduced to one only objective using a decomposition
+ * technique.
+ *
+ * Three different *decomposition methods* are here made available:
+ *
+ * - weighted decomposition,
+ * - Tchebycheff decomposition,
+ * - boundary interception method (with penalty constraint).
+ *
+ * In the case of \f$n\f$ objectives, we indicate with: \f$ \mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots,
+ * f_n(\mathbf x)] \f$ the vector containing the original multiple objectives, with: \f$ \boldsymbol \lambda =
+ * (\lambda_1, \ldots, \lambda_n) \f$ an \f$n\f$-dimensional weight vector and with: \f$ \mathbf z^* = (z^*_1, \ldots,
+ * z^*_n) \f$ an \f$n\f$-dimensional reference point. We also ussume \f$\lambda_i > 0, \forall i=1..n\f$ and \f$\sum_i
+ * \lambda_i = 1\f$.
+ *
+ * The resulting single objective is thus defined as:
+ *
+ * - weighted decomposition: \f$ f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f \f$,
+ * - Tchebycheff decomposition: \f$ f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i \vert
+ * \f$,
+ * - boundary interception method (with penalty constraint): \f$ f_d(\mathbf x) = d_1 + \theta d_2\f$,
+ *
+ * where \f$d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}\f$,
+ * \f$d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\f$ and
+ * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$.
+ *
+ * @param f input vector of objectives.
+ * @param weight the weight to be used in the decomposition.
+ * @param ref_point the reference point to be used if either "tchebycheff" or "bi".
+ * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
+ * @param method decomposition method: one of "weighted", "tchebycheff" or "bi"
+ *
+ * @return the decomposed objective.
+ *
+ * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes
+ * @throws std::invalid_argument if \p method is not one of "weighted", "tchebycheff" or "bi"
+ */
+inline vector_double decompose_objectives(const vector_double &f, const vector_double &weight,
+                                          const vector_double &ref_point, const std::string &method)
+{
+    if (weight.size() != f.size()) {
+        pagmo_throw(std::invalid_argument,
+                    "Weight vector size must be equal to the number of objectives. The size of the weight vector is "
+                        + std::to_string(weight.size()) + " while " + std::to_string(f.size())
+                        + " objectives were detected");
+    }
+    if (ref_point.size() != f.size()) {
+        pagmo_throw(
+            std::invalid_argument,
+            "Reference point size must be equal to the number of objectives. The size of the reference point is "
+                + std::to_string(ref_point.size()) + " while " + std::to_string(f.size())
+                + " objectives were detected");
+    }
+    if (f.size() == 0u) {
+        pagmo_throw(std::invalid_argument, "The number of objectives detected is: " + std::to_string(f.size())
+                                               + ". Cannot decompose this into anything.");
+    }
+    double fd = 0.;
+    if (method == "weighted") {
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            fd += weight[i] * f[i];
+        }
+    } else if (method == "tchebycheff") {
+        double tmp, fixed_weight;
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            (weight[i] == 0.) ? (fixed_weight = 1e-4)
+                              : (fixed_weight = weight[i]); // fixes the numerical problem of 0 weights
+            tmp = fixed_weight * std::abs(f[i] - ref_point[i]);
+            if (tmp > fd) {
+                fd = tmp;
+            }
+        }
+    } else if (method == "bi") { // BI method
+        const double THETA = 5.;
+        double d1 = 0.;
+        double weight_norm = 0.;
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            d1 += (f[i] - ref_point[i]) * weight[i];
+            weight_norm += std::pow(weight[i], 2);
+        }
+        weight_norm = std::sqrt(weight_norm);
+        d1 = d1 / weight_norm;
+
+        double d2 = 0.;
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            d2 += std::pow(f[i] - (ref_point[i] + d1 * weight[i] / weight_norm), 2);
+        }
+        d2 = std::sqrt(d2);
+        fd = d1 + THETA * d2;
+    } else {
+        pagmo_throw(std::invalid_argument, "The decomposition method chosen was: " + method
+                                               + R"(, but only "weighted", "tchebycheff" or "bi" are allowed)");
+    }
+    return {fd};
 }
 
 } // namespace pagmo

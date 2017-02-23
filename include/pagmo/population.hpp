@@ -167,11 +167,30 @@ public:
      */
     void push_back(const vector_double &x)
     {
+        // This line will throw if dv dimensions are wrong, or fitness dimensions are worng
+        auto f = m_prob.fitness(x);
+        push_back(x, f);
+    }
+
+    /// Adds one decision vector/fitness vector to the population
+    /**
+     * Appends a new decision vectorome \p x to the population, and sets
+     * its fitness to \p f creating a new unique identifier for the newly
+     * born individual.
+     *
+     * In case of exceptions, the population will not be altered.
+     *
+     * @param x decision vector to be added to the population.
+     * @param f fitness vector corresponding to the decision vector
+     *
+     * @throws unspecified any exception thrown by memory errors in standard containers.
+     */
+    void push_back(const vector_double &x, const vector_double &f)
+    {
         // Prepare quantities to be appended to the internal vectors.
         const auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
         auto x_copy(x);
-        // This line will throw if dv dimensions are wrong, or fitness dimensions are worng
-        auto f = m_prob.fitness(x);
+        auto f_copy(f);
         // Reserve space in the vectors.
         // NOTE: in face of overflow here, reserve(0) will be called, which is fine.
         // The first push_back below will then fail, with no modifications to the class taking place.
@@ -183,7 +202,7 @@ public:
         update_champion(x, f);
         m_ID.push_back(new_id);
         m_x.push_back(std::move(x_copy));
-        m_f.push_back(std::move(f));
+        m_f.push_back(std::move(f_copy));
     }
 
     /// Creates a random decision vector
@@ -447,8 +466,10 @@ public:
             stream(os, "\tDecision vector:\t", p.m_x[i], '\n');
             stream(os, "\tFitness vector:\t\t", p.m_f[i], '\n');
         }
-        stream(os, "\nChampion decision vector: ", p.champion_x(), '\n');
-        stream(os, "Champion fitness: ", p.champion_f(), '\n');
+        if (p.get_problem().get_nobj() == 1u) {
+            stream(os, "\nChampion decision vector: ", p.champion_x(), '\n');
+            stream(os, "Champion fitness: ", p.champion_f(), '\n');
+        }
         return os;
     }
     /// Serialization.

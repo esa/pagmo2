@@ -50,3 +50,13 @@ Algorithms exposed from C++
 
 .. autoclass:: pygmo.core.pso
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.mbh
+   :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.nsga2
+   :members:

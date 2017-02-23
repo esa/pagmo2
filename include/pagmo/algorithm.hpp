@@ -34,8 +34,10 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
+#include "exceptions.hpp"
 #include "population.hpp"
 #include "serialization.hpp"
+#include "threading.hpp"
 #include "type_traits.hpp"
 
 #define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, #algo)
@@ -48,13 +50,14 @@ namespace pagmo
  * This algorithm is used to implement the default constructors of meta-algorithms.
  */
 struct null_algorithm {
-    /// Algorithm evolve method (juice implementation of the algorithm)
+    /// Evolve method.
     /**
+     * In the null algorithm, the evolve method just returns the input
+     * population.
      *
-     * Evolves the population for the requested number of generations.
+     * @param pop input population.
      *
-     * @param pop population to be evolved
-     * @return evolved population
+     * @return a copy of the input population.
      */
     population evolve(const population &pop) const
     {
@@ -72,14 +75,14 @@ struct null_algorithm {
 namespace pagmo
 {
 
-/// Detect \p set_verbose() method.
+/// Detect \p set_verbosity() method.
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
  * @code{.unparsed}
- * void set_verbose(unsigned);
+ * void set_verbosity(unsigned);
  * @endcode
- * The \p set_verbose() method is part of the interface for the definition of an algorithm
+ * The \p set_verbosity() method is part of the interface for the definition of an algorithm
  * (see pagmo::algorithm).
  */
 template <typename T>
@@ -156,12 +159,13 @@ struct algo_inner_base {
     }
     virtual algo_inner_base *clone() const = 0;
     virtual population evolve(const population &pop) const = 0;
-    virtual void set_seed(unsigned int) = 0;
+    virtual void set_seed(unsigned) = 0;
     virtual bool has_set_seed() const = 0;
-    virtual void set_verbosity(unsigned int) = 0;
+    virtual void set_verbosity(unsigned) = 0;
     virtual bool has_set_verbosity() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
+    virtual thread_safety get_thread_safety() const = 0;
     template <typename Archive>
     void serialize(Archive &)
     {
@@ -175,8 +179,8 @@ struct algo_inner final : algo_inner_base {
         std::is_default_constructible<T>::value && std::is_copy_constructible<T>::value
             && std::is_move_constructible<T>::value && std::is_destructible<T>::value,
         "An algorithm must be default-constructible, copy-constructible, move-constructible and destructible.");
-    static_assert(has_evolve<T>::value, "A user-defined algorithm must provide a method with signature 'population "
-                                        "evolve(population) const'. Could not detect one.");
+    static_assert(has_evolve<T>::value, "A user-defined algorithm must provide an evolve method: "
+                                        "the evolve method was either not provided or not implemented correctly.");
     // We just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;
@@ -184,16 +188,16 @@ struct algo_inner final : algo_inner_base {
     algo_inner &operator=(const algo_inner &) = delete;
     algo_inner &operator=(algo_inner &&) = delete;
     // Constructors from T (copy and move variants).
-    explicit algo_inner(T &&x) : m_value(std::move(x))
+    explicit algo_inner(const T &x) : m_value(x)
     {
     }
-    explicit algo_inner(const T &x) : m_value(x)
+    explicit algo_inner(T &&x) : m_value(std::move(x))
     {
     }
     // The clone method, used in the copy constructor of algorithm.
     virtual algo_inner_base *clone() const override final
     {
-        return ::new algo_inner<T>(m_value);
+        return ::new algo_inner(m_value);
     }
     // Mandatory methods.
     virtual population evolve(const population &pop) const override final
@@ -201,7 +205,7 @@ struct algo_inner final : algo_inner_base {
         return m_value.evolve(pop);
     }
     // Optional methods
-    virtual void set_seed(unsigned int seed) override final
+    virtual void set_seed(unsigned seed) override final
     {
         set_seed_impl(m_value, seed);
     }
@@ -209,7 +213,7 @@ struct algo_inner final : algo_inner_base {
     {
         return has_set_seed_impl(m_value);
     }
-    virtual void set_verbosity(unsigned int level) override final
+    virtual void set_verbosity(unsigned level) override final
     {
         set_verbosity_impl(m_value, level);
     }
@@ -225,91 +229,96 @@ struct algo_inner final : algo_inner_base {
     {
         return get_extra_info_impl(m_value);
     }
+    virtual thread_safety get_thread_safety() const override final
+    {
+        return get_thread_safety_impl(m_value);
+    }
     // Implementation of the optional methods.
-    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
-    static void set_seed_impl(U &a, unsigned int seed)
+    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value, int> = 0>
+    static void set_seed_impl(U &a, unsigned seed)
     {
         a.set_seed(seed);
     }
-    template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value, int>::type = 0>
-    static void set_seed_impl(U &, unsigned int)
+    template <typename U, enable_if_t<!pagmo::has_set_seed<U>::value, int> = 0>
+    static void set_seed_impl(U &, unsigned)
     {
-        pagmo_throw(
-            std::logic_error,
-            "The set_seed method has been called but not implemented by the user.\n"
-            "A function with prototype 'void set_seed(unsigned int)' was expected in the user defined algorithm.");
+        pagmo_throw(not_implemented_error,
+                    "The set_seed() method has been invoked but it is not implemented in the UDA");
     }
-    template <typename U,
-              typename std::enable_if<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &a)
     {
         return a.has_set_seed();
     }
-    template <typename U,
-              typename std::enable_if<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<pagmo::has_set_verbosity<U>::value, int>::type = 0>
-    static void set_verbosity_impl(U &value, unsigned int seed)
+    template <typename U, enable_if_t<pagmo::has_set_verbosity<U>::value, int> = 0>
+    static void set_verbosity_impl(U &value, unsigned level)
     {
-        value.set_verbosity(seed);
+        value.set_verbosity(level);
     }
-    template <typename U, typename std::enable_if<!pagmo::has_set_verbosity<U>::value, int>::type = 0>
-    static void set_verbosity_impl(U &, unsigned int)
+    template <typename U, enable_if_t<!pagmo::has_set_verbosity<U>::value, int> = 0>
+    static void set_verbosity_impl(U &, unsigned)
     {
-        pagmo_throw(
-            std::logic_error,
-            "The set_verbosity method has been called but not implemented by the user.\n"
-            "A function with prototype 'void set_verbosity(unsigned int)' was expected in the user defined algorithm.");
+        pagmo_throw(not_implemented_error,
+                    "The set_verbosity() method has been invoked but it is not implemented in the UDA");
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_set_verbosity<U>::value && override_has_set_verbosity<U>::value, int>::type
-        = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_set_verbosity<U>::value && override_has_set_verbosity<U>::value, int> = 0>
     static bool has_set_verbosity_impl(const U &a)
     {
         return a.has_set_verbosity();
     }
-    template <
-        typename U,
-        typename std::enable_if<pagmo::has_set_verbosity<U>::value && !override_has_set_verbosity<U>::value, int>::type
-        = 0>
+    template <typename U,
+              enable_if_t<pagmo::has_set_verbosity<U>::value && !override_has_set_verbosity<U>::value, int> = 0>
     static bool has_set_verbosity_impl(const U &)
     {
         return true;
     }
-    template <typename U, typename std::enable_if<!pagmo::has_set_verbosity<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!pagmo::has_set_verbosity<U>::value, int> = 0>
     static bool has_set_verbosity_impl(const U &)
     {
         return false;
     }
-    template <typename U, typename std::enable_if<has_name<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &value)
     {
         return value.get_name();
     }
-    template <typename U, typename std::enable_if<!has_name<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &)
     {
         return typeid(U).name();
     }
-    template <typename U, typename std::enable_if<has_extra_info<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<has_extra_info<U>::value, int> = 0>
     static std::string get_extra_info_impl(const U &value)
     {
         return value.get_extra_info();
     }
-    template <typename U, typename std::enable_if<!has_extra_info<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<!has_extra_info<U>::value, int> = 0>
     static std::string get_extra_info_impl(const U &)
     {
         return "";
     }
+    template <typename U, enable_if_t<has_get_thread_safety<U>::value, int> = 0>
+    static thread_safety get_thread_safety_impl(const U &value)
+    {
+        return value.get_thread_safety();
+    }
+    template <typename U, enable_if_t<!has_get_thread_safety<U>::value, int> = 0>
+    static thread_safety get_thread_safety_impl(const U &)
+    {
+        return thread_safety::basic;
+    }
+
     // Serialization
     template <typename Archive>
     void serialize(Archive &ar)
@@ -327,42 +336,37 @@ struct algo_inner final : algo_inner_base {
  *
  * This class represents an optimization algorithm. An algorithm can be
  * stochastic, deterministic, population based, derivative-free, using hessians,
- * using gradients, a meta-heuristic, evolutionary, etc.. Via this class PaGMO offers a common interface to
+ * using gradients, a meta-heuristic, evolutionary, etc.. Via this class pagmo offers a common interface to
  * all types of algorithms that can be applied to find solution to a generic matematical
  * programming problem as represented by the pagmo::problem class.
  *
- * To create an instance of a pagmo::algorithm the user is asked to construct it from
- * a separate object of type \p T where, at least, a method must be present having signature
- * equivalent to the following:
+ * In order to define an optimizaztion algorithm in pagmo, the user must first define a class
+ * (or a struct) whose methods describe the properties of the algorithm and implement its logic.
+ * In pagmo, we refer to such a class as a **user-defined algorithm**, or UDA for short. Once defined and instantiated,
+ * a UDA can then be used to construct an instance of this class, pagmo::algorithm, which
+ * provides a generic interface to optimization algorithms.
  *
+ * Every UDA must implement at least the following method:
  * @code{.unparsed}
  * population evolve(const population&) const;
  * @endcode
  *
- * - The signature does not need to have const &.
- * - The return value of \p T::evolve(const population&) is the
- * optimized (*evolved*) pagmo::population.
+ * The <tt>%evolve()</tt> method takes as input a pagmo::population, and it is expected to return
+ * a new population generated by the *evolution* (or *optimisation*) of the original population.
  *
- * The mandatory method above allow to define a deterministic algorithm.
- * In order to consider more complex cases, the user may implement one or more
- * of the following methods in \p T :
- *   @code{.unparsed}
- * void set_seed(unsigned int seed)
- * void set_verbosity(unsigned int level)
- * std::string get_name() const
- * std::string get_extra_info() const
- *   @endcode
+ * Additional optional methods can be implemented in a UDA:
+ * @code{.unparsed}
+ * void set_seed(unsigned);
+ * bool has_set_seed() const;
+ * void set_verbosity(unsigned);
+ * bool has_set_verbosity() const;
+ * std::string get_name() const;
+ * std::string get_extra_info() const;
+ * thread_safety get_thread_safety() const;
+ * @endcode
  *
- * - \p T::set_seed(unsigned int seed) changes the value of the random seed used in the user implemented evolve
- * method to drive a stochastic optimization.
- * - \p T::set_verbosity(unsigned int level) changes the value of the screen output and logs verbosity as implemented in
- * the user defined algorithm. When not implemented a call to algorithm::set_verbosity(unsigned int level) throws an \p
- * std::logic_error.
- * - \p T::get_name() returns a string containing the algorithm name to be used in output streams.
- * - \p T::get_extra_info() returns a string containing extra human readable information to be used in output streams.
- * For
- * example the algorithm parameters.
- *
+ * See the documentation of the corresponding methods in this class for details on how the optional
+ * methods in the UDA are used by pagmo::algorithm.
  */
 class algorithm
 {
@@ -372,25 +376,21 @@ class algorithm
     using generic_ctor_enabler = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value, int>;
 
 public:
-    /// Constructor from a user algorithm of type \p T
+    /// Constructor from a user-defined algorithm of type \p T
     /**
-     * Construct a pagmo::algorithm with from an object of type \p T. In
-     * order for the construction to be successful \p T needs
-     * to satisfy the following requests:
+     * **NOTE** this constructor is not enabled if, after the removal of cv and reference qualifiers,
+     * \p T is of type pagmo::algorithm (that is, this constructor does not compete with the copy/move
+     * constructors of pagmo::algorithm).
      *
-     * - \p T must implement the following mandatory method:
-     *   @code{.unparsed}
-     *   population evolve(const population&) const;
-     *   @endcode
-     *   otherwise construction will result in a compile-time failure
-     * - \p T must be default-constructible, copy-constructible, move-constructible and destructible,
-     *   otherwise a call to this constructor will result in a compile-time failure
+     * This constructor will construct a pagmo::algorithm from the UDA (user-defined algorithm) \p x of type \p T. In
+     * order for the construction to be successful, the UDA must implement a minimal set of methods,
+     * as described in the documentation of pagmo::algorithm. The constructor will examine the properties of \p x and
+     * store them as data members of \p this.
      *
-     * **NOTE** \p T must be not of type pagmo::algorithm, otherwise this templated constructor is not enabled and the
-     * copy constructor will be called instead.
+     * @param x the UDA.
      *
-     * @param x The user implemented algorithm
-     *
+     * @throws unspecified any exception thrown by methods of the UDA invoked during construction or by memory errors
+     * in strings and standard containers.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit algorithm(T &&x) : m_ptr(::new detail::algo_inner<uncvref_t<T>>(std::forward<T>(x)))
@@ -403,18 +403,35 @@ public:
         m_name = ptr()->get_name();
     }
     /// Copy constructor
+    /**
+     * The copy constructor will deep copy the input algorithm \p other.
+     *
+     * @param other the algorithm to be copied.
+     *
+     * @throws unspecified any exception thrown by:
+     * - memory allocation errors in standard containers,
+     * - the copying of the internal UDA.
+     */
     algorithm(const algorithm &other)
         : m_ptr(other.m_ptr->clone()), m_has_set_seed(other.m_has_set_seed),
           m_has_set_verbosity(other.m_has_set_verbosity), m_name(other.m_name)
     {
     }
     /// Move constructor
+    /**
+     * @param other the algorithm from which \p this will be move-constructed.
+     */
     algorithm(algorithm &&other) noexcept
         : m_ptr(std::move(other.m_ptr)), m_has_set_seed(std::move(other.m_has_set_seed)),
           m_has_set_verbosity(other.m_has_set_verbosity), m_name(std::move(other.m_name))
     {
     }
     /// Move assignment operator
+    /**
+     * @param other the assignment target.
+     *
+     * @return a reference to \p this.
+     */
     algorithm &operator=(algorithm &&other) noexcept
     {
         if (this != &other) {
@@ -426,6 +443,15 @@ public:
         return *this;
     }
     /// Copy assignment operator
+    /**
+     * Copy assignment is implemented as a copy constructor followed by a move assignment.
+     *
+     * @param other the assignment target.
+     *
+     * @return a reference to \p this.
+     *
+     * @throws unspecified any exception thrown by the copy constructor.
+     */
     algorithm &operator=(const algorithm &other)
     {
         // Copy ctor + move assignment.
@@ -472,11 +498,9 @@ public:
         return p == nullptr ? nullptr : &(p->m_value);
     }
 
-    /// Checks the user defined algorithm type at run-time
+    /// Checks the user-defined algorithm type at run-time.
     /**
-     * @tparam T The type to be checked
-     *
-     * @return \p true if the user defined algorithm is \p T, \p false otherwise.
+     * @return \p true if the user-defined algorithm is \p T, \p false otherwise.
      */
     template <typename T>
     bool is() const
@@ -484,85 +508,95 @@ public:
         return extract<T>() != nullptr;
     }
 
-    /// Evolve method
+    /// Evolve method.
     /**
-     * Calls the user implemented evolve method. This is where the core of the optimization (*evolution*) is made.
+     * This method will invoke the <tt>%evolve()</tt> method of the UDA. This is where the core of the optimization
+     * (*evolution*) is made.
      *
-     * @param  pop starting population
-     * @return     evolved population
-     * @throws unspecified all excpetions thrown by the user implemented evolve method.
+     * @param pop starting population
+     *
+     * @return evolved population
+     *
+     * @throws unspecified any exception thrown by the <tt>%evolve()</tt> method of the UDA.
      */
     population evolve(const population &pop) const
     {
         return ptr()->evolve(pop);
     }
 
-    /// Sets the seed for stochastic evolution
+    /// Set the seed for the stochastic evolution.
     /**
-     * Sets the seed to be used in the evolve method for all
-     * all stochastic variables. This is assuming that the user implemented in his algorithm random generators
-     * controlled by the optional set_seed method.
+     * Sets the seed to be used in the <tt>%evolve()</tt> method of the UDA for all stochastic variables. If the UDA
+     * satisfies pagmo::has_set_seed, then its <tt>%set_seed()</tt> method will be invoked. Otherwise, an error will be
+     * raised.
      *
-     * @param seed seed
+     * @param seed seed.
+     *
+     * @throws not_implemented_error if the UDA does not satisfy pagmo::has_set_seed.
+     * @throws unspecified any exception thrown by the <tt>%set_seed()</tt> method of the UDA.
      */
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         ptr()->set_seed(seed);
     }
 
-    /// Check if the user-defined algorithm implements a set_seed method
+    /// Check if a <tt>%set_seed()</tt> method is available in the UDA.
     /**
-     * If the user defined algorithm implements a set_seed method, this
-     * will return true, false otherwise. The value returned can
-     * also be forced by the user by implementing the additional
-     * method
+     * This method will return \p true if a <tt>%set_seed()</tt> method is available in the UDA, \p false otherwise.
      *
-     * @code{.unparsed}
-     * bool has_set_seed() const
-     * @endcode
+     * The availability of the a <tt>%set_seed()</tt> method is determined as follows:
+     * - if the UDA does not satisfy pagmo::has_set_seed, then this method will always return \p false;
+     * - if the UDA satisfies pagmo::has_set_seed but it does not satisfy pagmo::override_has_set_seed,
+     *   then this method will always return \p true;
+     * - if the UDA satisfies both pagmo::has_set_seed and pagmo::override_has_set_seed,
+     *   then this method will return the output of the <tt>%has_set_seed()</tt> method of the UDA.
      *
-     * in the user-defined algorithm
-     *
-     * @return a boolean flag
-     *
+     * @return a flag signalling the availability of the <tt>%set_seed()</tt> method in the UDA.
      */
     bool has_set_seed() const
     {
         return m_has_set_seed;
     }
 
-    /// Alias for algorithm::has_set_seed
+    /// Alias for algorithm::has_set_seed().
+    /**
+     * @return the output of algorithm::has_set_seed().
+     */
     bool is_stochastic() const
     {
         return has_set_seed();
     }
 
-    /// Sets the verbosity of logs and screen output
+    /// Set the verbosity of logs and screen output.
     /**
-     * Sets the level of verbosity. This is assuming that the user implemented in his algorithm a verbosity
-     * control controlled by a set_verbosity method.
+     * This method will set the level of verbosity for the algorithm. If the UDA satisfies pagmo::has_set_verbosity,
+     * then its <tt>%set_verbosity()</tt> method will be invoked. Otherwise, an error will be raised.
      *
-     * @param level verbosity level
+     * The exact meaning of the input parameter \p level is dependent on the UDA.
+     *
+     * @param level the desired verbosity level.
+     *
+     * @throws not_implemented_error if the UDA does not satisfy pagmo::has_set_verbosity.
+     * @throws unspecified any exception thrown by the <tt>%set_verbosity()</tt> method of the UDA.
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         ptr()->set_verbosity(level);
     }
 
-    /// Check if the user-defined algorithm implements a set_verbosity method
+    /// Check if a <tt>%set_verbosity()</tt> method is available in the UDA.
     /**
-     * If the user defined algorithm implements a set_verbosity method, this
-     * will return true, false otherwise. The value returned can
-     * also be forced by the user by implementing the additional
-     * method
+     * This method will return \p true if a <tt>%set_verbosity()</tt> method is available in the UDA, \p false
+     * otherwise.
      *
-     * @code{.unparsed}
-     * bool has_set_verbosity() const
-     * @endcode
+     * The availability of the a <tt>%set_verbosity()</tt> method is determined as follows:
+     * - if the UDA does not satisfy pagmo::has_set_verbosity, then this method will always return \p false;
+     * - if the UDA satisfies pagmo::has_set_verbosity but it does not satisfy pagmo::override_has_set_verbosity,
+     *   then this method will always return \p true;
+     * - if the UDA satisfies both pagmo::has_set_verbosity and pagmo::override_has_set_verbosity,
+     *   then this method will return the output of the <tt>%has_set_verbosity()</tt> method of the UDA.
      *
-     * in the user-defined algorithm
-     *
-     * @return a boolean flag
+     * @return a flag signalling the availability of the <tt>%set_verbosity()</tt> method in the UDA.
      */
     bool has_set_verbosity() const
     {
@@ -571,33 +605,58 @@ public:
 
     /// Algorithm's name.
     /**
-     * @return The algorithm's name as returned by the corresponding
-     * user-implemented method if present, the C++ mingled class name otherwise.
+     * If the UDA satisfies pagmo::has_name, then this method will return the output of its <tt>%get_name()</tt> method.
+     * Otherwise, an implementation-defined name based on the type of the UDA will be returned.
+     *
+     * @return the algorithm's name.
+     *
+     * @throws unspecified any exception thrown by copying an \p std::string object.
      */
     std::string get_name() const
     {
         return m_name;
     }
 
-    /// Extra info
+    /// Algorithm's extra info.
     /**
-     * @return The algorithm's extra info as returned by the corresponding
-     * user-implemented method if present, an empty string otehrwise.
+     * If the UDA satisfies pagmo::has_extra_info, then this method will return the output of its
+     * <tt>%get_extra_info()</tt> method. Otherwise, an empty string will be returned.
+     *
+     * @return extra info about the UDA.
+     *
+     * @throws unspecified any exception thrown by the <tt>%get_extra_info()</tt> method of the UDA.
      */
     std::string get_extra_info() const
     {
         return ptr()->get_extra_info();
     }
 
+    /// Algorithm's thread safety level.
+    /**
+     * If the UDA satisfies pagmo::has_get_thread_safety, then this method will return the output of its
+     * <tt>%get_thread_safety()</tt> method. Otherwise, thread_safety::basic will be returned.
+     * That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDA instances.
+     *
+     * @return the thread safety level of the UDA.
+     *
+     * @throws unspecified any exception thrown by the <tt>%get_thread_safety()</tt> method of the UDA.
+     */
+    thread_safety get_thread_safety() const
+    {
+        return ptr()->get_thread_safety();
+    }
+
     /// Streaming operator
     /**
+     * This function will stream to \p os a human-readable representation of the input
+     * algorithm \p a.
      *
-     * @param os input <tt>std::ostream</tt>
-     * @param a pagmo::algorithm object to be streamed
+     * @param os input <tt>std::ostream</tt>.
+     * @param a pagmo::algorithm object to be streamed.
      *
-     * @return An std::ostream containing a human-readable
-     * representation of the algorithm, including the result from
-     * the user-defined method extra_info if implemented.
+     * @return a reference to \p os.
+     *
+     * @throws unspecified any exception thrown by querying various algorithm properties and streaming them into \p os.
      */
     friend std::ostream &operator<<(std::ostream &os, const algorithm &a)
     {
@@ -607,6 +666,7 @@ public:
         } else {
             stream(os, " [stochastic]");
         }
+        stream(os, "\n\tThread safety: ", a.get_thread_safety(), '\n');
         const auto extra_str = a.get_extra_info();
         if (!extra_str.empty()) {
             stream(os, "\nExtra info:\n", extra_str);
@@ -614,7 +674,14 @@ public:
         return os;
     }
 
-    /// Serilization
+    /// Serialization.
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

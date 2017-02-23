@@ -1,0 +1,40 @@
+# Turn off tests with hash (#). You can also add comments this way.
+# Single test consists of:
+# [test_type] [algorithm_name] [testcase_filename] [epsilon]
+#
+# Possible test_type:
+#  compute - hypervolume computation test
+#  exclusive - exclusive hypervolume computation test
+#  least_contributor - test for the least contributor
+#  greatest_contributor - test for the greatest contributor
+#
+# Possible algorithm_name: 
+#  hv2d
+#  hv3d
+#  wfg
+#
+# The following algorithms are no longer supported in Pagmo 2.0
+#  hv4d
+#  hoy
+#  fpl
+#  bf_approx
+#  bf_fpras
+
+compute hv2d c_max_t100_d2_n128 10e-9
+compute hv3d c_max_t100_d3_n128 10e-9
+compute hv3d c_max_t1_d3_n2048 10e-9
+compute wfg c_max_t1_d3_n2048 10e-9
+compute wfg c_max_t100_d3_n128 10e-9
+compute wfg c_max_t1_d5_n1024 10e-4
+# compute fpl c_max_t1_d3_n2048 10e-9
+# compute fpl c_max_t100_d3_n128 10e-9
+# compute fpl c_max_t1_d5_n1024 10e-4
+
+exclusive wfg e_max_d5 10e-9
+# exclusive fpl e_max_d5 10e-9
+exclusive hv3d e_max_d3 10e-9
+exclusive hv2d e_max_d2 10e-9
+least_contributor wfg lc_max_d3 10e-9
+# least_contributor fpl lc_max_d3 10e-9
+least_contributor hv3d lc_max_d3 10e-9
+least_contributor hv2d lc_max_d2 10e-9

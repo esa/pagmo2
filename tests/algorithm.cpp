@@ -38,9 +38,11 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -107,8 +109,8 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_test)
     // And in the minimal case
     BOOST_CHECK(algo_minimal.has_set_seed() == false);
     BOOST_CHECK(algo_minimal.has_set_verbosity() == false);
-    BOOST_CHECK_THROW(algo_minimal.set_seed(1u), std::logic_error);
-    BOOST_CHECK_THROW(algo_minimal.set_verbosity(1u), std::logic_error);
+    BOOST_CHECK_THROW(algo_minimal.set_seed(1u), not_implemented_error);
+    BOOST_CHECK_THROW(algo_minimal.set_verbosity(1u), not_implemented_error);
     // We check that at construction the name has been assigned
     BOOST_CHECK(algo_full.get_name() == "name");
     BOOST_CHECK(algo_minimal.get_name().find("al_02") != std::string::npos);
@@ -390,4 +392,41 @@ BOOST_AUTO_TEST_CASE(extract_test)
     BOOST_CHECK(static_cast<const algorithm &>(p).extract<null_algorithm>() != nullptr);
     BOOST_CHECK(p.extract<const null_algorithm>() == nullptr);
     BOOST_CHECK(static_cast<const algorithm &>(p).extract<const null_algorithm>() == nullptr);
+}
+
+struct ts1 {
+    population evolve(const population &) const
+    {
+        return population{};
+    }
+};
+
+struct ts2 {
+    population evolve(const population &) const
+    {
+        return population{};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+struct ts3 {
+    population evolve(const population &) const
+    {
+        return population{};
+    }
+    int get_thread_safety() const
+    {
+        return 2;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(thread_safety_test)
+{
+    BOOST_CHECK(algorithm{null_algorithm{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(algorithm{ts1{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(algorithm{ts2{}}.get_thread_safety() == thread_safety::none);
+    BOOST_CHECK(algorithm{ts3{}}.get_thread_safety() == thread_safety::basic);
 }

@@ -30,7 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_PROBLEM_CEC2013_HPP
 
 #include <cassert>
-#include <exception>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -58,8 +58,8 @@ namespace pagmo
  *
  * **NOTE** All problems are box-bounded, continuous, single objective problems.
  *
- * @see http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC2013/CEC2013.htm
- * @see http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip
+ * See: http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC2013/CEC2013.htm
+ * See: http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip
  */
 class cec2013
 {
@@ -68,8 +68,8 @@ public:
     /**
      * Will construct one of the 28 CEC2013 problems
      *
-     * @param[in] prob_id The problem id. One of [1,2,...,28]
-     * @param[in] dim problem dimension. One of [2,5,10,20,30,...,100]
+     * @param prob_id The problem id. One of [1,2,...,28]
+     * @param dim problem dimension. One of [2,5,10,20,30,...,100]
      *
      * @throws invalid_argument if \p prob_id is not in [1,18] or if \p dim is not one of
      * [2,5,10,20,30,40,50,60,70,80,90,100]
@@ -223,7 +223,7 @@ public:
     }
     /// Box-bounds
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -237,7 +237,7 @@ public:
     }
     /// Problem name
     /**
-     * One of the optional methods of any user-defined problem (UDP).
+     *
      *
      * @return a string containing the problem name
      */

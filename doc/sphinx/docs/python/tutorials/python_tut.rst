@@ -3,7 +3,7 @@
 Python tutorials
 ================
 
-Getting Started
+Basics
 ^^^^^^^^^^^^^^^
 
 .. toctree::
@@ -13,6 +13,25 @@ Getting Started
   using_algorithm
   using_population
   evolving_a_population
+
+Multi-objective optimization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  moo
+  moo_moead
+
+Hypervolumes
+^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  hypervolume
+  hypervolume_advanced
+  hypervolume_approx
 
 Advanced Examples
 ^^^^^^^^^^^^^^^^^

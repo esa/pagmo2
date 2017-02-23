@@ -46,6 +46,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/problem.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 #include "common_base.hpp"
@@ -294,6 +295,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
             return true;
         }
         return bp::extract<bool>(hss());
+    }
+    // Hard code no thread safety for python problems.
+    virtual pagmo::thread_safety get_thread_safety() const override final
+    {
+        return pagmo::thread_safety::none;
     }
     template <typename Archive>
     void serialize(Archive &ar)
