@@ -48,11 +48,11 @@ struct common_base {
     static void check_mandatory_method(const bp::object &o, const char *s, const char *target)
     {
         if (!callable_attribute(o, s)) {
-            pygmo_throw(PyExc_TypeError, ("the mandatory '" + std::string(s)
-                                          + "()' method has not been detected in the user-defined Python "
-                                          + std::string(target) + " '" + str(o) + "' of type '" + str(type(o))
-                                          + "': the method is either not present or not callable")
-                                             .c_str());
+            pygmo_throw(PyExc_NotImplementedError, ("the mandatory '" + std::string(s)
+                                                    + "()' method has not been detected in the user-defined Python "
+                                                    + std::string(target) + " '" + str(o) + "' of type '" + str(type(o))
+                                                    + "': the method is either not present or not callable")
+                                                       .c_str());
         }
     }
     // A simple wrapper for getters. It will try to:

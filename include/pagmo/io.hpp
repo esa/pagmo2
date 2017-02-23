@@ -40,9 +40,13 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Forward declaration
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// Forward declaration
 template <typename... Args>
-void stream(std::ostream &, const Args &...);
+inline void stream(std::ostream &, const Args &...);
+
+#endif
 
 namespace detail
 {
@@ -108,14 +112,25 @@ inline void stream_impl(std::ostream &os, const T &x, const Args &... args)
 
 } // end of namespace detail
 
-/// The PaGMO streaming function
+/// The pagmo streaming function.
+/**
+ * This function will direct to the output stream \p os the input arguments \p args.
+ *
+ * @param os the target stream.
+ * @param args the objects that will be directed to to \p os.
+ */
 template <typename... Args>
 inline void stream(std::ostream &os, const Args &... args)
 {
     detail::stream_impl(os, args...);
 }
 
-/// The PaGMO print function
+/// The pagmo print function.
+/**
+ * This function is equivalent to calling pagmo::stream with \p std::cout as first argument.
+ *
+ * @param args the objects that will be printed to screen.
+ */
 template <typename... Args>
 inline void print(const Args &... args)
 {

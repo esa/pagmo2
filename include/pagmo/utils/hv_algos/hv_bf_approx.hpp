@@ -386,7 +386,8 @@ private:
         m_box_points = std::vector<std::vector<vector_double::size_type>>(points.size());
 
         // precomputed log factor for the point delta computation
-        const double log_factor = std::log(2. * points.size() * (1. + m_gamma) / (m_delta * m_gamma));
+        const double log_factor
+            = std::log(2. * static_cast<double>(points.size()) * (1. + m_gamma) / (m_delta * m_gamma));
 
         // round counter
         unsigned int round_no = 0u;

@@ -10,6 +10,7 @@ we suggest to follow the tutorials / examples.
 .. toctree::
   :maxdepth: 1
 
+  types
   problem
   population
   algorithm
@@ -78,3 +79,4 @@ Various coding utilities.
 
   miscellanea/generic
   miscellanea/type_traits
+  miscellanea/exceptions

@@ -71,6 +71,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
+#include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
@@ -196,6 +197,7 @@ std::unique_ptr<bp::class_<decompose>> decompose_ptr(nullptr);
 
 // Algorithm and meta-algorithm classes.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr(nullptr);
+std::unique_ptr<bp::class_<mbh>> mbh_ptr(nullptr);
 }
 
 // The cleanup function.
@@ -209,6 +211,7 @@ static inline void cleanup()
     pygmo::decompose_ptr.reset();
 
     pygmo::algorithm_ptr.reset();
+    pygmo::mbh_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -343,6 +346,36 @@ struct tu_test_problem {
     std::pair<vector_double, vector_double> get_bounds() const
     {
         return {{0.}, {1.}};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+// A test algo.
+struct test_algorithm {
+    population evolve(const population &pop) const
+    {
+        return pop;
+    }
+    // Set/get an internal value to test extraction semantics.
+    void set_n(int n)
+    {
+        m_n = n;
+    }
+    int get_n() const
+    {
+        return m_n;
+    }
+    int m_n = 1;
+};
+
+// A thread unsafe test algo.
+struct tu_test_algorithm {
+    population evolve(const population &pop) const
+    {
+        return pop;
     }
     thread_safety get_thread_safety() const
     {
@@ -524,9 +557,9 @@ BOOST_PYTHON_MODULE(core)
         .def("is_stochastic", &problem::is_stochastic,
              "is_stochastic()\n\nAlias for :func:`~pygmo.core.problem.has_set_seed()`.\n")
         .def("feasibility_x", +[](const problem &p, const bp::object &x) { return p.feasibility_x(pygmo::to_vd(x)); },
-             pygmo::problem_feasibility_x_docstring().c_str())
+             pygmo::problem_feasibility_x_docstring().c_str(), (bp::arg("x")))
         .def("feasibility_f", +[](const problem &p, const bp::object &f) { return p.feasibility_f(pygmo::to_vd(f)); },
-             pygmo::problem_feasibility_f_docstring().c_str())
+             pygmo::problem_feasibility_f_docstring().c_str(), (bp::arg("f")))
         .def("get_name", &problem::get_name, pygmo::problem_get_name_docstring().c_str())
         .def("get_extra_info", &problem::get_extra_info, pygmo::problem_get_extra_info_docstring().c_str())
         .def("get_thread_safety", &problem::get_thread_safety, pygmo::problem_get_thread_safety_docstring().c_str());
@@ -535,7 +568,7 @@ BOOST_PYTHON_MODULE(core)
     pygmo::algorithm_ptr
         = make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::no_init);
     auto &algorithm_class = *pygmo::algorithm_ptr;
-    algorithm_class.def(bp::init<const bp::object &>((bp::arg("a"))))
+    algorithm_class.def(bp::init<const bp::object &>((bp::arg("uda"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::algorithm_pickle_suite())
         // Copy and deepcopy.
@@ -544,49 +577,30 @@ BOOST_PYTHON_MODULE(core)
         // Algorithm extraction.
         .def("_py_extract", &pygmo::generic_py_extract<algorithm>)
         // Algorithm methods.
-        .def("evolve", &algorithm::evolve, "evolve(pop)\n\nEvolve population.\n\n:param pop: the population to evolve\n"
-                                           ":type pop: :class:`pygmo.core.population`\n"
-                                           ":returns: the evolved population\n"
-                                           ":rtype: :class:`pygmo.core.population`\n\n",
-             (bp::arg("pop")))
-        .def("set_seed", &algorithm::set_seed,
-             "set_seed(seed)\n\nSet algorithm seed.\n\n:param seed: the desired seed\n:type seed: ``int``\n"
-             ":raises: :exc:`RuntimeError` if the user-defined algorithm does not support seed setting\n"
-             ":raises: :exc:`OverflowError` if *seed* is negative or too large\n\n",
-             (bp::arg("seed")))
-        .def("has_set_seed", &algorithm::has_set_seed,
-             "has_set_seed()\n\nDetect the presence of the ``set_seed()`` method in the user-defined algorithm.\n\n"
-             ":returns: ``True`` if the user-defined algorithm has the ability of setting a random seed, ``False`` "
-             "otherwise\n"
-             ":rtype: ``bool``\n\n")
-        .def("set_verbosity", &algorithm::set_verbosity,
-             "set_verbosity(level)\n\nSet algorithm verbosity.\n\n:param level: the desired verbosity level\n:type "
-             "level: ``int``\n"
-             ":raises: :exc:`RuntimeError` if the user-defined algorithm does not support verbosity setting\n"
-             ":raises: :exc:`OverflowError` if *level* is negative or too large\n\n",
+        .def("evolve", &algorithm::evolve, pygmo::algorithm_evolve_docstring().c_str(), (bp::arg("pop")))
+        .def("set_seed", &algorithm::set_seed, pygmo::algorithm_set_seed_docstring().c_str(), (bp::arg("seed")))
+        .def("has_set_seed", &algorithm::has_set_seed, pygmo::algorithm_has_set_seed_docstring().c_str())
+        .def("set_verbosity", &algorithm::set_verbosity, pygmo::algorithm_set_verbosity_docstring().c_str(),
              (bp::arg("level")))
-        .def("has_set_verbosity", &algorithm::has_set_verbosity,
-             "has_set_verbosity()\n\nDetect the presence of the ``set_verbosity()`` method in the user-defined "
-             "algorithm.\n\n"
-             ":returns: ``True`` if the user-defined algorithm has the ability of setting a verbosity level, ``False`` "
-             "otherwise\n"
-             ":rtype: ``bool``\n\n")
+        .def("has_set_verbosity", &algorithm::has_set_verbosity, pygmo::algorithm_has_set_verbosity_docstring().c_str())
         .def("is_stochastic", &algorithm::is_stochastic,
-             "is_stochastic()\n\nAlias for :func:`~pygmo.core.algorithm.has_set_seed`.")
-        .def("get_name", &algorithm::get_name, "Get algorithm's name.")
-        .def("get_extra_info", &algorithm::get_extra_info, "Get algorithm's extra info.");
+             "is_stochastic()\n\nAlias for :func:`~pygmo.core.algorithm.has_set_seed()`.\n")
+        .def("get_name", &algorithm::get_name, pygmo::algorithm_get_name_docstring().c_str())
+        .def("get_extra_info", &algorithm::get_extra_info, pygmo::algorithm_get_extra_info_docstring().c_str())
+        .def("get_thread_safety", &algorithm::get_thread_safety,
+             pygmo::algorithm_get_thread_safety_docstring().c_str());
 
     // Translate meta-problem.
     pygmo::translate_ptr
         = make_unique<bp::class_<translate>>("translate", pygmo::translate_docstring().c_str(), bp::init<>());
     auto &tp = *pygmo::translate_ptr;
     // Constructor from Python user-defined problem and translation vector (allows to translate Python problems).
-    tp.def("__init__", pygmo::make_translate_init<bp::object>())
-        // Constructor of translate from translate and translation vector. This allows to apply the
-        // translation multiple times.
-        .def("__init__", pygmo::make_translate_init<translate>())
-        // Allow to extract a nested translate udp.
-        .def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>())
+    pygmo::make_translate_init<bp::object>(tp);
+    // Constructor of translate from translate and translation vector. This allows to apply the
+    // translation multiple times.
+    pygmo::make_translate_init<translate>(tp);
+    // Allow to extract a nested translate udp.
+    tp.def("_cpp_extract", &pygmo::generic_cpp_extract<translate, translate>, bp::return_internal_reference<>())
         // Python udp extraction.
         .def("_py_extract", &pygmo::generic_py_extract<translate>)
         .add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
@@ -606,9 +620,9 @@ BOOST_PYTHON_MODULE(core)
         = make_unique<bp::class_<decompose>>("decompose", pygmo::decompose_docstring().c_str(), bp::init<>());
     auto &dp = *pygmo::decompose_ptr;
     // Constructor from Python user-defined problem.
-    dp.def("__init__", pygmo::make_decompose_init<bp::object>())
-        // Python udp extraction.
-        .def("_py_extract", &pygmo::generic_py_extract<decompose>)
+    pygmo::make_decompose_init<bp::object>(dp);
+    // Python udp extraction.
+    dp.def("_py_extract", &pygmo::generic_py_extract<decompose>)
         // Returns the original multi-objective fitness
         .def("original_fitness",
              +[](const pagmo::decompose &p, const bp::object &x) {
@@ -630,11 +644,11 @@ BOOST_PYTHON_MODULE(core)
     // Before moving to the user-defined C++ problems, we need to expose the interoperability between
     // meta-problems.
     // Construct translate from decompose.
-    tp.def("__init__", pygmo::make_translate_init<decompose>());
+    pygmo::make_translate_init<decompose>(tp);
     // Extract decompose from translate.
     tp.def("_cpp_extract", &pygmo::generic_cpp_extract<translate, decompose>, bp::return_internal_reference<>());
     // Construct decompose from translate.
-    dp.def("__init__", pygmo::make_decompose_init<translate>());
+    pygmo::make_decompose_init<translate>(dp);
     // Extract translate from decompose.
     dp.def("_cpp_extract", &pygmo::generic_cpp_extract<decompose, translate>, bp::return_internal_reference<>());
 
@@ -714,10 +728,39 @@ BOOST_PYTHON_MODULE(core)
     auto cec2013_ = pygmo::expose_problem<cec2013>("cec2013", pygmo::cec2013_docstring().c_str());
     cec2013_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
 #endif
-    // Exposition of C++ algorithms.
+
+    // MBH meta-algo.
+    pygmo::mbh_ptr = make_unique<bp::class_<mbh>>("mbh", pygmo::mbh_docstring().c_str(), bp::init<>());
+    auto &mbh_ = *pygmo::mbh_ptr;
+    // Constructors from Python user-defined algo.
+    pygmo::make_mbh_inits<bp::object>(mbh_);
+    // Python udp extraction.
+    mbh_.def("_py_extract", &pygmo::generic_py_extract<mbh>);
+    // Mark it as a cpp algo.
+    mbh_.attr("_pygmo_cpp_algorithm") = true;
+    // Ctor of algorithm from mbh.
+    pygmo::algorithm_expose_init_cpp_uda<mbh>();
+    // Extract mbh from the algorithm class.
+    algorithm_class.def("_cpp_extract", &pygmo::generic_cpp_extract<algorithm, mbh>, bp::return_internal_reference<>());
+    // MBH-specific methods.
+    mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
+    mbh_.def("get_verbosity", &mbh::get_verbosity, pygmo::mbh_get_verbosity_docstring().c_str());
+    mbh_.def("set_perturb", +[](mbh &a, const bp::object &o) { a.set_perturb(pygmo::to_vd(o)); },
+             pygmo::mbh_set_perturb_docstring().c_str(), (bp::arg("perturb")));
+    pygmo::expose_algo_log(mbh_, pygmo::mbh_get_log_docstring().c_str());
+    mbh_.def("get_perturb", +[](const mbh &a) { return pygmo::v_to_a(a.get_perturb()); },
+             pygmo::mbh_get_perturb_docstring().c_str());
+    // Add it to the the algos submodule.
+    bp::scope().attr("algorithms").attr("mbh") = mbh_;
+
+    // Test algo.
+    auto test_a = pygmo::expose_algorithm<test_algorithm>("_test_algorithm", "A test algorithm.");
+    test_a.def("get_n", &test_algorithm::get_n);
+    test_a.def("set_n", &test_algorithm::set_n);
+    // Thread unsafe test algo.
+    pygmo::expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
-    auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm",
-                                                      "__init__()\n\nThe null algorithm.\n\nA test algorithm.\n\n");
+    auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm", pygmo::null_algorithm_docstring().c_str());
     // NOTE: this is needed only for the null_algorithm, as it is used in the implementation of the
     // serialization of the algorithm. Not necessary for any other algorithm type.
     na.def_pickle(null_algorithm_pickle_suite());
@@ -743,7 +786,6 @@ BOOST_PYTHON_MODULE(core)
     compass_search_.def("get_stop_range", &compass_search::get_stop_range);
     compass_search_.def("get_reduction_coeff", &compass_search::get_reduction_coeff);
     compass_search_.def("get_verbosity", &compass_search::get_verbosity);
-    compass_search_.def("set_verbosity", &compass_search::set_verbosity);
     // PSO
     auto pso_ = pygmo::expose_algorithm<pso>("pso", pygmo::pso_docstring().c_str());
     pso_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(

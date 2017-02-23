@@ -545,11 +545,12 @@ namespace detail
 double expected_hv_operations(vector_double::size_type n, vector_double::size_type d)
 {
     if (d <= 3u) {
-        return d * n * std::log(n); // hv3d
+        return static_cast<double>(d) * static_cast<double>(n) * std::log(n); // hv3d
     } else if (d == 4u) {
-        return 4.0 * n * n; // hv4d
+        return 4.0 * static_cast<double>(n) * static_cast<double>(n); // hv4d
     } else {
-        return 0.0005 * d * std::pow(n, d * 0.5); // exponential complexity
+        return 0.0005 * static_cast<double>(d)
+               * std::pow(static_cast<double>(n), static_cast<double>(d) * 0.5); // exponential complexity
     }
 }
 } // end namespace detail
