@@ -373,6 +373,96 @@ class decompose_test_case(_ut.TestCase):
         self.assertFalse(t.extract(translate).extract(null_problem) is None)
 
 
+class mbh_test_case(_ut.TestCase):
+    """Test case for the mbh meta-algorithm
+
+    """
+
+    def runTest(self):
+        from . import mbh, de, compass_search, algorithm, thread_safety as ts, null_algorithm
+        from numpy import array
+
+        class algo(object):
+
+            def evolve(pop):
+                return pop
+
+        # Def ctor.
+        a = mbh()
+        self.assertFalse(a.extract(compass_search) is None)
+        self.assertTrue(a.is_(compass_search))
+        self.assertTrue(a.extract(de) is None)
+        self.assertFalse(a.is_(de))
+        self.assertEqual(a.get_log(), [])
+        self.assertTrue(all(a.get_perturb() == array([0.01])))
+        seed = a.get_seed()
+        self.assertEqual(a.get_verbosity(), 0)
+        a.set_perturb([.2])
+        self.assertTrue(all(a.get_perturb() == array([0.2])))
+        al = algorithm(a)
+        self.assertTrue(al.get_thread_safety() == ts.basic)
+        self.assertTrue(al.extract(mbh).extract(compass_search) is not None)
+        self.assertTrue(al.extract(mbh).extract(de) is None)
+        self.assertTrue(str(seed) in str(al))
+        al.set_verbosity(4)
+        self.assertEqual(al.extract(mbh).get_verbosity(), 4)
+
+        # From C++ algo.
+        seed = 123321
+        a = mbh(uda=de(), stop=5, perturb=.4)
+        a = mbh(stop=5, perturb=(.4, .2), uda=de())
+        a = mbh(uda=de(), stop=5, seed=seed, perturb=(.4, .2))
+        self.assertTrue(a.extract(compass_search) is None)
+        self.assertFalse(a.is_(compass_search))
+        self.assertFalse(a.extract(de) is None)
+        self.assertTrue(a.is_(de))
+        self.assertEqual(a.get_log(), [])
+        self.assertTrue(all(a.get_perturb() == array([.4, .2])))
+        self.assertEqual(a.get_seed(), seed)
+        self.assertEqual(a.get_verbosity(), 0)
+        a.set_perturb([.2])
+        self.assertTrue(all(a.get_perturb() == array([0.2])))
+        al = algorithm(a)
+        self.assertTrue(al.get_thread_safety() == ts.basic)
+        self.assertTrue(al.extract(mbh).extract(compass_search) is None)
+        self.assertTrue(al.extract(mbh).extract(de) is not None)
+        self.assertTrue(str(seed) in str(al))
+        al.set_verbosity(4)
+        self.assertEqual(al.extract(mbh).get_verbosity(), 4)
+
+        # From Python algo.
+        class algo(object):
+
+            def evolve(self, pop):
+                return pop
+
+        seed = 123321
+        a = mbh(uda=algo(), stop=5, perturb=.4)
+        a = mbh(stop=5, perturb=(.4, .2), uda=algo())
+        a = mbh(uda=algo(), stop=5, seed=seed, perturb=(.4, .2))
+        self.assertTrue(a.extract(compass_search) is None)
+        self.assertFalse(a.is_(compass_search))
+        self.assertFalse(a.extract(algo) is None)
+        self.assertTrue(a.is_(algo))
+        self.assertEqual(a.get_log(), [])
+        self.assertTrue(all(a.get_perturb() == array([.4, .2])))
+        self.assertEqual(a.get_seed(), seed)
+        self.assertEqual(a.get_verbosity(), 0)
+        a.set_perturb([.2])
+        self.assertTrue(all(a.get_perturb() == array([0.2])))
+        al = algorithm(a)
+        self.assertTrue(al.get_thread_safety() == ts.none)
+        self.assertTrue(al.extract(mbh).extract(compass_search) is None)
+        self.assertTrue(al.extract(mbh).extract(algo) is not None)
+        self.assertTrue(str(seed) in str(al))
+        al.set_verbosity(4)
+        self.assertEqual(al.extract(mbh).get_verbosity(), 4)
+
+        # Construction from algorithm is forbidden.
+        self.assertRaises(TypeError, lambda: mbh(
+            algorithm(null_algorithm()), stop=5, perturb=.4))
+
+
 def run_test_suite():
     """Run the full test suite.
 
@@ -399,6 +489,7 @@ def run_test_suite():
     suite.addTest(dtlz_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
+    suite.addTest(mbh_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

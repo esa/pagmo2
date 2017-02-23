@@ -128,7 +128,7 @@ class algorithm_test_case(_ut.TestCase):
             population(null_problem(), 5)))
 
     def run_extract_tests(self):
-        from .core import algorithm, _test_algorithm
+        from .core import algorithm, _test_algorithm, mbh
         import sys
 
         # First we try with a C++ test algo.
@@ -142,6 +142,56 @@ class algorithm_test_case(_ut.TestCase):
         # Verify we are modifying the inner object.
         p.extract(_test_algorithm).set_n(5)
         self.assert_(p.extract(_test_algorithm).get_n() == 5)
+        # Chain extracts.
+        t = mbh(_test_algorithm(), stop=5, perturb=.4)
+        pt = algorithm(t)
+        rc = sys.getrefcount(pt)
+        talgo = pt.extract(mbh)
+        # Verify that extraction of mbh from the algo
+        # increases the refecount of pt.
+        self.assert_(sys.getrefcount(pt) == rc + 1)
+        # Extract the _test_algorithm from mbh.
+        rc2 = sys.getrefcount(talgo)
+        ttalgo = talgo.extract(_test_algorithm)
+        # The refcount of pt is not affected.
+        self.assert_(sys.getrefcount(pt) == rc + 1)
+        # The refcount of talgo has increased.
+        self.assert_(sys.getrefcount(talgo) == rc2 + 1)
+        del talgo
+        # We can still access ttalgo.
+        self.assert_(ttalgo.get_n() == 1)
+        self.assert_(sys.getrefcount(pt) == rc + 1)
+        del ttalgo
+        # Now the refcount of pt decreases, because deleting
+        # ttalgo eliminates the last ref to talgo, which in turn
+        # decreases the refcount of pt.
+        self.assert_(sys.getrefcount(pt) == rc)
+
+        class talgorithm(object):
+
+            def __init__(self):
+                self._n = 1
+
+            def get_n(self):
+                return self._n
+
+            def set_n(self, n):
+                self._n = n
+
+            def evolve(self, pop):
+                return pop
+
+        # Test with Python algo.
+        p = algorithm(talgorithm())
+        rc = sys.getrefcount(p)
+        talgo = p.extract(talgorithm)
+        # Reference count does not increase because
+        # talgorithm is stored as a proper Python object
+        # with its own refcount.
+        self.assertTrue(sys.getrefcount(p) == rc)
+        self.assertTrue(talgo.get_n() == 1)
+        talgo.set_n(12)
+        self.assert_(p.extract(talgorithm).get_n() == 12)
 
     def run_seed_tests(self):
         from .core import algorithm
@@ -324,7 +374,7 @@ class algorithm_test_case(_ut.TestCase):
         self.assert_(algo.get_extra_info() == 'pluto')
 
     def run_thread_safety_tests(self):
-        from .core import algorithm, de, _tu_test_algorithm
+        from .core import algorithm, de, _tu_test_algorithm, mbh
         from . import thread_safety as ts
 
         class a(object):
@@ -336,3 +386,9 @@ class algorithm_test_case(_ut.TestCase):
         self.assertTrue(algorithm(de()).get_thread_safety() == ts.basic)
         self.assertTrue(
             algorithm(_tu_test_algorithm()).get_thread_safety() == ts.none)
+        self.assertTrue(
+            algorithm(mbh(_tu_test_algorithm(), stop=5, perturb=.4)).get_thread_safety() == ts.none)
+        self.assertTrue(
+            algorithm(mbh(a(), stop=5, perturb=.4)).get_thread_safety() == ts.none)
+        self.assertTrue(
+            algorithm(mbh(de(), stop=5, perturb=.4)).get_thread_safety() == ts.basic)

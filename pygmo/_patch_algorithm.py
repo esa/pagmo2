@@ -31,7 +31,7 @@
 # for python 2.0 compatibility
 from __future__ import absolute_import as _ai
 
-from .core import algorithm
+from .core import algorithm, mbh
 
 
 def _algorithm_extract(self, t):
@@ -79,3 +79,5 @@ def _algorithm_is(self, t):
 # Do the actual patching.
 setattr(algorithm, "extract", _algorithm_extract)
 setattr(algorithm, "is_", _algorithm_is)
+setattr(mbh, "extract", _algorithm_extract)
+setattr(mbh, "is_", _algorithm_is)

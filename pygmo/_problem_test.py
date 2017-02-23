@@ -1753,10 +1753,10 @@ class problem_test_case(_ut.TestCase):
 
         prob = problem(p())
         self.assertTrue(prob.feasibility_x([0, 0]))
-        self.assertTrue(prob.feasibility_x(x = [0, 0]))
+        self.assertTrue(prob.feasibility_x(x=[0, 0]))
         self.assertEqual(2, prob.get_fevals())
         self.assertTrue(prob.feasibility_f([0]))
-        self.assertTrue(prob.feasibility_f(f = [0]))
+        self.assertTrue(prob.feasibility_f(f=[0]))
         self.assertEqual(2, prob.get_fevals())
         self.assertRaises(ValueError, lambda: prob.feasibility_f([0, 1]))
 
