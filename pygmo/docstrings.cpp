@@ -1505,6 +1505,13 @@ cluster optimization.
 
 See also the docs of the C++ class :cpp:class:`pagmo::mbh`.
 
+The constructor admits two forms:
+
+* no arguments,
+* three mandatory arguments and one optional argument (the seed).
+
+Any other combination of arguments will raise an exception.
+
 Args:
     uda: a user-defined algorithm (either C++ or Python - note that *uda* will be deep-copied
       and stored inside the :class:`~pygmo.core.mbh` instance)

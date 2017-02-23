@@ -778,7 +778,6 @@ BOOST_PYTHON_MODULE(core)
     compass_search_.def("get_stop_range", &compass_search::get_stop_range);
     compass_search_.def("get_reduction_coeff", &compass_search::get_reduction_coeff);
     compass_search_.def("get_verbosity", &compass_search::get_verbosity);
-    compass_search_.def("set_verbosity", &compass_search::set_verbosity);
     // PSO
     auto pso_ = pygmo::expose_algorithm<pso>("pso", pygmo::pso_docstring().c_str());
     pso_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(
