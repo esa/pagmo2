@@ -170,9 +170,9 @@ public:
             pagmo_throw(std::invalid_argument, get_name() + " cannot work on an empty population");
         }
         if (prob.get_nf() < 2u) {
-            pagmo_throw(std::invalid_argument, "The number of objectives detected in the instance of '"
-                                                   + prob.get_name() + "' is " + std::to_string(prob.get_nf()) + ". "
-                                                   + get_name() + " necessitates a problem with multiple objectives");
+            pagmo_throw(std::invalid_argument,
+                        "This is a multiobjective algortihm, while number of objectives detected in " + prob.get_name()
+                            + " is " + std::to_string(prob.get_nf()));
         }
         if (prob.get_nc() != 0u) {
             pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "

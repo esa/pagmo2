@@ -72,6 +72,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
 #include <pagmo/algorithms/moead.hpp>
+#include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
@@ -729,7 +730,7 @@ BOOST_PYTHON_MODULE(core)
         (bp::arg("gen") = 1u, bp::arg("F") = .8, bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6,
          bp::arg("tol") = 1E-6, bp::arg("seed"))));
     pygmo::expose_algo_log(de_, pygmo::de_get_log_docstring().c_str());
-    de_.def("get_seed", &de::get_seed);
+    de_.def("get_seed", &de::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // COMPASS SEARCH
     auto compass_search_
         = pygmo::expose_algorithm<compass_search>("compass_search", pygmo::compass_search_docstring().c_str());
@@ -754,14 +755,14 @@ BOOST_PYTHON_MODULE(core)
          bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
          bp::arg("memory") = false, bp::arg("seed"))));
     pygmo::expose_algo_log(pso_, pygmo::pso_get_log_docstring().c_str());
-    pso_.def("get_seed", &pso::get_seed);
+    pso_.def("get_seed", &pso::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // SEA
     auto sea_ = pygmo::expose_algorithm<sea>("sea", "__init__(gen = 1, seed = random)\n\n"
                                                     "(N+1)-ES simple evolutionary algorithm.\n\n");
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     pygmo::expose_algo_log(sea_, "");
-    sea_.def("get_seed", &sea::get_seed);
+    sea_.def("get_seed", &sea::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // SIMULATED ANNEALING
     auto simulated_annealing_ = pygmo::expose_algorithm<simulated_annealing>(
         "simulated_annealing", pygmo::simulated_annealing_docstring().c_str());
@@ -772,7 +773,8 @@ BOOST_PYTHON_MODULE(core)
         (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 10u,
          bp::arg("bin_size") = 10u, bp::arg("start_range") = 1., bp::arg("seed"))));
     pygmo::expose_algo_log(simulated_annealing_, pygmo::simulated_annealing_get_log_docstring().c_str());
-    simulated_annealing_.def("get_seed", &simulated_annealing::get_seed);
+    simulated_annealing_.def("get_seed", &simulated_annealing::get_seed,
+                             pygmo::generic_uda_get_seed_docstring().c_str());
     // SADE
     auto sade_ = pygmo::expose_algorithm<sade>("sade", pygmo::sade_docstring().c_str());
     sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool>(
@@ -782,7 +784,7 @@ BOOST_PYTHON_MODULE(core)
         (bp::arg("gen") = 1u, bp::arg("variant") = 2u, bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6,
          bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
     pygmo::expose_algo_log(sade_, pygmo::sade_get_log_docstring().c_str());
-    sade_.def("get_seed", &sade::get_seed);
+    sade_.def("get_seed", &sade::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // DE-1220
     auto de1220_ = pygmo::expose_algorithm<de1220>("de1220", pygmo::de1220_docstring().c_str());
     de1220_.def("__init__",
@@ -796,7 +798,7 @@ BOOST_PYTHON_MODULE(core)
                                       bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6,
                                       bp::arg("memory") = false, bp::arg("seed"))));
     pygmo::expose_algo_log(de1220_, pygmo::de1220_get_log_docstring().c_str());
-    de1220_.def("get_seed", &de1220::get_seed);
+    de1220_.def("get_seed", &de1220::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
 // CMA-ES
 #ifdef PAGMO_WITH_EIGEN3
     auto cmaes_ = pygmo::expose_algorithm<cmaes>("cmaes", pygmo::cmaes_docstring().c_str());
@@ -808,7 +810,7 @@ BOOST_PYTHON_MODULE(core)
          bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
          bp::arg("seed"))));
     pygmo::expose_algo_log(cmaes_, pygmo::cmaes_get_log_docstring().c_str());
-    cmaes_.def("get_seed", &cmaes::get_seed);
+    cmaes_.def("get_seed", &cmaes::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
 #endif
     // MOEA/D - DE
     auto moead_ = pygmo::expose_algorithm<moead>("moead", pygmo::moead_docstring().c_str());
@@ -833,7 +835,27 @@ BOOST_PYTHON_MODULE(core)
                },
                pygmo::moead_get_log_docstring().c_str());
 
-    moead_.def("get_seed", &moead::get_seed);
+    moead_.def("get_seed", &moead::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
+    // NSGA2
+    auto nsga2_ = pygmo::expose_algorithm<nsga2>("nsga2", pygmo::nsga2_docstring().c_str());
+    nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
+         bp::arg("int_dim") = 0)));
+    nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
+         bp::arg("int_dim") = 0, bp::arg("seed"))));
+    // nsga2 needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+    nsga2_.def("get_log",
+               +[](const nsga2 &a) -> bp::list {
+                   bp::list retval;
+                   for (const auto &t : a.get_log()) {
+                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), pygmo::v_to_a(std::get<2>(t))));
+                   }
+                   return retval;
+               },
+               pygmo::nsga2_get_log_docstring().c_str());
+
+    nsga2_.def("get_seed", &nsga2::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
 
     // Exposition of various structured utilities
     // Hypervolume class
