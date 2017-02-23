@@ -106,6 +106,11 @@ BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
 
     BOOST_CHECK(user_algo1.get_log().size() > 0u);
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+    // We evolve for many-objectives and trigger the output with the ellipses
+    udp = dtlz{1u, 12u, 7u};
+    population pop3{udp, 52u, 23u};
+    pop3 = user_algo2.evolve(pop3);
 }
 
 BOOST_AUTO_TEST_CASE(nsga2_setters_getters_test)

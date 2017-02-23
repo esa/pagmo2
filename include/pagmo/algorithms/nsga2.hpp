@@ -163,10 +163,6 @@ public:
                         "population size must be a multiple of 4. Detected input population size is: "
                             + std::to_string(NP));
         }
-        // Get out if there is nothing to do.
-        if (m_gen == 0u) {
-            return pop;
-        }
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
