@@ -68,8 +68,7 @@ namespace pagmo
  * decision vector and fitness vector are automatically kept updated. The *champion* is
  * not necessarily an individual currently in the population. The *champion* is
  * only defined and accessible via the population interface if the pagmo::problem
- * currently contained in the pagmo::population is single objective (i.e., population::get_problem().get_nobj()
- * returns exactly 1).
+ * currently contained in the pagmo::population is single objective.
  */
 class population
 {
@@ -80,9 +79,6 @@ class population
 
 public:
     /// The size type of the population.
-    /**
-     * A shortcut to <tt>std::vector<vector_double>::size_type</tt>.
-     */
     typedef std::vector<vector_double>::size_type size_type;
     /// Default constructor
     /**
