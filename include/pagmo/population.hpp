@@ -222,7 +222,7 @@ public:
         return pagmo::random_decision_vector(m_prob.get_bounds(), m_e);
     }
 
-    /// Index of best individual (accounting for a vector tolerance)
+    /// Index of the best individual (accounting for a vector tolerance)
     /**
      * If the problem is single-objective and unconstrained, the best
      * is simply the individual with the smallest fitness. If the problem
@@ -259,7 +259,7 @@ public:
                                  [this](size_type idx1, size_type idx2) { return m_f[idx1] < m_f[idx2]; });
     }
 
-    /// Index of best individual (accounting for a scalar tolerance)
+    /// Index of the best individual (accounting for a scalar tolerance)
     /**
      * @param tol scalar tolerance to be considered for each constraint.
      *
@@ -271,7 +271,7 @@ public:
         return best_idx(tol_vector);
     }
 
-    /// Index of worst individual (accounting for a vector tolerance)
+    /// Index of the worst individual (accounting for a vector tolerance)
     /**
      * If the problem is single-objective and unconstrained, the worst
      * is simply the individual with the largest fitness. If the problem
@@ -308,7 +308,7 @@ public:
                                  [this](size_type idx1, size_type idx2) { return m_f[idx1] < m_f[idx2]; });
     }
 
-    /// Index of worst individual (accounting for a scalar tolerance)
+    /// Index of the worst individual (accounting for a scalar tolerance)
     /**
      * @param tol scalar tolerance to be considered for each constraint.
      *

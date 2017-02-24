@@ -93,10 +93,24 @@ std::string population_best_idx_docstring()
 {
     return R"(best_idx(tol = 0.)
 
-Index of best individual. See :cpp:func:`pagmo::population::best_idx()`.
+Index of the best individual.
+
+If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem
+is, instead, single objective, but with constraints, the best will be defined using the criteria specified in pagmo::sort_population_con().
+     * If the problem is multi-objective one single best is not well defined. In
+     * this case the user can still obtain a strict ordering of the population
+     * individuals by calling the pagmo::sort_population_mo() function.
+     *
+     * @param tol vector of tolerances to be applied to each constraints.
+     *
+     * @returns the index of the best individual.
+     *
+     * @throws std::invalid_argument if the problem is multiobjective and thus
+     * a best individual is not well defined, or if the population is empty.
+     * @throws unspecified any exception thrown by pagmo::sort_population_con().
 
 Args:
-    tol (``float``, or ``array``, or ``list`` of ``floats``): a scalar tolerance or a vector of tolerances to be applied to
+    tol (``float`` or array-like object): a scalar or vector tolerance to be applied to
       each constraints
 
 Returns:
@@ -2580,10 +2594,10 @@ Raises:
 Returns:
     ``tuple``: (*ndf*, *dl*, *dc*, *ndr*), where:
 
-    * *ndf* (``list`` of 1D NumPy array of ``float``): the non dominated fronts
-    * *dl* (``list`` of 1D NumPy array of ``float``): the domination list
-    * *dc* (1D NumPy array of ``int``): the domination count
-    * *ndr* (1D NumPy array of ``int``): the non domination ranks
+    * *ndf* (``list`` of 1D NumPy float array): the non dominated fronts
+    * *dl* (``list`` of 1D NumPy float array): the domination list
+    * *dc* (1D NumPy int array): the domination count
+    * *ndr* (1D NumPy int array): the non domination ranks
 
 )";
 }
@@ -2815,7 +2829,7 @@ Args:
     hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
 
 Returns:
-    1D NumPy array of ``float``: the contribution of all points to the hypervolume
+    1D NumPy float array: the contribution of all points to the hypervolume
 
 Raises:
     ValueError: if *ref_point* is not suitable
@@ -2838,7 +2852,7 @@ Args:
 
 
 Returns:
-    1D NumPy array of ``float``: the contribution of all points to the hypervolume
+    1D NumPy float array: the contribution of all points to the hypervolume
 
 Raises:
     ValueError: if *ref_point* is not suitable or if *idx* is out of bounds
@@ -2899,7 +2913,7 @@ Args:
     offset (``float``): the reference point
 
 Returns:
-    1D NumPy array of ``float``: the reference point
+    1D NumPy float array: the reference point
 
 See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::refpoint`.
 

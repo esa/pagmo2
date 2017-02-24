@@ -437,6 +437,9 @@ BOOST_PYTHON_MODULE(core)
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
     // Ctors from problem.
+    // NOTE: we expose only the ctors from pagmo::problem, not from C++ or Python UDPs. An __init__ wrapper
+    // on the Python side will take care of cting a pagmo::problem from the input UDP, and then invoke this ctor.
+    // This way we avoid having to expose a different ctor for every exposed C++ prob.
     pop_class.def(bp::init<const problem &, population::size_type>((bp::arg("prob"), bp::arg("size"))))
         .def(bp::init<const problem &, population::size_type, unsigned>(
             (bp::arg("prob"), bp::arg("size"), bp::arg("seed"))))
@@ -458,8 +461,6 @@ BOOST_PYTHON_MODULE(core)
         .def("random_decision_vector",
              +[](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); },
              pygmo::population_random_decision_vector_docstring().c_str())
-        .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); })
-        .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); })
         .def("best_idx", +[](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); })
         .def("best_idx", +[](const population &pop, double tol) { return pop.best_idx(tol); })
         .def("best_idx", +[](const population &pop) { return pop.best_idx(); },
@@ -469,6 +470,8 @@ BOOST_PYTHON_MODULE(core)
         .def("worst_idx", +[](const population &pop, double tol) { return pop.worst_idx(tol); })
         .def("worst_idx", +[](const population &pop) { return pop.worst_idx(); },
              pygmo::population_worst_idx_docstring().c_str())
+        .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); })
+        .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); })
         .def("size", &population::size, pygmo::population_size_docstring().c_str())
         .def("__len__", &population::size)
         .def("set_xf", +[](population &pop, population::size_type i, const bp::object &x,
