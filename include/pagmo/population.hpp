@@ -424,7 +424,7 @@ public:
      * @param i individual's index in the population
      * @param x decision vector
      *
-     * @throws unspecified any exception thrown by set_xf
+     * @throws unspecified any exception thrown by population::set_xf().
      */
     void set_x(size_type i, const vector_double &x)
     {
