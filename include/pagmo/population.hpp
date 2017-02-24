@@ -236,12 +236,13 @@ public:
      * this case the user can still obtain a strict ordering of the population
      * individuals by calling the pagmo::sort_population_mo() function.
      *
-     * @param tol vector of tolerances to be applied to each constraints
+     * @param tol vector of tolerances to be applied to each constraints.
      *
-     * @returns the index of the best individual
+     * @returns the index of the best individual.
      *
      * @throws std::invalid_argument if the problem is multiobjective and thus
-     * a best individual is not well defined
+     * a best individual is not well defined, or if the population is empty.
+     * @throws unspecified any exception thrown by pagmo::sort_population_con().
      */
     vector_double::size_type best_idx(const vector_double &tol) const
     {
@@ -265,9 +266,9 @@ public:
 
     /// Index of best individual (accounting for a scalar tolerance)
     /**
-     * @param tol scalar tolerance to be considered for each constraint
+     * @param tol scalar tolerance to be considered for each constraint.
      *
-     * @return index of the best individual
+     * @return index of the best individual.
      */
     vector_double::size_type best_idx(double tol = 0.) const
     {
@@ -279,18 +280,19 @@ public:
     /**
      * If the problem is single-objective and unconstrained, the worst
      * is simply the individual with the largest fitness. If the problem
-     * is, instead, single objective, but with constraints, the best individual
+     * is, instead, single objective, but with constraints, the worst individual
      * will be defined using the criteria specified in pagmo::sort_population_con().
      * If the problem is multi-objective one single worst is not defined. In
      * this case the user can still obtain a strict ordering of the population
      * individuals by calling the pagmo::sort_population_mo() function.
      *
-     * @param tol vector of tolerances to be applied to each constraints
+     * @param tol vector of tolerances to be applied to each constraints.
      *
-     * @returns the index of the best individual
+     * @returns the index of the worst individual.
      *
      * @throws std::invalid_argument if the problem is multiobjective and thus
-     * a best individual is not well defined
+     * a worst individual is not well defined, or if the population is empty.
+     * @throws unspecified any exception thrown by pagmo::sort_population_con().
      */
     vector_double::size_type worst_idx(const vector_double &tol) const
     {
@@ -314,9 +316,9 @@ public:
 
     /// Index of worst individual (accounting for a scalar tolerance)
     /**
-     * @param tol scalar tolerance to be considered for each constraint
+     * @param tol scalar tolerance to be considered for each constraint.
      *
-     * @return index of the best individual
+     * @return index of the worst individual.
      */
     vector_double::size_type worst_idx(double tol = 0.) const
     {
@@ -326,9 +328,9 @@ public:
 
     /// Champion decision vector
     /**
-     * @return the champion decision vector
+     * @return the champion decision vector.
      *
-     * @throw std::invalid_argument if the current problem is not single objective
+     * @throw std::invalid_argument if the current problem is not single objective.
      */
     vector_double champion_x() const
     {
@@ -341,9 +343,9 @@ public:
 
     /// Champion fitness
     /**
-     * @return the champion fitness
+     * @return the champion fitness.
      *
-     * @throw std::invalid_argument if the current problem is not single objective
+     * @throw std::invalid_argument if the current problem is not single objective.
      */
     vector_double champion_f() const
     {
@@ -356,7 +358,7 @@ public:
 
     /// Number of individuals in the population
     /**
-     * @return the Number of individuals in the population
+     * @return the number of individuals in the population
      */
     size_type size() const
     {
@@ -373,13 +375,14 @@ public:
      * **NOTE**: The user must make sure that the input fitness \p f makes sense
      * as pagmo will only check its dimension.
      *
-     * @param i individual's index in the population
-     * @param x a decision vector (chromosome)
-     * @param f a fitness vector
+     * @param i individual's index in the population.
+     * @param x a decision vector (chromosome).
+     * @param f a fitness vector.
      *
-     * @throws std::invalid_argument if \p i is invalid (i.e. larger or equal to the population size)
-     * @throws std::invalid_argument if \p x has not the correct dimension
-     * @throws std::invalid_argument if \p f has not the correct dimension
+     * @throws std::invalid_argument if either:
+     * - \p i is invalid (i.e. larger or equal to the population size),
+     * - \p x has not the correct dimension,
+     * - \p f has not the correct dimension.
      */
     void set_xf(size_type i, const vector_double &x, const vector_double &f)
     {
@@ -389,20 +392,25 @@ public:
         }
         if (f.size() != m_prob.get_nf()) {
             pagmo_throw(std::invalid_argument, "Trying to set a fitness of dimension: " + std::to_string(f.size())
-                                                   + ", while problem get_nf returns: "
+                                                   + ", while the problem's fitness has dimension: "
                                                    + std::to_string(m_prob.get_nf()));
         }
         if (x.size() != m_prob.get_nx()) {
             pagmo_throw(std::invalid_argument, "Trying to set a decision vector of dimension: "
-                                                   + std::to_string(x.size()) + ", while problem get_nx returns: "
+                                                   + std::to_string(x.size()) + ", while the problem's dimension is: "
                                                    + std::to_string(m_prob.get_nx()));
         }
-        assert(m_x[i].size() == x.size());
-        assert(m_f[i].size() == f.size());
+
+        // Reserve space for the incoming vectors. If any of this throws,
+        // the data in m_x[i]/m_f[i] will not be modified.
+        m_x[i].reserve(x.size());
+        m_f[i].reserve(f.size());
 
         update_champion(x, f);
-        // Use std::copy in order to make sure we are not allocating and
-        // potentially throw.
+        // Use resize + std::copy: since we reserved enough space above, none of this
+        // can throw.
+        m_x[i].resize(x.size());
+        m_f[i].resize(f.size());
         std::copy(x.begin(), x.end(), m_x[i].begin());
         std::copy(f.begin(), f.end(), m_f[i].begin());
     }
@@ -413,7 +421,7 @@ public:
      * value \p x and changes its fitness accordingly. The
      * individual's ID remains the same.
      *
-     * **NOTE** a call to this method triggers one fitness function evaluation
+     * **NOTE** a call to this method triggers one fitness function evaluation.
      *
      * @param i individual's index in the population
      * @param x decision vector
@@ -425,43 +433,67 @@ public:
         set_xf(i, x, m_prob.fitness(x));
     }
 
-    /// Setter for the problem seed
-    void set_problem_seed(unsigned seed)
-    {
-        m_prob.set_seed(seed);
-    }
-
-    /// Getter for the pagmo::problem
+    /// Const getter for the pagmo::problem.
+    /**
+     * @return a const reference to the internal pagmo::problem.
+     */
     const problem &get_problem() const
     {
         return m_prob;
     }
 
-    /// Getter for the fitness vectors
+    /// Getter for the pagmo::problem.
+    /**
+     * @return a reference to the internal pagmo::problem.
+     */
+    problem &get_problem()
+    {
+        return m_prob;
+    }
+
+    /// Const getter for the fitness vectors.
+    /**
+     * @return a const reference to the vector of fitness vectors.
+     */
     const std::vector<vector_double> &get_f() const
     {
         return m_f;
     }
 
-    /// Getter for the decision vectors
+    /// Const getter for the decision vectors.
+    /**
+     * @return a const reference to the vector of decision vectors.
+     */
     const std::vector<vector_double> &get_x() const
     {
         return m_x;
     }
 
-    /// Getter for the individual IDs
+    /// Const getter for the individual IDs.
+    /**
+     * @return a const reference to the vector of individual IDs.
+     */
     const std::vector<unsigned long long> &get_ID() const
     {
         return m_ID;
     }
 
-    /// Getter for the seed of the population random engine
+    /// Getter for the seed of the population random engine.
+    /**
+     * @return the seed of the population's random engine.
+     */
     unsigned get_seed() const
     {
         return m_seed;
     }
 
-    /// Streaming operator for the class pagmo::population
+    /// Streaming operator for the class pagmo::population.
+    /**
+     * @param os target stream.
+     * @param p the population to be directed to stream.
+     *
+     * @return a reference to \p os.
+     */
     friend std::ostream &operator<<(std::ostream &os, const population &p)
     {
         stream(os, p.m_prob, '\n');
@@ -480,6 +512,11 @@ public:
         return os;
     }
     /// Serialization.
+    /**
+     * @param ar the target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

@@ -126,7 +126,7 @@ public:
     {
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                              // allowed (pop.set_problem_seed is)
+                                              // allowed
         auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
         auto NP = pop.size();
 
