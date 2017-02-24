@@ -51,6 +51,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/import.hpp>
 #include <boost/python/init.hpp>
 #include <boost/python/make_constructor.hpp>
+#include <boost/python/make_function.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
@@ -250,16 +251,6 @@ struct population_pickle_suite : bp::pickle_suite {
     }
 };
 
-// Various wrappers for the population exposition.
-
-// Expose a population constructor from problem.
-template <typename Prob>
-static inline void population_prob_init(bp::class_<population> &pop_class)
-{
-    pop_class.def(bp::init<const Prob &, population::size_type>())
-        .def(bp::init<const Prob &, population::size_type, unsigned>());
-}
-
 // DE1220 ctors.
 static inline de1220 *de1220_init_0(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory)
@@ -445,18 +436,28 @@ BOOST_PYTHON_MODULE(core)
 
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
-    // Ctor from problem.
-    population_prob_init<problem>(pop_class);
-    pop_class
+    // Ctors from problem.
+    pop_class.def(bp::init<const problem &, population::size_type>((bp::arg("prob"), bp::arg("size"))))
+        .def(bp::init<const problem &, population::size_type, unsigned>(
+            (bp::arg("prob"), bp::arg("size"), bp::arg("seed"))))
+        // Repr.
         .def(repr(bp::self))
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<population>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<population>)
         .def_pickle(population_pickle_suite())
-        .def("push_back", +[](population &pop, const bp::object &x) { pop.push_back(pygmo::to_vd(x)); },
-             pygmo::population_push_back_docstring().c_str(), (bp::arg("x")))
-        .def("decision_vector", +[](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); },
-             pygmo::population_decision_vector_docstring().c_str())
+        .def("push_back",
+             +[](population &pop, const bp::object &x, const bp::object &f) {
+                 if (f) {
+                     pop.push_back(pygmo::to_vd(x), pygmo::to_vd(f));
+                 } else {
+                     pop.push_back(pygmo::to_vd(x));
+                 }
+             },
+             pygmo::population_push_back_docstring().c_str(), (bp::arg("x"), bp::arg("f") = bp::object()))
+        .def("random_decision_vector",
+             +[](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); },
+             pygmo::population_random_decision_vector_docstring().c_str())
         .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); })
         .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); })
         .def("best_idx", +[](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); })
@@ -476,10 +477,10 @@ BOOST_PYTHON_MODULE(core)
         .def("set_x",
              +[](population &pop, population::size_type i, const bp::object &x) { pop.set_x(i, pygmo::to_vd(x)); },
              pygmo::population_set_x_docstring().c_str())
-        .def("set_problem_seed", &population::set_problem_seed, pygmo::population_set_problem_seed_docstring().c_str(),
-             (bp::arg("seed")))
-        .def("get_problem", &population::get_problem, pygmo::population_get_problem_docstring().c_str(),
-             bp::return_value_policy<bp::copy_const_reference>())
+        .add_property("problem",
+                      bp::make_function(+[](const population &pop) -> const problem & { return pop.get_problem(); },
+                                        bp::return_internal_reference<>()),
+                      +[](population &pop, const problem &p) { pop.get_problem() = p; })
         .def("get_f", +[](const population &pop) { return pygmo::vv_to_a(pop.get_f()); },
              pygmo::population_get_f_docstring().c_str())
         .def("get_x", +[](const population &pop) { return pygmo::vv_to_a(pop.get_x()); },

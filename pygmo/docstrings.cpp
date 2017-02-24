@@ -45,6 +45,11 @@ individual is determined:
 * by the fitness of the chromosome as evaluated by a :class:`~pygmo.core.problem` and thus including objectives,
   equality constraints and inequality constraints if present.
 
+A special mechanism is implemented to track the best individual that has ever been part of the population. Such an individual
+is called *champion* and its decision vector and fitness vector are automatically kept updated. The *champion* is not necessarily
+an individual currently in the population. The *champion* is only defined and accessible via the population interface if the
+:class:`~pygmo.core.problem` currently contained in the :class:`~pygmo.core.population` is single objective.
+
 See also the docs of the C++ class :cpp:class:`pagmo::population`.
 
 )";
@@ -52,61 +57,34 @@ See also the docs of the C++ class :cpp:class:`pagmo::population`.
 
 std::string population_push_back_docstring()
 {
-    return R"(push_back(x)
+    return R"(push_back(x, f = None)
 
 Adds one decision vector (chromosome) to the population.
 
-Appends a new chromosome x to the population, evaluating its fitness and creating a new unique identifier for the newly
-born individual. In case of exceptions, the population will not be altered.
+This method will append a new chromosome *x* to the population, creating a new unique identifier for the newly born individual
+and, if *f* is not provided, evaluating its fitness. If *f* is provided, the fitness of the new individual will be set to *f*.
+It is the user's responsibility to ensure that *f* actually corresponds to the fitness of *x*.
+
+In case of exceptions, the population will not be altered.
 
 Args:
-    x (``array``, or ``list`` of ``floats``): decision vector to be added to the population
+    x (array-like object): decision vector to be added to the population
 
 Raises:
-    ValueError: if the dimension of *x* is inconsistent with the problem dimension or the calculated fitness vector has
-        a dimension which is inconsistent with the fitness dimension of the problem
-    TypeError: if *x* cannot be converted to a C++ ``vector`` of ``floats``
-
-Examples:
-
->>> from numpy import array
->>> pop = population()
->>> pop.push_back([1])
->>> pop.push_back(array([2]))
->>> pop # doctest: +SKIP
-[...]
-List of individuals:
-#0:
-        ID:                     7905479722040097576
-        Decision vector:        [1]
-        Fitness vector:         [0, 0, 0]
-#1:
-        ID:                     11652046723302057419
-        Decision vector:        [2]
-        Fitness vector:         [0, 0, 0]
-[...]
->>> pop.push_back(3) # doctest: +IGNORE_EXCEPTION_DETAIL
-Traceback (most recent call last):
-   ...
-TypeError: cannot convert the type '<class 'int'>' to a vector of floats
+    unspecified: any exception thrown by :func:`pygmo.core.problem.fitness()` or by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
 
-std::string population_decision_vector_docstring()
+std::string population_random_decision_vector_docstring()
 {
-    return R"(decision_vector()
+    return R"(random_decision_vector()
 
-Create random decision_vector.
+This method will create a random decision vector within the problem's bounds.
 
 Returns:
-    ``array`` of ``floats``: a random decision vector within the problem’s bounds
-
-Examples:
-
->>> pop = population()
->>> pop.decision_vector() # doctest: +SKIP
-array([ 0.5393175])
+    1D NumPy float array: a random decision vector within the problem’s bounds
 
 )";
 }
@@ -253,40 +231,6 @@ List of individuals:
 Traceback (most recent call last):
   ...
 ValueError: Length of decision vector is 2, should be 1
-
-)";
-}
-
-std::string population_set_problem_seed_docstring()
-{
-    return R"(set_problem_seed(seed)
-
-Sets the problem seed.
-
-Args:
-    seed (``int``): the desired seed (must be non-negative)
-
-Raises:
-    RuntimeError: if the problem is not stochastic
-    OverflowError: if *seed* is too large or negative
-    TypeError: if the argument types are invalid
-
-Examples:
-
->>> pop = population(inventory())
->>> pop.set_problem_seed(42)
->>> pop # doctest: +SKIP
-[...]
-Extra info:
-        Weeks: 4
-        Sample size: 10
-        Seed: 42
-[...]
->>> pop = population()
->>> pop.set_problem_seed(seed = 42) # doctest: +IGNORE_EXCEPTION_DETAIL
-Traceback (most recent call last):
-  ...
-RuntimeError: the user-defined problem does not support seed setting
 
 )";
 }
@@ -2634,25 +2578,12 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (``tuple``): (*ndf*, *dl*, *dc*, *ndr*)
+    ``tuple``: (*ndf*, *dl*, *dc*, *ndr*), where:
 
-Where:
     * *ndf* (``list`` of 1D NumPy array of ``float``): the non dominated fronts
     * *dl* (``list`` of 1D NumPy array of ``float``): the domination list
     * *dc* (1D NumPy array of ``int``): the domination count
     * *ndr* (1D NumPy array of ``int``): the non domination ranks
-
-Examples:
-    >>> from pygmo import *
-    >>> ndf, dl, dc, ndr = fast_non_dominated_sorting([[2,3],[-1,2],[-3,2],[0,5],[1,1]])
-    >>> print(ndf)
-    [array([2, 4], dtype=uint64), array([1], dtype=uint64), array([0, 3], dtype=uint64)]
-    >>> print(dl)
-    [array([], dtype=uint64), array([0, 3], dtype=uint64), array([0, 1, 3], dtype=uint64), array([], dtype=uint64), array([0], dtype=uint64)]
-    >>> print(dc)
-    [3 1 0 2 0]
-    >>> print(ndr)
-    [2 1 0 2 0]
 
 )";
 }
@@ -2664,7 +2595,7 @@ std::string nadir_docstring()
 Computes the nadir point of a set of points, i.e objective vectors. The nadir is that point that has the maximum
 value of the objective function in the points of the non-dominated front.
 
-Complexity is :math:`O(MN^2)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
+Complexity is :math:`\mathcal{O}(MN^2)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
 
 Args:
     points (2d-array like object): the input points
@@ -2674,12 +2605,8 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (1D NumPy array of ``floats``): the nadir point
+    1D NumPy float array: the nadir point
 
-Examples:
-    >>> fimport pygmo as pg
-    >>> nadir_point = pg.nadir([[0,7],[1,5],[2,3],[4,2],[7,1],[10,0],[6,6],[9,15]])
-    >>> [10, 7]
 )";
 }
 
@@ -2687,10 +2614,10 @@ std::string ideal_docstring()
 {
     return R"(ideal(points)
 
- Computes the ideal point of a set of points, i.e objective vectors. The ideal poitn is that point that has, in each 
- component, the minimum value of the objective functions of the input points.
+Computes the ideal point of a set of points, i.e objective vectors. The ideal point is that point that has, in each 
+component, the minimum value of the objective functions of the input points.
 
-Complexity is :math:`O(MN)` where :math:`M` is the number of objectives and :math:`N:math:` is the number of points.
+Complexity is :math:`\mathcal{O}(MN)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
 
 Args:
     points (2d-array like object): the input points
@@ -2700,12 +2627,8 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (1D NumPy array of ``floats``): the ideal point
+    1D NumPy float array: the ideal point
 
-Examples:
-    >>> fimport pygmo as pg
-    >>> ideal_point = pg.ideal([[-1,3,597],[1,2,3645],[2,9,789],[0,0,231],[6,-2,4576]])
-    [-1,-2,231]
 )";
 }
 
