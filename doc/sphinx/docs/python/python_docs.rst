@@ -33,6 +33,7 @@ These are the algorithms implemented in PyGMO.
 .. toctree::
    :maxdepth: 1
 
+   algorithms/py_meta_algorithms
    algorithms/py_cpp_algorithms
 
 Utilities

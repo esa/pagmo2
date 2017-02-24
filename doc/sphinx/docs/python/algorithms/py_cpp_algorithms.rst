@@ -53,10 +53,5 @@ Algorithms exposed from C++
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.mbh
-   :members:
-
--------------------------------------------------------------
-
 .. autoclass:: pygmo.core.nsga2
    :members:
