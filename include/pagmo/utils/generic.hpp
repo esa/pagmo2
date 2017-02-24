@@ -56,10 +56,10 @@ namespace pagmo
  * Creates a random number within a closed range. If
  * both the lower and upper bounds are finite numbers, then the generated value
  * \f$ x \f$ will be such that \f$lb \le x < ub\f$. If \f$lb == ub\f$ then \f$lb\f$ is
- * returned
+ * returned.
  *
  * **NOTE**: This has to be preferred to std::uniform_real<double>(r_engine) as it
- * performs checks that avoid undefined behaviour in PaGMO.
+ * performs checks that avoid undefined behaviour in pagmo.
  *
  * Example:
  *
@@ -110,16 +110,16 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
 /**
  * Creates a random decision vector within some bounds. If
  * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
- * component of the randomly generated decision_vector will be such that
+ * component of the randomly generated pagmo::vector_double will be such that
  * \f$lb_i \le x_i < ub_i\f$. If \f$lb_i == ub_i\f$ then \f$lb_i\f$ is
- * returned
+ * returned.
  *
  * Example:
  *
  * @code{.unparsed}
  * std::mt19937 r_engine(32u);
- * auto x = decision_vector({{1,3},{3,5}}, r_engine); // a random vector
- * auto x = decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
+ * auto x = random_decision_vector({{1,3},{3,5}}, r_engine); // a random vector
+ * auto x = random_decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
  * @endcode
  *
  * @param bounds an <tt>std::pair</tt> containing the bounds
@@ -127,10 +127,10 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
  *
  * @throws std::invalid_argument if:
  * - the bounds are not of equal length, they have zero size, they contain NaNs or infs,
- *   or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
+ *   or \f$ \mathbf{ub} < \mathbf {lb}\f$,
  * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
  *
- * @returns a vector_double containing a random decision vector
+ * @returns a pagmo::vector_double containing a random decision vector
  */
 vector_double random_decision_vector(const std::pair<vector_double, vector_double> &bounds,
                                      detail::random_engine_type &r_engine)
@@ -150,16 +150,16 @@ vector_double random_decision_vector(const std::pair<vector_double, vector_doubl
 /**
  * Creates a random decision vector within some bounds. If
  * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
- * component of the randomly generated decision_vector will be such that
+ * component of the randomly generated pagmo::vector_double will be such that
  * \f$lb_i \le x_i < ub_i\f$. If \f$lb_i == ub_i\f$ then \f$lb_i\f$ is
- * returned
+ * returned.
  *
  * Example:
  *
  * @code{.unparsed}
  * std::mt19937 r_engine(32u);
- * auto x = decision_vector({1,3},{3,5}, r_engine); // a random vector
- * auto x = decision_vector({1,3},{1,3}, r_engine); // the vector {1,3}
+ * auto x = random_decision_vector({1,3},{3,5}, r_engine); // a random vector
+ * auto x = random_decision_vector({1,3},{1,3}, r_engine); // the vector {1,3}
  * @endcode
  *
  * @param lb a vector_double containing the lower bounds
@@ -167,10 +167,10 @@ vector_double random_decision_vector(const std::pair<vector_double, vector_doubl
  * @param r_engine a <tt>std::mt19937</tt> random engine
  *
  * @throws std::invalid_argument if:
- * - the bounds are not of equal length, they contain NaNs or infs, or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
+ * - the bounds are not of equal length, they contain NaNs or infs, or \f$ \mathbf{ub} < \mathbf {lb}\f$,
  * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
  *
- * @returns a vector_double containing a random decision vector
+ * @returns a pagmo::vector_double containing a random decision vector
  */
 vector_double random_decision_vector(const vector_double &lb, const vector_double &ub,
                                      detail::random_engine_type &r_engine)

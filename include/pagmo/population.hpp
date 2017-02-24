@@ -55,11 +55,11 @@ namespace pagmo
  * \image html population.jpg
  *
  * This class represents a population of individuals, i.e., potential
- * candidate solutions to a given problem. In PaGMO an
- * individual is determined
- * - by a unique ID used to track him across generations and migrations
- * - by a chromosome (a decision vector)
- * - by the fitness of the chromosome as evaluated by a pagmo::problem.
+ * candidate solutions to a given problem. In pagmo an
+ * individual is determined by:
+ * - a unique ID used to track it across generations and migrations,
+ * - a chromosome (a decision vector),
+ * - the fitness of the chromosome as evaluated by a pagmo::problem,
  * and thus including objectives, equality constraints and inequality
  * constraints if present.
  *
@@ -68,10 +68,8 @@ namespace pagmo
  * decision vector and fitness vector are automatically kept updated. The *champion* is
  * not necessarily an individual currently in the population. The *champion* is
  * only defined and accessible via the population interface if the pagmo::problem
- * currently contained in the pagmo::population is single objective (i.e. the population::get_problem().get_nobj())
- * returns exactly 1.
- *
- *
+ * currently contained in the pagmo::population is single objective (i.e., population::get_problem().get_nobj()
+ * returns exactly 1).
  */
 class population
 {
@@ -81,33 +79,40 @@ class population
     using generic_ctor_enabler = enable_if_t<!std::is_same<population, uncvref_t<T>>::value, int>;
 
 public:
-    /// A shortcut to <tt>std::vector<vector_double>::size_type</tt>.
+    /// The size type of the population.
+    /**
+     * A shortcut to <tt>std::vector<vector_double>::size_type</tt>.
+     */
     typedef std::vector<vector_double>::size_type size_type;
     /// Default constructor
     /**
      * Constructs an empty population with a pagmo::null_problem.
      * The random seed is initialised to zero.
      */
-    population() : m_prob(null_problem{}), m_e(0u), m_seed(0u)
+    population() : population(null_problem{}, 0u, 0u)
     {
     }
 
-    /// Constructor from a problem of type \p T
+    /// Constructor from a problem.
     /**
+     * **NOTE**: this constructor is enabled only if, after the removal of cv/reference qualifiers,
+     * \p T is not pagmo::population.
+     *
      * Constructs a population with \p pop_size individuals associated
      * to the problem \p x and setting the population random seed
-     * to \p seed. In order for the construction to be succesfull, \p x
-     * must be such that a pagmo::problem can be constructed from it.
+     * to \p seed. The input problem \p x can be either a pagmo::problem or a user-defined problem
+     * (UDP).
      *
-     * @param x the user problem the population refers to
-     * @param pop_size population size (i.e. number of individuals therein)
+     * @param x the problem the population refers to.
+     * @param pop_size population size (i.e. number of individuals therein).
      * @param seed seed of the random number generator used, for example, to
-     * create new random individuals within the bounds
+     * create new random individuals within the bounds.
      *
-     * @throws unspecified any exception thrown by decision_vector() or by push_back()
+     * @throws unspecified any exception thrown by random_decision_vector(), push_back(), or by the
+     * invoked constructor of pagmo::problem.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
-    explicit population(T &&x, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next())
+    explicit population(T &&x, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next())
         : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
     {
         for (size_type i = 0u; i < pop_size; ++i) {
@@ -140,6 +145,9 @@ public:
     }
 
     /// Defaulted move assignment operator.
+    /**
+     * @return a reference to \p this.
+     */
     population &operator=(population &&) = default;
 
     /// Destructor.
@@ -152,7 +160,7 @@ public:
         assert(m_ID.size() == m_f.size());
     }
 
-    /// Adds one decision vector (chromosome) to the population
+    /// Adds one decision vector (chromosome) to the population.
     /**
      * Appends a new chromosome \p x to the population, evaluating
      * its fitness and creating a new unique identifier for the newly
@@ -163,7 +171,6 @@ public:
      * @param x decision vector to be added to the population.
      *
      * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
-     * Wrong dimensions for the input decision vector or the output fitness will trigger an exception.
      */
     void push_back(const vector_double &x)
     {
@@ -174,7 +181,7 @@ public:
 
     /// Adds one decision vector/fitness vector to the population
     /**
-     * Appends a new decision vectorome \p x to the population, and sets
+     * Appends a new chromosome \p x to the population, and sets
      * its fitness to \p f creating a new unique identifier for the newly
      * born individual.
      *
@@ -212,7 +219,7 @@ public:
      *
      * @returns a random decision vector
      *
-     * @throws unspecified all exceptions thrown by pagmo::decision_vector()
+     * @throws unspecified all exceptions thrown by pagmo::random_decision_vector()
      */
     vector_double random_decision_vector() const
     {
@@ -419,7 +426,7 @@ public:
     }
 
     /// Setter for the problem seed
-    void set_problem_seed(unsigned int seed)
+    void set_problem_seed(unsigned seed)
     {
         m_prob.set_seed(seed);
     }
@@ -449,7 +456,7 @@ public:
     }
 
     /// Getter for the seed of the population random engine
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -511,7 +518,7 @@ private:
     // Random engine.
     mutable detail::random_engine_type m_e;
     // Seed.
-    unsigned int m_seed;
+    unsigned m_seed;
 };
 
 } // namespace pagmo
