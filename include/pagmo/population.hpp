@@ -244,7 +244,7 @@ public:
      * a best individual is not well defined, or if the population is empty.
      * @throws unspecified any exception thrown by pagmo::sort_population_con().
      */
-    vector_double::size_type best_idx(const vector_double &tol) const
+    size_type best_idx(const vector_double &tol) const
     {
         if (!size()) {
             pagmo_throw(std::invalid_argument, "Cannot determine the best individual of an empty population");
@@ -257,11 +257,10 @@ public:
             return sort_population_con(m_f, m_prob.get_nec(), tol)[0];
         }
         // Sort for single objective, unconstrained optimization
-        std::vector<vector_double::size_type> indexes(size());
-        std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
-        return *std::min_element(
-            indexes.begin(), indexes.end(),
-            [this](vector_double::size_type idx1, vector_double::size_type idx2) { return m_f[idx1] < m_f[idx2]; });
+        std::vector<size_type> indexes(size());
+        std::iota(indexes.begin(), indexes.end(), size_type(0u));
+        return *std::min_element(indexes.begin(), indexes.end(),
+                                 [this](size_type idx1, size_type idx2) { return m_f[idx1] < m_f[idx2]; });
     }
 
     /// Index of best individual (accounting for a scalar tolerance)
@@ -270,7 +269,7 @@ public:
      *
      * @return index of the best individual.
      */
-    vector_double::size_type best_idx(double tol = 0.) const
+    size_type best_idx(double tol = 0.) const
     {
         vector_double tol_vector(m_prob.get_nf() - 1u, tol);
         return best_idx(tol_vector);
@@ -294,7 +293,7 @@ public:
      * a worst individual is not well defined, or if the population is empty.
      * @throws unspecified any exception thrown by pagmo::sort_population_con().
      */
-    vector_double::size_type worst_idx(const vector_double &tol) const
+    size_type worst_idx(const vector_double &tol) const
     {
         if (!size()) {
             pagmo_throw(std::invalid_argument, "Cannot determine the worst element of an empty population");
@@ -307,11 +306,10 @@ public:
             return sort_population_con(m_f, m_prob.get_nec(), tol).back();
         }
         // Sort for single objective, unconstrained optimization
-        std::vector<vector_double::size_type> indexes(size());
-        std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
-        return *std::max_element(
-            indexes.begin(), indexes.end(),
-            [this](vector_double::size_type idx1, vector_double::size_type idx2) { return m_f[idx1] < m_f[idx2]; });
+        std::vector<size_type> indexes(size());
+        std::iota(indexes.begin(), indexes.end(), size_type(0u));
+        return *std::max_element(indexes.begin(), indexes.end(),
+                                 [this](size_type idx1, size_type idx2) { return m_f[idx1] < m_f[idx2]; });
     }
 
     /// Index of worst individual (accounting for a scalar tolerance)
@@ -320,7 +318,7 @@ public:
      *
      * @return index of the worst individual.
      */
-    vector_double::size_type worst_idx(double tol = 0.) const
+    size_type worst_idx(double tol = 0.) const
     {
         vector_double tol_vector(m_prob.get_nf() - 1u, tol);
         return worst_idx(tol_vector);
