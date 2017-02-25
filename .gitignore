@@ -15,9 +15,6 @@ build*
 # .out
 *.out
 
-# Third party submodules
-include/external/cereal/*
-
 # Generated docs
 doc/doxygen/html/*
 doc/doxygen/latex/*
