@@ -53,9 +53,9 @@ namespace cereal
       with the construct class to allow for non-default
       constructors.
 
-      **NOTE** This feature is experimental and may be altered or removed in a future release. See issue #46.
+      @note This feature is experimental and may be altered or removed in a future release. See issue #46.
 
-      @code{.unparsed}{.cpp}
+      @code{.cpp}
       struct MyUserData
       {
         int * myRawPointer;
@@ -134,9 +134,9 @@ namespace cereal
       some archive wrapped by UserDataAdapter.  If this is used on
       an archive that is not wrapped, a run-time exception will occur.
 
-      **NOTE** This feature is experimental and may be altered or removed in a future release. See issue #46.
+      @note This feature is experimental and may be altered or removed in a future release. See issue #46.
 
-      **NOTE** The correct use of this function cannot be enforced at compile
+      @note The correct use of this function cannot be enforced at compile
             time.
 
       @relates UserDataAdapter
