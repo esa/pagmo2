@@ -451,23 +451,25 @@ BOOST_PYTHON_MODULE(core)
         .def_pickle(population_pickle_suite())
         .def("push_back",
              +[](population &pop, const bp::object &x, const bp::object &f) {
-                 if (f) {
-                     pop.push_back(pygmo::to_vd(x), pygmo::to_vd(f));
-                 } else {
+                 if (f.is_none()) {
                      pop.push_back(pygmo::to_vd(x));
+                 } else {
+                     pop.push_back(pygmo::to_vd(x), pygmo::to_vd(f));
                  }
              },
              pygmo::population_push_back_docstring().c_str(), (bp::arg("x"), bp::arg("f") = bp::object()))
         .def("random_decision_vector",
              +[](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); },
              pygmo::population_random_decision_vector_docstring().c_str())
-        .def("best_idx", +[](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); })
-        .def("best_idx", +[](const population &pop, double tol) { return pop.best_idx(tol); })
+        .def("best_idx", +[](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); },
+             (bp::arg("tol")))
+        .def("best_idx", +[](const population &pop, double tol) { return pop.best_idx(tol); }, (bp::arg("tol")))
         .def("best_idx", +[](const population &pop) { return pop.best_idx(); },
              pygmo::population_best_idx_docstring().c_str())
         .def("worst_idx",
-             +[](const population &pop, const bp::object &tol) { return pop.worst_idx(pygmo::to_vd(tol)); })
-        .def("worst_idx", +[](const population &pop, double tol) { return pop.worst_idx(tol); })
+             +[](const population &pop, const bp::object &tol) { return pop.worst_idx(pygmo::to_vd(tol)); },
+             (bp::arg("tol")))
+        .def("worst_idx", +[](const population &pop, double tol) { return pop.worst_idx(tol); }, (bp::arg("tol")))
         .def("worst_idx", +[](const population &pop) { return pop.worst_idx(); },
              pygmo::population_worst_idx_docstring().c_str())
         .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); },

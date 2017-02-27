@@ -83,9 +83,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     virtual void set_seed(unsigned n) override final
     {
         auto ss = pygmo::callable_attribute(m_value, "set_seed");
-        if (ss) {
-            ss(n);
-        } else {
+        if (ss.is_none()) {
             pygmo_throw(PyExc_NotImplementedError,
                         ("set_seed() has been invoked but it is not implemented "
                          "in the user-defined Python algorithm '"
@@ -93,15 +91,16 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
                          + "': the method is either not present or not callable")
                             .c_str());
         }
+        ss(n);
     }
     virtual bool has_set_seed() const override final
     {
         auto ss = pygmo::callable_attribute(m_value, "set_seed");
-        if (!ss) {
+        if (ss.is_none()) {
             return false;
         }
         auto hss = pygmo::callable_attribute(m_value, "has_set_seed");
-        if (!hss) {
+        if (hss.is_none()) {
             return true;
         }
         return bp::extract<bool>(hss());
@@ -121,9 +120,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     virtual void set_verbosity(unsigned n) override final
     {
         auto sv = pygmo::callable_attribute(m_value, "set_verbosity");
-        if (sv) {
-            sv(n);
-        } else {
+        if (sv.is_none()) {
             pygmo_throw(PyExc_NotImplementedError,
                         ("set_verbosity() has been invoked but it is not implemented "
                          "in the user-defined Python algorithm '"
@@ -131,15 +128,16 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
                          + "': the method is either not present or not callable")
                             .c_str());
         }
+        sv(n);
     }
     virtual bool has_set_verbosity() const override final
     {
         auto sv = pygmo::callable_attribute(m_value, "set_verbosity");
-        if (!sv) {
+        if (sv.is_none()) {
             return false;
         }
         auto hsv = pygmo::callable_attribute(m_value, "has_set_verbosity");
-        if (!hsv) {
+        if (hsv.is_none()) {
             return true;
         }
         return bp::extract<bool>(hsv());

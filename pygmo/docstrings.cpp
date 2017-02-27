@@ -86,6 +86,10 @@ This method will create a random decision vector within the problem's bounds.
 Returns:
     1D NumPy float array: a random decision vector within the problem’s bounds
 
+Raises:
+    unspecified: any exception thrown by :func:`pygmo.core.problem.fitness()` or by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
 )";
 }
 
@@ -107,7 +111,6 @@ Returns:
     ``int``: the index of the best individual
 
 Raises:
-
      ValueError: if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty
      unspecified: any exception thrown by :cpp:func:`pagmo::sort_population_con()`
 
@@ -132,7 +135,6 @@ Returns:
     ``int``: the index of the worst individual
 
 Raises:
-
      ValueError: if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty
      unspecified: any exception thrown by :cpp:func:`pagmo::sort_population_con()`
 
@@ -150,6 +152,8 @@ Returns:
 
 Raises:
     ValueError: if the current problem is not single objective
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
@@ -165,6 +169,8 @@ Returns:
 
 Raises:
     ValueError: if the current problem is not single objective
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
