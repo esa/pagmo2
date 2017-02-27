@@ -470,9 +470,10 @@ BOOST_PYTHON_MODULE(core)
         .def("worst_idx", +[](const population &pop, double tol) { return pop.worst_idx(tol); })
         .def("worst_idx", +[](const population &pop) { return pop.worst_idx(); },
              pygmo::population_worst_idx_docstring().c_str())
-        .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); })
-        .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); })
-        .def("size", &population::size, pygmo::population_size_docstring().c_str())
+        .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); },
+                      pygmo::population_champion_x_docstring().c_str())
+        .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); },
+                      pygmo::population_champion_f_docstring().c_str())
         .def("__len__", &population::size)
         .def("set_xf", +[](population &pop, population::size_type i, const bp::object &x,
                            const bp::object &f) { pop.set_xf(i, pygmo::to_vd(x), pygmo::to_vd(f)); },
@@ -480,10 +481,10 @@ BOOST_PYTHON_MODULE(core)
         .def("set_x",
              +[](population &pop, population::size_type i, const bp::object &x) { pop.set_x(i, pygmo::to_vd(x)); },
              pygmo::population_set_x_docstring().c_str())
-        .add_property("problem",
-                      bp::make_function(+[](const population &pop) -> const problem & { return pop.get_problem(); },
-                                        bp::return_internal_reference<>()),
-                      +[](population &pop, const problem &p) { pop.get_problem() = p; })
+        .add_property("problem", bp::make_function(+[](population &pop) -> problem & { return pop.get_problem(); },
+                                                   bp::return_internal_reference<>()),
+                      +[](population &pop, const problem &p) { pop.get_problem() = p; },
+                      pygmo::population_problem_docstring().c_str())
         .def("get_f", +[](const population &pop) { return pygmo::vv_to_a(pop.get_f()); },
              pygmo::population_get_f_docstring().c_str())
         .def("get_x", +[](const population &pop) { return pygmo::vv_to_a(pop.get_x()); },
