@@ -168,25 +168,6 @@ static inline bp::object test_object_serialization(const bp::object &o)
     return retval;
 }
 
-// A pickle suite for pagmo::null_problem. The problem pickle suite
-// uses null_problem for the initialization of a problem instance,
-// and the initialization argument returned by getinitargs
-// must be serializable itself.
-struct null_problem_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const null_problem &)
-    {
-        return bp::make_tuple();
-    }
-};
-
-// Same as above for the null algo.
-struct null_algorithm_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const null_algorithm &)
-    {
-        return bp::make_tuple();
-    }
-};
-
 // Instances of the classes in pygmo_classes.hpp.
 namespace pygmo
 {
@@ -670,10 +651,6 @@ BOOST_PYTHON_MODULE(core)
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
     np.def(bp::init<vector_double::size_type>((bp::arg("nobj"))));
-    // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
-    // serialization of the problem. Not necessary for any other problem type.
-    // NOTE: this is needed because problem does not have a def ctor.
-    np.def_pickle(null_problem_pickle_suite());
     // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock", pygmo::rosenbrock_docstring().c_str());
     rb.def(bp::init<unsigned>((bp::arg("dim"))));
@@ -768,9 +745,6 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm", pygmo::null_algorithm_docstring().c_str());
-    // NOTE: this is needed only for the null_algorithm, as it is used in the implementation of the
-    // serialization of the algorithm. Not necessary for any other algorithm type.
-    na.def_pickle(null_algorithm_pickle_suite());
     // DE
     auto de_ = pygmo::expose_algorithm<de>("de", pygmo::de_docstring().c_str());
     de_.def(bp::init<unsigned int, double, double, unsigned int, double, double>(

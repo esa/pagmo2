@@ -49,8 +49,13 @@ class algorithm_test_case(_ut.TestCase):
     def run_basic_tests(self):
         # Tests for minimal algorithm, and mandatory methods.
         from numpy import all, array
-        from .core import algorithm, de, population, null_problem
+        from .core import algorithm, de, population, null_problem, null_algorithm
         from . import thread_safety as ts
+        # Def construction.
+        a = algorithm()
+        self.assertTrue(a.extract(null_algorithm) is not None)
+        self.assertTrue(a.extract(de) is None)
+
         # First a few non-algos.
         self.assertRaises(NotImplementedError, lambda: algorithm(1))
         self.assertRaises(NotImplementedError,

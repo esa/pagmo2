@@ -64,7 +64,14 @@ class problem_test_case(_ut.TestCase):
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
         from numpy import all, array
-        from .core import problem, rosenbrock
+        from .core import problem, rosenbrock, null_problem
+        # Def construction.
+        p = problem()
+        self.assertTrue(p.extract(null_problem) is not None)
+        self.assertTrue(p.extract(rosenbrock) is None)
+        self.assertEqual(p.get_nobj(), 1)
+        self.assertEqual(p.get_nx(), 1)
+
         # First a few non-problems.
         self.assertRaises(NotImplementedError, lambda: problem(1))
         self.assertRaises(NotImplementedError, lambda: problem("hello world"))

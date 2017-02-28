@@ -159,8 +159,7 @@ namespace bp = boost::python;
 struct algorithm_pickle_suite : bp::pickle_suite {
     static bp::tuple getinitargs(const pagmo::algorithm &)
     {
-        // For initialization purposes, we use the null algo.
-        return bp::make_tuple(pagmo::null_algorithm{});
+        return bp::make_tuple();
     }
     static bp::tuple getstate(const pagmo::algorithm &a)
     {

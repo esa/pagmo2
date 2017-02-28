@@ -324,8 +324,7 @@ namespace bp = boost::python;
 struct problem_pickle_suite : bp::pickle_suite {
     static bp::tuple getinitargs(const pagmo::problem &)
     {
-        // For initialization purposes, we use the null problem.
-        return bp::make_tuple(pagmo::null_problem{});
+        return bp::make_tuple();
     }
     static bp::tuple getstate(const pagmo::problem &p)
     {

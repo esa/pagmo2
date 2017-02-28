@@ -229,7 +229,6 @@ class population_test_case(_ut.TestCase):
         pop.set_xf(6, array([1.1, 1.1]), [0.])
         self.assertTrue(all(pop.get_x()[6] == array([1.1, 1.1])))
         self.assertTrue(all(pop.get_f()[6] == array([0])))
-        print(pop)
         self.assertEqual(pop.best_idx(), 6)
 
 
