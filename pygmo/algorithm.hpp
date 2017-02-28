@@ -181,7 +181,10 @@ struct algorithm_pickle_suite : bp::pickle_suite {
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
         if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
+            pygmo_throw(PyExc_ValueError, ("the state tuple passed for algorithm deserialization "
+                                           "must have a single element, but instead it has "
+                                           + std::to_string(len(state)) + " elements")
+                                              .c_str());
         }
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {

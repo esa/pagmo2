@@ -70,7 +70,7 @@ see https://www.gnu.org/licenses/. */
  * PAGMO_REGISTER_PROBLEM(my_namespace::my_problem)
  * @endcode
  */
-#define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>, #prob)
+#define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>, "udp " #prob)
 
 namespace pagmo
 {

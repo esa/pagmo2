@@ -59,7 +59,7 @@ see https://www.gnu.org/licenses/. */
  * PAGMO_REGISTER_ALGORITHM(my_namespace::my_algorithm)
  * @endcode
  */
-#define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, #algo)
+#define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, "uda " #algo)
 
 namespace pagmo
 {
