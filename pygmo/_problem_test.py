@@ -32,6 +32,13 @@ from __future__ import absolute_import as _ai
 
 import unittest as _ut
 
+class _prob(object):
+
+    def get_bounds(self):
+        return ([0, 0], [1, 1])
+
+    def fitness(self, a):
+        return [42]
 
 class problem_test_case(_ut.TestCase):
     """Test case for the :class:`~pygmo.core.problem` class.
@@ -60,6 +67,7 @@ class problem_test_case(_ut.TestCase):
         self.run_feas_tests()
         self.run_name_info_tests()
         self.run_thread_safety_tests()
+        self.run_pickle_test()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -1852,3 +1860,34 @@ class problem_test_case(_ut.TestCase):
             problem(translate(p(), [0, 1])).get_thread_safety() == ts.none)
         self.assertTrue(
             problem(translate(rosenbrock(), [0, 1])).get_thread_safety() == ts.basic)
+
+    def run_pickle_test(self):
+        from .core import problem, rosenbrock, translate
+        from pickle import dumps, loads
+        p = problem(rosenbrock(10))
+        p = loads(dumps(p))
+        self.assertEqual(repr(p), repr(problem(rosenbrock(10))))
+        self.assertEqual(p.get_nobj(), 1)
+        self.assertEqual(p.get_nx(), 10)
+        self.assertTrue(p.is_(rosenbrock))
+        p = problem(translate(rosenbrock(10), [.1]*10))
+        p = loads(dumps(p))
+        self.assertEqual(repr(p), repr(problem(translate(rosenbrock(10), [.1]*10))))
+        self.assertEqual(p.get_nobj(), 1)
+        self.assertEqual(p.get_nx(), 10)
+        self.assertTrue(p.is_(translate))
+        self.assertTrue(p.extract(translate).is_(rosenbrock))
+
+        p = problem(_prob())
+        p = loads(dumps(p))
+        self.assertEqual(repr(p), repr(problem(_prob())))
+        self.assertEqual(p.get_nobj(), 1)
+        self.assertEqual(p.get_nx(), 2)
+        self.assertTrue(p.is_(_prob))
+        p = problem(translate(_prob(), [.1]*2))
+        p = loads(dumps(p))
+        self.assertEqual(repr(p), repr(problem(translate(_prob(), [.1]*2))))
+        self.assertEqual(p.get_nobj(), 1)
+        self.assertEqual(p.get_nx(), 2)
+        self.assertTrue(p.is_(translate))
+        self.assertTrue(p.extract(translate).is_(_prob))

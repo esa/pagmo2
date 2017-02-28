@@ -33,6 +33,14 @@ from __future__ import absolute_import as _ai
 import unittest as _ut
 
 
+class _prob(object):
+
+    def get_bounds(self):
+        return ([0, 0], [1, 1])
+
+    def fitness(self, a):
+        return [42]
+
 class core_test_case(_ut.TestCase):
     """Test case for core PyGMO functionality.
 
@@ -90,6 +98,7 @@ class population_test_case(_ut.TestCase):
         self.run_push_back_test()
         self.run_random_dv_test()
         self.run_set_x_xf_test()
+        self.run_pickle_test()
 
     def run_init_test(self):
         from .core import population, null_problem, rosenbrock, problem
@@ -230,6 +239,22 @@ class population_test_case(_ut.TestCase):
         self.assertTrue(all(pop.get_x()[6] == array([1.1, 1.1])))
         self.assertTrue(all(pop.get_f()[6] == array([0])))
         self.assertEqual(pop.best_idx(), 6)
+
+    def run_pickle_test(self):
+        from .core import population, rosenbrock, translate
+        from pickle import dumps, loads
+        pop = population(rosenbrock(), size=12, seed=42)
+        p = loads(dumps(pop))
+        self.assertEqual(repr(pop),repr(p))
+        pop = population(translate(rosenbrock(2),2*[.1]), size=12, seed=42)
+        p = loads(dumps(pop))
+        self.assertEqual(repr(pop),repr(p))
+        pop = population(_prob(), size=12, seed=42)
+        p = loads(dumps(pop))
+        self.assertEqual(repr(pop),repr(p))
+        pop = population(translate(_prob(),2*[.1]), size=12, seed=42)
+        p = loads(dumps(pop))
+        self.assertEqual(repr(pop),repr(p))
 
 
 class pso_test_case(_ut.TestCase):

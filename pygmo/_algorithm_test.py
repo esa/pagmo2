@@ -33,6 +33,12 @@ from __future__ import absolute_import as _ai
 import unittest as _ut
 
 
+class _algo(object):
+
+    def evolve(self, pop):
+        return pop
+
+
 class algorithm_test_case(_ut.TestCase):
     """Test case for the :class:`~pygmo.core.algorithm` class.
 
@@ -45,6 +51,7 @@ class algorithm_test_case(_ut.TestCase):
         self.run_verbosity_tests()
         self.run_name_info_tests()
         self.run_thread_safety_tests()
+        self.run_pickle_tests()
 
     def run_basic_tests(self):
         # Tests for minimal algorithm, and mandatory methods.
@@ -397,3 +404,26 @@ class algorithm_test_case(_ut.TestCase):
             algorithm(mbh(a(), stop=5, perturb=.4)).get_thread_safety() == ts.none)
         self.assertTrue(
             algorithm(mbh(de(), stop=5, perturb=.4)).get_thread_safety() == ts.basic)
+
+    def run_pickle_tests(self):
+        from .core import algorithm, de, mbh
+        from pickle import dumps, loads
+        a_ = algorithm(de())
+        a = loads(dumps(a_))
+        self.assertEqual(repr(a), repr(a_))
+        self.assertTrue(a.is_(de))
+        a_ = algorithm(mbh(de(), 10, .1))
+        a = loads(dumps(a_))
+        self.assertEqual(repr(a), repr(a_))
+        self.assertTrue(a.is_(mbh))
+        self.assertTrue(a.extract(mbh).is_(de))
+
+        a_ = algorithm(_algo())
+        a = loads(dumps(a_))
+        self.assertEqual(repr(a), repr(a_))
+        self.assertTrue(a.is_(_algo))
+        a_ = algorithm(mbh(_algo(), 10, .1))
+        a = loads(dumps(a_))
+        self.assertEqual(repr(a), repr(a_))
+        self.assertTrue(a.is_(mbh))
+        self.assertTrue(a.extract(mbh).is_(_algo))
