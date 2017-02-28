@@ -861,7 +861,6 @@ struct prob_inner final : prob_inner_base {
     {
         return thread_safety::basic;
     }
-
     // Serialization.
     template <typename Archive>
     void serialize(Archive &ar)
@@ -1831,16 +1830,21 @@ public:
     template <typename Archive>
     void load(Archive &ar)
     {
-        ar(m_ptr);
+        // Deserialize in a separate object and move it in later, for exception safety.
+        problem tmp_prob;
+        ar(tmp_prob.m_ptr);
         unsigned long long tmp;
         ar(tmp);
-        m_fevals.store(tmp);
+        tmp_prob.m_fevals.store(tmp);
         ar(tmp);
-        m_gevals.store(tmp);
+        tmp_prob.m_gevals.store(tmp);
         ar(tmp);
-        m_hevals.store(tmp);
-        ar(m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient, m_has_gradient_sparsity, m_has_hessians,
-           m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim, m_thread_safety);
+        tmp_prob.m_hevals.store(tmp);
+        ar(tmp_prob.m_lb, tmp_prob.m_ub, tmp_prob.m_nobj, tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_c_tol,
+           tmp_prob.m_has_gradient, tmp_prob.m_has_gradient_sparsity, tmp_prob.m_has_hessians,
+           tmp_prob.m_has_hessians_sparsity, tmp_prob.m_has_set_seed, tmp_prob.m_name, tmp_prob.m_gs_dim,
+           tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
+        *this = std::move(tmp_prob);
     }
 
 private:

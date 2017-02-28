@@ -707,18 +707,33 @@ public:
         return os;
     }
 
-    /// Serialization.
+    /// Save to archive.
     /**
-     * This method will save/load \p this into the archive \p ar.
+     * This method will save \p this into the archive \p ar.
      *
      * @param ar target archive.
      *
      * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
      */
     template <typename Archive>
-    void serialize(Archive &ar)
+    void save(Archive &ar) const
     {
         ar(m_ptr, m_has_set_seed, m_has_set_verbosity, m_name, m_thread_safety);
+    }
+    /// Load from archive.
+    /**
+     * This method will load a pagmo::algorithm from \p ar into \p this.
+     *
+     * @param ar source archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of the UDA and of primitive types.
+     */
+    template <typename Archive>
+    void load(Archive &ar)
+    {
+        algorithm tmp;
+        ar(tmp.m_ptr, tmp.m_has_set_seed, tmp.m_has_set_verbosity, tmp.m_name, tmp.m_thread_safety);
+        *this = std::move(tmp);
     }
 
 private:

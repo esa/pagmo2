@@ -416,6 +416,10 @@ private:
     bool has_set_seed() const = delete;
     bool is_stochastic() const = delete;
     bool has_set_verbosity() const = delete;
+    template <typename Archive>
+    void save(Archive &) const = delete;
+    template <typename Archive>
+    void load(Archive &) = delete;
 
 // The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
 // it would just result in a "weird" behaviour in case the user would try to stream this object

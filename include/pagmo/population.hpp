@@ -69,6 +69,9 @@ namespace pagmo
  * not necessarily an individual currently in the population. The *champion* is
  * only defined and accessible via the population interface if the pagmo::problem
  * currently contained in the pagmo::population is single objective.
+ *
+ * **NOTE**: a moved-from pagmo::population is destructible and assignable. Any other operation will result
+ * in undefined behaviour.
  */
 class population
 {
@@ -122,7 +125,7 @@ public:
     population(const population &) = default;
 
     /// Defaulted move constructor.
-    population(population &&) = default;
+    population(population &&) noexcept = default;
 
     /// Copy assignment operator.
     /**
@@ -146,7 +149,7 @@ public:
     /**
      * @return a reference to \p this.
      */
-    population &operator=(population &&) = default;
+    population &operator=(population &&) noexcept = default;
 
     /// Destructor.
     /**
@@ -507,16 +510,35 @@ public:
         }
         return os;
     }
-    /// Serialization.
+    /// Save to archive.
     /**
-     * @param ar the target archive.
+     * This method will save \p this into the archive \p ar.
      *
-     * @throws unspecified any exception thrown by the serialization of primitive types.
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the internal pagmo::problem and of primitive
+     * types.
      */
     template <typename Archive>
-    void serialize(Archive &ar)
+    void save(Archive &ar) const
     {
         ar(m_prob, m_ID, m_x, m_f, m_champion_x, m_champion_f, m_e, m_seed);
+    }
+    /// Load from archive.
+    /**
+     * This method will load a pagmo::population from \p ar into \p this.
+     *
+     * @param ar source archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of the internal pagmo::problem and of primitive
+     * types.
+     */
+    template <typename Archive>
+    void load(Archive &ar)
+    {
+        population tmp;
+        ar(tmp.m_prob, tmp.m_ID, tmp.m_x, tmp.m_f, tmp.m_champion_x, tmp.m_champion_f, tmp.m_e, tmp.m_seed);
+        *this = std::move(tmp);
     }
 
 private:

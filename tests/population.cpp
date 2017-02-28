@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/included/unit_test.hpp>
 #include <exception>
 #include <iostream>
+#include <sstream>
 #include <string>
 
 #include <pagmo/population.hpp>
@@ -42,6 +43,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
+
+static inline std::string pop_to_string(const population &pop)
+{
+    std::stringstream ss;
+    ss << pop;
+    return ss.str();
+}
 
 BOOST_AUTO_TEST_CASE(population_construction_test)
 {
@@ -72,6 +80,24 @@ BOOST_AUTO_TEST_CASE(population_construction_test)
     BOOST_CHECK(pop2.get_ID() == pop5.get_ID());
     BOOST_CHECK(pop2.get_x() == pop5.get_x());
     BOOST_CHECK(pop2.get_f() == pop5.get_f());
+
+    // Check copy/move semantics.
+    population pop_a{problem{zdt{2, 5}}, 2, 20};
+    population pop_b{pop_a};
+    BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
+    population pop_c;
+    pop_c = pop_b;
+    BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_c));
+    population pop_d{std::move(pop_c)};
+    BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_d));
+    population pop_e;
+    pop_e = std::move(pop_b);
+    BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_e));
+    // Try to revive moved-from objects.
+    pop_c = pop_e;
+    BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_c));
+    pop_b = std::move(pop_e);
+    BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
 }
 
 BOOST_AUTO_TEST_CASE(population_copy_constructor_test)
