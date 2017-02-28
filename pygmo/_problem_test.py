@@ -32,6 +32,7 @@ from __future__ import absolute_import as _ai
 
 import unittest as _ut
 
+
 class _prob(object):
 
     def get_bounds(self):
@@ -39,6 +40,7 @@ class _prob(object):
 
     def fitness(self, a):
         return [42]
+
 
 class problem_test_case(_ut.TestCase):
     """Test case for the :class:`~pygmo.core.problem` class.
@@ -1870,9 +1872,10 @@ class problem_test_case(_ut.TestCase):
         self.assertEqual(p.get_nobj(), 1)
         self.assertEqual(p.get_nx(), 10)
         self.assertTrue(p.is_(rosenbrock))
-        p = problem(translate(rosenbrock(10), [.1]*10))
+        p = problem(translate(rosenbrock(10), [.1] * 10))
         p = loads(dumps(p))
-        self.assertEqual(repr(p), repr(problem(translate(rosenbrock(10), [.1]*10))))
+        self.assertEqual(repr(p), repr(
+            problem(translate(rosenbrock(10), [.1] * 10))))
         self.assertEqual(p.get_nobj(), 1)
         self.assertEqual(p.get_nx(), 10)
         self.assertTrue(p.is_(translate))
@@ -1884,9 +1887,9 @@ class problem_test_case(_ut.TestCase):
         self.assertEqual(p.get_nobj(), 1)
         self.assertEqual(p.get_nx(), 2)
         self.assertTrue(p.is_(_prob))
-        p = problem(translate(_prob(), [.1]*2))
+        p = problem(translate(_prob(), [.1] * 2))
         p = loads(dumps(p))
-        self.assertEqual(repr(p), repr(problem(translate(_prob(), [.1]*2))))
+        self.assertEqual(repr(p), repr(problem(translate(_prob(), [.1] * 2))))
         self.assertEqual(p.get_nobj(), 1)
         self.assertEqual(p.get_nx(), 2)
         self.assertTrue(p.is_(translate))

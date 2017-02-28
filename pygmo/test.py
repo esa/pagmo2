@@ -41,6 +41,7 @@ class _prob(object):
     def fitness(self, a):
         return [42]
 
+
 class core_test_case(_ut.TestCase):
     """Test case for core PyGMO functionality.
 
@@ -245,16 +246,16 @@ class population_test_case(_ut.TestCase):
         from pickle import dumps, loads
         pop = population(rosenbrock(), size=12, seed=42)
         p = loads(dumps(pop))
-        self.assertEqual(repr(pop),repr(p))
-        pop = population(translate(rosenbrock(2),2*[.1]), size=12, seed=42)
+        self.assertEqual(repr(pop), repr(p))
+        pop = population(translate(rosenbrock(2), 2 * [.1]), size=12, seed=42)
         p = loads(dumps(pop))
-        self.assertEqual(repr(pop),repr(p))
+        self.assertEqual(repr(pop), repr(p))
         pop = population(_prob(), size=12, seed=42)
         p = loads(dumps(pop))
-        self.assertEqual(repr(pop),repr(p))
-        pop = population(translate(_prob(),2*[.1]), size=12, seed=42)
+        self.assertEqual(repr(pop), repr(p))
+        pop = population(translate(_prob(), 2 * [.1]), size=12, seed=42)
         p = loads(dumps(pop))
-        self.assertEqual(repr(pop),repr(p))
+        self.assertEqual(repr(pop), repr(p))
 
 
 class pso_test_case(_ut.TestCase):
