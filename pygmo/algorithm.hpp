@@ -175,7 +175,7 @@ struct algorithm_pickle_suite : bp::pickle_suite {
         auto s = oss.str();
         return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
     }
-    static void setstate(pagmo::algorithm &a, bp::tuple state)
+    static void setstate(pagmo::algorithm &a, const bp::tuple &state)
     {
         // Similarly, first we extract a bytes object from the Python state,
         // and then we build a C++ string from it. The string is then used
