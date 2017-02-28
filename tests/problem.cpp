@@ -397,6 +397,29 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         // 3 - We check that the decision vector dimension is copied
         BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
+
+    // Default constructor.
+    problem p0;
+    BOOST_CHECK((p0.extract<null_problem>() != nullptr));
+    // Check copy semantics.
+    problem p1{p0};
+    BOOST_CHECK((p0.extract<null_problem>() != nullptr));
+    BOOST_CHECK((p1.extract<null_problem>() != nullptr));
+    problem p2{full_p{}};
+    p2 = p1;
+    BOOST_CHECK((p2.extract<null_problem>() != nullptr));
+    BOOST_CHECK((p1.extract<null_problem>() != nullptr));
+    // Move semantics.
+    problem p3{std::move(p0)};
+    BOOST_CHECK((p3.extract<null_problem>() != nullptr));
+    problem p4{full_p{}};
+    p4 = std::move(p2);
+    BOOST_CHECK((p4.extract<null_problem>() != nullptr));
+    // Check we can revive moved-from objects.
+    p0 = p4;
+    BOOST_CHECK((p0.extract<null_problem>() != nullptr));
+    p2 = std::move(p4);
+    BOOST_CHECK((p2.extract<null_problem>() != nullptr));
 }
 
 BOOST_AUTO_TEST_CASE(problem_assignment_test)

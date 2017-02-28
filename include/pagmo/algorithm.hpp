@@ -40,6 +40,25 @@ see https://www.gnu.org/licenses/. */
 #include "threading.hpp"
 #include "type_traits.hpp"
 
+/// Macro for the registration of the serialization functionality for user-defined algorithms.
+/**
+ * This macro should always be invoked after the declaration of a user-defined algorithm: it will register
+ * the algorithm with pagmo's serialization machinery. The macro should be called in the root namespace
+ * and using the fully qualified name of the algorithm to be registered. For example:
+ * @code{.unparsed}
+ * namespace my_namespace
+ * {
+ *
+ * class my_algorithm
+ * {
+ *    // ...
+ * };
+ *
+ * }
+ *
+ * PAGMO_REGISTER_ALGORITHM(my_namespace::my_algorithm)
+ * @endcode
+ */
 #define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, #algo)
 
 namespace pagmo

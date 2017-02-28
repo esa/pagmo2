@@ -1068,9 +1068,6 @@ UDPs, the returned value will be unconditionally :attr:`pygmo.thread_safety.none
 Returns:
     a value of :class:`pygmo.thread_safety`: the thread safety level of the UDP
 
-Raises:
-    unspecified: any exception thrown by the ``get_thread_safety()`` method of the UDP
-
 )";
 }
 
@@ -1372,9 +1369,6 @@ UDAs, the returned value will be unconditionally :attr:`pygmo.thread_safety.none
 
 Returns:
     a value of :class:`pygmo.thread_safety`: the thread safety level of the UDA
-
-Raises:
-    unspecified: any exception thrown by the ``get_thread_safety()`` method of the UDA
 
 )";
 }

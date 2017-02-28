@@ -84,6 +84,8 @@ public:
     /**
      * Constructs an empty population with a pagmo::null_problem.
      * The random seed is initialised to zero.
+     *
+     * @throws unspecified any exception thrown by the constructor from problem.
      */
     population() : population(null_problem{}, 0u, 0u)
     {
