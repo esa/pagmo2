@@ -3,6 +3,11 @@
 Algorithms exposed from C++
 ===========================
 
+.. autoclass:: pygmo.core.null_algorithm
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.core.de
    :members:
 
@@ -25,11 +30,6 @@ Algorithms exposed from C++
 
 .. autoclass:: pygmo.core.cmaes
   :members:
-
--------------------------------------------------------------
-
-.. autoclass:: pygmo.core.null_algorithm
-   :members:
 
 -------------------------------------------------------------
 

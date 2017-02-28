@@ -310,7 +310,7 @@ Returns:
 
 std::string problem_docstring()
 {
-    return R"(__init__(udp)
+    return R"(__init__(udp = null_problem)
 
 Problem class.
 
@@ -1134,7 +1134,7 @@ Returns:
 
 std::string algorithm_docstring()
 {
-    return R"(__init__(uda)
+    return R"(__init__(uda = null_algorithm)
 
 Algorithm class.
 

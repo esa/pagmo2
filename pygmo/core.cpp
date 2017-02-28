@@ -496,7 +496,7 @@ BOOST_PYTHON_MODULE(core)
         .def("get_seed", &population::get_seed, pygmo::population_get_seed_docstring().c_str());
 
     // Problem class.
-    pygmo::problem_ptr = make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::no_init);
+    pygmo::problem_ptr = make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::init<>());
     auto &problem_class = *pygmo::problem_ptr;
     problem_class.def(bp::init<const bp::object &>((bp::arg("udp"))))
         .def(repr(bp::self))
@@ -573,7 +573,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Algorithm class.
     pygmo::algorithm_ptr
-        = make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::no_init);
+        = make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::init<>());
     auto &algorithm_class = *pygmo::algorithm_ptr;
     algorithm_class.def(bp::init<const bp::object &>((bp::arg("uda"))))
         .def(repr(bp::self))
