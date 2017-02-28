@@ -142,6 +142,11 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
         }
         return bp::extract<bool>(hsv());
     }
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(cereal::base_class<algo_inner_base>(this), m_value);
+    }
     bp::object m_value;
 };
 }
@@ -157,10 +162,6 @@ namespace bp = boost::python;
 
 // Serialization support for the algorithm class.
 struct algorithm_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const pagmo::algorithm &)
-    {
-        return bp::make_tuple();
-    }
     static bp::tuple getstate(const pagmo::algorithm &a)
     {
         // The idea here is that first we extract a char array
@@ -184,7 +185,7 @@ struct algorithm_pickle_suite : bp::pickle_suite {
         }
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
-            pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize a problem");
+            pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize an algorithm");
         }
         const auto size = len(state[0]);
         std::string s(ptr, ptr + size);

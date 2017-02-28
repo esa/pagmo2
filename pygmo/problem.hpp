@@ -322,10 +322,6 @@ namespace bp = boost::python;
 
 // Serialization support for the problem class.
 struct problem_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const pagmo::problem &)
-    {
-        return bp::make_tuple();
-    }
     static bp::tuple getstate(const pagmo::problem &p)
     {
         // The idea here is that first we extract a char array
