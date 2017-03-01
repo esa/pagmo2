@@ -55,11 +55,11 @@ namespace pagmo
  * \image html population.jpg
  *
  * This class represents a population of individuals, i.e., potential
- * candidate solutions to a given problem. In PaGMO an
- * individual is determined
- * - by a unique ID used to track him across generations and migrations
- * - by a chromosome (a decision vector)
- * - by the fitness of the chromosome as evaluated by a pagmo::problem.
+ * candidate solutions to a given problem. In pagmo an
+ * individual is determined by:
+ * - a unique ID used to track it across generations and migrations,
+ * - a chromosome (a decision vector),
+ * - the fitness of the chromosome as evaluated by a pagmo::problem,
  * and thus including objectives, equality constraints and inequality
  * constraints if present.
  *
@@ -68,10 +68,10 @@ namespace pagmo
  * decision vector and fitness vector are automatically kept updated. The *champion* is
  * not necessarily an individual currently in the population. The *champion* is
  * only defined and accessible via the population interface if the pagmo::problem
- * currently contained in the pagmo::population is single objective (i.e. the population::get_problem().get_nobj())
- * returns exactly 1.
+ * currently contained in the pagmo::population is single objective.
  *
- *
+ * **NOTE**: a moved-from pagmo::population is destructible and assignable. Any other operation will result
+ * in undefined behaviour.
  */
 class population
 {
@@ -81,33 +81,39 @@ class population
     using generic_ctor_enabler = enable_if_t<!std::is_same<population, uncvref_t<T>>::value, int>;
 
 public:
-    /// A shortcut to <tt>std::vector<vector_double>::size_type</tt>.
+    /// The size type of the population.
     typedef std::vector<vector_double>::size_type size_type;
     /// Default constructor
     /**
      * Constructs an empty population with a pagmo::null_problem.
      * The random seed is initialised to zero.
+     *
+     * @throws unspecified any exception thrown by the constructor from problem.
      */
-    population() : m_prob(null_problem{}), m_e(0u), m_seed(0u)
+    population() : population(null_problem{}, 0u, 0u)
     {
     }
 
-    /// Constructor from a problem of type \p T
+    /// Constructor from a problem.
     /**
+     * **NOTE**: this constructor is enabled only if, after the removal of cv/reference qualifiers,
+     * \p T is not pagmo::population.
+     *
      * Constructs a population with \p pop_size individuals associated
      * to the problem \p x and setting the population random seed
-     * to \p seed. In order for the construction to be succesfull, \p x
-     * must be such that a pagmo::problem can be constructed from it.
+     * to \p seed. The input problem \p x can be either a pagmo::problem or a user-defined problem
+     * (UDP).
      *
-     * @param x the user problem the population refers to
-     * @param pop_size population size (i.e. number of individuals therein)
+     * @param x the problem the population refers to.
+     * @param pop_size population size (i.e. number of individuals therein).
      * @param seed seed of the random number generator used, for example, to
-     * create new random individuals within the bounds
+     * create new random individuals within the bounds.
      *
-     * @throws unspecified any exception thrown by decision_vector() or by push_back()
+     * @throws unspecified any exception thrown by random_decision_vector(), push_back(), or by the
+     * invoked constructor of pagmo::problem.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
-    explicit population(T &&x, size_type pop_size = 0u, unsigned int seed = pagmo::random_device::next())
+    explicit population(T &&x, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next())
         : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
     {
         for (size_type i = 0u; i < pop_size; ++i) {
@@ -119,7 +125,7 @@ public:
     population(const population &) = default;
 
     /// Defaulted move constructor.
-    population(population &&) = default;
+    population(population &&) noexcept = default;
 
     /// Copy assignment operator.
     /**
@@ -140,7 +146,10 @@ public:
     }
 
     /// Defaulted move assignment operator.
-    population &operator=(population &&) = default;
+    /**
+     * @return a reference to \p this.
+     */
+    population &operator=(population &&) noexcept = default;
 
     /// Destructor.
     /**
@@ -152,7 +161,7 @@ public:
         assert(m_ID.size() == m_f.size());
     }
 
-    /// Adds one decision vector (chromosome) to the population
+    /// Adds one decision vector (chromosome) to the population.
     /**
      * Appends a new chromosome \p x to the population, evaluating
      * its fitness and creating a new unique identifier for the newly
@@ -163,7 +172,6 @@ public:
      * @param x decision vector to be added to the population.
      *
      * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
-     * Wrong dimensions for the input decision vector or the output fitness will trigger an exception.
      */
     void push_back(const vector_double &x)
     {
@@ -174,7 +182,7 @@ public:
 
     /// Adds one decision vector/fitness vector to the population
     /**
-     * Appends a new decision vectorome \p x to the population, and sets
+     * Appends a new chromosome \p x to the population, and sets
      * its fitness to \p f creating a new unique identifier for the newly
      * born individual.
      *
@@ -212,14 +220,14 @@ public:
      *
      * @returns a random decision vector
      *
-     * @throws unspecified all exceptions thrown by pagmo::decision_vector()
+     * @throws unspecified all exceptions thrown by pagmo::random_decision_vector()
      */
     vector_double random_decision_vector() const
     {
         return pagmo::random_decision_vector(m_prob.get_bounds(), m_e);
     }
 
-    /// Index of best individual (accounting for a vector tolerance)
+    /// Index of the best individual (accounting for a vector tolerance)
     /**
      * If the problem is single-objective and unconstrained, the best
      * is simply the individual with the smallest fitness. If the problem
@@ -229,14 +237,15 @@ public:
      * this case the user can still obtain a strict ordering of the population
      * individuals by calling the pagmo::sort_population_mo() function.
      *
-     * @param tol vector of tolerances to be applied to each constraints
+     * @param tol vector of tolerances to be applied to each constraints.
      *
-     * @returns the index of the best individual
+     * @returns the index of the best individual.
      *
      * @throws std::invalid_argument if the problem is multiobjective and thus
-     * a best individual is not well defined
+     * a best individual is not well defined, or if the population is empty.
+     * @throws unspecified any exception thrown by pagmo::sort_population_con().
      */
-    vector_double::size_type best_idx(const vector_double &tol) const
+    size_type best_idx(const vector_double &tol) const
     {
         if (!size()) {
             pagmo_throw(std::invalid_argument, "Cannot determine the best individual of an empty population");
@@ -249,43 +258,43 @@ public:
             return sort_population_con(m_f, m_prob.get_nec(), tol)[0];
         }
         // Sort for single objective, unconstrained optimization
-        std::vector<vector_double::size_type> indexes(size());
-        std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
-        return *std::min_element(
-            indexes.begin(), indexes.end(),
-            [this](vector_double::size_type idx1, vector_double::size_type idx2) { return m_f[idx1] < m_f[idx2]; });
+        std::vector<size_type> indexes(size());
+        std::iota(indexes.begin(), indexes.end(), size_type(0u));
+        return *std::min_element(indexes.begin(), indexes.end(),
+                                 [this](size_type idx1, size_type idx2) { return m_f[idx1] < m_f[idx2]; });
     }
 
-    /// Index of best individual (accounting for a scalar tolerance)
+    /// Index of the best individual (accounting for a scalar tolerance)
     /**
-     * @param tol scalar tolerance to be considered for each constraint
+     * @param tol scalar tolerance to be considered for each constraint.
      *
-     * @return index of the best individual
+     * @return index of the best individual.
      */
-    vector_double::size_type best_idx(double tol = 0.) const
+    size_type best_idx(double tol = 0.) const
     {
         vector_double tol_vector(m_prob.get_nf() - 1u, tol);
         return best_idx(tol_vector);
     }
 
-    /// Index of worst individual (accounting for a vector tolerance)
+    /// Index of the worst individual (accounting for a vector tolerance)
     /**
      * If the problem is single-objective and unconstrained, the worst
      * is simply the individual with the largest fitness. If the problem
-     * is, instead, single objective, but with constraints, the best individual
+     * is, instead, single objective, but with constraints, the worst individual
      * will be defined using the criteria specified in pagmo::sort_population_con().
      * If the problem is multi-objective one single worst is not defined. In
      * this case the user can still obtain a strict ordering of the population
      * individuals by calling the pagmo::sort_population_mo() function.
      *
-     * @param tol vector of tolerances to be applied to each constraints
+     * @param tol vector of tolerances to be applied to each constraints.
      *
-     * @returns the index of the best individual
+     * @returns the index of the worst individual.
      *
      * @throws std::invalid_argument if the problem is multiobjective and thus
-     * a best individual is not well defined
+     * a worst individual is not well defined, or if the population is empty.
+     * @throws unspecified any exception thrown by pagmo::sort_population_con().
      */
-    vector_double::size_type worst_idx(const vector_double &tol) const
+    size_type worst_idx(const vector_double &tol) const
     {
         if (!size()) {
             pagmo_throw(std::invalid_argument, "Cannot determine the worst element of an empty population");
@@ -298,20 +307,19 @@ public:
             return sort_population_con(m_f, m_prob.get_nec(), tol).back();
         }
         // Sort for single objective, unconstrained optimization
-        std::vector<vector_double::size_type> indexes(size());
-        std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
-        return *std::max_element(
-            indexes.begin(), indexes.end(),
-            [this](vector_double::size_type idx1, vector_double::size_type idx2) { return m_f[idx1] < m_f[idx2]; });
+        std::vector<size_type> indexes(size());
+        std::iota(indexes.begin(), indexes.end(), size_type(0u));
+        return *std::max_element(indexes.begin(), indexes.end(),
+                                 [this](size_type idx1, size_type idx2) { return m_f[idx1] < m_f[idx2]; });
     }
 
-    /// Index of worst individual (accounting for a scalar tolerance)
+    /// Index of the worst individual (accounting for a scalar tolerance)
     /**
-     * @param tol scalar tolerance to be considered for each constraint
+     * @param tol scalar tolerance to be considered for each constraint.
      *
-     * @return index of the best individual
+     * @return index of the worst individual.
      */
-    vector_double::size_type worst_idx(double tol = 0.) const
+    size_type worst_idx(double tol = 0.) const
     {
         vector_double tol_vector(m_prob.get_nf() - 1u, tol);
         return worst_idx(tol_vector);
@@ -319,9 +327,9 @@ public:
 
     /// Champion decision vector
     /**
-     * @return the champion decision vector
+     * @return the champion decision vector.
      *
-     * @throw std::invalid_argument if the current problem is not single objective
+     * @throw std::invalid_argument if the current problem is not single objective.
      */
     vector_double champion_x() const
     {
@@ -334,9 +342,9 @@ public:
 
     /// Champion fitness
     /**
-     * @return the champion fitness
+     * @return the champion fitness.
      *
-     * @throw std::invalid_argument if the current problem is not single objective
+     * @throw std::invalid_argument if the current problem is not single objective.
      */
     vector_double champion_f() const
     {
@@ -349,7 +357,7 @@ public:
 
     /// Number of individuals in the population
     /**
-     * @return the Number of individuals in the population
+     * @return the number of individuals in the population
      */
     size_type size() const
     {
@@ -366,13 +374,14 @@ public:
      * **NOTE**: The user must make sure that the input fitness \p f makes sense
      * as pagmo will only check its dimension.
      *
-     * @param i individual's index in the population
-     * @param x a decision vector (chromosome)
-     * @param f a fitness vector
+     * @param i individual's index in the population.
+     * @param x a decision vector (chromosome).
+     * @param f a fitness vector.
      *
-     * @throws std::invalid_argument if \p i is invalid (i.e. larger or equal to the population size)
-     * @throws std::invalid_argument if \p x has not the correct dimension
-     * @throws std::invalid_argument if \p f has not the correct dimension
+     * @throws std::invalid_argument if either:
+     * - \p i is invalid (i.e. larger or equal to the population size),
+     * - \p x has not the correct dimension,
+     * - \p f has not the correct dimension.
      */
     void set_xf(size_type i, const vector_double &x, const vector_double &f)
     {
@@ -382,20 +391,25 @@ public:
         }
         if (f.size() != m_prob.get_nf()) {
             pagmo_throw(std::invalid_argument, "Trying to set a fitness of dimension: " + std::to_string(f.size())
-                                                   + ", while problem get_nf returns: "
+                                                   + ", while the problem's fitness has dimension: "
                                                    + std::to_string(m_prob.get_nf()));
         }
         if (x.size() != m_prob.get_nx()) {
             pagmo_throw(std::invalid_argument, "Trying to set a decision vector of dimension: "
-                                                   + std::to_string(x.size()) + ", while problem get_nx returns: "
+                                                   + std::to_string(x.size()) + ", while the problem's dimension is: "
                                                    + std::to_string(m_prob.get_nx()));
         }
-        assert(m_x[i].size() == x.size());
-        assert(m_f[i].size() == f.size());
+
+        // Reserve space for the incoming vectors. If any of this throws,
+        // the data in m_x[i]/m_f[i] will not be modified.
+        m_x[i].reserve(x.size());
+        m_f[i].reserve(f.size());
 
         update_champion(x, f);
-        // Use std::copy in order to make sure we are not allocating and
-        // potentially throw.
+        // Use resize + std::copy: since we reserved enough space above, none of this
+        // can throw.
+        m_x[i].resize(x.size());
+        m_f[i].resize(f.size());
         std::copy(x.begin(), x.end(), m_x[i].begin());
         std::copy(f.begin(), f.end(), m_f[i].begin());
     }
@@ -406,55 +420,79 @@ public:
      * value \p x and changes its fitness accordingly. The
      * individual's ID remains the same.
      *
-     * **NOTE** a call to this method triggers one fitness function evaluation
+     * **NOTE** a call to this method triggers one fitness function evaluation.
      *
      * @param i individual's index in the population
      * @param x decision vector
      *
-     * @throws unspecified any exception thrown by set_xf
+     * @throws unspecified any exception thrown by population::set_xf().
      */
     void set_x(size_type i, const vector_double &x)
     {
         set_xf(i, x, m_prob.fitness(x));
     }
 
-    /// Setter for the problem seed
-    void set_problem_seed(unsigned int seed)
-    {
-        m_prob.set_seed(seed);
-    }
-
-    /// Getter for the pagmo::problem
+    /// Const getter for the pagmo::problem.
+    /**
+     * @return a const reference to the internal pagmo::problem.
+     */
     const problem &get_problem() const
     {
         return m_prob;
     }
 
-    /// Getter for the fitness vectors
+    /// Getter for the pagmo::problem.
+    /**
+     * @return a reference to the internal pagmo::problem.
+     */
+    problem &get_problem()
+    {
+        return m_prob;
+    }
+
+    /// Const getter for the fitness vectors.
+    /**
+     * @return a const reference to the vector of fitness vectors.
+     */
     const std::vector<vector_double> &get_f() const
     {
         return m_f;
     }
 
-    /// Getter for the decision vectors
+    /// Const getter for the decision vectors.
+    /**
+     * @return a const reference to the vector of decision vectors.
+     */
     const std::vector<vector_double> &get_x() const
     {
         return m_x;
     }
 
-    /// Getter for the individual IDs
+    /// Const getter for the individual IDs.
+    /**
+     * @return a const reference to the vector of individual IDs.
+     */
     const std::vector<unsigned long long> &get_ID() const
     {
         return m_ID;
     }
 
-    /// Getter for the seed of the population random engine
-    unsigned int get_seed() const
+    /// Getter for the seed of the population random engine.
+    /**
+     * @return the seed of the population's random engine.
+     */
+    unsigned get_seed() const
     {
         return m_seed;
     }
 
-    /// Streaming operator for the class pagmo::population
+    /// Streaming operator for the class pagmo::population.
+    /**
+     * @param os target stream.
+     * @param p the population to be directed to stream.
+     *
+     * @return a reference to \p os.
+     */
     friend std::ostream &operator<<(std::ostream &os, const population &p)
     {
         stream(os, p.m_prob, '\n');
@@ -472,11 +510,35 @@ public:
         }
         return os;
     }
-    /// Serialization.
+    /// Save to archive.
+    /**
+     * This method will save \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the internal pagmo::problem and of primitive
+     * types.
+     */
     template <typename Archive>
-    void serialize(Archive &ar)
+    void save(Archive &ar) const
     {
         ar(m_prob, m_ID, m_x, m_f, m_champion_x, m_champion_f, m_e, m_seed);
+    }
+    /// Load from archive.
+    /**
+     * This method will load a pagmo::population from \p ar into \p this.
+     *
+     * @param ar source archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of the internal pagmo::problem and of primitive
+     * types.
+     */
+    template <typename Archive>
+    void load(Archive &ar)
+    {
+        population tmp;
+        ar(tmp.m_prob, tmp.m_ID, tmp.m_x, tmp.m_f, tmp.m_champion_x, tmp.m_champion_f, tmp.m_e, tmp.m_seed);
+        *this = std::move(tmp);
     }
 
 private:
@@ -511,7 +573,7 @@ private:
     // Random engine.
     mutable detail::random_engine_type m_e;
     // Seed.
-    unsigned int m_seed;
+    unsigned m_seed;
 };
 
 } // namespace pagmo

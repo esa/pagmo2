@@ -469,19 +469,19 @@ BOOST_AUTO_TEST_CASE(hypervolume_least_contribution_test)
     std::vector<double> ref = {4, 4};
 
     hv = hypervolume({{3, 1}, {2, 2}, {1, 3}}, true); // All points are least contributors
-    BOOST_CHECK((hv.least_contributor(ref) >= 0 && hv.least_contributor(ref) <= 2));
-    BOOST_CHECK((hv.greatest_contributor(ref) >= 0 && hv.greatest_contributor(ref) <= 2));
+    BOOST_CHECK((hv.least_contributor(ref) <= 2));
+    BOOST_CHECK((hv.greatest_contributor(ref) <= 2));
     hv = hypervolume({{3, 1}, {2, 2}, {1, 3}}, false); // All points are least contributors
-    BOOST_CHECK((hv.least_contributor(ref) >= 0 && hv.least_contributor(ref) <= 2));
-    BOOST_CHECK((hv.greatest_contributor(ref) >= 0 && hv.greatest_contributor(ref) <= 2));
+    BOOST_CHECK((hv.least_contributor(ref) <= 2));
+    BOOST_CHECK((hv.greatest_contributor(ref) <= 2));
     hv = hypervolume({{3, 1}, {2, 2}, {1, 3}}, true); // All points are least contributors
     hv.set_copy_points(false);
-    BOOST_CHECK((hv.least_contributor(ref) >= 0 && hv.least_contributor(ref) <= 2));
-    BOOST_CHECK((hv.greatest_contributor(ref) >= 0 && hv.greatest_contributor(ref) <= 2));
+    BOOST_CHECK((hv.least_contributor(ref) <= 2));
+    BOOST_CHECK((hv.greatest_contributor(ref) <= 2));
     hv = hypervolume({{3, 1}, {2, 2}, {1, 3}}, false); // All points are least contributors
     hv.set_copy_points(false);
-    BOOST_CHECK((hv.least_contributor(ref) >= 0 && hv.least_contributor(ref) <= 2));
-    BOOST_CHECK((hv.greatest_contributor(ref) >= 0 && hv.greatest_contributor(ref) <= 2));
+    BOOST_CHECK((hv.least_contributor(ref) <= 2));
+    BOOST_CHECK((hv.greatest_contributor(ref) <= 2));
 
     // Call corner case
     hv = hypervolume({{1, 2}}, true);

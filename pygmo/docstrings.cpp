@@ -45,6 +45,11 @@ individual is determined:
 * by the fitness of the chromosome as evaluated by a :class:`~pygmo.core.problem` and thus including objectives,
   equality constraints and inequality constraints if present.
 
+A special mechanism is implemented to track the best individual that has ever been part of the population. Such an individual
+is called *champion* and its decision vector and fitness vector are automatically kept updated. The *champion* is not necessarily
+an individual currently in the population. The *champion* is only defined and accessible via the population interface if the
+:class:`~pygmo.core.problem` currently contained in the :class:`~pygmo.core.population` is single objective.
+
 See also the docs of the C++ class :cpp:class:`pagmo::population`.
 
 )";
@@ -52,61 +57,38 @@ See also the docs of the C++ class :cpp:class:`pagmo::population`.
 
 std::string population_push_back_docstring()
 {
-    return R"(push_back(x)
+    return R"(push_back(x, f = None)
 
 Adds one decision vector (chromosome) to the population.
 
-Appends a new chromosome x to the population, evaluating its fitness and creating a new unique identifier for the newly
-born individual. In case of exceptions, the population will not be altered.
+This method will append a new chromosome *x* to the population, creating a new unique identifier for the newly born individual
+and, if *f* is not provided, evaluating its fitness. If *f* is provided, the fitness of the new individual will be set to *f*.
+It is the user's responsibility to ensure that *f* actually corresponds to the fitness of *x*.
+
+In case of exceptions, the population will not be altered.
 
 Args:
-    x (``array``, or ``list`` of ``floats``): decision vector to be added to the population
+    x (array-like object): decision vector to be added to the population
 
 Raises:
-    ValueError: if the dimension of *x* is inconsistent with the problem dimension or the calculated fitness vector has
-        a dimension which is inconsistent with the fitness dimension of the problem
-    TypeError: if *x* cannot be converted to a C++ ``vector`` of ``floats``
-
-Examples:
-
->>> from numpy import array
->>> pop = population()
->>> pop.push_back([1])
->>> pop.push_back(array([2]))
->>> pop # doctest: +SKIP
-[...]
-List of individuals:
-#0:
-        ID:                     7905479722040097576
-        Decision vector:        [1]
-        Fitness vector:         [0, 0, 0]
-#1:
-        ID:                     11652046723302057419
-        Decision vector:        [2]
-        Fitness vector:         [0, 0, 0]
-[...]
->>> pop.push_back(3) # doctest: +IGNORE_EXCEPTION_DETAIL
-Traceback (most recent call last):
-   ...
-TypeError: cannot convert the type '<class 'int'>' to a vector of floats
+    unspecified: any exception thrown by :func:`pygmo.core.problem.fitness()` or by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
 
-std::string population_decision_vector_docstring()
+std::string population_random_decision_vector_docstring()
 {
-    return R"(decision_vector()
+    return R"(random_decision_vector()
 
-Create random decision_vector.
+This method will create a random decision vector within the problem's bounds.
 
 Returns:
-    ``array`` of ``floats``: a random decision vector within the problem’s bounds
+    1D NumPy float array: a random decision vector within the problem’s bounds
 
-Examples:
-
->>> pop = population()
->>> pop.decision_vector() # doctest: +SKIP
-array([ 0.5393175])
+Raises:
+    unspecified: any exception thrown by :func:`pygmo.core.problem.fitness()` or by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
@@ -115,23 +97,22 @@ std::string population_best_idx_docstring()
 {
     return R"(best_idx(tol = 0.)
 
-Index of best individual. See :cpp:func:`pagmo::population::best_idx()`.
+Index of the best individual.
+
+If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem
+is, instead, single objective, but with constraints, the best will be defined using the criteria specified in :cpp:func:`pagmo::sort_population_con()`.
+If the problem is multi-objective one single best is not well defined. In this case the user can still obtain a strict ordering of the population
+individuals by calling the :cpp:func:`pagmo::sort_population_mo()` function.
 
 Args:
-    tol (``float``, or ``array``, or ``list`` of ``floats``): a scalar tolerance or a vector of tolerances to be applied to
-      each constraints
+    tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints
 
 Returns:
-    int: the index of the best individual
+    ``int``: the index of the best individual
 
 Raises:
-    ValueError: if the population is empty
-
-Examples:
-
->>> pop = population(size = 5)
->>> pop.best_idx()
-0
+     ValueError: if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty
+     unspecified: any exception thrown by :cpp:func:`pagmo::sort_population_con()`
 
 )";
 }
@@ -140,45 +121,56 @@ std::string population_worst_idx_docstring()
 {
     return R"(worst_idx(tol = 0.)
 
-Index of worst individual. See :cpp:func:`pagmo::population::worst_idx()`.
+Index of the worst individual.
+
+If the problem is single-objective and unconstrained, the worst is simply the individual with the largest fitness. If the problem
+is, instead, single objective, but with constraints, the worst will be defined using the criteria specified in :cpp:func:`pagmo::sort_population_con()`.
+If the problem is multi-objective one single worst is not well defined. In this case the user can still obtain a strict ordering of the population
+individuals by calling the :cpp:func:`pagmo::sort_population_mo()` function.
 
 Args:
-    tol (``float``, or an ``array``, or ``list`` of ``floats``): a scalar tolerance or a vector of tolerances to be applied to
-      each constraints
+    tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints
 
 Returns:
-    int: the index of the worst individual
+    ``int``: the index of the worst individual
 
 Raises:
-    ValueError: if the population is empty
-
-Examples:
-
->>> pop = population(size = 5)
->>> pop.worst_idx()
-0
+     ValueError: if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty
+     unspecified: any exception thrown by :cpp:func:`pagmo::sort_population_con()`
 
 )";
 }
 
-std::string population_size_docstring()
+std::string population_champion_x_docstring()
 {
-    return R"(size()
+    return R"(Champion's decision vector.
 
-Size of the population.
-
-The population size can also be queried using the builtin ``len()`` method.
+This read-only property contains an array of ``float`` representing the decision vector of the population's champion.
 
 Returns:
-    int: the number of individuals
+    1D NumPy float array: the champion's decision vector
 
-Examples:
+Raises:
+    ValueError: if the current problem is not single objective
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
->>> pop = population(size = 5)
->>> pop.size()
-5
->>> len(pop)
-5
+)";
+}
+
+std::string population_champion_f_docstring()
+{
+    return R"(Champion's fitness vector.
+
+This read-only property contains an array of ``float`` representing the fitness vector of the population's champion.
+
+Returns:
+    1D NumPy float array: the champion's fitness vector
+
+Raises:
+    ValueError: if the current problem is not single objective
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
@@ -187,36 +179,22 @@ std::string population_set_xf_docstring()
 {
     return R"(set_xf(i,x,f)
 
-Sets the i-th individual's decision vector and fitness.
+Sets the :math:`i`-th individual decision vector, and fitness.
 
-Sets simultaneously the i-th individual decision vector and fitness, thus avoiding to trigger a fitness
-function evaluation.
+Sets simultaneously the :math:`i`-th individual decision vector and fitness thus avoiding to trigger a fitness function evaluation.
+
+**NOTE**: the user must make sure that the input fitness *f* makes sense as pygmo will only check its dimension.
 
 Args:
     i (``int``): individual’s index in the population
-    x (``array`` or ``list`` of ``floats``): a decision vector (chromosome)
-    f (``array`` or ``list`` of ``floats``): a fitness vector
+    x (array-like object): a decision vector (chromosome)
+    f (array-like object): a fitness vector
 
 Raises:
     ValueError: if *i* is invalid, or if *x* or *f* have the wrong dimensions (i.e., their dimensions are
-        inconsistent with the problem properties)
-    TypeError: if the argument types are invalid
-
-Examples:
-
->>> pop = population(size = 1)
->>> pop.set_xf(0,[1],[1,2,3])
->>> pop # doctest: +SKIP
-[...]
-List of individuals:
-#0:
-        ID:                     12917122990260990364
-        Decision vector:        [1]
-        Fitness vector:         [1, 2, 3]
->>> pop.set_xf(1,[1],[1,2,3]) # doctest: +IGNORE_EXCEPTION_DETAIL
-Traceback (most recent call last):
-  ...
-ValueError: Trying to access individual at position: 1, while population has size: 1
+        inconsistent with the problem's properties)
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
@@ -225,89 +203,38 @@ std::string population_set_x_docstring()
 {
     return R"(set_x(i,x)
 
-Sets the i-th individual's decision vector.
+Sets the :math:`i`-th individual decision vector.
 
-The fitness of the individual will be computed from *x*.
+Sets the chromosome of the :math:`i`-th individual to the value *x* and changes its fitness accordingly. The
+individual's ID remains the same.
+
+**NOTE**: a call to this method triggers one fitness function evaluation.
 
 Args:
     i (``int``): individual’s index in the population
-    x (``array`` or ``list`` of ``floats``): a decision vector (chromosome)
+    x (array-like object): a decision vector (chromosome)
 
 Raises:
     ValueError: if *i* is invalid, or if *x* has the wrong dimensions (i.e., the dimension is
-        inconsistent with the problem properties)
-    TypeError: if the argument types are invalid
-
-Examples:
-
->>> pop = population(size = 1)
->>> pop.set_x(0,[1])
->>> pop # doctest: +SKIP
-[...]
-List of individuals:
-#0:
-        ID:                     5051278815751827100
-        Decision vector:        [1]
-        Fitness vector:         [0, 0, 0]
->>> pop.set_x(1,[1,2]) # doctest: +IGNORE_EXCEPTION_DETAIL
-Traceback (most recent call last):
-  ...
-ValueError: Length of decision vector is 2, should be 1
+        inconsistent with the problem's properties)
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
 
-std::string population_set_problem_seed_docstring()
+std::string population_problem_docstring()
 {
-    return R"(set_problem_seed(seed)
+    return R"(Population's problem.
 
-Sets the problem seed.
-
-Args:
-    seed (``int``): the desired seed (must be non-negative)
-
-Raises:
-    RuntimeError: if the problem is not stochastic
-    OverflowError: if *seed* is too large or negative
-    TypeError: if the argument types are invalid
-
-Examples:
-
->>> pop = population(inventory())
->>> pop.set_problem_seed(42)
->>> pop # doctest: +SKIP
-[...]
-Extra info:
-        Weeks: 4
-        Sample size: 10
-        Seed: 42
-[...]
->>> pop = population()
->>> pop.set_problem_seed(seed = 42) # doctest: +IGNORE_EXCEPTION_DETAIL
-Traceback (most recent call last):
-  ...
-RuntimeError: the user-defined problem does not support seed setting
-
-)";
-}
-
-std::string population_get_problem_docstring()
-{
-    return R"(get_problem()
-
-This method will return a deep copy of the internal problem instance.
+This property gives direct access to the :class:`~pygmo.core.problem` stored within the population.
 
 Returns:
-    :class:`~pygmo.core.problem`: a deep copy of the internal problem instance
+    :class:`~pygmo.core.problem`: a reference to the internal problem
 
-Examples:
-
->>> pop = population()
->>> pop.get_problem() # doctest: +SKIP
-Problem name: Null problem
-        Global dimension:                       1
-        Fitness dimension:                      3
-[...]
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.) when setting the property
 
 )";
 }
@@ -322,13 +249,11 @@ Each row of the returned array represents the fitness vector of the individual a
 population.
 
 Returns:
-    ``array`` of ``floats``: a deep copy of the fitness vectors of the individuals
+    2D NumPy float array: a deep copy of the fitness vectors of the individuals
 
-Examples:
-
->>> pop = population(size = 1)
->>> pop.get_f() # doctest: +SKIP
-array([[ 0.13275027, 0.41543223, 0.28420476]])
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
@@ -343,17 +268,11 @@ Each row of the returned array represents the chromosome of the individual at th
 population.
 
 Returns:
-    ``array`` of ``floats``: a deep copy of the chromosomes of the individuals
+    2D NumPy float array: a deep copy of the chromosomes of the individuals
 
-Examples:
-
->>> pop = population(size = 5)
->>> pop.get_x() # doctest: +SKIP
-array([[ 0.13275027],
-       [ 0.26826544],
-       [ 0.30058279],
-       [ 0.41543223],
-       [ 0.13370117]])
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
@@ -362,20 +281,17 @@ std::string population_get_ID_docstring()
 {
     return R"(get_ID()
 
-This method will return the IDs of the individuals as a 2D NumPy array.
+This method will return the IDs of the individuals as a 1D NumPy array.
 
-Each row of the returned array represents the ID of the individual at the corresponding position in the
+Each element of the returned array represents the ID of the individual at the corresponding position in the
 population.
 
 Returns:
-    ``array`` of ``int``: a deep copy of the IDs of the individuals
+    1D NumPy int array: a deep copy of the IDs of the individuals
 
-Examples:
-
->>> pop = population(size = 5)
->>> pop.get_ID() # doctest: +SKIP
-array([12098820240406021962,  2435494813514879429, 16758705632650014019,
-       13060277951708126199,  1018350750245690412], dtype=uint64)
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
@@ -387,20 +303,14 @@ std::string population_get_seed_docstring()
 This method will return the random seed of the population.
 
 Returns:
-    int: the random seed of the population
-
-Examples:
-
->>> pop = population(seed = 12)
->>> pop.get_seed()
-12
+    ``int``: the random seed of the population
 
 )";
 }
 
 std::string problem_docstring()
 {
-    return R"(__init__(udp)
+    return R"(__init__(udp = null_problem)
 
 Problem class.
 
@@ -1158,9 +1068,6 @@ UDPs, the returned value will be unconditionally :attr:`pygmo.thread_safety.none
 Returns:
     a value of :class:`pygmo.thread_safety`: the thread safety level of the UDP
 
-Raises:
-    unspecified: any exception thrown by the ``get_thread_safety()`` method of the UDP
-
 )";
 }
 
@@ -1227,7 +1134,7 @@ Returns:
 
 std::string algorithm_docstring()
 {
-    return R"(__init__(uda)
+    return R"(__init__(uda = null_algorithm)
 
 Algorithm class.
 
@@ -1462,9 +1369,6 @@ UDAs, the returned value will be unconditionally :attr:`pygmo.thread_safety.none
 
 Returns:
     a value of :class:`pygmo.thread_safety`: the thread safety level of the UDA
-
-Raises:
-    unspecified: any exception thrown by the ``get_thread_safety()`` method of the UDA
 
 )";
 }
@@ -1900,7 +1804,6 @@ Examples:
         151        95.4502              0              0    1.52588e-05
         159        95.4502              0              0    7.62939e-06
     Exit condition -- range: 7.62939e-06 <= 1e-05
-
     >>> al = algo.extract(compass_search)
     >>> al.get_log()
     [(4, 110.785345345, 1, 2.405833534534, 0.5), (12, 110.785345345, 1, 2.405833534534, 0.25) ...
@@ -2060,7 +1963,6 @@ Examples:
       41           1600    3.15834e-05        0.44117
       61           2400     2.3664e-05       0.206365
       81           3200     2.3664e-05       0.133305
-
     >>> al = algo.extract(nsga2)
     >>> al.get_log()
     [(1, 0, array([ 0.0033062 ,  2.44965599])), (21, 800, array([  2.75601086e-04 ...
@@ -2469,7 +2371,6 @@ Examples:
       90033    5.35153e-05    0.000120148    5.76009e-05    3.98107e-05
       95033    5.35153e-05    9.10958e-05    3.18624e-05    1.99526e-05
       99933    2.34849e-05    8.72206e-05    2.59215e-05    1.14815e-05
-
     >>> uda = algo.extract(simulated_annealing)
     >>> uda.get_log()
     [(57, 5936.999957947842, 5936.999957947842, 0.47999999999999987, 10.0), (10033, ...
@@ -2637,25 +2538,12 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (``tuple``): (*ndf*, *dl*, *dc*, *ndr*)
+    ``tuple``: (*ndf*, *dl*, *dc*, *ndr*), where:
 
-Where:
-    * *ndf* (``list`` of 1D NumPy array of ``float``): the non dominated fronts
-    * *dl* (``list`` of 1D NumPy array of ``float``): the domination list
-    * *dc* (1D NumPy array of ``int``): the domination count
-    * *ndr* (1D NumPy array of ``int``): the non domination ranks
-
-Examples:
-    >>> from pygmo import *
-    >>> ndf, dl, dc, ndr = fast_non_dominated_sorting([[2,3],[-1,2],[-3,2],[0,5],[1,1]])
-    >>> print(ndf)
-    [array([2, 4], dtype=uint64), array([1], dtype=uint64), array([0, 3], dtype=uint64)]
-    >>> print(dl)
-    [array([], dtype=uint64), array([0, 3], dtype=uint64), array([0, 1, 3], dtype=uint64), array([], dtype=uint64), array([0], dtype=uint64)]
-    >>> print(dc)
-    [3 1 0 2 0]
-    >>> print(ndr)
-    [2 1 0 2 0]
+    * *ndf* (``list`` of 1D NumPy float array): the non dominated fronts
+    * *dl* (``list`` of 1D NumPy float array): the domination list
+    * *dc* (1D NumPy int array): the domination count
+    * *ndr* (1D NumPy int array): the non domination ranks
 
 )";
 }
@@ -2667,7 +2555,7 @@ std::string nadir_docstring()
 Computes the nadir point of a set of points, i.e objective vectors. The nadir is that point that has the maximum
 value of the objective function in the points of the non-dominated front.
 
-Complexity is :math:`O(MN^2)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
+Complexity is :math:`\mathcal{O}(MN^2)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
 
 Args:
     points (2d-array like object): the input points
@@ -2677,12 +2565,8 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (1D NumPy array of ``floats``): the nadir point
+    1D NumPy float array: the nadir point
 
-Examples:
-    >>> fimport pygmo as pg
-    >>> nadir_point = pg.nadir([[0,7],[1,5],[2,3],[4,2],[7,1],[10,0],[6,6],[9,15]])
-    >>> [10, 7]
 )";
 }
 
@@ -2690,10 +2574,10 @@ std::string ideal_docstring()
 {
     return R"(ideal(points)
 
- Computes the ideal point of a set of points, i.e objective vectors. The ideal poitn is that point that has, in each 
- component, the minimum value of the objective functions of the input points.
+Computes the ideal point of a set of points, i.e objective vectors. The ideal point is that point that has, in each 
+component, the minimum value of the objective functions of the input points.
 
-Complexity is :math:`O(MN)` where :math:`M` is the number of objectives and :math:`N:math:` is the number of points.
+Complexity is :math:`\mathcal{O}(MN)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
 
 Args:
     points (2d-array like object): the input points
@@ -2703,12 +2587,8 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (1D NumPy array of ``floats``): the ideal point
+    1D NumPy float array: the ideal point
 
-Examples:
-    >>> fimport pygmo as pg
-    >>> ideal_point = pg.ideal([[-1,3,597],[1,2,3645],[2,9,789],[0,0,231],[6,-2,4576]])
-    [-1,-2,231]
 )";
 }
 
@@ -2895,7 +2775,7 @@ Args:
     hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
 
 Returns:
-    1D NumPy array of ``float``: the contribution of all points to the hypervolume
+    1D NumPy float array: the contribution of all points to the hypervolume
 
 Raises:
     ValueError: if *ref_point* is not suitable
@@ -2918,7 +2798,7 @@ Args:
 
 
 Returns:
-    1D NumPy array of ``float``: the contribution of all points to the hypervolume
+    1D NumPy float array: the contribution of all points to the hypervolume
 
 Raises:
     ValueError: if *ref_point* is not suitable or if *idx* is out of bounds
@@ -2979,7 +2859,7 @@ Args:
     offset (``float``): the reference point
 
 Returns:
-    1D NumPy array of ``float``: the reference point
+    1D NumPy float array: the reference point
 
 See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::refpoint`.
 

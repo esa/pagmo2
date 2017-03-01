@@ -152,7 +152,7 @@ public:
     {
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                              // allowed (pop.set_problem_seed is)
+                                              // allowed.
         auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
@@ -352,7 +352,7 @@ public:
             if (prob.is_stochastic()) {
                 // change the problem seed. This is done via the population_set_seed method as prob.set_seed
                 // is forbidden being prob a const ref.
-                pop.set_problem_seed(std::uniform_int_distribution<unsigned int>()(m_e));
+                pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
             }
             // Reinsertion
             for (decltype(lam) i = 0u; i < lam; ++i) {

@@ -78,10 +78,11 @@ def _population_init(self, prob=None, size=0, seed=None):
         seed (``int``): the random seed (if ``None``, it will be randomly-generated)
 
     Raises:
-        TypeError: if *size* is not an int or *seed* is not ``None`` and not an int
+        TypeError: if *size* is not an ``int`` or *seed* is not ``None`` and not an ``int``
         OverflowError:  is *size* or *seed* are negative
         unspecified: any exception thrown by the invoked C++ constructors or by the constructor of
-            :class:`~pygmo.core.problem`
+            :class:`~pygmo.core.problem`, or by failures at the intersection between C++ and
+            Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
     """
     import sys

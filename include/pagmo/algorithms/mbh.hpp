@@ -181,7 +181,7 @@ public:
     {
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                              // allowed (pop.set_problem_seed is)
+                                              // allowed
         auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
         auto nec = prob.get_nec();            // This getter does not return a const reference but a copy
         const auto bounds = prob.get_bounds();
@@ -416,6 +416,10 @@ private:
     bool has_set_seed() const = delete;
     bool is_stochastic() const = delete;
     bool has_set_verbosity() const = delete;
+    template <typename Archive>
+    void save(Archive &) const = delete;
+    template <typename Archive>
+    void load(Archive &) = delete;
 
 // The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
 // it would just result in a "weird" behaviour in case the user would try to stream this object

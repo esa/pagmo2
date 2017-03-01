@@ -83,9 +83,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     virtual void set_seed(unsigned n) override final
     {
         auto ss = pygmo::callable_attribute(m_value, "set_seed");
-        if (ss) {
-            ss(n);
-        } else {
+        if (ss.is_none()) {
             pygmo_throw(PyExc_NotImplementedError,
                         ("set_seed() has been invoked but it is not implemented "
                          "in the user-defined Python algorithm '"
@@ -93,15 +91,16 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
                          + "': the method is either not present or not callable")
                             .c_str());
         }
+        ss(n);
     }
     virtual bool has_set_seed() const override final
     {
         auto ss = pygmo::callable_attribute(m_value, "set_seed");
-        if (!ss) {
+        if (ss.is_none()) {
             return false;
         }
         auto hss = pygmo::callable_attribute(m_value, "has_set_seed");
-        if (!hss) {
+        if (hss.is_none()) {
             return true;
         }
         return bp::extract<bool>(hss());
@@ -121,9 +120,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     virtual void set_verbosity(unsigned n) override final
     {
         auto sv = pygmo::callable_attribute(m_value, "set_verbosity");
-        if (sv) {
-            sv(n);
-        } else {
+        if (sv.is_none()) {
             pygmo_throw(PyExc_NotImplementedError,
                         ("set_verbosity() has been invoked but it is not implemented "
                          "in the user-defined Python algorithm '"
@@ -131,18 +128,24 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
                          + "': the method is either not present or not callable")
                             .c_str());
         }
+        sv(n);
     }
     virtual bool has_set_verbosity() const override final
     {
         auto sv = pygmo::callable_attribute(m_value, "set_verbosity");
-        if (!sv) {
+        if (sv.is_none()) {
             return false;
         }
         auto hsv = pygmo::callable_attribute(m_value, "has_set_verbosity");
-        if (!hsv) {
+        if (hsv.is_none()) {
             return true;
         }
         return bp::extract<bool>(hsv());
+    }
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(cereal::base_class<algo_inner_base>(this), m_value);
     }
     bp::object m_value;
 };
@@ -159,11 +162,6 @@ namespace bp = boost::python;
 
 // Serialization support for the algorithm class.
 struct algorithm_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const pagmo::algorithm &)
-    {
-        // For initialization purposes, we use the null algo.
-        return bp::make_tuple(pagmo::null_algorithm{});
-    }
     static bp::tuple getstate(const pagmo::algorithm &a)
     {
         // The idea here is that first we extract a char array
@@ -177,17 +175,20 @@ struct algorithm_pickle_suite : bp::pickle_suite {
         auto s = oss.str();
         return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
     }
-    static void setstate(pagmo::algorithm &a, bp::tuple state)
+    static void setstate(pagmo::algorithm &a, const bp::tuple &state)
     {
         // Similarly, first we extract a bytes object from the Python state,
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
         if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
+            pygmo_throw(PyExc_ValueError, ("the state tuple passed for algorithm deserialization "
+                                           "must have a single element, but instead it has "
+                                           + std::to_string(len(state)) + " elements")
+                                              .c_str());
         }
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
-            pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize a problem");
+            pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize an algorithm");
         }
         const auto size = len(state[0]);
         std::string s(ptr, ptr + size);

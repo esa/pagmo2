@@ -114,6 +114,28 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_test)
     // We check that at construction the name has been assigned
     BOOST_CHECK(algo_full.get_name() == "name");
     BOOST_CHECK(algo_minimal.get_name().find("al_02") != std::string::npos);
+    // Default constructor.
+    algorithm a0;
+    BOOST_CHECK((a0.extract<null_algorithm>() != nullptr));
+    // Check copy semantics.
+    algorithm a1{a0};
+    BOOST_CHECK((a0.extract<null_algorithm>() != nullptr));
+    BOOST_CHECK((a1.extract<null_algorithm>() != nullptr));
+    algorithm a2{al_01{}};
+    a2 = a1;
+    BOOST_CHECK((a2.extract<null_algorithm>() != nullptr));
+    BOOST_CHECK((a1.extract<null_algorithm>() != nullptr));
+    // Move semantics.
+    algorithm a3{std::move(a0)};
+    BOOST_CHECK((a3.extract<null_algorithm>() != nullptr));
+    algorithm a4{al_01{}};
+    a4 = std::move(a2);
+    BOOST_CHECK((a4.extract<null_algorithm>() != nullptr));
+    // Check we can revive moved-from objects.
+    a0 = a4;
+    BOOST_CHECK((a0.extract<null_algorithm>() != nullptr));
+    a2 = std::move(a4);
+    BOOST_CHECK((a2.extract<null_algorithm>() != nullptr));
 }
 
 BOOST_AUTO_TEST_CASE(algorithm_copy_constructor_test)

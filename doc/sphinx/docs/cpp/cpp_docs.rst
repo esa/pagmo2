@@ -24,6 +24,7 @@ code your own algorithm
 .. toctree::
   :maxdepth: 1
 
+  algorithms/null
   algorithms/cmaes
   algorithms/compass_search
   algorithms/de
@@ -45,6 +46,7 @@ problem
 .. toctree::
   :maxdepth: 1
 
+  problems/null
   problems/rosenbrock
   problems/rastrigin
   problems/schwefel

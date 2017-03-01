@@ -51,10 +51,10 @@ see https://www.gnu.org/licenses/. */
 #include "types.hpp"
 #include "utils/constrained.hpp"
 
-/// Macro for the registration of the serialization functionality for problems.
+/// Macro for the registration of the serialization functionality for user-defined problems.
 /**
  * This macro should always be invoked after the declaration of a user-defined problem: it will register
- * the problem with PaGMO's serialization machinery. The macro should be called in the root namespace
+ * the problem with pagmo's serialization machinery. The macro should be called in the root namespace
  * and using the fully qualified name of the problem to be registered. For example:
  * @code{.unparsed}
  * namespace my_namespace
@@ -70,14 +70,14 @@ see https://www.gnu.org/licenses/. */
  * PAGMO_REGISTER_PROBLEM(my_namespace::my_problem)
  * @endcode
  */
-#define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>, #prob)
+#define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>, "udp " #prob)
 
 namespace pagmo
 {
 
 /// Null problem
 /**
- * This problem is used to implement the default constructors of meta-problems.
+ * This problem is used to implement the default constructors of pagmo::problem and of the meta-problems.
  */
 struct null_problem {
     /// Constructor from number of objectives.
@@ -861,7 +861,6 @@ struct prob_inner final : prob_inner_base {
     {
         return thread_safety::basic;
     }
-
     // Serialization.
     template <typename Archive>
     void serialize(Archive &ar)
@@ -941,8 +940,8 @@ struct prob_inner final : prob_inner_base {
  * See the documentation of the corresponding methods in this class for details on how the optional
  * methods in the UDP are used by pagmo::problem.
  *
- * **NOTE** the only allowed operations on an object belonging to this class, after it has been moved, are assignment
- * and destruction.
+ * **NOTE**: a moved-from pagmo::problem is destructible and assignable. Any other operation will result
+ * in undefined behaviour.
  */
 class problem
 {
@@ -952,6 +951,15 @@ class problem
     using generic_ctor_enabler = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value, int>;
 
 public:
+    /// Default constructor.
+    /**
+     * The default constructor will initialize a pagmo::problem containing a pagmo::null_problem.
+     *
+     * @throws unspecified any exception thrown by the constructor from UDP.
+     */
+    problem() : problem(null_problem{})
+    {
+    }
     /// Constructor from a user-defined problem of type \p T
     /**
      * **NOTE** this constructor is not enabled if, after the removal of cv and reference qualifiers,
@@ -1056,6 +1064,8 @@ public:
         }
         // 8 - Constraint tolerance
         m_c_tol.resize(m_nec + m_nic);
+        // 9 - Thread safety.
+        m_thread_safety = ptr()->get_thread_safety();
     }
 
     /// Copy constructor.
@@ -1074,7 +1084,8 @@ public:
           m_nic(other.m_nic), m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
           m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
           m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
-          m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim)
+          m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
+          m_thread_safety(other.m_thread_safety)
     {
     }
 
@@ -1089,7 +1100,7 @@ public:
           m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
           m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
           m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
-          m_hs_dim(std::move(other.m_hs_dim))
+          m_hs_dim(std::move(other.m_hs_dim)), m_thread_safety(std::move(other.m_thread_safety))
     {
     }
 
@@ -1120,6 +1131,7 @@ public:
             m_name = std::move(other.m_name);
             m_gs_dim = other.m_gs_dim;
             m_hs_dim = std::move(other.m_hs_dim);
+            m_thread_safety = std::move(other.m_thread_safety);
         }
         return *this;
     }
@@ -1729,12 +1741,10 @@ public:
      * That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDP instances.
      *
      * @return the thread safety level of the UDP.
-     *
-     * @throws unspecified any exception thrown by the <tt>%get_thread_safety()</tt> method of the UDP.
      */
     thread_safety get_thread_safety() const
     {
-        return ptr()->get_thread_safety();
+        return m_thread_safety;
     }
 
     /// Streaming operator
@@ -1806,7 +1816,7 @@ public:
     {
         ar(m_ptr, m_fevals.load(), m_gevals.load(), m_hevals.load(), m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol,
            m_has_gradient, m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name,
-           m_gs_dim, m_hs_dim);
+           m_gs_dim, m_hs_dim, m_thread_safety);
     }
 
     /// Load from archive.
@@ -1820,16 +1830,21 @@ public:
     template <typename Archive>
     void load(Archive &ar)
     {
-        ar(m_ptr);
+        // Deserialize in a separate object and move it in later, for exception safety.
+        problem tmp_prob;
+        ar(tmp_prob.m_ptr);
         unsigned long long tmp;
         ar(tmp);
-        m_fevals.store(tmp);
+        tmp_prob.m_fevals.store(tmp);
         ar(tmp);
-        m_gevals.store(tmp);
+        tmp_prob.m_gevals.store(tmp);
         ar(tmp);
-        m_hevals.store(tmp);
-        ar(m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient, m_has_gradient_sparsity, m_has_hessians,
-           m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim);
+        tmp_prob.m_hevals.store(tmp);
+        ar(tmp_prob.m_lb, tmp_prob.m_ub, tmp_prob.m_nobj, tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_c_tol,
+           tmp_prob.m_has_gradient, tmp_prob.m_has_gradient_sparsity, tmp_prob.m_has_hessians,
+           tmp_prob.m_has_hessians_sparsity, tmp_prob.m_has_set_seed, tmp_prob.m_name, tmp_prob.m_gs_dim,
+           tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
+        *this = std::move(tmp_prob);
     }
 
 private:
@@ -1994,6 +2009,8 @@ private:
     // on the returned gradient and hessians.
     vector_double::size_type m_gs_dim;
     std::vector<vector_double::size_type> m_hs_dim;
+    // Thread safety.
+    thread_safety m_thread_safety;
 };
 
 } // namespaces

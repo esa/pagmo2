@@ -140,11 +140,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - with a gradient() and no override, return true;
         // - with a gradient() and override, return the value from the override.
         auto g = pygmo::callable_attribute(m_value, "gradient");
-        if (!g) {
+        if (g.is_none()) {
             return false;
         }
         auto hg = pygmo::callable_attribute(m_value, "has_gradient");
-        if (!hg) {
+        if (hg.is_none()) {
             return true;
         }
         return bp::extract<bool>(hg());
@@ -152,14 +152,15 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     virtual vector_double gradient(const vector_double &dv) const override final
     {
         auto g = pygmo::callable_attribute(m_value, "gradient");
-        if (g) {
-            return pygmo::to_vd(g(pygmo::v_to_a(dv)));
+        if (g.is_none()) {
+            pygmo_throw(PyExc_NotImplementedError,
+                        ("gradients have been requested but they are not implemented "
+                         "in the user-defined Python problem '"
+                         + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
+                         + "': the method is either not present or not callable")
+                            .c_str());
         }
-        pygmo_throw(PyExc_NotImplementedError, ("gradients have been requested but they are not implemented "
-                                                "in the user-defined Python problem '"
-                                                + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
-                                                + "': the method is either not present or not callable")
-                                                   .c_str());
+        return pygmo::to_vd(g(pygmo::v_to_a(dv)));
     }
     virtual bool has_gradient_sparsity() const override final
     {
@@ -168,11 +169,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - with a gradient_sparsity() and no override, return true;
         // - with a gradient_sparsity() and override, return the value from the override.
         auto gs = pygmo::callable_attribute(m_value, "gradient_sparsity");
-        if (!gs) {
+        if (gs.is_none()) {
             return false;
         }
         auto hgs = pygmo::callable_attribute(m_value, "has_gradient_sparsity");
-        if (!hgs) {
+        if (hgs.is_none()) {
             return true;
         }
         return bp::extract<bool>(hgs());
@@ -180,23 +181,23 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     virtual sparsity_pattern gradient_sparsity() const override final
     {
         auto gs = pygmo::callable_attribute(m_value, "gradient_sparsity");
-        if (gs) {
-            return pygmo::to_sp(gs());
+        if (gs.is_none()) {
+            // NOTE: this is similar to C++: this virtual method gradient_sparsity() we are in, is called
+            // only if the availability of gradient_sparsity() in the UDP was detected upon the construction
+            // of a problem (i.e., m_has_gradient_sparsity is set to true). If the UDP didn't have a gradient_sparsity()
+            // method upon problem construction, the m_has_gradient_sparsity is set to false and we never get here.
+            // However, in Python we could have a situation in which a method is erased at runtime, so it is
+            // still possible to end up in this point (if gradient_sparsity() in the internal UDP was erased
+            // after the problem construction). This is something we need to strongly discourage, hence the message.
+            pygmo_throw(PyExc_RuntimeError,
+                        ("gradient sparsity has been requested but it is not implemented."
+                         "This indicates a logical error in the implementation of the user-defined Python problem "
+                         + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
+                         + "': the gradient sparsity was available at problem construction but it has been removed "
+                           "at a later stage")
+                            .c_str());
         }
-        // NOTE: this is similar to C++: this virtual method gradient_sparsity() we are in, is called
-        // only if the availability of gradient_sparsity() in the UDP was detected upon the construction
-        // of a problem (i.e., m_has_gradient_sparsity is set to true). If the UDP didn't have a gradient_sparsity()
-        // method upon problem construction, the m_has_gradient_sparsity is set to false and we never get here.
-        // However, in Python we could have a situation in which a method is erased at runtime, so it is
-        // still possible to end up in this point (if gradient_sparsity() in the internal UDP was erased
-        // after the problem construction). This is something we need to strongly discourage, hence the message.
-        pygmo_throw(PyExc_RuntimeError,
-                    ("gradient sparsity has been requested but it is not implemented."
-                     "This indicates a logical error in the implementation of the user-defined Python problem "
-                     + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
-                     + "': the gradient sparsity was available at problem construction but it has been removed "
-                       "at a later stage")
-                        .c_str());
+        return pygmo::to_sp(gs());
     }
     virtual bool has_hessians() const override final
     {
@@ -205,11 +206,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - with a hessians() and no override, return true;
         // - with a hessians() and override, return the value from the override.
         auto h = pygmo::callable_attribute(m_value, "hessians");
-        if (!h) {
+        if (h.is_none()) {
             return false;
         }
         auto hh = pygmo::callable_attribute(m_value, "has_hessians");
-        if (!hh) {
+        if (hh.is_none()) {
             return true;
         }
         return bp::extract<bool>(hh());
@@ -217,20 +218,21 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     virtual std::vector<vector_double> hessians(const vector_double &dv) const override final
     {
         auto h = pygmo::callable_attribute(m_value, "hessians");
-        if (h) {
-            // Invoke the method, getting out a generic Python object.
-            bp::object tmp = h(pygmo::v_to_a(dv));
-            // Let's build the return value.
-            std::vector<vector_double> retval;
-            bp::stl_input_iterator<bp::object> begin(tmp), end;
-            std::transform(begin, end, std::back_inserter(retval), [](const bp::object &o) { return pygmo::to_vd(o); });
-            return retval;
+        if (h.is_none()) {
+            pygmo_throw(PyExc_NotImplementedError,
+                        ("hessians have been requested but they are not implemented "
+                         "in the user-defined Python problem '"
+                         + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
+                         + "': the method is either not present or not callable")
+                            .c_str());
         }
-        pygmo_throw(PyExc_NotImplementedError, ("hessians have been requested but they are not implemented "
-                                                "in the user-defined Python problem '"
-                                                + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
-                                                + "': the method is either not present or not callable")
-                                                   .c_str());
+        // Invoke the method, getting out a generic Python object.
+        bp::object tmp = h(pygmo::v_to_a(dv));
+        // Let's build the return value.
+        std::vector<vector_double> retval;
+        bp::stl_input_iterator<bp::object> begin(tmp), end;
+        std::transform(begin, end, std::back_inserter(retval), [](const bp::object &o) { return pygmo::to_vd(o); });
+        return retval;
     }
     virtual bool has_hessians_sparsity() const override final
     {
@@ -239,11 +241,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - with a hessians_sparsity() and no override, return true;
         // - with a hessians_sparsity() and override, return the value from the override.
         auto hs = pygmo::callable_attribute(m_value, "hessians_sparsity");
-        if (!hs) {
+        if (hs.is_none()) {
             return false;
         }
         auto hhs = pygmo::callable_attribute(m_value, "has_hessians_sparsity");
-        if (!hhs) {
+        if (hhs.is_none()) {
             return true;
         }
         return bp::extract<bool>(hhs());
@@ -251,27 +253,25 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     virtual std::vector<sparsity_pattern> hessians_sparsity() const override final
     {
         auto hs = pygmo::callable_attribute(m_value, "hessians_sparsity");
-        if (hs) {
-            bp::object tmp = hs();
-            std::vector<sparsity_pattern> retval;
-            bp::stl_input_iterator<bp::object> begin(tmp), end;
-            std::transform(begin, end, std::back_inserter(retval), [](const bp::object &o) { return pygmo::to_sp(o); });
-            return retval;
+        if (hs.is_none()) {
+            pygmo_throw(PyExc_RuntimeError,
+                        ("hessians sparsity has been requested but it is not implemented."
+                         "This indicates a logical error in the implementation of the user-defined Python problem "
+                         + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
+                         + "': the hessians sparsity was available at problem construction but it has been removed "
+                           "at a later stage")
+                            .c_str());
         }
-        pygmo_throw(PyExc_RuntimeError,
-                    ("hessians sparsity has been requested but it is not implemented."
-                     "This indicates a logical error in the implementation of the user-defined Python problem "
-                     + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
-                     + "': the hessians sparsity was available at problem construction but it has been removed "
-                       "at a later stage")
-                        .c_str());
+        bp::object tmp = hs();
+        std::vector<sparsity_pattern> retval;
+        bp::stl_input_iterator<bp::object> begin(tmp), end;
+        std::transform(begin, end, std::back_inserter(retval), [](const bp::object &o) { return pygmo::to_sp(o); });
+        return retval;
     }
     virtual void set_seed(unsigned n) override final
     {
         auto ss = pygmo::callable_attribute(m_value, "set_seed");
-        if (ss) {
-            ss(n);
-        } else {
+        if (ss.is_none()) {
             pygmo_throw(PyExc_NotImplementedError,
                         ("set_seed() has been invoked but it is not implemented "
                          "in the user-defined Python problem '"
@@ -279,6 +279,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
                          + "': the method is either not present or not callable")
                             .c_str());
         }
+        ss(n);
     }
     virtual bool has_set_seed() const override final
     {
@@ -287,11 +288,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // - with a set_seed() and no override, return true;
         // - with a set_seed() and override, return the value from the override.
         auto ss = pygmo::callable_attribute(m_value, "set_seed");
-        if (!ss) {
+        if (ss.is_none()) {
             return false;
         }
         auto hss = pygmo::callable_attribute(m_value, "has_set_seed");
-        if (!hss) {
+        if (hss.is_none()) {
             return true;
         }
         return bp::extract<bool>(hss());
@@ -321,11 +322,6 @@ namespace bp = boost::python;
 
 // Serialization support for the problem class.
 struct problem_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const pagmo::problem &)
-    {
-        // For initialization purposes, we use the null problem.
-        return bp::make_tuple(pagmo::null_problem{});
-    }
     static bp::tuple getstate(const pagmo::problem &p)
     {
         // The idea here is that first we extract a char array
@@ -339,13 +335,16 @@ struct problem_pickle_suite : bp::pickle_suite {
         auto s = oss.str();
         return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
     }
-    static void setstate(pagmo::problem &p, bp::tuple state)
+    static void setstate(pagmo::problem &p, const bp::tuple &state)
     {
         // Similarly, first we extract a bytes object from the Python state,
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
         if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
+            pygmo_throw(PyExc_ValueError, ("the state tuple passed for problem deserialization "
+                                           "must have a single element, but instead it has "
+                                           + std::to_string(len(state)) + " elements")
+                                              .c_str());
         }
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
