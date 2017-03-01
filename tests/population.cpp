@@ -43,6 +43,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
 
+#if defined(__clang__)
+
+#pragma clang diagnostic ignored "-Wself-move"
+
+#endif
+
 using namespace pagmo;
 
 static inline std::string pop_to_string(const population &pop)
@@ -115,6 +121,13 @@ BOOST_AUTO_TEST_CASE(population_construction_test)
     BOOST_CHECK((std::is_constructible<population, problem &&>::value));
     BOOST_CHECK((std::is_constructible<population, const problem &>::value));
     BOOST_CHECK((std::is_constructible<population, const problem>::value));
+
+    // Self assignments.
+    pop_a = pop_b;
+    pop_a = pop_a;
+    BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
+    pop_a = std::move(pop_a);
+    BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
 }
 
 BOOST_AUTO_TEST_CASE(population_copy_constructor_test)
