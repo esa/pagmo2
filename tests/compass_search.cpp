@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
 
     BOOST_CHECK(user_algo1.get_log().size() > 0u);
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
-    BOOST_CHECK(std::get<2>(user_algo1.get_log()[user_algo1.get_log().size() - 1]) <= stop_range);
+    BOOST_CHECK(static_cast<double>(std::get<2>(user_algo1.get_log()[user_algo1.get_log().size() - 1])) <= stop_range);
 
     // We test the max_fevals stopping criteria
     auto max_fevals = 10u;
