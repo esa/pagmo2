@@ -37,6 +37,27 @@ see https://www.gnu.org/licenses/. */
 #include "serialization.hpp"
 #include "type_traits.hpp"
 
+/// Macro for the registration of the serialization functionality for user-defined islands.
+/**
+ * This macro should always be invoked after the declaration of a user-defined island: it will register
+ * the island with pagmo's serialization machinery. The macro should be called in the root namespace
+ * and using the fully qualified name of the island to be registered. For example:
+ * @code{.unparsed}
+ * namespace my_namespace
+ * {
+ *
+ * class my_island
+ * {
+ *    // ...
+ * };
+ *
+ * }
+ *
+ * PAGMO_REGISTER_ISLAND(my_namespace::my_island)
+ * @endcode
+ */
+#define PAGMO_REGISTER_ISLAND(isl) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::isl_inner<isl>, "udi " #isl)
+
 namespace pagmo
 {
 
