@@ -232,21 +232,7 @@ struct population_pickle_suite : bp::pickle_suite {
     }
 };
 
-// DE1220 ctors.
-static inline de1220 *de1220_init_0(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
-                                    double ftol, double xtol, bool memory)
-{
-    auto av = pygmo::to_vu(allowed_variants);
-    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory);
-}
-
-static inline de1220 *de1220_init_1(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
-                                    double ftol, double xtol, bool memory, unsigned seed)
-{
-    auto av = pygmo::to_vu(allowed_variants);
-    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory, seed);
-}
-
+// Helper to get the list of allowed variants for de1220.
 static inline bp::list de1220_allowed_variants()
 {
     bp::list retval;
@@ -810,16 +796,26 @@ BOOST_PYTHON_MODULE(core)
     sade_.def("get_seed", &sade::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // DE-1220
     auto de1220_ = pygmo::expose_algorithm<de1220>("de1220", pygmo::de1220_docstring().c_str());
-    de1220_.def("__init__",
-                bp::make_constructor(&de1220_init_0, bp::default_call_policies(),
-                                     (bp::arg("gen") = 1u, bp::arg("allowed_variants") = de1220_allowed_variants(),
-                                      bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6,
-                                      bp::arg("memory") = false)));
-    de1220_.def("__init__",
-                bp::make_constructor(&de1220_init_1, bp::default_call_policies(),
-                                     (bp::arg("gen") = 1u, bp::arg("allowed_variants") = de1220_allowed_variants(),
-                                      bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6,
-                                      bp::arg("memory") = false, bp::arg("seed"))));
+    de1220_.def("__init__", bp::make_constructor(
+                                +[](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
+                                    double ftol, double xtol, bool memory) -> de1220 * {
+                                    auto av = pygmo::to_vu(allowed_variants);
+                                    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory);
+                                },
+                                bp::default_call_policies(),
+                                (bp::arg("gen") = 1u, bp::arg("allowed_variants") = de1220_allowed_variants(),
+                                 bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6,
+                                 bp::arg("memory") = false)));
+    de1220_.def("__init__", bp::make_constructor(
+                                +[](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
+                                    double ftol, double xtol, bool memory, unsigned seed) -> de1220 * {
+                                    auto av = pygmo::to_vu(allowed_variants);
+                                    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory, seed);
+                                },
+                                bp::default_call_policies(),
+                                (bp::arg("gen") = 1u, bp::arg("allowed_variants") = de1220_allowed_variants(),
+                                 bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6,
+                                 bp::arg("memory") = false, bp::arg("seed"))));
     pygmo::expose_algo_log(de1220_, pygmo::de1220_get_log_docstring().c_str());
     de1220_.def("get_seed", &de1220::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
 // CMA-ES
