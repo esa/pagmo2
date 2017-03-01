@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <exception>
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -136,6 +137,22 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_test)
     BOOST_CHECK((a0.extract<null_algorithm>() != nullptr));
     a2 = std::move(a4);
     BOOST_CHECK((a2.extract<null_algorithm>() != nullptr));
+
+    // Check the is_uda type trait.
+    BOOST_CHECK(is_uda<al_01>::value);
+    BOOST_CHECK(is_uda<null_algorithm>::value);
+    BOOST_CHECK(!is_uda<al_01 &>::value);
+    BOOST_CHECK(!is_uda<const al_01>::value);
+    BOOST_CHECK(!is_uda<int>::value);
+    BOOST_CHECK(!is_uda<void>::value);
+    BOOST_CHECK(!is_uda<std::string>::value);
+    BOOST_CHECK((std::is_constructible<algorithm, al_01>::value));
+    BOOST_CHECK((std::is_constructible<algorithm, null_algorithm>::value));
+    BOOST_CHECK((std::is_constructible<algorithm, al_01 &>::value));
+    BOOST_CHECK((std::is_constructible<algorithm, const null_algorithm &>::value));
+    BOOST_CHECK((std::is_constructible<algorithm, al_01 &&>::value));
+    BOOST_CHECK((!std::is_constructible<algorithm, int>::value));
+    BOOST_CHECK((!std::is_constructible<algorithm, std::string>::value));
 }
 
 BOOST_AUTO_TEST_CASE(algorithm_copy_constructor_test)
@@ -406,14 +423,11 @@ BOOST_AUTO_TEST_CASE(extract_test)
 {
     algorithm p{null_algorithm{}};
     BOOST_CHECK(p.is<null_algorithm>());
-    BOOST_CHECK(!p.is<const null_algorithm>());
     BOOST_CHECK((std::is_same<null_algorithm *, decltype(p.extract<null_algorithm>())>::value));
     BOOST_CHECK((std::is_same<null_algorithm const *,
                               decltype(static_cast<const algorithm &>(p).extract<null_algorithm>())>::value));
     BOOST_CHECK(p.extract<null_algorithm>() != nullptr);
     BOOST_CHECK(static_cast<const algorithm &>(p).extract<null_algorithm>() != nullptr);
-    BOOST_CHECK(p.extract<const null_algorithm>() == nullptr);
-    BOOST_CHECK(static_cast<const algorithm &>(p).extract<const null_algorithm>() == nullptr);
 }
 
 struct ts1 {

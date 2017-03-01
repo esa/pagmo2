@@ -463,6 +463,29 @@ public:
 template <typename T>
 const bool override_has_hessians_sparsity<T>::value;
 
+/// Detect user-defined problems (UDP).
+/**
+ * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
+ * constructible, and if it satisfies the pagmo::has_fitness and pagmo::has_bounds type traits.
+ *
+ * Types satisfying this type trait can be used as user-defined problems (UDP) in pagmo::problem.
+ */
+template <typename T>
+class is_udp
+{
+    static const bool implementation_defined
+        = std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
+          && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
+          && std::is_destructible<T>::value && has_fitness<T>::value && has_bounds<T>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool is_udp<T>::value;
+
 namespace detail
 {
 
@@ -557,13 +580,9 @@ struct prob_inner_base {
 template <typename T>
 struct prob_inner final : prob_inner_base {
     // Static checks.
-    static_assert(std::is_default_constructible<T>::value && std::is_copy_constructible<T>::value
-                      && std::is_move_constructible<T>::value && std::is_destructible<T>::value,
-                  "A problem must be default-constructible, copy-constructible, move-constructible and destructible.");
-    static_assert(has_fitness<T>::value, "A problem must provide a fitness function: the fitness function was either "
-                                         "not provided or not implemented correctly.");
-    static_assert(has_bounds<T>::value, "A problem must provide a getter for its box bounds: the getter was either not "
-                                        "provided or not implemented correctly.");
+    static_assert(is_udp<T>::value, "A problem must not be cv/reference qualified, it must be default-constructible, "
+                                    "copy-constructible, move-constructible and destructible, "
+                                    "and it must provide the mandatory fitness() and get_bounds() methods.");
     // We just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
@@ -948,7 +967,8 @@ class problem
     // Enable the generic ctor only if T is not a problem (after removing
     // const/reference qualifiers).
     template <typename T>
-    using generic_ctor_enabler = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value, int>;
+    using generic_ctor_enabler
+        = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value && is_udp<uncvref_t<T>>::value, int>;
 
 public:
     /// Default constructor.
@@ -964,7 +984,7 @@ public:
     /**
      * **NOTE** this constructor is not enabled if, after the removal of cv and reference qualifiers,
      * \p T is of type pagmo::problem (that is, this constructor does not compete with the copy/move
-     * constructors of pagmo::problem).
+     * constructors of pagmo::problem), or if \p T does not satisfy pagmo::is_udp.
      *
      * This constructor will construct a pagmo::problem from the UDP (user-defined problem) \p x of type \p T. In order
      * for the construction to be successful, the UDP must implement a minimal set of methods,

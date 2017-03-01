@@ -7,6 +7,12 @@ Type traits and enums used in PaGMO
 
 .. doxygenenum:: pagmo::thread_safety
 
+.. doxygenclass:: pagmo::is_udp
+   :members:
+
+.. doxygenclass:: pagmo::is_uda
+   :members:
+
 .. doxygenclass:: pagmo::has_fitness
    :members:
 
