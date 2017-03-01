@@ -78,7 +78,9 @@ class population
     // Enable the generic ctor only if T is not a population (after removing
     // const/reference qualifiers).
     template <typename T>
-    using generic_ctor_enabler = enable_if_t<!std::is_same<population, uncvref_t<T>>::value, int>;
+    using generic_ctor_enabler
+        = enable_if_t<!std::is_same<population, uncvref_t<T>>::value && std::is_constructible<problem, T &&>::value,
+                      int>;
 
 public:
     /// The size type of the population.
@@ -97,7 +99,7 @@ public:
     /// Constructor from a problem.
     /**
      * **NOTE**: this constructor is enabled only if, after the removal of cv/reference qualifiers,
-     * \p T is not pagmo::population.
+     * \p T is not pagmo::population, and if pagmo::problem is constructible from \p T.
      *
      * Constructs a population with \p pop_size individuals associated
      * to the problem \p x and setting the population random seed
