@@ -216,10 +216,8 @@ struct algo_inner_base {
 
 template <typename T>
 struct algo_inner final : algo_inner_base {
-    // Static checks.
-    static_assert(is_uda<T>::value,
-                  "An algorithm must not be cv/reference qualified, it must be default-constructible, "
-                  "copy-constructible, move-constructible and destructible, and it must provide an evolve() method.");
+    // Mark this as the default implementation of algo_inner.
+    static const bool is_default = true;
     // We just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;
@@ -413,10 +411,15 @@ struct algo_inner final : algo_inner_base {
 class algorithm
 {
     // Enable the generic ctor only if T is not an algorithm (after removing
-    // const/reference qualifiers).
+    // const/reference qualifiers), and if either T is a uda or the algo_inner implementation
+    // is not the default one.
+    template <typename T>
+    using is_default_t = decltype(detail::algo_inner<T>::is_default);
     template <typename T>
     using generic_ctor_enabler
-        = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value && is_uda<uncvref_t<T>>::value, int>;
+        = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value
+                          && (is_uda<uncvref_t<T>>::value || !is_detected<is_default_t, uncvref_t<T>>::value),
+                      int>;
 
 public:
     /// Default constructor.

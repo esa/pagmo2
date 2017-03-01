@@ -579,10 +579,8 @@ struct prob_inner_base {
 
 template <typename T>
 struct prob_inner final : prob_inner_base {
-    // Static checks.
-    static_assert(is_udp<T>::value, "A problem must not be cv/reference qualified, it must be default-constructible, "
-                                    "copy-constructible, move-constructible and destructible, "
-                                    "and it must provide the mandatory fitness() and get_bounds() methods.");
+    // Mark this as the default implementation of prob_inner.
+    static const bool is_default = true;
     // We just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
@@ -965,10 +963,17 @@ struct prob_inner final : prob_inner_base {
 class problem
 {
     // Enable the generic ctor only if T is not a problem (after removing
-    // const/reference qualifiers).
+    // const/reference qualifiers), and if either T is a udp or the prob_inner implementation
+    // is not the default one.
+    // NOTE: the last bit, about the def implementation, is because the prob_inner specialisation for
+    // bp::object does *not* satisfy the is_uda reqs, so we must not check for them in that case.
+    template <typename T>
+    using is_default_t = decltype(detail::prob_inner<T>::is_default);
     template <typename T>
     using generic_ctor_enabler
-        = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value && is_udp<uncvref_t<T>>::value, int>;
+        = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value
+                          && (is_udp<uncvref_t<T>>::value || !is_detected<is_default_t, uncvref_t<T>>::value),
+                      int>;
 
 public:
     /// Default constructor.
