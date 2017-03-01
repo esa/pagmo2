@@ -125,7 +125,15 @@ public:
     population(const population &) = default;
 
     /// Defaulted move constructor.
-    population(population &&) noexcept = default;
+    /**
+     * @param pop construction argument.
+     */
+    population(population &&pop) noexcept
+        : m_prob(std::move(pop.m_prob)), m_ID(std::move(pop.m_ID)), m_x(std::move(pop.m_x)), m_f(std::move(pop.m_f)),
+          m_champion_x(std::move(pop.m_champion_x)), m_champion_f(std::move(pop.m_champion_f)), m_e(std::move(pop.m_e)),
+          m_seed(std::move(pop.m_seed))
+    {
+    }
 
     /// Copy assignment operator.
     /**
@@ -147,9 +155,24 @@ public:
 
     /// Defaulted move assignment operator.
     /**
+     * @param pop assignment argument.
+     *
      * @return a reference to \p this.
      */
-    population &operator=(population &&) noexcept = default;
+    population &operator=(population &&pop) noexcept
+    {
+        if (this != &pop) {
+            m_prob = std::move(pop.m_prob);
+            m_ID = std::move(pop.m_ID);
+            m_x = std::move(pop.m_x);
+            m_f = std::move(pop.m_f);
+            m_champion_x = std::move(pop.m_champion_x);
+            m_champion_f = std::move(pop.m_champion_f);
+            m_e = std::move(pop.m_e);
+            m_seed = std::move(pop.m_seed);
+        }
+        return *this;
+    }
 
     /// Destructor.
     /**
@@ -530,7 +553,8 @@ public:
      *
      * @param ar source archive.
      *
-     * @throws unspecified any exception thrown by the deserialization of the internal pagmo::problem and of primitive
+     * @throws unspecified any exception thrown by the deserialization of the internal pagmo::problem and of
+     * primitive
      * types.
      */
     template <typename Archive>
