@@ -42,6 +42,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
 
+#if defined(__clang__)
+
+#pragma clang diagnostic ignored "-Wself-move"
+
+#endif
+
 using namespace pagmo;
 
 static inline std::string pop_to_string(const population &pop)
