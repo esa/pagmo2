@@ -418,7 +418,10 @@ class algorithm
     template <typename T>
     using generic_ctor_enabler
         = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value
-                          && (is_uda<uncvref_t<T>>::value || !is_detected<is_default_t, uncvref_t<T>>::value),
+#if !defined(_MSC_VER)
+                          && (is_uda<uncvref_t<T>>::value || !is_detected<is_default_t, uncvref_t<T>>::value)
+#endif
+                          ,
                       int>;
 
 public:

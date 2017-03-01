@@ -113,11 +113,13 @@ BOOST_AUTO_TEST_CASE(population_construction_test)
     pop_a = std::move(pop_a);
     BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
 
+#if !defined(_MSC_VER)
     // Check constructability.
     BOOST_CHECK((!std::is_constructible<population, int>::value));
     BOOST_CHECK((!std::is_constructible<population, int &>::value));
     BOOST_CHECK((!std::is_constructible<population, const int &>::value));
     BOOST_CHECK((!std::is_constructible<population, std::string>::value));
+#endif
     BOOST_CHECK((std::is_constructible<population, null_problem>::value));
     BOOST_CHECK((std::is_constructible<population, null_problem &>::value));
     BOOST_CHECK((std::is_constructible<population, null_problem &&>::value));

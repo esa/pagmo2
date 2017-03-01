@@ -972,7 +972,10 @@ class problem
     template <typename T>
     using generic_ctor_enabler
         = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value
-                          && (is_udp<uncvref_t<T>>::value || !is_detected<is_default_t, uncvref_t<T>>::value),
+#if !defined(_MSC_VER)
+                          && (is_udp<uncvref_t<T>>::value || !is_detected<is_default_t, uncvref_t<T>>::value)
+#endif
+                          ,
                       int>;
 
 public:
