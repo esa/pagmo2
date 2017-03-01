@@ -3,6 +3,11 @@
 Algorithms exposed from C++
 ===========================
 
+.. autoclass:: pygmo.core.null_algorithm
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.core.de
    :members:
 
@@ -28,11 +33,6 @@ Algorithms exposed from C++
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.null_algorithm
-   :members:
-
--------------------------------------------------------------
-
 .. autoclass:: pygmo.core.moead
    :members:
 
@@ -49,11 +49,6 @@ Algorithms exposed from C++
 -------------------------------------------------------------
 
 .. autoclass:: pygmo.core.pso
-   :members:
-
--------------------------------------------------------------
-
-.. autoclass:: pygmo.core.mbh
    :members:
 
 -------------------------------------------------------------

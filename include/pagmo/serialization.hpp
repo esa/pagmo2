@@ -36,6 +36,10 @@ see https://www.gnu.org/licenses/. */
 #pragma GCC diagnostic ignored "-Wdeprecated"
 #endif
 
+// Enable thread-safety in cereal. See:
+// http://uscilab.github.io/cereal/thread_safety.html
+#define CEREAL_THREAD_SAFE 1
+
 #include "external/cereal/archives/binary.hpp"
 #include "external/cereal/archives/json.hpp"
 #include "external/cereal/archives/portable_binary.hpp"
@@ -47,6 +51,8 @@ see https://www.gnu.org/licenses/. */
 #include "external/cereal/types/utility.hpp"
 #include "external/cereal/types/vector.hpp"
 
+#undef CEREAL_THREAD_SAFE
+
 #if defined(__clang__) || defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
@@ -55,7 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <random>
 #include <sstream>
 #include <string>
-#ifdef PAGMO_WITH_EIGEN3
+#if defined(PAGMO_WITH_EIGEN3)
 #include <Eigen/Dense>
 #endif
 
@@ -88,7 +94,7 @@ inline void CEREAL_LOAD_FUNCTION_NAME(Archive &ar,
     iss >> e;
 }
 
-#ifdef PAGMO_WITH_EIGEN3
+#if defined(PAGMO_WITH_EIGEN3)
 // Implement the serialization of the Eigen::Matrix class
 template <class Archive, class S, int R, int C, int O, int MR, int MC>
 inline void CEREAL_SAVE_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S, R, C, O, MR, MC> const &cb)

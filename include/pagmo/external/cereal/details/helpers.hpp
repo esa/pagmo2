@@ -55,8 +55,10 @@ namespace cereal
   //! The size type used by cereal
   /*! To ensure compatability between 32, 64, etc bit machines, we need to use
       a fixed size type instead of size_t, which may vary from machine to
-      machine. */
-  using size_type = uint64_t;
+      machine.
+
+      The default value for CEREAL_SIZE_TYPE is specified in cereal/macros.hpp */
+  using size_type = CEREAL_SIZE_TYPE;
 
   // forward decls
   class BinaryOutputArchive;
@@ -73,7 +75,7 @@ namespace cereal
       can potentially take advantage of the pairing.
 
       In serialization functions, NameValuePairs are usually created like so:
-      @code{.unparsed}{.cpp}
+      @code{.cpp}
       struct MyStruct
       {
         int a, b, c, d, e;
@@ -91,7 +93,7 @@ namespace cereal
       @endcode
 
       Alternatively, you can give you data members custom names like so:
-      @code{.unparsed}{.cpp}
+      @code{.cpp}
       struct MyStruct
       {
         int a, b, my_embarrassing_variable_name, d, e;
@@ -112,7 +114,7 @@ namespace cereal
       is a third method which will elide the names when they are not used by
       the Archive:
 
-      @code{.unparsed}{.cpp}
+      @code{.cpp}
       struct MyStruct
       {
         int a, b;
@@ -191,7 +193,7 @@ namespace cereal
   }
 
   //! Convenience for creating a templated NVP
-  /*! For use in inteneral generic typing functions which have an
+  /*! For use in internal generic typing functions which have an
       Archive type declared
       @internal */
   #define CEREAL_NVP_(name, value) ::cereal::make_nvp<Archive>(name, value)
@@ -225,8 +227,29 @@ namespace cereal
     /* The rtti virtual function only exists to enable an archive to
        be used in a polymorphic fashion, if necessary.  See the
        archive adapters for an example of this */
-    class OutputArchiveBase { private: virtual void rtti(){} };
-    class InputArchiveBase { private: virtual void rtti(){} };
+    class OutputArchiveBase
+    {
+      public:
+        OutputArchiveBase() = default;
+        OutputArchiveBase( OutputArchiveBase && ) CEREAL_NOEXCEPT {}
+        OutputArchiveBase & operator=( OutputArchiveBase && ) CEREAL_NOEXCEPT { return *this; }
+        virtual ~OutputArchiveBase() CEREAL_NOEXCEPT = default;
+
+      private:
+        virtual void rtti() {}
+    };
+
+    class InputArchiveBase
+    {
+      public:
+        InputArchiveBase() = default;
+        InputArchiveBase( InputArchiveBase && ) CEREAL_NOEXCEPT {}
+        InputArchiveBase & operator=( InputArchiveBase && ) CEREAL_NOEXCEPT { return *this; }
+        virtual ~InputArchiveBase() CEREAL_NOEXCEPT = default;
+
+      private:
+        virtual void rtti() {}
+    };
 
     // forward decls for polymorphic support
     template <class Archive, class T> struct polymorphic_serialization_support;
@@ -270,7 +293,7 @@ namespace cereal
       human readable archives. For example, XML archives will use this wrapper
       to write maps like so:
 
-      @code{.unparsed}{.xml}
+      @code{.xml}
       <mymap>
         <item0>
           <key>MyFirstKey</key>

@@ -47,7 +47,7 @@ namespace bp = boost::python;
 struct common_base {
     static void check_mandatory_method(const bp::object &o, const char *s, const char *target)
     {
-        if (!callable_attribute(o, s)) {
+        if (callable_attribute(o, s).is_none()) {
             pygmo_throw(PyExc_NotImplementedError, ("the mandatory '" + std::string(s)
                                                     + "()' method has not been detected in the user-defined Python "
                                                     + std::string(target) + " '" + str(o) + "' of type '" + str(type(o))
@@ -64,10 +64,10 @@ struct common_base {
     static RetType getter_wrapper(const bp::object &o, const char *name, const RetType &def_value)
     {
         auto a = callable_attribute(o, name);
-        if (a) {
-            return bp::extract<RetType>(a());
+        if (a.is_none()) {
+            return def_value;
         }
-        return def_value;
+        return bp::extract<RetType>(a());
     }
 };
 }

@@ -40,14 +40,33 @@ see https://www.gnu.org/licenses/. */
 #include "threading.hpp"
 #include "type_traits.hpp"
 
-#define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, #algo)
+/// Macro for the registration of the serialization functionality for user-defined algorithms.
+/**
+ * This macro should always be invoked after the declaration of a user-defined algorithm: it will register
+ * the algorithm with pagmo's serialization machinery. The macro should be called in the root namespace
+ * and using the fully qualified name of the algorithm to be registered. For example:
+ * @code{.unparsed}
+ * namespace my_namespace
+ * {
+ *
+ * class my_algorithm
+ * {
+ *    // ...
+ * };
+ *
+ * }
+ *
+ * PAGMO_REGISTER_ALGORITHM(my_namespace::my_algorithm)
+ * @endcode
+ */
+#define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, "uda " #algo)
 
 namespace pagmo
 {
 
 /// Null algorithm
 /**
- * This algorithm is used to implement the default constructors of meta-algorithms.
+ * This algorithm is used to implement the default constructors of pagmo::algorithm and of the meta-algorithms.
  */
 struct null_algorithm {
     /// Evolve method.
@@ -367,6 +386,9 @@ struct algo_inner final : algo_inner_base {
  *
  * See the documentation of the corresponding methods in this class for details on how the optional
  * methods in the UDA are used by pagmo::algorithm.
+ *
+ * **NOTE**: a moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
+ * in undefined behaviour.
  */
 class algorithm
 {
@@ -376,6 +398,15 @@ class algorithm
     using generic_ctor_enabler = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value, int>;
 
 public:
+    /// Default constructor.
+    /**
+     * The default constructor will initialize a pagmo::algorithm containing a pagmo::null_algorithm.
+     *
+     * @throws unspecified any exception thrown by the constructor from UDA.
+     */
+    algorithm() : algorithm(null_algorithm{})
+    {
+    }
     /// Constructor from a user-defined algorithm of type \p T
     /**
      * **NOTE** this constructor is not enabled if, after the removal of cv and reference qualifiers,
@@ -401,6 +432,8 @@ public:
         m_has_set_verbosity = ptr()->has_set_verbosity();
         // We store at construction the value returned from the user implemented get_name
         m_name = ptr()->get_name();
+        // Store the thread safety value.
+        m_thread_safety = ptr()->get_thread_safety();
     }
     /// Copy constructor
     /**
@@ -414,7 +447,7 @@ public:
      */
     algorithm(const algorithm &other)
         : m_ptr(other.m_ptr->clone()), m_has_set_seed(other.m_has_set_seed),
-          m_has_set_verbosity(other.m_has_set_verbosity), m_name(other.m_name)
+          m_has_set_verbosity(other.m_has_set_verbosity), m_name(other.m_name), m_thread_safety(other.m_thread_safety)
     {
     }
     /// Move constructor
@@ -423,7 +456,8 @@ public:
      */
     algorithm(algorithm &&other) noexcept
         : m_ptr(std::move(other.m_ptr)), m_has_set_seed(std::move(other.m_has_set_seed)),
-          m_has_set_verbosity(other.m_has_set_verbosity), m_name(std::move(other.m_name))
+          m_has_set_verbosity(other.m_has_set_verbosity), m_name(std::move(other.m_name)),
+          m_thread_safety(std::move(other.m_thread_safety))
     {
     }
     /// Move assignment operator
@@ -439,6 +473,7 @@ public:
             m_has_set_seed = std::move(other.m_has_set_seed);
             m_has_set_verbosity = other.m_has_set_verbosity;
             m_name = std::move(other.m_name);
+            m_thread_safety = std::move(other.m_thread_safety);
         }
         return *this;
     }
@@ -638,12 +673,10 @@ public:
      * That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDA instances.
      *
      * @return the thread safety level of the UDA.
-     *
-     * @throws unspecified any exception thrown by the <tt>%get_thread_safety()</tt> method of the UDA.
      */
     thread_safety get_thread_safety() const
     {
-        return ptr()->get_thread_safety();
+        return m_thread_safety;
     }
 
     /// Streaming operator
@@ -674,18 +707,33 @@ public:
         return os;
     }
 
-    /// Serialization.
+    /// Save to archive.
     /**
-     * This method will save/load \p this into the archive \p ar.
+     * This method will save \p this into the archive \p ar.
      *
      * @param ar target archive.
      *
      * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
      */
     template <typename Archive>
-    void serialize(Archive &ar)
+    void save(Archive &ar) const
     {
-        ar(m_ptr, m_has_set_seed, m_has_set_verbosity, m_name);
+        ar(m_ptr, m_has_set_seed, m_has_set_verbosity, m_name, m_thread_safety);
+    }
+    /// Load from archive.
+    /**
+     * This method will load a pagmo::algorithm from \p ar into \p this.
+     *
+     * @param ar source archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of the UDA and of primitive types.
+     */
+    template <typename Archive>
+    void load(Archive &ar)
+    {
+        algorithm tmp;
+        ar(tmp.m_ptr, tmp.m_has_set_seed, tmp.m_has_set_verbosity, tmp.m_name, tmp.m_thread_safety);
+        *this = std::move(tmp);
     }
 
 private:
@@ -711,6 +759,7 @@ private:
     bool m_has_set_seed;
     bool m_has_set_verbosity;
     std::string m_name;
+    thread_safety m_thread_safety;
 };
 }
 

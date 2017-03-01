@@ -294,7 +294,7 @@ private:
         double tmp = m_box_volume[idx] / delta;
         double required_no_samples = 0.5 * ((1. + m_gamma) * std::log(round) + log_factor) * tmp * tmp;
 
-        while (m_no_samples[idx] < required_no_samples) {
+        while (static_cast<double>(m_no_samples[idx]) < required_no_samples) {
             ++m_no_samples[idx];
             if (sample_successful(points, idx)) {
                 ++m_no_succ_samples[idx];

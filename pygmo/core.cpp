@@ -51,6 +51,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/import.hpp>
 #include <boost/python/init.hpp>
 #include <boost/python/make_constructor.hpp>
+#include <boost/python/make_function.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/operators.hpp>
@@ -167,25 +168,6 @@ static inline bp::object test_object_serialization(const bp::object &o)
     return retval;
 }
 
-// A pickle suite for pagmo::null_problem. The problem pickle suite
-// uses null_problem for the initialization of a problem instance,
-// and the initialization argument returned by getinitargs
-// must be serializable itself.
-struct null_problem_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const null_problem &)
-    {
-        return bp::make_tuple();
-    }
-};
-
-// Same as above for the null algo.
-struct null_algorithm_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const null_algorithm &)
-    {
-        return bp::make_tuple();
-    }
-};
-
 // Instances of the classes in pygmo_classes.hpp.
 namespace pygmo
 {
@@ -249,16 +231,6 @@ struct population_pickle_suite : bp::pickle_suite {
         }
     }
 };
-
-// Various wrappers for the population exposition.
-
-// Expose a population constructor from problem.
-template <typename Prob>
-static inline void population_prob_init(bp::class_<population> &pop_class)
-{
-    pop_class.def(bp::init<const Prob &, population::size_type>())
-        .def(bp::init<const Prob &, population::size_type, unsigned>());
-}
 
 // DE1220 ctors.
 static inline de1220 *de1220_init_0(unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
@@ -445,30 +417,46 @@ BOOST_PYTHON_MODULE(core)
 
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
-    // Ctor from problem.
-    population_prob_init<problem>(pop_class);
-    pop_class
+    // Ctors from problem.
+    // NOTE: we expose only the ctors from pagmo::problem, not from C++ or Python UDPs. An __init__ wrapper
+    // on the Python side will take care of cting a pagmo::problem from the input UDP, and then invoke this ctor.
+    // This way we avoid having to expose a different ctor for every exposed C++ prob.
+    pop_class.def(bp::init<const problem &, population::size_type>((bp::arg("prob"), bp::arg("size"))))
+        .def(bp::init<const problem &, population::size_type, unsigned>(
+            (bp::arg("prob"), bp::arg("size"), bp::arg("seed"))))
+        // Repr.
         .def(repr(bp::self))
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<population>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<population>)
         .def_pickle(population_pickle_suite())
-        .def("push_back", +[](population &pop, const bp::object &x) { pop.push_back(pygmo::to_vd(x)); },
-             pygmo::population_push_back_docstring().c_str(), (bp::arg("x")))
-        .def("decision_vector", +[](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); },
-             pygmo::population_decision_vector_docstring().c_str())
-        .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); })
-        .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); })
-        .def("best_idx", +[](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); })
-        .def("best_idx", +[](const population &pop, double tol) { return pop.best_idx(tol); })
+        .def("push_back",
+             +[](population &pop, const bp::object &x, const bp::object &f) {
+                 if (f.is_none()) {
+                     pop.push_back(pygmo::to_vd(x));
+                 } else {
+                     pop.push_back(pygmo::to_vd(x), pygmo::to_vd(f));
+                 }
+             },
+             pygmo::population_push_back_docstring().c_str(), (bp::arg("x"), bp::arg("f") = bp::object()))
+        .def("random_decision_vector",
+             +[](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); },
+             pygmo::population_random_decision_vector_docstring().c_str())
+        .def("best_idx", +[](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); },
+             (bp::arg("tol")))
+        .def("best_idx", +[](const population &pop, double tol) { return pop.best_idx(tol); }, (bp::arg("tol")))
         .def("best_idx", +[](const population &pop) { return pop.best_idx(); },
              pygmo::population_best_idx_docstring().c_str())
         .def("worst_idx",
-             +[](const population &pop, const bp::object &tol) { return pop.worst_idx(pygmo::to_vd(tol)); })
-        .def("worst_idx", +[](const population &pop, double tol) { return pop.worst_idx(tol); })
+             +[](const population &pop, const bp::object &tol) { return pop.worst_idx(pygmo::to_vd(tol)); },
+             (bp::arg("tol")))
+        .def("worst_idx", +[](const population &pop, double tol) { return pop.worst_idx(tol); }, (bp::arg("tol")))
         .def("worst_idx", +[](const population &pop) { return pop.worst_idx(); },
              pygmo::population_worst_idx_docstring().c_str())
-        .def("size", &population::size, pygmo::population_size_docstring().c_str())
+        .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); },
+                      pygmo::population_champion_x_docstring().c_str())
+        .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); },
+                      pygmo::population_champion_f_docstring().c_str())
         .def("__len__", &population::size)
         .def("set_xf", +[](population &pop, population::size_type i, const bp::object &x,
                            const bp::object &f) { pop.set_xf(i, pygmo::to_vd(x), pygmo::to_vd(f)); },
@@ -476,10 +464,10 @@ BOOST_PYTHON_MODULE(core)
         .def("set_x",
              +[](population &pop, population::size_type i, const bp::object &x) { pop.set_x(i, pygmo::to_vd(x)); },
              pygmo::population_set_x_docstring().c_str())
-        .def("set_problem_seed", &population::set_problem_seed, pygmo::population_set_problem_seed_docstring().c_str(),
-             (bp::arg("seed")))
-        .def("get_problem", &population::get_problem, pygmo::population_get_problem_docstring().c_str(),
-             bp::return_value_policy<bp::copy_const_reference>())
+        .add_property("problem", bp::make_function(+[](population &pop) -> problem & { return pop.get_problem(); },
+                                                   bp::return_internal_reference<>()),
+                      +[](population &pop, const problem &p) { pop.get_problem() = p; },
+                      pygmo::population_problem_docstring().c_str())
         .def("get_f", +[](const population &pop) { return pygmo::vv_to_a(pop.get_f()); },
              pygmo::population_get_f_docstring().c_str())
         .def("get_x", +[](const population &pop) { return pygmo::vv_to_a(pop.get_x()); },
@@ -489,7 +477,7 @@ BOOST_PYTHON_MODULE(core)
         .def("get_seed", &population::get_seed, pygmo::population_get_seed_docstring().c_str());
 
     // Problem class.
-    pygmo::problem_ptr = make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::no_init);
+    pygmo::problem_ptr = make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::init<>());
     auto &problem_class = *pygmo::problem_ptr;
     problem_class.def(bp::init<const bp::object &>((bp::arg("udp"))))
         .def(repr(bp::self))
@@ -566,7 +554,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Algorithm class.
     pygmo::algorithm_ptr
-        = make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::no_init);
+        = make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::init<>());
     auto &algorithm_class = *pygmo::algorithm_ptr;
     algorithm_class.def(bp::init<const bp::object &>((bp::arg("uda"))))
         .def(repr(bp::self))
@@ -663,10 +651,6 @@ BOOST_PYTHON_MODULE(core)
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
     np.def(bp::init<vector_double::size_type>((bp::arg("nobj"))));
-    // NOTE: this is needed only for the null_problem, as it is used in the implementation of the
-    // serialization of the problem. Not necessary for any other problem type.
-    // NOTE: this is needed because problem does not have a def ctor.
-    np.def_pickle(null_problem_pickle_suite());
     // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock", pygmo::rosenbrock_docstring().c_str());
     rb.def(bp::init<unsigned>((bp::arg("dim"))));
@@ -761,9 +745,6 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm", pygmo::null_algorithm_docstring().c_str());
-    // NOTE: this is needed only for the null_algorithm, as it is used in the implementation of the
-    // serialization of the algorithm. Not necessary for any other algorithm type.
-    na.def_pickle(null_algorithm_pickle_suite());
     // DE
     auto de_ = pygmo::expose_algorithm<de>("de", pygmo::de_docstring().c_str());
     de_.def(bp::init<unsigned int, double, double, unsigned int, double, double>(

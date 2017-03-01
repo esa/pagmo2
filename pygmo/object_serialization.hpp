@@ -58,7 +58,7 @@ void save(Archive &archive, const boost::python::object &o)
     // content of the bytes object.
     auto ptr = PyBytes_AsString(tmp.ptr());
     if (!ptr) {
-        pygmo_throw(PyExc_TypeError, "pickle dumps did not return a bytes object");
+        pygmo_throw(PyExc_TypeError, "pickle's dumps() function did not return a bytes object");
     }
     // NOTE: this will be the length of the bytes object *without* the terminator.
     const auto size = len(tmp);

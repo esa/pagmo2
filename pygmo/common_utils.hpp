@@ -135,7 +135,7 @@ inline std::string str(const bp::object &o)
 // Check if type is callable.
 inline bool callable(const bp::object &o)
 {
-    if (!o) {
+    if (o.is_none()) {
         return false;
     }
     return bp::extract<bool>(builtin().attr("callable")(o));
