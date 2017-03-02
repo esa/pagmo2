@@ -463,29 +463,6 @@ public:
 template <typename T>
 const bool override_has_hessians_sparsity<T>::value;
 
-/// Detect user-defined problems (UDP).
-/**
- * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
- * constructible, and if it satisfies the pagmo::has_fitness and pagmo::has_bounds type traits.
- *
- * Types satisfying this type trait can be used as user-defined problems (UDP) in pagmo::problem.
- */
-template <typename T>
-class is_udp
-{
-    static const bool implementation_defined
-        = std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
-          && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
-          && std::is_destructible<T>::value && has_fitness<T>::value && has_bounds<T>::value;
-
-public:
-    /// Value of the type trait.
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool is_udp<T>::value;
-
 namespace detail
 {
 
