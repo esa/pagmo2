@@ -39,7 +39,7 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(island_construction)
 {
-    island isl(thread_island{}, de{});
+    island isl(de{}, thread_island{});
     for (unsigned i = 0u; i < 1000u; ++i) {
         isl.evolve();
     }

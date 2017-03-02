@@ -141,11 +141,8 @@ struct isl_inner final : isl_inner_base {
     isl_inner(isl_inner &&) = delete;
     isl_inner &operator=(const isl_inner &) = delete;
     isl_inner &operator=(isl_inner &&) = delete;
-    // Constructors from T (copy and move variants).
+    // Constructor from T.
     explicit isl_inner(const T &x) : m_value(x)
-    {
-    }
-    explicit isl_inner(T &&x) : m_value(std::move(x))
     {
     }
     // The clone method, used in the copy constructor of island.
@@ -181,9 +178,9 @@ struct isl_inner final : isl_inner_base {
 class island
 {
 public:
-    template <typename Island, typename Algo>
-    explicit island(Island &&isl, Algo &&a)
-        : m_ptr(::new detail::isl_inner<uncvref_t<Island>>(std::forward<Island>(isl))), m_algo(std::forward<Algo>(a))
+    template <typename Algo, typename Island>
+    explicit island(Algo &&a, Island &&isl)
+        : m_algo(std::forward<Algo>(a)), m_ptr(::new detail::isl_inner<uncvref_t<Island>>(std::forward<Island>(isl)))
     {
     }
     void evolve()
@@ -200,9 +197,9 @@ public:
     }
 
 private:
+    algorithm m_algo;
     // Pointer to the inner base island
     std::unique_ptr<detail::isl_inner_base> m_ptr;
-    algorithm m_algo;
 };
 }
 

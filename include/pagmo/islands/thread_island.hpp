@@ -149,20 +149,21 @@ struct task_queue {
 
 class thread_island
 {
-    template <typename... Args>
-    using generic_ctor_enabler = enable_if_t<std::is_constructible<population, Args &&...>::value, int>;
+    template <typename Arg0, typename... Args>
+    using generic_ctor_enabler = enable_if_t<std::is_constructible<population, Arg0 &&, Args &&...>::value, int>;
 
 public:
-    template <typename... Args, generic_ctor_enabler<Args...> = 0>
-    explicit thread_island(Args &&... args) : m_pop(std::forward<Args>(args)...)
+    thread_island() = default;
+    template <typename Arg0, typename... Args, generic_ctor_enabler<Arg0, Args...> = 0>
+    explicit thread_island(Arg0 &&arg0, Args &&... args) : m_pop(std::forward<Arg0>(arg0), std::forward<Args>(args)...)
     {
     }
     thread_island(const thread_island &other) : m_pop(other.get_population())
     {
     }
-    thread_island(thread_island &&other) : m_pop(other.move_out_population())
-    {
-    }
+    thread_island(thread_island &&) = delete;
+    thread_island operator=(const thread_island &) = delete;
+    thread_island operator=(thread_island &&) = delete;
     void enqueue_evolution(const algorithm &algo)
     {
         std::lock_guard<std::mutex> lock(m_futures_mutex);
