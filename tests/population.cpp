@@ -43,12 +43,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
 
-#if defined(__clang__)
-
-#pragma clang diagnostic ignored "-Wself-move"
-
-#endif
-
 using namespace pagmo;
 
 static inline std::string pop_to_string(const population &pop)
@@ -106,6 +100,7 @@ BOOST_AUTO_TEST_CASE(population_construction_test)
     pop_b = std::move(pop_e);
     BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
 
+<<<<<<< HEAD
     // Check constructability.
     BOOST_CHECK((!std::is_constructible<population, int>::value));
     BOOST_CHECK((!std::is_constructible<population, int &>::value));
@@ -122,12 +117,32 @@ BOOST_AUTO_TEST_CASE(population_construction_test)
     BOOST_CHECK((std::is_constructible<population, const problem &>::value));
     BOOST_CHECK((std::is_constructible<population, const problem>::value));
 
+=======
+>>>>>>> pagmo2/master
     // Self assignments.
     pop_a = pop_b;
     pop_a = pop_a;
     BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
+#if !defined(__clang__)
     pop_a = std::move(pop_a);
     BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
+#endif
+
+    // Check constructability.
+    BOOST_CHECK((!std::is_constructible<population, int>::value));
+    BOOST_CHECK((!std::is_constructible<population, int &>::value));
+    BOOST_CHECK((!std::is_constructible<population, const int &>::value));
+    BOOST_CHECK((!std::is_constructible<population, std::string>::value));
+    BOOST_CHECK((std::is_constructible<population, null_problem>::value));
+    BOOST_CHECK((std::is_constructible<population, null_problem &>::value));
+    BOOST_CHECK((std::is_constructible<population, null_problem &&>::value));
+    BOOST_CHECK((std::is_constructible<population, const null_problem &>::value));
+    BOOST_CHECK((std::is_constructible<population, const null_problem>::value));
+    BOOST_CHECK((std::is_constructible<population, problem>::value));
+    BOOST_CHECK((std::is_constructible<population, problem &>::value));
+    BOOST_CHECK((std::is_constructible<population, problem &&>::value));
+    BOOST_CHECK((std::is_constructible<population, const problem &>::value));
+    BOOST_CHECK((std::is_constructible<population, const problem>::value));
 }
 
 BOOST_AUTO_TEST_CASE(population_copy_constructor_test)

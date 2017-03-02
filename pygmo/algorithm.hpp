@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/tuple.hpp>
 #include <sstream>
 #include <string>
+#include <type_traits>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/population.hpp>
@@ -55,6 +56,11 @@ namespace detail
 {
 
 namespace bp = boost::python;
+
+// Disable the static UDA checks for bp::object.
+template <>
+struct disable_uda_checks<bp::object> : std::true_type {
+};
 
 template <>
 struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {

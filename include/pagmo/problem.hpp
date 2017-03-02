@@ -489,6 +489,42 @@ const bool is_udp<T>::value;
 namespace detail
 {
 
+// Specialise this to true in order to disable all the UDP checks and mark a type
+// as a UDP regardless of the features provided by it.
+// NOTE: this is needed when implementing the machinery for Python problems.
+// NOTE: leave this as an implementation detail for now.
+template <typename>
+struct disable_udp_checks : std::false_type {
+};
+}
+
+/// Detect user-defined problems (UDP).
+/**
+ * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
+ * constructible, and if it satisfies the pagmo::has_fitness and pagmo::has_bounds type traits.
+ *
+ * Types satisfying this type trait can be used as user-defined problems (UDP) in pagmo::problem.
+ */
+template <typename T>
+class is_udp
+{
+    static const bool implementation_defined
+        = (std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
+           && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
+           && std::is_destructible<T>::value && has_fitness<T>::value && has_bounds<T>::value)
+          || detail::disable_udp_checks<T>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool is_udp<T>::value;
+
+namespace detail
+{
+
 // Helper to check that the problem bounds are valid. This will throw if the bounds
 // are invalid because of:
 // - the bounds size is zero,
@@ -579,10 +615,6 @@ struct prob_inner_base {
 
 template <typename T>
 struct prob_inner final : prob_inner_base {
-    // Static checks.
-    static_assert(is_udp<T>::value, "A problem must not be cv/reference qualified, it must be default-constructible, "
-                                    "copy-constructible, move-constructible and destructible, "
-                                    "and it must provide the mandatory fitness() and get_bounds() methods.");
     // We just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
@@ -965,7 +997,7 @@ struct prob_inner final : prob_inner_base {
 class problem
 {
     // Enable the generic ctor only if T is not a problem (after removing
-    // const/reference qualifiers).
+    // const/reference qualifiers), and if T is a udp.
     template <typename T>
     using generic_ctor_enabler
         = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value && is_udp<uncvref_t<T>>::value, int>;

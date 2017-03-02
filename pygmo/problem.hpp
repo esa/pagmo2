@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <iterator>
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <utility>
 
 #include <pagmo/problem.hpp>
@@ -60,6 +61,11 @@ namespace detail
 {
 
 namespace bp = boost::python;
+
+// Disable the static UDP checks for bp::object.
+template <>
+struct disable_udp_checks<bp::object> : std::true_type {
+};
 
 // NOTE: here we are specialising the prob_inner implementation template for bp::object.
 // We need to do this because the default implementation works on C++ types by detecting
