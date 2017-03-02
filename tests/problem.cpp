@@ -420,6 +420,25 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     BOOST_CHECK((p0.extract<null_problem>() != nullptr));
     p2 = std::move(p4);
     BOOST_CHECK((p2.extract<null_problem>() != nullptr));
+
+    // Check the is_udp type trait.
+    BOOST_CHECK(is_udp<base_p>::value);
+    BOOST_CHECK(is_udp<grad_p>::value);
+    BOOST_CHECK(is_udp<hess_p>::value);
+    BOOST_CHECK(!is_udp<hess_p &>::value);
+    BOOST_CHECK(!is_udp<const hess_p &>::value);
+    BOOST_CHECK(!is_udp<const hess_p>::value);
+    BOOST_CHECK(!is_udp<int>::value);
+    BOOST_CHECK(!is_udp<void>::value);
+    BOOST_CHECK(!is_udp<std::string>::value);
+    BOOST_CHECK((std::is_constructible<problem, base_p>::value));
+    BOOST_CHECK((std::is_constructible<problem, grad_p>::value));
+    BOOST_CHECK((std::is_constructible<problem, hess_p>::value));
+    BOOST_CHECK((std::is_constructible<problem, hess_p &>::value));
+    BOOST_CHECK((std::is_constructible<problem, const hess_p &>::value));
+    BOOST_CHECK((std::is_constructible<problem, hess_p &&>::value));
+    BOOST_CHECK((!std::is_constructible<problem, int>::value));
+    BOOST_CHECK((!std::is_constructible<problem, std::string>::value));
 }
 
 BOOST_AUTO_TEST_CASE(problem_assignment_test)
@@ -1023,15 +1042,12 @@ BOOST_AUTO_TEST_CASE(extract_test)
 {
     problem p{null_problem{}};
     BOOST_CHECK(p.is<null_problem>());
-    BOOST_CHECK(!p.is<const null_problem>());
     BOOST_CHECK(!p.is<base_p>());
     BOOST_CHECK((std::is_same<null_problem *, decltype(p.extract<null_problem>())>::value));
     BOOST_CHECK(
         (std::is_same<null_problem const *, decltype(static_cast<const problem &>(p).extract<null_problem>())>::value));
     BOOST_CHECK(p.extract<null_problem>() != nullptr);
     BOOST_CHECK(static_cast<const problem &>(p).extract<null_problem>() != nullptr);
-    BOOST_CHECK(p.extract<const null_problem>() == nullptr);
-    BOOST_CHECK(static_cast<const problem &>(p).extract<const null_problem>() == nullptr);
     BOOST_CHECK(p.extract<base_p>() == nullptr);
     BOOST_CHECK(static_cast<const problem &>(p).extract<base_p>() == nullptr);
 }

@@ -172,6 +172,42 @@ const bool has_evolve<T>::value;
 namespace detail
 {
 
+// Specialise this to true in order to disable all the UDA checks and mark a type
+// as a UDA regardless of the features provided by it.
+// NOTE: this is needed when implementing the machinery for Python algos.
+// NOTE: leave this as an implementation detail for now.
+template <typename>
+struct disable_uda_checks : std::false_type {
+};
+}
+
+/// Detect user-defined algorithms (UDA).
+/**
+ * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
+ * constructible, and if it satisfies the pagmo::has_evolve type trait.
+ *
+ * Types satisfying this type trait can be used as user-defined algorithms (UDA) in pagmo::algorithm.
+ */
+template <typename T>
+class is_uda
+{
+    static const bool implementation_defined
+        = (std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
+           && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
+           && std::is_destructible<T>::value && has_evolve<T>::value)
+          || detail::disable_uda_checks<T>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool is_uda<T>::value;
+
+namespace detail
+{
+
 struct algo_inner_base {
     virtual ~algo_inner_base()
     {
@@ -193,13 +229,6 @@ struct algo_inner_base {
 
 template <typename T>
 struct algo_inner final : algo_inner_base {
-    // Static checks.
-    static_assert(
-        std::is_default_constructible<T>::value && std::is_copy_constructible<T>::value
-            && std::is_move_constructible<T>::value && std::is_destructible<T>::value,
-        "An algorithm must be default-constructible, copy-constructible, move-constructible and destructible.");
-    static_assert(has_evolve<T>::value, "A user-defined algorithm must provide an evolve method: "
-                                        "the evolve method was either not provided or not implemented correctly.");
     // We just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;
@@ -393,9 +422,10 @@ struct algo_inner final : algo_inner_base {
 class algorithm
 {
     // Enable the generic ctor only if T is not an algorithm (after removing
-    // const/reference qualifiers).
+    // const/reference qualifiers), and if T is a uda.
     template <typename T>
-    using generic_ctor_enabler = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value, int>;
+    using generic_ctor_enabler
+        = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value && is_uda<uncvref_t<T>>::value, int>;
 
 public:
     /// Default constructor.
@@ -411,7 +441,7 @@ public:
     /**
      * **NOTE** this constructor is not enabled if, after the removal of cv and reference qualifiers,
      * \p T is of type pagmo::algorithm (that is, this constructor does not compete with the copy/move
-     * constructors of pagmo::algorithm).
+     * constructors of pagmo::algorithm), or if \p T does not satisfy pagmo::is_uda.
      *
      * This constructor will construct a pagmo::algorithm from the UDA (user-defined algorithm) \p x of type \p T. In
      * order for the construction to be successful, the UDA must implement a minimal set of methods,
