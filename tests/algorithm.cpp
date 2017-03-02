@@ -151,10 +151,8 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_test)
     BOOST_CHECK((std::is_constructible<algorithm, al_01 &>::value));
     BOOST_CHECK((std::is_constructible<algorithm, const null_algorithm &>::value));
     BOOST_CHECK((std::is_constructible<algorithm, al_01 &&>::value));
-#if !defined(_MSC_VER)
     BOOST_CHECK((!std::is_constructible<algorithm, int>::value));
     BOOST_CHECK((!std::is_constructible<algorithm, std::string>::value));
-#endif
 }
 
 BOOST_AUTO_TEST_CASE(algorithm_copy_constructor_test)

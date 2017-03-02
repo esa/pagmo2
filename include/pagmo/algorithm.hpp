@@ -169,6 +169,18 @@ public:
 template <typename T>
 const bool has_evolve<T>::value;
 
+namespace detail
+{
+
+// Specialise this to true in order to disable all the UDA checks and mark a type
+// as a UDA regardless of the features provided by it.
+// NOTE: this is needed when implementing the machinery for Python algos.
+// NOTE: leave this as an implementation detail for now.
+template <typename>
+struct disable_uda_checks : std::false_type {
+};
+}
+
 /// Detect user-defined algorithms (UDA).
 /**
  * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
@@ -180,9 +192,10 @@ template <typename T>
 class is_uda
 {
     static const bool implementation_defined
-        = std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
-          && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
-          && std::is_destructible<T>::value && has_evolve<T>::value;
+        = (std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
+           && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
+           && std::is_destructible<T>::value && has_evolve<T>::value)
+          || detail::disable_uda_checks<T>::value;
 
 public:
     /// Value of the type trait.
@@ -216,8 +229,6 @@ struct algo_inner_base {
 
 template <typename T>
 struct algo_inner final : algo_inner_base {
-    // Mark this as the default implementation of algo_inner.
-    static const bool is_default = true;
     // We just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;
@@ -411,18 +422,10 @@ struct algo_inner final : algo_inner_base {
 class algorithm
 {
     // Enable the generic ctor only if T is not an algorithm (after removing
-    // const/reference qualifiers), and if either T is a uda or the algo_inner implementation
-    // is not the default one.
-    template <typename T>
-    using is_default_t = decltype(detail::algo_inner<T>::is_default);
+    // const/reference qualifiers), and if T is a uda.
     template <typename T>
     using generic_ctor_enabler
-        = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value
-#if !defined(_MSC_VER)
-                          && (is_uda<uncvref_t<T>>::value || !is_detected<is_default_t, uncvref_t<T>>::value)
-#endif
-                          ,
-                      int>;
+        = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value && is_uda<uncvref_t<T>>::value, int>;
 
 public:
     /// Default constructor.

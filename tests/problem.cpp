@@ -437,10 +437,8 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     BOOST_CHECK((std::is_constructible<problem, hess_p &>::value));
     BOOST_CHECK((std::is_constructible<problem, const hess_p &>::value));
     BOOST_CHECK((std::is_constructible<problem, hess_p &&>::value));
-#if !defined(_MSC_VER)
     BOOST_CHECK((!std::is_constructible<problem, int>::value));
     BOOST_CHECK((!std::is_constructible<problem, std::string>::value));
-#endif
 }
 
 BOOST_AUTO_TEST_CASE(problem_assignment_test)
