@@ -100,25 +100,6 @@ BOOST_AUTO_TEST_CASE(population_construction_test)
     pop_b = std::move(pop_e);
     BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
 
-<<<<<<< HEAD
-    // Check constructability.
-    BOOST_CHECK((!std::is_constructible<population, int>::value));
-    BOOST_CHECK((!std::is_constructible<population, int &>::value));
-    BOOST_CHECK((!std::is_constructible<population, const int &>::value));
-    BOOST_CHECK((!std::is_constructible<population, std::string>::value));
-    BOOST_CHECK((std::is_constructible<population, null_problem>::value));
-    BOOST_CHECK((std::is_constructible<population, null_problem &>::value));
-    BOOST_CHECK((std::is_constructible<population, null_problem &&>::value));
-    BOOST_CHECK((std::is_constructible<population, const null_problem &>::value));
-    BOOST_CHECK((std::is_constructible<population, const null_problem>::value));
-    BOOST_CHECK((std::is_constructible<population, problem>::value));
-    BOOST_CHECK((std::is_constructible<population, problem &>::value));
-    BOOST_CHECK((std::is_constructible<population, problem &&>::value));
-    BOOST_CHECK((std::is_constructible<population, const problem &>::value));
-    BOOST_CHECK((std::is_constructible<population, const problem>::value));
-
-=======
->>>>>>> pagmo2/master
     // Self assignments.
     pop_a = pop_b;
     pop_a = pop_a;
