@@ -123,17 +123,18 @@ struct isl_inner_base {
 template <typename T>
 struct isl_inner final : isl_inner_base {
     // Static checks.
-    static_assert(std::is_default_constructible<T>::value && std::is_copy_constructible<T>::value
-                      && std::is_move_constructible<T>::value && std::is_destructible<T>::value,
-                  "An island must be default-constructible, copy-constructible, move-constructible and destructible.");
-    static_assert(has_enqueue_evolution<T>::value,
-                  "An island must provide an enqueue_evolution() method: the method was either not "
-                  "provided or not implemented correctly.");
-    static_assert(has_wait<T>::value, "An island must provide a wait() method: the method was either not "
-                                      "provided or not implemented correctly.");
-    static_assert(has_get_population<T>::value,
-                  "An island must provide a get_population() method: the method was either not "
-                  "provided or not implemented correctly.");
+    // static_assert(std::is_default_constructible<T>::value && std::is_copy_constructible<T>::value
+    //                   && std::is_move_constructible<T>::value && std::is_destructible<T>::value,
+    //               "An island must be default-constructible, copy-constructible, move-constructible and
+    //               destructible.");
+    // static_assert(has_enqueue_evolution<T>::value,
+    //               "An island must provide an enqueue_evolution() method: the method was either not "
+    //               "provided or not implemented correctly.");
+    // static_assert(has_wait<T>::value, "An island must provide a wait() method: the method was either not "
+    //                                   "provided or not implemented correctly.");
+    // static_assert(has_get_population<T>::value,
+    //               "An island must provide a get_population() method: the method was either not "
+    //               "provided or not implemented correctly.");
     // We just need the def ctor, delete everything else.
     isl_inner() = default;
     isl_inner(const isl_inner &) = delete;

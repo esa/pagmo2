@@ -175,10 +175,15 @@ public:
     {
         std::lock_guard<std::mutex> lock(m_futures_mutex);
         for (decltype(m_futures.size()) i = 0; i < m_futures.size(); ++i) {
+            // NOTE: this has to be valid, as the only way to get the value of the futures is via
+            // this method, and we clear the futures vector after we are done.
             assert(m_futures[i].valid());
             try {
                 m_futures[i].get();
             } catch (...) {
+                // If any of the futures stores an exception, we will re-raise it.
+                // But first, we need to get all the other futures and erase the futures
+                // vector.
                 for (i = i + 1u; i < m_futures.size(); ++i) {
                     try {
                         m_futures[i].get();
