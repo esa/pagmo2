@@ -169,29 +169,6 @@ public:
 template <typename T>
 const bool has_evolve<T>::value;
 
-/// Detect user-defined algorithms (UDA).
-/**
- * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
- * constructible, and if it satisfies the pagmo::has_evolve type trait.
- *
- * Types satisfying this type trait can be used as user-defined algorithms (UDA) in pagmo::algorithm.
- */
-template <typename T>
-class is_uda
-{
-    static const bool implementation_defined
-        = std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
-          && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
-          && std::is_destructible<T>::value && has_evolve<T>::value;
-
-public:
-    /// Value of the type trait.
-    static const bool value = implementation_defined;
-};
-
-template <typename T>
-const bool is_uda<T>::value;
-
 namespace detail
 {
 
