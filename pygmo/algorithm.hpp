@@ -32,7 +32,6 @@ see https://www.gnu.org/licenses/. */
 #include "python_includes.hpp"
 
 #include <boost/numeric/conversion/cast.hpp>
-#include <boost/python/class.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/tuple.hpp>

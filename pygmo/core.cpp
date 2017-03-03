@@ -79,6 +79,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
+#include <pagmo/archipelago.hpp>
+#include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/ackley.hpp>
@@ -109,6 +111,7 @@ see https://www.gnu.org/licenses/. */
 #include "algorithm_exposition_suite.hpp"
 #include "common_utils.hpp"
 #include "docstrings.hpp"
+#include "island.hpp"
 #include "numpy.hpp"
 #include "object_serialization.hpp"
 #include "problem.hpp"
@@ -985,4 +988,21 @@ BOOST_PYTHON_MODULE(core)
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); },
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
+
+    // Island.
+    bp::class_<island> isl_class("island", bp::init<>());
+    isl_class.def(bp::init<const algorithm &, const bp::object &>((bp::arg("algo"), bp::arg("udi"))))
+        .def(bp::init<const algorithm &, const problem &, population::size_type>())
+        // TODO: enable when implemented.
+        //.def(repr(bp::self))
+        .def_pickle(pygmo::island_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<island>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
+        .def("evolve", &island::evolve)
+        .def("wait", &island::wait)
+        .def("get_population", &island::get_population)
+        .add_property("algorithm", bp::make_function(+[](island &isl) -> algorithm & { return isl.get_algorithm(); },
+                                                     bp::return_internal_reference<>()),
+                      +[](island &isl, const algorithm &a) { isl.get_algorithm() = a; });
 }
