@@ -26,10 +26,9 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_THREAD_ISLAND_HPP
-#define PAGMO_THREAD_ISLAND_HPP
+#ifndef PAGMO_TASK_QUEUE_HPP
+#define PAGMO_TASK_QUEUE_HPP
 
-#include <chrono>
 #include <cstdlib>
 #include <functional>
 #include <future>
@@ -38,14 +37,9 @@ see https://www.gnu.org/licenses/. */
 #include <queue>
 #include <stdexcept>
 #include <thread>
-#include <type_traits>
 #include <utility>
-#include <vector>
 
-#include <pagmo/algorithm.hpp>
 #include <pagmo/exceptions.hpp>
-#include <pagmo/population.hpp>
-#include <pagmo/type_traits.hpp>
 
 namespace pagmo
 {
@@ -146,101 +140,6 @@ struct task_queue {
     std::thread m_thread;
 };
 }
-
-class thread_island
-{
-    template <typename Arg0, typename... Args>
-    using generic_ctor_enabler = enable_if_t<std::is_constructible<population, Arg0 &&, Args &&...>::value, int>;
-
-public:
-    thread_island() = default;
-    template <typename Arg0, typename... Args, generic_ctor_enabler<Arg0, Args...> = 0>
-    explicit thread_island(Arg0 &&arg0, Args &&... args) : m_pop(std::forward<Arg0>(arg0), std::forward<Args>(args)...)
-    {
-    }
-    thread_island(const thread_island &other) : m_pop(other.get_population())
-    {
-    }
-    thread_island(thread_island &&) = delete;
-    thread_island operator=(const thread_island &) = delete;
-    thread_island operator=(thread_island &&) = delete;
-    void enqueue_evolution(const algorithm &algo)
-    {
-        std::lock_guard<std::mutex> lock(m_futures_mutex);
-        m_futures.emplace_back(m_queue.enqueue([this, algo]() {
-            auto new_pop = algo.evolve(this->get_population());
-            this->move_in_population(std::move(new_pop));
-        }));
-    }
-    void wait() const
-    {
-        std::lock_guard<std::mutex> lock(m_futures_mutex);
-        for (decltype(m_futures.size()) i = 0; i < m_futures.size(); ++i) {
-            // NOTE: this has to be valid, as the only way to get the value of the futures is via
-            // this method, and we clear the futures vector after we are done.
-            assert(m_futures[i].valid());
-            try {
-                m_futures[i].get();
-            } catch (...) {
-                // If any of the futures stores an exception, we will re-raise it.
-                // But first, we need to get all the other futures and erase the futures
-                // vector.
-                for (i = i + 1u; i < m_futures.size(); ++i) {
-                    try {
-                        m_futures[i].get();
-                    } catch (...) {
-                    }
-                }
-                m_futures.clear();
-                throw;
-            }
-        }
-        m_futures.clear();
-    }
-    bool busy() const
-    {
-        std::lock_guard<std::mutex> lock(m_futures_mutex);
-        for (const auto &f : m_futures) {
-            assert(f.valid());
-            const auto status = f.wait_for(std::chrono::duration<int>::zero());
-            if (status != std::future_status::ready) {
-                return true;
-            }
-        }
-        return false;
-    }
-    population get_population() const
-    {
-        std::lock_guard<std::mutex> lock(m_pop_mutex);
-        return m_pop;
-    }
-    ~thread_island()
-    {
-        try {
-            wait();
-        } catch (...) {
-        }
-    }
-
-private:
-    void move_in_population(population &&pop)
-    {
-        std::lock_guard<std::mutex> lock(m_pop_mutex);
-        m_pop = std::move(pop);
-    }
-    population move_out_population()
-    {
-        std::lock_guard<std::mutex> lock(m_pop_mutex);
-        return std::move(m_pop);
-    }
-
-private:
-    population m_pop;
-    detail::task_queue m_queue;
-    mutable std::mutex m_pop_mutex;
-    mutable std::vector<std::future<void>> m_futures;
-    mutable std::mutex m_futures_mutex;
-};
 }
 
 #endif

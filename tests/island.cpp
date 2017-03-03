@@ -31,7 +31,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/island.hpp>
-#include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 
@@ -39,7 +38,7 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(island_construction)
 {
-    island isl(de{}, thread_island{});
+    island isl(de{}, rosenbrock{}, 20);
     for (unsigned i = 0u; i < 1000u; ++i) {
         isl.evolve();
     }
