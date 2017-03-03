@@ -186,10 +186,16 @@ public:
     }
     thread_island(const thread_island &other) : m_pop(other.get_population())
     {
+        // NOTE: check here as well, in case copying the problem does something strange to its
+        // thread safety.
+        check_thread_safety(m_pop.get_problem());
     }
     // NOTE: the noexcept move semantics here means that if the pop mutex throws, the program
     // will abort. We can avoid this behaviour by adopting an atomic-based spinlock instead
     // of std::mutex. Let's wait and see if this becomes a problem in practice.
+    // NOTE: no need to re-check thread safety when move operations are involved: in the problem class,
+    // we have a pointer to the UDP and the move operation just moves the pointer without invoking
+    // any operation on the UDP.
     thread_island(thread_island &&other) noexcept : m_pop(other.move_out_population())
     {
     }
@@ -266,6 +272,7 @@ public:
     {
         population tmp;
         ar(tmp);
+        check_thread_safety(tmp.get_problem());
         move_in_population(std::move(tmp));
     }
 
@@ -400,6 +407,27 @@ public:
         thread_island t_isl(std::move(pop));
         m_ptr.reset(::new detail::isl_inner<thread_island>(std::move(t_isl)));
     }
+    island(const island &other) : m_algo(other.m_algo), m_ptr(other.m_ptr->clone())
+    {
+    }
+    island(island &&other) noexcept : m_algo(std::move(other.m_algo)), m_ptr(std::move(other.m_ptr))
+    {
+    }
+    island &operator=(const island &other)
+    {
+        if (this != &other) {
+            *this = island(other);
+        }
+        return *this;
+    }
+    island &operator=(island &&other) noexcept
+    {
+        if (this != &other) {
+            m_algo = std::move(other.m_algo);
+            m_ptr = std::move(other.m_ptr);
+        }
+        return *this;
+    }
     void evolve()
     {
         m_ptr->enqueue_evolution(m_algo, m_archi);
@@ -463,7 +491,15 @@ inline void thread_island::enqueue_evolution(const algorithm &algo, archipelago 
         // to it, the reference might be modified from pagmo::island and we would have
         // a data race.
         m_futures.back() = m_queue.enqueue([this, algo]() {
+            // Check it again, in the remote case copying it creates an algo with no thread safety.
+            check_thread_safety(algo);
             auto new_pop = algo.evolve(this->get_population());
+            if (static_cast<int>(new_pop.get_problem().get_thread_safety()) < static_cast<int>(thread_safety::basic)) {
+                pagmo_throw(std::runtime_error,
+                            "An evolve() call in thread_island returned a population with a "
+                            "problem providing no thread safety. This most likely indicates an error "
+                            "in the implementation of the user-defined problem/algorithm.");
+            }
             this->move_in_population(std::move(new_pop));
         });
     } catch (...) {
