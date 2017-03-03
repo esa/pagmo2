@@ -632,6 +632,22 @@ inline bp::tuple cpptuple_to_pytuple(const std::tuple<Args...> &t)
 {
     return detail::ct2pt_invoke(bp::make_tuple<Args...>, t);
 }
+
+// This RAII struct will unlock the GIL on construction,
+// and lock it again on destruction.
+//
+// See: https://docs.python.org/2/c-api/init.html
+struct gil_releaser {
+    gil_releaser()
+    {
+        m_thread_state = ::PyEval_SaveThread();
+    }
+    ~gil_releaser()
+    {
+        ::PyEval_RestoreThread(m_thread_state);
+    }
+    ::PyThreadState *m_thread_state;
+};
 }
 
 #endif
