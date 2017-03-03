@@ -346,6 +346,10 @@ struct tu_test_algorithm {
 
 BOOST_PYTHON_MODULE(core)
 {
+    // This function needs to be called before doing anything with threads.
+    // https://docs.python.org/3/c-api/init.html
+    ::PyEval_InitThreads();
+
     // Setup doc options
     bp::docstring_options doc_options;
     doc_options.enable_all();
@@ -410,9 +414,8 @@ BOOST_PYTHON_MODULE(core)
     // NOTE: we expose only the ctors from pagmo::problem, not from C++ or Python UDPs. An __init__ wrapper
     // on the Python side will take care of cting a pagmo::problem from the input UDP, and then invoke this ctor.
     // This way we avoid having to expose a different ctor for every exposed C++ prob.
-    pop_class.def(bp::init<const problem &, population::size_type>((bp::arg("prob"), bp::arg("size"))))
-        .def(bp::init<const problem &, population::size_type, unsigned>(
-            (bp::arg("prob"), bp::arg("size"), bp::arg("seed"))))
+    pop_class.def(bp::init<const problem &, population::size_type>())
+        .def(bp::init<const problem &, population::size_type, unsigned>())
         // Repr.
         .def(repr(bp::self))
         // Copy and deepcopy.
