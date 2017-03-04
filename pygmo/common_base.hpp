@@ -69,6 +69,19 @@ struct common_base {
         }
         return bp::extract<RetType>(a());
     }
+    // Check if the user is trying to construct a pagmo object from a type, rather than from an object.
+    // This is an easy error to commit, and it is sneaky because the callable_attribute() machinery will detect
+    // the methods of the *class* (rather than instance methods), and it will thus not error out.
+    static void check_not_type(const bp::object &o, const char *target)
+    {
+        if (isinstance(o, builtin().attr("type"))) {
+            pygmo_throw(PyExc_TypeError, ("it seems like you are trying to instantiate a pygmo " + std::string(target)
+                                          + " using a type rather than an object instance: please construct an object "
+                                            "and use that instead of the type in the "
+                                          + std::string(target) + " constructor")
+                                             .c_str());
+        }
+    }
 };
 }
 

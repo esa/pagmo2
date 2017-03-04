@@ -71,6 +71,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     algo_inner &operator=(algo_inner &&) = delete;
     explicit algo_inner(const bp::object &o)
     {
+        check_not_type(o, "algorithm");
         check_mandatory_method(o, "evolve", "algorithm");
         m_value = pygmo::deepcopy(o);
     }

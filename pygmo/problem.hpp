@@ -88,6 +88,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     prob_inner &operator=(prob_inner &&) = delete;
     explicit prob_inner(const bp::object &o)
     {
+        check_not_type(o, "problem");
         // Check the presence of the mandatory methods (these are static asserts
         // in the C++ counterpart).
         check_mandatory_method(o, "fitness", "problem");

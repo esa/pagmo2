@@ -112,6 +112,7 @@ see https://www.gnu.org/licenses/. */
 #include "common_utils.hpp"
 #include "docstrings.hpp"
 #include "island.hpp"
+#include "island_exposition_suite.hpp"
 #include "numpy.hpp"
 #include "object_serialization.hpp"
 #include "problem.hpp"
@@ -184,6 +185,9 @@ std::unique_ptr<bp::class_<decompose>> decompose_ptr(nullptr);
 // Algorithm and meta-algorithm classes.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr(nullptr);
 std::unique_ptr<bp::class_<mbh>> mbh_ptr(nullptr);
+
+// Island.
+std::unique_ptr<bp::class_<island>> island_ptr(nullptr);
 }
 
 // The cleanup function.
@@ -198,6 +202,8 @@ static inline void cleanup()
 
     pygmo::algorithm_ptr.reset();
     pygmo::mbh_ptr.reset();
+
+    pygmo::island_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -421,6 +427,15 @@ BOOST_PYTHON_MODULE(core)
     }
     auto algorithms_module = bp::object(bp::handle<>(bp::borrowed(algorithms_module_ptr)));
     bp::scope().attr("algorithms") = algorithms_module;
+
+    // Create the islands submodule.
+    std::string islands_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".islands");
+    PyObject *islands_module_ptr = PyImport_AddModule(islands_module_name.c_str());
+    if (!islands_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 'islands' submodule");
+    }
+    auto islands_module = bp::object(bp::handle<>(bp::borrowed(islands_module_ptr)));
+    bp::scope().attr("islands") = islands_module;
 
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
@@ -1007,8 +1022,9 @@ BOOST_PYTHON_MODULE(core)
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
 
     // Island.
-    bp::class_<island> isl_class("island", bp::init<>());
-    isl_class.def(bp::init<const algorithm &, const bp::object &>())
+    pygmo::island_ptr = make_unique<bp::class_<island>>("island", bp::init<>());
+    auto &island_class = *pygmo::island_ptr;
+    island_class.def(bp::init<const algorithm &, const bp::object &>())
         .def(bp::init<const algorithm &, const problem &, population::size_type>())
         .def(bp::init<const algorithm &, const problem &, population::size_type, unsigned>())
         .def(repr(bp::self))
@@ -1022,4 +1038,10 @@ BOOST_PYTHON_MODULE(core)
         .add_property("algorithm", bp::make_function(+[](island &isl) -> algorithm & { return isl.get_algorithm(); },
                                                      bp::return_internal_reference<>()),
                       +[](island &isl, const algorithm &a) { isl.get_algorithm() = a; });
+
+    // Null island.
+    auto ni = pygmo::expose_island<null_island>("null_island", "");
+    // Thread island.
+    auto ti = pygmo::expose_island<pygmo::py_thread_island>("thread_island", "");
+    ti.def(bp::init<const population &>());
 }

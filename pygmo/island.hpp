@@ -72,6 +72,7 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     isl_inner &operator=(isl_inner &&) = delete;
     explicit isl_inner(const bp::object &o)
     {
+        check_not_type(o, "island");
         check_mandatory_method(o, "enqueue_evolution", "island");
         check_mandatory_method(o, "wait", "island");
         check_mandatory_method(o, "get_population", "island");
