@@ -85,12 +85,12 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     // Mandatory methods.
     virtual void enqueue_evolution(const algorithm &algo, archipelago *archi) override final
     {
-        // Act on a copy of the algorithm, in order to avoid having to deal with reference semantics.
-        auto algo_copy(algo);
+        // NOTE: here Boost Python will create a copy of algo wrapped in a bp::object before
+        // passing it to the Python method.
         if (archi) {
-            m_value.attr("enqueue_evolution")(algo_copy, *archi);
+            m_value.attr("enqueue_evolution")(algo, *archi);
         } else {
-            m_value.attr("enqueue_evolution")(algo_copy, bp::object());
+            m_value.attr("enqueue_evolution")(algo, bp::object());
         }
     }
     virtual void wait() const override final

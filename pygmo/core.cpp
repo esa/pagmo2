@@ -116,6 +116,7 @@ see https://www.gnu.org/licenses/. */
 #include "object_serialization.hpp"
 #include "problem.hpp"
 #include "problem_exposition_suite.hpp"
+#include "py_thread_island.hpp"
 #include "pygmo_classes.hpp"
 
 #if defined(_MSC_VER)
@@ -349,6 +350,20 @@ BOOST_PYTHON_MODULE(core)
     // This function needs to be called before doing anything with threads.
     // https://docs.python.org/3/c-api/init.html
     ::PyEval_InitThreads();
+
+    // Override the default implementation of the island factory.
+    detail::island_factory<>::s_func
+        = +[](const algorithm &, const population &pop, std::unique_ptr<detail::isl_inner_base> &ptr) {
+              // NOTE: just like in py_thread_island, here we are re-implementing a piece of code that normally
+              // is pure C++. Potentially here we are calling into the Python interpreter, so, in order to handle
+              // the case in which we are invoking this code from a separate C++ thread, we construct a GIL ensurer
+              // in order to guard against concurrent access to the interpreter. The idea here is that this piece
+              // of code normally would provide a basic thread safety guarantee, and in order to continue providing
+              // it we use the ensurer.
+              pygmo::gil_thread_ensurer gte;
+              pygmo::py_thread_island t_isl(pop);
+              ptr.reset(::new detail::isl_inner<pygmo::py_thread_island>(std::move(t_isl)));
+          };
 
     // Setup doc options
     bp::docstring_options doc_options;

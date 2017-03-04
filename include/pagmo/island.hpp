@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_ISLAND_HPP
 
 #include <chrono>
+#include <functional>
 #include <future>
 #include <iostream>
 #include <memory>
@@ -149,7 +150,6 @@ public:
 template <typename T>
 const bool is_udi<T>::value;
 
-// TODO fill up.
 struct null_island {
     void enqueue_evolution(const algorithm &, archipelago *)
     {
@@ -397,6 +397,29 @@ struct isl_inner final : isl_inner_base {
     }
     T m_value;
 };
+
+// NOTE: this structure holds an std::function that implements the logic for the selection of the UDI
+// type in the constructor of pagmo::island from algo, prob, etc. The logic is decoupled from the island constructor
+// so that we can override the default logic with alternative implementations (e.g., use a process-based island
+// rather than the default thread island if prob, algo, etc. do not provide thread safety).
+template <typename = void>
+struct island_factory {
+    using func_t
+        = std::function<void(const algorithm &, const population &, std::unique_ptr<detail::isl_inner_base> &)>;
+    static func_t s_func;
+};
+
+// This is the default UDI type selector. It will always select thread_island as UDI.
+inline void default_island_factory(const algorithm &, const population &pop,
+                                   std::unique_ptr<detail::isl_inner_base> &ptr)
+{
+    thread_island t_isl(pop);
+    ptr.reset(::new detail::isl_inner<thread_island>(std::move(t_isl)));
+}
+
+// Static init.
+template <typename T>
+typename island_factory<T>::func_t island_factory<T>::s_func = default_island_factory;
 }
 
 class island
@@ -439,14 +462,7 @@ public:
     template <typename Algo, algo_pop_ctor_enabler<Algo> = 0>
     explicit island(Algo &&a, const population &pop) : m_algo(std::forward<Algo>(a))
     {
-        thread_island t_isl(pop);
-        m_ptr.reset(::new detail::isl_inner<thread_island>(std::move(t_isl)));
-    }
-    template <typename Algo, algo_pop_ctor_enabler<Algo> = 0>
-    explicit island(Algo &&a, population &&pop) : m_algo(std::forward<Algo>(a))
-    {
-        thread_island t_isl(std::move(pop));
-        m_ptr.reset(::new detail::isl_inner<thread_island>(std::move(t_isl)));
+        detail::island_factory<>::s_func(m_algo, pop, m_ptr);
     }
     island(const island &other) : m_algo(other.m_algo), m_ptr(other.m_ptr->clone())
     {
