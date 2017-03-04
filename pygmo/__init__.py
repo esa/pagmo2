@@ -47,6 +47,7 @@ from . import _patch_problem
 # Patch the algorithm class.
 from . import _patch_algorithm
 
+
 class thread_safety(object):
     """Thread safety level.
 
@@ -85,14 +86,11 @@ def _population_init(self, prob=None, size=0, seed=None):
 
     """
     import sys
-    if sys.version_info[0] < 3:
-        int_types = (int, long)
-    else:
-        int_types = (int,)
+    int_types = (int, long) if sys.version_info[0] < 3 else (int,)
     # Check input params.
     if not isinstance(size, int_types):
         raise TypeError("the 'size' parameter must be an integer")
-    if not seed is None and not isinstance(size, int_types):
+    if not seed is None and not isinstance(seed, int_types):
         raise TypeError("the 'seed' parameter must be None or an integer")
     if prob is None:
         # Use the null problem for default init.

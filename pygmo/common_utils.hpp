@@ -648,6 +648,27 @@ struct gil_releaser {
     }
     ::PyThreadState *m_thread_state;
 };
+
+// This RAII struct ensures that the Python interpreter
+// can be used from a thread created from outside Python
+// (e.g., a pthread/std::thread/etc. created from C/C++).
+// On creation, it will register the C/C++ thread with
+// the Python interpreter and lock the GIL. On destruction,
+// it will release any resource acquired on construction
+// and unlock the GIL.
+//
+// See: https://docs.python.org/2/c-api/init.html
+struct gil_thread_ensurer {
+    gil_thread_ensurer()
+    {
+        m_state = ::PyGILState_Ensure();
+    }
+    ~gil_thread_ensurer()
+    {
+        ::PyGILState_Release(m_state);
+    }
+    ::PyGILState_STATE m_state;
+};
 }
 
 #endif

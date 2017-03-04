@@ -31,16 +31,21 @@ see https://www.gnu.org/licenses/. */
 
 #include <chrono>
 #include <future>
+#include <iostream>
 #include <memory>
 #include <mutex>
+#include <sstream>
 #include <stdexcept>
+#include <string>
 #include <type_traits>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/serialization.hpp>
@@ -168,9 +173,10 @@ class thread_island
     static void check_thread_safety(const T &x)
     {
         if (static_cast<int>(x.get_thread_safety()) < static_cast<int>(thread_safety::basic)) {
-            pagmo_throw(std::invalid_argument,
-                        "Thread islands require objects which provide at least basic thread safety, but the object '"
-                            + x.get_name() + "' does not provide any thread safety guarantee");
+            pagmo_throw(
+                std::invalid_argument,
+                "thread islands require objects which provide at least the basic thread safety level, but the object '"
+                    + x.get_name() + "' does not provide any thread safety guarantee");
         }
     }
 
@@ -198,6 +204,13 @@ public:
     // any operation on the UDP.
     thread_island(thread_island &&other) noexcept : m_pop(other.move_out_population())
     {
+    }
+    ~thread_island()
+    {
+        try {
+            wait();
+        } catch (...) {
+        }
     }
     thread_island &operator=(const thread_island &other)
     {
@@ -255,12 +268,9 @@ public:
         std::lock_guard<std::mutex> lock(m_pop_mutex);
         return m_pop;
     }
-    ~thread_island()
+    std::string get_name() const
     {
-        try {
-            wait();
-        } catch (...) {
-        }
+        return "Thread island";
     }
     template <typename Archive>
     void save(Archive &ar) const
@@ -307,6 +317,8 @@ struct isl_inner_base {
     virtual void enqueue_evolution(const algorithm &, archipelago *) = 0;
     virtual void wait() const = 0;
     virtual population get_population() const = 0;
+    virtual std::string get_name() const = 0;
+    virtual std::string get_extra_info() const = 0;
     template <typename Archive>
     void serialize(Archive &)
     {
@@ -347,6 +359,35 @@ struct isl_inner final : isl_inner_base {
     virtual population get_population() const override final
     {
         return m_value.get_population();
+    }
+    // Optional methods.
+    virtual std::string get_name() const override final
+    {
+        return get_name_impl(m_value);
+    }
+    virtual std::string get_extra_info() const override final
+    {
+        return get_extra_info_impl(m_value);
+    }
+    template <typename U, enable_if_t<has_name<U>::value, int> = 0>
+    static std::string get_name_impl(const U &value)
+    {
+        return value.get_name();
+    }
+    template <typename U, enable_if_t<!has_name<U>::value, int> = 0>
+    static std::string get_name_impl(const U &)
+    {
+        return typeid(U).name();
+    }
+    template <typename U, enable_if_t<has_extra_info<U>::value, int> = 0>
+    static std::string get_extra_info_impl(const U &value)
+    {
+        return value.get_extra_info();
+    }
+    template <typename U, enable_if_t<!has_extra_info<U>::value, int> = 0>
+    static std::string get_extra_info_impl(const U &)
+    {
+        return "";
     }
     // Serialization.
     template <typename Archive>
@@ -430,15 +471,23 @@ public:
     }
     void evolve()
     {
-        m_ptr->enqueue_evolution(m_algo, m_archi);
+        ptr()->enqueue_evolution(m_algo, m_archi);
     }
     void wait() const
     {
-        m_ptr->wait();
+        ptr()->wait();
     }
     population get_population() const
     {
-        return m_ptr->get_population();
+        return ptr()->get_population();
+    }
+    std::string get_name() const
+    {
+        return ptr()->get_name();
+    }
+    std::string get_extra_info() const
+    {
+        return ptr()->get_extra_info();
     }
     const algorithm &get_algorithm() const
     {
@@ -447,6 +496,17 @@ public:
     algorithm &get_algorithm()
     {
         return m_algo;
+    }
+    friend std::ostream &operator<<(std::ostream &os, const island &isl)
+    {
+        stream(os, "Island name: ", isl.get_name());
+        stream(os, "\n\nAlgorithm:\n", isl.get_algorithm());
+        stream(os, "\n\nPopulation:\n", isl.get_population());
+        const auto extra_str = isl.get_extra_info();
+        if (!extra_str.empty()) {
+            stream(os, "\nExtra info:\n", extra_str);
+        }
+        return os;
     }
     template <typename Archive>
     void save(Archive &ar) const
@@ -459,6 +519,20 @@ public:
         island tmp_island;
         ar(tmp_island.m_algo, tmp_island.m_ptr);
         *this = std::move(tmp_island);
+    }
+
+private:
+    // Two small helpers to make sure that whenever we require
+    // access to the pointer it actually points to something.
+    detail::isl_inner_base const *ptr() const
+    {
+        assert(m_ptr.get() != nullptr);
+        return m_ptr.get();
+    }
+    detail::isl_inner_base *ptr()
+    {
+        assert(m_ptr.get() != nullptr);
+        return m_ptr.get();
     }
 
 private:
@@ -475,7 +549,7 @@ class archipelago
 };
 
 // NOTE: place it here, as we need the definition of archipelago.
-inline void thread_island::enqueue_evolution(const algorithm &algo, archipelago *)
+inline void thread_island::enqueue_evolution(const algorithm &algo, archipelago *archi)
 {
     check_thread_safety(algo);
     std::lock_guard<std::mutex> lock(m_futures_mutex);
@@ -490,7 +564,7 @@ inline void thread_island::enqueue_evolution(const algorithm &algo, archipelago 
         // NOTE: it is important to copy algo here, because if we stored a reference
         // to it, the reference might be modified from pagmo::island and we would have
         // a data race.
-        m_futures.back() = m_queue.enqueue([this, algo]() {
+        m_futures.back() = m_queue.enqueue([this, algo, archi]() {
             // Check it again, in the remote case copying it creates an algo with no thread safety.
             check_thread_safety(algo);
             auto new_pop = algo.evolve(this->get_population());

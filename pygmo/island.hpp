@@ -101,6 +101,15 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     {
         return bp::extract<population>(m_value.attr("get_population")());
     }
+    // Optional methods.
+    virtual std::string get_name() const override final
+    {
+        return getter_wrapper<std::string>(m_value, "get_name", pygmo::str(pygmo::type(m_value)));
+    }
+    virtual std::string get_extra_info() const override final
+    {
+        return getter_wrapper<std::string>(m_value, "get_extra_info", std::string{});
+    }
     template <typename Archive>
     void serialize(Archive &ar)
     {

@@ -360,8 +360,7 @@ BOOST_PYTHON_MODULE(core)
     // NOTE: only the second import is strictly necessary. We run a first import from BP
     // because that is the easiest way to detect whether numpy is installed or not (rather
     // than trying to figure out a way to detect it from wrap_import_array()).
-    // NOTE: if we split the module in multiple C++ files, we need to take care of importing numpy
-    // from every extension file and also defining PY_ARRAY_UNIQUE_SYMBOL as explained here:
+    // NOTE: if we split the module in multiple C++ files, we need to follow these instructions:
     // http://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
     try {
         bp::import("numpy.core.multiarray");
@@ -994,10 +993,10 @@ BOOST_PYTHON_MODULE(core)
 
     // Island.
     bp::class_<island> isl_class("island", bp::init<>());
-    isl_class.def(bp::init<const algorithm &, const bp::object &>((bp::arg("algo"), bp::arg("udi"))))
+    isl_class.def(bp::init<const algorithm &, const bp::object &>())
         .def(bp::init<const algorithm &, const problem &, population::size_type>())
-        // TODO: enable when implemented.
-        //.def(repr(bp::self))
+        .def(bp::init<const algorithm &, const problem &, population::size_type, unsigned>())
+        .def(repr(bp::self))
         .def_pickle(pygmo::island_pickle_suite())
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<island>)
