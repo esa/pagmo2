@@ -357,6 +357,22 @@ BOOST_PYTHON_MODULE(core)
     // https://docs.python.org/3/c-api/init.html
     ::PyEval_InitThreads();
 
+    // Init numpy.
+    // NOTE: only the second import is strictly necessary. We run a first import from BP
+    // because that is the easiest way to detect whether numpy is installed or not (rather
+    // than trying to figure out a way to detect it from wrap_import_array()).
+    // NOTE: if we split the module in multiple C++ files, we need to follow these instructions:
+    // http://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
+    try {
+        bp::import("numpy.core.multiarray");
+    } catch (...) {
+        pygmo::builtin().attr("print")(
+            u8"\033[91m====ERROR====\nThe NumPy module could not be imported. "
+            u8"Please make sure that NumPy has been correctly installed.\n====ERROR====\033[0m");
+        pygmo_throw(PyExc_ImportError, "");
+    }
+    wrap_import_array();
+
     // Override the default implementation of the island factory.
     detail::island_factory<>::s_func
         = +[](const algorithm &, const population &pop, std::unique_ptr<detail::isl_inner_base> &ptr) {
@@ -376,22 +392,6 @@ BOOST_PYTHON_MODULE(core)
     doc_options.enable_all();
     doc_options.disable_cpp_signatures();
     doc_options.disable_py_signatures();
-
-    // Init numpy.
-    // NOTE: only the second import is strictly necessary. We run a first import from BP
-    // because that is the easiest way to detect whether numpy is installed or not (rather
-    // than trying to figure out a way to detect it from wrap_import_array()).
-    // NOTE: if we split the module in multiple C++ files, we need to follow these instructions:
-    // http://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
-    try {
-        bp::import("numpy.core.multiarray");
-    } catch (...) {
-        pygmo::builtin().attr("print")(
-            u8"\033[91m====ERROR====\nThe NumPy module could not be imported. "
-            u8"Please make sure that NumPy has been correctly installed.\n====ERROR====\033[0m");
-        pygmo_throw(PyExc_ImportError, "");
-    }
-    wrap_import_array();
 
     // The thread_safety enum.
     bp::enum_<thread_safety>("_thread_safety").value("none", thread_safety::none).value("basic", thread_safety::basic);
