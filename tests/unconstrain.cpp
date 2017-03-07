@@ -46,5 +46,34 @@ see https://www.gnu.org/licenses/. */
 using namespace pagmo;
 BOOST_AUTO_TEST_CASE(unconstrain_construction_test)
 {
-    unconstrain p0{};
+    null_problem constrained_udp{2, 3, 4};
+    // We test the default constructor
+    BOOST_CHECK_NO_THROW(unconstrain{});
+    BOOST_CHECK_NO_THROW(problem{unconstrain{}});
+    // We test the constructor
+    BOOST_CHECK_NO_THROW((problem{unconstrain{constrained_udp, "death penalty"}}));
+    BOOST_CHECK_NO_THROW((problem{unconstrain{constrained_udp, "kuri"}}));
+    BOOST_CHECK_NO_THROW((problem{unconstrain{constrained_udp, "weighted", vector_double(7, 1.)}}));
+    BOOST_CHECK_NO_THROW((problem{unconstrain{constrained_udp, "ignore_c"}}));
+    BOOST_CHECK_NO_THROW((problem{unconstrain{constrained_udp, "ignore_o"}}));
+
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "death penalty"}}.get_nc()), 0u);
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "kuri"}}.get_nc()), 0u);
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "weighted", vector_double(7, 1.)}}.get_nc()), 0u);
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "ignore_c"}}.get_nc()), 0u);
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "ignore_o"}}.get_nc()), 0u);
+
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "death penalty"}}.get_nobj()), 2u);
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "kuri"}}.get_nobj()), 2u);
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "weighted", vector_double(7, 1.)}}.get_nobj()), 2u);
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "ignore_c"}}.get_nobj()), 2u);
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "ignore_o"}}.get_nobj()), 1u);
+
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "death penalty"}}.has_gradient()), false);
+    BOOST_CHECK_EQUAL((problem{unconstrain{constrained_udp, "death penalty"}}.has_hessians()), false);
+    // We test the various throws
+    BOOST_CHECK_THROW((unconstrain{null_problem{2, 0, 0}, "kuri"}), std::invalid_argument);
+    BOOST_CHECK_THROW((unconstrain{null_problem{2, 3, 4}, "weighted", vector_double(6, 1.)}), std::invalid_argument);
+    BOOST_CHECK_THROW((unconstrain{null_problem{2, 3, 4}, "mispelled"}), std::invalid_argument);
+    BOOST_CHECK_THROW((unconstrain{null_problem{2, 3, 4}, "kuri", vector_double(3, 1.)}), std::invalid_argument);
 }

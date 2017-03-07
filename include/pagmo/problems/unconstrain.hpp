@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include "../serialization.hpp"
 #include "../type_traits.hpp"
 #include "../types.hpp"
+#include "../utils/constrained.hpp"
 
 namespace pagmo
 {
@@ -54,7 +55,7 @@ namespace pagmo
  * satisfied constraints.
  *    - Weighted violations penalty: penalizes all objectives by the weighted sum of the constraint violations.
  *    - Ignore the constraints: simply ignores the constraints.
- *    - Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraint
+ *    - Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraints
  * violation.
  *
  * See: Coello Coello, C. A. (2002). Theoretical and numerical constraint-handling techniques used with evolutionary
@@ -75,7 +76,9 @@ public:
     /**
      * The default constructor will initialize a pagmo::null_problem unconstrained via the death penalty method.
      */
-    unconstrain() : problem(null_problem{2, 3, 4}), m_method(method_type::DEATH), m_weights()
+    unconstrain()
+        : problem(null_problem{2, 3, 4}), m_method(method_type::DEATH), m_weights(), m_nobj(2), m_nec(3), m_nic(4),
+          m_nc(7)
     {
     }
 
@@ -98,7 +101,7 @@ public:
      * @throws unspecified any exception thrown by the pagmo::problem constructor
      */
     template <typename T, ctor_enabler<T> = 0>
-    explicit unconstrain(T &&p, const std::string &method, const vector_double &weights)
+    explicit unconstrain(T &&p, const std::string &method, const vector_double &weights = vector_double{})
         : problem(std::forward<T>(p)), m_weights(weights)
     {
         // The number of constraints in the original udp
@@ -125,8 +128,11 @@ public:
                         "The weight vector needs to be empty to use the unconstrain method " + method);
         }
         // 5 - We store the method in a more efficient enum type and the number of objectives of the orginal udp
-        std::map<std::string, method_type> my_map
-            = {{"death penalty", 0}, {"kuri", 1}, {"weighted", 2}, {"ignore_c", 3}, {"ignore_o", 4}};
+        std::map<std::string, method_type> my_map = {{"death penalty", method_type::DEATH},
+                                                     {"kuri", method_type::KURI},
+                                                     {"weighted", method_type::WEIGHTED},
+                                                     {"ignore_c", method_type::IGNORE_C},
+                                                     {"ignore_o", method_type::IGNORE_O}};
         m_method = my_map[method];
         if (method != "ignore_o") {
             m_nobj = static_cast<const problem *>(this)->get_nobj();
@@ -223,6 +229,15 @@ public:
             } break;
         }
         return retval;
+    }
+
+    /// Number of objectives.
+    /**
+     * @return the number of objectives of the new meta-problem.
+     */
+    vector_double::size_type get_nobj() const
+    {
+        return m_nobj;
     }
 
     /// Problem name
