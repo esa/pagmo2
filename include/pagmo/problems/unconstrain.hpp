@@ -56,7 +56,7 @@ namespace pagmo
  *    - Weighted violations penalty: penalizes all objectives by the weighted sum of the constraint violations.
  *    - Ignore the constraints: simply ignores the constraints.
  *    - Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraints
- * violation.
+ * violation (i.e. the sum of the L2 norms of the equalities and inequalities violations)
  *
  * See: Coello Coello, C. A. (2002). Theoretical and numerical constraint-handling techniques used with evolutionary
  * algorithms: a survey of the state of the art. Computer methods in applied mechanics and engineering, 191(11),
@@ -217,12 +217,14 @@ public:
             case method_type::IGNORE_O: {
                 // get the tolerances
                 auto c_tol = static_cast<const problem *>(this)->get_c_tol();
+                // and the number of objectives in the original problem
+                auto n_obj_orig = static_cast<const problem *>(this)->get_nobj();
                 // compute the norm of the violation on the equalities
-                auto norm_ec = detail::test_eq_constraints(original_fitness.begin() + m_nobj,
-                                                           original_fitness.begin() + m_nobj + m_nec, c_tol.begin())
+                auto norm_ec = detail::test_eq_constraints(original_fitness.begin() + n_obj_orig,
+                                                           original_fitness.begin() + n_obj_orig + m_nec, c_tol.begin())
                                    .second;
                 // compute the norm of the violation on theinequalities
-                auto norm_ic = detail::test_ineq_constraints(original_fitness.begin() + m_nobj + m_nec,
+                auto norm_ic = detail::test_ineq_constraints(original_fitness.begin() + n_obj_orig + m_nec,
                                                              original_fitness.end(), c_tol.begin() + m_nec)
                                    .second;
                 retval = vector_double(1, norm_ec + norm_ic);
