@@ -293,15 +293,17 @@ private:
     vector_double::size_type get_gs_dim() const = delete;
     std::vector<vector_double::size_type> get_hs_dim() const = delete;
     bool is_stochastic() const = delete;
-    // bool feasibility_f(const vector_double &) const = delete;
-    // bool feasibility_x(const vector_double &) const = delete;
+    // These are methods brought in by the inheritance from pagmo::problem: they do not have any effect
+    // and they are just confusing to see.
+    void set_c_tol(const vector_double &) = delete;
     vector_double get_c_tol() const = delete;
-// void set_c_tol(const vector_double &) = delete;
+    bool feasibility_x(const vector_double &) const = delete;
+    bool feasibility_f(const vector_double &) const = delete;
 
 // The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
 // it would just result in a "weird" behaviour in case the user would try to stream this object
 #if __GNUC__ > 4
-    // NOTE: We delete the streaming operator overload called with translate, otherwise the inner prob would stream
+    // NOTE: We delete the streaming operator overload called with unconstrain, otherwise the inner prob would stream
     // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
     friend std::ostream &operator<<(std::ostream &, const unconstrain &) = delete;
 #endif
@@ -334,12 +336,6 @@ private:
     // No need for these the default implementation of these in pagmo::problem already returns zero.
     vector_double::size_type get_nec() const = delete;
     vector_double::size_type get_nic() const = delete;
-    // These are methods brought in by the inheritance from pagmo::problem: they do not have any effect
-    // and they are just confusing to see.
-    void set_c_tol(const vector_double &) = delete;
-    vector_double get_c_tol() const = delete;
-    bool feasibility_x(const vector_double &) const = delete;
-    bool feasibility_f(const vector_double &) const = delete;
 
     /// types of unconstrain methods
     enum method_type {
