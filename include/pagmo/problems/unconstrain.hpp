@@ -151,7 +151,7 @@ public:
         auto original_fitness = static_cast<const problem *>(this)->fitness(x);
         vector_double retval;
         switch (m_method) {
-            case 0: // death penalty
+            case method_type::DEATH:
                 // copy the objectives
                 retval = vector_double(original_fitness.begin(), original_fitness.begin() + m_nobj);
                 // penalize them if unfeasible
@@ -159,8 +159,7 @@ public:
                     std::fill(retval.begin(), retval.end(), std::numeric_limits<double>::max());
                 }
                 break;
-            case 1: // kuri's penalty'
-            {
+            case method_type::KURI: {
                 // copy the objectives
                 retval = vector_double(original_fitness.begin(), original_fitness.begin() + m_nobj);
                 // penalize them if unfeasible
@@ -180,8 +179,7 @@ public:
                     std::fill(retval.begin(), retval.end(), penalty);
                 }
             } break;
-            case 2: // weighted
-            {
+            case method_type::WEIGHTED: {
                 // copy the objectives
                 retval = vector_double(original_fitness.begin(), original_fitness.begin() + m_nobj);
                 // copy the constraints (NOTE: not necessary remove)
@@ -207,12 +205,10 @@ public:
                     value += penalty;
                 }
             } break;
-            case 3: // ignore_c
-            {
+            case method_type::IGNORE_C: {
                 retval = vector_double(original_fitness.begin(), original_fitness.begin() + m_nobj);
             } break;
-            case 4: // ignore_o
-            {
+            case method_type::IGNORE_O: {
                 // get the tolerances
                 auto c_tol = static_cast<const problem *>(this)->get_c_tol();
                 // compute the norm of the violation on the equalities
@@ -338,7 +334,7 @@ private:
     vector_double::size_type get_nic() const = delete;
 
     /// types of unconstrain methods
-    enum method_type {
+    enum class method_type {
         DEATH = 0,    ///< "death penalty"
         KURI = 1,     ///< "kuri"
         WEIGHTED = 2, ///< "weighted"
