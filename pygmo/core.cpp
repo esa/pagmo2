@@ -636,7 +636,7 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_problem<tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
-    np.def(bp::init<vector_double::size_type>((bp::arg("nobj"))));
+    np.def(bp::init<vector_double::size_type>((bp::arg("nobj"), bp::arg("nec"), bp::arg("nic"))));
     // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock", pygmo::rosenbrock_docstring().c_str());
     rb.def(bp::init<unsigned>((bp::arg("dim"))));

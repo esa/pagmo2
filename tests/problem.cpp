@@ -1006,6 +1006,11 @@ BOOST_AUTO_TEST_CASE(null_problem_test)
     BOOST_CHECK((p.fitness(x2) == vector_double{0}));
     p = problem{null_problem{2}};
     BOOST_CHECK(null_problem{2}.get_nobj() == 2u);
+    BOOST_CHECK(null_problem{2}.get_nec() == 0u);
+    BOOST_CHECK(null_problem{2}.get_nic() == 0u);
+    BOOST_CHECK((null_problem{2, 3, 4}.get_nobj() == 2u));
+    BOOST_CHECK((null_problem{2, 3, 4}.get_nec() == 3u));
+    BOOST_CHECK((null_problem{2, 3, 4}.get_nic() == 4u));
     BOOST_CHECK(p.get_nobj() == 2u);
     BOOST_CHECK((p.fitness(x1) == vector_double{0, 0}));
     BOOST_CHECK((p.fitness(x2) == vector_double{0, 0}));
@@ -1014,7 +1019,7 @@ BOOST_AUTO_TEST_CASE(null_problem_test)
 
 BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
 {
-    problem p{null_problem{2}};
+    problem p{null_problem{2, 3, 4}};
     // Call objfun to increase the internal counter.
     p.fitness({1});
     // Store the string representation of p.
@@ -1035,6 +1040,8 @@ BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
     BOOST_CHECK_EQUAL(p.get_nobj(), 2u);
+    BOOST_CHECK_EQUAL(p.get_nec(), 3u);
+    BOOST_CHECK_EQUAL(p.get_nic(), 4u);
     BOOST_CHECK_EQUAL(p.fitness({1.}).size(), 2u);
 }
 

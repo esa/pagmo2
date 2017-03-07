@@ -1523,7 +1523,7 @@ An algorithm used in the default-initialization of :class:`pygmo.core.algorithm`
 
 std::string null_problem_docstring()
 {
-    return R"(__init__(nobj = 1)
+    return R"(__init__(nobj = 1, nec = 0, nic = 0)
 
 The null problem.
 
@@ -1531,9 +1531,11 @@ A problem used in the default-initialization of :class:`pygmo.core.problem` and 
 
 Args:
     nobj (``int``): the number of objectives
+    nec  (``int``): the number of equality constraints
+    nic  (``int``): the number of inequality constraintsctives
 
 Raises:
-    ValueError: if *nobj* is not strictly positive
+    ValueError: if *nobj*, *nec*, *nic* are not positive or if *nobj* is zero
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
 

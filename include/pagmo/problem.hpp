@@ -86,7 +86,8 @@ struct null_problem {
      *
      * @throws std::invalid_argument if \p nobj is zero.
      */
-    null_problem(vector_double::size_type nobj = 1) : m_nobj(nobj)
+    null_problem(vector_double::size_type nobj = 1, vector_double::size_type nec = 0, vector_double::size_type nic = 0)
+        : m_nobj(nobj), m_nec(nec), m_nic(nic)
     {
         if (!nobj) {
             pagmo_throw(std::invalid_argument, "The null problem must have a non-zero number of objectives");
@@ -98,7 +99,7 @@ struct null_problem {
      */
     vector_double fitness(const vector_double &) const
     {
-        return vector_double(get_nobj(), 0.);
+        return vector_double(get_nobj() + get_nec() + get_nic(), 0.);
     }
     /// Problem bounds.
     /**
@@ -116,6 +117,22 @@ struct null_problem {
     {
         return m_nobj;
     }
+    /// Number of equality constraints.
+    /**
+     * @return the number of equality constraints of the problem (as specified upon construction).
+     */
+    vector_double::size_type get_nec() const
+    {
+        return m_nec;
+    }
+    /// Number of inequality constraints.
+    /**
+     * @return the number of inequality constraints of the problem (as specified upon construction).
+     */
+    vector_double::size_type get_nic() const
+    {
+        return m_nic;
+    }
     /// Serialization
     /**
      * @param ar the target serialization archive.
@@ -123,11 +140,13 @@ struct null_problem {
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar &m_nobj;
+        ar(m_nobj, m_nec, m_nic);
     }
 
 private:
     vector_double::size_type m_nobj;
+    vector_double::size_type m_nec;
+    vector_double::size_type m_nic;
 };
 }
 
