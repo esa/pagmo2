@@ -616,16 +616,14 @@ BOOST_PYTHON_MODULE(core)
              pygmo::algorithm_get_thread_safety_docstring().c_str());
 
     // Translate meta-problem.
-    pygmo::expose_meta_problem<translate>(std::get<0>(pygmo::meta_probs_ptrs), "translate",
-                                          pygmo::translate_docstring().c_str());
+    pygmo::expose_meta_problem(std::get<0>(pygmo::meta_probs_ptrs), "translate", pygmo::translate_docstring().c_str());
     auto &tp = *std::get<0>(pygmo::meta_probs_ptrs);
     // Getter for the translation vector.
     tp.add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
                     pygmo::translate_translation_docstring().c_str());
 
     // Decompose meta-problem.
-    pygmo::expose_meta_problem<decompose>(std::get<1>(pygmo::meta_probs_ptrs), "decompose",
-                                          pygmo::decompose_docstring().c_str());
+    pygmo::expose_meta_problem(std::get<1>(pygmo::meta_probs_ptrs), "decompose", pygmo::decompose_docstring().c_str());
     auto &dp = *std::get<1>(pygmo::meta_probs_ptrs);
     // Returns the original multi-objective fitness
     dp.def("original_fitness", +[](const pagmo::decompose &p,
@@ -712,7 +710,7 @@ BOOST_PYTHON_MODULE(core)
 #endif
 
     // MBH meta-algo.
-    pygmo::expose_meta_algorithm<mbh>(std::get<0>(pygmo::meta_algos_ptrs), "mbh", pygmo::mbh_docstring().c_str());
+    pygmo::expose_meta_algorithm(std::get<0>(pygmo::meta_algos_ptrs), "mbh", pygmo::mbh_docstring().c_str());
     auto &mbh_ = *std::get<0>(pygmo::meta_algos_ptrs);
     mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
     mbh_.def("get_verbosity", &mbh::get_verbosity, pygmo::mbh_get_verbosity_docstring().c_str());
