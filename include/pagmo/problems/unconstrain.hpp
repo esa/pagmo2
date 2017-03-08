@@ -178,7 +178,8 @@ public:
                                       .first;
                     // compute the number of inequality constraints violated
                     auto sat_ic = detail::test_ineq_constraints(original_fitness.data() + m_nobj + m_nec,
-                                                                original_fitness.data(), c_tol.data() + m_nec)
+                                                                original_fitness.data() + original_fitness.size(),
+                                                                c_tol.data() + m_nec)
                                       .first;
                     // sets the Kuri penalization
                     auto penalty = std::numeric_limits<double>::max() * (1. - (double)(sat_ec + sat_ic) / (double)m_nc);
@@ -189,7 +190,7 @@ public:
                 // copy the objectives
                 retval = vector_double(original_fitness.data(), original_fitness.data() + m_nobj);
                 // copy the constraints (NOTE: not necessary remove)
-                vector_double c(original_fitness.data() + m_nobj, original_fitness.data());
+                vector_double c(original_fitness.data() + m_nobj, original_fitness.data() + original_fitness.size());
                 // get the tolerances
                 auto c_tol = static_cast<const problem *>(this)->get_c_tol();
                 // modify constraints to account for the tolerance and be violated if positive
@@ -225,7 +226,8 @@ public:
                                    .second;
                 // compute the norm of the violation on theinequalities
                 auto norm_ic = detail::test_ineq_constraints(original_fitness.data() + n_obj_orig + m_nec,
-                                                             original_fitness.data(), c_tol.data() + m_nec)
+                                                             original_fitness.data() + original_fitness.size(),
+                                                             c_tol.data() + m_nec)
                                    .second;
                 retval = vector_double(1, norm_ec + norm_ic);
             } break;
