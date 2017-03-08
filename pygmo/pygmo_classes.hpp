@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/python/class.hpp>
 #include <memory>
+#include <tuple>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/mbh.hpp>
@@ -44,14 +45,18 @@ see https://www.gnu.org/licenses/. */
 namespace pygmo
 {
 
-// pagmo::problem and meta-problems.
+// pagmo::problem.
 extern std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
-extern std::unique_ptr<bp::class_<pagmo::translate>> translate_ptr;
-extern std::unique_ptr<bp::class_<pagmo::decompose>> decompose_ptr;
 
-// pagmo::algorithm and meta-algorithms.
+// meta-problems.
+extern std::tuple<std::unique_ptr<bp::class_<pagmo::translate>>, std::unique_ptr<bp::class_<pagmo::decompose>>>
+    meta_probs_ptrs;
+
+// pagmo::algorithm.
 extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
-extern std::unique_ptr<bp::class_<pagmo::mbh>> mbh_ptr;
+
+// meta-algorithms.
+extern std::tuple<std::unique_ptr<bp::class_<pagmo::mbh>>> meta_algos_ptrs;
 }
 
 #endif
