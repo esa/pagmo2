@@ -1202,7 +1202,7 @@ public:
         return *this = problem(other);
     }
 
-    /// Extract a const pointer to the UDP.
+    /// Extract a const pointer to the UDP used for construction.
     /**
      * This method will extract a const pointer to the internal instance of the UDP. If \p T is not the same type
      * as the UDP used during construction (after removal of cv and reference qualifiers), this method will
@@ -1222,7 +1222,7 @@ public:
         return p == nullptr ? nullptr : &(p->m_value);
     }
 
-    /// Extract a pointer to the UDP.
+    /// Extract a pointer to the UDP used for construction.
     /**
      * This method will extract a pointer to the internal instance of the UDP. If \p T is not the same type
      * as the UDP used during construction (after removal of cv and reference qualifiers), this method will
@@ -1242,9 +1242,9 @@ public:
         return p == nullptr ? nullptr : &(p->m_value);
     }
 
-    /// Check if the UDP is of type \p T.
+    /// Check if the UDP used for construction is of type \p T.
     /**
-     * @return \p true if the UDP is of type \p T, \p false otherwise.
+     * @return \p true if the UDP used in construction is of type \p T, \p false otherwise.
      */
     template <typename T>
     bool is() const

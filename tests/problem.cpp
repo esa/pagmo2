@@ -1042,7 +1042,7 @@ BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
     BOOST_CHECK_EQUAL(p.get_nobj(), 2u);
     BOOST_CHECK_EQUAL(p.get_nec(), 3u);
     BOOST_CHECK_EQUAL(p.get_nic(), 4u);
-    BOOST_CHECK_EQUAL(p.fitness({1.}).size(), 2u);
+    BOOST_CHECK_EQUAL(p.fitness({1.}).size(), 9u);
 }
 
 BOOST_AUTO_TEST_CASE(extract_test)
