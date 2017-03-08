@@ -37,13 +37,17 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/init.hpp>
 #include <boost/python/make_constructor.hpp>
 #include <boost/python/object.hpp>
+#include <boost/python/return_internal_reference.hpp>
 #include <boost/python/scope.hpp>
 #include <cassert>
+#include <memory>
 #include <string>
 #include <utility>
 
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/translate.hpp>
+#include <pagmo/type_traits.hpp>
 
 #include "common_utils.hpp"
 #include "pygmo_classes.hpp"
@@ -60,6 +64,13 @@ inline bp::object best_known_wrapper(const Prob &p)
 {
     return v_to_a(p.best_known());
 }
+
+// This is a class whose call operator is invoked to expose the constructors of
+// the meta-problem Meta from the UDP T. It needs to be specialised for the various
+// meta-problems, as the default implementation does not define a call operator.
+template <typename Meta, typename T>
+struct make_meta_problem_init {
+};
 
 // Constructor of translate from problem and translation vector.
 // NOTE: it seems like returning a raw pointer is fine. See the examples here:
@@ -85,14 +96,17 @@ inline pagmo::translate *translate_init<bp::object>(const bp::object &p, const b
     return ::new pagmo::translate(p, vd);
 }
 
-// Make python inits for mbh from the above ctors.
-template <typename Prob>
-inline void make_translate_init(bp::class_<pagmo::translate> &tp)
-{
-    tp.def("__init__", bp::make_constructor(
-                           +[](const Prob &p, const bp::object &translation) { return translate_init(p, translation); },
-                           bp::default_call_policies(), (bp::arg("udp"), bp::arg("translation"))));
-}
+// Implement the structure to define constructors for the translate meta-problem.
+template <typename T>
+struct make_meta_problem_init<pagmo::translate, T> {
+    void operator()(bp::class_<pagmo::translate> &tp) const
+    {
+        tp.def("__init__",
+               bp::make_constructor(
+                   +[](const T &p, const bp::object &translation) { return translate_init(p, translation); },
+                   bp::default_call_policies(), (bp::arg("udp"), bp::arg("translation"))));
+    }
+};
 
 // Constructor of decompose from problem and weight, z, method and bool flag.
 template <typename Prob>
@@ -117,17 +131,19 @@ inline pagmo::decompose *decompose_init<bp::object>(const bp::object &p, const b
     return ::new pagmo::decompose(p, vd_w, vd_z, method, adapt_ideal);
 }
 
-// Make a python init from the above ctor.
-template <typename Prob>
-inline void make_decompose_init(bp::class_<pagmo::decompose> &dp)
-{
-    dp.def("__init__", bp::make_constructor(
-                           +[](const Prob &p, const bp::object &weight, const bp::object &z, const std::string &method,
-                               bool adapt_ideal) { return decompose_init(p, weight, z, method, adapt_ideal); },
-                           bp::default_call_policies(),
-                           (bp::arg("udp"), bp::arg("weight"), bp::arg("z"),
-                            bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false)));
-}
+// Implement the structure to define constructors for the decompose meta-problem.
+template <typename T>
+struct make_meta_problem_init<pagmo::decompose, T> {
+    void operator()(bp::class_<pagmo::decompose> &dp) const
+    {
+        dp.def("__init__", bp::make_constructor(
+                               +[](const T &p, const bp::object &weight, const bp::object &z, const std::string &method,
+                                   bool adapt_ideal) { return decompose_init(p, weight, z, method, adapt_ideal); },
+                               bp::default_call_policies(),
+                               (bp::arg("udp"), bp::arg("weight"), bp::arg("z"),
+                                bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false)));
+    }
+};
 
 // Expose a problem ctor from a C++ UDP.
 // NOTE: abstracted in a separate wrapper because it is re-used in core.cpp.
@@ -139,16 +155,26 @@ inline void problem_expose_init_cpp_udp()
     prob_class.def(bp::init<const Prob &>((bp::arg("udp"))));
 }
 
-// Main problem exposition function.
+// This is a helper struct used to connect C++ meta-problems and C++ UDPs. It will expose
+// the constructor of the meta prob T from the C++ UDP Prob, and the extraction from T of Prob.
+template <typename Prob>
+struct problem_connect_metas_cpp_udp {
+    template <typename T>
+    void operator()(std::unique_ptr<bp::class_<T>> &ptr) const
+    {
+        // Expose the meta's constructor from Prob.
+        make_meta_problem_init<T, Prob>{}(*ptr);
+        // Extract Prob from the meta.
+        ptr->def("_cpp_extract", &generic_cpp_extract<T, Prob>, bp::return_internal_reference<>());
+    }
+};
+
+// Main C++ UDP exposition function.
 template <typename Prob>
 inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
 {
     assert(problem_ptr.get() != nullptr);
-    assert(translate_ptr.get() != nullptr);
-    assert(decompose_ptr.get() != nullptr);
     auto &problem_class = *problem_ptr;
-    auto &tp_class = *translate_ptr;
-    auto &dp_class = *decompose_ptr;
     // We require all problems to be def-ctible at the bare minimum.
     bp::class_<Prob> c(name, descr, bp::init<>());
     // Mark it as a C++ problem.
@@ -159,20 +185,38 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
     // Expose extract.
     problem_class.def("_cpp_extract", &generic_cpp_extract<pagmo::problem, Prob>, bp::return_internal_reference<>());
 
-    // Expose translate's constructor from Prob and translation vector.
-    make_translate_init<Prob>(tp_class);
-    // Extract.
-    tp_class.def("_cpp_extract", &generic_cpp_extract<pagmo::translate, Prob>, bp::return_internal_reference<>());
-
-    // Expose decompose's constructor from Prob.
-    make_decompose_init<Prob>(dp_class);
-    // Extract.
-    dp_class.def("_cpp_extract", &generic_cpp_extract<pagmo::decompose, Prob>, bp::return_internal_reference<>());
-
     // Add the problem to the problems submodule.
     bp::scope().attr("problems").attr(name) = c;
 
+    // Expose ctor/extract functionality of the metas wrt Prob.
+    pagmo::detail::tuple_for_each(meta_probs_ptrs, problem_connect_metas_cpp_udp<Prob>{});
+
     return c;
+}
+
+// Main C++ meta-problem exposition function.
+template <typename Meta>
+inline void expose_meta_problem(std::unique_ptr<bp::class_<Meta>> &ptr, const char *name, const char *descr)
+{
+    assert(ptr.get() == nullptr);
+    assert(problem_ptr.get() != nullptr);
+    auto &problem_class = *problem_ptr;
+    // Create the class and expose def ctor.
+    ptr = make_unique<bp::class_<Meta>>(name, descr, bp::init<>());
+    // Make meta constructor from Python user-defined problem (allows to init a meta from Python UDPs).
+    // This needs to be the first exposed ctor as BP tries the constructors in reverse order, so this needs
+    // to be the last constructor tried during overload resolution.
+    make_meta_problem_init<Meta, bp::object>{}(*ptr);
+    // Python udp extraction.
+    ptr->def("_py_extract", &generic_py_extract<Meta>);
+    // Mark it as a cpp problem.
+    ptr->attr("_pygmo_cpp_problem") = true;
+    // Ctor of problem from Meta.
+    problem_expose_init_cpp_udp<Meta>();
+    // Extract a Meta problem from pagmo::problem.
+    problem_class.def("_cpp_extract", &generic_cpp_extract<pagmo::problem, Meta>, bp::return_internal_reference<>());
+    // Add it to the problems submodule.
+    bp::scope().attr("problems").attr(name) = *ptr;
 }
 }
 
