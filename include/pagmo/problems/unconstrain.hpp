@@ -159,7 +159,7 @@ public:
         switch (m_method) {
             case method_type::DEATH:
                 // copy the objectives
-                retval = vector_double(original_fitness.begin(), original_fitness.begin() + m_nobj);
+                retval = vector_double(original_fitness.data(), original_fitness.data() + m_nobj);
                 // penalize them if unfeasible
                 if (!static_cast<const problem *>(this)->feasibility_f(original_fitness)) {
                     std::fill(retval.begin(), retval.end(), std::numeric_limits<double>::max());
@@ -167,18 +167,18 @@ public:
                 break;
             case method_type::KURI: {
                 // copy the objectives
-                retval = vector_double(original_fitness.begin(), original_fitness.begin() + m_nobj);
+                retval = vector_double(original_fitness.data(), original_fitness.data() + m_nobj);
                 // penalize them if unfeasible
                 if (!static_cast<const problem *>(this)->feasibility_f(original_fitness)) {
                     // get the tolerances
                     auto c_tol = static_cast<const problem *>(this)->get_c_tol();
                     // compute the number of equality constraints satisfied
-                    auto sat_ec = detail::test_eq_constraints(original_fitness.begin() + m_nobj,
-                                                              original_fitness.begin() + m_nobj + m_nec, c_tol.begin())
+                    auto sat_ec = detail::test_eq_constraints(original_fitness.data() + m_nobj,
+                                                              original_fitness.data() + m_nobj + m_nec, c_tol.data())
                                       .first;
                     // compute the number of inequality constraints violated
-                    auto sat_ic = detail::test_ineq_constraints(original_fitness.begin() + m_nobj + m_nec,
-                                                                original_fitness.end(), c_tol.begin() + m_nec)
+                    auto sat_ic = detail::test_ineq_constraints(original_fitness.data() + m_nobj + m_nec,
+                                                                original_fitness.data(), c_tol.data() + m_nec)
                                       .first;
                     // sets the Kuri penalization
                     auto penalty = std::numeric_limits<double>::max() * (1. - (double)(sat_ec + sat_ic) / (double)m_nc);
@@ -187,9 +187,9 @@ public:
             } break;
             case method_type::WEIGHTED: {
                 // copy the objectives
-                retval = vector_double(original_fitness.begin(), original_fitness.begin() + m_nobj);
+                retval = vector_double(original_fitness.data(), original_fitness.data() + m_nobj);
                 // copy the constraints (NOTE: not necessary remove)
-                vector_double c(original_fitness.begin() + m_nobj, original_fitness.end());
+                vector_double c(original_fitness.data() + m_nobj, original_fitness.data());
                 // get the tolerances
                 auto c_tol = static_cast<const problem *>(this)->get_c_tol();
                 // modify constraints to account for the tolerance and be violated if positive
@@ -212,7 +212,7 @@ public:
                 }
             } break;
             case method_type::IGNORE_C: {
-                retval = vector_double(original_fitness.begin(), original_fitness.begin() + m_nobj);
+                retval = vector_double(original_fitness.data(), original_fitness.data() + m_nobj);
             } break;
             case method_type::IGNORE_O: {
                 // get the tolerances
@@ -220,12 +220,12 @@ public:
                 // and the number of objectives in the original problem
                 auto n_obj_orig = static_cast<const problem *>(this)->get_nobj();
                 // compute the norm of the violation on the equalities
-                auto norm_ec = detail::test_eq_constraints(original_fitness.begin() + n_obj_orig,
-                                                           original_fitness.begin() + n_obj_orig + m_nec, c_tol.begin())
+                auto norm_ec = detail::test_eq_constraints(original_fitness.data() + n_obj_orig,
+                                                           original_fitness.data() + n_obj_orig + m_nec, c_tol.data())
                                    .second;
                 // compute the norm of the violation on theinequalities
-                auto norm_ic = detail::test_ineq_constraints(original_fitness.begin() + n_obj_orig + m_nec,
-                                                             original_fitness.end(), c_tol.begin() + m_nec)
+                auto norm_ic = detail::test_ineq_constraints(original_fitness.data() + n_obj_orig + m_nec,
+                                                             original_fitness.data(), c_tol.data() + m_nec)
                                    .second;
                 retval = vector_double(1, norm_ec + norm_ic);
             } break;
