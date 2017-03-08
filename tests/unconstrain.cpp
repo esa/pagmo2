@@ -103,7 +103,13 @@ struct my_udp {
     {
         return "a simple problem with constraint for testing";
     }
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
 };
+
+PAGMO_REGISTER_PROBLEM(my_udp)
 
 BOOST_AUTO_TEST_CASE(unconstrain_fitness_test)
 {
@@ -146,4 +152,39 @@ BOOST_AUTO_TEST_CASE(unconstrain_fitness_test)
         BOOST_CHECK_CLOSE(p0.fitness(vector_double{1., 2., 1., 1., 1., -1.})[0], std::sqrt(2.) + std::sqrt(1.), 1e-8);
         BOOST_CHECK_CLOSE(p0.fitness(vector_double{1., 2., 1., 1., 1., 2.})[0], std::sqrt(2.) + std::sqrt(5.), 1e-8);
     }
+}
+
+BOOST_AUTO_TEST_CASE(unconstrain_various_test)
+{
+    unconstrain p0{my_udp{}, "death penalty"};
+    unconstrain p1{my_udp{}, "weighted", vector_double(4, 1.)};
+    BOOST_CHECK_EQUAL(p0.get_nobj(), 2u);
+    BOOST_CHECK(p0.get_name().find("[unconstrained]") != std::string::npos);
+    BOOST_CHECK(p0.get_extra_info().find("Weight vector") == std::string::npos);
+    BOOST_CHECK(p0.get_extra_info().find("death penalty") != std::string::npos);
+    BOOST_CHECK(p1.get_extra_info().find("Weight vector") != std::string::npos);
+    BOOST_CHECK(p1.get_extra_info().find("weighted") != std::string::npos);
+}
+
+BOOST_AUTO_TEST_CASE(unconstrain_serialization_test)
+{
+    problem p{unconstrain{my_udp{}, "kuri"}};
+    // Call objfun to increase the internal counters.
+    p.fitness({1., 1., 1., 1., 1., 1.});
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(p);
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
+    }
+    // Change the content of p before deserializing.
+    p = problem{null_problem{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
+    }
+    auto after = boost::lexical_cast<std::string>(p);
+    BOOST_CHECK_EQUAL(before, after);
 }
