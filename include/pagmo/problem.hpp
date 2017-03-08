@@ -83,6 +83,8 @@ struct null_problem {
     /// Constructor from number of objectives.
     /**
      * @param nobj the desired number of objectives.
+     * @param nec the desired number of equality constraints.
+     * @param nic the desired number of inequality constraints.
      *
      * @throws std::invalid_argument if \p nobj is zero.
      */

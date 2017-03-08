@@ -116,13 +116,13 @@ BOOST_AUTO_TEST_CASE(unconstrain_fitness_test)
     {
         unconstrain p0{my_udp{}, "death penalty"};
         // we test the method death penalty
-        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(2., 0.));
-        BOOST_CHECK(p0.fitness(vector_double(6, 1.)) == vector_double(2., std::numeric_limits<double>::max()));
+        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(2, 0.));
+        BOOST_CHECK(p0.fitness(vector_double(6, 1.)) == vector_double(2, std::numeric_limits<double>::max()));
     }
     {
         unconstrain p0{my_udp{}, "kuri"};
         // we test the method kuri
-        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(2., 0.));
+        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(2, 0.));
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 1., 1., -1., 1.})
                     == vector_double(2, std::numeric_limits<double>::max() * (1. - 1. / 4.)));
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 1., 1., -1., -1.})
@@ -132,21 +132,21 @@ BOOST_AUTO_TEST_CASE(unconstrain_fitness_test)
     }
     {
         unconstrain p0{my_udp{}, "weighted", vector_double(4, 1.)};
-        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(2., 0.));
+        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(2, 0.));
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 1., 1., -1., 1.}) == vector_double(2, 3.));
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 1., 1., -1., -1.}) == vector_double(2, 2.));
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 0., 1., 0., 0.}) == vector_double(2, 1.));
     }
     {
         unconstrain p0{my_udp{}, "ignore_c"};
-        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(2., 0.));
+        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(2, 0.));
         BOOST_CHECK((p0.fitness(vector_double{1., 2., 1., 1., -1., 1.}) == vector_double{1., 2.}));
         BOOST_CHECK((p0.fitness(vector_double{3., 4., 1., 1., -1., -1.}) == vector_double{3., 4.}));
         BOOST_CHECK((p0.fitness(vector_double{5., 6., 0., 1., 0., 0.}) == vector_double{5., 6.}));
     }
     {
         unconstrain p0{my_udp{}, "ignore_o"};
-        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(1., 0.));
+        BOOST_CHECK(p0.fitness(vector_double(6, 0.)) == vector_double(1, 0.));
         BOOST_CHECK((p0.fitness(vector_double{1., 2., 1., 0., -1., -1.}) == vector_double{1.}));
         BOOST_CHECK_CLOSE(p0.fitness(vector_double{1., 2., 1., 1., -1., -1.})[0], std::sqrt(2.), 1e-8);
         BOOST_CHECK_CLOSE(p0.fitness(vector_double{1., 2., 1., 1., 1., -1.})[0], std::sqrt(2.) + std::sqrt(1.), 1e-8);
