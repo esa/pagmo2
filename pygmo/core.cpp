@@ -652,7 +652,7 @@ BOOST_PYTHON_MODULE(core)
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
     np.def(bp::init<vector_double::size_type, vector_double::size_type, vector_double::size_type>(
-        (bp::arg("nobj"), bp::arg("nec") = 0, bp::arg("nic") = 0)));
+        (bp::arg("nobj") = 1, bp::arg("nec") = 0, bp::arg("nic") = 0)));
     // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock", pygmo::rosenbrock_docstring().c_str());
     rb.def(bp::init<unsigned>((bp::arg("dim"))));

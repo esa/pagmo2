@@ -487,7 +487,7 @@ class translate_test_case(_ut.TestCase):
 
 
 class unconstrain_test_case(_ut.TestCase):
-    """Test case for the decompose meta-problem
+    """Test case for the unconstrain meta-problem
 
     """
 

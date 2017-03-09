@@ -76,9 +76,7 @@ public:
     /**
      * The default constructor will initialize a pagmo::null_problem unconstrained via the death penalty method.
      */
-    unconstrain()
-        : problem(null_problem{2, 3, 4}), m_method(method_type::DEATH), m_weights(), m_nobj(2), m_nec(3), m_nic(4),
-          m_nc(7)
+    unconstrain() : unconstrain(null_problem{2, 3, 4}, "death penalty")
     {
     }
 
@@ -105,17 +103,17 @@ public:
         : problem(std::forward<T>(p)), m_weights(weights)
     {
         // The number of constraints in the original udp
-        m_nec = static_cast<const problem *>(this)->get_nec();
-        m_nic = static_cast<const problem *>(this)->get_nic();
-        m_nc = m_nec + m_nic;
+        auto nec = static_cast<const problem *>(this)->get_nec();
+        auto nic = static_cast<const problem *>(this)->get_nic();
+        auto nc = nec + nic;
         // 1 - We throw if the original problem is unconstrained
-        if (m_nc == 0u) {
+        if (nc == 0u) {
             pagmo_throw(std::invalid_argument, "Unconstrain can only be applied to constrained problems");
         }
         // 2 - We throw if the method weighted is selected but the weight vector has the wrong size
-        if (weights.size() != m_nc && method == "weighted") {
+        if (weights.size() != nc && method == "weighted") {
             pagmo_throw(std::invalid_argument, "Length of weight vector is: " + std::to_string(weights.size())
-                                                   + " while the problem constraints are: " + std::to_string(m_nc));
+                                                   + " while the problem constraints are: " + std::to_string(nc));
         }
         // 3 - We throw if the method selected is not supported
         if (method != "death penalty" && method != "kuri" && method != "weighted" && method != "ignore_c"
@@ -134,11 +132,6 @@ public:
                                                      {"ignore_c", method_type::IGNORE_C},
                                                      {"ignore_o", method_type::IGNORE_O}};
         m_method = my_map[method];
-        if (method != "ignore_o") {
-            m_nobj = static_cast<const problem *>(this)->get_nobj();
-        } else {
-            m_nobj = 1u;
-        }
     }
 
     /// Fitness
@@ -154,55 +147,62 @@ public:
      */
     vector_double fitness(const vector_double &x) const
     {
+        // some quantities from the orginal udp
         auto original_fitness = static_cast<const problem *>(this)->fitness(x);
+        auto nobj = static_cast<const problem *>(this)->get_nobj();
+        auto nec = static_cast<const problem *>(this)->get_nec();
+        auto nic = static_cast<const problem *>(this)->get_nic();
+        auto nc = nec + nic;
+
+        // the different methods
         vector_double retval;
         switch (m_method) {
-            case method_type::DEATH:
+            case method_type::DEATH: {
                 // copy the objectives
-                retval = vector_double(original_fitness.data(), original_fitness.data() + m_nobj);
+                retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
                 // penalize them if unfeasible
                 if (!static_cast<const problem *>(this)->feasibility_f(original_fitness)) {
                     std::fill(retval.begin(), retval.end(), std::numeric_limits<double>::max());
                 }
-                break;
+            } break;
             case method_type::KURI: {
                 // copy the objectives
-                retval = vector_double(original_fitness.data(), original_fitness.data() + m_nobj);
+                retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
                 // penalize them if unfeasible
                 if (!static_cast<const problem *>(this)->feasibility_f(original_fitness)) {
                     // get the tolerances
                     auto c_tol = static_cast<const problem *>(this)->get_c_tol();
                     // compute the number of equality constraints satisfied
-                    auto sat_ec = detail::test_eq_constraints(original_fitness.data() + m_nobj,
-                                                              original_fitness.data() + m_nobj + m_nec, c_tol.data())
+                    auto sat_ec = detail::test_eq_constraints(original_fitness.data() + nobj,
+                                                              original_fitness.data() + nobj + nec, c_tol.data())
                                       .first;
                     // compute the number of inequality constraints violated
-                    auto sat_ic = detail::test_ineq_constraints(original_fitness.data() + m_nobj + m_nec,
+                    auto sat_ic = detail::test_ineq_constraints(original_fitness.data() + nobj + nec,
                                                                 original_fitness.data() + original_fitness.size(),
-                                                                c_tol.data() + m_nec)
+                                                                c_tol.data() + nec)
                                       .first;
                     // sets the Kuri penalization
-                    auto penalty = std::numeric_limits<double>::max() * (1. - (double)(sat_ec + sat_ic) / (double)m_nc);
+                    auto penalty = std::numeric_limits<double>::max() * (1. - (double)(sat_ec + sat_ic) / (double)nc);
                     std::fill(retval.begin(), retval.end(), penalty);
                 }
             } break;
             case method_type::WEIGHTED: {
                 // copy the objectives
-                retval = vector_double(original_fitness.data(), original_fitness.data() + m_nobj);
+                retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
                 // copy the constraints (NOTE: not necessary remove)
-                vector_double c(original_fitness.data() + m_nobj, original_fitness.data() + original_fitness.size());
+                vector_double c(original_fitness.data() + nobj, original_fitness.data() + original_fitness.size());
                 // get the tolerances
                 auto c_tol = static_cast<const problem *>(this)->get_c_tol();
                 // modify constraints to account for the tolerance and be violated if positive
                 auto penalty = 0.;
-                for (decltype(m_nc) i = 0u; i < m_nc; ++i) {
-                    if (i < m_nec) {
+                for (decltype(nc) i = 0u; i < nc; ++i) {
+                    if (i < nec) {
                         c[i] = std::abs(c[i]) - c_tol[i];
                     } else {
                         c[i] = c[i] - c_tol[i];
                     }
                 }
-                for (decltype(m_nc) i = 0u; i < m_nc; ++i) {
+                for (decltype(nc) i = 0u; i < nc; ++i) {
                     if (c[i] > 0.) {
                         penalty += m_weights[i] * c[i];
                     }
@@ -213,7 +213,7 @@ public:
                 }
             } break;
             case method_type::IGNORE_C: {
-                retval = vector_double(original_fitness.data(), original_fitness.data() + m_nobj);
+                retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
             } break;
             case method_type::IGNORE_O: {
                 // get the tolerances
@@ -222,12 +222,12 @@ public:
                 auto n_obj_orig = static_cast<const problem *>(this)->get_nobj();
                 // compute the norm of the violation on the equalities
                 auto norm_ec = detail::test_eq_constraints(original_fitness.data() + n_obj_orig,
-                                                           original_fitness.data() + n_obj_orig + m_nec, c_tol.data())
+                                                           original_fitness.data() + n_obj_orig + nec, c_tol.data())
                                    .second;
                 // compute the norm of the violation on theinequalities
-                auto norm_ic = detail::test_ineq_constraints(original_fitness.data() + n_obj_orig + m_nec,
+                auto norm_ic = detail::test_ineq_constraints(original_fitness.data() + n_obj_orig + nec,
                                                              original_fitness.data() + original_fitness.size(),
-                                                             c_tol.data() + m_nec)
+                                                             c_tol.data() + nec)
                                    .second;
                 retval = vector_double(1, norm_ec + norm_ic);
             } break;
@@ -241,7 +241,11 @@ public:
      */
     vector_double::size_type get_nobj() const
     {
-        return m_nobj;
+        if (m_method != method_type::IGNORE_O) {
+            return static_cast<const problem *>(this)->get_nobj();
+        } else {
+            return 1u;
+        }
     }
 
     /// Problem name
@@ -293,7 +297,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<problem>(this), m_method, m_weights, m_nobj, m_nec, m_nic, m_nc);
+        ar(cereal::base_class<problem>(this), m_method, m_weights);
     }
 
 private:
@@ -354,23 +358,17 @@ private:
 
     /// types of unconstrain methods
     enum class method_type {
-        DEATH = 0,    ///< "death penalty"
-        KURI = 1,     ///< "kuri"
-        WEIGHTED = 2, ///< "weighted"
-        IGNORE_C = 3, ///< "ignore_c"
-        IGNORE_O = 4  ///< "ignore_o"
+        DEATH,    ///< "death penalty"
+        KURI,     ///< "kuri"
+        WEIGHTED, ///< "weighted"
+        IGNORE_C, ///< "ignore_c"
+        IGNORE_O  ///< "ignore_o"
     };
 
     /// method used to unconstrain the problem
     method_type m_method;
     /// weights vector
     vector_double m_weights;
-    /// number of objectives
-    vector_double::size_type m_nobj;
-    /// number of constraints in the orginal udp
-    vector_double::size_type m_nec;
-    vector_double::size_type m_nic;
-    vector_double::size_type m_nc;
 };
 }
 
