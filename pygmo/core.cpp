@@ -270,6 +270,9 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
            && std::all_of(res.begin(), res.end(), [m](const vector_double &v) { return v.size() == m; });
 }
 
+namespace pygmo
+{
+
 // A test problem.
 struct test_problem {
     test_problem(unsigned nobj = 1) : m_nobj(nobj)
@@ -345,6 +348,7 @@ struct tu_test_algorithm {
         return thread_safety::none;
     }
 };
+}
 
 // Metaprogramming for the implementation of connect_meta_problems().
 struct meta_problem_connector {
@@ -673,12 +677,12 @@ BOOST_PYTHON_MODULE(core)
 
     // Exposition of C++ problems.
     // Test problem.
-    auto test_p = pygmo::expose_problem<test_problem>("_test_problem", "A test problem.");
+    auto test_p = pygmo::expose_problem<pygmo::test_problem>("_test_problem", "A test problem.");
     test_p.def(bp::init<unsigned>((bp::arg("nobj"))));
-    test_p.def("get_n", &test_problem::get_n);
-    test_p.def("set_n", &test_problem::set_n);
+    test_p.def("get_n", &pygmo::test_problem::get_n);
+    test_p.def("set_n", &pygmo::test_problem::set_n);
     // Thread unsafe test problem.
-    pygmo::expose_problem<tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
+    pygmo::expose_problem<pygmo::tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
     np.def(bp::init<vector_double::size_type>((bp::arg("nobj"))));
@@ -760,11 +764,11 @@ BOOST_PYTHON_MODULE(core)
     connect_meta_algorithms();
 
     // Test algo.
-    auto test_a = pygmo::expose_algorithm<test_algorithm>("_test_algorithm", "A test algorithm.");
-    test_a.def("get_n", &test_algorithm::get_n);
-    test_a.def("set_n", &test_algorithm::set_n);
+    auto test_a = pygmo::expose_algorithm<pygmo::test_algorithm>("_test_algorithm", "A test algorithm.");
+    test_a.def("get_n", &pygmo::test_algorithm::get_n);
+    test_a.def("set_n", &pygmo::test_algorithm::set_n);
     // Thread unsafe test algo.
-    pygmo::expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
+    pygmo::expose_algorithm<pygmo::tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm", pygmo::null_algorithm_docstring().c_str());
     // DE
@@ -1023,7 +1027,7 @@ BOOST_PYTHON_MODULE(core)
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
 
     // Island.
-    pygmo::island_ptr = make_unique<bp::class_<island>>("island", bp::init<>());
+    pygmo::island_ptr = pygmo::make_unique<bp::class_<island>>("island", bp::init<>());
     auto &island_class = *pygmo::island_ptr;
     island_class.def(bp::init<const algorithm &, const bp::object &>())
         .def(bp::init<const algorithm &, const problem &, population::size_type>())
