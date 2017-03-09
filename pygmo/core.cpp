@@ -635,7 +635,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Unconstrain meta-problem.
     pygmo::expose_meta_problem(std::get<2>(pygmo::meta_probs_ptrs), "unconstrain",
-                               pygmo::translate_docstring().c_str());
+                               pygmo::unconstrain_docstring().c_str());
 
     // Before moving to the user-defined C++ problems, we need to expose the interoperability between
     // meta-problems.
@@ -652,7 +652,7 @@ BOOST_PYTHON_MODULE(core)
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
     np.def(bp::init<vector_double::size_type, vector_double::size_type, vector_double::size_type>(
-        (bp::arg("nobj"), bp::arg("nec"), bp::arg("nic"))));
+        (bp::arg("nobj"), bp::arg("nec") = 0, bp::arg("nic") = 0)));
     // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock", pygmo::rosenbrock_docstring().c_str());
     rb.def(bp::init<unsigned>((bp::arg("dim"))));

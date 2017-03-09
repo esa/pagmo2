@@ -90,6 +90,9 @@ std::string decompose_decompose_fitness_docstring();
 std::string decompose_original_fitness_docstring();
 std::string decompose_z_docstring();
 
+// unconstrain
+std::string unconstrain_docstring();
+
 // algorithm
 std::string algorithm_docstring();
 std::string algorithm_evolve_docstring();

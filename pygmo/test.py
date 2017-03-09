@@ -361,6 +361,8 @@ class null_problem_test_case(_ut.TestCase):
         n = np()
         n = np(1)
         n = np(nobj=2)
+        n = np(nobj=2, nec=2)
+        n = np(nobj=2, nec=2, nic=2)
         self.assertRaises(ValueError, lambda: np(0))
         self.assertTrue(problem(np()).get_nobj() == 1)
         self.assertTrue(problem(np(23)).get_nobj() == 23)
@@ -482,6 +484,57 @@ class translate_test_case(_ut.TestCase):
         self.assertTrue(t.is_(decompose))
         self.assertFalse(t.extract(decompose) is None)
         self.assertFalse(t.extract(decompose).extract(null_problem) is None)
+
+
+class unconstrain_test_case(_ut.TestCase):
+    """Test case for the decompose meta-problem
+
+    """
+
+    def runTest(self):
+        from .core import hock_schittkowsky_71, unconstrain, null_problem, problem, translate
+        from numpy import array
+
+        d = unconstrain()
+        self.assertFalse(d.extract(null_problem) is None)
+        d = unconstrain(udp=hock_schittkowsky_71(),
+                        method="weighted", weights=[1., 1.])
+        self.assertTrue(problem(d).is_(unconstrain))
+        self.assertFalse(problem(d).extract(unconstrain) is None)
+        self.assertTrue(d.is_(hock_schittkowsky_71))
+        self.assertFalse(d.extract(hock_schittkowsky_71) is None)
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+
+            def get_nobj(self):
+                return 2
+
+            def get_nic(self):
+                return 2
+
+            def get_nec(self):
+                return 2
+
+        d = unconstrain(p(), "kuri")
+        self.assertTrue(d.is_(p))
+        self.assertFalse(d.extract(p) is None)
+
+        # Verify construction from problem is forbidden.
+        self.assertRaises(TypeError, lambda: unconstrain(
+            problem(null_problem(2, 2, 2)), "kuri"))
+
+        # Verify chaining of metas
+        t = unconstrain(translate(null_problem(
+            2, 2, 2), [0.]), "death penalty")
+        self.assertTrue(t.is_(translate))
+        self.assertFalse(t.extract(translate) is None)
+        self.assertFalse(t.extract(translate).extract(null_problem) is None)
 
 
 class decompose_test_case(_ut.TestCase):
@@ -650,6 +703,7 @@ def run_test_suite():
     suite.addTest(dtlz_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
+    suite.addTest(unconstrain_test_case())
     suite.addTest(mbh_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
