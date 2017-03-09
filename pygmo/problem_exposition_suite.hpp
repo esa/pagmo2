@@ -48,6 +48,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
 
 #include "common_utils.hpp"
 #include "pygmo_classes.hpp"
@@ -105,6 +106,44 @@ struct make_meta_problem_init<pagmo::translate, T> {
                bp::make_constructor(
                    +[](const T &p, const bp::object &translation) { return translate_init(p, translation); },
                    bp::default_call_policies(), (bp::arg("udp"), bp::arg("translation"))));
+    }
+};
+
+// Constructor of translate from problem and translation vector.
+// NOTE: it seems like returning a raw pointer is fine. See the examples here:
+// http://www.boost.org/doc/libs/1_61_0/libs/python/test/injected.cpp
+template <typename Prob>
+inline pagmo::unconstrain *unconstrain_init(const Prob &p, const std::string &method, const bp::object &o)
+{
+    auto vd = to_vd(o);
+    return ::new pagmo::unconstrain(p, method, vd);
+}
+
+// NOTE: we specialise this as we need to avoid that we end up using a pagmo::problem
+// wrapped in a bp::object as a UDP. This is needed in order to make consistent the behaviour
+// between C++ (where translate cannot be cted from pagmo::problem) and Python.
+template <>
+inline pagmo::unconstrain *unconstrain_init<bp::object>(const bp::object &p, const std::string &method,
+                                                        const bp::object &o)
+{
+    if (type(p) == *problem_ptr) {
+        pygmo_throw(PyExc_TypeError, "a pygmo problem is not a user-defined problem, and it cannot be used "
+                                     "as a construction argument for the translate meta-problem");
+    }
+    auto vd = to_vd(o);
+    return ::new pagmo::unconstrain(p, method, vd);
+}
+
+// Implement the structure to define constructors for the unconstrain meta-problem.
+template <typename T>
+struct make_meta_problem_init<pagmo::unconstrain, T> {
+    void operator()(bp::class_<pagmo::unconstrain> &tp) const
+    {
+        tp.def("__init__",
+               bp::make_constructor(+[](const T &p, const std::string &method,
+                                        const bp::object &weights) { return unconstrain_init(p, method, weights); },
+                                    bp::default_call_policies(),
+                                    (bp::arg("udp"), bp::arg("method"), bp::arg("weights") = pagmo::vector_double{})));
     }
 };
 
