@@ -10,3 +10,8 @@ Meta-problems
 
 .. autoclass:: pygmo.core.decompose
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.unconstrain
+   :members:

@@ -1523,7 +1523,7 @@ An algorithm used in the default-initialization of :class:`pygmo.core.algorithm`
 
 std::string null_problem_docstring()
 {
-    return R"(__init__(nobj = 1)
+    return R"(__init__(nobj = 1, nec = 0, nic = 0)
 
 The null problem.
 
@@ -1531,9 +1531,11 @@ A problem used in the default-initialization of :class:`pygmo.core.problem` and 
 
 Args:
     nobj (``int``): the number of objectives
+    nec  (``int``): the number of equality constraints
+    nic  (``int``): the number of inequality constraintsctives
 
 Raises:
-    ValueError: if *nobj* is not strictly positive
+    ValueError: if *nobj*, *nec*, *nic* are not positive or if *nobj* is zero
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
 
@@ -2382,7 +2384,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_anneali
 
 std::string decompose_docstring()
 {
-    return R"(__init__(udp = null_problem(nobj = 2), weight = [0.5, 0.5], z = [0., 0.], method = 'weighted', adapt_ideal = False)
+    return R"(__init__(udp = null_problem(nobj = 2), weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False)
 
 The decompose meta-problem.
 
@@ -2520,6 +2522,61 @@ Returns:
 Raises:
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string unconstrain_docstring()
+{
+    return R"(__init__(udp = null_problem(nobj=2, nec=3, nic=4), method = "death penalty", weights = [])
+
+The unconstrain meta-problem.
+
+This meta-problem transforms a constrained problem into an unconstrained problem applying one of the following methods:
+
+* Death penalty: simply penalizes all objectives by the same high value if the fitness vector is infeasible.
+* Kuri's death penalty: defined by Angel Kuri Morales et al., penalizes all objectives according to the rate of satisfied constraints.
+* Weighted violations penalty: penalizes all objectives by the weighted sum of the constraint violations.
+* Ignore the constraints: simply ignores the constraints.
+* Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraints violation (i.e. the sum of the L2 norms of the equalities and inequalities violations)
+
+**NOTE** The use of :class:`~pygmo.core.unconstrain` discards gradients and hessians so that if the original user defined problem
+implements them, they will not be available in the unconstrained problem. The reason for this behaviour is that,
+in general, the methods implemented may not be differentiable. Also, the use of this class was originally intended for
+derivative-free optimization.
+
+See: Coello Coello, C. A. (2002). Theoretical and numerical constraint-handling techniques used with evolutionary algorithms: 
+a survey of the state of the art. Computer methods in applied mechanics and engineering, 191(11), 1245-1287.
+
+See: Kuri Morales, A. and Quezada, C.C. A Universal eclectic genetic algorithm for constrained optimization,
+Proceedings 6th European Congress on Intelligent Techniques & Soft Computing, EUFIT'98, 518-522, 1998.
+
+The constructor admits two forms:
+
+* no arguments,
+* two mandatory arguments and one optional arguments.
+
+Any other combination of arguments will raise an exception.
+
+Args:
+    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
+      and stored inside the :class:`~pygmo.core.unconstrained` instance)
+    method (``str``): a string containing the unconstrain method chosen, one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``]
+    weights (array-like object): the vector of weights to be used if the method chosen is "weighted"
+
+Raises:
+    ValueError: if either:
+
+      * *udp* is unconstrained,
+      * *method* is not one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``],
+      * *weight* is not of the same size as the problem constraints (if the method ``'weighted'`` is selcted), or not empty otherwise.
+
+    unspecified: any exception thrown by:
+
+      * the constructor of :class:`pygmo.core.problem`,
+      * the constructor of the underlying C++ class,
+      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
 
 )";
 }

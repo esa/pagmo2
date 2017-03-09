@@ -59,6 +59,7 @@ problem
   problems/translate
   problems/decompose
   problems/cec2013
+  problems/unconstrain
 
 Utilities
 ^^^^^^^^^

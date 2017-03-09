@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/translate.hpp>
+#include <pagmo/problems/unconstrain.hpp>
 
 namespace pygmo
 {
@@ -50,7 +51,8 @@ namespace pygmo
 extern std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
 
 // meta-problems.
-extern std::tuple<std::unique_ptr<bp::class_<pagmo::translate>>, std::unique_ptr<bp::class_<pagmo::decompose>>>
+extern std::tuple<std::unique_ptr<bp::class_<pagmo::translate>>, std::unique_ptr<bp::class_<pagmo::decompose>>,
+                  std::unique_ptr<bp::class_<pagmo::unconstrain>>>
     meta_probs_ptrs;
 
 // pagmo::algorithm.

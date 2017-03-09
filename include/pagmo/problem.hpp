@@ -83,10 +83,13 @@ struct null_problem {
     /// Constructor from number of objectives.
     /**
      * @param nobj the desired number of objectives.
+     * @param nec the desired number of equality constraints.
+     * @param nic the desired number of inequality constraints.
      *
      * @throws std::invalid_argument if \p nobj is zero.
      */
-    null_problem(vector_double::size_type nobj = 1) : m_nobj(nobj)
+    null_problem(vector_double::size_type nobj = 1, vector_double::size_type nec = 0, vector_double::size_type nic = 0)
+        : m_nobj(nobj), m_nec(nec), m_nic(nic)
     {
         if (!nobj) {
             pagmo_throw(std::invalid_argument, "The null problem must have a non-zero number of objectives");
@@ -98,7 +101,7 @@ struct null_problem {
      */
     vector_double fitness(const vector_double &) const
     {
-        return vector_double(get_nobj(), 0.);
+        return vector_double(get_nobj() + get_nec() + get_nic(), 0.);
     }
     /// Problem bounds.
     /**
@@ -116,6 +119,22 @@ struct null_problem {
     {
         return m_nobj;
     }
+    /// Number of equality constraints.
+    /**
+     * @return the number of equality constraints of the problem (as specified upon construction).
+     */
+    vector_double::size_type get_nec() const
+    {
+        return m_nec;
+    }
+    /// Number of inequality constraints.
+    /**
+     * @return the number of inequality constraints of the problem (as specified upon construction).
+     */
+    vector_double::size_type get_nic() const
+    {
+        return m_nic;
+    }
     /// Serialization
     /**
      * @param ar the target serialization archive.
@@ -123,11 +142,13 @@ struct null_problem {
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar &m_nobj;
+        ar(m_nobj, m_nec, m_nic);
     }
 
 private:
     vector_double::size_type m_nobj;
+    vector_double::size_type m_nec;
+    vector_double::size_type m_nic;
 };
 }
 
@@ -1181,7 +1202,7 @@ public:
         return *this = problem(other);
     }
 
-    /// Extract a const pointer to the UDP.
+    /// Extract a const pointer to the UDP used for construction.
     /**
      * This method will extract a const pointer to the internal instance of the UDP. If \p T is not the same type
      * as the UDP used during construction (after removal of cv and reference qualifiers), this method will
@@ -1201,7 +1222,7 @@ public:
         return p == nullptr ? nullptr : &(p->m_value);
     }
 
-    /// Extract a pointer to the UDP.
+    /// Extract a pointer to the UDP used for construction.
     /**
      * This method will extract a pointer to the internal instance of the UDP. If \p T is not the same type
      * as the UDP used during construction (after removal of cv and reference qualifiers), this method will
@@ -1221,9 +1242,9 @@ public:
         return p == nullptr ? nullptr : &(p->m_value);
     }
 
-    /// Check if the UDP is of type \p T.
+    /// Check if the UDP used for construction is of type \p T.
     /**
-     * @return \p true if the UDP is of type \p T, \p false otherwise.
+     * @return \p true if the UDP used in construction is of type \p T, \p false otherwise.
      */
     template <typename T>
     bool is() const
