@@ -1087,7 +1087,7 @@ Returns:
 
 std::string translate_docstring()
 {
-    return R"(__init__(udp, translation)
+    return R"(__init__(udp = null_problem(), translation = [0.])
 
 The translate meta-problem.
 
@@ -2384,7 +2384,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_anneali
 
 std::string decompose_docstring()
 {
-    return R"(__init__(udp, weight, z, method = 'weighted', adapt_ideal = False)
+    return R"(__init__(udp = null_problem(nobj = 2), weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False)
 
 The decompose meta-problem.
 
@@ -2528,7 +2528,7 @@ Raises:
 
 std::string unconstrain_docstring()
 {
-    return R"(__init__(udp, method, weights = [])
+    return R"(__init__(udp = null_problem(nobj=2, nec=3, nic=4), method = "death penalty", weights = [])
 
 The unconstrain meta-problem.
 
