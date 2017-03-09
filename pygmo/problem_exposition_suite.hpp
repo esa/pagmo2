@@ -175,10 +175,12 @@ struct make_meta_problem_init<pagmo::unconstrain, T> {
     void operator()(bp::class_<pagmo::unconstrain> &tp) const
     {
         tp.def("__init__",
-               bp::make_constructor(+[](const T &p, const std::string &method,
-                                        const bp::object &weights) { return unconstrain_init(p, method, weights); },
-                                    bp::default_call_policies(),
-                                    (bp::arg("udp"), bp::arg("method"), bp::arg("weights") = pagmo::vector_double{})));
+               bp::make_constructor(
+                   +[](const T &p, const std::string &method, const bp::object &weights) {
+                       return unconstrain_init(p, method, weights);
+                   },
+                   bp::default_call_policies(),
+                   (bp::arg("udp"), bp::arg("method"), bp::arg("weights") = pygmo::v_to_a(pagmo::vector_double{}))));
     }
 };
 
