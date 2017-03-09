@@ -95,6 +95,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/translate.hpp>
+#include <pagmo/problems/unconstrain.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
@@ -628,9 +629,13 @@ BOOST_PYTHON_MODULE(core)
     // Returns the original multi-objective fitness
     dp.def("original_fitness", +[](const pagmo::decompose &p,
                                    const bp::object &x) { return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x))); },
-           pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")))
-        .add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
-                      pygmo::decompose_z_docstring().c_str());
+           pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
+    dp.add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
+                    pygmo::decompose_z_docstring().c_str());
+
+    // Unconstrain meta-problem.
+    pygmo::expose_meta_problem(std::get<2>(pygmo::meta_probs_ptrs), "unconstrain",
+                               pygmo::unconstrain_docstring().c_str());
 
     // Before moving to the user-defined C++ problems, we need to expose the interoperability between
     // meta-problems.
@@ -646,7 +651,8 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_problem<tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
-    np.def(bp::init<vector_double::size_type>((bp::arg("nobj"))));
+    np.def(bp::init<vector_double::size_type, vector_double::size_type, vector_double::size_type>(
+        (bp::arg("nobj") = 1, bp::arg("nec") = 0, bp::arg("nic") = 0)));
     // Rosenbrock.
     auto rb = pygmo::expose_problem<rosenbrock>("rosenbrock", pygmo::rosenbrock_docstring().c_str());
     rb.def(bp::init<unsigned>((bp::arg("dim"))));
