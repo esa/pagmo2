@@ -83,15 +83,11 @@ if(PAGMO_BUILD_PYGMO)
 endif()
 
 # Boost setup.
-# We need Boost if we are building pygmo (boost.python) or the tests
-# (boost testing framework, header only).
-if(PAGMO_BUILD_PYGMO OR PAGMO_BUILD_TESTS)
-    include(PagmoFindBoost)
-endif()
+include(PagmoFindBoost)
 
 # Setup of the header-only pagmo library.
 add_library(pagmo INTERFACE)
-target_link_libraries(pagmo INTERFACE Threads::Threads)
+target_link_libraries(pagmo INTERFACE Threads::Threads Boost::boost)
 target_include_directories(pagmo INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
