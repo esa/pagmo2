@@ -56,9 +56,11 @@ class thread_safety(object):
 
     """
 
-    #: No thread safety: concurrent operations on distinct instances are unsafe
+    #: No thread safety: any concurrent operation on distinct instances is unsafe
     none = core._thread_safety.none
-    #: Basic thread safety: concurrent operations on distinct instances are safe
+    #: Copy-only thread safety: concurrent copying of distinct instances is safe
+    copyonly = core._thread_safety.copyonly
+    #: Basic thread safety: any concurrent operation on distinct instances is safe
     basic = core._thread_safety.basic
 
 

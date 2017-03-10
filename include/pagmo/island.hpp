@@ -141,7 +141,7 @@ class thread_island
             pagmo_throw(
                 std::invalid_argument,
                 "thread islands require objects which provide at least the basic thread safety level, but the object '"
-                    + x.get_name() + "' does not provide any thread safety guarantee");
+                    + x.get_name() + "' provides only the '" + std::string(x.get_thread_safety() == thread_safety::copyonly ? "copyonly" : "none") + "' thread safety guarantee");
         }
     }
 
