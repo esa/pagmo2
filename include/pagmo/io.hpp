@@ -69,15 +69,15 @@ inline void stream_impl(std::ostream &os, const bool &b)
 inline void stream_impl(std::ostream &os, thread_safety ts)
 {
     switch (ts) {
-    case thread_safety::none:
-        os << "none";
-        break;
-    case thread_safety::copyonly:
-        os << "copyonly";
-        break;
-    case thread_safety::basic:
-        os << "basic";
-        break;
+        case thread_safety::none:
+            os << "none";
+            break;
+        case thread_safety::copyonly:
+            os << "copyonly";
+            break;
+        case thread_safety::basic:
+            os << "basic";
+            break;
     }
 }
 

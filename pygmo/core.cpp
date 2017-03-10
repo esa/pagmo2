@@ -456,7 +456,10 @@ BOOST_PYTHON_MODULE(core)
     doc_options.disable_py_signatures();
 
     // The thread_safety enum.
-    bp::enum_<thread_safety>("_thread_safety").value("none", thread_safety::none).value("copyonly", thread_safety::copyonly).value("basic", thread_safety::basic);
+    bp::enum_<thread_safety>("_thread_safety")
+        .value("none", thread_safety::none)
+        .value("copyonly", thread_safety::copyonly)
+        .value("basic", thread_safety::basic);
 
     // Expose utility functions for testing purposes.
     bp::def("_builtin", &pygmo::builtin);

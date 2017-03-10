@@ -91,8 +91,9 @@ class has_run_evolve
 {
     using ulock_t = std::unique_lock<std::mutex>;
     template <typename U>
-    using run_evolve_t = decltype(std::declval<U &>().run_evolve(std::declval<algorithm &>(),
-        std::declval<ulock_t &>(), std::declval<population &>(), std::declval<ulock_t &>()));
+    using run_evolve_t
+        = decltype(std::declval<U &>().run_evolve(std::declval<algorithm &>(), std::declval<ulock_t &>(),
+                                                  std::declval<population &>(), std::declval<ulock_t &>()));
     static const bool implementation_defined = std::is_same<void, detected_t<run_evolve_t, T>>::value;
 
 public:
@@ -250,7 +251,9 @@ class thread_island
             pagmo_throw(
                 std::invalid_argument,
                 "thread islands require objects which provide at least the basic thread safety level, but the object '"
-                    + x.get_name() + "' provides only the '" + std::string(x.get_thread_safety() == thread_safety::copyonly ? "copyonly" : "none") + "' thread safety guarantee");
+                    + x.get_name() + "' provides only the '"
+                    + std::string(x.get_thread_safety() == thread_safety::copyonly ? "copyonly" : "none")
+                    + "' thread safety guarantee");
         }
     }
 
