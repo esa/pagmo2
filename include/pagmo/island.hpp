@@ -31,11 +31,13 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/any.hpp>
 #include <chrono>
+#include <functional>
 #include <future>
 #include <memory>
 #include <mutex>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <typeinfo>
 #include <utility>
 #include <vector>
@@ -45,11 +47,97 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 
+/// Macro for the registration of the serialization functionality for user-defined islands.
+/**
+ * This macro should always be invoked after the declaration of a user-defined island: it will register
+ * the island with pagmo's serialization machinery. The macro should be called in the root namespace
+ * and using the fully qualified name of the island to be registered. For example:
+ * @code{.unparsed}
+ * namespace my_namespace
+ * {
+ *
+ * class my_island
+ * {
+ *    // ...
+ * };
+ *
+ * }
+ *
+ * PAGMO_REGISTER_ISLAND(my_namespace::my_island)
+ * @endcode
+ */
+#define PAGMO_REGISTER_ISLAND(isl) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::isl_inner<isl>, "udi " #isl)
+
 namespace pagmo
 {
+
+/// Detect \p run_evolve() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code{.unparsed}
+ * void run_evolve(pagmo::algorithm &, ulock_t &, pagmo::population &, ulock_t &);
+ * @endcode
+ * where \p ulock_t is <tt>std::unique_lock<std::mutex></tt>.
+ * The \p run_evolve() method is part of the interface for the definition of an island
+ * (see pagmo::island).
+ */
+template <typename T>
+class has_run_evolve
+{
+    using ulock_t = std::unique_lock<std::mutex>;
+    template <typename U>
+    using run_evolve_t = decltype(std::declval<U &>().run_evolve(std::declval<algorithm &>(),
+        std::declval<ulock_t &>(), std::declval<population &>(), std::declval<ulock_t &>()));
+    static const bool implementation_defined = std::is_same<void, detected_t<run_evolve_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_run_evolve<T>::value;
+
+namespace detail
+{
+
+// Specialise this to true in order to disable all the UDI checks and mark a type
+// as a UDI regardless of the features provided by it.
+// NOTE: this is needed when implementing the machinery for Python islands.
+// NOTE: leave this as an implementation detail for now.
+template <typename>
+struct disable_udi_checks : std::false_type {
+};
+}
+
+/// Detect user-defined islands (UDI).
+/**
+ * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
+ * constructible, and if it satisfies the pagmo::has_run_evolve type trait.
+ *
+ * Types satisfying this type trait can be used as user-defined islands (UDI) in pagmo::island.
+ */
+template <typename T>
+class is_udi
+{
+    static const bool implementation_defined
+        = (std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
+           && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
+           && std::is_destructible<T>::value && has_run_evolve<T>::value)
+          || detail::disable_udi_checks<T>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool is_udi<T>::value;
 
 namespace detail
 {
@@ -63,6 +151,10 @@ struct isl_inner_base {
     virtual void run_evolve(algorithm &, ulock_t &, population &, ulock_t &) = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
 };
 
 template <typename T>
@@ -119,19 +211,36 @@ struct isl_inner final : isl_inner_base {
     {
         return "";
     }
+    // Serialization
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(cereal::base_class<isl_inner_base>(this), m_value);
+    }
     T m_value;
 };
 
-// TODO fix names and stuff.
+// NOTE: this construct is used to create a RAII-style object at the beginning
+// of island::wait(). Normally this object's constructor and destructor will not
+// do anything, but in Python we need to override this getter to that it returns
+// a RAII object that unlocks the GIL, otherwise we could run into deadlocks in Python
+// if isl::wait() holds the GIL while waiting.
 template <typename = void>
-struct isl_waiter {
-    static std::function<boost::any()> func;
+struct isl_wait_raii {
+    static std::function<boost::any()> getter;
 };
 
+// NOTE: the default implementation just returns a defcted boost::any, whose ctor and dtor
+// will have no effect.
 template <typename T>
-std::function<boost::any()> isl_waiter<T>::func = []() { return boost::any{}; };
+std::function<boost::any()> isl_wait_raii<T>::getter = []() { return boost::any{}; };
 }
 
+/// Thread island.
+/**
+ * This class is a user-defined island (UDI) that will run evolutions in a thread
+ * distinct from the main one.
+ */
 class thread_island
 {
     template <typename T>
@@ -146,10 +255,32 @@ class thread_island
     }
 
 public:
+    /// Island's name.
+    /**
+     * @return <tt>"Thread island"</tt>.
+     */
     std::string get_name() const
     {
         return "Thread island";
     }
+    /// Run evolve.
+    /**
+     * This method will invoke the <tt>evolve()</tt> method on a copy of \p algo, using a copy
+     * of \p pop as argument, and it will then assign the result of the evolution back to \p pop.
+     * During the evolution the input locks are released.
+     *
+     * @param algo the algorithm that will be used for the evolution.
+     * @param algo_lock a locked lock that guarantees exclusive access to \p algo.
+     * @param pop the population that will be evolved by \p algo.
+     * @param pop_lock a locked lock that guarantees exclusive access to \p pop.
+     *
+     * @throws std::invalid_argument if either \p algo or <tt>pop</tt>'s problem do not provide
+     * at least the pagmo::thread_safety::basic thread safety guarantee.
+     * @throws unspecified any exception thrown by:
+     * - threading primitives,
+     * - the copy constructors of \p pop and \p algo,
+     * - the <tt>evolve()</tt> method of \p algo.
+     */
     void run_evolve(algorithm &algo, std::unique_lock<std::mutex> &algo_lock, population &pop,
                     std::unique_lock<std::mutex> &pop_lock)
     {
@@ -174,10 +305,24 @@ public:
         // NOTE: this does not need any thread safety, as we are just moving in a problem pointer.
         pop = std::move(new_pop);
     }
+    /// Serialization support.
+    /**
+     * This class is stateless, no data will be saved to or loaded from the archive.
+     */
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
 };
 
 class archipelago;
 
+/// Island class.
+/**
+ * In pagmo an island is a object that is used to evolve a population....
+ *
+ * TODO UDIs must have basic thread safety.
+ */
 class island
 {
 public:
@@ -246,7 +391,8 @@ public:
     }
     void wait() const
     {
-        auto v = detail::isl_waiter<>::func();
+        auto iwr = detail::isl_wait_raii<>::getter();
+        (void)iwr;
         std::lock_guard<std::mutex> lock(m_futures_mutex);
         for (decltype(m_futures.size()) i = 0; i < m_futures.size(); ++i) {
             // NOTE: this has to be valid, as the only way to get the value of the futures is via
