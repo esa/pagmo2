@@ -175,7 +175,7 @@ def _island_init(self, **kwargs):
             "the number of keyword arguments for the island constructor must be "
             "either 0, 2, 3 or 4, but {} arguments were passed instead".format(len(kwargs)))
 
-setattr(island, "__init__", _island_init)
+#setattr(island, "__init__", _island_init)
 
 # Register the cleanup function.
 import atexit as _atexit

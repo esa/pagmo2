@@ -38,8 +38,9 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(island_construction)
 {
-    island isl(de{}, rosenbrock{}, 20);
+    island isl(thread_island{}, rosenbrock{}, de{}, 20);
     for (unsigned i = 0u; i < 1000u; ++i) {
         isl.evolve();
     }
+    isl.wait();
 }

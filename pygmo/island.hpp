@@ -31,23 +31,20 @@ see https://www.gnu.org/licenses/. */
 
 #include "python_includes.hpp"
 
-#include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/object.hpp>
-#include <boost/python/tuple.hpp>
-#include <sstream>
+// #include <boost/python/tuple.hpp>
+// #include <sstream>
 #include <string>
-#include <type_traits>
+// #include <type_traits>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/archipelago.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 
 #include "common_base.hpp"
 #include "common_utils.hpp"
-#include "object_serialization.hpp"
 
 namespace pagmo
 {
@@ -58,12 +55,23 @@ namespace detail
 namespace bp = boost::python;
 
 // Disable the static UDI checks for bp::object.
-template <>
-struct disable_udi_checks<bp::object> : std::true_type {
-};
+// template <>
+// struct disable_udi_checks<bp::object> : std::true_type {
+// };
 
 template <>
 struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
+    template <typename T>
+    static void check_thread_safety(const T &x)
+    {
+        if (static_cast<int>(x.get_thread_safety()) < static_cast<int>(thread_safety::copyonly)) {
+            pygmo_throw(PyExc_ValueError,
+                        ("pythonic islands require objects which provide at least the copyonly thread "
+                         "safety level, but the object '"
+                         + x.get_name() + "' does not provide any thread safety guarantee")
+                            .c_str());
+        }
+    }
     // Just need the def ctor, delete everything else.
     isl_inner() = default;
     isl_inner(const isl_inner &) = delete;
@@ -73,9 +81,7 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     explicit isl_inner(const bp::object &o)
     {
         check_not_type(o, "island");
-        check_mandatory_method(o, "enqueue_evolution", "island");
-        check_mandatory_method(o, "wait", "island");
-        check_mandatory_method(o, "get_population", "island");
+        check_mandatory_method(o, "run_evolve", "island");
         m_value = pygmo::deepcopy(o);
     }
     virtual isl_inner_base *clone() const override final
@@ -84,23 +90,36 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         return ::new isl_inner(m_value);
     }
     // Mandatory methods.
-    virtual void enqueue_evolution(const algorithm &algo, archipelago *archi) override final
+    virtual void run_evolve(algorithm &algo, ulock_t &algo_lock, population &pop, ulock_t &pop_lock) override final
     {
-        // NOTE: here Boost Python will create a copy of algo wrapped in a bp::object before
-        // passing it to the Python method.
-        if (archi) {
-            m_value.attr("enqueue_evolution")(algo, *archi);
-        } else {
-            m_value.attr("enqueue_evolution")(algo, bp::object());
+        // NOTE: run_evolve() is called from a separate thread in pagmo::island, need to construct a GTE before doing
+        // anything with the interpreter (including the throws in the checks below).
+        pygmo::gil_thread_ensurer gte;
+
+        // NOTE: the idea of these checks is the following: we will have to copy algo and pop in order to invoke
+        // the pythonic UDI's evolve method, which has a signature which is different from C++. If algo/prob are
+        // bp::object, via the GTE above we have made sure we can safely copy them so we don't need to check anything.
+        // Otherwise, we run the check, which is against the copyonly thread safety level as that is all we need.
+        if (!algo.is<bp::object>()) {
+            check_thread_safety(algo);
         }
-    }
-    virtual void wait() const override final
-    {
-        m_value.attr("wait")();
-    }
-    virtual population get_population() const override final
-    {
-        return bp::extract<population>(m_value.attr("get_population")());
+        if (!pop.get_problem().is<bp::object>()) {
+            check_thread_safety(pop.get_problem());
+        }
+
+        // Everything fine, copy algo/pop and unlock.
+        bp::object algo_copy(algo);
+        algo_lock.unlock();
+        bp::object pop_copy(pop);
+        pop_lock.unlock();
+
+        // Invoke the run_evolve() method of the UDI and get out the evolved pop.
+        // NOTE: here bp::extract will extract a copy of pop, and then a move ctor will take place,
+        // which will just move the internal problem pointer. No additional thread safety guarantees are needed.
+        population new_pop = bp::extract<population>(m_value.attr("run_evolve")(algo_copy, pop_copy));
+        // Re-lock and assign.
+        pop_lock.lock();
+        pop = std::move(new_pop);
     }
     // Optional methods.
     virtual std::string get_name() const override final
@@ -111,64 +130,9 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     {
         return getter_wrapper<std::string>(m_value, "get_extra_info", std::string{});
     }
-    template <typename Archive>
-    void serialize(Archive &ar)
-    {
-        ar(cereal::base_class<isl_inner_base>(this), m_value);
-    }
     bp::object m_value;
 };
 }
-}
-
-// Register the isl_inner specialisation for bp::object.
-PAGMO_REGISTER_ISLAND(boost::python::object)
-
-namespace pygmo
-{
-
-namespace bp = boost::python;
-
-// Serialization support for the island class.
-struct island_pickle_suite : bp::pickle_suite {
-    static bp::tuple getstate(const pagmo::island &isl)
-    {
-        // The idea here is that first we extract a char array
-        // into which isl has been cerealised, then we turn
-        // this object into a Python bytes object and return that.
-        std::ostringstream oss;
-        {
-            cereal::PortableBinaryOutputArchive oarchive(oss);
-            oarchive(isl);
-        }
-        auto s = oss.str();
-        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
-    }
-    static void setstate(pagmo::island &isl, const bp::tuple &state)
-    {
-        // Similarly, first we extract a bytes object from the Python state,
-        // and then we build a C++ string from it. The string is then used
-        // to decerealise the object.
-        if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, ("the state tuple passed for island deserialization "
-                                           "must have a single element, but instead it has "
-                                           + std::to_string(len(state)) + " elements")
-                                              .c_str());
-        }
-        auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
-        if (!ptr) {
-            pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize an island");
-        }
-        const auto size = len(state[0]);
-        std::string s(ptr, ptr + size);
-        std::istringstream iss;
-        iss.str(s);
-        {
-            cereal::PortableBinaryInputArchive iarchive(iss);
-            iarchive(isl);
-        }
-    }
-};
 }
 
 #endif

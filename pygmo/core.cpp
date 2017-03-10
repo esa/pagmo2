@@ -120,7 +120,7 @@ see https://www.gnu.org/licenses/. */
 #include "object_serialization.hpp"
 #include "problem.hpp"
 #include "problem_exposition_suite.hpp"
-#include "py_thread_island.hpp"
+//#include "py_thread_island.hpp"
 #include "pygmo_classes.hpp"
 
 #if defined(_MSC_VER)
@@ -406,6 +406,11 @@ static inline void connect_meta_algorithms()
     pagmo::detail::tuple_for_each(pygmo::meta_algos_ptrs, meta_algorithm_connector{});
 }
 
+struct isl_wait_locks {
+    pygmo::gil_thread_ensurer gte;
+    pygmo::gil_releaser gr;
+};
+
 BOOST_PYTHON_MODULE(core)
 {
     // This function needs to be called before doing anything with threads.
@@ -429,18 +434,20 @@ BOOST_PYTHON_MODULE(core)
     wrap_import_array();
 
     // Override the default implementation of the island factory.
-    detail::island_factory<>::s_func
-        = +[](const algorithm &, const population &pop, std::unique_ptr<detail::isl_inner_base> &ptr) {
-              // NOTE: just like in py_thread_island, here we are re-implementing a piece of code that normally
-              // is pure C++. Potentially here we are calling into the Python interpreter, so, in order to handle
-              // the case in which we are invoking this code from a separate C++ thread, we construct a GIL ensurer
-              // in order to guard against concurrent access to the interpreter. The idea here is that this piece
-              // of code normally would provide a basic thread safety guarantee, and in order to continue providing
-              // it we use the ensurer.
-              pygmo::gil_thread_ensurer gte;
-              pygmo::py_thread_island t_isl(pop);
-              ptr.reset(::new detail::isl_inner<pygmo::py_thread_island>(std::move(t_isl)));
-          };
+    // detail::island_factory<>::s_func
+    //     = +[](const algorithm &, const population &pop, std::unique_ptr<detail::isl_inner_base> &ptr) {
+    //           // NOTE: just like in py_thread_island, here we are re-implementing a piece of code that normally
+    //           // is pure C++. Potentially here we are calling into the Python interpreter, so, in order to handle
+    //           // the case in which we are invoking this code from a separate C++ thread, we construct a GIL ensurer
+    //           // in order to guard against concurrent access to the interpreter. The idea here is that this piece
+    //           // of code normally would provide a basic thread safety guarantee, and in order to continue providing
+    //           // it we use the ensurer.
+    //           pygmo::gil_thread_ensurer gte;
+    //           pygmo::py_thread_island t_isl(pop);
+    //           ptr.reset(::new detail::isl_inner<pygmo::py_thread_island>(std::move(t_isl)));
+    //       };
+
+    detail::isl_waiter<>::func = []() { return std::shared_ptr<isl_wait_locks>{::new isl_wait_locks{}}; };
 
     // Setup doc options
     bp::docstring_options doc_options;
@@ -1035,24 +1042,23 @@ BOOST_PYTHON_MODULE(core)
     // Island.
     pygmo::island_ptr = pygmo::make_unique<bp::class_<island>>("island", bp::init<>());
     auto &island_class = *pygmo::island_ptr;
-    island_class.def(bp::init<const algorithm &, const bp::object &>())
-        .def(bp::init<const algorithm &, const problem &, population::size_type>())
-        .def(bp::init<const algorithm &, const problem &, population::size_type, unsigned>())
-        .def(repr(bp::self))
-        .def_pickle(pygmo::island_pickle_suite())
+    island_class.def(bp::init<const population &, const algorithm &>())
+        .def(bp::init<const bp::object &, const problem &, const algorithm &, population::size_type>())
+        .def(bp::init<const bp::object &, const problem &, const algorithm &, population::size_type, unsigned>())
+        .def(bp::init<const problem &, const algorithm &, population::size_type>())
+        .def(bp::init<const problem &, const algorithm &, population::size_type, unsigned>())
+        //.def(repr(bp::self))
         // Copy and deepcopy.
-        .def("__copy__", &pygmo::generic_copy_wrapper<island>)
-        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
+        // .def("__copy__", &pygmo::generic_copy_wrapper<island>)
+        // .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
         .def("evolve", &island::evolve)
-        .def("wait", &island::wait)
-        .def("get_population", &island::get_population)
-        .add_property("algorithm", bp::make_function(+[](island &isl) -> algorithm & { return isl.get_algorithm(); },
-                                                     bp::return_internal_reference<>()),
-                      +[](island &isl, const algorithm &a) { isl.get_algorithm() = a; });
+        .def("wait", &island::wait);
+    // .def("wait", +[](island &isl) {
+    //     pygmo::gil_thread_ensurer gte;
+    //     pygmo::gil_releaser gr;
+    //     isl.wait();
+    // });
 
-    // Null island.
-    auto ni = pygmo::expose_island<null_island>("null_island", "");
     // Thread island.
-    auto ti = pygmo::expose_island<pygmo::py_thread_island>("thread_island", "");
-    ti.def(bp::init<const population &>());
+    auto ti = pygmo::expose_island<thread_island>("thread_island", "");
 }

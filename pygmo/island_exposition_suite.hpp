@@ -50,7 +50,10 @@ inline void island_expose_init_cpp_udi()
 {
     assert(island_ptr.get() != nullptr);
     auto &isl_class = *island_ptr;
-    isl_class.def(bp::init<const pagmo::algorithm &, const Isl &>());
+    isl_class.def(
+        bp::init<const Isl &, const pagmo::problem &, const pagmo::algorithm &, pagmo::population::size_type>());
+    isl_class.def(bp::init<const Isl &, const pagmo::problem &, const pagmo::algorithm &, pagmo::population::size_type,
+                           unsigned>());
 }
 
 // Main island exposition function.
