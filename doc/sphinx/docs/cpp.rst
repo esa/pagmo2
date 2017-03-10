@@ -31,6 +31,7 @@ code your own algorithm
   algorithms/de1220
   algorithms/cmaes
   algorithms/moead
+  algorithms/abc
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
