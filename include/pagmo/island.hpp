@@ -227,14 +227,14 @@ struct isl_inner final : isl_inner_base {
 // a RAII object that unlocks the GIL, otherwise we could run into deadlocks in Python
 // if isl::wait() holds the GIL while waiting.
 template <typename = void>
-struct isl_wait_raii {
+struct wait_raii {
     static std::function<boost::any()> getter;
 };
 
 // NOTE: the default implementation just returns a defcted boost::any, whose ctor and dtor
 // will have no effect.
 template <typename T>
-std::function<boost::any()> isl_wait_raii<T>::getter = []() { return boost::any{}; };
+std::function<boost::any()> wait_raii<T>::getter = []() { return boost::any{}; };
 }
 
 /// Thread island.
@@ -484,7 +484,7 @@ public:
     }
     void wait() const
     {
-        auto iwr = detail::isl_wait_raii<>::getter();
+        auto iwr = detail::wait_raii<>::getter();
         (void)iwr;
         std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
         for (decltype(m_ptr->futures.size()) i = 0; i < m_ptr->futures.size(); ++i) {

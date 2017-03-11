@@ -406,7 +406,7 @@ static inline void connect_meta_algorithms()
     pagmo::detail::tuple_for_each(pygmo::meta_algos_ptrs, meta_algorithm_connector{});
 }
 
-struct isl_wait_locks {
+struct py_wait_locks {
     pygmo::gil_thread_ensurer gte;
     pygmo::gil_releaser gr;
 };
@@ -447,7 +447,7 @@ BOOST_PYTHON_MODULE(core)
     //           ptr.reset(::new detail::isl_inner<pygmo::py_thread_island>(std::move(t_isl)));
     //       };
 
-    detail::isl_waiter<>::func = []() { return std::shared_ptr<isl_wait_locks>{::new isl_wait_locks{}}; };
+    detail::wait_raii<>::getter = []() { return std::make_shared<py_wait_locks>(); };
 
     // Setup doc options
     bp::docstring_options doc_options;
@@ -1045,22 +1045,18 @@ BOOST_PYTHON_MODULE(core)
     // Island.
     pygmo::island_ptr = pygmo::make_unique<bp::class_<island>>("island", bp::init<>());
     auto &island_class = *pygmo::island_ptr;
-    island_class.def(bp::init<const population &, const algorithm &>())
-        .def(bp::init<const bp::object &, const problem &, const algorithm &, population::size_type>())
-        .def(bp::init<const bp::object &, const problem &, const algorithm &, population::size_type, unsigned>())
-        .def(bp::init<const problem &, const algorithm &, population::size_type>())
-        .def(bp::init<const problem &, const algorithm &, population::size_type, unsigned>())
+    island_class.def(bp::init<const algorithm &, const population &>())
+        .def(bp::init<const bp::object &, const algorithm &, const problem &, population::size_type>())
+        .def(bp::init<const bp::object &, const algorithm &, const problem &, population::size_type, unsigned>())
+        .def(bp::init<const algorithm &, const problem &, population::size_type>())
+        .def(bp::init<const algorithm &, const problem &, population::size_type, unsigned>())
         //.def(repr(bp::self))
         // Copy and deepcopy.
-        // .def("__copy__", &pygmo::generic_copy_wrapper<island>)
-        // .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
+        .def("__copy__", &pygmo::generic_copy_wrapper<island>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
         .def("evolve", &island::evolve)
+        .def("busy", &island::busy)
         .def("wait", &island::wait);
-    // .def("wait", +[](island &isl) {
-    //     pygmo::gil_thread_ensurer gte;
-    //     pygmo::gil_releaser gr;
-    //     isl.wait();
-    // });
 
     // Thread island.
     auto ti = pygmo::expose_island<thread_island>("thread_island", "");

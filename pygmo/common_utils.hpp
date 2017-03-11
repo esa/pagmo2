@@ -643,6 +643,11 @@ struct gil_releaser {
     {
         m_thread_state = ::PyEval_SaveThread();
     }
+    // Make sure we don't accidentally try to copy/move it.
+    gil_releaser(const gil_releaser &) = delete;
+    gil_releaser(gil_releaser &&) = delete;
+    gil_releaser &operator=(const gil_releaser &) = delete;
+    gil_releaser &operator=(gil_releaser &&) = delete;
     ~gil_releaser()
     {
         ::PyEval_RestoreThread(m_thread_state);
@@ -664,6 +669,11 @@ struct gil_thread_ensurer {
     {
         m_state = ::PyGILState_Ensure();
     }
+    // Make sure we don't accidentally try to copy/move it.
+    gil_thread_ensurer(const gil_thread_ensurer &) = delete;
+    gil_thread_ensurer(gil_thread_ensurer &&) = delete;
+    gil_thread_ensurer &operator=(const gil_thread_ensurer &) = delete;
+    gil_thread_ensurer &operator=(gil_thread_ensurer &&) = delete;
     ~gil_thread_ensurer()
     {
         ::PyGILState_Release(m_state);
