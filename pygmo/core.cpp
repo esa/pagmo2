@@ -121,7 +121,6 @@ see https://www.gnu.org/licenses/. */
 #include "object_serialization.hpp"
 #include "problem.hpp"
 #include "problem_exposition_suite.hpp"
-//#include "py_thread_island.hpp"
 #include "pygmo_classes.hpp"
 
 #if defined(_MSC_VER)
@@ -454,18 +453,24 @@ BOOST_PYTHON_MODULE(core)
     wrap_import_array();
 
     // Override the default implementation of the island factory.
-    // detail::island_factory<>::s_func
-    //     = +[](const algorithm &, const population &pop, std::unique_ptr<detail::isl_inner_base> &ptr) {
-    //           // NOTE: just like in py_thread_island, here we are re-implementing a piece of code that normally
-    //           // is pure C++. Potentially here we are calling into the Python interpreter, so, in order to handle
-    //           // the case in which we are invoking this code from a separate C++ thread, we construct a GIL ensurer
-    //           // in order to guard against concurrent access to the interpreter. The idea here is that this piece
-    //           // of code normally would provide a basic thread safety guarantee, and in order to continue providing
-    //           // it we use the ensurer.
-    //           pygmo::gil_thread_ensurer gte;
-    //           pygmo::py_thread_island t_isl(pop);
-    //           ptr.reset(::new detail::isl_inner<pygmo::py_thread_island>(std::move(t_isl)));
-    //       };
+    detail::island_factory<>::s_func = [](const algorithm &algo, const population &pop,
+                                          std::unique_ptr<detail::isl_inner_base> &ptr) {
+        if (static_cast<int>(algo.get_thread_safety()) >= static_cast<int>(thread_safety::basic)
+            && static_cast<int>(pop.get_problem().get_thread_safety()) >= static_cast<int>(thread_safety::basic)) {
+            // Both algo and prob have at least the basic thread safety guarantee. Use the thread island.
+            ptr = detail::make_unique<detail::isl_inner<thread_island>>();
+        } else {
+            // NOTE: here we are re-implementing a piece of code that normally
+            // is pure C++. We are calling into the Python interpreter, so, in order to handle
+            // the case in which we are invoking this code from a separate C++ thread, we construct a GIL ensurer
+            // in order to guard against concurrent access to the interpreter. The idea here is that this piece
+            // of code normally would provide a basic thread safety guarantee, and in order to continue providing
+            // it we use the ensurer.
+            pygmo::gil_thread_ensurer gte;
+            bp::object ipyparallel_island = bp::import("pygmo").attr("ipyparallel_island");
+            ptr = detail::make_unique<detail::isl_inner<bp::object>>(ipyparallel_island());
+        }
+    };
 
     // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
