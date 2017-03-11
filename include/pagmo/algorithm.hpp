@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
+#include "detail/make_unique.hpp"
 #include "exceptions.hpp"
 #include "population.hpp"
 #include "serialization.hpp"
@@ -454,7 +455,7 @@ public:
      * in strings and standard containers.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
-    explicit algorithm(T &&x) : m_ptr(::new detail::algo_inner<uncvref_t<T>>(std::forward<T>(x)))
+    explicit algorithm(T &&x) : m_ptr(detail::make_unique<detail::algo_inner<uncvref_t<T>>>(std::forward<T>(x)))
     {
         // We detect if set_seed is implemented in the algorithm, in which case the algorithm is stochastic
         m_has_set_seed = ptr()->has_set_seed();

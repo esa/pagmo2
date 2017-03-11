@@ -43,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
@@ -326,7 +327,7 @@ namespace detail
 struct island_data {
     // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
     // are both thread safe.
-    island_data() : isl_ptr(::new isl_inner<thread_island>{})
+    island_data() : isl_ptr(make_unique<isl_inner<thread_island>>())
     {
     }
 
@@ -334,12 +335,12 @@ struct island_data {
     explicit island_data(Algo &&a, Pop &&p) : algo(std::forward<Algo>(a)), pop(std::forward<Pop>(p))
     {
         // TODO replace with island selection logic.
-        isl_ptr.reset(::new isl_inner<thread_island>{});
+        isl_ptr = make_unique<isl_inner<thread_island>>();
     }
 
     template <typename Isl, typename Algo, typename Pop>
     explicit island_data(Isl &&isl, Algo &&a, Pop &&p)
-        : isl_ptr(::new isl_inner<uncvref_t<Isl>>(std::forward<Isl>(isl))), algo(std::forward<Algo>(a)),
+        : isl_ptr(make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))), algo(std::forward<Algo>(a)),
           pop(std::forward<Pop>(p))
     {
     }
@@ -384,29 +385,25 @@ public:
     // TODO island type selection factory.
     // TODO UDI checks, ignore checks.
     // TODO do all the enablers properly.
-    island() : m_ptr(::new idata_t{})
+    island() : m_ptr(detail::make_unique<idata_t>())
     {
     }
-    island(const island &other) : m_ptr()
+    island(const island &other)
+        : m_ptr(detail::make_unique<idata_t>(other.get_isl_ptr(), other.get_algorithm(), other.get_population()))
     {
-        // NOTE: don't init directly into m_ptr because the getters here may throw,
-        // and we could run in the usual problem with evaluation order and new operator.
-        auto algo = other.get_algorithm();
-        auto pop = other.get_population();
-        auto isl_ptr = other.get_isl_ptr();
         // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
-        m_ptr.reset(::new idata_t(std::move(isl_ptr), std::move(algo), std::move(pop)));
     }
     island(island &&other) noexcept : m_ptr(std::move(other.m_ptr))
     {
     }
     template <typename Algo, typename Pop>
-    explicit island(Algo &&a, Pop &&p) : m_ptr(::new idata_t(std::forward<Algo>(a), std::forward<Pop>(p)))
+    explicit island(Algo &&a, Pop &&p)
+        : m_ptr(detail::make_unique<idata_t>(std::forward<Algo>(a), std::forward<Pop>(p)))
     {
     }
     template <typename Isl, typename Algo, typename Pop>
     explicit island(Isl &&isl, Algo &&a, Pop &&p)
-        : m_ptr(::new idata_t(std::forward<Isl>(isl), std::forward<Algo>(a), std::forward<Pop>(p)))
+        : m_ptr(detail::make_unique<idata_t>(std::forward<Isl>(isl), std::forward<Algo>(a), std::forward<Pop>(p)))
     {
     }
     template <typename Algo, typename Prob>

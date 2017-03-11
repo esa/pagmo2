@@ -43,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include "detail/custom_comparisons.hpp"
+#include "detail/make_unique.hpp"
 #include "exceptions.hpp"
 #include "io.hpp"
 #include "serialization.hpp"
@@ -1036,7 +1037,8 @@ public:
      */
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit problem(T &&x)
-        : m_ptr(::new detail::prob_inner<uncvref_t<T>>(std::forward<T>(x))), m_fevals(0u), m_gevals(0u), m_hevals(0u)
+        : m_ptr(detail::make_unique<detail::prob_inner<uncvref_t<T>>>(std::forward<T>(x))), m_fevals(0u), m_gevals(0u),
+          m_hevals(0u)
     {
         // 1 - Bounds.
         auto bounds = ptr()->get_bounds();
