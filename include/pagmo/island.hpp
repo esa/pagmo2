@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <chrono>
 #include <functional>
 #include <future>
+#include <iostream>
 #include <memory>
 #include <mutex>
 #include <stdexcept>
@@ -46,6 +47,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/serialization.hpp>
@@ -378,7 +380,6 @@ struct island_data {
     island_data &operator=(island_data &&) = delete;
 
     // The data members.
-    std::mutex isl_mutex;
     std::unique_ptr<isl_inner_base> isl_ptr;
     std::mutex algo_mutex;
     algorithm algo;
@@ -396,6 +397,7 @@ struct island_data {
  * In pagmo an island is a object that is used to evolve a population....
  *
  * TODO document move semantics.
+ * TODO UDI requires full thread safety.
  */
 class island
 {
@@ -406,7 +408,8 @@ public:
     {
     }
     island(const island &other)
-        : m_ptr(detail::make_unique<idata_t>(other.get_isl_ptr(), other.get_algorithm(), other.get_population()))
+        : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(),
+                                             other.get_population()))
     {
         // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
     }
@@ -511,11 +514,6 @@ public:
             // having enqueued any task.
             m_ptr->futures.back() = m_ptr->queue.enqueue([ptr]() {
                 {
-                    // Lock the island.
-                    // NOTE: we do it before the other locks because otherwise clang thread sanitizer complains
-                    // about potential deadlock due to lock order inversion. In reality, this code
-                    // is never executed concurrently by more than 1 thread, so we are safe.
-                    std::lock_guard<std::mutex> isl_lock(ptr->isl_mutex);
                     // Lock down access to algo and pop.
                     std::unique_lock<std::mutex> algo_lock(ptr->algo_mutex);
                     std::unique_lock<std::mutex> pop_lock(ptr->pop_mutex);
@@ -579,11 +577,30 @@ public:
         std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
         return m_ptr->pop;
     }
+    std::string get_name() const
+    {
+        return m_ptr->isl_ptr->get_name();
+    }
+    std::string get_extra_info() const
+    {
+        return m_ptr->isl_ptr->get_extra_info();
+    }
+    friend std::ostream &operator<<(std::ostream &os, const island &isl)
+    {
+        stream(os, "Island name: ", isl.get_name());
+        stream(os, "\n\nAlgorithm:\n", isl.get_algorithm());
+        stream(os, "\n\nPopulation:\n", isl.get_population());
+        const auto extra_str = isl.get_extra_info();
+        if (!extra_str.empty()) {
+            stream(os, "\nExtra info:\n", extra_str);
+        }
+        return os;
+    }
 
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(get_isl_ptr(), get_algorithm(), get_population());
+        ar(m_ptr->isl_ptr, get_algorithm(), get_population());
     }
     template <typename Archive>
     void load(Archive &ar)
@@ -594,14 +611,6 @@ public:
         ar(tmp_island.m_ptr->algo);
         ar(tmp_island.m_ptr->pop);
         *this = std::move(tmp_island);
-    }
-
-private:
-    // This is only used in the copy ctor and it is of no interest to the user.
-    std::unique_ptr<detail::isl_inner_base> get_isl_ptr() const
-    {
-        std::lock_guard<std::mutex> lock(m_ptr->isl_mutex);
-        return m_ptr->isl_ptr->clone();
     }
 
 private:

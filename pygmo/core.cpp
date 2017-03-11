@@ -1073,7 +1073,7 @@ BOOST_PYTHON_MODULE(core)
         .def(bp::init<const bp::object &, const algorithm &, const problem &, population::size_type, unsigned>())
         .def(bp::init<const algorithm &, const problem &, population::size_type>())
         .def(bp::init<const algorithm &, const problem &, population::size_type, unsigned>())
-        //.def(repr(bp::self))
+        .def(repr(bp::self))
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<island>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
