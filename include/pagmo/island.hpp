@@ -587,7 +587,7 @@ public:
     }
     friend std::ostream &operator<<(std::ostream &os, const island &isl)
     {
-        stream(os, "Island name: ", isl.get_name());
+        stream(os, "Island name: ", isl.get_name(), "\n\n");
         stream(os, isl.get_algorithm());
         stream(os, isl.get_population());
         const auto extra_str = isl.get_extra_info();
