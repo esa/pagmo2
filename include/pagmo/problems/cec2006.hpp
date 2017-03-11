@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
+// forward declearing the class to allow the following definition of pointers to its methods
 class cec2006;
 typedef void (cec2006::*func_ptr)(vector_double &, const vector_double &) const;
 namespace detail
@@ -56,6 +57,10 @@ struct cec2006_statics {
     static std::vector<unsigned short> m_nec;
     /// Inequality constraints dimension
     static std::vector<unsigned short> m_nic;
+    /// Bounds
+    static std::vector<std::pair<vector_double, vector_double>> m_bounds;
+    /// Best solutions known
+    static std::vector<vector_double> m_best_known;
     /// Pointers to the member functions to be used in fitness
     static std::vector<func_ptr> m_o_ptr;
     static std::vector<func_ptr> m_c_ptr;
@@ -72,6 +77,109 @@ std::vector<unsigned short> cec2006_statics<T>::m_nec
 template <typename T>
 std::vector<unsigned short> cec2006_statics<T>::m_nic
     = {9, 2, 0, 6, 2, 2, 8, 2, 4, 6, 0, 1, 0, 0, 0, 38, 0, 13, 5, 6, 1, 1, 2, 2};
+
+template <typename T>
+std::vector<std::pair<vector_double, vector_double>> cec2006_statics<T>::m_bounds = {
+
+    {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {1., 1., 1., 1., 1., 1., 1., 1., 1., 100., 100., 100., 1.}},
+    {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.},
+     {10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}},
+    {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {1., 1., 1., 1., 1., 1., 1., 1., 1., 1.}},
+    {{78., 33., 27., 27., 27.}, {102., 45., 45., 45., 45.}},
+    {{0., 0., -0.55, -0.55}, {1200., 1200., 0.55, 0.55}},
+    {{13., 0.}, {100., 100.}},
+    {{-10., -10., -10., -10., -10., -10., -10., -10., -10., -10.}, {10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}},
+    {{0., 0.}, {10., 10.}},
+    {{-10., -10., -10., -10., -10., -10., -10.}, {10., 10., 10., 10., 10., 10., 10.}},
+    {{100., 1000., 1000., 10., 10., 10., 10., 10.}, {10000., 10000., 10000., 1000., 1000., 1000., 1000., 1000.}},
+    {{-1., -1.}, {1., 1.}},
+    {{0., 0., 0.}, {10., 10., 10.}},
+    {{-2.3, -2.3, -3.2, -3.2, -3.2}, {2.3, 2.3, 3.2, 3.2, 3.2}},
+    {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}},
+    {{0., 0., 0.}, {10., 10., 10.}},
+    {{704.4148, 68.6, 0., 193., 25.}, {906.3855, 288.88, 134.75, 287.0966, 84.1988}},
+    {{0., 0., 340., 340., -1000., 0.}, {400., 1000., 420., 420., 1000., 0.5236}},
+    {{-10., -10., -10., -10., -10., -10., -10., -10., 0.}, {10., 10., 10., 10., 10., 10., 10., 10., 20.}},
+    {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.},
+     {10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}},
+    {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.},
+     {10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
+      10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}},
+    {{0., 0., 0., 100., 6.3, 5.9, 4.5}, {1000., 40., 40., 300., 6.7, 6.4, 6.25}},
+    {{0., 0., 0., 0., 0., 0., 0., 100., 100., 100.01, 100., 100., 0., 0., 0., 0.01, 0.01, -4.7, -4.7, -4.7, -4.7, -4.7},
+     {20000., 1e6, 1e6, 1e6, 4e7,  4e7,  4e7,  299.99, 399.99, 300,  400,
+      600,    500, 500, 500, 300., 400., 6.25, 6.25,   6.25,   6.25, 6.25}},
+    {{0., 0., 0., 0., 0., 0., 0., 0., 0.01}, {300., 300., 100., 200., 100., 300., 100., 200., 0.03}},
+    {{0., 0.}, {3., 4.}}};
+
+template <typename T>
+std::vector<vector_double> cec2006_statics<T>::m_best_known = {
+    {1., 1., 1., 1., 1., 1., 1., 1., 1., 3., 3., 3., 1.},
+    {3.16246061572185, 3.12833142812967, 3.09479212988791, 3.06145059523469, 3.02792915885555,
+     2.99382606701730, 2.95866871765285, 2.92184227312450, 0.49482511456933, 0.48835711005490,
+     0.48231642711865, 0.47664475092742, 0.47129550835493, 0.46623099264167, 0.46142004984199,
+     0.45683664767217, 0.45245876903267, 0.44826762241853, 0.44424700958760, 0.44038285956317},
+    {0.31624357647283069, 0.316243577414338339, 0.316243578012345927, 0.316243575664017895, 0.316243578205526066,
+     0.31624357738855069, 0.316243575472949512, 0.316243577164883938, 0.316243578155920302, 0.316243576147374916},
+    {78, 33, 29.9952560256815985, 45, 36.7758129057882073},
+    {679.945148297028709, 1026.06697600004691, 0.118876369094410433, -0.39623348521517826},
+    {14.09500000000000064, 0.8429607892154795668},
+    {2.17199634142692, 2.3636830416034, 8.77392573913157, 5.09598443745173, 0.990654756560493, 1.43057392853463,
+     1.32164415364306, 9.82872576524495, 8.2800915887356, 8.3759266477347},
+    {1.22797135260752599, 4.24537336612274885},
+    {2.33049935147405174, 1.95137236847114592, -0.477541399510615805, 4.36572624923625874, -0.624486959100388983,
+     1.03813099410962173, 1.5942266780671519},
+    {579.306685017979589, 1359.97067807935605, 5109.97065743133317, 182.01769963061534, 295.601173702746792,
+     217.982300369384632, 286.41652592786852, 395.601173702746735},
+    {-0.707036070037170616, 0.500000004333606807},
+    {5., 5., 5.},
+    {-1.71714224003, 1.59572124049468, 1.8272502406271, -0.763659881912867, -0.76365986736498},
+    {0.0406684113216282, 0.147721240492452, 0.783205732104114, 0.00141433931889084, 0.485293636780388,
+     0.000693183051556082, 0.0274052040687766, 0.0179509660214818, 0.0373268186859717, 0.0968844604336845},
+    {3.51212812611795133, 0.216987510429556135, 3.55217854929179921},
+    {705.174537070090537, 68.5999999999999943, 102.899999999999991, 282.324931593660324, 37.5841164258054832},
+    {201.784467214523659, 99.9999999999999005, 383.071034852773266, 420, -10.9076584514292652, 0.0731482312084287128},
+    {-0.657776192427943163, -0.153418773482438542, 0.323413871675240938, -0.946257611651304398, -0.657776194376798906,
+     -0.753213434632691414, 0.323413874123576972, -0.346462947962331735, 0.59979466285217542},
+    {1.66991341326291344e-17, 3.95378229282456509e-16, 3.94599045143233784, 1.06036597479721211e-16, 3.2831773458454161,
+     9.99999999999999822, 1.12829414671605333e-17, 1.2026194599794709e-17, 2.50706276000769697e-15,
+     2.24624122987970677e-15, 0.370764847417013987, 0.278456024942955571, 0.523838487672241171, 0.388620152510322781,
+     0.298156764974678579},
+    {1.28582343498528086e-18,
+     4.83460302526130664e-34,
+     0,
+     0,
+     6.30459929660781851e-18,
+     7.57192526201145068e-34,
+     5.03350698372840437e-34,
+     9.28268079616618064e-34,
+     0,
+     1.76723384525547359e-17,
+     3.55686101822965701e-34,
+     2.99413850083471346e-34,
+     0.158143376337580827,
+     2.29601774161699833e-19,
+     1.06106938611042947e-18,
+     1.31968344319506391e-18,
+     0.530902525044209539,
+     0,
+     2.89148310257773535e-18,
+     3.34892126180666159e-18,
+     0,
+     0.310999974151577319,
+     5.41244666317833561e-05,
+     4.84993165246959553e-16},
+    {193.724510070034967, 5.56944131553368433e-27, 17.3191887294084914, 100.047897801386839, 6.68445185362377892,
+     5.99168428444264833, 6.21451648886070451},
+    {236.430975504001054, 135.82847151732463,  204.818152544824585, 6446.54654059436416, 3007540.83940215595,
+     4074188.65771341929, 32918270.5028952882, 130.075408394314167, 170.817294970528621, 299.924591605478554,
+     399.258113423595205, 330.817294971142758, 184.51831230897065,  248.64670239647424,  127.658546694545862,
+     269.182627528746707, 160.000016724090955, 5.29788288102680571, 5.13529735903945728, 5.59531526444068827,
+     5.43444479314453499, 5.07517453535834395},
+    {0.00510000000000259465, 99.9947000000000514, 9.01920162996045897e-18, 99.9999000000000535, 0.000100000000027086086,
+     2.75700683389584542e-14, 99.9999999999999574, 200, 0.0100000100000100008},
+    {2.32952019747762, 3.17849307411774}};
+
 } // end namespace detail
 
 /// The CEC 2006 problems: Constrained Real-Parameter Optimization
@@ -90,9 +198,10 @@ std::vector<unsigned short> cec2006_statics<T>::m_nic
  */
 class cec2006 : public detail::cec2006_statics<>
 {
+public:
+    // Needs friendship as to gain access to the private methodsssss
     friend cec2006_statics;
 
-public:
     /// Constructor
     /**
      * Will construct one of the 24 CEC2006 problems
@@ -141,120 +250,7 @@ public:
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        std::pair<vector_double, vector_double> retval;
-        switch (m_prob_id) {
-            case 1: {
-                retval = {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.},
-                          {1., 1., 1., 1., 1., 1., 1., 1., 1., 100., 100., 100., 1.}};
-                break;
-            }
-            case 2: {
-                retval = {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.},
-                          {10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
-                           10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}};
-                break;
-            }
-            case 3: {
-                retval = {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {1., 1., 1., 1., 1., 1., 1., 1., 1., 1.}};
-                break;
-            }
-            case 4: {
-                retval = {{78., 33., 27., 27., 27.}, {102., 45., 45., 45., 45.}};
-                break;
-            }
-            case 5: {
-                retval = {{0., 0., -0.55, -0.55}, {1200., 1200., 0.55, 0.55}};
-                break;
-            }
-            case 6: {
-                retval = {{13., 0.}, {100., 100.}};
-                break;
-            }
-            case 7: {
-                retval = {{-10., -10., -10., -10., -10., -10., -10., -10., -10., -10.},
-                          {10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}};
-                break;
-            }
-            case 8: {
-                retval = {{0., 0.}, {10., 10.}};
-                break;
-            }
-            case 9: {
-                retval = {{-10., -10., -10., -10., -10., -10., -10.}, {10., 10., 10., 10., 10., 10., 10.}};
-                break;
-            }
-            case 10: {
-                retval = {{100., 1000., 1000., 10., 10., 10., 10., 10.},
-                          {10000., 10000., 10000., 1000., 1000., 1000., 1000., 1000.}};
-                break;
-            }
-            case 11: {
-                retval = {{-1., -1.}, {1., 1.}};
-                break;
-            }
-            case 12: {
-                retval = {{0., 0., 0.}, {10., 10., 10.}};
-                break;
-            }
-            case 13: {
-                retval = {{-2.3, -2.3, -3.2, -3.2, -3.2}, {2.3, 2.3, 3.2, 3.2, 3.2}};
-                break;
-            }
-            case 14: {
-                retval = {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}};
-                break;
-            }
-            case 15: {
-                retval = {{0., 0., 0.}, {10., 10., 10.}};
-                break;
-            }
-            case 16: {
-                retval = {{704.4148, 68.6, 0., 193., 25.}, {906.3855, 288.88, 134.75, 287.0966, 84.1988}};
-                break;
-            }
-            case 17: {
-                retval = {{0., 0., 340., 340., -1000., 0.}, {400., 1000., 420., 420., 1000., 0.5236}};
-                break;
-            }
-            case 18: {
-                retval = {{-10., -10., -10., -10., -10., -10., -10., -10., 0.},
-                          {10., 10., 10., 10., 10., 10., 10., 10., 20.}};
-                break;
-            }
-            case 19: {
-                retval = {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.},
-                          {10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}};
-                break;
-            }
-            case 20: {
-                retval
-                    = {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.},
-                       {10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
-                        10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.}};
-                break;
-            }
-            case 21: {
-                retval = {{0., 0., 0., 100., 6.3, 5.9, 4.5}, {1000., 40., 40., 300., 6.7, 6.4, 6.25}};
-                break;
-            }
-            case 22: {
-                retval = {{0.,   0., 0., 0., 0.,   0.,   0.,   100., 100., 100.01, 100.,
-                           100., 0., 0., 0., 0.01, 0.01, -4.7, -4.7, -4.7, -4.7,   -4.7},
-                          {20000., 1e6, 1e6, 1e6, 4e7,  4e7,  4e7,  299.99, 399.99, 300,  400,
-                           600,    500, 500, 500, 300., 400., 6.25, 6.25,   6.25,   6.25, 6.25}};
-                break;
-            }
-            case 23: {
-                retval
-                    = {{0., 0., 0., 0., 0., 0., 0., 0., 0.01}, {300., 300., 100., 200., 100., 300., 100., 200., 0.03}};
-                break;
-            }
-            case 24: {
-                retval = {{0., 0.}, {3., 4.}};
-                break;
-            }
-        }
-        return retval;
+        return m_bounds[m_prob_id - 1];
     }
     /// Fitness computation
     /**
@@ -267,6 +263,14 @@ public:
     vector_double fitness(const vector_double &x) const
     {
         return fitness_impl(m_c_ptr[m_prob_id - 1], m_o_ptr[m_prob_id - 1], x);
+    }
+    /// Optimal solution
+    /**
+     * @return the decision vector corresponding to the best solution for this problem.
+     */
+    vector_double best_known() const
+    {
+        return m_best_known[m_prob_id - 1];
     }
     /// Problem name
     /**
@@ -335,16 +339,6 @@ private:
         c[8] = -2.0 * x[7] - x[8] + x[11];
     }
 
-    vector_double g01_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g01_compute_constraints_impl(retval, x);
-        g01_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -383,16 +377,6 @@ private:
         c[1] = g2 - 7.5 * ((double)nx);
     }
 
-    vector_double g02_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g02_compute_constraints_impl(retval, x);
-        g02_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -426,16 +410,6 @@ private:
         c[0] = f2 - 1.0;
     }
 
-    vector_double g03_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g03_compute_constraints_impl(retval, x);
-        g03_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -455,16 +429,6 @@ private:
         c[3] = -80.51249 - 0.0071317 * x[1] * x[4] - 0.0029955 * x[0] * x[1] - 0.0021813 * x[2] * x[2] + 90.;
         c[4] = 9.300961 + 0.0047026 * x[2] * x[4] + 0.0012547 * x[0] * x[2] + 0.0019085 * x[2] * x[3] - 25.;
         c[5] = -9.300961 - 0.0047026 * x[2] * x[4] - 0.0012547 * x[0] * x[2] - 0.0019085 * x[2] * x[3] + 20.;
-    }
-
-    vector_double g04_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g04_compute_constraints_impl(retval, x);
-        g04_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
     }
 
     // -------------------------------------------
@@ -489,16 +453,6 @@ private:
         c[4] = -x[2] + x[3] - 0.55;
     }
 
-    vector_double g05_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g05_compute_constraints_impl(retval, x);
-        g05_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -514,16 +468,6 @@ private:
         /* constraints g<=0 */
         c[0] = 100. - (x[0] - 5.) * (x[0] - 5.) - (x[1] - 5.) * (x[1] - 5.);
         c[1] = (x[0] - 6.) * (x[0] - 6.) + (x[1] - 5.) * (x[1] - 5.) - 82.81;
-    }
-
-    vector_double g06_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g06_compute_constraints_impl(retval, x);
-        g06_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
     }
 
     // -------------------------------------------
@@ -551,16 +495,6 @@ private:
         c[5] = x[0] * x[0] + 2.0 * (x[1] - 2.0) * (x[1] - 2.0) - 2.0 * x[0] * x[1] + 14.0 * x[4] - 6.0 * x[5];
         c[6] = 0.5 * (x[0] - 8.0) * (x[0] - 8.0) + 2.0 * (x[1] - 4.0) * (x[1] - 4.0) + 3.0 * x[4] * x[4] - x[5] - 30.0;
         c[7] = -3.0 * x[0] + 6.0 * x[1] + 12.0 * (x[8] - 8.0) * (x[8] - 8.0) - 7.0 * x[9];
-    }
-
-    vector_double g07_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g07_compute_constraints_impl(retval, x);
-        g07_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
     }
 
     // -------------------------------------------
@@ -612,16 +546,6 @@ private:
         c[3] = 4.0 * x[0] * x[0] + x[1] * x[1] - 3.0 * x[0] * x[1] + 2.0 * x[2] * x[2] + 5.0 * x[5] - 11.0 * x[6];
     }
 
-    vector_double g09_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g09_compute_constraints_impl(retval, x);
-        g09_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -643,16 +567,6 @@ private:
         c[5] = -x[2] * x[7] + 1250000.0 + x[2] * x[4] - 2500.0 * x[4];
     }
 
-    vector_double g10_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g10_compute_constraints_impl(retval, x);
-        g10_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -667,16 +581,6 @@ private:
     {
         /* constraints h=0 */
         c[0] = x[1] - x[0] * x[0];
-    }
-
-    vector_double g11_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g11_compute_constraints_impl(retval, x);
-        g11_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
     }
 
     // -------------------------------------------
@@ -705,16 +609,6 @@ private:
         }
     }
 
-    vector_double g12_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g12_compute_constraints_impl(retval, x);
-        g12_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -731,16 +625,6 @@ private:
         c[0] = x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3] + x[4] * x[4] - 10.0;
         c[1] = x[1] * x[2] - 5.0 * x[3] * x[4];
         c[2] = pow(x[0], 3) + pow(x[1], 3) + 1.0;
-    }
-
-    vector_double g13_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g13_compute_constraints_impl(retval, x);
-        g13_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
     }
 
     // -------------------------------------------
@@ -769,16 +653,6 @@ private:
         c[2] = x[2] + x[6] + x[7] + 2.0 * x[8] + x[9] - 1.0;
     }
 
-    vector_double g14_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g14_compute_constraints_impl(retval, x);
-        g14_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -794,16 +668,6 @@ private:
         /* constraints h=0 */
         c[0] = pow(x[0], 2.0) + pow(x[1], 2.0) + pow(x[2], 2.0) - 25.0;
         c[1] = 8.0 * x[0] + 14.0 * x[1] + 7.0 * x[2] - 56.0;
-    }
-
-    vector_double g15_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g15_compute_constraints_impl(retval, x);
-        g15_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
     }
 
     // -------------------------------------------
@@ -948,16 +812,6 @@ private:
         c[37] = Y[16] - 12146108.0;
     }
 
-    vector_double g16_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g16_compute_constraints_impl(retval, x);
-        g16_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -1028,16 +882,6 @@ private:
         c[3] = aux4;
     }
 
-    vector_double g17_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g17_compute_constraints_impl(retval, x);
-        g17_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -1064,16 +908,6 @@ private:
         c[10] = -x[2] * x[8];
         c[11] = x[4] * x[8];
         c[12] = -x[4] * x[7] + x[5] * x[6];
-    }
-
-    vector_double g18_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g18_compute_constraints_impl(retval, x);
-        g18_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
     }
 
     // -------------------------------------------
@@ -1142,16 +976,6 @@ private:
         }
     }
 
-    vector_double g19_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g10_compute_constraints_impl(retval, x);
-        g10_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -1206,16 +1030,6 @@ private:
             c[14 + j] = (x[j + 3] + x[j + 15]) / (sumtotal + E[j]);
     }
 
-    vector_double g20_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g20_compute_constraints_impl(retval, x);
-        g20_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -1237,16 +1051,6 @@ private:
 
         /* constraint functions g(x) <= 0 */
         c[5] = -x[0] + 35.0 * pow(x[1], 0.6) + 35.0 * pow(x[2], 0.6);
-    }
-
-    vector_double g21_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g21_compute_constraints_impl(retval, x);
-        g21_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
     }
 
     // -------------------------------------------
@@ -1286,16 +1090,6 @@ private:
         c[19] = -x[0] + std::pow(x[1], 0.6) + std::pow(x[2], 0.6) + std::pow(x[3], 0.6);
     }
 
-    vector_double g22_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g22_compute_constraints_impl(retval, x);
-        g22_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -1319,16 +1113,6 @@ private:
         c[5] = x[8] * x[3] + 0.02 * x[6] - 0.015 * x[7];
     }
 
-    vector_double g23_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g23_compute_constraints_impl(retval, x);
-        g23_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     /// Implementation of the objective function.
@@ -1347,16 +1131,6 @@ private:
                - 36.0;
     }
 
-    vector_double g24_fitness_impl(const vector_double &x) const
-    {
-        vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
-        vector_double f(1, 0.);
-        g24_compute_constraints_impl(retval, x);
-        g24_objfun_impl(f, x);
-        retval.insert(retval.begin(), f.begin(), f.end());
-        return retval;
-    }
-
     // -------------------------------------------
 
     // LCOV_EXCL_STOP
@@ -1370,21 +1144,27 @@ namespace detail
 {
 template <typename T>
 std::vector<func_ptr> cec2006_statics<T>::m_o_ptr
-    = {&cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl};
+    = {&cec2006::g01_objfun_impl, &cec2006::g02_objfun_impl, &cec2006::g03_objfun_impl, &cec2006::g04_objfun_impl,
+       &cec2006::g05_objfun_impl, &cec2006::g06_objfun_impl, &cec2006::g07_objfun_impl, &cec2006::g08_objfun_impl,
+       &cec2006::g09_objfun_impl, &cec2006::g10_objfun_impl, &cec2006::g11_objfun_impl, &cec2006::g12_objfun_impl,
+       &cec2006::g13_objfun_impl, &cec2006::g14_objfun_impl, &cec2006::g15_objfun_impl, &cec2006::g16_objfun_impl,
+       &cec2006::g17_objfun_impl, &cec2006::g18_objfun_impl, &cec2006::g19_objfun_impl, &cec2006::g20_objfun_impl,
+       &cec2006::g21_objfun_impl, &cec2006::g22_objfun_impl, &cec2006::g23_objfun_impl, &cec2006::g24_objfun_impl};
 
 template <typename T>
 std::vector<func_ptr> cec2006_statics<T>::m_c_ptr
-    = {&cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
-       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl};
+    = {&cec2006::g01_compute_constraints_impl, &cec2006::g02_compute_constraints_impl,
+       &cec2006::g03_compute_constraints_impl, &cec2006::g04_compute_constraints_impl,
+       &cec2006::g05_compute_constraints_impl, &cec2006::g06_compute_constraints_impl,
+       &cec2006::g07_compute_constraints_impl, &cec2006::g08_compute_constraints_impl,
+       &cec2006::g09_compute_constraints_impl, &cec2006::g10_compute_constraints_impl,
+       &cec2006::g11_compute_constraints_impl, &cec2006::g12_compute_constraints_impl,
+       &cec2006::g13_compute_constraints_impl, &cec2006::g14_compute_constraints_impl,
+       &cec2006::g15_compute_constraints_impl, &cec2006::g16_compute_constraints_impl,
+       &cec2006::g17_compute_constraints_impl, &cec2006::g18_compute_constraints_impl,
+       &cec2006::g19_compute_constraints_impl, &cec2006::g20_compute_constraints_impl,
+       &cec2006::g21_compute_constraints_impl, &cec2006::g22_compute_constraints_impl,
+       &cec2006::g23_compute_constraints_impl, &cec2006::g24_compute_constraints_impl};
 } // namespace detail
 } // namespace pagmo
 

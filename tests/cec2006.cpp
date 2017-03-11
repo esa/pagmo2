@@ -41,8 +41,71 @@ see https://www.gnu.org/licenses/. */
 
 using namespace pagmo;
 
-BOOST_AUTO_TEST_CASE(cec2013_test)
+BOOST_AUTO_TEST_CASE(cec2013_construction_test)
 {
-    cec2006 udp{1};
-    print(udp.fitness(vector_double(13, 0.5)));
+    // We check that all problems can be constructed
+    for (unsigned i = 1u; i <= 24u; ++i) {
+        cec2006 udp{i};
+    }
+    // We check that wrong problem ids and dimensions cannot be constructed
+    BOOST_CHECK_THROW((cec2006{0u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cec2006{29u}), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(cec2006_fitness_test)
+{
+    std::mt19937 r_engine(32u);
+    // We check that all problems return a fitness
+    for (unsigned i = 1u; i <= 24u; ++i) {
+        cec2006 udp{i};
+        auto x = random_decision_vector(cec2006::m_bounds[i - 1u], r_engine); // a random vector
+        auto f = udp.fitness(x);
+        BOOST_CHECK_EQUAL(f.size(), cec2006::m_nec[i - 1u] + cec2006::m_nic[i - 1u] + 1);
+        BOOST_CHECK((udp.get_name().find("CEC2006 - g")) != std::string::npos);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(cec2006_getters_test)
+{
+    // We check that all problems return a fitness
+    for (unsigned i = 1u; i <= 24u; ++i) {
+        cec2006 udp{i};
+        BOOST_CHECK((udp.get_name().find("CEC2006 - g")) != std::string::npos);
+        BOOST_CHECK((udp.get_nic() == cec2006::m_nic[i - 1u]));
+        BOOST_CHECK((udp.get_nec() == cec2006::m_nec[i - 1u]));
+    }
+}
+
+BOOST_AUTO_TEST_CASE(cec2006_best_known_test)
+{
+    // We check that all problems return a fitness
+    for (unsigned i = 1u; i <= 24u; ++i) {
+        cec2006 udp{i};
+        auto best = udp.best_known();
+        // BOOST_CHECK(problem{udp}.feasibility_x(best));
+        BOOST_CHECK(best.size() == cec2006::m_dim[i - 1u]);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(cec2006_serialization_test)
+{
+    problem p{cec2006{1u}};
+    // Call objfun to increase the internal counters.
+    p.fitness(vector_double(cec2006::m_dim[0], 0.5));
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(p);
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
+    }
+    // Change the content of p before deserializing.
+    p = problem{null_problem{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
+    }
+    auto after = boost::lexical_cast<std::string>(p);
+    BOOST_CHECK_EQUAL(before, after);
 }
