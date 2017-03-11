@@ -407,6 +407,25 @@ static inline void connect_meta_algorithms()
     pagmo::detail::tuple_for_each(pygmo::meta_algos_ptrs, meta_algorithm_connector{});
 }
 
+// NOTE: we need to provide a custom raii waiter in the island. The reason is the following.
+// Boost.Python locks the GIL when crossing the boundary from Python into C++. So, if we call wait() from Python,
+// BP will lock the GIL and then we will be waiting for evolutions in the island to finish. During this time, no
+// Python code will be executed because the GIL is locked. This means that if we have a Python thread doing background
+// work (e.g., managing the task queue in pythonic islands), it will have to wait before doing any progress. By
+// unlocking the GIL before calling thread_island::wait(), we give the chance to other Python threads to continue
+// doing some work.
+// NOTE: here we have 2 RAII classes interacting with the GIL. The GIL releaser is the *second* one,
+// and it is the one that is responsible for unlocking the Python interpreter while wait() is running.
+// The *first* one, the GIL thread ensurer, does something else: it makes sure that we can call the Python
+// interpreter from the current C++ thread. In a normal situation, in which islands are just instantiated
+// from the main thread, the gte object is superfluous. However, if we are interacting with islands from a
+// separate C++ thread, then we need to make sure that every time we call into the Python interpreter (e.g., by
+// using the GIL releaser below) we inform Python we are about to call from a separate thread. This is what
+// the GTE object does. This use case is, for instance, what happens with the PADE algorithm when, algo, prob,
+// etc. are all C++ objects (when at least one object is pythonic, we will not end up using the thread island).
+// NOTE: by ordering the class members in this way we ensure that gte is constructed before gr, which is essential
+// (otherwise we might be calling into the interpreter with a releaser before informing Python we are calling
+// from a separate thread).
 struct py_wait_locks {
     pygmo::gil_thread_ensurer gte;
     pygmo::gil_releaser gr;
@@ -448,6 +467,9 @@ BOOST_PYTHON_MODULE(core)
     //           ptr.reset(::new detail::isl_inner<pygmo::py_thread_island>(std::move(t_isl)));
     //       };
 
+    // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
+    // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
+    // destroy at the end of island::wait().
     detail::wait_raii<>::getter = []() { return std::make_shared<py_wait_locks>(); };
 
     // Setup doc options
