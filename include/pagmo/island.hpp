@@ -324,6 +324,27 @@ class archipelago;
 namespace detail
 {
 
+// NOTE: this structure holds an std::function that implements the logic for the selection of the UDI
+// type in the constructor of island_data. The logic is decoupled so that we can override the default logic with
+// alternative implementations (e.g., use a process-based island rather than the default thread island if prob, algo,
+// etc. do not provide thread safety).
+template <typename = void>
+struct island_factory {
+    using func_t
+        = std::function<void(const algorithm &, const population &, std::unique_ptr<detail::isl_inner_base> &)>;
+    static func_t s_func;
+};
+
+// This is the default UDI type selector. It will always select thread_island as UDI.
+inline void default_island_factory(const algorithm &, const population &, std::unique_ptr<detail::isl_inner_base> &ptr)
+{
+    ptr = make_unique<isl_inner<thread_island>>();
+}
+
+// Static init.
+template <typename T>
+typename island_factory<T>::func_t island_factory<T>::s_func = default_island_factory;
+
 struct island_data {
     // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
     // are both thread safe.
@@ -334,8 +355,7 @@ struct island_data {
     template <typename Algo, typename Pop>
     explicit island_data(Algo &&a, Pop &&p) : algo(std::forward<Algo>(a)), pop(std::forward<Pop>(p))
     {
-        // TODO replace with island selection logic.
-        isl_ptr = make_unique<isl_inner<thread_island>>();
+        island_factory<>::s_func(algo, pop, isl_ptr);
     }
 
     template <typename Isl, typename Algo, typename Pop>
@@ -375,14 +395,13 @@ struct island_data {
 /**
  * In pagmo an island is a object that is used to evolve a population....
  *
- * TODO move semantics.
+ * TODO document move semantics.
  */
 class island
 {
     using idata_t = detail::island_data;
 
 public:
-    // TODO island type selection factory.
     island() : m_ptr(detail::make_unique<idata_t>())
     {
     }
@@ -550,17 +569,31 @@ public:
         }
         return false;
     }
-
     algorithm get_algorithm() const
     {
         std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
         return m_ptr->algo;
     }
-
     population get_population() const
     {
         std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
         return m_ptr->pop;
+    }
+
+    template <typename Archive>
+    void save(Archive &ar) const
+    {
+        ar(get_isl_ptr(), get_algorithm(), get_population());
+    }
+    template <typename Archive>
+    void load(Archive &ar)
+    {
+        island tmp_island;
+        // NOTE: no need to lock access to these, as there no evolution going on in tmp_island.
+        ar(tmp_island.m_ptr->isl_ptr);
+        ar(tmp_island.m_ptr->algo);
+        ar(tmp_island.m_ptr->pop);
+        *this = std::move(tmp_island);
     }
 
 private:
@@ -575,5 +608,7 @@ private:
     mutable std::unique_ptr<idata_t> m_ptr;
 };
 }
+
+PAGMO_REGISTER_ISLAND(pagmo::thread_island)
 
 #endif
