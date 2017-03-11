@@ -383,8 +383,6 @@ class island
 
 public:
     // TODO island type selection factory.
-    // TODO UDI checks, ignore checks.
-    // TODO do all the enablers properly.
     island() : m_ptr(detail::make_unique<idata_t>())
     {
     }
@@ -396,22 +394,57 @@ public:
     island(island &&other) noexcept : m_ptr(std::move(other.m_ptr))
     {
     }
+
+private:
     template <typename Algo, typename Pop>
+    using algo_pop_enabler = enable_if_t<std::is_constructible<algorithm, Algo &&>::value
+                                             && std::is_same<population, uncvref_t<Pop>>::value,
+                                         int>;
+
+public:
+    template <typename Algo, typename Pop, algo_pop_enabler<Algo, Pop> = 0>
     explicit island(Algo &&a, Pop &&p)
         : m_ptr(detail::make_unique<idata_t>(std::forward<Algo>(a), std::forward<Pop>(p)))
     {
     }
+
+private:
     template <typename Isl, typename Algo, typename Pop>
+    using isl_algo_pop_enabler
+        = enable_if_t<is_udi<uncvref_t<Isl>>::value && std::is_constructible<algorithm, Algo &&>::value
+                          && std::is_same<population, uncvref_t<Pop>>::value,
+                      int>;
+
+public:
+    template <typename Isl, typename Algo, typename Pop, isl_algo_pop_enabler<Isl, Algo, Pop> = 0>
     explicit island(Isl &&isl, Algo &&a, Pop &&p)
         : m_ptr(detail::make_unique<idata_t>(std::forward<Isl>(isl), std::forward<Algo>(a), std::forward<Pop>(p)))
     {
     }
+
+private:
     template <typename Algo, typename Prob>
+    using algo_prob_enabler
+        = enable_if_t<std::is_constructible<algorithm, Algo &&>::value
+                          && std::is_constructible<population, Prob &&, population::size_type, unsigned>::value,
+                      int>;
+
+public:
+    template <typename Algo, typename Prob, algo_prob_enabler<Algo, Prob> = 0>
     explicit island(Algo &&a, Prob &&p, population::size_type size, unsigned seed = pagmo::random_device::next())
         : island(std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed))
     {
     }
+
+private:
     template <typename Isl, typename Algo, typename Prob>
+    using isl_algo_prob_enabler
+        = enable_if_t<is_udi<uncvref_t<Isl>>::value && std::is_constructible<algorithm, Algo &&>::value
+                          && std::is_constructible<population, Prob &&, population::size_type, unsigned>::value,
+                      int>;
+
+public:
+    template <typename Isl, typename Algo, typename Prob, isl_algo_prob_enabler<Isl, Algo, Prob> = 0>
     explicit island(Isl &&isl, Algo &&a, Prob &&p, population::size_type size,
                     unsigned seed = pagmo::random_device::next())
         : island(std::forward<Isl>(isl), std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed))
@@ -419,7 +452,7 @@ public:
     }
     ~island()
     {
-        // If the island has been moved from, don't do anything.'
+        // If the island has been moved from, don't do anything.
         if (!m_ptr) {
             return;
         }

@@ -33,7 +33,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/python/extract.hpp>
 #include <boost/python/object.hpp>
-// #include <sstream>
 #include <string>
 #include <type_traits>
 
@@ -54,9 +53,9 @@ namespace detail
 namespace bp = boost::python;
 
 // Disable the static UDI checks for bp::object.
-// template <>
-// struct disable_udi_checks<bp::object> : std::true_type {
-// };
+template <>
+struct disable_udi_checks<bp::object> : std::true_type {
+};
 
 template <>
 struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
