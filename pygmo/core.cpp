@@ -182,7 +182,7 @@ std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
 decltype(meta_algos_ptrs) meta_algos_ptrs{};
 
 // Island.
-std::unique_ptr<bp::class_<island>> island_ptr(nullptr);
+std::unique_ptr<bp::class_<island>> island_ptr{};
 }
 
 // The cleanup function.
