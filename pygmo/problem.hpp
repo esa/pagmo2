@@ -40,11 +40,13 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/tuple.hpp>
 #include <iterator>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <type_traits>
 #include <utility>
 
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
@@ -96,10 +98,10 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // The Python UDP looks alright, let's deepcopy it into m_value.
         m_value = pygmo::deepcopy(o);
     }
-    virtual prob_inner_base *clone() const override final
+    virtual std::unique_ptr<prob_inner_base> clone() const override final
     {
         // This will make a deep copy using the ctor above.
-        return ::new prob_inner(m_value);
+        return make_unique<prob_inner>(m_value);
     }
     // Mandatory methods.
     virtual vector_double fitness(const vector_double &dv) const override final

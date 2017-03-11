@@ -213,7 +213,7 @@ struct algo_inner_base {
     virtual ~algo_inner_base()
     {
     }
-    virtual algo_inner_base *clone() const = 0;
+    virtual std::unique_ptr<algo_inner_base> clone() const = 0;
     virtual population evolve(const population &pop) const = 0;
     virtual void set_seed(unsigned) = 0;
     virtual bool has_set_seed() const = 0;
@@ -244,9 +244,9 @@ struct algo_inner final : algo_inner_base {
     {
     }
     // The clone method, used in the copy constructor of algorithm.
-    virtual algo_inner_base *clone() const override final
+    virtual std::unique_ptr<algo_inner_base> clone() const override final
     {
-        return ::new algo_inner(m_value);
+        return make_unique<algo_inner>(m_value);
     }
     // Mandatory methods.
     virtual population evolve(const population &pop) const override final

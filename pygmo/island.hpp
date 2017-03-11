@@ -33,10 +33,12 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/python/extract.hpp>
 #include <boost/python/object.hpp>
+#include <memory>
 #include <string>
 #include <type_traits>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/threading.hpp>
@@ -82,10 +84,10 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         check_mandatory_method(o, "run_evolve", "island");
         m_value = pygmo::deepcopy(o);
     }
-    virtual isl_inner_base *clone() const override final
+    virtual std::unique_ptr<isl_inner_base> clone() const override final
     {
         // This will make a deep copy using the ctor above.
-        return ::new isl_inner(m_value);
+        return make_unique<isl_inner>(m_value);
     }
     // Mandatory methods.
     virtual void run_evolve(algorithm &algo, ulock_t &algo_lock, population &pop, ulock_t &pop_lock) override final

@@ -587,7 +587,7 @@ struct prob_inner_base {
     virtual ~prob_inner_base()
     {
     }
-    virtual prob_inner_base *clone() const = 0;
+    virtual std::unique_ptr<prob_inner_base> clone() const = 0;
     virtual vector_double fitness(const vector_double &) const = 0;
     virtual vector_double gradient(const vector_double &) const = 0;
     virtual bool has_gradient() const = 0;
@@ -628,9 +628,9 @@ struct prob_inner final : prob_inner_base {
     {
     }
     // The clone method, used in the copy constructor of problem.
-    virtual prob_inner_base *clone() const override final
+    virtual std::unique_ptr<prob_inner_base> clone() const override final
     {
-        return ::new prob_inner(m_value);
+        return make_unique<prob_inner>(m_value);
     }
     // Mandatory methods.
     virtual vector_double fitness(const vector_double &dv) const override final

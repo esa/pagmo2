@@ -149,7 +149,7 @@ struct isl_inner_base {
     virtual ~isl_inner_base()
     {
     }
-    virtual isl_inner_base *clone() const = 0;
+    virtual std::unique_ptr<isl_inner_base> clone() const = 0;
     virtual void run_evolve(algorithm &, ulock_t &, population &, ulock_t &) = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
@@ -175,9 +175,9 @@ struct isl_inner final : isl_inner_base {
     {
     }
     // The clone method, used in the copy constructor of island.
-    virtual isl_inner_base *clone() const override final
+    virtual std::unique_ptr<isl_inner_base> clone() const override final
     {
-        return ::new isl_inner(m_value);
+        return make_unique<isl_inner>(m_value);
     }
     // The enqueue_evolution() method.
     virtual void run_evolve(algorithm &algo, ulock_t &algo_lock, population &pop, ulock_t &pop_lock) override final
@@ -568,7 +568,7 @@ private:
     std::unique_ptr<detail::isl_inner_base> get_isl_ptr() const
     {
         std::lock_guard<std::mutex> lock(m_ptr->isl_mutex);
-        return std::unique_ptr<detail::isl_inner_base>(m_ptr->isl_ptr->clone());
+        return m_ptr->isl_ptr->clone();
     }
 
 private:

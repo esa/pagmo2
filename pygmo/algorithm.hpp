@@ -35,11 +35,13 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/extract.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/tuple.hpp>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <type_traits>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
@@ -75,10 +77,10 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
         check_mandatory_method(o, "evolve", "algorithm");
         m_value = pygmo::deepcopy(o);
     }
-    virtual algo_inner_base *clone() const override final
+    virtual std::unique_ptr<algo_inner_base> clone() const override final
     {
         // This will make a deep copy using the ctor above.
-        return ::new algo_inner(m_value);
+        return make_unique<algo_inner>(m_value);
     }
     // Mandatory methods.
     virtual population evolve(const population &pop) const override final
