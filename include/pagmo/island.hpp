@@ -320,75 +320,165 @@ public:
 
 class archipelago;
 
+namespace detail
+{
+
+struct island_data {
+    // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
+    // are both thread safe.
+    island_data() : isl_ptr(::new isl_inner<thread_island>{})
+    {
+    }
+
+    template <typename Algo, typename Pop>
+    explicit island_data(Algo &&a, Pop &&p) : algo(std::forward<Algo>(a)), pop(std::forward<Pop>(p))
+    {
+        // TODO replace with island selection logic.
+        isl_ptr.reset(::new isl_inner<thread_island>{});
+    }
+
+    template <typename Isl, typename Algo, typename Pop>
+    explicit island_data(Isl &&isl, Algo &&a, Pop &&p)
+        : isl_ptr(::new isl_inner<uncvref_t<Isl>>(std::forward<Isl>(isl))), algo(std::forward<Algo>(a)),
+          pop(std::forward<Pop>(p))
+    {
+    }
+
+    template <typename Algo, typename Pop>
+    explicit island_data(std::unique_ptr<isl_inner_base> &&ptr, Algo &&a, Pop &&p)
+        : isl_ptr(std::move(ptr)), algo(std::forward<Algo>(a)), pop(std::forward<Pop>(p))
+    {
+    }
+
+    // Delete all the rest.
+    island_data(const island_data &) = delete;
+    island_data(island_data &&) = delete;
+    island_data &operator=(const island_data &) = delete;
+    island_data &operator=(island_data &&) = delete;
+
+    // The data members.
+    std::mutex isl_mutex;
+    std::unique_ptr<isl_inner_base> isl_ptr;
+    std::mutex algo_mutex;
+    algorithm algo;
+    std::mutex pop_mutex;
+    population pop;
+    std::mutex futures_mutex;
+    std::vector<std::future<void>> futures;
+    archipelago *archi_ptr = nullptr;
+    task_queue queue;
+};
+}
+
 /// Island class.
 /**
  * In pagmo an island is a object that is used to evolve a population....
  *
- * TODO UDIs must have basic thread safety.
+ * TODO move semantics.
  */
 class island
 {
+    using idata_t = detail::island_data;
+
 public:
     // TODO island type selection factory.
-    // TODO copy ctor, delete move and assignment operators?
     // TODO UDI checks, ignore checks.
-    // TODO wait hook for avoiding blocking Python.
-    // TODO all enablers here, also us delegating ctors.
-    island() : m_isl_ptr(::new detail::isl_inner<thread_island>{})
+    // TODO do all the enablers properly.
+    island() : m_ptr(::new idata_t{})
     {
     }
-    island(const island &other)
-        : m_pop(other.get_population()), m_algo(other.get_algorithm()), m_isl_ptr(other.isl_ptr()->clone())
+    island(const island &other) : m_ptr()
+    {
+        // NOTE: don't init directly into m_ptr because the getters here may throw,
+        // and we could run in the usual problem with evaluation order and new operator.
+        auto algo = other.get_algorithm();
+        auto pop = other.get_population();
+        auto isl_ptr = other.get_isl_ptr();
+        // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
+        m_ptr.reset(::new idata_t(std::move(isl_ptr), std::move(algo), std::move(pop)));
+    }
+    island(island &&other) noexcept : m_ptr(std::move(other.m_ptr))
     {
     }
-    explicit island(const population &pop, const algorithm &algo)
-        : m_pop(pop), m_algo(algo), m_isl_ptr(::new detail::isl_inner<thread_island>{})
+    template <typename Algo, typename Pop>
+    explicit island(Algo &&a, Pop &&p) : m_ptr(::new idata_t(std::forward<Algo>(a), std::forward<Pop>(p)))
     {
     }
-    template <typename Prob, typename Algo>
-    explicit island(Prob &&p, Algo &&a, population::size_type size, unsigned seed = pagmo::random_device::next())
-        : m_pop(std::forward<Prob>(p), size, seed), m_algo(std::forward<Algo>(a)),
-          m_isl_ptr(::new detail::isl_inner<thread_island>{})
+    template <typename Isl, typename Algo, typename Pop>
+    explicit island(Isl &&isl, Algo &&a, Pop &&p)
+        : m_ptr(::new idata_t(std::forward<Isl>(isl), std::forward<Algo>(a), std::forward<Pop>(p)))
     {
     }
-    template <typename Isl, typename Prob, typename Algo>
-    explicit island(Isl &&isl, Prob &&p, Algo &&a, population::size_type size,
+    template <typename Algo, typename Prob>
+    explicit island(Algo &&a, Prob &&p, population::size_type size, unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed))
+    {
+    }
+    template <typename Isl, typename Algo, typename Prob>
+    explicit island(Isl &&isl, Algo &&a, Prob &&p, population::size_type size,
                     unsigned seed = pagmo::random_device::next())
-        : m_pop(std::forward<Prob>(p), size, seed), m_algo(std::forward<Algo>(a)),
-          m_isl_ptr(::new detail::isl_inner<uncvref_t<Isl>>(std::forward<Isl>(isl)))
+        : island(std::forward<Isl>(isl), std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed))
     {
     }
     ~island()
     {
+        // If the island has been moved from, don't do anything.'
+        if (!m_ptr) {
+            return;
+        }
         try {
             wait();
         } catch (...) {
         }
     }
+    island &operator=(island &&other) noexcept
+    {
+        if (this != &other) {
+            m_ptr = std::move(other.m_ptr);
+        }
+        return *this;
+    }
+    island &operator=(const island &other)
+    {
+        if (this != &other) {
+            *this = island(other);
+        }
+        return *this;
+    }
     void evolve()
     {
-        std::lock_guard<std::mutex> lock(m_futures_mutex);
+        std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
         // First add an empty future, so that if an exception is thrown
         // we will not have modified m_futures, nor we will have a future
         // in flight which we cannot wait upon.
-        m_futures.emplace_back();
+        m_ptr->futures.emplace_back();
         try {
+            // Get a pointer to the members tuple. Capturing ptr in the lambda
+            // rather than this ensures tasks can still be executed after a move
+            // operation on this.
+            auto ptr = m_ptr.get();
             // Move assign a new future provided by the enqueue() method.
             // NOTE: enqueue either returns a valid future, or throws without
             // having enqueued any task.
-            m_futures.back() = m_queue.enqueue([this]() {
+            m_ptr->futures.back() = m_ptr->queue.enqueue([ptr]() {
                 {
+                    // Lock the island.
+                    // NOTE: we do it before the other locks because otherwise clang thread sanitizer complains
+                    // about potential deadlock due to lock order inversion. In reality, this code
+                    // is never executed concurrently by more than 1 thread, so we are safe.
+                    std::lock_guard<std::mutex> isl_lock(ptr->isl_mutex);
                     // Lock down access to algo and pop.
-                    std::unique_lock<std::mutex> algo_lock(this->m_algo_mutex), pop_lock(this->m_pop_mutex);
-                    this->isl_ptr()->run_evolve(this->m_algo, algo_lock, this->m_pop, pop_lock);
+                    std::unique_lock<std::mutex> algo_lock(ptr->algo_mutex);
+                    std::unique_lock<std::mutex> pop_lock(ptr->pop_mutex);
+                    ptr->isl_ptr->run_evolve(ptr->algo, algo_lock, ptr->pop, pop_lock);
                 }
-                auto archi = this->m_archi_ptr;
+                auto archi = ptr->archi_ptr;
                 (void)archi;
             });
         } catch (...) {
             // We end up here only if enqueue threw. In such a case, we need to cleanup
             // the empty future we added above before re-throwing and exiting.
-            m_futures.pop_back();
+            m_ptr->futures.pop_back();
             throw;
         }
     }
@@ -396,33 +486,33 @@ public:
     {
         auto iwr = detail::isl_wait_raii<>::getter();
         (void)iwr;
-        std::lock_guard<std::mutex> lock(m_futures_mutex);
-        for (decltype(m_futures.size()) i = 0; i < m_futures.size(); ++i) {
+        std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
+        for (decltype(m_ptr->futures.size()) i = 0; i < m_ptr->futures.size(); ++i) {
             // NOTE: this has to be valid, as the only way to get the value of the futures is via
             // this method, and we clear the futures vector after we are done.
-            assert(m_futures[i].valid());
+            assert(m_ptr->futures[i].valid());
             try {
-                m_futures[i].get();
+                m_ptr->futures[i].get();
             } catch (...) {
                 // If any of the futures stores an exception, we will re-raise it.
                 // But first, we need to get all the other futures and erase the futures
                 // vector.
-                for (i = i + 1u; i < m_futures.size(); ++i) {
+                for (i = i + 1u; i < m_ptr->futures.size(); ++i) {
                     try {
-                        m_futures[i].get();
+                        m_ptr->futures[i].get();
                     } catch (...) {
                     }
                 }
-                m_futures.clear();
+                m_ptr->futures.clear();
                 throw;
             }
         }
-        m_futures.clear();
+        m_ptr->futures.clear();
     }
     bool busy() const
     {
-        std::lock_guard<std::mutex> lock(m_futures_mutex);
-        for (const auto &f : m_futures) {
+        std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
+        for (const auto &f : m_ptr->futures) {
             assert(f.valid());
             if (f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready) {
                 return true;
@@ -433,46 +523,26 @@ public:
 
     algorithm get_algorithm() const
     {
-        std::lock_guard<std::mutex> lock(m_algo_mutex);
-        return m_algo;
+        std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
+        return m_ptr->algo;
     }
 
     population get_population() const
     {
-        std::lock_guard<std::mutex> lock(m_pop_mutex);
-        return m_pop;
+        std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
+        return m_ptr->pop;
     }
 
 private:
-    // Two small helpers to make sure that whenever we require
-    // access to the isl pointer it actually points to something.
-    detail::isl_inner_base const *isl_ptr() const
+    // This is only used in the copy ctor and it is of no interest to the user.
+    std::unique_ptr<detail::isl_inner_base> get_isl_ptr() const
     {
-        assert(m_isl_ptr.get() != nullptr);
-        return m_isl_ptr.get();
-    }
-    detail::isl_inner_base *isl_ptr()
-    {
-        assert(m_isl_ptr.get() != nullptr);
-        return m_isl_ptr.get();
+        std::lock_guard<std::mutex> lock(m_ptr->isl_mutex);
+        return std::unique_ptr<detail::isl_inner_base>(m_ptr->isl_ptr->clone());
     }
 
 private:
-    mutable std::mutex m_pop_mutex;
-    population m_pop;
-
-    mutable std::mutex m_algo_mutex;
-    algorithm m_algo;
-
-    archipelago *m_archi_ptr = nullptr;
-
-    detail::task_queue m_queue;
-
-    mutable std::mutex m_futures_mutex;
-    mutable std::vector<std::future<void>> m_futures;
-
-    // Pointer to the inner base island.
-    std::unique_ptr<detail::isl_inner_base> m_isl_ptr;
+    mutable std::unique_ptr<idata_t> m_ptr;
 };
 }
 

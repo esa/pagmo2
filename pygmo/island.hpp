@@ -33,10 +33,9 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/python/extract.hpp>
 #include <boost/python/object.hpp>
-// #include <boost/python/tuple.hpp>
 // #include <sstream>
 #include <string>
-// #include <type_traits>
+#include <type_traits>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/island.hpp>
