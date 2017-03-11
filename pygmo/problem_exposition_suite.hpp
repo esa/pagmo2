@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/translate.hpp>
@@ -241,7 +242,7 @@ inline void expose_meta_problem(std::unique_ptr<bp::class_<Meta>> &ptr, const ch
     assert(problem_ptr.get() != nullptr);
     auto &problem_class = *problem_ptr;
     // Create the class and expose def ctor.
-    ptr = make_unique<bp::class_<Meta>>(name, descr, bp::init<>());
+    ptr = pagmo::detail::make_unique<bp::class_<Meta>>(name, descr, bp::init<>());
     // Make meta constructor from Python user-defined problem (allows to init a meta from Python UDPs).
     // This needs to be the first exposed ctor as BP tries the constructors in reverse order, so this needs
     // to be the last constructor tried during overload resolution.

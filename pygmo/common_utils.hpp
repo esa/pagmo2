@@ -44,7 +44,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/tuple.hpp>
 #include <cstddef>
-#include <memory>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -680,14 +679,6 @@ struct gil_thread_ensurer {
     }
     ::PyGILState_STATE m_state;
 };
-
-// Implementation of std::make_unique:
-// http://stackoverflow.com/questions/17902405/how-to-implement-make-unique-function-in-c11
-template <typename T, typename... Args>
-inline std::unique_ptr<T> make_unique(Args &&... args)
-{
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
 }
 
 #endif

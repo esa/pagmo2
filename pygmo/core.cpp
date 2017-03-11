@@ -81,6 +81,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
 #include <pagmo/archipelago.hpp>
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
@@ -564,7 +565,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Problem class.
     pygmo::problem_ptr
-        = pygmo::make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::init<>());
+        = detail::make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::init<>());
     auto &problem_class = *pygmo::problem_ptr;
     problem_class.def(bp::init<const bp::object &>((bp::arg("udp"))))
         .def(repr(bp::self))
@@ -641,7 +642,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Algorithm class.
     pygmo::algorithm_ptr
-        = pygmo::make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::init<>());
+        = detail::make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::init<>());
     auto &algorithm_class = *pygmo::algorithm_ptr;
     algorithm_class.def(bp::init<const bp::object &>((bp::arg("uda"))))
         .def(repr(bp::self))
@@ -1043,7 +1044,7 @@ BOOST_PYTHON_MODULE(core)
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
 
     // Island.
-    pygmo::island_ptr = pygmo::make_unique<bp::class_<island>>("island", bp::init<>());
+    pygmo::island_ptr = detail::make_unique<bp::class_<island>>("island", bp::init<>());
     auto &island_class = *pygmo::island_ptr;
     island_class.def(bp::init<const algorithm &, const population &>())
         .def(bp::init<const bp::object &, const algorithm &, const problem &, population::size_type>())
