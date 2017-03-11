@@ -42,6 +42,8 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
+class cec2006;
+typedef void (cec2006::*func_ptr)(vector_double &, const vector_double &) const;
 namespace detail
 {
 // Usual template trick to have static members in header only libraries
@@ -54,6 +56,9 @@ struct cec2006_statics {
     static std::vector<unsigned short> m_nec;
     /// Inequality constraints dimension
     static std::vector<unsigned short> m_nic;
+    /// Pointers to the member functions to be used in fitness
+    static std::vector<func_ptr> m_o_ptr;
+    static std::vector<func_ptr> m_c_ptr;
 };
 
 template <typename T>
@@ -67,7 +72,6 @@ std::vector<unsigned short> cec2006_statics<T>::m_nec
 template <typename T>
 std::vector<unsigned short> cec2006_statics<T>::m_nic
     = {9, 2, 0, 6, 2, 2, 8, 2, 4, 6, 0, 1, 0, 0, 0, 38, 0, 13, 5, 6, 1, 1, 2, 2};
-
 } // end namespace detail
 
 /// The CEC 2006 problems: Constrained Real-Parameter Optimization
@@ -260,82 +264,7 @@ public:
      */
     vector_double fitness(const vector_double &x) const
     {
-        vector_double f;
-        switch (m_prob_id) {
-            case 1:
-                f = g01_fitness_impl(x);
-                break;
-            case 2:
-                f = g02_fitness_impl(x);
-                break;
-            case 3:
-                f = g03_fitness_impl(x);
-                break;
-            case 4:
-                f = g04_fitness_impl(x);
-                break;
-            case 5:
-                f = g05_fitness_impl(x);
-                break;
-            case 6:
-                f = g06_fitness_impl(x);
-                break;
-            case 7:
-                f = g07_fitness_impl(x);
-                break;
-            case 8:
-                f = g08_fitness_impl(x);
-                break;
-            case 9:
-                f = g09_fitness_impl(x);
-                break;
-            case 10:
-                f = g10_fitness_impl(x);
-                break;
-            case 11:
-                f = g11_fitness_impl(x);
-                break;
-            case 12:
-                f = g12_fitness_impl(x);
-                break;
-            case 13:
-                f = g13_fitness_impl(x);
-                break;
-            case 14:
-                f = g14_fitness_impl(x);
-                break;
-            case 15:
-                f = g15_fitness_impl(x);
-                break;
-            case 16:
-                f = g16_fitness_impl(x);
-                break;
-            case 17:
-                f = g17_fitness_impl(x);
-                break;
-            case 18:
-                f = g18_fitness_impl(x);
-                break;
-            case 19:
-                f = g19_fitness_impl(x);
-                break;
-            case 20:
-                f = g20_fitness_impl(x);
-                break;
-            case 21:
-                f = g21_fitness_impl(x);
-                break;
-            case 22:
-                f = g22_fitness_impl(x);
-                break;
-            case 23:
-                f = g23_fitness_impl(x);
-                break;
-            case 24:
-                f = g24_fitness_impl(x);
-                break;
-        }
-        return f;
+        return fitness_impl(m_c_ptr[m_prob_id - 1], m_o_ptr[m_prob_id - 1], x);
     }
     /// Problem name
     /**
@@ -364,13 +293,13 @@ public:
 
 private:
     // Pointers to member functions are used
-    typedef void (cec2006::*func_ptr)(vector_double &, const vector_double &) const;
     vector_double fitness_impl(func_ptr c, func_ptr o, const vector_double &x) const
     {
         vector_double retval(m_nec[m_prob_id - 1u] + m_nic[m_prob_id - 1u], 0.);
         vector_double f(1, 0.);
-        c(retval, x);
-        o(f, x);
+        // Syntax is ugly as these are member function pointers.
+        ((*this).*(c))(retval, x); // calls c
+        ((*this).*(o))(f, x);      // calls o
         retval.insert(retval.begin(), f.begin(), f.end());
         return retval;
     }
@@ -1434,6 +1363,27 @@ private:
     unsigned int m_prob_id;
 };
 
+// Bunch of member function pointers as static member
+namespace detail
+{
+template <typename T>
+std::vector<func_ptr> cec2006_statics<T>::m_o_ptr
+    = {&cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl};
+
+template <typename T>
+std::vector<func_ptr> cec2006_statics<T>::m_c_ptr
+    = {&cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl,
+       &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl, &cec2006::g01_objfun_impl};
+} // namespace detail
 } // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::cec2006)
