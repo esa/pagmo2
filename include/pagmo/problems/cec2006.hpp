@@ -90,6 +90,8 @@ std::vector<unsigned short> cec2006_statics<T>::m_nic
  */
 class cec2006 : public detail::cec2006_statics<>
 {
+    friend cec2006_statics;
+
 public:
     /// Constructor
     /**
