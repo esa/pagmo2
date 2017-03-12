@@ -588,8 +588,8 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const island &isl)
     {
         stream(os, "Island name: ", isl.get_name(), "\n\n");
-        stream(os, isl.get_algorithm());
-        stream(os, isl.get_population());
+        stream(os, isl.get_algorithm(), "\n\n");
+        stream(os, isl.get_population(), "\n\n");
         const auto extra_str = isl.get_extra_info();
         if (!extra_str.empty()) {
             stream(os, "\nExtra info:\n", extra_str);
