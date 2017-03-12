@@ -31,8 +31,12 @@ see https://www.gnu.org/licenses/. */
 
 #include "python_includes.hpp"
 
+#include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
+#include <boost/python/handle.hpp>
 #include <boost/python/object.hpp>
+#include <cassert>
+#include <exception>
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -45,6 +49,20 @@ see https://www.gnu.org/licenses/. */
 
 #include "common_base.hpp"
 #include "common_utils.hpp"
+
+namespace pygmo
+{
+
+// This exception is used to transport a Python exception across threads. It contains
+// two BP objects, the type of the exception, and its value.
+struct transported_exception : std::exception {
+    transported_exception(const bp::object &tp, const bp::object &v) : type(tp), value(v)
+    {
+    }
+    mutable bp::object type;
+    mutable bp::object value;
+};
+}
 
 namespace pagmo
 {
@@ -92,34 +110,72 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     // Mandatory methods.
     virtual void run_evolve(algorithm &algo, ulock_t &algo_lock, population &pop, ulock_t &pop_lock) override final
     {
-        // NOTE: run_evolve() is called from a separate thread in pagmo::island, need to construct a GTE before doing
-        // anything with the interpreter (including the throws in the checks below).
+        // NOTE: run_evolve() is called from a separate thread in pagmo::island, need to construct a GTE before
+        // doing anything with the interpreter (including the throws in the checks below).
         pygmo::gil_thread_ensurer gte;
 
-        // NOTE: the idea of these checks is the following: we will have to copy algo and pop in order to invoke
-        // the pythonic UDI's evolve method, which has a signature which is different from C++. If algo/prob are
-        // bp::object, via the GTE above we have made sure we can safely copy them so we don't need to check anything.
-        // Otherwise, we run the check, which is against the copyonly thread safety level as that is all we need.
-        if (!algo.is<bp::object>()) {
-            check_thread_safety(algo);
-        }
-        if (!pop.get_problem().is<bp::object>()) {
-            check_thread_safety(pop.get_problem());
-        }
+        try {
+            // NOTE: the idea of these checks is the following: we will have to copy algo and pop in order to invoke
+            // the pythonic UDI's evolve method, which has a signature which is different from C++. If algo/prob are
+            // bp::object, via the GTE above we have made sure we can safely copy them so we don't need to check
+            // anything. Otherwise, we run the check, which is against the copyonly thread safety level as that is all
+            // we need.
+            if (!algo.is<bp::object>()) {
+                check_thread_safety(algo);
+            }
+            if (!pop.get_problem().is<bp::object>()) {
+                check_thread_safety(pop.get_problem());
+            }
 
-        // Everything fine, copy algo/pop and unlock.
-        bp::object algo_copy(algo);
-        algo_lock.unlock();
-        bp::object pop_copy(pop);
-        pop_lock.unlock();
+            // Everything fine, copy algo/pop and unlock.
+            bp::object algo_copy(algo);
+            algo_lock.unlock();
+            bp::object pop_copy(pop);
+            pop_lock.unlock();
 
-        // Invoke the run_evolve() method of the UDI and get out the evolved pop.
-        // NOTE: here bp::extract will extract a copy of pop, and then a move ctor will take place,
-        // which will just move the internal problem pointer. No additional thread safety guarantees are needed.
-        population new_pop = bp::extract<population>(m_value.attr("run_evolve")(algo_copy, pop_copy));
-        // Re-lock and assign.
-        pop_lock.lock();
-        pop = std::move(new_pop);
+            // Invoke the run_evolve() method of the UDI and get out the evolved pop.
+            // NOTE: here bp::extract will extract a copy of pop, and then a move ctor will take place,
+            // which will just move the internal problem pointer. No additional thread safety guarantees are needed.
+            population new_pop = bp::extract<population>(m_value.attr("run_evolve")(algo_copy, pop_copy));
+            // Re-lock and assign.
+            pop_lock.lock();
+            pop = std::move(new_pop);
+        } catch (const bp::error_already_set &) {
+            // NOTE: run_evolve() is called from a separate thread. If Python raises any exception in this separate
+            // thread (as signalled by the bp::error_already_set exception being handled here), the following will
+            // happen: the Python error indicator has been set for the *current* thread, but the bp::error_already_set
+            // exception will actually *escape* this thread due to the internal exception transport mechanism of
+            // std::future. In other words, bp::error_already_set will be re-thrown in a thread which, from the
+            // Python side, has no knowledge/information about the Python exception that originated all this, resulting
+            // in an unhelpful error message by Boost Python.
+            //
+            // What we do then is the following: we get the Python exception via PyErr_Fetch(), store it in an ad-hoc
+            // C++ exception, which will be thrown and then transferred by std::future to the thread that calls wait()
+            // on the future. In core.cpp, we register a BP exception translator for our ad-hoc exception, which
+            // will copy the exception back into the current thread and set the Python error flag.
+            // https://docs.python.org/3/c-api/exceptions.html
+            //
+            // NOTE: my understanding is that this assert should never fail, if we are handling a bp::error_already_set
+            // exception it means a Python exception was generated. However, I have seen snippets of code on the
+            // internet where people do check this flag. Keep this in mind, it should be easy to transform this assert()
+            // in an if/else.
+            assert(::PyErr_Occurred());
+            // Fetch the error data that was set by Python: exception type, value and the traceback.
+            ::PyObject *type, *value, *traceback;
+            // PyErr_Fetch() creates new references, and it also clears the error indicator.
+            ::PyErr_Fetch(&type, &value, &traceback);
+            // This normalisation step is apparently needed because sometimes, for some Python-internal reasons,
+            // the values returned by PyErr_Fetch() are “unnormalized” (see the Python documentation for this function).
+            ::PyErr_NormalizeException(&type, &value, &traceback);
+            // Move it into bp::object. These are all new objects.
+            // NOTE: we dont' use the traceback anywhere, just wrap it into a BP object so that it will
+            // be cleaned up properly.
+            bp::object tp{bp::handle<>{type}}, v{bp::handle<>{value}}, tb{bp::handle<>{traceback}};
+            // transported_exception will either be used to set the a Python exception from another thread (see the
+            // translation bits in core.cpp) or it will be swallowed by the catch (...) in island::wait(). In any case,
+            // since we are using bp::objects to manage the data, everything should be cleaned up properly eventually.
+            throw pygmo::transported_exception(tp, v);
+        }
     }
     // Optional methods.
     virtual std::string get_name() const override final

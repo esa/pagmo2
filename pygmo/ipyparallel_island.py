@@ -32,14 +32,15 @@
 from __future__ import absolute_import as _ai
 
 from ipyparallel import Client as _Client
-_rc = _Client()
 
 
 class ipyparallel_island(object):
 
     def __init__(self):
+        self._rc = _Client()
+        self._rc[:].use_dill().get()
         # Setup of the ipyparallel bits.
-        self._lview = _rc.load_balanced_view()
+        self._lview = self._rc.load_balanced_view()
 
     def __copy__(self):
         return ipyparallel_island()
@@ -52,3 +53,6 @@ class ipyparallel_island(object):
             return algo.evolve(pop)
 
         return self._lview.apply_sync(evolve_func, algo, pop)
+
+    def get_name(self):
+        return "Ipyparallel island"
