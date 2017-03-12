@@ -44,6 +44,7 @@ namespace pagmo
 {
 // forward declearing the class to allow the following definition of pointers to its methods
 class cec2006;
+/// Pointer type to the methods to compute the objective and constraints
 typedef void (cec2006::*func_ptr)(vector_double &, const vector_double &) const;
 namespace detail
 {
@@ -199,14 +200,14 @@ std::vector<vector_double> cec2006_statics<T>::m_best_known = {
 class cec2006 : public detail::cec2006_statics<>
 {
 public:
-    // Needs friendship as to gain access to the private methodsssss
+    // Static data containers needs friendship as to gain access to the private methods definitions
     friend cec2006_statics;
 
     /// Constructor
     /**
      * Will construct one of the 24 CEC2006 problems
      *
-     * @param fun_id The problem id. One of [1,2,...,24]
+     * @param prob_id The problem id. One of [1,2,...,24]
      *
      * @throws invalid_argument if \p prob_id is not in [1,24]
      */

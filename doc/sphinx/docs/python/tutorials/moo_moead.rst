@@ -21,7 +21,7 @@ using the :func:`~pygmo.core.dtlz.p_distance` metric.
 .. doctest::
    
     >>> from pygmo import *
-    >>> udp = dtlz(id = 1)
+    >>> udp = dtlz(prob_id = 1)
     >>> pop = population(prob = udp, size = 105)
     >>> algo = algorithm(moead(gen = 100))
     >>> for i in range(10):
@@ -55,6 +55,8 @@ particular the **weight_generation** kwarg was set to **grid** and the **decompo
 
     >>> print(algo) #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     Algorithm name: MOEA/D - DE [stochastic]
+    	Thread safety: basic
+    <BLANKLINE>
     Extra info:
         Generations: 100
         Weight generation: grid
