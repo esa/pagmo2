@@ -452,6 +452,16 @@ BOOST_PYTHON_MODULE(core)
     }
     wrap_import_array();
 
+    // Check that dill is available.
+    try {
+        bp::import("dill");
+    } catch (...) {
+        pygmo::builtin().attr("print")(
+            u8"\033[91m====ERROR====\nThe dill module could not be imported. "
+            u8"Please make sure that dill has been correctly installed.\n====ERROR====\033[0m");
+        pygmo_throw(PyExc_ImportError, "");
+    }
+
     // Override the default implementation of the island factory.
     detail::island_factory<>::s_func = [](const algorithm &algo, const population &pop,
                                           std::unique_ptr<detail::isl_inner_base> &ptr) {
@@ -883,7 +893,7 @@ BOOST_PYTHON_MODULE(core)
     sade_.def("get_seed", &sade::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // DE-1220
     auto de1220_ = pygmo::expose_algorithm<de1220>("de1220", pygmo::de1220_docstring().c_str());
-    // Helper to get the list of allowed variants for de1220.
+    // Helper to get the list of default allowed variants for de1220.
     auto de1220_allowed_variants = []() -> bp::list {
         bp::list retval;
         for (const auto &n : de1220_statics<void>::allowed_variants) {
