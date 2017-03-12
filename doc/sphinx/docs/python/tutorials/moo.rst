@@ -14,7 +14,7 @@ Let us start to define our population:
 .. doctest::
    
     >>> from pygmo import *
-    >>> udp = zdt(id = 1)
+    >>> udp = zdt(prob_id = 1)
     >>> pop = population(prob = udp, size = 10, seed = 3453412)
 
 We here make use of first problem of the ZDT benchmark suite implemented in :class:`~pygmo.core.zdt` 

@@ -377,7 +377,7 @@ class hypervolume_test_case(_ut.TestCase):
         from .core import hypervolume, hv2d, hv3d, hvwfg, bf_fpras, bf_approx
         from .core import population, zdt
         import numpy as np
-        pop = population(prob=zdt(id=1, param=10), size=20)
+        pop = population(prob=zdt(prob_id=1, param=10), size=20)
         hv1 = hypervolume(pop=pop)
         hv2 = hypervolume(points=[[0, 0], [-1, 1], [-2, 2]])
         hv2.copy_points = True
@@ -423,9 +423,20 @@ class dtlz_test_case(_ut.TestCase):
 
     def runTest(self):
         from .core import dtlz, population
-        udp = dtlz(id=3, dim=9, fdim=3, alpha=5)
+        udp = dtlz(prob_id=3, dim=9, fdim=3, alpha=5)
         udp.p_distance([0.2] * 9)
         udp.p_distance(population(udp, 20))
+
+
+class cec2006_test_case(_ut.TestCase):
+    """Test case for the UDP cec2006
+
+    """
+
+    def runTest(self):
+        from .core import cec2006, population
+        udp = cec2006(prob_id=3)
+        best = udp.best_known
 
 
 class translate_test_case(_ut.TestCase):
@@ -701,6 +712,7 @@ def run_test_suite():
     except ImportError:
         pass
     suite.addTest(dtlz_test_case())
+    suite.addTest(cec2006_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
     suite.addTest(unconstrain_test_case())

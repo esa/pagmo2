@@ -1608,19 +1608,19 @@ See also the docs of the C++ class :func:`~pygmo.core.dtlz.p_distance()`
 
 std::string dtlz_docstring()
 {
-    return R"(__init__(id = 1, dim = 5, fdim = 3, alpha = 100)
+    return R"(__init__(prob_id = 1, dim = 5, fdim = 3, alpha = 100)
 
 The DTLZ problem suite problem.
 
 Args:
-    id (``int``): DTLZ problem id 
+    prob_id (``int``): DTLZ problem id 
     dim (``int``): problem dimension
     fdim (``int``): number of objectives
     alpha (``int``): controls density of solutions (used only by DTLZ4)
 
 Raises:
-    OverflowError: if *id*, *dim*, *fdim* or *alpha* are negative or greater than an implementation-defined value
-    ValueError: if *id* is not in [1..7], *fdim* is smaller than 2, *dim* is smaller or equal to *fdim*.
+    OverflowError: if *prob_id*, *dim*, *fdim* or *alpha* are negative or greater than an implementation-defined value
+    ValueError: if *prob_id* is not in [1..7], *fdim* is smaller than 2, *dim* is smaller or equal to *fdim*.
 
 See also the docs of the C++ class :cpp:class:`pagmo::dtlz`.
 
@@ -1642,6 +1642,24 @@ Raises:
     ValueError: if *prob_id* is not in [1..28] or if *dim* is not in [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
 See also the docs of the C++ class :cpp:class:`pagmo::cec2013`.
+
+)";
+}
+
+std::string cec2006_docstring()
+{
+    return R"(__init__(prob_id = 1)
+
+The CEC 2006 problem suite (continuous, constrained, single-objective problems)
+
+Args:
+    prob_id (``int``): problem id (one of [1..24])
+
+Raises:
+    OverflowError: if *prob_id* is negative or greater than an implementation-defined value
+    ValueError: if *prob_id* is not in [1..24]
+
+See also the docs of the C++ class :cpp:class:`pagmo::cec2006`.
 
 )";
 }
