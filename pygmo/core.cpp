@@ -90,6 +90,7 @@ see https://www.gnu.org/licenses/. */
 #if !defined(_MSC_VER)
 #include <pagmo/problems/cec2013.hpp>
 #endif
+#include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/griewank.hpp>
@@ -777,16 +778,16 @@ BOOST_PYTHON_MODULE(core)
     griew.def("best_known", &pygmo::best_known_wrapper<griewank>,
               pygmo::problem_get_best_docstring("Griewank").c_str());
     // ZDT.
-    auto zdt_p = pygmo::expose_problem<zdt>("zdt", "__init__(id = 1, param = 30)\n\nThe ZDT problem.\n\n"
+    auto zdt_p = pygmo::expose_problem<zdt>("zdt", "__init__(prob_id = 1, param = 30)\n\nThe ZDT problem.\n\n"
                                                    "See :cpp:class:`pagmo::zdt`.\n\n");
-    zdt_p.def(bp::init<unsigned, unsigned>((bp::arg("id") = 1u, bp::arg("param") = 30u)));
+    zdt_p.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1u, bp::arg("param") = 30u)));
     zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); });
     zdt_p.def("p_distance", +[](const zdt &z, const population &pop) { return z.p_distance(pop); },
               pygmo::zdt_p_distance_docstring().c_str());
     // DTLZ.
     auto dtlz_p = pygmo::expose_problem<dtlz>("dtlz", pygmo::dtlz_docstring().c_str());
     dtlz_p.def(bp::init<unsigned, unsigned, unsigned, unsigned>(
-        (bp::arg("id") = 1u, bp::arg("dim") = 5u, bp::arg("fdim") = 3u, bp::arg("alpha") = 100u)));
+        (bp::arg("prob_id") = 1u, bp::arg("dim") = 5u, bp::arg("fdim") = 3u, bp::arg("alpha") = 100u)));
     dtlz_p.def("p_distance", +[](const dtlz &z, const bp::object &x) { return z.p_distance(pygmo::to_vd(x)); });
     dtlz_p.def("p_distance", +[](const dtlz &z, const population &pop) { return z.p_distance(pop); },
                pygmo::dtlz_p_distance_docstring().c_str());
@@ -804,6 +805,12 @@ BOOST_PYTHON_MODULE(core)
     auto cec2013_ = pygmo::expose_problem<cec2013>("cec2013", pygmo::cec2013_docstring().c_str());
     cec2013_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
 #endif
+
+    // CEC 2006
+    auto cec2006_ = pygmo::expose_problem<cec2006>("cec2006", pygmo::cec2006_docstring().c_str());
+    cec2006_.def(bp::init<unsigned>((bp::arg("prob_id") = 1)));
+    cec2006_.def("best_known", &pygmo::best_known_wrapper<cec2006>,
+                 pygmo::problem_get_best_docstring("CEC 2006").c_str());
 
     // MBH meta-algo.
     pygmo::expose_meta_algorithm(std::get<0>(pygmo::meta_algos_ptrs), "mbh", pygmo::mbh_docstring().c_str());

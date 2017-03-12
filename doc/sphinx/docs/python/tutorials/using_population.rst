@@ -25,13 +25,13 @@ the random seed passed as kwarg.
 
 .. doctest::
 
-    >>> print(pop1.size())
+    >>> print(len(pop1))
     0
-    >>> print(pop1.get_problem().get_fevals())
+    >>> print(pop1.problem.get_fevals())
     0
-    >>> print(pop2.size())
+    >>> print(len(pop2))
     5
-    >>> print(pop2.get_problem().get_fevals())
+    >>> print(pop2.problem.get_fevals())
     5
 
 The full inspection of a :class:`~pygmo.core.population` is possible, as usual,
@@ -70,9 +70,9 @@ its :class:`~pygmo.core.population.push_back` method:
 .. doctest::
 
     >>> pop1.push_back([0.1,0.2,0.3,0.4]) # correct size
-    >>> pop1.size()
+    >>> len(pop1)
     1
-    >>> pop1.get_problem().get_fevals()
+    >>> pop1.problem.get_fevals()
     1
     >>> pop1.push_back([0.1,0.2,0.3]) # wrong size
     Traceback (most recent call last):
@@ -96,17 +96,17 @@ some individual decision vector:
 
 .. doctest::
 
-    >>> pop1.get_problem().get_fevals()
+    >>> pop1.problem.get_fevals()
     1
     >>> print(pop1.get_x()[0])
     [ 0.1  0.2  0.3  0.4]
     >>> pop1.set_x(0, [1.,2.,3.,4.])
-    >>> pop1.get_problem().get_fevals()
+    >>> pop1.problem.get_fevals()
     2
     >>> print(pop1.get_f()[0])
     [ 2705.]
     >>> pop1.set_xf(0, [1.,2.,3.,4.], [8.43469444])
-    >>> pop1.get_problem().get_fevals()
+    >>> pop1.problem.get_fevals()
     2
     >>> print(pop1.get_f()[0])
     [ 8.43469444]

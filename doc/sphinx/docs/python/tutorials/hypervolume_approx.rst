@@ -30,7 +30,7 @@ for the computation of the hypervolume indicator. You can invoke the FPRAS as fo
 .. doctest::
 
     >>> import pygmo as pg
-    >>> prob = pg.problem(pg.dtlz(id = 3, fdim=10, dim=11))
+    >>> prob = pg.problem(pg.dtlz(prob_id = 3, fdim=10, dim=11))
     >>> pop = pg.population(prob, 100)
     >>> fpras = pg.bf_fpras(eps=0.1, delta=0.1)
     >>> hv = pg.hypervolume(pop)
@@ -78,7 +78,7 @@ problems has many objectives.
 .. doctest::
 
   >>> # Problem with 30 objectives and 300 individuals
-  >>> prob = pg.problem(pg.dtlz(id = 3, fdim=30, dim=35))
+  >>> prob = pg.problem(pg.dtlz(prob_id = 3, fdim=30, dim=35))
   >>> pop = pg.population(prob, size = 300)
   >>> hv_algo = pg.bf_approx(eps=0.1, delta=0.1)
   >>> hv = pg.hypervolume(pop)

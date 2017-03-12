@@ -44,7 +44,7 @@ The first one uses the fitness values of the individuals of a :class:`~pygmo.cor
 
     >>> import pygmo as pg
     >>> # Construct a DTLZ-2 problem with 3-dimensional fitness space and 10 dimensions
-    >>> udp = pg.problem(pg.dtlz(id = 2, dim = 10, fdim = 3))  
+    >>> udp = pg.problem(pg.dtlz(prob_id = 2, dim = 10, fdim = 3))  
     >>> pop = pg.population(udp, 50) 
     >>> hv = hypervolume(pop)
   
@@ -160,7 +160,7 @@ increase after the evolution of a :class:`~pygmo.core.population`.
 
     >>> import pygmo as pg
     >>> # Instantiates a 4-objectives problem
-    >>> prob = pg.problem(pg.dtlz(id=4, dim = 12, fdim=4))
+    >>> prob = pg.problem(pg.dtlz(prob_id=4, dim = 12, fdim=4))
     >>> pop = pg.population(prob, 84)
     >>> # Construct the hypervolume object
     >>> # and get the reference point off-setted by 10 in each objective
