@@ -44,14 +44,15 @@ namespace pagmo
 {
 // forward declearing the class to allow the following definition of pointers to its methods
 class cec2006;
-/// Pointer type to the methods to compute the objective and constraints
-typedef void (cec2006::*func_ptr)(vector_double &, const vector_double &) const;
+
 namespace detail
 {
 // Usual template trick to have static members in header only libraries
 // see: http://stackoverflow.com/questions/18860895/how-to-initialize-static-members-in-the-header
 template <typename = void>
 struct cec2006_statics {
+    /// Pointer type to the methods to compute the objective and constraints
+    typedef void (cec2006::*func_ptr)(vector_double &, const vector_double &) const;
     /// Problem dimension
     static std::vector<unsigned short> m_dim;
     /// Equality constraints dimensions
@@ -197,12 +198,9 @@ std::vector<vector_double> cec2006_statics<T>::m_best_known = {
  *
  * See: http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC-06/CEC06.htm
  */
-class cec2006 : public detail::cec2006_statics<>
+class cec2006 : private detail::cec2006_statics<>
 {
 public:
-    // Static data containers needs friendship as to gain access to the private methods definitions
-    friend cec2006_statics;
-
     /// Constructor
     /**
      * Will construct one of the 24 CEC2006 problems
@@ -299,6 +297,8 @@ public:
     }
 
 private:
+    // Static data containers needs friendship as to gain access to the private methods definitions
+    friend cec2006_statics;
     // Pointers to member functions are used
     vector_double fitness_impl(func_ptr c, func_ptr o, const vector_double &x) const
     {
@@ -1144,7 +1144,7 @@ private:
 namespace detail
 {
 template <typename T>
-std::vector<func_ptr> cec2006_statics<T>::m_o_ptr
+std::vector<typename cec2006_statics<T>::func_ptr> cec2006_statics<T>::m_o_ptr
     = {&cec2006::g01_objfun_impl, &cec2006::g02_objfun_impl, &cec2006::g03_objfun_impl, &cec2006::g04_objfun_impl,
        &cec2006::g05_objfun_impl, &cec2006::g06_objfun_impl, &cec2006::g07_objfun_impl, &cec2006::g08_objfun_impl,
        &cec2006::g09_objfun_impl, &cec2006::g10_objfun_impl, &cec2006::g11_objfun_impl, &cec2006::g12_objfun_impl,
@@ -1153,7 +1153,7 @@ std::vector<func_ptr> cec2006_statics<T>::m_o_ptr
        &cec2006::g21_objfun_impl, &cec2006::g22_objfun_impl, &cec2006::g23_objfun_impl, &cec2006::g24_objfun_impl};
 
 template <typename T>
-std::vector<func_ptr> cec2006_statics<T>::m_c_ptr
+std::vector<typename cec2006_statics<T>::func_ptr> cec2006_statics<T>::m_c_ptr
     = {&cec2006::g01_compute_constraints_impl, &cec2006::g02_compute_constraints_impl,
        &cec2006::g03_compute_constraints_impl, &cec2006::g04_compute_constraints_impl,
        &cec2006::g05_compute_constraints_impl, &cec2006::g06_compute_constraints_impl,
