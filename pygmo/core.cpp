@@ -239,16 +239,6 @@ struct population_pickle_suite : bp::pickle_suite {
     }
 };
 
-// Helper to get the list of allowed variants for de1220.
-static inline bp::list de1220_allowed_variants()
-{
-    bp::list retval;
-    for (const auto &n : de1220_statics<void>::allowed_variants) {
-        retval.append(n);
-    }
-    return retval;
-}
-
 // Helper function to test the to_vd functionality.
 static inline bool test_to_vd(const bp::object &o, unsigned n)
 {
@@ -893,6 +883,14 @@ BOOST_PYTHON_MODULE(core)
     sade_.def("get_seed", &sade::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // DE-1220
     auto de1220_ = pygmo::expose_algorithm<de1220>("de1220", pygmo::de1220_docstring().c_str());
+    // Helper to get the list of allowed variants for de1220.
+    auto de1220_allowed_variants = []() -> bp::list {
+        bp::list retval;
+        for (const auto &n : de1220_statics<void>::allowed_variants) {
+            retval.append(n);
+        }
+        return retval;
+    };
     de1220_.def("__init__", bp::make_constructor(
                                 +[](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory) -> de1220 * {
