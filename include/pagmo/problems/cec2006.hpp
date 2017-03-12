@@ -54,34 +54,34 @@ struct cec2006_statics {
     /// Pointer type to the methods to compute the objective and constraints
     typedef void (cec2006::*func_ptr)(vector_double &, const vector_double &) const;
     /// Problem dimension
-    static std::vector<unsigned short> m_dim;
+    static const std::vector<unsigned short> m_dim;
     /// Equality constraints dimensions
-    static std::vector<unsigned short> m_nec;
+    static const std::vector<unsigned short> m_nec;
     /// Inequality constraints dimension
-    static std::vector<unsigned short> m_nic;
+    static const std::vector<unsigned short> m_nic;
     /// Bounds
-    static std::vector<std::pair<vector_double, vector_double>> m_bounds;
+    static const std::vector<std::pair<vector_double, vector_double>> m_bounds;
     /// Best solutions known
-    static std::vector<vector_double> m_best_known;
+    static const std::vector<vector_double> m_best_known;
     /// Pointers to the member functions to be used in fitness
-    static std::vector<func_ptr> m_o_ptr;
-    static std::vector<func_ptr> m_c_ptr;
+    static const std::vector<func_ptr> m_o_ptr;
+    static const std::vector<func_ptr> m_c_ptr;
 };
 
 template <typename T>
-std::vector<unsigned short> cec2006_statics<T>::m_dim
+const std::vector<unsigned short> cec2006_statics<T>::m_dim
     = {13, 20, 10, 5, 4, 2, 10, 2, 7, 8, 2, 3, 5, 10, 3, 5, 6, 9, 15, 24, 7, 22, 9, 2};
 
 template <typename T>
-std::vector<unsigned short> cec2006_statics<T>::m_nec
+const std::vector<unsigned short> cec2006_statics<T>::m_nec
     = {0, 0, 1, 0, 3, 0, 0, 0, 0, 0, 1, 0, 3, 3, 2, 0, 4, 0, 0, 14, 5, 19, 4, 0};
 
 template <typename T>
-std::vector<unsigned short> cec2006_statics<T>::m_nic
+const std::vector<unsigned short> cec2006_statics<T>::m_nic
     = {9, 2, 0, 6, 2, 2, 8, 2, 4, 6, 0, 1, 0, 0, 0, 38, 0, 13, 5, 6, 1, 1, 2, 2};
 
 template <typename T>
-std::vector<std::pair<vector_double, vector_double>> cec2006_statics<T>::m_bounds = {
+const std::vector<std::pair<vector_double, vector_double>> cec2006_statics<T>::m_bounds = {
 
     {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.}, {1., 1., 1., 1., 1., 1., 1., 1., 1., 100., 100., 100., 1.}},
     {{0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.},
@@ -115,7 +115,7 @@ std::vector<std::pair<vector_double, vector_double>> cec2006_statics<T>::m_bound
     {{0., 0.}, {3., 4.}}};
 
 template <typename T>
-std::vector<vector_double> cec2006_statics<T>::m_best_known = {
+const std::vector<vector_double> cec2006_statics<T>::m_best_known = {
     {1., 1., 1., 1., 1., 1., 1., 1., 1., 3., 3., 3., 1.},
     {3.16246061572185, 3.12833142812967, 3.09479212988791, 3.06145059523469, 3.02792915885555,
      2.99382606701730, 2.95866871765285, 2.92184227312450, 0.49482511456933, 0.48835711005490,
@@ -1137,14 +1137,14 @@ private:
     // LCOV_EXCL_STOP
 
     // problem id
-    unsigned int m_prob_id;
+    unsigned m_prob_id;
 };
 
 // Bunch of member function pointers as static member
 namespace detail
 {
 template <typename T>
-std::vector<typename cec2006_statics<T>::func_ptr> cec2006_statics<T>::m_o_ptr
+const std::vector<typename cec2006_statics<T>::func_ptr> cec2006_statics<T>::m_o_ptr
     = {&cec2006::g01_objfun_impl, &cec2006::g02_objfun_impl, &cec2006::g03_objfun_impl, &cec2006::g04_objfun_impl,
        &cec2006::g05_objfun_impl, &cec2006::g06_objfun_impl, &cec2006::g07_objfun_impl, &cec2006::g08_objfun_impl,
        &cec2006::g09_objfun_impl, &cec2006::g10_objfun_impl, &cec2006::g11_objfun_impl, &cec2006::g12_objfun_impl,
@@ -1153,7 +1153,7 @@ std::vector<typename cec2006_statics<T>::func_ptr> cec2006_statics<T>::m_o_ptr
        &cec2006::g21_objfun_impl, &cec2006::g22_objfun_impl, &cec2006::g23_objfun_impl, &cec2006::g24_objfun_impl};
 
 template <typename T>
-std::vector<typename cec2006_statics<T>::func_ptr> cec2006_statics<T>::m_c_ptr
+const std::vector<typename cec2006_statics<T>::func_ptr> cec2006_statics<T>::m_c_ptr
     = {&cec2006::g01_compute_constraints_impl, &cec2006::g02_compute_constraints_impl,
        &cec2006::g03_compute_constraints_impl, &cec2006::g04_compute_constraints_impl,
        &cec2006::g05_compute_constraints_impl, &cec2006::g06_compute_constraints_impl,
