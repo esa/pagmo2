@@ -32,7 +32,7 @@
 from __future__ import absolute_import as _ai
 
 import sys as _sys
-# The context manager functionality for the multiprocessing modules is
+# The context manager functionality for the multiprocessing module is
 # available since Python 3.4.
 _has_context = _sys.version_info[0] > 3 or (
     _sys.version_info[0] == 3 and _sys.version_info[1] >= 4)
