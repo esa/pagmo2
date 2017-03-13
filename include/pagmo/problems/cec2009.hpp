@@ -232,6 +232,7 @@ public:
                 }
             }
         }
+        return std::pair<vector_double, vector_double>(std::move(lb), std::move(ub));
     }
     /// Fitness computation
     /**
@@ -578,7 +579,7 @@ private:
         f[2] = -f[2]; // convert to g(x) <= 0 form
     }
 
-    void CF2(vector_double &f, const vector_double &x, double *c) const
+    void CF2(vector_double &f, const vector_double &x) const
     {
         double count1, count2;
         double sum1, sum2, yj, N, a, t;
@@ -606,7 +607,7 @@ private:
         f[2] = -f[2]; // convert to g(x) <= 0 form
     }
 
-    void CF3(vector_double &f, const vector_double &x, double *c) const
+    void CF3(vector_double &f, const vector_double &x) const
     {
         double count1, count2;
         double sum1, sum2, prod1, prod2, yj, pj, N, a;
@@ -637,9 +638,8 @@ private:
         f[2] = -f[2]; // convert to g(x) <= 0 form
     }
 
-    void CF4(vector_double &f, const vector_double &x, double *c) const
+    void CF4(vector_double &f, const vector_double &x) const
     {
-        unsigned int j;
         double sum1, sum2, yj, t;
 
         sum1 = sum2 = 0.0;
@@ -662,9 +662,8 @@ private:
         f[2] = -f[2]; // convert to g(x) <= 0 form
     }
 
-    void CF5(vector_double &f, const vector_double &x, double *c) const
+    void CF5(vector_double &f, const vector_double &x) const
     {
-        unsigned int j;
         double sum1, sum2, yj;
 
         sum1 = sum2 = 0.0;
@@ -685,12 +684,11 @@ private:
         // Inequality constraint
         f[2] = x[1] - 0.8 * x[0] * std::sin(6.0 * x[0] * detail::pi() + 2.0 * detail::pi() / (double)m_dim) - 0.5 * x[0]
                + 0.25;
-        f[2] = -c[2]; // convert to g(x) <= 0 form
+        f[2] = -f[2]; // convert to g(x) <= 0 form
     }
 
-    void CF6(vector_double &f, const vector_double &x, double *c) const
+    void CF6(vector_double &f, const vector_double &x) const
     {
-        unsigned int j;
         double sum1, sum2, yj;
 
         sum1 = sum2 = 0.0;
@@ -716,9 +714,8 @@ private:
         f[3] = -f[3];
     }
 
-    void CF7(vector_double &f, const vector_double &x, double *c) const
+    void CF7(vector_double &f, const vector_double &x) const
     {
-        unsigned int j;
         double sum1, sum2, yj;
 
         sum1 = sum2 = 0.0;
@@ -747,9 +744,9 @@ private:
         f[3] = -f[3];
     }
 
-    void CF8(vector_double &f, const vector_double &x, double *c) const
+    void CF8(vector_double &f, const vector_double &x) const
     {
-        unsigned int j, count1, count2, count3;
+        double count1, count2, count3;
         double sum1, sum2, sum3, yj, N, a;
         N = 2.0;
         a = 4.0;
@@ -778,9 +775,9 @@ private:
         f[3] = -f[3]; // convert to g(x) <= 0 form
     }
 
-    void CF9(vector_double &f, const vector_double &x, double *c) const
+    void CF9(vector_double &f, const vector_double &x) const
     {
-        unsigned int j, count1, count2, count3;
+        double count1, count2, count3;
         double sum1, sum2, sum3, yj, N, a;
         N = 2.0;
         a = 3.0;
@@ -809,9 +806,9 @@ private:
         f[3] = -f[3]; // convert to g(x) <= 0 form
     }
 
-    void CF10(vector_double &f, const vector_double &x, double *c) const
+    void CF10(vector_double &f, const vector_double &x) const
     {
-        unsigned int j, count1, count2, count3;
+        double count1, count2, count3;
         double sum1, sum2, sum3, yj, hj, N, a;
         N = 2.0;
         a = 1.0;
@@ -854,13 +851,13 @@ namespace detail
 {
 template <typename T>
 const std::vector<typename cec2009_statics<T>::func_ptr> cec2009_statics<T>::m_u_ptr
-    = {&cec2009::UF1, &cec2009::UF1, &cec2009::UF1, &cec2009::UF1, &cec2009::UF1,
-       &cec2009::UF1, &cec2009::UF1, &cec2009::UF1, &cec2009::UF1, &cec2009::UF1};
+    = {&cec2009::UF1, &cec2009::UF2, &cec2009::UF3, &cec2009::UF4, &cec2009::UF5,
+       &cec2009::UF6, &cec2009::UF7, &cec2009::UF8, &cec2009::UF9, &cec2009::UF10};
 
 template <typename T>
 const std::vector<typename cec2009_statics<T>::func_ptr> cec2009_statics<T>::m_c_ptr
-    = {&cec2009::CF1, &cec2009::CF1, &cec2009::CF1, &cec2009::CF1, &cec2009::CF1,
-       &cec2009::CF1, &cec2009::CF1, &cec2009::CF1, &cec2009::CF1, &cec2009::CF1};
+    = {&cec2009::CF1, &cec2009::CF2, &cec2009::CF3, &cec2009::CF4, &cec2009::CF5,
+       &cec2009::CF6, &cec2009::CF7, &cec2009::CF8, &cec2009::CF9, &cec2009::CF10};
 } // namespace detail
 } // namespace pagmo
 
