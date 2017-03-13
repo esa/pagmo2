@@ -35,9 +35,10 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/extract.hpp>
 #include <boost/python/handle.hpp>
 #include <boost/python/object.hpp>
+#include <boost/python/str.hpp>
 #include <cassert>
-#include <exception>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 
@@ -49,20 +50,6 @@ see https://www.gnu.org/licenses/. */
 
 #include "common_base.hpp"
 #include "common_utils.hpp"
-
-namespace pygmo
-{
-
-// This exception is used to transport a Python exception across threads. It contains
-// two BP objects, the type of the exception, and its value.
-struct transported_exception : std::exception {
-    transported_exception(const bp::object &tp, const bp::object &v) : type(tp), value(v)
-    {
-    }
-    mutable bp::object type;
-    mutable bp::object value;
-};
-}
 
 namespace pagmo
 {
@@ -149,11 +136,17 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
             // Python side, has no knowledge/information about the Python exception that originated all this, resulting
             // in an unhelpful error message by Boost Python.
             //
-            // What we do then is the following: we get the Python exception via PyErr_Fetch(), store it in an ad-hoc
-            // C++ exception, which will be thrown and then transferred by std::future to the thread that calls wait()
-            // on the future. In core.cpp, we register a BP exception translator for our ad-hoc exception, which
-            // will copy the exception back into the current thread and set the Python error flag.
+            // What we do then is the following: we get the Python exception via PyErr_Fetch(), store its data in an
+            // ad-hoc C++ exception, which will be thrown and then transferred by std::future to the thread that calls
+            // wait() on the future.
             // https://docs.python.org/3/c-api/exceptions.html
+            //
+            // NOTE: we used to have here a more sophisticated system that attempted to transport the exception
+            // information for Python into a C++ exception, that would then be translated back to a Python exception via
+            // a translator registered in core.cpp. However, managing the lifetime of the exception data turned out to
+            // be difficult, with either segfaults in certain situations or memory leaks (if the pointers are never
+            // freed). Maybe we can revisit this at one point in the future. The relevant code can be found at the git
+            // revision 13a2d254a62dee5d82858595f95babd145e91e94.
             //
             // NOTE: my understanding is that this assert should never fail, if we are handling a bp::error_already_set
             // exception it means a Python exception was generated. However, I have seen snippets of code on the
@@ -167,14 +160,15 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
             // This normalisation step is apparently needed because sometimes, for some Python-internal reasons,
             // the values returned by PyErr_Fetch() are “unnormalized” (see the Python documentation for this function).
             ::PyErr_NormalizeException(&type, &value, &traceback);
-            // Move it into bp::object. These are all new objects.
-            // NOTE: we dont' use the traceback anywhere, just wrap it into a BP object so that it will
-            // be cleaned up properly.
+            // Move them into bp::object, so that they are cleaned up at the end of the scope. These are all new
+            // objects.
             bp::object tp{bp::handle<>{type}}, v{bp::handle<>{value}}, tb{bp::handle<>{traceback}};
-            // transported_exception will either be used to set the a Python exception from another thread (see the
-            // translation bits in core.cpp) or it will be swallowed by the catch (...) in island::wait(). In any case,
-            // since we are using bp::objects to manage the data, everything should be cleaned up properly eventually.
-            throw pygmo::transported_exception(tp, v);
+            // Extract a string description of the exception using the "traceback" module.
+            const std::string tmp = bp::extract<std::string>(
+                bp::str("").attr("join")(bp::import("traceback").attr("format_exception")(tp, v, tb)));
+            // Throw the C++ exception.
+            throw std::runtime_error("The asynchronous evolution of a Pythonic island of type '" + get_name()
+                                     + "' raised an error:\n" + tmp);
         }
     }
     // Optional methods.

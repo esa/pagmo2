@@ -47,7 +47,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/enum.hpp>
 #include <boost/python/errors.hpp>
-#include <boost/python/exception_translator.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/import.hpp>
 #include <boost/python/init.hpp>
@@ -422,15 +421,6 @@ struct py_wait_locks {
     pygmo::gil_releaser gr;
 };
 
-// Exception translator for the transported_exception exception. This is an exception that is thrown
-// when wait()ing on pagmo::island when the internal UDI is Pythonic, and some kind of error occurred
-// during evolution. The exception object contains the Python exception (type and value) that was generated,
-// and the translation here will effectively throw the stored Python exception in the calling thread.
-static inline void translate_te(const pygmo::transported_exception &e)
-{
-    ::PyErr_SetObject(e.type.ptr(), e.value.ptr());
-}
-
 BOOST_PYTHON_MODULE(core)
 {
     // This function needs to be called before doing anything with threads.
@@ -487,9 +477,6 @@ BOOST_PYTHON_MODULE(core)
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
     // destroy at the end of island::wait().
     detail::wait_raii<>::getter = []() { return std::make_shared<py_wait_locks>(); };
-
-    // Register the translate for pygmo::transported_exception.
-    bp::register_exception_translator<pygmo::transported_exception>(&translate_te);
 
     // Setup doc options
     bp::docstring_options doc_options;

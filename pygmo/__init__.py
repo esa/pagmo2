@@ -35,6 +35,7 @@ from __future__ import absolute_import as _ai
 from .core import *
 from .plotting import *
 from .ipyparallel_island import ipyparallel_island
+from .mp_island import mp_island
 
 # And we explicitly import the submodules
 from . import core
