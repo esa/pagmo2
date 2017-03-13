@@ -30,8 +30,9 @@
 
 # for python 2.0 compatibility
 from __future__ import absolute_import as _ai
-
 import sys as _sys
+import threading as _thr
+
 # The context manager functionality for the multiprocessing module is
 # available since Python 3.4.
 _has_context = _sys.version_info[0] > 3 or (
@@ -39,8 +40,7 @@ _has_context = _sys.version_info[0] > 3 or (
 
 
 class _temp_disable_sigint(object):
-    # A small helper context class to disable CTRL+C while evolution
-    # is ongoing in a separate process.
+    # A small helper context class to disable CTRL+C temporarily.
 
     def __enter__(self):
         import signal
@@ -54,43 +54,49 @@ class _temp_disable_sigint(object):
         # Restore the previous sighandler.
         signal.signal(signal.SIGINT, self._prev_signal)
 
+_pool_lock = _thr.Lock()
+_pool = None
+_pool_size = None
 
-def _evolve_func(q, algo, pop):
+
+def _evolve_func(algo, pop):
     # The evolve function that is actually run from the separate processes.
-    with _temp_disable_sigint():
-        try:
-            newpop = algo.evolve(pop)
-            q.put(newpop)
-        except BaseException as e:
-            q.put(e)
+    return algo.evolve(pop)
 
 
 class mp_island(object):
 
-    def __init__(self, method=None):
+    def __init__(self, method=None, processes=None):
+        import multiprocessing as mp
         if not _has_context and method is not None:
             raise ValueError(
                 'the "method" parameter must be None in Python < 3.4')
         if method is not None and not isinstance(method, str):
             raise TypeError(
                 'the "method" parameter must be either None or a string')
-        self._method = method
+        # TODO check processes.
+        global _pool, _pool_size
+
+        def create_pool():
+            with _temp_disable_sigint():
+                if _has_context:
+                    ctx = mp.get_context(method)
+                    _pool = ctx.Pool(processes)
+                else:
+                    _pool = mp.Pool(processes)
+            _pool_size = processes
+        with _pool_lock:
+            if _pool is None:
+                create_pool()
+            elif processes != _pool_size:
+                _pool.close()
+                _pool.join()
+                create_pool()
 
     def run_evolve(self, algo, pop):
-        import multiprocessing as mp
-        if _has_context:
-            ctx = mp.get_context(self._method)
-            q = ctx.Queue()
-            p = ctx.Process(target=_evolve_func, args=(q, algo, pop))
-        else:
-            q = mp.Queue()
-            p = mp.Process(target=_evolve_func, args=(q, algo, pop))
-        p.start()
-        retval = q.get()
-        p.join()
-        if isinstance(retval, BaseException):
-            raise retval
-        return retval
+        with _pool_lock:
+            res = _pool.apply_async(_evolve_func, (algo, pop))
+        return res.get()
 
     def get_name(self):
         return "Multiprocessing island"
