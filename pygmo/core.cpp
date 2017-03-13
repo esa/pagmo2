@@ -468,8 +468,14 @@ BOOST_PYTHON_MODULE(core)
             // of code normally would provide a basic thread safety guarantee, and in order to continue providing
             // it we use the ensurer.
             pygmo::gil_thread_ensurer gte;
-            bp::object ipyparallel_island = bp::import("pygmo").attr("ipyparallel_island");
-            ptr = detail::make_unique<detail::isl_inner<bp::object>>(ipyparallel_island());
+            bp::object py_island = bp::import("pygmo")
+#if PY_MAJOR_VERSION < 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION < 4)
+                                       // NOTE: the mp_island is supported since Python 3.4.
+                                       .attr("ipyparallel_island");
+#else
+                                       .attr("mp_island");
+#endif
+            ptr = detail::make_unique<detail::isl_inner<bp::object>>(py_island());
         }
     };
 
@@ -1089,10 +1095,7 @@ BOOST_PYTHON_MODULE(core)
     pygmo::island_ptr = detail::make_unique<bp::class_<island>>("island", bp::init<>());
     auto &island_class = *pygmo::island_ptr;
     island_class.def(bp::init<const algorithm &, const population &>())
-        .def(bp::init<const bp::object &, const algorithm &, const problem &, population::size_type>())
-        .def(bp::init<const bp::object &, const algorithm &, const problem &, population::size_type, unsigned>())
-        .def(bp::init<const algorithm &, const problem &, population::size_type>())
-        .def(bp::init<const algorithm &, const problem &, population::size_type, unsigned>())
+        .def(bp::init<const bp::object &, const algorithm &, const population &>())
         .def(repr(bp::self))
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<island>)

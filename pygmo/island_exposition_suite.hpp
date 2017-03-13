@@ -35,7 +35,9 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/init.hpp>
 #include <boost/python/scope.hpp>
 #include <cassert>
+
 #include <pagmo/algorithm.hpp>
+#include <pagmo/population.hpp>
 
 #include "pygmo_classes.hpp"
 
@@ -50,10 +52,7 @@ inline void island_expose_init_cpp_udi()
 {
     assert(island_ptr.get() != nullptr);
     auto &isl_class = *island_ptr;
-    isl_class.def(
-        bp::init<const Isl &, const pagmo::algorithm &, const pagmo::problem &, pagmo::population::size_type>());
-    isl_class.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::problem &, pagmo::population::size_type,
-                           unsigned>());
+    isl_class.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
 }
 
 // Main island exposition function.

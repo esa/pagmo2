@@ -120,64 +120,65 @@ __original_island_init = island.__init__
 def _island_init(self, **kwargs):
     """
     Keyword Args:
-        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.core.algorithm`
-        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
         udi: a user-defined island (either Python or C++)
+        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.core.algorithm`
+        pop (:class:`~pygmo.core.population`): a population
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
         size (``int``): the number of individuals
         seed (``int``): the random seed (if not specified, it will be randomly-generated)
 
     Raises:
-        TypeError: if *size* is not an ``int`` or *seed* is not an ``int``
-        ValueError: if the number of keyword arguments is not one of [0, 2, 3, 4]
-        KeyError: if the names of the keyword arguments are not consistent with the number of keyword arguments
-        OverflowError:  is *size* or *seed* are negative
-        unspecified: any exception thrown by the invoked C++ constructors or by the constructors of
-            :class:`~pygmo.core.problem` and :class:`~pygmo.core.algorithm`, or by failures at the intersection
-            between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+        KeyError: if the set of keyword arguments is invalid
+        unspecified: any exception thrown by:
+
+          * the invoked C++ constructors,
+          * the constructors of :class:`~pygmo.core.algorithm` and :class:`~pygmo.core.population`,
+          * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+            signatures, etc.)
 
     """
-    import sys
-    int_types = (int, long) if sys.version_info[0] < 3 else (int,)
     if len(kwargs) == 0:
+        # Default constructor.
         __original_island_init(self)
-    elif len(kwargs) in [2, 3, 4]:
-        if not "algo" in kwargs:
-            raise KeyError(
-                "the mandatory 'algo' parameter is missing from the list of arguments "
-                "of the island constructor")
-        algo = kwargs.pop("algo")
-        algo = algo if type(algo) == algorithm else algorithm(algo)
-        if len(kwargs) == 1:
-            if not "udi" in kwargs:
-                raise KeyError(
-                    "the 'udi' parameter is missing from the 2-arguments "
-                    "form of the island constructor. The argument '{}' "
-                    "is present instead".format(list(kwargs.keys())[0]))
-            __original_island_init(self, algo, kwargs.pop("udi"))
-        else:
-            keys = sorted(kwargs.keys())
-            if keys != ["prob", "seed", "size"] and keys != ["prob", "size"]:
-                raise KeyError("one or more parameters are missing from the 3/4-arguments "
-                               "form of the island constructor. The 'prob' and 'size' arguments are "
-                               "mandatory, the 'seed' argument is optional")
-            prob = kwargs.pop("prob")
-            prob = prob if type(prob) == problem else problem(prob)
-            size = kwargs.pop("size")
-            if not isinstance(size, int_types):
-                raise TypeError("the 'size' parameter must be an integer")
-            if len(kwargs) == 0:
-                __original_island_init(self, algo, prob, size)
-            else:
-                seed = kwargs.pop("seed")
-                if not isinstance(seed, int_types):
-                    raise TypeError("the 'seed' parameter must be an integer")
-                __original_island_init(self, algo, prob, size, seed)
-    else:
-        raise ValueError(
-            "the number of keyword arguments for the island constructor must be "
-            "either 0, 2, 3 or 4, but {} arguments were passed instead".format(len(kwargs)))
+        return
 
-#setattr(island, "__init__", _island_init)
+    # If we are not dealing with a def ctor, we always need the algo argument.
+    if not "algo" in kwargs:
+        raise KeyError(
+            "the mandatory 'algo' parameter is missing from the list of arguments "
+            "of the island constructor")
+    algo = kwargs.pop('algo')
+    algo = algo if isinstance(algo, algorithm) else algorithm(algo)
+
+    # Population setup. We either need an input pop, or the prob and size,
+    # plus optionally seed.
+    if 'pop' in kwargs and ('prob' in kwargs or 'size' in kwargs or 'seed' in kwargs):
+        raise KeyError(
+            "if the 'pop' argument is provided, the 'prob', 'size' and 'seed' "
+            "arguments must not be provided")
+    elif 'pop' in kwargs:
+        pop = kwargs.pop("pop")
+    elif 'prob' in kwargs and 'size' in kwargs:
+        if 'seed' in kwargs:
+            pop = population(kwargs.pop('prob'), kwargs.pop(
+                'size'), kwargs.pop('seed'))
+        else:
+            pop = population(kwargs.pop('prob'), kwargs.pop('size'))
+    else:
+        raise KeyError(
+            "unable to construct a population from the arguments of "
+            "the island constructor: you must either pass a population "
+            "('pop') or a set of arguments that can be used to build one "
+            "('prob', 'size' and, optionally, 'seed')")
+
+    # UDI, if any.
+    if 'udi' in kwargs:
+        __original_island_init(self, kwargs.pop('udi'), algo, pop)
+    else:
+        __original_island_init(self, algo, pop)
+
+
+setattr(island, "__init__", _island_init)
 
 # Register the cleanup function.
 import atexit as _atexit
