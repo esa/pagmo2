@@ -305,7 +305,7 @@ private:
         for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
             yj = x[j - 1] - std::sin(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
             yj = yj * yj;
-            if (j % 2 == 0) {
+            if (j % 2 == 0u) {
                 sum2 += yj;
                 count2++;
             } else {
@@ -324,8 +324,8 @@ private:
 
         sum1 = sum2 = 0.0;
         count1 = count2 = 0;
-        for (decltype(m_dim) j = 2; j <= m_dim; ++j) {
-            if (j % 2 == 0) {
+        for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
+            if (j % 2 == 0u) {
                 yj = x[j - 1]
                      - 0.3 * x[0]
                            * (x[0] * std::cos(24.0 * detail::pi() * x[0] + 4.0 * j * detail::pi() / (double)m_dim)
@@ -355,10 +355,10 @@ private:
         sum1 = sum2 = 0.0;
         count1 = count2 = 0;
         prod1 = prod2 = 1.0;
-        for (decltype(m_dim) j = 2; j <= m_dim; ++j) {
+        for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
             yj = x[j - 1] - std::pow(x[0], 0.5 * (1.0 + 3.0 * (j - 2.0) / ((double)m_dim - 2.0)));
             pj = std::cos(20.0 * yj * detail::pi() / std::sqrt(j + 0.0));
-            if (j % 2 == 0) {
+            if (j % 2 == 0u) {
                 sum2 += yj * yj;
                 prod2 *= pj;
                 count2++;
@@ -379,10 +379,10 @@ private:
 
         sum1 = sum2 = 0.0;
         count1 = count2 = 0;
-        for (decltype(m_dim) j = 2; j <= m_dim; ++j) {
+        for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
             yj = x[j - 1] - std::sin(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
             hj = std::abs(yj) / (1.0 + std::exp(2.0 * std::abs(yj)));
-            if (j % 2 == 0) {
+            if (j % 2 == 0u) {
                 sum2 += hj;
                 count2++;
             } else {
@@ -403,10 +403,10 @@ private:
         count1 = count2 = 0;
         N = 10.0;
         E = 0.1;
-        for (decltype(m_dim) j = 2; j <= m_dim; ++j) {
+        for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
             yj = x[j - 1] - std::sin(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
             hj = 2.0 * yj * yj - std::cos(4.0 * detail::pi() * yj) + 1.0;
-            if (j % 2 == 0) {
+            if (j % 2 == 0u) {
                 sum2 += hj;
                 count2++;
             } else {
@@ -429,10 +429,10 @@ private:
         sum1 = sum2 = 0.0;
         count1 = count2 = 0;
         prod1 = prod2 = 1.0;
-        for (decltype(m_dim) j = 2; j <= m_dim; ++j) {
+        for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
             yj = x[j - 1] - std::sin(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
             pj = std::cos(20.0 * yj * detail::pi() / std::sqrt(j + 0.0));
-            if (j % 2 == 0) {
+            if (j % 2 == 0u) {
                 sum2 += yj * yj;
                 prod2 *= pj;
                 count2++;
@@ -458,7 +458,7 @@ private:
         count1 = count2 = 0;
         for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
             yj = x[j - 1] - std::sin(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
-            if (j % 2 == 0) {
+            if (j % 2 == 0u) {
                 sum2 += yj * yj;
                 count2++;
             } else {
@@ -483,7 +483,7 @@ private:
             if (j % 3 == 1u) {
                 sum1 += yj * yj;
                 count1++;
-            } else if (j % 3 == 2) {
+            } else if (j % 3 == 2u) {
                 sum2 += yj * yj;
                 count2++;
             } else {
@@ -509,7 +509,7 @@ private:
             if (j % 3 == 1u) {
                 sum1 += yj * yj;
                 count1++;
-            } else if (j % 3 == 2) {
+            } else if (j % 3 == 2u) {
                 sum2 += yj * yj;
                 count2++;
             } else {
@@ -534,10 +534,10 @@ private:
         for (decltype(m_dim) j = 3u; j <= m_dim; ++j) {
             yj = x[j - 1] - 2.0 * x[1] * std::sin(2.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
             hj = 4.0 * yj * yj - std::cos(8.0 * detail::pi() * yj) + 1.0;
-            if (j % 3 == 1) {
+            if (j % 3 == 1u) {
                 sum1 += hj;
                 count1++;
-            } else if (j % 3 == 2) {
+            } else if (j % 3 == 2u) {
                 sum2 += hj;
                 count2++;
             } else {
@@ -564,7 +564,7 @@ private:
         count1 = count2 = 0;
         for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
             yj = x[j - 1] - std::pow(x[0], 0.5 * (1.0 + 3.0 * (j - 2.0) / ((double)m_dim - 2.0)));
-            if (j % 2 == 1) {
+            if (j % 2 == 1u) {
                 sum1 += yj * yj;
                 count1++;
             } else {
@@ -620,7 +620,7 @@ private:
         for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
             yj = x[j - 1] - std::sin(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
             pj = std::cos(20.0 * yj * detail::pi() / std::sqrt(j + 0.0));
-            if (j % 2 == 0) {
+            if (j % 2 == 0u) {
                 sum2 += yj * yj;
                 prod2 *= pj;
                 count2++;
@@ -645,10 +645,10 @@ private:
         sum1 = sum2 = 0.0;
         for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
             yj = x[j - 1] - std::sin(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
-            if (j % 2 == 1) {
+            if (j % 2 == 1u) {
                 sum1 += yj * yj;
             } else {
-                if (j == 2)
+                if (j == 2u)
                     sum2 += yj < 1.5 - 0.75 * std::sqrt(2.0) ? std::abs(yj) : (0.125 + (yj - 1) * (yj - 1));
                 else
                     sum2 += yj * yj;
@@ -668,12 +668,12 @@ private:
 
         sum1 = sum2 = 0.0;
         for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
-            if (j % 2 == 1) {
+            if (j % 2 == 1u) {
                 yj = x[j - 1] - 0.8 * x[0] * std::cos(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
                 sum1 += 2.0 * yj * yj - std::cos(4.0 * detail::pi() * yj) + 1.0;
             } else {
                 yj = x[j - 1] - 0.8 * x[0] * std::sin(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
-                if (j == 2)
+                if (j == 2u)
                     sum2 += yj < 1.5 - 0.75 * std::sqrt(2.0) ? std::abs(yj) : (0.125 + (yj - 1) * (yj - 1));
                 else
                     sum2 += 2.0 * yj * yj - std::cos(4.0 * detail::pi() * yj) + 1.0;
@@ -693,7 +693,7 @@ private:
 
         sum1 = sum2 = 0.0;
         for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
-            if (j % 2 == 1) {
+            if (j % 2 == 1u) {
                 yj = x[j - 1] - 0.8 * x[0] * std::cos(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
                 sum1 += yj * yj;
             } else {
@@ -720,12 +720,12 @@ private:
 
         sum1 = sum2 = 0.0;
         for (decltype(m_dim) j = 2u; j <= m_dim; ++j) {
-            if (j % 2 == 1) {
+            if (j % 2 == 1u) {
                 yj = x[j - 1] - std::cos(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
                 sum1 += 2.0 * yj * yj - std::cos(4.0 * detail::pi() * yj) + 1.0;
             } else {
                 yj = x[j - 1] - std::sin(6.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
-                if (j == 2 || j == 4)
+                if (j == 2u || j == 4u)
                     sum2 += yj * yj;
                 else
                     sum2 += 2.0 * yj * yj - std::cos(4.0 * detail::pi() * yj) + 1.0;
@@ -755,10 +755,10 @@ private:
         count1 = count2 = count3 = 0;
         for (decltype(m_dim) j = 3u; j <= m_dim; ++j) {
             yj = x[j - 1] - 2.0 * x[1] * std::sin(2.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
-            if (j % 3 == 1) {
+            if (j % 3 == 1u) {
                 sum1 += yj * yj;
                 count1++;
-            } else if (j % 3 == 2) {
+            } else if (j % 3 == 2u) {
                 sum2 += yj * yj;
                 count2++;
             } else {
@@ -786,10 +786,10 @@ private:
         count1 = count2 = count3 = 0;
         for (decltype(m_dim) j = 3u; j <= m_dim; ++j) {
             yj = x[j - 1] - 2.0 * x[1] * std::sin(2.0 * detail::pi() * x[0] + j * detail::pi() / (double)m_dim);
-            if (j % 3 == 1) {
+            if (j % 3 == 1u) {
                 sum1 += yj * yj;
                 count1++;
-            } else if (j % 3 == 2) {
+            } else if (j % 3 == 2u) {
                 sum2 += yj * yj;
                 count2++;
             } else {
