@@ -109,7 +109,7 @@ public:
     cec2009(unsigned prob_id = 1u, bool is_constrained = false, unsigned dim = 30u)
         : m_prob_id(prob_id), m_is_constrained(is_constrained), m_dim(dim)
     {
-        if (prob_id < 1u || prob_id > 20u) {
+        if (prob_id < 1u || prob_id > 10u) {
             pagmo_throw(std::invalid_argument,
                         "Error: CEC2009 Test functions are only defined for prob_id in [1, 20], a prob_id of "
                             + std::to_string(prob_id) + " was requested.");
@@ -286,7 +286,8 @@ private:
     // Pointers to member functions are used
     vector_double fitness_impl(func_ptr f, const vector_double &x) const
     {
-        vector_double retval(m_nic[m_prob_id - 1u] + m_nobj[m_prob_id - 1u], 0.);
+        auto nic = m_is_constrained ? m_nic[m_prob_id - 1u] : 0u;
+        vector_double retval(nic + m_nobj[m_prob_id - 1u], 0.);
         // Syntax is ugly as these are member function pointers.
         ((*this).*(f))(retval, x); // calls f
         return retval;

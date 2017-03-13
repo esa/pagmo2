@@ -26,7 +26,7 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE cec2006_test
+#define BOOST_TEST_MODULE cec2009_test
 #include <boost/test/included/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
@@ -45,8 +45,13 @@ using statics = detail::cec2009_statics<>;
 BOOST_AUTO_TEST_CASE(cec2009_construction_test)
 {
     // We check that all problems can be constructed
-    for (unsigned i = 1u; i <= 20u; ++i) {
-        cec2009 udp{i};
+    for (unsigned i = 1u; i <= 10u; ++i) {
+        cec2009 udp{i, false};
+        print(udp.fitness(vector_double(30, 0.5)), "\n");
+    }
+    for (unsigned i = 1u; i <= 10u; ++i) {
+        cec2009 udp{i, true};
+        print(udp.fitness(vector_double(30, 0.5)), "\n");
     }
     // We check that wrong problem ids and dimensions cannot be constructed
     // BOOST_CHECK_THROW((cec2006{0u}), std::invalid_argument);
