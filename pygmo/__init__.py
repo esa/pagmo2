@@ -34,8 +34,7 @@ from __future__ import absolute_import as _ai
 # We import the sub-modules into the root namespace
 from .core import *
 from .plotting import *
-from .ipyparallel_island import ipyparallel_island
-from .mp_island import mp_island
+from .py_islands import *
 
 # And we explicitly import the submodules
 from . import core
@@ -182,5 +181,12 @@ def _island_init(self, **kwargs):
 
 # Register the cleanup function.
 import atexit as _atexit
-from .core import _cleanup
-_atexit.register(lambda: _cleanup())
+from .core import _cleanup as _cpp_cleanup
+
+
+def _cleanup():
+    mp_island._shutdown_pool()
+    _cpp_cleanup()
+
+
+_atexit.register(_cleanup)
