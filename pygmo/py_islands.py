@@ -32,7 +32,6 @@
 from __future__ import absolute_import as _ai
 
 from threading import Lock as _Lock
-from ipyparallel import Client as _Client, use_dill as _use_dill
 
 
 def _evolve_func(algo, pop):
@@ -134,8 +133,13 @@ class mp_island(object):
                 mp_island._pool.close()
                 mp_island._pool.join()
 
-# Make sure we use dill for serialization.
-_use_dill()
+
+# Make sure we use dill for serialization, if ipyparallel is available.
+try:
+    from ipyparallel import use_dill as _use_dill
+    _use_dill()
+except ImportError:
+    pass
 
 
 # NOTE: the idea here is that we don't want to create a new client for
@@ -163,6 +167,7 @@ def _hashable(v):
 class ipyparallel_island(object):
 
     def __init__(self, *args, **kwargs):
+        from ipyparallel import Client
         # Turn the arguments into something that might be hashable.
         args_key = (args, tuple(sorted([(k, kwargs[k]) for k in kwargs])))
         if _hashable(args_key):
@@ -170,12 +175,12 @@ class ipyparallel_island(object):
                 if args_key in _client_cache:
                     self._rc = _client_cache[args_key]
                 else:
-                    _client_cache[args_key] = _Client(*args, **kwargs)
+                    _client_cache[args_key] = Client(*args, **kwargs)
                     self._rc = _client_cache[args_key]
         else:
             # If the arguments are not hashable, just create a brand new
             # client.
-            self._rc = _Client(*args, **kwargs)
+            self._rc = Client(*args, **kwargs)
 
         # Init the load balanced view.
         self._lview = self._rc.load_balanced_view()
