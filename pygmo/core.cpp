@@ -90,6 +90,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/cec2013.hpp>
 #endif
 #include <pagmo/problems/cec2006.hpp>
+#include <pagmo/problems/cec2009.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/griewank.hpp>
@@ -804,6 +805,11 @@ BOOST_PYTHON_MODULE(core)
     cec2006_.def(bp::init<unsigned>((bp::arg("prob_id") = 1)));
     cec2006_.def("best_known", &pygmo::best_known_wrapper<cec2006>,
                  pygmo::problem_get_best_docstring("CEC 2006").c_str());
+
+    // CEC 2009
+    auto cec2009_ = pygmo::expose_problem<cec2009>("cec2009", pygmo::cec2009_docstring().c_str());
+    cec2009_.def(bp::init<unsigned, bool, unsigned>(
+        (bp::arg("prob_id") = 1u, bp::arg("is_constrained") = false, bp::arg("dim") = 30u)));
 
     // MBH meta-algo.
     pygmo::expose_meta_algorithm(std::get<0>(pygmo::meta_algos_ptrs), "mbh", pygmo::mbh_docstring().c_str());
