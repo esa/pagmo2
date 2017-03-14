@@ -40,8 +40,6 @@ see https://www.gnu.org/licenses/. */
 #include "../problem.hpp" // needed for cereal registration macro
 #include "../types.hpp"
 
-#define MYSIGN(x) ((x) > 0 ? 1.0 : -1.0)
-
 namespace pagmo
 {
 // forward declearing the class to allow the following definition of pointers to its methods
@@ -236,7 +234,7 @@ public:
                 }
             }
         }
-        return std::pair<vector_double, vector_double>(std::move(lb), std::move(ub));
+        return std::make_pair(std::move(lb), std::move(ub));
     }
     /// Fitness computation
     /**
@@ -296,6 +294,12 @@ private:
         ((*this).*(f))(retval, x); // calls f
         return retval;
     }
+
+    static double sgn(double val)
+    {
+        return ((val) > 0 ? 1.0 : -1.0);
+    }
+
     // For the coverage analysis we do not cover the code below as its derived from a third party source
     // LCOV_EXCL_START
 
@@ -608,7 +612,7 @@ private:
         f[1] = 1.0 - std::sqrt(x[0]) + 2.0 * sum2 / count2;
         // Inequality constraint
         t = f[1] + std::sqrt(f[0]) - a * std::sin(N * detail::pi() * (sqrt(f[0]) - f[1] + 1.0)) - 1.0;
-        f[2] = MYSIGN(t) * std::abs(t) / (1 + std::exp(4.0 * std::abs(t)));
+        f[2] = sgn(t) * std::abs(t) / (1 + std::exp(4.0 * std::abs(t)));
         f[2] = -f[2]; // convert to g(x) <= 0 form
     }
 
@@ -663,7 +667,7 @@ private:
         f[1] = 1.0 - x[0] + sum2;
         // Inequality constraint
         t = x[1] - std::sin(6.0 * x[0] * detail::pi() + 2.0 * detail::pi() / (double)m_dim) - 0.5 * x[0] + 0.25;
-        f[2] = MYSIGN(t) * std::abs(t) / (1 + std::exp(4.0 * std::abs(t)));
+        f[2] = sgn(t) * std::abs(t) / (1 + std::exp(4.0 * std::abs(t)));
         f[2] = -f[2]; // convert to g(x) <= 0 form
     }
 
@@ -710,9 +714,9 @@ private:
         f[1] = (1.0 - x[0]) * (1.0 - x[0]) + sum2;
         // Inequality constraint
         f[2] = x[1] - 0.8 * x[0] * std::sin(6.0 * x[0] * detail::pi() + 2.0 * detail::pi() / (double)m_dim)
-               - MYSIGN((x[0] - 0.5) * (1.0 - x[0])) * std::sqrt(fabs((x[0] - 0.5) * (1.0 - x[0])));
+               - sgn((x[0] - 0.5) * (1.0 - x[0])) * std::sqrt(fabs((x[0] - 0.5) * (1.0 - x[0])));
         f[3] = x[3] - 0.8 * x[0] * std::sin(6.0 * x[0] * detail::pi() + 4.0 * detail::pi() / (double)m_dim)
-               - MYSIGN(0.25 * std::sqrt(1 - x[0]) - 0.5 * (1.0 - x[0]))
+               - sgn(0.25 * std::sqrt(1 - x[0]) - 0.5 * (1.0 - x[0]))
                      * std::sqrt(fabs(0.25 * std::sqrt(1 - x[0]) - 0.5 * (1.0 - x[0])));
         // convert to g(x) <= 0 form
         f[2] = -f[2];
@@ -740,9 +744,9 @@ private:
         f[1] = (1.0 - x[0]) * (1.0 - x[0]) + sum2;
         // Inequality constraint
         f[2] = x[1] - std::sin(6.0 * x[0] * detail::pi() + 2.0 * detail::pi() / (double)m_dim)
-               - MYSIGN((x[0] - 0.5) * (1.0 - x[0])) * std::sqrt(fabs((x[0] - 0.5) * (1.0 - x[0])));
+               - sgn((x[0] - 0.5) * (1.0 - x[0])) * std::sqrt(fabs((x[0] - 0.5) * (1.0 - x[0])));
         f[3] = x[3] - std::sin(6.0 * x[0] * detail::pi() + 4.0 * detail::pi() / (double)m_dim)
-               - MYSIGN(0.25 * std::sqrt(1 - x[0]) - 0.5 * (1.0 - x[0]))
+               - sgn(0.25 * std::sqrt(1 - x[0]) - 0.5 * (1.0 - x[0]))
                      * std::sqrt(fabs(0.25 * std::sqrt(1 - x[0]) - 0.5 * (1.0 - x[0])));
         // convert to g(x) <= 0 form
         f[2] = -f[2];
@@ -866,7 +870,7 @@ const std::vector<typename cec2009_statics<T>::func_ptr> cec2009_statics<T>::m_c
 } // namespace detail
 } // namespace pagmo
 
-#undef MYSIGN
+#undef sgn
 
 PAGMO_REGISTER_PROBLEM(pagmo::cec2009)
 

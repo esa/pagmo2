@@ -1,0 +1,5 @@
+CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)
+=======================================================================
+
+.. doxygenclass:: pagmo::cec2009
+   :members:
