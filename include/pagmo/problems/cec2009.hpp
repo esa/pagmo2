@@ -129,7 +129,11 @@ public:
      */
     vector_double::size_type get_nic() const
     {
-        return m_nic[m_prob_id - 1u];
+        if (m_is_constrained) {
+            return m_nic[m_prob_id - 1u];
+        } else {
+            return 0u;
+        }
     }
     /// Number of objectives
     /**
@@ -834,7 +838,7 @@ private:
         f[1] = std::cos(0.5 * detail::pi() * x[0]) * std::sin(0.5 * detail::pi() * x[1]) + 2.0 * sum2 / count2;
         f[2] = std::sin(0.5 * detail::pi() * x[0]) + 2.0 * sum3 / count3;
         // Inequality constraint
-        f[3] = (f[3] * f[0] + f[1] * f[1]) / (1 - f[2] * f[2])
+        f[3] = (f[0] * f[0] + f[1] * f[1]) / (1 - f[2] * f[2])
                - a * std::sin(N * detail::pi() * ((f[0] * f[0] - f[1] * f[1]) / (1 - f[2] * f[2]) + 1.0)) - 1.0;
         f[3] = -f[3]; // convert to g(x) <= 0 form
     }
