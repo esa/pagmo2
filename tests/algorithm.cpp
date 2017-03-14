@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #define BOOST_TEST_MODULE algorithm_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -5,14 +33,17 @@
 #include <exception>
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/algorithms/de.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -79,11 +110,49 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_test)
     // And in the minimal case
     BOOST_CHECK(algo_minimal.has_set_seed() == false);
     BOOST_CHECK(algo_minimal.has_set_verbosity() == false);
-    BOOST_CHECK_THROW(algo_minimal.set_seed(1u), std::logic_error);
-    BOOST_CHECK_THROW(algo_minimal.set_verbosity(1u), std::logic_error);
+    BOOST_CHECK_THROW(algo_minimal.set_seed(1u), not_implemented_error);
+    BOOST_CHECK_THROW(algo_minimal.set_verbosity(1u), not_implemented_error);
     // We check that at construction the name has been assigned
     BOOST_CHECK(algo_full.get_name() == "name");
     BOOST_CHECK(algo_minimal.get_name().find("al_02") != std::string::npos);
+    // Default constructor.
+    algorithm a0;
+    BOOST_CHECK((a0.extract<null_algorithm>() != nullptr));
+    // Check copy semantics.
+    algorithm a1{a0};
+    BOOST_CHECK((a0.extract<null_algorithm>() != nullptr));
+    BOOST_CHECK((a1.extract<null_algorithm>() != nullptr));
+    algorithm a2{al_01{}};
+    a2 = a1;
+    BOOST_CHECK((a2.extract<null_algorithm>() != nullptr));
+    BOOST_CHECK((a1.extract<null_algorithm>() != nullptr));
+    // Move semantics.
+    algorithm a3{std::move(a0)};
+    BOOST_CHECK((a3.extract<null_algorithm>() != nullptr));
+    algorithm a4{al_01{}};
+    a4 = std::move(a2);
+    BOOST_CHECK((a4.extract<null_algorithm>() != nullptr));
+    // Check we can revive moved-from objects.
+    a0 = a4;
+    BOOST_CHECK((a0.extract<null_algorithm>() != nullptr));
+    a2 = std::move(a4);
+    BOOST_CHECK((a2.extract<null_algorithm>() != nullptr));
+
+    // Check the is_uda type trait.
+    BOOST_CHECK(is_uda<al_01>::value);
+    BOOST_CHECK(is_uda<null_algorithm>::value);
+    BOOST_CHECK(!is_uda<al_01 &>::value);
+    BOOST_CHECK(!is_uda<const al_01>::value);
+    BOOST_CHECK(!is_uda<int>::value);
+    BOOST_CHECK(!is_uda<void>::value);
+    BOOST_CHECK(!is_uda<std::string>::value);
+    BOOST_CHECK((std::is_constructible<algorithm, al_01>::value));
+    BOOST_CHECK((std::is_constructible<algorithm, null_algorithm>::value));
+    BOOST_CHECK((std::is_constructible<algorithm, al_01 &>::value));
+    BOOST_CHECK((std::is_constructible<algorithm, const null_algorithm &>::value));
+    BOOST_CHECK((std::is_constructible<algorithm, al_01 &&>::value));
+    BOOST_CHECK((!std::is_constructible<algorithm, int>::value));
+    BOOST_CHECK((!std::is_constructible<algorithm, std::string>::value));
 }
 
 BOOST_AUTO_TEST_CASE(algorithm_copy_constructor_test)
@@ -318,4 +387,82 @@ BOOST_AUTO_TEST_CASE(algorithm_serialization_test)
     // Check explicitly that the properties of base_p where restored as well.
     BOOST_CHECK_EQUAL(algo.extract<al_01>()->m_seed, algo2.extract<al_01>()->m_seed);
     BOOST_CHECK_EQUAL(algo.extract<al_01>()->m_verbosity, algo2.extract<al_01>()->m_verbosity);
+}
+
+BOOST_AUTO_TEST_CASE(null_algorithm_construction_and_evolve)
+{
+    // Trivial checks
+    null_algorithm user_algo{};
+    // Evolve check (population does not change)
+    rosenbrock user_prob{};
+    population pop(user_prob, 20u);
+    auto evolved_pop = user_algo.evolve(pop);
+    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+        BOOST_CHECK(pop.get_x()[i] == evolved_pop.get_x()[i]);
+        BOOST_CHECK(pop.get_f()[i] == evolved_pop.get_f()[i]);
+        BOOST_CHECK(pop.get_ID()[i] == evolved_pop.get_ID()[i]);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(serialization_test)
+{
+    algorithm algo{null_algorithm{}};
+    std::stringstream ss;
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(algo);
+    }
+    algo = algorithm{de{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(algo);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(extract_test)
+{
+    algorithm p{null_algorithm{}};
+    BOOST_CHECK(p.is<null_algorithm>());
+    BOOST_CHECK((std::is_same<null_algorithm *, decltype(p.extract<null_algorithm>())>::value));
+    BOOST_CHECK((std::is_same<null_algorithm const *,
+                              decltype(static_cast<const algorithm &>(p).extract<null_algorithm>())>::value));
+    BOOST_CHECK(p.extract<null_algorithm>() != nullptr);
+    BOOST_CHECK(static_cast<const algorithm &>(p).extract<null_algorithm>() != nullptr);
+}
+
+struct ts1 {
+    population evolve(const population &) const
+    {
+        return population{};
+    }
+};
+
+struct ts2 {
+    population evolve(const population &) const
+    {
+        return population{};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+struct ts3 {
+    population evolve(const population &) const
+    {
+        return population{};
+    }
+    int get_thread_safety() const
+    {
+        return 2;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(thread_safety_test)
+{
+    BOOST_CHECK(algorithm{null_algorithm{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(algorithm{ts1{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(algorithm{ts2{}}.get_thread_safety() == thread_safety::none);
+    BOOST_CHECK(algorithm{ts3{}}.get_thread_safety() == thread_safety::basic);
 }

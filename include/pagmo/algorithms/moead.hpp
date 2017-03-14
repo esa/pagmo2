@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_ALGORITHMS_MOEAD_HPP
 #define PAGMO_ALGORITHMS_MOEAD_HPP
 
@@ -12,75 +40,70 @@
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
+#include "../problem.hpp"
 #include "../problems/decompose.hpp"
 #include "../rng.hpp"
 #include "../utils/generic.hpp"         // safe_cast, kNN
-#include "../utils/multi_objective.hpp" // ideal, decomposition_weights
+#include "../utils/multi_objective.hpp" // ideal
 
 namespace pagmo
 {
 /// Multi Objective Evolutionary Algorithms by Decomposition (the DE variant)
 /**
-  * \image html moead.png "Solving by decomposition" width=3cm
-  *
-  * MOEA/D-DE is a very successfull multi-objective optimization algorithm, always worth a try. Based on the idea of
- * problem decomposition,
-  * it leverages on evolutionary operators to combine good solutions of neighbouring problems thus allowing for nice
- * convergence
-  * properties. MOEA/D is, essentially, a framework and this particual algorithm implemented in pagmo with the name
- * pagmo::moead
-  * uses the rand/2/exp Differential Evolution operator followed by a polynomial mutation to create offsprings, and the
- * tchebycheff
-  * decomposition method to instantiate the decomposed problems. A diversity preservation mechanism, as proposed in the
- * work
-  * from Li et al. referenced below, is also implemented.
-  *
-  * @note The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This allows
- * to have MOEA/D-DE
-  * work on populations having arbitrary size, while preserving a nice coverage of the final non-dominated front.
-  *
-  * @see Zhang, Qingfu, and Hui Li. "MOEA/D: A multiobjective evolutionary algorithm based on decomposition."
+ * \image html moead.png "Solving by decomposition" width=3cm
+ *
+ * MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of
+ * problem decomposition, it leverages on evolutionary operators to combine good solutions of neighbouring problems thus
+ * allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particual algorithm
+ * implemented in pagmo with the name pagmo::moead uses the rand/2/exp Differential Evolution operator followed by a
+ * polynomial mutation to create offsprings, and the tchebycheff, wieghted or boundary intersection decomposition method
+ * decomposition method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is
+ * also implemented.
+ *
+ * **NOTE** The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This
+ * allows to have MOEA/D-DE work on populations having arbitrary size, while preserving a nice coverage of the final
+ * non-dominated front.
+ *
+ * See: Zhang, Qingfu, and Hui Li. "MOEA/D: A multiobjective evolutionary algorithm based on decomposition."
  * Evolutionary Computation, IEEE Transactions on 11.6 (2007): 712-731.
-  * @see Li, Hui, and Qingfu Zhang. "Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
+ * See: Li, Hui, and Qingfu Zhang. "Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
  * NSGA-II." Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
  */
 class moead
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, adf, ideal_point)
     typedef std::tuple<unsigned int, unsigned long long, double, vector_double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, vector_double>;
-    using log_type = std::vector<log_line_type>;
-#endif
+
     /// Constructor
     /**
-    * Constructs a MOEA/D-DE algorithm
+    * Constructs MOEA/D-DE
     *
-    * @param[in] gen number of generations
-    * @param[in] weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
-    * @param[in] neighbours size of the weight's neighborhood
-    * @param[in] CR crossover parameter in the Differential Evolution operator
-    * @param[in] F parameter for the Differential Evolution operator
-    * @param[in] eta_m distribution index used by the polynomial mutation
-    * @param[in] realb chance that the neighbourhood is considered at each generation, rather than the whole population
+    * @param gen number of generations
+    * @param weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
+    * @param decomposition decomposition method: one of "weighted", "tchebycheff" or "bi"
+    * @param neighbours size of the weight's neighborhood
+    * @param CR crossover parameter in the Differential Evolution operator
+    * @param F parameter for the Differential Evolution operator
+    * @param eta_m distribution index used by the polynomial mutation
+    * @param realb chance that the neighbourhood is considered at each generation, rather than the whole population
     * (only if preserve_diversity is true)
-    * @param[in] limit maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
-    * @param[in] preserve_diversity when true activates the two diversity preservation mechanisms described in Li, Hui,
+    * @param limit maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
+    * @param preserve_diversity when true activates the two diversity preservation mechanisms described in Li, Hui,
     * and Qingfu Zhang paper
-    * @param[in] seed seed used by the internal random number generator (default is random)
+    * @param seed seed used by the internal random number generator (default is random)
     * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not
     * in [1.0] or m_eta is < 0
     */
-    moead(unsigned int gen = 1u, std::string weight_generation = "grid", population::size_type neighbours = 20u,
-          double CR = 1.0, double F = 0.5, double eta_m = 20., double realb = 0.9, unsigned int limit = 2u,
-          bool preserve_diversity = true, unsigned int seed = pagmo::random_device::next())
-        : m_gen(gen), m_weight_generation(weight_generation), m_neighbours(neighbours), m_CR(CR), m_F(F),
-          m_eta_m(eta_m), m_realb(realb), m_limit(limit), m_preserve_diversity(preserve_diversity), m_e(seed),
-          m_seed(seed), m_verbosity(0u), m_log()
+    moead(unsigned int gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
+          population::size_type neighbours = 20u, double CR = 1.0, double F = 0.5, double eta_m = 20.,
+          double realb = 0.9, unsigned int limit = 2u, bool preserve_diversity = true,
+          unsigned int seed = pagmo::random_device::next())
+        : m_gen(gen), m_weight_generation(weight_generation), m_decomposition(decomposition), m_neighbours(neighbours),
+          m_CR(CR), m_F(F), m_eta_m(eta_m), m_realb(realb), m_limit(limit), m_preserve_diversity(preserve_diversity),
+          m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         // Sanity checks
         if (m_weight_generation != "random" && m_weight_generation != "grid"
@@ -88,6 +111,10 @@ public:
             pagmo_throw(std::invalid_argument,
                         "Weight generation method requested is '" + m_weight_generation
                             + "', but only one of 'random', 'low discrepancy', 'grid' is allowed");
+        }
+        if (m_decomposition != "tchebycheff" && m_decomposition != "weighted" && m_decomposition != "bi") {
+            pagmo_throw(std::invalid_argument, "Weight generation method requested is '" + m_decomposition
+                                                   + "', but only one of 'tchebycheff', 'weighted', 'bi' is allowed");
         }
         if (CR > 1.0 || CR < 0.) {
             pagmo_throw(
@@ -119,14 +146,14 @@ public:
      *
      * Evolves the population for the requested number of generations.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      */
     population evolve(population pop) const
     {
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                              // allowed (pop.set_problem_seed is)
+                                              // allowed
         auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
@@ -139,10 +166,13 @@ public:
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
         // particular algorithm.
+        if (!NP) {
+            pagmo_throw(std::invalid_argument, get_name() + " cannot work on an empty population");
+        }
         if (prob.get_nf() < 2u) {
-            pagmo_throw(std::invalid_argument, "The number of objectives detected in the instance of '"
-                                                   + prob.get_name() + "' is " + std::to_string(prob.get_nf()) + ". "
-                                                   + get_name() + " necessitates a problem with multiple objectives");
+            pagmo_throw(std::invalid_argument,
+                        "This is a multiobjective algortihm, while number of objectives detected in " + prob.get_name()
+                            + " is " + std::to_string(prob.get_nf()));
         }
         if (prob.get_nc() != 0u) {
             pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
@@ -180,9 +210,6 @@ public:
         auto neigh_idxs = kNN(weights, m_neighbours);
         // We compute the initial ideal point (will be adapted along the course of the algorithm)
         vector_double ideal_point = ideal(pop.get_f());
-        // We create a decompose problem which will be used only to access its decompose_fitness(f) method
-        // (the construction parameter weights, ideal_point and false are thus irrelevant).
-        decompose prob_decomposed{prob, weights[0], ideal_point, "tchebycheff", false};
         // We create the container that will represent a pseudo-random permutation of the population indexes 1..NP
         std::vector<population::size_type> shuffle(NP);
         std::iota(shuffle.begin(), shuffle.end(), std::vector<population::size_type>::size_type(0u));
@@ -196,7 +223,7 @@ public:
                     // We compute the average decomposed fitness (ADF)
                     auto adf = 0.;
                     for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
-                        adf += prob_decomposed.decompose_fitness(pop.get_f()[i], weights[i], ideal_point)[0];
+                        adf += decompose_objectives(pop.get_f()[i], weights[i], ideal_point, m_decomposition)[0];
                     }
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
@@ -269,8 +296,8 @@ public:
                 // 9 - We insert the newly found solution into the population
                 decltype(NP) size, time = 0;
                 // First try on problem n
-                auto f1 = prob_decomposed.decompose_fitness(pop.get_f()[n], weights[n], ideal_point);
-                auto f2 = prob_decomposed.decompose_fitness(new_f, weights[n], ideal_point);
+                auto f1 = decompose_objectives(pop.get_f()[n], weights[n], ideal_point, m_decomposition);
+                auto f2 = decompose_objectives(new_f, weights[n], ideal_point, m_decomposition);
                 if (f2[0] < f1[0]) {
                     pop.set_xf(n, candidate, new_f);
                     time++;
@@ -291,8 +318,8 @@ public:
                     } else {
                         pick = neigh_idxs[n][shuffle2[k]];
                     }
-                    f1 = prob_decomposed.decompose_fitness(pop.get_f()[pick], weights[pick], ideal_point);
-                    f2 = prob_decomposed.decompose_fitness(new_f, weights[pick], ideal_point);
+                    f1 = decompose_objectives(pop.get_f()[pick], weights[pick], ideal_point, m_decomposition);
+                    f2 = decompose_objectives(new_f, weights[pick], ideal_point, m_decomposition);
                     if (f2[0] < f1[0]) {
                         pop.set_xf(pick, candidate, new_f);
                         time++;
@@ -307,13 +334,18 @@ public:
         }
         return pop;
     }
-
-    /// Sets the algorithm seed
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     };
     /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned int get_seed() const
     {
         return m_seed;
@@ -326,7 +358,7 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 1):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:           ADF:        ideal1:        ideal2:
      *   1              0        24.9576       0.117748        2.77748
      *   2             40        19.2461      0.0238826        2.51403
@@ -344,35 +376,58 @@ public:
      * along the corresponding direction. The ideal point of the current population follows cropped to its 5th
      * component.
      *
-     * @param[in] level verbosity level
+     * @param level verbosity level
      */
     void set_verbosity(unsigned int level)
     {
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
-    /// Get generations
+    /// Gets the generations
+    /**
+     * @return the number of generations to evolve for
+     */
     unsigned int get_gen() const
     {
         return m_gen;
     }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "MOEA/D - DE";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
-        return "\tGenerations: " + std::to_string(m_gen) + "\n\tWeight generation: " + m_weight_generation
-               + "\n\tNeighbourhood size: " + std::to_string(m_neighbours) + "\n\tParameter CR: " + std::to_string(m_CR)
-               + "\n\tParameter F: " + std::to_string(m_F) + "\n\tDistribution index: " + std::to_string(m_eta_m)
-               + "\n\tChance for diversity preservation: " + std::to_string(m_realb) + "\n\tVerbosity: "
-               + std::to_string(m_verbosity) + "\n\tSeed: " + std::to_string(m_seed);
+        std::ostringstream ss;
+        stream(ss, "\tGenerations: ", m_gen);
+        stream(ss, "\n\tWeight generation: ", m_weight_generation);
+        stream(ss, "\n\tDecomposition method: ", m_decomposition);
+        stream(ss, "\n\tNeighbourhood size: ", m_neighbours);
+        stream(ss, "\n\tParameter CR: ", m_F);
+        stream(ss, "\n\tParameter F: ", m_F);
+        stream(ss, "\n\tDistribution index: ", m_eta_m);
+        stream(ss, "\n\tChance for diversity preservation: ", m_realb);
+        stream(ss, "\n\tSeed: ", m_seed);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
+        return ss.str();
     }
     /// Get log
     /**
@@ -386,12 +441,19 @@ public:
     {
         return m_log;
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_weight_generation, m_neighbours, m_CR, m_F, m_eta_m, m_realb, m_limit, m_preserve_diversity, m_e,
-           m_seed, m_verbosity, m_log);
+        ar(m_gen, m_weight_generation, m_decomposition, m_neighbours, m_CR, m_F, m_eta_m, m_realb, m_limit,
+           m_preserve_diversity, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -427,10 +489,8 @@ private:
                     deltaq = 1. - (std::pow(val, mut_pow));
                 }
                 y = y + deltaq * (yu - yl);
-                if (y < yl)
-                    y = yl;
-                if (y > yu)
-                    y = yu;
+                if (y < yl) y = yl;
+                if (y > yu) y = yu;
                 child[j] = y;
             }
         }
@@ -461,14 +521,14 @@ private:
                     break;
                 }
             }
-            if (flag)
-                retval.push_back(p);
+            if (flag) retval.push_back(p);
         }
         return retval;
     }
 
     unsigned int m_gen;
     std::string m_weight_generation;
+    std::string m_decomposition;
     population::size_type m_neighbours;
     double m_CR;
     double m_F;

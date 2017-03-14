@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_MULTI_OBJECTIVE_HPP
 #define PAGMO_MULTI_OBJECTIVE_HPP
 
@@ -16,6 +44,7 @@
 #include <tuple>
 #include <vector>
 
+#include "../detail/custom_comparisons.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
@@ -66,8 +95,8 @@ void reksum(std::vector<std::vector<double>> &retval, const std::vector<populati
  * elements in \p obj1 are less or equal to the corresponding element in \p obj2,
  * but at least one is different, \p true will be returned. Otherwise, \p false will be returned.
  *
- * @param[in] obj1 first vector of objectives.
- * @param[in] obj2 second vector of objectives.
+ * @param obj1 first vector of objectives.
+ * @param obj2 second vector of objectives.
  *
  * @return \p true if \p obj1 is dominating \p obj2, \p false otherwise.
  *
@@ -99,10 +128,10 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
  * the
  * complexity of calling pagmo::fast_non_dominated_sorting
  *
- * @see Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
+ * See: Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
  * IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
  *
- * @param[in] input_objs an <tt>std::vector</tt> containing the points (i.e. vector of objectives)
+ * @param input_objs an <tt>std::vector</tt> containing the points (i.e. vector of objectives)
  *
  * @return A <tt>std::vector</tt> containing the indexes of the points in the non-dominated front
  *
@@ -134,9 +163,9 @@ std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<v
     std::sort(indexes.begin(), indexes.end(),
               [&input_objs](vector_double::size_type idx1, vector_double::size_type idx2) {
                   if (input_objs[idx1][0] == input_objs[idx2][0]) {
-                      return input_objs[idx1][1] < input_objs[idx2][1];
+                      return detail::less_than_f(input_objs[idx1][1], input_objs[idx2][1]);
                   }
-                  return input_objs[idx1][0] < input_objs[idx2][0];
+                  return detail::less_than_f(input_objs[idx1][0], input_objs[idx2][0]);
               });
     for (auto i : indexes) {
         bool flag = false;
@@ -164,11 +193,11 @@ using fnds_return_type
  * number of objectives
  * and \f$N\f$ is the number of individuals.
  *
- * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
+ * See: Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg,
  * 2000.
  *
- * @param[in] points An std::vector containing the objectives of different individuals. Example
+ * @param points An std::vector containing the objectives of different individuals. Example
  * {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
  *
  * @return an std::tuple containing:
@@ -180,8 +209,7 @@ using fnds_return_type
  *  - the domination count, an <tt>std::vector<vector_double::size_type></tt> containing the number of individuals
  * that dominate the individual at position \f$i\f$. Example {2, 0, 0, 1}
  *  - the non domination rank, an <tt>std::vector<vector_double::size_type></tt> containing the index of the non
- * dominated
- * front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
+ * dominated front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
  *
  * @throws std::invalid_argument If the size of \p points is not at least 2
  */
@@ -251,11 +279,11 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
  * condition
  * will result in undefined behaviour.
  *
- * @see Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
+ * See: Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm
  * for multi-objective optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg,
  * 2000.
  *
- * @param[in] non_dom_front An <tt>std::vector<vector_double></tt> containing a non dominated front. Example
+ * @param non_dom_front An <tt>std::vector<vector_double></tt> containing a non dominated front. Example
  * {{0,0},{-1,1},{2,-2}}
  *
  * @returns a vector_double containing the crowding distances. Example: {2, inf, inf}
@@ -290,7 +318,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
     for (decltype(M) i = 0u; i < M; ++i) {
         std::sort(indexes.begin(), indexes.end(),
                   [i, &non_dom_front](vector_double::size_type idx1, vector_double::size_type idx2) {
-                      return non_dom_front[idx1][i] < non_dom_front[idx2][i];
+                      return detail::less_than_f(non_dom_front[idx1][i], non_dom_front[idx2][i]);
                   });
         retval[indexes[0]] = std::numeric_limits<double>::infinity();
         retval[indexes[N - 1u]] = std::numeric_limits<double>::infinity();
@@ -311,18 +339,18 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  *
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @note This function will also work for single objective optimization, i.e. with 1 objective
+ * **NOTE** This function will also work for single objective optimization, i.e. with 1 objective
  * in which case, though, it is more efficient to sort using directly on of the following forms:
- * @code
+ * @code{.unparsed}
  * std::sort(input_f.begin(), input_f.end(), [] (auto a, auto b) {return a[0] < b[0];});
  * @endcode
- * @code
+ * @code{.unparsed}
  * std::vector<vector_double::size_type> idx(input_f.size());
  * std::iota(idx.begin(), idx.end(), vector_double::size_type(0u));
  * std::sort(idx.begin(), idx.end(), [] (auto a, auto b) {return input_f[a][0] < input_f[b][0];});
  * @endcode
  *
- * @param[in] input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
+ * @param input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
  *
  * @returns an <tt>std::vector</tt> containing the indexes of the sorted objectives vectors. Example {1,2,0}
  *
@@ -362,10 +390,10 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
     // Sort the indexes
     std::sort(retval.begin(), retval.end(),
               [&tuple, &crowding](vector_double::size_type idx1, vector_double::size_type idx2) {
-                  if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {     // same non domination rank
-                      return crowding[idx1] > crowding[idx2];                     // crowding distance decides
-                  } else {                                                        // different non domination ranks
-                      return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2]; // non domination rank decides
+                  if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {        // same non domination rank
+                      return detail::greater_than_f(crowding[idx1], crowding[idx2]); // crowding distance decides
+                  } else {                                                           // different non domination ranks
+                      return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2];    // non domination rank decides
                   };
               });
     return retval;
@@ -382,7 +410,7 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
  * While the complexity is the same as that of pagmo::sort_population_mo, this function returns a permutation
  * of:
  *
- * @code
+ * @code{.unparsed}
  * auto ret = pagmo::sort_population_mo(input_f).resize(N);
  * @endcode
  *
@@ -390,8 +418,8 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
  * computes
  * it for the last non-dominated front that contains individuals included in the best N.
  *
- * @param[in] input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
- * @param[in] N Number of best individuals to return
+ * @param input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
+ * @param N Number of best individuals to return
  *
  * @returns an <tt>std::vector</tt> containing the indexes of the best N objective vectors. Example {2,1}
  *
@@ -444,7 +472,7 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
     std::vector<vector_double::size_type> idxs(front.size());
     std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
     std::sort(idxs.begin(), idxs.end(), [&cds](vector_double::size_type idx1, vector_double::size_type idx2) {
-        return (cds[idx1] > cds[idx2]);
+        return detail::greater_than_f(cds[idx1], cds[idx2]);
     }); // Descending order1
     auto remaining = N - retval.size();
     for (decltype(remaining) i = 0u; i < remaining; ++i) {
@@ -460,22 +488,22 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
  *
  * Complexity is \f$ O(MN)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @param[in] input_f Input objectives vectors. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
+ * @param points Input objectives vectors. Example {{-1,3,597},{1,2,3645},{2,9,789},{0,0,231},{6,-2,4576}};
  *
  * @returns A vector_double containing the ideal point. Example: {-1,-2,231}
  *
  * @throws std::invalid_argument if the input objective vectors are not all of the same size
  */
-vector_double ideal(const std::vector<vector_double> &input_f)
+vector_double ideal(const std::vector<vector_double> &points)
 {
     // Corner case
-    if (input_f.size() == 0u) {
+    if (points.size() == 0u) {
         return {};
     }
 
     // Sanity checks
-    auto M = input_f[0].size();
-    for (const auto &f : input_f) {
+    auto M = points[0].size();
+    for (const auto &f : points) {
         if (f.size() != M) {
             pagmo_throw(std::invalid_argument,
                         "Input vector of objectives must contain fitness vector of equal dimension "
@@ -486,7 +514,7 @@ vector_double ideal(const std::vector<vector_double> &input_f)
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
         retval[i]
-            = (*std::min_element(input_f.begin(), input_f.end(),
+            = (*std::min_element(points.begin(), points.end(),
                                  [i](const vector_double &f1, const vector_double &f2) { return f1[i] < f2[i]; }))[i];
     }
     return retval;
@@ -499,30 +527,30 @@ vector_double ideal(const std::vector<vector_double> &input_f)
  *
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * @param[in] input_f Input objective vectors. Example {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{6,6},{9,15}}
+ * @param points Input objective vectors. Example {{0,7},{1,5},{2,3},{4,2},{7,1},{10,0},{6,6},{9,15}}
  *
  * @returns A vector_double containing the nadir point. Example: {10,7}
  *
  */
-vector_double nadir(const std::vector<vector_double> &input_f)
+vector_double nadir(const std::vector<vector_double> &points)
 {
     // Corner case
-    if (input_f.size() == 0u) {
+    if (points.size() == 0u) {
         return {};
     }
     // Sanity checks
-    auto M = input_f[0].size();
+    auto M = points[0].size();
     // We extract all objective vectors belonging to the first non dominated front (the Pareto front)
-    auto pareto_idx = std::get<0>(fast_non_dominated_sorting(input_f))[0];
-    std::vector<vector_double> nd_fits;
+    auto pareto_idx = std::get<0>(fast_non_dominated_sorting(points))[0];
+    std::vector<vector_double> nd_points;
     for (auto idx : pareto_idx) {
-        nd_fits.push_back(input_f[idx]);
+        nd_points.push_back(points[idx]);
     }
     // And compute the nadir over them
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
         retval[i]
-            = (*std::max_element(nd_fits.begin(), nd_fits.end(),
+            = (*std::max_element(nd_points.begin(), nd_points.end(),
                                  [i](const vector_double &f1, const vector_double &f2) { return f1[i] < f2[i]; }))[i];
     }
     return retval;
@@ -542,21 +570,21 @@ vector_double nadir(const std::vector<vector_double> &input_f)
  * low dimensionalities are expected in the number of objcetvices (i.e. less than 20), hence Halton sequence is deemes
  *as appropriate.
  *
- * @note All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All
+ * **NOTE** All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All
  *weight generation methods
  * are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
  *
  * Example: to generate 10 weights distributed somehow regularly to decompose a three dimensional problem:
- * @code
+ * @code{.unparsed}
  * detail::random_engine_type r_engine();
  * auto lambdas = decomposition_weights(3u, 10u, "low discrepancy", r_engine);
  * @endcode
  *
- * @param[in] n_f dimension of each weight vector (i.e. fitness dimension)
- * @param[in] n_w number of weights to be generated
- * @param[in] weight_generation methods to generate the weights of the decomposed problems. One of "grid", "random",
+ * @param n_f dimension of each weight vector (i.e. fitness dimension)
+ * @param n_w number of weights to be generated
+ * @param weight_generation methods to generate the weights of the decomposed problems. One of "grid", "random",
  *"low discrepancy"
- * @param[in] r_engine random engine
+ * @param r_engine random engine
  *
  * @returns an <tt>std:vector</tt> containing the weight vectors
  *
@@ -647,6 +675,104 @@ std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, v
                         + " is unknown. One of 'grid', 'random' or 'low discrepancy' was expected");
     }
     return retval;
+}
+
+/// Decomposes a vector of objectives.
+/**
+ * A vector of objectives is reduced to one only objective using a decomposition
+ * technique.
+ *
+ * Three different *decomposition methods* are here made available:
+ *
+ * - weighted decomposition,
+ * - Tchebycheff decomposition,
+ * - boundary interception method (with penalty constraint).
+ *
+ * In the case of \f$n\f$ objectives, we indicate with: \f$ \mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots,
+ * f_n(\mathbf x)] \f$ the vector containing the original multiple objectives, with: \f$ \boldsymbol \lambda =
+ * (\lambda_1, \ldots, \lambda_n) \f$ an \f$n\f$-dimensional weight vector and with: \f$ \mathbf z^* = (z^*_1, \ldots,
+ * z^*_n) \f$ an \f$n\f$-dimensional reference point. We also ussume \f$\lambda_i > 0, \forall i=1..n\f$ and \f$\sum_i
+ * \lambda_i = 1\f$.
+ *
+ * The resulting single objective is thus defined as:
+ *
+ * - weighted decomposition: \f$ f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f \f$,
+ * - Tchebycheff decomposition: \f$ f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i \vert
+ * \f$,
+ * - boundary interception method (with penalty constraint): \f$ f_d(\mathbf x) = d_1 + \theta d_2\f$,
+ *
+ * where \f$d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}\f$,
+ * \f$d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\f$ and
+ * \f$ \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\f$.
+ *
+ * @param f input vector of objectives.
+ * @param weight the weight to be used in the decomposition.
+ * @param ref_point the reference point to be used if either "tchebycheff" or "bi".
+ * was indicated as a decomposition method. Its value is ignored if "weighted" was indicated.
+ * @param method decomposition method: one of "weighted", "tchebycheff" or "bi"
+ *
+ * @return the decomposed objective.
+ *
+ * @throws std::invalid_argument if \p f, \p weight and \p ref_point have different sizes
+ * @throws std::invalid_argument if \p method is not one of "weighted", "tchebycheff" or "bi"
+ */
+inline vector_double decompose_objectives(const vector_double &f, const vector_double &weight,
+                                          const vector_double &ref_point, const std::string &method)
+{
+    if (weight.size() != f.size()) {
+        pagmo_throw(std::invalid_argument,
+                    "Weight vector size must be equal to the number of objectives. The size of the weight vector is "
+                        + std::to_string(weight.size()) + " while " + std::to_string(f.size())
+                        + " objectives were detected");
+    }
+    if (ref_point.size() != f.size()) {
+        pagmo_throw(
+            std::invalid_argument,
+            "Reference point size must be equal to the number of objectives. The size of the reference point is "
+                + std::to_string(ref_point.size()) + " while " + std::to_string(f.size())
+                + " objectives were detected");
+    }
+    if (f.size() == 0u) {
+        pagmo_throw(std::invalid_argument, "The number of objectives detected is: " + std::to_string(f.size())
+                                               + ". Cannot decompose this into anything.");
+    }
+    double fd = 0.;
+    if (method == "weighted") {
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            fd += weight[i] * f[i];
+        }
+    } else if (method == "tchebycheff") {
+        double tmp, fixed_weight;
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            (weight[i] == 0.) ? (fixed_weight = 1e-4)
+                              : (fixed_weight = weight[i]); // fixes the numerical problem of 0 weights
+            tmp = fixed_weight * std::abs(f[i] - ref_point[i]);
+            if (tmp > fd) {
+                fd = tmp;
+            }
+        }
+    } else if (method == "bi") { // BI method
+        const double THETA = 5.;
+        double d1 = 0.;
+        double weight_norm = 0.;
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            d1 += (f[i] - ref_point[i]) * weight[i];
+            weight_norm += std::pow(weight[i], 2);
+        }
+        weight_norm = std::sqrt(weight_norm);
+        d1 = d1 / weight_norm;
+
+        double d2 = 0.;
+        for (decltype(f.size()) i = 0u; i < f.size(); ++i) {
+            d2 += std::pow(f[i] - (ref_point[i] + d1 * weight[i] / weight_norm), 2);
+        }
+        d2 = std::sqrt(d2);
+        fd = d1 + THETA * d2;
+    } else {
+        pagmo_throw(std::invalid_argument, "The decomposition method chosen was: " + method
+                                               + R"(, but only "weighted", "tchebycheff" or "bi" are allowed)");
+    }
+    return {fd};
 }
 
 } // namespace pagmo

@@ -39,9 +39,9 @@
 #include "../details/polymorphic_impl.hpp"
 
 #ifdef _MSC_VER
-#define STATIC_CONSTEXPR static
+#define CEREAL_STATIC_CONSTEXPR static
 #else
-#define STATIC_CONSTEXPR static constexpr
+#define CEREAL_STATIC_CONSTEXPR static constexpr
 #endif
 
 //! Registers a derived polymorphic type with cereal
@@ -79,16 +79,16 @@
 
     Polymorphic support in cereal requires RTTI to be
     enabled */
-#define CEREAL_REGISTER_TYPE(T)                         \
-  namespace cereal {                                    \
-  namespace detail {                                    \
-  template <>                                           \
-  struct binding_name<T>                                \
-  {                                                     \
-    STATIC_CONSTEXPR char const * name() { return #T; } \
-  };                                                    \
-  } } /* end namespaces */                              \
-  CEREAL_BIND_TO_ARCHIVES(T)
+#define CEREAL_REGISTER_TYPE(...)                                        \
+  namespace cereal {                                                     \
+  namespace detail {                                                     \
+  template <>                                                            \
+  struct binding_name<__VA_ARGS__>                                       \
+  {                                                                      \
+    CEREAL_STATIC_CONSTEXPR char const * name() { return #__VA_ARGS__; } \
+  };                                                                     \
+  } } /* end namespaces */                                               \
+  CEREAL_BIND_TO_ARCHIVES(__VA_ARGS__)
 
 //! Registers a polymorphic type with cereal, giving it a
 //! user defined name
@@ -96,14 +96,35 @@
     CEREAL_REGISTER_TYPE (the name of the type) may not be
     suitable.  This macro allows any name to be associated
     with the type.  The name should be unique */
-#define CEREAL_REGISTER_TYPE_WITH_NAME(T, Name)              \
-  namespace cereal {                                         \
-  namespace detail {                                         \
-  template <>                                                \
-  struct binding_name<T>                                     \
-  { STATIC_CONSTEXPR char const * name() { return Name; } }; \
-  } } /* end namespaces */                                   \
+#define CEREAL_REGISTER_TYPE_WITH_NAME(T, Name)                     \
+  namespace cereal {                                                \
+  namespace detail {                                                \
+  template <>                                                       \
+  struct binding_name<T>                                            \
+  { CEREAL_STATIC_CONSTEXPR char const * name() { return Name; } }; \
+  } } /* end namespaces */                                          \
   CEREAL_BIND_TO_ARCHIVES(T)
+
+//! Registers the base-derived relationship for a polymorphic type
+/*! When polymorphic serialization occurs, cereal needs to know how to
+    properly cast between derived and base types for the polymorphic
+    type. Normally this happens automatically whenever cereal::base_class
+    or cereal::virtual_base_class are used to serialize a base class. In
+    cases where neither of these is ever called but a base class still
+    exists, this explicit registration is required.
+
+    The Derived class should be the most derived type that will be serialized,
+    and the Base type any possible base that has not been covered under a base
+    class serialization that will be used to store a Derived pointer.
+
+    Placement of this is the same as for CEREAL_REGISTER_TYPE. */
+#define CEREAL_REGISTER_POLYMORPHIC_RELATION(Base, Derived)                     \
+  namespace cereal {                                                            \
+  namespace detail {                                                            \
+  template <>                                                                   \
+  struct PolymorphicRelation<Base, Derived>                                     \
+  { static void bind() { RegisterPolymorphicCaster<Base, Derived>::bind(); } }; \
+  } } /* end namespaces */
 
 //! Adds a way to force initialization of a translation unit containing
 //! calls to CEREAL_REGISTER_TYPE
@@ -156,10 +177,6 @@
     }                                                   \
   } } /* end namespaces */
 
-#ifdef _MSC_VER
-#undef CONSTEXPR
-#endif
-
 namespace cereal
 {
   namespace polymorphic_detail
@@ -181,8 +198,8 @@ namespace cereal
       if(nameid == 0)
       {
         typename ::cereal::detail::InputBindingMap<Archive>::Serializers emptySerializers;
-        emptySerializers.shared_ptr = [](void*, std::shared_ptr<void> & ptr) { ptr.reset(); };
-        emptySerializers.unique_ptr = [](void*, std::unique_ptr<void, ::cereal::detail::EmptyDeleter<void>> & ptr) { ptr.reset( nullptr ); };
+        emptySerializers.shared_ptr = [](void*, std::shared_ptr<void> & ptr, std::type_info const &) { ptr.reset(); };
+        emptySerializers.unique_ptr = [](void*, std::unique_ptr<void, ::cereal::detail::EmptyDeleter<void>> & ptr, std::type_info const &) { ptr.reset( nullptr ); };
         return emptySerializers;
       }
 
@@ -195,7 +212,7 @@ namespace cereal
       else
         name = ar.getPolymorphicName(nameid);
 
-      auto & bindingMap = detail::StaticObject<detail::InputBindingMap<Archive>>::getInstance().map;
+      auto const & bindingMap = detail::StaticObject<detail::InputBindingMap<Archive>>::getInstance().map;
 
       auto binding = bindingMap.find(name);
       if(binding == bindingMap.end())
@@ -293,17 +310,18 @@ namespace cereal
     }
 
     std::type_info const & ptrinfo = typeid(*ptr.get());
+    static std::type_info const & tinfo = typeid(T);
     // ptrinfo can never be equal to T info since we can't have an instance
     // of an abstract object
     //  this implies we need to do the lookup
 
-    auto & bindingMap = detail::StaticObject<detail::OutputBindingMap<Archive>>::getInstance().map;
+    auto const & bindingMap = detail::StaticObject<detail::OutputBindingMap<Archive>>::getInstance().map;
 
     auto binding = bindingMap.find(std::type_index(ptrinfo));
     if(binding == bindingMap.end())
       UNREGISTERED_POLYMORPHIC_EXCEPTION(save, cereal::util::demangle(ptrinfo.name()))
 
-    binding->second.shared_ptr(&ar, ptr.get());
+    binding->second.shared_ptr(&ar, ptr.get(), tinfo);
   }
 
   //! Saving std::shared_ptr for polymorphic types, not abstract
@@ -332,13 +350,13 @@ namespace cereal
       return;
     }
 
-    auto & bindingMap = detail::StaticObject<detail::OutputBindingMap<Archive>>::getInstance().map;
+    auto const & bindingMap = detail::StaticObject<detail::OutputBindingMap<Archive>>::getInstance().map;
 
     auto binding = bindingMap.find(std::type_index(ptrinfo));
     if(binding == bindingMap.end())
       UNREGISTERED_POLYMORPHIC_EXCEPTION(save, cereal::util::demangle(ptrinfo.name()))
 
-    binding->second.shared_ptr(&ar, ptr.get());
+    binding->second.shared_ptr(&ar, ptr.get(), tinfo);
   }
 
   //! Loading std::shared_ptr for polymorphic types
@@ -355,7 +373,7 @@ namespace cereal
 
     auto binding = polymorphic_detail::getInputBinding(ar, nameid);
     std::shared_ptr<void> result;
-    binding.shared_ptr(&ar, result);
+    binding.shared_ptr(&ar, result, typeid(T));
     ptr = std::static_pointer_cast<T>(result);
   }
 
@@ -391,17 +409,18 @@ namespace cereal
     }
 
     std::type_info const & ptrinfo = typeid(*ptr.get());
+    static std::type_info const & tinfo = typeid(T);
     // ptrinfo can never be equal to T info since we can't have an instance
     // of an abstract object
     //  this implies we need to do the lookup
 
-    auto & bindingMap = detail::StaticObject<detail::OutputBindingMap<Archive>>::getInstance().map;
+    auto const & bindingMap = detail::StaticObject<detail::OutputBindingMap<Archive>>::getInstance().map;
 
     auto binding = bindingMap.find(std::type_index(ptrinfo));
     if(binding == bindingMap.end())
       UNREGISTERED_POLYMORPHIC_EXCEPTION(save, cereal::util::demangle(ptrinfo.name()))
 
-    binding->second.unique_ptr(&ar, ptr.get());
+    binding->second.unique_ptr(&ar, ptr.get(), tinfo);
   }
 
   //! Saving std::unique_ptr for polymorphic types, not abstract
@@ -430,13 +449,13 @@ namespace cereal
       return;
     }
 
-    auto & bindingMap = detail::StaticObject<detail::OutputBindingMap<Archive>>::getInstance().map;
+    auto const & bindingMap = detail::StaticObject<detail::OutputBindingMap<Archive>>::getInstance().map;
 
     auto binding = bindingMap.find(std::type_index(ptrinfo));
     if(binding == bindingMap.end())
       UNREGISTERED_POLYMORPHIC_EXCEPTION(save, cereal::util::demangle(ptrinfo.name()))
 
-    binding->second.unique_ptr(&ar, ptr.get());
+    binding->second.unique_ptr(&ar, ptr.get(), tinfo);
   }
 
   //! Loading std::unique_ptr, case when user provides load_and_construct for polymorphic types
@@ -453,7 +472,7 @@ namespace cereal
 
     auto binding = polymorphic_detail::getInputBinding(ar, nameid);
     std::unique_ptr<void, ::cereal::detail::EmptyDeleter<void>> result;
-    binding.unique_ptr(&ar, result);
+    binding.unique_ptr(&ar, result, typeid(T));
     ptr.reset(static_cast<T*>(result.release()));
   }
 

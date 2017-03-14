@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #include <pagmo/problem.hpp>
 
 #define BOOST_TEST_MODULE problem_test
@@ -5,12 +33,16 @@
 
 #include <boost/lexical_cast.hpp>
 #include <exception>
+#include <limits>
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
+#include <pagmo/exceptions.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -269,17 +301,17 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
     std::vector<sparsity_pattern> hesss_22_correct{{{0, 0}, {1, 0}}, {{0, 0}, {1, 0}}};
 
     // 0 - lb size is zero
-    BOOST_CHECK_THROW(problem{base_p(1, 0, 0, fit_2, {}, {})}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1, 0, 0, fit_1, {}, {})}, std::invalid_argument);
     // 1 - lb > ub
-    BOOST_CHECK_THROW(problem{base_p(1, 0, 0, fit_2, ub_2, lb_2)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1, 0, 0, fit_1, ub_2, lb_2)}, std::invalid_argument);
     // 2 - lb length is wrong
-    BOOST_CHECK_THROW(problem{base_p(1, 0, 0, fit_2, lb_3, ub_2)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1, 0, 0, fit_1, lb_3, ub_2)}, std::invalid_argument);
     // 3 - ub length is wrong
-    BOOST_CHECK_THROW(problem{base_p(1, 0, 0, fit_2, lb_2, ub_3)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(1, 0, 0, fit_1, lb_2, ub_3)}, std::invalid_argument);
     // 4 - gradient sparsity has index out of bounds
-    BOOST_CHECK_THROW(problem{grad_p(1, 0, 0, fit_2, lb_2, ub_2, grad_2, grads_2_outofbounds)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{grad_p(1, 0, 0, fit_1, lb_2, ub_2, grad_2, grads_2_outofbounds)}, std::invalid_argument);
     // 5 - gradient sparsity has a repeating pair
-    BOOST_CHECK_THROW(problem{grad_p(1, 0, 0, fit_2, lb_2, ub_2, grad_2, grads_2_repeats)}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{grad_p(1, 0, 0, fit_1, lb_2, ub_2, grad_2, grads_2_repeats)}, std::invalid_argument);
     // 6 - hessian sparsity has index out of bounds
     BOOST_CHECK_THROW(problem{hess_p(1, 1, 0, fit_2, lb_2, ub_2, hess_22, hesss_22_outofbounds)},
                       std::invalid_argument);
@@ -293,7 +325,7 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         problem{hess_p(1, 1, 0, fit_2, lb_2, ub_2, hess_22, {{{0, 0}, {1, 0}}, {{0, 0}, {1, 0}}, {{0, 0}}})},
         std::invalid_argument);
     // 10 - 0 objectives
-    BOOST_CHECK_THROW(problem{base_p(0, 0, 0, fit_2, {1}, {2})}, std::invalid_argument);
+    BOOST_CHECK_THROW(problem{base_p(0, 0, 0, fit_1, {1}, {2})}, std::invalid_argument);
     // 11 - many objectives
     BOOST_CHECK_THROW(problem{base_p(std::numeric_limits<vector_double::size_type>::max(), 0, 0, fit_2, {1}, {2})},
                       std::invalid_argument);
@@ -365,6 +397,48 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
         // 3 - We check that the decision vector dimension is copied
         BOOST_CHECK(p2.get_nx() == p1.get_nx());
     }
+
+    // Default constructor.
+    problem p0;
+    BOOST_CHECK((p0.extract<null_problem>() != nullptr));
+    // Check copy semantics.
+    problem p1{p0};
+    BOOST_CHECK((p0.extract<null_problem>() != nullptr));
+    BOOST_CHECK((p1.extract<null_problem>() != nullptr));
+    problem p2{full_p{}};
+    p2 = p1;
+    BOOST_CHECK((p2.extract<null_problem>() != nullptr));
+    BOOST_CHECK((p1.extract<null_problem>() != nullptr));
+    // Move semantics.
+    problem p3{std::move(p0)};
+    BOOST_CHECK((p3.extract<null_problem>() != nullptr));
+    problem p4{full_p{}};
+    p4 = std::move(p2);
+    BOOST_CHECK((p4.extract<null_problem>() != nullptr));
+    // Check we can revive moved-from objects.
+    p0 = p4;
+    BOOST_CHECK((p0.extract<null_problem>() != nullptr));
+    p2 = std::move(p4);
+    BOOST_CHECK((p2.extract<null_problem>() != nullptr));
+
+    // Check the is_udp type trait.
+    BOOST_CHECK(is_udp<base_p>::value);
+    BOOST_CHECK(is_udp<grad_p>::value);
+    BOOST_CHECK(is_udp<hess_p>::value);
+    BOOST_CHECK(!is_udp<hess_p &>::value);
+    BOOST_CHECK(!is_udp<const hess_p &>::value);
+    BOOST_CHECK(!is_udp<const hess_p>::value);
+    BOOST_CHECK(!is_udp<int>::value);
+    BOOST_CHECK(!is_udp<void>::value);
+    BOOST_CHECK(!is_udp<std::string>::value);
+    BOOST_CHECK((std::is_constructible<problem, base_p>::value));
+    BOOST_CHECK((std::is_constructible<problem, grad_p>::value));
+    BOOST_CHECK((std::is_constructible<problem, hess_p>::value));
+    BOOST_CHECK((std::is_constructible<problem, hess_p &>::value));
+    BOOST_CHECK((std::is_constructible<problem, const hess_p &>::value));
+    BOOST_CHECK((std::is_constructible<problem, hess_p &&>::value));
+    BOOST_CHECK((!std::is_constructible<problem, int>::value));
+    BOOST_CHECK((!std::is_constructible<problem, std::string>::value));
 }
 
 BOOST_AUTO_TEST_CASE(problem_assignment_test)
@@ -475,8 +549,8 @@ BOOST_AUTO_TEST_CASE(problem_gradient_test)
 
     {
         problem p2{base_p{2, 2, 2, {12, 13, 14, 15, 16, 17}, {5, 5}, {10, 10}}};
-        BOOST_CHECK_THROW(p2.gradient({3, 3}), std::logic_error);
-        BOOST_CHECK_THROW(p2.hessians({3, 3}), std::logic_error);
+        BOOST_CHECK_THROW(p2.gradient({3, 3}), not_implemented_error);
+        BOOST_CHECK_THROW(p2.hessians({3, 3}), not_implemented_error);
     }
 }
 
@@ -579,14 +653,21 @@ BOOST_AUTO_TEST_CASE(problem_has_test)
     BOOST_CHECK(!p4.has_hessians());
     BOOST_CHECK(!p4.has_hessians_sparsity());
 
-    BOOST_CHECK_THROW(problem{hgs_not_impl{}}, std::logic_error);
-    BOOST_CHECK_THROW(problem{hhs_not_impl{}}, std::logic_error);
-
     problem p6{ss_not_impl{}};
-    BOOST_CHECK_THROW(p6.set_seed(32u), std::logic_error);
+    BOOST_CHECK_THROW(p6.set_seed(32u), not_implemented_error);
 
     problem p7{base_p{}};
-    BOOST_CHECK_THROW(p7.set_seed(32u), std::logic_error);
+    BOOST_CHECK_THROW(p7.set_seed(32u), not_implemented_error);
+
+    // These two implement the has_sparsity() methods without the sparsity() methods.
+    // They will not error out because the lack of the sparsity() methods makes the has_sparsity()
+    // methods return always false.
+    BOOST_CHECK_NO_THROW(problem{hgs_not_impl{}});
+    BOOST_CHECK(!problem{hgs_not_impl{}}.has_gradient_sparsity());
+    BOOST_CHECK_NO_THROW(problem{hgs_not_impl{}}.gradient_sparsity());
+    BOOST_CHECK_NO_THROW(problem{hhs_not_impl{}});
+    BOOST_CHECK(!problem{hhs_not_impl{}}.has_hessians_sparsity());
+    BOOST_CHECK_NO_THROW(problem{hhs_not_impl{}}.hessians_sparsity());
 }
 
 BOOST_AUTO_TEST_CASE(problem_getters_test)
@@ -608,6 +689,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p1.get_nec() == 3);
     BOOST_CHECK(p1.get_nic() == 4);
     BOOST_CHECK(p1.get_nc() == 4 + 3);
+    BOOST_CHECK((p1.get_c_tol() == vector_double{0., 0., 0., 0., 0., 0., 0.}));
     BOOST_CHECK(p1.get_nf() == 2 + 3 + 4);
     BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13, 13}, {17, 17}}));
 
@@ -864,7 +946,7 @@ BOOST_AUTO_TEST_CASE(problem_get_nobj_detection)
     BOOST_CHECK(problem{without_get_nobj{}}.get_nobj() == 1u);
     BOOST_CHECK_NO_THROW(problem{with_get_nobj{}}.fitness({1.}));
     BOOST_CHECK_THROW(problem{without_get_nobj{}}.fitness({1.}),
-                      std::invalid_argument); // detects a returned size of 3 but has the defualt
+                      std::invalid_argument); // detects a returned size of 3 but has the default
 }
 
 BOOST_AUTO_TEST_CASE(problem_auto_sparsity_test)
@@ -872,4 +954,156 @@ BOOST_AUTO_TEST_CASE(problem_auto_sparsity_test)
     problem p{base_p(2u, 2u, 2u, {1., 1., 1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
     BOOST_CHECK(p.gradient_sparsity() == detail::dense_gradient(6u, 2u));
     BOOST_CHECK(p.hessians_sparsity() == detail::dense_hessians(6u, 2u));
+}
+
+BOOST_AUTO_TEST_CASE(problem_get_set_c_tol_test)
+{
+    problem prob{base_p(2u, 1u, 1u, {1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
+    BOOST_CHECK((prob.get_c_tol() == vector_double{0., 0.}));
+    prob.set_c_tol({1., 2.});
+    BOOST_CHECK((prob.get_c_tol() == vector_double{1., 2.}));
+    prob.set_c_tol({12., 22.});
+    BOOST_CHECK((prob.get_c_tol() == vector_double{12., 22.}));
+    if (std::numeric_limits<double>::has_quiet_NaN) {
+        BOOST_CHECK_THROW(prob.set_c_tol({std::numeric_limits<double>::quiet_NaN(), 22.}), std::invalid_argument);
+        BOOST_CHECK((prob.get_c_tol() == vector_double{12., 22.}));
+    }
+    BOOST_CHECK_THROW(prob.set_c_tol({-12., 22.}), std::invalid_argument);
+    BOOST_CHECK((prob.get_c_tol() == vector_double{12., 22.}));
+    BOOST_CHECK_THROW(prob.set_c_tol({12., 22., 33.});, std::invalid_argument);
+    BOOST_CHECK((prob.get_c_tol() == vector_double{12., 22.}));
+}
+
+BOOST_AUTO_TEST_CASE(problem_feasibility_methods_test)
+{
+    problem test01{base_p(2u, 1u, 1u, {1., 1., 1., 1.}, {0., 0.}, {1., 1.})};
+    problem test02{base_p(2u, 1u, 1u, {1., 1., 1e-9, -1.}, {0., 0.}, {1., 1.})};
+
+    BOOST_CHECK(test01.feasibility_x({1., 1.}) == false);
+    BOOST_CHECK(test01.feasibility_f({2., 3., 1e-10, 3.}) == false);
+    test01.set_c_tol({2., 2.});
+    BOOST_CHECK(test01.feasibility_x({1., 1.}) == true);
+    BOOST_CHECK(test01.feasibility_f({2., 3., 1e-10, 1.}) == true);
+
+    BOOST_CHECK(test02.feasibility_x({1., 1.}) == false);
+    BOOST_CHECK(test02.feasibility_f({2., 3., 1e-10, 3.}) == false);
+    test02.set_c_tol({2., 2.});
+    BOOST_CHECK(test02.feasibility_x({1., 1.}) == true);
+    BOOST_CHECK(test02.feasibility_f({2., 3., 1e-10, 1.5}) == true);
+
+    BOOST_CHECK_THROW(test02.feasibility_f({1., -23, 1e-10, 2., 34.}), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(null_problem_test)
+{
+    // Problem instantiation
+    problem p{null_problem{}};
+    // Pick a few reference points
+    vector_double x1 = {1};
+    vector_double x2 = {2};
+    // Fitness test
+    BOOST_CHECK((p.fitness(x1) == vector_double{0}));
+    BOOST_CHECK((p.fitness(x2) == vector_double{0}));
+    p = problem{null_problem{2}};
+    BOOST_CHECK(null_problem{2}.get_nobj() == 2u);
+    BOOST_CHECK(null_problem{2}.get_nec() == 0u);
+    BOOST_CHECK(null_problem{2}.get_nic() == 0u);
+    BOOST_CHECK((null_problem{2, 3, 4}.get_nobj() == 2u));
+    BOOST_CHECK((null_problem{2, 3, 4}.get_nec() == 3u));
+    BOOST_CHECK((null_problem{2, 3, 4}.get_nic() == 4u));
+    BOOST_CHECK(p.get_nobj() == 2u);
+    BOOST_CHECK((p.fitness(x1) == vector_double{0, 0}));
+    BOOST_CHECK((p.fitness(x2) == vector_double{0, 0}));
+    BOOST_CHECK_THROW(p = problem{null_problem{0}}, std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
+{
+    problem p{null_problem{2, 3, 4}};
+    // Call objfun to increase the internal counter.
+    p.fitness({1});
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(p);
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
+    }
+    // Change the content of p before deserializing.
+    p = problem{null_problem{}};
+    BOOST_CHECK_EQUAL(p.get_nobj(), 1u);
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
+    }
+    auto after = boost::lexical_cast<std::string>(p);
+    BOOST_CHECK_EQUAL(before, after);
+    BOOST_CHECK_EQUAL(p.get_nobj(), 2u);
+    BOOST_CHECK_EQUAL(p.get_nec(), 3u);
+    BOOST_CHECK_EQUAL(p.get_nic(), 4u);
+    BOOST_CHECK_EQUAL(p.fitness({1.}).size(), 9u);
+}
+
+BOOST_AUTO_TEST_CASE(extract_test)
+{
+    problem p{null_problem{}};
+    BOOST_CHECK(p.is<null_problem>());
+    BOOST_CHECK(!p.is<base_p>());
+    BOOST_CHECK((std::is_same<null_problem *, decltype(p.extract<null_problem>())>::value));
+    BOOST_CHECK(
+        (std::is_same<null_problem const *, decltype(static_cast<const problem &>(p).extract<null_problem>())>::value));
+    BOOST_CHECK(p.extract<null_problem>() != nullptr);
+    BOOST_CHECK(static_cast<const problem &>(p).extract<null_problem>() != nullptr);
+    BOOST_CHECK(p.extract<base_p>() == nullptr);
+    BOOST_CHECK(static_cast<const problem &>(p).extract<base_p>() == nullptr);
+}
+
+struct ts1 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+};
+
+struct ts2 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+struct ts3 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    int get_thread_safety() const
+    {
+        return 2;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(thread_safety_test)
+{
+    BOOST_CHECK(problem{null_problem{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(problem{ts1{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(problem{ts2{}}.get_thread_safety() == thread_safety::none);
+    BOOST_CHECK(problem{ts3{}}.get_thread_safety() == thread_safety::basic);
 }

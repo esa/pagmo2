@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_ALGORITHMS_SEA_HPP
 #define PAGMO_ALGORITHMS_SEA_HPP
 
@@ -30,38 +58,33 @@ namespace pagmo
  * by mutating its best individual uniformly at random within the bounds. Should the
  * offspring be better than the worst individual in the population it will substitute it.
  *
- * @note The algorithm does not work for multi-objective problems, nor for
+ * **NOTE** The algorithm does not work for multi-objective problems, nor for
  * constrained optimization
  *
- * @note The mutation is uniform within box-bounds. Hence, unbounded problems
+ * **NOTE** The mutation is uniform within box-bounds. Hence, unbounded problems
  * will produce an error.
  *
- * @see Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for
+ * See: Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for
  * combinatorial optimization: A decade of results." International Journal of Automation and Computing
  * 4.3 (2007): 281-293.
  *
- * @see http://www.scholarpedia.org/article/Evolution_strategies
+ * See: http://www.scholarpedia.org/article/Evolution_strategies
  *
  */
 class sea
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, improvement, mutations)
     typedef std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor
     /**
-     * Constructs a sea algorithm from the number of generations and the random seed.
+     * Constructs sea
      *
-     * @param[in] gen Number of generations to consider. Each generation will compute the objective function once
-     * @param[in] seed seed used by the internal random number generator
+     * @param gen Number of generations to consider. Each generation will compute the objective function once
+     * @param seed seed used by the internal random number generator
      */
     sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next())
         : m_gen(gen), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
@@ -70,7 +93,7 @@ public:
 
     /// Algorithm evolve method (juice implementation of the algorithm)
     /**
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained
      */
@@ -78,7 +101,7 @@ public:
     {
         // We store some useful properties
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                              // allowed (pop.set_problem_seed is)
+                                              // allowed
         const auto dim = prob.get_nx();       // This getter does not return a const reference but a copy
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
@@ -101,9 +124,8 @@ public:
         if (m_gen == 0u) {
             return pop;
         }
-        if (pop.size() < 1u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 1 individual in the population, "
-                                                   + std::to_string(pop.size()) + " detected");
+        if (!pop.size()) {
+            pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -120,7 +142,7 @@ public:
             if (prob.is_stochastic()) {
                 // change the problem seed. This is done via the population_set_seed method as prob.set_seed
                 // is forbidden being prob a const ref.
-                pop.set_problem_seed(std::uniform_int_distribution<unsigned int>()(m_e));
+                pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
                 // re-evaluate the whole population w.r.t. the new seed
                 for (decltype(pop.size()) j = 0u; j < pop.size(); ++j) {
                     pop.set_xf(j, pop.get_x()[j], prob.fitness(pop.get_x()[j]));
@@ -183,11 +205,6 @@ public:
         }
         return pop;
     };
-    /// Sets the algorithm seed
-    void set_seed(unsigned int seed)
-    {
-        m_seed = seed;
-    };
     /// Sets the algorithm verbosity
     /**
      * Sets the verbosity level of the screen output and of the
@@ -197,7 +214,7 @@ public:
      * - >1: will print and log one line each \p level generations.
      *
      * Example (verbosity 1):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:          Best:   Improvement:     Mutations:
      * 632           3797        1464.31        51.0203              1
      * 633           3803        1463.23        13.4503              1
@@ -215,22 +232,46 @@ public:
     {
         m_verbosity = level;
     };
-    /// Gets the seed
-    unsigned int get_seed() const
-    {
-        return m_seed;
-    }
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
+    void set_seed(unsigned int seed)
+    {
+        m_seed = seed;
+    };
+    /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
+    unsigned int get_seed() const
+    {
+        return m_seed;
+    }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "(N+1)-EA Simple Evolutionary Algorithm";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         return "\tGenerations: " + std::to_string(m_gen) + "\n\tVerbosity: " + std::to_string(m_verbosity)
@@ -248,7 +289,14 @@ public:
     {
         return m_log;
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

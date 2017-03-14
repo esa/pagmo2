@@ -1,9 +1,38 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_ALGORITHMS_DE_HPP
 #define PAGMO_ALGORITHMS_DE_HPP
 
 #include <iomanip>
 #include <numeric> //std::iota
 #include <random>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <utility> //std::swap
@@ -31,31 +60,26 @@ namespace pagmo
  * The implementation provided for PaGMO is based on the code provided in the official
  * DE web site. pagmo::de is suitable for box-constrained single-objective continuous optimization.
  *
- * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+ * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
  * the allowed box-bounds, is here done by creating a random number in the bounds.
  *
- * @see http://www.icsi.berkeley.edu/~storn/code.html for the official DE web site
- * @see http://www.springerlink.com/content/x555692233083677/ for the paper that introduces Differential Evolution
+ * See: http://www.icsi.berkeley.edu/~storn/code.html for the official DE web site
+ * See: http://www.springerlink.com/content/x555692233083677/ for the paper that introduces Differential Evolution
  */
 class de
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, dx, df)
     typedef std::tuple<unsigned int, unsigned long long, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor.
     /**
-     * Constructs a de algorithm
+     * Constructs de
      *
      * The following variants (mutation variants) are available to create a new candidate individual:
-     * @code
+     * @code{.unparsed}
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
      * 5 - rand/2/exp                               6. - best/1/bin
@@ -63,13 +87,13 @@ public:
      * 9 - best/2/bin                               10. - rand/2/bin
      * @endcode
      *
-     * @param[in] gen number of generations.
-     * @param[in] F weight coefficient (dafault value is 0.8)
-     * @param[in] CR crossover probability (dafault value is 0.9)
-     * @param[in] variant mutation variant (dafault variant is 2: /rand/1/exp)
-     * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
-     * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param gen number of generations.
+     * @param F weight coefficient (dafault value is 0.8)
+     * @param CR crossover probability (dafault value is 0.9)
+     * @param variant mutation variant (dafault variant is 2: /rand/1/exp)
+     * @param ftol stopping criteria on the x tolerance (default is 1e-6)
+     * @param xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if F, CR are not in [0,1]
      * @throws std::invalid_argument if variant is not one of 1 .. 10
@@ -95,7 +119,7 @@ public:
      * Evolves the population for a maximum number of generations, until one of
      * tolerances set on the population flatness (x_tol, f_tol) are met.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
      * @throws std::invalid_argument if the population size is not at least 5
@@ -104,7 +128,7 @@ public:
     {
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                              // allowed (pop.set_problem_seed is)
+                                              // allowed
         auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
@@ -134,7 +158,7 @@ public:
             return pop;
         }
         if (pop.size() < 5u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 5 individuals in the population, "
+            pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
                                                    + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
@@ -382,13 +406,18 @@ public:
         }
         return pop;
     }
-
-    /// Sets the algorithm seed
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     };
     /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned int get_seed() const
     {
         return m_seed;
@@ -401,7 +430,7 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 100):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:          Best:            dx:            df:
      * 5001         100020    3.62028e-05      0.0396687      0.0002866
      * 5101         102020    1.16784e-05      0.0473027    0.000249057
@@ -422,21 +451,37 @@ public:
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
-    /// Get generations
+    /// Gets the generations
+    /**
+     * @return the number of generations to evolve for
+     */
     unsigned int get_gen() const
     {
         return m_gen;
     }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "Differential Evolution";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         return "\tGenerations: " + std::to_string(m_gen) + "\n\tParameter F: " + std::to_string(m_F)
@@ -455,7 +500,14 @@ public:
     {
         return m_log;
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

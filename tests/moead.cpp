@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #define BOOST_TEST_MODULE moead_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -8,7 +36,6 @@
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/moead.hpp>
-#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -19,22 +46,35 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(moead_algorithm_construction)
 {
-    moead user_algo{10u, "grid", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
-    BOOST_CHECK(user_algo.get_verbosity() == 0u);
-    BOOST_CHECK(user_algo.get_seed() == 23u);
-    BOOST_CHECK((user_algo.get_log() == moead::log_type{}));
+    moead uda{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
+    BOOST_CHECK(uda.get_verbosity() == 0u);
+    BOOST_CHECK(uda.get_seed() == 23u);
+    BOOST_CHECK((uda.get_log() == moead::log_type{}));
 
     // Check the throws
     // Wrong weight generation type
-    BOOST_CHECK_THROW((moead{1234u, "random_typo"}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "typo", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
+    // Wrong decomposition method
+    BOOST_CHECK_THROW((moead{10u, "grid", "typo", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}), std::invalid_argument);
     // Wrong CR
-    BOOST_CHECK_THROW((moead{1234u, "grid", 20u, 2.}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1.1, 0.5, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, -0.3, 0.5, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
     // Wrong F
-    BOOST_CHECK_THROW((moead{1234u, "grid", 20u, 0.5, 2.}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 1.1, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., -0.3, 20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
     // Wrong eta_m
-    BOOST_CHECK_THROW((moead{1234u, "grid", 20u, 0.5, 0.5, -2.}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 0.5, -20., 0.9, 2u, true, 23u}),
+                      std::invalid_argument);
     // Wrong realb
-    BOOST_CHECK_THROW((moead{1234u, "grid", 20u, 0.5, 0.5, 20., 2.}), std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 1.1, 2u, true, 23u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., -0.34, 2u, true, 23u}),
+                      std::invalid_argument);
 }
 
 struct mo_con {
@@ -103,11 +143,11 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     population pop1{prob, 40u, 23u};
     population pop2{prob, 40u, 23u};
 
-    moead user_algo1{10u, "grid", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
+    moead user_algo1{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
     user_algo1.set_verbosity(1u);
     pop1 = user_algo1.evolve(pop1);
 
-    moead user_algo2{10u, "grid", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
+    moead user_algo2{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
     user_algo2.set_verbosity(1u);
     pop2 = user_algo2.evolve(pop2);
 
@@ -115,6 +155,8 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 
     // We then check that the method evolve fails when called on unsuitable problems (populations)
+    // Empty population.
+    BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     // Single objective problem
     BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{rosenbrock{}}, 20u}), std::invalid_argument);
     // Multi-objective problem with constraints
@@ -122,7 +164,8 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     // Stochastic problem
     BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{mo_sto{}}, 15u}), std::invalid_argument);
     // Population size is too small for the neighbourhood specified
-    BOOST_CHECK_THROW(moead(10u, "grid", 20u).evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(moead(10u, "grid", "tchebycheff", 20u).evolve(population{problem{zdt{}}, 15u}),
+                      std::invalid_argument);
 
     // And a clean exit for 0 generations
     population pop{zdt{}, 40u};
@@ -135,7 +178,7 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
 
 BOOST_AUTO_TEST_CASE(moead_setters_getters_test)
 {
-    moead user_algo{10u, "grid", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
+    moead user_algo{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
     user_algo.set_verbosity(23u);
     BOOST_CHECK(user_algo.get_verbosity() == 23u);
     user_algo.set_seed(15u);
@@ -150,7 +193,7 @@ BOOST_AUTO_TEST_CASE(moead_serialization_test)
     // Make one evolution
     problem prob{zdt{1u, 30u}};
     population pop{prob, 40u, 23u};
-    algorithm algo{moead{10u, "grid", 10u, 0.9, 0.5, 20., 0.9, 2u, true, 23u}};
+    algorithm algo{moead{10u, "grid", "tchebycheff", 10u, 0.9, 0.5, 20., 0.9, 2u, true, 23u}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
 

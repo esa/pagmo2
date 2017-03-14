@@ -1,11 +1,39 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_PROBLEM_ZDT_HPP
 #define PAGMO_PROBLEM_ZDT_HPP
 
 #include <algorithm>
 #include <cmath>
-#include <exception>
 #include <iostream>
 #include <iterator>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -13,6 +41,7 @@
 #include "../detail/constants.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
+#include "../population.hpp"
 #include "../problem.hpp"
 #include "../types.hpp"
 
@@ -30,10 +59,10 @@ namespace pagmo
  * any point to the Pareto front while creating interesting problems. They also suggest some
  * dimensions for instantiating the problems, namely \f$m = [30, 30, 30, 10, 11, 10]\f$.
  *
- * @note The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
+ * **NOTE** The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
  * via std::floor().
  *
- * @see Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:
+ * See: Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:
  * Empirical results." Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848
  *
  * ZDT1:
@@ -106,30 +135,37 @@ public:
      *
      * Will construct one problem from the ZDT test-suite.
      *
-     * @param[in] id problem number. Must be in [1, .., 6]
-     * @param[in] param problem parameter, representing the problem dimension
+     * @param prob_id problem number. Must be in [1, .., 6]
+     * @param param problem parameter, representing the problem dimension
      * except for ZDT5 where it represents the number of binary strings
      *
      * @throws std::invalid_argument if \p id is not in [1,..,6]
      * @throws std::invalid_argument if \p param is not at least 2.
      */
-    zdt(unsigned int id = 1u, unsigned int param = 30u) : m_id(id), m_param(param)
+    zdt(unsigned int prob_id = 1u, unsigned int param = 30u) : m_prob_id(prob_id), m_param(param)
     {
         if (param < 2u) {
             pagmo_throw(std::invalid_argument, "ZDT test problems must have a minimum value of 2 for the constructing "
                                                "parameter (representing the dimension except for ZDT5), "
                                                    + std::to_string(param) + " requested");
         }
-        if (id == 0u || id > 6u) {
-            pagmo_throw(std::invalid_argument,
-                        "ZDT test suite contains six (id=[1 ... 6]) problems, id=" + std::to_string(id) + " requested");
+        if (prob_id == 0u || prob_id > 6u) {
+            pagmo_throw(std::invalid_argument, "ZDT test suite contains six (prob_id=[1 ... 6]) problems, prob_id="
+                                                   + std::to_string(prob_id) + " was detected");
         }
     };
-    /// Fitness
+    /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
     vector_double fitness(const vector_double &x) const
     {
         vector_double retval;
-        switch (m_id) {
+        switch (m_prob_id) {
             case 1u:
                 retval = zdt1_fitness(x);
                 break;
@@ -152,16 +188,28 @@ public:
         return retval;
     }
     /// Number of objectives
+    /**
+     *
+     * It returns the number of objectives.
+     *
+     * @return the number of objectives
+     */
     vector_double::size_type get_nobj() const
     {
         return 2u;
     }
 
-    /// Problem bounds
+    /// Box-bounds
+    /**
+     *
+     * It returns the box-bounds for this UDP.
+     *
+     * @return the lower and upper bounds for each of the decision vector components
+     */
     std::pair<vector_double, vector_double> get_bounds() const
     {
         std::pair<vector_double, vector_double> retval;
-        switch (m_id) {
+        switch (m_prob_id) {
             case 1u:
             case 2u:
             case 3u:
@@ -178,20 +226,44 @@ public:
             }
             case 5u: {
                 auto dim = 30u + 5u * (m_param - 1u);
-                retval = {
-                    vector_double(dim, 0.),
-                    vector_double(
-                        dim,
-                        2.)}; // the bounds [0,2] guarantee that floor(x) will be in [0,1] as the rng generates in [0,2)
+                retval
+                    = {vector_double(dim, 0.),
+                       vector_double(
+                           dim,
+                           1.)}; // the bounds [0,1] imply that round(x) will be in [0,1] as the rng generates in [0,1)
                 break;
             }
         }
         return retval;
     }
     /// Problem name
+    /**
+     *
+     *
+     * @return a string containing the problem name
+     */
     std::string get_name() const
     {
-        return "ZDT" + std::to_string(m_id);
+        return "ZDT" + std::to_string(m_prob_id);
+    }
+    /// Distance from the Pareto front (of a population)
+    /**
+     * Convergence metric for a given population (0 = on the optimal front)
+     *
+     * Takes the average across the input population of the p_distance
+     *
+     * @param pop population to be assigned a pareto distance
+     * @return the p_distance
+     *
+     */
+    double p_distance(const pagmo::population &pop) const
+    {
+        double c = 0.0;
+        for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+            c += p_distance(pop.get_x()[i]);
+        }
+
+        return c / static_cast<double>(pop.size());
     }
     /// Distance from the Pareto front
     /**
@@ -204,14 +276,14 @@ public:
      * @param x input decision vector
      * @return the p_distance
      *
-     * @see Märtens, Marcus, and Dario Izzo. "The asynchronous island model
+     * See: Märtens, Marcus, and Dario Izzo. "The asynchronous island model
      * and NSGA-II: study of a new migration operator and its performance."
      * Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013.
      */
     double p_distance(const vector_double &x) const
     {
         double retval = 0.;
-        switch (m_id) {
+        switch (m_prob_id) {
             case 1u:
             case 2u:
             case 3u:
@@ -229,11 +301,18 @@ public:
         }
         return retval;
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_id, m_param);
+        ar(m_prob_id, m_param);
     }
 
 private:
@@ -313,10 +392,10 @@ private:
         std::vector<vector_double::size_type> u(n_vectors, 0u);
         std::vector<vector_double::size_type> v(n_vectors);
 
-        // Convert the input vector into floored values (integers)
+        // Convert the input vector into rounded values (integers)
         vector_double x;
         std::transform(x_double.begin(), x_double.end(), std::back_inserter(x),
-                       [](double item) { return std::floor(item); });
+                       [](double item) { return std::round(item); });
         f[0] = x[0];
 
         // Counts how many 1s are there in the first (30 dim)
@@ -442,7 +521,7 @@ private:
 
 private:
     // Problem dimensions
-    unsigned int m_id;
+    unsigned int m_prob_id;
     unsigned int m_param;
 };
 }

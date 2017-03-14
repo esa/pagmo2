@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_IO_HPP
 #define PAGMO_IO_HPP
 
@@ -5,14 +33,20 @@
 #include <utility>
 #include <vector>
 
+#include "threading.hpp"
+
 #define PAGMO_MAX_OUTPUT_LENGTH 5u
 
 namespace pagmo
 {
 
-/// Forward declaration
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// Forward declaration
 template <typename... Args>
-void stream(std::ostream &, const Args &...);
+inline void stream(std::ostream &, const Args &...);
+
+#endif
 
 namespace detail
 {
@@ -29,6 +63,15 @@ inline void stream_impl(std::ostream &os, const bool &b)
         os << "true";
     } else {
         os << "false";
+    }
+}
+
+inline void stream_impl(std::ostream &os, thread_safety ts)
+{
+    if (ts == thread_safety::none) {
+        os << "none";
+    } else {
+        os << "basic";
     }
 }
 
@@ -69,14 +112,25 @@ inline void stream_impl(std::ostream &os, const T &x, const Args &... args)
 
 } // end of namespace detail
 
-/// The PaGMO streaming function
+/// The pagmo streaming function.
+/**
+ * This function will direct to the output stream \p os the input arguments \p args.
+ *
+ * @param os the target stream.
+ * @param args the objects that will be directed to to \p os.
+ */
 template <typename... Args>
 inline void stream(std::ostream &os, const Args &... args)
 {
     detail::stream_impl(os, args...);
 }
 
-/// The PaGMO print function
+/// The pagmo print function.
+/**
+ * This function is equivalent to calling pagmo::stream with \p std::cout as first argument.
+ *
+ * @param args the objects that will be printed to screen.
+ */
 template <typename... Args>
 inline void print(const Args &... args)
 {

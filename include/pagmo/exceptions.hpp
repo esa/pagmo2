@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_EXCEPTIONS_HPP
 #define PAGMO_EXCEPTIONS_HPP
 
@@ -8,6 +36,7 @@
  */
 
 #include <exception>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -76,16 +105,30 @@ struct ex_thrower {
  *
  * Note that, in order to be fully standard-compliant, for use with exceptions that take no arguments on construction
  * the invocation must include a closing comma. E.g.,
- @code
- pagmo_throw(std::bad_alloc);
- @endcode
+ * @code{.unparsed}
+ * pagmo_throw(std::bad_alloc);
+ * @endcode
  * is not correct, whereas
- @code
- pagmo_throw(std::bad_alloc,);
- @endcode
+ * @code{.unparsed}
+ * pagmo_throw(std::bad_alloc,);
+ * @endcode
  * is correct.
  */
 #define pagmo_throw(exception_type, ...)                                                                               \
     pagmo::detail::ex_thrower<exception_type>(__FILE__, __LINE__, __func__)(__VA_ARGS__)
+
+namespace pagmo
+{
+
+/// Exception for functionality which has not been implemented.
+/**
+ * This exception is used by pagmo::problem, pagmo::algorithm, etc. to signal that
+ * optional methods in user-defined classes are not implemented.
+ * This class inherits the constructors from \p std::runtime_error.
+ */
+struct not_implemented_error final : std::runtime_error {
+    using std::runtime_error::runtime_error;
+};
+}
 
 #endif

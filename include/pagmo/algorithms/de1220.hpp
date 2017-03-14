@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_ALGORITHMS_DE1220_HPP
 #define PAGMO_ALGORITHMS_DE1220_HPP
 
@@ -54,41 +82,35 @@ std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u, 3u, 7u, 10u
  * where \f$\tau\f$ is set to be 0.1, \f$random\f$ selects a random mutation variant and \f$r_i\f$ is a random
  * uniformly distributed number in [0, 1]
  *
- * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+ * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
  * the allowed box-bounds, is here done by creating a random number in the bounds.
  *
- * @see pagmo::de, pagmo::sade For other available algorithms based on Differential Evolution
+ * See: pagmo::de, pagmo::sade For other available algorithms based on Differential Evolution
  */
 
 class de1220
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, F, CR, Variant, dx, df)
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, unsigned int, double, double>
         log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type
-        = std::tuple<unsigned int, unsigned long long, double, double, double, unsigned int, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor.
     /**
-     * Constructs a pDE (a.k.a. DE 1220) algorithm
+     * Constructs pDE (a.k.a. DE 1220)
      *
      * The same two self-adaptation variants used in pagmo::sade are used to self-adapt the
      * CR and F parameters:
      *
-     * @code
+     * @code{.unparsed}
      * 1 - jDE (Brest et al.)                       2 - iDE (Elsayed at al.)
      * @endcode
      *
      * A subset of the following mutation variants is considered when adapting the mutation variant:
      *
-     * @code
+     * @code{.unparsed}
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
      * 5 - rand/2/exp                               6. - best/1/bin
@@ -103,22 +125,22 @@ public:
      * The first ten are the classical variants introduced in the orginal DE algorithm, the remaining ones are,
      * instead, introduced in the work by Elsayed et al.
      *
-     * @param[in] gen number of generations.
-     * @param[in] allowed_variants the subset of mutation variants to be considered (default is {2u ,3u ,7u ,10u ,13u
+     * @param gen number of generations.
+     * @param allowed_variants the subset of mutation variants to be considered (default is {2u ,3u ,7u ,10u ,13u
      ,14u ,15u ,16u})
-     * @param[in] variant_adptv parameter adaptation scheme to be used (one of 1..2)
-     * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
-     * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
-     * @param[in] memory when true the parameters CR anf F are not reset between successive calls to the evolve method
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param variant_adptv parameter adaptation scheme to be used (one of 1..2)
+     * @param ftol stopping criteria on the x tolerance (default is 1e-6)
+     * @param xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param memory when true the parameters CR anf F are not reset between successive calls to the evolve method
+     * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if \p variant_adptv is not in [0,1]
      * @throws std::invalid_argument if \p allowed_variants contains a number not in 1..18
      *
-     * @see (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control
+     * See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control
      parameters in differential evolution: a comparative study on numerical benchmark problems. Evolutionary
      Computation, IEEE Transactions on, 10(6), 646-657. Chicago
-     * @see (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple
+     * See: (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple
      strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011
      IEEE Congress on (pp. 1041-1048). IEEE.
      */
@@ -146,7 +168,7 @@ public:
      * Evolves the population for a maximum number of generations, until one of
      * tolerances set on the population flatness (x_tol, f_tol) are met.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
      * @throws std::invalid_argument if the population size is not at least 7
@@ -155,7 +177,7 @@ public:
     {
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                              // allowed (pop.set_problem_seed is)
+                                              // allowed
         auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
@@ -185,7 +207,7 @@ public:
             return pop;
         }
         if (pop.size() < 7u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 7 individuals in the population, "
+            pagmo_throw(std::invalid_argument, get_name() + " needs at least 7 individuals in the population, "
                                                    + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
@@ -680,13 +702,18 @@ public:
         }
         return pop;
     }
-
-    /// Sets the algorithm seed
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     };
     /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned int get_seed() const
     {
         return m_seed;
@@ -699,7 +726,7 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 1):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:
     *     1             15        45.4245       0.480391       0.567908              4        10.9413        35061.1
     *     2             30        45.4245       0.480391       0.567908              4        10.9413        35061.1
@@ -729,21 +756,37 @@ public:
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
-    /// Get generations
+    /// Gets the generations
+    /**
+     * @return the number of generations to evolve for
+     */
     unsigned int get_gen() const
     {
         return m_gen;
     }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "Self-adaptive Differential Evolution 1220";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         std::ostringstream ss;
@@ -770,7 +813,14 @@ public:
     {
         return m_log;
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

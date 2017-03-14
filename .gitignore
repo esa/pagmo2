@@ -4,6 +4,7 @@ build*
 # Temp files.
 *~
 *.bak
+.DS_Store
 
 # .orig files from patch.
 *.orig
@@ -14,13 +15,9 @@ build*
 # .out
 *.out
 
-# Third party submodules
-include/external/cereal/*
-
 # Generated docs
 doc/doxygen/html/*
 doc/doxygen/latex/*
 doc/doxygen/xml/*
 
 doc/sphinx/_build
-

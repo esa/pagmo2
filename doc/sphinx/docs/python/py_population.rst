@@ -1,5 +1,3 @@
-.. py_population
-
 Population class
 ================
 

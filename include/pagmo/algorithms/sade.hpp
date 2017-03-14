@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_ALGORITHMS_SADE_HPP
 #define PAGMO_ALGORITHMS_SADE_HPP
 
@@ -34,44 +62,40 @@ namespace pagmo
  * operator to produce new
  * CR anf F parameters for each individual. We refer to this variant as to iDE.
  *
- * @note There exist an algorithm referred to as SaDE in the literature. This is not the algorithm implemented in PaGMO.
+ * **NOTE** There exist an algorithm referred to as SaDE in the literature. This is not the algorithm implemented in
+ * PaGMO.
  *
- * @note The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+ * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
  * the allowed box-bounds, is here done by creating a random number in the bounds.
  *
- * @see (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control parameters
+ * See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control parameters
  * in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE
  * Transactions on, 10(6), 646-657. Chicago
- * @see (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple
+ * See: (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple
  * strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011
  * IEEE Congress on (pp. 1041-1048). IEEE.
  */
 class sade
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, best, F, CR, dx, df)
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor.
     /**
-     * Constructs a self-adaptive differential evolution algorithm
+     * Constructs self-adaptive differential evolution
      *
      * Two self-adaptation variants are available to control the F and CR parameters:
      *
-     * @code
+     * @code{.unparsed}
      * 1 - jDE (Brest et al.)                       2 - iDE (Elsayed at al.)
      * @endcode
      *
      * The following variants are available to produce a mutant vector:
      *
-     * @code
+     * @code{.unparsed}
      * 1 - best/1/exp                               2. - rand/1/exp
      * 3 - rand-to-best/1/exp                       4. - best/2/exp
      * 5 - rand/2/exp                               6. - best/1/bin
@@ -86,14 +110,14 @@ public:
      * The first ten are the classical mutation variants introduced in the orginal DE algorithm, the remaining ones are,
      * instead, considered in the work by Elsayed et al.
      *
-     * @param[in] gen number of generations.
-     * @param[in] variant mutation variant (dafault variant is 2: /rand/1/exp)
-     * @param[in] variant_adptv F and CR parameter adaptation scheme to be used (one of 1..2)
-     * @param[in] ftol stopping criteria on the x tolerance (default is 1e-6)
-     * @param[in] xtol stopping criteria on the f tolerance (default is 1e-6)
-     * @param[in] memory when true the adapted parameters CR anf F are not reset between successive calls to the evolve
+     * @param gen number of generations.
+     * @param variant mutation variant (dafault variant is 2: /rand/1/exp)
+     * @param variant_adptv F and CR parameter adaptation scheme to be used (one of 1..2)
+     * @param ftol stopping criteria on the x tolerance (default is 1e-6)
+     * @param xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param memory when true the adapted parameters CR anf F are not reset between successive calls to the evolve
      method
-     * @param[in] seed seed used by the internal random number generator (default is random)
+     * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if \p variant_adptv is not one of 0,1
      * @throws std::invalid_argument if variant is not one of 1, .., 18
@@ -120,7 +144,7 @@ public:
      * Evolves the population for a maximum number of generations, until one of
      * tolerances set on the population flatness (x_tol, f_tol) are met.
      *
-     * @param[in] pop population to be evolved
+     * @param pop population to be evolved
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
      * @throws std::invalid_argument if the population size is not at least 7
@@ -129,7 +153,7 @@ public:
     {
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                              // allowed (pop.set_problem_seed is)
+                                              // allowed
         auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
@@ -159,7 +183,7 @@ public:
             return pop;
         }
         if (pop.size() < 7u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 7 individuals in the population, "
+            pagmo_throw(std::invalid_argument, get_name() + " needs at least 7 individuals in the population, "
                                                    + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
@@ -642,13 +666,18 @@ public:
         }
         return pop;
     }
-
-    /// Sets the algorithm seed
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     };
     /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned int get_seed() const
     {
         return m_seed;
@@ -661,7 +690,7 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 1):
-     * @code
+     * @code{.unparsed}
      * Gen:        Fevals:          Best:             F:            CR:            dx:            df:
      *  301           4515       0.668472       0.374983       0.502932    0.000276682    0.000388866
      *  302           4530       0.668472       0.374983       0.502932    0.000213271     0.00020986
@@ -685,28 +714,49 @@ public:
         m_verbosity = level;
     };
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
-    /// Get generations
+    /// Gets the generations
+    /**
+     * @return the number of generations to evolve for
+     */
     unsigned int get_gen() const
     {
         return m_gen;
     }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "Self-adaptive Differential Evolution";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
-        return "\tGenerations: " + std::to_string(m_gen) + "\n\tVariant: " + std::to_string(m_variant)
-               + "\n\tSelf adaptation variant: " + std::to_string(m_variant_adptv) + "\n\tStopping xtol: "
-               + std::to_string(m_xtol) + "\n\tStopping ftol: " + std::to_string(m_Ftol) + "\n\tMemory: "
-               + std::to_string(m_memory) + "\n\tVerbosity: " + std::to_string(m_verbosity) + "\n\tSeed: "
-               + std::to_string(m_seed);
+        std::ostringstream ss;
+        stream(ss, "\tGenerations: ", m_gen);
+        stream(ss, "\n\tVariant: ", m_variant);
+        stream(ss, "\n\tSelf adaptation variant: ", m_variant_adptv);
+        stream(ss, "\n\tStopping xtol: ", m_xtol);
+        stream(ss, "\n\tStopping ftol: ", m_Ftol);
+        stream(ss, "\n\tMemory: ", m_memory);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
+        stream(ss, "\n\tSeed: ", m_seed);
+        return ss.str();
     }
     /// Get log
     /**
@@ -720,7 +770,14 @@ public:
     {
         return m_log;
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

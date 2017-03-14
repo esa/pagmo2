@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_DISCREPANCY_HPP
 #define PAGMO_DISCREPANCY_HPP
 
@@ -12,6 +40,7 @@
 #include <string>
 #include <vector>
 
+#include "../detail/custom_comparisons.hpp"
 #include "../detail/prime_numbers.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
@@ -31,7 +60,7 @@ namespace pagmo
  * a list of \f$n\f$ number that, by construction, will sum up to 1. Moreover this sampling is uniform.
  * As an example the following code would generate points distributed on a \f$n\f$ dimensional simplex:
  *
- * @code
+ * @code{.unparsed}
  * std::vector<std::vector<double>> points_on_a_simplex;
  * halton ld_rng(n-1);
  * for (auto i = 0u; i < 100u; ++i) {
@@ -39,13 +68,13 @@ namespace pagmo
  * }
  * @endcode
  *
- * @param[in] in a <tt>std::vector</tt> containing a point in \f$n+1\f$ dimensions.
+ * @param in a <tt>std::vector</tt> containing a point in \f$n+1\f$ dimensions.
  * @return a <tt>std::vector</tt> containing the projected point of \f$n\f$ dimensions.
  *
  * @throws std::invalid_argument if the input vector elements are not in [0,1]
  * @throws std::invalid_argument if the input vector has size 0 or 1.
  *
- * @see Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134.
+ * See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134.
  */
 inline std::vector<double> sample_from_simplex(std::vector<double> in)
 {
@@ -53,7 +82,7 @@ inline std::vector<double> sample_from_simplex(std::vector<double> in)
         pagmo_throw(std::invalid_argument, "Input vector must have all elements in [0,1]");
     }
     if (in.size() > 0u) {
-        std::sort(in.begin(), in.end());
+        std::sort(in.begin(), in.end(), detail::less_than_f<double>);
         in.insert(in.begin(), 0.0);
         in.push_back(1.0);
         for (decltype(in.size()) i = 0u; i < in.size() - 1u; ++i) {
@@ -95,7 +124,7 @@ inline std::vector<double> sample_from_simplex(std::vector<double> in)
  * \tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16},
  * \tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \f$
  *
- * @see http://en.wikipedia.org/wiki/Van_der_Corput_sequence
+ * See: http://en.wikipedia.org/wiki/Van_der_Corput_sequence
  *
  */
 class van_der_corput
@@ -106,8 +135,8 @@ public:
      * Consruct a van der Corput lowp-discrepancy sequence with base
      * \p b and starting element position \p n
      *
-     * @param[in] b base
-     * @param[in] n position of the starting element
+     * @param b base
+     * @param n position of the starting element
      *
      * @throws std::invalid_argument if the base is 0u or 1u
      *
@@ -120,6 +149,9 @@ public:
         }
     }
     /// Returns the next number in the sequence
+    /**
+     * @return the next number in the sequence
+     */
     double operator()()
     {
         double retval = 0.;
@@ -133,7 +165,14 @@ public:
         ++m_counter;
         return retval;
     }
-    /// Serialization.
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {
@@ -161,10 +200,10 @@ private:
  * \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\}
  * \f]
  *
- * @param[in] n selects which element of the sequence to return
- * @param[in] dim dimensions of the returned point
+ * @param n selects which element of the sequence to return
+ * @param dim dimensions of the returned point
  *
- * @see https://en.wikipedia.org/wiki/Halton_sequence
+ * See: https://en.wikipedia.org/wiki/Halton_sequence
  *
  */
 class halton
@@ -175,8 +214,8 @@ public:
      * Consruct a Halton low-discrepancy sequence with dimension
      * \p dim and starting element position \p n
      *
-     * @param[in] dim dimension
-     * @param[in] n position of the starting element
+     * @param dim dimension
+     * @param n position of the starting element
      *
      * @throws unspecified all exceptions thrown by pagmo::van_der_corput
      *
@@ -187,7 +226,10 @@ public:
             m_vdc.push_back(van_der_corput(detail::prime(i + 1), n));
         }
     }
-    /// Returns the next point in the sequence
+    /// Returns the next number in the sequence
+    /**
+     * @return the next number in the sequence
+     */
     std::vector<double> operator()()
     {
         std::vector<double> retval;
@@ -196,7 +238,14 @@ public:
         }
         return retval;
     }
-    /// Serialization.
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

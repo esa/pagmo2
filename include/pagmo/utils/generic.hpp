@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_UTILS_GENERIC_HPP
 #define PAGMO_UTILS_GENERIC_HPP
 
@@ -14,6 +42,7 @@
 #include <string>
 #include <utility>
 
+#include "../detail/custom_comparisons.hpp"
 #include "../exceptions.hpp"
 #include "../problem.hpp"
 #include "../rng.hpp"
@@ -27,22 +56,22 @@ namespace pagmo
  * Creates a random number within a closed range. If
  * both the lower and upper bounds are finite numbers, then the generated value
  * \f$ x \f$ will be such that \f$lb \le x < ub\f$. If \f$lb == ub\f$ then \f$lb\f$ is
- * returned
+ * returned.
  *
- * @note: This has to be preferred to std::uniform_real<double>(r_engine) as it
- * performs checks that avoid undefined behaviour in PaGMO.
+ * **NOTE**: This has to be preferred to std::uniform_real<double>(r_engine) as it
+ * performs checks that avoid undefined behaviour in pagmo.
  *
  * Example:
  *
- * @code
+ * @code{.unparsed}
  * std::mt19937 r_engine(32u);
  * auto x = uniform_real_from_range(3,5,r_engine); // a random value
  * auto x = uniform_real_from_range(2,2,r_engine); // the value 2.
  * @endcode
  *
- * @param[in] lb lower bound
- * @param[in] ub upper bound
- * @param[in] r_engine a <tt>std::mt19937</tt> random engine
+ * @param lb lower bound
+ * @param ub upper bound
+ * @param r_engine a <tt>std::mt19937</tt> random engine
  *
  * @throws std::invalid_argument if:
  * - the bounds contain NaNs or infs,
@@ -81,30 +110,30 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
 /**
  * Creates a random decision vector within some bounds. If
  * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
- * component of the randomly generated decision_vector will be such that
+ * component of the randomly generated pagmo::vector_double will be such that
  * \f$lb_i \le x_i < ub_i\f$. If \f$lb_i == ub_i\f$ then \f$lb_i\f$ is
- * returned
+ * returned.
  *
  * Example:
  *
- * @code
+ * @code{.unparsed}
  * std::mt19937 r_engine(32u);
- * auto x = decision_vector({{1,3},{3,5}}, r_engine); // a random vector
- * auto x = decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
+ * auto x = random_decision_vector({{1,3},{3,5}}, r_engine); // a random vector
+ * auto x = random_decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
  * @endcode
  *
- * @param[in] bounds an <tt>std::pair</tt> containing the bounds
- * @param[in] r_engine a <tt>std::mt19937</tt> random engine
+ * @param bounds an <tt>std::pair</tt> containing the bounds
+ * @param r_engine a <tt>std::mt19937</tt> random engine
  *
  * @throws std::invalid_argument if:
  * - the bounds are not of equal length, they have zero size, they contain NaNs or infs,
- *   or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
+ *   or \f$ \mathbf{ub} < \mathbf {lb}\f$,
  * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
  *
- * @returns a vector_double containing a random decision vector
+ * @returns a pagmo::vector_double containing a random decision vector
  */
-vector_double decision_vector(const std::pair<vector_double, vector_double> &bounds,
-                              detail::random_engine_type &r_engine)
+vector_double random_decision_vector(const std::pair<vector_double, vector_double> &bounds,
+                                     detail::random_engine_type &r_engine)
 {
     // This will check for consistent vector lengths, non-null sizes, lb <= ub and no NaNs.
     detail::check_problem_bounds(bounds);
@@ -121,31 +150,32 @@ vector_double decision_vector(const std::pair<vector_double, vector_double> &bou
 /**
  * Creates a random decision vector within some bounds. If
  * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
- * component of the randomly generated decision_vector will be such that
+ * component of the randomly generated pagmo::vector_double will be such that
  * \f$lb_i \le x_i < ub_i\f$. If \f$lb_i == ub_i\f$ then \f$lb_i\f$ is
- * returned
+ * returned.
  *
  * Example:
  *
- * @code
+ * @code{.unparsed}
  * std::mt19937 r_engine(32u);
- * auto x = decision_vector({1,3},{3,5}, r_engine); // a random vector
- * auto x = decision_vector({1,3},{1,3}, r_engine); // the vector {1,3}
+ * auto x = random_decision_vector({1,3},{3,5}, r_engine); // a random vector
+ * auto x = random_decision_vector({1,3},{1,3}, r_engine); // the vector {1,3}
  * @endcode
  *
- * @param[in] lb a vector_double containing the lower bounds
- * @param[in] ub a vector_double containing the upper bounds
- * @param[in] r_engine a <tt>std::mt19937</tt> random engine
+ * @param lb a vector_double containing the lower bounds
+ * @param ub a vector_double containing the upper bounds
+ * @param r_engine a <tt>std::mt19937</tt> random engine
  *
  * @throws std::invalid_argument if:
- * - the bounds are not of equal length, they contain NaNs or infs, or \f$ \mathbf{ub} \le \mathbf {lb}\f$,
+ * - the bounds are not of equal length, they contain NaNs or infs, or \f$ \mathbf{ub} < \mathbf {lb}\f$,
  * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
  *
- * @returns a vector_double containing a random decision vector
+ * @returns a pagmo::vector_double containing a random decision vector
  */
-vector_double decision_vector(const vector_double &lb, const vector_double &ub, detail::random_engine_type &r_engine)
+vector_double random_decision_vector(const vector_double &lb, const vector_double &ub,
+                                     detail::random_engine_type &r_engine)
 {
-    return decision_vector({lb, ub}, r_engine);
+    return random_decision_vector({lb, ub}, r_engine);
 }
 
 /// Safely cast between unsigned types
@@ -153,14 +183,14 @@ vector_double decision_vector(const vector_double &lb, const vector_double &ub, 
  * Performs a cast between unsigned types throwing if the input cannot be represented in the new type
  *
  * Example:
- * @code
+ * @code{.unparsed}
  * unsigned short s = std::numeric_limits<unsigned short>::max();
  * unsigned long l = std::numeric_limits<unsigned long>::max();
  * auto res1 = safe_cast<unsigned long>(s); // Will always work
  * auto res2 = safe_cast<unsigned short>(l); // Will throw an std::overflow_error if precision is lost
  * @endcode
  *
- * @param[in] x an unsigned value \p x to be casted to \p T
+ * @param x an unsigned value \p x to be casted to \p T
  * @return the input \p x safey casted to \p T
  * @throws std::overflow_error if \p x cannot be represented by the new type
  */
@@ -200,12 +230,12 @@ double binomial_coefficient(vector_double::size_type n, vector_double::size_type
  * points and \f$M\f$ their dimensionality
  *
  * Example:
- * @code
+ * @code{.unparsed}
  * auto res = kNN({{1, 1}, {2, 2}, {3.1, 3.1}, {5, 5}}, 2u);
  * @endcode
  *
- * @param[in] points the \f$N\f$ points having dimension \f$M\f$
- * @param[in] k number of neighbours to detect
+ * @param points the \f$N\f$ points having dimension \f$M\f$
+ * @param k number of neighbours to detect
  * @return An <tt>std::vector<std::vector<population::size_type> > </tt> containing the indexes of the k nearest
  * neighbours sorted by distance
  * @throws std::invalid_argument If the points do not all have the same dimension.
@@ -237,7 +267,7 @@ std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<vector_
         std::vector<vector_double::size_type> idxs(N);
         std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
         std::sort(idxs.begin(), idxs.end(), [&distances](vector_double::size_type idx1, vector_double::size_type idx2) {
-            return distances[idx1] < distances[idx2];
+            return detail::less_than_f(distances[idx1], distances[idx2]);
         });
         // We remove the first element containg the self-distance (0)
         idxs.erase(std::remove(idxs.begin(), idxs.end(), i), idxs.end());

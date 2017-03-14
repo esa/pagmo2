@@ -44,12 +44,49 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND YACMA_COMPILER_IS_CLANGXX)
   list(APPEND PAGMO_CXX_FLAGS_DEBUG "-stdlib=libc++")
   list(APPEND PAGMO_CXX_FLAGS_RELEASE "-stdlib=libc++")
 endif()
+if(YACMA_COMPILER_IS_MSVC)
+  # Disable the idiotic minmax macros on MSVC, some annoying warnings,
+  # and enable the bigobj option.
+  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/bigobj")
+  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/bigobj")
+endif()
+if(YACMA_COMPILER_IS_INTELXX)
+  # NOTE: on MSVC we use the push/pop pragmas, but they do not seem to work on Intel (the pragmas
+  # in icc influence the behaviour at instantiation point, not at definition point).
+  # These warnings are useful in principle, but they are generated a lot from cereal and we have no
+  # way of disabling them selectively. Just rely on the other compilers to provde good diagnostic.
+  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-diag-disable" "2259,1682,68")
+  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-diag-disable" "2259,1682,68")
+endif()
 
 # Setting up Eigen3
 if(PAGMO_WITH_EIGEN3)
     find_package(Eigen3 REQUIRED)
     message(STATUS "Eigen include directory: ${EIGEN3_INCLUDE_DIR}")
     message(STATUS "Eigen version detected: ${EIGEN3_VERSION}")
+endif()
+
+# Python setup.
+# NOTE: we do it here because we need to detect the Python bits *before*
+# looking for boost.python.
+if(PAGMO_BUILD_PYGMO)
+    include(YACMAPythonSetup)
+
+    # Python version check.
+    if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
+        message(FATAL_ERROR "Minimum supported Python version is 2.7.")
+    endif()
+
+    if(NOT YACMA_NUMPY_INCLUDES_DIR)
+        message(FATAL_ERROR "The NumPy headers could not be located.")
+    endif()
+endif()
+
+# Boost setup.
+# We need Boost if we are building pygmo (boost.python) or the tests
+# (boost testing framework, header only).
+if(PAGMO_BUILD_PYGMO OR PAGMO_BUILD_TESTS)
+    include(PagmoFindBoost)
 endif()
 
 # Setup of the header-only pagmo library.

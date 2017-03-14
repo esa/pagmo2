@@ -1,10 +1,38 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #ifndef PAGMO_PROBLEM_INVENTORY_HPP
 #define PAGMO_PROBLEM_INVENTORY_HPP
 
-#include <exception>
 #include <iostream>
 #include <random>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -40,7 +68,7 @@ namespace pagmo
  * d_i]_+
  * \f]
  *
- * @see www2.isye.gatech.edu/people/faculty/Alex_Shapiro/SPbook.pdf
+ * See: www2.isye.gatech.edu/people/faculty/Alex_Shapiro/SPbook.pdf
  *
  */
 class inventory
@@ -52,18 +80,24 @@ public:
      * approximate the expected value and a starting random seed, we construct
      * the inventory prolem
      *
-     * @param[in] weeks dimension of the problem corresponding to the numer of weeks
+     * @param weeks dimension of the problem corresponding to the numer of weeks
      * to plan the inventory for.
-     * @param[in] sample_size dimension of the sample used to approximate the expected value
-     * @param[in] seed starting random seed to build the pseudorandom sequences used to
+     * @param sample_size dimension of the sample used to approximate the expected value
+     * @param seed starting random seed to build the pseudorandom sequences used to
      * generate the sample
      */
     inventory(unsigned int weeks = 4u, unsigned int sample_size = 10u, unsigned int seed = pagmo::random_device::next())
         : m_weeks(weeks), m_sample_size(sample_size), m_e(seed), m_seed(seed)
     {
     }
-
     /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
     vector_double fitness(const vector_double &x) const
     {
         // We seed the random engine
@@ -85,34 +119,45 @@ public:
         }
         return {retval / m_sample_size};
     }
-
-    /// Number of objectives
-    vector_double::size_type get_nobj() const
-    {
-        return 1u;
-    }
-
-    /// Problem bounds
+    /// Box-bounds
+    /**
+     *
+     * It returns the box-bounds for this UDP.
+     *
+     * @return the lower and upper bounds for each of the decision vector components
+     */
     std::pair<vector_double, vector_double> get_bounds() const
     {
         vector_double lb(m_weeks, 0.);
         vector_double ub(m_weeks, 200.);
         return {lb, ub};
     }
-
     /// Sets the seed
+    /**
+     *
+     *
+     * @param seed the random number generator seed
+     */
     void set_seed(unsigned int seed)
     {
         m_seed = seed;
     }
-
     /// Problem name
+    /**
+     *
+     *
+     * @return a string containing the problem name
+     */
     std::string get_name() const
     {
         return "Inventory problem";
     }
-
     /// Extra informations
+    /**
+     *
+     *
+     * @return a string containing extra informations on the problem
+     */
     std::string get_extra_info() const
     {
         std::ostringstream ss;
@@ -122,7 +167,14 @@ public:
         return ss.str();
     }
 
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

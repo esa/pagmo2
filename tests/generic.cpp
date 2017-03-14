@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #define BOOST_TEST_MODULE generic_utilities_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -30,7 +58,7 @@ BOOST_AUTO_TEST_CASE(uniform_real_from_range_test)
     BOOST_CHECK_THROW(uniform_real_from_range(inf, inf, r_engine), std::invalid_argument);
 }
 
-BOOST_AUTO_TEST_CASE(decision_vector_test)
+BOOST_AUTO_TEST_CASE(random_decision_vector_test)
 {
     auto inf = std::numeric_limits<double>::infinity();
     auto big = std::numeric_limits<double>::max();
@@ -38,21 +66,21 @@ BOOST_AUTO_TEST_CASE(decision_vector_test)
     detail::random_engine_type r_engine(pagmo::random_device::next());
 
     // Test the throws
-    BOOST_CHECK_THROW(decision_vector({{1, 2}, {0, 3}}, r_engine), std::invalid_argument);
-    BOOST_CHECK_THROW(decision_vector({{1, -big}, {0, big}}, r_engine), std::invalid_argument);
-    BOOST_CHECK_THROW(decision_vector({{1, -inf}, {0, 32}}, r_engine), std::invalid_argument);
-    BOOST_CHECK_THROW(decision_vector({{1, 2, 3}, {0, 3}}, r_engine), std::invalid_argument);
-    BOOST_CHECK_THROW(decision_vector({{0, 2, 3}, {1, 4, nan}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{1, 2}, {0, 3}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{1, -big}, {0, big}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{1, -inf}, {0, 32}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{1, 2, 3}, {0, 3}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, 2, 3}, {1, 4, nan}}, r_engine), std::invalid_argument);
 
     // Test the results
-    BOOST_CHECK((decision_vector({{3, 4}, {3, 4}}, r_engine) == vector_double{3, 4}));
-    BOOST_CHECK(decision_vector({{0, 0}, {1, 1}}, r_engine)[0] >= 0);
-    BOOST_CHECK(decision_vector({{0, 0}, {1, 1}}, r_engine)[1] < 1);
+    BOOST_CHECK((random_decision_vector({{3, 4}, {3, 4}}, r_engine) == vector_double{3, 4}));
+    BOOST_CHECK(random_decision_vector({{0, 0}, {1, 1}}, r_engine)[0] >= 0);
+    BOOST_CHECK(random_decision_vector({{0, 0}, {1, 1}}, r_engine)[1] < 1);
 
     // Test the overload
-    BOOST_CHECK((decision_vector({3, 4}, {3, 4}, r_engine) == vector_double{3, 4}));
-    BOOST_CHECK(decision_vector({0, 0}, {1, 1}, r_engine)[0] >= 0);
-    BOOST_CHECK(decision_vector({0, 0}, {1, 1}, r_engine)[1] < 1);
+    BOOST_CHECK((random_decision_vector({3, 4}, {3, 4}, r_engine) == vector_double{3, 4}));
+    BOOST_CHECK(random_decision_vector({0, 0}, {1, 1}, r_engine)[0] >= 0);
+    BOOST_CHECK(random_decision_vector({0, 0}, {1, 1}, r_engine)[1] < 1);
 }
 
 BOOST_AUTO_TEST_CASE(force_bounds_test)

@@ -1,5 +1,3 @@
-.. py_problem
-
 Problem class
 =============
 

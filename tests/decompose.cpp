@@ -1,3 +1,31 @@
+/* Copyright 2017 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #define BOOST_TEST_MODULE decompose_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -7,9 +35,10 @@
 #include <stdexcept>
 #include <string>
 
+#include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
-#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
@@ -39,7 +68,7 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
 {
     // First we check directly the two constructors
     problem p0{decompose{}};
-    problem p1{decompose{zdt{1u, 2u}, {0.5, 0.5}, {0., 0.}, "weighted", false}};
+    problem p1{decompose{null_problem{2}, {0.5, 0.5}, {0., 0.}, "weighted", false}};
 
     auto p0_string = boost::lexical_cast<std::string>(p0);
     auto p1_string = boost::lexical_cast<std::string>(p1);
@@ -48,6 +77,12 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     // which has an identical representation to the problem
     // built by the explicit constructor.
     BOOST_CHECK(p0_string == p1_string);
+
+    // Check extract/is.
+    BOOST_CHECK(decompose{}.extract<null_problem>() != nullptr);
+    BOOST_CHECK(decompose{}.extract<zdt>() == nullptr);
+    BOOST_CHECK(decompose{}.is<null_problem>());
+    BOOST_CHECK(!decompose{}.is<zdt>());
 
     // We check the throws
     auto inf = std::numeric_limits<double>::infinity();
@@ -78,8 +113,8 @@ BOOST_AUTO_TEST_CASE(decompose_integration_into_problem_test)
     BOOST_CHECK(p.has_gradient() == false);
     BOOST_CHECK(p.has_hessians() == false);
     BOOST_CHECK(p.get_nobj() == 1u);
-    BOOST_CHECK_THROW(p.gradient({1, 2}), std::logic_error);
-    BOOST_CHECK_THROW(p.hessians({1, 2}), std::logic_error);
+    BOOST_CHECK_THROW(p.gradient({1, 2}), not_implemented_error);
+    BOOST_CHECK_THROW(p.hessians({1, 2}), not_implemented_error);
 }
 
 BOOST_AUTO_TEST_CASE(decompose_fitness_test)
@@ -110,7 +145,7 @@ BOOST_AUTO_TEST_CASE(decompose_fitness_test)
     BOOST_CHECK_CLOSE(fdbi[0], d1 + 5.0 * d2, 1e-8);
 }
 
-BOOST_AUTO_TEST_CASE(original_and_decomposed_fitness_test)
+BOOST_AUTO_TEST_CASE(original_fitness_test)
 {
     zdt p{zdt{1u, 2u}};
     vector_double lambda{0.5, 0.5};
@@ -129,28 +164,6 @@ BOOST_AUTO_TEST_CASE(original_and_decomposed_fitness_test)
     BOOST_CHECK(f == fdw);
     BOOST_CHECK(f == fdtch);
     BOOST_CHECK(f == fdbi);
-
-    // We check that the decomposed fitness is correct (by a direct call, not via fitness)
-    lambda = {0.2, 0.8};
-    z = {0.1, 0.1};
-    fdw = pdw.decompose_fitness(f, lambda, z);
-    fdtch = pdtch.decompose_fitness(f, lambda, z);
-    fdbi = pdbi.decompose_fitness(f, lambda, z);
-    BOOST_CHECK_CLOSE(fdw[0], f[0] * lambda[0] + f[1] * lambda[1], 1e-8);
-    BOOST_CHECK_CLOSE(fdtch[0], std::max(lambda[0] * std::abs(f[0] - z[0]), lambda[1] * std::abs(f[1] - z[1])), 1e-8);
-    double lnorm = std::sqrt(lambda[0] * lambda[0] + lambda[1] * lambda[1]);
-    vector_double ilambda{lambda[0] / lnorm, lambda[1] / lnorm};
-    double d1 = (f[0] - z[0]) * ilambda[0] + (f[1] - z[1]) * ilambda[1];
-    double d20 = f[0] - (z[0] + d1 * ilambda[0]);
-    double d21 = f[1] - (z[1] + d1 * ilambda[1]);
-    d20 *= d20;
-    d21 *= d21;
-    double d2 = std::sqrt(d20 + d21);
-    BOOST_CHECK_CLOSE(fdbi[0], d1 + 5.0 * d2, 1e-8);
-
-    // We check the throws
-    BOOST_CHECK_THROW(pdw.decompose_fitness(f, {1., 2., 3}, z), std::invalid_argument);
-    BOOST_CHECK_THROW(pdw.decompose_fitness(f, lambda, {1.}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(decompose_ideal_point_adaptation_test)
