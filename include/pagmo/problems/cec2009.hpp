@@ -870,8 +870,6 @@ const std::vector<typename cec2009_statics<T>::func_ptr> cec2009_statics<T>::m_c
 } // namespace detail
 } // namespace pagmo
 
-#undef sgn
-
 PAGMO_REGISTER_PROBLEM(pagmo::cec2009)
 
 #endif
