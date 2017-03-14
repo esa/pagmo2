@@ -142,16 +142,23 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     problem prob{zdt{1u, 30u}};
     population pop1{prob, 40u, 23u};
     population pop2{prob, 40u, 23u};
+    population pop3{prob, 40u, 23u};
 
     moead user_algo1{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
     user_algo1.set_verbosity(1u);
     pop1 = user_algo1.evolve(pop1);
 
+    BOOST_CHECK(user_algo1.get_log().size() > 0u);
+
     moead user_algo2{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
     user_algo2.set_verbosity(1u);
     pop2 = user_algo2.evolve(pop2);
 
-    BOOST_CHECK(user_algo1.get_log().size() > 0u);
+    BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+    user_algo2.set_seed(23u);
+    pop3 = user_algo2.evolve(pop3);
+
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 
     // We then check that the method evolve fails when called on unsuitable problems (populations)
@@ -172,8 +179,8 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     BOOST_CHECK(moead{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
 
     // We test a call on many objectives (>5) to trigger the relative lines cropping the screen output
-    population pop3{problem{mo_many{}}, 56u, 23u};
-    user_algo1.evolve(pop3);
+    population pop4{problem{mo_many{}}, 56u, 23u};
+    user_algo1.evolve(pop4);
 }
 
 BOOST_AUTO_TEST_CASE(moead_setters_getters_test)
