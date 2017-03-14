@@ -439,6 +439,16 @@ class cec2006_test_case(_ut.TestCase):
         best = udp.best_known
 
 
+class cec2009_test_case(_ut.TestCase):
+    """Test case for the UDP cec2009
+
+    """
+
+    def runTest(self):
+        from .core import cec2009, population
+        udp = cec2009(prob_id=3, is_constrained=True, dim=15)
+
+
 class translate_test_case(_ut.TestCase):
     """Test case for the translate meta-problem
 
@@ -713,6 +723,7 @@ def run_test_suite():
         pass
     suite.addTest(dtlz_test_case())
     suite.addTest(cec2006_test_case())
+    suite.addTest(cec2009_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
     suite.addTest(unconstrain_test_case())

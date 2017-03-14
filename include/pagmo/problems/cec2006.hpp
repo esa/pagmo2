@@ -209,7 +209,7 @@ public:
      *
      * @throws invalid_argument if \p prob_id is not in [1,24]
      */
-    cec2006(unsigned int prob_id = 1u) : m_prob_id(prob_id)
+    cec2006(unsigned prob_id = 1u) : m_prob_id(prob_id)
     {
         if (prob_id < 1u || prob_id > 24u) {
             pagmo_throw(std::invalid_argument,
