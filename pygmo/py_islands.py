@@ -45,7 +45,7 @@ class _temp_disable_sigint(object):
 
     def __enter__(self):
         import signal
-        # Record the previous sigint handler.
+        # Store the previous sigint handler.
         self._prev_signal = signal.getsignal(signal.SIGINT)
         # Assign the new sig handler (i.e., ignore SIGINT).
         signal.signal(signal.SIGINT, signal.SIG_IGN)
@@ -67,6 +67,10 @@ class mp_island(object):
 
     def run_evolve(self, algo, pop):
         with mp_island._pool_lock:
+            # NOTE: run this while the pool is locked. We have
+            # functions to modify the pool (e.g., resize()) and
+            # we need to make sure we are not trying to touch
+            # the pool while we are sending tasks to it.
             res = mp_island._pool.apply_async(_evolve_func, (algo, pop))
         return res.get()
 
@@ -75,19 +79,35 @@ class mp_island(object):
 
     @staticmethod
     def _make_pool(processes):
+        # A small private factory function to create the a process pool.
+        # It accomplishes the tasks of selecting the correct method for
+        # starting the processes ("spawn") and making sure that the
+        # created processes will ignore the SIGINT signal (this prevents)
+        # troubles when the user issues an interruption with ctrl+c from
+        # the main process.
         import sys
         import os
         import multiprocessing as mp
+        # The context functionality in the mp module is available since
+        # Python 3.4. It is uses to force the process creation with the
+        # "spawn" method.
         has_context = sys.version_info[0] > 3 or (
             sys.version_info[0] == 3 and sys.version_info[1] >= 4)
         with _temp_disable_sigint():
+            # NOTE: we temporarily disable sigint while creating the pool.
+            # This ensures that the processes created in the pool will ignore
+            # interruptions issued via ctrl+c (only the main process will
+            # be affected by them).
             if has_context:
                 ctx = mp.get_context("spawn")
                 pool = ctx.Pool(processes=processes)
             else:
+                # NOTE: for Python < 3.4, only Windows is supported and we
+                # should never end up here.
                 assert(os.name == 'nt')
                 pool = mp.Pool(processes=processes)
         pool_size = mp.cpu_count() if processes is None else processes
+        # Return the created pool and its size.
         return pool, pool_size
 
     @staticmethod
@@ -119,28 +139,29 @@ class mp_island(object):
     @staticmethod
     def resize_pool(processes):
         import multiprocessing as mp
-        mp_island.init_pool()
         if not isinstance(processes, int):
             raise TypeError("The 'processes' argument must be an int")
         if processes <= 0:
             raise ValueError(
                 "The 'processes' argument must be strictly positive")
+        mp_island.init_pool()
         with mp_island._pool_lock:
             if processes == mp_island._pool_size:
                 # Don't do anything if we are not changing
                 # the size of the pool.
                 return
             # Create new pool.
-            new_pool, _ = mp_island._make_pool(processes)
+            new_pool, new_size = mp_island._make_pool(processes)
             # Stop the current pool.
             mp_island._pool.close()
             mp_island._pool.join()
             # Assign the new pool.
             mp_island._pool = new_pool
-            mp_island._pool_size = processes
+            mp_island._pool_size = new_size
 
     @staticmethod
     def _shutdown_pool():
+        # This is used only during the shutdown phase of the pygmo module.
         with mp_island._pool_lock:
             if mp_island._pool is not None:
                 mp_island._pool.close()
@@ -208,6 +229,8 @@ class ipyparallel_island(object):
         return self
 
     def run_evolve(self, algo, pop):
+        # NOTE: no need to lock, as there's no other way to interact
+        # with lview apart from this method.
         return self._lview.apply_sync(_evolve_func, algo, pop)
 
     def get_name(self):
