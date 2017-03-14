@@ -11,6 +11,7 @@ function(ADD_PAGMO_TESTCASE arg1)
 endfunction()
 
 # Tests requiring no dependencies (in alphabetical order)
+ADD_PAGMO_TESTCASE(abc)
 ADD_PAGMO_TESTCASE(ackley)
 ADD_PAGMO_TESTCASE(algorithm)
 ADD_PAGMO_TESTCASE(constrained)

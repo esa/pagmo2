@@ -34,7 +34,8 @@ public:
     /**
      * Constructs an abc algorithm
      */
-    abc(unsigned int seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+    abc(unsigned int gen = 1u, unsigned int limit = 1u, unsigned int seed = pagmo::random_device::next())
+        : m_gen(gen), m_limit(limit), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
     }
 
@@ -44,6 +45,151 @@ public:
      */
     population evolve(population pop) const
     {
+        const auto &prob = pop.get_problem();
+        auto dim = prob.get_nx();
+        const auto bounds = prob.get_bounds();
+        const auto &lb = bounds.first;
+        const auto &ub = bounds.second;
+        auto NP = pop.size();
+        auto prob_f_dimension = prob.get_nf();
+        auto fevals0 = prob.get_fevals(); // disount for the already made fevals
+        auto count = 1u;                  // regulates the screen output
+        // PREAMBLE-------------------------------------------------------------------------------------------------
+        // Check whether the problem/population are suitable for ABC
+        if (prob_f_dimension != 1u) {
+            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
+        }
+        if (prob.is_stochastic()) {
+            pagmo_throw(std::invalid_argument,
+                        "The problem appears to be stochastic. " + get_name() + " cannot deal with it");
+        }
+        if (NP < 2u) {
+            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 2 individuals in the population, "
+                                                   + std::to_string(NP) + " detected");
+        }
+        // Get out if there is nothing to do.
+        if (m_gen == 0u) {
+            return pop;
+        }
+        // ---------------------------------------------------------------------------------------------------------
+
+        // No throws, all valid: we clear the logs
+        m_log.clear();
+
+        // Some vectors used during evolution are declared.
+        vector_double newsol(dim); // contains the mutated candidate
+        auto X = pop.get_x();
+        auto fit = pop.get_f();
+        std::vector<unsigned> trial(NP, 0u);
+        std::uniform_real_distribution<double> phirng(-1., 1.); // to generate a number in [-1, 1]
+        std::uniform_real_distribution<double> rrng(0., 1.);    // to generate a number in [0, 1]
+        std::uniform_int_distribution<vector_double::size_type> comprng(
+            0u, dim - 1u); // to generate a random index for the component
+        std::uniform_int_distribution<vector_double::size_type> neirng(
+            0u, NP - 2u); // to generate a random index for the neighbour
+
+        for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
+            // 1 - Employed bees phase
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                newsol = X[i];
+                // selects a random component of the decision vector
+                auto comp2change = comprng(m_e);
+                // selects a random neighbour
+                auto neighbour = neirng(m_e);
+                if (neighbour >= i) {
+                    neighbour++;
+                }
+                // mutate new solution
+                newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[neighbour][comp2change]);
+                // if the generated parameter value is out of boundaries, shift it into the boundaries
+                if (newsol[comp2change] < lb[comp2change]) {
+                    newsol[comp2change] = lb[comp2change]
+                }
+                if (newsol[comp2change] > ub[comp2change]) {
+                    newsol[comp2change] = ub[comp2change]
+                }
+                // if the new solution is better than the old one replace it and reset its trial counter
+                auto newfitness = prob.fitness(newsol);
+                if (newfitness < fit[i][0]) {
+                    fit[i][0] = newfitness;
+                    X[i][comp2change] = newsol[comp2change];
+                    pop.set_xf(i, newsol, newfitness);
+                    trial[i] = 0;
+                } else {
+                    trial[i]++;
+                }
+            }
+
+            // 2 - Onlooker bee phase
+            // compute probabilities
+            vector_double p(NP);
+            auto sump = 0.;
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                if (fit[i][0] >= 0.) {
+                    p[i] = 1. / (1. + fit[i][0]);
+                } else {
+                    p[i] = 1. - fit[i][0];
+                }
+                sump += p[i];
+            }
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                p[i] /= sump;
+            }
+            auto s = 0u;
+            auto t = 0u;
+            // for each onlooker bee
+            while (t < NP) {
+                // probabilistic selection of a food source
+                auto r = rrng(m_e);
+                if (r < p[s]) {
+                    t++;
+                    newsol = X[s];
+                    // selects a random component of the decision vector
+                    auto comp2change = comprng(m_e);
+                    // selects a random neighbour
+                    auto neighbour = neirng(m_e);
+                    if (neighbour >= s) {
+                        neighbour++;
+                    }
+                    // mutate new solution
+                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[neighbour][comp2change]);
+                    // if the generated parameter value is out of boundaries, shift it into the boundaries
+                    if (newsol[comp2change] < lb[comp2change]) {
+                        newsol[comp2change] = lb[comp2change]
+                    }
+                    if (newsol[comp2change] > ub[comp2change]) {
+                        newsol[comp2change] = ub[comp2change]
+                    }
+                    // if the new solution is better than the old one replace it and reset its trial counter
+                    auto newfitness = prob.fitness(newsol);
+                    if (newfitness < fit[s][0]) {
+                        fit[s][0] = newfitness;
+                        X[s][comp2change] = newsol[comp2change];
+                        pop.set_xf(s, newsol, newfitness);
+                        trial[s] = 0;
+                    } else {
+                        trial[s]++;
+                    }
+                }
+                s = (s + 1) % NP;
+            }
+            // 3 - Scout bee phase
+            auto mi = 0u;
+            for (auto i = 1u; i < NP; ++i) {
+                if (trial[i] > trial[mi]) {
+                    mi = i;
+                }
+            }
+            if (trial[mi] > m_limit) {
+                for (auto j = 0u; j < dim; ++j) {
+                    X[mi][j] = uniform_real_from_range(lb[j], ub[j], m_e);
+                }
+                auto newfitness = prob.fitness(X[mi]);
+                pop.set_xf(mi, X[mi], newfitness);
+                trial[mi] = 0;
+            }
+        }
         return pop;
     }
 
@@ -112,6 +258,7 @@ public:
 
 private:
     unsigned int m_gen;
+    unsigned int m_limit;
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;
