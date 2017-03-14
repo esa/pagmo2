@@ -412,6 +412,7 @@ public:
      */
     void set_seed(unsigned int seed)
     {
+        m_e.seed(seed);
         m_seed = seed;
     };
     /// Gets the seed
