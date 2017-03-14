@@ -1646,6 +1646,26 @@ See also the docs of the C++ class :cpp:class:`pagmo::cec2013`.
 )";
 }
 
+std::string cec2009_docstring()
+{
+    return R"(__init__(prob_id = 1, is_constrained = false, dim = 30u)
+
+The CEC 2009 problem suite (continuous, constrained, single-objective problems)
+
+Args:
+    prob_id (``int``): problem id (one of [1..10])
+    is_constrained (``bool``): selects the constrained version of the problems 
+    dim (``int``): problem dimension
+
+Raises:
+    OverflowError: if *prob_id* or *dim* are negative or greater than an implementation-defined value
+    ValueError: if *prob_id* is not in [1..10] or if *dim* is zero
+
+See also the docs of the C++ class :cpp:class:`pagmo::cec2009`.
+
+)";
+}
+
 std::string cec2006_docstring()
 {
     return R"(__init__(prob_id = 1)
