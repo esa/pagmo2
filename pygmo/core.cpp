@@ -469,11 +469,11 @@ BOOST_PYTHON_MODULE(core)
             // it we use the ensurer.
             pygmo::gil_thread_ensurer gte;
             bp::object py_island = bp::import("pygmo")
-#if PY_MAJOR_VERSION < 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION < 4)
-                                       // NOTE: the mp_island is supported since Python 3.4.
-                                       .attr("ipyparallel_island");
-#else
+#if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
+                                       // NOTE: the mp_island is supported since Python 3.4 or on Windows.
                                        .attr("mp_island");
+#else
+                                       .attr("ipyparallel_island");
 #endif
             ptr = detail::make_unique<detail::isl_inner<bp::object>>(py_island());
         }
