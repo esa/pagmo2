@@ -74,15 +74,32 @@ class mp_island(object):
         return "Multiprocessing island"
 
     @staticmethod
+    def _make_pool(processes):
+        import sys
+        import os
+        import multiprocessing as mp
+        has_context = sys.version_info[0] > 3 or (
+            sys.version_info[0] == 3 and sys.version_info[1] >= 4)
+        with _temp_disable_sigint():
+            if has_context:
+                ctx = mp.get_context("spawn")
+                pool = ctx.Pool(processes=processes)
+            else:
+                assert(os.name == 'nt')
+                pool = mp.Pool(processes=processes)
+        pool_size = mp.cpu_count() if processes is None else processes
+        return pool, pool_size
+
+    @staticmethod
     def init_pool(processes=None):
         # Helper to create a new pool. It will do something
         # only if the pool has never been created before.
-        import multiprocessing as mp
         import sys
-        # The mp island requires Python 3.4 at least.
-        if sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4):
+        import os
+        # The mp island requires either Windows or at least Python 3.4.
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
             raise RuntimeError(
-                "The multiprocessing island is supported only for Python >= 3.4.")
+                "The multiprocessing island is supported only on Windows or on Python >= 3.4.")
         if processes is not None and not isinstance(processes, int):
             raise TypeError("The 'processes' argument must be None or an int")
         if processes is not None and processes <= 0:
@@ -90,10 +107,8 @@ class mp_island(object):
                 "The 'processes' argument, if not None, must be strictly positive")
         with mp_island._pool_lock:
             if mp_island._pool is None:
-                with _temp_disable_sigint():
-                    ctx = mp.get_context("spawn")
-                    mp_island._pool = ctx.Pool(processes=processes)
-                mp_island._pool_size = mp.cpu_count() if processes is None else processes
+                mp_island._pool, mp_island._pool_size = mp_island._make_pool(
+                    processes)
 
     @staticmethod
     def get_pool_size():
@@ -116,9 +131,7 @@ class mp_island(object):
                 # the size of the pool.
                 return
             # Create new pool.
-            with _temp_disable_sigint():
-                ctx = mp.get_context("spawn")
-                new_pool = ctx.Pool(processes)
+            new_pool, _ = mp_island._make_pool(processes)
             # Stop the current pool.
             mp_island._pool.close()
             mp_island._pool.join()
