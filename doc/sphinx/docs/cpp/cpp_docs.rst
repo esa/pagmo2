@@ -4,7 +4,7 @@ The full, stand-alone, detailed, documentation of the c++ code.
 
 Core classes
 ^^^^^^^^^^^^
-These are the core PaGMO classes to learn how to use them
+These are the core PaGMO classes. In order to learn how to use them
 we suggest to follow the tutorials / examples.
 
 .. toctree::
@@ -12,14 +12,12 @@ we suggest to follow the tutorials / examples.
 
   types
   problem
-  population
   algorithm
+  population
+  island
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^
-These are the algorithms implemented in PaGMO. They can be used
-to solve problems you have implemented or to learn how to use PaGMO to
-code your own algorithm
 
 .. toctree::
   :maxdepth: 1
@@ -39,9 +37,6 @@ code your own algorithm
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
-These are the problems implemented in PaGMO. They can be used
-to test your algorithms or to learn how to use PaGMO to represent your
-problem
 
 .. toctree::
   :maxdepth: 1
@@ -61,6 +56,14 @@ problem
   problems/cec2013
   problems/cec2006
   problems/unconstrain
+
+Implemented islands
+^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  islands/thread_island
 
 Utilities
 ^^^^^^^^^

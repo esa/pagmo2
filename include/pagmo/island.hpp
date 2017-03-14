@@ -242,8 +242,8 @@ std::function<boost::any()> wait_raii<T>::getter = []() { return boost::any{}; }
 
 /// Thread island.
 /**
- * This class is a user-defined island (UDI) that will run evolutions in a thread
- * distinct from the main one.
+ * This class is a user-defined island (UDI) that will run evolutions directly inside
+ * the separate thread of execution within pagmo::island.
  */
 class thread_island
 {
@@ -347,6 +347,11 @@ inline void default_island_factory(const algorithm &, const population &, std::u
 template <typename T>
 typename island_factory<T>::func_t island_factory<T>::s_func = default_island_factory;
 
+// NOTE: the idea with this class is that we use it to store the data members of pagmo::island, and,
+// within pagmo::island, we store a pointer to an instance of this struct. The reason for this approach
+// is that, like this, we can provide sensible move semantics: just move the internal pointer of pagmo::island,
+// the operation will be noexcept and there will be no need to synchronise anything - the evolution can continue
+// while the move operation is taking place.
 struct island_data {
     // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
     // are both thread safe.
@@ -354,12 +359,15 @@ struct island_data {
     {
     }
 
+    // This is the main ctor, from an algo and a population. The UDI type will be selected
+    // by the island_factory functor.
     template <typename Algo, typename Pop>
     explicit island_data(Algo &&a, Pop &&p) : algo(std::forward<Algo>(a)), pop(std::forward<Pop>(p))
     {
         island_factory<>::s_func(algo, pop, isl_ptr);
     }
 
+    // As above, but the UDI is explicitly passed by the user.
     template <typename Isl, typename Algo, typename Pop>
     explicit island_data(Isl &&isl, Algo &&a, Pop &&p)
         : isl_ptr(make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))), algo(std::forward<Algo>(a)),
@@ -367,20 +375,25 @@ struct island_data {
     {
     }
 
+    // This is used only in the copy ctor of island. It's equivalent to the ctor from Algo + pop,
+    // the island will come from the clone() method of an isl_inner.
     template <typename Algo, typename Pop>
     explicit island_data(std::unique_ptr<isl_inner_base> &&ptr, Algo &&a, Pop &&p)
         : isl_ptr(std::move(ptr)), algo(std::forward<Algo>(a)), pop(std::forward<Pop>(p))
     {
     }
 
-    // Delete all the rest.
+    // Delete all the rest, make sure we don't implicitly rely on any of this.
     island_data(const island_data &) = delete;
     island_data(island_data &&) = delete;
     island_data &operator=(const island_data &) = delete;
     island_data &operator=(island_data &&) = delete;
 
     // The data members.
+    // NOTE: isl_ptr has no associated mutex, as it's supposed to be fully
+    // threads-safe on its own.
     std::unique_ptr<isl_inner_base> isl_ptr;
+    // Algo, pop and futures all need a mutex to regulate access.
     std::mutex algo_mutex;
     algorithm algo;
     std::mutex pop_mutex;
@@ -388,31 +401,100 @@ struct island_data {
     std::mutex futures_mutex;
     std::vector<std::future<void>> futures;
     archipelago *archi_ptr = nullptr;
+    // task_queue is thread-safe on its own.
     task_queue queue;
 };
 }
 
 /// Island class.
 /**
- * In pagmo an island is a object that is used to evolve a population....
+ * \image html island.jpg
  *
- * TODO document move semantics.
- * TODO UDI requires full thread safety.
+ * In the pagmo jargon, an island is a class that encapsulates three entities:
+ * - a user-defined island (UDI),
+ * - a pagmo::algorithm,
+ * - a pagmo::population.
+ *
+ * Through the UDI, the island class manages the asynchronous evolution (or optimisation)
+ * of the internal pagmo::population via the algorithm's algorithm::evolve() method. Depending
+ * on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
+ * pagmo::thread_island), in a separate process or even in a separate machine. The evolution
+ * is always asynchronous (i.e., running in the "background") and it is initiated by a call
+ * to the island::evolve() method. At any time the user can query the state of the island
+ * and fetch its internal data members. The user can explicitly wait for pending evolutions
+ * to conclude by calling the island::wait() method.
+ *
+ * Typically, pagmo users will employ an already-available UDI (such as pagmo::thread_island) in
+ * conjunction with this class, but advanced users can implement their own UDI types. A user-defined
+ * island must implement the following method:
+ * @code{.unparsed}
+ * void run_evolve(pagmo::algorithm &, ulock_t &, pagmo::population &, ulock_t &);
+ * @endcode
+ * where \p ulock_t is <tt>std::unique_lock<std::mutex></tt>.
+ *
+ * The <tt>run_evolve()</tt> method of
+ * the UDI will use the input algorithm's algorithm::evolve() method to evolve the input population
+ * and, once the evolution is finished, will replace the input population with the evolved population.
+ * The two extra arguments are locked locks that guarantee exclusive access to the input algorithm and population
+ * respectively. Typically, a UDI's <tt>run_evolve()</tt> method will first copy the input algorithm and population,
+ * release the locks, evolve the population, re-acquire the population's lock and finally assign the evolved population.
+ * In addition to providing the above method, a UDI must also be default, copy and move constructible. Also, since
+ * internally the pagmo::island class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs
+ * to guarantee strong thread-safety: it must be safe to interact with UDI instances simultaneously from multiple
+ * threads, or the behaviour will be undefined.
+ *
+ * In addition to the mandatory <tt>run_evolve()</tt> method, a UDI might implement the following optional methods:
+ * @code{.unparsed}
+ * std::string get_name() const;
+ * std::string get_extra_info() const;
+ * @endcode
+ *
+ * See the documentation of the corresponding methods in this class for details on how the optional
+ * methods in the UDI are used by pagmo::island.
+ *
+ * **NOTE**: a moved-from pagmo::island is destructible and assignable. Any other operation will result
+ * in undefined behaviour.
  */
 class island
 {
     using idata_t = detail::island_data;
 
 public:
+    /// Default constructor.
+    /**
+     * The default constructor will initialise an island containing a UDI of type pagmo::thread_island,
+     * and default-constructed pagmo::algorithm and pagmo::population.
+     *
+     * @throws unspecified any exception thrown by any invoked constructor or by memory allocation failures.
+     */
     island() : m_ptr(detail::make_unique<idata_t>())
     {
     }
+    /// Copy constructor.
+    /**
+     * The copy constructor will initialise an island containing a copy of <tt>other</tt>'s UDI, population
+     * and algorithm. It is safe to call this constructor while \p other is evolving.
+     *
+     * @param other the island tht will be copied.
+     *
+     * @throws unspecified any exception thrown by:
+     * - threading primitives,
+     * - memory allocation errors,
+     * - the copy constructors of pagmo::algorithm and pagmo::population.
+     */
     island(const island &other)
         : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(),
                                              other.get_population()))
     {
         // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
     }
+    /// Move constructor.
+    /**
+     * The move constructor will transfer the entire state of \p other (including any ongoing evolution)
+     * into \p this.
+     *
+     * @param other the island tht will be moved.
+     */
     island(island &&other) noexcept : m_ptr(std::move(other.m_ptr))
     {
     }
@@ -424,6 +506,21 @@ private:
                                          int>;
 
 public:
+    /// Constructor from algorithm and population.
+    /**
+     * **NOTE**: this constructor is enabled only if \p a can be used to construct a
+     * pagmo::algorithm and \p p is an instance of pagmo::population.
+     *
+     * This constructor will use \p a to construct the internal algorithm, and \p p to construct
+     * the internal population. A default-constructed pagmo::thread_island will be the internal UDI.
+     *
+     * @param a the input algorithm.
+     * @param p the input population.
+     *
+     * @throws unspecified any exception thrown by:
+     * - memory allocation errors,
+     * - the constructors of pagmo::algorithm and pagmo::population.
+     */
     template <typename Algo, typename Pop, algo_pop_enabler<Algo, Pop> = 0>
     explicit island(Algo &&a, Pop &&p)
         : m_ptr(detail::make_unique<idata_t>(std::forward<Algo>(a), std::forward<Pop>(p)))
@@ -438,6 +535,24 @@ private:
                       int>;
 
 public:
+    /// Constructor from UDI, algorithm and population.
+    /**
+     * **NOTE**: this constructor is enabled only if:
+     * - \p Isl satisfies pagmo::is_udi,
+     * - \p a can be used to construct a pagmo::algorithm,
+     * - \p p is an instance of pagmo::population.
+     *
+     * This constructor will use \p isl to construct the internal UDI, \p a to construct the internal algorithm,
+     * and \p p to construct the internal population.
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input population.
+     *
+     * @throws unspecified any exception thrown by:
+     * - memory allocation errors,
+     * - the constructors of \p Isl, pagmo::algorithm and pagmo::population.
+     */
     template <typename Isl, typename Algo, typename Pop, isl_algo_pop_enabler<Isl, Algo, Pop> = 0>
     explicit island(Isl &&isl, Algo &&a, Pop &&p)
         : m_ptr(detail::make_unique<idata_t>(std::forward<Isl>(isl), std::forward<Algo>(a), std::forward<Pop>(p)))
@@ -452,6 +567,22 @@ private:
                       int>;
 
 public:
+    /// Constructor from algorithm, problem, size and seed.
+    /**
+     * **NOTE**: this constructor is enabled only if \p a can be used to construct a
+     * pagmo::algorithm, and \p p, \p size and \p seed can be used to construct a pagmo::population.
+     *
+     * This constructor will construct a pagmo::population \p pop from \p p, \p size and \p seed, and it will
+     * then invoke island(Algo &&, Pop &&) with \p a and \p pop as arguments.
+     *
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param size the population size.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the invoked pagmo::population constructor or by
+     * island(Algo &&, Pop &&).
+     */
     template <typename Algo, typename Prob, algo_prob_enabler<Algo, Prob> = 0>
     explicit island(Algo &&a, Prob &&p, population::size_type size, unsigned seed = pagmo::random_device::next())
         : island(std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed))
@@ -466,12 +597,36 @@ private:
                       int>;
 
 public:
+    /// Constructor from UDI, algorithm, problem, size and seed.
+    /**
+     * **NOTE**: this constructor is enabled only if \p Isl satisfies pagmo::is_udi, \p a can be used to construct a
+     * pagmo::algorithm, and \p p, \p size and \p seed can be used to construct a pagmo::population.
+     *
+     * This constructor will construct a pagmo::population \p pop from \p p, \p size and \p seed, and it will
+     * then invoke island(Isl &&, Algo &&, Pop &&) with \p isl, \p a and \p pop as arguments.
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param size the population size.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by:
+     * - the invoked pagmo::population constructor,
+     * - island(Isl &&, Algo &&, Pop &&),
+     * - the invoked constructor of \p Isl.
+     */
     template <typename Isl, typename Algo, typename Prob, isl_algo_prob_enabler<Isl, Algo, Prob> = 0>
     explicit island(Isl &&isl, Algo &&a, Prob &&p, population::size_type size,
                     unsigned seed = pagmo::random_device::next())
         : island(std::forward<Isl>(isl), std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed))
     {
     }
+    /// Destructor.
+    /**
+     * If the island has not been moved-from, the destructor will call island::wait(), ignoring
+     * any exception that might be thrown.
+     */
     ~island()
     {
         // If the island has been moved from, don't do anything.
