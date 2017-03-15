@@ -1098,11 +1098,13 @@ BOOST_PYTHON_MODULE(core)
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
 
     // Island.
-    pygmo::island_ptr = detail::make_unique<bp::class_<island>>("island", bp::init<>());
+    pygmo::island_ptr
+        = detail::make_unique<bp::class_<island>>("island", pygmo::island_docstring().c_str(), bp::init<>());
     auto &island_class = *pygmo::island_ptr;
     island_class.def(bp::init<const algorithm &, const population &>())
         .def(bp::init<const bp::object &, const algorithm &, const population &>())
         .def(repr(bp::self))
+        .def_pickle(pygmo::island_pickle_suite())
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<island>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
@@ -1111,5 +1113,5 @@ BOOST_PYTHON_MODULE(core)
         .def("wait", &island::wait);
 
     // Thread island.
-    auto ti = pygmo::expose_island<thread_island>("thread_island", "");
+    auto ti = pygmo::expose_island<thread_island>("thread_island", pygmo::thread_island_docstring().c_str());
 }

@@ -2961,4 +2961,59 @@ See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::refpoint`.
 )";
 }
 
+std::string island_docstring()
+{
+    return R"(island(**kwargs)
+
+Island class.
+
+In the pygmo jargon, an island is a class that encapsulates three entities:
+
+* a user-defined island (**UDI**),
+* an :class:`~pygmo.core.algorithm`,
+* a :class:`~pygmo.core.population`.
+
+Through the UDI, the island class manages the asynchronous evolution (or optimisation)
+of the :class:`~pygmo.core.population` via the algorithm's :func:`~pygmo.core.algorithm.evolve()`
+method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
+pagmo::thread_island), in a separate process or even in a separate machine. The evolution
+is always asynchronous (i.e., running in the "background") and it is initiated by a call
+to the island::evolve() method. At any time the user can query the state of the island
+and fetch its internal data members. The user can explicitly wait for pending evolutions
+to conclude by calling the island::wait() method.
+
+Typically, pagmo users will employ an already-available UDI (such as pagmo::thread_island) in
+conjunction with this class, but advanced users can implement their own UDI types. A user-defined
+island must implement the following method:
+@code{.unparsed}
+void run_evolve(pagmo::algorithm &, ulock_t &, pagmo::population &, ulock_t &);
+@endcode
+ * where \p ulock_t is <tt>std::unique_lock<std::mutex></tt>.
+ *
+ * The <tt>run_evolve()</tt> method of
+ * the UDI will use the input algorithm's algorithm::evolve() method to evolve the input population
+ * and, once the evolution is finished, will replace the input population with the evolved population.
+ * The two extra arguments are locked locks that guarantee exclusive access to the input algorithm and population
+ * respectively. Typically, a UDI's <tt>run_evolve()</tt> method will first copy the input algorithm and population,
+ * release the locks, evolve the population, re-acquire the population's lock and finally assign the evolved population.
+ * In addition to providing the above method, a UDI must also be default, copy and move constructible. Also, since
+ * internally the pagmo::island class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs
+ * to guarantee strong thread-safety: it must be safe to interact with UDI instances simultaneously from multiple
+ * threads, or the behaviour will be undefined.
+ *
+ * In addition to the mandatory <tt>run_evolve()</tt> method, a UDI might implement the following optional methods:
+ * @code{.unparsed}
+ * std::string get_name() const;
+ * std::string get_extra_info() const;
+ * @endcode
+ *
+ * See the documentation of the corresponding methods in this class for details on how the optional
+ * methods in the UDI are used by pagmo::island.
+ *
+ * **NOTE**: a moved-from pagmo::island is destructible and assignable. Any other operation will result
+ * in undefined behaviour.
+
+)";
+}
+
 } // namespace

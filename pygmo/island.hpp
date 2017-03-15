@@ -31,13 +31,17 @@ see https://www.gnu.org/licenses/. */
 
 #include "python_includes.hpp"
 
+#include <boost/numeric/conversion/cast.hpp>
+#include <boost/python/class.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/handle.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/str.hpp>
+#include <boost/python/tuple.hpp>
 #include <cassert>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -46,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 
 #include "common_base.hpp"
@@ -183,6 +188,57 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     bp::object m_value;
 };
 }
+}
+
+// Register the isl_inner specialisation for bp::object.
+PAGMO_REGISTER_ISLAND(boost::python::object)
+
+namespace pygmo
+{
+
+namespace bp = boost::python;
+
+// Serialization support for the island class.
+struct island_pickle_suite : bp::pickle_suite {
+    static bp::tuple getstate(const pagmo::island &isl)
+    {
+        // The idea here is that first we extract a char array
+        // into which island has been cerealised, then we turn
+        // this object into a Python bytes object and return that.
+        std::ostringstream oss;
+        {
+            cereal::PortableBinaryOutputArchive oarchive(oss);
+            oarchive(isl);
+        }
+        auto s = oss.str();
+        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+    }
+    static void setstate(pagmo::island &isl, const bp::tuple &state)
+    {
+        // Similarly, first we extract a bytes object from the Python state,
+        // and then we build a C++ string from it. The string is then used
+        // to decerealise the object.
+        if (len(state) != 1) {
+            pygmo_throw(PyExc_ValueError, ("the state tuple passed for island deserialization "
+                                           "must have a single element, but instead it has "
+                                           + std::to_string(len(state)) + " elements")
+                                              .c_str());
+        }
+        // NOTE: PyBytes_AsString is a macro.
+        auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
+        if (!ptr) {
+            pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize an island");
+        }
+        const auto size = len(state[0]);
+        std::string s(ptr, ptr + size);
+        std::istringstream iss;
+        iss.str(s);
+        {
+            cereal::PortableBinaryInputArchive iarchive(iss);
+            iarchive(isl);
+        }
+    }
+};
 }
 
 #endif
