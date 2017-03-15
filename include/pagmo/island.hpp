@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <mutex>
 #include <stdexcept>
 #include <string>
+#include <system_error>
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
@@ -416,7 +417,7 @@ struct island_data {
  * - a pagmo::population.
  *
  * Through the UDI, the island class manages the asynchronous evolution (or optimisation)
- * of the internal pagmo::population via the algorithm's algorithm::evolve() method. Depending
+ * of the pagmo::population via the algorithm's algorithm::evolve() method. Depending
  * on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
  * pagmo::thread_island), in a separate process or even in a separate machine. The evolution
  * is always asynchronous (i.e., running in the "background") and it is initiated by a call
@@ -490,7 +491,7 @@ public:
     }
     /// Move constructor.
     /**
-     * The move constructor will transfer the entire state of \p other (including any ongoing evolution)
+     * The move constructor will transfer the state of \p other (including any ongoing evolution)
      * into \p this.
      *
      * @param other the island tht will be moved.
@@ -625,7 +626,8 @@ public:
     /// Destructor.
     /**
      * If the island has not been moved-from, the destructor will call island::wait(), ignoring
-     * any exception that might be thrown.
+     * any exception that might be thrown apart from \p std::system_error. If an \p std::system_error
+     * exception is thrown, the program will terminate.
      */
     ~island()
     {
@@ -635,9 +637,24 @@ public:
         }
         try {
             wait();
+        } catch (const std::system_error &) {
+            // NOTE: the rationale here is that we interpret system_error as
+            // a failure in the locking primitives inside wait(), and if that
+            // fails we will have loose threads hanging around. Best just to
+            // rethrow, which will cause program termination as this dtor is noexcept.
+            throw;
         } catch (...) {
         }
     }
+    /// Move assignment.
+    /**
+     * Move assignment will transfer the state of \p other (including any ongoing evolution)
+     * into \p this.
+     *
+     * @param other the island tht will be moved.
+     *
+     * @return a reference to \p this.
+     */
     island &operator=(island &&other) noexcept
     {
         if (this != &other) {
@@ -645,6 +662,16 @@ public:
         }
         return *this;
     }
+    /// Copy assignment.
+    /**
+     * Copy assignment is implemented as copy construction followed by move assignment.
+     *
+     * @param other the island tht will be copied.
+     *
+     * @return a reference to \p this.
+     *
+     * @throws unspecified any exception thrown by the copy constructor.
+     */
     island &operator=(const island &other)
     {
         if (this != &other) {
@@ -652,6 +679,28 @@ public:
         }
         return *this;
     }
+    /// Launch evolution.
+    /**
+     * This method will evolve the island's pagmo::population using the
+     * island's pagmo::algorithm. The evolution happens asynchronously:
+     * a call to island::evolve() will create an evolution task that will be pushed
+     * to a queue, and then return immediately.
+     * The tasks in the queue are consumed
+     * by a separate thread of execution managed by the pagmo::island object,
+     * which will invoke the <tt>run_evolve()</tt>
+     * method of the UDI to perform the actual evolution. The island's population will be updated
+     * at the end of each evolution task. Exceptions raised insided the tasks are stored within
+     * the island object, and can be re-raised by calling wait().
+     *
+     * It is possible to call this method multiple times to enqueue multiple evolution tasks, which
+     * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() to block until
+     * all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
+     *
+     * @throws unspecified any exception thrown by:
+     * - threading primitives,
+     * - memory allocation errors,
+     * - the public interface of \p std::future.
+     */
     void evolve()
     {
         std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
@@ -684,6 +733,15 @@ public:
             throw;
         }
     }
+    /// Block until evolution ends.
+    /**
+     * This method will block until all the evolution tasks enqueued via island::evolve() have been completed.
+     * The method will also raise the first exception raised by any task enqueued since the last time wait() was called.
+     *
+     * @throws unspecified any exception thrown by:
+     * - evolution tasks,
+     * - threading primitives.
+     */
     void wait() const
     {
         auto iwr = detail::wait_raii<>::getter();
@@ -711,6 +769,12 @@ public:
         }
         m_ptr->futures.clear();
     }
+    /// Check island status.
+    /**
+     * @return \p true if the island is evolving, \p false otherwise.
+     *
+     * @throws unspecified any exception thrown by threading primitives.
+     */
     bool busy() const
     {
         std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
@@ -722,24 +786,71 @@ public:
         }
         return false;
     }
+    /// Get the algorithm.
+    /**
+     * It is safe to call this method while the island is evolving.
+     *
+     * @return a copy of the island's algorithm.
+     *
+     * @throws unspecified any exception thrown by threading primitives.
+     */
     algorithm get_algorithm() const
     {
         std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
         return m_ptr->algo;
     }
+    /// Get the population.
+    /**
+     * It is safe to call this method while the island is evolving.
+     *
+     * @return a copy of the island's population.
+     *
+     * @throws unspecified any exception thrown by threading primitives.
+     */
     population get_population() const
     {
         std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
         return m_ptr->pop;
     }
+    /// Island's name.
+    /**
+     * If the UDI satisfies pagmo::has_name, then this method will return the output of its <tt>%get_name()</tt> method.
+     * Otherwise, an implementation-defined name based on the type of the UDI will be returned.
+     *
+     * @return the name of the UDI.
+     *
+     * @throws unspecified any exception thrown by the <tt>%get_name()</tt> method of the UDI.
+     */
     std::string get_name() const
     {
         return m_ptr->isl_ptr->get_name();
     }
+    /// Island's extra info.
+    /**
+     * If the UDI satisfies pagmo::has_extra_info, then this method will return the output of its
+     * <tt>%get_extra_info()</tt> method. Otherwise, an empty string will be returned.
+     *
+     * @return extra info about the UDI.
+     *
+     * @throws unspecified any exception thrown by the <tt>%get_extra_info()</tt> method of the UDI.
+     */
     std::string get_extra_info() const
     {
         return m_ptr->isl_ptr->get_extra_info();
     }
+    /// Stream operator for pagmo::island.
+    /**
+     * This operator will stream to \p os a human-readable representation of \p isl.
+     * It is safe to call this operator while the island is evolving.
+     *
+     * @param os the target stream.
+     * @param isl the island.
+     *
+     * @return a reference to \p os.
+     *
+     * @throws unspecified any exception thrown by the stream operators of fundamental types,
+     * pagmo::algorithm and pagmo::population, or by pagmo::island::get_extra_info().
+     */
     friend std::ostream &operator<<(std::ostream &os, const island &isl)
     {
         stream(os, "Island name: ", isl.get_name(), "\n\n");
@@ -751,17 +862,40 @@ public:
         }
         return os;
     }
-
+    /// Save to archive.
+    /**
+     * This method will save \p this to the archive \p ar.
+     * It is safe to call this method while the island is evolving.
+     *
+     * @param ar the target archive.
+     *
+     * @throws unspecified any exception thrown by:
+     * - the serialization of pagmo::algorithm, pagmo::population and of the UDI type,
+     * - get_algorithm() and get_population().
+     */
     template <typename Archive>
     void save(Archive &ar) const
     {
         ar(m_ptr->isl_ptr, get_algorithm(), get_population());
     }
+    /// Load from archive.
+    /**
+     * This method will load into \p this the content of \p ar.
+     * It is safe to call this method while the island is evolving,
+     * but this method will wait until all evolution tasks are completed
+     * before returning.
+     *
+     * @param ar the source archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of pagmo::algorithm, pagmo::population and of the
+     * UDI type.
+     */
     template <typename Archive>
     void load(Archive &ar)
     {
+        // Deserialize into tmp island, and then move assign it.
         island tmp_island;
-        // NOTE: no need to lock access to these, as there no evolution going on in tmp_island.
+        // NOTE: no need to lock access to these, as there is no evolution going on in tmp_island.
         ar(tmp_island.m_ptr->isl_ptr);
         ar(tmp_island.m_ptr->algo);
         ar(tmp_island.m_ptr->pop);
