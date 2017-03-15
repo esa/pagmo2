@@ -98,7 +98,7 @@ public:
      * @param prob_id The problem id. One of [1,2,...10]
      * @param is_constrained Specify whether the problem is constrained. False will yield the UF problems, True will
      * yield the CF problems.
-     * @param prob_dim problem dimension. Default is 30, which is the setting used by the competition. But all the
+     * @param dim problem dimension. Default is 30, which is the setting used by the competition. But all the
      * problems are scalable in terms of decision variable's dimension.
      *
      * @see http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm
