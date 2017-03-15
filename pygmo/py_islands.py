@@ -57,15 +57,66 @@ class _temp_disable_sigint(object):
 
 
 class mp_island(object):
+    """Multiprocessing island.
+
+    This user-defined island (UDI) will dispatch evolution tasks to a pool of processes
+    created via the standard Python multiprocessing module. The pool is shared between
+    different instances of :class:`~pygmo.py_islands.mp_island`, and it is created
+    either implicitly by the construction of the first :class:`~pygmo.py_islands.mp_island`
+    object or explicitly via the :func:`~pygmo.py_islands.mp_island.init_pool()` static method.
+    The default number of processes in the pool is equal to the number of logical CPUs on the
+    current machine. The pool's size can be queried via :func:`~pygmo.py_islands.mp_island.get_pool_size()`,
+    and changed via :func:`~pygmo.py_islands.mp_island.resize_pool()`.
+
+    .. note::
+
+       Due to certain implementation details of CPython, it is not possible to initialise or resize the pool
+       from a thread different from the main one. Normally this is not a problem, but, for instance, if the first
+       :class:`~pygmo.py_islands.mp_island` instance is created in a thread different from the main one, an error
+       will be raised. In such a situation, the user should ensure to call :func:`~pygmo.py_islands.mp_island.init_pool()`
+       from the main thread before spawning the secondary thread.
+
+    .. note::
+
+       This island type is supported only on Windows or if the Python version is at least 3.4. Attempting to instantiate
+       this class on non-Windows platforms with a Python version earlier than 3.4 will raise an error.
+
+    """
     _pool_lock = _Lock()
     _pool = None
     _pool_size = None
 
     def __init__(self):
+        """
+        Raises:
+
+           unspecified: any exception thrown by :func:`~pygmo.py_islands.mp_island.init_pool()`
+
+        """
         # Init the process pool, if necessary.
         mp_island.init_pool()
 
     def run_evolve(self, algo, pop):
+        """Evolve population.
+
+        This method will evolve the input :class:`~pygmo.core.population` *pop* using the input
+        :class:`~pygmo.core.algorithm` *algo*, and return the evolved population. The evolution
+        is run on one of the processes of the pool backing backing :class:`~pygmo.py_islands.mp_island`.
+
+        Args:
+
+            pop(:class:`~pygmo.core.population`): the input population
+            algo(:class:`~pygmo.core.algorithm`): the input algorithm
+
+        Returns:
+            :class:`~pygmo.core.population`: the evolved population
+
+        Raises:
+            unspecified: any exception thrown during the evolution, or by the public interface of the
+              process pool
+
+
+        """
         with mp_island._pool_lock:
             # NOTE: run this while the pool is locked. We have
             # functions to modify the pool (e.g., resize()) and
@@ -75,16 +126,31 @@ class mp_island(object):
         return res.get()
 
     def get_name(self):
+        """Island's name.
+
+        Returns:
+            ``str``: ``"Multiprocessing island"``
+
+        """
         return "Multiprocessing island"
+
+    def get_extra_info(self):
+        """Island's extra info.
+
+        Returns:
+            ``str``: a string specifying the current number of processes in the pool
+
+        """
+        return "\tNumber of processes in the pool: {}".format(mp_island.get_pool_size())
 
     @staticmethod
     def _make_pool(processes):
         # A small private factory function to create the a process pool.
         # It accomplishes the tasks of selecting the correct method for
         # starting the processes ("spawn") and making sure that the
-        # created processes will ignore the SIGINT signal (this prevents)
+        # created processes will ignore the SIGINT signal (this prevents
         # troubles when the user issues an interruption with ctrl+c from
-        # the main process.
+        # the main process).
         import sys
         import os
         import multiprocessing as mp
@@ -112,6 +178,23 @@ class mp_island(object):
 
     @staticmethod
     def init_pool(processes=None):
+        """Initialise the process pool.
+
+        This method will initialise the global process pool backing :class:`~pygmo.py_islands.mp_island`, if the pool
+        has not been initialised yet. Otherwise, this method will have no effects.
+
+        Args:
+            processes(``None`` or an ``int``): the size of the pool (if ``None``, the size of the pool will be
+              equal to the number of logical CPUs on the system)
+
+        Raises:
+
+            ValueError: if the pool does not exist yet and the function is being called from a thread different
+              from the main one, or if *processes* is a non-positive value
+            RuntimeError: if the current platform or Python version is not supported
+            TypeError: if *processes* is not ``None`` and not an ``int``
+
+        """
         # Helper to create a new pool. It will do something
         # only if the pool has never been created before.
         import sys
@@ -132,12 +215,34 @@ class mp_island(object):
 
     @staticmethod
     def get_pool_size():
+        """Get the size of the process pool.
+
+        Returns:
+
+            ``int``: the current size of the pool
+
+        """
         mp_island.init_pool()
         with mp_island._pool_lock:
             return mp_island._pool_size
 
     @staticmethod
     def resize_pool(processes):
+        """Resize pool.
+
+        This method will resize the global process pool backing :class:`~pygmo.py_islands.mp_island`.
+
+        Args:
+
+            processes(``int``): the desired number of processes in the pool
+
+        Raises:
+
+            TypeError: if the *processes* argument is not an ``int``
+            ValueError: if the *processes* argument is not strictly positive
+            unspecified: any exception thrown by :func:`~pygmo.py_islands.mp_island.init_pool()`
+
+        """
         import multiprocessing as mp
         if not isinstance(processes, int):
             raise TypeError("The 'processes' argument must be an int")
@@ -199,6 +304,20 @@ def _hashable(v):
 
 
 class ipyparallel_island(object):
+    """Ipyparallel island.
+
+    This user-defined island (UDI) will dispatch evolution tasks to an ipyparallel cluster.
+    Upon construction, an instance of this UDI will first initialise an :class:`ipyparallel.Client`
+    object, and then extract an :class:`ipyparallel.LoadBalancedView` object from it that will
+    be used to submit evolution tasks to the cluster. The arguments to the constructor of this
+    class will be passed without modifications to the constructor of the :class:`ipyparallel.Client`
+    object that will be created internally.
+
+    .. seealso::
+
+       https://ipyparallel.readthedocs.io/en/latest/
+
+    """
 
     def __init__(self, *args, **kwargs):
         from ipyparallel import Client
@@ -229,9 +348,36 @@ class ipyparallel_island(object):
         return self
 
     def run_evolve(self, algo, pop):
+        """Evolve population.
+
+        This method will evolve the input :class:`~pygmo.core.population` *pop* using the input
+        :class:`~pygmo.core.algorithm` *algo*, and return the evolved population. The evolution
+        task is submitted to the ipyparallel cluster via an internal :class:`ipyparallel.LoadBalancedView`
+        instance initialised during the construction of the island.
+
+        Args:
+
+            pop(:class:`~pygmo.core.population`): the input population
+            algo(:class:`~pygmo.core.algorithm`): the input algorithm
+
+        Returns:
+            :class:`~pygmo.core.population`: the evolved population
+
+        Raises:
+            unspecified: any exception thrown during the evolution, or by submitting the evolution task
+              to the ipyparallel cluster
+
+
+        """
         # NOTE: no need to lock, as there's no other way to interact
         # with lview apart from this method.
         return self._lview.apply_sync(_evolve_func, algo, pop)
 
     def get_name(self):
+        """Island's name.
+
+        Returns:
+            ``str``: ``"Ipyparallel island"``
+
+        """
         return "Ipyparallel island"

@@ -418,7 +418,7 @@ struct island_data {
  * - a pagmo::population.
  *
  * Through the UDI, the island class manages the asynchronous evolution (or optimisation)
- * of the pagmo::population via the algorithm's algorithm::evolve() method. Depending
+ * of its pagmo::population via the algorithm's algorithm::evolve() method. Depending
  * on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
  * pagmo::thread_island), in a separate process or even in a separate machine. The evolution
  * is always asynchronous (i.e., running in the "background") and it is initiated by a call
@@ -855,12 +855,12 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const island &isl)
     {
         stream(os, "Island name: ", isl.get_name(), "\n\n");
-        stream(os, isl.get_algorithm(), "\n\n");
-        stream(os, isl.get_population(), "\n\n");
         const auto extra_str = isl.get_extra_info();
         if (!extra_str.empty()) {
-            stream(os, "\nExtra info:\n", extra_str);
+            stream(os, "Extra info:\n", extra_str, "\n\n");
         }
+        stream(os, isl.get_algorithm(), "\n\n");
+        stream(os, isl.get_population(), "\n\n");
         return os;
     }
     /// Save to archive.

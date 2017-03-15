@@ -2965,7 +2965,7 @@ See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::refpoint`.
 
 std::string island_docstring()
 {
-    return R"(island(**kwargs)
+    return R"(__init__(**kwargs)
 
 Island class.
 
@@ -2976,53 +2976,82 @@ In the pygmo jargon, an island is a class that encapsulates three entities:
 * a :class:`~pygmo.core.population`.
 
 Through the UDI, the island class manages the asynchronous evolution (or optimisation)
-of the :class:`~pygmo.core.population` via the algorithm's :func:`~pygmo.core.algorithm.evolve()`
+of its :class:`~pygmo.core.population` via the algorithm's :func:`~pygmo.core.algorithm.evolve()`
 method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
-pagmo::thread_island), in a separate process or even in a separate machine. The evolution
-is always asynchronous (i.e., running in the "background") and it is initiated by a call
-to the island::evolve() method. At any time the user can query the state of the island
-and fetch its internal data members. The user can explicitly wait for pending evolutions
-to conclude by calling the island::wait() method.
+:class:`~pygmo.core.thread_island`), in a separate process (e.g., if the UDI is a
+:class:`~pygmo.py_islands.mp_island`) or even in a separate machine (e.g., if the UDI is a
+:class:`~pygmo.py_islands.ipyparallel_island`). The evolution is always asynchronous (i.e., running in the
+"background") and it is initiated by a call to the :func:`~pygmo.core.island.evolve()` method. At any
+time the user can query the state of the island and fetch its internal data members. The user can explicitly
+wait for pending evolutions to conclude by calling the :func:`~pygmo.core.island.wait()` method.
 
-Typically, pagmo users will employ an already-available UDI (such as pagmo::thread_island) in
-conjunction with this class, but advanced users can implement their own UDI types. A user-defined
-island must implement the following method:
-@code{.unparsed}
-void run_evolve(pagmo::algorithm &, ulock_t &, pagmo::population &, ulock_t &);
-@endcode
- * where \p ulock_t is <tt>std::unique_lock<std::mutex></tt>.
- *
- * The <tt>run_evolve()</tt> method of
- * the UDI will use the input algorithm's algorithm::evolve() method to evolve the input population
- * and, once the evolution is finished, will replace the input population with the evolved population.
- * The two extra arguments are locked locks that guarantee exclusive access to the input algorithm and population
- * respectively. Typically, a UDI's <tt>run_evolve()</tt> method will first copy the input algorithm and population,
- * release the locks, evolve the population, re-acquire the population's lock and finally assign the evolved population.
- * In addition to providing the above method, a UDI must also be default, copy and move constructible. Also, since
- * internally the pagmo::island class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs
- * to guarantee strong thread-safety: it must be safe to interact with UDI instances simultaneously from multiple
- * threads, or the behaviour will be undefined.
- *
- * In addition to the mandatory <tt>run_evolve()</tt> method, a UDI might implement the following optional methods:
- * @code{.unparsed}
- * std::string get_name() const;
- * std::string get_extra_info() const;
- * @endcode
- *
- * See the documentation of the corresponding methods in this class for details on how the optional
- * methods in the UDI are used by pagmo::island.
- *
- * **NOTE**: a moved-from pagmo::island is destructible and assignable. Any other operation will result
- * in undefined behaviour.
+Typically, pagmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
+for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
+the following method:
+
+.. code-block:: python
+
+   def run_evolve(self, algo, pop):
+     ...
+
+The ``run_evolve()`` method of the UDI will use the input :class:`~pygmo.core.algorithm`'s
+:func:`~pygmo.core.algorithm.evolve()` method to evolve the input :class:`~pygmo.core.population` and, once the evolution
+is finished, it will return the evolved :class:`~pygmo.core.population`. Note that, since internally the
+:class:`~pygmo.core.island` class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs
+to guarantee strong thread-safety: it must be safe to interact with UDI instances simultaneously from multiple
+threads.
+
+In addition to the mandatory ``run_evolve()`` method, a UDI might implement the following optional methods:
+
+.. code-block:: python
+
+   def get_name(self):
+     ...
+   def get_extra_info(self):
+     ...
+
+See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDI are used by :class:`~pygmo.core.island`. This class is the Python counterpart of the C++ class
+:cpp:class:`pagmo::island`.
+
+An island can be initialised in a variety of ways using keyword arguments:
+
+* if the arguments list is empty, a default :class:`~pygmo.core.island` is constructed, containing a
+  :class:`~pygmo.core.thread_island` UDI, a :class:`~pygmo.core.null_algorithm` algorithm and an empty
+  population with problem type :class:`~pygmo.core.null_problem`;
+* if the arguments list contains *algo*, *pop* and, optionally, *udi*, then the constructor will initialise
+  an :class:`~pygmo.core.island` containing the specified algorithm, population and UDI. If the *udi* parameter
+  is not supplied, the UDI type is chosen according to a heuristic which depends on the platform, the
+  Python version and the supplied *algo* and *pop* parameters:
+
+  * if *algo* and *pop*'s problem provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee,
+    then :class:`~pygmo.core.thread_island` will be selected as UDI type;
+  * otherwise, if the current platform is Windows or the Python version is at least 3.4, then :class:`~pygmo.py_islands.mp_island`
+    will be selected as UDI type, else :class:`~pygmo.py_islands.ipyparallel_island` will be chosen;
+* if the arguments list contains *algo*, *prob*, *size* and, optionally, *udi* and *seed*, then a :class:`~pygmo.core.population`
+  will be constructed from *prob*, *size* and *seed*, and the construction will then proceed in the same way detailed
+  above (i.e., *algo* and the newly-created population are used to initialise the island's algorithm and population,
+  and the UDI, if not specified, will be chosen according to the heuristic detailed above).
+
+If the keyword arguments list is invalid, a :exc:`KeyError` exception will be raised.
 
 )";
 }
 
 std::string thread_island_docstring()
 {
-    return R"(thread_island()
+    return R"(__init__()
 
-Thread island class.
+Thread island.
+
+This class is a user-defined island (UDI) that will run evolutions directly inside
+the separate thread of execution within :class:`pygmo.core.island`. Evolution tasks running on this
+UDI must involve :class:`~pygmo.core.algorithm` and :class:`~pygmo.core.problem` instances
+that provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee, otherwise
+errors will be raised during the evolution.
+
+See also the documentation of the corresponding C++ class :cpp:class:`pagmo::thread_island`.
+
 )";
 }
 
