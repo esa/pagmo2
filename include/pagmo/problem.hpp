@@ -964,6 +964,7 @@ struct prob_inner final : prob_inner_base {
  * \f$(\mathbf{lb}, \mathbf{ub})\f$, which also implicitly define the dimension of the problem.
  * The <tt>%fitness()</tt> and <tt>%get_bounds()</tt> methods of the UDP are accessible from the corresponding
  * problem::fitness() and problem::get_bounds() methods (see their documentation for details).
+ * In addition to providing the above methods, a UDP must also be default, copy and move constructible.
  *
  * The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
  * optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following
