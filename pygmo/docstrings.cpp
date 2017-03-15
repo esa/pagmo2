@@ -396,8 +396,9 @@ methods:
 
 See the documentation of the corresponding methods in this class for details on how the optional
 methods in the UDP should be implemented and on how they are used by :class:`~pygmo.core.problem`.
-Note that the :ref:`exposed C++ problems <py_cpp_problems>` can also be used as UDPs, even if
-they do not expose any of the mandatory or optional methods listed above.
+Note that the exposed C++ problems can also be used as UDPs, even if they do not expose any of the
+mandatory or optional methods listed above (see :ref:`here <py_problems>` for the
+full list of UDPs already coded in pygmo).
 
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::problem`.
 
@@ -1180,8 +1181,9 @@ Additional optional methods can be implemented in a UDA:
 
 See the documentation of the corresponding methods in this class for details on how the optional
 methods in the UDA should be implemented and on how they are used by :class:`~pygmo.core.algorithm`.
-Note that the :ref:`exposed C++ algorithms <py_cpp_algorithms>` can also be used as UDAs, even if
-they do not expose any of the mandatory or optional methods listed above.
+Note that the exposed C++ algorithms can also be used as UDAs, even if they do not expose any of the
+mandatory or optional methods listed above (see :ref:`here <py_algorithms>` for the
+full list of UDAs already coded in pygmo).
 
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::algorithm`.
 
@@ -3013,6 +3015,14 @@ void run_evolve(pagmo::algorithm &, ulock_t &, pagmo::population &, ulock_t &);
  * **NOTE**: a moved-from pagmo::island is destructible and assignable. Any other operation will result
  * in undefined behaviour.
 
+)";
+}
+
+std::string thread_island_docstring()
+{
+    return R"(thread_island()
+
+Thread island class.
 )";
 }
 

@@ -1,67 +1,65 @@
-.. _py_cpp_problems:
+.. _py_algorithms:
 
-Problems exposed from C++
-=========================
+List of algorithms available in pygmo
+=====================================
 
-.. autoclass:: pygmo.core.null_problem
+Algorithms exposed from C++
+---------------------------
+
+.. autoclass:: pygmo.core.null_algorithm
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.cec2013
+.. autoclass:: pygmo.core.de
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.cec2006
+.. autoclass:: pygmo.core.sea
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.cec2009
+.. autoclass:: pygmo.core.sade
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.rosenbrock
+.. autoclass:: pygmo.core.de1220
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.rastrigin
+.. autoclass:: pygmo.core.cmaes
+  :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.moead
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.schwefel
+.. autoclass:: pygmo.core.compass_search
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.ackley
+.. autoclass:: pygmo.core.simulated_annealing
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.griewank
+.. autoclass:: pygmo.core.pso
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.zdt
+.. autoclass:: pygmo.core.nsga2
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.dtlz
-   :members:
-
--------------------------------------------------------------
-
-.. autoclass:: pygmo.core.inventory
-   :members:
-
--------------------------------------------------------------
-
-.. autoclass:: pygmo.core.hock_schittkowsky_71
+.. autoclass:: pygmo.core.mbh
    :members:
