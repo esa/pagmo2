@@ -78,8 +78,10 @@ public:
         if (pop.size() == 0u) {
             pagmo_throw(std::invalid_argument, "Cannot define an adaptive penalty for an empty population");
         }
+        // We assign the naked pointer
         m_pop_ptr = &pop;
-        update_ref_pop();
+        // Update all data members
+        update();
     }
 
     // The bounds are unchanged
@@ -101,16 +103,19 @@ public:
             f[0] = it_f->second[0];
             solution_infeasibility = compute_infeasibility(it_f->second);
         } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem )
-            f[0] = m_pop_ptr->get_problem().fitness(x)[0];
-            solution_infeasibility = compute_infeasibility(f);
+            auto fit = m_pop_ptr->get_problem().fitness(x);
+            f[0] = fit[0];
+            solution_infeasibility = compute_infeasibility(fit);
         }
-
+        print("\nIn Fitness: fitness: ", m_pop_ptr->get_problem().fitness(x));
+        print("\nIn Fitness: sol infeas: ", solution_infeasibility);
         // 2 - Then we apply the penalty
         if (solution_infeasibility > 0.) {
             // apply penalty 1 only if necessary
             if (m_apply_penalty_1) {
                 double inf_tilde = 0.;
                 inf_tilde = (solution_infeasibility - m_i_hat_down) / (m_i_hat_up - m_i_hat_down);
+                print("\nIn Fitness: inf_tilde: ", inf_tilde);
                 f[0] += inf_tilde * (m_f_hat_down[0] - m_f_hat_up[0]);
             }
             // apply penalty 2
@@ -129,7 +134,7 @@ public:
     // As the penalization algorithm depends heavily on the ref population this method takes care of
     // updating the necessary information. It also builds the hash map used to avoid unecessary fitness
     // evaluations
-    void update_ref_pop()
+    void update()
     {
         auto pop_size = m_pop_ptr->size();
         // 1 - We build the hash map to be able (later) to return already computed fitnesses corresponding to
@@ -269,7 +274,7 @@ public:
         // 7 - hat round idx,a.k.a the solution with highest objective
         // function value in the population
         hat_round_idx = 0u;
-        for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
+        for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
             if (m_pop_ptr->get_f()[hat_round_idx][0] < m_pop_ptr->get_f()[i][0]) {
                 hat_round_idx = i;
             }
@@ -297,7 +302,7 @@ public:
         }
     }
 
-private:
+public:
     // Computes c_max holding the maximum value of the violation of each constraint in the whole ref population
     void compute_c_max()
     {
@@ -348,7 +353,7 @@ private:
                 retval += std::max(0., fit[j + 1] - c_tol[j]) / m_c_max[j];
             }
         }
-        retval /= nc;
+        retval /= (double)nc;
         return retval;
     }
     // According to the population, the first penalty may or may not be applied
