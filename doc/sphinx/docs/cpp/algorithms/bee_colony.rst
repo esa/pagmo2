@@ -3,6 +3,6 @@
 Artificial Bee Colony
 ======================================
 
-.. doxygenclass:: pagmo::abc
+.. doxygenclass:: pagmo::bee_colony
    :project: PaGMOreborn
    :members:

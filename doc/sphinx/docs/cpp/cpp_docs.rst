@@ -25,7 +25,7 @@ code your own algorithm
   :maxdepth: 1
 
   algorithms/null
-  algorithms/abc
+  algorithms/bee_colony
   algorithms/cmaes
   algorithms/compass_search
   algorithms/de

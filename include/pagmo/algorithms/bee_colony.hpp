@@ -1,5 +1,5 @@
-#ifndef PAGMO_ALGORITHMS_ABC_HPP
-#define PAGMO_ALGORITHMS_ABC_HPP
+#ifndef PAGMO_ALGORITHMS_BEE_COLONY_HPP
+#define PAGMO_ALGORITHMS_BEE_COLONY_HPP
 
 #include <random>
 #include <string>
@@ -17,7 +17,7 @@ namespace pagmo
 /**
  *
  */
-class abc
+class bee_colony
 {
 public:
 #if defined(DOXYGEN_INVOKED)
@@ -32,9 +32,9 @@ public:
 
     /// Constructor.
     /**
-     * Constructs an abc algorithm
+     * Constructs a bee_colony algorithm
      */
-    abc(unsigned int gen = 1u, unsigned int limit = 1u, unsigned int seed = pagmo::random_device::next())
+    bee_colony(unsigned int gen = 1u, unsigned int limit = 1u, unsigned int seed = pagmo::random_device::next())
         : m_gen(gen), m_limit(limit), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
     }
@@ -55,7 +55,7 @@ public:
         auto fevals0 = prob.get_fevals(); // disount for the already made fevals
         auto count = 1u;                  // regulates the screen output
         // PREAMBLE-------------------------------------------------------------------------------------------------
-        // Check whether the problem/population are suitable for ABC
+        // Check whether the problem/population are suitable for bee_colony
         if (prob_f_dimension != 1u) {
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
@@ -267,6 +267,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::abc)
+PAGMO_REGISTER_ALGORITHM(pagmo::bee_colony)
 
 #endif
