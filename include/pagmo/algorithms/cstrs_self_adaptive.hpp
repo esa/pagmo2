@@ -61,6 +61,8 @@ namespace detail
 class unconstrain_with_adaptive_penalty
 {
 public:
+    /// Fake default constructor to please the is_udp type trait
+    unconstrain_with_adaptive_penalty(){};
     /// Constructs the udp. At construction all member get initialized using the incoming pop
     unconstrain_with_adaptive_penalty(population &pop) : m_fitness_map(), m_decision_vector_hash()
     {
@@ -80,6 +82,12 @@ public:
         update_ref_pop();
     }
 
+    // The bounds are unchanged
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return m_pop_ptr->get_problem().get_bounds();
+    }
+
     /// The fitness computation
     vector_double fitness(const vector_double &x) const
     {
@@ -90,10 +98,10 @@ public:
         // 1 - We check if the decision vector is already in the reference population and return that or recompute.
         it_f = m_fitness_map.find(m_decision_vector_hash(x));
         if (it_f != m_fitness_map.end()) {
-            f = it_f->second;
+            f[0] = it_f->second[0];
             solution_infeasibility = compute_infeasibility(it_f->second);
         } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem )
-            f = m_pop_ptr->get_problem().fitness(x);
+            f[0] = m_pop_ptr->get_problem().fitness(x)[0];
             solution_infeasibility = compute_infeasibility(f);
         }
 
@@ -225,7 +233,6 @@ public:
                 // Do not apply penalty 1
                 m_apply_penalty_1 = false;
             }
-
         } else {
             // 6 - Second case where there is no feasible solution in the population
             // best is the individual with the lowest infeasibility

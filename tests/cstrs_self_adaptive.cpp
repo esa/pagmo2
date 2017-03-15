@@ -59,4 +59,6 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction_test)
     print(ptr->get_problem());
     ptr->get_problem().fitness(vector_double{1., 2., 3., 4});
     print(pop.get_problem());
+    problem prob(dummy);
+    print(prob.fitness(vector_double{1., 2., 3., 4}));
 }
