@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/any.hpp>
 #include <chrono>
+#include <cstdlib>
 #include <functional>
 #include <future>
 #include <iostream>
@@ -641,8 +642,8 @@ public:
             // NOTE: the rationale here is that we interpret system_error as
             // a failure in the locking primitives inside wait(), and if that
             // fails we will have loose threads hanging around. Best just to
-            // rethrow, which will cause program termination as this dtor is noexcept.
-            throw;
+            // abort.
+            std::abort();
         } catch (...) {
         }
     }
