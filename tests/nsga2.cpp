@@ -93,22 +93,29 @@ BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
 
     population pop1{udp, 52u, 23u};
     population pop2{udp, 52u, 23u};
+    population pop3{udp, 52u, 23u};
 
     nsga2 user_algo1{10u, 0.95, 10., 0.01, 50., 3u, 32u};
     user_algo1.set_verbosity(1u);
     pop1 = user_algo1.evolve(pop1);
 
+    BOOST_CHECK(user_algo1.get_log().size() > 0u);
+
     nsga2 user_algo2{10u, 0.95, 10., 0.01, 50., 3u, 32u};
     user_algo2.set_verbosity(1u);
     pop2 = user_algo2.evolve(pop2);
 
-    BOOST_CHECK(user_algo1.get_log().size() > 0u);
+    BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+    user_algo2.set_seed(32u);
+    pop3 = user_algo2.evolve(pop3);
+
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 
     // We evolve for many-objectives and trigger the output with the ellipses
     udp = dtlz{1u, 12u, 7u};
-    population pop3{udp, 52u, 23u};
-    pop3 = user_algo2.evolve(pop3);
+    population pop4{udp, 52u, 23u};
+    pop4 = user_algo2.evolve(pop4);
 }
 
 BOOST_AUTO_TEST_CASE(nsga2_setters_getters_test)

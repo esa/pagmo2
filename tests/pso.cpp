@@ -90,35 +90,45 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     // seed is controlled and for all algoritmic variants:
     for (unsigned int variant = 1u; variant <= 6u; ++variant) {
         for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
-            problem prob1{rosenbrock{10u}};
-            population pop1{prob1, 5u, 23u};
+            problem prob{rosenbrock{10u}};
+            population pop1{prob, 5u, 23u};
             pso user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
             user_algo1.set_verbosity(1u);
             pop1 = user_algo1.evolve(pop1);
 
-            problem prob2{rosenbrock{10u}};
-            population pop2{prob2, 5u, 23u};
+            population pop2{prob, 5u, 23u};
             pso user_algo2{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
             user_algo2.set_verbosity(1u);
             pop2 = user_algo2.evolve(pop2);
+            BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+            population pop3{prob, 5u, 23u};
+            user_algo2.set_seed(23u);
+            pop3 = user_algo2.evolve(pop3);
             BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
         }
     }
     // And with active memory
     for (unsigned int variant = 1u; variant <= 6u; ++variant) {
         for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
-            problem prob1{rosenbrock{10u}};
-            population pop1{prob1, 5u, 23u};
+            problem prob{rosenbrock{10u}};
+            population pop1{prob, 5u, 23u};
             pso user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
             user_algo1.set_verbosity(1u);
             pop1 = user_algo1.evolve(pop1);
 
-            problem prob2{rosenbrock{10u}};
-            population pop2{prob2, 5u, 23u};
+            population pop2{prob, 5u, 23u};
             pso user_algo2{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
             user_algo2.set_verbosity(1u);
             pop2 = user_algo2.evolve(pop2);
             BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+            population pop3{prob, 5u, 23u};
+            pso user_algo3{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 0u};
+            user_algo3.set_verbosity(1u);
+            user_algo3.set_seed(23u);
+            pop3 = user_algo3.evolve(pop3);
+            BOOST_CHECK(user_algo1.get_log() == user_algo3.get_log());
         }
     }
 }
