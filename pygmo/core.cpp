@@ -1108,9 +1108,13 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<island>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
-        .def("evolve", &island::evolve)
-        .def("busy", &island::busy)
-        .def("wait", &island::wait);
+        .def("evolve", &island::evolve, pygmo::island_evolve_docstring().c_str())
+        .def("busy", &island::busy, pygmo::island_busy_docstring().c_str())
+        .def("wait", &island::wait, pygmo::island_wait_docstring().c_str())
+        .def("get_population", &island::get_population, pygmo::island_get_population_docstring().c_str())
+        .def("get_algorithm", &island::get_algorithm, pygmo::island_get_algorithm_docstring().c_str())
+        .def("get_name", &island::get_name, pygmo::island_get_name_docstring().c_str())
+        .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
 
     // Thread island.
     auto ti = pygmo::expose_island<thread_island>("thread_island", pygmo::thread_island_docstring().c_str());

@@ -167,6 +167,13 @@ std::string nadir_docstring();
 
 // island.
 std::string island_docstring();
+std::string island_evolve_docstring();
+std::string island_wait_docstring();
+std::string island_busy_docstring();
+std::string island_get_algorithm_docstring();
+std::string island_get_population_docstring();
+std::string island_get_name_docstring();
+std::string island_get_extra_info_docstring();
 
 // udi.
 std::string thread_island_docstring();

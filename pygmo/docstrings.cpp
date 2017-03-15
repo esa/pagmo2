@@ -3038,6 +3038,146 @@ If the keyword arguments list is invalid, a :exc:`KeyError` exception will be ra
 )";
 }
 
+std::string island_evolve_docstring()
+{
+    return R"(evolve()
+
+Launch evolution.
+
+This method will evolve the island’s :class:`~pygmo.core.population` using the island’s :class:`~pygmo.core.algorithm`.
+The evolution happens asynchronously: a call to :func:`~pygmo.core.island.evolve()` will create an evolution task that
+will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution
+managed by the :class:`~pygmo.core.island` object, which will invoke the ``run_evolve()`` method of the UDI to perform the
+actual evolution. The island’s population will be updated at the end of each evolution task. Exceptions raised insided the tasks
+are stored within the island object, and can be re-raised by calling :func:`~pygmo.core.island.wait()`.
+
+It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
+first-out) fashion. The user may call :func:`~pygmo.core.island.wait()` to block until all tasks have been completed, and to fetch
+exceptions raised during the execution of the tasks.
+
+Raises:
+
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_wait_docstring()
+{
+    return R"(wait()
+
+Block until evolution ends.
+
+This method will block until all the evolution tasks enqueued via :func:`~pygmo.core.island.evolve()` have been completed.
+The method will also raise the first exception raised by any task enqueued since the last time :func:`~pygmo.core.island.wait()`
+was called.
+
+Raises:
+
+    unspecified: any exception thrown by evolution tasks or by the underlying C++ method
+
+)";
+}
+
+std::string island_busy_docstring()
+{
+    return R"(busy()
+
+Check island status.
+
+Returns:
+
+    ``bool``: ``True`` if the island is evolving, ``False`` otherwise
+
+Raises:
+
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_get_algorithm_docstring()
+{
+    return R"(get_algorithm()
+
+Get the algorithm.
+
+It is safe to call this method while the island is evolving.
+
+Returns:
+
+    :class:`~pygmo.core.algorithm`: a copy of the island's algorithm
+
+Raises:
+
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_get_population_docstring()
+{
+    return R"(get_population()
+
+Get the population.
+
+It is safe to call this method while the island is evolving.
+
+Returns:
+
+    :class:`~pygmo.core.population`: a copy of the island's population
+
+Raises:
+
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_get_name_docstring()
+{
+    return R"(get_name()
+
+Island's name.
+
+If the UDI provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
+Otherwise, an implementation-defined name based on the type of the UDI will be returned.
+
+The ``get_name()`` method of the UDI must return a ``str``.
+
+Returns:
+
+    `str`: the name of the UDI
+
+Raises:
+
+    unspecified: any exception thrown by the ``get_name()`` method of the UDI
+
+)";
+}
+
+std::string island_get_extra_info_docstring()
+{
+    return R"(get_extra_info()
+
+Island's extra info.
+
+If the UDI provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
+method. Otherwise, an empty string will be returned.
+
+The ``get_extra_info()`` method of the UDI must return a ``str``.
+
+Returns:
+
+    `str`: extra info about the UDI
+
+Raises:
+
+    unspecified: any exception thrown by the ``get_extra_info()`` method of the UDI
+
+)";
+}
+
 std::string thread_island_docstring()
 {
     return R"(__init__()

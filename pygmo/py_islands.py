@@ -180,7 +180,7 @@ class mp_island(object):
     def init_pool(processes=None):
         """Initialise the process pool.
 
-        This method will initialise the global process pool backing :class:`~pygmo.py_islands.mp_island`, if the pool
+        This method will initialise the process pool backing :class:`~pygmo.py_islands.mp_island`, if the pool
         has not been initialised yet. Otherwise, this method will have no effects.
 
         Args:
@@ -230,7 +230,7 @@ class mp_island(object):
     def resize_pool(processes):
         """Resize pool.
 
-        This method will resize the global process pool backing :class:`~pygmo.py_islands.mp_island`.
+        This method will resize the process pool backing :class:`~pygmo.py_islands.mp_island`.
 
         Args:
 
