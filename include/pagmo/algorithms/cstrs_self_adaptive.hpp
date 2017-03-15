@@ -61,25 +61,34 @@ class unconstrain_with_adaptive_penalty
 {
 public:
     /// Constructs the udp. At construction all
-    unconstrain_with_adaptive_penalty(const population &pop)
+    unconstrain_with_adaptive_penalty(population &pop) : m_pop_ptr(&pop)
     {
     }
 
+    population *get_ptr()
+    {
+        return m_pop;
+    }
+
 private:
-    // According to the population the first penalty may or may not be applied
+    // According to the population, the first penalty may or may not be applied
     bool m_apply_penalty_1;
+    // The parameter gamma that scales the second penalty
     double m_scaling_factor;
-
-    constraint_vector m_c_scaling;
-
-    fitness_vector m_f_hat_down;
-    fitness_vector m_f_hat_up;
-    fitness_vector m_f_hat_round;
-
+    // The normalization of each constraint
+    vector_double m_c_max;
+    // The fitness of the three reference individuals
+    vector_double m_f_hat_down;
+    vector_double m_f_hat_up;
+    vector_double m_f_hat_round;
+    // The infeasibilities of the three reference individuals
     double m_i_hat_down;
     double m_i_hat_up;
     double m_i_hat_round;
-}
+    // A pointer to the population, allowing to call the fitness function and later recover
+    // the counters outside of the class, and avoiding unecessary copies.
+    population *m_pop_ptr;
+};
 }
 
 } // namespace pagmo
