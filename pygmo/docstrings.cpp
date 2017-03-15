@@ -3147,7 +3147,7 @@ The ``get_name()`` method of the UDI must return a ``str``.
 
 Returns:
 
-    `str`: the name of the UDI
+    ``str``: the name of the UDI
 
 Raises:
 
@@ -3169,7 +3169,7 @@ The ``get_extra_info()`` method of the UDI must return a ``str``.
 
 Returns:
 
-    `str`: extra info about the UDI
+    ``str``: extra info about the UDI
 
 Raises:
 
