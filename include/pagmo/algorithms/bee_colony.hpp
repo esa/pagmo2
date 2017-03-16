@@ -21,12 +21,12 @@ class bee_colony
 {
 public:
 #if defined(DOXYGEN_INVOKED)
-    /// Single entry of the log (gen, fevals, best, dx, df)
-    typedef std::tuple<unsigned int, unsigned long long, double, double, double> log_line_type;
+    /// Single entry of the log (gen, fevals, curr_best, best, dx, df)
+    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 #else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double>;
+    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double, double>;
     using log_type = std::vector<log_line_type>;
 #endif
 
@@ -34,9 +34,12 @@ public:
     /**
      * Constructs a bee_colony algorithm
      */
-    bee_colony(unsigned int gen = 1u, unsigned int limit = 1u, unsigned int seed = pagmo::random_device::next())
-        : m_gen(gen), m_limit(limit), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+    bee_colony(unsigned int mfe = 1u, unsigned int limit = 1u, unsigned int seed = pagmo::random_device::next())
+        : m_mfe(mfe), m_limit(limit), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
+        if (limit == 0u) {
+            pagmo_throw(std::invalid_argument, "The limit must be larger than 0.");
+        }
     }
 
     /// Algorithm evolve method
@@ -69,7 +72,7 @@ public:
                                                    + std::to_string(NP) + " detected");
         }
         // Get out if there is nothing to do.
-        if (m_gen == 0u) {
+        if (m_mfe == 0u) {
             return pop;
         }
         // ---------------------------------------------------------------------------------------------------------
@@ -85,11 +88,12 @@ public:
         std::uniform_real_distribution<double> phirng(-1., 1.); // to generate a number in [-1, 1]
         std::uniform_real_distribution<double> rrng(0., 1.);    // to generate a number in [0, 1]
         std::uniform_int_distribution<vector_double::size_type> comprng(
-            0u, dim - 1u); // to generate a random index for the component
+            0u, dim - 1u); // to generate a random index for the component to mutate
         std::uniform_int_distribution<vector_double::size_type> neirng(
             0u, NP - 2u); // to generate a random index for the neighbour
 
-        for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
+        auto gen = 1u;
+        while (prob.get_fevals() - fevals0 < m_mfe) {
             // 1 - Employed bees phase
             for (decltype(NP) i = 0u; i < NP; ++i) {
                 newsol = X[i];
@@ -98,26 +102,30 @@ public:
                 // selects a random neighbour
                 auto neighbour = neirng(m_e);
                 if (neighbour >= i) {
-                    neighbour++;
+                    ++neighbour;
                 }
                 // mutate new solution
                 newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[neighbour][comp2change]);
                 // if the generated parameter value is out of boundaries, shift it into the boundaries
                 if (newsol[comp2change] < lb[comp2change]) {
-                    newsol[comp2change] = lb[comp2change]
+                    newsol[comp2change] = lb[comp2change];
                 }
                 if (newsol[comp2change] > ub[comp2change]) {
-                    newsol[comp2change] = ub[comp2change]
+                    newsol[comp2change] = ub[comp2change];
                 }
                 // if the new solution is better than the old one replace it and reset its trial counter
                 auto newfitness = prob.fitness(newsol);
-                if (newfitness < fit[i][0]) {
-                    fit[i][0] = newfitness;
+
+                if (newfitness[0] < fit[i][0]) {
+                    fit[i][0] = newfitness[0];
                     X[i][comp2change] = newsol[comp2change];
                     pop.set_xf(i, newsol, newfitness);
                     trial[i] = 0;
                 } else {
-                    trial[i]++;
+                    ++trial[i];
+                }
+                if (prob.get_fevals() - fevals0 >= m_mfe) {
+                    return pop;
                 }
             }
 
@@ -143,33 +151,36 @@ public:
                 // probabilistic selection of a food source
                 auto r = rrng(m_e);
                 if (r < p[s]) {
-                    t++;
+                    ++t;
                     newsol = X[s];
                     // selects a random component of the decision vector
                     auto comp2change = comprng(m_e);
                     // selects a random neighbour
                     auto neighbour = neirng(m_e);
                     if (neighbour >= s) {
-                        neighbour++;
+                        ++neighbour;
                     }
                     // mutate new solution
                     newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[neighbour][comp2change]);
                     // if the generated parameter value is out of boundaries, shift it into the boundaries
                     if (newsol[comp2change] < lb[comp2change]) {
-                        newsol[comp2change] = lb[comp2change]
+                        newsol[comp2change] = lb[comp2change];
                     }
                     if (newsol[comp2change] > ub[comp2change]) {
-                        newsol[comp2change] = ub[comp2change]
+                        newsol[comp2change] = ub[comp2change];
                     }
                     // if the new solution is better than the old one replace it and reset its trial counter
                     auto newfitness = prob.fitness(newsol);
-                    if (newfitness < fit[s][0]) {
-                        fit[s][0] = newfitness;
+                    if (newfitness[0] < fit[s][0]) {
+                        fit[s][0] = newfitness[0];
                         X[s][comp2change] = newsol[comp2change];
                         pop.set_xf(s, newsol, newfitness);
                         trial[s] = 0;
                     } else {
-                        trial[s]++;
+                        ++trial[s];
+                    }
+                    if (prob.get_fevals() - fevals0 >= m_mfe) {
+                        return pop;
                     }
                 }
                 s = (s + 1) % NP;
@@ -188,17 +199,55 @@ public:
                 auto newfitness = prob.fitness(X[mi]);
                 pop.set_xf(mi, X[mi], newfitness);
                 trial[mi] = 0;
+                if (prob.get_fevals() - fevals0 >= m_mfe) {
+                    return pop;
+                }
             }
+            // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
+            if (m_verbosity > 0u) {
+                // Every m_verbosity generations print a log line
+                if (gen % m_verbosity == 1u || m_verbosity == 1u) {
+                    auto best_idx = pop.best_idx();
+                    auto worst_idx = pop.worst_idx();
+                    double dx = 0.;
+                    // The population flattness in chromosome
+                    for (decltype(dim) i = 0u; i < dim; ++i) {
+                        dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
+                    }
+                    // The population flattness in fitness
+                    double df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
+                    // Every 50 lines print the column names
+                    if (count % 50u == 1u) {
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Current best:",
+                              std::setw(15), "Best:", std::setw(15), "dx:", std::setw(15), "df:", '\n');
+                    }
+                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
+                          pop.get_f()[best_idx][0], std::setw(15), pop.champion_f()[0], std::setw(15), dx,
+                          std::setw(15), df, '\n');
+                    ++count;
+                    // Logs
+                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0],
+                                                  pop.champion_f()[0], dx, df));
+                }
+            }
+            ++gen;
         }
         return pop;
     }
 
-    /// Sets the algorithm seed
+    /// Sets the seed
+    /**
+     * @param seed the seed controlling the algorithm stochastic behaviour
+     */
     void set_seed(unsigned int seed)
     {
+        m_e.seed(seed);
         m_seed = seed;
-    };
+    }
     /// Gets the seed
+    /**
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned int get_seed() const
     {
         return m_seed;
@@ -211,40 +260,71 @@ public:
      * - >0: will print and log one line each \p level generations.
      *
      * Example (verbosity 100):
-     * @code
+     * @code{.unparsed}
+     *    Gen:        Fevals:  Current best:          Best:            dx:            df:
+     *       1             50         203199         203199        63.3553    2.39397e+06
+     *     101           5137         185.11         185.11        62.6044    2.50845e+06
+     *     201          10237        36.8093        7.28722        55.2853    2.51614e+06
+     *     301          15337        45.2122        7.28722        52.4086    2.18182e+06
+     *     401          20437        18.3259        7.28722        36.9614    2.67986e+06
+     *     501          25537         261364        7.28722        58.7791    2.69368e+06
      * @endcode
+     * Gen is the generation number, Fevals the number of function evaluation used, Current best is the best fitness
+     * currently in the population, Best is the best fitness found, dx is the population flatness evaluated as
+     * the distance between the decisions vector of the best and of the worst individual, df is the population flatness
+     * evaluated as the distance between the fitness of the best and of the worst individual.
      *
      * @param level verbosity level
      */
     void set_verbosity(unsigned int level)
     {
         m_verbosity = level;
-    };
+    }
     /// Gets the verbosity level
+    /**
+     * @return the verbosity level
+     */
     unsigned int get_verbosity() const
     {
         return m_verbosity;
     }
-    /// Get generations
-    unsigned int get_gen() const
+    /// Gets the number of maximum function evaluations
+    /**
+     * @return the number of maximum function evaluations
+     */
+    unsigned int get_mfe() const
     {
-        return m_gen;
+        return m_mfe;
     }
     /// Algorithm name
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "Artificial Bee Colony";
     }
     /// Extra informations
+    /**
+     * One of the optional methods of any user-defined algorithm (UDA).
+     *
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
-        return "\tGenerations: " + std::to_string(m_gen) + "\n\tVerbosity: " + std::to_string(m_verbosity)
-               + "\n\tSeed: " + std::to_string(m_seed);
+        std::ostringstream ss;
+        stream(ss, "\tMaximum number of objective function evaluations: ", m_mfe);
+        stream(ss, "\n\tLimit: ", m_limit);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
+        stream(ss, "\n\tSeed: ", m_seed);
+        return ss.str();
     }
     /// Get log
     /**
-     * A log containing relevant quantities monitoring the last call to evolve.
-     */
+    * A log containing relevant quantities monitoring the last call to evolve.
+    */
     const log_type &get_log() const
     {
         return m_log;
@@ -253,11 +333,11 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_e, m_seed, m_verbosity, m_log);
+        ar(m_mfe, m_limit, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
-    unsigned int m_gen;
+    unsigned int m_mfe;
     unsigned int m_limit;
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
