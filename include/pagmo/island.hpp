@@ -29,6 +29,8 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ISLAND_HPP
 #define PAGMO_ISLAND_HPP
 
+#include <algorithm>
+#include <atomic>
 #include <boost/any.hpp>
 #include <chrono>
 #include <cstdlib>
@@ -228,7 +230,7 @@ struct isl_inner final : isl_inner_base {
 
 // NOTE: this construct is used to create a RAII-style object at the beginning
 // of island::wait(). Normally this object's constructor and destructor will not
-// do anything, but in Python we need to override this getter to that it returns
+// do anything, but in Python we need to override this getter so that it returns
 // a RAII object that unlocks the GIL, otherwise we could run into deadlocks in Python
 // if isl::wait() holds the GIL while waiting.
 template <typename = void>
@@ -402,7 +404,7 @@ struct island_data {
     population pop;
     std::mutex futures_mutex;
     std::vector<std::future<void>> futures;
-    archipelago *archi_ptr = nullptr;
+    std::atomic<archipelago *> archi_ptr{nullptr};
     // task_queue is thread-safe on its own.
     task_queue queue;
 };
@@ -459,7 +461,10 @@ struct island_data {
  */
 class island
 {
+    // Handy shortcut.
     using idata_t = detail::island_data;
+    // archi needs access to the internal of island.
+    friend class archipelago;
 
 public:
     /// Default constructor.
@@ -724,7 +729,7 @@ public:
                     std::unique_lock<std::mutex> pop_lock(ptr->pop_mutex);
                     ptr->isl_ptr->run_evolve(ptr->algo, algo_lock, ptr->pop, pop_lock);
                 }
-                auto archi = ptr->archi_ptr;
+                auto archi = ptr->archi_ptr.load();
                 (void)archi;
             });
         } catch (...) {
@@ -905,6 +910,113 @@ public:
 
 private:
     mutable std::unique_ptr<idata_t> m_ptr;
+};
+
+class archipelago
+{
+public:
+    using size_type = std::vector<island>::size_type;
+    archipelago() = default;
+    archipelago(const archipelago &) = default;
+    archipelago(archipelago &&other) noexcept : m_islands(std::move(other.m_islands))
+    {
+    }
+
+private:
+    template <typename... Args>
+    using n_ctor_enabler = enable_if_t<std::is_constructible<island, Args &&...>::value, int>;
+
+public:
+    template <typename... Args, n_ctor_enabler<Args...> = 0>
+    explicit archipelago(size_type n, Args &&... args)
+    {
+        for (size_type i = 0; i < n; ++i) {
+            push_back(std::forward<Args>(args)...);
+        }
+    }
+    archipelago &operator=(const archipelago &other)
+    {
+        if (this != &other) {
+            *this = archipelago(other);
+        }
+        return *this;
+    }
+    archipelago &operator=(archipelago &&other) noexcept
+    {
+        if (this != &other) {
+            m_islands = std::move(other.m_islands);
+        }
+        return *this;
+    }
+    ~archipelago()
+    {
+        assert(std::all_of(m_islands.begin(), m_islands.end(),
+                           [](const island &isl) { return isl.m_ptr->archi_ptr.load() != nullptr; }));
+    }
+
+private:
+    template <typename... Args>
+    using push_back_enabler = n_ctor_enabler<Args...>;
+
+public:
+    island &operator[](size_type i)
+    {
+        if (i >= size()) {
+            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
+                                               + ": the archipelago has a size of only "
+                                               + std::to_string(m_islands.size()));
+        }
+        return m_islands[i];
+    }
+    const island &operator[](size_type i) const
+    {
+        if (i >= size()) {
+            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
+                                               + ": the archipelago has a size of only "
+                                               + std::to_string(m_islands.size()));
+        }
+        return m_islands[i];
+    }
+    size_type size() const
+    {
+        return m_islands.size();
+    }
+    template <typename... Args, push_back_enabler<Args...> = 0>
+    void push_back(Args &&... args)
+    {
+        m_islands.emplace_back(std::forward<Args>(args)...);
+        m_islands.back().m_ptr->archi_ptr.store(this);
+    }
+    void evolve()
+    {
+        for (auto &isl : m_islands) {
+            isl.evolve();
+        }
+    }
+    void wait() const
+    {
+        for (decltype(m_islands.size()) i = 0; i < m_islands.size(); ++i) {
+            try {
+                m_islands[i].wait();
+            } catch (...) {
+                for (i = i + 1u; i < m_islands.size(); ++i) {
+                    try {
+                        m_islands[i].wait();
+                    } catch (...) {
+                    }
+                }
+                throw;
+            }
+        }
+    }
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_islands);
+    }
+
+private:
+    std::vector<island> m_islands;
 };
 }
 
