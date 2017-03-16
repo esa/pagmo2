@@ -52,13 +52,21 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction_test)
 {
-    population pop{hock_schittkowsky_71{}, 10u};
-    detail::unconstrain_with_adaptive_penalty dummy{pop};
+    population pop{hock_schittkowsky_71{}, 5u};
+    detail::apply_adaptive_penalty dummy{pop};
     print(dummy.m_c_max, "\n");
     print(dummy.m_i_hat_down, "\n");
     print(dummy.m_i_hat_up, "\n");
     print(dummy.m_i_hat_round, "\n");
     print(dummy.m_scaling_factor, "\n");
     problem prob(dummy);
-    print(prob.fitness(vector_double{1., 2., 3., 4.}));
+    for (auto d : pop.get_x()) {
+        print(pop.get_problem().fitness(d), " ");
+    }
+    print("\n");
+    for (auto d : pop.get_x()) {
+        print(prob.fitness(d), " ");
+    }
+    print(pop.get_problem().fitness(vector_double{1., 2., 3., 4.}));
+    print("\n", prob.fitness(vector_double{1., 2., 3., 4.}));
 }

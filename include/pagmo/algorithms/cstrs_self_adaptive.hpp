@@ -58,13 +58,13 @@ namespace detail
  * Evolutionary Computation, IEEE Transactions on, 7(5), 445-455 for the paper introducing the method.
  *
  */
-class unconstrain_with_adaptive_penalty
+class apply_adaptive_penalty
 {
 public:
     /// Fake default constructor to please the is_udp type trait
-    unconstrain_with_adaptive_penalty(){};
+    apply_adaptive_penalty(){};
     /// Constructs the udp. At construction all member get initialized using the incoming pop
-    unconstrain_with_adaptive_penalty(population &pop) : m_fitness_map(), m_decision_vector_hash()
+    apply_adaptive_penalty(population &pop) : m_fitness_map(), m_decision_vector_hash()
     {
         // Only constrained problems can use this
         if (pop.get_problem().get_nc() == 0u) {
@@ -78,7 +78,7 @@ public:
         if (pop.size() == 0u) {
             pagmo_throw(std::invalid_argument, "Cannot define an adaptive penalty for an empty population");
         }
-        // We assign the naked pointer
+        // We assign the naked pointer THis will not change and pop has to change outside in order for update to matter.
         m_pop_ptr = &pop;
         // Update all data members
         update();
@@ -107,20 +107,18 @@ public:
             f[0] = fit[0];
             solution_infeasibility = compute_infeasibility(fit);
         }
-        print("\nIn Fitness: fitness: ", m_pop_ptr->get_problem().fitness(x));
-        print("\nIn Fitness: sol infeas: ", solution_infeasibility);
         // 2 - Then we apply the penalty
         if (solution_infeasibility > 0.) {
+            double inf_tilde = solution_infeasibility;
+            if (m_i_hat_up != m_i_hat_down) {
+                inf_tilde = (solution_infeasibility - m_i_hat_down) / (m_i_hat_up - m_i_hat_down);
+            }
             // apply penalty 1 only if necessary
             if (m_apply_penalty_1) {
-                double inf_tilde = 0.;
-                inf_tilde = (solution_infeasibility - m_i_hat_down) / (m_i_hat_up - m_i_hat_down);
-                print("\nIn Fitness: inf_tilde: ", inf_tilde);
                 f[0] += inf_tilde * (m_f_hat_down[0] - m_f_hat_up[0]);
             }
-            // apply penalty 2
-            f[0] += m_scaling_factor * std::abs(f[0])
-                    * ((std::exp(2. * solution_infeasibility) - 1.) / (std::exp(2.) - 1.));
+            // apply penalty 2 uses inf_tilde correcting a bug in pagmo legacy
+            f[0] += m_scaling_factor * std::abs(f[0]) * ((std::exp(2. * inf_tilde) - 1.) / (std::exp(2.) - 1.));
         }
         return f;
     }
@@ -161,6 +159,10 @@ public:
 
         // 3 - If the reference population contains only feasible fitnesses return
         if (infeasible_idx.size() == 0u) {
+            // Since no infeasible individuals exist in the reference population, we
+            // still need to decide what to do when evaluating the fitness of a decision vector
+            // not in the ref_pop.
+            m_scaling_factor = 0.;
             return;
         }
 
@@ -179,7 +181,7 @@ public:
 
         // 5 - First case: the population contains at least one feasible solution
         if (feasible_idx.size() > 0u) {
-            // 5a - hat_down, a.k.a feasible individual with lowest objective value in p
+            // 5a - hat_down, a.k.a feasible individual with lowest objective value in the ref_pop
             hat_down_idx = feasible_idx[0];
             for (decltype(feasible_idx.size()) i = 1u; i < feasible_idx.size(); ++i) {
                 auto current_idx = feasible_idx[i];
@@ -239,12 +241,10 @@ public:
                 m_apply_penalty_1 = false;
             }
         } else {
-            // 6 - Second case where there is no feasible solution in the population
-            // best is the individual with the lowest infeasibility
+            // 6 - Second case: there is no feasible solution in the reference population
+            // 6a - hat_down, a.k.a the individual with the lowest infeasibility
             hat_down_idx = 0u;
-            hat_up_idx = 0u;
-            // 6a - hat_down
-            for (decltype(pop_size) i = 0u; i < pop_size; i++) {
+            for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
                 if (infeasibility[i] <= infeasibility[hat_down_idx]) {
                     if (infeasibility[i] == infeasibility[hat_down_idx]) {
                         if (m_pop_ptr->get_f()[i][0] < m_pop_ptr->get_f()[hat_down_idx][0]) {
@@ -255,8 +255,9 @@ public:
                     }
                 }
             }
-            // 6a - hat_up
-            for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
+            // 6b - hat_up, ak.a. the individual with the maximum infeasibility (and minimum objective function)
+            hat_up_idx = 0u;
+            for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
                 if (infeasibility[i] >= infeasibility[hat_up_idx]) {
                     if (infeasibility[i] == infeasibility[hat_up_idx]) {
                         if (m_pop_ptr->get_f()[hat_up_idx][0] < m_pop_ptr->get_f()[i][0]) {
@@ -271,8 +272,8 @@ public:
             m_apply_penalty_1 = true;
         }
 
-        // 7 - hat round idx,a.k.a the solution with highest objective
-        // function value in the population
+        // 7 - hat round idx, a.k.a the solution with highest objective
+        // function value in the reference population
         hat_round_idx = 0u;
         for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
             if (m_pop_ptr->get_f()[hat_round_idx][0] < m_pop_ptr->get_f()[i][0]) {
