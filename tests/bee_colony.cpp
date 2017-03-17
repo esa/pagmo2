@@ -12,9 +12,12 @@
 #include <pagmo/population.hpp>
 #include <pagmo/problems/ackley.hpp>
 #include <pagmo/problems/griewank.hpp>
+#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
+#include <pagmo/problems/zdt.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/types.hpp>
 
@@ -39,13 +42,13 @@ BOOST_AUTO_TEST_CASE(bee_colony_evolve_test)
     population pop2{prob, 5u, 23u};
     population pop3{prob, 5u, 23u};
 
-    bee_colony user_algo1{30u, 10u, 23u};
+    bee_colony user_algo1{10u, 4u, 23u};
     user_algo1.set_verbosity(1u);
     pop1 = user_algo1.evolve(pop1);
 
     BOOST_CHECK(user_algo1.get_log().size() > 0u);
 
-    bee_colony user_algo2{30u, 10u, 23u};
+    bee_colony user_algo2{10u, 4u, 23u};
     user_algo2.set_verbosity(1u);
     pop2 = user_algo2.evolve(pop2);
 
@@ -55,16 +58,25 @@ BOOST_AUTO_TEST_CASE(bee_colony_evolve_test)
     pop3 = user_algo2.evolve(pop3);
 
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+    // We then check that the evolve throws if called on unsuitable problems
+    BOOST_CHECK_THROW(bee_colony{10u}.evolve(population{problem{rosenbrock{}}, 1u}), std::invalid_argument);
+    BOOST_CHECK_THROW(bee_colony{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(bee_colony{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(bee_colony{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
+    // And a clean exit for 0 generations
+    population pop{rosenbrock{25u}, 10u};
+    BOOST_CHECK(bee_colony{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
 }
 
 BOOST_AUTO_TEST_CASE(bee_colony_setters_getters_test)
 {
-    bee_colony user_algo{30u, 10u, 1u};
+    bee_colony user_algo{10u, 10u, 1u};
     user_algo.set_verbosity(11u);
     BOOST_CHECK(user_algo.get_verbosity() == 11u);
     user_algo.set_seed(5u);
     BOOST_CHECK(user_algo.get_seed() == 5u);
-    BOOST_CHECK(user_algo.get_mfe() == 30u);
+    BOOST_CHECK(user_algo.get_gen() == 10u);
     BOOST_CHECK(user_algo.get_name().find("Artificial Bee Colony") != std::string::npos);
     BOOST_CHECK(user_algo.get_extra_info().find("Limit") != std::string::npos);
     BOOST_CHECK_NO_THROW(user_algo.get_log());
@@ -76,7 +88,7 @@ BOOST_AUTO_TEST_CASE(bee_colony_serialization_test)
     // Make one evolution
     problem prob{rosenbrock{25u}};
     population pop{prob, 10u, 23u};
-    algorithm algo{bee_colony{30u, 10u, 23u}};
+    algorithm algo{bee_colony{10u, 10u, 23u}};
     algo.set_verbosity(1u); // allows the log to be filled
     pop = algo.evolve(pop);
 
@@ -106,7 +118,5 @@ BOOST_AUTO_TEST_CASE(bee_colony_serialization_test)
         BOOST_CHECK_EQUAL(std::get<1>(before_log[i]), std::get<1>(after_log[i]));
         BOOST_CHECK_CLOSE(std::get<2>(before_log[i]), std::get<2>(after_log[i]), 1e-8);
         BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
-        BOOST_CHECK_CLOSE(std::get<4>(before_log[i]), std::get<4>(after_log[i]), 1e-8);
-        BOOST_CHECK_CLOSE(std::get<5>(before_log[i]), std::get<5>(after_log[i]), 1e-8);
     }
 }

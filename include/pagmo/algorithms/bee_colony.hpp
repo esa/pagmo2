@@ -15,36 +15,55 @@ namespace pagmo
 {
 /// Artificial Bee Colony Algorithm
 /**
+ * Artificial Bee Colony is an optimization algorithm based on the intelligent foraging behaviour of honey bee swarm,
+ * proposed by Karaboga in 2005.
  *
+ * The implementation provided for PaGMO is based on the pseudo-code provided in Mernik et al. (2015) - Algorithm 2.
+ * pagmo::bee_colony is suitable for box-constrained single-objective continuous optimization.
+ *
+ * See: http://mf.erciyes.edu.tr/abc/ for the official ABC web site
+ * See: https://link.springer.com/article/10.1007/s10898-007-9149-x for the paper that introduces Artificial Bee Colony
+ * See: http://www.sciencedirect.com/science/article/pii/S0020025514008378 for the pseudo-code
  */
 class bee_colony
 {
 public:
 #if defined(DOXYGEN_INVOKED)
-    /// Single entry of the log (gen, fevals, curr_best, best, dx, df)
-    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
+    /// Single entry of the log (gen, fevals, curr_best, best)
+    typedef std::tuple<unsigned int, unsigned long long, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 #else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double, double, double>;
+    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double>;
     using log_type = std::vector<log_line_type>;
 #endif
 
-    /// Constructor.
+    /// Constructor
     /**
      * Constructs a bee_colony algorithm
+     *
+     * @param gen number of generations. Note that the total number of function evaluations will be 2*gen
+     * @param limit maximum number of trials for abandoning a source
+     * @param seed seed used by the internal random number generator (default is random)
+     *
+     * @throws std::invalid_argument if limit equals 0
      */
-    bee_colony(unsigned int mfe = 1u, unsigned int limit = 1u, unsigned int seed = pagmo::random_device::next())
-        : m_mfe(mfe), m_limit(limit), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+    bee_colony(unsigned int gen = 1u, unsigned int limit = 1u, unsigned int seed = pagmo::random_device::next())
+        : m_gen(gen), m_limit(limit), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (limit == 0u) {
-            pagmo_throw(std::invalid_argument, "The limit must be larger than 0.");
+            pagmo_throw(std::invalid_argument, "The limit must be greater than 0.");
         }
     }
 
-    /// Algorithm evolve method
+    /// Algorithm evolve method (juice implementation of the algorithm)
     /**
-     * Evolves the population
+     * Evolves the population for a maximum number of generations
+     *
+     * @param pop population to be evolved
+     * @return evolved population
+     * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
+     * @throws std::invalid_argument if the population size is smaller than 2
      */
     population evolve(population pop) const
     {
@@ -54,12 +73,15 @@ public:
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
         auto NP = pop.size();
-        auto prob_f_dimension = prob.get_nf();
-        auto fevals0 = prob.get_fevals(); // disount for the already made fevals
+        auto fevals0 = prob.get_fevals(); // fevals already made
         auto count = 1u;                  // regulates the screen output
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // Check whether the problem/population are suitable for bee_colony
-        if (prob_f_dimension != 1u) {
+        if (prob.get_nc() != 0u) {
+            pagmo_throw(std::invalid_argument, "Constraints detected in " + prob.get_name() + " instance. " + get_name()
+                                                   + " cannot deal with them");
+        }
+        if (prob.get_nf() != 1u) {
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
         }
@@ -72,7 +94,7 @@ public:
                                                    + std::to_string(NP) + " detected");
         }
         // Get out if there is nothing to do.
-        if (m_mfe == 0u) {
+        if (m_gen == 0u) {
             return pop;
         }
         // ---------------------------------------------------------------------------------------------------------
@@ -84,7 +106,7 @@ public:
         vector_double newsol(dim); // contains the mutated candidate
         auto X = pop.get_x();
         auto fit = pop.get_f();
-        std::vector<unsigned> trial(NP, 0u);
+        std::vector<unsigned int> trial(NP, 0u);
         std::uniform_real_distribution<double> phirng(-1., 1.); // to generate a number in [-1, 1]
         std::uniform_real_distribution<double> rrng(0., 1.);    // to generate a number in [0, 1]
         std::uniform_int_distribution<vector_double::size_type> comprng(
@@ -92,44 +114,58 @@ public:
         std::uniform_int_distribution<vector_double::size_type> neirng(
             0u, NP - 2u); // to generate a random index for the neighbour
 
-        auto gen = 1u;
-        while (prob.get_fevals() - fevals0 < m_mfe) {
+        for (auto gen = 1u; gen <= m_gen; ++gen) {
             // 1 - Employed bees phase
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-                newsol = X[i];
-                // selects a random component of the decision vector
-                auto comp2change = comprng(m_e);
-                // selects a random neighbour
-                auto neighbour = neirng(m_e);
-                if (neighbour >= i) {
-                    ++neighbour;
-                }
-                // mutate new solution
-                newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[neighbour][comp2change]);
-                // if the generated parameter value is out of boundaries, shift it into the boundaries
-                if (newsol[comp2change] < lb[comp2change]) {
-                    newsol[comp2change] = lb[comp2change];
-                }
-                if (newsol[comp2change] > ub[comp2change]) {
-                    newsol[comp2change] = ub[comp2change];
-                }
-                // if the new solution is better than the old one replace it and reset its trial counter
-                auto newfitness = prob.fitness(newsol);
-
-                if (newfitness[0] < fit[i][0]) {
-                    fit[i][0] = newfitness[0];
-                    X[i][comp2change] = newsol[comp2change];
-                    pop.set_xf(i, newsol, newfitness);
-                    trial[i] = 0;
-                } else {
-                    ++trial[i];
-                }
-                if (prob.get_fevals() - fevals0 >= m_mfe) {
-                    return pop;
+            auto mi = 0u;
+            for (auto i = 1u; i < NP; ++i) {
+                if (trial[i] > trial[mi]) {
+                    mi = i;
                 }
             }
-
-            // 2 - Onlooker bee phase
+            bool scout = false;
+            if (trial[mi] >= m_limit) {
+                scout = true;
+            }
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                if (trial[i] < m_limit || i != mi) {
+                    newsol = X[i];
+                    // selects a random component of the decision vector
+                    auto comp2change = comprng(m_e);
+                    // selects a random neighbour
+                    auto neighbour = neirng(m_e);
+                    if (neighbour >= i) {
+                        ++neighbour;
+                    }
+                    // mutate new solution
+                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[neighbour][comp2change]);
+                    // if the generated parameter value is out of boundaries, shift it into the boundaries
+                    if (newsol[comp2change] < lb[comp2change]) {
+                        newsol[comp2change] = lb[comp2change];
+                    }
+                    if (newsol[comp2change] > ub[comp2change]) {
+                        newsol[comp2change] = ub[comp2change];
+                    }
+                    // if the new solution is better than the old one replace it and reset its trial counter
+                    auto newfitness = prob.fitness(newsol);
+                    if (newfitness[0] < fit[i][0]) {
+                        fit[i][0] = newfitness[0];
+                        X[i][comp2change] = newsol[comp2change];
+                        pop.set_xf(i, newsol, newfitness);
+                        trial[i] = 0;
+                    } else {
+                        ++trial[i];
+                    }
+                }
+            }
+            // 2 - Scout bee phase
+            if (scout) {
+                for (auto j = 0u; j < dim; ++j) {
+                    X[mi][j] = uniform_real_from_range(lb[j], ub[j], m_e);
+                }
+                pop.set_x(mi, X[mi]); // this causes a fitness evaluation
+                trial[mi] = 0;
+            }
+            // 3 - Onlooker bee phase
             // compute probabilities
             vector_double p(NP);
             auto sump = 0.;
@@ -179,58 +215,27 @@ public:
                     } else {
                         ++trial[s];
                     }
-                    if (prob.get_fevals() - fevals0 >= m_mfe) {
-                        return pop;
-                    }
                 }
                 s = (s + 1) % NP;
-            }
-            // 3 - Scout bee phase
-            auto mi = 0u;
-            for (auto i = 1u; i < NP; ++i) {
-                if (trial[i] > trial[mi]) {
-                    mi = i;
-                }
-            }
-            if (trial[mi] > m_limit) {
-                for (auto j = 0u; j < dim; ++j) {
-                    X[mi][j] = uniform_real_from_range(lb[j], ub[j], m_e);
-                }
-                auto newfitness = prob.fitness(X[mi]);
-                pop.set_xf(mi, X[mi], newfitness);
-                trial[mi] = 0;
-                if (prob.get_fevals() - fevals0 >= m_mfe) {
-                    return pop;
-                }
             }
             // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
             if (m_verbosity > 0u) {
                 // Every m_verbosity generations print a log line
                 if (gen % m_verbosity == 1u || m_verbosity == 1u) {
                     auto best_idx = pop.best_idx();
-                    auto worst_idx = pop.worst_idx();
-                    double dx = 0.;
-                    // The population flattness in chromosome
-                    for (decltype(dim) i = 0u; i < dim; ++i) {
-                        dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
-                    }
-                    // The population flattness in fitness
-                    double df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
                         print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Current best:",
-                              std::setw(15), "Best:", std::setw(15), "dx:", std::setw(15), "df:", '\n');
+                              std::setw(15), "Best:\n");
                     }
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
-                          pop.get_f()[best_idx][0], std::setw(15), pop.champion_f()[0], std::setw(15), dx,
-                          std::setw(15), df, '\n');
+                          pop.get_f()[best_idx][0], std::setw(15), pop.champion_f()[0], '\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0],
-                                                  pop.champion_f()[0], dx, df));
+                    m_log.push_back(
+                        log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], pop.champion_f()[0]));
                 }
             }
-            ++gen;
         }
         return pop;
     }
@@ -261,18 +266,16 @@ public:
      *
      * Example (verbosity 100):
      * @code{.unparsed}
-     *    Gen:        Fevals:  Current best:          Best:            dx:            df:
-     *       1             50         203199         203199        63.3553    2.39397e+06
-     *     101           5137         185.11         185.11        62.6044    2.50845e+06
-     *     201          10237        36.8093        7.28722        55.2853    2.51614e+06
-     *     301          15337        45.2122        7.28722        52.4086    2.18182e+06
-     *     401          20437        18.3259        7.28722        36.9614    2.67986e+06
-     *     501          25537         261364        7.28722        58.7791    2.69368e+06
+     *    Gen:        Fevals:  Current best:          Best:
+     *       1            100        81757.2        81757.2
+     *     101          10100        28.2248        28.2248
+     *     201          20100         7.9007       0.580009
+     *     301          30100        1.48624      0.0871484
+     *     401          40100       0.415268      0.0871484
+     *     501          50100       0.533034      0.0871484
      * @endcode
      * Gen is the generation number, Fevals the number of function evaluation used, Current best is the best fitness
-     * currently in the population, Best is the best fitness found, dx is the population flatness evaluated as
-     * the distance between the decisions vector of the best and of the worst individual, df is the population flatness
-     * evaluated as the distance between the fitness of the best and of the worst individual.
+     * currently in the population, Best is the best fitness found.
      *
      * @param level verbosity level
      */
@@ -288,13 +291,13 @@ public:
     {
         return m_verbosity;
     }
-    /// Gets the number of maximum function evaluations
+    /// Gets the number of generations
     /**
-     * @return the number of maximum function evaluations
+     * @return the number of generations to evolve for
      */
-    unsigned int get_mfe() const
+    unsigned int get_gen() const
     {
-        return m_mfe;
+        return m_gen;
     }
     /// Algorithm name
     /**
@@ -315,7 +318,7 @@ public:
     std::string get_extra_info() const
     {
         std::ostringstream ss;
-        stream(ss, "\tMaximum number of objective function evaluations: ", m_mfe);
+        stream(ss, "\tMaximum number of generations: ", m_gen);
         stream(ss, "\n\tLimit: ", m_limit);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
         stream(ss, "\n\tSeed: ", m_seed);
@@ -323,21 +326,33 @@ public:
     }
     /// Get log
     /**
-    * A log containing relevant quantities monitoring the last call to evolve.
-    */
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <tt>
+     * std::vector </tt> is a bee_colony::log_line_type containing: Gen, Fevals, Current best, Best as
+     * described in bee_colony::set_verbosity
+     *
+     * @return an <tt> std::vector </tt> of bee_colony::log_line_type containing the logged values Gen, Fevals, Current
+     * best, Best
+     */
     const log_type &get_log() const
     {
         return m_log;
     }
-    /// Serialization
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_mfe, m_limit, m_e, m_seed, m_verbosity, m_log);
+        ar(m_gen, m_limit, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
-    unsigned int m_mfe;
+    unsigned int m_gen;
     unsigned int m_limit;
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
