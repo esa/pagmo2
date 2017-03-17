@@ -120,7 +120,8 @@ __original_island_init = island.__init__
 def _island_init(self, **kwargs):
     """
     Keyword Args:
-        udi: a user-defined island (either Python or C++)
+        udi: a user-defined island (either Python or C++ - note that *udi* will be deep-copied
+          and stored inside the :class:`~pygmo.core.island` instance)
         algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.core.algorithm`
         pop (:class:`~pygmo.core.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
@@ -132,6 +133,7 @@ def _island_init(self, **kwargs):
         unspecified: any exception thrown by:
 
           * the invoked C++ constructors,
+          * the deep copy of the UDI,
           * the constructors of :class:`~pygmo.core.algorithm` and :class:`~pygmo.core.population`,
           * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
             signatures, etc.)
