@@ -74,9 +74,10 @@ public:
         if (pop.get_problem().get_nobj() != 1u) {
             pagmo_throw(std::invalid_argument, "Cannot define an adaptive penalty for multi objective problems.");
         }
-        // Population cannot be empty
-        if (pop.size() == 0u) {
-            pagmo_throw(std::invalid_argument, "Cannot define an adaptive penalty for an empty population");
+        // Population cannot contain less than 3 individuals
+        if (pop.size() < 4u) {
+            pagmo_throw(std::invalid_argument,
+                        "Cannot define an adaptive penalty for a population with less than 3 decision vectors");
         }
         // We assign the naked pointer THis will not change and pop has to change outside in order for update to matter.
         m_pop_ptr = &pop;
@@ -112,6 +113,9 @@ public:
             double inf_tilde = solution_infeasibility;
             if (m_i_hat_up != m_i_hat_down) {
                 inf_tilde = (solution_infeasibility - m_i_hat_down) / (m_i_hat_up - m_i_hat_down);
+            } else {
+                inf_tilde = 1.; // This will trigger, for example, when the whole population is feasible (m_i_hat_up =
+                                // m_i_hat_down = 0)
             }
             // apply penalty 1 only if necessary
             if (m_apply_penalty_1) {
@@ -121,11 +125,6 @@ public:
             f[0] += m_scaling_factor * std::abs(f[0]) * ((std::exp(2. * inf_tilde) - 1.) / (std::exp(2.) - 1.));
         }
         return f;
-    }
-
-    population *get_ptr()
-    {
-        return m_pop_ptr;
     }
 
     // Call to this method updates all the members that are used to penalize the objective function
@@ -161,8 +160,16 @@ public:
         if (infeasible_idx.size() == 0u) {
             // Since no infeasible individuals exist in the reference population, we
             // still need to decide what to do when evaluating the fitness of a decision vector
-            // not in the ref_pop.
-            m_scaling_factor = 0.;
+            // not in the ref_pop. In that case we set a penalty of f_worst*f
+            auto hat_round_idx = 0u;
+            for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
+                if (m_pop_ptr->get_f()[hat_round_idx][0] < m_pop_ptr->get_f()[i][0]) {
+                    hat_round_idx = i;
+                }
+            }
+            m_scaling_factor = m_pop_ptr->get_f()[hat_round_idx][0];
+            m_i_hat_up = 0.;
+            m_i_hat_down = 0.;
             return;
         }
 
@@ -276,7 +283,7 @@ public:
         // function value in the reference population
         hat_round_idx = 0u;
         for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
-            if (m_pop_ptr->get_f()[hat_round_idx][0] < m_pop_ptr->get_f()[i][0]) {
+            if (m_pop_ptr->get_f()[i][0] > m_pop_ptr->get_f()[hat_round_idx][0]) {
                 hat_round_idx = i;
             }
         }
@@ -301,6 +308,31 @@ public:
         if (m_f_hat_up[0] == m_f_hat_round[0]) {
             m_scaling_factor = 0.;
         }
+    }
+    friend std::ostream &operator<<(std::ostream &os, const apply_adaptive_penalty &p)
+    {
+        auto pop_size = p.m_pop_ptr->size();
+        // Evaluate all solutions infeasibility
+        std::vector<double> infeasibility(pop_size, 0.);
+
+        for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
+            // compute the infeasibility of the fitness
+            infeasibility[i] = p.compute_infeasibility(p.m_pop_ptr->get_f()[i]);
+        }
+        os << "\nInfeasibilities: ";
+        os << "\n\tBest (hat down): " << p.m_i_hat_down;
+        os << "\n\tWorst (hat up): " << p.m_i_hat_up;
+        os << "\n\tWorst objective (hat round): " << p.m_i_hat_round;
+        stream(os, "\n\tAll: ", infeasibility);
+        os << "\nFitness: ";
+        stream(os, "\n\tBest (hat down): ", p.m_f_hat_down);
+        stream(os, "\n\tWorst (hat up): ", p.m_f_hat_up);
+        stream(os, "\n\tWorst objective (hat round): ", p.m_f_hat_round);
+        os << "\nMisc: ";
+        stream(os, "\n\tConstraints normalization: ", p.m_c_max);
+        stream(os, "\n\tApply penalty 1: ", p.m_apply_penalty_1);
+        stream(os, "\n\tGamma (scaling factor): ", p.m_scaling_factor);
+        return os;
     }
 
 public:
