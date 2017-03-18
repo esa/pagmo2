@@ -38,7 +38,7 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(archipelago_construction)
 {
-    archipelago a(20, de{1000}, rosenbrock{}, 30);
-    a.push_back(de{1000}, rosenbrock{}, 300);
+    archipelago a(20u, de{1000u}, rosenbrock{}, 30u);
+    a.push_back(de{1000u}, rosenbrock{}, 300u);
     a.evolve();
 }
