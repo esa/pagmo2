@@ -87,20 +87,18 @@ namespace pagmo
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
  * @code{.unparsed}
- * void run_evolve(pagmo::algorithm &, ulock_t &, pagmo::population &, ulock_t &);
+ * void run_evolve(pagmo::algorithm &, std::mutex &, pagmo::population &, std::mutex &) const;
  * @endcode
- * where \p ulock_t is <tt>std::unique_lock<std::mutex></tt>.
  * The \p run_evolve() method is part of the interface for the definition of an island
  * (see pagmo::island).
  */
 template <typename T>
 class has_run_evolve
 {
-    using ulock_t = std::unique_lock<std::mutex>;
     template <typename U>
     using run_evolve_t
-        = decltype(std::declval<U &>().run_evolve(std::declval<algorithm &>(), std::declval<ulock_t &>(),
-                                                  std::declval<population &>(), std::declval<ulock_t &>()));
+        = decltype(std::declval<const U &>().run_evolve(std::declval<algorithm &>(), std::declval<std::mutex &>(),
+                                                        std::declval<population &>(), std::declval<std::mutex &>()));
     static const bool implementation_defined = std::is_same<void, detected_t<run_evolve_t, T>>::value;
 
 public:
@@ -151,12 +149,11 @@ namespace detail
 {
 
 struct isl_inner_base {
-    using ulock_t = std::unique_lock<std::mutex>;
     virtual ~isl_inner_base()
     {
     }
     virtual std::unique_ptr<isl_inner_base> clone() const = 0;
-    virtual void run_evolve(algorithm &, ulock_t &, population &, ulock_t &) = 0;
+    virtual void run_evolve(algorithm &, std::mutex &, population &, std::mutex &) const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
     template <typename Archive>
@@ -186,9 +183,10 @@ struct isl_inner final : isl_inner_base {
         return make_unique<isl_inner>(m_value);
     }
     // The enqueue_evolution() method.
-    virtual void run_evolve(algorithm &algo, ulock_t &algo_lock, population &pop, ulock_t &pop_lock) override final
+    virtual void run_evolve(algorithm &algo, std::mutex &algo_mutex, population &pop,
+                            std::mutex &pop_mutex) const override final
     {
-        m_value.run_evolve(algo, algo_lock, pop, pop_lock);
+        m_value.run_evolve(algo, algo_mutex, pop, pop_mutex);
     }
     // Optional methods.
     virtual std::string get_name() const override final
@@ -277,12 +275,11 @@ public:
     /**
      * This method will invoke the <tt>evolve()</tt> method on a copy of \p algo, using a copy
      * of \p pop as argument, and it will then assign the result of the evolution back to \p pop.
-     * During the evolution the input locks are released.
      *
      * @param algo the algorithm that will be used for the evolution.
-     * @param algo_lock a locked lock that guarantees exclusive access to \p algo.
+     * @param algo_mutex a mutex regulating exclusive access to \p algo.
      * @param pop the population that will be evolved by \p algo.
-     * @param pop_lock a locked lock that guarantees exclusive access to \p pop.
+     * @param pop_mutex a mutex regulating exclusive access to \p pop.
      *
      * @throws std::invalid_argument if either \p algo or <tt>pop</tt>'s problem do not provide
      * at least the pagmo::thread_safety::basic thread safety guarantee.
@@ -291,9 +288,11 @@ public:
      * - the copy constructors of \p pop and \p algo,
      * - the <tt>evolve()</tt> method of \p algo.
      */
-    void run_evolve(algorithm &algo, std::unique_lock<std::mutex> &algo_lock, population &pop,
-                    std::unique_lock<std::mutex> &pop_lock)
+    void run_evolve(algorithm &algo, std::mutex &algo_mutex, population &pop, std::mutex &pop_mutex) const
     {
+        // Lock down algo and pop.
+        std::unique_lock<std::mutex> algo_lock(algo_mutex), pop_lock(pop_mutex);
+
         // NOTE: these are checks run on pagmo::algo/prob, both of which have thread-safe implementations
         // of the get_thread_safety() method.
         check_thread_safety(algo);
@@ -432,20 +431,20 @@ struct island_data {
  * conjunction with this class, but advanced users can implement their own UDI types. A user-defined
  * island must implement the following method:
  * @code{.unparsed}
- * void run_evolve(pagmo::algorithm &, ulock_t &, pagmo::population &, ulock_t &);
+ * void run_evolve(pagmo::algorithm &, std::mutex &, pagmo::population &, std::mutex &);
  * @endcode
- * where \p ulock_t is <tt>std::unique_lock<std::mutex></tt>.
  *
  * The <tt>run_evolve()</tt> method of
  * the UDI will use the input algorithm's algorithm::evolve() method to evolve the input population
  * and, once the evolution is finished, will replace the input population with the evolved population.
- * The two extra arguments are locked locks that guarantee exclusive access to the input algorithm and population
- * respectively. Typically, a UDI's <tt>run_evolve()</tt> method will first copy the input algorithm and population,
- * release the locks, evolve the population, re-acquire the population's lock and finally assign the evolved population.
- * In addition to providing the above method, a UDI must also be default, copy and move constructible. Also, since
- * internally the pagmo::island class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs
- * to guarantee strong thread-safety: it must be safe to interact with UDI instances simultaneously from multiple
- * threads, or the behaviour will be undefined.
+ * The two extra arguments are (unlocked) mutexes that regulate exclusive access to the input algorithm and population
+ * respectively. Typically, a UDI's <tt>run_evolve()</tt> method will lock the mutexes, copy the input algorithm and
+ * population, release the locks, evolve the copy of the population, re-acquire the population's lock and finally assign
+ * the evolved population. In addition to providing the above method, a UDI must also be default, copy and move
+ * constructible. Also, since internally the pagmo::island class uses a separate thread of execution to provide
+ * asynchronous behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact
+ * with the UDI while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or
+ * call the <tt>get_name()</tt>, <tt>get_extra_info()</tt> methods, etc.), otherwise he behaviour will be undefined.
  *
  * In addition to the mandatory <tt>run_evolve()</tt> method, a UDI might implement the following optional methods:
  * @code{.unparsed}
@@ -725,12 +724,7 @@ public:
             // NOTE: enqueue either returns a valid future, or throws without
             // having enqueued any task.
             m_ptr->futures.back() = m_ptr->queue.enqueue([ptr]() {
-                {
-                    // Lock down access to algo and pop.
-                    std::unique_lock<std::mutex> algo_lock(ptr->algo_mutex);
-                    std::unique_lock<std::mutex> pop_lock(ptr->pop_mutex);
-                    ptr->isl_ptr->run_evolve(ptr->algo, algo_lock, ptr->pop, pop_lock);
-                }
+                ptr->isl_ptr->run_evolve(ptr->algo, ptr->algo_mutex, ptr->pop, ptr->pop_mutex);
                 auto archi = ptr->archi_ptr.load();
                 (void)archi;
             });

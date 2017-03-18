@@ -100,18 +100,18 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         return make_unique<isl_inner>(m_value);
     }
     // Mandatory methods.
-    virtual void run_evolve(algorithm &algo, ulock_t &algo_lock, population &pop, ulock_t &pop_lock) override final
+    virtual void run_evolve(algorithm &algo, std::mutex &algo_mutex, population &pop,
+                            std::mutex &pop_mutex) const override final
     {
-        pop_lock.unlock();
-        algo_lock.unlock();
-
         // NOTE: run_evolve() is called from a separate thread in pagmo::island, need to construct a GTE before
         // doing anything with the interpreter (including the throws in the checks below).
+        // NOTE: we must make sure that we lock the GIL before locking algo and pop. The reason is that in other
+        // situations the GIL is always the first lock to be locked (e.g., if we do a get_population(), get_algo(),
+        // etc.). In this situation, we are calling this code from a separate C++ thread which, before the
+        // construction of the ensurer, does NOT hold the GIL. If we locked the algo/pop before the GIL, we would end
+        // up with a lock order inversion with potential deadlock.
         pygmo::gil_thread_ensurer gte;
-
-        algo_lock.lock();
-        pop_lock.lock();
-
+        std::unique_lock<std::mutex> algo_lock(algo_mutex), pop_lock(pop_mutex);
         try {
             // NOTE: the idea of these checks is the following: we will have to copy algo and pop in order to invoke
             // the pythonic UDI's evolve method, which has a signature which is different from C++. If algo/prob are
