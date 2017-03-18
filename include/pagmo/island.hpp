@@ -701,14 +701,12 @@ public:
      * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() to block until
      * all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
      *
-     * @return a reference to \p this.
-     *
      * @throws unspecified any exception thrown by:
      * - threading primitives,
      * - memory allocation errors,
      * - the public interface of \p std::future.
      */
-    island &evolve()
+    void evolve()
     {
         std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
         // First add an empty future, so that if an exception is thrown
@@ -734,20 +732,17 @@ public:
             m_ptr->futures.pop_back();
             throw;
         }
-        return *this;
     }
     /// Block until evolution ends.
     /**
      * This method will block until all the evolution tasks enqueued via island::evolve() have been completed.
      * The method will also raise the first exception raised by any task enqueued since the last time wait() was called.
      *
-     * @return a reference to \p this.
-     *
      * @throws unspecified any exception thrown by:
      * - evolution tasks,
      * - threading primitives.
      */
-    island &wait()
+    void wait()
     {
         auto iwr = detail::wait_raii<>::getter();
         (void)iwr;
@@ -773,7 +768,6 @@ public:
             }
         }
         m_ptr->futures.clear();
-        return *this;
     }
     /// Check island status.
     /**
@@ -1022,14 +1016,13 @@ public:
         m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
         m_islands.back()->m_ptr->archi_ptr.store(this);
     }
-    archipelago &evolve()
+    void evolve()
     {
         for (auto &iptr : m_islands) {
             iptr->evolve();
         }
-        return *this;
     }
-    archipelago &wait()
+    void wait()
     {
         for (auto it = m_islands.begin(); it != m_islands.end(); ++it) {
             try {
@@ -1044,7 +1037,6 @@ public:
                 throw;
             }
         }
-        return *this;
     }
     template <typename Archive>
     void save(Archive &ar) const
