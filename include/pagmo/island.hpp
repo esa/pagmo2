@@ -302,10 +302,10 @@ public:
         // Create copies of algo/pop and unlock the locks.
         // NOTE: copies cannot alter the thread safety property of algo/prob, as
         // it is a class member.
-        auto algo_copy(algo);
-        algo_lock.unlock();
         auto pop_copy(pop);
         pop_lock.unlock();
+        auto algo_copy(algo);
+        algo_lock.unlock();
 
         // Run the actual evolution.
         auto new_pop(algo_copy.evolve(pop_copy));
@@ -702,12 +702,14 @@ public:
      * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() to block until
      * all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
      *
+     * @return a reference to \p this.
+     *
      * @throws unspecified any exception thrown by:
      * - threading primitives,
      * - memory allocation errors,
      * - the public interface of \p std::future.
      */
-    void evolve()
+    island &evolve()
     {
         std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
         // First add an empty future, so that if an exception is thrown
@@ -738,17 +740,20 @@ public:
             m_ptr->futures.pop_back();
             throw;
         }
+        return *this;
     }
     /// Block until evolution ends.
     /**
      * This method will block until all the evolution tasks enqueued via island::evolve() have been completed.
      * The method will also raise the first exception raised by any task enqueued since the last time wait() was called.
      *
+     * @return a reference to \p this.
+     *
      * @throws unspecified any exception thrown by:
      * - evolution tasks,
      * - threading primitives.
      */
-    void wait() const
+    island &wait()
     {
         auto iwr = detail::wait_raii<>::getter();
         (void)iwr;
@@ -774,6 +779,7 @@ public:
             }
         }
         m_ptr->futures.clear();
+        return *this;
     }
     /// Check island status.
     /**
@@ -909,17 +915,41 @@ public:
     }
 
 private:
-    mutable std::unique_ptr<idata_t> m_ptr;
+    std::unique_ptr<idata_t> m_ptr;
 };
 
 class archipelago
 {
 public:
-    using size_type = std::vector<island>::size_type;
-    archipelago() = default;
-    archipelago(const archipelago &) = default;
-    archipelago(archipelago &&other) noexcept : m_islands(std::move(other.m_islands))
+    using size_type = std::vector<std::unique_ptr<island>>::size_type;
+    archipelago()
     {
+    }
+    archipelago(const archipelago &other)
+    {
+        for (const auto &iptr : other.m_islands) {
+            // This will end up copying the island members,
+            // and assign the archi pointer as well.
+            push_back(*iptr);
+        }
+    }
+    archipelago(archipelago &&other) noexcept
+    {
+        // NOTE: in move operations we have to wait, because the ongoing
+        // island evolutions are interacting with their hosting archi 'other'.
+        // We cannot just move in the vector of islands.
+        try {
+            other.wait();
+        } catch (const std::system_error &) {
+            std::abort();
+        } catch (...) {
+        }
+        // Move in the islands.
+        m_islands = std::move(other.m_islands);
+        // Re-direct the archi pointers to point to this.
+        for (const auto &iptr : m_islands) {
+            iptr->m_ptr->archi_ptr.store(this);
+        }
     }
 
 private:
@@ -944,14 +974,27 @@ public:
     archipelago &operator=(archipelago &&other) noexcept
     {
         if (this != &other) {
+            // NOTE: as in the move ctor, we need to wait on other.
+            try {
+                other.wait();
+            } catch (const std::system_error &) {
+                std::abort();
+            } catch (...) {
+            }
+            // Move in the islands.
             m_islands = std::move(other.m_islands);
+            // Re-direct the archi pointers to point to this.
+            for (const auto &iptr : m_islands) {
+                iptr->m_ptr->archi_ptr.store(this);
+            }
         }
         return *this;
     }
     ~archipelago()
     {
-        assert(std::all_of(m_islands.begin(), m_islands.end(),
-                           [](const island &isl) { return isl.m_ptr->archi_ptr.load() != nullptr; }));
+        assert(std::all_of(m_islands.begin(), m_islands.end(), [this](const std::unique_ptr<island> &iptr) {
+            return iptr->m_ptr->archi_ptr.load() == this;
+        }));
     }
 
 private:
@@ -963,19 +1006,17 @@ public:
     {
         if (i >= size()) {
             pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
-                                               + ": the archipelago has a size of only "
-                                               + std::to_string(m_islands.size()));
+                                               + ": the archipelago has a size of only " + std::to_string(size()));
         }
-        return m_islands[i];
+        return *m_islands[i];
     }
     const island &operator[](size_type i) const
     {
         if (i >= size()) {
             pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
-                                               + ": the archipelago has a size of only "
-                                               + std::to_string(m_islands.size()));
+                                               + ": the archipelago has a size of only " + std::to_string(size()));
         }
-        return m_islands[i];
+        return *m_islands[i];
     }
     size_type size() const
     {
@@ -984,39 +1025,48 @@ public:
     template <typename... Args, push_back_enabler<Args...> = 0>
     void push_back(Args &&... args)
     {
-        m_islands.emplace_back(std::forward<Args>(args)...);
-        m_islands.back().m_ptr->archi_ptr.store(this);
+        m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
+        m_islands.back()->m_ptr->archi_ptr.store(this);
     }
-    void evolve()
+    archipelago &evolve()
     {
-        for (auto &isl : m_islands) {
-            isl.evolve();
+        for (auto &iptr : m_islands) {
+            iptr->evolve();
         }
+        return *this;
     }
-    void wait() const
+    archipelago &wait()
     {
-        for (decltype(m_islands.size()) i = 0; i < m_islands.size(); ++i) {
+        for (auto it = m_islands.begin(); it != m_islands.end(); ++it) {
             try {
-                m_islands[i].wait();
+                (*it)->wait();
             } catch (...) {
-                for (i = i + 1u; i < m_islands.size(); ++i) {
+                for (it = it + 1; it != m_islands.end(); ++it) {
                     try {
-                        m_islands[i].wait();
+                        (*it)->wait();
                     } catch (...) {
                     }
                 }
                 throw;
             }
         }
+        return *this;
     }
     template <typename Archive>
-    void serialize(Archive &ar)
+    void save(Archive &ar) const
     {
         ar(m_islands);
     }
+    template <typename Archive>
+    void load(Archive &ar)
+    {
+        archipelago tmp;
+        ar(tmp.m_islands);
+        *this = std::move(tmp);
+    }
 
 private:
-    std::vector<island> m_islands;
+    std::vector<std::unique_ptr<island>> m_islands;
 };
 }
 

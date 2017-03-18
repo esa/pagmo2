@@ -102,9 +102,15 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     // Mandatory methods.
     virtual void run_evolve(algorithm &algo, ulock_t &algo_lock, population &pop, ulock_t &pop_lock) override final
     {
+        pop_lock.unlock();
+        algo_lock.unlock();
+
         // NOTE: run_evolve() is called from a separate thread in pagmo::island, need to construct a GTE before
         // doing anything with the interpreter (including the throws in the checks below).
         pygmo::gil_thread_ensurer gte;
+
+        algo_lock.lock();
+        pop_lock.lock();
 
         try {
             // NOTE: the idea of these checks is the following: we will have to copy algo and pop in order to invoke
@@ -120,10 +126,10 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
             }
 
             // Everything fine, copy algo/pop and unlock.
-            bp::object algo_copy(algo);
-            algo_lock.unlock();
             bp::object pop_copy(pop);
             pop_lock.unlock();
+            bp::object algo_copy(algo);
+            algo_lock.unlock();
 
             // Invoke the run_evolve() method of the UDI and get out the evolved pop.
             // NOTE: here bp::extract will extract a copy of pop, and then a move ctor will take place,
