@@ -2996,10 +2996,11 @@ the following method:
 
 The ``run_evolve()`` method of the UDI will use the input :class:`~pygmo.core.algorithm`'s
 :func:`~pygmo.core.algorithm.evolve()` method to evolve the input :class:`~pygmo.core.population` and, once the evolution
-is finished, it will return the evolved :class:`~pygmo.core.population`. Note that, since internally the
-:class:`~pygmo.core.island` class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs
-to guarantee strong thread-safety: it must be safe to interact with UDI instances simultaneously from multiple
-threads.
+is finished, it will return the evolved :class:`~pygmo.core.population`. Note that, since internally the :class:`~pygmo.core.island`
+class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs to guarantee a certain degree of
+thread-safety: it must be possible to interact with the UDI while evolution is ongoing (e.g., it must be possible to copy
+the UDI while evolution is undergoing, or call the ``get_name()``, ``get_extra_info()`` methods, etc.), otherwise he behaviour
+will be undefined.
 
 In addition to the mandatory ``run_evolve()`` method, a UDI might implement the following optional methods:
 
