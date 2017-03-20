@@ -67,6 +67,28 @@ BOOST_AUTO_TEST_CASE(bee_colony_evolve_test)
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};
     BOOST_CHECK(bee_colony{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
+
+    // To cover the case of fitness < 0
+    struct my_problem {
+        my_problem(unsigned int dim = 2u) : m_dim(dim){};
+        vector_double fitness(const vector_double &x) const
+        {
+            double sum = 0.;
+            for (decltype(m_dim) i = 0u; i < m_dim; ++i) {
+                sum += x[i];
+            }
+            vector_double fit{sum};
+            return fit;
+        }
+        std::pair<vector_double, vector_double> get_bounds() const
+        {
+            vector_double lb(m_dim, -1.);
+            vector_double ub(m_dim, 1.);
+            return {lb, ub};
+        }
+        unsigned int m_dim;
+    };
+    BOOST_CHECK_NO_THROW(user_algo1.evolve(population{my_problem(3u), 10u, 23u}));
 }
 
 BOOST_AUTO_TEST_CASE(bee_colony_setters_getters_test)

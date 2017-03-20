@@ -109,12 +109,12 @@ public:
         auto X = pop.get_x();
         auto fit = pop.get_f();
         std::vector<unsigned> trial(NP, 0u);
-        std::uniform_real_distribution<double> phirng(-1., 1.); // to generate a number in [-1, 1]
-        std::uniform_real_distribution<double> rrng(0., 1.);    // to generate a number in [0, 1]
+        std::uniform_real_distribution<double> phirng(-1., 1.); // to generate a number in [-1, 1)
+        std::uniform_real_distribution<double> rrng(0., 1.);    // to generate a number in [0, 1)
         std::uniform_int_distribution<vector_double::size_type> comprng(
             0u, dim - 1u); // to generate a random index for the component to mutate
-        std::uniform_int_distribution<vector_double::size_type> neirng(
-            0u, NP - 2u); // to generate a random index for the neighbour
+        std::uniform_int_distribution<vector_double::size_type> dvrng(
+            0u, NP - 2u); // to generate a random index for the second decision vector
 
         for (auto gen = 1u; gen <= m_gen; ++gen) {
             // 1 - Employed bees phase
@@ -133,13 +133,13 @@ public:
                     newsol = X[i];
                     // selects a random component of the decision vector
                     auto comp2change = comprng(m_e);
-                    // selects a random neighbour
-                    auto neighbour = neirng(m_e);
-                    if (neighbour >= i) {
-                        ++neighbour;
+                    // selects a random decision vector in the population other than the current
+                    auto rdv = dvrng(m_e);
+                    if (rdv >= i) {
+                        ++rdv;
                     }
                     // mutate new solution
-                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[neighbour][comp2change]);
+                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[rdv][comp2change]);
                     // if the generated parameter value is out of boundaries, shift it into the boundaries
                     if (newsol[comp2change] < lb[comp2change]) {
                         newsol[comp2change] = lb[comp2change];
@@ -183,7 +183,7 @@ public:
                 p[i] /= sump;
             }
             vector_double::size_type s = 0u;
-            auto t = 0u;
+            decltype(NP) t = 0u;
             // for each onlooker bee
             while (t < NP) {
                 // probabilistic selection of a food source
@@ -193,13 +193,13 @@ public:
                     newsol = X[s];
                     // selects a random component of the decision vector
                     auto comp2change = comprng(m_e);
-                    // selects a random neighbour
-                    auto neighbour = neirng(m_e);
-                    if (neighbour >= s) {
-                        ++neighbour;
+                    // selects a random decision vector in the population other than the current
+                    auto rdv = dvrng(m_e);
+                    if (rdv >= s) {
+                        ++rdv;
                     }
                     // mutate new solution
-                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[neighbour][comp2change]);
+                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[rdv][comp2change]);
                     // if the generated parameter value is out of boundaries, shift it into the boundaries
                     if (newsol[comp2change] < lb[comp2change]) {
                         newsol[comp2change] = lb[comp2change];
@@ -303,8 +303,6 @@ public:
     }
     /// Algorithm name
     /**
-     * One of the optional methods of any user-defined algorithm (UDA).
-     *
      * @return a string containing the algorithm name
      */
     std::string get_name() const
@@ -313,8 +311,6 @@ public:
     }
     /// Extra informations
     /**
-     * One of the optional methods of any user-defined algorithm (UDA).
-     *
      * @return a string containing extra informations on the algorithm
      */
     std::string get_extra_info() const

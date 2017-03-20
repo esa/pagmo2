@@ -1703,7 +1703,7 @@ Artificial Bee Colony
 
 Args:
     gen (``int``): number of generations
-    limit (``int``): maximum number of trials for abandoning a source (default value is 1)
+    limit (``int``): maximum number of trials for abandoning a source
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
