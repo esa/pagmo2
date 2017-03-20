@@ -94,12 +94,11 @@ public:
     /// The fitness computation
     vector_double fitness(const vector_double &x) const
     {
-        std::map<std::size_t, vector_double>::const_iterator it_f;
         double solution_infeasibility;
         vector_double f(1, 0.);
 
         // 1 - We check if the decision vector is already in the reference population and return that or recompute.
-        it_f = m_fitness_map.find(m_decision_vector_hash(x));
+        auto it_f = m_fitness_map.find(m_decision_vector_hash(x));
         if (it_f != m_fitness_map.end()) {
             f[0] = it_f->second[0];
             solution_infeasibility = compute_infeasibility(it_f->second);
@@ -107,6 +106,7 @@ public:
             auto fit = m_pop_ptr->get_problem().fitness(x);
             f[0] = fit[0];
             solution_infeasibility = compute_infeasibility(fit);
+            m_fitness_map[m_decision_vector_hash(x)] = fit;
         }
         // 2 - Then we apply the penalty
         if (solution_infeasibility > 0.) {
@@ -114,14 +114,16 @@ public:
             if (m_i_hat_up != m_i_hat_down) {
                 inf_tilde = (solution_infeasibility - m_i_hat_down) / (m_i_hat_up - m_i_hat_down);
             } else {
-                inf_tilde = 1.; // This will trigger, for example, when the whole population is feasible (m_i_hat_up =
-                                // m_i_hat_down = 0)
+                inf_tilde = solution_infeasibility; // This will trigger, for example, when the whole population is
+                                                    // all feasible.
             }
-            // apply penalty 1 only if necessary
+            // apply penalty 1 only if necessary. This penalizes infeasible solutions so that their objective
+            // values cannot be much better than that of the best solution.
             if (m_apply_penalty_1) {
                 f[0] += inf_tilde * (m_f_hat_down[0] - m_f_hat_up[0]);
             }
-            // apply penalty 2 uses inf_tilde correcting a bug in pagmo legacy
+            // apply penalty 2 NOTE: uses (2. * inf_tilde) correcting what seems a clear bug in pagmo legacy
+            // This penalizes all infeasible solutions exponentially with their infeasibility
             f[0] += m_scaling_factor * std::abs(f[0]) * ((std::exp(2. * inf_tilde) - 1.) / (std::exp(2.) - 1.));
         }
         return f;
@@ -141,52 +143,43 @@ public:
             m_fitness_map[m_decision_vector_hash(m_pop_ptr->get_x()[i])] = m_pop_ptr->get_f()[i];
         }
 
-        std::vector<population::size_type> feasible_idx(0);
-        std::vector<population::size_type> infeasible_idx(0);
-
-        // 2 - Store indexes of feasible and non feasible individuals
-        for (decltype(pop_size) i = 0u; i < pop_size; i++) {
-            if (m_pop_ptr->get_problem().feasibility_f(m_pop_ptr->get_f()[i])) {
-                feasible_idx.push_back(i);
-            } else {
-                infeasible_idx.push_back(i);
-            }
-        }
         // Init some data member values
         m_apply_penalty_1 = false;
         compute_c_max();
 
-        // 3 - If the reference population contains only feasible fitnesses return
+        // 2 - Compute feasibility of all individuals and store the indexes of feasible / unfeasible ones
+        std::vector<population::size_type> feasible_idx(0);
+        std::vector<population::size_type> infeasible_idx(0);
+        std::vector<double> infeasibility(pop_size, 0.);
+        for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
+            // compute the infeasibility of the fitness
+            infeasibility[i] = compute_infeasibility(m_pop_ptr->get_f()[i]);
+            if (infeasibility[i] > 0.) {
+                infeasible_idx.push_back(i);
+            } else {
+                feasible_idx.push_back(i);
+            }
+        }
+
+        // 3 - If the reference population contains only feasible fitnesses
         if (infeasible_idx.size() == 0u) {
             // Since no infeasible individuals exist in the reference population, we
             // still need to decide what to do when evaluating the fitness of a decision vector
-            // not in the ref_pop. In that case we set a penalty of f_worst*f
+            // not in the ref_pop.
             auto hat_round_idx = 0u;
             for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
                 if (m_pop_ptr->get_f()[hat_round_idx][0] < m_pop_ptr->get_f()[i][0]) {
                     hat_round_idx = i;
                 }
             }
-            m_scaling_factor = m_pop_ptr->get_f()[hat_round_idx][0];
+            m_scaling_factor = 0.;
             m_i_hat_up = 0.;
             m_i_hat_down = 0.;
             return;
         }
 
-        // 4 - Evaluate solutions infeasibility
-        std::vector<double> infeasibility(pop_size, 0.);
-
-        for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
-            // compute the infeasibility of the fitness
-            infeasibility[i] = compute_infeasibility(m_pop_ptr->get_f()[i]);
-        }
-
-        // search position of x_hat_down, x_hat_up and x_hat_round
-        population::size_type hat_down_idx = -1;
-        population::size_type hat_up_idx = -1;
-        population::size_type hat_round_idx = -1;
-
         // 5 - First case: the population contains at least one feasible solution
+        population::size_type hat_down_idx = -1, hat_up_idx = -1, hat_round_idx = -1;
         if (feasible_idx.size() > 0u) {
             // 5a - hat_down, a.k.a feasible individual with lowest objective value in the ref_pop
             hat_down_idx = feasible_idx[0];
@@ -249,7 +242,7 @@ public:
             }
         } else {
             // 6 - Second case: there is no feasible solution in the reference population
-            // 6a - hat_down, a.k.a the individual with the lowest infeasibility
+            // 6a - hat_down, a.k.a the individual with the lowest infeasibility (and minimum objective function)
             hat_down_idx = 0u;
             for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
                 if (infeasibility[i] <= infeasibility[hat_down_idx]) {
@@ -262,12 +255,12 @@ public:
                     }
                 }
             }
-            // 6b - hat_up, ak.a. the individual with the maximum infeasibility (and minimum objective function)
+            // 6b - hat_up, ak.a. the individual with the maximum infeasibility (and maximum objective function)
             hat_up_idx = 0u;
             for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
                 if (infeasibility[i] >= infeasibility[hat_up_idx]) {
                     if (infeasibility[i] == infeasibility[hat_up_idx]) {
-                        if (m_pop_ptr->get_f()[hat_up_idx][0] < m_pop_ptr->get_f()[i][0]) {
+                        if (m_pop_ptr->get_f()[i][0] > m_pop_ptr->get_f()[hat_up_idx][0]) {
                             hat_up_idx = i;
                         }
                     } else {
@@ -288,7 +281,7 @@ public:
             }
         }
 
-        // Stores the objective function values of the three individuals
+        // Stores the fitness values of the three special individuals
         m_f_hat_round = m_pop_ptr->get_f()[hat_round_idx];
         m_f_hat_down = m_pop_ptr->get_f()[hat_down_idx];
         m_f_hat_up = m_pop_ptr->get_f()[hat_up_idx];
@@ -300,10 +293,10 @@ public:
 
         // Computes the scaling factor
         m_scaling_factor = 0.;
-        if (m_f_hat_down[0] < m_f_hat_up[0]) {
-            m_scaling_factor = (m_f_hat_round[0] - m_f_hat_up[0]) / m_f_hat_up[0];
-        } else {
+        if (m_f_hat_up[0] <= m_f_hat_down[0]) {
             m_scaling_factor = (m_f_hat_round[0] - m_f_hat_down[0]) / m_f_hat_down[0];
+        } else {
+            m_scaling_factor = (m_f_hat_round[0] - m_f_hat_up[0]) / m_f_hat_up[0];
         }
         if (m_f_hat_up[0] == m_f_hat_round[0]) {
             m_scaling_factor = 0.;
@@ -350,14 +343,14 @@ public:
 
         // We evaluate the scaling factor
         for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
-            // updates the current constraint vector
+            // fitness of the i-th decision vector
             auto fit = m_pop_ptr->get_f()[i];
 
             // computes scaling with the right definition of the constraints
-            for (decltype(nec) j = 0u; j < nec; j++) {
+            for (decltype(nec) j = 0u; j < nec; ++j) {
                 m_c_max[j] = std::max(m_c_max[j], std::max(0., (std::abs(fit[j + 1]) - c_tol[j])));
             }
-            for (decltype(nc) j = nec; j < nc; j++) {
+            for (decltype(nc) j = nec; j < nc; ++j) {
                 m_c_max[j] = std::max(m_c_max[j], std::max(0., fit[j + 1] - c_tol[j]));
             }
         }
@@ -374,9 +367,9 @@ public:
         double retval = 0.;
 
         // 2 -  We compute the infeasibility measure
+        // NOTE: if, for some i, m_c_max[i] is zero, that constraint is satisfied by the whole population
+        // we thus neglect it favouring its violation in the assumption it is not a problem to fix it
         for (decltype(nec) j = 0u; j < nec; ++j) {
-            // test needed otherwise the m_c_max can be 0, and division by 0 occurs
-            // f is accessed only in the constrain part hence the +1
             if (m_c_max[j] > 0.) {
                 retval += std::max(0., (std::abs(fit[j + 1]) - c_tol[j])) / m_c_max[j];
             }
@@ -407,7 +400,7 @@ public:
     // the counters outside of the class, and avoiding unecessary copies.
     population *m_pop_ptr;
     // The hash map connecting the decision vector hashes to their fitnesses
-    std::map<std::size_t, vector_double> m_fitness_map;
+    mutable std::map<std::size_t, vector_double> m_fitness_map;
     // The hasher (and impossible)
     boost::hash<std::vector<double>> m_decision_vector_hash;
 };
