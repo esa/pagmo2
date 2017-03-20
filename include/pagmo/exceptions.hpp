@@ -98,10 +98,9 @@ struct ex_thrower {
  * - and if the exception can be constructed from the set of arguments <tt>[str,arg1,...]</tt>,
  *   where \p str is an instance of \p std::string,
  *
- * then the first argument \p arg0 is interpreted as the error message associated to the exception object, and it will
- be decorated
- * with information about the context in which the exception was thrown (file, line, function) before being
- * passed on for construction.
+ * then the first argument \p arg0 is interpreted as the error message associated to the exception object, and it
+ * will be decorated with information about the context in which the exception was thrown (file, line, function) before
+ * being passed on for construction.
  *
  * Note that, in order to be fully standard-compliant, for use with exceptions that take no arguments on construction
  * the invocation must include a closing comma. E.g.,
