@@ -71,6 +71,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/cmaes.hpp>
 #endif
 #include <pagmo/algorithms/compass_search.hpp>
+#include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
 #include <pagmo/algorithms/mbh.hpp>
@@ -751,6 +752,13 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm", pygmo::null_algorithm_docstring().c_str());
+    // ARTIFICIAL BEE COLONY
+    auto bee_colony_ = pygmo::expose_algorithm<bee_colony>("bee_colony", pygmo::bee_colony_docstring().c_str());
+    bee_colony_.def(bp::init<unsigned int, unsigned int>((bp::arg("gen") = 1u, bp::arg("limit") = 1u)));
+    bee_colony_.def(
+        bp::init<unsigned int, unsigned int, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 1u, bp::arg("seed"))));
+    pygmo::expose_algo_log(bee_colony_, pygmo::bee_colony_get_log_docstring().c_str());
+    bee_colony_.def("get_seed", &bee_colony::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // DE
     auto de_ = pygmo::expose_algorithm<de>("de", pygmo::de_docstring().c_str());
     de_.def(bp::init<unsigned int, double, double, unsigned int, double, double>(

@@ -22,7 +22,9 @@ namespace pagmo
  * pagmo::bee_colony is suitable for box-constrained single-objective continuous optimization.
  *
  * See: http://mf.erciyes.edu.tr/abc/ for the official ABC web site
+ *
  * See: https://link.springer.com/article/10.1007/s10898-007-9149-x for the paper that introduces Artificial Bee Colony
+ *
  * See: http://www.sciencedirect.com/science/article/pii/S0020025514008378 for the pseudo-code
  */
 class bee_colony
