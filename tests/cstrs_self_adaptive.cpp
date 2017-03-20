@@ -91,7 +91,7 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction_test)
     print("\n", pop.champion_f());
     print("\n", pop.get_problem().get_fevals());
 
-    algorithm algo2{cstrs_self_adaptive{de{1u}}};
+    algorithm algo2{cstrs_self_adaptive{de{1u}, 1500u}};
     population pop2{prob, 20u};
     pop2 = algo2.evolve(pop2);
     print("\n", pop2.champion_f());

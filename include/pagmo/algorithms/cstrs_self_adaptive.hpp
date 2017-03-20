@@ -82,7 +82,7 @@ public:
         }
         // We assign the naked pointer THis will not change and pop has to change outside in order for update to matter.
         m_pop_ptr = &pop;
-        // Update all data members
+        // Update all data members and init the cache
         update();
     }
 
@@ -422,7 +422,7 @@ public:
      *
      * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
      */
-    cstrs_self_adaptive() : algorithm(de{1}), m_verbosity(0u)
+    cstrs_self_adaptive() : algorithm(de{1}), m_iters(1u), m_verbosity(0u)
     {
         const auto rnd = pagmo::random_device::next();
         m_seed = rnd;
@@ -431,8 +431,8 @@ public:
     /// Constructor
 
     template <typename T, ctor_enabler<T> = 0>
-    explicit cstrs_self_adaptive(T &&a, unsigned seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_e(seed), m_seed(seed), m_verbosity(0u)
+    explicit cstrs_self_adaptive(T &&a, unsigned iters, unsigned seed = pagmo::random_device::next())
+        : algorithm(std::forward<T>(a)), m_iters(iters), m_e(seed), m_seed(seed), m_verbosity(0u)
     {
     }
 
@@ -486,28 +486,34 @@ public:
         // m_log.clear();
         // cstrs_self_adaptive main loop
 
-        // 1 - We create a dummy meta-problem that mantains a pointer to pop and uses it to define the penalty in an
-        // adaptive way. Upon consruction a cache is initialized mapping decision vectors to the constrained fitnesses.
+        // 1 - We create a dummy meta-problem that mantains a pointer to pop and uses it to define and adapt the penalty
+        // Upon consruction a cache is also initialized mapping decision vectors to constrained fitnesses.
         detail::apply_adaptive_penalty dummy{pop};
         // 2 - We construct a new population with the dummy so that we can evolve it with single objective,
         // unconstrained solvers. Upon construction the problem is copied and so is the cache.
         population new_pop{dummy};
-        // This does not cause fevals to increment as the cache will be hit.
+        // The following lines do not cause fevals increments as the cache is hit.
         for (decltype(NP) i = 0u; i < NP; ++i) {
             new_pop.push_back(pop.get_x()[i]);
         }
-
-        for (int i = 0; i < 1500u; ++i) {
-
-            auto best_idx = pop.best_idx(pop.get_problem().get_c_tol()); // ctol here
+        // Main iterations
+        for (decltype(m_iters) i = 0; i < m_iters; ++i) {
+            // We record the current best decision vector and fitness as we will
+            // reinsert it at each iteration
+            auto best_idx = pop.best_idx(pop.get_problem().get_c_tol());
             auto best_x = pop.get_x()[best_idx];
             auto best_f = pop.get_f()[best_idx];
             auto worst_idx = pop.worst_idx();
+            // As the population changes (evolves) we update all penalties and reset the cache
+            // (the first iter this is not needed as upon construction this was already done and the pop
+            // has not changed since)
             new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->update();
-            for (int i = 0; i < new_pop.size(); ++i) {
+            for (decltype(new_pop.size()) i = 0u; i < new_pop.size(); ++i) {
                 new_pop.set_x(i, pop.get_x()[i]);
             }
+            // We call the evolution on the unconstrained population (here is where fevals will increase)
             new_pop = static_cast<const algorithm *>(this)->evolve(new_pop);
+            // We update the original pop avoiding fevals thanks to the cache
             for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
                 auto x = new_pop.get_x()[i];
                 auto it_f = new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->m_fitness_map.find(
@@ -517,8 +523,8 @@ public:
                            .extract<detail::apply_adaptive_penalty>()
                            ->m_fitness_map.end()) { // cash hit
                     pop.set_xf(i, x, it_f->second);
-                } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem
-                         // )
+                } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem,
+                         // but should never happen)
                     pop.set_x(i, x);
                 }
             }
@@ -632,7 +638,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<algorithm>(this), m_e, m_seed, m_verbosity); //, m_log);
+        ar(cereal::base_class<algorithm>(this), m_iters, m_e, m_seed, m_verbosity); //, m_log);
     }
 
 private:
@@ -654,6 +660,7 @@ private:
     friend std::ostream &operator<<(std::ostream &, const cstrs_self_adaptive &) = delete;
 #endif
 
+    unsigned m_iters;
     mutable detail::random_engine_type m_e;
     unsigned m_seed;
     unsigned m_verbosity;
