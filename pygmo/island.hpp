@@ -95,9 +95,7 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
 
         // NOTE: run_evolve() is called from a separate thread in pagmo::island, need to construct a GTE before
         // doing anything with the interpreter (including the throws in the checks below).
-        std::cout << this << " about to ensure\n";
         pygmo::gil_thread_ensurer gte;
-        std::cout << this << " ensured\n";
 
         try {
             isl.set_population(

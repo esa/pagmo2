@@ -2983,7 +2983,8 @@ method. Depending on the UDI, the evolution might take place in a separate threa
 :class:`~pygmo.py_islands.ipyparallel_island`). The evolution is always asynchronous (i.e., running in the
 "background") and it is initiated by a call to the :func:`~pygmo.core.island.evolve()` method. At any
 time the user can query the state of the island and fetch its internal data members. The user can explicitly
-wait for pending evolutions to conclude by calling the :func:`~pygmo.core.island.wait()` method.
+wait for pending evolutions to conclude by calling the :func:`~pygmo.core.island.wait()` and
+:func:`~pygmo.core.island.get()` methods.
 
 Typically, pagmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
@@ -2999,10 +3000,10 @@ The ``run_evolve()`` method of the UDI will use the input :class:`~pygmo.core.al
 is finished, it will return the evolved :class:`~pygmo.core.population`. Note that, since internally the :class:`~pygmo.core.island`
 class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs to guarantee a certain degree of
 thread-safety: it must be possible to interact with the UDI while evolution is ongoing (e.g., it must be possible to copy
-the UDI while evolution is undergoing, or call the ``get_name()``, ``get_extra_info()`` methods, etc.), otherwise he behaviour
+the UDI while evolution is undergoing, or call the ``get_name()``, ``get_extra_info()`` methods, etc.), otherwise the behaviour
 will be undefined.
 
-In addition to the mandatory ``run_evolve()`` method, a UDI might implement the following optional methods:
+In addition to the mandatory ``run_evolve()`` method, a UDI may implement the following optional methods:
 
 .. code-block:: python
 
@@ -3049,12 +3050,12 @@ This method will evolve the island’s :class:`~pygmo.core.population` using the
 The evolution happens asynchronously: a call to :func:`~pygmo.core.island.evolve()` will create an evolution task that
 will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution
 managed by the :class:`~pygmo.core.island` object, which will invoke the ``run_evolve()`` method of the UDI to perform the
-actual evolution. The island’s population will be updated at the end of each evolution task. Exceptions raised insided the tasks
-are stored within the island object, and can be re-raised by calling :func:`~pygmo.core.island.wait()`.
+actual evolution. The island’s population will be updated at the end of each evolution task. Exceptions raised inside the tasks
+are stored within the island object, and can be re-raised by calling :func:`~pygmo.core.island.get()`.
 
 It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
-first-out) fashion. The user may call :func:`~pygmo.core.island.wait()` to block until all tasks have been completed, and to fetch
-exceptions raised during the execution of the tasks.
+first-out) fashion. The user may call :func:`~pygmo.core.island.wait()` or :func:`~pygmo.core.island.get()` to block until all
+tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
 
 Raises:
 
@@ -3063,19 +3064,28 @@ Raises:
 )";
 }
 
-std::string island_wait_docstring()
+std::string island_get_docstring()
 {
-    return R"(wait()
+    return R"(get()
 
-Block until evolution ends.
+Block until evolution ends and re-raise the first stored exception.
 
 This method will block until all the evolution tasks enqueued via :func:`~pygmo.core.island.evolve()` have been completed.
-The method will also raise the first exception raised by any task enqueued since the last time :func:`~pygmo.core.island.wait()`
-was called.
+The method will then raise the first exception raised by any task enqueued since the last time :func:`~pygmo.core.island.wait()`
+or :func:`~pygmo.core.island.get()` were called.
 
 Raises:
 
     unspecified: any exception thrown by evolution tasks or by the underlying C++ method
+
+)";
+}
+
+std::string island_wait_docstring()
+{
+    return R"(wait()
+
+This method will block until all the evolution tasks enqueued via :func:`~pygmo.core.island.evolve()` have been completed.
 
 )";
 }
@@ -3089,10 +3099,6 @@ Check island status.
 Returns:
 
     ``bool``: ``True`` if the island is evolving, ``False`` otherwise
-
-Raises:
-
-    unspecified: any exception thrown by the underlying C++ method
 
 )";
 }
@@ -3108,6 +3114,25 @@ It is safe to call this method while the island is evolving.
 Returns:
 
     :class:`~pygmo.core.algorithm`: a copy of the island's algorithm
+
+Raises:
+
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_set_algorithm_docstring()
+{
+    return R"(set_algorithm(algo)
+
+Set the algorithm.
+
+It is safe to call this method while the island is evolving.
+
+Args:
+
+    algo(:class:`~pygmo.core.algorithm`): the algorithm that will be copied into the island
 
 Raises:
 
@@ -3135,6 +3160,43 @@ Raises:
 )";
 }
 
+std::string island_set_population_docstring()
+{
+    return R"(set_population(pop)
+
+Set the population.
+
+It is safe to call this method while the island is evolving.
+
+Args:
+
+    algo(:class:`~pygmo.core.population`): the population that will be copied into the island
+
+Raises:
+
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_get_thread_safety_docstring()
+{
+    return R"(get_thread_safety()
+
+It is safe to call this method while the island is evolving.
+
+Returns:
+
+    ``tuple``: a tuple containing the :class:`~pygmo.core.thread_safety` levels of the
+      island's algorithm and problem
+
+Raises:
+
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
 std::string island_get_name_docstring()
 {
     return R"(get_name()
@@ -3143,6 +3205,8 @@ Island's name.
 
 If the UDI provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
 Otherwise, an implementation-defined name based on the type of the UDI will be returned.
+
+It is safe to call this method while the island is evolving.
 
 The ``get_name()`` method of the UDI must return a ``str``.
 
@@ -3165,6 +3229,8 @@ Island's extra info.
 
 If the UDI provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
 method. Otherwise, an empty string will be returned.
+
+It is safe to call this method while the island is evolving.
 
 The ``get_extra_info()`` method of the UDI must return a ``str``.
 

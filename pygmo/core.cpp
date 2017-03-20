@@ -1111,8 +1111,18 @@ BOOST_PYTHON_MODULE(core)
         .def("evolve", &island::evolve, pygmo::island_evolve_docstring().c_str())
         .def("busy", &island::busy, pygmo::island_busy_docstring().c_str())
         .def("wait", &island::wait, pygmo::island_wait_docstring().c_str())
+        .def("get", &island::get, pygmo::island_get_docstring().c_str())
         .def("get_population", &island::get_population, pygmo::island_get_population_docstring().c_str())
         .def("get_algorithm", &island::get_algorithm, pygmo::island_get_algorithm_docstring().c_str())
+        .def("set_population", &island::set_population, pygmo::island_set_population_docstring().c_str(),
+             bp::arg("pop"))
+        .def("set_algorithm", &island::set_algorithm, pygmo::island_set_algorithm_docstring().c_str(), bp::arg("algo"))
+        .def("get_thread_safety",
+             +[](const island &isl) -> bp::tuple {
+                 const auto ts = isl.get_thread_safety();
+                 return bp::make_tuple(ts[0], ts[1]);
+             },
+             pygmo::island_get_thread_safety_docstring().c_str())
         .def("get_name", &island::get_name, pygmo::island_get_name_docstring().c_str())
         .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
 
