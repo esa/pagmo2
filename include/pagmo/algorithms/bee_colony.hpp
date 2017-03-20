@@ -108,7 +108,7 @@ public:
         vector_double newsol(dim); // contains the mutated candidate
         auto X = pop.get_x();
         auto fit = pop.get_f();
-        std::vector<unsigned int> trial(NP, 0u);
+        std::vector<unsigned> trial(NP, 0u);
         std::uniform_real_distribution<double> phirng(-1., 1.); // to generate a number in [-1, 1]
         std::uniform_real_distribution<double> rrng(0., 1.);    // to generate a number in [0, 1]
         std::uniform_int_distribution<vector_double::size_type> comprng(
@@ -118,8 +118,8 @@ public:
 
         for (auto gen = 1u; gen <= m_gen; ++gen) {
             // 1 - Employed bees phase
-            auto mi = 0u;
-            for (auto i = 1u; i < NP; ++i) {
+            std::vector<unsigned>::size_type mi = 0u;
+            for (decltype(NP) i = 1u; i < NP; ++i) {
                 if (trial[i] > trial[mi]) {
                     mi = i;
                 }
@@ -182,7 +182,7 @@ public:
             for (decltype(NP) i = 0u; i < NP; ++i) {
                 p[i] /= sump;
             }
-            auto s = 0u;
+            vector_double::size_type s = 0u;
             auto t = 0u;
             // for each onlooker bee
             while (t < NP) {
