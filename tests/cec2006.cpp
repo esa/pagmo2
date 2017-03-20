@@ -42,7 +42,7 @@ see https://www.gnu.org/licenses/. */
 using namespace pagmo;
 using statics = detail::cec2006_statics<>;
 
-BOOST_AUTO_TEST_CASE(cec2013_construction_test)
+BOOST_AUTO_TEST_CASE(cec2006_construction_test)
 {
     // We check that all problems can be constructed
     for (unsigned i = 1u; i <= 24u; ++i) {

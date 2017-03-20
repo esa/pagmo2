@@ -58,8 +58,9 @@ problem
   problems/inventory
   problems/translate
   problems/decompose
-  problems/cec2013
   problems/cec2006
+  problems/cec2009
+  problems/cec2013
   problems/unconstrain
 
 Utilities

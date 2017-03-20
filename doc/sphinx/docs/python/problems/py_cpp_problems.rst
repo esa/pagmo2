@@ -18,6 +18,11 @@ Problems exposed from C++
 
 -------------------------------------------------------------
 
+.. autoclass:: pygmo.core.cec2009
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.core.rosenbrock
    :members:
 

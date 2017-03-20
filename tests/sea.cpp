@@ -63,33 +63,43 @@ BOOST_AUTO_TEST_CASE(sea_evolve_test)
     //
     // On a single objective deterministic problem
     {
-        problem prob1{rosenbrock{25u}};
-        population pop1{prob1, 5u, 23u};
+        problem prob{rosenbrock{25u}};
+        population pop1{prob, 5u, 23u};
         sea user_algo1{10u, 23u};
         user_algo1.set_verbosity(1u);
         pop1 = user_algo1.evolve(pop1);
 
-        problem prob2{rosenbrock{25u}};
-        population pop2{prob2, 5u, 23u};
+        population pop2{prob, 5u, 23u};
         sea user_algo2{10u, 23u};
         user_algo2.set_verbosity(1u);
         pop2 = user_algo2.evolve(pop2);
 
         BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+        population pop3{prob, 5u, 23u};
+        user_algo2.set_seed(23u);
+        pop3 = user_algo2.evolve(pop3);
+
+        BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
     }
     // On a single objective stochastic problem
     {
-        problem prob1{inventory{25u, 5u, 1432u}};
-        population pop1{prob1, 5u, 23u};
+        problem prob{inventory{25u, 5u, 1432u}};
+        population pop1{prob, 5u, 23u};
         sea user_algo1{10u, 23u};
         user_algo1.set_verbosity(2u);
         pop1 = user_algo1.evolve(pop1);
 
-        problem prob2{inventory{25u, 5u, 1432u}};
-        population pop2{prob2, 5u, 23u};
+        population pop2{prob, 5u, 23u};
         sea user_algo2{10u, 23u};
         user_algo2.set_verbosity(2u); // more verbosity here to also cover the relative code lines
         pop2 = user_algo2.evolve(pop2);
+
+        BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+        population pop3{prob, 5u, 23u};
+        user_algo2.set_seed(23u);
+        pop3 = user_algo2.evolve(pop3);
 
         BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
     }

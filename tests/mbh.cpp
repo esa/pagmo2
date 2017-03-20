@@ -84,16 +84,23 @@ BOOST_AUTO_TEST_CASE(mbh_evolve_test)
         prob.set_c_tol({1e-3, 1e-3});
         population pop1{prob, 5u, 23u};
         population pop2{prob, 5u, 23u};
+        population pop3{prob, 5u, 23u};
 
         mbh user_algo1{compass_search{100u, 0.1, 0.001, 0.7}, 5u, 0.1, 23u};
         user_algo1.set_verbosity(1u);
         pop1 = user_algo1.evolve(pop1);
 
+        BOOST_CHECK(user_algo1.get_log().size() > 0u);
+
         mbh user_algo2{compass_search{100u, 0.1, 0.001, 0.7}, 5u, 0.1, 23u};
         user_algo2.set_verbosity(1u);
         pop2 = user_algo2.evolve(pop2);
 
-        BOOST_CHECK(user_algo1.get_log().size() > 0u);
+        BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+        user_algo2.set_seed(23u);
+        pop3 = user_algo2.evolve(pop3);
+
         BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
     }
     // We then check that the evolve throws if called on unsuitable problems
