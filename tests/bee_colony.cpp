@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(bee_colony_evolve_test)
 
     // To cover the case of fitness < 0
     struct my_problem {
-        my_problem(unsigned int dim = 2u) : m_dim(dim){};
+        my_problem(unsigned dim = 2u) : m_dim(dim){};
         vector_double fitness(const vector_double &x) const
         {
             double sum = 0.;
@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE(bee_colony_evolve_test)
             vector_double ub(m_dim, 1.);
             return {lb, ub};
         }
-        unsigned int m_dim;
+        unsigned m_dim;
     };
     BOOST_CHECK_NO_THROW(user_algo1.evolve(population{my_problem(3u), 10u, 23u}));
 }

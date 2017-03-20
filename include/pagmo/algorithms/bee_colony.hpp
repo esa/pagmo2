@@ -32,11 +32,11 @@ class bee_colony
 public:
 #if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, curr_best, best)
-    typedef std::tuple<unsigned int, unsigned long long, double, double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 #else
-    using log_line_type = std::tuple<unsigned int, unsigned long long, double, double>;
+    using log_line_type = std::tuple<unsigned, unsigned long long, double, double>;
     using log_type = std::vector<log_line_type>;
 #endif
 
@@ -50,7 +50,7 @@ public:
      *
      * @throws std::invalid_argument if limit equals 0
      */
-    bee_colony(unsigned int gen = 1u, unsigned int limit = 1u, unsigned int seed = pagmo::random_device::next())
+    bee_colony(unsigned gen = 1u, unsigned limit = 1u, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_limit(limit), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (limit == 0u) {
@@ -116,7 +116,7 @@ public:
         std::uniform_int_distribution<vector_double::size_type> dvrng(
             0u, NP - 2u); // to generate a random index for the second decision vector
 
-        for (auto gen = 1u; gen <= m_gen; ++gen) {
+        for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
             // 1 - Employed bees phase
             std::vector<unsigned>::size_type mi = 0u;
             for (decltype(NP) i = 1u; i < NP; ++i) {
@@ -246,7 +246,7 @@ public:
     /**
      * @param seed the seed controlling the algorithm stochastic behaviour
      */
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_e.seed(seed);
         m_seed = seed;
@@ -255,7 +255,7 @@ public:
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -281,7 +281,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
@@ -289,7 +289,7 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
@@ -297,7 +297,7 @@ public:
     /**
      * @return the number of generations to evolve for
      */
-    unsigned int get_gen() const
+    unsigned get_gen() const
     {
         return m_gen;
     }
@@ -350,11 +350,11 @@ public:
     }
 
 private:
-    unsigned int m_gen;
-    unsigned int m_limit;
+    unsigned m_gen;
+    unsigned m_limit;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 
