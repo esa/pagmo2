@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 
 #include "../algorithm.hpp"
+#include "../algorithms/de.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
@@ -115,7 +116,7 @@ public:
                 inf_tilde = (solution_infeasibility - m_i_hat_down) / (m_i_hat_up - m_i_hat_down);
             } else {
                 inf_tilde = solution_infeasibility; // This will trigger, for example, when the whole population is
-                                                    // all feasible.
+                                                    // feasible.
             }
             // apply penalty 1 only if necessary. This penalizes infeasible solutions so that their objective
             // values cannot be much better than that of the best solution.
@@ -165,13 +166,7 @@ public:
         if (infeasible_idx.size() == 0u) {
             // Since no infeasible individuals exist in the reference population, we
             // still need to decide what to do when evaluating the fitness of a decision vector
-            // not in the ref_pop.
-            auto hat_round_idx = 0u;
-            for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
-                if (m_pop_ptr->get_f()[hat_round_idx][0] < m_pop_ptr->get_f()[i][0]) {
-                    hat_round_idx = i;
-                }
-            }
+            // not in the ref_pop. We here set the members so that all penalties are zero.
             m_scaling_factor = 0.;
             m_i_hat_up = 0.;
             m_i_hat_down = 0.;
@@ -406,8 +401,267 @@ public:
 };
 }
 
+class cstrs_self_adaptive : public algorithm
+{
+    // Enabler for the ctor from UDA.
+    template <typename T>
+    using ctor_enabler
+        = enable_if_t<std::is_constructible<algorithm, T &&>::value && !std::is_same<uncvref_t<T>, algorithm>::value,
+                      int>;
+
+public:
+    /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, trial).
+    // typedef std::tuple<unsigned long long, double, vector_double::size_type, double, unsigned> log_line_type;
+    /// The log.
+    // typedef std::vector<log_line_type> log_type;
+    /// Default constructor.
+    /**
+     * The default constructor will initialize the algorithm with the following parameters:
+     * - inner algorithm: pagmo::de{};
+     * - seed: random.
+     *
+     * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
+     */
+    cstrs_self_adaptive() : algorithm(de{1}), m_verbosity(0u)
+    {
+        const auto rnd = pagmo::random_device::next();
+        m_seed = rnd;
+        m_e.seed(rnd);
+    }
+    /// Constructor
+
+    template <typename T, ctor_enabler<T> = 0>
+    explicit cstrs_self_adaptive(T &&a, unsigned seed = pagmo::random_device::next())
+        : algorithm(std::forward<T>(a)), m_e(seed), m_seed(seed), m_verbosity(0u)
+    {
+    }
+
+    /// Evolve method.
+    /**
+     * This method will evolve the input population up to when \p stop consecutve runs of the internal
+     * algorithm do not improve the solution.
+     *
+     * @param pop population to be evolved.
+     *
+     * @return evolved population.
+     *
+     * @throws std::invalid_argument if the problem is multi-objective or stochastic, or if the perturbation vector size
+     * does not equal the problem size.
+     */
+    population evolve(population pop) const
+    {
+        // We store some useful variables
+        const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
+                                              // allowed
+        auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
+        auto nec = prob.get_nec();            // This getter does not return a const reference but a copy
+        const auto bounds = prob.get_bounds();
+        const auto &lb = bounds.first;
+        const auto &ub = bounds.second;
+        auto NP = pop.size();
+
+        auto fevals0 = prob.get_fevals(); // discount for the already made fevals
+        unsigned count = 1u;              // regulates the screen output
+
+        // PREAMBLE-------------------------------------------------------------------------------------------------
+        if (prob.get_nobj() != 1u) {
+            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
+        }
+        if (prob.is_stochastic()) {
+            pagmo_throw(std::invalid_argument, "The input problem " + prob.get_name() + " appears to be stochastic, "
+                                                   + get_name() + " cannot deal with it");
+        }
+        if (prob.get_nc() == 0u) {
+            pagmo_throw(std::invalid_argument, "No constraints detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " needs a constrained problem");
+        }
+        if (NP < 4u) {
+            pagmo_throw(std::invalid_argument,
+                        "Cannot use " + prob.get_name() + " on a population with less than 4 individuals");
+        }
+        // ---------------------------------------------------------------------------------------------------------
+
+        // No throws, all valid: we clear the logs
+        // m_log.clear();
+        // cstrs_self_adaptive main loop
+
+        // 1 - We create a dummy meta-problem that mantains a pointer to pop and uses it to define the penalty in an
+        // adaptive way. Upon consruction a cache is initialized mapping decision vectors to the constrained fitnesses.
+        detail::apply_adaptive_penalty dummy{pop};
+        // 2 - We construct a new population with the dummy so that we can evolve it with single objective,
+        // unconstrained solvers. Upon construction the problem is copied and so is the cache.
+        population new_pop{dummy};
+        // This does not cause fevals to increment as the cache will be hit.
+        for (decltype(NP) i = 0u; i < NP; ++i) {
+            new_pop.push_back(pop.get_x()[i]);
+        }
+
+        for (int i = 0; i < 1500u; ++i) {
+
+            auto best_idx = pop.best_idx(pop.get_problem().get_c_tol()); // ctol here
+            auto best_x = pop.get_x()[best_idx];
+            auto best_f = pop.get_f()[best_idx];
+            auto worst_idx = pop.worst_idx();
+            new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->update();
+            for (int i = 0; i < new_pop.size(); ++i) {
+                new_pop.set_x(i, pop.get_x()[i]);
+            }
+            new_pop = static_cast<const algorithm *>(this)->evolve(new_pop);
+            for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+                auto x = new_pop.get_x()[i];
+                auto it_f = new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->m_fitness_map.find(
+                    new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->m_decision_vector_hash(x));
+                if (it_f
+                    != new_pop.get_problem()
+                           .extract<detail::apply_adaptive_penalty>()
+                           ->m_fitness_map.end()) { // cash hit
+                    pop.set_xf(i, x, it_f->second);
+                } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem
+                         // )
+                    pop.set_x(i, x);
+                }
+            }
+            pop.set_xf(worst_idx, best_x, best_f);
+        }
+        return pop;
+    }
+    /// Set the seed.
+    /**
+     * @param seed the seed controlling the algorithm's stochastic behaviour.
+     */
+    void set_seed(unsigned seed)
+    {
+        m_e.seed(seed);
+        m_seed = seed;
+    }
+    /// Get the seed.
+    /**
+     * @return the seed controlling the algorithm's stochastic behaviour.
+     */
+    unsigned get_seed() const
+    {
+        return m_seed;
+    }
+    /// Set the algorithm verbosity.
+    /**
+     * This method will sets the verbosity level of the screen output and of the
+     * log returned by get_log(). \p level can be:
+     * - 0: no verbosity,
+     * - >0: will print and log one line at the end of each call to the inner algorithm.
+     *
+     * Example (verbosity 100):
+     * @code
+     * Fevals:          Best:      Violated:    Viol. Norm:         Trial:
+     *     105        110.395              1      0.0259512              0 i
+     *     211        110.395              1      0.0259512              1 i
+     *     319        110.395              1      0.0259512              2 i
+     *     422        110.514              1      0.0181383              0 i
+     *     525         111.33              1      0.0149418              0 i
+     *     628         111.33              1      0.0149418              1 i
+     *     731         111.33              1      0.0149418              2 i
+     *     834         111.33              1      0.0149418              3 i
+     *     937         111.33              1      0.0149418              4 i
+     *    1045         111.33              1      0.0149418              5 i
+     * @endcode
+     * \p Fevals is the number of fitness evaluations, \p Best is the objective function of the best
+     * fitness currently in the population, \p Violated is the number of constraints currently violated
+     * by the best solution, <tt>Viol. Norm</tt> is the norm of the violation (discounted already by the constraints
+     * tolerance) and \p Trial is the trial number (which will determine the algorithm stop).
+     * The small \p i appearing at the end of the line stands for "infeasible" and will disappear only
+     * once \p Violated is 0.
+     *
+     * @param level verbosity level.
+     */
+    void set_verbosity(unsigned level)
+    {
+        m_verbosity = level;
+    };
+    /// Get the verbosity level.
+    /**
+     * @return the verbosity level.
+     */
+    unsigned get_verbosity() const
+    {
+        return m_verbosity;
+    }
+
+    /// Get log.
+    /**
+     * A log containing relevant quantities monitoring the last call to mbh::evolve(). Each element of the returned
+     * <tt>std::vector</tt> is a mbh::log_line_type containing: \p Fevals, \p Best, \p Violated, <tt>Viol. Norm</tt> and
+     * \p Trial as described in mbh::set_verbosity().
+     *
+     * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals,
+     * Violated, Viol.Norm and Trial.
+     */
+    // const log_type &get_log() const
+    //{
+    //    return m_log;
+    //}
+    /// Algorithm name
+    /**
+     * @return a string containing the algorithm name.
+     */
+    std::string get_name() const
+    {
+        return "Self-adaptive penalty for handling constraints";
+    }
+    /// Extra informations
+    /**
+     * @return a string containing extra informations on the algorithm.
+     */
+    std::string get_extra_info() const
+    {
+        std::ostringstream ss;
+        stream(ss, "\n\tSeed: ", m_seed);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
+        stream(ss, "\n\n\tInner algorithm: ", static_cast<const algorithm *>(this)->get_name());
+        stream(ss, "\n\tInner algorithm extra info: ");
+        stream(ss, "\n", static_cast<const algorithm *>(this)->get_extra_info());
+        return ss.str();
+    }
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
+     */
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(cereal::base_class<algorithm>(this), m_e, m_seed, m_verbosity); //, m_log);
+    }
+
+private:
+    // Delete all that we do not want to inherit from algorithm.
+    // A - Common to all meta
+    bool has_set_seed() const = delete;
+    bool is_stochastic() const = delete;
+    bool has_set_verbosity() const = delete;
+    template <typename Archive>
+    void save(Archive &) const = delete;
+    template <typename Archive>
+    void load(Archive &) = delete;
+
+// The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
+// it would just result in a "weird" behaviour in case the user would try to stream this object
+#if __GNUC__ > 4
+    // NOTE: We delete the streaming operator overload called with mbh, otherwise the inner algo would stream
+    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it.
+    friend std::ostream &operator<<(std::ostream &, const cstrs_self_adaptive &) = delete;
+#endif
+
+    mutable detail::random_engine_type m_e;
+    unsigned m_seed;
+    unsigned m_verbosity;
+    // mutable log_type m_log;
+};
+
 } // namespace pagmo
 
-// PAGMO_REGISTER_ALGORITHM(pagmo::sea)
+PAGMO_REGISTER_ALGORITHM(pagmo::cstrs_self_adaptive)
 
 #endif
