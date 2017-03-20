@@ -182,6 +182,49 @@ def _island_init(self, **kwargs):
 
 setattr(island, "__init__", _island_init)
 
+# Override of the archi constructor.
+__original_archi_init = archipelago.__init__
+
+
+def _archi_init(self, n=0, **kwargs):
+    """
+    Args:
+        n (``int``): the number of islands in the archipelago
+
+    Keyword Args:
+        udi: a user-defined island (either Python or C++ - note that *udi* will be deep-copied
+          and stored inside the :class:`~pygmo.core.island` instances of the archipelago)
+        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.core.algorithm`
+        pop (:class:`~pygmo.core.population`): a population
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
+        size (``int``): the number of individuals for each island
+        seed (``int``): the random seed for each island (if not specified, it will be randomly-generated for
+          each island)
+
+    Raises:
+        TODO
+
+    """
+    import sys
+    int_types = (int, long) if sys.version_info[0] < 3 else (int,)
+    # Check n.
+    if not isinstance(n, int_types):
+        raise TypeError("the 'n' parameter must be an integer")
+    if n < 0:
+        raise ValueError(
+            "the 'n' parameter must be non-negative, but it is {} instead".format(n))
+
+    # Call the original init.
+    __original_archi_init(self, n, island(**kwargs))
+
+setattr(archipelago, "__init__", _archi_init)
+
+
+def _archi_push_back(self, **kwargs):
+    self._push_back(island(**kwargs))
+
+setattr(archipelago, "push_back", _archi_push_back)
+
 # Register the cleanup function.
 import atexit as _atexit
 from .core import _cleanup as _cpp_cleanup

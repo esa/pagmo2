@@ -71,17 +71,6 @@ struct disable_udi_checks<bp::object> : std::true_type {
 
 template <>
 struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
-    template <typename T>
-    static void check_thread_safety(const T &x)
-    {
-        if (static_cast<int>(x.get_thread_safety()) < static_cast<int>(thread_safety::copyonly)) {
-            pygmo_throw(PyExc_ValueError,
-                        ("pythonic islands require objects which provide at least the copyonly thread "
-                         "safety level, but the object '"
-                         + x.get_name() + "' does not provide any thread safety guarantee")
-                            .c_str());
-        }
-    }
     // Just need the def ctor, delete everything else.
     isl_inner() = default;
     isl_inner(const isl_inner &) = delete;
@@ -100,44 +89,19 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         return make_unique<isl_inner>(m_value);
     }
     // Mandatory methods.
-    virtual void run_evolve(algorithm &algo, std::mutex &algo_mutex, population &pop,
-                            std::mutex &pop_mutex) const override final
+    virtual void run_evolve(island &isl) const override final
     {
+        // TODO: ts checks.
+
         // NOTE: run_evolve() is called from a separate thread in pagmo::island, need to construct a GTE before
         // doing anything with the interpreter (including the throws in the checks below).
-        // NOTE: we must make sure that we lock the GIL before locking algo and pop. The reason is that in other
-        // situations the GIL is always the first lock to be locked (e.g., if we do a get_population(), get_algo(),
-        // etc.). In this situation, we are calling this code from a separate C++ thread which, before the
-        // construction of the ensurer, does NOT hold the GIL. If we locked the algo/pop before the GIL, we would end
-        // up with a lock order inversion with potential deadlock.
+        std::cout << this << " about to ensure\n";
         pygmo::gil_thread_ensurer gte;
-        std::unique_lock<std::mutex> algo_lock(algo_mutex), pop_lock(pop_mutex);
+        std::cout << this << " ensured\n";
+
         try {
-            // NOTE: the idea of these checks is the following: we will have to copy algo and pop in order to invoke
-            // the pythonic UDI's evolve method, which has a signature which is different from C++. If algo/prob are
-            // bp::object, via the GTE above we have made sure we can safely copy them so we don't need to check
-            // anything. Otherwise, we run the check, which is against the copyonly thread safety level as that is all
-            // we need.
-            if (!algo.is<bp::object>()) {
-                check_thread_safety(algo);
-            }
-            if (!pop.get_problem().is<bp::object>()) {
-                check_thread_safety(pop.get_problem());
-            }
-
-            // Everything fine, copy algo/pop and unlock.
-            bp::object pop_copy(pop);
-            pop_lock.unlock();
-            bp::object algo_copy(algo);
-            algo_lock.unlock();
-
-            // Invoke the run_evolve() method of the UDI and get out the evolved pop.
-            // NOTE: here bp::extract will extract a copy of pop, and then a move ctor will take place,
-            // which will just move the internal problem pointer. No additional thread safety guarantees are needed.
-            population new_pop = bp::extract<population>(m_value.attr("run_evolve")(algo_copy, pop_copy));
-            // Re-lock and assign.
-            pop_lock.lock();
-            pop = std::move(new_pop);
+            isl.set_population(
+                bp::extract<population>(m_value.attr("run_evolve")(isl.get_algorithm(), isl.get_population()))());
         } catch (const bp::error_already_set &) {
             // NOTE: run_evolve() is called from a separate thread. If Python raises any exception in this separate
             // thread (as signalled by the bp::error_already_set exception being handled here), the following will

@@ -1120,5 +1120,18 @@ BOOST_PYTHON_MODULE(core)
     auto ti = pygmo::expose_island<thread_island>("thread_island", pygmo::thread_island_docstring().c_str());
 
     // Archi.
-    bp::class_<archipelago> archi_class("archipelago", "", bp::init<>());
+    bp::class_<archipelago> archi_class("archipelago", "", bp::init<archipelago::size_type, const island &>());
+    archi_class
+        .def(repr(bp::self))
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<archipelago>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<archipelago>)
+        // Size.
+        .def("__len__", &archipelago::size)
+        .def("evolve", &archipelago::evolve, "")
+        .def("busy", &archipelago::busy, "")
+        .def("wait", &archipelago::wait, "")
+        .def("__getitem__", +[](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; },
+             bp::return_internal_reference<>())
+        .def("_push_back", +[](archipelago &archi, const island &isl) { archi.push_back(isl); });
 }

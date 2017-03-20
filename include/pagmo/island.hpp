@@ -30,7 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_ISLAND_HPP
 
 #include <algorithm>
-#include <atomic>
+#include <array>
 #include <boost/any.hpp>
 #include <chrono>
 #include <cstdlib>
@@ -82,12 +82,15 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+// Fwd declaration.
+class island;
+
 /// Detect \p run_evolve() method.
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
  * @code{.unparsed}
- * void run_evolve(pagmo::algorithm &, std::mutex &, pagmo::population &, std::mutex &) const;
+ * void run_evolve(std::island &) const;
  * @endcode
  * The \p run_evolve() method is part of the interface for the definition of an island
  * (see pagmo::island).
@@ -96,9 +99,7 @@ template <typename T>
 class has_run_evolve
 {
     template <typename U>
-    using run_evolve_t
-        = decltype(std::declval<const U &>().run_evolve(std::declval<algorithm &>(), std::declval<std::mutex &>(),
-                                                        std::declval<population &>(), std::declval<std::mutex &>()));
+    using run_evolve_t = decltype(std::declval<const U &>().run_evolve(std::declval<island &>()));
     static const bool implementation_defined = std::is_same<void, detected_t<run_evolve_t, T>>::value;
 
 public:
@@ -153,7 +154,7 @@ struct isl_inner_base {
     {
     }
     virtual std::unique_ptr<isl_inner_base> clone() const = 0;
-    virtual void run_evolve(algorithm &, std::mutex &, population &, std::mutex &) const = 0;
+    virtual void run_evolve(island &) const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
     template <typename Archive>
@@ -182,11 +183,10 @@ struct isl_inner final : isl_inner_base {
     {
         return make_unique<isl_inner>(m_value);
     }
-    // The enqueue_evolution() method.
-    virtual void run_evolve(algorithm &algo, std::mutex &algo_mutex, population &pop,
-                            std::mutex &pop_mutex) const override final
+    // The run_evolve() method.
+    virtual void run_evolve(island &isl) const override final
     {
-        m_value.run_evolve(algo, algo_mutex, pop, pop_mutex);
+        m_value.run_evolve(isl);
     }
     // Optional methods.
     virtual std::string get_name() const override final
@@ -225,21 +225,6 @@ struct isl_inner final : isl_inner_base {
     }
     T m_value;
 };
-
-// NOTE: this construct is used to create a RAII-style object at the beginning
-// of island::wait(). Normally this object's constructor and destructor will not
-// do anything, but in Python we need to override this getter so that it returns
-// a RAII object that unlocks the GIL, otherwise we could run into deadlocks in Python
-// if isl::wait() holds the GIL while waiting.
-template <typename = void>
-struct wait_raii {
-    static std::function<boost::any()> getter;
-};
-
-// NOTE: the default implementation just returns a defcted boost::any, whose ctor and dtor
-// will have no effect.
-template <typename T>
-std::function<boost::any()> wait_raii<T>::getter = []() { return boost::any{}; };
 }
 
 /// Thread island.
@@ -249,19 +234,6 @@ std::function<boost::any()> wait_raii<T>::getter = []() { return boost::any{}; }
  */
 class thread_island
 {
-    template <typename T>
-    static void check_thread_safety(const T &x)
-    {
-        if (static_cast<int>(x.get_thread_safety()) < static_cast<int>(thread_safety::basic)) {
-            pagmo_throw(
-                std::invalid_argument,
-                "thread islands require objects which provide at least the basic thread safety level, but the object '"
-                    + x.get_name() + "' provides only the '"
-                    + std::string(x.get_thread_safety() == thread_safety::copyonly ? "copyonly" : "none")
-                    + "' thread safety guarantee");
-        }
-    }
-
 public:
     /// Island's name.
     /**
@@ -271,49 +243,7 @@ public:
     {
         return "Thread island";
     }
-    /// Run evolve.
-    /**
-     * This method will invoke the <tt>evolve()</tt> method on a copy of \p algo, using a copy
-     * of \p pop as argument, and it will then assign the result of the evolution back to \p pop.
-     *
-     * @param algo the algorithm that will be used for the evolution.
-     * @param algo_mutex a mutex regulating exclusive access to \p algo.
-     * @param pop the population that will be evolved by \p algo.
-     * @param pop_mutex a mutex regulating exclusive access to \p pop.
-     *
-     * @throws std::invalid_argument if either \p algo or <tt>pop</tt>'s problem do not provide
-     * at least the pagmo::thread_safety::basic thread safety guarantee.
-     * @throws unspecified any exception thrown by:
-     * - threading primitives,
-     * - the copy constructors of \p pop and \p algo,
-     * - the <tt>evolve()</tt> method of \p algo.
-     */
-    void run_evolve(algorithm &algo, std::mutex &algo_mutex, population &pop, std::mutex &pop_mutex) const
-    {
-        // Lock down algo and pop.
-        std::unique_lock<std::mutex> algo_lock(algo_mutex), pop_lock(pop_mutex);
-
-        // NOTE: these are checks run on pagmo::algo/prob, both of which have thread-safe implementations
-        // of the get_thread_safety() method.
-        check_thread_safety(algo);
-        check_thread_safety(pop.get_problem());
-
-        // Create copies of algo/pop and unlock the locks.
-        // NOTE: copies cannot alter the thread safety property of algo/prob, as
-        // it is a class member.
-        auto pop_copy(pop);
-        pop_lock.unlock();
-        auto algo_copy(algo);
-        algo_lock.unlock();
-
-        // Run the actual evolution.
-        auto new_pop(algo_copy.evolve(pop_copy));
-
-        // Lock and assign back.
-        pop_lock.lock();
-        // NOTE: this does not need any thread safety, as we are just moving in a problem pointer.
-        pop = std::move(new_pop);
-    }
+    void run_evolve(island &) const;
     /// Serialization support.
     /**
      * This class is stateless, no data will be saved to or loaded from the archive.
@@ -328,6 +258,20 @@ class archipelago;
 
 namespace detail
 {
+// NOTE: this construct is used to create a RAII-style object at the beginning
+// of island::wait(). Normally this object's constructor and destructor will not
+// do anything, but in Python we need to override this getter so that it returns
+// a RAII object that unlocks the GIL, otherwise we could run into deadlocks in Python
+// if isl::wait() holds the GIL while waiting.
+template <typename = void>
+struct wait_raii {
+    static std::function<boost::any()> getter;
+};
+
+// NOTE: the default implementation just returns a defcted boost::any, whose ctor and dtor
+// will have no effect.
+template <typename T>
+std::function<boost::any()> wait_raii<T>::getter = []() { return boost::any{}; };
 
 // NOTE: this structure holds an std::function that implements the logic for the selection of the UDI
 // type in the constructor of island_data. The logic is decoupled so that we can override the default logic with
@@ -352,29 +296,32 @@ typename island_factory<T>::func_t island_factory<T>::s_func = default_island_fa
 
 // NOTE: the idea with this class is that we use it to store the data members of pagmo::island, and,
 // within pagmo::island, we store a pointer to an instance of this struct. The reason for this approach
-// is that, like this, we can provide sensible move semantics: just move the internal pointer of pagmo::island,
-// the operation will be noexcept and there will be no need to synchronise anything - the evolution can continue
-// while the move operation is taking place.
+// is that, like this, we can provide sensible move semantics: just move the internal pointer of pagmo::island.
 struct island_data {
     // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
     // are both thread safe.
-    island_data() : isl_ptr(make_unique<isl_inner<thread_island>>())
+    island_data()
+        : isl_ptr(make_unique<isl_inner<thread_island>>()), algo(std::make_shared<algorithm>()),
+          pop(std::make_shared<population>())
     {
     }
 
     // This is the main ctor, from an algo and a population. The UDI type will be selected
     // by the island_factory functor.
     template <typename Algo, typename Pop>
-    explicit island_data(Algo &&a, Pop &&p) : algo(std::forward<Algo>(a)), pop(std::forward<Pop>(p))
+    explicit island_data(Algo &&a, Pop &&p)
+        : algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
+          pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
-        island_factory<>::s_func(algo, pop, isl_ptr);
+        island_factory<>::s_func(*algo, *pop, isl_ptr);
     }
 
     // As above, but the UDI is explicitly passed by the user.
     template <typename Isl, typename Algo, typename Pop>
     explicit island_data(Isl &&isl, Algo &&a, Pop &&p)
-        : isl_ptr(make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))), algo(std::forward<Algo>(a)),
-          pop(std::forward<Pop>(p))
+        : isl_ptr(make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
+          algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
+          pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
     }
 
@@ -382,7 +329,8 @@ struct island_data {
     // the island will come from the clone() method of an isl_inner.
     template <typename Algo, typename Pop>
     explicit island_data(std::unique_ptr<isl_inner_base> &&ptr, Algo &&a, Pop &&p)
-        : isl_ptr(std::move(ptr)), algo(std::forward<Algo>(a)), pop(std::forward<Pop>(p))
+        : isl_ptr(std::move(ptr)), algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
+          pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
     }
 
@@ -396,15 +344,13 @@ struct island_data {
     // NOTE: isl_ptr has no associated mutex, as it's supposed to be fully
     // threads-safe on its own.
     std::unique_ptr<isl_inner_base> isl_ptr;
-    // Algo, pop and futures all need a mutex to regulate access.
+    // Algo and pop a mutex to regulate access.
     std::mutex algo_mutex;
-    algorithm algo;
+    std::shared_ptr<algorithm> algo;
     std::mutex pop_mutex;
-    population pop;
-    std::mutex futures_mutex;
+    std::shared_ptr<population> pop;
     std::vector<std::future<void>> futures;
-    std::atomic<archipelago *> archi_ptr{nullptr};
-    // task_queue is thread-safe on its own.
+    archipelago *archi_ptr = nullptr;
     task_queue queue;
 };
 }
@@ -496,13 +442,15 @@ public:
     }
     /// Move constructor.
     /**
-     * The move constructor will transfer the state of \p other (including any ongoing evolution)
-     * into \p this.
+     * The move constructor will transfer the state of \p other into \p this, after any ongoing
+     * evolution in \p other is finished.
      *
-     * @param other the island tht will be moved.
+     * @param other the island that will be moved.
      */
-    island(island &&other) noexcept : m_ptr(std::move(other.m_ptr))
+    island(island &&other) noexcept
     {
+        other.wait();
+        m_ptr = std::move(other.m_ptr);
     }
 
 private:
@@ -630,31 +578,19 @@ public:
     }
     /// Destructor.
     /**
-     * If the island has not been moved-from, the destructor will call island::wait(), ignoring
-     * any exception that might be thrown apart from \p std::system_error. If an \p std::system_error
-     * exception is thrown, the program will terminate.
+     * If the island has not been moved-from, the destructor will call island::wait().
      */
     ~island()
     {
         // If the island has been moved from, don't do anything.
-        if (!m_ptr) {
-            return;
-        }
-        try {
+        if (m_ptr) {
             wait();
-        } catch (const std::system_error &) {
-            // NOTE: the rationale here is that we interpret system_error as
-            // a failure in the locking primitives inside wait(), and if that
-            // fails we will have loose threads hanging around. Best just to
-            // abort.
-            std::abort();
-        } catch (...) {
         }
     }
     /// Move assignment.
     /**
-     * Move assignment will transfer the state of \p other (including any ongoing evolution)
-     * into \p this.
+     * Move assignment will transfer the state of \p other into \p this, after any ongoing
+     * evolution in \p this and \p other is finished.
      *
      * @param other the island tht will be moved.
      *
@@ -663,6 +599,10 @@ public:
     island &operator=(island &&other) noexcept
     {
         if (this != &other) {
+            if (m_ptr) {
+                wait();
+            }
+            other.wait();
             m_ptr = std::move(other.m_ptr);
         }
         return *this;
@@ -708,24 +648,15 @@ public:
      */
     void evolve()
     {
-        std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
         // First add an empty future, so that if an exception is thrown
         // we will not have modified m_futures, nor we will have a future
         // in flight which we cannot wait upon.
         m_ptr->futures.emplace_back();
         try {
-            // Get a pointer to the members tuple. Capturing ptr in the lambda
-            // rather than this ensures tasks can still be executed after a move
-            // operation on this.
-            auto ptr = m_ptr.get();
             // Move assign a new future provided by the enqueue() method.
             // NOTE: enqueue either returns a valid future, or throws without
             // having enqueued any task.
-            m_ptr->futures.back() = m_ptr->queue.enqueue([ptr]() {
-                ptr->isl_ptr->run_evolve(ptr->algo, ptr->algo_mutex, ptr->pop, ptr->pop_mutex);
-                auto archi = ptr->archi_ptr.load();
-                (void)archi;
-            });
+            m_ptr->futures.back() = m_ptr->queue.enqueue([this]() { this->m_ptr->isl_ptr->run_evolve(*this); });
         } catch (...) {
             // We end up here only if enqueue threw. In such a case, we need to cleanup
             // the empty future we added above before re-throwing and exiting.
@@ -742,11 +673,10 @@ public:
      * - evolution tasks,
      * - threading primitives.
      */
-    void wait()
+    void get()
     {
         auto iwr = detail::wait_raii<>::getter();
         (void)iwr;
-        std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
         for (decltype(m_ptr->futures.size()) i = 0; i < m_ptr->futures.size(); ++i) {
             // NOTE: this has to be valid, as the only way to get the value of the futures is via
             // this method, and we clear the futures vector after we are done.
@@ -769,6 +699,20 @@ public:
         }
         m_ptr->futures.clear();
     }
+    // TODO docs, document rationale, document noexcept.
+    // TODO rationale of clearing the futures.
+    void wait() noexcept
+    {
+        auto iwr = detail::wait_raii<>::getter();
+        (void)iwr;
+        for (const auto &f : m_ptr->futures) {
+            // NOTE: this has to be valid, as the only way to get the value of the futures is via
+            // this method, and we clear the futures vector after we are done.
+            assert(f.valid());
+            f.wait();
+        }
+        m_ptr->futures.clear();
+    }
     /// Check island status.
     /**
      * @return \p true if the island is evolving, \p false otherwise.
@@ -777,7 +721,6 @@ public:
      */
     bool busy() const
     {
-        std::lock_guard<std::mutex> lock(m_ptr->futures_mutex);
         for (const auto &f : m_ptr->futures) {
             assert(f.valid());
             if (f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready) {
@@ -796,8 +739,16 @@ public:
      */
     algorithm get_algorithm() const
     {
+        std::unique_lock<std::mutex> lock(m_ptr->algo_mutex);
+        auto new_algo_ptr = m_ptr->algo;
+        lock.unlock();
+        return *new_algo_ptr;
+    }
+    void set_algorithm(algorithm algo)
+    {
+        auto new_algo_ptr = std::make_shared<algorithm>(std::move(algo));
         std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
-        return m_ptr->algo;
+        m_ptr->algo = new_algo_ptr;
     }
     /// Get the population.
     /**
@@ -809,8 +760,29 @@ public:
      */
     population get_population() const
     {
+        std::unique_lock<std::mutex> lock(m_ptr->pop_mutex);
+        auto new_pop_ptr = m_ptr->pop;
+        lock.unlock();
+        return *new_pop_ptr;
+    }
+    void set_population(population pop)
+    {
+        auto new_pop_ptr = std::make_shared<population>(std::move(pop));
         std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
-        return m_ptr->pop;
+        m_ptr->pop = new_pop_ptr;
+    }
+    std::array<thread_safety, 2> get_thread_safety() const
+    {
+        std::array<thread_safety, 2> retval;
+        {
+            std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
+            retval[0] = m_ptr->algo->get_thread_safety();
+        }
+        {
+            std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
+            retval[1] = m_ptr->pop->get_problem().get_thread_safety();
+        }
+        return retval;
     }
     /// Island's name.
     /**
@@ -853,7 +825,8 @@ public:
      */
     friend std::ostream &operator<<(std::ostream &os, const island &isl)
     {
-        stream(os, "Island name: ", isl.get_name(), "\n\n");
+        stream(os, "Island name: ", isl.get_name());
+        stream(os, "\n\tEvolving: ", isl.busy(), "\n\n");
         const auto extra_str = isl.get_extra_info();
         if (!extra_str.empty()) {
             stream(os, "Extra info:\n", extra_str, "\n\n");
@@ -881,8 +854,7 @@ public:
     /// Load from archive.
     /**
      * This method will load into \p this the content of \p ar.
-     * It is safe to call this method while the island is evolving,
-     * but this method will wait until all evolution tasks are completed
+     * This method will wait until any ongoing evolution in \p this is finished
      * before returning.
      *
      * @param ar the source archive.
@@ -905,6 +877,32 @@ public:
 private:
     std::unique_ptr<idata_t> m_ptr;
 };
+
+/// Run evolve.
+/**
+ * This method will invoke the <tt>evolve()</tt> method on a copy of \p algo, using a copy
+ * of \p pop as argument, and it will then assign the result of the evolution back to \p pop.
+ *
+ * @param algo the algorithm that will be used for the evolution.
+ * @param algo_mutex a mutex regulating exclusive access to \p algo.
+ * @param pop the population that will be evolved by \p algo.
+ * @param pop_mutex a mutex regulating exclusive access to \p pop.
+ *
+ * @throws std::invalid_argument if either \p algo or <tt>pop</tt>'s problem do not provide
+ * at least the pagmo::thread_safety::basic thread safety guarantee.
+ * @throws unspecified any exception thrown by:
+ * - threading primitives,
+ * - the copy constructors of \p pop and \p algo,
+ * - the <tt>evolve()</tt> method of \p algo.
+ */
+inline void thread_island::run_evolve(island &isl) const
+{
+    // const auto i_ts = isl.get_thread_safety();
+    // TODO check thread safety.
+    // TODO doc.
+
+    isl.set_population(isl.get_algorithm().evolve(isl.get_population()));
+}
 
 class archipelago
 {
@@ -936,7 +934,7 @@ public:
         m_islands = std::move(other.m_islands);
         // Re-direct the archi pointers to point to this.
         for (const auto &iptr : m_islands) {
-            iptr->m_ptr->archi_ptr.store(this);
+            iptr->m_ptr->archi_ptr = this;
         }
     }
 
@@ -973,16 +971,15 @@ public:
             m_islands = std::move(other.m_islands);
             // Re-direct the archi pointers to point to this.
             for (const auto &iptr : m_islands) {
-                iptr->m_ptr->archi_ptr.store(this);
+                iptr->m_ptr->archi_ptr = this;
             }
         }
         return *this;
     }
     ~archipelago()
     {
-        assert(std::all_of(m_islands.begin(), m_islands.end(), [this](const std::unique_ptr<island> &iptr) {
-            return iptr->m_ptr->archi_ptr.load() == this;
-        }));
+        assert(std::all_of(m_islands.begin(), m_islands.end(),
+                           [this](const std::unique_ptr<island> &iptr) { return iptr->m_ptr->archi_ptr == this; }));
     }
 
 private:
@@ -1014,7 +1011,7 @@ public:
     void push_back(Args &&... args)
     {
         m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
-        m_islands.back()->m_ptr->archi_ptr.store(this);
+        m_islands.back()->m_ptr->archi_ptr = this;
     }
     void evolve()
     {
@@ -1037,6 +1034,25 @@ public:
                 throw;
             }
         }
+    }
+    bool busy() const
+    {
+        return std::any_of(m_islands.begin(), m_islands.end(),
+                           [](const std::unique_ptr<island> &iptr) { return iptr->busy(); });
+    }
+    friend std::ostream &operator<<(std::ostream &os, const archipelago &archi)
+    {
+        stream(os, "Number of islands: ", archi.size(), "\n");
+        stream(os, "Evolving: ", archi.busy(), "\n\n");
+        stream(os, "Islands summaries:\n\n");
+        detail::table t({"#", "Size", "Algo", "Prob", "Evolving"}, "\t");
+        for (decltype(archi.size()) i = 0; i < archi.size(); ++i) {
+            t.add_row({std::to_string(i), std::to_string(archi[i].get_population().size()),
+                       archi[i].get_algorithm().get_name(), archi[i].get_population().get_problem().get_name(),
+                       archi[i].busy() ? "True" : "False"});
+        }
+        stream(os, t);
+        return os;
     }
     template <typename Archive>
     void save(Archive &ar) const

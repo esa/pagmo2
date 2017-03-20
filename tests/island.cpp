@@ -42,7 +42,13 @@ BOOST_AUTO_TEST_CASE(island_construction)
     for (unsigned i = 0u; i < 1000u; ++i) {
         isl.evolve();
     }
-    auto isl2(std::move(isl));
-    isl = std::move(isl2);
+    isl.set_algorithm(pagmo::algorithm{});
+    isl.set_algorithm(pagmo::algorithm{});
+    isl.set_algorithm(pagmo::algorithm{});
+    isl.set_algorithm(pagmo::algorithm{});
+    isl.set_algorithm(pagmo::algorithm{});
+    isl.set_algorithm(pagmo::algorithm{});
+    isl.set_algorithm(pagmo::algorithm{});
+    isl.set_algorithm(pagmo::algorithm{});
     isl.wait();
 }
