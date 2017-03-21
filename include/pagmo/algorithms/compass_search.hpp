@@ -237,7 +237,7 @@ public:
                       std::setw(15), l, std::setw(15), newrange, '\n');
                 ++count;
                 // Logs
-                m_log.push_back(log_line_type(prob.get_fevals() - fevals0, cur_best_f[0], n, l, newrange));
+                m_log.emplace_back(prob.get_fevals() - fevals0, cur_best_f[0], n, l, newrange);
             }
         } // end while
 
