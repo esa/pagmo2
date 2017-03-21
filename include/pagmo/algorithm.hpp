@@ -83,7 +83,18 @@ struct null_algorithm {
     {
         return pop;
     };
+    /// Algorithm name.
+    /**
+     * @return <tt>"Null algorithm"</tt>.
+     */
+    std::string get_name() const
+    {
+        return "Null algorithm";
+    }
     /// Serialization support.
+    /**
+     * This class is stateless, no data will be loaded or saved during serialization.
+     */
     template <typename Archive>
     void serialize(Archive &)
     {

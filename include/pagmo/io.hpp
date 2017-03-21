@@ -39,6 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include "exceptions.hpp"
 #include "threading.hpp"
 
 #define PAGMO_MAX_OUTPUT_LENGTH 5u
@@ -149,9 +150,9 @@ public:
     void add_row(const Args &... args)
     {
         if (sizeof...(args) != m_headers.size()) {
-            throw std::invalid_argument("the table was constructed with " + to_string(m_headers.size())
-                                        + " columns, but a row with " + to_string(sizeof...(args))
-                                        + " columns is being added: the two values must be equal");
+            pagmo_throw(std::invalid_argument, "the table was constructed with " + to_string(m_headers.size())
+                                                   + " columns, but a row with " + to_string(sizeof...(args))
+                                                   + " columns is being added: the two values must be equal");
         }
         // Convert to a vector of strings, and add the row.
         m_rows.emplace_back(std::vector<std::string>{to_string(args)...});

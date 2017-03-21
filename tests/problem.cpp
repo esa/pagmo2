@@ -998,6 +998,7 @@ BOOST_AUTO_TEST_CASE(null_problem_test)
 {
     // Problem instantiation
     problem p{null_problem{}};
+    BOOST_CHECK_EQUAL(p.get_name(), "Null problem");
     // Pick a few reference points
     vector_double x1 = {1};
     vector_double x2 = {2};

@@ -136,6 +136,14 @@ struct null_problem {
     {
         return m_nic;
     }
+    /// Problem name.
+    /**
+     * @return <tt>"Null problem"</tt>.
+     */
+    std::string get_name() const
+    {
+        return "Null problem";
+    }
     /// Serialization
     /**
      * @param ar the target serialization archive.
