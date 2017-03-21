@@ -94,7 +94,4 @@ BOOST_AUTO_TEST_CASE(stream_print_test)
     ss1.str("");
     stream(ss1, thread_safety::basic);
     BOOST_CHECK_EQUAL(ss1.str(), "basic");
-    ss1.str("");
-    stream(ss1, thread_safety::copyonly);
-    BOOST_CHECK_EQUAL(ss1.str(), "copyonly");
 }

@@ -15,6 +15,7 @@ These are the core PyGMO classes.
    py_problem
    py_population
    py_island
+   py_archipelago
    py_misc
 
 Implemented problems, algorithms and islands

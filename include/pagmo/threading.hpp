@@ -38,9 +38,8 @@ namespace pagmo
  * the thread safety of problems, algorithms, etc.
  */
 enum class thread_safety {
-    none,     ///< No thread safety: any concurrent operation on distinct instances is unsafe
-    copyonly, ///< Copy-only thread safety: concurrent copying of distinct instances is safe
-    basic     ///< Basic thread safety: any concurrent operation on distinct instances is safe
+    none, ///< No thread safety: any concurrent operation on distinct instances is unsafe
+    basic ///< Basic thread safety: any concurrent operation on distinct instances is safe
 };
 }
 

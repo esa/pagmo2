@@ -3023,9 +3023,7 @@ See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::refpoint`.
 
 std::string island_docstring()
 {
-    return R"(__init__(**kwargs)
-
-Island class.
+    return R"(Island class.
 
 In the pygmo jargon, an island is a class that encapsulates three entities:
 
@@ -3304,9 +3302,7 @@ See also the documentation of the corresponding C++ class :cpp:class:`pagmo::thr
 
 std::string archipelago_docstring()
 {
-    return R"(__init__(n=0, **kwargs)
-
-Archipelago.
+    return R"(Archipelago.
 
 An archipelago is a collection of :class:`~pygmo.core.island` objects which provides a convenient way to perform
 multiple optimisations in parallel.

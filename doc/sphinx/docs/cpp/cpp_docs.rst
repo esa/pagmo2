@@ -15,6 +15,7 @@ we suggest to follow the tutorials / examples.
   algorithm
   population
   island
+  archipelago
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^

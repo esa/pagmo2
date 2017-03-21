@@ -973,7 +973,7 @@ public:
     }
     /// Copy constructor.
     /**
-     * The islands of \p other will be copied into \p this via algorithm::push_back().
+     * The islands of \p other will be copied into \p this via archipelago::push_back().
      *
      * @param other the archipelago that will be copied.
      *
