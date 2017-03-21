@@ -250,7 +250,7 @@ public:
                                 ++count;
                                 std::cout << std::endl; // we flush here as we want the user to read in real time ...
                                 // Logs
-                                m_log.push_back(log_line_type(fevals_count, best_f[0], fOLD[0], avg_range, currentT));
+                                m_log.emplace_back(fevals_count, best_f[0], fOLD[0], avg_range, currentT);
                             }
                         }
                     } // end for(nter = 0; ...

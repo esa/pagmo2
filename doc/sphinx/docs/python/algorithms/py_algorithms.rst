@@ -11,6 +11,11 @@ Algorithms exposed from C++
 
 -------------------------------------------------------------
 
+.. autoclass:: pygmo.core.bee_colony
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.core.de
    :members:
 

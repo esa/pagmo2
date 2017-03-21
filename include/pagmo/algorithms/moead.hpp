@@ -247,7 +247,7 @@ public:
                     print('\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, adf, ideal_point));
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, adf, ideal_point);
                 }
             }
             // 1 - Shuffle the population indexes

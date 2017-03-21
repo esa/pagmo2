@@ -181,8 +181,7 @@ public:
                           pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut, '\n');
                     ++count;
                     // Logs
-                    m_log.push_back(
-                        log_line_type(i, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], improvement, mut));
+                    m_log.emplace_back(i, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], improvement, mut);
                 }
             }
             // 4 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
@@ -198,8 +197,7 @@ public:
                           pop.get_f()[best_idx][0], std::setw(15), improvement, std::setw(15), mut, '\n');
                     ++count;
                     // Logs
-                    m_log.push_back(
-                        log_line_type(i, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], improvement, mut));
+                    m_log.emplace_back(i, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], improvement, mut);
                 }
             }
         }

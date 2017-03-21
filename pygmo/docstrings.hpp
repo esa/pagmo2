@@ -129,6 +129,8 @@ std::string cmaes_docstring();
 std::string cmaes_get_log_docstring();
 std::string compass_search_docstring();
 std::string compass_search_get_log_docstring();
+std::string bee_colony_docstring();
+std::string bee_colony_get_log_docstring();
 std::string de_docstring();
 std::string de_get_log_docstring();
 std::string de1220_docstring();

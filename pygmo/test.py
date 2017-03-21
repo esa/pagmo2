@@ -274,6 +274,20 @@ class pso_test_case(_ut.TestCase):
         log = uda.get_log()
 
 
+class bee_colony_test_case(_ut.TestCase):
+    """Test case for the UDA bee_colony
+
+    """
+
+    def runTest(self):
+        from .core import bee_colony
+        uda = bee_colony()
+        uda = bee_colony(gen=1, limit=10)
+        uda = bee_colony(gen=1, limit=10, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        log = uda.get_log()
+
+
 class moead_test_case(_ut.TestCase):
     """Test case for the UDA moead
 
@@ -710,6 +724,7 @@ def run_test_suite():
     suite.addTest(_problem_test.problem_test_case())
     suite.addTest(_algorithm_test.algorithm_test_case())
     suite.addTest(pso_test_case())
+    suite.addTest(bee_colony_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(moead_test_case())
