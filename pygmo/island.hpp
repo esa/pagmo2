@@ -91,8 +91,6 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     // Mandatory methods.
     virtual void run_evolve(island &isl) const override final
     {
-        // TODO: ts checks.
-
         // NOTE: run_evolve() is called from a separate thread in pagmo::island, need to construct a GTE before
         // doing anything with the interpreter (including the throws in the checks below).
         pygmo::gil_thread_ensurer gte;

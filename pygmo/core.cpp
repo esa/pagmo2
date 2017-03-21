@@ -241,6 +241,42 @@ struct population_pickle_suite : bp::pickle_suite {
     }
 };
 
+// Serialization support for the archi class.
+struct archipelago_pickle_suite : bp::pickle_suite {
+    static bp::tuple getinitargs(const archipelago &)
+    {
+        return bp::make_tuple();
+    }
+    static bp::tuple getstate(const archipelago &archi)
+    {
+        std::ostringstream oss;
+        {
+            cereal::PortableBinaryOutputArchive oarchive(oss);
+            oarchive(archi);
+        }
+        auto s = oss.str();
+        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+    }
+    static void setstate(archipelago &archi, bp::tuple state)
+    {
+        if (len(state) != 1) {
+            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
+        }
+        auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
+        if (!ptr) {
+            pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize an archipelago");
+        }
+        const auto size = len(state[0]);
+        std::string s(ptr, ptr + size);
+        std::istringstream iss;
+        iss.str(s);
+        {
+            cereal::PortableBinaryInputArchive iarchive(iss);
+            iarchive(archi);
+        }
+    }
+};
+
 // Helper function to test the to_vd functionality.
 static inline bool test_to_vd(const bp::object &o, unsigned n)
 {
@@ -1137,8 +1173,8 @@ BOOST_PYTHON_MODULE(core)
     // Archi.
     bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(),
                                         bp::init<archipelago::size_type, const island &>());
-    archi_class
-        .def(repr(bp::self))
+    archi_class.def(repr(bp::self))
+        .def_pickle(archipelago_pickle_suite())
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<archipelago>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<archipelago>)
