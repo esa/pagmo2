@@ -4,7 +4,9 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <iostream>
+#include <stdexcept>
 #include <string>
+#include <tuple>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/bee_colony.hpp>

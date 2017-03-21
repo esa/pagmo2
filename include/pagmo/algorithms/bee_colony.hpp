@@ -1,8 +1,11 @@
 #ifndef PAGMO_ALGORITHMS_BEE_COLONY_HPP
 #define PAGMO_ALGORITHMS_BEE_COLONY_HPP
 
+#include <iomanip>
 #include <random>
+#include <stdexcept>
 #include <string>
+#include <tuple>
 
 #include "../algorithm.hpp"
 #include "../exceptions.hpp"
@@ -234,8 +237,7 @@ public:
                           pop.get_f()[best_idx][0], std::setw(15), pop.champion_f()[0], '\n');
                     ++count;
                     // Logs
-                    m_log.push_back(
-                        log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], pop.champion_f()[0]));
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], pop.champion_f()[0]);
                 }
             }
         }

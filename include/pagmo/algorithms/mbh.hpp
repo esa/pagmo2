@@ -272,7 +272,7 @@ public:
                 ++count;
                 std::cout << std::endl; // we flush here as we want the user to read in real time ...
                 // Logs
-                m_log.push_back(log_line_type(prob.get_fevals() - fevals0, cur_best_f[0], n, l, i));
+                m_log.emplace_back(prob.get_fevals() - fevals0, cur_best_f[0], n, l, i);
             }
         }
         // We extract chromosomes and fitnesses
