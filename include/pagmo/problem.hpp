@@ -1234,6 +1234,9 @@ public:
      * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
      * of \p this, and \p delete must never be called on the pointer.
      *
+     * **NOTE** The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     * methods on the internal UDP instance. Assigning a new UDP via this pointer is undefined behaviour.
+     *
      * @return a pointer to the internal UDP, or \p nullptr
      * if \p T does not correspond exactly to the original UDP type used
      * in the constructor.

@@ -554,6 +554,9 @@ public:
      * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
      * of \p this and \p delete must never be called on the pointer.
      *
+     * **NOTE** The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     * methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.
+     *
      * @return a pointer to the internal UDA, or \p nullptr
      * if \p T does not correspond exactly to the original UDA type used
      * in the constructor.
