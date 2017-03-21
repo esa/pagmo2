@@ -56,7 +56,6 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction_test)
     problem prob{cec2006{1u}};
     auto c_tol = vector_double(prob.get_nc(), 0.);
     prob.set_c_tol(c_tol);
-    population pop{prob, 20u};
     algorithm algo2{cstrs_self_adaptive(1500u)};
     population pop2{prob, 20u};
     pop2 = algo2.evolve(pop2);

@@ -565,7 +565,7 @@ public:
             new_pop.push_back(pop.get_x()[i]);
         }
         // Main iterations
-        for (decltype(m_iters) i = 0; i < m_iters; ++i) {
+        for (decltype(m_iters) iter = 1u; iter <= m_iters; ++iter) {
             // We record the current best decision vector and fitness as we will
             // reinsert it at each iteration
             auto best_idx = pop.best_idx(pop.get_problem().get_c_tol());
@@ -578,6 +578,34 @@ public:
             new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->update();
             for (decltype(new_pop.size()) i = 0u; i < new_pop.size(); ++i) {
                 new_pop.set_x(i, pop.get_x()[i]);
+            }
+            // We log to screen
+            if (m_verbosity > 0u) {
+                // Prints a log line after each call to the inner algorithm
+                // 1 - Every 50 lines print the column names
+                if (count % 50u == 1u) {
+                    print("\n", std::setw(7), "Iter:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15),
+                          "Infeasibility:", std::setw(15), "Violated:", std::setw(15), "Viol. Norm:", '\n');
+                }
+                // 2 - Print
+                auto cur_best_f = pop.get_f()[pop.best_idx()];
+                auto c1eq = detail::test_eq_constraints(cur_best_f.data() + 1, cur_best_f.data() + 1 + nec,
+                                                        prob.get_c_tol().data());
+                auto c1ineq = detail::test_ineq_constraints(
+                    cur_best_f.data() + 1 + nec, cur_best_f.data() + cur_best_f.size(), prob.get_c_tol().data() + nec);
+                auto n = prob.get_nc() - c1eq.first - c1ineq.first;
+                auto l = c1eq.second + c1ineq.second;
+                auto infeas = new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->compute_infeasibility(
+                    new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->m_f_hat_down);
+                print(std::setw(7), iter, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0],
+                      std::setw(15), infeas, std::setw(15), n, std::setw(15), l);
+                if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
+                    std::cout << " i";
+                }
+                ++count;
+                std::cout << std::endl; // we flush here as we want the user to read in real time ...
+                // Logs
+                m_log.push_back(log_line_type(iter, prob.get_fevals() - fevals0, cur_best_f[0], infeas, n, l));
             }
             // We call the evolution on the unconstrained population (here is where fevals will increase)
             new_pop = static_cast<const algorithm *>(this)->evolve(new_pop);
