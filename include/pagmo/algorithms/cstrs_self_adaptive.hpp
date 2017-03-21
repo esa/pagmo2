@@ -521,11 +521,8 @@ public:
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                               // allowed
-        auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
         auto nec = prob.get_nec();            // This getter does not return a const reference but a copy
         const auto bounds = prob.get_bounds();
-        const auto &lb = bounds.first;
-        const auto &ub = bounds.second;
         auto NP = pop.size();
 
         auto fevals0 = prob.get_fevals(); // discount for the already made fevals
@@ -581,31 +578,36 @@ public:
             }
             // We log to screen
             if (m_verbosity > 0u) {
-                // Prints a log line after each call to the inner algorithm
-                // 1 - Every 50 lines print the column names
-                if (count % 50u == 1u) {
-                    print("\n", std::setw(7), "Iter:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15),
-                          "Infeasibility:", std::setw(15), "Violated:", std::setw(15), "Viol. Norm:", '\n');
+                if (iter % m_verbosity == 1u || m_verbosity == 1u) {
+                    // Prints a log line after each call to the inner algorithm
+                    // 1 - Every 50 lines print the column names
+                    if (count % 50u == 1u) {
+                        print("\n", std::setw(7), "Iter:", std::setw(15), "Fevals:", std::setw(15), "Best:",
+                              std::setw(15), "Infeasibility:", std::setw(15), "Violated:", std::setw(15), "Viol. Norm:",
+                              '\n');
+                    }
+                    // 2 - Print
+                    auto cur_best_f = pop.get_f()[pop.best_idx()];
+                    auto c1eq = detail::test_eq_constraints(cur_best_f.data() + 1, cur_best_f.data() + 1 + nec,
+                                                            prob.get_c_tol().data());
+                    auto c1ineq = detail::test_ineq_constraints(cur_best_f.data() + 1 + nec,
+                                                                cur_best_f.data() + cur_best_f.size(),
+                                                                prob.get_c_tol().data() + nec);
+                    auto n = prob.get_nc() - c1eq.first - c1ineq.first;
+                    auto l = c1eq.second + c1ineq.second;
+                    auto infeas
+                        = new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->compute_infeasibility(
+                            new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->m_f_hat_down);
+                    print(std::setw(7), iter, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0],
+                          std::setw(15), infeas, std::setw(15), n, std::setw(15), l);
+                    if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
+                        std::cout << " i";
+                    }
+                    ++count;
+                    std::cout << std::endl; // we flush here as we want the user to read in real time ...
+                    // Logs
+                    m_log.push_back(log_line_type(iter, prob.get_fevals() - fevals0, cur_best_f[0], infeas, n, l));
                 }
-                // 2 - Print
-                auto cur_best_f = pop.get_f()[pop.best_idx()];
-                auto c1eq = detail::test_eq_constraints(cur_best_f.data() + 1, cur_best_f.data() + 1 + nec,
-                                                        prob.get_c_tol().data());
-                auto c1ineq = detail::test_ineq_constraints(
-                    cur_best_f.data() + 1 + nec, cur_best_f.data() + cur_best_f.size(), prob.get_c_tol().data() + nec);
-                auto n = prob.get_nc() - c1eq.first - c1ineq.first;
-                auto l = c1eq.second + c1ineq.second;
-                auto infeas = new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->compute_infeasibility(
-                    new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->m_f_hat_down);
-                print(std::setw(7), iter, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0],
-                      std::setw(15), infeas, std::setw(15), n, std::setw(15), l);
-                if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
-                    std::cout << " i";
-                }
-                ++count;
-                std::cout << std::endl; // we flush here as we want the user to read in real time ...
-                // Logs
-                m_log.push_back(log_line_type(iter, prob.get_fevals() - fevals0, cur_best_f[0], infeas, n, l));
             }
             // We call the evolution on the unconstrained population (here is where fevals will increase)
             new_pop = static_cast<const algorithm *>(this)->evolve(new_pop);
@@ -650,26 +652,33 @@ public:
      * This method will sets the verbosity level of the screen output and of the
      * log returned by get_log(). \p level can be:
      * - 0: no verbosity,
-     * - >0: will print and log one line at the end of each call to the inner algorithm.
+     * - >0: will print and log one line each  \p level call to the inner algorithm.
      *
      * Example (verbosity 100):
      * @code
-     * Fevals:          Best:      Violated:    Viol. Norm:         Trial:
-     *     105        110.395              1      0.0259512              0 i
-     *     211        110.395              1      0.0259512              1 i
-     *     319        110.395              1      0.0259512              2 i
-     *     422        110.514              1      0.0181383              0 i
-     *     525         111.33              1      0.0149418              0 i
-     *     628         111.33              1      0.0149418              1 i
-     *     731         111.33              1      0.0149418              2 i
-     *     834         111.33              1      0.0149418              3 i
-     *     937         111.33              1      0.0149418              4 i
-     *    1045         111.33              1      0.0149418              5 i
+     * Iter:        Fevals:          Best: Infeasibility:      Violated:    Viol. Norm:
+     *     1              0       -85.0783        0.27686              9        113.517 i
+     *    11            200        -63.389       0.265589              5        115.934 i
+     *    21            400       -63.4911       0.223718              5        115.932 i
+     *    31            600       -64.3827        0.11351              4        115.931 i
+     *    41            798       -52.7867       0.102092              4        87.6829 i
+     *    51            996       -52.7867       0.185789              4        87.6829 i
+     *    61           1195       -52.9318       0.135594              4         87.667 i
+     *    71           1395       -53.2577       0.198257              4        87.5359 i
+     *    81           1595       -53.2145       0.193373              4        87.5176 i
+     *    91           1793       -53.4946        0.20727              4        87.5176 i
+     *   101           1992       -9.24713      0.0140202              3        3.66306 i
+     *   111           2191       -9.24713     0.00609212              3        3.66306 i
+     *   121           2391        -9.7824      0.0818012              3        2.80238 i
+     *   131           2590        -9.7824     0.00638764              3        2.80238 i
+     *   141           2789       -9.78008      0.0101844              3         2.4812 i
+     *   151           2988       -10.6099      0.0247001              3        1.90121 i
+     *   161           3188       -8.17669      0.0010254              1       0.870286 i
      * @endcode
-     * \p Fevals is the number of fitness evaluations, \p Best is the objective function of the best
-     * fitness currently in the population, \p Violated is the number of constraints currently violated
-     * by the best solution, <tt>Viol. Norm</tt> is the norm of the violation (discounted already by the constraints
-     * tolerance) and \p Trial is the trial number (which will determine the algorithm stop).
+     * \p Iter is the iteration number, \p Fevals is the number of fitness evaluations, \p Best is the objective
+     * function of the best fitness currently in the population, \p Infeasibility is the normailized infeasibility
+     * measure, \p Violated is the number of constraints currently violated by the best solution, <tt>Viol. Norm</tt> is
+     * the norm of the violation (discounted already by the constraints tolerance).
      * The small \p i appearing at the end of the line stands for "infeasible" and will disappear only
      * once \p Violated is 0.
      *
@@ -691,11 +700,11 @@ public:
     /// Get log.
     /**
      * A log containing relevant quantities monitoring the last call to mbh::evolve(). Each element of the returned
-     * <tt>std::vector</tt> is a mbh::log_line_type containing: \p Fevals, \p Best, \p Violated, <tt>Viol. Norm</tt> and
-     * \p Trial as described in mbh::set_verbosity().
+     * <tt>std::vector</tt> is a cstrs_self_adaptive::log_line_type containing: \p Iters, \p Fevals, \p Best, \p
+     * Infeasibility, \p Violated, as described in cstrs_self_adaptive::set_verbosity().
      *
-     * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals,
-     * Violated, Viol.Norm and Trial.
+     * @return an <tt> std::vector </tt> of cstrs_self_adaptive::log_line_type containing the logged values Iters,
+     * Fevals, Best, Infeasibility, Violated and Viol.Norm
      */
     const log_type &get_log() const
     {
