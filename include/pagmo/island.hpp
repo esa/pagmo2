@@ -910,8 +910,8 @@ public:
         island tmp_island;
         // NOTE: no need to lock access to these, as there is no evolution going on in tmp_island.
         ar(tmp_island.m_ptr->isl_ptr);
-        ar(tmp_island.m_ptr->algo);
-        ar(tmp_island.m_ptr->pop);
+        ar(*tmp_island.m_ptr->algo);
+        ar(*tmp_island.m_ptr->pop);
         *this = std::move(tmp_island);
     }
 
