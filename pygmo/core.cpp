@@ -1130,7 +1130,8 @@ BOOST_PYTHON_MODULE(core)
     auto ti = pygmo::expose_island<thread_island>("thread_island", pygmo::thread_island_docstring().c_str());
 
     // Archi.
-    bp::class_<archipelago> archi_class("archipelago", "", bp::init<archipelago::size_type, const island &>());
+    bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(),
+                                        bp::init<archipelago::size_type, const island &>());
     archi_class
         .def(repr(bp::self))
         // Copy and deepcopy.
@@ -1138,10 +1139,10 @@ BOOST_PYTHON_MODULE(core)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<archipelago>)
         // Size.
         .def("__len__", &archipelago::size)
-        .def("evolve", &archipelago::evolve, "")
-        .def("busy", &archipelago::busy, "")
-        .def("wait", &archipelago::wait, "")
-        .def("get", &archipelago::get, "")
+        .def("evolve", &archipelago::evolve, pygmo::archipelago_evolve_docstring().c_str())
+        .def("busy", &archipelago::busy, pygmo::archipelago_busy_docstring().c_str())
+        .def("wait", &archipelago::wait, pygmo::archipelago_wait_docstring().c_str())
+        .def("get", &archipelago::get, pygmo::archipelago_get_docstring().c_str())
         .def("__getitem__", +[](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; },
              bp::return_internal_reference<>())
         // NOTE: docs for push_back() are in the Python reimplementation.

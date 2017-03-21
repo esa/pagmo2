@@ -181,6 +181,13 @@ std::string island_get_thread_safety_docstring();
 
 // udi.
 std::string thread_island_docstring();
+
+// archipelago.
+std::string archipelago_docstring();
+std::string archipelago_evolve_docstring();
+std::string archipelago_busy_docstring();
+std::string archipelago_wait_docstring();
+std::string archipelago_get_docstring();
 }
 
 #endif

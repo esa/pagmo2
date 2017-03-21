@@ -175,9 +175,15 @@ def _island_init(self, **kwargs):
 
     # UDI, if any.
     if 'udi' in kwargs:
-        __original_island_init(self, kwargs.pop('udi'), algo, pop)
+        args = [kwargs.pop('udi'), algo, pop]
     else:
-        __original_island_init(self, algo, pop)
+        args = [algo, pop]
+
+    if len(kwargs) != 0:
+        raise KeyError(
+            "unrecognised keyword arguments: {}".format(list(kwargs.keys())))
+
+    __original_island_init(self, *args)
 
 
 setattr(island, "__init__", _island_init)
@@ -188,21 +194,18 @@ __original_archi_init = archipelago.__init__
 
 def _archi_init(self, n=0, **kwargs):
     """
+    The keyword arguments accept the same format as explained in the constructor of
+    :class:`~pygmo.core.island`. The constructor will initialise an archipelago with
+    *n* islands built from *kwargs*.
+
     Args:
         n (``int``): the number of islands in the archipelago
 
-    Keyword Args:
-        udi: a user-defined island (either Python or C++ - note that *udi* will be deep-copied
-          and stored inside the :class:`~pygmo.core.island` instances of the archipelago)
-        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.core.algorithm`
-        pop (:class:`~pygmo.core.population`): a population
-        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
-        size (``int``): the number of individuals for each island
-        seed (``int``): the random seed for each island (if not specified, it will be randomly-generated for
-          each island)
-
     Raises:
-        TODO
+        TypeError: if *n* is not an integral type
+        ValueError: if *n* is negative
+        unspecified: any exception thrown by the constructor of :class:`~pygmo.core.island`
+          or by the underlying C++ constructor
 
     """
     import sys
@@ -221,6 +224,20 @@ setattr(archipelago, "__init__", _archi_init)
 
 
 def _archi_push_back(self, **kwargs):
+    """Add island.
+
+    This method will construct an island from the supplied arguments and add it to the archipelago.
+    Islands are added at the end of the archipelago (that is, the new island will have an index
+    equal to the size of the archipelago before the call to this method).
+
+    The keyword arguments accept the same format as explained in the constructor of
+    :class:`~pygmo.core.island`.
+
+    Raises:
+        unspecified: any exception thrown by the constructor of :class:`~pygmo.core.island` or by
+          the underlying C++ method
+
+    """
     self._push_back(island(**kwargs))
 
 setattr(archipelago, "push_back", _archi_push_back)

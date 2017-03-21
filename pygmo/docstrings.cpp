@@ -3126,7 +3126,7 @@ Set the algorithm.
 It is safe to call this method while the island is evolving.
 
 Args:
-    algo(:class:`~pygmo.core.algorithm`): the algorithm that will be copied into the island
+    algo (:class:`~pygmo.core.algorithm`): the algorithm that will be copied into the island
 
 Raises:
     unspecified: any exception thrown by the underlying C++ method
@@ -3160,7 +3160,7 @@ Set the population.
 It is safe to call this method while the island is evolving.
 
 Args:
-    algo(:class:`~pygmo.core.population`): the population that will be copied into the island
+    pop (:class:`~pygmo.core.population`): the population that will be copied into the island
 
 Raises:
     unspecified: any exception thrown by the underlying C++ method
@@ -3240,6 +3240,75 @@ that provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guara
 errors will be raised during the evolution.
 
 See also the documentation of the corresponding C++ class :cpp:class:`pagmo::thread_island`.
+
+)";
+}
+
+std::string archipelago_docstring()
+{
+    return R"(__init__(n=0, **kwargs)
+
+Archipelago.
+
+An archipelago is a collection of :class:`~pygmo.core.island` objects which provides a convenient way to perform
+multiple optimisations in parallel.
+
+This class is the Python counterpart of the C++ class :cpp:class:`pagmo::archipelago`.
+
+)";
+}
+
+std::string archipelago_evolve_docstring()
+{
+    return R"(evolve()
+
+Evolve archipelago.
+
+This method will call :func:`pygmo.core.island.evolve()` on all the islands of the archipelago.
+
+Raises:
+    unspecified: any exception thrown by the invoked C++ method
+
+)";
+}
+
+std::string archipelago_busy_docstring()
+{
+    return R"(busy()
+
+Check archipelago status.
+
+Returns:
+    ``bool``: ``True`` if at least one island is evolving, ``False`` otherwise
+
+)";
+}
+
+std::string archipelago_wait_docstring()
+{
+    return R"(wait()
+
+Block until all evolutions have finished.
+
+This method will call :func:`pygmo.core.island.wait()` on all the islands of the archipelago.
+
+)";
+}
+
+std::string archipelago_get_docstring()
+{
+    return R"(get()
+
+Block until all evolutions have finished and raise the first exception that was encountered.
+
+This method will call :func:`pygmo.core.island.get()` on all the islands of the archipelago.
+If an invocation of :func:`pygmo.core.island.get()` raises an exception, then on the remaining
+islands :func:`pygmo.core.island.wait()` will be called instead, and the raised exception will be re-raised
+by this method.
+
+Raises:
+    unspecified: any exception thrown by any evolution task queued in the archipelago's
+      islands
 
 )";
 }

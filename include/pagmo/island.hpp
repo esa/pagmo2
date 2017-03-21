@@ -948,13 +948,37 @@ inline void thread_island::run_evolve(island &isl) const
     isl.set_population(isl.get_algorithm().evolve(isl.get_population()));
 }
 
+/// Archipelago.
+/**
+ * An archipelago is a collection of pagmo::island objects which provides a convenient way to perform
+ * multiple optimisations in parallel.
+ */
 class archipelago
 {
+    using size_type_implementation = std::vector<std::unique_ptr<island>>::size_type;
+
 public:
-    using size_type = std::vector<std::unique_ptr<island>>::size_type;
+    /// The size type of the archipelago.
+    /**
+     * This is an unsigned integer type used to represent the number of islands in the
+     * archipelago.
+     */
+    using size_type = size_type_implementation;
+    /// Default constructor.
+    /**
+     * The default constructor will initialise an empty archipelago.
+     */
     archipelago()
     {
     }
+    /// Copy constructor.
+    /**
+     * The islands of \p other will be copied into \p this via algorithm::push_back().
+     *
+     * @param other the archipelago that will be copied.
+     *
+     * @throws unspecified any exception thrown by archipelago::push_back().
+     */
     archipelago(const archipelago &other)
     {
         for (const auto &iptr : other.m_islands) {
@@ -963,6 +987,14 @@ public:
             push_back(*iptr);
         }
     }
+    /// Move constructor.
+    /**
+     * The move constructor will wait for any ongoing evolution in \p other to finish
+     * and it will then transfer the state of \p other into \p this. After the move,
+     * \p other is left in an unspecified but valid state.
+     *
+     * @param other the archipelago that will be moved.
+     */
     archipelago(archipelago &&other) noexcept
     {
         // NOTE: in move operations we have to wait, because the ongoing
@@ -982,6 +1014,20 @@ private:
     using n_ctor_enabler = enable_if_t<std::is_constructible<island, Args &&...>::value, int>;
 
 public:
+    /// Constructor from \p n islands.
+    /**
+     * **NOTE**: this constructor is enabled only if the parameter pack \p Args
+     * can be used to construct a pagmo::island.
+     *
+     * This constructor will construct \p n pagmo::island instances using \p Args
+     * and it will then add them to the archipelago via archipelago::push_back().
+     *
+     * @param n the desired number of islands.
+     * @param args the arguments that will be used for the construction of each island.
+     *
+     * @throws unspecified any exception thrown by the invoked pagmo::island constructor
+     * or by archipelago::push_back().
+     */
     template <typename... Args, n_ctor_enabler<Args...> = 0>
     explicit archipelago(size_type n, Args &&... args)
     {
@@ -989,6 +1035,16 @@ public:
             push_back(std::forward<Args>(args)...);
         }
     }
+    /// Copy assignment.
+    /**
+     * Copy assignment is implemented as copy construction followed by a move assignment.
+     *
+     * @param other the assignment argument.
+     *
+     * @return a reference to \p this.
+     *
+     * @throws unspecified any exception thrown by the copy constructor.
+     */
     archipelago &operator=(const archipelago &other)
     {
         if (this != &other) {
@@ -996,6 +1052,15 @@ public:
         }
         return *this;
     }
+    /// Move assignment.
+    /**
+     * Move assignment will transfer the state of \p other into \p this, after any ongoing
+     * evolution in \p this and \p other has finished.
+     *
+     * @param other the assignment argument.
+     *
+     * @return a reference to \p this.
+     */
     archipelago &operator=(archipelago &&other) noexcept
     {
         if (this != &other) {
@@ -1012,6 +1077,10 @@ public:
         }
         return *this;
     }
+    /// Destructor.
+    /**
+     * The destructor will call archipelago::wait() internally, and run checks in debug mode.
+     */
     ~archipelago()
     {
         // NOTE: this is not strictly necessary, but it will not hurt. And, if we add further
@@ -1020,14 +1089,23 @@ public:
         assert(std::all_of(m_islands.begin(), m_islands.end(),
                            [this](const std::unique_ptr<island> &iptr) { return iptr->m_ptr->archi_ptr == this; }));
     }
-
-private:
-    template <typename... Args>
-    using push_back_enabler = n_ctor_enabler<Args...>;
-
-public:
-    // TODO document this cannot be used to set the island.
-    // TODO document that references remain valid after push_back().
+    /// Mutable island access.
+    /**
+     * This subscript operator can be used to access the <tt>i</tt>-th island of the archipelago (that is,
+     * the <tt>i</tt>-th island that was inserted via push_back()). References returned by this method are valid even
+     * after a push_back() invocation. Assignment and destruction of the archipelago will invalidate island references
+     * obtained via this method.
+     *
+     * **NOTE**: the mutable version of the subscript operator exists solely to allow calling non-const methods
+     * on the islands. Assigning an island via a reference obtained through this operator will result
+     * in undefined behaviour.
+     *
+     * @param i the index of the island to be accessed.
+     *
+     * @return a reference to the <tt>i</tt>-th island of the archipelago.
+     *
+     * @throws std::out_of_range if \p i is not less than the size of the archipelago.
+     */
     island &operator[](size_type i)
     {
         if (i >= size()) {
@@ -1036,6 +1114,19 @@ public:
         }
         return *m_islands[i];
     }
+    /// Const island access.
+    /**
+     * This subscript operator can be used to access the <tt>i</tt>-th island of the archipelago (that is,
+     * the <tt>i</tt>-th island that was inserted via push_back()). References returned by this method are valid even
+     * after a push_back() invocation. Assignment and destruction of the archipelago will invalidate island references
+     * obtained via this method.
+     *
+     * @param i the index of the island to be accessed.
+     *
+     * @return a const reference to the <tt>i</tt>-th island of the archipelago.
+     *
+     * @throws std::out_of_range if \p i is not less than the size of the archipelago.
+     */
     const island &operator[](size_type i) const
     {
         if (i >= size()) {
@@ -1044,28 +1135,73 @@ public:
         }
         return *m_islands[i];
     }
+    /// Size.
+    /**
+     * @return the number of islands in the archipelago.
+     */
     size_type size() const
     {
         return m_islands.size();
     }
+
+private:
+    template <typename... Args>
+    using push_back_enabler = n_ctor_enabler<Args...>;
+
+public:
+    /// Add island.
+    /**
+     * **NOTE**: this method is enabled only if the parameter pack \p Args
+     * can be used to construct a pagmo::island.
+     *
+     * This method will construct an island from the supplied arguments and add it to the archipelago.
+     * Islands are added at the end of the archipelago (that is, the new island will have an index
+     * equal to the value of size() before the call to this method).
+     *
+     * @param args the arguments that will be used for the construction of the island.
+     *
+     * @throws unspecified any exception thrown by memory allocation errors or by the invoked constructor
+     * of pagmo::island.
+     */
     template <typename... Args, push_back_enabler<Args...> = 0>
     void push_back(Args &&... args)
     {
         m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
+        // NOTE: this is noexcept.
         m_islands.back()->m_ptr->archi_ptr = this;
     }
+    /// Evolve archipelago.
+    /**
+     * This method will call island::evolve() on all the islands of the archipelago.
+     *
+     * @throws unspecified any exception thrown by island::evolve().
+     */
     void evolve()
     {
         for (auto &iptr : m_islands) {
             iptr->evolve();
         }
     }
+    /// Block until all evolutions have finished.
+    /**
+     * This method will call island::wait() on all the islands of the archipelago.
+     */
     void wait() noexcept
     {
         for (const auto &iptr : m_islands) {
             iptr->wait();
         }
     }
+    /// Block until all evolutions have finished and raise the first exception that was encountered.
+    /**
+     * This method will call island::get() on all the islands of the archipelago.
+     * If an invocation of island::get() raises an exception, then on the remaining
+     * islands island::wait() will be called instead, and the raised exception will be re-raised
+     * by this method.
+     *
+     * @throws unspecified any exception thrown by any evolution task queued in the archipelago's
+     * islands.
+     */
     void get()
     {
         for (auto it = m_islands.begin(); it != m_islands.end(); ++it) {
@@ -1079,11 +1215,29 @@ public:
             }
         }
     }
+    /// Check archipelago status.
+    /**
+     * @return \p true if at least one island is evolving, \p false otherwise.
+     */
     bool busy() const
     {
         return std::any_of(m_islands.begin(), m_islands.end(),
                            [](const std::unique_ptr<island> &iptr) { return iptr->busy(); });
     }
+    /// Stream operator.
+    /**
+     * This operator will stream to \p os a human-readable representation of the input
+     * archipelago \p archi.
+     *
+     * @param os the target stream.
+     * @param archi the archipelago that will be streamed.
+     *
+     * @return a reference to \p os.
+     *
+     * @throws unspecified any exception thrown by:
+     * - the streaming of primitive types,
+     * - island::get_algorithm(), island::get_population().
+     */
     friend std::ostream &operator<<(std::ostream &os, const archipelago &archi)
     {
         stream(os, "Number of islands: ", archi.size(), "\n");
@@ -1091,18 +1245,35 @@ public:
         stream(os, "Islands summaries:\n\n");
         detail::table t({"#", "Type", "Algo", "Prob", "Size", "Evolving"}, "\t");
         for (decltype(archi.size()) i = 0; i < archi.size(); ++i) {
-            t.add_row(i, archi[i].get_name(), archi[i].get_algorithm().get_name(),
-                      archi[i].get_population().get_problem().get_name(), archi[i].get_population().size(),
-                      archi[i].busy());
+            const auto pop = archi[i].get_population();
+            t.add_row(i, archi[i].get_name(), archi[i].get_algorithm().get_name(), pop.get_problem().get_name(),
+                      pop.size(), archi[i].busy());
         }
         stream(os, t);
         return os;
     }
+    /// Save to archive.
+    /**
+     * This method will save to \p ar the islands of the archipelago.
+     *
+     * @param ar the output archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of pagmo::island.
+     */
     template <typename Archive>
     void save(Archive &ar) const
     {
         ar(m_islands);
     }
+    /// Load from archive.
+    /**
+     * This method will load into \p this the content of \p ar, after any ongoing evolution
+     * in \p this has finished.
+     *
+     * @param ar the input archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of pagmo::island.
+     */
     template <typename Archive>
     void load(Archive &ar)
     {
