@@ -59,8 +59,7 @@ namespace detail
  * Evolutionary Computation, IEEE Transactions on, 7(5), 445-455 for the paper introducing the method.
  *
  */
-class apply_adaptive_penalty
-{
+struct apply_adaptive_penalty {
 public:
     /// Fake default constructor to please the is_udp type trait
     apply_adaptive_penalty(){};
@@ -323,7 +322,6 @@ public:
         return os;
     }
 
-public:
     // Computes c_max holding the maximum value of the violation of each constraint in the whole ref population
     void compute_c_max()
     {
@@ -401,6 +399,67 @@ public:
 };
 }
 
+/// Self-adaptive constraints handling
+/**
+ *
+ * This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
+ * (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
+ * technique self-adapts its parameters during
+ * each successive call to the inner UDA basing its decisions on the entire underlying population. The resulting
+ * approach is an alternative to using the meta-problem pagmo::unconstrained to transform the
+ * constrained fitness into an unconstrained fitness.
+ *
+ * The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
+ * extends their use to any-algorithm, in particular to non generational population based evolutionary approaches where
+ * a steady-state einsertion is used (i.e. as soon as an individual is found fit it is immediately reinserted into the
+ * pop and will influence the next offspring genetic material).
+ *
+ * Each decision vector is assigned an infeasibility measure \f$\iota\f$ which accounts for the normalized violation of
+ * all the constraints (discounted by the constraints tolerance as returned by pagmo::problem::get_c_tol()). The
+ * normalization factor used \f$c_{j_{max}}\f$ is the maximum violation of the \f$j-th\f$ constraint.
+ *
+ * As in the original paper, three individuals in the evolving population are then used to penalize the single
+ * objective.
+ *
+ * \f[
+ * \begin{array}{rl}
+ *   \check X & \mbox{: the best decision vector} \\
+ *   \hat X & \mbox{: the worst decision vector} \\
+ *   \breve X & \mbox{: the decision vector with the highest objective}
+ * \end{array}
+ * \f]
+ *
+ * The best and worst decision vectors are defined accounting for their infeasibilities and for the value of the
+ * objective function. Using the above definitions the overall pseudo code can be summarized as follows:
+ *
+ * @code{.unparsed}
+ * > Select a pagmo::population (related to a single-objective constrained problem)
+ * > Select a UDA (able to solve single-objective unconstrained problems)
+ * > while i < iter
+ * > > Compute the normalization factors (will depend on the current population)
+ * > > Compute the best, worst, highest (will depend on the current population)
+ * > > Evolve the population using the UDA and a penalized objective
+ * > > Reinsert the best decision vector from the previous evolution
+ * @endcode
+ *
+ * pagmo::cstrs_self_adaptive is a user-defined algorithm (UDA) that can be used to construct pagmo::algorithm objects.
+ *
+ * **NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+ * for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
+ * The number of function evaluation will be bounded to \p iters times the fevals made by one call to the inner UDA. The
+ * internal cache is reset at each iteration, but its size will grow unlimited during each callto
+ * the inner UDA evolve method.
+ *
+ * **NOTE** Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+ * corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  constraint is ignored if all
+ * the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
+ *
+ * **NOTE** The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner UDA employed and
+ * in particular to its parameters (generations / iterations)
+ *
+ * See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
+ * Transactions on Evolutionary Computation 7.5 (2003): 445-455.
+ */
 class cstrs_self_adaptive : public algorithm
 {
     // Enabler for the ctor from UDA.
@@ -410,43 +469,52 @@ class cstrs_self_adaptive : public algorithm
                       int>;
 
 public:
-    /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, trial).
-    // typedef std::tuple<unsigned long long, double, vector_double::size_type, double, unsigned> log_line_type;
+    /// Single entry of the log (iter, fevals, best_f, infeas, n. constraints violated, violation norm).
+    typedef std::tuple<unsigned, unsigned long long, double, double, vector_double::size_type, double> log_line_type;
     /// The log.
-    // typedef std::vector<log_line_type> log_type;
+    typedef std::vector<log_line_type> log_type;
     /// Default constructor.
     /**
+     *
+     * @param iters Number of iterations (calls to the inner UDA). After each iteration the penalty is adapted
      * The default constructor will initialize the algorithm with the following parameters:
-     * - inner algorithm: pagmo::de{};
+     * - inner algorithm: pagmo::de{1u};
      * - seed: random.
      *
      * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
      */
-    cstrs_self_adaptive() : algorithm(de{1}), m_iters(1u), m_verbosity(0u)
+    cstrs_self_adaptive(unsigned iters = 1u) : algorithm(de{1}), m_iters(iters), m_verbosity(0u), m_log()
     {
         const auto rnd = pagmo::random_device::next();
         m_seed = rnd;
         m_e.seed(rnd);
     }
-    /// Constructor
-
+    /// Constructor.
+    /**
+     *
+     * @param iters Number of iterations (calls to the inner UDA). After each iteration the penalty is adapted
+     * @param a a user-defined algorithm (UDA) that will be used to construct the inner algorithm.
+     * @param seed seed used by the internal random number generator (default is random).
+     *
+     * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
+     */
     template <typename T, ctor_enabler<T> = 0>
-    explicit cstrs_self_adaptive(T &&a, unsigned iters, unsigned seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_iters(iters), m_e(seed), m_seed(seed), m_verbosity(0u)
+    explicit cstrs_self_adaptive(unsigned iters, T &&a, unsigned seed = pagmo::random_device::next())
+        : algorithm(std::forward<T>(a)), m_iters(iters), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
     }
 
     /// Evolve method.
     /**
-     * This method will evolve the input population up to when \p stop consecutve runs of the internal
-     * algorithm do not improve the solution.
+     * This method will call evolve on the inner UDA \p iters times updating the penalty to be applied to the
+     * objective after each call
      *
      * @param pop population to be evolved.
      *
      * @return evolved population.
      *
-     * @throws std::invalid_argument if the problem is multi-objective or stochastic, or if the perturbation vector size
-     * does not equal the problem size.
+     * @throws std::invalid_argument if the problem is multi-objective or stochastic, or unconstrained and if the
+     * population does not contain at least 3 individuals.
      */
     population evolve(population pop) const
     {
@@ -483,7 +551,7 @@ public:
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
-        // m_log.clear();
+        m_log.clear();
         // cstrs_self_adaptive main loop
 
         // 1 - We create a dummy meta-problem that mantains a pointer to pop and uses it to define and adapt the penalty
@@ -601,17 +669,17 @@ public:
      * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals,
      * Violated, Viol.Norm and Trial.
      */
-    // const log_type &get_log() const
-    //{
-    //    return m_log;
-    //}
+    const log_type &get_log() const
+    {
+        return m_log;
+    }
     /// Algorithm name
     /**
      * @return a string containing the algorithm name.
      */
     std::string get_name() const
     {
-        return "Self-adaptive penalty for handling constraints";
+        return "Self-adaptive constraints handling";
     }
     /// Extra informations
     /**
@@ -620,6 +688,7 @@ public:
     std::string get_extra_info() const
     {
         std::ostringstream ss;
+        stream(ss, "\n\tIterations: ", m_iters);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
         stream(ss, "\n\n\tInner algorithm: ", static_cast<const algorithm *>(this)->get_name());
@@ -638,7 +707,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<algorithm>(this), m_iters, m_e, m_seed, m_verbosity); //, m_log);
+        ar(cereal::base_class<algorithm>(this), m_iters, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -664,7 +733,7 @@ private:
     mutable detail::random_engine_type m_e;
     unsigned m_seed;
     unsigned m_verbosity;
-    // mutable log_type m_log;
+    mutable log_type m_log;
 };
 
 } // namespace pagmo

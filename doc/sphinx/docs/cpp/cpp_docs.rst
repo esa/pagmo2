@@ -31,6 +31,7 @@ code your own algorithm
   algorithms/de1220
   algorithms/moead
   algorithms/mbh
+  algorithms/cstrs_self_adaptive
   algorithms/nsga2
   algorithms/pso
   algorithms/sade
