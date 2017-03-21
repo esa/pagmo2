@@ -1141,7 +1141,9 @@ BOOST_PYTHON_MODULE(core)
         .def("evolve", &archipelago::evolve, "")
         .def("busy", &archipelago::busy, "")
         .def("wait", &archipelago::wait, "")
+        .def("get", &archipelago::get, "")
         .def("__getitem__", +[](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; },
              bp::return_internal_reference<>())
+        // NOTE: docs for push_back() are in the Python reimplementation.
         .def("_push_back", +[](archipelago &archi, const island &isl) { archi.push_back(isl); });
 }

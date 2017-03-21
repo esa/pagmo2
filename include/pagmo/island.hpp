@@ -33,7 +33,6 @@ see https://www.gnu.org/licenses/. */
 #include <array>
 #include <boost/any.hpp>
 #include <chrono>
-#include <cstdlib>
 #include <functional>
 #include <future>
 #include <iostream>
@@ -41,7 +40,6 @@ see https://www.gnu.org/licenses/. */
 #include <mutex>
 #include <stdexcept>
 #include <string>
-#include <system_error>
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
@@ -386,7 +384,7 @@ struct island_data {
  * evolved population. Since internally the pagmo::island class uses a separate thread of execution to provide
  * asynchronous behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact
  * with the UDI while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or
- * call the <tt>get_name()</tt>, <tt>get_extra_info()</tt> methods, etc.), otherwise the behaviour will be undefined.
+ * call the <tt>%get_name()</tt>, <tt>%get_extra_info()</tt> methods, etc.), otherwise the behaviour will be undefined.
  *
  * In addition to the mandatory <tt>run_evolve()</tt> method, a UDI may implement the following optional methods:
  * @code{.unparsed}
@@ -745,7 +743,7 @@ public:
         // operations), release the C++ lock and then call into Python to perform the copy.
         // NOTE: we need to protect with a mutex here because m_ptr->algo might be set concurrently
         // by set_algorithm() below, and we guarantee strong thread safety for this method.
-        // NOTE: it might be possible to replace this with atomic operations:
+        // NOTE: it might be possible to replace the locks with atomic operations:
         // http://en.cppreference.com/w/cpp/memory/shared_ptr/atomic
         std::unique_lock<std::mutex> lock(m_ptr->algo_mutex);
         auto new_algo_ptr = m_ptr->algo;
@@ -947,7 +945,6 @@ inline void thread_island::run_evolve(island &isl) const
         pagmo_throw(std::invalid_argument, "the 'thread_island' UDI requires a problem providing at least the 'basic' "
                                            "thread safety guarantee");
     }
-
     isl.set_population(isl.get_algorithm().evolve(isl.get_population()));
 }
 
@@ -971,12 +968,7 @@ public:
         // NOTE: in move operations we have to wait, because the ongoing
         // island evolutions are interacting with their hosting archi 'other'.
         // We cannot just move in the vector of islands.
-        try {
-            other.wait();
-        } catch (const std::system_error &) {
-            std::abort();
-        } catch (...) {
-        }
+        other.wait();
         // Move in the islands.
         m_islands = std::move(other.m_islands);
         // Re-direct the archi pointers to point to this.
@@ -1007,13 +999,10 @@ public:
     archipelago &operator=(archipelago &&other) noexcept
     {
         if (this != &other) {
-            // NOTE: as in the move ctor, we need to wait on other.
-            try {
-                other.wait();
-            } catch (const std::system_error &) {
-                std::abort();
-            } catch (...) {
-            }
+            // NOTE: as in the move ctor, we need to wait on other and this as well.
+            // This mirrors the island's behaviour.
+            wait();
+            other.wait();
             // Move in the islands.
             m_islands = std::move(other.m_islands);
             // Re-direct the archi pointers to point to this.
@@ -1025,6 +1014,9 @@ public:
     }
     ~archipelago()
     {
+        // NOTE: this is not strictly necessary, but it will not hurt. And, if we add further
+        // sanity checks, we know the archi is stopped.
+        wait();
         assert(std::all_of(m_islands.begin(), m_islands.end(),
                            [this](const std::unique_ptr<island> &iptr) { return iptr->m_ptr->archi_ptr == this; }));
     }
@@ -1034,6 +1026,8 @@ private:
     using push_back_enabler = n_ctor_enabler<Args...>;
 
 public:
+    // TODO document this cannot be used to set the island.
+    // TODO document that references remain valid after push_back().
     island &operator[](size_type i)
     {
         if (i >= size()) {
@@ -1066,17 +1060,20 @@ public:
             iptr->evolve();
         }
     }
-    void wait()
+    void wait() noexcept
+    {
+        for (const auto &iptr : m_islands) {
+            iptr->wait();
+        }
+    }
+    void get()
     {
         for (auto it = m_islands.begin(); it != m_islands.end(); ++it) {
             try {
-                (*it)->wait();
+                (*it)->get();
             } catch (...) {
                 for (it = it + 1; it != m_islands.end(); ++it) {
-                    try {
-                        (*it)->wait();
-                    } catch (...) {
-                    }
+                    (*it)->wait();
                 }
                 throw;
             }

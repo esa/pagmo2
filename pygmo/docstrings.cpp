@@ -3058,7 +3058,6 @@ first-out) fashion. The user may call :func:`~pygmo.core.island.wait()` or :func
 tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
 
 Raises:
-
     unspecified: any exception thrown by the underlying C++ method
 
 )";
@@ -3075,7 +3074,6 @@ The method will then raise the first exception raised by any task enqueued since
 or :func:`~pygmo.core.island.get()` were called.
 
 Raises:
-
     unspecified: any exception thrown by evolution tasks or by the underlying C++ method
 
 )";
@@ -3097,7 +3095,6 @@ std::string island_busy_docstring()
 Check island status.
 
 Returns:
-
     ``bool``: ``True`` if the island is evolving, ``False`` otherwise
 
 )";
@@ -3112,11 +3109,9 @@ Get the algorithm.
 It is safe to call this method while the island is evolving.
 
 Returns:
-
     :class:`~pygmo.core.algorithm`: a copy of the island's algorithm
 
 Raises:
-
     unspecified: any exception thrown by the underlying C++ method
 
 )";
@@ -3131,11 +3126,9 @@ Set the algorithm.
 It is safe to call this method while the island is evolving.
 
 Args:
-
     algo(:class:`~pygmo.core.algorithm`): the algorithm that will be copied into the island
 
 Raises:
-
     unspecified: any exception thrown by the underlying C++ method
 
 )";
@@ -3150,11 +3143,9 @@ Get the population.
 It is safe to call this method while the island is evolving.
 
 Returns:
-
     :class:`~pygmo.core.population`: a copy of the island's population
 
 Raises:
-
     unspecified: any exception thrown by the underlying C++ method
 
 )";
@@ -3169,11 +3160,9 @@ Set the population.
 It is safe to call this method while the island is evolving.
 
 Args:
-
     algo(:class:`~pygmo.core.population`): the population that will be copied into the island
 
 Raises:
-
     unspecified: any exception thrown by the underlying C++ method
 
 )";
@@ -3186,12 +3175,9 @@ std::string island_get_thread_safety_docstring()
 It is safe to call this method while the island is evolving.
 
 Returns:
-
-    ``tuple``: a tuple containing the :class:`~pygmo.core.thread_safety` levels of the
-      island's algorithm and problem
+    ``tuple``: a tuple containing the :class:`~pygmo.thread_safety` levels of the island's algorithm and problem
 
 Raises:
-
     unspecified: any exception thrown by the underlying C++ method
 
 )";
@@ -3211,11 +3197,9 @@ It is safe to call this method while the island is evolving.
 The ``get_name()`` method of the UDI must return a ``str``.
 
 Returns:
-
     ``str``: the name of the UDI
 
 Raises:
-
     unspecified: any exception thrown by the ``get_name()`` method of the UDI
 
 )";
@@ -3235,11 +3219,9 @@ It is safe to call this method while the island is evolving.
 The ``get_extra_info()`` method of the UDI must return a ``str``.
 
 Returns:
-
     ``str``: extra info about the UDI
 
 Raises:
-
     unspecified: any exception thrown by the ``get_extra_info()`` method of the UDI
 
 )";
