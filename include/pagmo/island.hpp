@@ -1184,13 +1184,17 @@ public:
     /// Evolve archipelago.
     /**
      * This method will call island::evolve() on all the islands of the archipelago.
+     * The input parameter \p n represent the number of times the <tt>run_evolve()</tt>
+     * method of the island's UDI is called within the evolution task.
+     *
+     * @param n the parameter that will be passed to island::evolve().
      *
      * @throws unspecified any exception thrown by island::evolve().
      */
-    void evolve()
+    void evolve(unsigned n = 1)
     {
         for (auto &iptr : m_islands) {
-            iptr->evolve();
+            iptr->evolve(n);
         }
     }
     /// Block until all evolutions have finished.

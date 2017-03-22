@@ -3320,14 +3320,19 @@ This class is the Python counterpart of the C++ class :cpp:class:`pagmo::archipe
 
 std::string archipelago_evolve_docstring()
 {
-    return R"(evolve()
+    return R"(evolve(n = 1)
 
 Evolve archipelago.
 
 This method will call :func:`pygmo.core.island.evolve()` on all the islands of the archipelago.
+The input parameter *n* represent the number of times the ``run_evolve()`` method of the island's
+UDI is called within the evolution task.
+
+Args:
+     n (``int``): the parameter that will be passed to :func:`pygmo.core.island.evolve()`
 
 Raises:
-    unspecified: any exception thrown by the invoked C++ method
+    unspecified: any exception thrown by :func:`pygmo.core.island.evolve()`
 
 )";
 }

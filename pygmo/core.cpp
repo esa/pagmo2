@@ -1181,7 +1181,8 @@ BOOST_PYTHON_MODULE(core)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<archipelago>)
         // Size.
         .def("__len__", &archipelago::size)
-        .def("evolve", &archipelago::evolve, pygmo::archipelago_evolve_docstring().c_str())
+        .def("evolve", +[](archipelago &archi, unsigned n) { archi.evolve(n); },
+             pygmo::archipelago_evolve_docstring().c_str(), boost::python::arg("n") = 1u)
         .def("busy", &archipelago::busy, pygmo::archipelago_busy_docstring().c_str())
         .def("wait", &archipelago::wait, pygmo::archipelago_wait_docstring().c_str())
         .def("get", &archipelago::get, pygmo::archipelago_get_docstring().c_str())
