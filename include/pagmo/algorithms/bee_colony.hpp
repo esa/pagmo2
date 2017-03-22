@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <tuple>
+#include <vector>
 
 #include "../algorithm.hpp"
 #include "../exceptions.hpp"
@@ -33,7 +34,7 @@ namespace pagmo
 class bee_colony
 {
 public:
-#if defined(DOXYGEN_INVOKED)
+#if defined(PAGMO_DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, curr_best, best)
     typedef std::tuple<unsigned, unsigned long long, double, double> log_line_type;
     /// The log
@@ -326,11 +327,11 @@ public:
     }
     /// Get log
     /**
-     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <tt>
-     * std::vector </tt> is a bee_colony::log_line_type containing: Gen, Fevals, Current best, Best as
-     * described in bee_colony::set_verbosity
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+     * <tt>std::vector</tt> is a bee_colony::log_line_type containing: Gen, Fevals, Current best, Best as
+     * described in bee_colony::set_verbosity().
      *
-     * @return an <tt> std::vector </tt> of bee_colony::log_line_type containing the logged values Gen, Fevals, Current
+     * @return an <tt> std::vector</tt> of bee_colony::log_line_type containing the logged values Gen, Fevals, Current
      * best, Best
      */
     const log_type &get_log() const
