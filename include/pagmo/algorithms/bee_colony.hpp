@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <tuple>
+#include <vector>
 
 #include "../algorithm.hpp"
 #include "../exceptions.hpp"
@@ -321,11 +322,11 @@ public:
     }
     /// Get log
     /**
-     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <tt>
-     * std::vector </tt> is a bee_colony::log_line_type containing: Gen, Fevals, Current best, Best as
-     * described in bee_colony::set_verbosity
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+     * <tt>std::vector</tt> is a bee_colony::log_line_type containing: Gen, Fevals, Current best, Best as
+     * described in bee_colony::set_verbosity().
      *
-     * @return an <tt> std::vector </tt> of bee_colony::log_line_type containing the logged values Gen, Fevals, Current
+     * @return an <tt> std::vector</tt> of bee_colony::log_line_type containing the logged values Gen, Fevals, Current
      * best, Best
      */
     const log_type &get_log() const
