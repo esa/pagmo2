@@ -33,15 +33,10 @@ namespace pagmo
 class bee_colony
 {
 public:
-#if defined(DOXYGEN_INVOKED)
     /// Single entry of the log (gen, fevals, curr_best, best)
     typedef std::tuple<unsigned, unsigned long long, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
-#else
-    using log_line_type = std::tuple<unsigned, unsigned long long, double, double>;
-    using log_type = std::vector<log_line_type>;
-#endif
 
     /// Constructor
     /**
