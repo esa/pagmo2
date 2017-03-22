@@ -626,22 +626,26 @@ public:
      * a call to island::evolve() will create an evolution task that will be pushed
      * to a queue, and then return immediately.
      * The tasks in the queue are consumed
-     * by a separate thread of execution managed by the pagmo::island object,
-     * which will invoke the <tt>run_evolve()</tt>
-     * method of the UDI to perform the actual evolution. The island's population will be updated
-     * at the end of each evolution task. Exceptions raised inside the tasks are stored within
-     * the island object, and can be re-raised by calling get().
+     * by a separate thread of execution managed by the pagmo::island object.
+     * Each task will invoke the <tt>run_evolve()</tt>
+     * method of the UDI \p n times consecutively to perform the actual evolution.
+     * The island's population will be updated at the end of each <tt>run_evolve()</tt>
+     * invocation. Exceptions raised inside the
+     * tasks are stored within the island object, and can be re-raised by calling get().
      *
      * It is possible to call this method multiple times to enqueue multiple evolution tasks, which
      * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() or island::get()
      * to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
+     *
+     * @param n the number of times the <tt>run_evolve()</tt> method of the UDI will be called
+     * within the evolution task.
      *
      * @throws unspecified any exception thrown by:
      * - threading primitives,
      * - memory allocation errors,
      * - the public interface of \p std::future.
      */
-    void evolve()
+    void evolve(unsigned n = 1)
     {
         // First add an empty future, so that if an exception is thrown
         // we will not have modified m_futures, nor we will have a future
@@ -651,7 +655,11 @@ public:
             // Move assign a new future provided by the enqueue() method.
             // NOTE: enqueue either returns a valid future, or throws without
             // having enqueued any task.
-            m_ptr->futures.back() = m_ptr->queue.enqueue([this]() { this->m_ptr->isl_ptr->run_evolve(*this); });
+            m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
+                for (auto i = 0u; i < n; ++i) {
+                    this->m_ptr->isl_ptr->run_evolve(*this);
+                }
+            });
         } catch (...) {
             // We end up here only if enqueue threw. In such a case, we need to cleanup
             // the empty future we added above before re-throwing and exiting.
@@ -715,13 +723,9 @@ public:
      */
     bool busy() const
     {
-        for (const auto &f : m_ptr->futures) {
-            assert(f.valid());
-            if (f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready) {
-                return true;
-            }
-        }
-        return false;
+        return std::any_of(m_ptr->futures.begin(), m_ptr->futures.end(), [](const std::future<void> &f) {
+            return f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready;
+        });
     }
     /// Get the algorithm.
     /**

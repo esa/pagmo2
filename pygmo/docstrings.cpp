@@ -3098,23 +3098,29 @@ If the keyword arguments list is invalid, a :exc:`KeyError` exception will be ra
 
 std::string island_evolve_docstring()
 {
-    return R"(evolve()
+    return R"(evolve(n = 1)
 
 Launch evolution.
 
 This method will evolve the island’s :class:`~pygmo.core.population` using the island’s :class:`~pygmo.core.algorithm`.
 The evolution happens asynchronously: a call to :func:`~pygmo.core.island.evolve()` will create an evolution task that
 will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution
-managed by the :class:`~pygmo.core.island` object, which will invoke the ``run_evolve()`` method of the UDI to perform the
-actual evolution. The island’s population will be updated at the end of each evolution task. Exceptions raised inside the tasks
-are stored within the island object, and can be re-raised by calling :func:`~pygmo.core.island.get()`.
+managed by the :class:`~pygmo.core.island` object. Each task will invoke the ``run_evolve()`` method of the UDI *n*
+times consecutively to perform the actual evolution. The island's population will be updated at the end of each ``run_evolve()``
+invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling
+:func:`~pygmo.core.island.get()`.
 
 It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
 first-out) fashion. The user may call :func:`~pygmo.core.island.wait()` or :func:`~pygmo.core.island.get()` to block until all
 tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
 
+Args:
+     n (``int``): the number of times the ``run_evolve()`` method of the UDI will be called within the evolution task
+
 Raises:
-    unspecified: any exception thrown by the underlying C++ method
+    OverflowError: if *n* is negative or larger than an implementation-defined value
+    unspecified: any exception thrown by the underlying C++ method, or by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }

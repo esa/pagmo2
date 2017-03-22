@@ -1149,7 +1149,8 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<island>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
-        .def("evolve", &island::evolve, pygmo::island_evolve_docstring().c_str())
+        .def("evolve", +[](island &isl, unsigned n) { isl.evolve(n); }, pygmo::island_evolve_docstring().c_str(),
+             boost::python::arg("n") = 1u)
         .def("busy", &island::busy, pygmo::island_busy_docstring().c_str())
         .def("wait", &island::wait, pygmo::island_wait_docstring().c_str())
         .def("get", &island::get, pygmo::island_get_docstring().c_str())
