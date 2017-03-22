@@ -29,6 +29,10 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE island_test
 #include <boost/test/included/unit_test.hpp>
 
+#include <atomic>
+#include <boost/lexical_cast.hpp>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 #include <thread>
 #include <type_traits>
@@ -39,11 +43,24 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 
 struct udi_01 {
-    void run_evolve(island &) const;
+    void run_evolve(island &) const
+    {
+    }
+    std::string get_name() const
+    {
+        return "udi_01";
+    }
+    std::string get_extra_info() const
+    {
+        return "extra bits";
+    }
 };
 
 struct udi_02 {
@@ -168,4 +185,150 @@ BOOST_AUTO_TEST_CASE(island_evolve)
     island isl{de{}, population{rosenbrock{}, 25}};
     isl.evolve(0);
     isl.get();
+    isl.evolve();
+    isl.get();
+    isl.evolve(20);
+    isl.get();
+    // Copy/move operations with a few tasks queued.
+    auto enqueue_n = [](island &is, int n) {
+        for (auto i = 0; i < n; ++i) {
+            is.evolve(20);
+        }
+    };
+    enqueue_n(isl, 10);
+    auto isl2(isl);
+    auto isl3(std::move(isl));
+    isl = island{de{}, population{rosenbrock{}, 25}};
+    enqueue_n(isl, 10);
+    isl2 = isl;
+    isl3 = std::move(isl);
+    isl2.wait();
+    isl3.get();
+}
+
+static std::atomic_bool flag = ATOMIC_VAR_INIT(false);
+
+struct prob_01 {
+    vector_double fitness(const vector_double &) const
+    {
+        while (!flag.load()) {
+        }
+        return {.5};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+};
+
+BOOST_AUTO_TEST_CASE(island_get_wait_busy)
+{
+    flag.store(true);
+    island isl{de{}, population{prob_01{}, 25}};
+    BOOST_CHECK(!isl.busy());
+    flag.store(false);
+    isl.evolve();
+    BOOST_CHECK(isl.busy());
+    flag.store(true);
+    isl.wait();
+    flag.store(false);
+    isl = island{de{}, population{rosenbrock{}, 3}};
+    isl.evolve(10);
+    isl.evolve(10);
+    isl.evolve(10);
+    isl.evolve(10);
+    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+    isl.get();
+    isl.wait();
+}
+
+struct prob_02 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {.5};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+struct algo_01 {
+    population evolve(const population &pop) const
+    {
+        return pop;
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(island_tread_safety)
+{
+    island isl{de{}, population{rosenbrock{}, 25}};
+    auto ts = isl.get_thread_safety();
+    BOOST_CHECK(ts[0] == thread_safety::basic);
+    BOOST_CHECK(ts[1] == thread_safety::basic);
+    isl.evolve();
+    isl.get();
+    isl = island{de{}, population{prob_02{}, 25}};
+    ts = isl.get_thread_safety();
+    BOOST_CHECK(ts[0] == thread_safety::basic);
+    BOOST_CHECK(ts[1] == thread_safety::none);
+    isl.evolve();
+    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+    isl = island{algo_01{}, population{rosenbrock{}, 25}};
+    ts = isl.get_thread_safety();
+    BOOST_CHECK(ts[0] == thread_safety::none);
+    BOOST_CHECK(ts[1] == thread_safety::basic);
+    isl.evolve();
+    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+    isl = island{algo_01{}, population{prob_02{}, 25}};
+    ts = isl.get_thread_safety();
+    BOOST_CHECK(ts[0] == thread_safety::none);
+    BOOST_CHECK(ts[1] == thread_safety::none);
+    isl.evolve();
+    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(island_name_info_stream)
+{
+    std::ostringstream oss;
+    island isl{de{}, population{rosenbrock{}, 25}};
+    oss << isl;
+    BOOST_CHECK(!oss.str().empty());
+    BOOST_CHECK(isl.get_name() == "Thread island");
+    BOOST_CHECK(isl.get_extra_info() == "");
+    oss.str("");
+    isl = island{udi_01{}, de{}, population{rosenbrock{}, 25}};
+    oss << isl;
+    BOOST_CHECK(!oss.str().empty());
+    BOOST_CHECK(isl.get_name() == "udi_01");
+    BOOST_CHECK(isl.get_extra_info() == "extra bits");
+}
+
+BOOST_AUTO_TEST_CASE(island_serialization)
+{
+    island isl{de{}, population{rosenbrock{}, 25}};
+    isl.evolve();
+    isl.get();
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(isl);
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(isl);
+    }
+    isl = island{de{}, population{rosenbrock{}, 25}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(isl);
+    }
+    auto after = boost::lexical_cast<std::string>(isl);
+    BOOST_CHECK_EQUAL(before, after);
 }

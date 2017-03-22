@@ -1014,8 +1014,13 @@ public:
     }
 
 private:
+#if defined(_MSC_VER)
+    template <typename... Args>
+    using n_ctor_enabler = int;
+#else
     template <typename... Args>
     using n_ctor_enabler = enable_if_t<std::is_constructible<island, Args &&...>::value, int>;
+#endif
 
 public:
     /// Constructor from \p n islands.
