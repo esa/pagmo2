@@ -151,9 +151,10 @@ public:
                 feasible_idx.push_back(i);
             }
         }
+        m_n_feasible = feasible_idx.size();
 
         // 3 - If the reference population contains only feasible fitnesses
-        if (infeasible_idx.size() == 0u) {
+        if (m_n_feasible == pop_size) {
             // Since no infeasible individuals exist in the reference population, we
             // still need to decide what to do when evaluating the fitness of a decision vector
             // not in the ref_pop. We here set the members so that all penalties are zero.
@@ -292,6 +293,7 @@ public:
             m_scaling_factor = 0.;
         }
     }
+    // Only for debug purposes
     friend std::ostream &operator<<(std::ostream &os, const penalized_udp &p)
     {
         auto pop_size = p.m_pop_ptr->size();
@@ -385,12 +387,14 @@ public:
     double m_i_hat_down;
     double m_i_hat_up;
     double m_i_hat_round;
+
+    vector_double::size_type m_n_feasible;
     // A NAKED pointer to the reference population, allowing to call the fitness function and later recover
     // the counters outside of the class, and avoiding unecessary copies. Use with care.
     population *m_pop_ptr;
     // The hash map connecting the decision vector hashes to their fitnesses
     mutable std::map<std::size_t, vector_double> m_fitness_map;
-    // The hasher (and impossible)
+    // The hasher
     boost::hash<std::vector<double>> m_decision_vector_hash;
 };
 }
@@ -466,7 +470,9 @@ class cstrs_self_adaptive : public algorithm
 
 public:
     /// Single entry of the log (iter, fevals, best_f, infeas, n. constraints violated, violation norm).
-    typedef std::tuple<unsigned, unsigned long long, double, double, vector_double::size_type, double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, double, double, vector_double::size_type, double,
+                       vector_double::size_type>
+        log_line_type;
     /// The log.
     typedef std::vector<log_line_type> log_type;
     /// Default constructor.
@@ -547,12 +553,12 @@ public:
         m_log.clear();
         // cstrs_self_adaptive main loop
 
-        // 1 - We create a dummy meta-problem that mantains a pointer to pop and uses it to define and adapt the penalty
-        // Upon consruction a cache is also initialized mapping decision vectors to constrained fitnesses.
-        detail::penalized_udp dummy{pop};
-        // 2 - We construct a new population with the dummy so that we can evolve it with single objective,
+        // 1 - We create a penalized meta-problem that mantains a pointer to pop and uses it to define and adapt the
+        // penalty. Upon consruction a cache is also initialized mapping decision vectors to constrained fitnesses.
+        detail::penalized_udp udp_p{pop};
+        // 2 - We construct a new population with the penalized udp so that we can evolve it with single objective,
         // unconstrained solvers. Upon construction the problem is copied and so is the cache.
-        population new_pop{dummy};
+        population new_pop{udp_p};
         // The following lines do not cause fevals increments as the cache is hit.
         for (decltype(NP) i = 0u; i < NP; ++i) {
             new_pop.push_back(pop.get_x()[i]);
@@ -581,7 +587,7 @@ public:
                     if (count % 50u == 1u) {
                         print("\n", std::setw(7), "Iter:", std::setw(15), "Fevals:", std::setw(15), "Best:",
                               std::setw(15), "Infeasibility:", std::setw(15), "Violated:", std::setw(15), "Viol. Norm:",
-                              '\n');
+                              std::setw(15), "N. Feasible:", '\n');
                     }
                     // 2 - Print
                     auto cur_best_f = pop.get_f()[pop.best_idx()];
@@ -593,15 +599,16 @@ public:
                     auto n = prob.get_nc() - c1eq.first - c1ineq.first;
                     auto l = c1eq.second + c1ineq.second;
                     auto infeas = penalized_udp_ptr->compute_infeasibility(penalized_udp_ptr->m_f_hat_down);
+                    auto n_feasible = penalized_udp_ptr->m_n_feasible;
                     print(std::setw(7), iter, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0],
-                          std::setw(15), infeas, std::setw(15), n, std::setw(15), l);
+                          std::setw(15), infeas, std::setw(15), n, std::setw(15), l, std::setw(15), n_feasible);
                     if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
                         std::cout << " i";
                     }
                     ++count;
                     std::cout << std::endl; // we flush here as we want the user to read in real time ...
                     // Logs
-                    m_log.push_back(log_line_type(iter, prob.get_fevals() - fevals0, cur_best_f[0], infeas, n, l));
+                    m_log.emplace_back(iter, prob.get_fevals() - fevals0, cur_best_f[0], infeas, n, l, n_feasible);
                 }
             }
             // We call the evolution on the unconstrained population (here is where fevals will increase)
@@ -646,33 +653,31 @@ public:
      * - 0: no verbosity,
      * - >0: will print and log one line each  \p level call to the inner algorithm.
      *
-     * Example (verbosity 100):
+     * Example (verbosity 10):
      * @code
-     * Iter:        Fevals:          Best: Infeasibility:      Violated:    Viol. Norm:
-     *     1              0       -85.0783        0.27686              9        113.517 i
-     *    11            200        -63.389       0.265589              5        115.934 i
-     *    21            400       -63.4911       0.223718              5        115.932 i
-     *    31            600       -64.3827        0.11351              4        115.931 i
-     *    41            798       -52.7867       0.102092              4        87.6829 i
-     *    51            996       -52.7867       0.185789              4        87.6829 i
-     *    61           1195       -52.9318       0.135594              4         87.667 i
-     *    71           1395       -53.2577       0.198257              4        87.5359 i
-     *    81           1595       -53.2145       0.193373              4        87.5176 i
-     *    91           1793       -53.4946        0.20727              4        87.5176 i
-     *   101           1992       -9.24713      0.0140202              3        3.66306 i
-     *   111           2191       -9.24713     0.00609212              3        3.66306 i
-     *   121           2391        -9.7824      0.0818012              3        2.80238 i
-     *   131           2590        -9.7824     0.00638764              3        2.80238 i
-     *   141           2789       -9.78008      0.0101844              3         2.4812 i
-     *   151           2988       -10.6099      0.0247001              3        1.90121 i
-     *   161           3188       -8.17669      0.0010254              1       0.870286 i
+     *   Iter:        Fevals:          Best: Infeasibility:      Violated:    Viol. Norm:   N. Feasible:
+     *       1              0       -69.2141       0.235562              6        117.743              0 i
+     *      11            200       -69.2141       0.248216              6        117.743              0 i
+     *      21            400       -29.4754      0.0711599              5          44.39              0 i
+     *      31            600       -30.0791      0.0878253              4        44.3803              0 i
+     *     ...            ...       ........      .........              .        .......              . .
+     *     211           4190       -7.68336    0.000341894              1       0.273829              0 i
+     *     221           4390       -7.89941     0.00031154              1       0.273829              0 i
+     *     231           4590       -8.38299    0.000168309              1       0.147935              0 i
+     *     241           4790       -8.38299    0.000181461              1       0.147935              0 i
+     *     251           4989       -8.71021    0.000191197              1       0.100357              0 i
+     *     261           5189       -8.71021    0.000165734              1       0.100357              0 i
+     *     271           5389       -10.7421              0              0              0              3
+     *     281           5585       -10.7421              0              0              0              3
+     *     291           5784       -11.4868              0              0              0              4
+
      * @endcode
      * \p Iter is the iteration number, \p Fevals is the number of fitness evaluations, \p Best is the objective
      * function of the best fitness currently in the population, \p Infeasibility is the normailized infeasibility
      * measure, \p Violated is the number of constraints currently violated by the best solution, <tt>Viol. Norm</tt> is
-     * the norm of the violation (discounted already by the constraints tolerance).
-     * The small \p i appearing at the end of the line stands for "infeasible" and will disappear only
-     * once \p Violated is 0.
+     * the norm of the violation (discounted already by the constraints tolerance) and N. Feasible is the number of
+     * feasible individuals in the current iteration. The small \p i appearing at the end of the line stands for
+     * "infeasible" and will disappear only once \p Violated is 0.
      *
      * @param level verbosity level.
      */
