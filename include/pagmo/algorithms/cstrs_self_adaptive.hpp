@@ -170,7 +170,7 @@ public:
         }
 
         // 4 - First case: the population contains at least one feasible solution
-        population::size_type hat_down_idx = -1, hat_up_idx = -1, hat_round_idx = -1;
+        population::size_type hat_down_idx = 0u, hat_up_idx = 0u, hat_round_idx = 0u;
         if (feasible_idx.size() > 0u) {
             // 4a - hat_down, a.k.a feasible individual with lowest objective value in the ref_pop
             hat_down_idx = feasible_idx[0];
