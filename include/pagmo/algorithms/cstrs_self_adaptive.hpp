@@ -123,7 +123,9 @@ public:
     // Call to this method updates all the members that are used to penalize the objective function
     // As the penalization algorithm depends heavily on the ref population this method takes care of
     // updating the necessary information. It also builds the hash map used to avoid unecessary fitness
-    // evaluations
+    // evaluations. We exclude this method from the test as all of its corner cases are difficult to trigger
+    // and test for correctness
+    // LCOV_EXCL_START
     void update()
     {
         auto pop_size = m_pop_ptr->size();
@@ -293,6 +295,8 @@ public:
             m_scaling_factor = 0.;
         }
     }
+    // LCOV_EXCL_STOP
+
     // Only for debug purposes
     friend std::ostream &operator<<(std::ostream &os, const penalized_udp &p)
     {
@@ -621,8 +625,8 @@ public:
                 if (it_f != penalized_udp_ptr->m_fitness_map.end()) { // cash hit
                     pop.set_xf(i, x, it_f->second);
                 } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem,
-                         // but should never happen)
-                    pop.set_x(i, x);
+                         // but should never happen hence we do not test it)
+                    pop.set_x(i, x); // LCOV_EXCL_LINE
                 }
             }
             pop.set_xf(worst_idx, best_x, best_f);

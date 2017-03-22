@@ -146,6 +146,10 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction)
         cstrs_self_adaptive user_algo{150u, de{10u, 0.8, 0.9, 2u, 1e-6, 1e-6, 32u}, 32u};
         BOOST_CHECK_THROW(user_algo.evolve(population{rosenbrock{}, 15u}), std::invalid_argument);
     }
+    {
+        cstrs_self_adaptive user_algo{150u, de{10u, 0.8, 0.9, 2u, 1e-6, 1e-6, 32u}, 32u};
+        BOOST_CHECK_THROW(user_algo.evolve(population{hock_schittkowsky_71{}, 3u}), std::invalid_argument);
+    }
     // And a clean exit for 0 iterations
     problem prob{hock_schittkowsky_71{}};
     population pop{prob, 10u};
