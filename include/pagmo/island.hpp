@@ -954,6 +954,8 @@ inline void thread_island::run_evolve(island &isl) const
 
 /// Archipelago.
 /**
+ * \image html archi.png
+ *
  * An archipelago is a collection of pagmo::island objects which provides a convenient way to perform
  * multiple optimisations in parallel.
  */
