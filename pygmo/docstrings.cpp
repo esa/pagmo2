@@ -1701,7 +1701,7 @@ std::string bee_colony_docstring()
 {
     return R"(__init__(gen = 1, limit = 1, seed = random)
 
-Artificial Bee Colony
+Artificial Bee Colony.
 
 Args:
     gen (``int``): number of generations
