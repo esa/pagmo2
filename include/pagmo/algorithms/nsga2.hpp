@@ -205,7 +205,7 @@ public:
                     print('\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, ideal_point));
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, ideal_point);
                 }
             }
 
