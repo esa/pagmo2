@@ -61,9 +61,9 @@ namespace detail
  */
 struct apply_adaptive_penalty {
 public:
-    /// Fake default constructor to please the is_udp type trait
+    /// Unused default constructor to please the is_udp type trait
     apply_adaptive_penalty(){};
-    /// Constructs the udp. At construction all member get initialized using the incoming pop
+    /// Constructs the udp. At construction all member get initialized calling update().
     apply_adaptive_penalty(population &pop) : m_fitness_map(), m_decision_vector_hash()
     {
         // Only constrained problems can use this
@@ -169,13 +169,18 @@ public:
             m_scaling_factor = 0.;
             m_i_hat_up = 0.;
             m_i_hat_down = 0.;
+            // We init these as well even though they will not be used
+            m_i_hat_round = 0.;
+            m_f_hat_down = m_pop_ptr->get_f()[0];
+            m_f_hat_up = m_pop_ptr->get_f()[0];
+            m_f_hat_round = m_pop_ptr->get_f()[0];
             return;
         }
 
-        // 5 - First case: the population contains at least one feasible solution
+        // 4 - First case: the population contains at least one feasible solution
         population::size_type hat_down_idx = -1, hat_up_idx = -1, hat_round_idx = -1;
         if (feasible_idx.size() > 0u) {
-            // 5a - hat_down, a.k.a feasible individual with lowest objective value in the ref_pop
+            // 4a - hat_down, a.k.a feasible individual with lowest objective value in the ref_pop
             hat_down_idx = feasible_idx[0];
             for (decltype(feasible_idx.size()) i = 1u; i < feasible_idx.size(); ++i) {
                 auto current_idx = feasible_idx[i];
@@ -185,7 +190,7 @@ public:
             }
             auto f_hat_down = m_pop_ptr->get_f()[hat_down_idx];
 
-            // 5b - hat_up, its value depends if the population contains infeasible individual with objective
+            // 4b - hat_up, its value depends if the population contains infeasible individual with objective
             // function better than f_hat_down
             bool pop_contains_infeasible_f_better_x_hat_down = false;
             for (decltype(infeasible_idx.size()) i = 0u; i < infeasible_idx.size(); ++i) {
@@ -235,8 +240,8 @@ public:
                 m_apply_penalty_1 = false;
             }
         } else {
-            // 6 - Second case: there is no feasible solution in the reference population
-            // 6a - hat_down, a.k.a the individual with the lowest infeasibility (and minimum objective function)
+            // 5 - Second case: there is no feasible solution in the reference population
+            // 5a - hat_down, a.k.a the individual with the lowest infeasibility (and minimum objective function)
             hat_down_idx = 0u;
             for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
                 if (infeasibility[i] <= infeasibility[hat_down_idx]) {
@@ -249,7 +254,7 @@ public:
                     }
                 }
             }
-            // 6b - hat_up, ak.a. the individual with the maximum infeasibility (and maximum objective function)
+            // 5b - hat_up, ak.a. the individual with the maximum infeasibility (and maximum objective function)
             hat_up_idx = 0u;
             for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
                 if (infeasibility[i] >= infeasibility[hat_up_idx]) {
@@ -266,7 +271,7 @@ public:
             m_apply_penalty_1 = true;
         }
 
-        // 7 - hat round idx, a.k.a the solution with highest objective
+        // 6 - hat round idx, a.k.a the solution with highest objective
         // function value in the reference population
         hat_round_idx = 0u;
         for (decltype(pop_size) i = 1u; i < pop_size; ++i) {
@@ -389,8 +394,8 @@ public:
     double m_i_hat_down;
     double m_i_hat_up;
     double m_i_hat_round;
-    // A pointer to the reference population, allowing to call the fitness function and later recover
-    // the counters outside of the class, and avoiding unecessary copies.
+    // A NAKED pointer to the reference population, allowing to call the fitness function and later recover
+    // the counters outside of the class, and avoiding unecessary copies. Use with care.
     population *m_pop_ptr;
     // The hash map connecting the decision vector hashes to their fitnesses
     mutable std::map<std::size_t, vector_double> m_fitness_map;
@@ -562,6 +567,7 @@ public:
             new_pop.push_back(pop.get_x()[i]);
         }
         // Main iterations
+        auto ptr = new_pop.get_problem().extract<detail::apply_adaptive_penalty>();
         for (decltype(m_iters) iter = 1u; iter <= m_iters; ++iter) {
             // We record the current best decision vector and fitness as we will
             // reinsert it at each iteration
@@ -572,7 +578,7 @@ public:
             // As the population changes (evolves) we update all penalties and reset the cache
             // (the first iter this is not needed as upon construction this was already done and the pop
             // has not changed since)
-            new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->update();
+            ptr->update();
             for (decltype(new_pop.size()) i = 0u; i < new_pop.size(); ++i) {
                 new_pop.set_x(i, pop.get_x()[i]);
             }
@@ -595,9 +601,7 @@ public:
                                                                 prob.get_c_tol().data() + nec);
                     auto n = prob.get_nc() - c1eq.first - c1ineq.first;
                     auto l = c1eq.second + c1ineq.second;
-                    auto infeas
-                        = new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->compute_infeasibility(
-                            new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->m_f_hat_down);
+                    auto infeas = ptr->compute_infeasibility(ptr->m_f_hat_down);
                     print(std::setw(7), iter, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0],
                           std::setw(15), infeas, std::setw(15), n, std::setw(15), l);
                     if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
@@ -611,15 +615,12 @@ public:
             }
             // We call the evolution on the unconstrained population (here is where fevals will increase)
             new_pop = static_cast<const algorithm *>(this)->evolve(new_pop);
+            ptr = new_pop.get_problem().extract<detail::apply_adaptive_penalty>();
             // We update the original pop avoiding fevals thanks to the cache
             for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
                 auto x = new_pop.get_x()[i];
-                auto it_f = new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->m_fitness_map.find(
-                    new_pop.get_problem().extract<detail::apply_adaptive_penalty>()->m_decision_vector_hash(x));
-                if (it_f
-                    != new_pop.get_problem()
-                           .extract<detail::apply_adaptive_penalty>()
-                           ->m_fitness_map.end()) { // cash hit
+                auto it_f = ptr->m_fitness_map.find(ptr->m_decision_vector_hash(x));
+                if (it_f != ptr->m_fitness_map.end()) { // cash hit
                     pop.set_xf(i, x, it_f->second);
                 } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem,
                          // but should never happen)
