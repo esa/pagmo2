@@ -59,27 +59,18 @@ namespace detail
  * Evolutionary Computation, IEEE Transactions on, 7(5), 445-455 for the paper introducing the method.
  *
  */
-struct apply_adaptive_penalty {
+struct penalized_udp {
 public:
     /// Unused default constructor to please the is_udp type trait
-    apply_adaptive_penalty(){};
+    penalized_udp(){};
     /// Constructs the udp. At construction all member get initialized calling update().
-    apply_adaptive_penalty(population &pop) : m_fitness_map(), m_decision_vector_hash()
+    penalized_udp(population &pop) : m_fitness_map(), m_decision_vector_hash()
     {
-        // Only constrained problems can use this
-        if (pop.get_problem().get_nc() == 0u) {
-            pagmo_throw(std::invalid_argument, "Cannot define an adaptive penalty for unconstrained problems.");
-        }
-        // Only single objective problems can use this
-        if (pop.get_problem().get_nobj() != 1u) {
-            pagmo_throw(std::invalid_argument, "Cannot define an adaptive penalty for multi objective problems.");
-        }
-        // Population cannot contain less than 3 individuals
-        if (pop.size() < 4u) {
-            pagmo_throw(std::invalid_argument,
-                        "Cannot define an adaptive penalty for a population with less than 3 decision vectors");
-        }
-        // We assign the naked pointer THis will not change and pop has to change outside in order for update to matter.
+        assert(pop.get_problem().get_nc() != 0u);   // Only constrained problems can use this
+        assert(pop.get_problem().get_nobj() == 1u); // Only single objective problems can use this
+        assert(pop.size() >= 4u);                   // Population cannot contain less than 3 individuals
+
+        // We assign the naked pointer The pointer will be immutable (as in its never changed afterwards)
         m_pop_ptr = &pop;
         // Update all data members and init the cache
         update();
@@ -301,7 +292,7 @@ public:
             m_scaling_factor = 0.;
         }
     }
-    friend std::ostream &operator<<(std::ostream &os, const apply_adaptive_penalty &p)
+    friend std::ostream &operator<<(std::ostream &os, const penalized_udp &p)
     {
         auto pop_size = p.m_pop_ptr->size();
         // Evaluate all solutions infeasibility
@@ -558,7 +549,7 @@ public:
 
         // 1 - We create a dummy meta-problem that mantains a pointer to pop and uses it to define and adapt the penalty
         // Upon consruction a cache is also initialized mapping decision vectors to constrained fitnesses.
-        detail::apply_adaptive_penalty dummy{pop};
+        detail::penalized_udp dummy{pop};
         // 2 - We construct a new population with the dummy so that we can evolve it with single objective,
         // unconstrained solvers. Upon construction the problem is copied and so is the cache.
         population new_pop{dummy};
@@ -567,7 +558,7 @@ public:
             new_pop.push_back(pop.get_x()[i]);
         }
         // Main iterations
-        auto ptr = new_pop.get_problem().extract<detail::apply_adaptive_penalty>();
+        auto penalized_udp_ptr = new_pop.get_problem().extract<detail::penalized_udp>();
         for (decltype(m_iters) iter = 1u; iter <= m_iters; ++iter) {
             // We record the current best decision vector and fitness as we will
             // reinsert it at each iteration
@@ -578,7 +569,7 @@ public:
             // As the population changes (evolves) we update all penalties and reset the cache
             // (the first iter this is not needed as upon construction this was already done and the pop
             // has not changed since)
-            ptr->update();
+            penalized_udp_ptr->update();
             for (decltype(new_pop.size()) i = 0u; i < new_pop.size(); ++i) {
                 new_pop.set_x(i, pop.get_x()[i]);
             }
@@ -601,7 +592,7 @@ public:
                                                                 prob.get_c_tol().data() + nec);
                     auto n = prob.get_nc() - c1eq.first - c1ineq.first;
                     auto l = c1eq.second + c1ineq.second;
-                    auto infeas = ptr->compute_infeasibility(ptr->m_f_hat_down);
+                    auto infeas = penalized_udp_ptr->compute_infeasibility(penalized_udp_ptr->m_f_hat_down);
                     print(std::setw(7), iter, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0],
                           std::setw(15), infeas, std::setw(15), n, std::setw(15), l);
                     if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
@@ -615,12 +606,12 @@ public:
             }
             // We call the evolution on the unconstrained population (here is where fevals will increase)
             new_pop = static_cast<const algorithm *>(this)->evolve(new_pop);
-            ptr = new_pop.get_problem().extract<detail::apply_adaptive_penalty>();
+            penalized_udp_ptr = new_pop.get_problem().extract<detail::penalized_udp>();
             // We update the original pop avoiding fevals thanks to the cache
             for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
                 auto x = new_pop.get_x()[i];
-                auto it_f = ptr->m_fitness_map.find(ptr->m_decision_vector_hash(x));
-                if (it_f != ptr->m_fitness_map.end()) { // cash hit
+                auto it_f = penalized_udp_ptr->m_fitness_map.find(penalized_udp_ptr->m_decision_vector_hash(x));
+                if (it_f != penalized_udp_ptr->m_fitness_map.end()) { // cash hit
                     pop.set_xf(i, x, it_f->second);
                 } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem,
                          // but should never happen)
