@@ -29,14 +29,16 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_CSTRS_SELF_ADAPTIVE_HPP
 #define PAGMO_ALGORITHMS_CSTRS_SELF_ADAPTIVE_HPP
 
-#include <boost/functional/hash.hpp>
+#include <boost/functional/hash.hpp> // boost::hash_combine
 #include <iomanip>
 #include <random>
 #include <string>
 #include <tuple>
+#include <unordered_map>
 
 #include "../algorithm.hpp"
 #include "../algorithms/de.hpp"
+#include "../detail/custom_comparisons.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
@@ -397,7 +399,9 @@ public:
     // the counters outside of the class, and avoiding unecessary copies. Use with care.
     population *m_pop_ptr;
     // The hash map connecting the decision vector hashes to their fitnesses
-    mutable std::map<vector_double, vector_double> m_fitness_map;
+    mutable std::unordered_map<vector_double, vector_double, detail::hash<vector_double>,
+                               detail::equal_to_vf<vector_double>>
+        m_fitness_map;
 };
 }
 

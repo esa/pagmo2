@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_CUSTOM_COMPARISONS_HPP
 
 #include <type_traits>
+#include <vector>
 
 #include "../type_traits.hpp"
 
@@ -84,6 +85,41 @@ inline bool equal_to_f(T a, T b)
     }
     return std::isnan(a) && std::isnan(b);
 }
+
+// equal_to_vf than compares vectors of floating point types considering nan==nan
+template <typename T>
+struct equal_to_vf {
+};
+
+template <typename T>
+struct equal_to_vf<std::vector<T>> {
+    bool operator()(const std::vector<T> &lhs, const std::vector<T> &rhs) const
+    {
+        if (lhs.size() != rhs.size()) {
+            return false;
+        } else {
+            return std::equal(lhs.begin(), lhs.end(), rhs.begin(), equal_to_f<T>);
+        }
+    }
+};
+
+// hash can be used to hash vectors of floating point types
+template <typename T>
+struct hash {
+};
+
+template <typename T>
+struct hash<std::vector<T>> {
+    size_t operator()(std::vector<T> const &in) const
+    {
+        size_t retval = 0u;
+        for (T el : in) {
+            // Combine the hash of the current vector with the hashes of the previous ones
+            boost::hash_combine(retval, el);
+        }
+        return retval;
+    }
+};
 
 } // end of detail namespace
 } // end of pagmo namespace
