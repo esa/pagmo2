@@ -64,7 +64,7 @@ public:
     /// Unused default constructor to please the is_udp type trait
     penalized_udp(){};
     /// Constructs the udp. At construction all member get initialized calling update().
-    penalized_udp(population &pop) : m_fitness_map(), m_decision_vector_hash()
+    penalized_udp(population &pop) : m_fitness_map()
     {
         assert(pop.get_problem().get_nc() != 0u);   // Only constrained problems can use this
         assert(pop.get_problem().get_nobj() == 1u); // Only single objective problems can use this
@@ -89,7 +89,7 @@ public:
         vector_double f(1, 0.);
 
         // 1 - We check if the decision vector is already in the reference population and return that or recompute.
-        auto it_f = m_fitness_map.find(m_decision_vector_hash(x));
+        auto it_f = m_fitness_map.find(x);
         if (it_f != m_fitness_map.end()) {
             f[0] = it_f->second[0];
             solution_infeasibility = compute_infeasibility(it_f->second);
@@ -97,7 +97,7 @@ public:
             auto fit = m_pop_ptr->get_problem().fitness(x);
             f[0] = fit[0];
             solution_infeasibility = compute_infeasibility(fit);
-            m_fitness_map[m_decision_vector_hash(x)] = fit;
+            m_fitness_map[x] = fit;
         }
         // 2 - Then we apply the penalty
         if (solution_infeasibility > 0.) {
@@ -133,7 +133,7 @@ public:
         // some decision vector
         m_fitness_map.clear();
         for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
-            m_fitness_map[m_decision_vector_hash(m_pop_ptr->get_x()[i])] = m_pop_ptr->get_f()[i];
+            m_fitness_map[m_pop_ptr->get_x()[i]] = m_pop_ptr->get_f()[i];
         }
 
         // Init some data member values
@@ -397,9 +397,7 @@ public:
     // the counters outside of the class, and avoiding unecessary copies. Use with care.
     population *m_pop_ptr;
     // The hash map connecting the decision vector hashes to their fitnesses
-    mutable std::map<std::size_t, vector_double> m_fitness_map;
-    // The hasher
-    boost::hash<std::vector<double>> m_decision_vector_hash;
+    mutable std::map<vector_double, vector_double> m_fitness_map;
 };
 }
 
@@ -621,7 +619,7 @@ public:
             // We update the original pop avoiding fevals thanks to the cache
             for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
                 auto x = new_pop.get_x()[i];
-                auto it_f = penalized_udp_ptr->m_fitness_map.find(penalized_udp_ptr->m_decision_vector_hash(x));
+                auto it_f = penalized_udp_ptr->m_fitness_map.find(x);
                 if (it_f != penalized_udp_ptr->m_fitness_map.end()) { // cash hit
                     pop.set_xf(i, x, it_f->second);
                 } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem,
