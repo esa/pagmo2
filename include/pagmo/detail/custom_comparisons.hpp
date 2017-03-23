@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_CUSTOM_COMPARISONS_HPP
 #define PAGMO_CUSTOM_COMPARISONS_HPP
 
+#include <boost/functional/hash.hpp> // boost::hash_combine
 #include <type_traits>
 #include <vector>
 
@@ -89,10 +90,6 @@ inline bool equal_to_f(T a, T b)
 // equal_to_vf than compares vectors of floating point types considering nan==nan
 template <typename T>
 struct equal_to_vf {
-};
-
-template <typename T>
-struct equal_to_vf<std::vector<T>> {
     bool operator()(const std::vector<T> &lhs, const std::vector<T> &rhs) const
     {
         if (lhs.size() != rhs.size()) {
@@ -103,13 +100,9 @@ struct equal_to_vf<std::vector<T>> {
     }
 };
 
-// hash can be used to hash vectors of floating point types
+// hash_vf can be used to hash vectors of floating point types
 template <typename T>
-struct hash {
-};
-
-template <typename T>
-struct hash<std::vector<T>> {
+struct hash_vf {
     size_t operator()(std::vector<T> const &in) const
     {
         size_t retval = 0u;

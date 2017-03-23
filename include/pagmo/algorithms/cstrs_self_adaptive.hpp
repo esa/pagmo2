@@ -29,7 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_CSTRS_SELF_ADAPTIVE_HPP
 #define PAGMO_ALGORITHMS_CSTRS_SELF_ADAPTIVE_HPP
 
-#include <boost/functional/hash.hpp> // boost::hash_combine
 #include <iomanip>
 #include <random>
 #include <string>
@@ -401,8 +400,7 @@ public:
     // The hash map connecting the decision vector to their fitnesses. The use of
     // custom comparison is needed to take care of nans, while the custom hasher is needed as std::hash does not
     // work on std::vectors
-    mutable std::unordered_map<vector_double, vector_double, detail::hash<vector_double>,
-                               detail::equal_to_vf<vector_double>>
+    mutable std::unordered_map<vector_double, vector_double, detail::hash_vf<double>, detail::equal_to_vf<double>>
         m_fitness_map;
 };
 }
