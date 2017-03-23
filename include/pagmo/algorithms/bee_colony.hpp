@@ -19,6 +19,8 @@ namespace pagmo
 {
 /// Artificial Bee Colony Algorithm
 /**
+ * \image html BeeColony.gif "One funny bee" width=3cm
+ *
  * Artificial Bee Colony is an optimization algorithm based on the intelligent foraging behaviour of honey bee swarm,
  * proposed by Karaboga in 2005.
  *
