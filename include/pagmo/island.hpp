@@ -1042,8 +1042,13 @@ public:
     template <typename... Args, n_ctor_enabler<Args...> = 0>
     explicit archipelago(size_type n, Args &&... args)
     {
+        // NOTE: fwd-construct an island and then
+        // copy it. We cannot directly forward the args into push_back() because
+        // in case of n > 1 we might end up constructing from moved-from
+        // objects.
+        island isl(std::forward<Args>(args)...);
         for (size_type i = 0; i < n; ++i) {
-            push_back(std::forward<Args>(args)...);
+            push_back(isl);
         }
     }
     /// Copy assignment.
