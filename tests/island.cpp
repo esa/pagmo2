@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <atomic>
 #include <boost/lexical_cast.hpp>
+#include <initializer_list>
 #include <sstream>
 #include <stdexcept>
 #include <string>

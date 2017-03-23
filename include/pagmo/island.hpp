@@ -1030,8 +1030,8 @@ public:
      * **NOTE**: this constructor is enabled only if the parameter pack \p Args
      * can be used to construct a pagmo::island.
      *
-     * This constructor will construct \p n pagmo::island instances using \p Args
-     * and it will then add them to the archipelago via archipelago::push_back().
+     * This constructor will forward \p n times the input arguments \p args to the
+     * push_back() method.
      *
      * @param n the desired number of islands.
      * @param args the arguments that will be used for the construction of each island.
@@ -1042,13 +1042,12 @@ public:
     template <typename... Args, n_ctor_enabler<Args...> = 0>
     explicit archipelago(size_type n, Args &&... args)
     {
-        // NOTE: fwd-construct an island and then
-        // copy it. We cannot directly forward the args into push_back() because
-        // in case of n > 1 we might end up constructing from moved-from
-        // objects.
-        island isl(std::forward<Args>(args)...);
         for (size_type i = 0; i < n; ++i) {
-            push_back(isl);
+            // NOTE: don't forward, in order to avoid moving twice
+            // from the same objects. This also ensures that, when
+            // using a ctor without seed, the seed is set to random
+            // for each island.
+            push_back(args...);
         }
     }
     /// Copy assignment.

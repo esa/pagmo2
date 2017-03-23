@@ -15,7 +15,7 @@ bash miniconda.sh -b -p $HOME/miniconda
 export PATH="$HOME/miniconda/bin:$PATH"
 conda config --add channels conda-forge --force
 
-conda_pkgs="boost>=1.55 cmake>=3.2 eigen"
+conda_pkgs="boost>=1.55 boost-cpp>=1.55 cmake>=3.2 eigen"
 
 conda create -q -p $deps_dir -y $conda_pkgs
 source activate $deps_dir
