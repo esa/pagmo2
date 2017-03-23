@@ -174,14 +174,14 @@ BOOST_AUTO_TEST_CASE(mbh_serialization_test)
 }
 
 struct ts1 {
-    population evolve(const population &pop) const
+    population evolve(population pop) const
     {
         return pop;
     }
 };
 
 struct ts2 {
-    population evolve(const population &pop) const
+    population evolve(population pop) const
     {
         return pop;
     }
@@ -192,7 +192,7 @@ struct ts2 {
 };
 
 struct ts3 {
-    population evolve(const population &pop) const
+    population evolve(population pop) const
     {
         return pop;
     }
@@ -207,4 +207,27 @@ BOOST_AUTO_TEST_CASE(mbh_threading_test)
     BOOST_CHECK((algorithm{mbh{ts1{}, 5u, 1e-2, 23u}}.get_thread_safety() == thread_safety::basic));
     BOOST_CHECK((algorithm{mbh{ts2{}, 5u, 1e-2, 23u}}.get_thread_safety() == thread_safety::none));
     BOOST_CHECK((algorithm{mbh{ts3{}, 5u, 1e-2, 23u}}.get_thread_safety() == thread_safety::basic));
+}
+
+struct ia1 {
+    population evolve(const population &pop) const
+    {
+        return pop;
+    }
+    double m_data = 0.;
+};
+
+BOOST_AUTO_TEST_CASE(mbh_inner_algo_get_test)
+{
+    // We check that the correct overload is called according to this being const or not
+    {
+        const mbh uda(ia1{}, 5u, 1e-2, 23u);
+        BOOST_CHECK(std::is_const<decltype(uda)>::value);
+        BOOST_CHECK(std::is_const<std::remove_reference<decltype(uda.get_inner_algorithm())>::type>::value);
+    }
+    {
+        mbh uda(ia1{}, 5u, 1e-2, 23u);
+        BOOST_CHECK(!std::is_const<decltype(uda)>::value);
+        BOOST_CHECK(!std::is_const<std::remove_reference<decltype(uda.get_inner_algorithm())>::type>::value);
+    }
 }

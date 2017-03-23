@@ -56,9 +56,6 @@ extern std::tuple<std::unique_ptr<bp::class_<pagmo::translate>>, std::unique_ptr
 
 // pagmo::algorithm.
 extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
-
-// meta-algorithms.
-extern std::tuple<std::unique_ptr<bp::class_<pagmo::mbh>>> meta_algos_ptrs;
 }
 
 #endif

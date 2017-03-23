@@ -81,7 +81,7 @@ namespace pagmo
  * See: http://arxiv.org/pdf/cond-mat/9803344 for the paper introducing the basin hopping idea for a Lennard-Jones
  * cluster optimization.
  */
-class mbh : public algorithm
+class mbh
 {
     // Enabler for the ctor from UDA.
     template <typename T>
@@ -104,7 +104,7 @@ public:
      *
      * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
      */
-    mbh() : algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_verbosity(0u)
+    mbh() : m_algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_verbosity(0u)
     {
         const auto rnd = pagmo::random_device::next();
         m_seed = rnd;
@@ -130,7 +130,7 @@ public:
      */
     template <typename T, ctor_enabler<T> = 0>
     explicit mbh(T &&a, unsigned stop, double perturb, unsigned seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
+        : m_algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
     {
         if (perturb > 1. || perturb <= 0. || std::isnan(perturb)) {
             pagmo_throw(std::invalid_argument, "The scalar perturbation must be in (0, 1], while a value of "
@@ -157,7 +157,7 @@ public:
      */
     template <typename T, ctor_enabler<T> = 0>
     explicit mbh(T &&a, unsigned stop, vector_double perturb, unsigned seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
+        : m_algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
     {
         if (!std::all_of(perturb.begin(), perturb.end(),
                          [](double item) { return (item > 0. && item <= 1. && !std::isnan(item)); })) {
@@ -238,7 +238,7 @@ public:
                 pop.set_x(j, tmp_x); // fitness is evaluated here
             }
             // 3 - We evolve the current population with the selected algorithm
-            pop = static_cast<const algorithm *>(this)->evolve(pop);
+            pop = m_algorithm.evolve(pop);
             i++;
             // 4 - We reset the counter if we have improved, otherwise we reset the population
             if (compare_fc(pop.get_f()[pop.best_idx()], pop_old.get_f()[pop_old.best_idx()], nec, prob.get_c_tol())) {
@@ -272,7 +272,7 @@ public:
                 ++count;
                 std::cout << std::endl; // we flush here as we want the user to read in real time ...
                 // Logs
-                m_log.push_back(log_line_type(prob.get_fevals() - fevals0, cur_best_f[0], n, l, i));
+                m_log.emplace_back(prob.get_fevals() - fevals0, cur_best_f[0], n, l, i);
             }
         }
         // We extract chromosomes and fitnesses
@@ -284,6 +284,7 @@ public:
      */
     void set_seed(unsigned seed)
     {
+        m_e.seed(seed);
         m_seed = seed;
     }
     /// Get the seed.
@@ -359,13 +360,43 @@ public:
         }
         m_perturb = perturb;
     }
+    /// Algorithm's thread safety level.
+    /**
+     * The thread safety of a meta-algorithm is defined by the thread safety of the interal pagmo::algorithm.
+     *
+     * @return the thread safety level of the interal pagmo::algorithm.
+     */
+    thread_safety get_thread_safety() const
+    {
+        return m_algorithm.get_thread_safety();
+    }
+    /// Getter for the inner algorithm
+    /**
+     * Returns a const reference to the inner pagmo::algorithm
+     *
+     * @return a const reference to the inner pagmo::algorithm
+     */
+    const algorithm &get_inner_algorithm() const
+    {
+        return m_algorithm;
+    }
+    /// Getter for the inner algorithm
+    /**
+     * Returns a reference to the inner pagmo::algorithm
+     *
+     * @return a reference to the inner pagmo::algorithm
+     */
+    algorithm &get_inner_algorithm()
+    {
+        return m_algorithm;
+    }
     /// Get log.
     /**
      * A log containing relevant quantities monitoring the last call to mbh::evolve(). Each element of the returned
      * <tt>std::vector</tt> is a mbh::log_line_type containing: \p Fevals, \p Best, \p Violated, <tt>Viol. Norm</tt> and
      * \p Trial as described in mbh::set_verbosity().
      *
-     * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals,
+     * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals, Best,
      * Violated, Viol.Norm and Trial.
      */
     const log_type &get_log() const
@@ -391,9 +422,9 @@ public:
         stream(ss, "\n\tPerturbation vector: ", m_perturb);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
-        stream(ss, "\n\n\tInner algorithm: ", static_cast<const algorithm *>(this)->get_name());
+        stream(ss, "\n\n\tInner algorithm: ", m_algorithm.get_name());
         stream(ss, "\n\tInner algorithm extra info: ");
-        stream(ss, "\n", static_cast<const algorithm *>(this)->get_extra_info());
+        stream(ss, "\n", m_algorithm.get_extra_info());
         return ss.str();
     }
     /// Object serialization
@@ -407,28 +438,11 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<algorithm>(this), m_stop, m_perturb, m_e, m_seed, m_verbosity, m_log);
+        ar(m_algorithm, m_stop, m_perturb, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
-    // Delete all that we do not want to inherit from algorithm.
-    // A - Common to all meta
-    bool has_set_seed() const = delete;
-    bool is_stochastic() const = delete;
-    bool has_set_verbosity() const = delete;
-    template <typename Archive>
-    void save(Archive &) const = delete;
-    template <typename Archive>
-    void load(Archive &) = delete;
-
-// The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
-// it would just result in a "weird" behaviour in case the user would try to stream this object
-#if __GNUC__ > 4
-    // NOTE: We delete the streaming operator overload called with mbh, otherwise the inner algo would stream
-    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it.
-    friend std::ostream &operator<<(std::ostream &, const mbh &) = delete;
-#endif
-
+    algorithm m_algorithm;
     unsigned m_stop;
     // The member m_perturb is mutable as to allow to construct mbh also using a perturbation defined as a scalar
     // (in which case upon the first call to evolve it is expanded to the problem dimension)

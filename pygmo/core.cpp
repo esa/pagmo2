@@ -172,10 +172,8 @@ namespace pygmo
 std::unique_ptr<bp::class_<problem>> problem_ptr{};
 decltype(meta_probs_ptrs) meta_probs_ptrs{};
 
-// Algorithm and meta-algorithm classes.
+// Algorithm classes.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
-decltype(meta_algos_ptrs) meta_algos_ptrs{};
-}
 
 // The cleanup function.
 // This function will be registered to be called when the pygmo core module is unloaded
@@ -190,7 +188,6 @@ static inline void cleanup()
     pygmo::meta_probs_ptrs = decltype(pygmo::meta_probs_ptrs){};
 
     pygmo::algorithm_ptr.reset();
-    pygmo::meta_algos_ptrs = decltype(pygmo::meta_algos_ptrs){};
 }
 
 // Serialization support for the population class.
@@ -364,33 +361,6 @@ struct meta_problem_connector {
 static inline void connect_meta_problems()
 {
     pagmo::detail::tuple_for_each(pygmo::meta_probs_ptrs, meta_problem_connector{});
-}
-
-// Metaprogramming for the implementation of connect_meta_algorithms().
-struct meta_algorithm_connector {
-    template <typename Meta>
-    struct runner {
-        template <typename Meta2>
-        void operator()(std::unique_ptr<bp::class_<Meta2>> &ptr) const
-        {
-            // Construct Meta2 from Meta (this could be the same meta).
-            pygmo::make_meta_algorithm_init<Meta2, Meta>{}(*ptr);
-            // Extract Meta from Meta2.
-            ptr->def("_cpp_extract", &pygmo::generic_cpp_extract<Meta2, Meta>, bp::return_internal_reference<>());
-        }
-    };
-    template <typename Meta>
-    void operator()(std::unique_ptr<bp::class_<Meta>> &) const
-    {
-        // We need a nested iteration over all the metas.
-        pagmo::detail::tuple_for_each(pygmo::meta_algos_ptrs, runner<Meta>{});
-    }
-};
-
-// This function will expose ctors/extract for all meta-algos wrt all meta-algos.
-static inline void connect_meta_algorithms()
-{
-    pagmo::detail::tuple_for_each(pygmo::meta_algos_ptrs, meta_algorithm_connector{});
 }
 
 BOOST_PYTHON_MODULE(core)
@@ -723,8 +693,7 @@ BOOST_PYTHON_MODULE(core)
                  pygmo::problem_get_best_docstring("CEC 2006").c_str());
 
     // MBH meta-algo.
-    pygmo::expose_meta_algorithm(std::get<0>(pygmo::meta_algos_ptrs), "mbh", pygmo::mbh_docstring().c_str());
-    auto &mbh_ = *std::get<0>(pygmo::meta_algos_ptrs);
+    auto mbh_ = pygmo::expose_algorithm<mbh>("mbh", pygmo::mbh_docstring().c_str());
     mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
     mbh_.def("get_verbosity", &mbh::get_verbosity, pygmo::mbh_get_verbosity_docstring().c_str());
     mbh_.def("set_perturb", +[](mbh &a, const bp::object &o) { a.set_perturb(pygmo::to_vd(o)); },
@@ -732,10 +701,10 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algo_log(mbh_, pygmo::mbh_get_log_docstring().c_str());
     mbh_.def("get_perturb", +[](const mbh &a) { return pygmo::v_to_a(a.get_perturb()); },
              pygmo::mbh_get_perturb_docstring().c_str());
-
-    // Before moving to the user-defined C++ algos, we need to expose the interoperability between
-    // meta-algos.
-    connect_meta_algorithms();
+    mbh_.add_property("inner_algorithm",
+                      bp::make_function(+[](mbh &udp) -> algorithm & { return udp.get_inner_algorithm(); },
+                                        bp::return_internal_reference<>()),
+                      pygmo::mbh_get_perturb_docstring().c_str());
 
     // Test algo.
     auto test_a = pygmo::expose_algorithm<test_algorithm>("_test_algorithm", "A test algorithm.");
@@ -1000,3 +969,4 @@ BOOST_PYTHON_MODULE(core)
     bp::def("ideal", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); },
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
 }
+} // end of namespace pygmo

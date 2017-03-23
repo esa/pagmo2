@@ -79,5 +79,3 @@ def _algorithm_is(self, t):
 # Do the actual patching.
 setattr(algorithm, "extract", _algorithm_extract)
 setattr(algorithm, "is_", _algorithm_is)
-setattr(mbh, "extract", _algorithm_extract)
-setattr(mbh, "is_", _algorithm_is)
