@@ -398,7 +398,9 @@ public:
     // A NAKED pointer to the reference population, allowing to call the fitness function and later recover
     // the counters outside of the class, and avoiding unecessary copies. Use with care.
     population *m_pop_ptr;
-    // The hash map connecting the decision vector hashes to their fitnesses
+    // The hash map connecting the decision vector to their fitnesses. The use of
+    // custom comparison is needed to take care of nans, while the custom hasher is needed as std::hash does not
+    // work on std::vectors
     mutable std::unordered_map<vector_double, vector_double, detail::hash<vector_double>,
                                detail::equal_to_vf<vector_double>>
         m_fitness_map;
