@@ -734,6 +734,8 @@ def run_test_suite():
     suite.addTest(_problem_test.problem_test_case())
     suite.addTest(_algorithm_test.algorithm_test_case())
     suite.addTest(_island_test.island_test_case())
+    suite.addTest(_island_test.mp_island_test_case())
+    suite.addTest(_island_test.ipyparallel_island_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(bee_colony_test_case())
     suite.addTest(compass_search_test_case())

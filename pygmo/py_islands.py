@@ -78,7 +78,7 @@ class mp_island(object):
 
     .. note::
 
-       This island type is supported only on Windows or if the Python version is at least 3.4. Attempting to instantiate
+       This island type is supported only on Windows or if the Python version is at least 3.4. Attempting to use
        this class on non-Windows platforms with a Python version earlier than 3.4 will raise an error.
 
     """

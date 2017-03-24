@@ -49,6 +49,18 @@ class _udi_02(object):
     pass
 
 
+class _prob(object):
+
+    def __init__(self, data):
+        self.data = data
+
+    def fitness(self, x):
+        return [0.]
+
+    def get_bounds(self):
+        return ([0.], [1.])
+
+
 class island_test_case(_ut.TestCase):
     """Test case for the :class:`~pygmo.core.island` class.
 
@@ -177,3 +189,82 @@ class island_test_case(_ut.TestCase):
         tmp = repr(isl)
         isl = loads(dumps(isl))
         self.assertEqual(tmp, repr(isl))
+
+
+class mp_island_test_case(_ut.TestCase):
+    """Test case for the :class:`~pygmo.py_islands.mp_island` class.
+
+    """
+
+    def runTest(self):
+        import sys
+        import os
+        # The mp island requires either Windows or at least Python 3.4.
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
+            return
+
+        self.run_basic_tests()
+
+    def run_basic_tests(self):
+        from .core import island, de, rosenbrock
+        from . import mp_island
+        isl = island(algo=de(), prob=rosenbrock(), size=25, udi=mp_island())
+        self.assertEqual(isl.get_name(), "Multiprocessing island")
+        self.assertTrue(isl.get_extra_info() != "")
+        self.assertTrue(mp_island.get_pool_size() > 0)
+        mp_island.init_pool()
+        self.assertRaises(TypeError, lambda: mp_island.init_pool("dasda"))
+        self.assertRaises(ValueError, lambda: mp_island.init_pool(0))
+        self.assertRaises(ValueError, lambda: mp_island.init_pool(-1))
+        mp_island.resize_pool(6)
+        isl.evolve(20)
+        mp_island.resize_pool(4)
+        isl.get()
+        isl.evolve(20)
+        isl.wait()
+        self.assertRaises(ValueError, lambda: mp_island.resize_pool(-1))
+        self.assertRaises(TypeError, lambda: mp_island.resize_pool("dasda"))
+
+        # Check the picklability of a problem storing a lambda.
+        isl = island(algo=de(), prob=_prob(lambda x, y: x + y), size=25)
+        isl.evolve()
+        isl.get()
+
+
+class ipyparallel_island_test_case(_ut.TestCase):
+    """Test case for the :class:`~pygmo.py_islands.ipyparallel` class.
+
+    """
+
+    def runTest(self):
+        try:
+            import ipyparallel
+        except ImportError:
+            return
+
+        self.run_basic_tests()
+
+    def run_basic_tests(self):
+        from .core import island, de, rosenbrock
+        from . import ipyparallel_island
+        to = .5
+        try:
+            isl = island(algo=de(), prob=rosenbrock(),
+                         size=25, udi=ipyparallel_island(timeout=to))
+        except OSError:
+            return
+        isl = island(algo=de(), prob=rosenbrock(),
+                     size=25, udi=ipyparallel_island(timeout=to))
+        isl = island(algo=de(), prob=rosenbrock(),
+                     size=25, udi=ipyparallel_island(timeout=to + .3))
+        self.assertEqual(isl.get_name(), "Ipyparallel island")
+        self.assertTrue(isl.get_extra_info() == "")
+        isl.evolve(20)
+        isl.get()
+        isl.evolve(20)
+        isl.wait()
+
+        # Check the picklability of a problem storing a lambda.
+        isl = island(algo=de(), prob=_prob(lambda x, y: x + y), size=25)
+        isl.evolve()
+        isl.get()
