@@ -33,7 +33,7 @@ from __future__ import absolute_import as _ai
 import unittest as _ut
 
 
-class udi_01(object):
+class _udi_01(object):
 
     def run_evolve(self, algo, pop):
         return algo.evolve(pop)
@@ -45,7 +45,7 @@ class udi_01(object):
         return "extra bits"
 
 
-class udi_02(object):
+class _udi_02(object):
     pass
 
 
@@ -57,6 +57,10 @@ class island_test_case(_ut.TestCase):
     def runTest(self):
         self.run_basic_tests()
         self.run_concurrent_access_tests()
+        self.run_evolve_tests()
+        self.run_get_busy_wait_tests()
+        self.run_thread_safety_tests()
+        self.run_io_tests()
 
     def run_basic_tests(self):
         from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock
@@ -74,15 +78,102 @@ class island_test_case(_ut.TestCase):
         self.assertTrue(isl.get_population().problem.is_(rosenbrock))
         self.assertEqual(len(isl.get_population()), 11)
         self.assertEqual(isl.get_population().get_seed(), 15)
-        isl = island(prob=rosenbrock(), udi=udi_01(),
+        isl = island(prob=rosenbrock(), udi=_udi_01(),
                      size=11, algo=de(), seed=15)
         self.assertEqual(isl.get_name(), "udi_01")
         self.assertEqual(isl.get_extra_info(), "extra bits")
         self.assertTrue(isl.get_algorithm().is_(de))
         self.assertTrue(isl.get_population().problem.is_(rosenbrock))
         self.assertEqual(len(isl.get_population()), 11)
-        self.assertRaises(NotImplementedError, lambda: island(prob=rosenbrock(), udi=udi_02(),
+        self.assertRaises(NotImplementedError, lambda: island(prob=rosenbrock(), udi=_udi_02(),
                                                               size=11, algo=de(), seed=15))
 
     def run_concurrent_access_tests(self):
         import threading as thr
+        from .core import island, de, rosenbrock
+        isl = island(algo=de(), prob=rosenbrock(), size=10)
+
+        def thread_func():
+            for i in range(100):
+                pop = isl.get_population()
+                isl.set_population(pop)
+                algo = isl.get_algorithm()
+                isl.set_algorithm(algo)
+
+        thr_list = [thr.Thread(target=thread_func) for i in range(4)]
+        [_.start() for _ in thr_list]
+        [_.join() for _ in thr_list]
+
+    def run_evolve_tests(self):
+        from .core import island, de, rosenbrock
+        from copy import deepcopy
+        isl = island(algo=de(), prob=rosenbrock(), size=25)
+        isl.evolve(0)
+        isl.get()
+        isl.evolve()
+        isl.get()
+        isl.evolve(20)
+        isl.get()
+        for i in range(10):
+            isl.evolve(20)
+        isl2 = deepcopy(isl)
+        isl2.get()
+        isl.get()
+
+    def run_get_busy_wait_tests(self):
+        from .core import island, de, rosenbrock
+        isl = island(algo=de(), prob=rosenbrock(), size=25)
+        self.assertFalse(isl.busy())
+        isl = island(algo=de(), prob=rosenbrock(), size=3)
+        isl.evolve(20)
+        self.assertRaises(BaseException, lambda: isl.get())
+        isl.evolve(20)
+        isl.wait()
+
+    def run_thread_safety_tests(self):
+        from .core import island, de, rosenbrock
+        from . import thread_safety as ts
+        isl = island(algo=de(), prob=rosenbrock(), size=25)
+        self.assertEqual(isl.get_thread_safety(), (ts.basic, ts.basic))
+
+        class prob(object):
+
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0.], [1.])
+
+        isl = island(algo=de(), prob=prob(), size=25)
+        self.assertEqual(isl.get_thread_safety(), (ts.basic, ts.none))
+
+        class algo(object):
+
+            def evolve(self, algo, pop):
+                return pop
+
+        isl = island(algo=algo(), prob=rosenbrock(), size=25)
+        self.assertEqual(isl.get_thread_safety(), (ts.none, ts.basic))
+        isl = island(algo=algo(), prob=prob(), size=25)
+        self.assertEqual(isl.get_thread_safety(), (ts.none, ts.none))
+        isl.evolve(20)
+        self.assertRaises(BaseException, lambda: isl.get())
+
+    def run_io_tests(self):
+        from .core import island, de, rosenbrock
+        isl = island(algo=de(), prob=rosenbrock(), size=25)
+        self.assertTrue(repr(isl) != "")
+        self.assertTrue(isl.get_name() == "Thread island")
+        self.assertTrue(isl.get_extra_info() == "")
+        isl = island(algo=de(), prob=rosenbrock(), size=25, udi=_udi_01())
+        self.assertTrue(repr(isl) != "")
+        self.assertTrue(isl.get_name() == "udi_01")
+        self.assertTrue(isl.get_extra_info() == "extra bits")
+
+    def run_serialization_tests(self):
+        from .core import island, de, rosenbrock
+        from pickle import dumps, loads
+        isl = island(algo=de(), prob=rosenbrock(), size=25)
+        tmp = repr(isl)
+        isl = loads(dumps(isl))
+        self.assertEqual(tmp, repr(isl))

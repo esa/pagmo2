@@ -145,7 +145,7 @@ class mp_island(object):
 
     @staticmethod
     def _make_pool(processes):
-        # A small private factory function to create the a process pool.
+        # A small private factory function to create a process pool.
         # It accomplishes the tasks of selecting the correct method for
         # starting the processes ("spawn") and making sure that the
         # created processes will ignore the SIGINT signal (this prevents
@@ -155,7 +155,7 @@ class mp_island(object):
         import os
         import multiprocessing as mp
         # The context functionality in the mp module is available since
-        # Python 3.4. It is uses to force the process creation with the
+        # Python 3.4. It is used to force the process creation with the
         # "spawn" method.
         has_context = sys.version_info[0] > 3 or (
             sys.version_info[0] == 3 and sys.version_info[1] >= 4)
