@@ -52,10 +52,9 @@ namespace pagmo
  */
 class translate
 {
-    // Enabler for the UDP ctor.
+    // Enabler for the ctor from UDP or problem. In this case we allow construction from type problem.
     template <typename T>
-    using ctor_enabler
-        = enable_if_t<std::is_constructible<problem, T &&>::value && !std::is_same<uncvref_t<T>, problem>::value, int>;
+    using ctor_enabler = enable_if_t<std::is_constructible<problem, T &&>::value, int>;
 
 public:
     /// Default constructor

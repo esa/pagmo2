@@ -1390,7 +1390,7 @@ Raises:
 )";
 }
 
-std::string generic_uda_inner_problem_docstring()
+std::string generic_udp_inner_problem_docstring()
 {
 
     return R"(Inner problem of the meta-problem
