@@ -1373,6 +1373,40 @@ Returns:
 )";
 }
 
+std::string generic_uda_inner_algorithm_docstring()
+{
+
+    return R"(Inner algorithm of the meta-algorithm
+
+This property gives direct access to the :class:`~pygmo.core.algorithm` stored within the meta-algorithm.
+
+Returns:
+    :class:`~pygmo.core.algorithm`: a reference to the inner algorithm
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.) when setting the property
+
+)";
+}
+
+std::string generic_uda_inner_problem_docstring()
+{
+
+    return R"(Inner problem of the meta-problem
+
+This property gives direct access to the :class:`~pygmo.core.problem` stored within the meta-problem.
+
+Returns:
+    :class:`~pygmo.core.problem`: a reference to the inner problem
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.) when setting the property
+
+)";
+}
+
 std::string mbh_docstring()
 {
     return R"(__init__(uda = compass_search(), stop = 5, perturb = 1e-2, seed = random)

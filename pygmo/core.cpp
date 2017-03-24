@@ -646,7 +646,7 @@ BOOST_PYTHON_MODULE(core)
     translate_.add_property("inner_problem",
                             bp::make_function(+[](translate &udp) -> problem & { return udp.get_inner_problem(); },
                                               bp::return_internal_reference<>()),
-                            pygmo::mbh_get_perturb_docstring().c_str());
+                            pygmo::generic_udp_inner_problem_docstring().c_str());
 
 // excluded in MSVC (Dec. - 2016) because of troubles to deal with the big static array defining the problem data. To be
 // reassesed in future versions of the compiler
@@ -674,7 +674,7 @@ BOOST_PYTHON_MODULE(core)
     mbh_.add_property("inner_algorithm",
                       bp::make_function(+[](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); },
                                         bp::return_internal_reference<>()),
-                      pygmo::mbh_get_perturb_docstring().c_str());
+                      pygmo::generic_uda_inner_algorithm_docstring().c_str());
 
     // Test algo.
     auto test_a = pygmo::expose_algorithm<test_algorithm>("_test_algorithm", "A test algorithm.");

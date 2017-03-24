@@ -151,3 +151,24 @@ BOOST_AUTO_TEST_CASE(translate_thread_safety_test)
     BOOST_CHECK(t.get_thread_safety() == thread_safety::basic);
     BOOST_CHECK((translate{ts2{}, {1}}.get_thread_safety() == thread_safety::none));
 }
+
+template <typename T>
+void check_inheritance(T udp, const vector_double &t)
+{
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nobj(), problem(udp).get_nobj());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nec(), problem(udp).get_nec());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nic(), problem(udp).get_nic());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_gradient(), problem(udp).has_gradient());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_gradient_sparsity(), problem(udp).has_gradient_sparsity());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_hessians(), problem(udp).has_hessians());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_hessians_sparsity(), problem(udp).has_hessians_sparsity());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_set_seed(), problem(udp).has_set_seed());
+}
+
+BOOST_AUTO_TEST_CASE(translate_inheritance_test)
+{
+    check_inheritance(hock_schittkowsky_71{}, vector_double(4, 0.5));
+    check_inheritance(cec2006{1}, vector_double(13, 0.5));
+    check_inheritance(cec2009{1}, vector_double(4, 0.5));
+    check_inheritance(cec2013{1}, vector_double(4, 0.5));
+}

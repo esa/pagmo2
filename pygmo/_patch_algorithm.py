@@ -31,7 +31,7 @@
 # for python 2.0 compatibility
 from __future__ import absolute_import as _ai
 
-from .core import algorithm, mbh
+from .core import algorithm
 
 
 def _algorithm_extract(self, t):
