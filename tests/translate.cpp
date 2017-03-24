@@ -162,7 +162,7 @@ void check_inheritance(T udp, const vector_double &t)
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nec(), problem(udp).get_nec());
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nic(), problem(udp).get_nic());
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_gradient(), problem(udp).has_gradient());
-    BOOST_CHECK(problem(translate(udp, t)).gradient_sparsity() == problem(udp).gradient_sparsity());
+    BOOST_CHECK(translate(udp, t).gradient_sparsity() == problem(udp).gradient_sparsity());
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_gradient_sparsity(), problem(udp).has_gradient_sparsity());
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_hessians(), problem(udp).has_hessians());
     BOOST_CHECK(problem(translate(udp, t)).hessians_sparsity() == problem(udp).hessians_sparsity());
