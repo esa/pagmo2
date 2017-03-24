@@ -50,7 +50,7 @@ namespace pagmo
  * by a fixed translation vector. pagmo::translate objects are user-defined problems that can be used in
  * the definition of a pagmo::problem.
  */
-class translate : public problem
+class translate
 {
     // Enabler for the UDP ctor.
     template <typename T>
@@ -62,7 +62,7 @@ public:
     /**
      * The default constructor will initialize a non-translated pagmo::null_problem.
      */
-    translate() : problem(null_problem{}), m_translation({0.})
+    translate() : m_problem(null_problem{}), m_translation({0.})
     {
     }
 
@@ -83,12 +83,12 @@ public:
      */
     template <typename T, ctor_enabler<T> = 0>
     explicit translate(T &&p, const vector_double &translation)
-        : problem(std::forward<T>(p)), m_translation(translation)
+        : m_problem(std::forward<T>(p)), m_translation(translation)
     {
-        if (translation.size() != static_cast<const problem *>(this)->get_nx()) {
+        if (translation.size() != m_problem.get_nx()) {
             pagmo_throw(std::invalid_argument, "Length of shift vector is: " + std::to_string(translation.size())
                                                    + " while the problem dimension is: "
-                                                   + std::to_string(static_cast<const problem *>(this)->get_nx()));
+                                                   + std::to_string(m_problem.get_nx()));
         }
     }
 
@@ -106,7 +106,7 @@ public:
     vector_double fitness(const vector_double &x) const
     {
         vector_double x_deshifted = translate_back(x);
-        return static_cast<const problem *>(this)->fitness(x_deshifted);
+        return m_problem.fitness(x_deshifted);
     }
 
     /// Box-bounds
@@ -120,10 +120,54 @@ public:
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        auto b_sh = static_cast<const problem *>(this)->get_bounds();
+        auto b_sh = m_problem.get_bounds();
         // NOTE: this should be safe as the translation vector has been checked against the
         // bounds size upon construction (via get_nx()).
         return {apply_translation(b_sh.first), apply_translation(b_sh.second)};
+    }
+
+    /// Number of objectives.
+    /**
+     * @return the number of objectives of the inner problem.
+     */
+    vector_double::size_type get_nobj() const
+    {
+        return m_problem.get_nobj();
+    }
+
+    /// Equality constraint dimension
+    /**
+     *
+     * Returns the number of equality constraints of the inner problem.
+     *
+     * @return the number of equality constraints of the inner problem.
+     */
+    vector_double::size_type get_nec() const
+    {
+        return m_problem.get_nec();
+    }
+
+    /// Inequality constraint dimension
+    /**
+     *
+     * Returns the number of inequality constraints of the inner problem.
+     *
+     * @return the number of inequality constraints of the inner problem.
+     */
+    vector_double::size_type get_nic() const
+    {
+        return m_problem.get_nic();
+    }
+
+    /// Checks if the inner UDP has gradients.
+    /**
+     * The has_gradient computation is forwarded to the inner UDP
+     *
+     * @return a flag signalling the availability of the gradient in the inner UDP.
+     */
+    bool has_gradient() const
+    {
+        return m_problem.has_gradient();
     }
 
     /// Gradients
@@ -140,7 +184,40 @@ public:
     vector_double gradient(const vector_double &x) const
     {
         vector_double x_deshifted = translate_back(x);
-        return static_cast<const problem *>(this)->gradient(x_deshifted);
+        return m_problem.gradient(x_deshifted);
+    }
+
+    /// Checks if the inner UDP has gradient sparisty implemented.
+    /**
+     * The has_gradient_sparsity computation is forwarded to the inner UDP
+     *
+     * @return a flag signalling the availability of the gradient sparisty in the inner UDP.
+     */
+    bool has_gradient_sparsity() const
+    {
+        return m_problem.has_gradient_sparsity();
+    }
+
+    /// Gradient sparsity
+    /**
+     * The gradient sparsity computation is forwarded to the inner UDP
+     *
+     * @return the gradient sparsity of the inner problem.
+     */
+    sparsity_pattern gradient_sparsity() const
+    {
+        return m_problem.gradient_sparsity();
+    }
+
+    /// Checks if the inner UDP has hessians.
+    /**
+     * The has_hessians computation is forwarded to the inner UDP
+     *
+     * @return a flag signalling the availability of the hessians in the inner UDP.
+     */
+    bool has_hessians() const
+    {
+        return m_problem.has_hessians();
     }
 
     /// Hessians
@@ -149,7 +226,7 @@ public:
      *
      * @param x the decision vector.
      *
-     * @return the hessians of the fitness function.
+     * @return the hessians of the fitness function computed at \p x
      *
      * @throws unspecified any exception thrown by memory errors in standard containers,
      * or by problem::hessians().
@@ -157,7 +234,51 @@ public:
     std::vector<vector_double> hessians(const vector_double &x) const
     {
         vector_double x_deshifted = translate_back(x);
-        return static_cast<const problem *>(this)->hessians(x_deshifted);
+        return m_problem.hessians(x_deshifted);
+    }
+
+    /// Checks if the inner UDP has hessians sparisty implemented.
+    /**
+     * The has_hessians_sparsity computation is forwarded to the inner UDP
+     *
+     * @return a flag signalling the availability of the hessians sparisty in the inner UDP.
+     */
+    bool has_hessians_sparsity() const
+    {
+        return m_problem.has_hessians_sparsity();
+    }
+
+    /// Hessians sparsity
+    /**
+     * The hessians sparsity computation is forwarded to the inner UDP
+     *
+     * @return the hessians sparsity of the inner problem.
+     */
+    std::vector<sparsity_pattern> hessians_sparsity() const
+    {
+        return m_problem.hessians_sparsity();
+    }
+
+    /// Checks if the inner UDP has set_seed implemented.
+    /**
+     * The has_set_seed computation is forwarded to the inner UDP
+     *
+     * @return a flag signalling the availability of the set seed in the inner UDP.
+     */
+    bool has_set_seed() const
+    {
+        return m_problem.has_set_seed();
+    }
+
+    /// Sets the seed of the inner UDP
+    /**
+     * The set seed is forwarded to the inner UDP
+     *
+     * @param the seed to be set
+     */
+    void set_seed(unsigned seed)
+    {
+        return m_problem.set_seed(seed);
     }
 
     /// Problem name
@@ -170,7 +291,7 @@ public:
      */
     std::string get_name() const
     {
-        return static_cast<const problem *>(this)->get_name() + " [translated]";
+        return m_problem.get_name() + " [translated]";
     }
 
     /// Extra info
@@ -187,7 +308,7 @@ public:
     {
         std::ostringstream oss;
         stream(oss, m_translation);
-        return static_cast<const problem *>(this)->get_extra_info() + "\n\tTranslation Vector: " + oss.str();
+        return m_problem.get_extra_info() + "\n\tTranslation Vector: " + oss.str();
     }
 
     /// Get the translation vector
@@ -197,6 +318,39 @@ public:
     const vector_double &get_translation() const
     {
         return m_translation;
+    }
+
+    /// Problem's thread safety level.
+    /**
+     * The thread safety of a meta-problem is defined by the thread safety of the inner pagmo::problem.
+     *
+     * @return the thread safety level of the inner pagmo::problem.
+     */
+    thread_safety get_thread_safety() const
+    {
+        return m_problem.get_thread_safety();
+    }
+
+    /// Getter for the inner problem
+    /**
+     * Returns a const reference to the inner pagmo::problem
+     *
+     * @return a const reference to the inner pagmo::problem
+     */
+    const problem &get_inner_problem() const
+    {
+        return m_problem;
+    }
+
+    /// Getter for the inner problem
+    /**
+     * Returns a reference to the inner pagmo::problem
+     *
+     * @return a reference to the inner pagmo::problem
+     */
+    problem &get_inner_problem()
+    {
+        return m_problem;
     }
 
     /// Object serialization
@@ -210,38 +364,10 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<problem>(this), m_translation);
+        ar(m_problem, m_translation);
     }
 
 private:
-    // Delete all that we do not want to inherit from problem
-    // A - Common to all meta
-    vector_double::size_type get_nx() const = delete;
-    vector_double::size_type get_nf() const = delete;
-    vector_double::size_type get_nc() const = delete;
-    unsigned long long get_fevals() const = delete;
-    unsigned long long get_gevals() const = delete;
-    unsigned long long get_hevals() const = delete;
-    vector_double::size_type get_gs_dim() const = delete;
-    std::vector<vector_double::size_type> get_hs_dim() const = delete;
-    bool is_stochastic() const = delete;
-    bool feasibility_f(const vector_double &) const = delete;
-    bool feasibility_x(const vector_double &) const = delete;
-    vector_double get_c_tol() const = delete;
-    void set_c_tol(const vector_double &) = delete;
-
-// The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
-// it would just result in a "weird" behaviour in case the user would try to stream this object
-#if __GNUC__ > 4
-    // NOTE: We delete the streaming operator overload called with translate, otherwise the inner prob would stream
-    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
-    friend std::ostream &operator<<(std::ostream &, const translate &) = delete;
-#endif
-    template <typename Archive>
-    void save(Archive &) const = delete;
-    template <typename Archive>
-    void load(Archive &) = delete;
-
     vector_double translate_back(const vector_double &x) const
     {
         // NOTE: here we use assert instead of throwing because the general idea is that we don't
@@ -260,6 +386,8 @@ private:
         std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::plus<double>());
         return x_sh;
     }
+    /// Inner problem
+    problem m_problem;
     /// translation vector
     vector_double m_translation;
 };

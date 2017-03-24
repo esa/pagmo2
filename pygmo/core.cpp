@@ -168,9 +168,8 @@ static inline bp::object test_object_serialization(const bp::object &o)
 namespace pygmo
 {
 
-// Problem and meta-problem classes.
+// Problem classes.
 std::unique_ptr<bp::class_<problem>> problem_ptr{};
-decltype(meta_probs_ptrs) meta_probs_ptrs{};
 
 // Algorithm classes.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
@@ -185,8 +184,6 @@ std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
 static inline void cleanup()
 {
     pygmo::problem_ptr.reset();
-    pygmo::meta_probs_ptrs = decltype(pygmo::meta_probs_ptrs){};
-
     pygmo::algorithm_ptr.reset();
 }
 
@@ -334,34 +331,6 @@ struct tu_test_algorithm {
         return thread_safety::none;
     }
 };
-
-// Metaprogramming for the implementation of connect_meta_problems().
-struct meta_problem_connector {
-    template <typename Meta>
-    struct runner {
-        template <typename Meta2>
-        void operator()(std::unique_ptr<bp::class_<Meta2>> &ptr) const
-        {
-            // Construct Meta2 from Meta (this could be the same meta).
-            pygmo::make_meta_problem_init<Meta2, Meta>{}(*ptr);
-            // Extract Meta from Meta2.
-            ptr->def("_cpp_extract", &pygmo::generic_cpp_extract<Meta2, Meta>, bp::return_internal_reference<>());
-        }
-    };
-    template <typename Meta>
-    void operator()(std::unique_ptr<bp::class_<Meta>> &) const
-    {
-        // We need a nested iteration over all the metas.
-        pagmo::detail::tuple_for_each(pygmo::meta_probs_ptrs, runner<Meta>{});
-    }
-};
-
-// This function will expose ctors/extract for all meta-problems wrt all meta-problems (e.g., init translate
-// from decompose and viceversa, extract translate from decompose and viceversa, etc.).
-static inline void connect_meta_problems()
-{
-    pagmo::detail::tuple_for_each(pygmo::meta_probs_ptrs, meta_problem_connector{});
-}
 
 BOOST_PYTHON_MODULE(core)
 {
@@ -587,30 +556,21 @@ BOOST_PYTHON_MODULE(core)
         .def("get_thread_safety", &algorithm::get_thread_safety,
              pygmo::algorithm_get_thread_safety_docstring().c_str());
 
-    // Translate meta-problem.
-    pygmo::expose_meta_problem(std::get<0>(pygmo::meta_probs_ptrs), "translate", pygmo::translate_docstring().c_str());
-    auto &tp = *std::get<0>(pygmo::meta_probs_ptrs);
-    // Getter for the translation vector.
-    tp.add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
-                    pygmo::translate_translation_docstring().c_str());
-
     // Decompose meta-problem.
-    pygmo::expose_meta_problem(std::get<1>(pygmo::meta_probs_ptrs), "decompose", pygmo::decompose_docstring().c_str());
-    auto &dp = *std::get<1>(pygmo::meta_probs_ptrs);
+    // pygmo::expose_meta_problem(std::get<1>(pygmo::meta_probs_ptrs), "decompose",
+    // pygmo::decompose_docstring().c_str());
+    // auto &dp = *std::get<1>(pygmo::meta_probs_ptrs);
     // Returns the original multi-objective fitness
-    dp.def("original_fitness", +[](const pagmo::decompose &p,
-                                   const bp::object &x) { return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x))); },
-           pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
-    dp.add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
-                    pygmo::decompose_z_docstring().c_str());
+    // dp.def("original_fitness", +[](const pagmo::decompose &p,
+    //                               const bp::object &x) { return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x)));
+    //                               },
+    //       pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
+    // dp.add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
+    //                pygmo::decompose_z_docstring().c_str());
 
     // Unconstrain meta-problem.
-    pygmo::expose_meta_problem(std::get<2>(pygmo::meta_probs_ptrs), "unconstrain",
-                               pygmo::unconstrain_docstring().c_str());
-
-    // Before moving to the user-defined C++ problems, we need to expose the interoperability between
-    // meta-problems.
-    connect_meta_problems();
+    // pygmo::expose_meta_problem(std::get<2>(pygmo::meta_probs_ptrs), "unconstrain",
+    // pygmo::unconstrain_docstring().c_str());
 
     // Exposition of C++ problems.
     // Test problem.
@@ -678,6 +638,16 @@ BOOST_PYTHON_MODULE(core)
     inv.def(bp::init<unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u)));
     inv.def(
         bp::init<unsigned, unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u, bp::arg("seed"))));
+    // Translate meta-problem.
+    auto translate_ = pygmo::expose_problem<translate>("translate", pygmo::translate_docstring().c_str());
+    // Getter for the translation vector.
+    translate_.add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
+                            pygmo::translate_translation_docstring().c_str());
+    translate_.add_property("inner_problem",
+                            bp::make_function(+[](translate &udp) -> problem & { return udp.get_inner_problem(); },
+                                              bp::return_internal_reference<>()),
+                            pygmo::mbh_get_perturb_docstring().c_str());
+
 // excluded in MSVC (Dec. - 2016) because of troubles to deal with the big static array defining the problem data. To be
 // reassesed in future versions of the compiler
 #if !defined(_MSC_VER)
@@ -702,7 +672,7 @@ BOOST_PYTHON_MODULE(core)
     mbh_.def("get_perturb", +[](const mbh &a) { return pygmo::v_to_a(a.get_perturb()); },
              pygmo::mbh_get_perturb_docstring().c_str());
     mbh_.add_property("inner_algorithm",
-                      bp::make_function(+[](mbh &udp) -> algorithm & { return udp.get_inner_algorithm(); },
+                      bp::make_function(+[](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); },
                                         bp::return_internal_reference<>()),
                       pygmo::mbh_get_perturb_docstring().c_str());
 

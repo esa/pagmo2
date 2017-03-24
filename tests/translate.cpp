@@ -56,12 +56,6 @@ BOOST_AUTO_TEST_CASE(translate_construction_test)
     // built by the explicit constructor.
     BOOST_CHECK(p0_string == p1_string);
 
-    // Check extract/is.
-    BOOST_CHECK(translate{}.extract<null_problem>() != nullptr);
-    BOOST_CHECK(translate{}.extract<hock_schittkowsky_71>() == nullptr);
-    BOOST_CHECK(translate{}.is<null_problem>());
-    BOOST_CHECK(!translate{}.is<hock_schittkowsky_71>());
-
     // We check that wrong size for translation results in an invalid_argument
     // exception
     BOOST_CHECK_THROW((translate{null_problem{}, {1, 2}}), std::invalid_argument);
@@ -133,13 +127,6 @@ BOOST_AUTO_TEST_CASE(translate_stochastic_test)
     hock_schittkowsky_71 p0{};
     problem p{translate{p0, {0.1, -0.2, 0.3, 0.4}}};
     BOOST_CHECK(!p.is_stochastic());
-}
-
-BOOST_AUTO_TEST_CASE(translate_extract_test)
-{
-    hock_schittkowsky_71 p0{};
-    translate t{p0, {0.1, -0.2, 0.3, 0.4}};
-    BOOST_CHECK(t.extract<hock_schittkowsky_71>() != nullptr);
 }
 
 struct ts2 {
