@@ -35,7 +35,11 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <pagmo/io.hpp>
+#include <pagmo/problems/cec2006.hpp>
+#include <pagmo/problems/cec2009.hpp>
+#include <pagmo/problems/cec2013.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
@@ -169,6 +173,14 @@ BOOST_AUTO_TEST_CASE(translate_inheritance_test)
 {
     check_inheritance(hock_schittkowsky_71{}, vector_double(4, 0.5));
     check_inheritance(cec2006{1}, vector_double(13, 0.5));
-    check_inheritance(cec2009{1}, vector_double(4, 0.5));
-    check_inheritance(cec2013{1}, vector_double(4, 0.5));
+    check_inheritance(cec2009{1}, vector_double(30, 0.5));
+    check_inheritance(cec2013{1}, vector_double(2, 0.5));
+    // We check set_seed is working
+    problem p{inventory{10u, 10u, 1234567u}};
+    std::ostringstream ss1, ss2;
+    ss1 << p;
+    BOOST_CHECK(ss1.str().find(std::to_string(1234567u)) != std::string::npos);
+    p.set_seed(5672543u);
+    ss2 << p;
+    BOOST_CHECK(ss2.str().find(std::to_string(5672543u)) != std::string::npos);
 }
