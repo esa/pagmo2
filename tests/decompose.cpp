@@ -230,7 +230,7 @@ struct smobjp {
     smobjp(unsigned seed = 0u) : m_seed(seed)
     {
     }
-    vector_double fitness(const vector_double &x) const
+    vector_double fitness(const vector_double &) const
     {
         return {1u, 1u};
     }
