@@ -335,7 +335,7 @@ public:
                           std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, best_f[0], dx, df, sigma));
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, best_f[0], dx, df, sigma);
                 }
             }
             // 2 - we fix the bounds. We cannot use the utils::generic::force_bounds_random as we here represent a
@@ -431,6 +431,7 @@ public:
      */
     void set_seed(unsigned int seed)
     {
+        m_e.seed(seed);
         m_seed = seed;
     };
     /// Gets the seed

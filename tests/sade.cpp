@@ -64,23 +64,31 @@ BOOST_AUTO_TEST_CASE(evolve_test)
 {
     // Here we only test that evolution is deterministic if the
     // seed is controlled for all variants
-    problem prob1{rosenbrock{25u}};
-    population pop1{prob1, 15u, 23u};
-    problem prob2{rosenbrock{25u}};
-    population pop2{prob2, 15u, 23u};
+    {
+        problem prob{rosenbrock{25u}};
+        population pop1{prob, 15u, 23u};
+        population pop2{prob, 15u, 23u};
+        population pop3{prob, 15u, 23u};
 
-    for (unsigned int j = 1u; j <= 2u; ++j) {
-        for (unsigned int i = 1u; i <= 18u; ++i) {
-            sade user_algo1{10u, i, j, 1e-6, 1e-6, false, 23u};
-            user_algo1.set_verbosity(1u);
-            pop1 = user_algo1.evolve(pop1);
+        for (unsigned int j = 1u; j <= 2u; ++j) {
+            for (unsigned int i = 1u; i <= 18u; ++i) {
+                sade user_algo1{10u, i, j, 1e-6, 1e-6, false, 23u};
+                user_algo1.set_verbosity(1u);
+                pop1 = user_algo1.evolve(pop1);
 
-            sade user_algo2{10u, i, j, 1e-6, 1e-6, false, 23u};
-            user_algo2.set_verbosity(1u);
-            pop2 = user_algo2.evolve(pop2);
+                BOOST_CHECK(user_algo1.get_log().size() > 0u);
 
-            BOOST_CHECK(user_algo1.get_log().size() > 0u);
-            BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+                sade user_algo2{10u, i, j, 1e-6, 1e-6, false, 23u};
+                user_algo2.set_verbosity(1u);
+                pop2 = user_algo2.evolve(pop2);
+
+                BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+                user_algo2.set_seed(23u);
+                pop3 = user_algo2.evolve(pop3);
+
+                BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+            }
         }
     }
     // Here we check that the exit condition of ftol and xtol actually provoke an exit within 300u gen (rosenbrock{2} is

@@ -274,6 +274,20 @@ class pso_test_case(_ut.TestCase):
         log = uda.get_log()
 
 
+class bee_colony_test_case(_ut.TestCase):
+    """Test case for the UDA bee_colony
+
+    """
+
+    def runTest(self):
+        from .core import bee_colony
+        uda = bee_colony()
+        uda = bee_colony(gen=1, limit=10)
+        uda = bee_colony(gen=1, limit=10, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        log = uda.get_log()
+
+
 class moead_test_case(_ut.TestCase):
     """Test case for the UDA moead
 
@@ -437,6 +451,26 @@ class cec2006_test_case(_ut.TestCase):
         from .core import cec2006, population
         udp = cec2006(prob_id=3)
         best = udp.best_known
+
+
+class cec2009_test_case(_ut.TestCase):
+    """Test case for the UDP cec2009
+
+    """
+
+    def runTest(self):
+        from .core import cec2009, population
+        udp = cec2009(prob_id=3, is_constrained=True, dim=15)
+
+
+class cec2013_test_case(_ut.TestCase):
+    """Test case for the UDP cec2013
+
+    """
+
+    def runTest(self):
+        from .core import cec2013, population
+        udp = cec2013(prob_id=3, dim=10)
 
 
 class translate_test_case(_ut.TestCase):
@@ -700,6 +734,7 @@ def run_test_suite():
     suite.addTest(_problem_test.problem_test_case())
     suite.addTest(_algorithm_test.algorithm_test_case())
     suite.addTest(pso_test_case())
+    suite.addTest(bee_colony_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(moead_test_case())
@@ -713,6 +748,8 @@ def run_test_suite():
         pass
     suite.addTest(dtlz_test_case())
     suite.addTest(cec2006_test_case())
+    suite.addTest(cec2009_test_case())
+    suite.addTest(cec2013_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
     suite.addTest(unconstrain_test_case())

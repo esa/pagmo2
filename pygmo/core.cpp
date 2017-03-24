@@ -70,6 +70,7 @@ see https://www.gnu.org/licenses/. */
 #ifdef PAGMO_WITH_EIGEN3
 #include <pagmo/algorithms/cmaes.hpp>
 #endif
+#include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
@@ -87,6 +88,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/cec2013.hpp>
 #endif
 #include <pagmo/problems/cec2006.hpp>
+#include <pagmo/problems/cec2009.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/griewank.hpp>
@@ -662,6 +664,11 @@ BOOST_PYTHON_MODULE(core)
     cec2006_.def("best_known", &pygmo::best_known_wrapper<cec2006>,
                  pygmo::problem_get_best_docstring("CEC 2006").c_str());
 
+    // CEC 2009
+    auto cec2009_ = pygmo::expose_problem<cec2009>("cec2009", pygmo::cec2009_docstring().c_str());
+    cec2009_.def(bp::init<unsigned, bool, unsigned>(
+        (bp::arg("prob_id") = 1u, bp::arg("is_constrained") = false, bp::arg("dim") = 30u)));
+
     // MBH meta-algo.
     auto mbh_ = pygmo::expose_algorithm<mbh>("mbh", pygmo::mbh_docstring().c_str());
     mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
@@ -684,12 +691,19 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm", pygmo::null_algorithm_docstring().c_str());
+    // ARTIFICIAL BEE COLONY
+    auto bee_colony_ = pygmo::expose_algorithm<bee_colony>("bee_colony", pygmo::bee_colony_docstring().c_str());
+    bee_colony_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 1u)));
+    bee_colony_.def(
+        bp::init<unsigned, unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 1u, bp::arg("seed"))));
+    pygmo::expose_algo_log(bee_colony_, pygmo::bee_colony_get_log_docstring().c_str());
+    bee_colony_.def("get_seed", &bee_colony::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // DE
     auto de_ = pygmo::expose_algorithm<de>("de", pygmo::de_docstring().c_str());
-    de_.def(bp::init<unsigned int, double, double, unsigned int, double, double>(
+    de_.def(bp::init<unsigned, double, double, unsigned, double, double>(
         (bp::arg("gen") = 1u, bp::arg("F") = .8, bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6,
          bp::arg("tol") = 1E-6)));
-    de_.def(bp::init<unsigned int, double, double, unsigned int, double, double, unsigned>(
+    de_.def(bp::init<unsigned, double, double, unsigned, double, double, unsigned>(
         (bp::arg("gen") = 1u, bp::arg("F") = .8, bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6,
          bp::arg("tol") = 1E-6, bp::arg("seed"))));
     pygmo::expose_algo_log(de_, pygmo::de_get_log_docstring().c_str());
@@ -698,8 +712,8 @@ BOOST_PYTHON_MODULE(core)
     auto compass_search_
         = pygmo::expose_algorithm<compass_search>("compass_search", pygmo::compass_search_docstring().c_str());
     compass_search_.def(
-        bp::init<unsigned int, double, double, double>((bp::arg("max_fevals") = 1u, bp::arg("start_range") = .1,
-                                                        bp::arg("stop_range") = .01, bp::arg("reduction_coeff") = .5)));
+        bp::init<unsigned, double, double, double>((bp::arg("max_fevals") = 1u, bp::arg("start_range") = .1,
+                                                    bp::arg("stop_range") = .01, bp::arg("reduction_coeff") = .5)));
     pygmo::expose_algo_log(compass_search_, pygmo::compass_search_get_log_docstring().c_str());
     compass_search_.def("get_max_fevals", &compass_search::get_max_fevals);
     compass_search_.def("get_start_range", &compass_search::get_start_range);
@@ -854,7 +868,7 @@ BOOST_PYTHON_MODULE(core)
                               const bp::object &r_point) { return hv.exclusive(p_idx, pygmo::to_vd(r_point)); },
              (bp::arg("idx"), bp::arg("ref_point")))
         .def("exclusive",
-             +[](const hypervolume &hv, unsigned int p_idx, const bp::object &r_point,
+             +[](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
                  boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo);
              },

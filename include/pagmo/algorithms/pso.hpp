@@ -490,7 +490,7 @@ public:
                           mean_velocity, std::setw(15), lb_avg, std::setw(15), avg_dist, '\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, feval_count, best, mean_velocity, lb_avg, avg_dist));
+                    m_log.emplace_back(gen, feval_count, best, mean_velocity, lb_avg, avg_dist);
                 }
             }
         } // end of main PSO loop
@@ -551,6 +551,7 @@ public:
      */
     void set_seed(unsigned int seed)
     {
+        m_e.seed(seed);
         m_seed = seed;
     };
     /// Gets the seed

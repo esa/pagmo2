@@ -1680,6 +1680,26 @@ See also the docs of the C++ class :cpp:class:`pagmo::cec2013`.
 )";
 }
 
+std::string cec2009_docstring()
+{
+    return R"(__init__(prob_id = 1, is_constrained = false, dim = 30u)
+
+The CEC 2009 problem suite (continuous, constrained, single-objective problems)
+
+Args:
+    prob_id (``int``): problem id (one of [1..10])
+    is_constrained (``bool``): selects the constrained version of the problems 
+    dim (``int``): problem dimension
+
+Raises:
+    OverflowError: if *prob_id* or *dim* are negative or greater than an implementation-defined value
+    ValueError: if *prob_id* is not in [1..10] or if *dim* is zero
+
+See also the docs of the C++ class :cpp:class:`pagmo::cec2009`.
+
+)";
+}
+
 std::string cec2006_docstring()
 {
     return R"(__init__(prob_id = 1)
@@ -1706,6 +1726,64 @@ This method will return the random seed used internally by this uda.
 
 Returns:
     ``int``: the random seed of the population
+)";
+}
+
+std::string bee_colony_docstring()
+{
+    return R"(__init__(gen = 1, limit = 1, seed = random)
+
+Artificial Bee Colony.
+
+Args:
+    gen (``int``): number of generations
+    limit (``int``): maximum number of trials for abandoning a source
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen*, *limit* or *seed* is negative or greater than an implementation-defined value
+    ValueError: if *limit* is not greater than 0
+
+See also the docs of the C++ class :cpp:class:`pagmo::bee_colony`.
+
+)";
+}
+
+std::string bee_colony_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
+constructed with a :class:`~pygmo.core.bee_colony`. A verbosity of ``N`` implies a log line each ``N`` generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Current best``, ``Best``, where:
+
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``Current best`` (``float``), the best fitness currently in the population
+    * ``Best`` (``float``), the best fitness found
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(bee_colony(gen = 500, limit = 20))
+    >>> algo.set_verbosity(100)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop)
+    Gen:        Fevals:  Current best:          Best:
+       1             40         183728         183728
+     101           4040        506.757        26.4234
+     201           8040        55.6282        14.9136
+     301          12040         65.554        14.9136
+     401          16040        191.654        14.9136
+    >>> al = algo.extract(bee_colony)
+    >>> al.get_log()
+    [(1, 40, 183727.83934515435, 183727.83934515435), ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::bee_colony::get_log()`.
+
 )";
 }
 

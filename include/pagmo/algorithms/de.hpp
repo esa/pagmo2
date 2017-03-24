@@ -397,7 +397,7 @@ public:
                           pop.get_f()[best_idx][0], std::setw(15), dx, std::setw(15), df, '\n');
                     ++count;
                     // Logs
-                    m_log.push_back(log_line_type(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], dx, df));
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], dx, df);
                 }
             }
         } // end main DE iterations
@@ -412,6 +412,7 @@ public:
      */
     void set_seed(unsigned int seed)
     {
+        m_e.seed(seed);
         m_seed = seed;
     };
     /// Gets the seed
