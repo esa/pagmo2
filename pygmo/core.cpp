@@ -519,7 +519,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
-    // destroy at the end of island::wait().
+    // destroyed at the end of island::wait().
     detail::wait_raii<>::getter = []() { return std::make_shared<py_wait_locks>(); };
 
     // Setup doc options
