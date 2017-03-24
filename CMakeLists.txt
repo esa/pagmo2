@@ -92,7 +92,10 @@ target_include_directories(pagmo INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 if(PAGMO_WITH_EIGEN3)
-    target_include_directories(pagmo SYSTEM INTERFACE "${EIGEN3_INCLUDE_DIR}")
+    add_library(Eigen3::eigen3 INTERFACE IMPORTED)
+    set_target_properties(Eigen3::eigen3 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${EIGEN3_INCLUDE_DIR}")
+    target_link_libraries(pagmo INTERFACE Eigen3::eigen3)
+    # FIXME: this needs to go into config.hpp, once implemented.
     target_compile_definitions(pagmo INTERFACE PAGMO_WITH_EIGEN3)
 endif()
 

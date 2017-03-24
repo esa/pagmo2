@@ -1,5 +1,5 @@
 YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp)
-target_link_libraries(core PRIVATE Boost::boost Boost::python Boost::disable_autolinking pagmo)
+target_link_libraries(core PRIVATE Boost::python Boost::disable_autolinking pagmo)
 target_include_directories(core SYSTEM PRIVATE "${YACMA_NUMPY_INCLUDES_DIR}")
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
 set_property(TARGET core PROPERTY CXX_STANDARD 11)
