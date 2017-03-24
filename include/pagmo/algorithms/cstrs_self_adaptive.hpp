@@ -66,7 +66,10 @@ namespace detail
 struct penalized_udp {
 public:
     /// Unused default constructor to please the is_udp type trait
-    penalized_udp(){assert(false)};
+    penalized_udp()
+    {
+        assert(false);
+    };
     /// Constructs the udp. At construction all member get initialized calling update().
     penalized_udp(population &pop) : m_fitness_map()
     {
