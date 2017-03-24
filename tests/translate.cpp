@@ -37,7 +37,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/cec2009.hpp>
-#include <pagmo/problems/cec2013.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/translate.hpp>
@@ -136,7 +135,7 @@ BOOST_AUTO_TEST_CASE(translate_stochastic_test)
 struct ts2 {
     vector_double fitness(const vector_double &) const
     {
-        return {2, 2, 2};
+        return {2};
     }
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -176,7 +175,6 @@ BOOST_AUTO_TEST_CASE(translate_inheritance_test)
     check_inheritance(hock_schittkowsky_71{}, vector_double(4, 0.5));
     check_inheritance(cec2006{1}, vector_double(13, 0.5));
     check_inheritance(cec2009{1}, vector_double(30, 0.5));
-    check_inheritance(cec2013{1}, vector_double(2, 0.5));
     // We check if set_seed is working
     problem p{translate{inventory{10u, 10u, 1234567u}, vector_double(10, 1.)}};
     std::ostringstream ss1, ss2;

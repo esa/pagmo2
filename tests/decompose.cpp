@@ -280,3 +280,30 @@ BOOST_AUTO_TEST_CASE(decompose_inner_algo_get_test)
         BOOST_CHECK(!std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
     }
 }
+
+struct ts2 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(decompose_thread_safety_test)
+{
+    zdt p0{1, 2};
+    decompose t{p0, {0.5, 0.5}, {2., 2.}};
+    BOOST_CHECK(t.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK((decompose{ts2{}, {0.5, 0.5}, {2., 2.}}.get_thread_safety() == thread_safety::none));
+}

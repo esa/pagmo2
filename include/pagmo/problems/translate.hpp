@@ -274,7 +274,7 @@ public:
     /**
      * The set seed is forwarded to the inner UDP
      *
-     * @param the seed to be set
+     * @param seed seed to be set
      */
     void set_seed(unsigned seed)
     {
