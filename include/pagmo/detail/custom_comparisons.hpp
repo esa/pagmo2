@@ -29,7 +29,9 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_CUSTOM_COMPARISONS_HPP
 #define PAGMO_CUSTOM_COMPARISONS_HPP
 
+#include <algorithm>
 #include <boost/functional/hash.hpp> // boost::hash_combine
+#include <cstddef>
 #include <type_traits>
 #include <vector>
 
@@ -103,9 +105,9 @@ struct equal_to_vf {
 // hash_vf can be used to hash vectors of floating point types
 template <typename T>
 struct hash_vf {
-    size_t operator()(std::vector<T> const &in) const
+    std::size_t operator()(std::vector<T> const &in) const
     {
-        size_t retval = 0u;
+        std::size_t retval = 0u;
         for (T el : in) {
             // Combine the hash of the current vector with the hashes of the previous ones
             boost::hash_combine(retval, el);

@@ -366,7 +366,7 @@ public:
      * <tt>std::vector</tt> is a mbh::log_line_type containing: \p Fevals, \p Best, \p Violated, <tt>Viol. Norm</tt> and
      * \p Trial as described in mbh::set_verbosity().
      *
-     * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals, Best,
+     * @return an <tt>std::vector</tt> of mbh::log_line_type containing the logged values Fevals, Best,
      * Violated, Viol.Norm and Trial.
      */
     const log_type &get_log() const

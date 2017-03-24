@@ -29,6 +29,8 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_CSTRS_SELF_ADAPTIVE_HPP
 #define PAGMO_ALGORITHMS_CSTRS_SELF_ADAPTIVE_HPP
 
+#include <cassert>
+#include <cmath>
 #include <iomanip>
 #include <random>
 #include <string>
@@ -42,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include "../io.hpp"
 #include "../population.hpp"
 #include "../rng.hpp"
+#include "../types.hpp"
 #include "../utils/generic.hpp"
 
 namespace pagmo
@@ -63,7 +66,7 @@ namespace detail
 struct penalized_udp {
 public:
     /// Unused default constructor to please the is_udp type trait
-    penalized_udp(){};
+    penalized_udp(){assert(false)};
     /// Constructs the udp. At construction all member get initialized calling update().
     penalized_udp(population &pop) : m_fitness_map()
     {
@@ -126,7 +129,6 @@ public:
     // updating the necessary information. It also builds the hash map used to avoid unecessary fitness
     // evaluations. We exclude this method from the test as all of its corner cases are difficult to trigger
     // and test for correctness
-    // LCOV_EXCL_START
     void update()
     {
         auto pop_size = m_pop_ptr->size();
@@ -296,7 +298,6 @@ public:
             m_scaling_factor = 0.;
         }
     }
-    // LCOV_EXCL_STOP
 
     // Only for debug purposes
     friend std::ostream &operator<<(std::ostream &os, const penalized_udp &p)
@@ -624,12 +625,7 @@ public:
             for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
                 auto x = new_pop.get_x()[i];
                 auto it_f = penalized_udp_ptr->m_fitness_map.find(x);
-                if (it_f != penalized_udp_ptr->m_fitness_map.end()) { // cash hit
-                    pop.set_xf(i, x, it_f->second);
-                } else { // we have to compute the fitness (this will increase the feval counter in the ref pop problem,
-                         // but should never happen hence we do not test it)
-                    pop.set_x(i, x); // LCOV_EXCL_LINE
-                }
+                pop.set_xf(i, x, it_f->second); // We are asserting here that the cache will be hit
             }
             pop.set_xf(worst_idx, best_x, best_f);
         }
@@ -706,7 +702,7 @@ public:
      * <tt>std::vector</tt> is a cstrs_self_adaptive::log_line_type containing: \p Iters, \p Fevals, \p Best, \p
      * Infeasibility, \p Violated, as described in cstrs_self_adaptive::set_verbosity().
      *
-     * @return an <tt> std::vector </tt> of cstrs_self_adaptive::log_line_type containing the logged values Iters,
+     * @return an <tt>std::vector</tt> of cstrs_self_adaptive::log_line_type containing the logged values Iters,
      * Fevals, Best, Infeasibility, Violated and Viol.Norm
      */
     const log_type &get_log() const
