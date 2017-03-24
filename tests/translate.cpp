@@ -184,3 +184,18 @@ BOOST_AUTO_TEST_CASE(translate_inheritance_test)
     ss2 << p;
     BOOST_CHECK(ss2.str().find(std::to_string(5672543u)) != std::string::npos);
 }
+
+BOOST_AUTO_TEST_CASE(translate_inner_algo_get_test)
+{
+    // We check that the correct overload is called according to (*this) being const or not
+    {
+        const translate udp(hock_schittkowsky_71{}, vector_double(4, 0.5));
+        BOOST_CHECK(std::is_const<decltype(udp)>::value);
+        BOOST_CHECK(std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
+    }
+    {
+        translate udp(hock_schittkowsky_71{}, vector_double(4, 0.5));
+        BOOST_CHECK(!std::is_const<decltype(udp)>::value);
+        BOOST_CHECK(!std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
+    }
+}

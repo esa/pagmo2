@@ -226,7 +226,7 @@ struct ia1 {
 
 BOOST_AUTO_TEST_CASE(mbh_inner_algo_get_test)
 {
-    // We check that the correct overload is called according to this being const or not
+    // We check that the correct overload is called according to (*this) being const or not
     {
         const mbh uda(ia1{}, 5u, 1e-2, 23u);
         BOOST_CHECK(std::is_const<decltype(uda)>::value);
