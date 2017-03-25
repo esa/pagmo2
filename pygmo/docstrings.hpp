@@ -190,6 +190,7 @@ std::string archipelago_evolve_docstring();
 std::string archipelago_busy_docstring();
 std::string archipelago_wait_docstring();
 std::string archipelago_get_docstring();
+std::string archipelago_getitem_docstring();
 }
 
 #endif

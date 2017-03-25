@@ -3378,4 +3378,17 @@ Raises:
 )";
 }
 
+std::string archipelago_getitem_docstring()
+{
+    return R"(__getitem__(i)
+
+This subscript operator can be used to access the *i*-th island of the archipelago (that is, the *i*-th island that was
+inserted via :func:`~pygmo.core.archipelago.push_back()`).
+
+Raises:
+    IndexError: if *i* is greater than the size of the archipelago
+
+)";
+}
+
 } // namespace

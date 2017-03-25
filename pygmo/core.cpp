@@ -1187,7 +1187,7 @@ BOOST_PYTHON_MODULE(core)
         .def("wait", &archipelago::wait, pygmo::archipelago_wait_docstring().c_str())
         .def("get", &archipelago::get, pygmo::archipelago_get_docstring().c_str())
         .def("__getitem__", +[](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; },
-             bp::return_internal_reference<>())
+             pygmo::archipelago_getitem_docstring().c_str(), bp::return_internal_reference<>())
         // NOTE: docs for push_back() are in the Python reimplementation.
         .def("_push_back", +[](archipelago &archi, const island &isl) { archi.push_back(isl); });
 }
