@@ -123,6 +123,7 @@ class island_test_case(_ut.TestCase):
         isl.evolve(0)
         isl.get()
         isl.evolve()
+        isl.evolve()
         isl.get()
         isl.evolve(20)
         isl.get()
@@ -208,6 +209,8 @@ class mp_island_test_case(_ut.TestCase):
     def run_basic_tests(self):
         from .core import island, de, rosenbrock
         from . import mp_island
+        from copy import copy, deepcopy
+        from pickle import dumps, loads
         isl = island(algo=de(), prob=rosenbrock(), size=25, udi=mp_island())
         self.assertEqual(isl.get_name(), "Multiprocessing island")
         self.assertTrue(isl.get_extra_info() != "")
@@ -218,8 +221,10 @@ class mp_island_test_case(_ut.TestCase):
         self.assertRaises(ValueError, lambda: mp_island.init_pool(-1))
         mp_island.resize_pool(6)
         isl.evolve(20)
+        isl.evolve(20)
         mp_island.resize_pool(4)
         isl.get()
+        isl.evolve(20)
         isl.evolve(20)
         isl.wait()
         self.assertRaises(ValueError, lambda: mp_island.resize_pool(-1))
@@ -229,6 +234,15 @@ class mp_island_test_case(_ut.TestCase):
         isl = island(algo=de(), prob=_prob(lambda x, y: x + y), size=25)
         isl.evolve()
         isl.get()
+
+        # Copy/deepcopy.
+        isl2 = copy(isl)
+        isl3 = deepcopy(isl)
+        self.assertEqual(str(isl2), str(isl))
+        self.assertEqual(str(isl3), str(isl))
+
+        # Pickle.
+        self.assertEqual(str(loads(dumps(isl))), str(isl))
 
 
 class ipyparallel_island_test_case(_ut.TestCase):
@@ -247,6 +261,8 @@ class ipyparallel_island_test_case(_ut.TestCase):
     def run_basic_tests(self):
         from .core import island, de, rosenbrock
         from . import ipyparallel_island
+        from copy import copy, deepcopy
+        from pickle import dumps, loads
         to = .5
         try:
             isl = island(algo=de(), prob=rosenbrock(),
@@ -258,9 +274,10 @@ class ipyparallel_island_test_case(_ut.TestCase):
         isl = island(algo=de(), prob=rosenbrock(),
                      size=25, udi=ipyparallel_island(timeout=to + .3))
         self.assertEqual(isl.get_name(), "Ipyparallel island")
-        self.assertTrue(isl.get_extra_info() == "")
+        self.assertTrue(isl.get_extra_info() != "")
         isl.evolve(20)
         isl.get()
+        isl.evolve(20)
         isl.evolve(20)
         isl.wait()
 
@@ -268,3 +285,12 @@ class ipyparallel_island_test_case(_ut.TestCase):
         isl = island(algo=de(), prob=_prob(lambda x, y: x + y), size=25)
         isl.evolve()
         isl.get()
+
+        # Copy/deepcopy.
+        isl2 = copy(isl)
+        isl3 = deepcopy(isl)
+        self.assertEqual(str(isl2), str(isl))
+        self.assertEqual(str(isl3), str(isl))
+
+        # Pickle.
+        self.assertEqual(str(loads(dumps(isl))), str(isl))

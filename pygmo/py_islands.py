@@ -320,12 +320,21 @@ class ipyparallel_island(object):
     """
 
     def __init__(self, *args, **kwargs):
+        # NOTE: we need to regulate access to the view because,
+        # while run_evolve() is running in a separate thread, we
+        # could be doing other things involving the view (e.g.,
+        # unpickling into self). Thus, create the lock here.
         self._view_lock = _Lock()
         lview = self._init(*args, **kwargs)
         with self._view_lock:
             self._lview = lview
 
     def _init(self, *args, **kwargs):
+        # A small helper function which will do the following:
+        # * get a client from the cache in a thread safe manner, or
+        #   create a new one from scratch
+        # * store the input arguments as class members
+        # * return a LoadBalancedView from the client.
         from ipyparallel import Client
         # Turn the arguments into something that might be hashable.
         args_key = (args, tuple(sorted([(k, kwargs[k]) for k in kwargs])))
@@ -356,10 +365,15 @@ class ipyparallel_island(object):
         return self.__copy__()
 
     def __getstate__(self):
+        # For pickle/unpickle, we employ the construction
+        # arguments, which will be used to re-init the class
+        # during unpickle.
         return self._args, self._kwargs
 
     def __setstate__(self, state):
         lview = self._init(*state[0], **state[1])
+        # Exclusive access to the _lview member, in order
+        # to avoid data races with run_evolve().
         with self._view_lock:
             self._lview = lview
 
@@ -397,3 +411,15 @@ class ipyparallel_island(object):
 
         """
         return "Ipyparallel island"
+
+    def get_extra_info(self):
+        """Island's extra info.
+
+        Returns:
+            ``str``: a string with extra information about the status of the island
+
+        """
+        with self._view_lock:
+            lview = self._lview
+        d = lview.queue_status()
+        return "\tQueue status:\n\t\n\t" + "\n\t".join(["(" + str(k) + ", " + str(d[k]) + ")" for k in d])
