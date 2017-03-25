@@ -81,6 +81,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
+#include <pagmo/archipelago.hpp>
+#include <pagmo/detail/make_unique.hpp>
+#include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/ackley.hpp>
@@ -115,6 +118,8 @@ see https://www.gnu.org/licenses/. */
 #include "algorithm_exposition_suite.hpp"
 #include "common_utils.hpp"
 #include "docstrings.hpp"
+#include "island.hpp"
+#include "island_exposition_suite.hpp"
 #include "numpy.hpp"
 #include "object_serialization.hpp"
 #include "problem.hpp"
@@ -177,6 +182,9 @@ decltype(meta_probs_ptrs) meta_probs_ptrs{};
 // Algorithm and meta-algorithm classes.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
 decltype(meta_algos_ptrs) meta_algos_ptrs{};
+
+// Island.
+std::unique_ptr<bp::class_<island>> island_ptr{};
 }
 
 // The cleanup function.
@@ -193,6 +201,8 @@ static inline void cleanup()
 
     pygmo::algorithm_ptr.reset();
     pygmo::meta_algos_ptrs = decltype(pygmo::meta_algos_ptrs){};
+
+    pygmo::island_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -231,15 +241,41 @@ struct population_pickle_suite : bp::pickle_suite {
     }
 };
 
-// Helper to get the list of allowed variants for de1220.
-static inline bp::list de1220_allowed_variants()
-{
-    bp::list retval;
-    for (const auto &n : de1220_statics<void>::allowed_variants) {
-        retval.append(n);
+// Serialization support for the archi class.
+struct archipelago_pickle_suite : bp::pickle_suite {
+    static bp::tuple getinitargs(const archipelago &)
+    {
+        return bp::make_tuple();
     }
-    return retval;
-}
+    static bp::tuple getstate(const archipelago &archi)
+    {
+        std::ostringstream oss;
+        {
+            cereal::PortableBinaryOutputArchive oarchive(oss);
+            oarchive(archi);
+        }
+        auto s = oss.str();
+        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+    }
+    static void setstate(archipelago &archi, bp::tuple state)
+    {
+        if (len(state) != 1) {
+            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
+        }
+        auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
+        if (!ptr) {
+            pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize an archipelago");
+        }
+        const auto size = len(state[0]);
+        std::string s(ptr, ptr + size);
+        std::istringstream iss;
+        iss.str(s);
+        {
+            cereal::PortableBinaryInputArchive iarchive(iss);
+            iarchive(archi);
+        }
+    }
+};
 
 // Helper function to test the to_vd functionality.
 static inline bool test_to_vd(const bp::object &o, unsigned n)
@@ -263,6 +299,9 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
     return res.size() == n
            && std::all_of(res.begin(), res.end(), [m](const vector_double &v) { return v.size() == m; });
 }
+
+namespace pygmo
+{
 
 // A test problem.
 struct test_problem {
@@ -339,6 +378,7 @@ struct tu_test_algorithm {
         return thread_safety::none;
     }
 };
+}
 
 // Metaprogramming for the implementation of connect_meta_problems().
 struct meta_problem_connector {
@@ -395,20 +435,41 @@ static inline void connect_meta_algorithms()
     pagmo::detail::tuple_for_each(pygmo::meta_algos_ptrs, meta_algorithm_connector{});
 }
 
+// NOTE: we need to provide a custom raii waiter in the island. The reason is the following.
+// Boost.Python locks the GIL when crossing the boundary from Python into C++. So, if we call wait() from Python,
+// BP will lock the GIL and then we will be waiting for evolutions in the island to finish. During this time, no
+// Python code will be executed because the GIL is locked. This means that if we have a Python thread doing background
+// work (e.g., managing the task queue in pythonic islands), it will have to wait before doing any progress. By
+// unlocking the GIL before calling thread_island::wait(), we give the chance to other Python threads to continue
+// doing some work.
+// NOTE: here we have 2 RAII classes interacting with the GIL. The GIL releaser is the *second* one,
+// and it is the one that is responsible for unlocking the Python interpreter while wait() is running.
+// The *first* one, the GIL thread ensurer, does something else: it makes sure that we can call the Python
+// interpreter from the current C++ thread. In a normal situation, in which islands are just instantiated
+// from the main thread, the gte object is superfluous. However, if we are interacting with islands from a
+// separate C++ thread, then we need to make sure that every time we call into the Python interpreter (e.g., by
+// using the GIL releaser below) we inform Python we are about to call from a separate thread. This is what
+// the GTE object does. This use case is, for instance, what happens with the PADE algorithm when, algo, prob,
+// etc. are all C++ objects (when at least one object is pythonic, we will not end up using the thread island).
+// NOTE: by ordering the class members in this way we ensure that gte is constructed before gr, which is essential
+// (otherwise we might be calling into the interpreter with a releaser before informing Python we are calling
+// from a separate thread).
+struct py_wait_locks {
+    pygmo::gil_thread_ensurer gte;
+    pygmo::gil_releaser gr;
+};
+
 BOOST_PYTHON_MODULE(core)
 {
-    // Setup doc options
-    bp::docstring_options doc_options;
-    doc_options.enable_all();
-    doc_options.disable_cpp_signatures();
-    doc_options.disable_py_signatures();
+    // This function needs to be called before doing anything with threads.
+    // https://docs.python.org/3/c-api/init.html
+    ::PyEval_InitThreads();
 
     // Init numpy.
     // NOTE: only the second import is strictly necessary. We run a first import from BP
     // because that is the easiest way to detect whether numpy is installed or not (rather
     // than trying to figure out a way to detect it from wrap_import_array()).
-    // NOTE: if we split the module in multiple C++ files, we need to take care of importing numpy
-    // from every extension file and also defining PY_ARRAY_UNIQUE_SYMBOL as explained here:
+    // NOTE: if we split the module in multiple C++ files, we need to follow these instructions:
     // http://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
     try {
         bp::import("numpy.core.multiarray");
@@ -419,6 +480,53 @@ BOOST_PYTHON_MODULE(core)
         pygmo_throw(PyExc_ImportError, "");
     }
     wrap_import_array();
+
+    // Check that dill is available.
+    try {
+        bp::import("dill");
+    } catch (...) {
+        pygmo::builtin().attr("print")(
+            u8"\033[91m====ERROR====\nThe dill module could not be imported. "
+            u8"Please make sure that dill has been correctly installed.\n====ERROR====\033[0m");
+        pygmo_throw(PyExc_ImportError, "");
+    }
+
+    // Override the default implementation of the island factory.
+    detail::island_factory<>::s_func = [](const algorithm &algo, const population &pop,
+                                          std::unique_ptr<detail::isl_inner_base> &ptr) {
+        if (static_cast<int>(algo.get_thread_safety()) >= static_cast<int>(thread_safety::basic)
+            && static_cast<int>(pop.get_problem().get_thread_safety()) >= static_cast<int>(thread_safety::basic)) {
+            // Both algo and prob have at least the basic thread safety guarantee. Use the thread island.
+            ptr = detail::make_unique<detail::isl_inner<thread_island>>();
+        } else {
+            // NOTE: here we are re-implementing a piece of code that normally
+            // is pure C++. We are calling into the Python interpreter, so, in order to handle
+            // the case in which we are invoking this code from a separate C++ thread, we construct a GIL ensurer
+            // in order to guard against concurrent access to the interpreter. The idea here is that this piece
+            // of code normally would provide a basic thread safety guarantee, and in order to continue providing
+            // it we use the ensurer.
+            pygmo::gil_thread_ensurer gte;
+            bp::object py_island = bp::import("pygmo")
+#if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
+                                       // NOTE: the mp_island is supported since Python 3.4 or on Windows.
+                                       .attr("mp_island");
+#else
+                                       .attr("ipyparallel_island");
+#endif
+            ptr = detail::make_unique<detail::isl_inner<bp::object>>(py_island());
+        }
+    };
+
+    // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
+    // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
+    // destroyed at the end of island::wait().
+    detail::wait_raii<>::getter = []() { return std::make_shared<py_wait_locks>(); };
+
+    // Setup doc options
+    bp::docstring_options doc_options;
+    doc_options.enable_all();
+    doc_options.disable_cpp_signatures();
+    doc_options.disable_py_signatures();
 
     // The thread_safety enum.
     bp::enum_<thread_safety>("_thread_safety").value("none", thread_safety::none).value("basic", thread_safety::basic);
@@ -455,15 +563,23 @@ BOOST_PYTHON_MODULE(core)
     auto algorithms_module = bp::object(bp::handle<>(bp::borrowed(algorithms_module_ptr)));
     bp::scope().attr("algorithms") = algorithms_module;
 
+    // Create the islands submodule.
+    std::string islands_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".islands");
+    PyObject *islands_module_ptr = PyImport_AddModule(islands_module_name.c_str());
+    if (!islands_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 'islands' submodule");
+    }
+    auto islands_module = bp::object(bp::handle<>(bp::borrowed(islands_module_ptr)));
+    bp::scope().attr("islands") = islands_module;
+
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
     // Ctors from problem.
     // NOTE: we expose only the ctors from pagmo::problem, not from C++ or Python UDPs. An __init__ wrapper
     // on the Python side will take care of cting a pagmo::problem from the input UDP, and then invoke this ctor.
     // This way we avoid having to expose a different ctor for every exposed C++ prob.
-    pop_class.def(bp::init<const problem &, population::size_type>((bp::arg("prob"), bp::arg("size"))))
-        .def(bp::init<const problem &, population::size_type, unsigned>(
-            (bp::arg("prob"), bp::arg("size"), bp::arg("seed"))))
+    pop_class.def(bp::init<const problem &, population::size_type>())
+        .def(bp::init<const problem &, population::size_type, unsigned>())
         // Repr.
         .def(repr(bp::self))
         // Copy and deepcopy.
@@ -518,7 +634,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Problem class.
     pygmo::problem_ptr
-        = pygmo::make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::init<>());
+        = detail::make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::init<>());
     auto &problem_class = *pygmo::problem_ptr;
     problem_class.def(bp::init<const bp::object &>((bp::arg("udp"))))
         .def(repr(bp::self))
@@ -595,7 +711,7 @@ BOOST_PYTHON_MODULE(core)
 
     // Algorithm class.
     pygmo::algorithm_ptr
-        = pygmo::make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::init<>());
+        = detail::make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::init<>());
     auto &algorithm_class = *pygmo::algorithm_ptr;
     algorithm_class.def(bp::init<const bp::object &>((bp::arg("uda"))))
         .def(repr(bp::self))
@@ -646,12 +762,12 @@ BOOST_PYTHON_MODULE(core)
 
     // Exposition of C++ problems.
     // Test problem.
-    auto test_p = pygmo::expose_problem<test_problem>("_test_problem", "A test problem.");
+    auto test_p = pygmo::expose_problem<pygmo::test_problem>("_test_problem", "A test problem.");
     test_p.def(bp::init<unsigned>((bp::arg("nobj"))));
-    test_p.def("get_n", &test_problem::get_n);
-    test_p.def("set_n", &test_problem::set_n);
+    test_p.def("get_n", &pygmo::test_problem::get_n);
+    test_p.def("set_n", &pygmo::test_problem::set_n);
     // Thread unsafe test problem.
-    pygmo::expose_problem<tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
+    pygmo::expose_problem<pygmo::tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
     // Null problem.
     auto np = pygmo::expose_problem<null_problem>("null_problem", pygmo::null_problem_docstring().c_str());
     np.def(bp::init<vector_double::size_type, vector_double::size_type, vector_double::size_type>(
@@ -745,11 +861,11 @@ BOOST_PYTHON_MODULE(core)
     connect_meta_algorithms();
 
     // Test algo.
-    auto test_a = pygmo::expose_algorithm<test_algorithm>("_test_algorithm", "A test algorithm.");
-    test_a.def("get_n", &test_algorithm::get_n);
-    test_a.def("set_n", &test_algorithm::set_n);
+    auto test_a = pygmo::expose_algorithm<pygmo::test_algorithm>("_test_algorithm", "A test algorithm.");
+    test_a.def("get_n", &pygmo::test_algorithm::get_n);
+    test_a.def("set_n", &pygmo::test_algorithm::set_n);
     // Thread unsafe test algo.
-    pygmo::expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
+    pygmo::expose_algorithm<pygmo::tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
     auto na = pygmo::expose_algorithm<null_algorithm>("null_algorithm", pygmo::null_algorithm_docstring().c_str());
     // ARTIFICIAL BEE COLONY
@@ -824,6 +940,14 @@ BOOST_PYTHON_MODULE(core)
     sade_.def("get_seed", &sade::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
     // DE-1220
     auto de1220_ = pygmo::expose_algorithm<de1220>("de1220", pygmo::de1220_docstring().c_str());
+    // Helper to get the list of default allowed variants for de1220.
+    auto de1220_allowed_variants = []() -> bp::list {
+        bp::list retval;
+        for (const auto &n : de1220_statics<void>::allowed_variants) {
+            retval.append(n);
+        }
+        return retval;
+    };
     de1220_.def("__init__", bp::make_constructor(
                                 +[](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                     double ftol, double xtol, bool memory) -> de1220 * {
@@ -1013,4 +1137,57 @@ BOOST_PYTHON_MODULE(core)
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); },
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
+
+    // Island.
+    pygmo::island_ptr
+        = detail::make_unique<bp::class_<island>>("island", pygmo::island_docstring().c_str(), bp::init<>());
+    auto &island_class = *pygmo::island_ptr;
+    island_class.def(bp::init<const algorithm &, const population &>())
+        .def(bp::init<const bp::object &, const algorithm &, const population &>())
+        .def(repr(bp::self))
+        .def_pickle(pygmo::island_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<island>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
+        .def("evolve", +[](island &isl, unsigned n) { isl.evolve(n); }, pygmo::island_evolve_docstring().c_str(),
+             boost::python::arg("n") = 1u)
+        .def("busy", &island::busy, pygmo::island_busy_docstring().c_str())
+        .def("wait", &island::wait, pygmo::island_wait_docstring().c_str())
+        .def("get", &island::get, pygmo::island_get_docstring().c_str())
+        .def("get_population", &island::get_population, pygmo::island_get_population_docstring().c_str())
+        .def("get_algorithm", &island::get_algorithm, pygmo::island_get_algorithm_docstring().c_str())
+        .def("set_population", &island::set_population, pygmo::island_set_population_docstring().c_str(),
+             bp::arg("pop"))
+        .def("set_algorithm", &island::set_algorithm, pygmo::island_set_algorithm_docstring().c_str(), bp::arg("algo"))
+        .def("get_thread_safety",
+             +[](const island &isl) -> bp::tuple {
+                 const auto ts = isl.get_thread_safety();
+                 return bp::make_tuple(ts[0], ts[1]);
+             },
+             pygmo::island_get_thread_safety_docstring().c_str())
+        .def("get_name", &island::get_name, pygmo::island_get_name_docstring().c_str())
+        .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
+
+    // Thread island.
+    auto ti = pygmo::expose_island<thread_island>("thread_island", pygmo::thread_island_docstring().c_str());
+
+    // Archi.
+    bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(),
+                                        bp::init<archipelago::size_type, const island &>());
+    archi_class.def(repr(bp::self))
+        .def_pickle(archipelago_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<archipelago>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<archipelago>)
+        // Size.
+        .def("__len__", &archipelago::size)
+        .def("evolve", +[](archipelago &archi, unsigned n) { archi.evolve(n); },
+             pygmo::archipelago_evolve_docstring().c_str(), boost::python::arg("n") = 1u)
+        .def("busy", &archipelago::busy, pygmo::archipelago_busy_docstring().c_str())
+        .def("wait", &archipelago::wait, pygmo::archipelago_wait_docstring().c_str())
+        .def("get", &archipelago::get, pygmo::archipelago_get_docstring().c_str())
+        .def("__getitem__", +[](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; },
+             pygmo::archipelago_getitem_docstring().c_str(), bp::return_internal_reference<>())
+        // NOTE: docs for push_back() are in the Python reimplementation.
+        .def("_push_back", +[](archipelago &archi, const island &isl) { archi.push_back(isl); });
 }

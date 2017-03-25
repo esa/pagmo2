@@ -68,7 +68,7 @@ class algorithm_test_case(_ut.TestCase):
         self.assertRaises(NotImplementedError,
                           lambda: algorithm("hello world"))
         self.assertRaises(NotImplementedError, lambda: algorithm([]))
-        self.assertRaises(NotImplementedError, lambda: algorithm(int))
+        self.assertRaises(TypeError, lambda: algorithm(int))
         # Some algorithms missing methods, wrong arity, etc.
 
         class na0(object):

@@ -26,21 +26,11 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_THREADING_HPP
-#define PAGMO_THREADING_HPP
+#ifndef PAGMO_ARCHIPELAGO_HPP
+#define PAGMO_ARCHIPELAGO_HPP
 
-namespace pagmo
-{
-
-/// Thread safety levels.
-/**
- * This enum defines a set of values that can be used to specify
- * the thread safety of problems, algorithms, etc.
- */
-enum class thread_safety {
-    none, ///< No thread safety: any concurrent operation on distinct instances is unsafe
-    basic ///< Basic thread safety: any concurrent operation on distinct instances is safe
-};
-}
+// NOTE: archi needs to be together in the same file with island, in order
+// to avoid circular deps. Hence, here we just include island.hpp.
+#include <pagmo/island.hpp>
 
 #endif

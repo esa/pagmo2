@@ -14,27 +14,20 @@ These are the core PyGMO classes.
    py_algorithm
    py_problem
    py_population
+   py_island
+   py_archipelago
    py_misc
 
-Implemented problems
-^^^^^^^^^^^^^^^^^^^^
-These are the problems implemented in PyGMO.
+Implemented problems, algorithms and islands
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+These are the user-defined problems, algorithms and islands implemented in PyGMO.
 
 .. toctree::
    :maxdepth: 1
 
-   problems/py_meta_problems
-   problems/py_cpp_problems
-
-Implemented algorithms
-^^^^^^^^^^^^^^^^^^^^^^
-These are the algorithms implemented in PyGMO.
-
-.. toctree::
-   :maxdepth: 1
-
-   algorithms/py_meta_algorithms
-   algorithms/py_cpp_algorithms
+   problems/py_problems
+   algorithms/py_algorithms
+   islands/py_islands
 
 Utilities
 ^^^^^^^^^

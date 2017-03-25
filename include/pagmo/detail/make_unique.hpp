@@ -26,21 +26,27 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_THREADING_HPP
-#define PAGMO_THREADING_HPP
+#ifndef PAGMO_MAKE_UNIQUE_HPP
+#define PAGMO_MAKE_UNIQUE_HPP
+
+#include <memory>
+#include <utility>
 
 namespace pagmo
 {
 
-/// Thread safety levels.
-/**
- * This enum defines a set of values that can be used to specify
- * the thread safety of problems, algorithms, etc.
- */
-enum class thread_safety {
-    none, ///< No thread safety: any concurrent operation on distinct instances is unsafe
-    basic ///< Basic thread safety: any concurrent operation on distinct instances is safe
-};
+namespace detail
+{
+
+// Implementation of std::make_unique:
+// http://stackoverflow.com/questions/17902405/how-to-implement-make-unique-function-in-c11
+// NOTE: this is not a complete implementation, but sufficient for our uses.
+template <typename T, typename... Args>
+inline std::unique_ptr<T> make_unique(Args &&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+}
 }
 
 #endif

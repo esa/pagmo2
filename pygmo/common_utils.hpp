@@ -44,7 +44,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/tuple.hpp>
 #include <cstddef>
-#include <memory>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -634,13 +633,52 @@ inline bp::tuple cpptuple_to_pytuple(const std::tuple<Args...> &t)
     return detail::ct2pt_invoke(bp::make_tuple<Args...>, t);
 }
 
-// Implementation of std::make_unique:
-// http://stackoverflow.com/questions/17902405/how-to-implement-make-unique-function-in-c11
-template <typename T, typename... Args>
-inline std::unique_ptr<T> make_unique(Args &&... args)
-{
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
+// This RAII struct will unlock the GIL on construction,
+// and lock it again on destruction.
+//
+// See: https://docs.python.org/2/c-api/init.html
+struct gil_releaser {
+    gil_releaser()
+    {
+        m_thread_state = ::PyEval_SaveThread();
+    }
+    // Make sure we don't accidentally try to copy/move it.
+    gil_releaser(const gil_releaser &) = delete;
+    gil_releaser(gil_releaser &&) = delete;
+    gil_releaser &operator=(const gil_releaser &) = delete;
+    gil_releaser &operator=(gil_releaser &&) = delete;
+    ~gil_releaser()
+    {
+        ::PyEval_RestoreThread(m_thread_state);
+    }
+    ::PyThreadState *m_thread_state;
+};
+
+// This RAII struct ensures that the Python interpreter
+// can be used from a thread created from outside Python
+// (e.g., a pthread/std::thread/etc. created from C/C++).
+// On creation, it will register the C/C++ thread with
+// the Python interpreter and lock the GIL. On destruction,
+// it will release any resource acquired on construction
+// and unlock the GIL.
+//
+// See: https://docs.python.org/2/c-api/init.html
+struct gil_thread_ensurer {
+    gil_thread_ensurer()
+    {
+        m_state = ::PyGILState_Ensure();
+    }
+    // Make sure we don't accidentally try to copy/move it.
+    gil_thread_ensurer(const gil_thread_ensurer &) = delete;
+    gil_thread_ensurer(gil_thread_ensurer &&) = delete;
+    gil_thread_ensurer &operator=(const gil_thread_ensurer &) = delete;
+    gil_thread_ensurer &operator=(gil_thread_ensurer &&) = delete;
+    ~gil_thread_ensurer()
+    {
+        ::PyGILState_Release(m_state);
+    }
+    ::PyGILState_STATE m_state;
+};
 }
 
 #endif

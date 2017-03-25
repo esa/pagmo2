@@ -396,8 +396,9 @@ methods:
 
 See the documentation of the corresponding methods in this class for details on how the optional
 methods in the UDP should be implemented and on how they are used by :class:`~pygmo.core.problem`.
-Note that the :ref:`exposed C++ problems <py_cpp_problems>` can also be used as UDPs, even if
-they do not expose any of the mandatory or optional methods listed above.
+Note that the exposed C++ problems can also be used as UDPs, even if they do not expose any of the
+mandatory or optional methods listed above (see :ref:`here <py_problems>` for the
+full list of UDPs already coded in pygmo).
 
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::problem`.
 
@@ -1180,8 +1181,9 @@ Additional optional methods can be implemented in a UDA:
 
 See the documentation of the corresponding methods in this class for details on how the optional
 methods in the UDA should be implemented and on how they are used by :class:`~pygmo.core.algorithm`.
-Note that the :ref:`exposed C++ algorithms <py_cpp_algorithms>` can also be used as UDAs, even if
-they do not expose any of the mandatory or optional methods listed above.
+Note that the exposed C++ algorithms can also be used as UDAs, even if they do not expose any of the
+mandatory or optional methods listed above (see :ref:`here <py_algorithms>` for the
+full list of UDAs already coded in pygmo).
 
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::algorithm`.
 
@@ -3015,6 +3017,376 @@ Returns:
     1D NumPy float array: the reference point
 
 See also the docs of the C++ class :cpp:func:`pagmo::hypervolume::refpoint`.
+
+)";
+}
+
+std::string island_docstring()
+{
+    return R"(Island class.
+
+In the pygmo jargon, an island is a class that encapsulates three entities:
+
+* a user-defined island (**UDI**),
+* an :class:`~pygmo.core.algorithm`,
+* a :class:`~pygmo.core.population`.
+
+Through the UDI, the island class manages the asynchronous evolution (or optimisation)
+of its :class:`~pygmo.core.population` via the algorithm's :func:`~pygmo.core.algorithm.evolve()`
+method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
+:class:`~pygmo.core.thread_island`), in a separate process (e.g., if the UDI is a
+:class:`~pygmo.py_islands.mp_island`) or even in a separate machine (e.g., if the UDI is a
+:class:`~pygmo.py_islands.ipyparallel_island`). The evolution is always asynchronous (i.e., running in the
+"background") and it is initiated by a call to the :func:`~pygmo.core.island.evolve()` method. At any
+time the user can query the state of the island and fetch its internal data members. The user can explicitly
+wait for pending evolutions to conclude by calling the :func:`~pygmo.core.island.wait()` and
+:func:`~pygmo.core.island.get()` methods.
+
+Typically, pagmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
+for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
+the following method:
+
+.. code-block:: python
+
+   def run_evolve(self, algo, pop):
+     ...
+
+The ``run_evolve()`` method of the UDI will use the input :class:`~pygmo.core.algorithm`'s
+:func:`~pygmo.core.algorithm.evolve()` method to evolve the input :class:`~pygmo.core.population` and, once the evolution
+is finished, it will return the evolved :class:`~pygmo.core.population`. Note that, since internally the :class:`~pygmo.core.island`
+class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs to guarantee a certain degree of
+thread-safety: it must be possible to interact with the UDI while evolution is ongoing (e.g., it must be possible to copy
+the UDI while evolution is undergoing, or call the ``get_name()``, ``get_extra_info()`` methods, etc.), otherwise the behaviour
+will be undefined.
+
+In addition to the mandatory ``run_evolve()`` method, a UDI may implement the following optional methods:
+
+.. code-block:: python
+
+   def get_name(self):
+     ...
+   def get_extra_info(self):
+     ...
+
+See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDI are used by :class:`~pygmo.core.island`. This class is the Python counterpart of the C++ class
+:cpp:class:`pagmo::island`.
+
+An island can be initialised in a variety of ways using keyword arguments:
+
+* if the arguments list is empty, a default :class:`~pygmo.core.island` is constructed, containing a
+  :class:`~pygmo.core.thread_island` UDI, a :class:`~pygmo.core.null_algorithm` algorithm and an empty
+  population with problem type :class:`~pygmo.core.null_problem`;
+* if the arguments list contains *algo*, *pop* and, optionally, *udi*, then the constructor will initialise
+  an :class:`~pygmo.core.island` containing the specified algorithm, population and UDI. If the *udi* parameter
+  is not supplied, the UDI type is chosen according to a heuristic which depends on the platform, the
+  Python version and the supplied *algo* and *pop* parameters:
+
+  * if *algo* and *pop*'s problem provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee,
+    then :class:`~pygmo.core.thread_island` will be selected as UDI type;
+  * otherwise, if the current platform is Windows or the Python version is at least 3.4, then :class:`~pygmo.py_islands.mp_island`
+    will be selected as UDI type, else :class:`~pygmo.py_islands.ipyparallel_island` will be chosen;
+* if the arguments list contains *algo*, *prob*, *size* and, optionally, *udi* and *seed*, then a :class:`~pygmo.core.population`
+  will be constructed from *prob*, *size* and *seed*, and the construction will then proceed in the same way detailed
+  above (i.e., *algo* and the newly-created population are used to initialise the island's algorithm and population,
+  and the UDI, if not specified, will be chosen according to the heuristic detailed above).
+
+If the keyword arguments list is invalid, a :exc:`KeyError` exception will be raised.
+
+)";
+}
+
+std::string island_evolve_docstring()
+{
+    return R"(evolve(n = 1)
+
+Launch evolution.
+
+This method will evolve the island’s :class:`~pygmo.core.population` using the island’s :class:`~pygmo.core.algorithm`.
+The evolution happens asynchronously: a call to :func:`~pygmo.core.island.evolve()` will create an evolution task that
+will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution
+managed by the :class:`~pygmo.core.island` object. Each task will invoke the ``run_evolve()`` method of the UDI *n*
+times consecutively to perform the actual evolution. The island's population will be updated at the end of each ``run_evolve()``
+invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling
+:func:`~pygmo.core.island.get()`.
+
+It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
+first-out) fashion. The user may call :func:`~pygmo.core.island.wait()` or :func:`~pygmo.core.island.get()` to block until all
+tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
+
+Args:
+     n (``int``): the number of times the ``run_evolve()`` method of the UDI will be called within the evolution task
+
+Raises:
+    OverflowError: if *n* is negative or larger than an implementation-defined value
+    unspecified: any exception thrown by the underlying C++ method, or by failures at the intersection between C++ and
+      Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string island_get_docstring()
+{
+    return R"(get()
+
+Block until evolution ends and re-raise the first stored exception.
+
+This method will block until all the evolution tasks enqueued via :func:`~pygmo.core.island.evolve()` have been completed.
+The method will then raise the first exception raised by any task enqueued since the last time :func:`~pygmo.core.island.wait()`
+or :func:`~pygmo.core.island.get()` were called.
+
+Raises:
+    unspecified: any exception thrown by evolution tasks or by the underlying C++ method
+
+)";
+}
+
+std::string island_wait_docstring()
+{
+    return R"(wait()
+
+This method will block until all the evolution tasks enqueued via :func:`~pygmo.core.island.evolve()` have been completed.
+
+)";
+}
+
+std::string island_busy_docstring()
+{
+    return R"(busy()
+
+Check island status.
+
+Returns:
+    ``bool``: ``True`` if the island is evolving, ``False`` otherwise
+
+)";
+}
+
+std::string island_get_algorithm_docstring()
+{
+    return R"(get_algorithm()
+
+Get the algorithm.
+
+It is safe to call this method while the island is evolving.
+
+Returns:
+    :class:`~pygmo.core.algorithm`: a copy of the island's algorithm
+
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_set_algorithm_docstring()
+{
+    return R"(set_algorithm(algo)
+
+Set the algorithm.
+
+It is safe to call this method while the island is evolving.
+
+Args:
+    algo (:class:`~pygmo.core.algorithm`): the algorithm that will be copied into the island
+
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_get_population_docstring()
+{
+    return R"(get_population()
+
+Get the population.
+
+It is safe to call this method while the island is evolving.
+
+Returns:
+    :class:`~pygmo.core.population`: a copy of the island's population
+
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_set_population_docstring()
+{
+    return R"(set_population(pop)
+
+Set the population.
+
+It is safe to call this method while the island is evolving.
+
+Args:
+    pop (:class:`~pygmo.core.population`): the population that will be copied into the island
+
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_get_thread_safety_docstring()
+{
+    return R"(get_thread_safety()
+
+It is safe to call this method while the island is evolving.
+
+Returns:
+    ``tuple``: a tuple containing the :class:`~pygmo.thread_safety` levels of the island's algorithm and problem
+
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string island_get_name_docstring()
+{
+    return R"(get_name()
+
+Island's name.
+
+If the UDI provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
+Otherwise, an implementation-defined name based on the type of the UDI will be returned.
+
+It is safe to call this method while the island is evolving.
+
+The ``get_name()`` method of the UDI must return a ``str``.
+
+Returns:
+    ``str``: the name of the UDI
+
+Raises:
+    unspecified: any exception thrown by the ``get_name()`` method of the UDI
+
+)";
+}
+
+std::string island_get_extra_info_docstring()
+{
+    return R"(get_extra_info()
+
+Island's extra info.
+
+If the UDI provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
+method. Otherwise, an empty string will be returned.
+
+It is safe to call this method while the island is evolving.
+
+The ``get_extra_info()`` method of the UDI must return a ``str``.
+
+Returns:
+    ``str``: extra info about the UDI
+
+Raises:
+    unspecified: any exception thrown by the ``get_extra_info()`` method of the UDI
+
+)";
+}
+
+std::string thread_island_docstring()
+{
+    return R"(__init__()
+
+Thread island.
+
+This class is a user-defined island (UDI) that will run evolutions directly inside
+the separate thread of execution within :class:`pygmo.core.island`. Evolution tasks running on this
+UDI must involve :class:`~pygmo.core.algorithm` and :class:`~pygmo.core.problem` instances
+that provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee, otherwise
+errors will be raised during the evolution.
+
+See also the documentation of the corresponding C++ class :cpp:class:`pagmo::thread_island`.
+
+)";
+}
+
+std::string archipelago_docstring()
+{
+    return R"(Archipelago.
+
+An archipelago is a collection of :class:`~pygmo.core.island` objects which provides a convenient way to perform
+multiple optimisations in parallel.
+
+This class is the Python counterpart of the C++ class :cpp:class:`pagmo::archipelago`.
+
+)";
+}
+
+std::string archipelago_evolve_docstring()
+{
+    return R"(evolve(n = 1)
+
+Evolve archipelago.
+
+This method will call :func:`pygmo.core.island.evolve()` on all the islands of the archipelago.
+The input parameter *n* represent the number of times the ``run_evolve()`` method of the island's
+UDI is called within the evolution task.
+
+Args:
+     n (``int``): the parameter that will be passed to :func:`pygmo.core.island.evolve()`
+
+Raises:
+    unspecified: any exception thrown by :func:`pygmo.core.island.evolve()`
+
+)";
+}
+
+std::string archipelago_busy_docstring()
+{
+    return R"(busy()
+
+Check archipelago status.
+
+Returns:
+    ``bool``: ``True`` if at least one island is evolving, ``False`` otherwise
+
+)";
+}
+
+std::string archipelago_wait_docstring()
+{
+    return R"(wait()
+
+Block until all evolutions have finished.
+
+This method will call :func:`pygmo.core.island.wait()` on all the islands of the archipelago.
+
+)";
+}
+
+std::string archipelago_get_docstring()
+{
+    return R"(get()
+
+Block until all evolutions have finished and raise the first exception that was encountered.
+
+This method will call :func:`pygmo.core.island.get()` on all the islands of the archipelago.
+If an invocation of :func:`pygmo.core.island.get()` raises an exception, then on the remaining
+islands :func:`pygmo.core.island.wait()` will be called instead, and the raised exception will be re-raised
+by this method.
+
+Raises:
+    unspecified: any exception thrown by any evolution task queued in the archipelago's
+      islands
+
+)";
+}
+
+std::string archipelago_getitem_docstring()
+{
+    return R"(__getitem__(i)
+
+This subscript operator can be used to access the *i*-th island of the archipelago (that is, the *i*-th island that was
+inserted via :func:`~pygmo.core.archipelago.push_back()`).
+
+Raises:
+    IndexError: if *i* is greater than the size of the archipelago
 
 )";
 }

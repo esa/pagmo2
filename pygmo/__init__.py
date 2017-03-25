@@ -34,6 +34,7 @@ from __future__ import absolute_import as _ai
 # We import the sub-modules into the root namespace
 from .core import *
 from .plotting import *
+from .py_islands import *
 
 # And we explicitly import the submodules
 from . import core
@@ -55,9 +56,9 @@ class thread_safety(object):
 
     """
 
-    #: No thread safety: concurrent operations on distinct instances are unsafe
+    #: No thread safety: any concurrent operation on distinct instances is unsafe
     none = core._thread_safety.none
-    #: Basic thread safety: concurrent operations on distinct instances are safe
+    #: Basic thread safety: any concurrent operation on distinct instances is safe
     basic = core._thread_safety.basic
 
 
@@ -86,14 +87,11 @@ def _population_init(self, prob=None, size=0, seed=None):
 
     """
     import sys
-    if sys.version_info[0] < 3:
-        int_types = (int, long)
-    else:
-        int_types = (int,)
+    int_types = (int, long) if sys.version_info[0] < 3 else (int,)
     # Check input params.
     if not isinstance(size, int_types):
         raise TypeError("the 'size' parameter must be an integer")
-    if not seed is None and not isinstance(size, int_types):
+    if not seed is None and not isinstance(seed, int_types):
         raise TypeError("the 'seed' parameter must be None or an integer")
     if prob is None:
         # Use the null problem for default init.
@@ -113,7 +111,143 @@ def _population_init(self, prob=None, size=0, seed=None):
 
 setattr(population, "__init__", _population_init)
 
+# Override of the island constructor.
+__original_island_init = island.__init__
+
+
+def _island_init(self, **kwargs):
+    """
+    Keyword Args:
+        udi: a user-defined island (either Python or C++ - note that *udi* will be deep-copied
+          and stored inside the :class:`~pygmo.core.island` instance)
+        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.core.algorithm`
+        pop (:class:`~pygmo.core.population`): a population
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
+        size (``int``): the number of individuals
+        seed (``int``): the random seed (if not specified, it will be randomly-generated)
+
+    Raises:
+        KeyError: if the set of keyword arguments is invalid
+        unspecified: any exception thrown by:
+
+          * the invoked C++ constructors,
+          * the deep copy of the UDI,
+          * the constructors of :class:`~pygmo.core.algorithm` and :class:`~pygmo.core.population`,
+          * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+            signatures, etc.)
+
+    """
+    if len(kwargs) == 0:
+        # Default constructor.
+        __original_island_init(self)
+        return
+
+    # If we are not dealing with a def ctor, we always need the algo argument.
+    if not "algo" in kwargs:
+        raise KeyError(
+            "the mandatory 'algo' parameter is missing from the list of arguments "
+            "of the island constructor")
+    algo = kwargs.pop('algo')
+    algo = algo if isinstance(algo, algorithm) else algorithm(algo)
+
+    # Population setup. We either need an input pop, or the prob and size,
+    # plus optionally seed.
+    if 'pop' in kwargs and ('prob' in kwargs or 'size' in kwargs or 'seed' in kwargs):
+        raise KeyError(
+            "if the 'pop' argument is provided, the 'prob', 'size' and 'seed' "
+            "arguments must not be provided")
+    elif 'pop' in kwargs:
+        pop = kwargs.pop("pop")
+    elif 'prob' in kwargs and 'size' in kwargs:
+        if 'seed' in kwargs:
+            pop = population(kwargs.pop('prob'), kwargs.pop(
+                'size'), kwargs.pop('seed'))
+        else:
+            pop = population(kwargs.pop('prob'), kwargs.pop('size'))
+    else:
+        raise KeyError(
+            "unable to construct a population from the arguments of "
+            "the island constructor: you must either pass a population "
+            "('pop') or a set of arguments that can be used to build one "
+            "('prob', 'size' and, optionally, 'seed')")
+
+    # UDI, if any.
+    if 'udi' in kwargs:
+        args = [kwargs.pop('udi'), algo, pop]
+    else:
+        args = [algo, pop]
+
+    if len(kwargs) != 0:
+        raise KeyError(
+            "unrecognised keyword arguments: {}".format(list(kwargs.keys())))
+
+    __original_island_init(self, *args)
+
+
+setattr(island, "__init__", _island_init)
+
+# Override of the archi constructor.
+__original_archi_init = archipelago.__init__
+
+
+def _archi_init(self, n=0, **kwargs):
+    """
+    The keyword arguments accept the same format as explained in the constructor of
+    :class:`~pygmo.core.island`. The constructor will initialise an archipelago with
+    *n* islands built from *kwargs*.
+
+    Args:
+        n (``int``): the number of islands in the archipelago
+
+    Raises:
+        TypeError: if *n* is not an integral type
+        ValueError: if *n* is negative
+        unspecified: any exception thrown by the constructor of :class:`~pygmo.core.island`
+          or by the underlying C++ constructor
+
+    """
+    import sys
+    int_types = (int, long) if sys.version_info[0] < 3 else (int,)
+    # Check n.
+    if not isinstance(n, int_types):
+        raise TypeError("the 'n' parameter must be an integer")
+    if n < 0:
+        raise ValueError(
+            "the 'n' parameter must be non-negative, but it is {} instead".format(n))
+
+    # Call the original init.
+    __original_archi_init(self, n, island(**kwargs))
+
+setattr(archipelago, "__init__", _archi_init)
+
+
+def _archi_push_back(self, **kwargs):
+    """Add island.
+
+    This method will construct an island from the supplied arguments and add it to the archipelago.
+    Islands are added at the end of the archipelago (that is, the new island will have an index
+    equal to the size of the archipelago before the call to this method).
+
+    The keyword arguments accept the same format as explained in the constructor of
+    :class:`~pygmo.core.island`.
+
+    Raises:
+        unspecified: any exception thrown by the constructor of :class:`~pygmo.core.island` or by
+          the underlying C++ method
+
+    """
+    self._push_back(island(**kwargs))
+
+setattr(archipelago, "push_back", _archi_push_back)
+
 # Register the cleanup function.
 import atexit as _atexit
-from .core import _cleanup
-_atexit.register(lambda: _cleanup())
+from .core import _cleanup as _cpp_cleanup
+
+
+def _cleanup():
+    mp_island._shutdown_pool()
+    _cpp_cleanup()
+
+
+_atexit.register(_cleanup)

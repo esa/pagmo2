@@ -18,4 +18,4 @@ ADD_SUBDIRECTORY(plotting)
 
 # Add the Python files.
 install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py _problem_test.py
-     _algorithm_test.py DESTINATION ${PYGMO_INSTALL_PATH})
+     _algorithm_test.py _island_test.py py_islands.py DESTINATION ${PYGMO_INSTALL_PATH})

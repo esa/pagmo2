@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 
 #include <pagmo/algorithms/mbh.hpp>
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/type_traits.hpp>
 
@@ -187,7 +188,7 @@ inline void expose_meta_algorithm(std::unique_ptr<bp::class_<Meta>> &ptr, const 
     assert(algorithm_ptr.get() != nullptr);
     auto &algorithm_class = *algorithm_ptr;
     // Create the class and expose def ctor.
-    ptr = make_unique<bp::class_<Meta>>(name, descr, bp::init<>());
+    ptr = pagmo::detail::make_unique<bp::class_<Meta>>(name, descr, bp::init<>());
     // Make meta constructor from Python user-defined algo (allows to init a meta from Python UDAs).
     // This needs to be the first exposed ctor as BP tries the constructors in reverse order, so this needs
     // to be the last constructor tried during overload resolution.

@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
+#include "detail/make_unique.hpp"
 #include "exceptions.hpp"
 #include "population.hpp"
 #include "serialization.hpp"
@@ -82,7 +83,18 @@ struct null_algorithm {
     {
         return pop;
     };
+    /// Algorithm name.
+    /**
+     * @return <tt>"Null algorithm"</tt>.
+     */
+    std::string get_name() const
+    {
+        return "Null algorithm";
+    }
     /// Serialization support.
+    /**
+     * This class is stateless, no data will be loaded or saved during serialization.
+     */
     template <typename Archive>
     void serialize(Archive &)
     {
@@ -212,7 +224,7 @@ struct algo_inner_base {
     virtual ~algo_inner_base()
     {
     }
-    virtual algo_inner_base *clone() const = 0;
+    virtual std::unique_ptr<algo_inner_base> clone() const = 0;
     virtual population evolve(const population &pop) const = 0;
     virtual void set_seed(unsigned) = 0;
     virtual bool has_set_seed() const = 0;
@@ -243,9 +255,9 @@ struct algo_inner final : algo_inner_base {
     {
     }
     // The clone method, used in the copy constructor of algorithm.
-    virtual algo_inner_base *clone() const override final
+    virtual std::unique_ptr<algo_inner_base> clone() const override final
     {
-        return ::new algo_inner(m_value);
+        return make_unique<algo_inner>(m_value);
     }
     // Mandatory methods.
     virtual population evolve(const population &pop) const override final
@@ -455,7 +467,7 @@ public:
      * in strings and standard containers.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
-    explicit algorithm(T &&x) : m_ptr(::new detail::algo_inner<uncvref_t<T>>(std::forward<T>(x)))
+    explicit algorithm(T &&x) : m_ptr(detail::make_unique<detail::algo_inner<uncvref_t<T>>>(std::forward<T>(x)))
     {
         // We detect if set_seed is implemented in the algorithm, in which case the algorithm is stochastic
         m_has_set_seed = ptr()->has_set_seed();
@@ -552,6 +564,9 @@ public:
      *
      * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
      * of \p this and \p delete must never be called on the pointer.
+     *
+     * **NOTE** The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     * methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.
      *
      * @return a pointer to the internal UDA, or \p nullptr
      * if \p T does not correspond exactly to the original UDA type used
