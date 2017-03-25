@@ -151,6 +151,11 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     {
         return getter_wrapper<std::string>(m_value, "get_extra_info", std::string{});
     }
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(cereal::base_class<isl_inner_base>(this), m_value);
+    }
     bp::object m_value;
 };
 }

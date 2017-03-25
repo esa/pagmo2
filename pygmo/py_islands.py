@@ -320,32 +320,48 @@ class ipyparallel_island(object):
     """
 
     def __init__(self, *args, **kwargs):
+        self._view_lock = _Lock()
+        lview = self._init(*args, **kwargs)
+        with self._view_lock:
+            self._lview = lview
+
+    def _init(self, *args, **kwargs):
         from ipyparallel import Client
         # Turn the arguments into something that might be hashable.
         args_key = (args, tuple(sorted([(k, kwargs[k]) for k in kwargs])))
         if _hashable(args_key):
             with _client_cache_lock:
                 if args_key in _client_cache:
-                    self._rc = _client_cache[args_key]
+                    rc = _client_cache[args_key]
                 else:
                     _client_cache[args_key] = Client(*args, **kwargs)
-                    self._rc = _client_cache[args_key]
+                    rc = _client_cache[args_key]
         else:
             # If the arguments are not hashable, just create a brand new
             # client.
-            self._rc = Client(*args, **kwargs)
+            rc = Client(*args, **kwargs)
 
-        # Init the load balanced view.
-        self._lview = self._rc.load_balanced_view()
+        # Save the init arguments.
+        self._args = args
+        self._kwargs = kwargs
+
+        return rc.load_balanced_view()
 
     def __copy__(self):
-        # For copy and deepcopy just return a reference to itself,
-        # so the copy is not really deep. But it does not make any sense
-        # anyway to try to deep copy a connection object.
-        return self
+        # For copy/deepcopy, construct a new instance
+        # with the same arguments used to construct self.
+        return ipyparallel_island(*self._args, **self._kwargs)
 
     def __deepcopy__(self, d):
-        return self
+        return self.__copy__()
+
+    def __getstate__(self):
+        return self._args, self._kwargs
+
+    def __setstate__(self, state):
+        lview = self._init(*state[0], **state[1])
+        with self._view_lock:
+            self._lview = lview
 
     def run_evolve(self, algo, pop):
         """Evolve population.
@@ -369,9 +385,9 @@ class ipyparallel_island(object):
 
 
         """
-        # NOTE: no need to lock, as there's no other way to interact
-        # with lview apart from this method.
-        return self._lview.apply_sync(_evolve_func, algo, pop)
+        with self._view_lock:
+            lview = self._lview
+        return lview.apply_sync(_evolve_func, algo, pop)
 
     def get_name(self):
         """Island's name.
