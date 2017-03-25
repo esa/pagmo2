@@ -26,35 +26,52 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PYGMO_PYGMO_CLASSES_HPP
-#define PYGMO_PYGMO_CLASSES_HPP
+#ifndef PYGMO_ISLAND_EXPOSITION_SUITE_HPP
+#define PYGMO_ISLAND_EXPOSITION_SUITE_HPP
 
 #include "python_includes.hpp"
 
 #include <boost/python/class.hpp>
-#include <memory>
-#include <tuple>
+#include <boost/python/init.hpp>
+#include <boost/python/scope.hpp>
+#include <cassert>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/mbh.hpp>
-#include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problem.hpp>
-#include <pagmo/problems/decompose.hpp>
-#include <pagmo/problems/translate.hpp>
-#include <pagmo/problems/unconstrain.hpp>
+
+#include "pygmo_classes.hpp"
 
 namespace pygmo
 {
 
-// pagmo::problem.
-extern std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
+namespace bp = boost::python;
 
-// pagmo::algorithm.
-extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
+// Expose an island ctor from a C++ UDI.
+template <typename Isl>
+inline void island_expose_init_cpp_udi()
+{
+    assert(island_ptr.get() != nullptr);
+    auto &isl_class = *island_ptr;
+    isl_class.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
+}
 
-// pagmo::island.
-extern std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
+// Main island exposition function.
+template <typename Isl>
+inline bp::class_<Isl> expose_island(const char *name, const char *descr)
+{
+    // We require all islands to be def-ctible at the bare minimum.
+    bp::class_<Isl> c(name, descr, bp::init<>());
+    // Mark it as a C++ island.
+    c.attr("_pygmo_cpp_island") = true;
+
+    // Expose the island constructor from Isl.
+    island_expose_init_cpp_udi<Isl>();
+
+    // Add the island to the islands submodule.
+    bp::scope().attr("islands").attr(name) = c;
+
+    return c;
+}
 }
 
 #endif

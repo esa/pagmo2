@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/translate.hpp>

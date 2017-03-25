@@ -722,23 +722,189 @@ class mbh_test_case(_ut.TestCase):
             algorithm(null_algorithm()), stop=5, perturb=.4))
 
 
+class archipelago_test_case(_ut.TestCase):
+    """Test case for the archipelago class.
+
+    """
+
+    def runTest(self):
+        self.run_init_tests()
+        self.run_evolve_tests()
+        self.run_access_tests()
+        self.run_push_back_tests()
+        self.run_io_tests()
+        self.run_pickle_tests()
+
+    def run_init_tests(self):
+        from . import archipelago, de, rosenbrock, population, null_problem, thread_island, mp_island
+        a = archipelago()
+        self.assertEqual(len(a), 0)
+        self.assertRaises(IndexError, lambda: a[0])
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        self.assertEqual(len(a), 5)
+        self.assertTrue(a[0].get_algorithm().is_(de))
+        self.assertTrue(a[0].get_population().problem.is_(rosenbrock))
+        self.assertEqual(len(a[0].get_population()), 10)
+        a = archipelago(5, pop=population(), algo=de())
+        self.assertEqual(len(a), 5)
+        self.assertTrue(a[0].get_algorithm().is_(de))
+        self.assertTrue(a[0].get_population().problem.is_(null_problem))
+        self.assertEqual(len(a[0].get_population()), 0)
+        a = archipelago(5, algo=de(), prob=rosenbrock(),
+                        size=10, udi=thread_island(), seed=5)
+        self.assertEqual(len(a), 5)
+        self.assertTrue(a[0].get_algorithm().is_(de))
+        self.assertTrue(a[0].get_population().problem.is_(rosenbrock))
+        self.assertEqual(a[0].get_population().get_seed(), 5)
+        self.assertEqual(len(a[0].get_population()), 10)
+        import sys
+        import os
+        # The mp island requires either Windows or at least Python 3.4.
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
+            return
+        a = archipelago(5, algo=de(), prob=rosenbrock(),
+                        size=10, udi=mp_island(), seed=5)
+        self.assertEqual(len(a), 5)
+        self.assertTrue(a[0].get_algorithm().is_(de))
+        self.assertTrue(a[0].get_population().problem.is_(rosenbrock))
+        self.assertEqual(a[0].get_population().get_seed(), 5)
+        self.assertEqual(len(a[0].get_population()), 10)
+        self.assertRaises(KeyError, lambda: archipelago(
+            5, pop=population(), algo=de(), seed=1))
+
+    def run_evolve_tests(self):
+        from . import archipelago, de, rosenbrock, mp_island
+        from copy import deepcopy
+        a = archipelago()
+        self.assertFalse(a.busy())
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        a.evolve(10)
+        a.evolve(10)
+        str(a)
+        a.wait()
+        a.evolve(10)
+        a.evolve(10)
+        str(a)
+        a.get()
+        # Copy while evolving.
+        a.evolve(10)
+        a.evolve(10)
+        a2 = deepcopy(a)
+        a.get()
+        import sys
+        import os
+        # The mp island requires either Windows or at least Python 3.4.
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
+            return
+        a = archipelago(5, udi=mp_island(), algo=de(),
+                        prob=rosenbrock(), size=10)
+        a.evolve(10)
+        a.evolve(10)
+        str(a)
+        a.wait()
+        a.evolve(10)
+        a.evolve(10)
+        str(a)
+        a.get()
+        # Copy while evolving.
+        a.evolve(10)
+        a.evolve(10)
+        a2 = deepcopy(a)
+        a.get()
+
+    def run_access_tests(self):
+        from . import archipelago, de, rosenbrock
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        i0, i1, i2 = a[0], a[1], a[2]
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        for isl in (i0, i1, i2):
+            self.assertTrue(isl.get_algorithm().is_(de))
+            self.assertTrue(isl.get_population().problem.is_(rosenbrock))
+            self.assertEqual(len(isl.get_population()), 10)
+
+    def run_push_back_tests(self):
+        from . import archipelago, de, rosenbrock
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        # Push back while evolving.
+        a.evolve(10)
+        a.evolve(10)
+        a.evolve(10)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.get()
+        self.assertEqual(len(a), 18)
+        for i in range(5):
+            self.assertTrue(a[i].get_algorithm().is_(de))
+            self.assertTrue(a[i].get_population().problem.is_(rosenbrock))
+            self.assertEqual(len(a[i].get_population()), 10)
+        for i in range(5, 18):
+            self.assertTrue(a[i].get_algorithm().is_(de))
+            self.assertTrue(a[i].get_population().problem.is_(rosenbrock))
+            self.assertEqual(len(a[i].get_population()), 11)
+
+    def run_io_tests(self):
+        from . import archipelago, de, rosenbrock
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        self.assertFalse(repr(a) == "")
+
+    def run_pickle_tests(self):
+        from . import archipelago, de, rosenbrock, mp_island
+        from pickle import dumps, loads
+        import sys
+        import os
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        self.assertEqual(repr(a), repr(loads(dumps(a))))
+        # The mp island requires either Windows or at least Python 3.4.
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
+            return
+        a = archipelago(5, algo=de(), prob=_prob(), size=10, udi=mp_island())
+        self.assertEqual(repr(a), repr(loads(dumps(a))))
+
+
 def run_test_suite():
     """Run the full test suite.
 
     This function will raise an exception if at least one test fails.
 
     """
-    from . import _problem_test, _algorithm_test
+    from . import _problem_test, _algorithm_test, _island_test
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(_problem_test.problem_test_case())
     suite.addTest(_algorithm_test.algorithm_test_case())
+    suite.addTest(_island_test.island_test_case())
+    suite.addTest(_island_test.mp_island_test_case())
+    suite.addTest(_island_test.ipyparallel_island_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(bee_colony_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(moead_test_case())
     suite.addTest(population_test_case())
+    suite.addTest(archipelago_test_case())
     suite.addTest(null_problem_test_case())
     suite.addTest(hypervolume_test_case())
     try:

@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 
 #include <pagmo/algorithms/mbh.hpp>
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/type_traits.hpp>
 
@@ -101,5 +102,4 @@ inline bp::class_<Algo> expose_algorithm(const char *name, const char *descr)
     return c;
 }
 }
-
 #endif
