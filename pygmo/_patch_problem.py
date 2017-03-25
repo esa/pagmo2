@@ -33,6 +33,7 @@ from __future__ import absolute_import as _ai
 
 from .core import problem, translate, decompose, unconstrain
 
+
 def _problem_extract(self, t):
     """Extract user-defined problem instance.
 
