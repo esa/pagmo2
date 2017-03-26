@@ -38,6 +38,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/cec2006.hpp>
+#include <pagmo/problems/cec2009.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/unconstrain.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -187,4 +189,106 @@ BOOST_AUTO_TEST_CASE(unconstrain_serialization_test)
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
+}
+
+template <typename T>
+void check_inheritance(T udp)
+{
+    BOOST_CHECK_EQUAL(problem(unconstrain(udp)).get_nobj(), problem(udp).get_nobj());
+    BOOST_CHECK_EQUAL(problem(unconstrain(udp)).get_nc(), 0u);
+    BOOST_CHECK(problem(unconstrain(udp)).get_bounds() == problem(udp).get_bounds());
+    BOOST_CHECK_EQUAL(problem(unconstrain(udp)).has_set_seed(), problem(udp).has_set_seed());
+}
+
+struct sconp {
+    sconp(unsigned seed = 0u) : m_seed(seed)
+    {
+    }
+    vector_double fitness(const vector_double &) const
+    {
+        return {1u, 1u, 1u};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    vector_double::size_type get_nec() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nic() const
+    {
+        return 1u;
+    }
+    void set_seed(unsigned seed)
+    {
+        m_seed = seed;
+    }
+    std::string get_extra_info() const
+    {
+        return "Seed: " + std::to_string(m_seed);
+    }
+    unsigned m_seed;
+};
+
+BOOST_AUTO_TEST_CASE(unconstrain_inheritance_test)
+{
+    check_inheritance(my_udp{});
+    check_inheritance(null_problem{2, 3, 4});
+    check_inheritance(cec2006{2});
+    check_inheritance(cec2009{4, true});
+    // We check set_seed is working
+    problem p{unconstrain{sconp(1234567u)}};
+    std::ostringstream ss1, ss2;
+    ss1 << p;
+    BOOST_CHECK(ss1.str().find(std::to_string(1234567u)) != std::string::npos);
+    p.set_seed(5672543u);
+    ss2 << p;
+    BOOST_CHECK(ss2.str().find(std::to_string(5672543u)) != std::string::npos);
+}
+
+BOOST_AUTO_TEST_CASE(unconstrain_inner_algo_get_test)
+{
+    // We check that the correct overload is called according to (*this) being const or not
+    {
+        const unconstrain udp(null_problem{2, 2, 2});
+        BOOST_CHECK(std::is_const<decltype(udp)>::value);
+        BOOST_CHECK(std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
+    }
+    {
+        unconstrain udp(null_problem{2, 2, 2});
+        BOOST_CHECK(!std::is_const<decltype(udp)>::value);
+        BOOST_CHECK(!std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
+    }
+}
+
+struct ts2 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    vector_double::size_type get_nic() const
+    {
+        return 1u;
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(unconstrain_thread_safety_test)
+{
+    null_problem p0{2, 2, 3};
+    unconstrain t{p0};
+    BOOST_CHECK(t.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK((unconstrain{ts2{}}.get_thread_safety() == thread_safety::none));
 }

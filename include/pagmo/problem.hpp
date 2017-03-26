@@ -43,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include "detail/custom_comparisons.hpp"
+#include "detail/make_unique.hpp"
 #include "exceptions.hpp"
 #include "io.hpp"
 #include "serialization.hpp"
@@ -134,6 +135,14 @@ struct null_problem {
     vector_double::size_type get_nic() const
     {
         return m_nic;
+    }
+    /// Problem name.
+    /**
+     * @return <tt>"Null problem"</tt>.
+     */
+    std::string get_name() const
+    {
+        return "Null problem";
     }
     /// Serialization
     /**
@@ -586,7 +595,7 @@ struct prob_inner_base {
     virtual ~prob_inner_base()
     {
     }
-    virtual prob_inner_base *clone() const = 0;
+    virtual std::unique_ptr<prob_inner_base> clone() const = 0;
     virtual vector_double fitness(const vector_double &) const = 0;
     virtual vector_double gradient(const vector_double &) const = 0;
     virtual bool has_gradient() const = 0;
@@ -627,9 +636,9 @@ struct prob_inner final : prob_inner_base {
     {
     }
     // The clone method, used in the copy constructor of problem.
-    virtual prob_inner_base *clone() const override final
+    virtual std::unique_ptr<prob_inner_base> clone() const override final
     {
-        return ::new prob_inner(m_value);
+        return make_unique<prob_inner>(m_value);
     }
     // Mandatory methods.
     virtual vector_double fitness(const vector_double &dv) const override final
@@ -1037,7 +1046,8 @@ public:
      */
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit problem(T &&x)
-        : m_ptr(::new detail::prob_inner<uncvref_t<T>>(std::forward<T>(x))), m_fevals(0u), m_gevals(0u), m_hevals(0u)
+        : m_ptr(detail::make_unique<detail::prob_inner<uncvref_t<T>>>(std::forward<T>(x))), m_fevals(0u), m_gevals(0u),
+          m_hevals(0u)
     {
         // 1 - Bounds.
         auto bounds = ptr()->get_bounds();
@@ -1231,6 +1241,9 @@ public:
      *
      * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
      * of \p this, and \p delete must never be called on the pointer.
+     *
+     * **NOTE** The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     * methods on the internal UDP instance. Assigning a new UDP via this pointer is undefined behaviour.
      *
      * @return a pointer to the internal UDP, or \p nullptr
      * if \p T does not correspond exactly to the original UDP type used

@@ -483,26 +483,26 @@ class translate_test_case(_ut.TestCase):
         from numpy import array
 
         t = translate()
-        self.assertFalse(t.extract(null_problem) is None)
+        self.assertFalse(t.inner_problem.extract(null_problem) is None)
         self.assertTrue(all(t.translation == array([0.])))
-        t = translate(udp=rosenbrock(), translation=[1, 2])
-        self.assertFalse(t.extract(rosenbrock) is None)
+        t = translate(prob=rosenbrock(), translation=[1, 2])
+        self.assertFalse(t.inner_problem.extract(rosenbrock) is None)
         self.assertTrue(all(t.translation == array([1., 2.])))
         t = translate(rosenbrock(), [1, 2])
         self.assertTrue(problem(t).is_(translate))
         self.assertFalse(problem(t).extract(translate) is None)
-        self.assertTrue(t.is_(rosenbrock))
-        self.assertFalse(t.extract(rosenbrock) is None)
+        self.assertTrue(t.inner_problem.is_(rosenbrock))
+        self.assertFalse(t.inner_problem.extract(rosenbrock) is None)
         self.assertTrue(all(t.translation == array([1., 2.])))
-        t = translate(translation=[1, 2], udp=rosenbrock())
-        self.assertFalse(t.extract(rosenbrock) is None)
+        t = translate(translation=[1, 2], prob=rosenbrock())
+        self.assertFalse(t.inner_problem.extract(rosenbrock) is None)
         self.assertTrue(all(t.translation == array([1., 2.])))
 
         # Nested translation.
         t = translate(translate(rosenbrock(), [1, 2]), [1, 2])
-        self.assertTrue(t.is_(translate))
-        self.assertFalse(t.extract(translate) is None)
-        self.assertFalse(t.extract(translate).extract(rosenbrock) is None)
+        self.assertTrue(t.inner_problem.is_(translate))
+        self.assertFalse(t.inner_problem.extract(translate) is None)
+        self.assertFalse(t.inner_problem.extract(translate).inner_problem.extract(rosenbrock) is None)
 
         class p(object):
 
@@ -513,22 +513,21 @@ class translate_test_case(_ut.TestCase):
                 return [42]
 
         t = translate(p(), [-1, -1])
-        self.assertFalse(t.extract(p) is None)
+        self.assertFalse(t.inner_problem.extract(p) is None)
         self.assertTrue(all(t.translation == array([-1., -1.])))
-        t = translate(translation=[-1, -1], udp=p())
-        self.assertTrue(t.is_(p))
-        self.assertFalse(t.extract(p) is None)
+        t = translate(translation=[-1, -1], prob=p())
+        self.assertTrue(t.inner_problem.is_(p))
+        self.assertFalse(t.inner_problem.extract(p) is None)
         self.assertTrue(all(t.translation == array([-1., -1.])))
 
-        # Verify construction from problem is forbidden.
-        self.assertRaises(TypeError, lambda: translate(
-            problem(null_problem()), [0.]))
+        # Verify construction from problem is allowed.
+        translate(problem(null_problem()), [0.])
 
         # Verify translation of decompose.
         t = translate(decompose(null_problem(2), [0.2, 0.8], [0., 0.]), [0.])
-        self.assertTrue(t.is_(decompose))
-        self.assertFalse(t.extract(decompose) is None)
-        self.assertFalse(t.extract(decompose).extract(null_problem) is None)
+        self.assertTrue(t.inner_problem.is_(decompose))
+        self.assertFalse(t.inner_problem.extract(decompose) is None)
+        self.assertFalse(t.inner_problem.extract(decompose).inner_problem.extract(null_problem) is None)
 
 
 class unconstrain_test_case(_ut.TestCase):
@@ -541,13 +540,13 @@ class unconstrain_test_case(_ut.TestCase):
         from numpy import array
 
         d = unconstrain()
-        self.assertFalse(d.extract(null_problem) is None)
-        d = unconstrain(udp=hock_schittkowsky_71(),
+        self.assertFalse(d.inner_problem.extract(null_problem) is None)
+        d = unconstrain(prob=hock_schittkowsky_71(),
                         method="weighted", weights=[1., 1.])
         self.assertTrue(problem(d).is_(unconstrain))
         self.assertFalse(problem(d).extract(unconstrain) is None)
-        self.assertTrue(d.is_(hock_schittkowsky_71))
-        self.assertFalse(d.extract(hock_schittkowsky_71) is None)
+        self.assertTrue(d.inner_problem.is_(hock_schittkowsky_71))
+        self.assertFalse(d.inner_problem.extract(hock_schittkowsky_71) is None)
 
         class p(object):
 
@@ -567,19 +566,18 @@ class unconstrain_test_case(_ut.TestCase):
                 return 2
 
         d = unconstrain(p(), "kuri")
-        self.assertTrue(d.is_(p))
-        self.assertFalse(d.extract(p) is None)
+        self.assertTrue(d.inner_problem.is_(p))
+        self.assertFalse(d.inner_problem.extract(p) is None)
 
-        # Verify construction from problem is forbidden.
-        self.assertRaises(TypeError, lambda: unconstrain(
-            problem(null_problem(2, 2, 2)), "kuri"))
+        # Verify construction from problem is allowed.
+        unconstrain(problem(null_problem(2, 2, 2)), "kuri")
 
         # Verify chaining of metas
         t = unconstrain(translate(null_problem(
             2, 2, 2), [0.]), "death penalty")
-        self.assertTrue(t.is_(translate))
-        self.assertFalse(t.extract(translate) is None)
-        self.assertFalse(t.extract(translate).extract(null_problem) is None)
+        self.assertTrue(t.inner_problem.is_(translate))
+        self.assertFalse(t.inner_problem.extract(translate) is None)
+        self.assertFalse(t.inner_problem.extract(translate).inner_problem.extract(null_problem) is None)
 
 
 class decompose_test_case(_ut.TestCase):
@@ -592,13 +590,13 @@ class decompose_test_case(_ut.TestCase):
         from numpy import array
 
         d = decompose()
-        self.assertFalse(d.extract(null_problem) is None)
+        self.assertFalse(d.inner_problem.extract(null_problem) is None)
         self.assertTrue(all(d.z == array([0., 0.])))
         d = decompose(zdt(1, 2), [0.5, 0.5], [0.1, 0.1], "weighted", False)
         self.assertTrue(problem(d).is_(decompose))
         self.assertFalse(problem(d).extract(decompose) is None)
-        self.assertTrue(d.is_(zdt))
-        self.assertFalse(d.extract(zdt) is None)
+        self.assertTrue(d.inner_problem.is_(zdt))
+        self.assertFalse(d.inner_problem.extract(zdt) is None)
         self.assertTrue(all(d.z == array([0.1, 0.1])))
         self.assertTrue(all(d.original_fitness(
             [1., 1.]) == problem(zdt(1, 2)).fitness([1., 1.])))
@@ -616,20 +614,19 @@ class decompose_test_case(_ut.TestCase):
                 return 2
 
         d = decompose(p(), [0.5, 0.5], [0.1, 0.1], "weighted", False)
-        self.assertTrue(d.is_(p))
-        self.assertFalse(d.extract(p) is None)
+        self.assertTrue(d.inner_problem.is_(p))
+        self.assertFalse(d.inner_problem.extract(p) is None)
         self.assertTrue(all(d.z == array([0.1, 0.1])))
         self.assertTrue(all(d.original_fitness([1., 1.]) == array([42, 43])))
 
-        # Verify construction from problem is forbidden.
-        self.assertRaises(TypeError, lambda: decompose(
-            problem(null_problem(2)), [0.2, 0.8], [0., 0.]))
+        # Verify construction from problem is allowed.
+        decompose(problem(null_problem(2)), [0.2, 0.8], [0., 0.])
 
         # Verify decomposition of translate.
         t = decompose(translate(null_problem(2), [0.]), [0.2, 0.8], [0., 0.])
-        self.assertTrue(t.is_(translate))
-        self.assertFalse(t.extract(translate) is None)
-        self.assertFalse(t.extract(translate).extract(null_problem) is None)
+        self.assertTrue(t.inner_problem.is_(translate))
+        self.assertFalse(t.inner_problem.extract(translate) is None)
+        self.assertFalse(t.inner_problem.extract(translate).inner_problem.extract(null_problem) is None)
 
 
 class mbh_test_case(_ut.TestCase):
@@ -648,10 +645,10 @@ class mbh_test_case(_ut.TestCase):
 
         # Def ctor.
         a = mbh()
-        self.assertFalse(a.extract(compass_search) is None)
-        self.assertTrue(a.is_(compass_search))
-        self.assertTrue(a.extract(de) is None)
-        self.assertFalse(a.is_(de))
+        self.assertFalse(a.inner_algorithm.extract(compass_search) is None)
+        self.assertTrue(a.inner_algorithm.is_(compass_search))
+        self.assertTrue(a.inner_algorithm.extract(de) is None)
+        self.assertFalse(a.inner_algorithm.is_(de))
         self.assertEqual(a.get_log(), [])
         self.assertTrue(all(a.get_perturb() == array([0.01])))
         seed = a.get_seed()
@@ -660,21 +657,21 @@ class mbh_test_case(_ut.TestCase):
         self.assertTrue(all(a.get_perturb() == array([0.2])))
         al = algorithm(a)
         self.assertTrue(al.get_thread_safety() == ts.basic)
-        self.assertTrue(al.extract(mbh).extract(compass_search) is not None)
-        self.assertTrue(al.extract(mbh).extract(de) is None)
+        self.assertTrue(al.extract(mbh).inner_algorithm.extract(compass_search) is not None)
+        self.assertTrue(al.extract(mbh).inner_algorithm.extract(de) is None)
         self.assertTrue(str(seed) in str(al))
         al.set_verbosity(4)
         self.assertEqual(al.extract(mbh).get_verbosity(), 4)
 
         # From C++ algo.
         seed = 123321
-        a = mbh(uda=de(), stop=5, perturb=.4)
-        a = mbh(stop=5, perturb=(.4, .2), uda=de())
-        a = mbh(uda=de(), stop=5, seed=seed, perturb=(.4, .2))
-        self.assertTrue(a.extract(compass_search) is None)
-        self.assertFalse(a.is_(compass_search))
-        self.assertFalse(a.extract(de) is None)
-        self.assertTrue(a.is_(de))
+        a = mbh(algo=de(), stop=5, perturb=.4)
+        a = mbh(stop=5, perturb=(.4, .2), algo=de())
+        a = mbh(algo=de(), stop=5, seed=seed, perturb=(.4, .2))
+        self.assertTrue(a.inner_algorithm.extract(compass_search) is None)
+        self.assertFalse(a.inner_algorithm.is_(compass_search))
+        self.assertFalse(a.inner_algorithm.extract(de) is None)
+        self.assertTrue(a.inner_algorithm.is_(de))
         self.assertEqual(a.get_log(), [])
         self.assertTrue(all(a.get_perturb() == array([.4, .2])))
         self.assertEqual(a.get_seed(), seed)
@@ -683,8 +680,8 @@ class mbh_test_case(_ut.TestCase):
         self.assertTrue(all(a.get_perturb() == array([0.2])))
         al = algorithm(a)
         self.assertTrue(al.get_thread_safety() == ts.basic)
-        self.assertTrue(al.extract(mbh).extract(compass_search) is None)
-        self.assertTrue(al.extract(mbh).extract(de) is not None)
+        self.assertTrue(al.extract(mbh).inner_algorithm.extract(compass_search) is None)
+        self.assertTrue(al.extract(mbh).inner_algorithm.extract(de) is not None)
         self.assertTrue(str(seed) in str(al))
         al.set_verbosity(4)
         self.assertEqual(al.extract(mbh).get_verbosity(), 4)
@@ -696,13 +693,13 @@ class mbh_test_case(_ut.TestCase):
                 return pop
 
         seed = 123321
-        a = mbh(uda=algo(), stop=5, perturb=.4)
-        a = mbh(stop=5, perturb=(.4, .2), uda=algo())
-        a = mbh(uda=algo(), stop=5, seed=seed, perturb=(.4, .2))
-        self.assertTrue(a.extract(compass_search) is None)
-        self.assertFalse(a.is_(compass_search))
-        self.assertFalse(a.extract(algo) is None)
-        self.assertTrue(a.is_(algo))
+        a = mbh(algo=algo(), stop=5, perturb=.4)
+        a = mbh(stop=5, perturb=(.4, .2), algo=algo())
+        a = mbh(algo=algo(), stop=5, seed=seed, perturb=(.4, .2))
+        self.assertTrue(a.inner_algorithm.extract(compass_search) is None)
+        self.assertFalse(a.inner_algorithm.is_(compass_search))
+        self.assertFalse(a.inner_algorithm.extract(algo) is None)
+        self.assertTrue(a.inner_algorithm.is_(algo))
         self.assertEqual(a.get_log(), [])
         self.assertTrue(all(a.get_perturb() == array([.4, .2])))
         self.assertEqual(a.get_seed(), seed)
@@ -711,15 +708,176 @@ class mbh_test_case(_ut.TestCase):
         self.assertTrue(all(a.get_perturb() == array([0.2])))
         al = algorithm(a)
         self.assertTrue(al.get_thread_safety() == ts.none)
-        self.assertTrue(al.extract(mbh).extract(compass_search) is None)
-        self.assertTrue(al.extract(mbh).extract(algo) is not None)
+        self.assertTrue(al.extract(mbh).inner_algorithm.extract(compass_search) is None)
+        self.assertTrue(al.extract(mbh).inner_algorithm.extract(algo) is not None)
         self.assertTrue(str(seed) in str(al))
         al.set_verbosity(4)
         self.assertEqual(al.extract(mbh).get_verbosity(), 4)
 
-        # Construction from algorithm is forbidden.
-        self.assertRaises(TypeError, lambda: mbh(
-            algorithm(null_algorithm()), stop=5, perturb=.4))
+        # Construction from algorithm is allowed.
+        mbh(algorithm(null_algorithm()), stop=5, perturb=.4)
+
+
+class archipelago_test_case(_ut.TestCase):
+    """Test case for the archipelago class.
+
+    """
+
+    def runTest(self):
+        self.run_init_tests()
+        self.run_evolve_tests()
+        self.run_access_tests()
+        self.run_push_back_tests()
+        self.run_io_tests()
+        self.run_pickle_tests()
+
+    def run_init_tests(self):
+        from . import archipelago, de, rosenbrock, population, null_problem, thread_island, mp_island
+        a = archipelago()
+        self.assertEqual(len(a), 0)
+        self.assertRaises(IndexError, lambda: a[0])
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        self.assertEqual(len(a), 5)
+        self.assertTrue(a[0].get_algorithm().is_(de))
+        self.assertTrue(a[0].get_population().problem.is_(rosenbrock))
+        self.assertEqual(len(a[0].get_population()), 10)
+        a = archipelago(5, pop=population(), algo=de())
+        self.assertEqual(len(a), 5)
+        self.assertTrue(a[0].get_algorithm().is_(de))
+        self.assertTrue(a[0].get_population().problem.is_(null_problem))
+        self.assertEqual(len(a[0].get_population()), 0)
+        a = archipelago(5, algo=de(), prob=rosenbrock(),
+                        size=10, udi=thread_island(), seed=5)
+        self.assertEqual(len(a), 5)
+        self.assertTrue(a[0].get_algorithm().is_(de))
+        self.assertTrue(a[0].get_population().problem.is_(rosenbrock))
+        self.assertEqual(a[0].get_population().get_seed(), 5)
+        self.assertEqual(len(a[0].get_population()), 10)
+        import sys
+        import os
+        # The mp island requires either Windows or at least Python 3.4.
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
+            return
+        a = archipelago(5, algo=de(), prob=rosenbrock(),
+                        size=10, udi=mp_island(), seed=5)
+        self.assertEqual(len(a), 5)
+        self.assertTrue(a[0].get_algorithm().is_(de))
+        self.assertTrue(a[0].get_population().problem.is_(rosenbrock))
+        self.assertEqual(a[0].get_population().get_seed(), 5)
+        self.assertEqual(len(a[0].get_population()), 10)
+        self.assertRaises(KeyError, lambda: archipelago(
+            5, pop=population(), algo=de(), seed=1))
+
+    def run_evolve_tests(self):
+        from . import archipelago, de, rosenbrock, mp_island
+        from copy import deepcopy
+        a = archipelago()
+        self.assertFalse(a.busy())
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        a.evolve(10)
+        a.evolve(10)
+        str(a)
+        a.wait()
+        a.evolve(10)
+        a.evolve(10)
+        str(a)
+        a.get()
+        # Copy while evolving.
+        a.evolve(10)
+        a.evolve(10)
+        a2 = deepcopy(a)
+        a.get()
+        import sys
+        import os
+        # The mp island requires either Windows or at least Python 3.4.
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
+            return
+        a = archipelago(5, udi=mp_island(), algo=de(),
+                        prob=rosenbrock(), size=10)
+        a.evolve(10)
+        a.evolve(10)
+        str(a)
+        a.wait()
+        a.evolve(10)
+        a.evolve(10)
+        str(a)
+        a.get()
+        # Copy while evolving.
+        a.evolve(10)
+        a.evolve(10)
+        a2 = deepcopy(a)
+        a.get()
+
+    def run_access_tests(self):
+        from . import archipelago, de, rosenbrock
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        i0, i1, i2 = a[0], a[1], a[2]
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        for isl in (i0, i1, i2):
+            self.assertTrue(isl.get_algorithm().is_(de))
+            self.assertTrue(isl.get_population().problem.is_(rosenbrock))
+            self.assertEqual(len(isl.get_population()), 10)
+
+    def run_push_back_tests(self):
+        from . import archipelago, de, rosenbrock
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        # Push back while evolving.
+        a.evolve(10)
+        a.evolve(10)
+        a.evolve(10)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.push_back(algo=de(), prob=rosenbrock(), size=11)
+        a.get()
+        self.assertEqual(len(a), 18)
+        for i in range(5):
+            self.assertTrue(a[i].get_algorithm().is_(de))
+            self.assertTrue(a[i].get_population().problem.is_(rosenbrock))
+            self.assertEqual(len(a[i].get_population()), 10)
+        for i in range(5, 18):
+            self.assertTrue(a[i].get_algorithm().is_(de))
+            self.assertTrue(a[i].get_population().problem.is_(rosenbrock))
+            self.assertEqual(len(a[i].get_population()), 11)
+
+    def run_io_tests(self):
+        from . import archipelago, de, rosenbrock
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        self.assertFalse(repr(a) == "")
+
+    def run_pickle_tests(self):
+        from . import archipelago, de, rosenbrock, mp_island
+        from pickle import dumps, loads
+        import sys
+        import os
+        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        self.assertEqual(repr(a), repr(loads(dumps(a))))
+        # The mp island requires either Windows or at least Python 3.4.
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
+            return
+        a = archipelago(5, algo=de(), prob=_prob(), size=10, udi=mp_island())
+        self.assertEqual(repr(a), repr(loads(dumps(a))))
 
 
 def run_test_suite():
@@ -728,17 +886,21 @@ def run_test_suite():
     This function will raise an exception if at least one test fails.
 
     """
-    from . import _problem_test, _algorithm_test
+    from . import _problem_test, _algorithm_test, _island_test
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(_problem_test.problem_test_case())
     suite.addTest(_algorithm_test.algorithm_test_case())
+    suite.addTest(_island_test.island_test_case())
+    suite.addTest(_island_test.mp_island_test_case())
+    suite.addTest(_island_test.ipyparallel_island_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(bee_colony_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(moead_test_case())
     suite.addTest(population_test_case())
+    suite.addTest(archipelago_test_case())
     suite.addTest(null_problem_test_case())
     suite.addTest(hypervolume_test_case())
     try:

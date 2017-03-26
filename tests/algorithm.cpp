@@ -407,6 +407,7 @@ BOOST_AUTO_TEST_CASE(null_algorithm_construction_and_evolve)
 BOOST_AUTO_TEST_CASE(serialization_test)
 {
     algorithm algo{null_algorithm{}};
+    BOOST_CHECK_EQUAL(algo.get_name(), "Null algorithm");
     std::stringstream ss;
     {
         cereal::JSONOutputArchive oarchive(ss);

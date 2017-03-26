@@ -29,10 +29,17 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_IO_HPP
 #define PAGMO_IO_HPP
 
+#include <algorithm>
+#include <initializer_list>
 #include <iostream>
+#include <iterator>
+#include <sstream>
+#include <stdexcept>
+#include <string>
 #include <utility>
 #include <vector>
 
+#include "exceptions.hpp"
 #include "threading.hpp"
 
 #define PAGMO_MAX_OUTPUT_LENGTH 5u
@@ -68,10 +75,13 @@ inline void stream_impl(std::ostream &os, const bool &b)
 
 inline void stream_impl(std::ostream &os, thread_safety ts)
 {
-    if (ts == thread_safety::none) {
-        os << "none";
-    } else {
-        os << "basic";
+    switch (ts) {
+        case thread_safety::none:
+            os << "none";
+            break;
+        case thread_safety::basic:
+            os << "basic";
+            break;
     }
 }
 
@@ -109,6 +119,77 @@ inline void stream_impl(std::ostream &os, const T &x, const Args &... args)
     stream_impl(os, x);
     stream_impl(os, args...);
 }
+
+// A small helper function that transforms x to string, using internally pagmo::stream.
+template <typename T>
+inline std::string to_string(const T &x)
+{
+    std::ostringstream oss;
+    stream(oss, x);
+    return oss.str();
+}
+
+// Gizmo to create simple ascii tables.
+class table
+{
+    using s_size_t = std::string::size_type;
+
+public:
+    // Construct from table headers, and optional indentation to be used when printing
+    // the table.
+    table(std::vector<std::string> headers, std::string indent = "")
+        : m_indent(std::move(indent)), m_headers(std::move(headers))
+    {
+        std::transform(m_headers.begin(), m_headers.end(), std::back_inserter(m_sizes),
+                       [](const std::string &s) { return s.size(); });
+    }
+    // Add a row to the table. The input arguments are converted to string using to_string.
+    // assembled in a row, and the row is then added to the table. The maximum column widths
+    // are updated if elements in args require more width than currently allocated.
+    template <typename... Args>
+    void add_row(const Args &... args)
+    {
+        if (sizeof...(args) != m_headers.size()) {
+            pagmo_throw(std::invalid_argument, "the table was constructed with " + to_string(m_headers.size())
+                                                   + " columns, but a row with " + to_string(sizeof...(args))
+                                                   + " columns is being added: the two values must be equal");
+        }
+        // Convert to a vector of strings, and add the row.
+        m_rows.emplace_back(std::vector<std::string>{to_string(args)...});
+        // Update the column widths as needed.
+        std::transform(m_rows.back().begin(), m_rows.back().end(), m_sizes.begin(), m_sizes.begin(),
+                       [](const std::string &str, const s_size_t &size) { return (std::max)(str.size(), size); });
+    }
+    // Print the table to stream.
+    friend std::ostream &operator<<(std::ostream &os, const table &t)
+    {
+        // Small helper functor to print a single row.
+        auto print_row = [&t, &os](const std::vector<std::string> &row) {
+            std::transform(row.begin(), row.end(), t.m_sizes.begin(), std::ostream_iterator<std::string>(os),
+                           [](const std::string &str, const s_size_t &size) {
+                               return str + std::string(size - str.size() + 2u, ' ');
+                           });
+        };
+        os << t.m_indent;
+        print_row(t.m_headers);
+        os << '\n' << t.m_indent;
+        std::transform(t.m_sizes.begin(), t.m_sizes.end(), std::ostream_iterator<std::string>(os),
+                       [](const s_size_t &size) { return std::string(size + 2u, '-'); });
+        os << '\n';
+        for (const auto &v : t.m_rows) {
+            os << t.m_indent;
+            print_row(v);
+            os << '\n';
+        }
+        return os;
+    }
+
+private:
+    std::string m_indent;
+    std::vector<std::string> m_headers;
+    std::vector<s_size_t> m_sizes;
+    std::vector<std::vector<std::string>> m_rows;
+};
 
 } // end of namespace detail
 

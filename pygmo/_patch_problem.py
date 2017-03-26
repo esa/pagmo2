@@ -31,7 +31,7 @@
 # for python 2.0 compatibility
 from __future__ import absolute_import as _ai
 
-from .core import problem, translate, decompose, unconstrain
+from .core import problem
 
 
 def _problem_extract(self, t):
@@ -79,9 +79,3 @@ def _problem_is(self, t):
 # Do the actual patching.
 setattr(problem, "extract", _problem_extract)
 setattr(problem, "is_", _problem_is)
-setattr(translate, "extract", _problem_extract)
-setattr(translate, "is_", _problem_is)
-setattr(decompose, "extract", _problem_extract)
-setattr(decompose, "is_", _problem_is)
-setattr(unconstrain, "extract", _problem_extract)
-setattr(unconstrain, "is_", _problem_is)
