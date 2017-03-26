@@ -110,12 +110,12 @@ public:
     }
     /// Constructor (scalar perturbation).
     /**
-     * **NOTE** This constructor is enabled only if \p T, after the removal of cv/reference qualifiers,
-     * is not pagmo::algorithm.
+     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::algorithm.
+
      *
      * This constructor will construct a monotonic basin hopping algorithm using a scalar perturbation.
      *
-     * @param a a user-defined algorithm (UDA) that will be used to construct the inner algorithm.
+     * @param a a user-defined algorithm (UDA) or a pagmo::algorithm that will be used to construct the inner algorithm.
      * @param stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop.
      * @param perturb the perturbation to be applied to each component
@@ -368,7 +368,7 @@ public:
     {
         return m_algorithm.get_thread_safety();
     }
-    /// Getter for the inner algorithm
+    /// Getter for the inner algorithm.
     /**
      * Returns a const reference to the inner pagmo::algorithm.
      *
@@ -378,7 +378,7 @@ public:
     {
         return m_algorithm;
     }
-    /// Getter for the inner problem
+    /// Getter for the inner problem.
     /**
      * Returns a reference to the inner pagmo::algorithm.
      *
@@ -405,7 +405,7 @@ public:
     {
         return m_log;
     }
-    /// Algorithm name
+    /// Algorithm name.
     /**
      * @return a string containing the algorithm name.
      */
@@ -413,7 +413,7 @@ public:
     {
         return "Monotonic Basin Hopping (MBH) - Generalized";
     }
-    /// Extra informations
+    /// Extra informations.
     /**
      * @return a string containing extra informations on the algorithm.
      */
@@ -429,13 +429,13 @@ public:
         stream(ss, "\n", m_algorithm.get_extra_info());
         return ss.str();
     }
-    /// Object serialization
+    /// Object serialization.
     /**
      * This method will save/load \p this into the archive \p ar.
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of the inner algorithm and of primitive types.
      */
     template <typename Archive>
     void serialize(Archive &ar)

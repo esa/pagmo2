@@ -44,7 +44,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// The translate meta-problem
+/// The translate meta-problem.
 /**
  * This meta-problem translates the whole search space of an input problem
  * by a fixed translation vector. pagmo::translate objects are user-defined problems that can be used in
@@ -57,7 +57,7 @@ class translate
     using ctor_enabler = enable_if_t<std::is_constructible<problem, T &&>::value, int>;
 
 public:
-    /// Default constructor
+    /// Default constructor.
     /**
      * The default constructor will initialize a non-translated pagmo::null_problem.
      */
@@ -65,7 +65,7 @@ public:
     {
     }
 
-    /// Constructor from UDP and translation vector
+    /// Constructor from UDP and translation vector.
     /**
      * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem,
      * and \p T is not pagmo::problem.
@@ -91,7 +91,7 @@ public:
         }
     }
 
-    /// Fitness
+    /// Fitness.
     /**
      * The fitness computation is forwarded to the inner UDP, after the translation of \p x.
      *
@@ -108,7 +108,7 @@ public:
         return m_problem.fitness(x_deshifted);
     }
 
-    /// Box-bounds
+    /// Box-bounds.
     /**
      * The box-bounds returned by this method are the translated box-bounds of the inner UDP.
      *
@@ -134,7 +134,7 @@ public:
         return m_problem.get_nobj();
     }
 
-    /// Equality constraint dimension
+    /// Equality constraint dimension.
     /**
      * Returns the number of equality constraints of the inner problem.
      *
@@ -145,7 +145,7 @@ public:
         return m_problem.get_nec();
     }
 
-    /// Inequality constraint dimension
+    /// Inequality constraint dimension.
     /**
      * Returns the number of inequality constraints of the inner problem.
      *
@@ -158,7 +158,7 @@ public:
 
     /// Checks if the inner problem has gradients.
     /**
-     * The has_gradient computation is forwarded to the inner problem
+     * The has_gradient computation is forwarded to the inner problem.
      *
      * @return a flag signalling the availability of the gradient in the inner problem.
      */
@@ -167,7 +167,7 @@ public:
         return m_problem.has_gradient();
     }
 
-    /// Gradients
+    /// Gradients.
     /**
      * The gradients computation is forwarded to the inner problem, after the translation of \p x.
      *
@@ -186,7 +186,7 @@ public:
 
     /// Checks if the inner problem has gradient sparisty implemented.
     /**
-     * The has_gradient_sparsity computation is forwarded to the inner problem
+     * The has_gradient_sparsity computation is forwarded to the inner problem.
      *
      * @return a flag signalling the availability of the gradient sparisty in the inner problem.
      */
@@ -195,9 +195,9 @@ public:
         return m_problem.has_gradient_sparsity();
     }
 
-    /// Gradient sparsity
+    /// Gradient sparsity.
     /**
-     * The gradient sparsity computation is forwarded to the inner problem
+     * The gradient sparsity computation is forwarded to the inner problem.
      *
      * @return the gradient sparsity of the inner problem.
      */
@@ -208,7 +208,7 @@ public:
 
     /// Checks if the inner problem has hessians.
     /**
-     * The has_hessians computation is forwarded to the inner problem
+     * The has_hessians computation is forwarded to the inner problem.
      *
      * @return a flag signalling the availability of the hessians in the inner problem.
      */
@@ -217,7 +217,7 @@ public:
         return m_problem.has_hessians();
     }
 
-    /// Hessians
+    /// Hessians.
     /**
      * The hessians computation is forwarded to the inner problem, after the translation of \p x.
      *
@@ -236,7 +236,7 @@ public:
 
     /// Checks if the inner problem has hessians sparisty implemented.
     /**
-     * The has_hessians_sparsity computation is forwarded to the inner problem
+     * The has_hessians_sparsity computation is forwarded to the inner problem.
      *
      * @return a flag signalling the availability of the hessians sparisty in the inner problem.
      */
@@ -245,9 +245,9 @@ public:
         return m_problem.has_hessians_sparsity();
     }
 
-    /// Hessians sparsity
+    /// Hessians sparsity.
     /**
-     * The hessians sparsity computation is forwarded to the inner problem
+     * The hessians sparsity computation is forwarded to the inner problem.
      *
      * @return the hessians sparsity of the inner problem.
      */

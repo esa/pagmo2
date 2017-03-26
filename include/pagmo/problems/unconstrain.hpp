@@ -81,12 +81,11 @@ public:
 
     /// Constructor from UDP and unconstrain method
     /**
-     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem,
-     * and \p T is not pagmo::problem.
+     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem.
      *
      * Wraps a user-defined problem so that its constraints will be removed
      *
-     * @param p a user-defined problem.
+     * @param p a user-defined problem or a pagmo::problem.
      * @param method an <tt>std::string</tt> containing the name of the method to be used t remove the constraints: one
      * of "death penalty", "kuri", "weighted", "ignore_c" or "ignore_o".
      * @param weights an <tt>std::vector</tt> containing the weights in case "weighted" is selected as method.
@@ -136,9 +135,9 @@ public:
         m_method = my_map[method];
     }
 
-    /// Fitness
+    /// Fitness.
     /**
-     * The unconstrained fitness computation is made
+     * The unconstrained fitness computation.
      *
      * @param x the decision vector.
      *
@@ -250,7 +249,7 @@ public:
         }
     }
 
-    /// Box-bounds
+    /// Box-bounds.
     /**
      * Forwards the bounds computations to the inner pagmo::problem.
      *
@@ -299,7 +298,7 @@ public:
         return m_problem.get_thread_safety();
     }
 
-    /// Getter for the inner problem
+    /// Getter for the inner problem.
     /**
      * Returns a const reference to the inner pagmo::problem.
      *
@@ -310,7 +309,7 @@ public:
         return m_problem;
     }
 
-    /// Getter for the inner problem
+    /// Getter for the inner problem.
     /**
      * Returns a reference to the inner pagmo::problem.
      *
@@ -325,7 +324,7 @@ public:
         return m_problem;
     }
 
-    /// Problem name
+    /// Problem name.
     /**
      * This method will add <tt>[unconstrained]</tt> to the name provided by the inner problem.
      *
@@ -338,7 +337,7 @@ public:
         return m_problem.get_name() + " [unconstrained]";
     }
 
-    /// Extra info
+    /// Extra info.
     /**
      * This method will append a description of the unconstrain method to the extra info provided
      * by the inner problem.
@@ -363,7 +362,7 @@ public:
         return m_problem.get_extra_info() + oss.str();
     }
 
-    /// Object serialization
+    /// Object serialization.
     /**
      * This method will save/load \p this into/from the archive \p ar.
      *

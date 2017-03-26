@@ -766,8 +766,7 @@ BOOST_PYTHON_MODULE(core)
     mbh_.def("__init__",
              bp::make_constructor(+[](const algorithm &a, unsigned stop, const bp::object &perturb,
                                       unsigned seed) { return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), seed); },
-                                  bp::default_call_policies(),
-                                  (bp::arg("algo"), bp::arg("stop"), bp::arg("perturb"), bp::arg("seed"))));
+                                  bp::default_call_policies()));
     mbh_.def("__init__", bp::make_constructor(
                              +[](const algorithm &a, unsigned stop, const bp::object &perturb) {
                                  return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), pagmo::random_device::next());

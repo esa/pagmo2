@@ -110,16 +110,15 @@ public:
     decompose() : decompose(null_problem{2u}, {0.5, 0.5}, {0., 0.})
     {
     }
-    /// Constructor from UDP.
+    /// Constructor from problem.
     /**
-     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem,
-     * and \p T is not pagmo::problem.
+     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem.
      *
-     * Wraps a user-defined problem (UDP) so that its fitness will be decomposed using one of three
+     * Wraps a user-defined problem (UDP) or a pagmo::problem so that its fitness will be decomposed using one of three
      * decomposition methods. pagmo::decompose objects are user-defined problems that can be used
      * to define a pagmo::problem.
      *
-     * @param p the input UDP.
+     * @param p the input UDP or pagmo::problem.
      * @param weight the vector of weights \f$\boldsymbol \lambda\f$.
      * @param z the reference point \f$\mathbf z^*\f$.
      * @param method an \p std::string containing the decomposition method chosen.
@@ -247,7 +246,7 @@ public:
     {
         return 1u;
     }
-    /// Box-bounds
+    /// Box-bounds.
     /**
      * Forwards the bounds computations to the inner pagmo::problem.
      *
@@ -332,7 +331,7 @@ public:
         return m_problem.get_thread_safety();
     }
 
-    /// Getter for the inner problem
+    /// Getter for the inner problem.
     /**
      * Returns a const reference to the inner pagmo::problem.
      *
@@ -343,7 +342,7 @@ public:
         return m_problem;
     }
 
-    /// Getter for the inner problem
+    /// Getter for the inner problem.
     /**
      * Returns a reference to the inner pagmo::problem.
      *
@@ -358,7 +357,7 @@ public:
         return m_problem;
     }
 
-    /// Object serialization
+    /// Object serialization.
     /**
      * This method will save/load \p this into the archive \p ar.
      *

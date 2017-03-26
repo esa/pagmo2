@@ -1363,10 +1363,6 @@ This property gives direct access to the :class:`~pygmo.core.algorithm` stored w
 Returns:
     :class:`~pygmo.core.algorithm`: a reference to the inner algorithm
 
-Raises:
-    unspecified: any exception thrown by failures at the intersection between C++ and
-      Python (e.g., type conversion errors, mismatched function signatures, etc.) when setting the property
-
 )";
 }
 
@@ -1379,10 +1375,6 @@ This property gives direct access to the :class:`~pygmo.core.problem` stored wit
 
 Returns:
     :class:`~pygmo.core.problem`: a reference to the inner problem
-
-Raises:
-    unspecified: any exception thrown by failures at the intersection between C++ and
-      Python (e.g., type conversion errors, mismatched function signatures, etc.) when setting the property
 
 )";
 }
