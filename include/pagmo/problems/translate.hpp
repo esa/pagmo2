@@ -65,10 +65,9 @@ public:
     {
     }
 
-    /// Constructor from UDP and translation vector.
+    /// Constructor from problem and translation vector.
     /**
-     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem,
-     * and \p T is not pagmo::problem.
+     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem.
      *
      * Wraps a user-defined problem so that its fitness , bounds, etc. will be shifted by a
      * translation vector.
@@ -158,7 +157,7 @@ public:
 
     /// Checks if the inner problem has gradients.
     /**
-     * The has_gradient computation is forwarded to the inner problem.
+     * The <tt>has_gradient()</tt> computation is forwarded to the inner problem.
      *
      * @return a flag signalling the availability of the gradient in the inner problem.
      */
@@ -176,7 +175,7 @@ public:
      * @return the gradient of the fitness function.
      *
      * @throws unspecified any exception thrown by memory errors in standard containers,
-     * or by problem::gradient().
+     * or by <tt>problem::gradient()</tt>.
      */
     vector_double gradient(const vector_double &x) const
     {
@@ -186,7 +185,7 @@ public:
 
     /// Checks if the inner problem has gradient sparisty implemented.
     /**
-     * The has_gradient_sparsity computation is forwarded to the inner problem.
+     * The <tt>has_gradient_sparsity()</tt> computation is forwarded to the inner problem.
      *
      * @return a flag signalling the availability of the gradient sparisty in the inner problem.
      */
@@ -197,7 +196,7 @@ public:
 
     /// Gradient sparsity.
     /**
-     * The gradient sparsity computation is forwarded to the inner problem.
+     * The <tt>gradient_sparsity<\tt> computation is forwarded to the inner problem.
      *
      * @return the gradient sparsity of the inner problem.
      */
@@ -208,7 +207,7 @@ public:
 
     /// Checks if the inner problem has hessians.
     /**
-     * The has_hessians computation is forwarded to the inner problem.
+     * The <tt>has_hessians()</tt> computation is forwarded to the inner problem.
      *
      * @return a flag signalling the availability of the hessians in the inner problem.
      */
@@ -219,7 +218,7 @@ public:
 
     /// Hessians.
     /**
-     * The hessians computation is forwarded to the inner problem, after the translation of \p x.
+     * The <tt>hessians()</tt> computation is forwarded to the inner problem, after the translation of \p x.
      *
      * @param x the decision vector.
      *
@@ -236,7 +235,7 @@ public:
 
     /// Checks if the inner problem has hessians sparisty implemented.
     /**
-     * The has_hessians_sparsity computation is forwarded to the inner problem.
+     * The <tt>has_hessians_sparsity()</tt> computation is forwarded to the inner problem.
      *
      * @return a flag signalling the availability of the hessians sparisty in the inner problem.
      */
@@ -247,7 +246,7 @@ public:
 
     /// Hessians sparsity.
     /**
-     * The hessians sparsity computation is forwarded to the inner problem.
+     * The <tt>hessians_sparsity()</tt> computation is forwarded to the inner problem.
      *
      * @return the hessians sparsity of the inner problem.
      */
@@ -273,7 +272,7 @@ public:
      *
      * @param seed seed to be set.
      *
-     * @throws std::not_implemented_error if the inner problem is not stochastic.
+     * @throws unspecified any exception thrown by the method <tt>set_seed()</tt> of the inner problem.
      */
     void set_seed(unsigned seed)
     {
@@ -286,7 +285,7 @@ public:
      *
      * @return a string containing the problem name.
      *
-     * @throws unspecified any exception thrown by problem::get_name() or memory errors in standard classes.
+     * @throws unspecified any exception thrown by <tt>problem::get_name()</tt> or memory errors in standard classes.
      */
     std::string get_name() const
     {
