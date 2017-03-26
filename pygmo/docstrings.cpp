@@ -1389,7 +1389,7 @@ Raises:
 
 std::string mbh_docstring()
 {
-    return R"(__init__(uda = compass_search(), stop = 5, perturb = 1e-2, seed = random)
+    return R"(__init__(algo = compass_search(), stop = 5, perturb = 1e-2, seed = random)
 
 Monotonic Basin Hopping (generalized).
 
@@ -1424,28 +1424,6 @@ See: http://arxiv.org/pdf/cond-mat/9803344 for the paper introducing the basin h
 cluster optimization.
 
 See also the docs of the C++ class :cpp:class:`pagmo::mbh`.
-
-The constructor admits two forms:
-
-* no arguments,
-* three mandatory arguments and one optional argument (the seed).
-
-Any other combination of arguments will raise an exception.
-
-Args:
-    uda: a user-defined algorithm (either C++ or Python - note that *uda* will be deep-copied
-      and stored inside the :class:`~pygmo.core.mbh` instance)
-    stop (``int``): consecutive runs of the inner algorithm that need to result in no improvement for
-      :class:`~pygmo.core.mbh` to stop
-    perturb (``float`` or array-like object): perturb the perturbation to be applied to each component
-    seed (``int``): seed used by the internal random number generator
-
-Raises:
-    ValueError: if *perturb* (or one of its components, if *perturb* is an array) is not in the
-      (0,1] range
-    unspecified: any exception thrown by the constructor of :class:`pygmo.core.algorithm`, or by
-      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)
 
 )";
 }
@@ -2605,7 +2583,7 @@ Raises:
 
 std::string unconstrain_docstring()
 {
-    return R"(__init__(udp = null_problem(nobj=2, nec=3, nic=4), method = "death penalty", weights = [])
+    return R"(__init__(prob = null_problem(nobj=2, nec=3, nic=4), method = "death penalty", weights = [])
 
 The unconstrain meta-problem.
 
@@ -2627,33 +2605,6 @@ a survey of the state of the art. Computer methods in applied mechanics and engi
 
 See: Kuri Morales, A. and Quezada, C.C. A Universal eclectic genetic algorithm for constrained optimization,
 Proceedings 6th European Congress on Intelligent Techniques & Soft Computing, EUFIT'98, 518-522, 1998.
-
-The constructor admits two forms:
-
-* no arguments,
-* two mandatory arguments and one optional arguments.
-
-Any other combination of arguments will raise an exception.
-
-Args:
-    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
-      and stored inside the :class:`~pygmo.core.unconstrained` instance)
-    method (``str``): a string containing the unconstrain method chosen, one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``]
-    weights (array-like object): the vector of weights to be used if the method chosen is "weighted"
-
-Raises:
-    ValueError: if either:
-
-      * *udp* is unconstrained,
-      * *method* is not one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``],
-      * *weight* is not of the same size as the problem constraints (if the method ``'weighted'`` is selcted), or not empty otherwise.
-
-    unspecified: any exception thrown by:
-
-      * the constructor of :class:`pygmo.core.problem`,
-      * the constructor of the underlying C++ class,
-      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
 
 )";
 }

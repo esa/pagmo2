@@ -112,7 +112,7 @@ __original_decompose_init = decompose.__init__
 # of the syntax decompose(udp, ..., ) for all udps
 def _decompose_init(self, prob = None, weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False):
     """
-    The constructor admits two forms:
+    The constructor admits two forms,
 
     * no arguments,
     * two mandatory arguments (*prob* and *weight*) and three optional arguments.
@@ -126,7 +126,7 @@ def _decompose_init(self, prob = None, weight = [0.5, 0.5], z = [0.,0.], method 
         z (array-like object): the reference point :math:`\mathbf z^*`
         method (``str``): a string containing the decomposition method chosen
         adapt_ideal (``bool``): when ``True``, the reference point is adapted at each fitness evaluation
-        to be the ideal point
+            to be the ideal point
 
     Raises:
         ValueError: if either:
@@ -134,15 +134,17 @@ def _decompose_init(self, prob = None, weight = [0.5, 0.5], z = [0.,0.], method 
         * *prob* is single objective or constrained,
         * *method* is not one of [``'weighted'``, ``'tchebycheff'``, ``'bi'``],
         * *weight* is not of size :math:`n`,
-        * *z* is not of size :math:`n`,
-        * *weight* is not such that :math:`\lambda_i > 0, \forall i=1..n`,
-        * *weight* is not such that :math:`\sum_i \lambda_i = 1`
+        * *z* is not of size :math:`n`
+        * *weight* is not such that :math:`\\lambda_i > 0, \\forall i=1..n`,
+        * *weight* is not such that :math:`\\sum_i \\lambda_i = 1`
+
         unspecified: any exception thrown by:
 
         * the constructor of :class:`pygmo.core.problem`,
         * the constructor of the underlying C++ class,
         * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
             signatures, etc.)
+
     """
     if prob is None:
         # Use the null problem for default init.
@@ -159,13 +161,63 @@ def _decompose_init(self, prob = None, weight = [0.5, 0.5], z = [0.,0.], method 
 
 setattr(decompose, "__init__", _decompose_init)
 
+# Override of the unconstrain meta-problem constructor.
+__original_unconstrain_init = unconstrain.__init__
+
+# NOTE: the idea of having the unconstrain init here instead of exposed from C++ is to allow the use
+# of the syntax unconstrain(udp, ... ) for all udps
+def _unconstrain_init(self, prob = None, method = "death penalty", weights = []):
+    """
+    The constructor admits two forms,
+
+    * no arguments,
+    * two mandatory arguments and one optional argument.
+
+    Any other combination of arguments will raise an exception.
+
+    Args:
+        prob: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
+              and stored inside the :class:`~pygmo.core.unconstrained` instance)
+        method (``str``): a string containing the unconstrain method chosen, one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``]
+        weights (array-like object): the vector of weights to be used if the method chosen is "weighted"
+
+    Raises:
+        ValueError: if either:
+
+        * *prob* is unconstrained,
+        * *method* is not one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``],
+        * *weight* is not of the same size as the problem constraints (if the method ``'weighted'`` is selcted), or not empty otherwise.
+
+        unspecified: any exception thrown by:
+
+        * the constructor of :class:`pygmo.core.problem`,
+        * the constructor of the underlying C++ class,
+        * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+            signatures, etc.)
+
+    """
+    if prob is None:
+        # Use the null problem for default init.
+        prob = null_problem(nobj=2, nec=3, nic=4)
+    if type(prob) == problem:
+        # If prob is a pygmo problem, we will pass it as-is to the
+        # original init.
+        prob_arg = prob
+    else:
+        # Otherwise, we attempt to create a problem from it. This will
+        # work if prob is an exposed C++ problem or a Python UDP.
+        prob_arg = problem(prob)
+    __original_unconstrain_init(self, prob_arg, method, weights)
+
+setattr(unconstrain, "__init__", _unconstrain_init)
+
 # Override of the mbh meta-algorithm constructor.
 __original_mbh_init = mbh.__init__
 # NOTE: the idea of having the mbh init here instead of exposed from C++ is to allow the use
 # of the syntax mbh(uda, ...) for all udas
 def _mbh_init(self, algo = None, stop = 5, perturb = 1e-2, seed = None):
     """
-    The constructor admits two forms:
+    The constructor admits two forms,
 
     * no arguments,
     * three mandatory arguments and one optional argument (the seed).
@@ -174,18 +226,19 @@ def _mbh_init(self, algo = None, stop = 5, perturb = 1e-2, seed = None):
 
     Args:
         uda: a user-defined algorithm (either C++ or Python - note that *uda* will be deep-copied
-        and stored inside the :class:`~pygmo.core.mbh` instance)
+             and stored inside the :class:`~pygmo.core.mbh` instance)
         stop (``int``): consecutive runs of the inner algorithm that need to result in no improvement for
-        :class:`~pygmo.core.mbh` to stop
+             :class:`~pygmo.core.mbh` to stop
         perturb (``float`` or array-like object): perturb the perturbation to be applied to each component
         seed (``int``): seed used by the internal random number generator
 
     Raises:
         ValueError: if *perturb* (or one of its components, if *perturb* is an array) is not in the
-        (0,1] range
+             (0,1] range
         unspecified: any exception thrown by the constructor of :class:`pygmo.core.algorithm`, or by
-        failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
+             failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+             signatures, etc.)
+
     """
     if algo is None:
         # Use the null problem for default init.
