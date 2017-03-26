@@ -368,9 +368,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a nsga2::log_line_type containing: Gen, Fevals, ideal_point
+     * <tt>std::vector</tt> is a nsga2::log_line_type containing: Gen, Fevals, ideal_point
      * as described in nsga2::set_verbosity
-     * @return an <tt> std::vector </tt> of nsga2::log_line_type containing the logged values Gen, Fevals,
+     * @return an <tt>std::vector</tt> of nsga2::log_line_type containing the logged values Gen, Fevals,
      * ideal_point
      */
     const log_type &get_log() const

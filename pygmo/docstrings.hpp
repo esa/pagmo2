@@ -80,19 +80,6 @@ std::string problem_get_name_docstring();
 std::string problem_get_extra_info_docstring();
 std::string problem_get_thread_safety_docstring();
 
-// translate
-std::string translate_docstring();
-std::string translate_translation_docstring();
-
-// decompose
-std::string decompose_docstring();
-std::string decompose_decompose_fitness_docstring();
-std::string decompose_original_fitness_docstring();
-std::string decompose_z_docstring();
-
-// unconstrain
-std::string unconstrain_docstring();
-
 // algorithm
 std::string algorithm_docstring();
 std::string algorithm_evolve_docstring();
@@ -104,14 +91,6 @@ std::string algorithm_get_name_docstring();
 std::string algorithm_get_extra_info_docstring();
 std::string algorithm_get_thread_safety_docstring();
 
-// mbh.
-std::string mbh_docstring();
-std::string mbh_get_seed_docstring();
-std::string mbh_get_verbosity_docstring();
-std::string mbh_set_perturb_docstring();
-std::string mbh_get_log_docstring();
-std::string mbh_get_perturb_docstring();
-
 // user - problems
 std::string null_problem_docstring();
 std::string rosenbrock_docstring();
@@ -121,7 +100,15 @@ std::string zdt_p_distance_docstring();
 std::string cec2006_docstring();
 std::string cec2009_docstring();
 std::string cec2013_docstring();
+std::string translate_docstring();
+std::string translate_translation_docstring();
+std::string decompose_docstring();
+std::string decompose_decompose_fitness_docstring();
+std::string decompose_original_fitness_docstring();
+std::string decompose_z_docstring();
+std::string unconstrain_docstring();
 std::string get_best_docstring(const std::string &);
+std::string generic_udp_inner_problem_docstring();
 
 // user - algorithms
 std::string null_algorithm_docstring();
@@ -145,7 +132,14 @@ std::string sade_docstring();
 std::string sade_get_log_docstring();
 std::string simulated_annealing_docstring();
 std::string simulated_annealing_get_log_docstring();
+std::string mbh_docstring();
+std::string mbh_get_seed_docstring();
+std::string mbh_get_verbosity_docstring();
+std::string mbh_set_perturb_docstring();
+std::string mbh_get_log_docstring();
+std::string mbh_get_perturb_docstring();
 std::string generic_uda_get_seed_docstring();
+std::string generic_uda_inner_algorithm_docstring();
 
 // utilities
 // hypervolume

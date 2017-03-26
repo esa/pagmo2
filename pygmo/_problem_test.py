@@ -564,9 +564,9 @@ class problem_test_case(_ut.TestCase):
         # Verify that extraction of translate from the problem
         # increases the refecount of pt.
         self.assert_(sys.getrefcount(pt) == rc + 1)
-        # Extract the _test_problem from translate.
+        # Get back the _test_problem from translate.
         rc2 = sys.getrefcount(tprob)
-        ttprob = tprob.extract(_test_problem)
+        ttprob = tprob.inner_problem.extract(_test_problem)
         # The refcount of pt is not affected.
         self.assert_(sys.getrefcount(pt) == rc + 1)
         # The refcount of tprob has increased.
@@ -631,7 +631,7 @@ class problem_test_case(_ut.TestCase):
         self.assert_(sys.getrefcount(pt) == rc + 1)
         # Extract the _test_problem from decompose.
         rc2 = sys.getrefcount(tprob)
-        ttprob = tprob.extract(_test_problem)
+        ttprob = tprob.inner_problem.extract(_test_problem)
         # The refcount of pt is not affected.
         self.assert_(sys.getrefcount(pt) == rc + 1)
         # The refcount of tprob has increased.
@@ -654,12 +654,12 @@ class problem_test_case(_ut.TestCase):
         self.assertFalse(tprob is None)
         self.assert_(sys.getrefcount(p) == rc + 1)
         tmp = sys.getrefcount(tprob)
-        dprob = tprob.extract(decompose)
+        dprob = tprob.inner_problem.extract(decompose)
         self.assertFalse(dprob is None)
         self.assert_(sys.getrefcount(tprob) == tmp + 1)
         self.assert_(sys.getrefcount(p) == rc + 1)
         tmp2 = sys.getrefcount(dprob)
-        test_prob = dprob.extract(_test_problem)
+        test_prob = dprob.inner_problem.extract(_test_problem)
         self.assertFalse(test_prob is None)
         self.assert_(sys.getrefcount(dprob) == tmp2 + 1)
         self.assert_(sys.getrefcount(p) == rc + 1)
@@ -1879,7 +1879,7 @@ class problem_test_case(_ut.TestCase):
         self.assertEqual(p.get_nobj(), 1)
         self.assertEqual(p.get_nx(), 10)
         self.assertTrue(p.is_(translate))
-        self.assertTrue(p.extract(translate).is_(rosenbrock))
+        self.assertTrue(p.extract(translate).inner_problem.is_(rosenbrock))
 
         p = problem(_prob())
         p = loads(dumps(p))
@@ -1893,4 +1893,4 @@ class problem_test_case(_ut.TestCase):
         self.assertEqual(p.get_nobj(), 1)
         self.assertEqual(p.get_nx(), 2)
         self.assertTrue(p.is_(translate))
-        self.assertTrue(p.extract(translate).is_(_prob))
+        self.assertTrue(p.extract(translate).inner_problem.is_(_prob))

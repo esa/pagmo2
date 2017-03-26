@@ -177,11 +177,9 @@ namespace pygmo
 
 // Problem and meta-problem classes.
 std::unique_ptr<bp::class_<problem>> problem_ptr{};
-decltype(meta_probs_ptrs) meta_probs_ptrs{};
 
 // Algorithm and meta-algorithm classes.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
-decltype(meta_algos_ptrs) meta_algos_ptrs{};
 
 // Island.
 std::unique_ptr<bp::class_<island>> island_ptr{};
@@ -197,10 +195,8 @@ std::unique_ptr<bp::class_<island>> island_ptr{};
 static inline void cleanup()
 {
     pygmo::problem_ptr.reset();
-    pygmo::meta_probs_ptrs = decltype(pygmo::meta_probs_ptrs){};
 
     pygmo::algorithm_ptr.reset();
-    pygmo::meta_algos_ptrs = decltype(pygmo::meta_algos_ptrs){};
 
     pygmo::island_ptr.reset();
 }
@@ -378,61 +374,6 @@ struct tu_test_algorithm {
         return thread_safety::none;
     }
 };
-}
-
-// Metaprogramming for the implementation of connect_meta_problems().
-struct meta_problem_connector {
-    template <typename Meta>
-    struct runner {
-        template <typename Meta2>
-        void operator()(std::unique_ptr<bp::class_<Meta2>> &ptr) const
-        {
-            // Construct Meta2 from Meta (this could be the same meta).
-            pygmo::make_meta_problem_init<Meta2, Meta>{}(*ptr);
-            // Extract Meta from Meta2.
-            ptr->def("_cpp_extract", &pygmo::generic_cpp_extract<Meta2, Meta>, bp::return_internal_reference<>());
-        }
-    };
-    template <typename Meta>
-    void operator()(std::unique_ptr<bp::class_<Meta>> &) const
-    {
-        // We need a nested iteration over all the metas.
-        pagmo::detail::tuple_for_each(pygmo::meta_probs_ptrs, runner<Meta>{});
-    }
-};
-
-// This function will expose ctors/extract for all meta-problems wrt all meta-problems (e.g., init translate
-// from decompose and viceversa, extract translate from decompose and viceversa, etc.).
-static inline void connect_meta_problems()
-{
-    pagmo::detail::tuple_for_each(pygmo::meta_probs_ptrs, meta_problem_connector{});
-}
-
-// Metaprogramming for the implementation of connect_meta_algorithms().
-struct meta_algorithm_connector {
-    template <typename Meta>
-    struct runner {
-        template <typename Meta2>
-        void operator()(std::unique_ptr<bp::class_<Meta2>> &ptr) const
-        {
-            // Construct Meta2 from Meta (this could be the same meta).
-            pygmo::make_meta_algorithm_init<Meta2, Meta>{}(*ptr);
-            // Extract Meta from Meta2.
-            ptr->def("_cpp_extract", &pygmo::generic_cpp_extract<Meta2, Meta>, bp::return_internal_reference<>());
-        }
-    };
-    template <typename Meta>
-    void operator()(std::unique_ptr<bp::class_<Meta>> &) const
-    {
-        // We need a nested iteration over all the metas.
-        pagmo::detail::tuple_for_each(pygmo::meta_algos_ptrs, runner<Meta>{});
-    }
-};
-
-// This function will expose ctors/extract for all meta-algos wrt all meta-algos.
-static inline void connect_meta_algorithms()
-{
-    pagmo::detail::tuple_for_each(pygmo::meta_algos_ptrs, meta_algorithm_connector{});
 }
 
 // NOTE: we need to provide a custom raii waiter in the island. The reason is the following.
@@ -735,31 +676,6 @@ BOOST_PYTHON_MODULE(core)
         .def("get_thread_safety", &algorithm::get_thread_safety,
              pygmo::algorithm_get_thread_safety_docstring().c_str());
 
-    // Translate meta-problem.
-    pygmo::expose_meta_problem(std::get<0>(pygmo::meta_probs_ptrs), "translate", pygmo::translate_docstring().c_str());
-    auto &tp = *std::get<0>(pygmo::meta_probs_ptrs);
-    // Getter for the translation vector.
-    tp.add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
-                    pygmo::translate_translation_docstring().c_str());
-
-    // Decompose meta-problem.
-    pygmo::expose_meta_problem(std::get<1>(pygmo::meta_probs_ptrs), "decompose", pygmo::decompose_docstring().c_str());
-    auto &dp = *std::get<1>(pygmo::meta_probs_ptrs);
-    // Returns the original multi-objective fitness
-    dp.def("original_fitness", +[](const pagmo::decompose &p,
-                                   const bp::object &x) { return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x))); },
-           pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
-    dp.add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
-                    pygmo::decompose_z_docstring().c_str());
-
-    // Unconstrain meta-problem.
-    pygmo::expose_meta_problem(std::get<2>(pygmo::meta_probs_ptrs), "unconstrain",
-                               pygmo::unconstrain_docstring().c_str());
-
-    // Before moving to the user-defined C++ problems, we need to expose the interoperability between
-    // meta-problems.
-    connect_meta_problems();
-
     // Exposition of C++ problems.
     // Test problem.
     auto test_p = pygmo::expose_problem<pygmo::test_problem>("_test_problem", "A test problem.");
@@ -846,8 +762,16 @@ BOOST_PYTHON_MODULE(core)
         (bp::arg("prob_id") = 1u, bp::arg("is_constrained") = false, bp::arg("dim") = 30u)));
 
     // MBH meta-algo.
-    pygmo::expose_meta_algorithm(std::get<0>(pygmo::meta_algos_ptrs), "mbh", pygmo::mbh_docstring().c_str());
-    auto &mbh_ = *std::get<0>(pygmo::meta_algos_ptrs);
+    auto mbh_ = pygmo::expose_algorithm<mbh>("mbh", pygmo::mbh_docstring().c_str());
+    mbh_.def("__init__",
+             bp::make_constructor(+[](const algorithm &a, unsigned stop, const bp::object &perturb,
+                                      unsigned seed) { return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), seed); },
+                                  bp::default_call_policies()));
+    mbh_.def("__init__", bp::make_constructor(
+                             +[](const algorithm &a, unsigned stop, const bp::object &perturb) {
+                                 return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), pagmo::random_device::next());
+                             },
+                             bp::default_call_policies()));
     mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
     mbh_.def("get_verbosity", &mbh::get_verbosity, pygmo::mbh_get_verbosity_docstring().c_str());
     mbh_.def("set_perturb", +[](mbh &a, const bp::object &o) { a.set_perturb(pygmo::to_vd(o)); },
@@ -855,10 +779,10 @@ BOOST_PYTHON_MODULE(core)
     pygmo::expose_algo_log(mbh_, pygmo::mbh_get_log_docstring().c_str());
     mbh_.def("get_perturb", +[](const mbh &a) { return pygmo::v_to_a(a.get_perturb()); },
              pygmo::mbh_get_perturb_docstring().c_str());
-
-    // Before moving to the user-defined C++ algos, we need to expose the interoperability between
-    // meta-algos.
-    connect_meta_algorithms();
+    mbh_.add_property("inner_algorithm",
+                      bp::make_function(+[](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); },
+                                        bp::return_internal_reference<>()),
+                      pygmo::generic_uda_inner_algorithm_docstring().c_str());
 
     // Test algo.
     auto test_a = pygmo::expose_algorithm<pygmo::test_algorithm>("_test_algorithm", "A test algorithm.");
@@ -1027,6 +951,57 @@ BOOST_PYTHON_MODULE(core)
                pygmo::nsga2_get_log_docstring().c_str());
 
     nsga2_.def("get_seed", &nsga2::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
+
+    // Translate meta-problem
+    auto translate_ = pygmo::expose_problem<translate>("translate", pygmo::translate_docstring().c_str());
+    // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
+    // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
+    translate_.def("__init__", bp::make_constructor(
+                                   +[](const problem &p, const bp::object &tv) {
+                                       return ::new pagmo::translate(p, pygmo::to_vd(tv));
+                                   },
+                                   bp::default_call_policies()));
+    translate_.add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
+                            pygmo::translate_translation_docstring().c_str());
+    translate_.add_property("inner_problem",
+                            bp::make_function(+[](translate &udp) -> problem & { return udp.get_inner_problem(); },
+                                              bp::return_internal_reference<>()),
+                            pygmo::generic_udp_inner_problem_docstring().c_str());
+    // Unconstrain meta-problem.
+    auto unconstrain_ = pygmo::expose_problem<unconstrain>("unconstrain", pygmo::unconstrain_docstring().c_str());
+    // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
+    // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
+    unconstrain_.def("__init__", bp::make_constructor(
+                                     +[](const problem &p, const std::string &method, const bp::object &weights) {
+                                         return ::new pagmo::unconstrain(p, method, pygmo::to_vd(weights));
+                                     },
+                                     bp::default_call_policies()));
+    unconstrain_.add_property("inner_problem",
+                              bp::make_function(+[](unconstrain &udp) -> problem & { return udp.get_inner_problem(); },
+                                                bp::return_internal_reference<>()),
+                              pygmo::generic_udp_inner_problem_docstring().c_str());
+    // Decompose meta-problem.
+    auto decompose_ = pygmo::expose_problem<decompose>("decompose", pygmo::decompose_docstring().c_str());
+    // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
+    // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
+    decompose_.def("__init__", bp::make_constructor(
+                                   +[](const problem &p, const bp::object &weight, const bp::object &z,
+                                       const std::string &method, bool adapt_ideal) {
+                                       return ::new pagmo::decompose(p, pygmo::to_vd(weight), pygmo::to_vd(z), method,
+                                                                     adapt_ideal);
+                                   },
+                                   bp::default_call_policies()));
+    decompose_.def("original_fitness",
+                   +[](const pagmo::decompose &p, const bp::object &x) {
+                       return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x)));
+                   },
+                   pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
+    decompose_.add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
+                            pygmo::decompose_z_docstring().c_str());
+    decompose_.add_property("inner_problem",
+                            bp::make_function(+[](decompose &udp) -> problem & { return udp.get_inner_problem(); },
+                                              bp::return_internal_reference<>()),
+                            pygmo::generic_udp_inner_problem_docstring().c_str());
 
     // Exposition of various structured utilities
     // Hypervolume class
