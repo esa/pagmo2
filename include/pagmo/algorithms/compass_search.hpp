@@ -363,9 +363,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a compass_search::log_line_type containing: Fevals, Best, Violated and Viol.Norm,
+     * <tt>std::vector</tt> is a compass_search::log_line_type containing: Fevals, Best, Violated and Viol.Norm,
      * Range as described in compass_search::set_verbosity
-     * @return an <tt> std::vector </tt> of compass_search::log_line_type containing the logged values Fevals, Best,
+     * @return an <tt>std::vector</tt> of compass_search::log_line_type containing the logged values Fevals, Best,
      * Range
      */
     const log_type &get_log() const

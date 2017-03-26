@@ -762,9 +762,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a sade::log_line_type containing: Gen, Fevals, Best, F, CR, dx, df as described
+     * <tt>std::vector</tt> is a sade::log_line_type containing: Gen, Fevals, Best, F, CR, dx, df as described
      * in sade::set_verbosity
-     * @return an <tt> std::vector </tt> of sade::log_line_type containing the logged values Gen, Fevals, Best, F, CR,
+     * @return an <tt>std::vector</tt> of sade::log_line_type containing the logged values Gen, Fevals, Best, F, CR,
      * dx, df
      */
     const log_type &get_log() const

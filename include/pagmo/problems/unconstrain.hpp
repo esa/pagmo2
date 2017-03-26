@@ -264,22 +264,24 @@ public:
         return m_problem.get_bounds();
     }
 
-    /// Checks if the inner UDP has set_seed implemented.
+    /// Calls <tt>has_set_seed()</tt> of the inner problem.
     /**
-     * The has_set_seed computation is forwarded to the inner UDP
+     * Calls the method <tt>has_set_seed()</tt> of the inner problem.
      *
-     * @return a flag signalling the availability of the set seed in the inner UDP.
+     * @return a flag signalling wether the inner problem is stochastic.
      */
     bool has_set_seed() const
     {
         return m_problem.has_set_seed();
     }
 
-    /// Sets the seed of the inner UDP
+    /// Calls <tt>set_seed()</tt> of the inner problem.
     /**
-     * The set seed is forwarded to the inner UDP
+     * Calls the method <tt>set_seed()</tt> of the inner problem.
      *
-     * @param seed seed to be set
+     * @param seed seed to be set.
+     *
+     * @throws std::not_implemented_error if the inner problem is not stochastic.
      */
     void set_seed(unsigned seed)
     {
@@ -312,6 +314,10 @@ public:
     /**
      * Returns a reference to the inner pagmo::problem.
      *
+     * **NOTE** The ability to extract a non const reference is provided only in order to allow to call
+     * non-const methods on the internal pagmo::problem instance. Assigning a new pagmo::problem via
+     * this reference is undefined behaviour.
+     *
      * @return a reference to the inner pagmo::problem.
      */
     problem &get_inner_problem()
@@ -321,7 +327,7 @@ public:
 
     /// Problem name
     /**
-     * This method will add <tt>[unconstrained]</tt> to the name provided by the UDP.
+     * This method will add <tt>[unconstrained]</tt> to the name provided by the inner problem.
      *
      * @return a string containing the problem name.
      *
@@ -335,7 +341,7 @@ public:
     /// Extra info
     /**
      * This method will append a description of the unconstrain method to the extra info provided
-     * by the UDP.
+     * by the inner problem.
      *
      * @return a string containing extra info on the problem.
      *
@@ -363,7 +369,7 @@ public:
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of the inner problem and of primitive types.
      */
     template <typename Archive>
     void serialize(Archive &ar)

@@ -198,7 +198,7 @@ public:
     }
     /// Fitness computation.
     /**
-     * The fitness values of the original UDP will be combined using the decomposition method selected during
+     * The fitness values returned by the inner problem will be combined using the decomposition method selected during
      * construction.
      *
      * @param x the decision vector.
@@ -253,8 +253,7 @@ public:
      *
      * @return the lower and upper bounds for each of the decision vector components.
      *
-     * @throws unspecified any exception thrown by memory errors in standard containers,
-     * or by problem::get_bounds().
+     * @throws unspecified any exception thrown by problem::get_bounds().
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -275,7 +274,7 @@ public:
     }
     /// Problem name.
     /**
-     * This method will append <tt>[decomposed]</tt> to the name of the UDP.
+     * This method will append <tt>[decomposed]</tt> to the name of the inner problem.
      *
      * @return a string containing the problem name.
      */
@@ -286,7 +285,7 @@ public:
     /// Extra information.
     /**
      * This method will add info about the decomposition method to the extra info provided
-     * by the UDP.
+     * by the inner problem.
      *
      * @return a string containing extra information on the problem.
      */
@@ -298,22 +297,24 @@ public:
         return m_problem.get_extra_info() + oss.str();
     }
 
-    /// Checks if the inner UDP has set_seed implemented.
+    /// Calls <tt>has_set_seed()</tt> of the inner problem.
     /**
-     * The has_set_seed computation is forwarded to the inner UDP
+     * Calls the method <tt>has_set_seed()</tt> of the inner problem.
      *
-     * @return a flag signalling the availability of the set seed in the inner UDP.
+     * @return a flag signalling wether the inner problem is stochastic.
      */
     bool has_set_seed() const
     {
         return m_problem.has_set_seed();
     }
 
-    /// Sets the seed of the inner UDP
+    /// Calls <tt>set_seed()</tt> of the inner problem.
     /**
-     * The set seed is forwarded to the inner UDP
+     * Calls the method <tt>set_seed()</tt> of the inner problem.
      *
-     * @param seed seed to be set
+     * @param seed seed to be set.
+     *
+     * @throws std::not_implemented_error if the inner problem is not stochastic.
      */
     void set_seed(unsigned seed)
     {
@@ -346,6 +347,10 @@ public:
     /**
      * Returns a reference to the inner pagmo::problem.
      *
+     * **NOTE** The ability to extract a non const reference is provided only in order to allow to call
+     * non-const methods on the internal pagmo::problem instance. Assigning a new pagmo::problem via
+     * this reference is undefined behaviour.
+     *
      * @return a reference to the inner pagmo::problem.
      */
     problem &get_inner_problem()
@@ -359,7 +364,7 @@ public:
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of the inner problem and of primitive types.
      */
     template <typename Archive>
     void serialize(Archive &ar)

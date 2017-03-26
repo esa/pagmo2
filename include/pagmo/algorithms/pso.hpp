@@ -599,9 +599,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a pso::log_line_type containing: Gen, Fevals, gbest,
+     * <tt>std::vector</tt> is a pso::log_line_type containing: Gen, Fevals, gbest,
      * Mean Vel., Mean lbest, Avg. Dist. as described in pso::set_verbosity
-     * @return an <tt> std::vector </tt> of pso::log_line_type containing the logged values
+     * @return an <tt>std::vector</tt> of pso::log_line_type containing the logged values
      */
     const log_type &get_log() const
     {

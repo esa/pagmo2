@@ -378,9 +378,13 @@ public:
     {
         return m_algorithm;
     }
-    /// Getter for the inner algorithm
+    /// Getter for the inner problem
     /**
      * Returns a reference to the inner pagmo::algorithm.
+     *
+     * **NOTE** The ability to extract a non const reference is provided only in order to allow to call
+     * non-const methods on the internal pagmo::algorithm instance. Assigning a new pagmo::algorithm via
+     * this reference is undefined behaviour.
      *
      * @return a reference to the inner pagmo::algorithm.
      */
@@ -394,7 +398,7 @@ public:
      * <tt>std::vector</tt> is a mbh::log_line_type containing: \p Fevals, \p Best, \p Violated, <tt>Viol. Norm</tt> and
      * \p Trial as described in mbh::set_verbosity().
      *
-     * @return an <tt> std::vector </tt> of mbh::log_line_type containing the logged values Fevals, Best,
+     * @return an <tt>std::vector</tt> of mbh::log_line_type containing the logged values Fevals, Best,
      * Violated, Viol.Norm and Trial.
      */
     const log_type &get_log() const
