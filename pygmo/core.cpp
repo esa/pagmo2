@@ -767,12 +767,12 @@ BOOST_PYTHON_MODULE(core)
              bp::make_constructor(+[](const algorithm &a, unsigned stop, const bp::object &perturb,
                                       unsigned seed) { return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), seed); },
                                   bp::default_call_policies(),
-                                  (bp::arg("algorithm"), bp::arg("stop"), bp::arg("perturb"), bp::arg("seed"))));
+                                  (bp::arg("algo"), bp::arg("stop"), bp::arg("perturb"), bp::arg("seed"))));
     mbh_.def("__init__", bp::make_constructor(
                              +[](const algorithm &a, unsigned stop, const bp::object &perturb) {
                                  return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), pagmo::random_device::next());
                              },
-                             bp::default_call_policies(), (bp::arg("uda"), bp::arg("stop"), bp::arg("perturb"))));
+                             bp::default_call_policies(), (bp::arg("algo"), bp::arg("stop"), bp::arg("perturb"))));
     mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
     mbh_.def("get_verbosity", &mbh::get_verbosity, pygmo::mbh_get_verbosity_docstring().c_str());
     mbh_.def("set_perturb", +[](mbh &a, const bp::object &o) { a.set_perturb(pygmo::to_vd(o)); },
@@ -961,7 +961,7 @@ BOOST_PYTHON_MODULE(core)
                                    +[](const problem &p, const bp::object &tv) {
                                        return ::new pagmo::translate(p, pygmo::to_vd(tv));
                                    },
-                                   bp::default_call_policies(), (bp::arg("problem"), bp::arg("translation"))));
+                                   bp::default_call_policies()));
     translate_.add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
                             pygmo::translate_translation_docstring().c_str());
     translate_.add_property("inner_problem",
@@ -970,28 +970,28 @@ BOOST_PYTHON_MODULE(core)
                             pygmo::generic_udp_inner_problem_docstring().c_str());
     // Unconstrain meta-problem.
     auto unconstrain_ = pygmo::expose_problem<unconstrain>("unconstrain", pygmo::unconstrain_docstring().c_str());
+    // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
+    // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
     unconstrain_.def("__init__", bp::make_constructor(
                                      +[](const problem &p, const std::string &method, const bp::object &weights) {
                                          return ::new pagmo::unconstrain(p, method, pygmo::to_vd(weights));
                                      },
-                                     bp::default_call_policies(),
-                                     (bp::arg("problem"), bp::arg("method") = std::string("death penalty"),
-                                      bp::arg("weights") = pygmo::v_to_a(pagmo::vector_double{}))));
+                                     bp::default_call_policies()));
     unconstrain_.add_property("inner_problem",
                               bp::make_function(+[](unconstrain &udp) -> problem & { return udp.get_inner_problem(); },
                                                 bp::return_internal_reference<>()),
                               pygmo::generic_udp_inner_problem_docstring().c_str());
     // Decompose meta-problem.
     auto decompose_ = pygmo::expose_problem<decompose>("decompose", pygmo::decompose_docstring().c_str());
+    // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
+    // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
     decompose_.def("__init__", bp::make_constructor(
                                    +[](const problem &p, const bp::object &weight, const bp::object &z,
                                        const std::string &method, bool adapt_ideal) {
                                        return ::new pagmo::decompose(p, pygmo::to_vd(weight), pygmo::to_vd(z), method,
                                                                      adapt_ideal);
                                    },
-                                   bp::default_call_policies(),
-                                   (bp::arg("problem"), bp::arg("weight"), bp::arg("z"),
-                                    bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false)));
+                                   bp::default_call_policies()));
     decompose_.def("original_fitness",
                    +[](const pagmo::decompose &p, const bp::object &x) {
                        return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x)));
@@ -999,6 +999,10 @@ BOOST_PYTHON_MODULE(core)
                    pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
     decompose_.add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
                             pygmo::decompose_z_docstring().c_str());
+    decompose_.add_property("inner_problem",
+                            bp::make_function(+[](decompose &udp) -> problem & { return udp.get_inner_problem(); },
+                                              bp::return_internal_reference<>()),
+                            pygmo::generic_udp_inner_problem_docstring().c_str());
 
     // Exposition of various structured utilities
     // Hypervolume class

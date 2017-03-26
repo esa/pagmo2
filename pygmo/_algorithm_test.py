@@ -155,7 +155,7 @@ class algorithm_test_case(_ut.TestCase):
         p.extract(_test_algorithm).set_n(5)
         self.assert_(p.extract(_test_algorithm).get_n() == 5)
         # Chain extracts.
-        t = mbh(_test_algorithm(), stop=5, perturb=.4)
+        t = mbh(_test_algorithm(), stop=5, perturb=[.4])
         pt = algorithm(t)
         rc = sys.getrefcount(pt)
         talgo = pt.extract(mbh)
@@ -164,7 +164,7 @@ class algorithm_test_case(_ut.TestCase):
         self.assert_(sys.getrefcount(pt) == rc + 1)
         # Extract the _test_algorithm from mbh.
         rc2 = sys.getrefcount(talgo)
-        ttalgo = talgo.extract(_test_algorithm)
+        ttalgo = talgo.inner_algorithm.extract(_test_algorithm)
         # The refcount of pt is not affected.
         self.assert_(sys.getrefcount(pt) == rc + 1)
         # The refcount of talgo has increased.
@@ -416,7 +416,7 @@ class algorithm_test_case(_ut.TestCase):
         a = loads(dumps(a_))
         self.assertEqual(repr(a), repr(a_))
         self.assertTrue(a.is_(mbh))
-        self.assertTrue(a.extract(mbh).is_(de))
+        self.assertTrue(a.extract(mbh).inner_algorithm.is_(de))
 
         a_ = algorithm(_algo())
         a = loads(dumps(a_))
@@ -426,4 +426,4 @@ class algorithm_test_case(_ut.TestCase):
         a = loads(dumps(a_))
         self.assertEqual(repr(a), repr(a_))
         self.assertTrue(a.is_(mbh))
-        self.assertTrue(a.extract(mbh).is_(_algo))
+        self.assertTrue(a.extract(mbh).inner_algorithm.is_(_algo))

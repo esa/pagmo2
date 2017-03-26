@@ -65,10 +65,9 @@ class thread_safety(object):
 # Override of the translate meta-problem constructor.
 __original_translate_init = translate.__init__
 
-
-def _translate_init(self, prob=null_problem(), translation=[0.]):
-    # NOTE: the idea of having the translate init here instead of exposed from C++ is to allow the use
-    # of the syntax translate(udp, translation) for all udps
+# NOTE: the idea of having the translate init here instead of exposed from C++ is to allow the use
+# of the syntax translate(udp, translation) for all udps
+def _translate_init(self, prob=None, translation=[0.]):
     """
     The constructor admits two forms,
 
@@ -105,6 +104,108 @@ def _translate_init(self, prob=null_problem(), translation=[0.]):
     __original_translate_init(self, prob_arg, translation)
 
 setattr(translate, "__init__", _translate_init)
+
+# Override of the decompose meta-problem constructor.
+__original_decompose_init = decompose.__init__
+
+# NOTE: the idea of having the translate init here instead of exposed from C++ is to allow the use
+# of the syntax decompose(udp, ..., ) for all udps
+def _decompose_init(self, prob = None, weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False):
+    """
+    The constructor admits two forms:
+
+    * no arguments,
+    * two mandatory arguments (*prob* and *weight*) and three optional arguments.
+
+    Any other combination of arguments will raise an exception.
+
+    Args:
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
+            (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)
+        weight (array-like object): the vector of weights :math:`\boldsymbol \lambda`
+        z (array-like object): the reference point :math:`\mathbf z^*`
+        method (``str``): a string containing the decomposition method chosen
+        adapt_ideal (``bool``): when ``True``, the reference point is adapted at each fitness evaluation
+        to be the ideal point
+
+    Raises:
+        ValueError: if either:
+
+        * *prob* is single objective or constrained,
+        * *method* is not one of [``'weighted'``, ``'tchebycheff'``, ``'bi'``],
+        * *weight* is not of size :math:`n`,
+        * *z* is not of size :math:`n`,
+        * *weight* is not such that :math:`\lambda_i > 0, \forall i=1..n`,
+        * *weight* is not such that :math:`\sum_i \lambda_i = 1`
+        unspecified: any exception thrown by:
+
+        * the constructor of :class:`pygmo.core.problem`,
+        * the constructor of the underlying C++ class,
+        * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+            signatures, etc.)
+    """
+    if prob is None:
+        # Use the null problem for default init.
+        prob = null_problem(nobj = 2)
+    if type(prob) == problem:
+        # If prob is a pygmo problem, we will pass it as-is to the
+        # original init.
+        prob_arg = prob
+    else:
+        # Otherwise, we attempt to create a problem from it. This will
+        # work if prob is an exposed C++ problem or a Python UDP.
+        prob_arg = problem(prob)
+    __original_decompose_init(self, prob_arg, weight, z, method, adapt_ideal)
+
+setattr(decompose, "__init__", _decompose_init)
+
+# Override of the mbh meta-algorithm constructor.
+__original_mbh_init = mbh.__init__
+# NOTE: the idea of having the mbh init here instead of exposed from C++ is to allow the use
+# of the syntax mbh(uda, ...) for all udas
+def _mbh_init(self, algo = None, stop = 5, perturb = 1e-2, seed = None):
+    """
+    The constructor admits two forms:
+
+    * no arguments,
+    * three mandatory arguments and one optional argument (the seed).
+
+    Any other combination of arguments will raise an exception.
+
+    Args:
+        uda: a user-defined algorithm (either C++ or Python - note that *uda* will be deep-copied
+        and stored inside the :class:`~pygmo.core.mbh` instance)
+        stop (``int``): consecutive runs of the inner algorithm that need to result in no improvement for
+        :class:`~pygmo.core.mbh` to stop
+        perturb (``float`` or array-like object): perturb the perturbation to be applied to each component
+        seed (``int``): seed used by the internal random number generator
+
+    Raises:
+        ValueError: if *perturb* (or one of its components, if *perturb* is an array) is not in the
+        (0,1] range
+        unspecified: any exception thrown by the constructor of :class:`pygmo.core.algorithm`, or by
+        failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+        signatures, etc.)
+    """
+    if algo is None:
+        # Use the null problem for default init.
+        algo = compass_search()
+    if type(algo) == algorithm:
+        # If algo is a pygmo algorithm, we will pass it as-is to the
+        # original init.
+        algo_arg = algo
+    else:
+        # Otherwise, we attempt to create an algorithm from it. This will
+        # work if algo is an exposed C++ algorithm or a Python UDA.
+        algo_arg = algorithm(algo)
+    if type(perturb) is float:
+        perturb = [perturb]
+    if seed is None:
+        __original_mbh_init(self, algo_arg, stop, perturb)
+    else:
+        __original_mbh_init(self, algo_arg, stop, perturb, seed)
+
+setattr(mbh, "__init__", _mbh_init)
 
 
 # Override of the population constructor.

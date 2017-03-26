@@ -2537,39 +2537,6 @@ derivative-free optimization.
 See: "Q. Zhang -- MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition"
 
 See: https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems
-
-The constructor admits two forms:
-
-* no arguments,
-* two mandatory arguments and three optional arguments.
-
-Any other combination of arguments will raise an exception.
-
-Args:
-    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
-      and stored inside the :class:`~pygmo.core.decompose` instance)
-    weight (array-like object): the vector of weights :math:`\boldsymbol \lambda`
-    z (array-like object): the reference point :math:`\mathbf z^*`
-    method (``str``): a string containing the decomposition method chosen
-    adapt_ideal (``bool``): when ``True``, the reference point is adapted at each fitness evaluation
-      to be the ideal point
-
-Raises:
-    ValueError: if either:
-
-      * *udp* is single objective or constrained,
-      * *method* is not one of [``'weighted'``, ``'tchebycheff'``, ``'bi'``],
-      * *weight* is not of size :math:`n`,
-      * *z* is not of size :math:`n`,
-      * *weight* is not such that :math:`\lambda_i > 0, \forall i=1..n`,
-      * *weight* is not such that :math:`\sum_i \lambda_i = 1`
-    unspecified: any exception thrown by:
-
-      * the constructor of :class:`pygmo.core.problem`,
-      * the constructor of the underlying C++ class,
-      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
-
 )";
 }
 

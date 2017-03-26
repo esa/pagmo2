@@ -621,15 +621,14 @@ class decompose_test_case(_ut.TestCase):
         self.assertTrue(all(d.z == array([0.1, 0.1])))
         self.assertTrue(all(d.original_fitness([1., 1.]) == array([42, 43])))
 
-        # Verify construction from problem is forbidden.
-        self.assertRaises(TypeError, lambda: decompose(
-            problem(null_problem(2)), [0.2, 0.8], [0., 0.]))
+        # Verify construction from problem is allowed.
+        decompose(problem(null_problem(2)), [0.2, 0.8], [0., 0.])
 
         # Verify decomposition of translate.
         t = decompose(translate(null_problem(2), [0.]), [0.2, 0.8], [0., 0.])
         self.assertTrue(t.is_(translate))
         self.assertFalse(t.extract(translate) is None)
-        self.assertFalse(t.extract(translate).extract(null_problem) is None)
+        self.assertFalse(t.extract(translate).inner_problem.extract(null_problem) is None)
 
 
 class mbh_test_case(_ut.TestCase):
