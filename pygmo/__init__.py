@@ -62,6 +62,51 @@ class thread_safety(object):
     basic = core._thread_safety.basic
 
 
+# Override of the translate meta-problem constructor.
+__original_translate_init = translate.__init__
+
+
+def _translate_init(self, prob=null_problem(), translation=[0.]):
+    # NOTE: the idea of having the translate init here instead of exposed from C++ is to allow the use
+    # of the syntax translate(udp, translation) for all udps
+    """
+    The constructor admits two forms,
+
+    * no arguments,
+    * exactly two arguments.
+
+    Any other combination of arguments will raise an error.
+
+    Args:
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
+            (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)
+        translation (array-like object): an array containing the translation to be applied
+
+    Raises:
+        ValueError: if the length of *translation* is not equal to the dimension of *prob*
+        unspecified: any exception thrown by:
+
+        * the constructor of :class:`pygmo.core.problem`,
+        * the constructor of the underlying C++ class,
+        * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+            signatures, etc.)
+    """
+    if prob is None:
+        # Use the null problem for default init.
+        prob = null_problem()
+    if type(prob) == problem:
+        # If prob is a pygmo problem, we will pass it as-is to the
+        # original init.
+        prob_arg = prob
+    else:
+        # Otherwise, we attempt to create a problem from it. This will
+        # work if prob is an exposed C++ problem or a Python UDP.
+        prob_arg = problem(prob)
+    __original_translate_init(self, prob_arg, translation)
+
+setattr(translate, "__init__", _translate_init)
+
+
 # Override of the population constructor.
 __original_population_init = population.__init__
 

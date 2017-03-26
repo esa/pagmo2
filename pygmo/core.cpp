@@ -175,11 +175,15 @@ static inline bp::object test_object_serialization(const bp::object &o)
 namespace pygmo
 {
 
-// Problem classes.
+// Problem and meta-problem classes.
 std::unique_ptr<bp::class_<problem>> problem_ptr{};
 
-// Algorithm classes.
+// Algorithm and meta-algorithm classes.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
+
+// Island.
+std::unique_ptr<bp::class_<island>> island_ptr{};
+}
 
 // The cleanup function.
 // This function will be registered to be called when the pygmo core module is unloaded
@@ -191,7 +195,10 @@ std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
 static inline void cleanup()
 {
     pygmo::problem_ptr.reset();
+
     pygmo::algorithm_ptr.reset();
+
+    pygmo::island_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -735,51 +742,6 @@ BOOST_PYTHON_MODULE(core)
     inv.def(bp::init<unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u)));
     inv.def(
         bp::init<unsigned, unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u, bp::arg("seed"))));
-    // Translate meta-problem.
-    auto translate_ = pygmo::expose_problem<translate>("translate", pygmo::translate_docstring().c_str());
-    translate_.def("__init__", bp::make_constructor(
-                                   +[](const problem &p, const bp::object &tv) {
-                                       return ::new pagmo::translate(p, pygmo::to_vd(tv));
-                                   },
-                                   bp::default_call_policies(), (bp::arg("problem"), bp::arg("translation"))));
-    translate_.add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
-                            pygmo::translate_translation_docstring().c_str());
-    translate_.add_property("inner_problem",
-                            bp::make_function(+[](translate &udp) -> problem & { return udp.get_inner_problem(); },
-                                              bp::return_internal_reference<>()),
-                            pygmo::generic_udp_inner_problem_docstring().c_str());
-    // Unconstrain meta-problem.
-    auto unconstrain_ = pygmo::expose_problem<unconstrain>("unconstrain", pygmo::unconstrain_docstring().c_str());
-    unconstrain_.def("__init__", bp::make_constructor(
-                                     +[](const problem &p, const std::string &method, const bp::object &weights) {
-                                         return ::new pagmo::unconstrain(p, method, pygmo::to_vd(weights));
-                                     },
-                                     bp::default_call_policies(),
-                                     (bp::arg("problem"), bp::arg("method") = std::string("death penalty"),
-                                      bp::arg("weights") = pygmo::v_to_a(pagmo::vector_double{}))));
-    unconstrain_.add_property("inner_problem",
-                              bp::make_function(+[](unconstrain &udp) -> problem & { return udp.get_inner_problem(); },
-                                                bp::return_internal_reference<>()),
-                              pygmo::generic_udp_inner_problem_docstring().c_str());
-    // Decompose meta-problem.
-    auto decompose_ = pygmo::expose_problem<decompose>("decompose", pygmo::decompose_docstring().c_str());
-    decompose_.def("__init__", bp::make_constructor(
-                                   +[](const problem &p, const bp::object &weight, const bp::object &z,
-                                       const std::string &method, bool adapt_ideal) {
-                                       return ::new pagmo::decompose(p, pygmo::to_vd(weight), pygmo::to_vd(z), method,
-                                                                     adapt_ideal);
-                                   },
-                                   bp::default_call_policies(),
-                                   (bp::arg("problem"), bp::arg("weight"), bp::arg("z"),
-                                    bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false)));
-    decompose_.def("original_fitness",
-                   +[](const pagmo::decompose &p, const bp::object &x) {
-                       return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x)));
-                   },
-                   pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
-    decompose_.add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
-                            pygmo::decompose_z_docstring().c_str());
-
 // excluded in MSVC (Dec. - 2016) because of troubles to deal with the big static array defining the problem data. To be
 // reassesed in future versions of the compiler
 #if !defined(_MSC_VER)
@@ -798,6 +760,30 @@ BOOST_PYTHON_MODULE(core)
     auto cec2009_ = pygmo::expose_problem<cec2009>("cec2009", pygmo::cec2009_docstring().c_str());
     cec2009_.def(bp::init<unsigned, bool, unsigned>(
         (bp::arg("prob_id") = 1u, bp::arg("is_constrained") = false, bp::arg("dim") = 30u)));
+
+    // MBH meta-algo.
+    auto mbh_ = pygmo::expose_algorithm<mbh>("mbh", pygmo::mbh_docstring().c_str());
+    mbh_.def("__init__",
+             bp::make_constructor(+[](const algorithm &a, unsigned stop, const bp::object &perturb,
+                                      unsigned seed) { return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), seed); },
+                                  bp::default_call_policies(),
+                                  (bp::arg("algorithm"), bp::arg("stop"), bp::arg("perturb"), bp::arg("seed"))));
+    mbh_.def("__init__", bp::make_constructor(
+                             +[](const algorithm &a, unsigned stop, const bp::object &perturb) {
+                                 return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), pagmo::random_device::next());
+                             },
+                             bp::default_call_policies(), (bp::arg("uda"), bp::arg("stop"), bp::arg("perturb"))));
+    mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
+    mbh_.def("get_verbosity", &mbh::get_verbosity, pygmo::mbh_get_verbosity_docstring().c_str());
+    mbh_.def("set_perturb", +[](mbh &a, const bp::object &o) { a.set_perturb(pygmo::to_vd(o)); },
+             pygmo::mbh_set_perturb_docstring().c_str(), (bp::arg("perturb")));
+    pygmo::expose_algo_log(mbh_, pygmo::mbh_get_log_docstring().c_str());
+    mbh_.def("get_perturb", +[](const mbh &a) { return pygmo::v_to_a(a.get_perturb()); },
+             pygmo::mbh_get_perturb_docstring().c_str());
+    mbh_.add_property("inner_algorithm",
+                      bp::make_function(+[](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); },
+                                        bp::return_internal_reference<>()),
+                      pygmo::generic_uda_inner_algorithm_docstring().c_str());
 
     // Test algo.
     auto test_a = pygmo::expose_algorithm<pygmo::test_algorithm>("_test_algorithm", "A test algorithm.");
@@ -967,29 +953,52 @@ BOOST_PYTHON_MODULE(core)
 
     nsga2_.def("get_seed", &nsga2::get_seed, pygmo::generic_uda_get_seed_docstring().c_str());
 
-    // MBH meta-algo.
-    auto mbh_ = pygmo::expose_algorithm<mbh>("mbh", pygmo::mbh_docstring().c_str());
-    mbh_.def("__init__",
-             bp::make_constructor(+[](const algorithm &a, unsigned stop, const bp::object &perturb,
-                                      unsigned seed) { return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), seed); },
-                                  bp::default_call_policies(),
-                                  (bp::arg("algorithm"), bp::arg("stop"), bp::arg("perturb"), bp::arg("seed"))));
-    mbh_.def("__init__", bp::make_constructor(
-                             +[](const algorithm &a, unsigned stop, const bp::object &perturb) {
-                                 return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), pagmo::random_device::next());
-                             },
-                             bp::default_call_policies(), (bp::arg("uda"), bp::arg("stop"), bp::arg("perturb"))));
-    mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
-    mbh_.def("get_verbosity", &mbh::get_verbosity, pygmo::mbh_get_verbosity_docstring().c_str());
-    mbh_.def("set_perturb", +[](mbh &a, const bp::object &o) { a.set_perturb(pygmo::to_vd(o)); },
-             pygmo::mbh_set_perturb_docstring().c_str(), (bp::arg("perturb")));
-    pygmo::expose_algo_log(mbh_, pygmo::mbh_get_log_docstring().c_str());
-    mbh_.def("get_perturb", +[](const mbh &a) { return pygmo::v_to_a(a.get_perturb()); },
-             pygmo::mbh_get_perturb_docstring().c_str());
-    mbh_.add_property("inner_algorithm",
-                      bp::make_function(+[](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); },
-                                        bp::return_internal_reference<>()),
-                      pygmo::generic_uda_inner_algorithm_docstring().c_str());
+    // Translate meta-problem
+    auto translate_ = pygmo::expose_problem<translate>("translate", pygmo::translate_docstring().c_str());
+    // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
+    // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
+    translate_.def("__init__", bp::make_constructor(
+                                   +[](const problem &p, const bp::object &tv) {
+                                       return ::new pagmo::translate(p, pygmo::to_vd(tv));
+                                   },
+                                   bp::default_call_policies(), (bp::arg("problem"), bp::arg("translation"))));
+    translate_.add_property("translation", +[](const translate &t) { return pygmo::v_to_a(t.get_translation()); },
+                            pygmo::translate_translation_docstring().c_str());
+    translate_.add_property("inner_problem",
+                            bp::make_function(+[](translate &udp) -> problem & { return udp.get_inner_problem(); },
+                                              bp::return_internal_reference<>()),
+                            pygmo::generic_udp_inner_problem_docstring().c_str());
+    // Unconstrain meta-problem.
+    auto unconstrain_ = pygmo::expose_problem<unconstrain>("unconstrain", pygmo::unconstrain_docstring().c_str());
+    unconstrain_.def("__init__", bp::make_constructor(
+                                     +[](const problem &p, const std::string &method, const bp::object &weights) {
+                                         return ::new pagmo::unconstrain(p, method, pygmo::to_vd(weights));
+                                     },
+                                     bp::default_call_policies(),
+                                     (bp::arg("problem"), bp::arg("method") = std::string("death penalty"),
+                                      bp::arg("weights") = pygmo::v_to_a(pagmo::vector_double{}))));
+    unconstrain_.add_property("inner_problem",
+                              bp::make_function(+[](unconstrain &udp) -> problem & { return udp.get_inner_problem(); },
+                                                bp::return_internal_reference<>()),
+                              pygmo::generic_udp_inner_problem_docstring().c_str());
+    // Decompose meta-problem.
+    auto decompose_ = pygmo::expose_problem<decompose>("decompose", pygmo::decompose_docstring().c_str());
+    decompose_.def("__init__", bp::make_constructor(
+                                   +[](const problem &p, const bp::object &weight, const bp::object &z,
+                                       const std::string &method, bool adapt_ideal) {
+                                       return ::new pagmo::decompose(p, pygmo::to_vd(weight), pygmo::to_vd(z), method,
+                                                                     adapt_ideal);
+                                   },
+                                   bp::default_call_policies(),
+                                   (bp::arg("problem"), bp::arg("weight"), bp::arg("z"),
+                                    bp::arg("method") = std::string("weighted"), bp::arg("adapt_ideal") = false)));
+    decompose_.def("original_fitness",
+                   +[](const pagmo::decompose &p, const bp::object &x) {
+                       return pygmo::v_to_a(p.original_fitness(pygmo::to_vd(x)));
+                   },
+                   pygmo::decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
+    decompose_.add_property("z", +[](const pagmo::decompose &p) { return pygmo::v_to_a(p.get_z()); },
+                            pygmo::decompose_z_docstring().c_str());
 
     // Exposition of various structured utilities
     // Hypervolume class
@@ -1154,4 +1163,3 @@ BOOST_PYTHON_MODULE(core)
         // NOTE: docs for push_back() are in the Python reimplementation.
         .def("_push_back", +[](archipelago &archi, const island &isl) { archi.push_back(isl); });
 }
-} // end of namespace pygmo

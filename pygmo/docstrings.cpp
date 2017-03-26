@@ -1092,31 +1092,9 @@ std::string translate_docstring()
 
 The translate meta-problem.
 
-This meta-problem translates the whole search space of an input user-defined problem (UDP) by a fixed
-translation vector. :class:`~pygmo.core.translate` objects are user-defined problems that
-can be used in the definition of a :class:`pygmo.core.problem`.
-
-The constructor admits two forms,
-
-* no arguments,
-* exactly two arguments.
-
-Any other combination of arguments will raise an error.
-
-Args:
-    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
-      and stored inside the :class:`~pygmo.core.translate` instance)
-    translation (array-like object): an array containing the translation to be applied
-
-Raises:
-    ValueError: if the length of *translation* is not equal to the dimension of *udp*
-    unspecified: any exception thrown by:
-
-      * the constructor of :class:`pygmo.core.problem`,
-      * the constructor of the underlying C++ class,
-      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
-
+This meta-problem translates the whole search space of an input :class:`pygmo.core.problem` or 
+user-defined problem (UDP) by a fixed translation vector. :class:`~pygmo.core.translate` objects 
+are user-defined problems that can be used in the construction of a :class:`pygmo.core.problem`.
 )";
 }
 
