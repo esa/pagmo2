@@ -69,13 +69,6 @@ __original_translate_init = translate.__init__
 # of the syntax translate(udp, translation) for all udps
 def _translate_init(self, prob=None, translation=[0.]):
     """
-    The constructor admits two forms,
-
-    * no arguments,
-    * exactly two arguments.
-
-    Any other combination of arguments will raise an error.
-
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
             (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)
@@ -112,13 +105,6 @@ __original_decompose_init = decompose.__init__
 # of the syntax decompose(udp, ..., ) for all udps
 def _decompose_init(self, prob = None, weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False):
     """
-    The constructor admits two forms,
-
-    * no arguments,
-    * two mandatory arguments (*prob* and *weight*) and three optional arguments.
-
-    Any other combination of arguments will raise an exception.
-
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
             (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)
@@ -168,13 +154,6 @@ __original_unconstrain_init = unconstrain.__init__
 # of the syntax unconstrain(udp, ... ) for all udps
 def _unconstrain_init(self, prob = None, method = "death penalty", weights = []):
     """
-    The constructor admits two forms,
-
-    * no arguments,
-    * two mandatory arguments and one optional argument.
-
-    Any other combination of arguments will raise an exception.
-
     Args:
         prob: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
               and stored inside the :class:`~pygmo.core.unconstrained` instance)
@@ -217,13 +196,6 @@ __original_mbh_init = mbh.__init__
 # of the syntax mbh(uda, ...) for all udas
 def _mbh_init(self, algo = None, stop = 5, perturb = 1e-2, seed = None):
     """
-    The constructor admits two forms,
-
-    * no arguments,
-    * three mandatory arguments and one optional argument (the seed).
-
-    Any other combination of arguments will raise an exception.
-
     Args:
         uda: a user-defined algorithm (either C++ or Python - note that *uda* will be deep-copied
              and stored inside the :class:`~pygmo.core.mbh` instance)

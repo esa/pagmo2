@@ -330,7 +330,7 @@ public:
         return m_problem.get_thread_safety();
     }
 
-    /// Getter for the inner problem
+    /// Getter for the inner problem.
     /**
      * Returns a const reference to the inner pagmo::problem.
      *
@@ -341,7 +341,7 @@ public:
         return m_problem;
     }
 
-    /// Getter for the inner problem
+    /// Getter for the inner problem.
     /**
      * Returns a reference to the inner pagmo::problem.
      *
