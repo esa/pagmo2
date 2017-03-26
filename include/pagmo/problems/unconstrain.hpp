@@ -64,12 +64,11 @@ namespace pagmo
  * See: Kuri Morales, A. and Quezada, C.C. A Universal eclectic genetic algorithm for constrained optimization,
  * Proceedings 6th European Congress on Intelligent Techniques & Soft Computing, EUFIT'98, 518-522, 1998.
  */
-class unconstrain : public problem
+class unconstrain
 {
-    // Enabler for the UDP ctor.
+    // Enabler for the ctor from UDP or problem. In this case we allow construction from type problem.
     template <typename T>
-    using ctor_enabler
-        = enable_if_t<std::is_constructible<problem, T &&>::value && !std::is_same<uncvref_t<T>, problem>::value, int>;
+    using ctor_enabler = enable_if_t<std::is_constructible<problem, T &&>::value, int>;
 
 public:
     /// Default constructor
@@ -82,12 +81,11 @@ public:
 
     /// Constructor from UDP and unconstrain method
     /**
-     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem,
-     * and \p T is not pagmo::problem.
+     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem.
      *
      * Wraps a user-defined problem so that its constraints will be removed
      *
-     * @param p a user-defined problem.
+     * @param p a user-defined problem or a pagmo::problem.
      * @param method an <tt>std::string</tt> containing the name of the method to be used t remove the constraints: one
      * of "death penalty", "kuri", "weighted", "ignore_c" or "ignore_o".
      * @param weights an <tt>std::vector</tt> containing the weights in case "weighted" is selected as method.
@@ -99,16 +97,19 @@ public:
      * @throws unspecified any exception thrown by the pagmo::problem constructor
      */
     template <typename T, ctor_enabler<T> = 0>
-    explicit unconstrain(T &&p, const std::string &method, const vector_double &weights = vector_double{})
-        : problem(std::forward<T>(p)), m_weights(weights)
+    explicit unconstrain(T &&p, const std::string &method = "death penalty",
+                         const vector_double &weights = vector_double{})
+        : m_problem(std::forward<T>(p)), m_weights(weights)
     {
         // The number of constraints in the original udp
-        auto nec = static_cast<const problem *>(this)->get_nec();
-        auto nic = static_cast<const problem *>(this)->get_nic();
+        auto nec = m_problem.get_nec();
+        auto nic = m_problem.get_nic();
         auto nc = nec + nic;
         // 1 - We throw if the original problem is unconstrained
         if (nc == 0u) {
-            pagmo_throw(std::invalid_argument, "Unconstrain can only be applied to constrained problems");
+            pagmo_throw(std::invalid_argument,
+                        "Unconstrain can only be applied to constrained problems, the instance of "
+                            + m_problem.get_name() + " is not one.");
         }
         // 2 - We throw if the method weighted is selected but the weight vector has the wrong size
         if (weights.size() != nc && method == "weighted") {
@@ -134,9 +135,9 @@ public:
         m_method = my_map[method];
     }
 
-    /// Fitness
+    /// Fitness.
     /**
-     * The unconstrained fitness computation is made
+     * The unconstrained fitness computation.
      *
      * @param x the decision vector.
      *
@@ -148,10 +149,10 @@ public:
     vector_double fitness(const vector_double &x) const
     {
         // some quantities from the orginal udp
-        auto original_fitness = static_cast<const problem *>(this)->fitness(x);
-        auto nobj = static_cast<const problem *>(this)->get_nobj();
-        auto nec = static_cast<const problem *>(this)->get_nec();
-        auto nic = static_cast<const problem *>(this)->get_nic();
+        auto original_fitness = m_problem.fitness(x);
+        auto nobj = m_problem.get_nobj();
+        auto nec = m_problem.get_nec();
+        auto nic = m_problem.get_nic();
         auto nc = nec + nic;
 
         // the different methods
@@ -161,7 +162,7 @@ public:
                 // copy the objectives
                 retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
                 // penalize them if unfeasible
-                if (!static_cast<const problem *>(this)->feasibility_f(original_fitness)) {
+                if (!m_problem.feasibility_f(original_fitness)) {
                     std::fill(retval.begin(), retval.end(), std::numeric_limits<double>::max());
                 }
             } break;
@@ -169,9 +170,9 @@ public:
                 // copy the objectives
                 retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
                 // penalize them if unfeasible
-                if (!static_cast<const problem *>(this)->feasibility_f(original_fitness)) {
+                if (!m_problem.feasibility_f(original_fitness)) {
                     // get the tolerances
-                    auto c_tol = static_cast<const problem *>(this)->get_c_tol();
+                    auto c_tol = m_problem.get_c_tol();
                     // compute the number of equality constraints satisfied
                     auto sat_ec = detail::test_eq_constraints(original_fitness.data() + nobj,
                                                               original_fitness.data() + nobj + nec, c_tol.data())
@@ -192,7 +193,7 @@ public:
                 // copy the constraints (NOTE: not necessary remove)
                 vector_double c(original_fitness.data() + nobj, original_fitness.data() + original_fitness.size());
                 // get the tolerances
-                auto c_tol = static_cast<const problem *>(this)->get_c_tol();
+                auto c_tol = m_problem.get_c_tol();
                 // modify constraints to account for the tolerance and be violated if positive
                 auto penalty = 0.;
                 for (decltype(nc) i = 0u; i < nc; ++i) {
@@ -217,9 +218,9 @@ public:
             } break;
             case method_type::IGNORE_O: {
                 // get the tolerances
-                auto c_tol = static_cast<const problem *>(this)->get_c_tol();
+                auto c_tol = m_problem.get_c_tol();
                 // and the number of objectives in the original problem
-                auto n_obj_orig = static_cast<const problem *>(this)->get_nobj();
+                auto n_obj_orig = m_problem.get_nobj();
                 // compute the norm of the violation on the equalities
                 auto norm_ec = detail::test_eq_constraints(original_fitness.data() + n_obj_orig,
                                                            original_fitness.data() + n_obj_orig + nec, c_tol.data())
@@ -242,15 +243,89 @@ public:
     vector_double::size_type get_nobj() const
     {
         if (m_method != method_type::IGNORE_O) {
-            return static_cast<const problem *>(this)->get_nobj();
+            return m_problem.get_nobj();
         } else {
             return 1u;
         }
     }
 
-    /// Problem name
+    /// Box-bounds.
     /**
-     * This method will add <tt>[unconstrained]</tt> to the name provided by the UDP.
+     * Forwards the bounds computations to the inner pagmo::problem.
+     *
+     * @return the lower and upper bounds for each of the decision vector components.
+     *
+     * @throws unspecified any exception thrown by <tt>problem::get_bounds()</tt>.
+     */
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return m_problem.get_bounds();
+    }
+
+    /// Calls <tt>has_set_seed()</tt> of the inner problem.
+    /**
+     * Calls the method <tt>has_set_seed()</tt> of the inner problem.
+     *
+     * @return a flag signalling wether the inner problem is stochastic.
+     */
+    bool has_set_seed() const
+    {
+        return m_problem.has_set_seed();
+    }
+
+    /// Calls <tt>set_seed()</tt> of the inner problem.
+    /**
+     * Calls the method <tt>set_seed()</tt> of the inner problem.
+     *
+     * @param seed seed to be set.
+     *
+     * @throws std::not_implemented_error if the inner problem is not stochastic.
+     */
+    void set_seed(unsigned seed)
+    {
+        return m_problem.set_seed(seed);
+    }
+
+    /// Problem's thread safety level.
+    /**
+     * The thread safety of a meta-problem is defined by the thread safety of the inner pagmo::problem.
+     *
+     * @return the thread safety level of the inner pagmo::problem.
+     */
+    thread_safety get_thread_safety() const
+    {
+        return m_problem.get_thread_safety();
+    }
+
+    /// Getter for the inner problem.
+    /**
+     * Returns a const reference to the inner pagmo::problem.
+     *
+     * @return a const reference to the inner pagmo::problem.
+     */
+    const problem &get_inner_problem() const
+    {
+        return m_problem;
+    }
+
+    /// Getter for the inner problem.
+    /**
+     * Returns a reference to the inner pagmo::problem.
+     *
+     * **NOTE** The ability to extract a non const reference is provided only in order to allow to call
+     * non-const methods on the internal pagmo::problem instance. Assigning a new pagmo::problem via
+     * this reference is undefined behaviour.
+     *
+     * @return a reference to the inner pagmo::problem.
+     */
+    problem &get_inner_problem()
+    {
+        return m_problem;
+    }
+
+    /// Problem name.
+    /**
+     * This method will add <tt>[unconstrained]</tt> to the name provided by the inner problem.
      *
      * @return a string containing the problem name.
      *
@@ -258,13 +333,13 @@ public:
      */
     std::string get_name() const
     {
-        return static_cast<const problem *>(this)->get_name() + " [unconstrained]";
+        return m_problem.get_name() + " [unconstrained]";
     }
 
-    /// Extra info
+    /// Extra info.
     /**
      * This method will append a description of the unconstrain method to the extra info provided
-     * by the UDP.
+     * by the inner problem.
      *
      * @return a string containing extra info on the problem.
      *
@@ -283,79 +358,26 @@ public:
         if (m_method == method_type::WEIGHTED) {
             stream(oss, "\n\tWeight vector: ", m_weights);
         }
-        return static_cast<const problem *>(this)->get_extra_info() + oss.str();
+        return m_problem.get_extra_info() + oss.str();
     }
 
-    /// Object serialization
+    /// Object serialization.
     /**
      * This method will save/load \p this into/from the archive \p ar.
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of the inner problem and of primitive types.
      */
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<problem>(this), m_method, m_weights);
+        ar(m_problem, m_method, m_weights);
     }
 
 private:
-    // Delete all that we do not want to inherit from problem
-    // A - Common to all meta
-    vector_double::size_type get_nx() const = delete;
-    vector_double::size_type get_nf() const = delete;
-    vector_double::size_type get_nc() const = delete;
-    unsigned long long get_fevals() const = delete;
-    unsigned long long get_gevals() const = delete;
-    unsigned long long get_hevals() const = delete;
-    vector_double::size_type get_gs_dim() const = delete;
-    std::vector<vector_double::size_type> get_hs_dim() const = delete;
-    bool is_stochastic() const = delete;
-    // These are methods brought in by the inheritance from pagmo::problem: they do not have any effect
-    // and they are just confusing to see.
-    void set_c_tol(const vector_double &) = delete;
-    vector_double get_c_tol() const = delete;
-    bool feasibility_x(const vector_double &) const = delete;
-    bool feasibility_f(const vector_double &) const = delete;
-
-// The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
-// it would just result in a "weird" behaviour in case the user would try to stream this object
-#if __GNUC__ > 4
-    // NOTE: We delete the streaming operator overload called with unconstrain, otherwise the inner prob would stream
-    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
-    friend std::ostream &operator<<(std::ostream &, const unconstrain &) = delete;
-#endif
-    template <typename Archive>
-    void save(Archive &) const = delete;
-    template <typename Archive>
-    void load(Archive &) = delete;
-
-    // B - Specific to the unconstrain
-    // An unconstrained problem does not have gradients (most methods are not differentiable)
-    vector_double gradient(const vector_double &dv) const = delete;
-    // deleting has_gradient allows the automatic detection of gradients to see that unconstrain does not have any
-    // regardless of whether the class its build from has them. A unconstrain problem will thus never have gradients
-    bool has_gradient() const = delete;
-    // deleting has_gradient_sparsity/gradient_sparsity allows the automatic detection of gradient_sparsity to see that
-    // unconstrain does have an implementation for it. The sparsity will thus always be dense and referred to a problem
-    // with one objective
-    bool has_gradient_sparsity() const = delete;
-    sparsity_pattern gradient_sparsity() const = delete;
-    // An unconstrained problem does not have hessians (most methods are not differentiable)
-    std::vector<vector_double> hessians(const vector_double &dv) const = delete;
-    // deleting has_hessians allows the automatic detection of hessians to see that unconstrain does not have any
-    // regardless of whether the class its build from has them. An unconstrained problem will thus never have hessians
-    bool has_hessians() const = delete;
-    // deleting has_hessians_sparsity/hessians_sparsity allows the automatic detection of hessians_sparsity to see that
-    // unconstrain does have an implementation for it. The hessians_sparsity will thus always be dense
-    // (unconstrain::hessians_sparsity) and referred to a problem with one objective
-    bool has_hessians_sparsity() const = delete;
-    std::vector<sparsity_pattern> hessians_sparsity() const = delete;
-    // No need for these the default implementation of these in pagmo::problem already returns zero.
-    vector_double::size_type get_nec() const = delete;
-    vector_double::size_type get_nic() const = delete;
-
+    /// The inner problem
+    problem m_problem;
     /// types of unconstrain methods
     enum class method_type {
         DEATH,    ///< "death penalty"

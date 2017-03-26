@@ -35,7 +35,10 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <pagmo/io.hpp>
+#include <pagmo/problems/cec2006.hpp>
+#include <pagmo/problems/cec2009.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
@@ -55,12 +58,6 @@ BOOST_AUTO_TEST_CASE(translate_construction_test)
     // which has an identical representation to the problem
     // built by the explicit constructor.
     BOOST_CHECK(p0_string == p1_string);
-
-    // Check extract/is.
-    BOOST_CHECK(translate{}.extract<null_problem>() != nullptr);
-    BOOST_CHECK(translate{}.extract<hock_schittkowsky_71>() == nullptr);
-    BOOST_CHECK(translate{}.is<null_problem>());
-    BOOST_CHECK(!translate{}.is<hock_schittkowsky_71>());
 
     // We check that wrong size for translation results in an invalid_argument
     // exception
@@ -135,17 +132,10 @@ BOOST_AUTO_TEST_CASE(translate_stochastic_test)
     BOOST_CHECK(!p.is_stochastic());
 }
 
-BOOST_AUTO_TEST_CASE(translate_extract_test)
-{
-    hock_schittkowsky_71 p0{};
-    translate t{p0, {0.1, -0.2, 0.3, 0.4}};
-    BOOST_CHECK(t.extract<hock_schittkowsky_71>() != nullptr);
-}
-
 struct ts2 {
     vector_double fitness(const vector_double &) const
     {
-        return {2, 2, 2};
+        return {2};
     }
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -163,4 +153,49 @@ BOOST_AUTO_TEST_CASE(translate_thread_safety_test)
     translate t{p0, {0.1, -0.2, 0.3, 0.4}};
     BOOST_CHECK(t.get_thread_safety() == thread_safety::basic);
     BOOST_CHECK((translate{ts2{}, {1}}.get_thread_safety() == thread_safety::none));
+}
+
+template <typename T>
+void check_inheritance(T udp, const vector_double &t)
+{
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nobj(), problem(udp).get_nobj());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nec(), problem(udp).get_nec());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nic(), problem(udp).get_nic());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_gradient(), problem(udp).has_gradient());
+    BOOST_CHECK(translate(udp, t).gradient_sparsity() == problem(udp).gradient_sparsity());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_gradient_sparsity(), problem(udp).has_gradient_sparsity());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_hessians(), problem(udp).has_hessians());
+    BOOST_CHECK(problem(translate(udp, t)).hessians_sparsity() == problem(udp).hessians_sparsity());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_hessians_sparsity(), problem(udp).has_hessians_sparsity());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_set_seed(), problem(udp).has_set_seed());
+}
+
+BOOST_AUTO_TEST_CASE(translate_inheritance_test)
+{
+    check_inheritance(hock_schittkowsky_71{}, vector_double(4, 0.5));
+    check_inheritance(cec2006{1}, vector_double(13, 0.5));
+    check_inheritance(cec2009{1}, vector_double(30, 0.5));
+    // We check if set_seed is working
+    problem p{translate{inventory{10u, 10u, 1234567u}, vector_double(10, 1.)}};
+    std::ostringstream ss1, ss2;
+    ss1 << p;
+    BOOST_CHECK(ss1.str().find(std::to_string(1234567u)) != std::string::npos);
+    p.set_seed(5672543u);
+    ss2 << p;
+    BOOST_CHECK(ss2.str().find(std::to_string(5672543u)) != std::string::npos);
+}
+
+BOOST_AUTO_TEST_CASE(translate_inner_algo_get_test)
+{
+    // We check that the correct overload is called according to (*this) being const or not
+    {
+        const translate udp(hock_schittkowsky_71{}, vector_double(4, 0.5));
+        BOOST_CHECK(std::is_const<decltype(udp)>::value);
+        BOOST_CHECK(std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
+    }
+    {
+        translate udp(hock_schittkowsky_71{}, vector_double(4, 0.5));
+        BOOST_CHECK(!std::is_const<decltype(udp)>::value);
+        BOOST_CHECK(!std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
+    }
 }

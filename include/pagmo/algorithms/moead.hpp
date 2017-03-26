@@ -433,9 +433,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a moead::log_line_type containing: Gen, Fevals, ADR, ideal_point
+     * <tt>std::vector</tt> is a moead::log_line_type containing: Gen, Fevals, ADR, ideal_point
      * as described in moead::set_verbosity
-     * @return an <tt> std::vector </tt> of moead::log_line_type containing the logged values Gen, Fevals, ADR,
+     * @return an <tt>std::vector</tt> of moead::log_line_type containing the logged values Gen, Fevals, ADR,
      * ideal_point
      */
     const log_type &get_log() const

@@ -78,12 +78,6 @@ BOOST_AUTO_TEST_CASE(decompose_construction_test)
     // built by the explicit constructor.
     BOOST_CHECK(p0_string == p1_string);
 
-    // Check extract/is.
-    BOOST_CHECK(decompose{}.extract<null_problem>() != nullptr);
-    BOOST_CHECK(decompose{}.extract<zdt>() == nullptr);
-    BOOST_CHECK(decompose{}.is<null_problem>());
-    BOOST_CHECK(!decompose{}.is<zdt>());
-
     // We check the throws
     auto inf = std::numeric_limits<double>::infinity();
     auto nan = std::numeric_limits<double>::quiet_NaN();
@@ -222,4 +216,94 @@ BOOST_AUTO_TEST_CASE(decompose_serialization_test)
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
+}
+
+template <typename T>
+void check_inheritance(T udp, const vector_double &w, const vector_double &r)
+{
+    BOOST_CHECK_EQUAL(problem(decompose(udp, w, r)).get_nobj(), 1u);
+    BOOST_CHECK(problem(decompose(udp, w, r)).get_bounds() == problem(udp).get_bounds());
+    BOOST_CHECK_EQUAL(problem(decompose(udp, w, r)).has_set_seed(), problem(udp).has_set_seed());
+}
+
+struct smobjp {
+    smobjp(unsigned seed = 0u) : m_seed(seed)
+    {
+    }
+    vector_double fitness(const vector_double &) const
+    {
+        return {1u, 1u};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    void set_seed(unsigned seed)
+    {
+        m_seed = seed;
+    }
+    std::string get_extra_info() const
+    {
+        return "Seed: " + std::to_string(m_seed);
+    }
+    unsigned m_seed;
+};
+
+BOOST_AUTO_TEST_CASE(decompose_inheritance_test)
+{
+    check_inheritance(zdt{1u, 2u}, vector_double{0.5, 0.5}, vector_double{1.5, 1.5});
+    // We check set_seed is working
+    problem p{decompose{smobjp(1234567u), vector_double{0.5, 0.5}, vector_double{1.5, 1.5}}};
+    std::ostringstream ss1, ss2;
+    ss1 << p;
+    BOOST_CHECK(ss1.str().find(std::to_string(1234567u)) != std::string::npos);
+    p.set_seed(5672543u);
+    ss2 << p;
+    BOOST_CHECK(ss2.str().find(std::to_string(5672543u)) != std::string::npos);
+}
+
+BOOST_AUTO_TEST_CASE(decompose_inner_algo_get_test)
+{
+    // We check that the correct overload is called according to (*this) being const or not
+    {
+        const decompose udp(zdt{1u, 2u}, {0.5, 0.5}, {2., 2.}, "weighted", false);
+        BOOST_CHECK(std::is_const<decltype(udp)>::value);
+        BOOST_CHECK(std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
+    }
+    {
+        decompose udp(zdt{1u, 2u}, {0.5, 0.5}, {2., 2.}, "weighted", false);
+        BOOST_CHECK(!std::is_const<decltype(udp)>::value);
+        BOOST_CHECK(!std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
+    }
+}
+
+struct ts2 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2, 2, 2};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(decompose_thread_safety_test)
+{
+    zdt p0{1, 2};
+    decompose t{p0, {0.5, 0.5}, {2., 2.}};
+    BOOST_CHECK(t.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK((decompose{ts2{}, {0.5, 0.5}, {2., 2.}}.get_thread_safety() == thread_safety::none));
 }

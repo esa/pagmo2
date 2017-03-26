@@ -540,9 +540,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a cmaes::log_line_type containing: Gen, Fevals, Best, dx, df, sigma
+     * <tt>std::vector</tt> is a cmaes::log_line_type containing: Gen, Fevals, Best, dx, df, sigma
      * as described in cmaes::set_verbosity
-     * @return an <tt> std::vector </tt> of cmaes::log_line_type containing the logged values Gen, Fevals, Best, dx, df,
+     * @return an <tt>std::vector</tt> of cmaes::log_line_type containing the logged values Gen, Fevals, Best, dx, df,
      * sigma
      */
     const log_type &get_log() const

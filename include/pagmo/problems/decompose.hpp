@@ -93,11 +93,11 @@ namespace pagmo
  *
  * See: https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems
  */
-class decompose : public problem
+class decompose
 {
+    // Enabler for the ctor from UDP or problem. In this case we allow construction from type problem.
     template <typename T>
-    using ctor_enabler
-        = enable_if_t<std::is_constructible<problem, T &&>::value && !std::is_same<uncvref_t<T>, problem>::value, int>;
+    using ctor_enabler = enable_if_t<std::is_constructible<problem, T &&>::value, int>;
 
 public:
     // Default constructor.
@@ -110,16 +110,15 @@ public:
     decompose() : decompose(null_problem{2u}, {0.5, 0.5}, {0., 0.})
     {
     }
-    /// Constructor from UDP.
+    /// Constructor from problem.
     /**
-     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem,
-     * and \p T is not pagmo::problem.
+     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem.
      *
-     * Wraps a user-defined problem (UDP) so that its fitness will be decomposed using one of three
+     * Wraps a user-defined problem (UDP) or a pagmo::problem so that its fitness will be decomposed using one of three
      * decomposition methods. pagmo::decompose objects are user-defined problems that can be used
      * to define a pagmo::problem.
      *
-     * @param p the input UDP.
+     * @param p the input UDP or pagmo::problem.
      * @param weight the vector of weights \f$\boldsymbol \lambda\f$.
      * @param z the reference point \f$\mathbf z^*\f$.
      * @param method an \p std::string containing the decomposition method chosen.
@@ -136,18 +135,17 @@ public:
     template <typename T, ctor_enabler<T> = 0>
     explicit decompose(T &&p, const vector_double &weight, const vector_double &z,
                        const std::string &method = "weighted", bool adapt_ideal = false)
-        : problem(std::forward<T>(p)), m_weight(weight), m_z(z), m_method(method), m_adapt_ideal(adapt_ideal)
+        : m_problem(std::forward<T>(p)), m_weight(weight), m_z(z), m_method(method), m_adapt_ideal(adapt_ideal)
     {
-        const auto original_fitness_dimension = static_cast<const problem *>(this)->get_nobj();
+        const auto original_fitness_dimension = m_problem.get_nobj();
         // 0 - we check that the problem is multiobjective and unconstrained
         if (original_fitness_dimension < 2u) {
             pagmo_throw(std::invalid_argument, "Decomposition can only be applied to multi-objective problems");
         }
-        if (static_cast<const problem *>(this)->get_nc() != 0u) {
+        if (m_problem.get_nc() != 0u) {
             pagmo_throw(std::invalid_argument, "Decomposition can only be applied to unconstrained problems, it seems "
                                                "you are trying to decompose a problem with "
-                                                   + std::to_string(static_cast<const problem *>(this)->get_nc())
-                                                   + " constraints");
+                                                   + std::to_string(m_problem.get_nc()) + " constraints");
         }
         // 1 - we check that the decomposition method is one of "weighted", "tchebycheff" or "bi"
         if (method != "weighted" && method != "tchebycheff" && method != "bi") {
@@ -199,7 +197,7 @@ public:
     }
     /// Fitness computation.
     /**
-     * The fitness values of the original UDP will be combined using the decomposition method selected during
+     * The fitness values returned by the inner problem will be combined using the decomposition method selected during
      * construction.
      *
      * @param x the decision vector.
@@ -238,7 +236,7 @@ public:
     vector_double original_fitness(const vector_double &x) const
     {
         // We call the fitness of the original multiobjective problem
-        return static_cast<const problem *>(this)->fitness(x);
+        return m_problem.fitness(x);
     }
     /// Number of objectives.
     /**
@@ -247,6 +245,18 @@ public:
     vector_double::size_type get_nobj() const
     {
         return 1u;
+    }
+    /// Box-bounds.
+    /**
+     * Forwards the bounds computations to the inner pagmo::problem.
+     *
+     * @return the lower and upper bounds for each of the decision vector components.
+     *
+     * @throws unspecified any exception thrown by problem::get_bounds().
+     */
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return m_problem.get_bounds();
     }
     /// Gets the current reference point.
     /**
@@ -263,18 +273,18 @@ public:
     }
     /// Problem name.
     /**
-     * This method will append <tt>[decomposed]</tt> to the name of the UDP.
+     * This method will append <tt>[decomposed]</tt> to the name of the inner problem.
      *
      * @return a string containing the problem name.
      */
     std::string get_name() const
     {
-        return static_cast<const problem *>(this)->get_name() + " [decomposed]";
+        return m_problem.get_name() + " [decomposed]";
     }
     /// Extra information.
     /**
      * This method will add info about the decomposition method to the extra info provided
-     * by the UDP.
+     * by the inner problem.
      *
      * @return a string containing extra information on the problem.
      */
@@ -283,80 +293,87 @@ public:
         std::ostringstream oss;
         stream(oss, "\n\tDecomposition method: ", m_method, "\n\tDecomposition weight: ", m_weight,
                "\n\tDecomposition reference: ", m_z, "\n\tIdeal point adaptation: ", m_adapt_ideal, "\n");
-        return static_cast<const problem *>(this)->get_extra_info() + oss.str();
+        return m_problem.get_extra_info() + oss.str();
     }
 
-    /// Object serialization
+    /// Calls <tt>has_set_seed()</tt> of the inner problem.
+    /**
+     * Calls the method <tt>has_set_seed()</tt> of the inner problem.
+     *
+     * @return a flag signalling wether the inner problem is stochastic.
+     */
+    bool has_set_seed() const
+    {
+        return m_problem.has_set_seed();
+    }
+
+    /// Calls <tt>set_seed()</tt> of the inner problem.
+    /**
+     * Calls the method <tt>set_seed()</tt> of the inner problem.
+     *
+     * @param seed seed to be set.
+     *
+     * @throws std::not_implemented_error if the inner problem is not stochastic.
+     */
+    void set_seed(unsigned seed)
+    {
+        return m_problem.set_seed(seed);
+    }
+
+    /// Problem's thread safety level.
+    /**
+     * The thread safety of a meta-problem is defined by the thread safety of the inner pagmo::problem.
+     *
+     * @return the thread safety level of the inner pagmo::problem.
+     */
+    thread_safety get_thread_safety() const
+    {
+        return m_problem.get_thread_safety();
+    }
+
+    /// Getter for the inner problem.
+    /**
+     * Returns a const reference to the inner pagmo::problem.
+     *
+     * @return a const reference to the inner pagmo::problem.
+     */
+    const problem &get_inner_problem() const
+    {
+        return m_problem;
+    }
+
+    /// Getter for the inner problem.
+    /**
+     * Returns a reference to the inner pagmo::problem.
+     *
+     * **NOTE** The ability to extract a non const reference is provided only in order to allow to call
+     * non-const methods on the internal pagmo::problem instance. Assigning a new pagmo::problem via
+     * this reference is undefined behaviour.
+     *
+     * @return a reference to the inner pagmo::problem.
+     */
+    problem &get_inner_problem()
+    {
+        return m_problem;
+    }
+
+    /// Object serialization.
     /**
      * This method will save/load \p this into the archive \p ar.
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of the inner problem and of primitive types.
      */
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<problem>(this), m_weight, m_z, m_method, m_adapt_ideal);
+        ar(m_problem, m_weight, m_z, m_method, m_adapt_ideal);
     }
 
 private:
-    // Delete all that we do not want to inherit from problem
-    // A - Common to all meta
-    vector_double::size_type get_nx() const = delete;
-    vector_double::size_type get_nf() const = delete;
-    vector_double::size_type get_nc() const = delete;
-    unsigned long long get_fevals() const = delete;
-    unsigned long long get_gevals() const = delete;
-    unsigned long long get_hevals() const = delete;
-    vector_double::size_type get_gs_dim() const = delete;
-    std::vector<vector_double::size_type> get_hs_dim() const = delete;
-    bool is_stochastic() const = delete;
-
-// The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
-// it would just result in a "weird" behaviour in case the user would try to stream this object
-#if __GNUC__ > 4
-    // NOTE: We delete the streaming operator overload called with decompose, otherwise the inner prob would stream
-    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it
-    friend std::ostream &operator<<(std::ostream &, const decompose &) = delete;
-#endif
-    template <typename Archive>
-    void save(Archive &) const = delete;
-    template <typename Archive>
-    void load(Archive &) = delete;
-
-    // B - Specific to the decompose
-    // A decomposed problem does not have gradients (Tchebycheff is not differentiable)
-    vector_double gradient(const vector_double &dv) const = delete;
-    // deleting has_gradient allows the automatic detection of gradients to see that decompose does not have any
-    // regardless of whether the class its build from has them. A decompose problem will thus never have gradients
-    bool has_gradient() const = delete;
-    // deleting has_gradient_sparsity/gradient_sparsity allows the automatic detection of gradient_sparsity to see that
-    // decompose does have an implementation for it. The sparsity will thus always be dense and referred to a problem
-    // with one objective
-    bool has_gradient_sparsity() const = delete;
-    sparsity_pattern gradient_sparsity() const = delete;
-    // A decomposed problem does not have hessians (Tchebycheff is not differentiable)
-    std::vector<vector_double> hessians(const vector_double &dv) const = delete;
-    // deleting has_hessians allows the automatic detection of hessians to see that decompose does not have any
-    // regardless of whether the class its build from has them. A decompose problem will thus never have hessians
-    bool has_hessians() const = delete;
-    // deleting has_hessians_sparsity/hessians_sparsity allows the automatic detection of hessians_sparsity to see that
-    // decompose does have an implementation for it. The hessians_sparsity will thus always be dense
-    // (decompose::hessians_sparsity) and referred to a problem with one objective
-    bool has_hessians_sparsity() const = delete;
-    std::vector<sparsity_pattern> hessians_sparsity() const = delete;
-    // No need for these either: decompose does not support constraints, and the default implementation
-    // of these in pagmo::problem already returns zero.
-    vector_double::size_type get_nec() const = delete;
-    vector_double::size_type get_nic() const = delete;
-    // These are methods brought in by the inheritance from pagmo::problem: they do not have any effect
-    // and they are just confusing to see.
-    void set_c_tol(const vector_double &) = delete;
-    vector_double get_c_tol() const = delete;
-    bool feasibility_x(const vector_double &) const = delete;
-    bool feasibility_f(const vector_double &) const = delete;
-
+    // Inner problem
+    problem m_problem;
     // decomposition weight
     vector_double m_weight;
     // decomposition reference point (only relevant/used for tchebycheff and boundary interception)

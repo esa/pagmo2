@@ -804,10 +804,10 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a de1220::log_line_type containing: Gen, Fevals, Best, F, CR, Variant, dx, df as
+     * <tt>std::vector</tt> is a de1220::log_line_type containing: Gen, Fevals, Best, F, CR, Variant, dx, df as
      * described
      * in de1220::set_verbosity
-     * @return an <tt> std::vector </tt> of de1220::log_line_type containing the logged values Gen, Fevals, Best, F, CR,
+     * @return an <tt>std::vector</tt> of de1220::log_line_type containing the logged values Gen, Fevals, Best, F, CR,
      * Variant, dx, df
      */
     const log_type &get_log() const

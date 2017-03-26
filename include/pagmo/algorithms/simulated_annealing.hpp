@@ -372,9 +372,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt> std::vector </tt> is a simulated_annealing::log_line_type containing: Fevals, Best, Current, Mean range
+     * <tt>std::vector</tt> is a simulated_annealing::log_line_type containing: Fevals, Best, Current, Mean range
      * Temperature as described in simulated_annealing::set_verbosity
-     * @return an <tt> std::vector </tt> of simulated_annealing::log_line_type containing the logged values Gen, Fevals,
+     * @return an <tt>std::vector</tt> of simulated_annealing::log_line_type containing the logged values Gen, Fevals,
      * Best, Improvement, Mutations
      */
     const log_type &get_log() const
