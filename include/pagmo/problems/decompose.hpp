@@ -333,9 +333,9 @@ public:
 
     /// Getter for the inner problem
     /**
-     * Returns a const reference to the inner pagmo::problem
+     * Returns a const reference to the inner pagmo::problem.
      *
-     * @return a const reference to the inner pagmo::problem
+     * @return a const reference to the inner pagmo::problem.
      */
     const problem &get_inner_problem() const
     {
@@ -344,9 +344,9 @@ public:
 
     /// Getter for the inner problem
     /**
-     * Returns a reference to the inner pagmo::problem
+     * Returns a reference to the inner pagmo::problem.
      *
-     * @return a reference to the inner pagmo::problem
+     * @return a reference to the inner pagmo::problem.
      */
     problem &get_inner_problem()
     {

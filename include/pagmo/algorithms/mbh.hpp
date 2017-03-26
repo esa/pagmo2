@@ -370,9 +370,9 @@ public:
     }
     /// Getter for the inner algorithm
     /**
-     * Returns a const reference to the inner pagmo::algorithm
+     * Returns a const reference to the inner pagmo::algorithm.
      *
-     * @return a const reference to the inner pagmo::algorithm
+     * @return a const reference to the inner pagmo::algorithm.
      */
     const algorithm &get_inner_algorithm() const
     {
@@ -380,9 +380,9 @@ public:
     }
     /// Getter for the inner algorithm
     /**
-     * Returns a reference to the inner pagmo::algorithm
+     * Returns a reference to the inner pagmo::algorithm.
      *
-     * @return a reference to the inner pagmo::algorithm
+     * @return a reference to the inner pagmo::algorithm.
      */
     algorithm &get_inner_algorithm()
     {
