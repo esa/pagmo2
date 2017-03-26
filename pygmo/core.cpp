@@ -771,7 +771,7 @@ BOOST_PYTHON_MODULE(core)
                              +[](const algorithm &a, unsigned stop, const bp::object &perturb) {
                                  return ::new pagmo::mbh(a, stop, pygmo::to_vd(perturb), pagmo::random_device::next());
                              },
-                             bp::default_call_policies(), (bp::arg("algo"), bp::arg("stop"), bp::arg("perturb"))));
+                             bp::default_call_policies()));
     mbh_.def("get_seed", &mbh::get_seed, pygmo::mbh_get_seed_docstring().c_str());
     mbh_.def("get_verbosity", &mbh::get_verbosity, pygmo::mbh_get_verbosity_docstring().c_str());
     mbh_.def("set_perturb", +[](mbh &a, const bp::object &o) { a.set_perturb(pygmo::to_vd(o)); },

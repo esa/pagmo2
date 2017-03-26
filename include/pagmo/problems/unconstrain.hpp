@@ -255,8 +255,7 @@ public:
      *
      * @return the lower and upper bounds for each of the decision vector components.
      *
-     * @throws unspecified any exception thrown by memory errors in standard containers,
-     * or by problem::get_bounds().
+     * @throws unspecified any exception thrown by <tt>problem::get_bounds()</tt>.
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
