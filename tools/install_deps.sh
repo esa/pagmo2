@@ -17,11 +17,9 @@ conda config --add channels conda-forge --force
 
 conda_pkgs="boost>=1.55 cmake>=3.2 eigen"
 
-if [[ "${PAGMO_BUILD}" == "PygmoPython35" ]]; then
-    conda_pkgs="$conda_pkgs python=3.5 numpy dill ipyparallel"
-elif [[ "${PAGMO_BUILD}" == "PygmoPython36" ]]; then
+if [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "OSXPython36" ]]; then
     conda_pkgs="$conda_pkgs python=3.6 numpy dill ipyparallel"
-elif [[ "${PAGMO_BUILD}" == "PygmoPython27" ]]; then
+elif [[ "${PAGMO_BUILD}" == "Python27" || "${PAGMO_BUILD}" == "OSXPython27" ]]; then
     conda_pkgs="$conda_pkgs python=2.7 numpy dill ipyparallel"
 fi
 

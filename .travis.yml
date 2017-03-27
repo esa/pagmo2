@@ -80,7 +80,7 @@ matrix:
     # - env: PAGMO_BUILD="OSXRelease"
     #   os: osx
     #   osx_image: xcode6.4
-    - env: PAGMO_BUILD="PygmoPython35"
+    - env: PAGMO_BUILD="Python36"
       compiler: gcc
       os: linux
       addons:
@@ -90,7 +90,7 @@ matrix:
           packages:
           - gcc-4.8
           - g++-4.8
-    - env: PAGMO_BUILD="PygmoPython36"
+    - env: PAGMO_BUILD="Python27"
       compiler: gcc
       os: linux
       addons:
@@ -100,16 +100,12 @@ matrix:
           packages:
           - gcc-4.8
           - g++-4.8
-    - env: PAGMO_BUILD="PygmoPython27"
-      compiler: gcc
-      os: linux
-      addons:
-        apt:
-          sources:
-          - ubuntu-toolchain-r-test
-          packages:
-          - gcc-4.8
-          - g++-4.8
+    - env: PAGMO_BUILD="OSXPython36"
+      os: osx
+      osx_image: xcode6.4
+    - env: PAGMO_BUILD="OSXPython27"
+      os: osx
+      osx_image: xcode6.4
 
 script:
     - mkdir build
