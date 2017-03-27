@@ -45,14 +45,14 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
-    sleep 10;
+    sleep 20;
     python -c "import pygmo; pygmo.test.run_test_suite()"
 elif [[ "${PAGMO_BUILD}" == "OSXPython36" || "${PAGMO_BUILD}" == "OSXPython27" ]]; then
     CXX=clang++ CC=clang cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_INSTALL_HEADERS=no -DPAGMO_BUILD_PYGMO=yes -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
-    sleep 10;
+    sleep 20;
     python -c "import pygmo; pygmo.test.run_test_suite()"
 fi
 
