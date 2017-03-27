@@ -560,7 +560,7 @@ inline pagmo::sparsity_pattern to_sp(const bp::object &o)
 }
 
 // Wrapper around the CPython function to create a bytes object from raw data.
-bp::object make_bytes(const char *ptr, Py_ssize_t len)
+inline bp::object make_bytes(const char *ptr, Py_ssize_t len)
 {
     PyObject *retval;
     if (len) {
@@ -610,14 +610,14 @@ namespace detail
 {
 
 template <typename Func, typename Tup, std::size_t... index>
-auto ct2pt_invoke_helper(Func &&func, Tup &&tup, pagmo::detail::index_sequence<index...>)
+inline auto ct2pt_invoke_helper(Func &&func, Tup &&tup, pagmo::detail::index_sequence<index...>)
     -> decltype(func(std::get<index>(std::forward<Tup>(tup))...))
 {
     return func(std::get<index>(std::forward<Tup>(tup))...);
 }
 
 template <typename Func, typename Tup>
-auto ct2pt_invoke(Func &&func, Tup &&tup)
+inline auto ct2pt_invoke(Func &&func, Tup &&tup)
     -> decltype(ct2pt_invoke_helper(std::forward<Func>(func), std::forward<Tup>(tup),
                                     pagmo::detail::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{}))
 {

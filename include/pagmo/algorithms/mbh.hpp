@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include "../type_traits.hpp"
 #include "../utils/constrained.hpp"
 #include "../utils/generic.hpp" // pagmo::uniform_real_from_range
+#include "compass_search.hpp"
 
 namespace pagmo
 {
