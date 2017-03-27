@@ -19,6 +19,10 @@ conda_pkgs="boost>=1.55 cmake>=3.2 eigen"
 
 if [[ "${PAGMO_BUILD}" == "PygmoPython35" ]]; then
     conda_pkgs="$conda_pkgs python=3.5 numpy dill ipyparallel"
+elif [[ "${PAGMO_BUILD}" == "PygmoPython36" ]]; then
+    conda_pkgs="$conda_pkgs python=3.6 numpy dill ipyparallel"
+elif [[ "${PAGMO_BUILD}" == "PygmoPython27" ]]; then
+    conda_pkgs="$conda_pkgs python=2.7 numpy dill ipyparallel"
 fi
 
 conda create -q -p $deps_dir -y $conda_pkgs
