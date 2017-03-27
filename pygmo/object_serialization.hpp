@@ -44,7 +44,7 @@ namespace cereal
 {
 
 template <typename Archive>
-void save(Archive &archive, const boost::python::object &o)
+inline void save(Archive &archive, const boost::python::object &o)
 {
     // NOTE: these functions can be improved by using cereal's binary data
     // construct, at least for binary archives. This would allow to avoid the
@@ -69,7 +69,7 @@ void save(Archive &archive, const boost::python::object &o)
 }
 
 template <typename Archive>
-void load(Archive &archive, boost::python::object &o)
+inline void load(Archive &archive, boost::python::object &o)
 {
     using namespace boost::python;
     // Extract the char vector.
