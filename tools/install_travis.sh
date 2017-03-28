@@ -55,7 +55,7 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
     pip install sphinx breathe requests[security] sphinx-bootstrap-theme;
     # Run doxygen and check the output.
     cd ../doc/doxygen;
-    export DOXYGEN_OUTPUT=`doxygen 2>&1 >/dev/null`;
+    export DOXYGEN_OUTPUT=`doxygen > /dev/null`;
     if [[ "${DOXYGEN_OUTPUT}" != "" ]]; then
         echo "Doxygen encountered some problem:";
         echo "${DOXYGEN_OUTPUT}";
@@ -65,7 +65,7 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
     # Copy the images into the xml output dir (this is needed by sphinx).
     cp images/* xml/;
     cd ../sphinx/;
-    export SPHINX_OUTPUT=`make html 2>&1 >/dev/null`;
+    export SPHINX_OUTPUT=`make html > /dev/null`;
     if [[ "${SPHINX_OUTPUT}" != "" ]]; then
         echo "Sphinx encountered some problem:";
         echo "${SPHINX_OUTPUT}";
