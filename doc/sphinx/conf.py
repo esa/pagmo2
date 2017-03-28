@@ -42,7 +42,6 @@ extensions = [
 autoclass_content = 'both'
 
 # BREATHE configuration paths
-#sys.path.append( "/home/me/docproj/ext/breathe/" )
 breathe_projects = {"pagmo": "../doxygen/xml"}
 breathe_default_project = "pagmo"
 breathe_default_members = ('members',)
