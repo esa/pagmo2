@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>News-vendor problem &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Translate" href="translate.html" />
+    <link rel="prev" title="Hock Schittkowsky No.71" href="hock_schittkowsky_71.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../cpp_docs.html">C++ docs</a></li>
+                <li><a href="../../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">News-vendor problem</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="news-vendor-problem">
+<h1>News-vendor problem<a class="headerlink" href="#news-vendor-problem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo9inventoryE">
+<span id="pagmo::inventory"></span><span class="target" id="pagmoclasspagmo_1_1inventory"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">inventory</code><a class="headerlink" href="#_CPPv2N5pagmo9inventoryE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Stochastic Programming Test Problem: An Inventory Model. </p>
+<p><img alt="../../../_images/newsvendor.png" src="../../../_images/newsvendor.png" /></p>
+<p>This problem is a generalization of the simple inventory problem so-called of the &#8220;news-vendor&#8221;, widely used to introduce the main tools and techniques of stochastic programming Assume you are a newsvendor and each week, for the next <span class="math">\( N\)</span> weeks, you need to decide how many journals to order (indicated with the decision variable <span class="math">\( x_i \)</span>). The weekly journal demand is unknown to you and is indicated with the variable <span class="math">\(d_i\)</span>. The cost of ordering journals before the week starts is <span class="math">\( c\)</span>, the cost of ordering journals during the week (in order to meet an unforeseen demand) is <span class="math">\( b \)</span> and the cost of having to hold unsold journals is <span class="math">\( h \)</span>. The inventory level of journals will be defined by the succession: <div class="math">
+\[ I_i = [I_{i-1} + x_i - d_i]_+, I_1 = 0 \]</div>
+ while the total cost of running the journal sales for <span class="math">\(N\)</span> weeks will be: <div class="math">
+\[ J(\mathbf x, \mathbf d) = c \sum_{i=1}^N x_i+ b \sum_{i=1}^N [d_i - I_i - x_i]_+ + h \sum_{i=1}^N [I_i + x_i - d_i]_+ \]</div>
+</p>
+<p>See: www2.isye.gatech.edu/people/faculty/Alex_Shapiro/SPbook.pdf </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo9inventory9inventoryEjjj">
+<span id="pagmo::inventory::inventory__unsigned-i.unsigned-i.unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1inventory_1afe22e10a3584ecfe0a2ccc5bbbca2372"></span><code class="descname">inventory</code><span class="sig-paren">(</span>unsigned int <em>weeks</em> = 4u, unsigned int <em>sample_size</em> = 10u, unsigned int <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9inventory9inventoryEjjj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from weeks, sample size and random seed. </p>
+<p>Given the numer of weeks (i.e. prolem dimension), the sample size to approximate the expected value and a starting random seed, we construct the inventory prolem</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">weeks</span></code>: dimension of the problem corresponding to the numer of weeks to plan the inventory for. </li>
+<li><code class="docutils literal"><span class="pre">sample_size</span></code>: dimension of the sample used to approximate the expected value </li>
+<li><code class="docutils literal"><span class="pre">seed</span></code>: starting random seed to build the pseudorandom sequences used to generate the sample </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo9inventory7fitnessERK13vector_double">
+<span id="pagmo::inventory::fitness__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1inventory_1a3e61ad99ad59287c23d50c13d0bf3da8"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9inventory7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Fitness computation. </p>
+<p>Computes the fitness for this UDP</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the fitness of <code class="docutils literal"><span class="pre">x</span></code>. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo9inventory10get_boundsEv">
+<span id="pagmo::inventory::get_boundsC"></span><span class="target" id="pagmoclasspagmo_1_1inventory_1a0360d6f87f71e5840c52ebcf9abed7be"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9inventory10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Box-bounds. </p>
+<p>It returns the box-bounds for this UDP.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the lower and upper bounds for each of the decision vector components </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo9inventory8set_seedEj">
+<span id="pagmo::inventory::set_seed__unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1inventory_1aac9467a58566c57b28b32cac0431bc34"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9inventory8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seed</span></code>: the random number generator seed </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo9inventory8get_nameEv">
+<span id="pagmo::inventory::get_nameC"></span><span class="target" id="pagmoclasspagmo_1_1inventory_1ac67fa712ba3011fa37f51a8664926188"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9inventory8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Problem name. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing the problem name </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo9inventory14get_extra_infoEv">
+<span id="pagmo::inventory::get_extra_infoC"></span><span class="target" id="pagmoclasspagmo_1_1inventory_1a8c53c83a696a1e3d9576bd12f7480d8f"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9inventory14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extra informations. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing extra informations on the problem </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo9inventory9serializeER7Archive">
+<span id="pagmo::inventory::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1inventory_1ac414132d8dc23731737d7033807d644a"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9inventory9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

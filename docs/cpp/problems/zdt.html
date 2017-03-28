@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ZDT test suite &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="DTLZ test suite" href="dtlz.html" />
+    <link rel="prev" title="Griewank" href="griewank.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../cpp_docs.html">C++ docs</a></li>
+                <li><a href="../../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">ZDT test suite</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="zdt-test-suite">
+<h1>ZDT test suite<a class="headerlink" href="#zdt-test-suite" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo3zdtE">
+<span id="pagmo::zdt"></span><span class="target" id="pagmoclasspagmo_1_1zdt"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">zdt</code><a class="headerlink" href="#_CPPv2N5pagmo3zdtE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>ZDT problem test suite. </p>
+<p>This widespread test suite was conceived for two-objective problems and takes its name from its authors Zitzler, Deb and Thiele.</p>
+<p>In their paper the authors propose a set of 6 different scalable problems all originating from a well thought combination of functions allowing, by construction, to measure the distance of any point to the Pareto front while creating interesting problems. They also suggest some dimensions for instantiating the problems, namely <span class="math">\(m = [30, 30, 30, 10, 11, 10]\)</span>.</p>
+<p><strong>NOTE</strong> The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored via std::floor().</p>
+<p>See: Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. &#8220;Comparison of multiobjective evolutionary algorithms:
+Empirical results.&#8221; Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848</p>
+<p>ZDT1:</p>
+<p>This is a box-constrained continuous <span class="math">\(n\)</span>-dimensional ( <span class="math">\(n\)</span>&gt;1) multi-objecive problem. <div class="math">
+\[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\ F_1 \left(x\right) = x_1 \\ F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
+</p>
+<p>ZDT2:</p>
+<p>This is a box-constrained continuous <span class="math">\(n\)</span>-dimension multi-objecive problem. <div class="math">
+\[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\ F_1 \left(x\right) = x_1 \\ F_2 \left(x\right) = g(x) \left[ 1 - \left(x_1 / g(x)\right)^2 \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
+</p>
+<p>ZDT3:</p>
+<p>This is a box-constrained continuous <span class="math">\(n\)</span>-dimension multi-objecive problem. <div class="math">
+\[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\ F_1 \left(x\right) = x_1 \\ F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} - x_1/g(x) \sin(10 \pi x_1) \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
+</p>
+<p>ZDT4:</p>
+<p>This is a box-constrained continuous <span class="math">\(n\)</span>-dimension multi-objecive problem. <div class="math">
+\[\begin{split} \begin{array}{l} g\left(x\right) = 91 + \sum_{i=2}^{n} \left[x_i^2 - 10 \cos \left(4\pi x_i \right) \right] \\ F_1 \left(x\right) = x_1 \\ F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} \right] x_1 \in [0,1], x_i \in \left[ -5,5 \right] i=2, \cdots, 10. \end{array} \end{split}\]</div>
+</p>
+<p>ZDT5</p>
+<p>This is a box-constrained integer <span class="math">\(n\)</span>-dimension multi-objecive problem. The chromosome is a bitstring so that <span class="math">\(x_i \in \left\{0,1\right\}\)</span>. Refer to the original paper for the formal definition.</p>
+<p>ZDT6</p>
+<p>This is a box-constrained continuous <span class="math">\(n\)</span>dimension multi-objecive problem. <div class="math">
+\[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left[\left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right)\right]^{0.25} \\ F_1 \left(x\right) = 1 - \exp(-4 x_1) \sin^6(6 \pi \ x_1) \\ F_2 \left(x\right) = g(x) \left[ 1 - (f_1(x) / g(x))^2 \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
+ </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo3zdt3zdtEjj">
+<span id="pagmo::zdt::zdt__unsigned-i.unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1zdt_1a22f9184de7b21ad8e9a2a77ff6f50eae"></span><code class="descname">zdt</code><span class="sig-paren">(</span>unsigned int <em>prob_id</em> = 1u, unsigned int <em>param</em> = 30u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3zdt3zdtEjj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor</p>
+<p>Will construct one problem from the ZDT test-suite.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">prob_id</span></code>: problem number. Must be in [1, .., 6] </li>
+<li><code class="docutils literal"><span class="pre">param</span></code>: problem parameter, representing the problem dimension except for ZDT5 where it represents the number of binary strings</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">id</span></code> is not in [1,..,6] </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">param</span></code> is not at least 2. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3zdt7fitnessERK13vector_double">
+<span id="pagmo::zdt::fitness__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1zdt_1af4c526a2d08444249946391bb8736bd6"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3zdt7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Fitness computation. </p>
+<p>Computes the fitness for this UDP</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the fitness of <code class="docutils literal"><span class="pre">x</span></code>. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3zdt8get_nobjEv">
+<span id="pagmo::zdt::get_nobjC"></span><span class="target" id="pagmoclasspagmo_1_1zdt_1a3fe23a0bc425d2c0fcf6ad00165a4e04"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nobj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3zdt8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of objectives. </p>
+<p>It returns the number of objectives.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of objectives </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3zdt10get_boundsEv">
+<span id="pagmo::zdt::get_boundsC"></span><span class="target" id="pagmoclasspagmo_1_1zdt_1a464da3f9dd36e1a51701289efb5f447f"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3zdt10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Box-bounds. </p>
+<p>It returns the box-bounds for this UDP.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the lower and upper bounds for each of the decision vector components </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3zdt8get_nameEv">
+<span id="pagmo::zdt::get_nameC"></span><span class="target" id="pagmoclasspagmo_1_1zdt_1ac8052693a3978e6876b32184fad51263"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3zdt8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Problem name. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing the problem name </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3zdt10p_distanceERKN5pagmo10populationE">
+<span id="pagmo::zdt::p_distance__pagmo::populationCRC"></span><span class="target" id="pagmoclasspagmo_1_1zdt_1ae8bbe91c3e3aaf2449fe4b978a9f02c4"></span>double <code class="descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> pagmo::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3zdt10p_distanceERKN5pagmo10populationE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Distance from the Pareto front (of a population) </p>
+<p>Convergence metric for a given population (0 = on the optimal front)</p>
+<p>Takes the average across the input population of the p_distance</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the p_distance </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be assigned a pareto distance </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3zdt10p_distanceERK13vector_double">
+<span id="pagmo::zdt::p_distance__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1zdt_1ae3f67086871700c1acfcb2f36d96f87b"></span>double <code class="descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3zdt10p_distanceERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Distance from the Pareto front. </p>
+<p>Convergence metric for a given decision_vector (0 = on the optimal front)</p>
+<p>Introduced by Martens and Izzo, this metric is able to measure &#8220;a distance&#8221; of any point from the pareto front of any ZDT problem analytically without the need to precompute the front.</p>
+<p>
+See: Märtens, Marcus, and Dario Izzo. &#8220;The asynchronous island model
+and NSGA-II: study of a new migration operator and its performance.&#8221; Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013. <dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the p_distance</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: input decision vector </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo3zdt9serializeER7Archive">
+<span id="pagmo::zdt::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1zdt_1a79773a9a8dcbc17d7ad00172aad5a93e"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3zdt9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

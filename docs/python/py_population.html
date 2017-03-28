@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Population class &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Island class" href="py_island.html" />
+    <link rel="prev" title="Problem class" href="py_problem.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../cpp/cpp_docs.html">C++ docs</a></li>
+                <li><a href="python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="python_docs.html">Python Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Population class</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="population-class">
+<h1>Population class<a class="headerlink" href="#population-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pygmo.core.population">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">population</code><span class="sig-paren">(</span><em>prob=None</em>, <em>size=0</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population" title="Permalink to this definition">¶</a></dt>
+<dd><p>The population class.</p>
+<p>This class represents a population of individuals, i.e., potential candidate solutions to a given problem. In pygmo an
+individual is determined:</p>
+<ul class="simple">
+<li>by a unique ID used to track him across generations and migrations,</li>
+<li>by a chromosome (a decision vector),</li>
+<li>by the fitness of the chromosome as evaluated by a <a class="reference internal" href="py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> and thus including objectives,
+equality constraints and inequality constraints if present.</li>
+</ul>
+<p>A special mechanism is implemented to track the best individual that has ever been part of the population. Such an individual
+is called <em>champion</em> and its decision vector and fitness vector are automatically kept updated. The <em>champion</em> is not necessarily
+an individual currently in the population. The <em>champion</em> is only defined and accessible via the population interface if the
+<a class="reference internal" href="py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> currently contained in the <a class="reference internal" href="#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> is single objective.</p>
+<p>See also the docs of the C++ class <a class="reference internal" href="../cpp/population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+(if <code class="docutils literal"><span class="pre">None</span></code>, the population problem will be <a class="reference internal" href="problems/py_problems.html#pygmo.core.null_problem" title="pygmo.core.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a>)</li>
+<li><strong>size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the number of individuals</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the random seed (if <code class="docutils literal"><span class="pre">None</span></code>, it will be randomly-generated)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>size</em> is not an <code class="docutils literal"><span class="pre">int</span></code> or <em>seed</em> is not <code class="docutils literal"><span class="pre">None</span></code> and not an <code class="docutils literal"><span class="pre">int</span></code></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; is <em>size</em> or <em>seed</em> are negative</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the invoked C++ constructors or by the constructor of
+<a class="reference internal" href="py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>, or by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pygmo.core.population.best_idx">
+<code class="descname">best_idx</code><span class="sig-paren">(</span><em>tol = 0.</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.best_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of the best individual.</p>
+<p>If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem
+is, instead, single objective, but with constraints, the best will be defined using the criteria specified in <a class="reference internal" href="../cpp/utils/constrained.html#_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="pagmo::sort_population_con"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sort_population_con()</span></code></a>.
+If the problem is multi-objective one single best is not well defined. In this case the user can still obtain a strict ordering of the population
+individuals by calling the <a class="reference internal" href="../cpp/utils/multi_objective.html#_CPPv2N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE" title="pagmo::sort_population_mo"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sort_population_mo()</span></code></a> function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tol</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) &#8211; scalar tolerance or vector of tolerances to be applied to each constraints</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the index of the best individual</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="../cpp/utils/constrained.html#_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="pagmo::sort_population_con"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sort_population_con()</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.population.champion_f">
+<code class="descname">champion_f</code><a class="headerlink" href="#pygmo.core.population.champion_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Champion&#8217;s fitness vector.</p>
+<p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the fitness vector of the population&#8217;s champion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the champion&#8217;s fitness vector</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">1D NumPy float array</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the current problem is not single objective</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.population.champion_x">
+<code class="descname">champion_x</code><a class="headerlink" href="#pygmo.core.population.champion_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Champion&#8217;s decision vector.</p>
+<p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the decision vector of the population&#8217;s champion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the champion&#8217;s decision vector</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">1D NumPy float array</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the current problem is not single objective</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.population.get_ID">
+<code class="descname">get_ID</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.get_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the IDs of the individuals as a 1D NumPy array.</p>
+<p>Each element of the returned array represents the ID of the individual at the corresponding position in the
+population.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a deep copy of the IDs of the individuals</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">1D NumPy int array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.population.get_f">
+<code class="descname">get_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.get_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the fitness vectors of the individuals as a 2D NumPy array.</p>
+<p>Each row of the returned array represents the fitness vector of the individual at the corresponding position in the
+population.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a deep copy of the fitness vectors of the individuals</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">2D NumPy float array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.population.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.get_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the random seed of the population.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the random seed of the population</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.population.get_x">
+<code class="descname">get_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.get_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the chromosomes of the individuals as a 2D NumPy array.</p>
+<p>Each row of the returned array represents the chromosome of the individual at the corresponding position in the
+population.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a deep copy of the chromosomes of the individuals</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">2D NumPy float array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.population.problem">
+<code class="descname">problem</code><a class="headerlink" href="#pygmo.core.population.problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Population&#8217;s problem.</p>
+<p>This property gives direct access to the <a class="reference internal" href="py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within the population.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the internal problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.) when setting the property</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.population.push_back">
+<code class="descname">push_back</code><span class="sig-paren">(</span><em>x</em>, <em>f = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.push_back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds one decision vector (chromosome) to the population.</p>
+<p>This method will append a new chromosome <em>x</em> to the population, creating a new unique identifier for the newly born individual
+and, if <em>f</em> is not provided, evaluating its fitness. If <em>f</em> is provided, the fitness of the new individual will be set to <em>f</em>.
+It is the user&#8217;s responsibility to ensure that <em>f</em> actually corresponds to the fitness of <em>x</em>.</p>
+<p>In case of exceptions, the population will not be altered.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>array-like object</em>) &#8211; decision vector to be added to the population</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_problem.html#pygmo.core.problem.fitness" title="pygmo.core.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.problem.fitness()</span></code></a> or by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.population.random_decision_vector">
+<code class="descname">random_decision_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.random_decision_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will create a random decision vector within the problem&#8217;s bounds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a random decision vector within the problem’s bounds</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">1D NumPy float array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_problem.html#pygmo.core.problem.fitness" title="pygmo.core.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.problem.fitness()</span></code></a> or by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.population.set_x">
+<code class="descname">set_x</code><span class="sig-paren">(</span><em>i</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.set_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the <span class="math">\(i\)</span>-th individual decision vector.</p>
+<p>Sets the chromosome of the <span class="math">\(i\)</span>-th individual to the value <em>x</em> and changes its fitness accordingly. The
+individual&#8217;s ID remains the same.</p>
+<p><strong>NOTE</strong>: a call to this method triggers one fitness function evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>i</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; individual’s index in the population</li>
+<li><strong>x</strong> (<em>array-like object</em>) &#8211; a decision vector (chromosome)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>i</em> is invalid, or if <em>x</em> has the wrong dimensions (i.e., the dimension is
+inconsistent with the problem&#8217;s properties)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.population.set_xf">
+<code class="descname">set_xf</code><span class="sig-paren">(</span><em>i</em>, <em>x</em>, <em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.set_xf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the <span class="math">\(i\)</span>-th individual decision vector, and fitness.</p>
+<p>Sets simultaneously the <span class="math">\(i\)</span>-th individual decision vector and fitness thus avoiding to trigger a fitness function evaluation.</p>
+<p><strong>NOTE</strong>: the user must make sure that the input fitness <em>f</em> makes sense as pygmo will only check its dimension.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>i</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; individual’s index in the population</li>
+<li><strong>x</strong> (<em>array-like object</em>) &#8211; a decision vector (chromosome)</li>
+<li><strong>f</strong> (<em>array-like object</em>) &#8211; a fitness vector</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>i</em> is invalid, or if <em>x</em> or <em>f</em> have the wrong dimensions (i.e., their dimensions are
+inconsistent with the problem&#8217;s properties)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.population.worst_idx">
+<code class="descname">worst_idx</code><span class="sig-paren">(</span><em>tol = 0.</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.population.worst_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of the worst individual.</p>
+<p>If the problem is single-objective and unconstrained, the worst is simply the individual with the largest fitness. If the problem
+is, instead, single objective, but with constraints, the worst will be defined using the criteria specified in <a class="reference internal" href="../cpp/utils/constrained.html#_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="pagmo::sort_population_con"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sort_population_con()</span></code></a>.
+If the problem is multi-objective one single worst is not well defined. In this case the user can still obtain a strict ordering of the population
+individuals by calling the <a class="reference internal" href="../cpp/utils/multi_objective.html#_CPPv2N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE" title="pagmo::sort_population_mo"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sort_population_mo()</span></code></a> function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tol</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) &#8211; scalar tolerance or vector of tolerances to be applied to each constraints</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the index of the worst individual</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="../cpp/utils/constrained.html#_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="pagmo::sort_population_con"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sort_population_con()</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

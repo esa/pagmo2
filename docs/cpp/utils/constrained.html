@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Constrained optimization utilities &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Low-discrepancy sequences" href="discrepancy.html" />
+    <link rel="prev" title="Multi-objective optimization utilities" href="multi_objective.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../cpp_docs.html">C++ docs</a></li>
+                <li><a href="../../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Constrained optimization utilities</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="constrained-optimization-utilities">
+<span id="cpp-constrained-utils"></span><h1>Constrained optimization utilities<a class="headerlink" href="#constrained-optimization-utilities" title="Permalink to this headline">¶</a></h1>
+<p>A number of utilities to compute quantities that are of relevance to
+constrained optimization tasks.</p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double">
+<span id="pagmo::sort_population_con__std::vector:vector_double:CR.vector_double::size_type.vector_doubleCR"></span><span class="target" id="pagmonamespacepagmo_1a468115a79891255d62c38f01b8732872"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt; <code class="descclassname">pagmo::</code><code class="descname">sort_population_con</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>input_f</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>neq</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sorts a population in a single-objective, constrained, case (from a vector of tolerances)</p>
+<p>Sorts a population (intended here as an <code class="docutils literal"><span class="pre">std::vector&lt;vector_double&gt;</span></code> containing single objective fitness vectors) with respect to the following strict ordering:<ul class="simple">
+<li><span class="math">\(f_1 \prec f_2\)</span> if <span class="math">\(f_1\)</span> is feasible and <span class="math">\(f_2\)</span> is not.</li>
+<li><span class="math">\(f_1 \prec f_2\)</span> if <span class="math">\(f_1\)</span> is they are both infeasible, but <span class="math">\(f_1\)</span> violates less constraints than <span class="math">\(f_2\)</span>, or in case they both violate the same number of constraints, if the <span class="math">\(L_2\)</span> norm of the overall constraint violation is smaller.</li>
+<li><span class="math">\(f_1 \prec f_2\)</span> if both fitness vectors are feasible and the objective value in <span class="math">\(f_1\)</span> is smaller than the objectve value in <span class="math">\(f_2\)</span></li>
+</ul>
+</p>
+<p><strong>NOTE</strong>: the fitness vectors are assumed to contain exactly one objective, <code class="docutils literal"><span class="pre">neq</span></code> equality constraints and the rest (if any) inequality constraints</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of indexes containing the sorted population</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">input_f</span></code>: an <code class="docutils literal"><span class="pre">std::vector</span></code> of fitness vectors (containing objectives and constraints) </li>
+<li><code class="docutils literal"><span class="pre">neq</span></code>: number of equality constraints </li>
+<li><code class="docutils literal"><span class="pre">tol</span></code>: a vector_double containing tolerances to be accouted for in the constraints</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If the input fitness vectors do not have all the same size <span class="math">\(n &gt;=1\)</span> </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal"><span class="pre">neq</span></code> is larger than <span class="math">\(n - 1\)</span> (too many constraints) </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If the size of the <code class="docutils literal"><span class="pre">tol</span></code> is not exactly the size of <code class="docutils literal"><span class="pre">input_f</span></code> - 1 </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeEd">
+<span id="pagmo::sort_population_con__std::vector:vector_double:CR.vector_double::size_type.double"></span><span class="target" id="pagmonamespacepagmo_1a2fbf1ac951b1b3f4f362d68abb815969"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt; <code class="descclassname">pagmo::</code><code class="descname">sort_population_con</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>input_f</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>neq</em>, double <em>tol</em> = 0.<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sorts a population in a single-objective, constrained, case (from a scalar tolerance) </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of indexes containing the sorted population</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">input_f</span></code>: an <code class="docutils literal"><span class="pre">std::vector</span></code> of fitness vectors (containing objectives and constraints) </li>
+<li><code class="docutils literal"><span class="pre">neq</span></code>: number of equality constraints </li>
+<li><code class="docutils literal"><span class="pre">tol</span></code>: scalar tolerance to be accouted for in the constraints</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If the input fitness vectors do not have all the same size <span class="math">\(n &gt;=1\)</span> </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal"><span class="pre">neq</span></code> is larger than <span class="math">\(n - 1\)</span> (too many constraints) </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="_CPPv2N5pagmo10compare_fcERK13vector_doubleRK13vector_doubleN13vector_double9size_typeERK13vector_double">
+<span id="pagmo::compare_fc__vector_doubleCR.vector_doubleCR.vector_double::size_type.vector_doubleCR"></span><span class="target" id="pagmonamespacepagmo_1accb4f0cfb71555ffec215cc381ea87bc"></span>bool <code class="descclassname">pagmo::</code><code class="descname">compare_fc</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>f1</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>f2</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>neq</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10compare_fcERK13vector_doubleRK13vector_doubleN13vector_double9size_typeERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compares two fitness vectors in a single-objective, constrained, case (from a vector of tolerances)</p>
+<p>Comparison between two fitness vectors (assuming a single-objective optimization) with respect to the following strict ordering:<ul class="simple">
+<li><span class="math">\(f_1 \prec f_2\)</span> if <span class="math">\(f_1\)</span> is feasible and <span class="math">\(f_2\)</span> is not.</li>
+<li><span class="math">\(f_1 \prec f_2\)</span> if <span class="math">\(f_1\)</span> is they are both infeasible, but <span class="math">\(f_1\)</span> violates less constraints than <span class="math">\(f_2\)</span>, or in case they both violate the same number of constraints, if the <span class="math">\(L_2\)</span> norm of the overall constraint violation is smaller.</li>
+<li><span class="math">\(f_1 \prec f_2\)</span> if both fitness vectors are feasible and the objective value in <span class="math">\(f_1\)</span> is smaller than the objectve value in <span class="math">\(f_2\)</span></li>
+</ul>
+</p>
+<p><strong>NOTE</strong>: the fitness vectors are assumed to contain exactly one objective, <code class="docutils literal"><span class="pre">neq</span></code> equality constraints and the rest (if any) inequality constraints</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>true if <code class="docutils literal"><span class="pre">f1</span></code> is &#8220;better&#8221; than <code class="docutils literal"><span class="pre">f2</span></code> </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">f1</span></code>: first fitness vector </li>
+<li><code class="docutils literal"><span class="pre">f2</span></code>: second fitness vector </li>
+<li><code class="docutils literal"><span class="pre">neq</span></code>: number of equality constraints </li>
+<li><code class="docutils literal"><span class="pre">tol</span></code>: a vector_double containing the tolerances to be accounted for in the constraints</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal"><span class="pre">f1</span></code> and <code class="docutils literal"><span class="pre">f2</span></code> do not have equal size <span class="math">\(n\)</span> </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal"><span class="pre">f1</span></code> does not have at least size 1 </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal"><span class="pre">neq</span></code> is larger than <span class="math">\(n - 1\)</span> (too many constraints) </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If the size of the <code class="docutils literal"><span class="pre">tol</span></code> is not exactly the size of <code class="docutils literal"><span class="pre">f1</span></code> - 1 </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="_CPPv2N5pagmo10compare_fcERK13vector_doubleRK13vector_doubleN13vector_double9size_typeEd">
+<span id="pagmo::compare_fc__vector_doubleCR.vector_doubleCR.vector_double::size_type.double"></span><span class="target" id="pagmonamespacepagmo_1a4d87bae2c92d83dac8834854f6b87f17"></span>bool <code class="descclassname">pagmo::</code><code class="descname">compare_fc</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>f1</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>f2</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>neq</em>, double <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10compare_fcERK13vector_doubleRK13vector_doubleN13vector_double9size_typeEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compares two fitness vectors in a single-objective, constrained, case (from a scalar tolerance)</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>true if <code class="docutils literal"><span class="pre">f1</span></code> is &#8220;better&#8221; than <code class="docutils literal"><span class="pre">f2</span></code> </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">f1</span></code>: first fitness vector </li>
+<li><code class="docutils literal"><span class="pre">f2</span></code>: second fitness vector </li>
+<li><code class="docutils literal"><span class="pre">neq</span></code>: number of equality constraints </li>
+<li><code class="docutils literal"><span class="pre">tol</span></code>: a vector_double containing the tolerances to be accounted for in the constraints</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal"><span class="pre">f1</span></code> and <code class="docutils literal"><span class="pre">f2</span></code> do not have equal size <span class="math">\(n\)</span> </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal"><span class="pre">f1</span></code> does not have at least size 1 </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal"><span class="pre">neq</span></code> is larger than <span class="math">\(n - 1\)</span> (too many constraints) </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

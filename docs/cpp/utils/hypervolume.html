@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hypervolumes &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Generic utilities" href="../miscellanea/generic.html" />
+    <link rel="prev" title="Low-discrepancy sequences" href="discrepancy.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../cpp_docs.html">C++ docs</a></li>
+                <li><a href="../../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Hypervolumes</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="hypervolumes">
+<span id="cpp-hypervolume-utils"></span><h1>Hypervolumes<a class="headerlink" href="#hypervolumes" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="../../../_images/hypervolume.png"><img alt="hypervolume" class="align-right" src="../../../_images/hypervolume.png" style="width: 288.0px; height: 310.40000000000003px;" /></a>
+<p>The computation of hypervolumes plays an important role in solving multi-objective optimization
+problems. In pagmo we include a number of different methods and algorithms that allow
+hypervolumes to be computed efficiently at all dimensions. More information on the details
+of the algorithms implemented and their performance can be found in the publication:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Title:</th><td class="field-body">&#8220;Empirical performance of the approximation of the least hypervolume contributor.&#8221;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Krzysztof Nowak, Marcus Märtens, and Dario Izzo.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Published in:</th><td class="field-body">International Conference on Parallel Problem Solving from Nature. Springer International Publishing, 2014.</td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<dl class="class">
+<dt id="_CPPv2N5pagmo11hypervolumeE">
+<span id="pagmo::hypervolume"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">hypervolume</code><a class="headerlink" href="#_CPPv2N5pagmo11hypervolumeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Hypervolume. </p>
+<p>This class encapsulate various utilities used to compute the hyervolume of a set of points or the various exclusive contributions.</p>
+<p>The main API consists of the five methods:</p>
+<p><ul class="simple">
+<li><a class="reference internal" href="#pagmoclasspagmo_1_1hypervolume_1ae0434fb5ca5af87b763e59e7de6f10dc"><span class="std std-ref">hypervolume::compute</span></a> - returns the total hypervolume of the set of points</li>
+<li><a class="reference internal" href="#pagmoclasspagmo_1_1hypervolume_1a891718f8ea8864968b20d9c6dfdaa877"><span class="std std-ref">hypervolume::exclusive</span></a> - returns the exclusive volume contributed by a given point</li>
+<li><a class="reference internal" href="#pagmoclasspagmo_1_1hypervolume_1a2ef3e08acf9330b709e8a0d9c3726b82"><span class="std std-ref">hypervolume::least_contributor</span></a> - returns the index of the point contributing the least volume</li>
+<li><a class="reference internal" href="#pagmoclasspagmo_1_1hypervolume_1a8fffb5985f8386c03a7f59fa5fba7ced"><span class="std std-ref">hypervolume::greatest_contributor</span></a> - returns the index of the point contributing the most volume</li>
+<li><a class="reference internal" href="#pagmoclasspagmo_1_1hypervolume_1ae22158cd1d656a5e893fc4306064b5dd"><span class="std std-ref">hypervolume::contributions</span></a> - returns the vector of exclusive contributions for each of the points.</li>
+</ul>
+</p>
+<p>Each of the methods can be called passing them a reference point (and an index where needed) and will, internally, select the most efficient exact Hypervolume algorithm able to compute the requested quantity. A pagmo::hv_algorithm can also be passed as optional argument, in which case it will be used to perform the computations. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo11hypervolume11hypervolumeEv">
+<span id="pagmo::hypervolume::hypervolume"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1aba9b7e4f0cfcfa5c1cbf3c74471f2cd2"></span><code class="descname">hypervolume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume11hypervolumeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default constructor. </p>
+<p>Initiates hypervolume with empty set of points. Used for serialization purposes. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb">
+<span id="pagmo::hypervolume::hypervolume__pagmo::populationCR.b"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a26157de355a882044dddae3fb6772252"></span><code class="descname">hypervolume</code><span class="sig-paren">(</span><em class="property">const</em> pagmo::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em>, bool <em>verify</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from population. </p>
+<p>Constructs a hypervolume object, where points are elicited from a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> object.</p>
+<p>
+Example:<dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> </li>
+<li><code class="docutils literal"><span class="pre">verify</span></code>: flag stating whether the points should be verified for consistency after the construction.</li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">population</span> <span class="n">pop</span><span class="p">(</span><span class="n">zdt</span><span class="p">{</span><span class="mi">1</span><span class="n">u</span><span class="p">},</span> <span class="mi">20</span><span class="n">u</span><span class="p">);</span>
+<span class="n">hypervolume</span> <span class="n">hv</span><span class="p">(</span><span class="n">pop</span><span class="p">);</span>
+<span class="n">hypervolume</span> <span class="n">hv2</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">false</span><span class="p">);</span>
+</pre></div>
+</div>
+</p>
+<p><dl class="docutils">
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the population contains a problem that is constrained or single-objective </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb">
+<span id="pagmo::hypervolume::hypervolume__std::vector:vector_double:CR.b"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1ac5f4c950ff9a4808ce37048358367cf9"></span><code class="descname">hypervolume</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>points</em>, bool <em>verify</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from points. </p>
+<p>Constructs a hypervolume object from a provided set of points.</p>
+<p>
+Example: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">hypervolume</span> <span class="n">hv</span><span class="p">({{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}});</span>
+<span class="n">hypervolume</span> <span class="n">hv2</span><span class="p">({{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}},</span> <span class="n">false</span><span class="p">);</span>
+</pre></div>
+</div>
+ <dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">points</span></code>: vector of points for which the hypervolume is computed </li>
+<li><code class="docutils literal"><span class="pre">verify</span></code>: flag stating whether the points should be verified after the construction. This regulates validation for further computation as well, use &#8216;set_verify&#8217; flag to alter it later.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo11hypervolume11hypervolumeERK11hypervolume">
+<span id="pagmo::hypervolume::hypervolume__hypervolumeCR"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a1955cb06cbdb342aa0a9059eb01f70d1"></span><code class="descname">hypervolume</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo11hypervolume11hypervolumeEv" title="pagmo::hypervolume::hypervolume">hypervolume</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume11hypervolumeERK11hypervolume" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default copy constructor. </p>
+<p>The copy constructor will deep copy the input problem <code class="docutils literal"><span class="pre">other</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">other</span></code>: the hypervolume object to be copied.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
+<li>memory allocation errors in standard containers, </li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo11hypervolumeaSERK11hypervolume">
+<span id="pagmo::hypervolume::assign-operator__hypervolumeCR"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1ae0bcbad51b07fe31aec575b2cd21e775"></span><a class="reference internal" href="#_CPPv2N5pagmo11hypervolumeE" title="pagmo::hypervolume">hypervolume</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo11hypervolumeE" title="pagmo::hypervolume">hypervolume</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolumeaSERK11hypervolume" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default copy assignment operator. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a reference to <code class="docutils literal"><span class="pre">this</span></code>. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">other</span></code>: the assignment target.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo11hypervolume15set_copy_pointsEb">
+<span id="pagmo::hypervolume::set_copy_points__b"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a967ff107741f68d32e83d5a69230bc0f"></span>void <code class="descname">set_copy_points</code><span class="sig-paren">(</span>bool <em>copy_points</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume15set_copy_pointsEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Setter for &#8216;copy_points&#8217; flag. </p>
+<p>It is used in cases where we are certain that we can alter the original set of points from the hypervolume object. This is useful when we don&#8217;t want to make a copy of the points first, as most algorithms alter the original set, but may result in unexpected behaviour when used incorrectly (e.g. requesting the computation twice out of the same object)</p>
+<p><strong>NOTE</strong> When this flag is set to true the object can raliably be used only once to compute the hypervolume</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">copy_points</span></code>: boolean value stating whether the hypervolume computation may use original set </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume15get_copy_pointsEv">
+<span id="pagmo::hypervolume::get_copy_pointsC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a59d694e9c047f8d312514cd60bd66451"></span>bool <code class="descname">get_copy_points</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume15get_copy_pointsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Getter for &#8216;copy_points&#8217; flag. </p>
+<p>Gets the copy_points flag</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the copy_points flag value </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo11hypervolume10set_verifyEb">
+<span id="pagmo::hypervolume::set_verify__b"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1ab1e859d2a825b9fd54bf67547a26cdb1"></span>void <code class="descname">set_verify</code><span class="sig-paren">(</span>bool <em>verify</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume10set_verifyEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Setter for the &#8216;verify&#8217; flag. </p>
+<p>Turns off the verification phase. By default, the hypervolume object verifies whether certain characteristics of the point set hold, such as valid dimension sizes or a reference point that suits the minimisation. In order to optimize the computation when the rules above are certain, we can turn off that phase.</p>
+<p>This may result in unexpected behaviour when used incorrectly (e.g. requesting the computation of empty set of points)</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">verify</span></code>: boolean value stating whether the hypervolume computation is to be executed without verification </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume10get_verifyEv">
+<span id="pagmo::hypervolume::get_verifyC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1af975ff7cbe0871c827325d00458dd204"></span>bool <code class="descname">get_verify</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume10get_verifyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Getter for the &#8216;verify&#8217; flag. </p>
+<p>Gets the verify flag</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the verify flag value </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume8refpointEd">
+<span id="pagmo::hypervolume::refpoint__doubleC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a9380aaf15d7663536b1a95102d205247"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">refpoint</code><span class="sig-paren">(</span>double <em>offset</em> = 0.0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume8refpointEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculate a default reference point. </p>
+<p>Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object. The result is a point that is necessarily dominated by all other points, frequently used for hypervolume computations.</p>
+<p><strong>NOTE</strong> This point is different from the one computed by <a class="reference internal" href="multi_objective.html#pagmonamespacepagmo_1a88a611f76187a58dcdcfb813ef4ffcb9"><span class="std std-ref">pagmo::nadir</span></a> as only the non dominated front is considered in that method (also its complexity is thus higher)</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>reference point </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">offset</span></code>: value that can be added to each objective to assure strict domination</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume10get_pointsEv">
+<span id="pagmo::hypervolume::get_pointsC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1aa37acb22a015f7a3db7377bf466c6a01"></span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<code class="descname">get_points</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume10get_pointsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get points. </p>
+<p>Will return a vector containing the points as they were set up during construction of the hypervolume object.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>const reference to the vector containing the fitness_vectors representing the points in the hyperspace. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume16get_best_computeERK13vector_double">
+<span id="pagmo::hypervolume::get_best_compute__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1af115864d8c30124ea206546a7eef3eb5"></span>std::shared_ptr&lt;hv_algorithm&gt; <code class="descname">get_best_compute</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume16get_best_computeERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Chooses the best algorithm to compute the hypervolume. </p>
+<p>Returns the best method for given hypervolume computation problem. As of yet, only the dimension size is taken into account.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an std::shared_ptr to the selected algorithm </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: reference point for the vector of points</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double">
+<span id="pagmo::hypervolume::get_best_exclusive__unsigned-iC.vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1aba6702a9906932b2e0640e54facffbf3"></span>std::shared_ptr&lt;hv_algorithm&gt; <code class="descname">get_best_exclusive</code><span class="sig-paren">(</span><em class="property">const</em> unsigned int <em>p_idx</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Chooses the best algorithm to compute the hypervolume. </p>
+<p>Returns the best method for given hypervolume computation problem. As of yet, only the dimension size is taken into account.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an std::shared_ptr to the selected algorithm </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">p_idx</span></code>: index of the point for which the exclusive contribution is to be computed </li>
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: reference point for the vector of points</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume22get_best_contributionsERK13vector_double">
+<span id="pagmo::hypervolume::get_best_contributions__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a2815e9f5a0d0b8065cf631fb32b355bf"></span>std::shared_ptr&lt;hv_algorithm&gt; <code class="descname">get_best_contributions</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume22get_best_contributionsERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Chooses the best algorithm to compute the hypervolume. </p>
+<p>Returns the best method for given hypervolume computation problem. As of yet, only the dimension size is taken into account.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an std::shared_ptr to the selected algorithm </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: reference point for the vector of points</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume7computeERK13vector_double">
+<span id="pagmo::hypervolume::compute__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1ae0434fb5ca5af87b763e59e7de6f10dc"></span>double <code class="descname">compute</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume7computeERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute hypervolume. </p>
+<p>Computes hypervolume for given reference point. This method chooses the hv_algorithm dynamically.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>value representing the hypervolume </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: vector describing the reference point</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm">
+<span id="pagmo::hypervolume::compute__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a7c53c2a637c8a99b116b0969b4732dc5"></span>double <code class="descname">compute</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em>, hv_algorithm &amp;<em>hv_algo</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute hypervolume. </p>
+<p>Computes hypervolume for given reference point, using given pagmo::hv_algorithm object.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the hypervolume </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: fitness vector describing the reference point </li>
+<li><code class="docutils literal"><span class="pre">hv_algo</span></code>: instance of the algorithm object used for the computation</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm">
+<span id="pagmo::hypervolume::exclusive__unsigned-i.vector_doubleCR.hv_algorithmRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a891718f8ea8864968b20d9c6dfdaa877"></span>double <code class="descname">exclusive</code><span class="sig-paren">(</span>unsigned int <em>p_idx</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em>, hv_algorithm &amp;<em>hv_algo</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute exclusive contribution. </p>
+<p>Computes exclusive hypervolume for given indivdual.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the exclusive contribution to the hypervolume </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">p_idx</span></code>: index of the individual for whom we compute the exclusive contribution to the hypervolume </li>
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: fitness vector describing the reference point </li>
+<li><code class="docutils literal"><span class="pre">hv_algo</span></code>: instance of the algorithm object used for the computation</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume9exclusiveEjRK13vector_double">
+<span id="pagmo::hypervolume::exclusive__unsigned-i.vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1acb2eee63077abb5de4239a3aeda41809"></span>double <code class="descname">exclusive</code><span class="sig-paren">(</span>unsigned int <em>p_idx</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume9exclusiveEjRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute exclusive contribution. </p>
+<p>Computes exclusive hypervolume for given indivdual. This methods chooses the hv_algorithm dynamically.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the exclusive contribution to the hypervolume </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">p_idx</span></code>: index of the individual for whom we compute the exclusive contribution to the hypervolume </li>
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: fitness vector describing the reference point</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm">
+<span id="pagmo::hypervolume::contributions__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1ae22158cd1d656a5e893fc4306064b5dd"></span>std::vector&lt;double&gt; <code class="descname">contributions</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em>, hv_algorithm &amp;<em>hv_algo</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Contributions method. </p>
+<p>This method returns the exclusive contribution to the hypervolume by every point. The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor in a loop).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>vector of exclusive contributions by every point </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: fitness vector describing the reference point </li>
+<li><code class="docutils literal"><span class="pre">hv_algo</span></code>: instance of the algorithm object used for the computation</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume13contributionsERK13vector_double">
+<span id="pagmo::hypervolume::contributions__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a12de19cba01187c17eb0f9faf836f397"></span>std::vector&lt;double&gt; <code class="descname">contributions</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume13contributionsERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Contributions method. </p>
+<p>This method returns the exclusive contribution to the hypervolume by every point. The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor in a loop). The hv_algorithm itself is chosen dynamically, so the best performing method is employed for given task.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>vector of exclusive contributions by every point </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: fitness vector describing the reference point </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm">
+<span id="pagmo::hypervolume::least_contributor__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a2ef3e08acf9330b709e8a0d9c3726b82"></span>unsigned long long <code class="descname">least_contributor</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em>, hv_algorithm &amp;<em>hv_algo</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Find the least contributing individual. </p>
+<p>Establishes the individual contributing the least to the total hypervolume.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>index of the least contributing point </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: fitness vector describing the reference point </li>
+<li><code class="docutils literal"><span class="pre">hv_algo</span></code>: instance of the algorithm object used for the computation</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume17least_contributorERK13vector_double">
+<span id="pagmo::hypervolume::least_contributor__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a6ebe929875b8ee75fcbc3980f7b9e982"></span>unsigned long long <code class="descname">least_contributor</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume17least_contributorERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Find the least contributing individual. </p>
+<p>Establishes the individual contributing the least to the total hypervolume. This method chooses the best performing hv_algorithm dynamically</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>index of the least contributing point </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: fitness vector describing the reference point</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm">
+<span id="pagmo::hypervolume::greatest_contributor__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a8fffb5985f8386c03a7f59fa5fba7ced"></span>unsigned long long <code class="descname">greatest_contributor</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em>, hv_algorithm &amp;<em>hv_algo</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Find the most contributing individual. </p>
+<p>Establish the individual contributing the most to the total hypervolume.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>index of the most contributing point </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: fitness vector describing the reference point </li>
+<li><code class="docutils literal"><span class="pre">hv_algo</span></code>: instance of the algorithm object used for the computation</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11hypervolume20greatest_contributorERK13vector_double">
+<span id="pagmo::hypervolume::greatest_contributor__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1ad5284c599c3803a0e85a60d58232a9fe"></span>unsigned long long <code class="descname">greatest_contributor</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>r_point</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume20greatest_contributorERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Find the most contributing individual. </p>
+<p>Establish the individual contributing the most to the total hypervolume. This method chooses the best performing hv_algorithm dynamically</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>index of the most contributing point </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">r_point</span></code>: fitness vector describing the reference point</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo11hypervolume9serializeER7Archive">
+<span id="pagmo::hypervolume::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1aebfc7c856536a4c35e8cf97f2cb2203b"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>C++ Documentation &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Types" href="types.html" />
+    <link rel="prev" title="Home" href="../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="#">C++ docs</a></li>
+                <li><a href="../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">C++ Documentation</a><ul>
+<li><a class="reference internal" href="#core-classes">Core classes</a></li>
+<li><a class="reference internal" href="#implemented-algorithms">Implemented algorithms</a></li>
+<li><a class="reference internal" href="#implemented-problems">Implemented problems</a></li>
+<li><a class="reference internal" href="#implemented-islands">Implemented islands</a></li>
+<li><a class="reference internal" href="#utilities">Utilities</a></li>
+<li><a class="reference internal" href="#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="c-documentation">
+<h1>C++ Documentation<a class="headerlink" href="#c-documentation" title="Permalink to this headline">¶</a></h1>
+<p>The full, stand-alone, detailed, documentation of the c++ code.</p>
+<div class="section" id="core-classes">
+<h2>Core classes<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h2>
+<p>These are the core PaGMO classes. In order to learn how to use them
+we suggest to follow the tutorials / examples.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="types.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="population.html">Population</a></li>
+<li class="toctree-l1"><a class="reference internal" href="island.html">Island</a></li>
+<li class="toctree-l1"><a class="reference internal" href="archipelago.html">Archipelago</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="implemented-algorithms">
+<h2>Implemented algorithms<a class="headerlink" href="#implemented-algorithms" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/null.html">Null algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/bee_colony.html">Artificial Bee Colony</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/cmaes.html">Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/compass_search.html">Compass Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/de.html">Differential Evolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/de1220.html">Self-adaptive Differential Evolution (DE 1220 aka pDE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/moead.html">Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/mbh.html">Monotonic Basin Hopping (MBH) - Generalized</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/nsga2.html">Non dominated sorting genetic algorithm (NSGA-II)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/pso.html">Particle Swarm Optimization (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/sade.html">Self-adaptive Differential Evolution (jDE and iDE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/sea.html">(N+1)-ES Simple Evolutionary Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms/simulated_annealing.html">Simulated Annealing (Corana&#8217;s version)</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="implemented-problems">
+<h2>Implemented problems<a class="headerlink" href="#implemented-problems" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="problems/null.html">Null problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/rosenbrock.html">Rosenbrock</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/rastrigin.html">Rastrigin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/schwefel.html">Schwefel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/ackley.html">Ackley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/griewank.html">Griewank</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/zdt.html">ZDT test suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/dtlz.html">DTLZ test suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/hock_schittkowsky_71.html">Hock Schittkowsky No.71</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/inventory.html">News-vendor problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/translate.html">Translate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/decompose.html">Decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/cec2006.html">CEC 2006 Problem Suite (single-objective, constrained)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/cec2009.html">CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/cec2013.html">CEC 2013 Problem Suite (box-bound, single objective)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems/unconstrain.html">Unconstrain</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="implemented-islands">
+<h2>Implemented islands<a class="headerlink" href="#implemented-islands" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="islands/thread_island.html">Thread island</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
+<p>Various optimization utilities.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="utils/multi_objective.html">Multi-objective optimization utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/constrained.html">Constrained optimization utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/discrepancy.html">Low-discrepancy sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/hypervolume.html">Hypervolumes</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="miscellanea">
+<h2>Miscellanea<a class="headerlink" href="#miscellanea" title="Permalink to this headline">¶</a></h2>
+<p>Various coding utilities.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="miscellanea/generic.html">Generic utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="miscellanea/type_traits.html">Type traits and enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="miscellanea/exceptions.html">Exceptions</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

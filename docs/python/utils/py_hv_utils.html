@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hypervolume utilities &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Plotting utilities" href="py_plotting.html" />
+    <link rel="prev" title="Multi-objective optimization utilities" href="py_mo_utils.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../cpp/cpp_docs.html">C++ docs</a></li>
+                <li><a href="../python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Hypervolume utilities</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="hypervolume-utilities">
+<span id="py-hv-utils"></span><h1>Hypervolume utilities<a class="headerlink" href="#hypervolume-utilities" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pygmo.core.hypervolume">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">hypervolume</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hypervolume Class</p>
+<p>Constructor from points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>2d array-like object</em>) &#8211; the points</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>points</em> is inconsistent</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">points</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">],[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">3.1</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span> <span class="o">=</span> <span class="n">hypervolume</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/utils/hypervolume.html#_CPPv2N5pagmo11hypervolumeE" title="pagmo::hypervolume"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::hypervolume</span></code></a>.</p>
+<p>__init__(pop)</p>
+<p>Constructor from population</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; the input population</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>pop</em> contains a single-objective or a constrained problem</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">zdt</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span> <span class="o">=</span> <span class="n">hypervolume</span><span class="p">(</span><span class="n">pop</span> <span class="o">=</span> <span class="n">pop</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/utils/hypervolume.html#_CPPv2N5pagmo11hypervolumeE" title="pagmo::hypervolume"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::hypervolume</span></code></a>.</p>
+<dl class="method">
+<dt id="pygmo.core.hypervolume.compute">
+<code class="descname">compute</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.compute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the hypervolume with the supplied algorithm. If no algorithm
+is supplied,  then an exact hypervolume algorithm is automatically selected
+specific for the point dimension.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ref_point</strong> (<em>2d array-like object</em>) &#8211; the points</li>
+<li><strong>hv_algo</strong> (deriving from <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code>) &#8211; hypervolume algorithm to be used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the computed hypervolume assuming <em>ref_point</em> as reference point</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">float</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>ref_point</em> is not dominated by the nadir point</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/utils/hypervolume.html#_CPPv2NK5pagmo11hypervolume7computeERK13vector_double" title="pagmo::hypervolume::compute"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::hypervolume::compute()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.hypervolume.contributions">
+<code class="descname">contributions</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.contributions" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns the exclusive contribution to the hypervolume of every point.
+According to <em>hv_algo</em> this computation can be implemented optimally (as opposed to calling
+for <code class="xref py py-func docutils literal"><span class="pre">exclusive()</span></code> in a loop).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ref_point</strong> (<em>2d array-like object</em>) &#8211; the points</li>
+<li><strong>hv_algo</strong> (deriving from <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code>) &#8211; hypervolume algorithm to be used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the contribution of all points to the hypervolume</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">1D NumPy float array</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>ref_point</em> is not suitable</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/utils/hypervolume.html#_CPPv2NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm" title="pagmo::hypervolume::contributions"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::hypervolume::contributions()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.hypervolume.exclusive">
+<code class="descname">exclusive</code><span class="sig-paren">(</span><em>idx</em>, <em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.exclusive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the exclusive contribution to the hypervolume of a particular point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>idx</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; index of the point</li>
+<li><strong>ref_point</strong> (<em>array-like object</em>) &#8211; the reference point</li>
+<li><strong>hv_algo</strong> (deriving from <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code>) &#8211; hypervolume algorithm to be used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the contribution of all points to the hypervolume</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">1D NumPy float array</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>ref_point</em> is not suitable or if <em>idx</em> is out of bounds</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>idx</em> is negative or greater than an implementation-defined value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/utils/hypervolume.html#_CPPv2NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm" title="pagmo::hypervolume::exclusive"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::hypervolume::exclusive()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.hypervolume.greatest_contributor">
+<code class="descname">greatest_contributor</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.greatest_contributor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the point contributing the most to the total hypervolume.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ref_point</strong> (<em>array-like object</em>) &#8211; the reference point</li>
+<li><strong>hv_algo</strong> (deriving from <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code>) &#8211; hypervolume algorithm to be used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>ref_point</em> is not suitable</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/utils/hypervolume.html#_CPPv2NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm" title="pagmo::hypervolume::greatest_contributor"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::hypervolume::greatest_contributor()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.hypervolume.least_contributor">
+<code class="descname">least_contributor</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.least_contributor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the point contributing the least to the total hypervolume.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ref_point</strong> (<em>array-like object</em>) &#8211; the reference point</li>
+<li><strong>hv_algo</strong> (deriving from <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code>) &#8211; hypervolume algorithm to be used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>ref_point</em> is not suitable</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/utils/hypervolume.html#_CPPv2NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm" title="pagmo::hypervolume::least_contributor"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::hypervolume::least_contributor()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.hypervolume.refpoint">
+<code class="descname">refpoint</code><span class="sig-paren">(</span><em>offset = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.refpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
+The result is a point that is necessarily dominated by all other points, and thus can be used for hypervolume computations.</p>
+<p><strong>NOTE</strong> This point is different from the one computed by pagmo::nadir as only the non dominated front is considered
+in that method (also its complexity is thus higher)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>offset</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; the reference point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the reference point</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">1D NumPy float array</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/utils/hypervolume.html#_CPPv2NK5pagmo11hypervolume8refpointEd" title="pagmo::hypervolume::refpoint"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::hypervolume::refpoint()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.core.hvwfg">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">hvwfg</code><span class="sig-paren">(</span><em>stop_dimension = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hvwfg" title="Permalink to this definition">¶</a></dt>
+<dd><p>The hypervolume algorithm from the Walking Fish Group (2011 version).</p>
+<p>This object can be passed as parameter to the various methods of the
+class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>stop_dimension</strong> (<code class="docutils literal"><span class="pre">`int`</span></code>) &#8211; the input population</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>stop_dimension</em> is negative or greater than an implementation-defined value</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">hvwfg</span><span class="p">(</span><span class="n">stop_dimension</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See also the docs of the C++ class <code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::hvwfg</span></code>.</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.core.hv2d">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">hv2d</code><a class="headerlink" href="#pygmo.core.hv2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exact hypervolume algorithm for two dimensional points.</p>
+<p>This object can be passed as parameter to the various methods of the
+class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">hv2d</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See also the docs of the C++ class <code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::hv2d</span></code>.</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.core.hv3d">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">hv3d</code><a class="headerlink" href="#pygmo.core.hv3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exact hypervolume algorithm for three dimensional points.</p>
+<p>This object can be passed as parameter to the various methods of the
+class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">hv3d</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See also the docs of the C++ class <code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::hv3d</span></code>.</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.core.bf_fpras">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">bf_fpras</code><span class="sig-paren">(</span><em>eps = 1e-2</em>, <em>delta = 1e-2</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.bf_fpras" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedrich approximation scheme (FPRAS),
+reduced to the special case of approximating the hypervolume indicator.</p>
+<p>This object can be passed as parameter to the various methods of the
+class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">bf_fpras</span><span class="p">(</span><span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See also the docs of the C++ class <code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::bf_fpras</span></code>.</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.core.bf_approx">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">bf_approx</code><a class="headerlink" href="#pygmo.core.bf_approx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedrich approximation scheme (FPRAS),
+reduced to the special case of approximating the least contributor.</p>
+<p>This object can be passed as parameter to the various methods of the
+class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">bf_approx</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See also the docs of the C++ class <code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::bf_approx</span></code>.</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

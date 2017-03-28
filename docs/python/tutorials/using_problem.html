@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Use of the class problem &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Use of the class algorithm" href="using_algorithm.html" />
+    <link rel="prev" title="Python tutorials" href="python_tut.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../cpp/cpp_docs.html">C++ docs</a></li>
+                <li><a href="../python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Use of the class <code class="docutils literal"><span class="pre">problem</span></code></a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="use-of-the-class-problem">
+<span id="py-tutorial-using-problem"></span><h1>Use of the class <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a><a class="headerlink" href="#use-of-the-class-problem" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> class represents a generic optimization
+problem. The user codes the details of such a problem in a separate class (the
+user-defined problem, or UDP) which is then passed to <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+that provides a single unified interface.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The User Defined Problems (UDPs) are optimization problems (coded by the user) that can
+be used to build a pygmo object of type <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></p>
+</div>
+<p>Some UDPs (optimization problems) are already provided with pygmo and we refer to them as pygmo UDPs.</p>
+<p>For the purpose of this tutorial we are going to use a pygmo UDP called <a class="reference internal" href="../problems/py_problems.html#pygmo.core.rosenbrock" title="pygmo.core.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a>
+to show the basic construction of a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>, but the same logic would also
+apply to a custom UDPs, that is a UDP that is actually coded by the user.</p>
+<p>Let us start:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> 
+<span class="go">Problem name: Multidimensional Rosenbrock Function</span>
+<span class="go">    Global dimension:                       5</span>
+<span class="go">    Fitness dimension:                      1</span>
+<span class="go">    Number of objectives:                   1</span>
+<span class="go">    Equality constraints dimension:         0</span>
+<span class="go">    Inequality constraints dimension:       0</span>
+<span class="go">    Lower bounds: [-5, -5, -5, -5, -5]</span>
+<span class="go">    Upper bounds: [10, 10, 10, 10, 10]</span>
+
+<span class="go">    Has gradient: false</span>
+<span class="go">    User implemented gradient sparsity: false</span>
+<span class="go">    Has hessians: false</span>
+<span class="go">    User implemented hessians sparsity: false</span>
+
+<span class="go">    Function evaluations: 0</span>
+
+<span class="go">    Thread safety: basic</span>
+</pre></div>
+</div>
+<p>In the code above, after the trivial import of the pygmo package, we define a variable prob
+by constructing a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> from <a class="reference internal" href="../problems/py_problems.html#pygmo.core.rosenbrock" title="pygmo.core.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a>, a multidimensional problem
+constructed from its global dimensions. In the following line we inspect the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+We can see, at a glance, that the UDP <a class="reference internal" href="../problems/py_problems.html#pygmo.core.rosenbrock" title="pygmo.core.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a> is a five dimensional, single objective, box constrained
+problem for which neither gradients nor hessians nor sparsity information is provided in the UDP.</p>
+<p>We also see that its fitness function has never been called hence the counter for fitness evaluations is
+zero.</p>
+<p>All of the information contained in the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> print out can be retrieved using
+the appropriate methods, for example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<p>Lets check how a fitness computation increases the counter:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="go">array([ 14814.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p>We may also get back the UDP, and thus access all the methods not exposed in the
+<a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> interface at any time via the <a class="reference internal" href="../py_problem.html#pygmo.core.problem.extract" title="pygmo.core.problem.extract"><code class="xref py py-class docutils literal"><span class="pre">extract</span></code></a> method:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="go">&lt;class &#39;pygmo.core.rosenbrock&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rastrigin</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="go">&lt;class &#39;NoneType&#39;&gt;</span>
+</pre></div>
+</div>
+<p>Such an <em>extraction</em> will only work if the correct UDP type is passed as argument.</p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Low-discrepancy sequences &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Hypervolumes" href="hypervolume.html" />
+    <link rel="prev" title="Constrained optimization utilities" href="constrained.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../cpp_docs.html">C++ docs</a></li>
+                <li><a href="../../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Low-discrepancy sequences</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="low-discrepancy-sequences">
+<span id="cpp-low-discrepancy-utils"></span><h1>Low-discrepancy sequences<a class="headerlink" href="#low-discrepancy-sequences" title="Permalink to this headline">¶</a></h1>
+<p>A number of utilities to generate and use low- discrepancy sequences</p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE">
+<span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="pagmonamespacepagmo_1a0329797995bade31d52604daf6ad5247"></span>std::vector&lt;double&gt; <code class="descclassname">pagmo::</code><code class="descname">sample_from_simplex</code><span class="sig-paren">(</span>std::vector&lt;double&gt; <em>in</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sample from a simplex. </p>
+<p>Samples a point on a <span class="math">\(n\)</span> dimensional simplex from a <span class="math">\(n-1\)</span> dimensional point</p>
+<p>In order to generate a uniform distribution on a simplex, that is to sample a <span class="math">\(n\)</span>-dimensional point <span class="math">\(\mathbf x\)</span> such that <span class="math">\(\sum_{i=1}^{n} x_i = 1\)</span> one can follow the following approach: take <span class="math">\(n-1\)</span> random numbers from the interval (0,1)(0,1), then add a 0 and 1 to get a list of <span class="math">\(n+1\)</span> numbers. Sort the list and record the differences between two consecutive elements. This creates a list of <span class="math">\(n\)</span> number that, by construction, will sum up to 1. Moreover this sampling is uniform. As an example the following code would generate points distributed on a <span class="math">\(n\)</span> dimensional simplex:</p>
+<p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">double</span><span class="o">&gt;&gt;</span> <span class="n">points_on_a_simplex</span><span class="p">;</span>
+<span class="n">halton</span> <span class="n">ld_rng</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="n">u</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="n">u</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+     <span class="n">points_on_a_simplex</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">project_to_simplex</span><span class="p">(</span><span class="n">ld_rng</span><span class="p">()));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+<p>
+See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. <dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a <code class="docutils literal"><span class="pre">std::vector</span></code> containing the projected point of <span class="math">\(n\)</span> dimensions.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">in</span></code>: a <code class="docutils literal"><span class="pre">std::vector</span></code> containing a point in <span class="math">\(n+1\)</span> dimensions. </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the input vector elements are not in [0,1] </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the input vector has size 0 or 1.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="_CPPv2N5pagmo14van_der_corputE">
+<span id="pagmo::van_der_corput"></span><span class="target" id="pagmoclasspagmo_1_1van__der__corput"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">van_der_corput</code><a class="headerlink" href="#_CPPv2N5pagmo14van_der_corputE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Van der Corput sequence. </p>
+<p>A Van der Corput sequence is the simplest one-dimensional low-discrepancy sequence over the unit interval; it was first described in 1935 by the Dutch mathematician Johannes van der Corput. It is constructed by reversing the base representation of the sequence of natural number (1, 2, 3, …). A positive integer <span class="math">\(n \ge 1\)</span> is represented, in the base <span class="math">\(b\)</span> by: <div class="math">
+\[ n = \sum_{i=0}^{L-1}d_i(n) b^i, \]</div>
+ where <span class="math">\(L\)</span> is the number of digits needed. The <span class="math">\(n\)</span>-th number in a van der Corput sequence is thus defined as: <div class="math">
+\[ g_n=\sum_{i=0}^{L-1}d_i(n) b^{-i-1}. \]</div>
+</p>
+<p>so that, for example, if <span class="math">\(b = 10\)</span>:</p>
+<p><span class="math">\( seq = \{ 0, \tfrac{1}{10}, \tfrac{2}{10}, \tfrac{3}{10}, \tfrac{4}{10}, \tfrac{5}{10}, \tfrac{6}{10}, \tfrac{7}{10}, \tfrac{8}{10}, \tfrac{9}{10}, \tfrac{1}{100}, \tfrac{11}{100}, \tfrac{21}{100}, \tfrac{31}{100}, \tfrac{41}{100}, \tfrac{51}{100}, \tfrac{61}{100}, \tfrac{71}{100}, \tfrac{81}{100}, \tfrac{91}{100}, \tfrac{2}{100}, \tfrac{12}{100}, \tfrac{22}{100}, \tfrac{32}{100}, \ldots \} \,\)</span></p>
+<p>or, if <span class="math">\(b = 2\)</span>:</p>
+<p><span class="math">\( seq = \{0, \tfrac{1}{2}, \tfrac{1}{4}, \tfrac{3}{4}, \tfrac{1}{8}, \tfrac{5}{8}, \tfrac{3}{8}, \tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16}, \tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \)</span></p>
+<p>See: <a class="reference external" href="http://en.wikipedia.org/wiki/Van_der_Corput_sequence">http://en.wikipedia.org/wiki/Van_der_Corput_sequence</a> </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj">
+<span id="pagmo::van_der_corput::van_der_corput__unsigned-i.unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1van__der__corput_1a06bc0e26f8fab33fff6e66726b5eda0a"></span><code class="descname">van_der_corput</code><span class="sig-paren">(</span>unsigned int <em>b</em> = 2u, unsigned int <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from base and starting element. </p>
+<p>Consruct a van der Corput lowp-discrepancy sequence with base <code class="docutils literal"><span class="pre">b</span></code> and starting element position <code class="docutils literal"><span class="pre">n</span></code> </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">b</span></code>: base </li>
+<li><code class="docutils literal"><span class="pre">n</span></code>: position of the starting element</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the base is 0u or 1u </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo14van_der_corputclEv">
+<span id="pagmo::van_der_corput::call-operator"></span><span class="target" id="pagmoclasspagmo_1_1van__der__corput_1aaecfe69bc116abbc57524053dea0dc37"></span>double <code class="descname">operator()</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo14van_der_corputclEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the next number in the sequence. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the next number in the sequence </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo14van_der_corput9serializeER7Archive">
+<span id="pagmo::van_der_corput::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1van__der__corput_1a83a2bdeadaa2f18eb327782e48774c77"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo14van_der_corput9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="_CPPv2N5pagmo6haltonE">
+<span id="pagmo::halton"></span><span class="target" id="pagmoclasspagmo_1_1halton"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">halton</code><a class="headerlink" href="#_CPPv2N5pagmo6haltonE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Halton sequence. </p>
+<p>The Halton sequence is, essentially, a generalization of the van der Corput sequence to higher dimensions. It considers, along each dimension, a van der Corput sequence referred to co-prime numbers. Here, by default, we consider the sequence of all prime numbers starting from 2, 3, 5, ...... so that, for example, for <code class="docutils literal"><span class="pre">dim</span></code> equal two the following sequence is generated:</p>
+<p><div class="math">
+\[ seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac 19\right), \left(\frac 18, \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\} \]</div>
+</p>
+<p>
+See: <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_sequence">https://en.wikipedia.org/wiki/Halton_sequence</a> <dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">n</span></code>: selects which element of the sequence to return </li>
+<li><code class="docutils literal"><span class="pre">dim</span></code>: dimensions of the returned point</li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo6halton6haltonEjj">
+<span id="pagmo::halton::halton__unsigned-i.unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1halton_1aaf584e81f9063e121b777873bc703474"></span><code class="descname">halton</code><span class="sig-paren">(</span>unsigned int <em>dim</em> = 2u, unsigned int <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6halton6haltonEjj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from base and starting element. </p>
+<p>Consruct a Halton low-discrepancy sequence with dimension <code class="docutils literal"><span class="pre">dim</span></code> and starting element position <code class="docutils literal"><span class="pre">n</span></code> </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">dim</span></code>: dimension </li>
+<li><code class="docutils literal"><span class="pre">n</span></code>: position of the starting element</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: all exceptions thrown by <a class="reference internal" href="#pagmoclasspagmo_1_1van__der__corput"><span class="std std-ref">pagmo::van_der_corput</span></a> </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo6haltonclEv">
+<span id="pagmo::halton::call-operator"></span><span class="target" id="pagmoclasspagmo_1_1halton_1ad9418498c74ca18c2e023fd5fe2e31af"></span>std::vector&lt;double&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6haltonclEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the next number in the sequence. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the next number in the sequence </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo6halton9serializeER7Archive">
+<span id="pagmo::halton::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1halton_1ac0555fe6f1b387b933380b2623d1847c"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6halton9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

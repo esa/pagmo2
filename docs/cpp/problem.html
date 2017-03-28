@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Problem &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Algorithm" href="algorithm.html" />
+    <link rel="prev" title="Types" href="types.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="cpp_docs.html">C++ docs</a></li>
+                <li><a href="../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Problem</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="problem">
+<h1>Problem<a class="headerlink" href="#problem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo7problemE">
+<span id="pagmo::problem"></span><span class="target" id="pagmoclasspagmo_1_1problem"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">problem</code><a class="headerlink" href="#_CPPv2N5pagmo7problemE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Problem class. </p>
+<p><img alt="../../_images/problem.png" src="../../_images/problem.png" /></p>
+<p>This class represents a generic <em>mathematical programming</em> or <em>evolutionary optimization</em> problem in the form: <div class="math">
+\[\begin{split} \begin{array}{rl} \mbox{find:} &amp; \mathbf {lb} \le \mathbf x \le \mathbf{ub}\\ \mbox{to minimize: } &amp; \mathbf f(\mathbf x, s) \in \mathbb R^{n_{obj}}\\ \mbox{subject to:} &amp; \mathbf {c}_e(\mathbf x, s) = 0 \\ &amp; \mathbf {c}_i(\mathbf x, s) \le 0 \end{array} \end{split}\]</div>
+</p>
+<p>where <span class="math">\(\mathbf x \in \mathbb R^{n_x}\)</span> is called <em>decision vector</em> or <em>chromosome</em>, <span class="math">\(\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_x}\)</span> are the <em>box-bounds</em>, <span class="math">\( \mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}\)</span> define the <em>objectives</em>, <span class="math">\( \mathbf c_e: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\)</span> are non linear <em>equality constraints</em>, and <span class="math">\( \mathbf c_i: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\)</span> are non linear <em>inequality constraints</em>. Note that the objectives and constraints may also depend from an added value <span class="math">\(s\)</span> seeding the values of any number of stochastic variables. This allows also for stochastic programming tasks to be represented by this class. A tolerance is considered for the verification of the constraints and is set by default to zero, but it can be modified via the <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a1a55cca40f93b8268c8bc5c1d33b2201"><span class="std std-ref">problem::set_c_tol()</span></a> method.</p>
+<p>In order to define an optimizaztion problem in pagmo, the user must first define a class (or a struct) whose methods describe the properties of the problem and allow to compute the objective function, the gradient, the constraints, etc. In pagmo, we refer to such a class as a <strong>user-defined problem</strong>, or UDP for short. Once defined and instantiated, a UDP can then be used to construct an instance of this class, <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>, which provides a generic interface to optimization problems.</p>
+<p>Every UDP must implement at least the following two methods: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="n">fitness</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">std</span><span class="p">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span> <span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">get_bounds</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+</pre></div>
+</div>
+</p>
+<p>The <code class="docutils literal"><span class="pre">fitness()</span></code> method is expected to return the fitness of the input decision vector, while <code class="docutils literal"><span class="pre">get_bounds()</span></code> is expected to return the box bounds of the problem, <span class="math">\((\mathbf{lb}, \mathbf{ub})\)</span>, which also implicitly define the dimension of the problem. The <code class="docutils literal"><span class="pre">fitness()</span></code> and <code class="docutils literal"><span class="pre">get_bounds()</span></code> methods of the UDP are accessible from the corresponding <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a8e29c2c806377fd1855274dac8376add"><span class="std std-ref">problem::fitness()</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ae00e821bd8e59113ec5534e638691ea5"><span class="std std-ref">problem::get_bounds()</span></a> methods (see their documentation for details). In addition to providing the above methods, a UDP must also be default, copy and move constructible.</p>
+<p>The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following methods: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nobj</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nec</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nic</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="nb">bool</span> <span class="n">has_gradient</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">vector_double</span> <span class="n">gradient</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
+<span class="nb">bool</span> <span class="n">has_gradient_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">sparsity_pattern</span> <span class="n">gradient_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="nb">bool</span> <span class="n">has_hessians</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">hessians</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
+<span class="nb">bool</span> <span class="n">has_hessians_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">sparsity_pattern</span><span class="o">&gt;</span> <span class="n">hessians_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="nb">bool</span> <span class="n">has_set_seed</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">void</span> <span class="n">set_seed</span><span class="p">(</span><span class="n">unsigned</span><span class="p">);</span>
+<span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_extra_info</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<span class="n">thread_safety</span> <span class="n">get_thread_safety</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+</pre></div>
+</div>
+</p>
+<p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDP are used by <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
+<p><strong>NOTE</strong>: a moved-from <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> is destructible and assignable. Any other operation will result in undefined behaviour. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo7problem7problemEv">
+<span id="pagmo::problem::problem"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a87615b08403d32b1b21cc78511cc1502"></span><code class="descname">problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem7problemEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default constructor. </p>
+<p>The default constructor will initialize a <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> containing a <a class="reference internal" href="problems/null.html#pagmostructpagmo_1_1null__problem"><span class="std std-ref">pagmo::null_problem</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the constructor from UDP. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> T, generic_ctor_enabler&lt; T &gt; = 0&gt;</dt>
+<dt id="_CPPv2N5pagmo7problem7problemERR1T">
+<span id="pagmo::problem::problem__TRR"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a54f9bfeea18d0a3a5ff7ab5161c20d2a"></span><code class="descname">problem</code><span class="sig-paren">(</span>T &amp;&amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem7problemERR1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from a user-defined problem of type <code class="docutils literal"><span class="pre">T</span></code>. </p>
+<p><strong>NOTE</strong> this constructor is not enabled if, after the removal of cv and reference qualifiers, <code class="docutils literal"><span class="pre">T</span></code> is of type <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> (that is, this constructor does not compete with the copy/move constructors of <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>), or if <code class="docutils literal"><span class="pre">T</span></code> does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1is__udp"><span class="std std-ref">pagmo::is_udp</span></a>.</p>
+<p>This constructor will construct a <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> from the UDP (user-defined problem) <code class="docutils literal"><span class="pre">x</span></code> of type <code class="docutils literal"><span class="pre">T</span></code>. In order for the construction to be successful, the UDP must implement a minimal set of methods, as described in the documentation of <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. The constructor will examine the properties of <code class="docutils literal"><span class="pre">x</span></code> and store them as data members of <code class="docutils literal"><span class="pre">this</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: the UDP.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: in the following cases:<ul>
+<li>the number of objectives of the UDP is zero,</li>
+<li>the number of objectives, equality or inequality constraints is larger than an implementation-defined value,</li>
+<li>the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),</li>
+<li>the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> and <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> methods of the UDP fail basic sanity checks (e.g., they return vectors with repeated indices, they contain indices exceeding the problem&#8217;s dimensions, etc.). </li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by methods of the UDP invoked during construction or by memory errors in strings and standard containers. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo7problem7problemERK7problem">
+<span id="pagmo::problem::problem__problemCR"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a2178f0de7e53605d72c68c5fa3cad321"></span><code class="descname">problem</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo7problem7problemEv" title="pagmo::problem::problem">problem</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem7problemERK7problem" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy constructor. </p>
+<p>The copy constructor will deep copy the input problem <code class="docutils literal"><span class="pre">other</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">other</span></code>: the problem to be copied.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
+<li>memory allocation errors in standard containers,</li>
+<li>the copying of the internal UDP. </li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo7problem7problemERR7problem">
+<span id="pagmo::problem::problem__problemRR"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ae506b1e904fae8b548c03b916b1c8990"></span><code class="descname">problem</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo7problem7problemEv" title="pagmo::problem::problem">problem</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem7problemERR7problem" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Move constructor. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">other</span></code>: the problem from which <code class="docutils literal"><span class="pre">this</span></code> will be move-constructed. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo7problemaSERR7problem">
+<span id="pagmo::problem::assign-operator__problemRR"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a0b2e1c47bc3bbb586e1ed24ce7dfda03"></span><a class="reference internal" href="#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problemaSERR7problem" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Move assignment operator. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a reference to <code class="docutils literal"><span class="pre">this</span></code>. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">other</span></code>: the assignment target.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo7problemaSERK7problem">
+<span id="pagmo::problem::assign-operator__problemCR"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a9f61a53e9cfcd81269508502c9496588"></span><a class="reference internal" href="#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problemaSERK7problem" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy assignment operator. </p>
+<p>Copy assignment is implemented as a copy constructor followed by a move assignment.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a reference to <code class="docutils literal"><span class="pre">this</span></code>.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">other</span></code>: the assignment target.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the copy constructor. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<dt id="_CPPv2NK5pagmo7problem7extractEv">
+<span id="pagmo::problem::extractC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a7209755b283d5bd6d7a166bb6d1787dc"></span><em class="property">const</em> T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extract a const pointer to the UDP used for construction. </p>
+<p>This method will extract a const pointer to the internal instance of the UDP. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDP used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
+<p><strong>NOTE</strong> The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const pointer to the internal UDP, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDP type used in the constructor. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<dt id="_CPPv2N5pagmo7problem7extractEv">
+<span id="pagmo::problem::extract"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ab14e7bc86db8d7e98c31ae2bf167e151"></span>T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extract a pointer to the UDP used for construction. </p>
+<p>This method will extract a pointer to the internal instance of the UDP. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDP used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
+<p><strong>NOTE</strong> The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+<p><strong>NOTE</strong> The ability to extract a mutable pointer is provided only in order to allow to call non-const methods on the internal UDP instance. Assigning a new UDP via this pointer is undefined behaviour.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a pointer to the internal UDP, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDP type used in the constructor. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<dt id="_CPPv2NK5pagmo7problem2isEv">
+<span id="pagmo::problem::isC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a99ee02c539a4bc2428f109a440d923f5"></span>bool <code class="descname">is</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem2isEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the UDP used for construction is of type <code class="docutils literal"><span class="pre">T</span></code>. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><code class="docutils literal"><span class="pre">true</span></code> if the UDP used in construction is of type <code class="docutils literal"><span class="pre">T</span></code>, <code class="docutils literal"><span class="pre">false</span></code> otherwise. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem7fitnessERK13vector_double">
+<span id="pagmo::problem::fitness__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a8e29c2c806377fd1855274dac8376add"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>dv</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Fitness. </p>
+<p>This method will invoke the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP to compute the fitness of the input decision vector <code class="docutils literal"><span class="pre">dv</span></code>. The return value of the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP is expected to have a dimension of <span class="math">\(n_{f} = n_{obj} + n_{ec} + n_{ic}\)</span> and to contain the concatenated values of <span class="math">\(\mathbf f, \mathbf c_e\)</span> and <span class="math">\(\mathbf c_i\)</span> (in this order).</p>
+<p>In addition to invoking the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP, this method will perform sanity checks on <code class="docutils literal"><span class="pre">dv</span></code> and on the returned fitness vector. A successful call of this method will increase the internal fitness evaluation counter (see <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a8477607f9fd9cb22a53f9e2e2511d8e0"><span class="std std-ref">problem::get_fevals()</span></a>).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the fitness of <code class="docutils literal"><span class="pre">dv</span></code>.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">dv</span></code>: the decision vector.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if either<ul>
+<li>the length of <code class="docutils literal"><span class="pre">dv</span></code> differs from the value returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ac4a212a660feff63f78df5c3e63db9c5"><span class="std std-ref">get_nx()</span></a>, or</li>
+<li>the length of the returned fitness vector differs from the the value returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a88519584be841b84add0b7d3c5415d9e"><span class="std std-ref">get_nf()</span></a>. </li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem8gradientERK13vector_double">
+<span id="pagmo::problem::gradient__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a3fb8d8bb7b34477509eb9df3cd7b6e2e"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>dv</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gradient. </p>
+<p>This method will compute the gradient of the input decision vector <code class="docutils literal"><span class="pre">dv</span></code> by invoking the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP. The <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP must return a sparse representation of the gradient: the <span class="math">\( k\)</span>-th term of the gradient vector is expected to contain <span class="math">\( \frac{\partial f_i}{\partial x_j}\)</span>, where the pair <span class="math">\((i,j)\)</span> is the <span class="math">\(k\)</span>-th element of the sparsity pattern (collection of index pairs), as returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d2267a7d2defd716d30480f5c8b8c77"><span class="std std-ref">problem::gradient_sparsity()</span></a>.</p>
+<p>If the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient"><span class="std std-ref">pagmo::has_gradient</span></a>, this method will forward <code class="docutils literal"><span class="pre">dv</span></code> to the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP after sanity checks. The output of the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP will also be checked before being returned. If the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient"><span class="std std-ref">pagmo::has_gradient</span></a>, an error will be raised.</p>
+<p>A successful call of this method will increase the internal gradient evaluation counter (see <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ae6e94a45a2dc38e08fc3a3247480393c"><span class="std std-ref">problem::get_gevals()</span></a>).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the gradient of <code class="docutils literal"><span class="pre">dv</span></code>.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">dv</span></code>: the decision vector whose gradient will be computed.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if either:<ul>
+<li>the length of <code class="docutils literal"><span class="pre">dv</span></code> differs from the value returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ac4a212a660feff63f78df5c3e63db9c5"><span class="std std-ref">get_nx()</span></a>, or</li>
+<li>the returned gradient vector does not have the same size as the vector returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d2267a7d2defd716d30480f5c8b8c77"><span class="std std-ref">problem::gradient_sparsity()</span></a>. </li>
+</ul>
+</li>
+<li><code class="docutils literal"><a class="reference internal" href="miscellanea/exceptions.html#pagmostructpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient"><span class="std std-ref">pagmo::has_gradient</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem12has_gradientEv">
+<span id="pagmo::problem::has_gradientC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a34ed60c3436bd7424f03fd643e378959"></span>bool <code class="descname">has_gradient</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem12has_gradientEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the gradient is available in the UDP. </p>
+<p>This method will return <code class="docutils literal"><span class="pre">true</span></code> if the gradient is available in the UDP, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</p>
+<p>The availability of the gradient is determined as follows:<ul class="simple">
+<li>if the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient"><span class="std std-ref">pagmo::has_gradient</span></a>, then this method will always return <code class="docutils literal"><span class="pre">false</span></code>;</li>
+<li>if the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient"><span class="std std-ref">pagmo::has_gradient</span></a> but it does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__gradient"><span class="std std-ref">pagmo::override_has_gradient</span></a>, then this method will always return <code class="docutils literal"><span class="pre">true</span></code>;</li>
+<li>if the UDP satisfies both <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient"><span class="std std-ref">pagmo::has_gradient</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__gradient"><span class="std std-ref">pagmo::override_has_gradient</span></a>, then this method will return the output of the <code class="docutils literal"><span class="pre">has_gradient()</span></code> method of the UDP.</li>
+</ul>
+</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a flag signalling the availability of the gradient in the UDP. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem17gradient_sparsityEv">
+<span id="pagmo::problem::gradient_sparsityC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a3d2267a7d2defd716d30480f5c8b8c77"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a> <code class="descname">gradient_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem17gradient_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gradient sparsity pattern. </p>
+<p>This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of <span class="math">\( g_{ij} = \frac{\partial f_i}{\partial x_j}\)</span>.</p>
+<p>If <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1aa12d2105958962f7837d983a540e4f1f"><span class="std std-ref">problem::has_gradient_sparsity()</span></a> returns <code class="docutils literal"><span class="pre">true</span></code>, then the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method of the UDP will be invoked, and its result returned (after sanity checks). Otherwise, a a dense pattern is assumed and the returned vector will be <span class="math">\(((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\)</span>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the gradient sparsity pattern.</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices or if the indices in the pattern are incompatible with the properties of the problem). </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: memory errors in standard containers. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem21has_gradient_sparsityEv">
+<span id="pagmo::problem::has_gradient_sparsityC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1aa12d2105958962f7837d983a540e4f1f"></span>bool <code class="descname">has_gradient_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem21has_gradient_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the gradient sparsity is available in the UDP. </p>
+<p>This method will return <code class="docutils literal"><span class="pre">true</span></code> if the gradient sparsity is available in the UDP, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</p>
+<p>The availability of the gradient sparsity is determined as follows:<ul class="simple">
+<li>if the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient__sparsity"><span class="std std-ref">pagmo::has_gradient_sparsity</span></a>, then this method will always return <code class="docutils literal"><span class="pre">false</span></code>;</li>
+<li>if the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient__sparsity"><span class="std std-ref">pagmo::has_gradient_sparsity</span></a> but it does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__gradient__sparsity"><span class="std std-ref">pagmo::override_has_gradient_sparsity</span></a>, then this method will always return <code class="docutils literal"><span class="pre">true</span></code>;</li>
+<li>if the UDP satisfies both <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient__sparsity"><span class="std std-ref">pagmo::has_gradient_sparsity</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__gradient__sparsity"><span class="std std-ref">pagmo::override_has_gradient_sparsity</span></a>, then this method will return the output of the <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method of the UDP.</li>
+</ul>
+</p>
+<p><strong>NOTE</strong> regardless of what this method returns, the <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d2267a7d2defd716d30480f5c8b8c77"><span class="std std-ref">problem::gradient_sparsity()</span></a> method will always return a sparsity pattern: if the UDP does not provide the gradient sparsity, PaGMO will assume that the sparsity pattern of the gradient is dense. See <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d2267a7d2defd716d30480f5c8b8c77"><span class="std std-ref">problem::gradient_sparsity()</span></a> for more details.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a flag signalling the availability of the gradient sparsity in the UDP. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem8hessiansERK13vector_double">
+<span id="pagmo::problem::hessians__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a5ccf5719ef8d91d53599fba84cdb1674"></span>std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">hessians</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>dv</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem8hessiansERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Hessians. </p>
+<p>This method will compute the hessians of the input decision vector <code class="docutils literal"><span class="pre">dv</span></code> by invoking the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP. The <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP must return a sparse representation of the hessians: the element <span class="math">\( l\)</span> of the returned vector contains <span class="math">\( h^l_{ij} = \frac{\partial f^2_l}{\partial x_i\partial x_j}\)</span> in the order specified by the <span class="math">\( l\)</span>-th element of the hessians sparsity pattern (a vector of index pairs <span class="math">\((i,j)\)</span>) as returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"><span class="std std-ref">problem::hessians_sparsity()</span></a>. Since the hessians are symmetric, their sparse representation contains only lower triangular elements.</p>
+<p>If the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians"><span class="std std-ref">pagmo::has_hessians</span></a>, this method will forward <code class="docutils literal"><span class="pre">dv</span></code> to the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP after sanity checks. The output of the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP will also be checked before being returned. If the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians"><span class="std std-ref">pagmo::has_hessians</span></a>, an error will be raised.</p>
+<p>A successful call of this method will increase the internal hessians evaluation counter (see <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1abf598b69c2f7138e32d8edd5e002ba2b"><span class="std std-ref">problem::get_hevals()</span></a>).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the hessians of <code class="docutils literal"><span class="pre">dv</span></code>.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">dv</span></code>: the decision vector whose hessians will be computed.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if either:<ul>
+<li>the length of <code class="docutils literal"><span class="pre">dv</span></code> differs from the output of <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ac4a212a660feff63f78df5c3e63db9c5"><span class="std std-ref">get_nx()</span></a>, or</li>
+<li>the length of the returned hessians does not match the corresponding hessians sparsity pattern dimensions. </li>
+</ul>
+</li>
+<li><code class="docutils literal"><a class="reference internal" href="miscellanea/exceptions.html#pagmostructpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians"><span class="std std-ref">pagmo::has_hessians</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem12has_hessiansEv">
+<span id="pagmo::problem::has_hessiansC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a544672edd95256d62b032910918b863d"></span>bool <code class="descname">has_hessians</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem12has_hessiansEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the hessians are available in the UDP. </p>
+<p>This method will return <code class="docutils literal"><span class="pre">true</span></code> if the hessians are available in the UDP, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</p>
+<p>The availability of the hessians is determined as follows:<ul class="simple">
+<li>if the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians"><span class="std std-ref">pagmo::has_hessians</span></a>, then this method will always return <code class="docutils literal"><span class="pre">false</span></code>;</li>
+<li>if the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians"><span class="std std-ref">pagmo::has_hessians</span></a> but it does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__hessians"><span class="std std-ref">pagmo::override_has_hessians</span></a>, then this method will always return <code class="docutils literal"><span class="pre">true</span></code>;</li>
+<li>if the UDP satisfies both <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians"><span class="std std-ref">pagmo::has_hessians</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__hessians"><span class="std std-ref">pagmo::override_has_hessians</span></a>, then this method will return the output of the <code class="docutils literal"><span class="pre">has_hessians()</span></code> method of the UDP.</li>
+</ul>
+</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a flag signalling the availability of the hessians in the UDP. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem17hessians_sparsityEv">
+<span id="pagmo::problem::hessians_sparsityC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"></span>std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a>&gt; <code class="descname">hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem17hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Hessians sparsity pattern. </p>
+<p>This method will return the hessians sparsity pattern of the problem. Each component <span class="math">\( l\)</span> of the hessians sparsity pattern is a collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of <span class="math">\(h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\)</span>. Since the Hessian matrix is symmetric, only lower triangular elements are allowed.</p>
+<p>If <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ae1d5d6985ed595158f673e22ff3bb877"><span class="std std-ref">problem::has_hessians_sparsity()</span></a> returns <code class="docutils literal"><span class="pre">true</span></code>, then the <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the UDP will be invoked, and its result returned (after sanity checks). Otherwise, a dense pattern is assumed and <span class="math">\(n_f\)</span> sparsity patterns containing <span class="math">\(((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\)</span> will be returned.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the hessians sparsity pattern.</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the sparsity pattern returned by the UDP is invalid (specifically, if its size is invalid, if it contains duplicate pairs of indices or if the returned indices do not correspond to a lower triangular representation of a symmetric matrix). </li>
+<li><code class="docutils literal"><a class="reference internal" href="miscellanea/exceptions.html#pagmostructpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the UDP is invoked without being available. This indicates in general an inconsistency in the implementation of the UDP. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: memory errors in standard containers. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem21has_hessians_sparsityEv">
+<span id="pagmo::problem::has_hessians_sparsityC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ae1d5d6985ed595158f673e22ff3bb877"></span>bool <code class="descname">has_hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem21has_hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the hessians sparsity is available in the UDP. </p>
+<p>This method will return <code class="docutils literal"><span class="pre">true</span></code> if the hessians sparsity is available in the UDP, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</p>
+<p>The availability of the hessians sparsity is determined as follows:<ul class="simple">
+<li>if the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians__sparsity"><span class="std std-ref">pagmo::has_hessians_sparsity</span></a>, then this method will always return <code class="docutils literal"><span class="pre">false</span></code>;</li>
+<li>if the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians__sparsity"><span class="std std-ref">pagmo::has_hessians_sparsity</span></a> but it does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__hessians__sparsity"><span class="std std-ref">pagmo::override_has_hessians_sparsity</span></a>, then this method will always return <code class="docutils literal"><span class="pre">true</span></code>;</li>
+<li>if the UDP satisfies both <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians__sparsity"><span class="std std-ref">pagmo::has_hessians_sparsity</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__hessians__sparsity"><span class="std std-ref">pagmo::override_has_hessians_sparsity</span></a>, then this method will return the output of the <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method of the UDP.</li>
+</ul>
+</p>
+<p><strong>NOTE</strong> regardless of what this method returns, the <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"><span class="std std-ref">problem::hessians_sparsity()</span></a> method will always return a vector of sparsity patterns: if the UDP does not provide the hessians sparsity, PaGMO will assume that the sparsity pattern of the hessians is dense. See <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"><span class="std std-ref">problem::hessians_sparsity()</span></a> for more details.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a flag signalling the availability of the hessians sparsity in the UDP. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem8get_nobjEv">
+<span id="pagmo::problem::get_nobjC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ae4a8c52d909b5450be543774bc271ace"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nobj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of objectives. </p>
+<p>This method will return <span class="math">\( n_{obj}\)</span>, the number of objectives of the optimization problem. If the UDP satisfies the <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__get__nobj"><span class="std std-ref">pagmo::has_get_nobj</span></a> type traits, then the output of its <code class="docutils literal"><span class="pre">get_nobj()</span></code> method will be returned. Otherwise, this method will return 1.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of objectives of the problem. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem6get_nxEv">
+<span id="pagmo::problem::get_nxC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ac4a212a660feff63f78df5c3e63db9c5"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nx</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem6get_nxEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Dimension. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><span class="math">\( n_{x}\)</span>, the dimension of the problem as established by the length of the bounds returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ae00e821bd8e59113ec5534e638691ea5"><span class="std std-ref">problem::get_bounds()</span></a>. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem6get_nfEv">
+<span id="pagmo::problem::get_nfC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a88519584be841b84add0b7d3c5415d9e"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nf</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem6get_nfEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Fitness dimension. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><span class="math">\( n_{f}\)</span>, the dimension of the fitness, which is the sum of <span class="math">\(n_{obj}\)</span>, <span class="math">\(n_{ec}\)</span> and <span class="math">\(n_{ic}\)</span> </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem10get_boundsEv">
+<span id="pagmo::problem::get_boundsC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ae00e821bd8e59113ec5534e638691ea5"></span>std::pair&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Box-bounds. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><span class="math">\( (\mathbf{lb}, \mathbf{ub}) \)</span>, the box-bounds, as returned by the <code class="docutils literal"><span class="pre">get_bounds()</span></code> method of the UDP. Infinities in the bounds are allowed.</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by memory errors in standard containers. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem7get_necEv">
+<span id="pagmo::problem::get_necC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1aac814730b9d38e352a11919bdd8cca55"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem7get_necEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of equality constraints. </p>
+<p>This method will return <span class="math">\( n_{ec} \)</span>, the number of equality constraints of the problem. If the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__e__constraints"><span class="std std-ref">pagmo::has_e_constraints</span></a>, then the output of its <code class="docutils literal"><span class="pre">get_nec()</span></code> method will be returned. Otherwise, this method will return 0.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of equality constraints of the problem. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem7get_nicEv">
+<span id="pagmo::problem::get_nicC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a198bdea8d1d618fd4e667f7412771453"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nic</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem7get_nicEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of inequality constraints. </p>
+<p>This method will return <span class="math">\( n_{ic} \)</span>, the number of inequality constraints of the problem. If the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__i__constraints"><span class="std std-ref">pagmo::has_i_constraints</span></a>, then the output of its <code class="docutils literal"><span class="pre">get_nic()</span></code> method will be returned. Otherwise, this method will return 0.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of inequality constraints of the problem. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo7problem9set_c_tolERK13vector_double">
+<span id="pagmo::problem::set_c_tol__vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a1a55cca40f93b8268c8bc5c1d33b2201"></span>void <code class="descname">set_c_tol</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>c_tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem9set_c_tolERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the constraint tolerance. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">c_tol</span></code>: a vector containing the tolerances to use when checking for constraint feasibility.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the size of <code class="docutils literal"><span class="pre">c_tol</span></code> differs from the number of constraints, or if any of its elements is negative or NaN. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem9get_c_tolEv">
+<span id="pagmo::problem::get_c_tolC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">get_c_tol</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem9get_c_tolEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the constraint tolerance. </p>
+<p>This method will return a vector of dimension <span class="math">\(n_{ec} + n_{ic}\)</span> containing tolerances to be used when checking constraint feasibility. The constraint tolerance is zero-filled upon problem construction, and it can be set via <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a1a55cca40f93b8268c8bc5c1d33b2201"><span class="std std-ref">problem::set_c_tol()</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a <a class="reference internal" href="types.html#pagmonamespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing the tolerances to use when checking for constraint feasibility. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem6get_ncEv">
+<span id="pagmo::problem::get_ncC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ac91da0b48f2fd1c1d606b238c973438c"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nc</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem6get_ncEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Total number of constraints. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the sum of the output of <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a198bdea8d1d618fd4e667f7412771453"><span class="std std-ref">get_nic()</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1aac814730b9d38e352a11919bdd8cca55"><span class="std std-ref">get_nec()</span></a> (i.e., the total number of constraints). </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem10get_fevalsEv">
+<span id="pagmo::problem::get_fevalsC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a8477607f9fd9cb22a53f9e2e2511d8e0"></span>unsigned long long <code class="descname">get_fevals</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem10get_fevalsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of fitness evaluations. </p>
+<p>Each time a call to <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a8e29c2c806377fd1855274dac8376add"><span class="std std-ref">problem::fitness()</span></a> successfully completes, an internal counter is increased by one. The counter is initialised to zero upon problem construction and it is never reset. Copy and move operations copy the counter as well.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of times <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a8e29c2c806377fd1855274dac8376add"><span class="std std-ref">problem::fitness()</span></a> was successfully called. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem10get_gevalsEv">
+<span id="pagmo::problem::get_gevalsC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ae6e94a45a2dc38e08fc3a3247480393c"></span>unsigned long long <code class="descname">get_gevals</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem10get_gevalsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of gradient evaluations. </p>
+<p>Each time a call to <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3fb8d8bb7b34477509eb9df3cd7b6e2e"><span class="std std-ref">problem::gradient()</span></a> successfully completes, an internal counter is increased by one. The counter is initialised to zero upon problem construction and it is never reset. Copy and move operations copy the counter as well.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of times <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3fb8d8bb7b34477509eb9df3cd7b6e2e"><span class="std std-ref">problem::gradient()</span></a> was successfully called. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem10get_hevalsEv">
+<span id="pagmo::problem::get_hevalsC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1abf598b69c2f7138e32d8edd5e002ba2b"></span>unsigned long long <code class="descname">get_hevals</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem10get_hevalsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of hessians evaluations. </p>
+<p>Each time a call to <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a5ccf5719ef8d91d53599fba84cdb1674"><span class="std std-ref">problem::hessians()</span></a> successfully completes, an internal counter is increased by one. The counter is initialised to zero upon problem construction and it is never reset. Copy and move operations copy the counter as well.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of times <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a5ccf5719ef8d91d53599fba84cdb1674"><span class="std std-ref">problem::hessians()</span></a> was successfully called. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo7problem8set_seedEj">
+<span id="pagmo::problem::set_seed__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a461f9d5cd50e904622eb1529a6f4bd47"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the seed for the stochastic variables. </p>
+<p>Sets the seed to be used in the fitness function to instantiate all stochastic variables. If the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>, then its <code class="docutils literal"><span class="pre">set_seed()</span></code> method will be invoked. Otherwise, an error will be raised.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seed</span></code>: seed.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><a class="reference internal" href="miscellanea/exceptions.html#pagmostructpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDP. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem13feasibility_xERK13vector_double">
+<span id="pagmo::problem::feasibility_x__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a1a7c6d11470c8bca089e740260107457"></span>bool <code class="descname">feasibility_x</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem13feasibility_xERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Feasibility of a decision vector. </p>
+<p>This method will check the feasibility of the fitness corresponding to a decision vector <code class="docutils literal"><span class="pre">x</span></code> against the tolerances returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"><span class="std std-ref">problem::get_c_tol()</span></a>.</p>
+<p><strong>NOTE</strong> This will cause one fitness evaluation.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><code class="docutils literal"><span class="pre">true</span></code> if the decision vector results in a feasible fitness, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: a decision vector.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ac53d0a801571b55912a60a72fadf73f1"><span class="std std-ref">problem::feasibility_f()</span></a> or <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a8e29c2c806377fd1855274dac8376add"><span class="std std-ref">problem::fitness()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem13feasibility_fERK13vector_double">
+<span id="pagmo::problem::feasibility_f__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ac53d0a801571b55912a60a72fadf73f1"></span>bool <code class="descname">feasibility_f</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>f</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem13feasibility_fERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Feasibility of a fitness vector. </p>
+<p>This method will check the feasibility of a fitness vector <code class="docutils literal"><span class="pre">f</span></code> against the tolerances returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"><span class="std std-ref">problem::get_c_tol()</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><code class="docutils literal"><span class="pre">true</span></code> if the fitness vector is feasible, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">f</span></code>: a fitness vector.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the size of <code class="docutils literal"><span class="pre">f</span></code> is not the same as the output of <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a88519584be841b84add0b7d3c5415d9e"><span class="std std-ref">problem::get_nf()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem12has_set_seedEv">
+<span id="pagmo::problem::has_set_seedC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a849886ff9277cbc4e0210d45c876daa2"></span>bool <code class="descname">has_set_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem12has_set_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if a <code class="docutils literal"><span class="pre">set_seed()</span></code> method is available in the UDP. </p>
+<p>This method will return <code class="docutils literal"><span class="pre">true</span></code> if a <code class="docutils literal"><span class="pre">set_seed()</span></code> method is available in the UDP, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</p>
+<p>The availability of the a <code class="docutils literal"><span class="pre">set_seed()</span></code> method is determined as follows:<ul class="simple">
+<li>if the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>, then this method will always return <code class="docutils literal"><span class="pre">false</span></code>;</li>
+<li>if the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a> but it does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__set__seed"><span class="std std-ref">pagmo::override_has_set_seed</span></a>, then this method will always return <code class="docutils literal"><span class="pre">true</span></code>;</li>
+<li>if the UDP satisfies both <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__set__seed"><span class="std std-ref">pagmo::override_has_set_seed</span></a>, then this method will return the output of the <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method of the UDP.</li>
+</ul>
+</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a flag signalling the availability of the <code class="docutils literal"><span class="pre">set_seed()</span></code> method in the UDP. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem13is_stochasticEv">
+<span id="pagmo::problem::is_stochasticC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a22373d4f5fc614899d4e1d4be7b106f5"></span>bool <code class="descname">is_stochastic</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem13is_stochasticEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Alias for <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a849886ff9277cbc4e0210d45c876daa2"><span class="std std-ref">problem::has_set_seed()</span></a>. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the output of <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a849886ff9277cbc4e0210d45c876daa2"><span class="std std-ref">problem::has_set_seed()</span></a>. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem8get_nameEv">
+<span id="pagmo::problem::get_nameC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a2ff5b65d95677c3bf6eb4a37a58dec32"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Problem&#8217;s name. </p>
+<p>If the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__name"><span class="std std-ref">pagmo::has_name</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_name()</span></code> method. Otherwise, an implementation-defined name based on the type of the UDP will be returned.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the problem&#8217;s name.</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by copying an <code class="docutils literal"><span class="pre">std::string</span></code> object. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem14get_extra_infoEv">
+<span id="pagmo::problem::get_extra_infoC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ae38075a0d96d2873d93e25283f461a07"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Problem&#8217;s extra info. </p>
+<p>If the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__extra__info"><span class="std std-ref">pagmo::has_extra_info</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method. Otherwise, an empty string will be returned.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>extra info about the UDP.</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDP. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo7problem17get_thread_safetyEv">
+<span id="pagmo::problem::get_thread_safetyC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a3a4b11756d597508afdd2ef0c3c4c4dc"></span><a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a> <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Problem&#8217;s thread safety level. </p>
+<p>If the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__get__thread__safety"><span class="std std-ref">pagmo::has_get_thread_safety</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method. Otherwise, <a class="reference internal" href="miscellanea/type_traits.html#pagmonamespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1af17aaabc20bfe045075927934fed52d2"><span class="std std-ref">thread_safety::basic</span></a> will be returned. That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDP instances.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the thread safety level of the UDP. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2NK5pagmo7problem4saveER7Archive">
+<span id="pagmo::problem::save__ArchiveRC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a0d1c91d136fdd43e21e9f8fac0a99c8e"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Save to archive. </p>
+<p>This method will save <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo7problem4loadER7Archive">
+<span id="pagmo::problem::load__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a96bc50f0a049e53be4bfef736383d1be"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Load from archive. </p>
+<p>This method will deserialize into <code class="docutils literal"><span class="pre">this</span></code> the content of <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: source archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Friends</p>
+<dl class="function">
+<dt id="_CPPv2lsRNSt7ostreamERK7problem">
+<span id="lshift-operator__osR.problemCR"></span><span class="target" id="pagmoclasspagmo_1_1problem_1abaec8c47cdfc8c067c1afe9843cebb97"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> problem &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2lsRNSt7ostreamERK7problem" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Streaming operator. </p>
+<p>This function will stream to <code class="docutils literal"><span class="pre">os</span></code> a human-readable representation of the input problem <code class="docutils literal"><span class="pre">p</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a reference to <code class="docutils literal"><span class="pre">os</span></code>.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">os</span></code>: input <code class="docutils literal"><span class="pre">std::ostream</span></code>. </li>
+<li><code class="docutils literal"><span class="pre">p</span></code>: <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> object to be streamed.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by querying various problem properties and streaming them into <code class="docutils literal"><span class="pre">os</span></code>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Problem class &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Population class" href="py_population.html" />
+    <link rel="prev" title="Algorithm class" href="py_algorithm.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../cpp/cpp_docs.html">C++ docs</a></li>
+                <li><a href="python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="python_docs.html">Python Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Problem class</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="problem-class">
+<h1>Problem class<a class="headerlink" href="#problem-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pygmo.core.problem">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">problem</code><span class="sig-paren">(</span><em>udp = null_problem</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Problem class.</p>
+<p>This class represents a generic <em>mathematical programming</em> or <em>evolutionary optimization</em> problem in the form:</p>
+<div class="math">
+\[\begin{split}\begin{array}{rl}
+\mbox{find:}      &amp; \mathbf {lb} \le \mathbf x \le \mathbf{ub}\\
+\mbox{to minimize: } &amp; \mathbf f(\mathbf x, s) \in \mathbb R^{n_{obj}}\\
+\mbox{subject to:} &amp; \mathbf {c}_e(\mathbf x, s) = 0 \\
+                  &amp; \mathbf {c}_i(\mathbf x, s) \le 0
+\end{array}\end{split}\]</div>
+<p>where <span class="math">\(\mathbf x \in \mathbb R^{n_x}\)</span> is called <em>decision vector</em> or
+<em>chromosome</em>, <span class="math">\(\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_x}\)</span> are the <em>box-bounds</em>,
+<span class="math">\(\mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}\)</span> define the <em>objectives</em>,
+<span class="math">\(\mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\)</span> are non linear <em>equality constraints</em>,
+and <span class="math">\(\mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\)</span> are non linear <em>inequality constraints</em>.
+Note that the objectives and constraints may also depend from an added value <span class="math">\(s\)</span> seeding the
+values of any number of stochastic variables. This allows also for stochastic programming
+tasks to be represented by this class.</p>
+<p>In order to define an optimizaztion problem in pygmo, the user must first define a class
+whose methods describe the properties of the problem and allow to compute
+the objective function, the gradient, the constraints, etc. In pygmo, we refer to such
+a class as a <strong>user-defined problem</strong>, or UDP for short. Once defined and instantiated,
+a UDP can then be used to construct an instance of this class, <a class="reference internal" href="#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>, which
+provides a generic interface to optimization problems.</p>
+<p>Every UDP must implement at least the following two methods:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">fitness()</span></code> method is expected to return the fitness of the input decision vector, while
+<code class="docutils literal"><span class="pre">get_bounds()</span></code> is expected to return the box bounds of the problem,
+<span class="math">\((\mathbf{lb}, \mathbf{ub})\)</span>, which also implicitly define the dimension of the problem.
+The <code class="docutils literal"><span class="pre">fitness()</span></code> and <code class="docutils literal"><span class="pre">get_bounds()</span></code> methods of the UDP are accessible from the corresponding
+<a class="reference internal" href="#pygmo.core.problem.fitness" title="pygmo.core.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.problem.fitness()</span></code></a> and <a class="reference internal" href="#pygmo.core.problem.get_bounds" title="pygmo.core.problem.get_bounds"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.problem.get_bounds()</span></code></a>
+methods (see their documentation for information on how the two methods should be implemented
+in the UDP and other details).</p>
+<p>The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
+optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following
+methods:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_nobj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">get_nec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">get_nic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">has_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">has_gradient_sparsity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">gradient_sparsity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">has_hessians</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">hessians</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">has_hessians_sparsity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">hessians_sparsity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">has_set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">get_extra_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+<p>See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDP should be implemented and on how they are used by <a class="reference internal" href="#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>.
+Note that the exposed C++ problems can also be used as UDPs, even if they do not expose any of the
+mandatory or optional methods listed above (see <a class="reference internal" href="problems/py_problems.html#py-problems"><span class="std std-ref">here</span></a> for the
+full list of UDPs already coded in pygmo).</p>
+<p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>udp</strong> &#8211; a user-defined problem (either C++ or Python - note that <em>udp</em> will be deep-copied
+and stored inside the <a class="reference internal" href="#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> instance)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if <em>udp</em> does not implement the mandatory methods detailed above</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; in the following cases:<ul>
+<li>the number of objectives of the UDP is zero,</li>
+<li>the number of objectives, equality or inequality constraints is larger than an implementation-defined value,</li>
+<li>the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
+different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),</li>
+<li>the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> and <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> methods of the UDP fail basic sanity checks
+(e.g., they return vectors with repeated indices, they contain indices exceeding the problem&#8217;s dimensions, etc.)</li>
+</ul>
+</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li>methods of the UDP invoked during construction,</li>
+<li>the deep copy of the UDP,</li>
+<li>the constructor of the underlying C++ class,</li>
+<li>failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+signatures, etc.)</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pygmo.core.problem.c_tol">
+<code class="descname">c_tol</code><a class="headerlink" href="#pygmo.core.problem.c_tol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constraints tolerance.</p>
+<p>This property contains an array of <code class="docutils literal"><span class="pre">float</span></code> that are used when checking for constraint feasibility.
+The dimension of the array is <span class="math">\(n_{ec} + n_{ic}\)</span>, and the array is zero-filled on problem
+construction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the constraints tolerance</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">1D NumPy float array</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, the size of the input array differs from the number
+of constraints of the problem or if any element of the array is negative or NaN</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.extract">
+<code class="descname">extract</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract user-defined problem instance.</p>
+<p>If <em>t</em> is the same type of the user-defined problem used to construct this problem, then a reference to
+the internal user-defined problem will be returned. Otherwise, <code class="docutils literal"><span class="pre">None</span></code> will be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) &#8211; the type of the user-defined problem to extract</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a reference to the internal user-defined problem if it is of type <em>t</em>, or <code class="docutils literal"><span class="pre">None</span></code> otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>t</em> is not a type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.feasibility_f">
+<code class="descname">feasibility_f</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.feasibility_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will check the feasibility of a fitness vector <em>f</em> against the tolerances returned by
+<a class="reference internal" href="#pygmo.core.problem.c_tol" title="pygmo.core.problem.c_tol"><code class="xref py py-attr docutils literal"><span class="pre">c_tol</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<em>array-like object</em>) &#8211; a fitness vector</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">True</span></code> if the fitness vector is feasible, <code class="docutils literal"><span class="pre">False</span></code> otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the size of <em>f</em> is not the same as the output of
+<code class="xref py py-func docutils literal"><span class="pre">get_nf()</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.feasibility_x">
+<code class="descname">feasibility_x</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.feasibility_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will check the feasibility of the fitness corresponding to a decision vector <em>x</em> against
+the tolerances returned by <a class="reference internal" href="#pygmo.core.problem.c_tol" title="pygmo.core.problem.c_tol"><code class="xref py py-attr docutils literal"><span class="pre">c_tol</span></code></a>.</p>
+<p><strong>NOTE</strong> This will cause one fitness evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dv</strong> (<em>array-like object</em>) &#8211; a decision vector</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">True</span></code> if <em>x</em> results in a feasible fitness, <code class="docutils literal"><span class="pre">False</span></code> otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="#pygmo.core.problem.feasibility_f" title="pygmo.core.problem.feasibility_f"><code class="xref py py-func docutils literal"><span class="pre">feasibility_f()</span></code></a> or
+<a class="reference internal" href="#pygmo.core.problem.fitness" title="pygmo.core.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">fitness()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.fitness">
+<code class="descname">fitness</code><span class="sig-paren">(</span><em>dv</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitness.</p>
+<p>This method will invoke the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP to compute the fitness of the
+input decision vector <em>dv</em>. The return value of the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP is expected to have a
+dimension of <span class="math">\(n_{f} = n_{obj} + n_{ec} + n_{ic}\)</span> and to contain the concatenated values of
+<span class="math">\(\mathbf f, \mathbf c_e\)</span> and <span class="math">\(\mathbf c_i\)</span> (in this order).</p>
+<p>In addition to invoking the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP, this method will perform sanity checks on
+<em>dv</em> and on the returned fitness vector. A successful call of this method will increase the internal fitness
+evaluation counter (see <a class="reference internal" href="#pygmo.core.problem.get_fevals" title="pygmo.core.problem.get_fevals"><code class="xref py py-func docutils literal"><span class="pre">get_fevals()</span></code></a>).</p>
+<p>The <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP must be able to take as input the decision vector as a 1D NumPy array, and it must
+return the fitness vector as an iterable Python object (e.g., 1D NumPy array, list, tuple, etc.).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dv</strong> (<em>array-like object</em>) &#8211; the decision vector (chromosome) to be evaluated</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the fitness of <em>dv</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">1D NumPy float array</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.core.problem.get_nx" title="pygmo.core.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
+the length of the returned fitness vector differs from the value returned by <a class="reference internal" href="#pygmo.core.problem.get_nf" title="pygmo.core.problem.get_nf"><code class="xref py py-func docutils literal"><span class="pre">get_nf()</span></code></a></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP, or by failures at the intersection
+between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_bounds">
+<code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Box-bounds.</p>
+<p>This method will invoke the <code class="docutils literal"><span class="pre">get_bounds()</span></code> method of the UDP to return the box-bounds
+<span class="math">\((\mathbf{lb}, \mathbf{ub})\)</span> of the problem. Infinities in the bounds are allowed.</p>
+<p>The <code class="docutils literal"><span class="pre">get_bounds()</span></code> method of the UDP must return the box-bounds as a tuple of 2 elements,
+the lower bounds vector and the upper bounds vector, which must be represented as iterable Python objects (e.g.,
+1D NumPy arrays, lists, tuples, etc.). The box-bounds returned by the UDP are checked upon the construction
+of a <a class="reference internal" href="#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a tuple of two 1D NumPy float arrays representing the lower and upper box-bounds of the problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">tuple</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the invoked method of the underlying C++ class, or failures at the
+intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_extra_info">
+<code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_extra_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Problem&#8217;s extra info.</p>
+<p>If the UDP provides a <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method, then this method will return the output of its <code class="docutils literal"><span class="pre">get_extra_info()</span></code>
+method. Otherwise, an empty string will be returned.</p>
+<p>The <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">str</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">extra info about the UDP</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDP</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_fevals">
+<code class="descname">get_fevals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_fevals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of fitness evaluations.</p>
+<p>Each time a call to <a class="reference internal" href="#pygmo.core.problem.fitness" title="pygmo.core.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">fitness()</span></code></a> successfully completes, an internal counter
+is increased by one. The counter is initialised to zero upon problem construction and it is never
+reset. Copy operations copy the counter as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of times <a class="reference internal" href="#pygmo.core.problem.fitness" title="pygmo.core.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">fitness()</span></code></a> was successfully called</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_gevals">
+<code class="descname">get_gevals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_gevals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of gradient evaluations.</p>
+<p>Each time a call to <a class="reference internal" href="#pygmo.core.problem.gradient" title="pygmo.core.problem.gradient"><code class="xref py py-func docutils literal"><span class="pre">gradient()</span></code></a> successfully completes, an internal counter
+is increased by one. The counter is initialised to zero upon problem construction and it is never
+reset. Copy operations copy the counter as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of times <a class="reference internal" href="#pygmo.core.problem.gradient" title="pygmo.core.problem.gradient"><code class="xref py py-func docutils literal"><span class="pre">gradient()</span></code></a> was successfully called</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_hevals">
+<code class="descname">get_hevals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_hevals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of hessians evaluations.</p>
+<p>Each time a call to <a class="reference internal" href="#pygmo.core.problem.hessians" title="pygmo.core.problem.hessians"><code class="xref py py-func docutils literal"><span class="pre">hessians()</span></code></a> successfully completes, an internal counter
+is increased by one. The counter is initialised to zero upon problem construction and it is never
+reset. Copy operations copy the counter as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of times <a class="reference internal" href="#pygmo.core.problem.hessians" title="pygmo.core.problem.hessians"><code class="xref py py-func docutils literal"><span class="pre">hessians()</span></code></a> was successfully called</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Problem&#8217;s name.</p>
+<p>If the UDP provides a <code class="docutils literal"><span class="pre">get_name()</span></code> method, then this method will return the output of its <code class="docutils literal"><span class="pre">get_name()</span></code> method.
+Otherwise, an implementation-defined name based on the type of the UDP will be returned.</p>
+<p>The <code class="docutils literal"><span class="pre">get_name()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">str</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the problem&#8217;s name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_nc">
+<code class="descname">get_nc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_nc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of constraints.</p>
+<p>This method will return the sum of the output of <a class="reference internal" href="#pygmo.core.problem.get_nic" title="pygmo.core.problem.get_nic"><code class="xref py py-func docutils literal"><span class="pre">get_nic()</span></code></a> and
+<a class="reference internal" href="#pygmo.core.problem.get_nec" title="pygmo.core.problem.get_nec"><code class="xref py py-func docutils literal"><span class="pre">get_nec()</span></code></a> (i.e., the total number of constraints).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the total number of constraints of the problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_nec">
+<code class="descname">get_nec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_nec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of equality constraints.</p>
+<p>This method will return <span class="math">\(n_{ec}\)</span>, the number of equality constraints of the problem.</p>
+<p>The optional <code class="docutils literal"><span class="pre">get_nec()</span></code> method of the UDP must return the number of equality constraints as an <code class="docutils literal"><span class="pre">int</span></code>.
+If the UDP does not implement the <code class="docutils literal"><span class="pre">get_nec()</span></code> method, zero equality constraints will be assumed.
+The number of equality constraints returned by the UDP is checked upon the construction
+of a <a class="reference internal" href="#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of equality constraints of the problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_nf">
+<code class="descname">get_nf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_nf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dimension of the fitness.</p>
+<p>This method will return <span class="math">\(n_{f}\)</span>, the dimension of the fitness, which is the sum of
+<span class="math">\(n_{obj}\)</span>, <span class="math">\(n_{ec}\)</span> and <span class="math">\(n_{ic}\)</span>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the dimension of the fitness</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_nic">
+<code class="descname">get_nic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_nic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of inequality constraints.</p>
+<p>This method will return <span class="math">\(n_{ic}\)</span>, the number of inequality constraints of the problem.</p>
+<p>The optional <code class="docutils literal"><span class="pre">get_nic()</span></code> method of the UDP must return the number of inequality constraints as an <code class="docutils literal"><span class="pre">int</span></code>.
+If the UDP does not implement the <code class="docutils literal"><span class="pre">get_nic()</span></code> method, zero inequality constraints will be assumed.
+The number of inequality constraints returned by the UDP is checked upon the construction
+of a <a class="reference internal" href="#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of inequality constraints of the problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_nobj">
+<code class="descname">get_nobj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_nobj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of objectives.</p>
+<p>This method will return <span class="math">\(n_{obj}\)</span>, the number of objectives of the problem.</p>
+<p>The optional <code class="docutils literal"><span class="pre">get_nobj()</span></code> method of the UDP must return the number of objectives as an <code class="docutils literal"><span class="pre">int</span></code>.
+If the UDP does not implement the <code class="docutils literal"><span class="pre">get_nobj()</span></code> method, a single-objective optimizaztion problem
+will be assumed. The number of objectives returned by the UDP is checked upon the construction
+of a <a class="reference internal" href="#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of objectives of the problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_nx">
+<code class="descname">get_nx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_nx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dimension of the problem.</p>
+<p>This method will return <span class="math">\(n_{x}\)</span>, the dimension of the problem as established by the length of
+the bounds returned by <a class="reference internal" href="#pygmo.core.problem.get_bounds" title="pygmo.core.problem.get_bounds"><code class="xref py py-func docutils literal"><span class="pre">get_bounds()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the dimension of the problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.get_thread_safety">
+<code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.get_thread_safety" title="Permalink to this definition">¶</a></dt>
+<dd><p>Problem&#8217;s thread safety level.</p>
+<p>This method will return a value of the enum <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal"><span class="pre">pygmo.thread_safety</span></code></a> which indicates the thread safety level
+of the UDP. Unlike in C++, in Python it is not possible to re-implement this method in the UDP. That is, for C++
+UDPs, the returned value will be the value returned by the <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method of the UDP. For Python
+UDPs, the returned value will be unconditionally <a class="reference internal" href="py_misc.html#pygmo.thread_safety.none" title="pygmo.thread_safety.none"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.thread_safety.none</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the thread safety level of the UDP</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">a value of <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal"><span class="pre">pygmo.thread_safety</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>dv</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gradient.</p>
+<p>This method will compute the gradient of the input decision vector <em>dv</em> by invoking
+the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP. The <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP must return
+a sparse representation of the gradient: the <span class="math">\(k\)</span>-th term of the gradient vector
+is expected to contain <span class="math">\(\frac{\partial f_i}{\partial x_j}\)</span>, where the pair <span class="math">\((i,j)\)</span>
+is the <span class="math">\(k\)</span>-th element of the sparsity pattern (collection of index pairs), as returned by
+<a class="reference internal" href="#pygmo.core.problem.gradient_sparsity" title="pygmo.core.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a>.</p>
+<p>If the UDP provides a <code class="docutils literal"><span class="pre">gradient()</span></code> method, this method will forward <em>dv</em> to the <code class="docutils literal"><span class="pre">gradient()</span></code>
+method of the UDP after sanity checks. The output of the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP will
+also be checked before being returned. If the UDP does not provide a <code class="docutils literal"><span class="pre">gradient()</span></code> method, an
+error will be raised. A successful call of this method will increase the internal gradient
+evaluation counter (see <a class="reference internal" href="#pygmo.core.problem.get_gevals" title="pygmo.core.problem.get_gevals"><code class="xref py py-func docutils literal"><span class="pre">get_gevals()</span></code></a>).</p>
+<p>The <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP must be able to take as input the decision vector as a 1D NumPy
+array, and it must return the gradient vector as an iterable Python object (e.g., 1D NumPy array,
+list, tuple, etc.).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dv</strong> (<em>array-like object</em>) &#8211; the decision vector whose gradient will be computed</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the gradient of <em>dv</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">1D NumPy float array</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.core.problem.get_nx" title="pygmo.core.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
+the returned gradient vector does not have the same size as the vector returned by
+<a class="reference internal" href="#pygmo.core.problem.gradient_sparsity" title="pygmo.core.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if the UDP does not provide a <code class="docutils literal"><span class="pre">gradient()</span></code> method</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP, or by failures at the intersection
+between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.gradient_sparsity">
+<code class="descname">gradient_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.gradient_sparsity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gradient sparsity pattern.</p>
+<p>This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a
+collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of <span class="math">\(g_{ij} = \frac{\partial f_i}{\partial x_j}\)</span>.</p>
+<p>If <a class="reference internal" href="#pygmo.core.problem.has_gradient_sparsity" title="pygmo.core.problem.has_gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">has_gradient_sparsity()</span></code></a> returns <code class="docutils literal"><span class="pre">True</span></code>, then the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method of the
+UDP will be invoked, and its result returned (after sanity checks). Otherwise, a a dense pattern is assumed and the
+returned vector will be <span class="math">\(((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\)</span>.</p>
+<p>The <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method of the UDP must return either a 2D NumPy array of integers, or an iterable
+Python object of any kind. Specifically:</p>
+<ul class="simple">
+<li>if the returned value is a NumPy array, its shape must be <span class="math">\((n,2)\)</span> (with <span class="math">\(n \geq 0\)</span>),</li>
+<li>if the returned value is an iterable Python object, then its elements must in turn be iterable Python objects
+containing each exactly 2 elements representing the indices <span class="math">\((i,j)\)</span>.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the gradient sparsity pattern</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">2D Numpy int array</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; in the following cases:<ul>
+<li>the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
+shape, dimensions, etc.),</li>
+<li>at least one element of the returned iterable Python object does not consist of a collection of exactly
+2 elements,</li>
+<li>if the sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
+or if the indices in the pattern are incompatible with the properties of the problem)</li>
+</ul>
+</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the NumPy array returned by the UDP contains integer values which are negative or outside an
+implementation-defined range</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li>the underlying C++ function,</li>
+<li>the <code class="docutils literal"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API,</li>
+<li>failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+signatures, etc.)</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.has_gradient">
+<code class="descname">has_gradient</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.has_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the gradient is available in the UDP.</p>
+<p>This method will return <code class="docutils literal"><span class="pre">True</span></code> if the gradient is available in the UDP, <code class="docutils literal"><span class="pre">False</span></code> otherwise.</p>
+<p>The availability of the gradient is determined as follows:</p>
+<ul class="simple">
+<li>if the UDP does not provide a <code class="docutils literal"><span class="pre">gradient()</span></code> method, then this method will always return <code class="docutils literal"><span class="pre">False</span></code>;</li>
+<li>if the UDP provides a <code class="docutils literal"><span class="pre">gradient()</span></code> method but it does not provide a <code class="docutils literal"><span class="pre">has_gradient()</span></code> method,
+then this method will always return <code class="docutils literal"><span class="pre">True</span></code>;</li>
+<li>if the UDP provides both a <code class="docutils literal"><span class="pre">gradient()</span></code> and a <code class="docutils literal"><span class="pre">has_gradient()</span></code> method, then this method will return
+the output of the <code class="docutils literal"><span class="pre">has_gradient()</span></code> method of the UDP.</li>
+</ul>
+<p>The optional <code class="docutils literal"><span class="pre">has_gradient()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
+implement the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP, see <a class="reference internal" href="#pygmo.core.problem.gradient" title="pygmo.core.problem.gradient"><code class="xref py py-func docutils literal"><span class="pre">gradient()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag signalling the availability of the gradient in the UDP</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.has_gradient_sparsity">
+<code class="descname">has_gradient_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.has_gradient_sparsity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the gradient sparsity is available in the UDP.</p>
+<p>This method will return <code class="docutils literal"><span class="pre">True</span></code> if the gradient sparsity is available in the UDP, <code class="docutils literal"><span class="pre">False</span></code> otherwise.</p>
+<p>The availability of the gradient sparsity is determined as follows:</p>
+<ul class="simple">
+<li>if the UDP does not provide a <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method, then this method will always return <code class="docutils literal"><span class="pre">False</span></code>;</li>
+<li>if the UDP provides a <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method but it does not provide a <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code>
+method, then this method will always return <code class="docutils literal"><span class="pre">True</span></code>;</li>
+<li>if the UDP provides both a <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method and a <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method,
+then this method will return the output of the <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method of the UDP.</li>
+</ul>
+<p>The optional <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
+implement the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method of the UDP, see <a class="reference internal" href="#pygmo.core.problem.gradient_sparsity" title="pygmo.core.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a>.</p>
+<p><strong>NOTE</strong> regardless of what this method returns, the <a class="reference internal" href="#pygmo.core.problem.gradient_sparsity" title="pygmo.core.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a> method will always
+return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
+pattern of the gradient is dense. See <a class="reference internal" href="#pygmo.core.problem.gradient_sparsity" title="pygmo.core.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a> for more details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag signalling the availability of the gradient sparsity in the UDP</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.has_hessians">
+<code class="descname">has_hessians</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.has_hessians" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the hessians are available in the UDP.</p>
+<p>This method will return <code class="docutils literal"><span class="pre">True</span></code> if the hessians are available in the UDP, <code class="docutils literal"><span class="pre">False</span></code> otherwise.</p>
+<p>The availability of the hessians is determined as follows:</p>
+<ul class="simple">
+<li>if the UDP does not provide a <code class="docutils literal"><span class="pre">hessians()</span></code> method, then this method will always return <code class="docutils literal"><span class="pre">False</span></code>;</li>
+<li>if the UDP provides a <code class="docutils literal"><span class="pre">hessians()</span></code> method but it does not provide a <code class="docutils literal"><span class="pre">has_hessians()</span></code> method,
+then this method will always return <code class="docutils literal"><span class="pre">True</span></code>;</li>
+<li>if the UDP provides both a <code class="docutils literal"><span class="pre">hessians()</span></code> and a <code class="docutils literal"><span class="pre">has_hessians()</span></code> method, then this method will return
+the output of the <code class="docutils literal"><span class="pre">has_hessians()</span></code> method of the UDP.</li>
+</ul>
+<p>The optional <code class="docutils literal"><span class="pre">has_hessians()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
+implement the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP, see <a class="reference internal" href="#pygmo.core.problem.hessians" title="pygmo.core.problem.hessians"><code class="xref py py-func docutils literal"><span class="pre">hessians()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag signalling the availability of the hessians in the UDP</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.has_hessians_sparsity">
+<code class="descname">has_hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.has_hessians_sparsity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the hessians sparsity is available in the UDP.</p>
+<p>This method will return <code class="docutils literal"><span class="pre">True</span></code> if the hessians sparsity is available in the UDP, <code class="docutils literal"><span class="pre">False</span></code> otherwise.</p>
+<p>The availability of the hessians sparsity is determined as follows:</p>
+<ul class="simple">
+<li>if the UDP does not provide a <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method, then this method will always return <code class="docutils literal"><span class="pre">False</span></code>;</li>
+<li>if the UDP provides a <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method but it does not provide a <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code>
+method, then this method will always return <code class="docutils literal"><span class="pre">True</span></code>;</li>
+<li>if the UDP provides both a <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method and a <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method,
+then this method will return the output of the <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method of the UDP.</li>
+</ul>
+<p>The optional <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
+implement the <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the UDP, see <a class="reference internal" href="#pygmo.core.problem.hessians_sparsity" title="pygmo.core.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a>.</p>
+<p><strong>NOTE</strong> regardless of what this method returns, the <a class="reference internal" href="#pygmo.core.problem.hessians_sparsity" title="pygmo.core.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a> method will always
+return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
+pattern of the hessians is dense. See <a class="reference internal" href="#pygmo.core.problem.hessians_sparsity" title="pygmo.core.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a> for more details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag signalling the availability of the hessians sparsity in the UDP</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.has_set_seed">
+<code class="descname">has_set_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.has_set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the <code class="docutils literal"><span class="pre">set_seed()</span></code> method is available in the UDP.</p>
+<p>This method will return <code class="docutils literal"><span class="pre">True</span></code> if the <code class="docutils literal"><span class="pre">set_seed()</span></code> method is available in the UDP, <code class="docutils literal"><span class="pre">False</span></code> otherwise.</p>
+<p>The availability of the <code class="docutils literal"><span class="pre">set_seed()</span></code> method is determined as follows:</p>
+<ul class="simple">
+<li>if the UDP does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method, then this method will always return <code class="docutils literal"><span class="pre">False</span></code>;</li>
+<li>if the UDP provides a <code class="docutils literal"><span class="pre">set_seed()</span></code> method but it does not provide a <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method,
+then this method will always return <code class="docutils literal"><span class="pre">True</span></code>;</li>
+<li>if the UDP provides both a <code class="docutils literal"><span class="pre">set_seed()</span></code> and a <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method, then this method will return
+the output of the <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method of the UDP.</li>
+</ul>
+<p>The optional <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
+implement the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDP, see <a class="reference internal" href="#pygmo.core.problem.set_seed" title="pygmo.core.problem.set_seed"><code class="xref py py-func docutils literal"><span class="pre">set_seed()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag signalling the availability of the <code class="docutils literal"><span class="pre">set_seed()</span></code> method in the UDP</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.hessians">
+<code class="descname">hessians</code><span class="sig-paren">(</span><em>dv</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.hessians" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hessians.</p>
+<p>This method will compute the hessians of the input decision vector <em>dv</em> by invoking
+the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP. The <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP must return
+a sparse representation of the hessians: the element <span class="math">\(l\)</span> of the returned vector contains
+<span class="math">\(h^l_{ij} = \frac{\partial f^2_l}{\partial x_i\partial x_j}\)</span> in the order specified by the
+<span class="math">\(l\)</span>-th element of the hessians sparsity pattern (a vector of index pairs <span class="math">\((i,j)\)</span>)
+as returned by <a class="reference internal" href="#pygmo.core.problem.hessians_sparsity" title="pygmo.core.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a>. Since
+the hessians are symmetric, their sparse representation contains only lower triangular elements.</p>
+<p>If the UDP provides a <code class="docutils literal"><span class="pre">hessians()</span></code> method, this method will forward <em>dv</em> to the <code class="docutils literal"><span class="pre">hessians()</span></code>
+method of the UDP after sanity checks. The output of the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP will
+also be checked before being returned. If the UDP does not provide a <code class="docutils literal"><span class="pre">hessians()</span></code> method, an
+error will be raised. A successful call of this method will increase the internal hessians
+evaluation counter (see <a class="reference internal" href="#pygmo.core.problem.get_hevals" title="pygmo.core.problem.get_hevals"><code class="xref py py-func docutils literal"><span class="pre">get_hevals()</span></code></a>).</p>
+<p>The <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP must be able to take as input the decision vector as a 1D NumPy
+array, and it must return the hessians vector as an iterable Python object (e.g., list, tuple, etc.).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dv</strong> (<em>array-like object</em>) &#8211; the decision vector whose hessians will be computed</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the hessians of <em>dv</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">list</span></code> of 1D NumPy float array</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.core.problem.get_nx" title="pygmo.core.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
+the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if the UDP does not provide a <code class="docutils literal"><span class="pre">hessians()</span></code> method</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP, or by failures at the intersection
+between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.hessians_sparsity">
+<code class="descname">hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.hessians_sparsity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hessians sparsity pattern.</p>
+<p>This method will return the hessians sparsity pattern of the problem. Each component <span class="math">\(l\)</span> of the hessians
+sparsity pattern is a collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of
+<span class="math">\(h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\)</span>. Since the Hessian matrix is symmetric, only
+lower triangular elements are allowed.</p>
+<p>If <a class="reference internal" href="#pygmo.core.problem.has_hessians_sparsity" title="pygmo.core.problem.has_hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">has_hessians_sparsity()</span></code></a> returns <code class="docutils literal"><span class="pre">True</span></code>, then the <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the
+UDP will be invoked, and its result returned (after sanity checks). Otherwise, a dense pattern is assumed and
+<span class="math">\(n_f\)</span> sparsity patterns containing <span class="math">\(((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\)</span> will be returned.</p>
+<p>The <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the UDP must return an iterable Python object of any kind. Each element of the
+returned object will then be interpreted as a sparsity pattern in the same way as described in
+<a class="reference internal" href="#pygmo.core.problem.gradient_sparsity" title="pygmo.core.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a>. Specifically:</p>
+<ul class="simple">
+<li>if the element is a NumPy array, its shape must be <span class="math">\((n,2)\)</span> (with <span class="math">\(n \geq 0\)</span>),</li>
+<li>if the element is itself an iterable Python object, then its elements must in turn be iterable Python objects
+containing each exactly 2 elements representing the indices <span class="math">\((i,j)\)</span>.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the hessians sparsity patterns</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">list</span></code> of 2D Numpy int array</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; in the following cases:<ul>
+<li>the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
+shape, dimensions, etc.),</li>
+<li>at least one element of a returned iterable Python object does not consist of a collection of exactly
+2 elements,</li>
+<li>if a sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
+or if the indices in the pattern are incompatible with the properties of the problem)</li>
+</ul>
+</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
+implementation-defined range</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li>the underlying C++ function,</li>
+<li>the <code class="docutils literal"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API,</li>
+<li>failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+signatures, etc.)</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.is_">
+<code class="descname">is_</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.is_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the type of the user-defined problem instance.</p>
+<p>If <em>t</em> is the same type of the user-defined problem used to construct this problem, then <code class="docutils literal"><span class="pre">True</span></code> will be
+returned. Otherwise, <code class="docutils literal"><span class="pre">False</span></code> will be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) &#8211; the type of the user-defined problem to extract</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">whether the user-defined problem is of type <em>t</em> or not</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>t</em> is not a type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.is_stochastic">
+<code class="descname">is_stochastic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.is_stochastic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#pygmo.core.problem.has_set_seed" title="pygmo.core.problem.has_set_seed"><code class="xref py py-func docutils literal"><span class="pre">has_set_seed()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.problem.set_seed">
+<code class="descname">set_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed for the stochastic variables.</p>
+<p>This method will set the seed to be used in the fitness function to instantiate
+all stochastic variables. If the UDP provides a <code class="docutils literal"><span class="pre">set_seed()</span></code> method, then
+its <code class="docutils literal"><span class="pre">set_seed()</span></code> method will be invoked. Otherwise, an error will be raised.
+The <em>seed</em> parameter must be non-negative.</p>
+<p>The <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDP must be able to take an <code class="docutils literal"><span class="pre">int</span></code> as input parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the desired seed value</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if the UDP does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>seed</em> is negative</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception raised by the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDP or failures at the intersection
+between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Approximating the hypervolume &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Participating to the CEC2013 Competition" href="cec2013_comp.html" />
+    <link rel="prev" title="Advanced hypervolume computation and analysis" href="hypervolume_advanced.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../cpp/cpp_docs.html">C++ docs</a></li>
+                <li><a href="../python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Approximating the hypervolume</a><ul>
+<li><a class="reference internal" href="#fpras">FPRAS</a><ul>
+<li><a class="reference internal" href="#running-time">Running time</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#approximation-of-the-least-contributor">Approximation of the least contributor</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="approximating-the-hypervolume">
+<span id="py-tutorial-hypervolume-approx"></span><h1>Approximating the hypervolume<a class="headerlink" href="#approximating-the-hypervolume" title="Permalink to this headline">¶</a></h1>
+<p>Determining the hypervolume indicator is a computationally expensive task.
+Even in case of a reasonably small dimension and low number of points (e.g. 100 points in 10 dimensions),
+there are currently no known algorithms that can yield the results fast enough for use in
+most multiple-objective optimizers.</p>
+<p>In this tutorial we will show a way to compute the hypervolume indicator faster, but at the cost of accuracy.
+Two algorithms are included in pygmo and are capable of computing the hypervolume approximately:</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.bf_fpras" title="pygmo.core.bf_fpras"><code class="xref py py-class docutils literal"><span class="pre">bf_fpras</span></code></a> - capable of approximating the hypervolume indicator</li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.bf_approx" title="pygmo.core.bf_approx"><code class="xref py py-class docutils literal"><span class="pre">bf_approx</span></code></a> - capable of approximating the least and the greatest contributor</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> object will never delegate the computation to any of the approximated algorithms.
+The only way to use the approximated algorithms is through the explicit request
+(see the beginning of the tutorial <a class="reference internal" href="hypervolume_advanced.html#py-tutorial-hypervolume-advanced"><span class="std std-ref">Advanced hypervolume computation and analysis</span></a> for
+more information on how to do that).</p>
+</div>
+<div class="section" id="fpras">
+<h2>FPRAS<a class="headerlink" href="#fpras" title="Permalink to this headline">¶</a></h2>
+<p>The class <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.bf_fpras" title="pygmo.core.bf_fpras"><code class="xref py py-class docutils literal"><span class="pre">bf_fpras</span></code></a> found in PyGMO is a Fully Polynomial-Time Randomized Approximation Scheme accustomed
+for the computation of the hypervolume indicator. You can invoke the FPRAS as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">dtlz</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">fdim</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">11</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fpras</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">bf_fpras</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">hypervolume</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">offset</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ref_point</span> <span class="o">=</span> <span class="n">hv</span><span class="o">.</span><span class="n">refpoint</span><span class="p">(</span><span class="n">offset</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">hv_algo</span><span class="o">=</span><span class="n">fpras</span><span class="p">)</span> 
+</pre></div>
+</div>
+<p>To influence the accuracy of the FPRAS, it is possible to provide the following keyword arguments to its constructor:</p>
+<ol class="arabic simple">
+<li><em>eps</em> - relative accuracy of the approximation</li>
+<li><em>delta</em> - probability of error</li>
+</ol>
+<p>For given parameters <strong>eps=eps0</strong> and <strong>delta=delta0</strong>, the obtained solution is (with probability <strong>1 - delta0</strong>)
+within a factor of <strong>1 +/- eps0</strong> from the exact hypervolume.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The smaller the <strong>eps</strong> and <strong>delta</strong>, the longer it will take for the algorithm to evaluate.</p>
+</div>
+<p>By the <em>relative</em> error, we mean the scenario in which the approximation is accurate within given order of
+magnitude, e.g. 312.32 and 313.41, are accurate within <strong>eps = 0.1</strong>, because they are accurate within two
+orders of magnitude. At the same time, these are NOT accurate within <strong>eps = 0.01</strong>.</p>
+<div class="section" id="running-time">
+<h3>Running time<a class="headerlink" href="#running-time" title="Permalink to this headline">¶</a></h3>
+<img alt="../../../_images/hv_fpras.png" class="align-center" src="../../../_images/hv_fpras.png" />
+<p>The plots presents the measured running time (average and MAX out of 10) of FPRAS for varying <code class="docutils literal"><span class="pre">Front</span> <span class="pre">size</span></code> and <code class="docutils literal"><span class="pre">Dimension</span></code>.
+The algorithm is instantiated with <strong>eps=0.1</strong> and <strong>delta=0.1</strong>.
+Notice the lack of any exponential increase in time as the dimension increases.</p>
+<p>Since FPRAS scales so well with the dimension size, we can also present data for larger front sizes and number of objectives.</p>
+<p>Now, that is quite a feat! A front of 1000 points in 100 dimensions would be beyond the reach of any of the algorithms
+that rely on the exact computation.</p>
+</div>
+</div>
+<div class="section" id="approximation-of-the-least-contributor">
+<h2>Approximation of the least contributor<a class="headerlink" href="#approximation-of-the-least-contributor" title="Permalink to this headline">¶</a></h2>
+<p>Additionally to FPRAS, pygmo provides an approximated algorithm dedicated for the computation of the least/greatest contributor.
+This is useful when we want to utilize evolutionary algorithms which rely on that feature, especially when the
+problems has many objectives.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Problem with 30 objectives and 300 individuals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">dtlz</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">fdim</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">35</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">300</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">bf_approx</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">hypervolume</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">offset</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ref_point</span> <span class="o">=</span> <span class="n">hv</span><span class="o">.</span><span class="n">refpoint</span><span class="p">(</span><span class="n">offset</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span><span class="o">.</span><span class="n">least_contributor</span><span class="p">(</span><span class="n">ref_point</span><span class="p">,</span> <span class="n">hv_algo</span><span class="o">=</span><span class="n">hv_algo</span><span class="p">)</span> 
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.bf_approx" title="pygmo.core.bf_approx"><code class="xref py py-class docutils literal"><span class="pre">bf_approx</span></code></a> provides only two features - computation of the least and the greatest contributor.
+Request for the computation of any other measure will raise and exception.</p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

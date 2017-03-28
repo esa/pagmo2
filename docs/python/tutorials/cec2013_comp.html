@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Participating to the CEC2013 Competition &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="Approximating the hypervolume" href="hypervolume_approx.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../cpp/cpp_docs.html">C++ docs</a></li>
+                <li><a href="../python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Participating to the CEC2013 Competition</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="participating-to-the-cec2013-competition">
+<span id="py-tutorial-cec2013-copm"></span><h1>Participating to the CEC2013 Competition<a class="headerlink" href="#participating-to-the-cec2013-competition" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial we will show how to use pygmo to run algorithms on the test problem suite used in the
+Special Session &amp; Competition on Real-Parameter Single Objective Optimization at CEC-2013, Cancun, Mexico 21-23 June 2013.</p>
+<p>All of the CEC 2013 problems are box-bounded, continuous, single objective problems and are provided as UDP (user-defined
+problems) by pygmo in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.core.cec2013" title="pygmo.core.cec2013"><code class="xref py py-class docutils literal"><span class="pre">cec2013</span></code></a>. Instantiating one of these problems is easy:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The user-defined problem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">cec2013</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The pygmo problem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>as usual, we can quickly inspect the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> printing it to screen:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> 
+<span class="go">Problem name: CEC2013 - f24(cf04)</span>
+<span class="go">    Global dimension:                       10</span>
+<span class="go">    Fitness dimension:                      1</span>
+<span class="go">    Number of objectives:                   1</span>
+<span class="go">    Equality constraints dimension:         0</span>
+<span class="go">    Inequality constraints dimension:       0</span>
+<span class="go">    Lower bounds: [-100, -100, -100, -100, -100, ... ]</span>
+<span class="go">    Upper bounds: [100, 100, 100, 100, 100, ... ]</span>
+
+<span class="go">    Has gradient: false</span>
+<span class="go">    User implemented gradient sparsity: false</span>
+<span class="go">    Has hessians: false</span>
+<span class="go">    User implemented hessians sparsity: false</span>
+
+<span class="go">    Function evaluations: 0</span>
+
+<span class="go">    Thread safety: basic</span>
+</pre></div>
+</div>
+<p>Let us assume we want to assess the performance of (say) the optimization algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> (which
+implements as user-defined algorithm the Covariance Matrix Adaptation Evolutionary Strategy) on the whole
+<a class="reference internal" href="../problems/py_problems.html#pygmo.core.cec2013" title="pygmo.core.cec2013"><code class="xref py py-class docutils literal"><span class="pre">cec2013</span></code></a> problem suite at dimension D=2. Since the competition rules allowed D * 10000
+function evaluations, we choose a population of 50 and 400 generations:</p>
+<a class="reference internal image-reference" href="../../../_images/cec2013_2_jde.png"><img alt="CEC2013-JDE-2D" class="align-right" src="../../../_images/cec2013_2_jde.png" style="width: 500.0px; height: 150.0px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/cec2013_2_cmaes.png"><img alt="CEC2013-CMAES-2D" class="align-right" src="../../../_images/cec2013_2_cmaes.png" style="width: 500.0px; height: 150.0px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/cec2013_2_sa.png"><img alt="CEC2013-SIMANNEAL-2D" class="align-right" src="../../../_images/cec2013_2_sa.png" style="width: 500.0px; height: 150.0px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/cec2013_2_pso.png"><img alt="CEC2013-PSO-2D" class="align-right" src="../../../_images/cec2013_2_pso.png" style="width: 500.0px; height: 150.0px;" /></a>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The cmaes pygmo algorithm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">cmaes</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Defining all 28 problems dimension</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Running the algo on them multiple times</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">error</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trials</span> <span class="o">=</span> <span class="mi">25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">trials</span><span class="p">):</span> 
+<span class="gp">... </span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">28</span><span class="p">):</span>
+<span class="gp">... </span>                <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">cec2013</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="n">D</span><span class="p">))</span>
+<span class="gp">... </span>                <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">... </span>                <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">... </span>                <span class="n">error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">get_f</span><span class="p">()[</span><span class="n">pop</span><span class="o">.</span><span class="n">best_idx</span><span class="p">()]</span> <span class="o">+</span> <span class="mi">1400</span> <span class="o">-</span> <span class="mi">100</span><span class="o">*</span><span class="n">i</span> <span class="o">-</span> <span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">&gt;</span><span class="mi">13</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>At the end of the script, a matplotlib boxplot can be easily produced reporting the results for each of the 28
+problem instances:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">boxplot</span><span class="p">([</span><span class="n">error</span><span class="p">[</span><span class="n">s</span><span class="p">::</span><span class="mi">28</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">28</span><span class="p">)])</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">algo</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">350</span><span class="p">])</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;CEC2013: dimension = 2&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
+</pre></div>
+</div>
+<p>The same can be done for different user-defined algorithms. In the various figures on the right
+we have reported only a few available from pygmo&#8217;s core. At this low dimension it can be seen how
+the particular instances choosen for <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.sade" title="pygmo.core.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a> (jDE) are
+performing particularly well. It has to be noted here that <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> results, in general,
+to spend less than the available budget of function evaluations so that a proper comparison at these low
+dimensionality should allow for restarts as to properly make use of the allowed budget.</p>
+<p>The script above can be run again for higher problem dimensions, so that, for example, at D = 10 and using a larger
+population size as to allow for the larger available budget of function evaluations, the following plots are obtained for
+the chosen instances of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.sade" title="pygmo.core.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a>:</p>
+<a class="reference internal image-reference" href="../../../_images/cec2013_10_cmaes.png"><img alt="CEC2013-CMAES-10D" class="align-center" src="../../../_images/cec2013_10_cmaes.png" style="width: 1000.0px; height: 300.0px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/cec2013_10_jde.png"><img alt="CEC2013-JDE-10D" class="align-center" src="../../../_images/cec2013_10_jde.png" style="width: 1000.0px; height: 300.0px;" /></a>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

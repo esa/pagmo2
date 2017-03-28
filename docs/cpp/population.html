@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Population &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Island" href="island.html" />
+    <link rel="prev" title="Algorithm" href="algorithm.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="cpp_docs.html">C++ docs</a></li>
+                <li><a href="../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Population</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="population">
+<h1>Population<a class="headerlink" href="#population" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo10populationE">
+<span id="pagmo::population"></span><span class="target" id="pagmoclasspagmo_1_1population"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">population</code><a class="headerlink" href="#_CPPv2N5pagmo10populationE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Population class. </p>
+<p><img alt="../../_images/population.jpg" src="../../_images/population.jpg" /></p>
+<p>This class represents a population of individuals, i.e., potential candidate solutions to a given problem. In pagmo an individual is determined by:<ul class="simple">
+<li>a unique ID used to track it across generations and migrations,</li>
+<li>a chromosome (a decision vector),</li>
+<li>the fitness of the chromosome as evaluated by a <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>, and thus including objectives, equality constraints and inequality constraints if present.</li>
+</ul>
+</p>
+<p>A special mechanism is implemented to track the best individual that has ever been part of the population. Such an individual is called <em>champion</em> and its decision vector and fitness vector are automatically kept updated. The <em>champion</em> is not necessarily an individual currently in the population. The <em>champion</em> is only defined and accessible via the population interface if the <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> currently contained in the <a class="reference internal" href="#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> is single objective.</p>
+<p><strong>NOTE</strong>: a moved-from <a class="reference internal" href="#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> is destructible and assignable. Any other operation will result in undefined behaviour. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv2N5pagmo10population9size_typeE">
+<span id="pagmo::population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt;::size_type <code class="descname">size_type</code><a class="headerlink" href="#_CPPv2N5pagmo10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The size type of the population. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population10populationEv">
+<span id="pagmo::population::population"></span><span class="target" id="pagmoclasspagmo_1_1population_1a70063d0691690bebfa190ebf23c2c3d2"></span><code class="descname">population</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population10populationEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default constructor. </p>
+<p>Constructs an empty population with a <a class="reference internal" href="problems/null.html#pagmostructpagmo_1_1null__problem"><span class="std std-ref">pagmo::null_problem</span></a>. The random seed is initialised to zero.</p>
+<p><dl class="docutils">
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the constructor from problem. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> T, generic_ctor_enabler&lt; T &gt; = 0&gt;</dt>
+<dt id="_CPPv2N5pagmo10population10populationERR1T9size_typej">
+<span id="pagmo::population::population__TRR.size_type.unsigned"></span><span class="target" id="pagmoclasspagmo_1_1population_1adb1dae0fccddd5bfb6937fb80282879f"></span><code class="descname">population</code><span class="sig-paren">(</span>T &amp;&amp;<em>x</em>, <a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>pop_size</em> = 0u, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population10populationERR1T9size_typej" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from a problem. </p>
+<p><strong>NOTE</strong>: this constructor is enabled only if, after the removal of cv/reference qualifiers, <code class="docutils literal"><span class="pre">T</span></code> is not <a class="reference internal" href="#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>, and if <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> is constructible from <code class="docutils literal"><span class="pre">T</span></code>.</p>
+<p>Constructs a population with <code class="docutils literal"><span class="pre">pop_size</span></code> individuals associated to the problem <code class="docutils literal"><span class="pre">x</span></code> and setting the population random seed to <code class="docutils literal"><span class="pre">seed</span></code>. The input problem <code class="docutils literal"><span class="pre">x</span></code> can be either a <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> or a user-defined problem (UDP).</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: the problem the population refers to. </li>
+<li><code class="docutils literal"><span class="pre">pop_size</span></code>: population size (i.e. number of individuals therein). </li>
+<li><code class="docutils literal"><span class="pre">seed</span></code>: seed of the random number generator used, for example, to create new random individuals within the bounds.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#pagmoclasspagmo_1_1population_1a989d5d53d9ac86f0ffdcfab3d675278d"><span class="std std-ref">random_decision_vector()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1population_1aacd5b3e4fd6c43a521db1c9a34cc05cb"><span class="std std-ref">push_back()</span></a>, or by the invoked constructor of <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population10populationERK10population">
+<span id="pagmo::population::population__populationCR"></span><span class="target" id="pagmoclasspagmo_1_1population_1a1d8178c18f9c6bdc3efec0215c17a7b7"></span><code class="descname">population</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo10population10populationEv" title="pagmo::population::population">population</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population10populationERK10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Defaulted copy constructor. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population10populationERR10population">
+<span id="pagmo::population::population__populationRR"></span><span class="target" id="pagmoclasspagmo_1_1population_1a5a4cbf0ec9266e7490c3bd313e215efd"></span><code class="descname">population</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo10population10populationEv" title="pagmo::population::population">population</a> &amp;&amp;<em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population10populationERR10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Defaulted move constructor. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: construction argument. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10populationaSERK10population">
+<span id="pagmo::population::assign-operator__populationCR"></span><span class="target" id="pagmoclasspagmo_1_1population_1a7575980dff0e28cc5fa0183cbde3ee7d"></span><a class="reference internal" href="#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10populationaSERK10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy assignment operator. </p>
+<p>Copy assignment is implemented via copy+move.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a reference to <code class="docutils literal"><span class="pre">this</span></code>.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">other</span></code>: assignment argument.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the copy constructor. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10populationaSERR10population">
+<span id="pagmo::population::assign-operator__populationRR"></span><span class="target" id="pagmoclasspagmo_1_1population_1a4eb59f19670fbec2f7d6385504b21ea1"></span><a class="reference internal" href="#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;&amp;<em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10populationaSERR10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Defaulted move assignment operator. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a reference to <code class="docutils literal"><span class="pre">this</span></code>. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: assignment argument.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10populationD0Ev">
+<span id="pagmo::population::~population"></span><span class="target" id="pagmoclasspagmo_1_1population_1a8c7dfe589573f79ba745ea1fccc92d64"></span><code class="descname">~population</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10populationD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destructor. </p>
+<p>The destructor will run sanity checks in debug mode. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population9push_backERK13vector_double">
+<span id="pagmo::population::push_back__vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1population_1aacd5b3e4fd6c43a521db1c9a34cc05cb"></span>void <code class="descname">push_back</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population9push_backERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Adds one decision vector (chromosome) to the population. </p>
+<p>Appends a new chromosome <code class="docutils literal"><span class="pre">x</span></code> to the population, evaluating its fitness and creating a new unique identifier for the newly born individual.</p>
+<p>In case of exceptions, the population will not be altered.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: decision vector to be added to the population.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by memory errors in standard containers or by <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem_1a8e29c2c806377fd1855274dac8376add"><span class="std std-ref">problem::fitness()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population9push_backERK13vector_doubleRK13vector_double">
+<span id="pagmo::population::push_back__vector_doubleCR.vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1population_1aae83165a6ce8858b3278fb833b5ac197"></span>void <code class="descname">push_back</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, <em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population9push_backERK13vector_doubleRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Adds one decision vector/fitness vector to the population. </p>
+<p>Appends a new chromosome <code class="docutils literal"><span class="pre">x</span></code> to the population, and sets its fitness to <code class="docutils literal"><span class="pre">f</span></code> creating a new unique identifier for the newly born individual.</p>
+<p>In case of exceptions, the population will not be altered.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: decision vector to be added to the population. </li>
+<li><code class="docutils literal"><span class="pre">f</span></code>: fitness vector corresponding to the decision vector</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by memory errors in standard containers. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population22random_decision_vectorEv">
+<span id="pagmo::population::random_decision_vectorC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a989d5d53d9ac86f0ffdcfab3d675278d"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">random_decision_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population22random_decision_vectorEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a random decision vector. </p>
+<p>Creates a random decision vector within the problem&#8217;s bounds. It calls internally <a class="reference internal" href="miscellanea/generic.html#pagmonamespacepagmo_1a04e08d19740f45dbe928c900f3c7b031"><span class="std std-ref">pagmo::random_decision_vector()</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a random decision vector</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: all exceptions thrown by <a class="reference internal" href="miscellanea/generic.html#pagmonamespacepagmo_1a04e08d19740f45dbe928c900f3c7b031"><span class="std std-ref">pagmo::random_decision_vector()</span></a> </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population8best_idxERK13vector_double">
+<span id="pagmo::population::best_idx__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1population_1abb2f96e7ec6f2c1bd6b2d23ed16e5f81"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">best_idx</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>tol</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population8best_idxERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Index of the best individual (accounting for a vector tolerance) </p>
+<p>If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem is, instead, single objective, but with constraints, the best will be defined using the criteria specified in <a class="reference internal" href="utils/constrained.html#pagmonamespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. If the problem is multi-objective one single best is not well defined. In this case the user can still obtain a strict ordering of the population individuals by calling the <a class="reference internal" href="utils/multi_objective.html#pagmonamespacepagmo_1a564410c4164043e81c3c0d2d44f34b44"><span class="std std-ref">pagmo::sort_population_mo()</span></a> function.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the index of the best individual.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">tol</span></code>: vector of tolerances to be applied to each constraints.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="utils/constrained.html#pagmonamespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population8best_idxEd">
+<span id="pagmo::population::best_idx__doubleC"></span><span class="target" id="pagmoclasspagmo_1_1population_1acac93268af841f549f942fb21914c3f1"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">best_idx</code><span class="sig-paren">(</span>double <em>tol</em> = 0.<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population8best_idxEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Index of the best individual (accounting for a scalar tolerance) </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>index of the best individual. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">tol</span></code>: scalar tolerance to be considered for each constraint.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population9worst_idxERK13vector_double">
+<span id="pagmo::population::worst_idx__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a997570eee98e774ed0c704b24a89995c"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">worst_idx</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>tol</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population9worst_idxERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Index of the worst individual (accounting for a vector tolerance) </p>
+<p>If the problem is single-objective and unconstrained, the worst is simply the individual with the largest fitness. If the problem is, instead, single objective, but with constraints, the worst individual will be defined using the criteria specified in <a class="reference internal" href="utils/constrained.html#pagmonamespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. If the problem is multi-objective one single worst is not defined. In this case the user can still obtain a strict ordering of the population individuals by calling the <a class="reference internal" href="utils/multi_objective.html#pagmonamespacepagmo_1a564410c4164043e81c3c0d2d44f34b44"><span class="std std-ref">pagmo::sort_population_mo()</span></a> function.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the index of the worst individual.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">tol</span></code>: vector of tolerances to be applied to each constraints.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="utils/constrained.html#pagmonamespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population9worst_idxEd">
+<span id="pagmo::population::worst_idx__doubleC"></span><span class="target" id="pagmoclasspagmo_1_1population_1afa9b185577a5704f32c7e97d3f09e509"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">worst_idx</code><span class="sig-paren">(</span>double <em>tol</em> = 0.<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population9worst_idxEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Index of the worst individual (accounting for a scalar tolerance) </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>index of the worst individual. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">tol</span></code>: scalar tolerance to be considered for each constraint.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population10champion_xEv">
+<span id="pagmo::population::champion_xC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a292747373029eeac75b14c57055a19c2"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">champion_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population10champion_xEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Champion decision vector. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the champion decision vector.</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the current problem is not single objective. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population10champion_fEv">
+<span id="pagmo::population::champion_fC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a775980b4c4e94153e5e1f50c97681816"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">champion_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population10champion_fEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Champion fitness. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the champion fitness.</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the current problem is not single objective. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population4sizeEv">
+<span id="pagmo::population::sizeC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a24826469fd1e0430be0e80123b84bcad"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of individuals in the population. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of individuals in the population </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population6set_xfE9size_typeRK13vector_doubleRK13vector_double">
+<span id="pagmo::population::set_xf__size_type.vector_doubleCR.vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1population_1a20b2999f3db76d156c9ca801ee0a0158"></span>void <code class="descname">set_xf</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>i</em>, <em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, <em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population6set_xfE9size_typeRK13vector_doubleRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the <span class="math">\(i\)</span>-th individual decision vector, and fitness. </p>
+<p>Sets simultaneously the <span class="math">\(i\)</span>-th individual decision vector and fitness thus avoiding to trigger a fitness function evaluation.</p>
+<p><strong>NOTE</strong>: The user must make sure that the input fitness <code class="docutils literal"><span class="pre">f</span></code> makes sense as pagmo will only check its dimension.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">i</span></code>: individual&#8217;s index in the population. </li>
+<li><code class="docutils literal"><span class="pre">x</span></code>: a decision vector (chromosome). </li>
+<li><code class="docutils literal"><span class="pre">f</span></code>: a fitness vector.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if either:<ul>
+<li><code class="docutils literal"><span class="pre">i</span></code> is invalid (i.e. larger or equal to the population size),</li>
+<li><code class="docutils literal"><span class="pre">x</span></code> has not the correct dimension,</li>
+<li><code class="docutils literal"><span class="pre">f</span></code> has not the correct dimension. </li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population5set_xE9size_typeRK13vector_double">
+<span id="pagmo::population::set_x__size_type.vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1population_1afff13ff7928ec60d061cd525d654adaf"></span>void <code class="descname">set_x</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>i</em>, <em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population5set_xE9size_typeRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the <span class="math">\(i\)</span>-th individual&#8217;s chromosome. </p>
+<p>Sets the chromosome of the <span class="math">\(i\)</span>-th individual to the value <code class="docutils literal"><span class="pre">x</span></code> and changes its fitness accordingly. The individual&#8217;s ID remains the same.</p>
+<p><strong>NOTE</strong> a call to this method triggers one fitness function evaluation.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">i</span></code>: individual&#8217;s index in the population </li>
+<li><code class="docutils literal"><span class="pre">x</span></code>: decision vector</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#pagmoclasspagmo_1_1population_1a20b2999f3db76d156c9ca801ee0a0158"><span class="std std-ref">population::set_xf()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population11get_problemEv">
+<span id="pagmo::population::get_problemC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a424b03bbc76aa0db0502294de0f73e89"></span><em class="property">const</em> <a class="reference internal" href="problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">get_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population11get_problemEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Const getter for the <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const reference to the internal <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population11get_problemEv">
+<span id="pagmo::population::get_problem"></span><span class="target" id="pagmoclasspagmo_1_1population_1a3021c006c16bfc8172a33296dc3babc7"></span><a class="reference internal" href="problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">get_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population11get_problemEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Getter for the <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a reference to the internal <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population5get_fEv">
+<span id="pagmo::population::get_fC"></span><span class="target" id="pagmoclasspagmo_1_1population_1aad4f272c25f5c7842e01da6904ed7397"></span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<code class="descname">get_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population5get_fEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Const getter for the fitness vectors. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const reference to the vector of fitness vectors. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population5get_xEv">
+<span id="pagmo::population::get_xC"></span><span class="target" id="pagmoclasspagmo_1_1population_1aa0ae7146557e94fea2004333dbb1bd37"></span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<code class="descname">get_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population5get_xEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Const getter for the decision vectors. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const reference to the vector of decision vectors. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population6get_IDEv">
+<span id="pagmo::population::get_IDC"></span><span class="target" id="pagmoclasspagmo_1_1population_1afb3768954b6395f7788504f801f97e65"></span><em class="property">const</em> std::vector&lt;unsigned long long&gt; &amp;<code class="descname">get_ID</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population6get_IDEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Const getter for the individual IDs. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const reference to the vector of individual IDs. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo10population8get_seedEv">
+<span id="pagmo::population::get_seedC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a2515260295f98355363a2db0a0698778"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Getter for the seed of the population random engine. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the seed of the population&#8217;s random engine. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2NK5pagmo10population4saveER7Archive">
+<span id="pagmo::population::save__ArchiveRC"></span><span class="target" id="pagmoclasspagmo_1_1population_1ae03de7f45c694d61f688719c6da01251"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Save to archive. </p>
+<p>This method will save <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the internal <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo10population4loadER7Archive">
+<span id="pagmo::population::load__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1population_1a369c4f31121c21a7f0f1fc198c7d962b"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Load from archive. </p>
+<p>This method will load a <a class="reference internal" href="#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> from <code class="docutils literal"><span class="pre">ar</span></code> into <code class="docutils literal"><span class="pre">this</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: source archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of the internal <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Friends</p>
+<dl class="function">
+<dt id="_CPPv2lsRNSt7ostreamERK10population">
+<span id="lshift-operator__osR.populationCR"></span><span class="target" id="pagmoclasspagmo_1_1population_1a3b19277e3f6db1e2be68de6a7487efcf"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> population &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2lsRNSt7ostreamERK10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Streaming operator for the class <a class="reference internal" href="#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a reference to <code class="docutils literal"><span class="pre">os</span></code>. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">os</span></code>: target stream. </li>
+<li><code class="docutils literal"><span class="pre">p</span></code>: the population to be directed to stream.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

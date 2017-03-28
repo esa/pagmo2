@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Simulated Annealing (Corana’s version) &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Null problem" href="../problems/null.html" />
+    <link rel="prev" title="(N+1)-ES Simple Evolutionary Algorithm" href="sea.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../cpp_docs.html">C++ docs</a></li>
+                <li><a href="../../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Simulated Annealing (Corana&#8217;s version)</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="simulated-annealing-corana-s-version">
+<h1>Simulated Annealing (Corana&#8217;s version)<a class="headerlink" href="#simulated-annealing-corana-s-version" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo19simulated_annealingE">
+<span id="pagmo::simulated_annealing"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">simulated_annealing</code><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealingE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Simulated Annealing, Corana&#8217;s version with adaptive neighbourhood. </p>
+<p><img alt="../../../_images/Hill_Climbing_with_Simulated_Annealing.gif" src="../../../_images/Hill_Climbing_with_Simulated_Annealing.gif" /></p>
+<p>This version of the simulated annealing algorithm is, essentially, an iterative random search procedure with adaptive moves along the coordinate directions. It permits uphill moves under the control of metropolis criterion, in the hope to avoid the first local minima encountered.</p>
+<p>The implementation provided here allows to obtain a reannealing procedure via subsequent calls to the <a class="reference internal" href="#pagmoclasspagmo_1_1simulated__annealing_1af57d3963ed09cc45e8c539310365ba4d"><span class="std std-ref">pagmo::simulated_annealing::evolve()</span></a> method.</p>
+<p><strong>NOTE</strong> When selecting the starting and final temperature values it helps to think about the tempertaure as the deterioration in the objective function value that still has a 37% chance of being accepted.</p>
+<p><strong>NOTE</strong> The algorithm does not work for multi-objective problems, stochastic problems nor for constrained problems</p>
+<p><strong>NOTE</strong> At each call of the evolve method the number of function evaluations will be <code class="docutils literal"><span class="pre">n_T_adj</span></code> * <code class="docutils literal"><span class="pre">n_range_adj</span></code> * <code class="docutils literal"><span class="pre">bin_size</span></code> times the problem dimension</p>
+<p>See: Corana, A., Marchesi, M., Martini, C., &amp; Ridella, S. (1987). Minimizing multimodal functions of continuous variables with the “simulated annealing” algorithm Corrigenda for this article is available here. ACM Transactions on Mathematical Software (TOMS), 13(3), 262-280. <a class="reference external" href="http://people.sc.fsu.edu/~inavon/5420a/corana.pdf">http://people.sc.fsu.edu/~inavon/5420a/corana.pdf</a> </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv2N5pagmo19simulated_annealing13log_line_typeE">
+<span id="pagmo::simulated_annealing::log_line_type"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1af2fdc0250647cd0d68c671db26237b73"></span><em class="property">typedef </em>std::tuple&lt;unsigned long long, double, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Single entry of the log (fevals, best, current, avg_range, temperature) </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5pagmo19simulated_annealing8log_typeE">
+<span id="pagmo::simulated_annealing::log_type"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1a3491236b982d8453b77b153987312acc"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo19simulated_annealing13log_line_typeE" title="pagmo::simulated_annealing::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The log. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo19simulated_annealing19simulated_annealingEddjjjdj">
+<span id="pagmo::simulated_annealing::simulated_annealing__double.double.unsigned-i.unsigned-i.unsigned-i.double.unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1af7144768c6c4c4ba06242a6fd903c2c5"></span><code class="descname">simulated_annealing</code><span class="sig-paren">(</span>double <em>Ts</em> = 10., double <em>Tf</em> = .1, unsigned int <em>n_T_adj</em> = 10u, unsigned int <em>n_range_adj</em> = 1u, unsigned int <em>bin_size</em> = 20u, double <em>start_range</em> = 1., unsigned int <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing19simulated_annealingEddjjjdj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor. </p>
+<p>Constructs <a class="reference internal" href="#pagmoclasspagmo_1_1simulated__annealing"><span class="std std-ref">simulated_annealing</span></a></p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">Ts</span></code>: starting temperature </li>
+<li><code class="docutils literal"><span class="pre">Tf</span></code>: final temperature </li>
+<li><code class="docutils literal"><span class="pre">n_T_adj</span></code>: number of temperature adjustments in the annealing schedule </li>
+<li><code class="docutils literal"><span class="pre">n_range_adj</span></code>: number of adjustments of the search range performed at a constant temperature </li>
+<li><code class="docutils literal"><span class="pre">bin_size</span></code>: number of mutations that are used to compute the acceptance rate </li>
+<li><code class="docutils literal"><span class="pre">start_range</span></code>: starting range for mutating the decision vector </li>
+<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">Ts</span></code> or <code class="docutils literal"><span class="pre">Tf</span></code> are not finite and positive, <code class="docutils literal"><span class="pre">start_range</span></code> is not in (0,1], <code class="docutils literal"><span class="pre">n_T_adj</span></code> or n_range_adj <code class="docutils literal"><span class="pre">are</span></code> not strictly positive </li>
+<li><code class="docutils literal"><span class="pre">if</span></code>: <code class="docutils literal"><span class="pre">Tf</span></code> &gt; <code class="docutils literal"><span class="pre">Ts</span></code> </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo19simulated_annealing6evolveE10population">
+<span id="pagmo::simulated_annealing::evolve__populationC"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1af57d3963ed09cc45e8c539310365ba4d"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>evolved population </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective, constrained or stochastic </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the population size is &lt; 1u </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo19simulated_annealing13set_verbosityEj">
+<span id="pagmo::simulated_annealing::set_verbosity__unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1a1fdff96a5aaff167046207e6bb11faec"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the algorithm verbosity. </p>
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#pagmoclasspagmo_1_1simulated__annealing_1ab9549e3397579562592ab5dea2361d2e"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
+<li>0: no verbosity</li>
+<li>&gt;=1: will print and log one line at minimum every <code class="docutils literal"><span class="pre">level</span></code> function evaluations.</li>
+</ul>
+</p>
+<p>Example (verbosity 5000): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>       <span class="n">Current</span><span class="p">:</span>    <span class="n">Mean</span> <span class="nb">range</span><span class="p">:</span>   <span class="n">Temperature</span><span class="p">:</span>
+ <span class="o">...</span>
+ <span class="mi">45035</span>      <span class="mf">0.0700823</span>       <span class="mf">0.135928</span>     <span class="mf">0.00116657</span>      <span class="mf">0.0199526</span>
+ <span class="mi">50035</span>      <span class="mf">0.0215442</span>      <span class="mf">0.0261641</span>    <span class="mf">0.000770297</span>           <span class="mf">0.01</span>
+ <span class="mi">55035</span>     <span class="mf">0.00551839</span>      <span class="mf">0.0124842</span>    <span class="mf">0.000559839</span>     <span class="mf">0.00501187</span>
+ <span class="mi">60035</span>     <span class="mf">0.00284761</span>     <span class="mf">0.00703856</span>    <span class="mf">0.000314098</span>     <span class="mf">0.00251189</span>
+ <span class="mi">65035</span>     <span class="mf">0.00264808</span>      <span class="mf">0.0114764</span>    <span class="mf">0.000314642</span>     <span class="mf">0.00125893</span>
+ <span class="mi">70035</span>      <span class="mf">0.0011007</span>     <span class="mf">0.00293813</span>    <span class="mf">0.000167859</span>    <span class="mf">0.000630957</span>
+ <span class="mi">75035</span>    <span class="mf">0.000435798</span>     <span class="mf">0.00184352</span>    <span class="mf">0.000126954</span>    <span class="mf">0.000316228</span>
+ <span class="mi">80035</span>    <span class="mf">0.000287984</span>    <span class="mf">0.000825294</span>    <span class="mf">8.91823e-05</span>    <span class="mf">0.000158489</span>
+ <span class="mi">85035</span>     <span class="mf">9.5885e-05</span>    <span class="mf">0.000330647</span>    <span class="mf">6.49981e-05</span>    <span class="mf">7.94328e-05</span>
+ <span class="mi">90035</span>     <span class="mf">4.7986e-05</span>    <span class="mf">0.000148512</span>    <span class="mf">4.24692e-05</span>    <span class="mf">3.98107e-05</span>
+ <span class="mi">95035</span>    <span class="mf">2.43633e-05</span>    <span class="mf">2.43633e-05</span>    <span class="mf">2.90025e-05</span>    <span class="mf">1.99526e-05</span>
+</pre></div>
+</div>
+</p>
+<p>Fevals is the number of function evaluation used, Best is the best fitness function found, Current is the last fitness sampled, Mean range is the Mean search range across the decision vector components, Temperature is the current temperature.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo19simulated_annealing13get_verbosityEv">
+<span id="pagmo::simulated_annealing::get_verbosityC"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1aec7642038221d2ec79a1f4eb5eaf1917"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the verbosity level. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the verbosity level </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo19simulated_annealing8set_seedEj">
+<span id="pagmo::simulated_annealing::set_seed__unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1a22fbcd9a77bf60a7b7714ad894e4616d"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo19simulated_annealing8get_seedEv">
+<span id="pagmo::simulated_annealing::get_seedC"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1a9b9dbdfdc95176c20988aafd0d1d587c"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the seed controlling the algorithm stochastic behaviour </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo19simulated_annealing8get_nameEv">
+<span id="pagmo::simulated_annealing::get_nameC"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1a521951a68839500cbcf30496fb49b96a"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm name. </p>
+<p>One of the optional methods of any user-defined algorithm (UDA).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing the algorithm name </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo19simulated_annealing14get_extra_infoEv">
+<span id="pagmo::simulated_annealing::get_extra_infoC"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1af0c42c26791fe5d5d0261e96d36ede4c"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extra informations. </p>
+<p>One of the optional methods of any user-defined algorithm (UDA).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing extra informations on the algorithm </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo19simulated_annealing7get_logEv">
+<span id="pagmo::simulated_annealing::get_logC"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1ab9549e3397579562592ab5dea2361d2e"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo19simulated_annealing8log_typeE" title="pagmo::simulated_annealing::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get log. </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#pagmoclasspagmo_1_1simulated__annealing_1af2fdc0250647cd0d68c671db26237b73"><span class="std std-ref">simulated_annealing::log_line_type</span></a> containing: Fevals, Best, Current, Mean range Temperature as described in <a class="reference internal" href="#pagmoclasspagmo_1_1simulated__annealing_1a1fdff96a5aaff167046207e6bb11faec"><span class="std std-ref">simulated_annealing::set_verbosity</span></a> <dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#pagmoclasspagmo_1_1simulated__annealing_1af2fdc0250647cd0d68c671db26237b73"><span class="std std-ref">simulated_annealing::log_line_type</span></a> containing the logged values Gen, Fevals, Best, Improvement, Mutations </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo19simulated_annealing9serializeER7Archive">
+<span id="pagmo::simulated_annealing::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1simulated__annealing_1afac19cf14ba7a0358200facff0eaa4f6"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDA and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>DTLZ test suite &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Hock Schittkowsky No.71" href="hock_schittkowsky_71.html" />
+    <link rel="prev" title="ZDT test suite" href="zdt.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../cpp_docs.html">C++ docs</a></li>
+                <li><a href="../../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">DTLZ test suite</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="dtlz-test-suite">
+<h1>DTLZ test suite<a class="headerlink" href="#dtlz-test-suite" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo4dtlzE">
+<span id="pagmo::dtlz"></span><span class="target" id="pagmoclasspagmo_1_1dtlz"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">dtlz</code><a class="headerlink" href="#_CPPv2N5pagmo4dtlzE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>DTLZ problem test suite. </p>
+<p>This widespread test suite was conceived for multiobjective problems with scalable fitness dimensions and takes its name from its authors Deb, Thiele, Laumanns and Zitzler</p>
+<p>All problems in this test suite are box-constrained continuous n-dimensional multi-objective problems, scalable in fitness dimension. The dimension of the decision space is <span class="math">\( k + fdim - 1 \)</span>, whereas fdim is the number of objectives and k a paramter. Properties of the decision space and the Pareto-front of each problems are as follows:</p>
+<p>DTLZ1:</p>
+<p>The optimal pareto front lies on a linear hyperplane <span class="math">\( \sum_{m=1}^M f_m = 0.5 \)</span> .</p>
+<p>DTLZ2:</p>
+<p>The search space is continous, unimodal and the problem is not deceptive.</p>
+<p>DTLZ3:</p>
+<p>The search space is continous, unimodal and the problem is not deceptive. It is supposed to be harder to converge towards the optimal pareto front than DTLZ2</p>
+<p>DTLZ4:</p>
+<p>The search space contains a dense area of solutions next to the <span class="math">\( f_M / f_1\)</span> plane.</p>
+<p>DTLZ5:</p>
+<p>This problem will test an MOEA&#8217;s ability to converge to a cruve and will also allow an easier way to visually demonstrate (just by plotting f_M with any other objective function) the performance of an MOEA. Since there is a natural bias for solutions close to this Pareto-optimal curve, this problem may be easy for an algorithmn to solve. Because of its simplicity its recommended to use a higher number of objectives <span class="math">\( M \in [5, 10]\)</span>.</p>
+<p>DTLZ6:</p>
+<p>A more difficult version of the DTLZ5 problem: the non-linear distance function g makes it harder to convergence against the pareto optimal curve.</p>
+<p>DTLZ7:</p>
+<p>This problem has disconnected Pareto-optimal regions in the search space.</p>
+<p>See: K. Deb, L. Thiele, M. Laumanns, E. Zitzler, Scalable test problems for evolutionary multiobjective optimization </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo4dtlz4dtlzEjN13vector_double9size_typeEN13vector_double9size_typeEj">
+<span id="pagmo::dtlz::dtlz__unsigned-i.vector_double::size_type.vector_double::size_type.unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1dtlz_1a0714723b71b5f35e2ff1e2883d5282dd"></span><code class="descname">dtlz</code><span class="sig-paren">(</span>unsigned int <em>prob_id</em> = 1u, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>dim</em> = 5u, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>fdim</em> = 3u, unsigned int <em>alpha</em> = 100u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4dtlz4dtlzEjN13vector_double9size_typeEN13vector_double9size_typeEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor</p>
+<p>Will construct a problem of the DTLZ test-suite.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">prob_id</span></code>: problem id </li>
+<li><code class="docutils literal"><span class="pre">dim</span></code>: the problem dimension (size of the decision vector) </li>
+<li><code class="docutils literal"><span class="pre">fdim</span></code>: number of objectives </li>
+<li><code class="docutils literal"><span class="pre">alpha</span></code>: controls density of solutions (used only by DTLZ4)</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the prob_id is not in [1 .. 7], if fdim is less than 2 or if fdim or dim_param are larger than an implementation defiend value </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4dtlz7fitnessERK13vector_double">
+<span id="pagmo::dtlz::fitness__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1dtlz_1a1afb277ba4d4a41dc2d933b59262f738"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4dtlz7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Fitness computation. </p>
+<p>Computes the fitness for this UDP</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the fitness of <code class="docutils literal"><span class="pre">x</span></code>. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4dtlz8get_nobjEv">
+<span id="pagmo::dtlz::get_nobjC"></span><span class="target" id="pagmoclasspagmo_1_1dtlz_1a71dbead002b0124da349fd2f6ed27391"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nobj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4dtlz8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of objectives. </p>
+<p>It returns the number of objectives.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of objectives </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4dtlz10get_boundsEv">
+<span id="pagmo::dtlz::get_boundsC"></span><span class="target" id="pagmoclasspagmo_1_1dtlz_1a3afebe45fb30687dc09206ac70a10598"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4dtlz10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Box-bounds. </p>
+<p>It returns the box-bounds for this UDP, [0,1] for each component</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the lower and upper bounds for each of the decision vector components </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4dtlz10p_distanceERKN5pagmo10populationE">
+<span id="pagmo::dtlz::p_distance__pagmo::populationCRC"></span><span class="target" id="pagmoclasspagmo_1_1dtlz_1ab348ddd8a0d223fe2bca3f6c9411ce6d"></span>double <code class="descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> pagmo::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4dtlz10p_distanceERKN5pagmo10populationE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Distance from the Pareto front (of a population) </p>
+<p>Convergence metric for a given population (0 = on the optimal front)</p>
+<p>Takes the average across the input population of the p_distance</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the p_distance </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be assigned a pareto distance </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4dtlz10p_distanceERK13vector_double">
+<span id="pagmo::dtlz::p_distance__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1dtlz_1a3c2c5bb4c77d73976c74b0a3534478d4"></span>double <code class="descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4dtlz10p_distanceERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Distance from the Pareto front. </p>
+<p>Convergence metric for a given decision_vector (0 = on the optimal front)</p>
+<p>Introduced by Martens and Izzo, this metric is able to measure &#8220;a distance&#8221; of any point from the pareto front of any ZDT problem analytically without the need to precompute the front.</p>
+<p>
+See: Märtens, Marcus, and Dario Izzo. &#8220;The asynchronous island model
+and NSGA-II: study of a new migration operator and its performance.&#8221; Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013. <dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the p_distance</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: input decision vector </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4dtlz8get_nameEv">
+<span id="pagmo::dtlz::get_nameC"></span><span class="target" id="pagmoclasspagmo_1_1dtlz_1a6a9ef1908117eb04fe1f743cbdbe962f"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4dtlz8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Problem name. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing the problem name </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo4dtlz9serializeER7Archive">
+<span id="pagmo::dtlz::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1dtlz_1acfe51c622b544a76b3551a35f7f9a05f"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4dtlz9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

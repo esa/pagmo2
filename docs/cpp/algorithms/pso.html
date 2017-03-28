@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Particle Swarm Optimization (PSO) &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Self-adaptive Differential Evolution (jDE and iDE)" href="sade.html" />
+    <link rel="prev" title="Non dominated sorting genetic algorithm (NSGA-II)" href="nsga2.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          PaGMO</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../cpp_docs.html">C++ docs</a></li>
+                <li><a href="../../python/python_docs.html">Python docs</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Particle Swarm Optimization (PSO)</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="particle-swarm-optimization-pso">
+<h1>Particle Swarm Optimization (PSO)<a class="headerlink" href="#particle-swarm-optimization-pso" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo3psoE">
+<span id="pagmo::pso"></span><span class="target" id="pagmoclasspagmo_1_1pso"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">pso</code><a class="headerlink" href="#_CPPv2N5pagmo3psoE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Particle Swarm Optimization. </p>
+<p><img alt="../../../_images/pso.png" src="../../../_images/pso.png" /></p>
+<p>Particle swarm optimization (PSO) is a population based algorithm inspired by the foraging behaviour of swarms. In PSO each point has memory of the position where it achieved the best performance <span class="math">\(\mathbf x^l_i\)</span> (local memory) and of the best decision vector <span class="math">\( \mathbf x^g \)</span> in a certain neighbourhood, and uses this information to update its position using the equations (constriction coefficient): <div class="math">
+\[\begin{split} \begin{array}{l} \mathbf v_{i+1} = \omega \left( \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right) + \eta_2 \mathbf r_2 \cdot \left( \mathbf x_i - \mathbf x^g \right) \right) \\ \mathbf x_{i+1} = \mathbf x_i + \mathbf v_i \end{array} \end{split}\]</div>
+ or (inertia weight): <div class="math">
+\[\begin{split} \begin{array}{l} \mathbf v_{i+1} = \omega \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right) + \eta_2 \mathbf r_2 \cdot \left( \mathbf x_i - \mathbf x^g \right) \\ \mathbf x_{i+1} = \mathbf x_i + \mathbf v_i \end{array} \end{split}\]</div>
+</p>
+<p>The user can specify the values for <span class="math">\(\omega, \eta_1, \eta_2\)</span> and the magnitude of the maximum velocity allowed (normalized with respect ot the bounds). The user can specify one of five variants where the velocity update rule differs on the definition of the random vectors <span class="math">\(r_1\)</span> and <span class="math">\(r_2\)</span>:</p>
+<p><ul class="simple">
+<li>Variant 1: <span class="math">\(\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\)</span>, <span class="math">\(\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\)</span> ... (inertia weight) </li>
+<li>Variant 2: <span class="math">\(\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\)</span>, <span class="math">\(\mathbf r_2 = [r_{11}, r_{11}, ..., r_{1n}]\)</span> ... (inertia weight) </li>
+<li>Variant 3: <span class="math">\(\mathbf r_1 = [r_1, r_1, ..., r_1]\)</span>, <span class="math">\(\mathbf r_2 = [r_2, r_2, ..., r_2]\)</span> ... (inertia weight) </li>
+<li>Variant 4: <span class="math">\(\mathbf r_1 = [r_1, r_1, ..., r_1]\)</span>, <span class="math">\(\mathbf r_2 = [r_1, r_1, ..., r_1]\)</span> ... (inertia weight) </li>
+<li>Variant 5: <span class="math">\(\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\)</span>, <span class="math">\(\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\)</span> ... (constriction coefficient) </li>
+<li>Variant 6: Fully Informed Particle Swarm (FIPS)</li>
+</ul>
+<strong>NOTE</strong> The default variant in PaGMO is n. 5 corresponding to the canonical PSO and thus using the constriction coefficient velocity update formula</p>
+<p><strong>NOTE</strong> The algorithm does not work for multi-objective problems, nor for constrained or stochastic optimization</p>
+<p>See: <a class="reference external" href="http://www.particleswarm.info/">http://www.particleswarm.info/</a> for a repository of information related to PSO See: <a class="reference external" href="http://dx.doi.org/10.1007/s11721-007-0002-0">http://dx.doi.org/10.1007/s11721-007-0002-0</a> for a survey See: <a class="reference external" href="http://www.engr.iupui.edu/~shi/Coference/psopap4.html">http://www.engr.iupui.edu/~shi/Coference/psopap4.html</a> for the first paper on this algorithm </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv2N5pagmo3pso13log_line_typeE">
+<span id="pagmo::pso::log_line_type"></span><span class="target" id="pagmoclasspagmo_1_1pso_1aec79caf774f577019161b79c32e3ce9e"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, double, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo3pso13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.) </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5pagmo3pso8log_typeE">
+<span id="pagmo::pso::log_type"></span><span class="target" id="pagmoclasspagmo_1_1pso_1af1d8aafcbc312d18d7e84b7a0c22032a"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo3pso13log_line_typeE" title="pagmo::pso::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo3pso8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The log. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo3pso3psoEjddddjjjbj">
+<span id="pagmo::pso::pso__unsigned-i.double.double.double.double.unsigned-i.unsigned-i.unsigned-i.b.unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1pso_1ae83588103ee2227f0393b4d42bf38ec1"></span><code class="descname">pso</code><span class="sig-paren">(</span>unsigned int <em>gen</em> = 1u, double <em>omega</em> = 0.7298, double <em>eta1</em> = 2.05, double <em>eta2</em> = 2.05, double <em>max_vel</em> = 0.5, unsigned int <em>variant</em> = 5u, unsigned int <em>neighb_type</em> = 2u, unsigned int <em>neighb_param</em> = 4u, bool <em>memory</em> = false, unsigned int <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3pso3psoEjddddjjjbj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor. </p>
+<p>Allows to specify in detail all the parameters of the algorithm.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">gen</span></code>: number of generations </li>
+<li><code class="docutils literal"><span class="pre">omega</span></code>: particles&#8217; inertia weight, or alternatively, the constriction coefficient (definition depends on the variant used) </li>
+<li><code class="docutils literal"><span class="pre">eta1</span></code>: magnitude of the force, applied to the particle&#8217;s velocity, in the direction of its previous best position </li>
+<li><code class="docutils literal"><span class="pre">eta2</span></code>: magnitude of the force, applied to the particle&#8217;s velocity, in the direction of the best position in its neighborhood </li>
+<li><code class="docutils literal"><span class="pre">max_vel</span></code>: maximum allowed particle velocity (as a fraction of the box bounds) </li>
+<li><code class="docutils literal"><span class="pre">variant</span></code>: algorithm variant to use (one of 1 .. 6) </li>
+<li><code class="docutils literal"><span class="pre">neighb_type</span></code>: swarm topology to use (one of 1 .. 4) [gbest, lbest, Von Neumann, adaptive random] </li>
+<li><code class="docutils literal"><span class="pre">neighb_param</span></code>: the neighbourhood parameter. If the lbest topology is selected (neighb_type=2), it represents each particle&#8217;s indegree (also outdegree) in the swarm topology. Particles have neighbours up to a radius of k = neighb_param / 2 in the ring. If the Randomly-varying neighbourhood topology is selected (neighb_type=4), it represents each particle&#8217;s maximum outdegree in the swarm topology. The minimum outdegree is 1 (the particle always connects back to itself). If neighb_type is 1 or 3 this parameter is ignored. </li>
+<li><code class="docutils literal"><span class="pre">memory</span></code>: when true the particle velocities are not reset between successive calls to evolve </li>
+<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random)</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval, vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3pso6evolveE10population">
+<span id="pagmo::pso::evolve__populationC"></span><span class="target" id="pagmoclasspagmo_1_1pso_1a8b355c86485a3c71b2ff6f88f1a99ab6"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3pso6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>evolved population </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or constrained </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo3pso13set_verbosityEj">
+<span id="pagmo::pso::set_verbosity__unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1pso_1ad6778721748c9e7fce315fbfb2f1a831"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3pso13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the algorithm verbosity. </p>
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#pagmoclasspagmo_1_1pso_1a49c4fbee01b5d7d53b13969a9c28c240"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
+<li>0u: no verbosity</li>
+<li>&gt;=1u: will print and log one line each <code class="docutils literal"><span class="pre">level</span></code> generations</li>
+</ul>
+</p>
+<p>Example (verbosity 50u): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>         <span class="n">gbest</span><span class="p">:</span>     <span class="n">Mean</span> <span class="n">Vel</span><span class="o">.</span><span class="p">:</span>    <span class="n">Mean</span> <span class="n">lbest</span><span class="p">:</span>    <span class="n">Avg</span><span class="o">.</span> <span class="n">Dist</span><span class="o">.</span><span class="p">:</span>
+   <span class="mi">1</span>             <span class="mi">40</span>        <span class="mf">2.01917</span>       <span class="mf">0.298551</span>        <span class="mf">1855.03</span>       <span class="mf">0.394038</span>
+  <span class="mi">51</span>           <span class="mi">1040</span>     <span class="mf">0.00436298</span>      <span class="mf">0.0407766</span>         <span class="mf">1.0704</span>         <span class="mf">0.1288</span>
+ <span class="mi">101</span>           <span class="mi">2040</span>    <span class="mf">0.000228898</span>      <span class="mf">0.0110884</span>       <span class="mf">0.282699</span>      <span class="mf">0.0488969</span>
+ <span class="mi">151</span>           <span class="mi">3040</span>    <span class="mf">5.53426e-05</span>     <span class="mf">0.00231688</span>       <span class="mf">0.106807</span>      <span class="mf">0.0167147</span>
+ <span class="mi">201</span>           <span class="mi">4040</span>    <span class="mf">3.88181e-06</span>    <span class="mf">0.000972132</span>      <span class="mf">0.0315856</span>     <span class="mf">0.00988859</span>
+ <span class="mi">251</span>           <span class="mi">5040</span>    <span class="mf">1.25676e-06</span>    <span class="mf">0.000330553</span>     <span class="mf">0.00146805</span>     <span class="mf">0.00397989</span>
+ <span class="mi">301</span>           <span class="mi">6040</span>    <span class="mf">3.76784e-08</span>    <span class="mf">0.000118192</span>    <span class="mf">0.000738972</span>      <span class="mf">0.0018789</span>
+ <span class="mi">351</span>           <span class="mi">7040</span>    <span class="mf">2.35193e-09</span>    <span class="mf">5.39387e-05</span>    <span class="mf">0.000532189</span>     <span class="mf">0.00253805</span>
+ <span class="mi">401</span>           <span class="mi">8040</span>    <span class="mf">3.24364e-10</span>     <span class="mf">2.2936e-05</span>    <span class="mf">9.02879e-06</span>    <span class="mf">0.000178279</span>
+ <span class="mi">451</span>           <span class="mi">9040</span>    <span class="mf">2.31237e-10</span>    <span class="mf">5.01558e-06</span>    <span class="mf">8.12575e-07</span>    <span class="mf">9.77163e-05</span>
+</pre></div>
+</div>
+</p>
+<p>Gen is the generation number, Fevals the number of fitness evaluation made, gbest the global best, Mean Vel. the average mean normalized velocity of particles, Mean lbest the average of the local best fitness of particles and Avg. Dist. the average normalized distance among particles. Normalization is made with respect to the problem bounds.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3pso13get_verbosityEv">
+<span id="pagmo::pso::get_verbosityC"></span><span class="target" id="pagmoclasspagmo_1_1pso_1af668f2fda464980145e30a49c4e8257d"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3pso13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the verbosity level. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the verbosity level </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo3pso8set_seedEj">
+<span id="pagmo::pso::set_seed__unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1pso_1af524daafa28a8660dff2f08ef75fd5c7"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3pso8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3pso8get_seedEv">
+<span id="pagmo::pso::get_seedC"></span><span class="target" id="pagmoclasspagmo_1_1pso_1ae62009ac051d978eda0c420b2f894027"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3pso8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the seed controlling the algorithm stochastic behaviour </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3pso8get_nameEv">
+<span id="pagmo::pso::get_nameC"></span><span class="target" id="pagmoclasspagmo_1_1pso_1ada22e7c7b93ccad7f2bc9abb741d06b3"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3pso8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm name. </p>
+<p>One of the optional methods of any user-defined algorithm (UDA).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing the algorithm name </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3pso14get_extra_infoEv">
+<span id="pagmo::pso::get_extra_infoC"></span><span class="target" id="pagmoclasspagmo_1_1pso_1a4d81ca8c8f6d37d90e0ed6cbb73fe4b1"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3pso14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extra informations. </p>
+<p>One of the optional methods of any user-defined algorithm (UDA).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing extra informations on the algorithm </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3pso7get_logEv">
+<span id="pagmo::pso::get_logC"></span><span class="target" id="pagmoclasspagmo_1_1pso_1a49c4fbee01b5d7d53b13969a9c28c240"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo3pso8log_typeE" title="pagmo::pso::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3pso7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get log. </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#pagmoclasspagmo_1_1pso_1aec79caf774f577019161b79c32e3ce9e"><span class="std std-ref">pso::log_line_type</span></a> containing: Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist. as described in <a class="reference internal" href="#pagmoclasspagmo_1_1pso_1ad6778721748c9e7fce315fbfb2f1a831"><span class="std std-ref">pso::set_verbosity</span></a> <dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#pagmoclasspagmo_1_1pso_1aec79caf774f577019161b79c32e3ce9e"><span class="std std-ref">pso::log_line_type</span></a> containing the logged values </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo3pso9serializeER7Archive">
+<span id="pagmo::pso::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1pso_1a130c1aa6c1b77d436a1838791ee66b7b"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3pso9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDA and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
