@@ -754,9 +754,7 @@ class cstrs_self_adaptive_test_case(_ut.TestCase):
             de) is not None)
         self.assertTrue(al.extract(cstrs_self_adaptive).inner_algorithm.extract(
             compass_search) is None)
-        self.assertTrue(str(seed) in str(al))
         al.set_verbosity(4)
-        self.assertEqual(al.extract(cstrs_self_adaptive).get_verbosity(), 4)
 
         # From C++ algo.
         seed = 123321
@@ -774,9 +772,7 @@ class cstrs_self_adaptive_test_case(_ut.TestCase):
             compass_search) is None)
         self.assertTrue(al.extract(
             cstrs_self_adaptive).inner_algorithm.extract(de) is not None)
-        self.assertTrue(str(seed) in str(al))
         al.set_verbosity(4)
-        self.assertEqual(al.extract(cstrs_self_adaptive).get_verbosity(), 4)
 
         # From Python algo.
         class algo(object):
@@ -799,12 +795,10 @@ class cstrs_self_adaptive_test_case(_ut.TestCase):
             compass_search) is None)
         self.assertTrue(al.extract(
             cstrs_self_adaptive).inner_algorithm.extract(de) is not None)
-        self.assertTrue(str(seed) in str(al))
         al.set_verbosity(4)
-        self.assertEqual(al.extract(cstrs_self_adaptive).get_verbosity(), 4)
 
         # Construction from algorithm is allowed.
-        cstrs_self_adaptive(algorithm(null_algorithm()), seed=5, iters=4)
+        cstrs_self_adaptive(algo=algorithm(null_algorithm()), seed=5, iters=4)
 
 
 class archipelago_test_case(_ut.TestCase):
