@@ -42,12 +42,9 @@ extensions = [
 autoclass_content = 'both'
 
 # BREATHE configuration paths
-#sys.path.append( "/home/me/docproj/ext/breathe/" )
-breathe_projects = { "pagmo": "../doxygen/xml" }
+breathe_projects = {"pagmo": "../doxygen/xml"}
 breathe_default_project = "pagmo"
 breathe_default_members = ('members',)
-
-doctest_test_doctest_blocks = ""
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -294,17 +291,17 @@ htmlhelp_basename = 'pagmodoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    #'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 
-# Latex figure (float) alignment
-#'figure_align': 'htbp',
+    # Latex figure (float) alignment
+    #'figure_align': 'htbp',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples

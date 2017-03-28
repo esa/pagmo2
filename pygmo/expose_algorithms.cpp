@@ -61,6 +61,7 @@ see https://www.gnu.org/licenses/. */
 #endif
 #include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
+#include <pagmo/algorithms/cstrs_self_adaptive.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
 #include <pagmo/algorithms/mbh.hpp>
@@ -143,6 +144,24 @@ void expose_algorithms()
                       bp::make_function(+[](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); },
                                         bp::return_internal_reference<>()),
                       generic_uda_inner_algorithm_docstring().c_str());
+    // cstrs_self_adaptive meta-algo.
+    auto cstrs_sa
+        = expose_algorithm<cstrs_self_adaptive>("cstrs_self_adaptive", cstrs_self_adaptive_docstring().c_str());
+    cstrs_sa.def("__init__",
+                 bp::make_constructor(+[](unsigned iters, const algorithm &a,
+                                          unsigned seed) { return ::new pagmo::cstrs_self_adaptive(iters, a, seed); },
+                                      bp::default_call_policies()));
+    cstrs_sa.def("__init__", bp::make_constructor(
+                                 +[](unsigned iters, const algorithm &a) {
+                                     return ::new pagmo::cstrs_self_adaptive(iters, a, pagmo::random_device::next());
+                                 },
+                                 bp::default_call_policies()));
+    expose_algo_log(cstrs_sa, cstrs_self_adaptive_get_log_docstring().c_str());
+    cstrs_sa.add_property(
+        "inner_algorithm",
+        bp::make_function(+[](cstrs_self_adaptive &uda) -> algorithm & { return uda.get_inner_algorithm(); },
+                          bp::return_internal_reference<>()),
+        generic_uda_inner_algorithm_docstring().c_str());
 
     // Test algo.
     auto test_a = expose_algorithm<test_algorithm>("_test_algorithm", "A test algorithm.");

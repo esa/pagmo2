@@ -578,9 +578,16 @@ private:
             if (m_champion_x.size() == 0u) {
                 m_champion_x = std::move(x);
                 m_champion_f = std::move(f);
-            } else if (f[0] < m_champion_f[0]) {
-                m_champion_x = std::move(x);
-                m_champion_f = std::move(f);
+            } else if (m_prob.get_nc() == 0u) { // unconstrained
+                if (f[0] < m_champion_f[0]) {
+                    m_champion_x = std::move(x);
+                    m_champion_f = std::move(f);
+                }
+            } else { // constrained
+                if (compare_fc(f, m_champion_f, m_prob.get_nec(), m_prob.get_c_tol())) {
+                    m_champion_x = std::move(x);
+                    m_champion_f = std::move(f);
+                }
             }
         }
     }

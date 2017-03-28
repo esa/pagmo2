@@ -35,8 +35,7 @@ also compute the hypervolume indicator using the pygmo class :class:`~pygmo.core
 .. doctest::
 
     >>> hv = hypervolume(pop)
-    >>> hv.compute(ref_point = [1.,1.,1.]) # doctest: +ELLIPSIS
-    0.9...
+    >>> hv.compute(ref_point = [1.,1.,1.]) # doctest: +SKIP
 
 In this case, the reference point can be set manually as the dtlz1 problem is well known. We can also visualize the 
 whole population as the user-defined problem :class:`~pygmo.core.dtlz` implements a plot functionality:
