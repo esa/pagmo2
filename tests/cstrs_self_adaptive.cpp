@@ -197,3 +197,62 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_serialization)
         BOOST_CHECK_EQUAL(std::get<6>(before_log[i]), std::get<6>(after_log[i]));
     }
 }
+
+struct ts1 {
+    population evolve(population pop) const
+    {
+        return pop;
+    }
+};
+
+struct ts2 {
+    population evolve(population pop) const
+    {
+        return pop;
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
+struct ts3 {
+    population evolve(population pop) const
+    {
+        return pop;
+    }
+    thread_safety get_thread_safety()
+    {
+        return thread_safety::none;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_threading_test)
+{
+    BOOST_CHECK((algorithm{cstrs_self_adaptive{1500u, ts1{}, 32u}}.get_thread_safety() == thread_safety::basic));
+    BOOST_CHECK((algorithm{cstrs_self_adaptive{1500u, ts2{}, 32u}}.get_thread_safety() == thread_safety::none));
+    BOOST_CHECK((algorithm{cstrs_self_adaptive{1500u, ts3{}, 32u}}.get_thread_safety() == thread_safety::basic));
+}
+
+struct ia1 {
+    population evolve(const population &pop) const
+    {
+        return pop;
+    }
+    double m_data = 0.;
+};
+
+BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_inner_algo_get_test)
+{
+    // We check that the correct overload is called according to (*this) being const or not
+    {
+        const cstrs_self_adaptive uda(1500u, ia1{}, 32u);
+        BOOST_CHECK(std::is_const<decltype(uda)>::value);
+        BOOST_CHECK(std::is_const<std::remove_reference<decltype(uda.get_inner_algorithm())>::type>::value);
+    }
+    {
+        cstrs_self_adaptive uda(1500u, ia1{}, 32u);
+        BOOST_CHECK(!std::is_const<decltype(uda)>::value);
+        BOOST_CHECK(!std::is_const<std::remove_reference<decltype(uda.get_inner_algorithm())>::type>::value);
+    }
+}

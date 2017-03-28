@@ -732,6 +732,16 @@ public:
         stream(ss, "\n", m_algorithm.get_extra_info());
         return ss.str();
     }
+    /// Algorithm's thread safety level.
+    /**
+     * The thread safety of a meta-algorithm is defined by the thread safety of the interal pagmo::algorithm.
+     *
+     * @return the thread safety level of the interal pagmo::algorithm.
+     */
+    thread_safety get_thread_safety() const
+    {
+        return m_algorithm.get_thread_safety();
+    }
     /// Getter for the inner algorithm.
     /**
      * Returns a const reference to the inner pagmo::algorithm.
