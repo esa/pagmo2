@@ -55,7 +55,7 @@ namespace detail
 // Tests equality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm of
 // the violation
 template <typename It1, typename It2>
-std::pair<vector_double::size_type, double> test_eq_constraints(It1 ceq_first, It1 ceq_last, It2 tol_first)
+inline std::pair<vector_double::size_type, double> test_eq_constraints(It1 ceq_first, It1 ceq_last, It2 tol_first)
 {
     // Main computation
     double l2 = 0.;
@@ -73,7 +73,7 @@ std::pair<vector_double::size_type, double> test_eq_constraints(It1 ceq_first, I
 // Tests inequality constraints against some tolerance vector. Returns number of constraints satisfied and the L2 norm
 // of the violation
 template <typename It1, typename It2>
-std::pair<vector_double::size_type, double> test_ineq_constraints(It1 cineq_first, It1 cineq_last, It2 tol_first)
+inline std::pair<vector_double::size_type, double> test_ineq_constraints(It1 cineq_first, It1 cineq_last, It2 tol_first)
 {
     // Main computation
     double l2 = 0.;
@@ -216,8 +216,8 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
  * @throws std::invalid_argument If the size of the \p tol is not exactly the size of \p input_f - 1
  *
  */
-std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f,
-                                                          vector_double::size_type neq, const vector_double &tol)
+inline std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f,
+                                                                 vector_double::size_type neq, const vector_double &tol)
 {
     auto N = input_f.size();
     /// Corner cases
@@ -253,8 +253,8 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
  * @throws std::invalid_argument If the input fitness vectors do not have all the same size \f$n >=1\f$
  * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
  */
-std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f,
-                                                          vector_double::size_type neq, double tol = 0.)
+inline std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f,
+                                                                 vector_double::size_type neq, double tol = 0.)
 {
     auto N = input_f.size();
     /// Corner cases

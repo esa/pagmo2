@@ -66,8 +66,8 @@ namespace detail
 // can prevent this by limiting the recursion (e.g., via a function parameter that
 // gets increased each time the function is called from itself).
 // But for now I'd just put a note about this.
-void reksum(std::vector<std::vector<double>> &retval, const std::vector<population::size_type> &X,
-            population::size_type m, population::size_type s, std::vector<double> eggs = std::vector<double>())
+inline void reksum(std::vector<std::vector<double>> &retval, const std::vector<population::size_type> &X,
+                   population::size_type m, population::size_type s, std::vector<double> eggs = std::vector<double>())
 {
     if (m == 1u) {
         if (std::find(X.begin(), X.end(), s) == X.end()) { // not found
@@ -102,7 +102,7 @@ void reksum(std::vector<std::vector<double>> &retval, const std::vector<populati
  *
  * @throws std::invalid_argument if the dimensions of the two objectives are different
  */
-bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
+inline bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
 {
     if (obj1.size() != obj2.size()) {
         pagmo_throw(std::invalid_argument, "Different number of objectives found in input fitnesses: "
@@ -137,7 +137,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
  *
  * @throws std::invalid_argument If the objective vectors are not all containing two-objectives
  */
-std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<vector_double> &input_objs)
+inline std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<vector_double> &input_objs)
 {
     // If the input is empty return an empty vector
     if (input_objs.size() == 0u) {
@@ -213,7 +213,7 @@ using fnds_return_type
  *
  * @throws std::invalid_argument If the size of \p points is not at least 2
  */
-fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &points)
+inline fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &points)
 {
     auto N = points.size();
     // We make sure to have two points at least (one could also be allowed)
@@ -292,7 +292,7 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
  * @throws std::invalid_argument If points in \p do not all have at least two objectives
  * @throws std::invalid_argument If points in \p non_dom_front do not all have the same dimensionality
 */
-vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
+inline vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
 {
     auto N = non_dom_front.size();
     // We make sure to have two points at least
@@ -356,7 +356,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  *
  * @throws unspecified all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
  */
-std::vector<vector_double::size_type> sort_population_mo(const std::vector<vector_double> &input_f)
+inline std::vector<vector_double::size_type> sort_population_mo(const std::vector<vector_double> &input_f)
 {
     if (input_f.size() < 2u) { // corner cases
         if (input_f.size() == 0u) {
@@ -425,8 +425,8 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
  *
  * @throws unspecified all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
  */
-std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_double> &input_f,
-                                                       vector_double::size_type N)
+inline std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_double> &input_f,
+                                                              vector_double::size_type N)
 {
     if (N < 1u) {
         pagmo_throw(std::invalid_argument,
@@ -494,7 +494,7 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
  *
  * @throws std::invalid_argument if the input objective vectors are not all of the same size
  */
-vector_double ideal(const std::vector<vector_double> &points)
+inline vector_double ideal(const std::vector<vector_double> &points)
 {
     // Corner case
     if (points.size() == 0u) {
@@ -532,7 +532,7 @@ vector_double ideal(const std::vector<vector_double> &points)
  * @returns A vector_double containing the nadir point. Example: {10,7}
  *
  */
-vector_double nadir(const std::vector<vector_double> &points)
+inline vector_double nadir(const std::vector<vector_double> &points)
 {
     // Corner case
     if (points.size() == 0u) {
@@ -590,9 +590,9 @@ vector_double nadir(const std::vector<vector_double> &points)
  *
  * @throws if the population size is not compatible with the selected weight generation method
 **/
-std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, vector_double::size_type n_w,
-                                                 const std::string &weight_generation,
-                                                 detail::random_engine_type &r_engine)
+inline std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, vector_double::size_type n_w,
+                                                        const std::string &weight_generation,
+                                                        detail::random_engine_type &r_engine)
 {
     // Sanity check
     if (n_f > n_w) {

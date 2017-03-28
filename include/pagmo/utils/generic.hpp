@@ -80,7 +80,7 @@ namespace pagmo
  *
  * @returns a random floating-point value
  */
-double uniform_real_from_range(double lb, double ub, detail::random_engine_type &r_engine)
+inline double uniform_real_from_range(double lb, double ub, detail::random_engine_type &r_engine)
 {
     // NOTE: see here for the requirements for floating-point RNGS:
     // http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution/uniform_real_distribution
@@ -132,8 +132,8 @@ double uniform_real_from_range(double lb, double ub, detail::random_engine_type 
  *
  * @returns a pagmo::vector_double containing a random decision vector
  */
-vector_double random_decision_vector(const std::pair<vector_double, vector_double> &bounds,
-                                     detail::random_engine_type &r_engine)
+inline vector_double random_decision_vector(const std::pair<vector_double, vector_double> &bounds,
+                                            detail::random_engine_type &r_engine)
 {
     // This will check for consistent vector lengths, non-null sizes, lb <= ub and no NaNs.
     detail::check_problem_bounds(bounds);
@@ -172,8 +172,8 @@ vector_double random_decision_vector(const std::pair<vector_double, vector_doubl
  *
  * @returns a pagmo::vector_double containing a random decision vector
  */
-vector_double random_decision_vector(const vector_double &lb, const vector_double &ub,
-                                     detail::random_engine_type &r_engine)
+inline vector_double random_decision_vector(const vector_double &lb, const vector_double &ub,
+                                            detail::random_engine_type &r_engine)
 {
     return random_decision_vector({lb, ub}, r_engine);
 }
@@ -212,7 +212,7 @@ inline T safe_cast(const U &x)
  * @param  k second paramater \f$k\f$
  * @return the binomial coefficient \f$ n \choose k \f$
  */
-double binomial_coefficient(vector_double::size_type n, vector_double::size_type k)
+inline double binomial_coefficient(vector_double::size_type n, vector_double::size_type k)
 {
     if (k <= n) {
         return std::round(std::exp(std::lgamma(static_cast<double>(n) + 1.) - std::lgamma(static_cast<double>(k) + 1.)
@@ -240,8 +240,8 @@ double binomial_coefficient(vector_double::size_type n, vector_double::size_type
  * neighbours sorted by distance
  * @throws std::invalid_argument If the points do not all have the same dimension.
  */
-std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<vector_double> &points,
-                                                       std::vector<vector_double>::size_type k)
+inline std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<vector_double> &points,
+                                                              std::vector<vector_double>::size_type k)
 {
     std::vector<std::vector<vector_double::size_type>> neigh_idxs;
     auto N = points.size();
@@ -286,8 +286,8 @@ std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<vector_
 namespace detail
 {
 // modifies a chromosome so that it will be in the bounds. elements that are off are resampled at random in the bounds
-void force_bounds_random(vector_double &x, const vector_double &lb, const vector_double &ub,
-                         detail::random_engine_type &r_engine)
+inline void force_bounds_random(vector_double &x, const vector_double &lb, const vector_double &ub,
+                                detail::random_engine_type &r_engine)
 {
     assert(x.size() == lb.size());
     assert(x.size() == ub.size());
@@ -298,7 +298,7 @@ void force_bounds_random(vector_double &x, const vector_double &lb, const vector
     }
 }
 // modifies a chromosome so that it will be in the bounds. Elements that are off are reflected in the bounds
-void force_bounds_reflection(vector_double &x, const vector_double &lb, const vector_double &ub)
+inline void force_bounds_reflection(vector_double &x, const vector_double &lb, const vector_double &ub)
 {
     assert(x.size() == lb.size());
     assert(x.size() == ub.size());
@@ -314,7 +314,7 @@ void force_bounds_reflection(vector_double &x, const vector_double &lb, const ve
     }
 }
 // modifies a chromosome so that it will be in the bounds. Elements that are off are set on the bounds
-void force_bounds_stick(vector_double &x, const vector_double &lb, const vector_double &ub)
+inline void force_bounds_stick(vector_double &x, const vector_double &lb, const vector_double &ub)
 {
     assert(x.size() == lb.size());
     assert(x.size() == ub.size());
