@@ -502,7 +502,8 @@ class translate_test_case(_ut.TestCase):
         t = translate(translate(rosenbrock(), [1, 2]), [1, 2])
         self.assertTrue(t.inner_problem.is_(translate))
         self.assertFalse(t.inner_problem.extract(translate) is None)
-        self.assertFalse(t.inner_problem.extract(translate).inner_problem.extract(rosenbrock) is None)
+        self.assertFalse(t.inner_problem.extract(
+            translate).inner_problem.extract(rosenbrock) is None)
 
         class p(object):
 
@@ -527,7 +528,8 @@ class translate_test_case(_ut.TestCase):
         t = translate(decompose(null_problem(2), [0.2, 0.8], [0., 0.]), [0.])
         self.assertTrue(t.inner_problem.is_(decompose))
         self.assertFalse(t.inner_problem.extract(decompose) is None)
-        self.assertFalse(t.inner_problem.extract(decompose).inner_problem.extract(null_problem) is None)
+        self.assertFalse(t.inner_problem.extract(
+            decompose).inner_problem.extract(null_problem) is None)
 
 
 class unconstrain_test_case(_ut.TestCase):
@@ -577,7 +579,8 @@ class unconstrain_test_case(_ut.TestCase):
             2, 2, 2), [0.]), "death penalty")
         self.assertTrue(t.inner_problem.is_(translate))
         self.assertFalse(t.inner_problem.extract(translate) is None)
-        self.assertFalse(t.inner_problem.extract(translate).inner_problem.extract(null_problem) is None)
+        self.assertFalse(t.inner_problem.extract(
+            translate).inner_problem.extract(null_problem) is None)
 
 
 class decompose_test_case(_ut.TestCase):
@@ -626,7 +629,8 @@ class decompose_test_case(_ut.TestCase):
         t = decompose(translate(null_problem(2), [0.]), [0.2, 0.8], [0., 0.])
         self.assertTrue(t.inner_problem.is_(translate))
         self.assertFalse(t.inner_problem.extract(translate) is None)
-        self.assertFalse(t.inner_problem.extract(translate).inner_problem.extract(null_problem) is None)
+        self.assertFalse(t.inner_problem.extract(
+            translate).inner_problem.extract(null_problem) is None)
 
 
 class mbh_test_case(_ut.TestCase):
@@ -657,7 +661,8 @@ class mbh_test_case(_ut.TestCase):
         self.assertTrue(all(a.get_perturb() == array([0.2])))
         al = algorithm(a)
         self.assertTrue(al.get_thread_safety() == ts.basic)
-        self.assertTrue(al.extract(mbh).inner_algorithm.extract(compass_search) is not None)
+        self.assertTrue(al.extract(mbh).inner_algorithm.extract(
+            compass_search) is not None)
         self.assertTrue(al.extract(mbh).inner_algorithm.extract(de) is None)
         self.assertTrue(str(seed) in str(al))
         al.set_verbosity(4)
@@ -680,8 +685,10 @@ class mbh_test_case(_ut.TestCase):
         self.assertTrue(all(a.get_perturb() == array([0.2])))
         al = algorithm(a)
         self.assertTrue(al.get_thread_safety() == ts.basic)
-        self.assertTrue(al.extract(mbh).inner_algorithm.extract(compass_search) is None)
-        self.assertTrue(al.extract(mbh).inner_algorithm.extract(de) is not None)
+        self.assertTrue(al.extract(mbh).inner_algorithm.extract(
+            compass_search) is None)
+        self.assertTrue(al.extract(
+            mbh).inner_algorithm.extract(de) is not None)
         self.assertTrue(str(seed) in str(al))
         al.set_verbosity(4)
         self.assertEqual(al.extract(mbh).get_verbosity(), 4)
@@ -708,14 +715,96 @@ class mbh_test_case(_ut.TestCase):
         self.assertTrue(all(a.get_perturb() == array([0.2])))
         al = algorithm(a)
         self.assertTrue(al.get_thread_safety() == ts.none)
-        self.assertTrue(al.extract(mbh).inner_algorithm.extract(compass_search) is None)
-        self.assertTrue(al.extract(mbh).inner_algorithm.extract(algo) is not None)
+        self.assertTrue(al.extract(mbh).inner_algorithm.extract(
+            compass_search) is None)
+        self.assertTrue(al.extract(
+            mbh).inner_algorithm.extract(algo) is not None)
         self.assertTrue(str(seed) in str(al))
         al.set_verbosity(4)
         self.assertEqual(al.extract(mbh).get_verbosity(), 4)
 
         # Construction from algorithm is allowed.
         mbh(algorithm(null_algorithm()), stop=5, perturb=.4)
+
+
+class cstrs_self_adaptive_test_case(_ut.TestCase):
+    """Test case for the cstrs_self_adaptive meta-algorithm
+
+    """
+
+    def runTest(self):
+        from . import cstrs_self_adaptive, de, compass_search, algorithm, thread_safety as ts, null_algorithm
+        from numpy import array
+
+        class algo(object):
+
+            def evolve(pop):
+                return pop
+
+        # Def ctor.
+        a = cstrs_self_adaptive()
+        self.assertFalse(a.inner_algorithm.extract(de) is None)
+        self.assertTrue(a.inner_algorithm.is_(de))
+        self.assertTrue(a.inner_algorithm.extract(compass_search) is None)
+        self.assertFalse(a.inner_algorithm.is_(compass_search))
+        self.assertEqual(a.get_log(), [])
+        al = algorithm(a)
+        self.assertTrue(al.get_thread_safety() == ts.basic)
+        self.assertTrue(al.extract(cstrs_self_adaptive).inner_algorithm.extract(
+            de) is not None)
+        self.assertTrue(al.extract(cstrs_self_adaptive).inner_algorithm.extract(
+            compass_search) is None)
+        self.assertTrue(str(seed) in str(al))
+        al.set_verbosity(4)
+        self.assertEqual(al.extract(cstrs_self_adaptive).get_verbosity(), 4)
+
+        # From C++ algo.
+        seed = 123321
+        a = cstrs_self_adaptive(algo=de())
+        a = cstrs_self_adaptive(algo=de(), iters=1500)
+        a = cstrs_self_adaptive(seed=32, algo=de(), iters=12)
+        self.assertTrue(a.inner_algorithm.extract(compass_search) is None)
+        self.assertFalse(a.inner_algorithm.is_(compass_search))
+        self.assertFalse(a.inner_algorithm.extract(de) is None)
+        self.assertTrue(a.inner_algorithm.is_(de))
+        self.assertEqual(a.get_log(), [])
+        al = algorithm(a)
+        self.assertTrue(al.get_thread_safety() == ts.basic)
+        self.assertTrue(al.extract(cstrs_self_adaptive).inner_algorithm.extract(
+            compass_search) is None)
+        self.assertTrue(al.extract(
+            cstrs_self_adaptive).inner_algorithm.extract(de) is not None)
+        self.assertTrue(str(seed) in str(al))
+        al.set_verbosity(4)
+        self.assertEqual(al.extract(cstrs_self_adaptive).get_verbosity(), 4)
+
+        # From Python algo.
+        class algo(object):
+
+            def evolve(self, pop):
+                return pop
+
+        seed = 123321
+        a = cstrs_self_adaptive(algo=de())
+        a = cstrs_self_adaptive(algo=de(), iters=1500)
+        a = cstrs_self_adaptive(seed=32, algo=de(), iters=12)
+        self.assertTrue(a.inner_algorithm.extract(compass_search) is None)
+        self.assertFalse(a.inner_algorithm.is_(compass_search))
+        self.assertFalse(a.inner_algorithm.extract(de) is None)
+        self.assertTrue(a.inner_algorithm.is_(de))
+        self.assertEqual(a.get_log(), [])
+        al = algorithm(a)
+        self.assertTrue(al.get_thread_safety() == ts.basic)
+        self.assertTrue(al.extract(cstrs_self_adaptive).inner_algorithm.extract(
+            compass_search) is None)
+        self.assertTrue(al.extract(
+            cstrs_self_adaptive).inner_algorithm.extract(de) is not None)
+        self.assertTrue(str(seed) in str(al))
+        al.set_verbosity(4)
+        self.assertEqual(al.extract(cstrs_self_adaptive).get_verbosity(), 4)
+
+        # Construction from algorithm is allowed.
+        cstrs_self_adaptive(algorithm(null_algorithm()), seed=5, iters=4)
 
 
 class archipelago_test_case(_ut.TestCase):
@@ -916,6 +1005,7 @@ def run_test_suite():
     suite.addTest(decompose_test_case())
     suite.addTest(unconstrain_test_case())
     suite.addTest(mbh_test_case())
+    suite.addTest(cstrs_self_adaptive_test_case())
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1
