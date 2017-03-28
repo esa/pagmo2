@@ -1517,8 +1517,8 @@ std::string cstrs_self_adaptive_docstring()
 This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
 (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
 technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire
-underlying population. The resulting approach is an alternative to using the meta-problem pagmo::unconstrained to transform the
-constrained fitness into an unconstrained fitness.
+underlying population. The resulting approach is an alternative to using the meta-problem :class:`~pygmo.core.unconstrain`
+to transform the constrained fitness into an unconstrained fitness.
 
 The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
 extends their use to any-algorithm, in particular to non generational, population based, evolutionary approaches where
