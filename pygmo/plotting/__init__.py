@@ -51,7 +51,7 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
         >>> from pygmo import *
         >>> prob = problem(zdt())
         >>> pop = population(prob, 40)
-        >>> ax = plot_non_dominated_fronts(pop.get_f())
+        >>> ax = plot_non_dominated_fronts(pop.get_f()) # doctest: +SKIP
     """
     from matplotlib import pyplot as plt
     from ..core import fast_non_dominated_sorting, population
@@ -103,9 +103,9 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
 
     Examples:
         >>> import pygmo as pg
-        >>> udp = pg.dtlz(id = 1, fdim =3, dim = 5)
+        >>> udp = pg.dtlz(prob_id = 1, fdim =3, dim = 5)
         >>> pop = pg.population(udp, 40)
-        >>> udp.plot(pop)
+        >>> udp.plot(pop) # doctest: +SKIP
     """
     from mpl_toolkits.mplot3d import axes3d
     import matplotlib.pyplot as plt

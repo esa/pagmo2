@@ -1483,7 +1483,7 @@ Examples:
     >>> algo.set_verbosity(3)
     >>> prob = problem(cec2013(prob_id = 1, dim = 20))
     >>> pop = population(prob, 20)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Fevals:          Best:      Violated:    Viol. Norm:         Trial:
         440        25162.3              0              0              0
         880          14318              0              0              0
@@ -1598,11 +1598,11 @@ Returns:
 
 Examples:
     >>> from pygmo import *
-    >>> algo = algorithm(cstrs_self_adaptive(iter = 20, algo = pygmo.de(10)))
+    >>> algo = algorithm(cstrs_self_adaptive(iters = 20, algo = de(10)))
     >>> algo.set_verbosity(3)
     >>> prob = problem(cec2006(prob_id = 1))
     >>> pop = population(prob, 20)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Iter:        Fevals:          Best: Infeasibility:      Violated:    Viol. Norm:   N. Feasible:
         1              0       -96.5435        0.34607              4        177.705              0 i
         4            600       -96.5435       0.360913              4        177.705              0 i
@@ -1611,8 +1611,8 @@ Examples:
        13           2400       -23.2502       0.098049              4        37.1092              0 i
        16           3000       -23.2502       0.071571              4        37.1092              0 i
        19           3600       -23.2502       0.257604              4        37.1092              0 i
-    >>> al = algo.extract(moead)
-    >>> al.get_log()
+    >>> uda = algo.extract(moead)
+    >>> uda.get_log() # doctest: +SKIP
     [(1, 0, -96.54346700540063, 0.34606950943401493, 4, 177.70482046341274, 0), (4, 600, ...
 
 
@@ -1848,15 +1848,15 @@ Examples:
     >>> algo.set_verbosity(100)
     >>> prob = problem(rosenbrock(10))
     >>> pop = population(prob, 20)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Gen:        Fevals:  Current best:          Best:
        1             40         183728         183728
      101           4040        506.757        26.4234
      201           8040        55.6282        14.9136
      301          12040         65.554        14.9136
      401          16040        191.654        14.9136
-    >>> al = algo.extract(bee_colony)
-    >>> al.get_log()
+    >>> uda = algo.extract(bee_colony)
+    >>> uda.get_log() # doctest: +SKIP
     [(1, 40, 183727.83934515435, 183727.83934515435), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::bee_colony::get_log()`.
@@ -1925,7 +1925,7 @@ Examples:
     >>> algo.set_verbosity(100)
     >>> prob = problem(rosenbrock(10))
     >>> pop = population(prob, 20)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Gen:        Fevals:          Best:            dx:            df:
       1             20         162446        65.2891    1.78686e+06
     101           2020        198.402         8.4454        572.161
@@ -1933,8 +1933,8 @@ Examples:
     301           6020        6.67069        0.51811        1.99744
     401           8020        3.60022       0.583444       0.554511
     Exit condition -- generations = 500
-    >>> al = algo.extract(de)
-    >>> al.get_log()
+    >>> uda = algo.extract(de)
+    >>> uda.get_log() # doctest: +SKIP
     [(1, 20, 162446.0185265718, 65.28911664703388, 1786857.8926660626), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::de::get_log()`.
@@ -1985,7 +1985,7 @@ Examples:
     >>> algo.set_verbosity(1)
     >>> prob = problem(hock_schittkowsky_71())
     >>> pop = population(prob, 1)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Fevals:          Best:      Violated:    Viol. Norm:         Range:
           4        110.785              1        2.40583            0.5
          12        110.785              1        2.40583           0.25
@@ -2013,8 +2013,8 @@ Examples:
         151        95.4502              0              0    1.52588e-05
         159        95.4502              0              0    7.62939e-06
     Exit condition -- range: 7.62939e-06 <= 1e-05
-    >>> al = algo.extract(compass_search)
-    >>> al.get_log()
+    >>> uda = algo.extract(compass_search)
+    >>> uda.get_log() # doctest: +SKIP
     [(4, 110.785345345, 1, 2.405833534534, 0.5), (12, 110.785345345, 1, 2.405833534534, 0.25) ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::compass_search::get_log()`.
@@ -2099,7 +2099,7 @@ Examples:
     >>> algo.set_verbosity(100)
     >>> prob = problems.rosenbrock(10)
     >>> pop = population(prob, 20)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Gen:        Fevals:          Best:             F:            CR:            dx:            df:
       1             20         297060       0.690031       0.294769        44.1494    2.30584e+06
     101           2020        97.4258        0.58354       0.591527        13.3115        441.545
@@ -2107,8 +2107,8 @@ Examples:
     301           6020        6.84774       0.494549        0.98105        12.2781        40.9626
     401           8020         4.7861       0.428741       0.743813        12.2938        39.7791
     Exit condition -- generations = 500
-    >>> al = algo.extract(sade)
-    >>> al.get_log()
+    >>> uda = algo.extract(sade)
+    >>> uda.get_log() # doctest: +SKIP
     [(1, 20, 297059.6296130389, 0.690031071850855, 0.29476914701127666, 44.14940516578547, 2305836.7422693395), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log()`.
@@ -2165,15 +2165,15 @@ Examples:
     >>> algo = algorithm(nsga2(gen=100))
     >>> algo.set_verbosity(20)
     >>> pop = population(zdt(1), 40)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Gen:        Fevals:        ideal1:        ideal2:
        1              0      0.0033062        2.44966
       21            800    0.000275601       0.893137
       41           1600    3.15834e-05        0.44117
       61           2400     2.3664e-05       0.206365
       81           3200     2.3664e-05       0.133305
-    >>> al = algo.extract(nsga2)
-    >>> al.get_log()
+    >>> uda = algo.extract(nsga2)
+    >>> uda.get_log() # doctest: +SKIP
     [(1, 0, array([ 0.0033062 ,  2.44965599])), (21, 800, array([  2.75601086e-04 ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::nsga2::get_log`.
@@ -2236,15 +2236,15 @@ Examples:
     >>> algo.set_verbosity(100)
     >>> prob = problem(zdt())
     >>> pop = population(prob, 40)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Gen:        Fevals:           ADF:        ideal1:        ideal2:
       1              0        32.5747     0.00190532        2.65685
     101           4000        5.67751    2.56736e-09       0.468789
     201           8000        5.38297    2.56736e-09      0.0855025
     301          12000        5.05509    9.76581e-10      0.0574796
     401          16000        5.13126    9.76581e-10      0.0242256
-    >>> al = algo.extract(moead)
-    >>> al.get_log()
+    >>> uda = algo.extract(moead)
+    >>> uda.get_log() # doctest: +SKIP
     [(1, 0, 32.574745630075874, array([  1.90532430e-03,   2.65684834e+00])), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log()`.
@@ -2303,7 +2303,7 @@ Examples:
     >>> algo.set_verbosity(100)
     >>> prob = problem(rosenbrock(10))
     >>> pop = population(prob, 20)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Gen:        Fevals:          Best:            dx:            df:         sigma:
       1              0         173924        33.6872    3.06519e+06            0.5
     101           2000        92.9612       0.583942        156.921      0.0382078
@@ -2311,8 +2311,8 @@ Examples:
     301           6000        4.81377      0.0698366        1.34637      0.0297664
     401           8000        1.04445      0.0568541       0.514459      0.0649836
     Exit condition -- generations = 500
-    >>> al = algo.extract(cmaes)
-    >>> al.get_log()
+    >>> uda = algo.extract(cmaes)
+    >>> uda.get_log() # doctest: +SKIP
     [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::cmaes::get_log()`.
@@ -2399,16 +2399,16 @@ Examples:
     >>> algo.set_verbosity(100)
     >>> prob = problem(rosenbrock(10))
     >>> pop = population(prob, 20)
-    >>> pop = algo.evolve(pop)
-       Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:
-          1             20         285653        0.55135       0.441551             16        43.9719    2.02379e+06
-        101           2020        12.2721       0.127285      0.0792493             14        3.22986        106.764
-        201           4020        5.72927       0.148337       0.777806             14        2.72177        4.10793
-        301           6020        4.85084        0.12193       0.996191              3        2.95555        3.85027
-        401           8020        4.20638       0.235997       0.996259              3        3.60338        4.49432
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:
+        1             20         285653        0.55135       0.441551             16        43.9719    2.02379e+06
+    101           2020        12.2721       0.127285      0.0792493             14        3.22986        106.764
+    201           4020        5.72927       0.148337       0.777806             14        2.72177        4.10793
+    301           6020        4.85084        0.12193       0.996191              3        2.95555        3.85027
+    401           8020        4.20638       0.235997       0.996259              3        3.60338        4.49432
     Exit condition -- generations = 500
-    >>> al = algo.extract(de1220)
-    >>> al.get_log()
+    >>> uda = algo.extract(de1220)
+    >>> uda.get_log() # doctest: +SKIP
     [(1, 20, 285652.7928977573, 0.551350234239449, 0.4415510963067054, 16, 43.97185788345982, 2023791.5123259544), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::de1220::get_log()`.
@@ -2488,7 +2488,7 @@ Examples:
     >>> algo.set_verbosity(50)
     >>> prob = problem(rosenbrock(10))
     >>> pop = population(prob, 20)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Gen:        Fevals:         gbest:     Mean Vel.:    Mean lbest:    Avg. Dist.:
        1             40        72473.3       0.173892         677427       0.281744
       51           1040        135.867      0.0183806        748.001       0.065826
@@ -2500,8 +2500,8 @@ Examples:
      351           7040        6.09414    0.000187343        16.8875     0.00172307
      401           8040        5.78415    0.000524536        16.5073     0.00234197
      451           9040         5.4662     0.00018305        16.2339    0.000958182
-    >>> al = algo.extract(de1220)
-    >>> al.get_log()
+    >>> uda = algo.extract(de1220)
+    >>> uda.get_log() # doctest: +SKIP
     [(1,40,72473.32713790605,0.1738915144248373,677427.3504996448,0.2817443174278134), (51,1040,...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log()`.
@@ -2558,7 +2558,7 @@ Examples:
     >>> algo.set_verbosity(5000)
     >>> prob = problem(rosenbrock(dim = 10))
     >>> pop = population(prob, 1)
-    >>> pop = algo.evolve(pop)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
     Fevals:          Best:       Current:    Mean range:   Temperature:
          57           5937           5937           0.48             10
       10033        9.50937        28.6775      0.0325519        2.51189
@@ -2581,7 +2581,7 @@ Examples:
       95033    5.35153e-05    9.10958e-05    3.18624e-05    1.99526e-05
       99933    2.34849e-05    8.72206e-05    2.59215e-05    1.14815e-05
     >>> uda = algo.extract(simulated_annealing)
-    >>> uda.get_log()
+    >>> uda.get_log() # doctest: +SKIP
     [(57, 5936.999957947842, 5936.999957947842, 0.47999999999999987, 10.0), (10033, ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_annealing::get_log()`.
@@ -2913,7 +2913,7 @@ Raises:
 
 Examples:
     >>> from pygmo import *
-    >>> pop = population(prob = zdt(id = 1), size = 20)
+    >>> pop = population(prob = zdt(prob_id = 1), size = 20)
     >>> hv = hypervolume(pop = pop)
 
 See also the docs of the C++ class :cpp:class:`pagmo::hypervolume`.
