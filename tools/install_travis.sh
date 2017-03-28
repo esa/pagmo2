@@ -103,9 +103,9 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
     set -x
     cd pagmo2_gh_pages
     git checkout -b gh-pages --track origin/gh-pages;
-    git rm -fr sphinx;
-    mv /home/travis/sphinx .;
-    git add sphinx;
+    git rm -fr *;
+    mv /home/travis/sphinx/* .;
+    git add *;
     # We assume here that a failure in commit means that there's nothing
     # to commit.
     git commit -m "Update Sphinx documentation, commit ${TRAVIS_COMMIT} [skip ci]." || exit 0
