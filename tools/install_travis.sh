@@ -47,13 +47,6 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
     # Give some time for the cluster to start up.
     sleep 20;
     python -c "import pygmo; pygmo.test.run_test_suite()"
-    cd ../doc/sphinx;
-    make doctest;
-    if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
-        # Stop here if this is the Python27 build. Docs are checked and uploaded only in the Python36 build.
-        exit 0;
-    fi
-    cd ../../build
     # At the moment conda has these packages only for Python 3.4. Install via pip instead.
     pip install sphinx breathe requests[security] sphinx-bootstrap-theme;
     # Install a recent version of Doxygen locally, with a patch to fix a segfault.
@@ -86,6 +79,11 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
         exit 1;
     fi
     echo "Sphinx ran successfully";
+    make doctest;
+    if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
+        # Stop here if this is the Python27 build. Docs are uploaded only in the Python36 build.
+        exit 0;
+    fi
     if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
         echo "Testing a pull request, the generated documentation will not be uploaded.";
         exit 0;
