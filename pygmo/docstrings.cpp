@@ -608,7 +608,9 @@ Raises:
 
 std::string problem_get_fevals_docstring()
 {
-    return R"(Number of fitness evaluations.
+    return R"(get_fevals()
+
+Number of fitness evaluations.
 
 Each time a call to :func:`~pygmo.core.problem.fitness()` successfully completes, an internal counter
 is increased by one. The counter is initialised to zero upon problem construction and it is never
@@ -622,7 +624,9 @@ Returns:
 
 std::string problem_get_gevals_docstring()
 {
-    return R"(Number of gradient evaluations.
+    return R"(get_gevals()
+
+Number of gradient evaluations.
 
 Each time a call to :func:`~pygmo.core.problem.gradient()` successfully completes, an internal counter
 is increased by one. The counter is initialised to zero upon problem construction and it is never
@@ -636,7 +640,9 @@ Returns:
 
 std::string problem_get_hevals_docstring()
 {
-    return R"(Number of hessians evaluations.
+    return R"(get_hevals()
+
+Number of hessians evaluations.
 
 Each time a call to :func:`~pygmo.core.problem.hessians()` successfully completes, an internal counter
 is increased by one. The counter is initialised to zero upon problem construction and it is never
