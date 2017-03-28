@@ -83,14 +83,14 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
         exit 1;
     fi
     echo "Sphinx ran successfully";
-    # if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
-    #     echo "Testing a pull request, the generated documentation will not be uploaded.";
-    #     exit 0;
-    # fi
-    # if [[ "${TRAVIS_BRANCH}" != "master" ]]; then
-    #     echo "Branch is not master, the generated documentation will not be uploaded.";
-    #     exit 0;
-    # fi
+    if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
+        echo "Testing a pull request, the generated documentation will not be uploaded.";
+        exit 0;
+    fi
+    if [[ "${TRAVIS_BRANCH}" != "master" ]]; then
+        echo "Branch is not master, the generated documentation will not be uploaded.";
+        exit 0;
+    fi
     # Move out the resulting documentation.
     mv _build/html /home/travis/sphinx;
     # Checkout a new copy of the repo, for pushing to gh-pages.
