@@ -51,8 +51,8 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
         # Stop here if this is the Python27 build. Docs are checked and uploaded only in the Python36 build.
         exit 0;
     fi
-    # At the moment conda has this package only for Python 3.4. Install via pip instead.
-    pip install sphinx-bootstrap-theme;
+    # At the moment conda has these packages only for Python 3.4. Install via pip instead.
+    pip install breathe sphinx-bootstrap-theme;
     # Run doxygen and check the output.
     cd ../doc/doxygen;
     export DOXYGEN_OUTPUT=`doxygen 2>&1 >/dev/null`;

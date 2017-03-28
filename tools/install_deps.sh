@@ -24,7 +24,7 @@ elif [[ "${PAGMO_BUILD}" == "Python27" || "${PAGMO_BUILD}" == "OSXPython27" ]]; 
 fi
 
 if [[ "${PAGMO_BUILD}" == "Python36" ]]; then
-    conda_pkgs="$conda_pkgs breathe sphinx doxygen"
+    conda_pkgs="$conda_pkgs sphinx doxygen"
 fi
 
 conda create -q -p $deps_dir -y $conda_pkgs
