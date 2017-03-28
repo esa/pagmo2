@@ -132,6 +132,8 @@ std::string sade_docstring();
 std::string sade_get_log_docstring();
 std::string simulated_annealing_docstring();
 std::string simulated_annealing_get_log_docstring();
+std::string cstrs_self_adaptive_docstring();
+std::string cstrs_self_adaptive_get_log_docstring();
 std::string mbh_docstring();
 std::string mbh_get_seed_docstring();
 std::string mbh_get_verbosity_docstring();

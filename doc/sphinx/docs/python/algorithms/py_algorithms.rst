@@ -68,3 +68,8 @@ Algorithms exposed from C++
 
 .. autoclass:: pygmo.core.mbh
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.cstrs_self_adaptive
+   :members:

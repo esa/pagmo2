@@ -1477,6 +1477,22 @@ Returns:
     * ``Viol. Norm`` (``float``), the norm of the violation (discounted already by the constraints tolerance)
     * ``Trial`` (``int``), the trial number (which will determine the algorithm stop)
 
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(mbh(algorithm(de(gen = 10))))
+    >>> algo.set_verbosity(3)
+    >>> prob = problem(cec2013(prob_id = 1, dim = 20))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop)
+    Fevals:          Best:      Violated:    Viol. Norm:         Trial:
+        440        25162.3              0              0              0
+        880          14318              0              0              0
+       1320        11178.2              0              0              0
+       1760        6613.71              0              0              0
+       2200        6613.71              0              0              1
+       2640        6124.62              0              0              0
+       3080        6124.62              0              0              1
+
 See also the docs of the relevant C++ method :cpp:func:`pagmo::mbh::get_log()`.
 
 )";
@@ -1490,6 +1506,117 @@ Get the perturbation vector.
 
 Returns:
     1D NumPy float array: the perturbation vector
+
+)";
+}
+
+std::string cstrs_self_adaptive_docstring()
+{
+    return R"(__init__(iters = 1, algo = de(), seed = random)
+
+This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
+(UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
+technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire
+underlying population. The resulting approach is an alternative to using the meta-problem pagmo::unconstrained to transform the
+constrained fitness into an unconstrained fitness.
+
+The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
+extends their use to any-algorithm, in particular to non generational, population based, evolutionary approaches where
+a steady-state reinsertion is used (i.e. as soon as an individual is found fit it is immediately reinserted into the
+population and will influence the next offspring genetic material).
+
+Each decision vector is assigned an infeasibility measure :math:`\iota` which accounts for the normalized violation of
+all the constraints (discounted by the constraints tolerance as returned by pagmo::problem::get_c_tol()). The
+normalization factor used :math:`c_{j_{max}}` is the maximum violation of the :math:`j` constraint.
+
+As in the original paper, three individuals in the evolving population are then used to penalize the single
+objective.
+
+.. math::
+   \begin{array}{rl}
+   \check X & \mbox{: the best decision vector} \\
+   \hat X & \mbox{: the worst decision vector} \\
+   \breve X & \mbox{: the decision vector with the highest objective}
+   \end{array}
+
+The best and worst decision vectors are defined accounting for their infeasibilities and for the value of the
+objective function. Using the above definitions the overall pseudo code can be summarized as follows:
+
+.. code-block:: none
+
+   > Select a pagmo::population (related to a single-objective constrained problem)
+   > Select a UDA (able to solve single-objective unconstrained problems)
+   > while i < iter
+   > > Compute the normalization factors (will depend on the current population)
+   > > Compute the best, worst, highest (will depend on the current population)
+   > > Evolve the population using the UDA and a penalized objective
+   > > Reinsert the best decision vector from the previous evolution
+
+
+:class:`pygmo.core.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.core.algorithm` objects.
+
+**NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
+The number of function evaluation will be bounded to \p iters times the fevals made by one call to the inner UDA. The
+internal cache is reset at each iteration, but its size will grow unlimited during each callto
+the inner UDA evolve method.
+
+**NOTE** Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  constraint is ignored if all
+the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
+
+**NOTE** The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner UDA employed and
+in particular to its parameters (generations / iterations)
+
+See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
+Transactions on Evolutionary Computation 7.5 (2003): 445-455.
+
+See also the docs of the C++ class :cpp:class:`pagmo::cstrs_self_adaptive`.
+
+)";
+}
+
+std::string cstrs_self_adaptive_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity parameter
+(by default nothing is logged) which can be set calling :func:`~pygmo.core.algorithm.set_verbosity()` on a :class:`~pygmo.core.algorithm` constructed
+with an :class:`~pygmo.core.mbh`. A verbosity level of ``N > 0`` will log one line each ``N`` ``iters``.
+
+Returns:
+    ``list`` of ``tuples``: at each call of the inner algorithm, the values ``Iters``, ``Fevals``, ``Best``, ``Infeasibility``, 
+    ``Violated``, ``Viol. Norm`` and ``N. Feasible``, where:
+
+    * ``Iters`` (``int``), the number of iterations made (i.e. calls to the evolve method of the inner algorithm)
+    * ``Fevals`` (``int``), the number of fitness evaluations made
+    * ``Best`` (``float``), the objective function of the best fitness currently in the population
+    * ``Infeasibility`` (``float``), the aggregated (and normalized) infeasibility value of ``Best``
+    * ``Violated`` (``int``), the number of constraints currently violated by the best solution
+    * ``Viol. Norm`` (``float``), the norm of the violation (discounted already by the constraints tolerance)
+    * ``N. Feasible`` (``int``), the number of feasible individuals currently in the population.
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(cstrs_self_adaptive(iter = 20, algo = pygmo.de(10)))
+    >>> algo.set_verbosity(3)
+    >>> prob = problem(cec2006(prob_id = 1))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop)
+    Iter:        Fevals:          Best: Infeasibility:      Violated:    Viol. Norm:   N. Feasible:
+        1              0       -96.5435        0.34607              4        177.705              0 i
+        4            600       -96.5435       0.360913              4        177.705              0 i
+        7           1200       -96.5435        0.36434              4        177.705              0 i
+       10           1800       -96.5435       0.362307              4        177.705              0 i
+       13           2400       -23.2502       0.098049              4        37.1092              0 i
+       16           3000       -23.2502       0.071571              4        37.1092              0 i
+       19           3600       -23.2502       0.257604              4        37.1092              0 i
+    >>> al = algo.extract(moead)
+    >>> al.get_log()
+    [(1, 0, -96.54346700540063, 0.34606950943401493, 4, 177.70482046341274, 0), (4, 600, ...
+
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::cstrs_self_adaptive::get_log()`.
 
 )";
 }
@@ -1519,7 +1646,7 @@ Args:
     nic  (``int``): the number of inequality constraintsctives
 
 Raises:
-    ValueError: if *nobj*, *nec*, *nic* are not positive or if *nobj* is zero
+    ValueError: if *nobj*, *nec*, *nic* are negative or greater than an implementation-defined value or if *nobj* is zero
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
 

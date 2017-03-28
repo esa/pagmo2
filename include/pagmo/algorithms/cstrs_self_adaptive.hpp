@@ -699,11 +699,12 @@ public:
     /// Get log.
     /**
      * A log containing relevant quantities monitoring the last call to mbh::evolve(). Each element of the returned
-     * <tt>std::vector</tt> is a cstrs_self_adaptive::log_line_type containing: \p Iters, \p Fevals, \p Best, \p
-     * Infeasibility, \p Violated, as described in cstrs_self_adaptive::set_verbosity().
+     * <tt>std::vector</tt> is a cstrs_self_adaptive::log_line_type containing: \p Iter, \p Fevals, \p Best, \p
+     * Infeasibility, \p Violated, <tt>Viol. Norm</tt>, <tt>N. Feasible</tt> as described in
+     * cstrs_self_adaptive::set_verbosity().
      *
      * @return an <tt>std::vector</tt> of cstrs_self_adaptive::log_line_type containing the logged values Iters,
-     * Fevals, Best, Infeasibility, Violated and Viol.Norm
+     * Fevals, Best, Infeasibility, Violated and Viol. Norm and N. Feasible
      */
     const log_type &get_log() const
     {

@@ -67,6 +67,8 @@ __original_translate_init = translate.__init__
 
 # NOTE: the idea of having the translate init here instead of exposed from C++ is to allow the use
 # of the syntax translate(udp, translation) for all udps
+
+
 def _translate_init(self, prob=None, translation=[0.]):
     """
     Args:
@@ -103,7 +105,9 @@ __original_decompose_init = decompose.__init__
 
 # NOTE: the idea of having the translate init here instead of exposed from C++ is to allow the use
 # of the syntax decompose(udp, ..., ) for all udps
-def _decompose_init(self, prob = None, weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False):
+
+
+def _decompose_init(self, prob=None, weight=[0.5, 0.5], z=[0., 0.], method='weighted', adapt_ideal=False):
     """
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
@@ -134,7 +138,7 @@ def _decompose_init(self, prob = None, weight = [0.5, 0.5], z = [0.,0.], method 
     """
     if prob is None:
         # Use the null problem for default init.
-        prob = null_problem(nobj = 2)
+        prob = null_problem(nobj=2)
     if type(prob) == problem:
         # If prob is a pygmo problem, we will pass it as-is to the
         # original init.
@@ -152,7 +156,9 @@ __original_unconstrain_init = unconstrain.__init__
 
 # NOTE: the idea of having the unconstrain init here instead of exposed from C++ is to allow the use
 # of the syntax unconstrain(udp, ... ) for all udps
-def _unconstrain_init(self, prob = None, method = "death penalty", weights = []):
+
+
+def _unconstrain_init(self, prob=None, method="death penalty", weights=[]):
     """
     Args:
         prob: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
@@ -194,10 +200,12 @@ setattr(unconstrain, "__init__", _unconstrain_init)
 __original_mbh_init = mbh.__init__
 # NOTE: the idea of having the mbh init here instead of exposed from C++ is to allow the use
 # of the syntax mbh(uda, ...) for all udas
-def _mbh_init(self, algo = None, stop = 5, perturb = 1e-2, seed = None):
+
+
+def _mbh_init(self, algo=None, stop=5, perturb=1e-2, seed=None):
     """
     Args:
-        uda: a user-defined algorithm (either C++ or Python - note that *uda* will be deep-copied
+        algo: a user-defined algorithm (either C++ or Python - note that *algo* will be deep-copied
              and stored inside the :class:`~pygmo.core.mbh` instance)
         stop (``int``): consecutive runs of the inner algorithm that need to result in no improvement for
              :class:`~pygmo.core.mbh` to stop
@@ -231,6 +239,45 @@ def _mbh_init(self, algo = None, stop = 5, perturb = 1e-2, seed = None):
         __original_mbh_init(self, algo_arg, stop, perturb, seed)
 
 setattr(mbh, "__init__", _mbh_init)
+
+# Override of the cstrs_self_adaptive meta-algorithm constructor.
+__original_cstrs_self_adaptive_init = cstrs_self_adaptive.__init__
+# NOTE: the idea of having the cstrs_self_adaptive init here instead of exposed from C++ is to allow the use
+# of the syntax cstrs_self_adaptive(uda, ...) for all udas
+
+
+def _cstrs_self_adaptive_init(self, iters=1, algo=None, seed=None):
+    """
+    Args:
+        iter (``int``): number of iterations (i.e. calls to the innel algorithm evolve)
+        algo: a user-defined algorithm (either C++ or Python - note that *algo* will be deep-copied
+             and stored inside the :class:`~pygmo.core.cstrs_self_adaptive` instance)
+        seed (``int``): seed used by the internal random number generator
+
+    Raises:
+        ValueError: if *iters* is negative or greater than an implementation-defined value
+        unspecified: any exception thrown by the constructor of :class:`pygmo.core.algorithm`, or by
+             failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+             signatures, etc.)
+
+    """
+    if algo is None:
+        # Use the null problem for default init.
+        algo = de()
+    if type(algo) == algorithm:
+        # If algo is a pygmo algorithm, we will pass it as-is to the
+        # original init.
+        algo_arg = algo
+    else:
+        # Otherwise, we attempt to create an algorithm from it. This will
+        # work if algo is an exposed C++ algorithm or a Python UDA.
+        algo_arg = algorithm(algo)
+    if seed is None:
+        __original_cstrs_self_adaptive_init(self, iters, algo_arg)
+    else:
+        __original_cstrs_self_adaptive_init(self, iters, algo_arg, seed)
+
+setattr(cstrs_self_adaptive, "__init__", _cstrs_self_adaptive_init)
 
 
 # Override of the population constructor.
