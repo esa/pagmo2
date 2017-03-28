@@ -196,7 +196,7 @@ public:
 
     /// Gradient sparsity.
     /**
-     * The <tt>gradient_sparsity<\tt> computation is forwarded to the inner problem.
+     * The <tt>gradient_sparsity</tt> computation is forwarded to the inner problem.
      *
      * @return the gradient sparsity of the inner problem.
      */
