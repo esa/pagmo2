@@ -47,6 +47,65 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
     # Give some time for the cluster to start up.
     sleep 20;
     python -c "import pygmo; pygmo.test.run_test_suite()"
+    if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
+        # Stop here if this is the Python27 build. Docs are checked and uploaded only in the Python36 build.
+        exit 0;
+    fi
+    # Run doxygen anc check the output.
+    cd ../doc/doxygen;
+    export DOXYGEN_OUTPUT=`doxygen 2>&1 >/dev/null`;
+    if [[ "${DOXYGEN_OUTPUT}" != "" ]]; then
+        echo "Doxygen encountered some problem:";
+        echo "${DOXYGEN_OUTPUT}";
+        exit 1;
+    fi
+    echo "Doxygen ran successfully";
+    # Copy the images into the xml output dir (this is needed by sphinx).
+    cp images/* xml/;
+    cd ../sphinx/;
+    export SPHINX_OUTPUT=`make html 2>&1 >/dev/null`;
+    if [[ "${SPHINX_OUTPUT}" != "" ]]; then
+        echo "Sphinx encountered some problem:";
+        echo "${SPHINX_OUTPUT}";
+        exit 1;
+    fi
+    echo "Sphinx ran successfully";
+    # if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
+    #     echo "Testing a pull request, the generated documentation will not be uploaded.";
+    #     exit 0;
+    # fi
+    # if [[ "${TRAVIS_BRANCH}" != "master" ]]; then
+    #     echo "Branch is not master, the generated documentation will not be uploaded.";
+    #     exit 0;
+    # fi
+    # Move out the resulting documentation.
+    mv _build/html /home/travis/sphinx;
+    # Checkout a new copy of the repo, for pushing to gh-pages.
+    cd ../../../;
+    git config --global push.default simple
+    git config --global user.name "Travis CI"
+    git config --global user.email "bluescarni@gmail.com"
+    set +x
+    git clone "https://${GH_TOKEN}@github.com/esa/pagmo2.git" pagmo2_gh_pages -q
+    set -x
+    cd pagmo2_gh_pages
+    git checkout -b gh-pages --track origin/gh-pages;
+    git rm -fr sphinx;
+    mv /home/travis/sphinx .;
+    git add sphinx;
+    # We assume here that a failure in commit means that there's nothing
+    # to commit.
+    git commit -m "Update Sphinx documentation, commit ${TRAVIS_COMMIT} [skip ci]." || exit 0
+    PUSH_COUNTER=0
+    until git push -q
+    do
+        git pull -q
+        PUSH_COUNTER=$((PUSH_COUNTER + 1))
+        if [ "$PUSH_COUNTER" -gt 3 ]; then
+            echo "Push failed, aborting.";
+            exit 1;
+        fi
+    done
 elif [[ "${PAGMO_BUILD}" == "OSXPython36" || "${PAGMO_BUILD}" == "OSXPython27" ]]; then
     CXX=clang++ CC=clang cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_INSTALL_HEADERS=no -DPAGMO_BUILD_PYGMO=yes -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
     make install VERBOSE=1;

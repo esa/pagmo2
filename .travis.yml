@@ -8,72 +8,76 @@ sudo: false
 branches:
   except: /pr\/.*/
 
+env:
+  global:
+    - secure: "T5IAwX5V7gF+ALggE8wppXyhRe2rh0KCrM6H/JLzBM/hJ122blu9PGadRx7vXSoHkMB9InwLBpnUVf5NXvFJX7+0RmpMp6taj0/hlhl4mP+b6B7+UIg7b07XCvEm4Eyj25UqvoxKaUpsqd3BbCljNLkwHeRZ+P0eKL9m8YUjuqlRKW1BN1QkYGmrT0+1KT4gxXAql+/TS1RH4bnQsnXfau8bdrN7z21fMFMHHTH6e5OvFRsox0QS71miJf6VMPbpZ6HkAyfFywflQPRsJiHbhEGWt7AcE2DixKkJ4zJRD0IBuz2QbTs8irSQb03Upxni4BwRNezFNtgLWJmtgIN/Ww26ZgEXWC0O51OguvwTKkA2u/Sr7Fb2V1/22skj8OQPzBdPp/h1I8tUOZo0Ze5l12gcmDJEeGFA3hEGG1GZ9/zVANvVfCpFHl7rx7D4ggm1bN+Oi1C/JoXT7u1KhfiJtT5L77i4XJ1WBeQOpIV88UfGf28lhJxrt/HzkSoVT9N+t9GN9tPOWbvPqKOUIZqkxr+xz6FapL5eAySOUOJKOyUZ5Wcxa80aZFZHXfYOD8wVpImIxgxEI0LGznhftWY44bVegr1aSDeMCHVA34LZ62zJ+Ee7F40eKaX8HIzXt8F35i+LBVEiglteLd6KgNH3iSvp+EtAtSsu8eijD5fq6Lo="
+
 matrix:
   include:
-    - env: PAGMO_BUILD="DebugGCC48"
-      compiler: gcc
-      os: linux
-      addons:
-        apt:
-          sources:
-          - ubuntu-toolchain-r-test
-          packages:
-          - gcc-4.8
-          - g++-4.8
-          - binutils-gold
-    - env: PAGMO_BUILD="ReleaseGCC48"
-      compiler: gcc
-      os: linux
-      addons:
-        apt:
-          sources:
-          - ubuntu-toolchain-r-test
-          packages:
-          - gcc-4.8
-          - g++-4.8
-          - binutils-gold
-    - env: PAGMO_BUILD="CoverageGCC5"
-      compiler: gcc
-      os: linux
-      addons:
-        apt:
-          sources:
-          - ubuntu-toolchain-r-test
-          packages:
-          - gcc-5
-          - g++-5
-          - binutils-gold
-    - env: PAGMO_BUILD="DebugGCC6"
-      compiler: gcc
-      os: linux
-      addons:
-        apt:
-          sources:
-          - ubuntu-toolchain-r-test
-          packages:
-          - gcc-6
-          - g++-6
-          - binutils-gold
-    - env: PAGMO_BUILD="DebugClang38"
-      compiler: clang
-      os: linux
-      addons:
-        apt:
-          sources:
-          - llvm-toolchain-precise-3.8
-          - ubuntu-toolchain-r-test
-          packages:
-          - clang-3.8
-    - env: PAGMO_BUILD="ReleaseClang38"
-      compiler: clang
-      os: linux
-      addons:
-        apt:
-          sources:
-          - llvm-toolchain-precise-3.8
-          - ubuntu-toolchain-r-test
-          packages:
-          - clang-3.8
+    # - env: PAGMO_BUILD="DebugGCC48"
+    #   compiler: gcc
+    #   os: linux
+    #   addons:
+    #     apt:
+    #       sources:
+    #       - ubuntu-toolchain-r-test
+    #       packages:
+    #       - gcc-4.8
+    #       - g++-4.8
+    #       - binutils-gold
+    # - env: PAGMO_BUILD="ReleaseGCC48"
+    #   compiler: gcc
+    #   os: linux
+    #   addons:
+    #     apt:
+    #       sources:
+    #       - ubuntu-toolchain-r-test
+    #       packages:
+    #       - gcc-4.8
+    #       - g++-4.8
+    #       - binutils-gold
+    # - env: PAGMO_BUILD="CoverageGCC5"
+    #   compiler: gcc
+    #   os: linux
+    #   addons:
+    #     apt:
+    #       sources:
+    #       - ubuntu-toolchain-r-test
+    #       packages:
+    #       - gcc-5
+    #       - g++-5
+    #       - binutils-gold
+    # - env: PAGMO_BUILD="DebugGCC6"
+    #   compiler: gcc
+    #   os: linux
+    #   addons:
+    #     apt:
+    #       sources:
+    #       - ubuntu-toolchain-r-test
+    #       packages:
+    #       - gcc-6
+    #       - g++-6
+    #       - binutils-gold
+    # - env: PAGMO_BUILD="DebugClang38"
+    #   compiler: clang
+    #   os: linux
+    #   addons:
+    #     apt:
+    #       sources:
+    #       - llvm-toolchain-precise-3.8
+    #       - ubuntu-toolchain-r-test
+    #       packages:
+    #       - clang-3.8
+    # - env: PAGMO_BUILD="ReleaseClang38"
+    #   compiler: clang
+    #   os: linux
+    #   addons:
+    #     apt:
+    #       sources:
+    #       - llvm-toolchain-precise-3.8
+    #       - ubuntu-toolchain-r-test
+    #       packages:
+    #       - clang-3.8
     - env: PAGMO_BUILD="Python36"
       compiler: gcc
       os: linux
@@ -84,28 +88,28 @@ matrix:
           packages:
           - gcc-4.8
           - g++-4.8
-    - env: PAGMO_BUILD="Python27"
-      compiler: gcc
-      os: linux
-      addons:
-        apt:
-          sources:
-          - ubuntu-toolchain-r-test
-          packages:
-          - gcc-4.8
-          - g++-4.8
-    - env: PAGMO_BUILD="OSXDebug"
-      os: osx
-      osx_image: xcode6.4
-    - env: PAGMO_BUILD="OSXRelease"
-      os: osx
-      osx_image: xcode6.4
-    - env: PAGMO_BUILD="OSXPython36"
-      os: osx
-      osx_image: xcode6.4
-    - env: PAGMO_BUILD="OSXPython27"
-      os: osx
-      osx_image: xcode6.4
+    # - env: PAGMO_BUILD="Python27"
+    #   compiler: gcc
+    #   os: linux
+    #   addons:
+    #     apt:
+    #       sources:
+    #       - ubuntu-toolchain-r-test
+    #       packages:
+    #       - gcc-4.8
+    #       - g++-4.8
+    # - env: PAGMO_BUILD="OSXDebug"
+    #   os: osx
+    #   osx_image: xcode6.4
+    # - env: PAGMO_BUILD="OSXRelease"
+    #   os: osx
+    #   osx_image: xcode6.4
+    # - env: PAGMO_BUILD="OSXPython36"
+    #   os: osx
+    #   osx_image: xcode6.4
+    # - env: PAGMO_BUILD="OSXPython27"
+    #   os: osx
+    #   osx_image: xcode6.4
 
 script:
     - mkdir build
