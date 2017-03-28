@@ -457,7 +457,7 @@ public:
  * **NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
  * for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
  * The number of function evaluation will be bounded to \p iters times the fevals made by one call to the inner UDA. The
- * internal cache is reset at each iteration, but its size will grow unlimited during each callto
+ * internal cache is reset at each iteration, but its size will grow unlimited during each call to
  * the inner UDA evolve method.
  *
  * **NOTE** Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
@@ -465,7 +465,7 @@ public:
  * the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
  *
  * **NOTE** The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner UDA employed and
- * in particular to its parameters (generations / iterations)
+ * in particular to its parameters (generations / iterations).
  *
  * See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
  * Transactions on Evolutionary Computation 7.5 (2003): 445-455.
@@ -515,7 +515,7 @@ public:
 
     /// Evolve method.
     /**
-     * This method will call evolve on the inner UDA \p iters times updating the penalty to be applied to the
+     * This method will call evolve on the inner algorithm \p iters times updating the penalty to be applied to the
      * objective after each call
      *
      * @param pop population to be evolved.
@@ -656,7 +656,7 @@ public:
      * - >0: will print and log one line each  \p level call to the inner algorithm.
      *
      * Example (verbosity 10):
-     * @code
+     * @code{.unparsed}
      *   Iter:        Fevals:          Best: Infeasibility:      Violated:    Viol. Norm:   N. Feasible:
      *       1              0       -69.2141       0.235562              6        117.743              0 i
      *      11            200       -69.2141       0.248216              6        117.743              0 i
@@ -672,7 +672,7 @@ public:
      *     271           5389       -10.7421              0              0              0              3
      *     281           5585       -10.7421              0              0              0              3
      *     291           5784       -11.4868              0              0              0              4
-
+     *
      * @endcode
      * \p Iter is the iteration number, \p Fevals is the number of fitness evaluations, \p Best is the objective
      * function of the best fitness currently in the population, \p Infeasibility is the normailized infeasibility
@@ -698,13 +698,13 @@ public:
 
     /// Get log.
     /**
-     * A log containing relevant quantities monitoring the last call to mbh::evolve(). Each element of the returned
-     * <tt>std::vector</tt> is a cstrs_self_adaptive::log_line_type containing: \p Iter, \p Fevals, \p Best, \p
-     * Infeasibility, \p Violated, <tt>Viol. Norm</tt>, <tt>N. Feasible</tt> as described in
+     * A log containing relevant quantities monitoring the last call to cstrs_self_adaptive::evolve(). Each element of
+     * the returned <tt>std::vector</tt> is a cstrs_self_adaptive::log_line_type containing: \p Iter, \p Fevals, \p
+     * Best, \p Infeasibility, \p Violated, <tt>Viol. Norm</tt>, <tt>N. Feasible</tt> as described in
      * cstrs_self_adaptive::set_verbosity().
      *
      * @return an <tt>std::vector</tt> of cstrs_self_adaptive::log_line_type containing the logged values Iters,
-     * Fevals, Best, Infeasibility, Violated and Viol. Norm and N. Feasible
+     * Fevals, Best, Infeasibility, Violated and Viol. Norm and N. Feasible.
      */
     const log_type &get_log() const
     {

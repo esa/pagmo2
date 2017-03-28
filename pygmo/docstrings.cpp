@@ -1558,7 +1558,7 @@ objective function. Using the above definitions the overall pseudo code can be s
 **NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
 The number of function evaluation will be bounded to \p iters times the fevals made by one call to the inner UDA. The
-internal cache is reset at each iteration, but its size will grow unlimited during each callto
+internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.
 
 **NOTE** Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
@@ -1566,7 +1566,7 @@ corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  con
 the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
 
 **NOTE** The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner UDA employed and
-in particular to its parameters (generations / iterations)
+in particular to its parameters (generations / iterations).
 
 See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
 Transactions on Evolutionary Computation 7.5 (2003): 445-455.
@@ -1582,7 +1582,7 @@ std::string cstrs_self_adaptive_get_log_docstring()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity parameter
 (by default nothing is logged) which can be set calling :func:`~pygmo.core.algorithm.set_verbosity()` on a :class:`~pygmo.core.algorithm` constructed
-with an :class:`~pygmo.core.mbh`. A verbosity level of ``N > 0`` will log one line each ``N`` ``iters``.
+with an :class:`~pygmo.core.cstrs_self_adaptive`. A verbosity level of ``N > 0`` will log one line each ``N`` ``iters``.
 
 Returns:
     ``list`` of ``tuples``: at each call of the inner algorithm, the values ``Iters``, ``Fevals``, ``Best``, ``Infeasibility``, 
@@ -1614,7 +1614,6 @@ Examples:
     >>> uda = algo.extract(moead)
     >>> uda.get_log() # doctest: +SKIP
     [(1, 0, -96.54346700540063, 0.34606950943401493, 4, 177.70482046341274, 0), (4, 600, ...
-
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::cstrs_self_adaptive::get_log()`.
 
