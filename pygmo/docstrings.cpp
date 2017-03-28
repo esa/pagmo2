@@ -1565,8 +1565,8 @@ the inner UDA evolve method.
 corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  constraint is ignored if all
 the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
 
-**NOTE** The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner UDA employed and
-in particular to its parameters (generations / iterations).
+**NOTE** The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner
+algorithm employed and in particular to its parameters (generations / iterations).
 
 See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
 Transactions on Evolutionary Computation 7.5 (2003): 445-455.
