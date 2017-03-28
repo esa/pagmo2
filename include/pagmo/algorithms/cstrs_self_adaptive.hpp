@@ -470,13 +470,11 @@ public:
  * See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
  * Transactions on Evolutionary Computation 7.5 (2003): 445-455.
  */
-class cstrs_self_adaptive : public algorithm
+class cstrs_self_adaptive
 {
     // Enabler for the ctor from UDA.
     template <typename T>
-    using ctor_enabler
-        = enable_if_t<std::is_constructible<algorithm, T &&>::value && !std::is_same<uncvref_t<T>, algorithm>::value,
-                      int>;
+    using ctor_enabler = enable_if_t<std::is_constructible<algorithm, T &&>::value, int>;
 
 public:
     /// Single entry of the log (iter, fevals, best_f, infeas, n. constraints violated, violation norm).
@@ -493,9 +491,8 @@ public:
      * - inner algorithm: pagmo::de{1u};
      * - seed: random.
      *
-     * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
      */
-    cstrs_self_adaptive(unsigned iters = 1u) : algorithm(de{1}), m_iters(iters), m_verbosity(0u), m_log()
+    cstrs_self_adaptive(unsigned iters = 1u) : m_algorithm(de{1}), m_iters(iters), m_verbosity(0u), m_log()
     {
         const auto rnd = pagmo::random_device::next();
         m_seed = rnd;
@@ -504,15 +501,15 @@ public:
     /// Constructor.
     /**
      *
-     * @param iters Number of iterations (calls to the inner UDA). After each iteration the penalty is adapted
-     * @param a a user-defined algorithm (UDA) that will be used to construct the inner algorithm.
+     * @param iters Number of iterations (calls to the inner algorithm). After each iteration the penalty is adapted
+     * @param a a pagmo::algorithm (or UDA) that will be used to construct the inner algorithm.
      * @param seed seed used by the internal random number generator (default is random).
      *
      * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
      */
     template <typename T, ctor_enabler<T> = 0>
     explicit cstrs_self_adaptive(unsigned iters, T &&a, unsigned seed = pagmo::random_device::next())
-        : algorithm(std::forward<T>(a)), m_iters(iters), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        : m_algorithm(std::forward<T>(a)), m_iters(iters), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
     }
 
@@ -622,7 +619,7 @@ public:
                 }
             }
             // We call the evolution on the unconstrained population (here is where fevals will increase)
-            new_pop = static_cast<const algorithm *>(this)->evolve(new_pop);
+            new_pop = m_algorithm.evolve(new_pop);
             penalized_udp_ptr = new_pop.get_problem().extract<detail::penalized_udp>();
             // We update the original pop avoiding fevals thanks to the cache
             for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
@@ -730,10 +727,34 @@ public:
         stream(ss, "\n\tIterations: ", m_iters);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
-        stream(ss, "\n\n\tInner algorithm: ", static_cast<const algorithm *>(this)->get_name());
+        stream(ss, "\n\n\tInner algorithm: ", m_algorithm.get_name());
         stream(ss, "\n\tInner algorithm extra info: ");
-        stream(ss, "\n", static_cast<const algorithm *>(this)->get_extra_info());
+        stream(ss, "\n", m_algorithm.get_extra_info());
         return ss.str();
+    }
+    /// Getter for the inner algorithm.
+    /**
+     * Returns a const reference to the inner pagmo::algorithm.
+     *
+     * @return a const reference to the inner pagmo::algorithm.
+     */
+    const algorithm &get_inner_algorithm() const
+    {
+        return m_algorithm;
+    }
+    /// Getter for the inner problem.
+    /**
+     * Returns a reference to the inner pagmo::algorithm.
+     *
+     * **NOTE** The ability to extract a non const reference is provided only in order to allow to call
+     * non-const methods on the internal pagmo::algorithm instance. Assigning a new pagmo::algorithm via
+     * this reference is undefined behaviour.
+     *
+     * @return a reference to the inner pagmo::algorithm.
+     */
+    algorithm &get_inner_algorithm()
+    {
+        return m_algorithm;
     }
     /// Object serialization
     /**
@@ -746,28 +767,12 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<algorithm>(this), m_iters, m_e, m_seed, m_verbosity, m_log);
+        ar(m_algorithm, m_iters, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
-    // Delete all that we do not want to inherit from algorithm.
-    // A - Common to all meta
-    bool has_set_seed() const = delete;
-    bool is_stochastic() const = delete;
-    bool has_set_verbosity() const = delete;
-    template <typename Archive>
-    void save(Archive &) const = delete;
-    template <typename Archive>
-    void load(Archive &) = delete;
-
-// The CI using gcc 4.8 fails to compile this delete, excluding it in that case does not harm
-// it would just result in a "weird" behaviour in case the user would try to stream this object
-#if __GNUC__ > 4
-    // NOTE: We delete the streaming operator overload called with mbh, otherwise the inner algo would stream
-    // NOTE: If a streaming operator is wanted for this class remove the line below and implement it.
-    friend std::ostream &operator<<(std::ostream &, const cstrs_self_adaptive &) = delete;
-#endif
-
+    // Inner algorithm
+    algorithm m_algorithm;
     unsigned m_iters;
     mutable detail::random_engine_type m_e;
     unsigned m_seed;

@@ -100,8 +100,8 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction)
 {
     { // default constructor
         cstrs_self_adaptive udp;
-        BOOST_CHECK(udp.extract<de>() != NULL);
-        BOOST_CHECK(udp.extract<cmaes>() == NULL);
+        BOOST_CHECK(udp.get_inner_algorithm().extract<de>() != NULL);
+        BOOST_CHECK(udp.get_inner_algorithm().extract<cmaes>() == NULL);
     }
     { // constructor from iters
         BOOST_CHECK_NO_THROW((cstrs_self_adaptive{1500u}));
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction)
 
         BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
         user_algo2.set_seed(32u);
-        user_algo2.extract<de>()->set_seed(32u);
+        user_algo2.get_inner_algorithm().extract<de>()->set_seed(32u);
         pop3 = user_algo2.evolve(pop3);
 
         BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
