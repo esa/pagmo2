@@ -205,15 +205,15 @@ constructed with a <a class="reference internal" href="#pygmo.core.bee_colony" t
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:  Current best:          Best:</span>
 <span class="go">   1             40         183728         183728</span>
 <span class="go"> 101           4040        506.757        26.4234</span>
 <span class="go"> 201           8040        55.6282        14.9136</span>
 <span class="go"> 301          12040         65.554        14.9136</span>
 <span class="go"> 401          16040        191.654        14.9136</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">bee_colony</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">bee_colony</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 40, 183727.83934515435, 183727.83934515435), ...</span>
 </pre></div>
 </div>
@@ -320,7 +320,7 @@ constructed with a <a class="reference internal" href="#pygmo.core.de" title="py
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:            dx:            df:</span>
 <span class="go">  1             20         162446        65.2891    1.78686e+06</span>
 <span class="go">101           2020        198.402         8.4454        572.161</span>
@@ -328,8 +328,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.de" title="py
 <span class="go">301           6020        6.67069        0.51811        1.99744</span>
 <span class="go">401           8020        3.60022       0.583444       0.554511</span>
 <span class="go">Exit condition -- generations = 500</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">de</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">de</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 20, 162446.0185265718, 65.28911664703388, 1786857.8926660626), ...</span>
 </pre></div>
 </div>
@@ -485,7 +485,7 @@ constructed with a <a class="reference internal" href="#pygmo.core.sade" title="
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problems</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:             F:            CR:            dx:            df:</span>
 <span class="go">  1             20         297060       0.690031       0.294769        44.1494    2.30584e+06</span>
 <span class="go">101           2020        97.4258        0.58354       0.591527        13.3115        441.545</span>
@@ -493,8 +493,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.sade" title="
 <span class="go">301           6020        6.84774       0.494549        0.98105        12.2781        40.9626</span>
 <span class="go">401           8020         4.7861       0.428741       0.743813        12.2938        39.7791</span>
 <span class="go">Exit condition -- generations = 500</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">sade</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">sade</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 20, 297059.6296130389, 0.690031071850855, 0.29476914701127666, 44.14940516578547, 2305836.7422693395), ...</span>
 </pre></div>
 </div>
@@ -629,16 +629,16 @@ constructed with a <a class="reference internal" href="#pygmo.core.de1220" title
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
-<span class="go">   Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:</span>
-<span class="go">      1             20         285653        0.55135       0.441551             16        43.9719    2.02379e+06</span>
-<span class="go">    101           2020        12.2721       0.127285      0.0792493             14        3.22986        106.764</span>
-<span class="go">    201           4020        5.72927       0.148337       0.777806             14        2.72177        4.10793</span>
-<span class="go">    301           6020        4.85084        0.12193       0.996191              3        2.95555        3.85027</span>
-<span class="go">    401           8020        4.20638       0.235997       0.996259              3        3.60338        4.49432</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:</span>
+<span class="go">    1             20         285653        0.55135       0.441551             16        43.9719    2.02379e+06</span>
+<span class="go">101           2020        12.2721       0.127285      0.0792493             14        3.22986        106.764</span>
+<span class="go">201           4020        5.72927       0.148337       0.777806             14        2.72177        4.10793</span>
+<span class="go">301           6020        4.85084        0.12193       0.996191              3        2.95555        3.85027</span>
+<span class="go">401           8020        4.20638       0.235997       0.996259              3        3.60338        4.49432</span>
 <span class="go">Exit condition -- generations = 500</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">de1220</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">de1220</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 20, 285652.7928977573, 0.551350234239449, 0.4415510963067054, 16, 43.97185788345982, 2023791.5123259544), ...</span>
 </pre></div>
 </div>
@@ -725,7 +725,7 @@ constructed with a <a class="reference internal" href="#pygmo.core.cmaes" title=
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:            dx:            df:         sigma:</span>
 <span class="go">  1              0         173924        33.6872    3.06519e+06            0.5</span>
 <span class="go">101           2000        92.9612       0.583942        156.921      0.0382078</span>
@@ -733,8 +733,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.cmaes" title=
 <span class="go">301           6000        4.81377      0.0698366        1.34637      0.0297664</span>
 <span class="go">401           8000        1.04445      0.0568541       0.514459      0.0649836</span>
 <span class="go">Exit condition -- generations = 500</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">cmaes</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">cmaes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...</span>
 </pre></div>
 </div>
@@ -826,15 +826,15 @@ constructed with a <a class="reference internal" href="#pygmo.core.moead" title=
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">zdt</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:           ADF:        ideal1:        ideal2:</span>
 <span class="go">  1              0        32.5747     0.00190532        2.65685</span>
 <span class="go">101           4000        5.67751    2.56736e-09       0.468789</span>
 <span class="go">201           8000        5.38297    2.56736e-09      0.0855025</span>
 <span class="go">301          12000        5.05509    9.76581e-10      0.0574796</span>
 <span class="go">401          16000        5.13126    9.76581e-10      0.0242256</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">moead</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">moead</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0, 32.574745630075874, array([  1.90532430e-03,   2.65684834e+00])), ...</span>
 </pre></div>
 </div>
@@ -913,7 +913,7 @@ change in the search range.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">hock_schittkowsky_71</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Fevals:          Best:      Violated:    Viol. Norm:         Range:</span>
 <span class="go">      4        110.785              1        2.40583            0.5</span>
 <span class="go">     12        110.785              1        2.40583           0.25</span>
@@ -941,8 +941,8 @@ change in the search range.</p>
 <span class="go">    151        95.4502              0              0    1.52588e-05</span>
 <span class="go">    159        95.4502              0              0    7.62939e-06</span>
 <span class="go">Exit condition -- range: 7.62939e-06 &lt;= 1e-05</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">compass_search</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">compass_search</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(4, 110.785345345, 1, 2.405833534534, 0.5), (12, 110.785345345, 1, 2.405833534534, 0.25) ...</span>
 </pre></div>
 </div>
@@ -1012,7 +1012,7 @@ each verbosity function evaluations.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Fevals:          Best:       Current:    Mean range:   Temperature:</span>
 <span class="go">     57           5937           5937           0.48             10</span>
 <span class="go">  10033        9.50937        28.6775      0.0325519        2.51189</span>
@@ -1035,7 +1035,7 @@ each verbosity function evaluations.</p>
 <span class="go">  95033    5.35153e-05    9.10958e-05    3.18624e-05    1.99526e-05</span>
 <span class="go">  99933    2.34849e-05    8.72206e-05    2.59215e-05    1.14815e-05</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">simulated_annealing</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(57, 5936.999957947842, 5936.999957947842, 0.47999999999999987, 10.0), (10033, ...</span>
 </pre></div>
 </div>
@@ -1157,7 +1157,7 @@ constructed with a <a class="reference internal" href="#pygmo.core.de1220" title
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:         gbest:     Mean Vel.:    Mean lbest:    Avg. Dist.:</span>
 <span class="go">   1             40        72473.3       0.173892         677427       0.281744</span>
 <span class="go">  51           1040        135.867      0.0183806        748.001       0.065826</span>
@@ -1169,8 +1169,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.de1220" title
 <span class="go"> 351           7040        6.09414    0.000187343        16.8875     0.00172307</span>
 <span class="go"> 401           8040        5.78415    0.000524536        16.5073     0.00234197</span>
 <span class="go"> 451           9040         5.4662     0.00018305        16.2339    0.000958182</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">de1220</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">de1220</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1,40,72473.32713790605,0.1738915144248373,677427.3504996448,0.2817443174278134), (51,1040,...</span>
 </pre></div>
 </div>
@@ -1256,15 +1256,15 @@ constructed with a <a class="reference internal" href="#pygmo.core.nsga2" title=
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">nsga2</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">zdt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">40</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:        ideal1:        ideal2:</span>
 <span class="go">   1              0      0.0033062        2.44966</span>
 <span class="go">  21            800    0.000275601       0.893137</span>
 <span class="go">  41           1600    3.15834e-05        0.44117</span>
 <span class="go">  61           2400     2.3664e-05       0.206365</span>
 <span class="go">  81           3200     2.3664e-05       0.133305</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">nsga2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">nsga2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0, array([ 0.0033062 ,  2.44965599])), (21, 800, array([  2.75601086e-04 ...</span>
 </pre></div>
 </div>
@@ -1325,7 +1325,7 @@ cluster optimization.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>uda</strong> &#8211; a user-defined algorithm (either C++ or Python - note that <em>uda</em> will be deep-copied
+<li><strong>algo</strong> &#8211; a user-defined algorithm (either C++ or Python - note that <em>algo</em> will be deep-copied
 and stored inside the <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> instance)</li>
 <li><strong>stop</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; consecutive runs of the inner algorithm that need to result in no improvement for
 <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> to stop</li>
@@ -1368,6 +1368,23 @@ with an <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.m
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">mbh</span><span class="p">(</span><span class="n">algorithm</span><span class="p">(</span><span class="n">de</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">10</span><span class="p">))))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">cec2013</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Fevals:          Best:      Violated:    Viol. Norm:         Trial:</span>
+<span class="go">    440        25162.3              0              0              0</span>
+<span class="go">    880          14318              0              0              0</span>
+<span class="go">   1320        11178.2              0              0              0</span>
+<span class="go">   1760        6613.71              0              0              0</span>
+<span class="go">   2200        6613.71              0              0              1</span>
+<span class="go">   2640        6124.62              0              0              0</span>
+<span class="go">   3080        6124.62              0              0              1</span>
+</pre></div>
+</div>
 <p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh7get_logEv" title="pagmo::mbh::get_log"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::mbh::get_log()</span></code></a>.</p>
 </dd></dl>
 
@@ -1448,6 +1465,145 @@ with an <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.m
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
 mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.core.cstrs_self_adaptive">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">cstrs_self_adaptive</code><span class="sig-paren">(</span><em>iters = 1</em>, <em>algo = de()</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cstrs_self_adaptive" title="Permalink to this definition">¶</a></dt>
+<dd><p>This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
+(UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
+technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire
+underlying population. The resulting approach is an alternative to using the meta-problem pagmo::unconstrained to transform the
+constrained fitness into an unconstrained fitness.</p>
+<p>The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
+extends their use to any-algorithm, in particular to non generational, population based, evolutionary approaches where
+a steady-state reinsertion is used (i.e. as soon as an individual is found fit it is immediately reinserted into the
+population and will influence the next offspring genetic material).</p>
+<p>Each decision vector is assigned an infeasibility measure <span class="math">\(\iota\)</span> which accounts for the normalized violation of
+all the constraints (discounted by the constraints tolerance as returned by pagmo::problem::get_c_tol()). The
+normalization factor used <span class="math">\(c_{j_{max}}\)</span> is the maximum violation of the <span class="math">\(j\)</span> constraint.</p>
+<p>As in the original paper, three individuals in the evolving population are then used to penalize the single
+objective.</p>
+<div class="math">
+\[\begin{split}\begin{array}{rl}
+\check X &amp; \mbox{: the best decision vector} \\
+\hat X &amp; \mbox{: the worst decision vector} \\
+\breve X &amp; \mbox{: the decision vector with the highest objective}
+\end{array}\end{split}\]</div>
+<p>The best and worst decision vectors are defined accounting for their infeasibilities and for the value of the
+objective function. Using the above definitions the overall pseudo code can be summarized as follows:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt; Select a pagmo::population (related to a single-objective constrained problem)
+&gt; Select a UDA (able to solve single-objective unconstrained problems)
+&gt; while i &lt; iter
+&gt; &gt; Compute the normalization factors (will depend on the current population)
+&gt; &gt; Compute the best, worst, highest (will depend on the current population)
+&gt; &gt; Evolve the population using the UDA and a penalized objective
+&gt; &gt; Reinsert the best decision vector from the previous evolution
+</pre></div>
+</div>
+<p><a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.cstrs_self_adaptive</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a> objects.</p>
+<p><strong>NOTE</strong> Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
+The number of function evaluation will be bounded to p iters times the fevals made by one call to the inner UDA. The
+internal cache is reset at each iteration, but its size will grow unlimited during each call to
+the inner UDA evolve method.</p>
+<p><strong>NOTE</strong> Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+corner cases and with any UDAs. Most notably, a violation to the f$jf$-th  constraint is ignored if all
+the decision vectors in the population satisfy that particular constraint (i.e. if f$c_{j_{max}} = 0f$).</p>
+<p><strong>NOTE</strong> The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner
+algorithm employed and in particular to its parameters (generations / iterations).</p>
+<p>See: Farmani, Raziyeh, and Jonathan A. Wright. &#8220;Self-adaptive fitness formulation for constrained optimization.&#8221; IEEE
+Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/cstrs_self_adaptive.html#_CPPv2N5pagmo19cstrs_self_adaptiveE" title="pagmo::cstrs_self_adaptive"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cstrs_self_adaptive</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>iter</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of iterations (i.e. calls to the innel algorithm evolve)</li>
+<li><strong>algo</strong> &#8211; a user-defined algorithm (either C++ or Python - note that <em>algo</em> will be deep-copied
+and stored inside the <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> instance)</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>iters</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a>, or by
+failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pygmo.core.cstrs_self_adaptive.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cstrs_self_adaptive.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity parameter
+(by default nothing is logged) which can be set calling <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on a <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed
+with an <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a>. A verbosity level of <code class="docutils literal"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> will log one line each <code class="docutils literal"><span class="pre">N</span></code> <code class="docutils literal"><span class="pre">iters</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">at each call of the inner algorithm, the values <code class="docutils literal"><span class="pre">Iters</span></code>, <code class="docutils literal"><span class="pre">Fevals</span></code>, <code class="docutils literal"><span class="pre">Best</span></code>, <code class="docutils literal"><span class="pre">Infeasibility</span></code>,
+<code class="docutils literal"><span class="pre">Violated</span></code>, <code class="docutils literal"><span class="pre">Viol.</span> <span class="pre">Norm</span></code> and <code class="docutils literal"><span class="pre">N.</span> <span class="pre">Feasible</span></code>, where:<ul class="simple">
+<li><code class="docutils literal"><span class="pre">Iters</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), the number of iterations made (i.e. calls to the evolve method of the inner algorithm)</li>
+<li><code class="docutils literal"><span class="pre">Fevals</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), the number of fitness evaluations made</li>
+<li><code class="docutils literal"><span class="pre">Best</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the objective function of the best fitness currently in the population</li>
+<li><code class="docutils literal"><span class="pre">Infeasibility</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the aggregated (and normalized) infeasibility value of <code class="docutils literal"><span class="pre">Best</span></code></li>
+<li><code class="docutils literal"><span class="pre">Violated</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), the number of constraints currently violated by the best solution</li>
+<li><code class="docutils literal"><span class="pre">Viol.</span> <span class="pre">Norm</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the norm of the violation (discounted already by the constraints tolerance)</li>
+<li><code class="docutils literal"><span class="pre">N.</span> <span class="pre">Feasible</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), the number of feasible individuals currently in the population.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">tuples</span></code></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">cstrs_self_adaptive</span><span class="p">(</span><span class="n">iters</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">de</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">cec2006</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Iter:        Fevals:          Best: Infeasibility:      Violated:    Viol. Norm:   N. Feasible:</span>
+<span class="go">    1              0       -96.5435        0.34607              4        177.705              0 i</span>
+<span class="go">    4            600       -96.5435       0.360913              4        177.705              0 i</span>
+<span class="go">    7           1200       -96.5435        0.36434              4        177.705              0 i</span>
+<span class="go">   10           1800       -96.5435       0.362307              4        177.705              0 i</span>
+<span class="go">   13           2400       -23.2502       0.098049              4        37.1092              0 i</span>
+<span class="go">   16           3000       -23.2502       0.071571              4        37.1092              0 i</span>
+<span class="go">   19           3600       -23.2502       0.257604              4        37.1092              0 i</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">moead</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
+<span class="go">[(1, 0, -96.54346700540063, 0.34606950943401493, 4, 177.70482046341274, 0), (4, 600, ...</span>
+</pre></div>
+</div>
+<p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/cstrs_self_adaptive.html#_CPPv2NK5pagmo19cstrs_self_adaptive7get_logEv" title="pagmo::cstrs_self_adaptive::get_log"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::cstrs_self_adaptive::get_log()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.cstrs_self_adaptive.inner_algorithm">
+<code class="descname">inner_algorithm</code><a class="headerlink" href="#pygmo.core.cstrs_self_adaptive.inner_algorithm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inner algorithm of the meta-algorithm</p>
+<p>This property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the inner algorithm</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></td>
 </tr>
 </tbody>
 </table>
