@@ -58,6 +58,12 @@ see https://www.gnu.org/licenses/. */
 
 #include "numpy.hpp"
 
+#if defined(_MSC_VER)
+
+#include "function_traits.hpp"
+
+#endif
+
 // A throwing macro similar to pagmo_throw, only for Python. This will set the global
 // error string of Python to "msg", the exception type to "type", and then invoke the Boost
 // Python function to raise the Python exception.
@@ -679,6 +685,36 @@ struct gil_thread_ensurer {
     }
     ::PyGILState_STATE m_state;
 };
+
+#if defined(_MSC_VER)
+
+template <typename T, std::size_t... I>
+auto lcast_impl(T func, std::index_sequence<I...>)
+{
+  using ftraits = utils::function_traits<T>;
+  using ret_t = typename ftraits::result_type;
+  return static_cast<ret_t (*)(typename ftraits::template arg<I>::type...)>(func);
+}
+
+template <typename T>
+inline auto lcast(T func)
+{
+  using ftraits = utils::function_traits<T>;
+  constexpr std::size_t arity = ftraits::arity;
+  using seq_t = std::make_index_sequence<arity>;
+  return lcast_impl(func,seq_t{});
+}
+
+#else
+
+template <typename T>
+inline auto lcast(T func) -> decltype(+func)
+{
+  return +func;
+}
+
+#endif
+
 }
 
 #endif

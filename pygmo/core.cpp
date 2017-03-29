@@ -419,48 +419,48 @@ BOOST_PYTHON_MODULE(core)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<population>)
         .def_pickle(population_pickle_suite())
         .def("push_back",
-             +[](population &pop, const bp::object &x, const bp::object &f) {
+             pygmo::lcast([](population &pop, const bp::object &x, const bp::object &f) {
                  if (f.is_none()) {
                      pop.push_back(pygmo::to_vd(x));
                  } else {
                      pop.push_back(pygmo::to_vd(x), pygmo::to_vd(f));
                  }
-             },
+             }),
              pygmo::population_push_back_docstring().c_str(), (bp::arg("x"), bp::arg("f") = bp::object()))
         .def("random_decision_vector",
-             +[](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); },
+             pygmo::lcast([](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); }),
              pygmo::population_random_decision_vector_docstring().c_str())
-        .def("best_idx", +[](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); },
+        .def("best_idx", pygmo::lcast([](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); }),
              (bp::arg("tol")))
-        .def("best_idx", +[](const population &pop, double tol) { return pop.best_idx(tol); }, (bp::arg("tol")))
-        .def("best_idx", +[](const population &pop) { return pop.best_idx(); },
+        .def("best_idx", pygmo::lcast([](const population &pop, double tol) { return pop.best_idx(tol); }), (bp::arg("tol")))
+        .def("best_idx", pygmo::lcast([](const population &pop) { return pop.best_idx(); }),
              pygmo::population_best_idx_docstring().c_str())
         .def("worst_idx",
-             +[](const population &pop, const bp::object &tol) { return pop.worst_idx(pygmo::to_vd(tol)); },
+             pygmo::lcast([](const population &pop, const bp::object &tol) { return pop.worst_idx(pygmo::to_vd(tol)); }),
              (bp::arg("tol")))
-        .def("worst_idx", +[](const population &pop, double tol) { return pop.worst_idx(tol); }, (bp::arg("tol")))
-        .def("worst_idx", +[](const population &pop) { return pop.worst_idx(); },
+        .def("worst_idx", pygmo::lcast([](const population &pop, double tol) { return pop.worst_idx(tol); }), (bp::arg("tol")))
+        .def("worst_idx", pygmo::lcast([](const population &pop) { return pop.worst_idx(); }),
              pygmo::population_worst_idx_docstring().c_str())
-        .add_property("champion_x", +[](const population &pop) { return pygmo::v_to_a(pop.champion_x()); },
+        .add_property("champion_x", pygmo::lcast([](const population &pop) { return pygmo::v_to_a(pop.champion_x()); }),
                       pygmo::population_champion_x_docstring().c_str())
-        .add_property("champion_f", +[](const population &pop) { return pygmo::v_to_a(pop.champion_f()); },
+        .add_property("champion_f", pygmo::lcast([](const population &pop) { return pygmo::v_to_a(pop.champion_f()); }),
                       pygmo::population_champion_f_docstring().c_str())
         .def("__len__", &population::size)
-        .def("set_xf", +[](population &pop, population::size_type i, const bp::object &x,
-                           const bp::object &f) { pop.set_xf(i, pygmo::to_vd(x), pygmo::to_vd(f)); },
+        .def("set_xf", pygmo::lcast([](population &pop, population::size_type i, const bp::object &x,
+                           const bp::object &f) { pop.set_xf(i, pygmo::to_vd(x), pygmo::to_vd(f)); }),
              pygmo::population_set_xf_docstring().c_str())
         .def("set_x",
-             +[](population &pop, population::size_type i, const bp::object &x) { pop.set_x(i, pygmo::to_vd(x)); },
+             pygmo::lcast([](population &pop, population::size_type i, const bp::object &x) { pop.set_x(i, pygmo::to_vd(x)); }),
              pygmo::population_set_x_docstring().c_str())
-        .add_property("problem", bp::make_function(+[](population &pop) -> problem & { return pop.get_problem(); },
+        .add_property("problem", bp::make_function(pygmo::lcast([](population &pop) -> problem & { return pop.get_problem(); }),
                                                    bp::return_internal_reference<>()),
-                      +[](population &pop, const problem &p) { pop.get_problem() = p; },
+                      pygmo::lcast([](population &pop, const problem &p) { pop.get_problem() = p; }),
                       pygmo::population_problem_docstring().c_str())
-        .def("get_f", +[](const population &pop) { return pygmo::vv_to_a(pop.get_f()); },
+        .def("get_f", pygmo::lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_f()); }),
              pygmo::population_get_f_docstring().c_str())
-        .def("get_x", +[](const population &pop) { return pygmo::vv_to_a(pop.get_x()); },
+        .def("get_x", pygmo::lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_x()); }),
              pygmo::population_get_x_docstring().c_str())
-        .def("get_ID", +[](const population &pop) { return pygmo::v_to_a(pop.get_ID()); },
+        .def("get_ID", pygmo::lcast([](const population &pop) { return pygmo::v_to_a(pop.get_ID()); }),
              pygmo::population_get_ID_docstring().c_str())
         .def("get_seed", &population::get_seed, pygmo::population_get_seed_docstring().c_str());
 
@@ -478,42 +478,42 @@ BOOST_PYTHON_MODULE(core)
         .def("_py_extract", &pygmo::generic_py_extract<problem>)
         // Problem methods.
         .def("fitness",
-             +[](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.fitness(pygmo::to_vd(dv))); },
+             pygmo::lcast([](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.fitness(pygmo::to_vd(dv))); }),
              pygmo::problem_fitness_docstring().c_str(), (bp::arg("dv")))
         .def("get_bounds",
-             +[](const pagmo::problem &p) -> bp::tuple {
+             pygmo::lcast([](const pagmo::problem &p) -> bp::tuple {
                  auto retval = p.get_bounds();
                  return bp::make_tuple(pygmo::v_to_a(retval.first), pygmo::v_to_a(retval.second));
-             },
+             }),
              pygmo::problem_get_bounds_docstring().c_str())
         .def("gradient",
-             +[](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv))); },
+             pygmo::lcast([](const pagmo::problem &p, const bp::object &dv) { return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv))); }),
              pygmo::problem_gradient_docstring().c_str(), (bp::arg("dv")))
         .def("has_gradient", &problem::has_gradient, pygmo::problem_has_gradient_docstring().c_str())
-        .def("gradient_sparsity", +[](const pagmo::problem &p) { return pygmo::sp_to_a(p.gradient_sparsity()); },
+        .def("gradient_sparsity", pygmo::lcast([](const pagmo::problem &p) { return pygmo::sp_to_a(p.gradient_sparsity()); }),
              pygmo::problem_gradient_sparsity_docstring().c_str())
         .def("has_gradient_sparsity", &problem::has_gradient_sparsity,
              pygmo::problem_has_gradient_sparsity_docstring().c_str())
         .def("hessians",
-             +[](const pagmo::problem &p, const bp::object &dv) -> bp::list {
+             pygmo::lcast([](const pagmo::problem &p, const bp::object &dv) -> bp::list {
                  bp::list retval;
                  const auto h = p.hessians(pygmo::to_vd(dv));
                  for (const auto &v : h) {
                      retval.append(pygmo::v_to_a(v));
                  }
                  return retval;
-             },
+             }),
              pygmo::problem_hessians_docstring().c_str(), (bp::arg("dv")))
         .def("has_hessians", &problem::has_hessians, pygmo::problem_has_hessians_docstring().c_str())
         .def("hessians_sparsity",
-             +[](const pagmo::problem &p) -> bp::list {
+             pygmo::lcast([](const pagmo::problem &p) -> bp::list {
                  bp::list retval;
                  const auto hs = p.hessians_sparsity();
                  for (const auto &sp : hs) {
                      retval.append(pygmo::sp_to_a(sp));
                  }
                  return retval;
-             },
+             }),
              pygmo::problem_hessians_sparsity_docstring().c_str())
         .def("has_hessians_sparsity", &problem::has_hessians_sparsity,
              pygmo::problem_has_hessians_sparsity_docstring().c_str())
@@ -523,8 +523,8 @@ BOOST_PYTHON_MODULE(core)
         .def("get_nec", &problem::get_nec, pygmo::problem_get_nec_docstring().c_str())
         .def("get_nic", &problem::get_nic, pygmo::problem_get_nic_docstring().c_str())
         .def("get_nc", &problem::get_nc, pygmo::problem_get_nc_docstring().c_str())
-        .add_property("c_tol", +[](const problem &prob) { return pygmo::v_to_a(prob.get_c_tol()); },
-                      +[](problem &prob, const bp::object &c_tol) { prob.set_c_tol(pygmo::to_vd(c_tol)); },
+        .add_property("c_tol", pygmo::lcast([](const problem &prob) { return pygmo::v_to_a(prob.get_c_tol()); }),
+                      pygmo::lcast([](problem &prob, const bp::object &c_tol) { prob.set_c_tol(pygmo::to_vd(c_tol)); }),
                       pygmo::problem_c_tol_docstring().c_str())
         .def("get_fevals", &problem::get_fevals, pygmo::problem_get_fevals_docstring().c_str())
         .def("get_gevals", &problem::get_gevals, pygmo::problem_get_gevals_docstring().c_str())
@@ -533,9 +533,9 @@ BOOST_PYTHON_MODULE(core)
         .def("has_set_seed", &problem::has_set_seed, pygmo::problem_has_set_seed_docstring().c_str())
         .def("is_stochastic", &problem::is_stochastic,
              "is_stochastic()\n\nAlias for :func:`~pygmo.core.problem.has_set_seed()`.\n")
-        .def("feasibility_x", +[](const problem &p, const bp::object &x) { return p.feasibility_x(pygmo::to_vd(x)); },
+        .def("feasibility_x", pygmo::lcast([](const problem &p, const bp::object &x) { return p.feasibility_x(pygmo::to_vd(x)); }),
              pygmo::problem_feasibility_x_docstring().c_str(), (bp::arg("x")))
-        .def("feasibility_f", +[](const problem &p, const bp::object &f) { return p.feasibility_f(pygmo::to_vd(f)); },
+        .def("feasibility_f", pygmo::lcast([](const problem &p, const bp::object &f) { return p.feasibility_f(pygmo::to_vd(f)); }),
              pygmo::problem_feasibility_f_docstring().c_str(), (bp::arg("f")))
         .def("get_name", &problem::get_name, pygmo::problem_get_name_docstring().c_str())
         .def("get_extra_info", &problem::get_extra_info, pygmo::problem_get_extra_info_docstring().c_str())
@@ -575,65 +575,65 @@ BOOST_PYTHON_MODULE(core)
     // Hypervolume class
     bp::class_<hypervolume>("hypervolume", "Hypervolume Class")
         .def("__init__", bp::make_constructor(
-                             +[](const bp::object &points) {
+                             pygmo::lcast([](const bp::object &points) {
                                  auto vvd_points = pygmo::to_vvd(points);
                                  return ::new hypervolume(vvd_points, true);
-                             },
+                             }),
                              bp::default_call_policies(), (bp::arg("points"))),
              pygmo::hv_init2_docstring().c_str())
-        .def("__init__", bp::make_constructor(+[](const population &pop) { return ::new hypervolume(pop, true); },
+        .def("__init__", bp::make_constructor(pygmo::lcast([](const population &pop) { return ::new hypervolume(pop, true); }),
                                               bp::default_call_policies(), (bp::arg("pop"))),
              pygmo::hv_init1_docstring().c_str())
         .def("compute",
-             +[](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); },
+             pygmo::lcast([](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); }),
              (bp::arg("ref_point")))
         .def("compute",
-             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+             pygmo::lcast([](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.compute(pygmo::to_vd(r_point), *hv_algo);
-             },
+             }),
              pygmo::hv_compute_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
-        .def("exclusive", +[](const hypervolume &hv, unsigned p_idx,
-                              const bp::object &r_point) { return hv.exclusive(p_idx, pygmo::to_vd(r_point)); },
+        .def("exclusive", pygmo::lcast([](const hypervolume &hv, unsigned p_idx,
+                              const bp::object &r_point) { return hv.exclusive(p_idx, pygmo::to_vd(r_point)); }),
              (bp::arg("idx"), bp::arg("ref_point")))
         .def("exclusive",
-             +[](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
+             pygmo::lcast([](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
                  boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo);
-             },
+             }),
              pygmo::hv_exclusive_docstring().c_str(), (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("least_contributor",
-             +[](const hypervolume &hv, const bp::object &r_point) {
+             pygmo::lcast([](const hypervolume &hv, const bp::object &r_point) {
                  return hv.least_contributor(pygmo::to_vd(r_point));
-             },
+             }),
              (bp::arg("ref_point")))
         .def("least_contributor",
-             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+             pygmo::lcast([](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.least_contributor(pygmo::to_vd(r_point), *hv_algo);
-             },
+             }),
              pygmo::hv_least_contributor_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("greatest_contributor",
-             +[](const hypervolume &hv, const bp::object &r_point) {
+             pygmo::lcast([](const hypervolume &hv, const bp::object &r_point) {
                  return hv.greatest_contributor(pygmo::to_vd(r_point));
-             },
+             }),
              (bp::arg("ref_point")))
         .def("greatest_contributor",
-             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+             pygmo::lcast([](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.greatest_contributor(pygmo::to_vd(r_point), *hv_algo);
-             },
+             }),
              pygmo::hv_greatest_contributor_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("contributions",
-             +[](const hypervolume &hv, const bp::object &r_point) {
+             pygmo::lcast([](const hypervolume &hv, const bp::object &r_point) {
                  return pygmo::v_to_a(hv.contributions(pygmo::to_vd(r_point)));
-             },
+             }),
              (bp::arg("ref_point")))
         .def("contributions",
-             +[](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
+             pygmo::lcast([](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
                  return pygmo::v_to_a(hv.contributions(pygmo::to_vd(r_point), *hv_algo));
-             },
+             }),
              pygmo::hv_contributions_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
         .add_property("copy_points", &hypervolume::get_copy_points, &hypervolume::set_copy_points)
-        .def("get_points", +[](const hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); })
-        .def("refpoint", +[](const hypervolume &hv, double offset) { return pygmo::v_to_a(hv.refpoint(offset)); },
+        .def("get_points", pygmo::lcast([](const hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); }))
+        .def("refpoint", pygmo::lcast([](const hypervolume &hv, double offset) { return pygmo::v_to_a(hv.refpoint(offset)); }),
              pygmo::hv_refpoint_docstring().c_str(), (bp::arg("offset") = 0));
 
     // Hypervolume algorithms
@@ -658,7 +658,7 @@ BOOST_PYTHON_MODULE(core)
     // Exposition of stand alone functions
     // Multi-objective utilities
     bp::def("fast_non_dominated_sorting",
-            +[](const bp::object &x) -> bp::object {
+            pygmo::lcast([](const bp::object &x) -> bp::object {
                 auto fnds = fast_non_dominated_sorting(pygmo::to_vvd(x));
                 // the non-dominated fronts
                 auto ndf = std::get<0>(fnds);
@@ -674,11 +674,11 @@ BOOST_PYTHON_MODULE(core)
                 }
                 return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)),
                                       pygmo::v_to_a(std::get<3>(fnds)));
-            },
+            }),
             pygmo::fast_non_dominated_sorting_docstring().c_str(), boost::python::arg("points"));
-    bp::def("nadir", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); },
+    bp::def("nadir", pygmo::lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); }),
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
-    bp::def("ideal", +[](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); },
+    bp::def("ideal", pygmo::lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); }),
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
 
     // Island.
@@ -692,7 +692,7 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<island>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
-        .def("evolve", +[](island &isl, unsigned n) { isl.evolve(n); }, pygmo::island_evolve_docstring().c_str(),
+        .def("evolve", pygmo::lcast([](island &isl, unsigned n) { isl.evolve(n); }), pygmo::island_evolve_docstring().c_str(),
              boost::python::arg("n") = 1u)
         .def("busy", &island::busy, pygmo::island_busy_docstring().c_str())
         .def("wait", &island::wait, pygmo::island_wait_docstring().c_str())
@@ -703,10 +703,10 @@ BOOST_PYTHON_MODULE(core)
              bp::arg("pop"))
         .def("set_algorithm", &island::set_algorithm, pygmo::island_set_algorithm_docstring().c_str(), bp::arg("algo"))
         .def("get_thread_safety",
-             +[](const island &isl) -> bp::tuple {
+             pygmo::lcast([](const island &isl) -> bp::tuple {
                  const auto ts = isl.get_thread_safety();
                  return bp::make_tuple(ts[0], ts[1]);
-             },
+             }),
              pygmo::island_get_thread_safety_docstring().c_str())
         .def("get_name", &island::get_name, pygmo::island_get_name_docstring().c_str())
         .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
@@ -724,13 +724,13 @@ BOOST_PYTHON_MODULE(core)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<archipelago>)
         // Size.
         .def("__len__", &archipelago::size)
-        .def("evolve", +[](archipelago &archi, unsigned n) { archi.evolve(n); },
+        .def("evolve", pygmo::lcast([](archipelago &archi, unsigned n) { archi.evolve(n); }),
              pygmo::archipelago_evolve_docstring().c_str(), boost::python::arg("n") = 1u)
         .def("busy", &archipelago::busy, pygmo::archipelago_busy_docstring().c_str())
         .def("wait", &archipelago::wait, pygmo::archipelago_wait_docstring().c_str())
         .def("get", &archipelago::get, pygmo::archipelago_get_docstring().c_str())
-        .def("__getitem__", +[](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; },
+        .def("__getitem__", pygmo::lcast([](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; }),
              pygmo::archipelago_getitem_docstring().c_str(), bp::return_internal_reference<>())
         // NOTE: docs for push_back() are in the Python reimplementation.
-        .def("_push_back", +[](archipelago &archi, const island &isl) { archi.push_back(isl); });
+        .def("_push_back", pygmo::lcast([](archipelago &archi, const island &isl) { archi.push_back(isl); }));
 }

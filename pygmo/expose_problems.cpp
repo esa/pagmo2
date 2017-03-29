@@ -183,15 +183,15 @@ void expose_problems()
     auto zdt_p = expose_problem<zdt>("zdt", "__init__(prob_id = 1, param = 30)\n\nThe ZDT problem.\n\n"
                                             "See :cpp:class:`pagmo::zdt`.\n\n");
     zdt_p.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1u, bp::arg("param") = 30u)));
-    zdt_p.def("p_distance", +[](const zdt &z, const bp::object &x) { return z.p_distance(to_vd(x)); });
-    zdt_p.def("p_distance", +[](const zdt &z, const population &pop) { return z.p_distance(pop); },
+    zdt_p.def("p_distance", lcast([](const zdt &z, const bp::object &x) { return z.p_distance(to_vd(x)); }));
+    zdt_p.def("p_distance", lcast([](const zdt &z, const population &pop) { return z.p_distance(pop); }),
               zdt_p_distance_docstring().c_str());
     // DTLZ.
     auto dtlz_p = expose_problem<dtlz>("dtlz", dtlz_docstring().c_str());
     dtlz_p.def(bp::init<unsigned, unsigned, unsigned, unsigned>(
         (bp::arg("prob_id") = 1u, bp::arg("dim") = 5u, bp::arg("fdim") = 3u, bp::arg("alpha") = 100u)));
-    dtlz_p.def("p_distance", +[](const dtlz &z, const bp::object &x) { return z.p_distance(to_vd(x)); });
-    dtlz_p.def("p_distance", +[](const dtlz &z, const population &pop) { return z.p_distance(pop); },
+    dtlz_p.def("p_distance", lcast([](const dtlz &z, const bp::object &x) { return z.p_distance(to_vd(x)); }));
+    dtlz_p.def("p_distance", lcast([](const dtlz &z, const population &pop) { return z.p_distance(pop); }),
                dtlz_p_distance_docstring().c_str());
     // Inventory.
     auto inv = expose_problem<inventory>(
@@ -224,12 +224,12 @@ void expose_problems()
     // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
     translate_.def("__init__",
                    bp::make_constructor(
-                       +[](const problem &p, const bp::object &tv) { return ::new pagmo::translate(p, to_vd(tv)); },
+                       lcast([](const problem &p, const bp::object &tv) { return ::new pagmo::translate(p, to_vd(tv)); }),
                        bp::default_call_policies()));
-    translate_.add_property("translation", +[](const translate &t) { return v_to_a(t.get_translation()); },
+    translate_.add_property("translation", lcast([](const translate &t) { return v_to_a(t.get_translation()); }),
                             translate_translation_docstring().c_str());
     translate_.add_property("inner_problem",
-                            bp::make_function(+[](translate &udp) -> problem & { return udp.get_inner_problem(); },
+                            bp::make_function(lcast([](translate &udp) -> problem & { return udp.get_inner_problem(); }),
                                               bp::return_internal_reference<>()),
                             generic_udp_inner_problem_docstring().c_str());
     // Unconstrain meta-problem.
@@ -237,12 +237,12 @@ void expose_problems()
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
     // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
     unconstrain_.def("__init__", bp::make_constructor(
-                                     +[](const problem &p, const std::string &method, const bp::object &weights) {
+                                     lcast([](const problem &p, const std::string &method, const bp::object &weights) {
                                          return ::new pagmo::unconstrain(p, method, to_vd(weights));
-                                     },
+                                     }),
                                      bp::default_call_policies()));
     unconstrain_.add_property("inner_problem",
-                              bp::make_function(+[](unconstrain &udp) -> problem & { return udp.get_inner_problem(); },
+                              bp::make_function(lcast([](unconstrain &udp) -> problem & { return udp.get_inner_problem(); }),
                                                 bp::return_internal_reference<>()),
                               generic_udp_inner_problem_docstring().c_str());
     // Decompose meta-problem.
@@ -250,18 +250,18 @@ void expose_problems()
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
     // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
     decompose_.def("__init__", bp::make_constructor(
-                                   +[](const problem &p, const bp::object &weight, const bp::object &z,
+                                   lcast([](const problem &p, const bp::object &weight, const bp::object &z,
                                        const std::string &method, bool adapt_ideal) {
                                        return ::new pagmo::decompose(p, to_vd(weight), to_vd(z), method, adapt_ideal);
-                                   },
+                                   }),
                                    bp::default_call_policies()));
     decompose_.def("original_fitness",
-                   +[](const pagmo::decompose &p, const bp::object &x) { return v_to_a(p.original_fitness(to_vd(x))); },
+                   lcast([](const pagmo::decompose &p, const bp::object &x) { return v_to_a(p.original_fitness(to_vd(x))); }),
                    decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
-    decompose_.add_property("z", +[](const pagmo::decompose &p) { return v_to_a(p.get_z()); },
+    decompose_.add_property("z", lcast([](const pagmo::decompose &p) { return v_to_a(p.get_z()); }),
                             decompose_z_docstring().c_str());
     decompose_.add_property("inner_problem",
-                            bp::make_function(+[](decompose &udp) -> problem & { return udp.get_inner_problem(); },
+                            bp::make_function(lcast([](decompose &udp) -> problem & { return udp.get_inner_problem(); }),
                                               bp::return_internal_reference<>()),
                             generic_udp_inner_problem_docstring().c_str());
 }
