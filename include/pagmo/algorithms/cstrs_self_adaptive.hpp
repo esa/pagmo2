@@ -625,7 +625,8 @@ public:
             for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
                 auto x = new_pop.get_x()[i];
                 auto it_f = penalized_udp_ptr->m_fitness_map.find(x);
-                pop.set_xf(i, x, it_f->second); // We are asserting here that the cache will be hit
+                assert(it_f != m_fitness_map.end()); // We are assasserting here the cache will be hit
+                pop.set_xf(i, x, it_f->second);
             }
             pop.set_xf(worst_idx, best_x, best_f);
         }
