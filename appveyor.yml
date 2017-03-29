@@ -8,6 +8,9 @@ environment:
     #   PLATFORM: "Win32"
     # - BUILD_TYPE: "Debug"
     #   COMPILER: MinGW
+    - BUILD_TYPE: "Python36"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
     - BUILD_TYPE: "Debug"
       COMPILER: MSVC15
       PLATFORM: "x64"
@@ -29,15 +32,22 @@ install:
 - conda config --add channels conda-forge --force
 - conda create -y --name pagmo python=3.6 cmake boost eigen
 - activate pagmo
+- if [%BUILD_TYPE%]==[Python36] conda install -y numpy dill ipyparallel
 
 build_script:
 - mkdir build
 - cd build
-- if [%COMPILER%]==[MSVC15] if [%PLATFORM%]==[x64] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=YES ..
-- cmake --build . --config %BUILD_TYPE% --target install
+- if [%BUILD_TYPE%]==[Debug] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=YES ..
+- if [%BUILD_TYPE%]==[Debug] cmake --build . --config Debug --target install
+- if [%BUILD_TYPE%]==[Python36] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DPAGMO_WITH_EIGEN3=YES -DPAGMO_BUILD_PYGMO=yes ..
+- if [%BUILD_TYPE%]==[Python36] cmake --build . --config Release --target install
 
 test_script:
-- ctest --output-on-failure
+- if [%BUILD_TYPE%]==[Debug] ctest --output-on-failure
+- if [%BUILD_TYPE%]==[Python36] cd c:\
+- if [%BUILD_TYPE%]==[Python36] start /b ipcluster start
+- if [%BUILD_TYPE%]==[Python36] timeout 20
+- if [%BUILD_TYPE%]==[Python36] python -c "import pygmo; pygmo.test.run_test_suite()"
 
 notifications:
   - provider: Webhook
@@ -46,5 +56,5 @@ notifications:
 # Enable this to be able to login to the build worker. You can use the
 # `remmina` program in Ubuntu, use the login information that the line below
 # prints into the log.
-#on_finish:
-#- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
