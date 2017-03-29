@@ -25,7 +25,7 @@ environment:
     #   COMPILER: MinGW-w64
 
 install:
-- set PATH=C:\Miniconda36-x64;%PATH%
+- set PATH=C:\Miniconda36-x64\bin;%PATH%
 - conda config --add channels conda-forge --force
 - conda create --name pagmo python=3.6 cmake boost eigen3
 - activate pagmo
