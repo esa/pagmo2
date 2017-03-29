@@ -14,9 +14,11 @@ environment:
       PLATFORM: "x64"
 
 install:
+- if [%BUILD_TYPE%]==[Debug] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[Python35] set PATH=C:\Miniconda35-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
 - conda config --add channels conda-forge --force
+- if [%BUILD_TYPE%]==[Debug] conda create -y --name pagmo python=3.6 cmake boost eigen
 - if [%BUILD_TYPE%]==[Python35] conda create -y --name pagmo python=3.5 cmake boost eigen
 - if [%BUILD_TYPE%]==[Python36] conda create -y --name pagmo python=3.6 cmake boost eigen
 - activate pagmo
