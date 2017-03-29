@@ -124,7 +124,7 @@ Once the hypervolume object is created, it allows for the computation of the fol
 .. doctest::
 
     >>> # hv and ref_point refer to the data above
-    >>> hv.least_contributor(ref_point)
+    >>> hv.least_contributor(ref_point) # doctest: +SKIP
     3
 
 4. :class:`~pygmo.core.hypervolume.greatest_contributor` - Returns the index of a point contributing the most to the hypervolume.

@@ -58,7 +58,7 @@ We may also get access to the UDA, and thus to its methods not exposed in the
     >>> type(uda)
     <class 'pygmo.core.cmaes'>
     >>> uda = algo.extract(pg.de)
-    >>> type(uda)
-    <class 'NoneType'>
+    >>> uda is None
+    True
 
 Such an extraction will only work if the correct UDA type is passed as argument.
