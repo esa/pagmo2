@@ -224,7 +224,7 @@ public:
                 // initialize hat_up_idx
                 hat_up_idx = infeasible_idx[0];
 
-                for (decltype(infeasible_idx.size()) i = 0u; i < infeasible_idx.size(); ++i) {
+                for (decltype(infeasible_idx.size()) i = 1u; i < infeasible_idx.size(); ++i) {
                     auto current_idx = infeasible_idx[i];
                     if (infeasibility[current_idx] >= infeasibility[hat_up_idx]) {
                         if (infeasibility[current_idx] == infeasibility[hat_up_idx]) {
