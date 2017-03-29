@@ -27,17 +27,13 @@ environment:
 install:
 - set PATH=C:\Miniconda36-x64\Scripts;%PATH%
 - conda config --add channels conda-forge --force
-- conda create --name pagmo python=3.6 cmake boost eigen3
+- conda create --name pagmo python=3.6 cmake boost eigen
 - activate pagmo
-- if [%COMPILER%]==[MSVC15] set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-
 
 build_script:
 - mkdir build
 - cd build
-
 - if [%COMPILER%]==[MSVC15] if [%PLATFORM%]==[x64] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=YES ..
-
 - cmake --build . --config %BUILD_TYPE% --target install
 
 test_script:
@@ -50,5 +46,5 @@ notifications:
 # Enable this to be able to login to the build worker. You can use the
 # `remmina` program in Ubuntu, use the login information that the line below
 # prints into the log.
-on_finish:
-- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#on_finish:
+#- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
