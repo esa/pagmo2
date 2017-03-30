@@ -122,7 +122,6 @@ struct hash_vf {
         return retval;
     }
 };
-
 } // end of detail namespace
 } // end of pagmo namespace
 
