@@ -608,7 +608,9 @@ Raises:
 
 std::string problem_get_fevals_docstring()
 {
-    return R"(Number of fitness evaluations.
+    return R"(get_fevals()
+
+Number of fitness evaluations.
 
 Each time a call to :func:`~pygmo.core.problem.fitness()` successfully completes, an internal counter
 is increased by one. The counter is initialised to zero upon problem construction and it is never
@@ -622,7 +624,9 @@ Returns:
 
 std::string problem_get_gevals_docstring()
 {
-    return R"(Number of gradient evaluations.
+    return R"(get_gevals()
+
+Number of gradient evaluations.
 
 Each time a call to :func:`~pygmo.core.problem.gradient()` successfully completes, an internal counter
 is increased by one. The counter is initialised to zero upon problem construction and it is never
@@ -636,7 +640,9 @@ Returns:
 
 std::string problem_get_hevals_docstring()
 {
-    return R"(Number of hessians evaluations.
+    return R"(get_hevals()
+
+Number of hessians evaluations.
 
 Each time a call to :func:`~pygmo.core.problem.hessians()` successfully completes, an internal counter
 is increased by one. The counter is initialised to zero upon problem construction and it is never
@@ -1517,8 +1523,8 @@ std::string cstrs_self_adaptive_docstring()
 This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
 (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
 technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire
-underlying population. The resulting approach is an alternative to using the meta-problem pagmo::unconstrained to transform the
-constrained fitness into an unconstrained fitness.
+underlying population. The resulting approach is an alternative to using the meta-problem :class:`~pygmo.core.unconstrain`
+to transform the constrained fitness into an unconstrained fitness.
 
 The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
 extends their use to any-algorithm, in particular to non generational, population based, evolutionary approaches where

@@ -416,12 +416,12 @@ public:
  * (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
  * technique self-adapts its parameters during
  * each successive call to the inner UDA basing its decisions on the entire underlying population. The resulting
- * approach is an alternative to using the meta-problem pagmo::unconstrained to transform the
+ * approach is an alternative to using the meta-problem pagmo::unconstrain to transform the
  * constrained fitness into an unconstrained fitness.
  *
  * The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
  * extends their use to any-algorithm, in particular to non generational population based evolutionary approaches where
- * a steady-state einsertion is used (i.e. as soon as an individual is found fit it is immediately reinserted into the
+ * a steady-state reinsertion is used (i.e., as soon as an individual is found fit it is immediately reinserted into the
  * pop and will influence the next offspring genetic material).
  *
  * Each decision vector is assigned an infeasibility measure \f$\iota\f$ which accounts for the normalized violation of

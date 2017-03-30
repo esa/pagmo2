@@ -23,8 +23,8 @@ elif [[ "${PAGMO_BUILD}" == "Python27" || "${PAGMO_BUILD}" == "OSXPython27" ]]; 
     conda_pkgs="$conda_pkgs python=2.7 numpy dill ipyparallel"
 fi
 
-if [[ "${PAGMO_BUILD}" == "Python36" ]]; then
-    conda_pkgs="$conda_pkgs graphviz"
+if [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; then
+    conda_pkgs="$conda_pkgs graphviz doxygen"
 fi
 
 conda create -q -p $deps_dir -y $conda_pkgs
