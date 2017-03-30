@@ -47,26 +47,11 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
     # Give some time for the cluster to start up.
     sleep 20;
     python -c "import pygmo; pygmo.test.run_test_suite()"
-    if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
-        # Stop here if this is the Python27 build. Docs are checked and uploaded only in the Python36 build.
-        exit 0;
-    fi
     # At the moment conda has these packages only for Python 3.4. Install via pip instead.
     pip install sphinx breathe requests[security] sphinx-bootstrap-theme;
-    # Install a recent version of Doxygen locally, with a patch to fix a segfault.
-    wget "http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.13.src.tar.gz";
-    tar xzf doxygen-1.8.13.src.tar.gz;
-    cd doxygen-1.8.13;
-    wget "http://mirror.ip-projects.de/gentoo/gentoo-portage/app-doc/doxygen/files/doxygen-1.8.13-NULL-dereference.patch"
-    cat doxygen-1.8.13-NULL-dereference.patch | patch -p1
-    mkdir build;
-    cd build;
-    cmake -DCMAKE_INSTALL_PREFIX=/home/travis/.local ../;
-    make -j2;
-    make install;
     # Run doxygen and check the output.
-    cd ../../../doc/doxygen;
-    export DOXYGEN_OUTPUT=`/home/travis/.local/bin/doxygen 2>&1 >/dev/null`;
+    cd ../doc/doxygen;
+    export DOXYGEN_OUTPUT=`doxygen 2>&1 >/dev/null`;
     if [[ "${DOXYGEN_OUTPUT}" != "" ]]; then
         echo "Doxygen encountered some problem:";
         echo "${DOXYGEN_OUTPUT}";
@@ -83,6 +68,11 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
         exit 1;
     fi
     echo "Sphinx ran successfully";
+    make doctest;
+    if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
+        # Stop here if this is the Python27 build. Docs are uploaded only in the Python36 build.
+        exit 0;
+    fi
     if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
         echo "Testing a pull request, the generated documentation will not be uploaded.";
         exit 0;

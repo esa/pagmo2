@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cassert>
+#include <initializer_list>
 #include <stdexcept>
 #include <type_traits>
 
@@ -50,7 +51,7 @@ namespace pagmo
  * This meta-problem transforms a constrained problem into an unconstrained problem applying one of the following
  * methods:
  *    - Death penalty: simply penalizes all objectives by the same high value if the fitness vector is infeasible as
- * checked by pagmo::problem::fesibility_f.
+ * checked by pagmo::problem::feasibility_f().
  *    - Kuri's death penalty: defined by Angel Kuri Morales et al., penalizes all objectives according to the rate of
  * satisfied constraints.
  *    - Weighted violations penalty: penalizes all objectives by the weighted sum of the constraint violations.
@@ -61,6 +62,7 @@ namespace pagmo
  * See: Coello Coello, C. A. (2002). Theoretical and numerical constraint-handling techniques used with evolutionary
  * algorithms: a survey of the state of the art. Computer methods in applied mechanics and engineering, 191(11),
  * 1245-1287.
+ *
  * See: Kuri Morales, A. and Quezada, C.C. A Universal eclectic genetic algorithm for constrained optimization,
  * Proceedings 6th European Congress on Intelligent Techniques & Soft Computing, EUFIT'98, 518-522, 1998.
  */
@@ -97,8 +99,7 @@ public:
      * @throws unspecified any exception thrown by the pagmo::problem constructor
      */
     template <typename T, ctor_enabler<T> = 0>
-    explicit unconstrain(T &&p, const std::string &method = "death penalty",
-                         const vector_double &weights = vector_double{})
+    explicit unconstrain(T &&p, const std::string &method = "death penalty", const vector_double &weights = {})
         : m_problem(std::forward<T>(p)), m_weights(weights)
     {
         // The number of constraints in the original udp
