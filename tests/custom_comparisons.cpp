@@ -113,3 +113,35 @@ BOOST_AUTO_TEST_CASE(equal_to_f_test)
     BOOST_CHECK((detail::equal_to_f(a_double, a_nan) == false));
     BOOST_CHECK((detail::equal_to_f<double>(a_double, a_nan) == false));
 }
+
+BOOST_AUTO_TEST_CASE(equal_to_vf_test)
+{
+    auto a_nan = std::nan("");
+    vector_double v1 = {1., 2., 3., 4.};
+    vector_double v2 = {1., 2., 3., 4., 5.};
+    vector_double v3 = {1., 2., 3.1, 4.};
+    vector_double v4 = {1., a_nan, 3.1, 4.};
+    vector_double v5 = {1., a_nan, 3.1, 4.};
+    vector_double v6 = {1., a_nan, a_nan, 4.};
+    vector_double v7 = {1., 2.1, 3.1, 4.};
+
+    // Test all branches on T=double
+    BOOST_CHECK((detail::equal_to_vf<double>()(v1, v2) == false));
+    BOOST_CHECK((detail::equal_to_vf<double>()(v1, v3) == false));
+    BOOST_CHECK((detail::equal_to_vf<double>()(v3, v4) == false));
+    BOOST_CHECK((detail::equal_to_vf<double>()(v4, v5) == true));
+    BOOST_CHECK((detail::equal_to_vf<double>()(v4, v6) == false));
+    BOOST_CHECK((detail::equal_to_vf<double>()(v3, v6) == false));
+    BOOST_CHECK((detail::equal_to_vf<double>()(v3, v6) == false));
+    BOOST_CHECK((detail::equal_to_vf<double>()(v3, v6) == false));
+}
+
+BOOST_AUTO_TEST_CASE(hash_vf_test)
+{
+    auto a_nan = std::nan("");
+    vector_double v1 = {1., a_nan, 3., 4.};
+    vector_double v2 = {1., 2., 3., 4.};
+    vector_double v3 = {1., a_nan, 3., 4.};
+    BOOST_CHECK((detail::hash_vf<double>()(v1) != detail::hash_vf<double>()(v2)));
+    BOOST_CHECK((detail::hash_vf<double>()(v3) == detail::hash_vf<double>()(v1)));
+}

@@ -757,12 +757,12 @@ struct prob_inner final : prob_inner_base {
         return p.gradient_sparsity();
     }
     template <typename U, enable_if_t<!pagmo::has_gradient_sparsity<U>::value, int> = 0>
-    [[noreturn]] static sparsity_pattern gradient_sparsity_impl(const U &)
+    [[noreturn]] static sparsity_pattern gradient_sparsity_impl(const U &) // LCOV_EXCL_LINE
     {
         // NOTE: we should never end up here. gradient_sparsity() is called only if m_has_gradient_sparsity
         // in the problem is set to true, and m_has_gradient_sparsity is unconditionally false if the UDP
         // does not implement gradient_sparsity() (see implementation of the three overloads below).
-        assert(false);
+        assert(false); // LCOV_EXCL_LINE
         throw;
     }
     template <
@@ -816,12 +816,12 @@ struct prob_inner final : prob_inner_base {
         return value.hessians_sparsity();
     }
     template <typename U, enable_if_t<!pagmo::has_hessians_sparsity<U>::value, int> = 0>
-    [[noreturn]] static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &)
+    [[noreturn]] static std::vector<sparsity_pattern> hessians_sparsity_impl(const U &) // LCOV_EXCL_LINE
     {
         // NOTE: we should never end up here. hessians_sparsity() is called only if m_has_hessians_sparsity
         // in the problem is set to true, and m_has_hessians_sparsity is unconditionally false if the UDP
         // does not implement hessians_sparsity() (see implementation of the three overloads below).
-        assert(false);
+        assert(false); // LCOV_EXCL_LINE
         throw;
     }
     template <
