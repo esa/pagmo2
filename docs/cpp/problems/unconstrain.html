@@ -145,14 +145,15 @@
 <span id="pagmo::unconstrain"></span><span class="target" id="pagmoclasspagmo_1_1unconstrain"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">unconstrain</code><a class="headerlink" href="#_CPPv2N5pagmo11unconstrainE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The unconstrain meta-problem. </p>
 <p>This meta-problem transforms a constrained problem into an unconstrained problem applying one of the following methods:<ul class="simple">
-<li>Death penalty: simply penalizes all objectives by the same high value if the fitness vector is infeasible as checked by pagmo::problem::fesibility_f.</li>
+<li>Death penalty: simply penalizes all objectives by the same high value if the fitness vector is infeasible as checked by <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem_1ac53d0a801571b55912a60a72fadf73f1"><span class="std std-ref">pagmo::problem::feasibility_f()</span></a>.</li>
 <li>Kuri&#8217;s death penalty: defined by Angel Kuri Morales et al., penalizes all objectives according to the rate of satisfied constraints.</li>
 <li>Weighted violations penalty: penalizes all objectives by the weighted sum of the constraint violations.</li>
 <li>Ignore the constraints: simply ignores the constraints.</li>
 <li>Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraints violation (i.e. the sum of the L2 norms of the equalities and inequalities violations)</li>
 </ul>
 </p>
-<p>See: Coello Coello, C. A. (2002). Theoretical and numerical constraint-handling techniques used with evolutionary algorithms: a survey of the state of the art. Computer methods in applied mechanics and engineering, 191(11), 1245-1287. See: Kuri Morales, A. and Quezada, C.C. A Universal eclectic genetic algorithm for constrained optimization, Proceedings 6th European Congress on Intelligent Techniques &amp; Soft Computing, EUFIT&#8216;98, 518-522, 1998. </p>
+<p>See: Coello Coello, C. A. (2002). Theoretical and numerical constraint-handling techniques used with evolutionary algorithms: a survey of the state of the art. Computer methods in applied mechanics and engineering, 191(11), 1245-1287.</p>
+<p>See: Kuri Morales, A. and Quezada, C.C. A Universal eclectic genetic algorithm for constrained optimization, Proceedings 6th European Congress on Intelligent Techniques &amp; Soft Computing, EUFIT&#8216;98, 518-522, 1998. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
@@ -166,7 +167,7 @@
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double">
-<span id="pagmo::unconstrain::unconstrain__TRR.ssCR.vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1unconstrain_1a6674f1b422e9d313970269e54180c2a3"></span><code class="descname">unconstrain</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> std::string &amp;<em>method</em> = &quot;death penalty&quot;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>weights</em> = vector_double {}<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::unconstrain::unconstrain__TRR.ssCR.vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1unconstrain_1a9b6e1ad7270ac8b9bec0b090ef82aab0"></span><code class="descname">unconstrain</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> std::string &amp;<em>method</em> = &quot;death penalty&quot;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>weights</em> = {}<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from UDP and unconstrain method. </p>
 <p><strong>NOTE</strong> This constructor is enabled only if <code class="docutils literal"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <p>Wraps a user-defined problem so that its constraints will be removed</p>

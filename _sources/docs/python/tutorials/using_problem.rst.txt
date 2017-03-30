@@ -58,8 +58,8 @@ the appropriate methods, for example:
 
 .. doctest::
 
-    >>> prob.get_fevals()
-    0
+    >>> prob.get_fevals() == 0
+    True
 
 Lets check how a fitness computation increases the counter:
 
@@ -67,8 +67,8 @@ Lets check how a fitness computation increases the counter:
 
     >>> prob.fitness([1,2,3,4,5])
     array([ 14814.])
-    >>> prob.get_fevals()
-    1
+    >>> prob.get_fevals() == 1
+    True
 
 We may also get back the UDP, and thus access all the methods not exposed in the
 :class:`~pygmo.core.problem` interface at any time via the :class:`~pygmo.core.problem.extract` method:
@@ -79,7 +79,7 @@ We may also get back the UDP, and thus access all the methods not exposed in the
     >>> type(udp)
     <class 'pygmo.core.rosenbrock'>
     >>> udp = prob.extract(pg.rastrigin)
-    >>> type(udp)
-    <class 'NoneType'>
+    >>> udp is None
+    True
 
 Such an *extraction* will only work if the correct UDP type is passed as argument.

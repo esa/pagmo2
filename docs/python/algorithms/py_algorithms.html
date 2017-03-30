@@ -1479,8 +1479,8 @@ mismatched function signatures, etc.)</td>
 <dd><p>This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
 (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
 technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire
-underlying population. The resulting approach is an alternative to using the meta-problem pagmo::unconstrained to transform the
-constrained fitness into an unconstrained fitness.</p>
+underlying population. The resulting approach is an alternative to using the meta-problem <a class="reference internal" href="../problems/py_problems.html#pygmo.core.unconstrain" title="pygmo.core.unconstrain"><code class="xref py py-class docutils literal"><span class="pre">unconstrain</span></code></a>
+to transform the constrained fitness into an unconstrained fitness.</p>
 <p>The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
 extends their use to any-algorithm, in particular to non generational, population based, evolutionary approaches where
 a steady-state reinsertion is used (i.e. as soon as an individual is found fit it is immediately reinserted into the

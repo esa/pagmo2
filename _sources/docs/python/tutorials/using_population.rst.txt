@@ -65,15 +65,15 @@ via its methods or glancing to the screen print of the entire class:
     	Fitness vector:		[487030]
 
 Individuals, i.e. new candidate solutions can be put into a population calling
-its :class:`~pygmo.core.population.push_back` method:
+its :func:`~pygmo.core.population.push_back()` method:
 
 .. doctest::
 
     >>> pop1.push_back([0.1,0.2,0.3,0.4]) # correct size
-    >>> len(pop1)
-    1
-    >>> pop1.problem.get_fevals()
-    1
+    >>> len(pop1) == 1
+    True
+    >>> pop1.problem.get_fevals() == 1
+    True
     >>> pop1.push_back([0.1,0.2,0.3]) # wrong size
     Traceback (most recent call last):
       File ".../lib/python3.6/doctest.py", line 1330, in __run
@@ -85,7 +85,7 @@ its :class:`~pygmo.core.population.push_back` method:
     where: /Users/darioizzo/Documents/pagmo2/include/pagmo/problem.hpp, 1835
     what: Length of decision vector is 3, should be 4
 
-Some consistency checks are done by :class:`~pygmo.core.population.push_back`, e.g. on the decision vector
+Some consistency checks are done by :func:`~pygmo.core.population.push_back()`, e.g. on the decision vector
 length.
 
 .. note:: Decision vectors that are outside of the box bounds are allowed to be
@@ -96,18 +96,18 @@ some individual decision vector:
 
 .. doctest::
 
-    >>> pop1.problem.get_fevals()
-    1
+    >>> pop1.problem.get_fevals() == 1
+    True
     >>> print(pop1.get_x()[0])
     [ 0.1  0.2  0.3  0.4]
     >>> pop1.set_x(0, [1.,2.,3.,4.])
-    >>> pop1.problem.get_fevals()
-    2
+    >>> pop1.problem.get_fevals() == 2
+    True
     >>> print(pop1.get_f()[0])
     [ 2705.]
     >>> pop1.set_xf(0, [1.,2.,3.,4.], [8.43469444])
-    >>> pop1.problem.get_fevals()
-    2
+    >>> pop1.problem.get_fevals() == 2
+    True
     >>> print(pop1.get_f()[0])
     [ 8.43469444]
 

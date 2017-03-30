@@ -185,15 +185,15 @@ problem for which neither gradients nor hessians nor sparsity information is pro
 zero.</p>
 <p>All of the information contained in the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> print out can be retrieved using
 the appropriate methods, for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span>
-<span class="go">0</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 <p>Lets check how a fitness computation increases the counter:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
 <span class="go">array([ 14814.])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span>
-<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 <p>We may also get back the UDP, and thus access all the methods not exposed in the
@@ -202,8 +202,8 @@ the appropriate methods, for example:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
 <span class="go">&lt;class &#39;pygmo.core.rosenbrock&#39;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rastrigin</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
-<span class="go">&lt;class &#39;NoneType&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 <p>Such an <em>extraction</em> will only work if the correct UDP type is passed as argument.</p>
