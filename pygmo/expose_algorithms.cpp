@@ -126,40 +126,41 @@ void expose_algorithms()
     // MBH meta-algo.
     auto mbh_ = expose_algorithm<mbh>("mbh", mbh_docstring().c_str());
     mbh_.def("__init__",
-             bp::make_constructor(+[](const algorithm &a, unsigned stop, const bp::object &perturb,
-                                      unsigned seed) { return ::new pagmo::mbh(a, stop, to_vd(perturb), seed); },
+             bp::make_constructor(lcast([](const algorithm &a, unsigned stop, const bp::object &perturb,
+                                           unsigned seed) { return ::new pagmo::mbh(a, stop, to_vd(perturb), seed); }),
                                   bp::default_call_policies()));
-    mbh_.def("__init__", bp::make_constructor(
-                             +[](const algorithm &a, unsigned stop, const bp::object &perturb) {
-                                 return ::new pagmo::mbh(a, stop, to_vd(perturb), pagmo::random_device::next());
-                             },
-                             bp::default_call_policies()));
+    mbh_.def("__init__", bp::make_constructor(lcast([](const algorithm &a, unsigned stop, const bp::object &perturb) {
+                                                  return ::new pagmo::mbh(a, stop, to_vd(perturb),
+                                                                          pagmo::random_device::next());
+                                              }),
+                                              bp::default_call_policies()));
     mbh_.def("get_seed", &mbh::get_seed, mbh_get_seed_docstring().c_str());
     mbh_.def("get_verbosity", &mbh::get_verbosity, mbh_get_verbosity_docstring().c_str());
-    mbh_.def("set_perturb", +[](mbh &a, const bp::object &o) { a.set_perturb(to_vd(o)); },
+    mbh_.def("set_perturb", lcast([](mbh &a, const bp::object &o) { a.set_perturb(to_vd(o)); }),
              mbh_set_perturb_docstring().c_str(), (bp::arg("perturb")));
     expose_algo_log(mbh_, mbh_get_log_docstring().c_str());
-    mbh_.def("get_perturb", +[](const mbh &a) { return v_to_a(a.get_perturb()); }, mbh_get_perturb_docstring().c_str());
+    mbh_.def("get_perturb", lcast([](const mbh &a) { return v_to_a(a.get_perturb()); }),
+             mbh_get_perturb_docstring().c_str());
     mbh_.add_property("inner_algorithm",
-                      bp::make_function(+[](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); },
+                      bp::make_function(lcast([](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
                                         bp::return_internal_reference<>()),
                       generic_uda_inner_algorithm_docstring().c_str());
     // cstrs_self_adaptive meta-algo.
     auto cstrs_sa
         = expose_algorithm<cstrs_self_adaptive>("cstrs_self_adaptive", cstrs_self_adaptive_docstring().c_str());
-    cstrs_sa.def("__init__",
-                 bp::make_constructor(+[](unsigned iters, const algorithm &a,
-                                          unsigned seed) { return ::new pagmo::cstrs_self_adaptive(iters, a, seed); },
-                                      bp::default_call_policies()));
-    cstrs_sa.def("__init__", bp::make_constructor(
-                                 +[](unsigned iters, const algorithm &a) {
-                                     return ::new pagmo::cstrs_self_adaptive(iters, a, pagmo::random_device::next());
-                                 },
-                                 bp::default_call_policies()));
+    cstrs_sa.def("__init__", bp::make_constructor(lcast([](unsigned iters, const algorithm &a, unsigned seed) {
+                                                      return ::new pagmo::cstrs_self_adaptive(iters, a, seed);
+                                                  }),
+                                                  bp::default_call_policies()));
+    cstrs_sa.def("__init__", bp::make_constructor(lcast([](unsigned iters, const algorithm &a) {
+                                                      return ::new pagmo::cstrs_self_adaptive(
+                                                          iters, a, pagmo::random_device::next());
+                                                  }),
+                                                  bp::default_call_policies()));
     expose_algo_log(cstrs_sa, cstrs_self_adaptive_get_log_docstring().c_str());
     cstrs_sa.add_property(
         "inner_algorithm",
-        bp::make_function(+[](cstrs_self_adaptive &uda) -> algorithm & { return uda.get_inner_algorithm(); },
+        bp::make_function(lcast([](cstrs_self_adaptive &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
                           bp::return_internal_reference<>()),
         generic_uda_inner_algorithm_docstring().c_str());
 
@@ -249,26 +250,26 @@ void expose_algorithms()
         }
         return retval;
     };
-    de1220_.def("__init__", bp::make_constructor(
-                                +[](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
-                                    double ftol, double xtol, bool memory) -> de1220 * {
-                                    auto av = to_vu(allowed_variants);
-                                    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory);
-                                },
-                                bp::default_call_policies(),
-                                (bp::arg("gen") = 1u, bp::arg("allowed_variants") = de1220_allowed_variants(),
-                                 bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6,
-                                 bp::arg("memory") = false)));
-    de1220_.def("__init__", bp::make_constructor(
-                                +[](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
-                                    double ftol, double xtol, bool memory, unsigned seed) -> de1220 * {
-                                    auto av = to_vu(allowed_variants);
-                                    return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory, seed);
-                                },
-                                bp::default_call_policies(),
-                                (bp::arg("gen") = 1u, bp::arg("allowed_variants") = de1220_allowed_variants(),
-                                 bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6,
-                                 bp::arg("memory") = false, bp::arg("seed"))));
+    de1220_.def("__init__",
+                bp::make_constructor(lcast([](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
+                                              double ftol, double xtol, bool memory) -> de1220 * {
+                                         auto av = to_vu(allowed_variants);
+                                         return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory);
+                                     }),
+                                     bp::default_call_policies(),
+                                     (bp::arg("gen") = 1u, bp::arg("allowed_variants") = de1220_allowed_variants(),
+                                      bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6,
+                                      bp::arg("memory") = false)));
+    de1220_.def("__init__",
+                bp::make_constructor(lcast([](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
+                                              double ftol, double xtol, bool memory, unsigned seed) -> de1220 * {
+                                         auto av = to_vu(allowed_variants);
+                                         return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory, seed);
+                                     }),
+                                     bp::default_call_policies(),
+                                     (bp::arg("gen") = 1u, bp::arg("allowed_variants") = de1220_allowed_variants(),
+                                      bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6,
+                                      bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(de1220_, de1220_get_log_docstring().c_str());
     de1220_.def("get_seed", &de1220::get_seed, generic_uda_get_seed_docstring().c_str());
 // CMA-ES
@@ -296,15 +297,14 @@ void expose_algorithms()
          bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5, bp::arg("eta_m") = 20,
          bp::arg("realb") = 0.9, bp::arg("limit") = 2u, bp::arg("preserve_diversity") = true, bp::arg("seed"))));
     // moead needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
-    moead_.def("get_log",
-               +[](const moead &a) -> bp::list {
+    moead_.def("get_log", lcast([](const moead &a) -> bp::list {
                    bp::list retval;
                    for (const auto &t : a.get_log()) {
                        retval.append(
                            bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), v_to_a(std::get<3>(t))));
                    }
                    return retval;
-               },
+               }),
                moead_get_log_docstring().c_str());
 
     moead_.def("get_seed", &moead::get_seed, generic_uda_get_seed_docstring().c_str());
@@ -317,14 +317,13 @@ void expose_algorithms()
         (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
          bp::arg("int_dim") = 0, bp::arg("seed"))));
     // nsga2 needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
-    nsga2_.def("get_log",
-               +[](const nsga2 &a) -> bp::list {
+    nsga2_.def("get_log", lcast([](const nsga2 &a) -> bp::list {
                    bp::list retval;
                    for (const auto &t : a.get_log()) {
                        retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), v_to_a(std::get<2>(t))));
                    }
                    return retval;
-               },
+               }),
                nsga2_get_log_docstring().c_str());
 
     nsga2_.def("get_seed", &nsga2::get_seed, generic_uda_get_seed_docstring().c_str());

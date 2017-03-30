@@ -469,7 +469,11 @@ class cec2013_test_case(_ut.TestCase):
     """
 
     def runTest(self):
-        from .core import cec2013, population
+        try:
+            # NOTE: cec2013 is not always present (see MSVC issue).
+            from .core import cec2013, population
+        except ImportError:
+            return
         udp = cec2013(prob_id=3, dim=10)
 
 
