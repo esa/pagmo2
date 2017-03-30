@@ -79,7 +79,7 @@ We may also get back the UDP, and thus access all the methods not exposed in the
     >>> type(udp)
     <class 'pygmo.core.rosenbrock'>
     >>> udp = prob.extract(pg.rastrigin)
-    >>> type(udp)
-    <class 'NoneType'>
+    >>> udp is None
+    True
 
 Such an *extraction* will only work if the correct UDP type is passed as argument.

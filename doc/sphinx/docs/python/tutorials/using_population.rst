@@ -96,8 +96,8 @@ some individual decision vector:
 
 .. doctest::
 
-    >>> pop1.problem.get_fevals()
-    1
+    >>> pop1.problem.get_fevals() == 1
+    True
     >>> print(pop1.get_x()[0])
     [ 0.1  0.2  0.3  0.4]
     >>> pop1.set_x(0, [1.,2.,3.,4.])
