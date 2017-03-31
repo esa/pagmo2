@@ -27,6 +27,9 @@ option(PAGMO_BUILD_PYGMO "Build PyGMO." OFF)
 # Build option: enable features depending on Eigen3.
 option(PAGMO_WITH_EIGEN3 "Enable features depending on Eigen3 (such as CMAES). Requires Eigen3." OFF)
 
+# Build option: enable NLopt.
+option(PAGMO_WITH_NLOPT "Enable wrappers for the NLopt algorithms." OFF)
+
 # Build option: install header.
 option(PAGMO_INSTALL_HEADERS "Enable the installation of PaGMO's header files." ON)
 
@@ -66,6 +69,13 @@ if(PAGMO_WITH_EIGEN3)
     message(STATUS "Eigen version detected: ${EIGEN3_VERSION}")
 endif()
 
+# NLopt setup
+if(PAGMO_WITH_NLOPT)
+    find_package(NLOPT REQUIRED)
+    message(STATUS "NLopt include directory: ${NLOPT_INCLUDE_DIRS}")
+    message(STATUS "NLopt libraries: ${NLOPT_LIBRARIES}")
+endif()
+
 # Python setup.
 # NOTE: we do it here because we need to detect the Python bits *before*
 # looking for boost.python.
@@ -91,12 +101,22 @@ target_link_libraries(pagmo INTERFACE Threads::Threads Boost::boost)
 target_include_directories(pagmo INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
+
 if(PAGMO_WITH_EIGEN3)
+    # Link pagmo to eigen3.
     add_library(Eigen3::eigen3 INTERFACE IMPORTED)
     set_target_properties(Eigen3::eigen3 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${EIGEN3_INCLUDE_DIR}")
     target_link_libraries(pagmo INTERFACE Eigen3::eigen3)
     # FIXME: this needs to go into config.hpp, once implemented.
     target_compile_definitions(pagmo INTERFACE PAGMO_WITH_EIGEN3)
+endif()
+
+if(PAGMO_WITH_NLOPT)
+    # Link pagmo to NLopt.
+    add_library(NLOPT::nlopt UNKNOWN IMPORTED)
+    set_target_properties(NLOPT::nlopt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${NLOPT_INCLUDE_DIRS}")
+    set_target_properties(NLOPT::nlopt PROPERTIES IMPORTED_LINK_INTERFACE_LANGUAGES "C" IMPORTED_LOCATION "${NLOPT_LIBRARIES}")
+    target_link_libraries(pagmo INTERFACE NLOPT::nlopt)
 endif()
 
 if(PAGMO_BUILD_TESTS)
