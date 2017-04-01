@@ -162,9 +162,17 @@ Notes on computational speed
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The most performant way to write a UDP is to code it in C++ and expose it to python. Most UDPs that
-are included in pygmo are like that. When writing your own UDP, though, it is often quicker and less
+are included in pygmo (see :ref:`py_problems`) are like that. When writing your own UDP, though, it is often quicker and less
 painful to code, as shown in this tutorial, directly in python. What effect does this have w.r.t. the ideal
 situation? Well, lets see, on an old test machine, a simple example: the scalable Rosenbrock function:
+
+.. math::
+   \begin{array}{ll}
+     \mbox{minimize: } & \sum_{i=1}^{N-1} 100 (x_{i+1} - x_i^2 )^2 + (1-x_i)^2 \\
+     \mbox{subject to:} & -5 \le x_i \le 10, i = 1..N
+   \end{array}
+
+which in pygmo can be quickly written as:
 
     >>> import numpy as np
     >>> class py_rosenbrock:
@@ -178,7 +186,7 @@ situation? Well, lets see, on an old test machine, a simple example: the scalabl
     ...     def get_bounds(self):
     ...         return (np.full((self.dim,),-5.),np.full((self.dim,),10.))
 
-We now make a quick and dirty profiling of our high dimensional problem ....
+We now make a quick and dirty profiling instantiating a high dimensional instance of Rosenbrock: 2000 variables!!
 
     >>> prob_python = pg.problem(py_rosenbrock(2000))
     >>> prob_cpp = pg.problem(pg.rosenbrock(2000))
@@ -189,7 +197,7 @@ We now make a quick and dirty profiling of our high dimensional problem ....
     >>> start_time = time.time(); [prob2.fitness(arr) for i in range(100)]; print(time.time() - start_time) #doctest: +SKIP
     0.001353...
 
-wait a minute ... really? two orders of magnitude? Do not panic. This is a very large problem and array operations are not
+wait a minute ... really? two orders of magnitude? Do not panic. This is a very large problem and that for loop is not going to be
 super optimized in python. Lets see if we can do better in these cases .... Let us use the jit decorator from numba
 
     >>> from numba import jit
