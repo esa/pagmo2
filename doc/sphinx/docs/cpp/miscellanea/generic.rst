@@ -19,10 +19,6 @@ A number of utilities to compute quantities that are of general relevance.
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::safe_cast
-
---------------------------------------------------------------------------
-
 .. doxygenfunction:: pagmo::binomial_coefficient
 
 --------------------------------------------------------------------------

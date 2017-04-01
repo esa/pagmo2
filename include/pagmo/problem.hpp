@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <atomic>
+#include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -1118,7 +1119,7 @@ public:
             }
             // We resize rather than push back here, so that an std::length_error is called quickly rather
             // than an std::bad_alloc after waiting the growth
-            m_hs_dim.resize(nf);
+            m_hs_dim.resize(boost::numeric_cast<decltype(m_hs_dim.size())>(nf));
             for (vector_double::size_type i = 0u; i < nf; ++i) {
                 m_hs_dim[i] = (nx * (nx - 1u) / 2u + nx); // lower triangular
             }

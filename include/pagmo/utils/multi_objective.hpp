@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
  */
 
 #include <algorithm>
+#include <boost/numeric/conversion/cast.hpp>
 #include <limits>
 #include <numeric>
 #include <stdexcept>
@@ -589,7 +590,7 @@ inline vector_double nadir(const std::vector<vector_double> &points)
  * @returns an <tt>std:vector</tt> containing the weight vectors
  *
  * @throws if the population size is not compatible with the selected weight generation method
-**/
+ */
 inline std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, vector_double::size_type n_w,
                                                         const std::string &weight_generation,
                                                         detail::random_engine_type &r_engine)
@@ -652,7 +653,7 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
             retval[i][i] = 1.;
         }
         // Then we add points on the simplex randomly genrated using Halton low discrepancy sequence
-        halton ld_seq{safe_cast<unsigned int>(n_f - 1u), safe_cast<unsigned int>(n_f)};
+        halton ld_seq{boost::numeric_cast<unsigned int>(n_f - 1u), boost::numeric_cast<unsigned int>(n_f)};
         for (decltype(n_w) i = n_f; i < n_w; ++i) {
             retval.push_back(sample_from_simplex(ld_seq()));
         }
