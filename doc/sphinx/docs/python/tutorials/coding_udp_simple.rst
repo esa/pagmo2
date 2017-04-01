@@ -198,7 +198,8 @@ We now make a quick and dirty profiling instantiating a high dimensional instanc
     0.001353...
 
 wait a minute ... really? two orders of magnitude? Do not panic. This is a very large problem and that for loop is not going to be
-super optimized in python. Lets see if we can do better in these cases .... Let us use the jit decorator from numba
+super optimized in python. Lets see if we can do better in these cases .... Let us use the jit decorator from numba to compile 
+our fitness method into C code.
 
     >>> from numba import jit
     >>> class jit_rosenbrock:
@@ -216,6 +217,6 @@ super optimized in python. Lets see if we can do better in these cases .... Let 
     >>> start_time = time.time(); [prob_jit.fitness(arr) for i in range(100)]; print(time.time() - start_time) #doctest: +SKIP
     0.0059030...
 
-much better right?
+much better right? For more information see `Numba documentation pages <http://numba.pydata.org/>`_.
 
 
