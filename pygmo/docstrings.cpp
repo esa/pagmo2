@@ -778,8 +778,9 @@ Raises:
         shape, dimensions, etc.),
       * at least one element of the returned iterable Python object does not consist of a collection of exactly
         2 elements,
-      * if the sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
-        or if the indices in the pattern are incompatible with the properties of the problem)
+      * if the sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices,
+        or if the indices in the pattern are incompatible with the properties of the problem, or if the size of the
+        returned pattern is different from the size recorded upon construction)
     OverflowError: if the NumPy array returned by the UDP contains integer values which are negative or outside an
       implementation-defined range
     unspecified: any exception thrown by:
@@ -847,8 +848,9 @@ Returns:
     ``list`` of 1D NumPy float array: the hessians of *dv*
 
 Raises:
-    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
-      the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions
+    ValueError: if the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
+      the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions, or
+      the size of the return value is not equal to the fitness dimension
     NotImplementedError: if the UDP does not provide a ``hessians()`` method
     unspecified: any exception thrown by the ``hessians()`` method of the UDP, or by failures at the intersection
       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
@@ -918,8 +920,9 @@ Raises:
         shape, dimensions, etc.),
       * at least one element of a returned iterable Python object does not consist of a collection of exactly
         2 elements,
-      * if a sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
-        or if the indices in the pattern are incompatible with the properties of the problem)
+      * if a sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices,
+        if the indices in the pattern are incompatible with the properties of the problem or if the size of the pattern
+        differs from the size recorded upon construction)
     OverflowError: if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
       implementation-defined range
     unspecified: any exception thrown by:
