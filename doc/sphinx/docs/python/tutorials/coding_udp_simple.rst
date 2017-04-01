@@ -217,6 +217,8 @@ our fitness method into C code.
     >>> start_time = time.time(); [prob_jit.fitness(arr) for i in range(100)]; print(time.time() - start_time) #doctest: +SKIP
     0.0059030...
 
-much better right? For more information see `Numba documentation pages <http://numba.pydata.org/>`_.
+much better right? For more information on using Numba to speed up your python code see `Numba documentation pages <http://numba.pydata.org/>`_.
+Note that only a limited part on NumPy and the python language in general is suported by this use, and you can
+easily run into problems using the ``@jit`` decorator if you are using a number of features of the language.
 
 
