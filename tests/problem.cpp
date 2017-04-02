@@ -1146,6 +1146,21 @@ struct gs2 {
     }
 };
 
+struct gs3 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}};
+    }
+    sparsity_pattern gradient_sparsity() const
+    {
+        return {{0, 0}, {0, 2}, {0, 1}};
+    }
+};
+
 BOOST_AUTO_TEST_CASE(custom_gs)
 {
     // Test a gradient sparsity that changes after the first invocation of gradient_sparsity().
@@ -1153,6 +1168,8 @@ BOOST_AUTO_TEST_CASE(custom_gs)
     BOOST_CHECK_THROW(p.gradient_sparsity(), std::invalid_argument);
     p = problem{gs2{}};
     BOOST_CHECK_NO_THROW(p.gradient_sparsity());
+    // Gradient sparsity not sorted.
+    BOOST_CHECK_THROW(p = problem{gs3{}}, std::invalid_argument);
 }
 
 struct hs1 {
@@ -1200,6 +1217,25 @@ struct hs2 {
     }
 };
 
+struct hs3 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2;
+    }
+    std::vector<sparsity_pattern> hessians_sparsity() const
+    {
+        return {{{1, 0}, {2, 1}, {1, 1}}, {{1, 0}, {2, 0}}};
+    }
+};
+
 BOOST_AUTO_TEST_CASE(custom_hs)
 {
     // Test a hessians sparsity that changes after the first invocation of hessians_sparsity().
@@ -1207,6 +1243,7 @@ BOOST_AUTO_TEST_CASE(custom_hs)
     BOOST_CHECK_THROW(p.hessians_sparsity(), std::invalid_argument);
     p = problem{hs2{}};
     BOOST_CHECK_NO_THROW(p.hessians_sparsity());
+    BOOST_CHECK_THROW(p = problem{hs3{}}, std::invalid_argument);
 }
 
 struct hess1 {

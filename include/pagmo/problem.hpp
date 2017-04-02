@@ -1360,7 +1360,7 @@ public:
     /// Gradient sparsity pattern.
     /**
      * This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a
-     * collection of the indices \f$(i,j)\f$ of the non-zero elements of
+     * lexicographically sorted collection of the indices \f$(i,j)\f$ of the non-zero elements of
      * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$.
      *
      * If problem::has_gradient_sparsity() returns \p true,
@@ -1371,8 +1371,9 @@ public:
      * @return the gradient sparsity pattern.
      *
      * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
-     * it contains duplicate pairs of indices, or if the indices in the pattern are incompatible with the properties of
-     * the problem, or if the size of the returned pattern is different from the size recorded upon construction).
+     * it is not strictly sorted lexicographically, or if the indices in the pattern are incompatible with the
+     * properties of the problem, or if the size of the returned pattern is different from the size recorded upon
+     * construction).
      * @throws unspecified memory errors in standard containers.
      */
     sparsity_pattern gradient_sparsity() const
@@ -1482,7 +1483,7 @@ public:
     /// Hessians sparsity pattern.
     /**
      * This method will return the hessians sparsity pattern of the problem. Each component \f$ l\f$ of the hessians
-     * sparsity pattern is a collection of the indices \f$(i,j)\f$ of the non-zero elements of
+     * sparsity pattern is a lexicographically sorted collection of the indices \f$(i,j)\f$ of the non-zero elements of
      * \f$h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\f$. Since the Hessian matrix
      * is symmetric, only lower triangular elements are allowed.
      *
@@ -1493,13 +1494,10 @@ public:
      *
      * @return the hessians sparsity pattern.
      *
-     * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
-     * its size is invalid, if it contains duplicate pairs of indices, if the returned indices do not correspond
-     * to a lower triangular representation of a symmetric matrix, or if the sizes of the components differ from
-     * the sizes recorded upon construction).
-     * @throws not_implemented_error if the <tt>%hessians_sparsity()</tt> method of the UDP is invoked without being
-     * available. This indicates in general an inconsistency in the implementation of the UDP.
-     * @throws unspecified memory errors in standard containers.
+     * @throws std::invalid_argument if a sparsity pattern returned by the UDP is invalid (specifically, if
+     * if it is not strictly sorted lexicographically, if the returned indices do not
+     * correspond to a lower triangular representation of a symmetric matrix, or if the size of the pattern differs
+     * from the size recorded upon construction).
      */
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
@@ -1956,43 +1954,31 @@ private:
         return m_ptr.get();
     }
 
-    // A small helper to check if a vector containes unique elements.
-    // This version for floating point types is also protected against possible nans
-    template <typename U, detail::enable_if_is_floating_point<U> = 0>
-    static bool all_unique(std::vector<U> x)
-    {
-        std::sort(x.begin(), x.end(), detail::less_than_f<U>);
-        auto it = std::unique(x.begin(), x.end(), detail::equal_to_f<U>);
-        return it == x.end();
-    }
-    // The version for non floating point types is not protected vs possible nans
-    // (e.g if used with std::pair it could be troublesome)
-    template <typename U, detail::enable_if_is_not_floating_point<U> = 0>
-    static bool all_unique(std::vector<U> x)
-    {
-        std::sort(x.begin(), x.end());
-        auto it = std::unique(x.begin(), x.end());
-        return it == x.end();
-    }
-
     void check_gradient_sparsity(const sparsity_pattern &gs) const
     {
+        // Cache a couple of quantities.
         const auto nx = get_nx();
         const auto nf = get_nf();
-        // 1 - We check that the gradient sparsity pattern has
-        // valid indices.
-        for (const auto &pair : gs) {
-            if ((pair.first >= nf) || (pair.second >= nx)) {
+
+        // Check the pattern.
+        for (auto it = gs.begin(); it != gs.end(); ++it) {
+            if ((it->first >= nf) || (it->second >= nx)) {
                 pagmo_throw(std::invalid_argument, "Invalid pair detected in the gradient sparsity pattern: ("
-                                                       + std::to_string(pair.first) + ", " + std::to_string(pair.second)
+                                                       + std::to_string(it->first) + ", " + std::to_string(it->second)
                                                        + ")\nFitness dimension is: " + std::to_string(nf)
                                                        + "\nDecision vector dimension is: " + std::to_string(nx));
             }
-        }
-        // 2 - We check all pairs are unique
-        if (!all_unique(gs)) {
-            pagmo_throw(std::invalid_argument,
-                        "Multiple entries of the same index pair was detected in the gradient sparsity pattern");
+            if (it == gs.begin()) {
+                continue;
+            }
+            if (!(*(it - 1) < *it)) {
+                pagmo_throw(
+                    std::invalid_argument,
+                    "The gradient sparsity pattern is not strictly sorted in ascending order: the indices pair ("
+                        + std::to_string((it - 1)->first) + ", " + std::to_string((it - 1)->second)
+                        + ") is greater than or equal to the successive indices pair (" + std::to_string(it->first)
+                        + ", " + std::to_string(it->second) + ")");
+            }
         }
     }
     void check_hessians_sparsity(const std::vector<sparsity_pattern> &hs) const
@@ -2013,23 +1999,28 @@ private:
     void check_hessian_sparsity(const sparsity_pattern &hs) const
     {
         const auto nx = get_nx();
-        // 1 - We check that the hessian sparsity pattern has
+        // We check that the hessian sparsity pattern has
         // valid indices. Assuming a lower triangular representation of
         // a symmetric matrix. Example, for a 4x4 dense symmetric
         // [(0,0), (1,0), (1,1), (2,0), (2,1), (2,2), (3,0), (3,1), (3,2), (3,3)]
-        for (const auto &pair : hs) {
-            if ((pair.first >= nx) || (pair.second > pair.first)) {
+        for (auto it = hs.begin(); it != hs.end(); ++it) {
+            if ((it->first >= nx) || (it->second > it->first)) {
                 pagmo_throw(std::invalid_argument, "Invalid pair detected in the hessians sparsity pattern: ("
-                                                       + std::to_string(pair.first) + ", " + std::to_string(pair.second)
+                                                       + std::to_string(it->first) + ", " + std::to_string(it->second)
                                                        + ")\nDecision vector dimension is: " + std::to_string(nx)
                                                        + "\nNOTE: hessian is a symmetric matrix and PaGMO represents "
                                                          "it as lower triangular: i.e (i,j) is not valid if j>i");
             }
-        }
-        // 2 -  We check all pairs are unique
-        if (!all_unique(hs)) {
-            pagmo_throw(std::invalid_argument,
-                        "Multiple entries of the same index pair were detected in the hessian sparsity pattern");
+            if (it == hs.begin()) {
+                continue;
+            }
+            if (!(*(it - 1) < *it)) {
+                pagmo_throw(std::invalid_argument,
+                            "The hessian sparsity pattern is not strictly sorted in ascending order: the indices pair ("
+                                + std::to_string((it - 1)->first) + ", " + std::to_string((it - 1)->second)
+                                + ") is greater than or equal to the successive indices pair ("
+                                + std::to_string(it->first) + ", " + std::to_string(it->second) + ")");
+            }
         }
     }
     void check_decision_vector(const vector_double &dv) const
