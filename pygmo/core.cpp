@@ -715,8 +715,7 @@ BOOST_PYTHON_MODULE(core)
     auto ti = pygmo::expose_island<thread_island>("thread_island", pygmo::thread_island_docstring().c_str());
 
     // Archi.
-    bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(),
-                                        bp::init<archipelago::size_type, const island &>());
+    bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(), bp::init<>());
     archi_class.def(repr(bp::self))
         .def_pickle(archipelago_pickle_suite())
         // Copy and deepcopy.
