@@ -32,13 +32,15 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nlopt.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problems/ackley.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
 
 using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(nlopt_algorithm_construction)
 {
-    population pop{ackley{10}, 20};
-    algorithm algo{nlopt{"cobylsa"}};
-    std::cout << algo.evolve(pop) << '\n';
+    population pop{rosenbrock{10}, 20};
+    algorithm algo{nlopt{"cobyla"}};
+    pop = algo.evolve(pop);
+    std::cout << algo << '\n';
+    std::cout << pop << '\n';
 }
