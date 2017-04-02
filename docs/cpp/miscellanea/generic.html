@@ -251,38 +251,6 @@
 
 <hr class="docutils" />
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> T, <em class="property">typename</em> U&gt;</dt>
-<dt id="_CPPv2N5pagmo9safe_castERK1U">
-<span id="pagmo::safe_cast__UCR"></span><span class="target" id="pagmonamespacepagmo_1a5a94d110bb024d02cc4658c6b2f12d2c"></span>T <code class="descclassname">pagmo::</code><code class="descname">safe_cast</code><span class="sig-paren">(</span><em class="property">const</em> U &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9safe_castERK1U" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Safely cast between unsigned types. </p>
-<p>Performs a cast between unsigned types throwing if the input cannot be represented in the new type</p>
-<p>Example: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">unsigned</span> <span class="n">short</span> <span class="n">s</span> <span class="o">=</span> <span class="n">std</span><span class="p">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="n">unsigned</span> <span class="n">short</span><span class="o">&gt;</span><span class="p">::</span><span class="nb">max</span><span class="p">();</span>
-<span class="n">unsigned</span> <span class="n">long</span> <span class="n">l</span> <span class="o">=</span> <span class="n">std</span><span class="p">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="n">unsigned</span> <span class="n">long</span><span class="o">&gt;</span><span class="p">::</span><span class="nb">max</span><span class="p">();</span>
-<span class="n">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">safe_cast</span><span class="o">&lt;</span><span class="n">unsigned</span> <span class="n">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="o">//</span> <span class="n">Will</span> <span class="n">always</span> <span class="n">work</span>
-<span class="n">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">safe_cast</span><span class="o">&lt;</span><span class="n">unsigned</span> <span class="n">short</span><span class="o">&gt;</span><span class="p">(</span><span class="n">l</span><span class="p">);</span> <span class="o">//</span> <span class="n">Will</span> <span class="n">throw</span> <span class="n">an</span> <span class="n">std</span><span class="p">::</span><span class="n">overflow_error</span> <span class="k">if</span> <span class="n">precision</span> <span class="ow">is</span> <span class="n">lost</span>
-</pre></div>
-</div>
-</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the input <code class="docutils literal"><span class="pre">x</span></code> safey casted to <code class="docutils literal"><span class="pre">T</span></code> </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">x</span></code>: an unsigned value <code class="docutils literal"><span class="pre">x</span></code> to be casted to <code class="docutils literal"><span class="pre">T</span></code> </li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::overflow_error</span></code>: if <code class="docutils literal"><span class="pre">x</span></code> cannot be represented by the new type </li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<hr class="docutils" />
-<dl class="function">
 <dt id="_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE">
 <span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="pagmonamespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span>double <code class="descclassname">pagmo::</code><code class="descname">binomial_coefficient</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Binomial coefficient. </p>
@@ -342,7 +310,7 @@
     </p>
     <p>
         &copy; Copyright 2017, PaGMO development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.4.<br/>
     </p>
   </div>
 </footer>

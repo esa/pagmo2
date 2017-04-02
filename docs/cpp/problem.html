@@ -424,14 +424,14 @@
 <dt id="_CPPv2NK5pagmo7problem17gradient_sparsityEv">
 <span id="pagmo::problem::gradient_sparsityC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a3d2267a7d2defd716d30480f5c8b8c77"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a> <code class="descname">gradient_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem17gradient_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradient sparsity pattern. </p>
-<p>This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of <span class="math">\( g_{ij} = \frac{\partial f_i}{\partial x_j}\)</span>.</p>
+<p>This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a lexicographically sorted collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of <span class="math">\( g_{ij} = \frac{\partial f_i}{\partial x_j}\)</span>.</p>
 <p>If <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1aa12d2105958962f7837d983a540e4f1f"><span class="std std-ref">problem::has_gradient_sparsity()</span></a> returns <code class="docutils literal"><span class="pre">true</span></code>, then the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method of the UDP will be invoked, and its result returned (after sanity checks). Otherwise, a a dense pattern is assumed and the returned vector will be <span class="math">\(((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))\)</span>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the gradient sparsity pattern.</dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices or if the indices in the pattern are incompatible with the properties of the problem). </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically, or if the indices in the pattern are incompatible with the properties of the problem, or if the size of the returned pattern is different from the size recorded upon construction). </li>
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: memory errors in standard containers. </li>
 </ul>
 </dd>
@@ -477,7 +477,8 @@
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if either:<ul>
 <li>the length of <code class="docutils literal"><span class="pre">dv</span></code> differs from the output of <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ac4a212a660feff63f78df5c3e63db9c5"><span class="std std-ref">get_nx()</span></a>, or</li>
-<li>the length of the returned hessians does not match the corresponding hessians sparsity pattern dimensions. </li>
+<li>the length of the returned hessians does not match the corresponding hessians sparsity pattern dimensions, or</li>
+<li>the size of the return value is not equal to the fitness dimension. </li>
 </ul>
 </li>
 <li><code class="docutils literal"><a class="reference internal" href="miscellanea/exceptions.html#pagmostructpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the UDP does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians"><span class="std std-ref">pagmo::has_hessians</span></a>. </li>
@@ -510,16 +511,14 @@
 <dt id="_CPPv2NK5pagmo7problem17hessians_sparsityEv">
 <span id="pagmo::problem::hessians_sparsityC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"></span>std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a>&gt; <code class="descname">hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem17hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hessians sparsity pattern. </p>
-<p>This method will return the hessians sparsity pattern of the problem. Each component <span class="math">\( l\)</span> of the hessians sparsity pattern is a collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of <span class="math">\(h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\)</span>. Since the Hessian matrix is symmetric, only lower triangular elements are allowed.</p>
+<p>This method will return the hessians sparsity pattern of the problem. Each component <span class="math">\( l\)</span> of the hessians sparsity pattern is a lexicographically sorted collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of <span class="math">\(h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\)</span>. Since the Hessian matrix is symmetric, only lower triangular elements are allowed.</p>
 <p>If <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1ae1d5d6985ed595158f673e22ff3bb877"><span class="std std-ref">problem::has_hessians_sparsity()</span></a> returns <code class="docutils literal"><span class="pre">true</span></code>, then the <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the UDP will be invoked, and its result returned (after sanity checks). Otherwise, a dense pattern is assumed and <span class="math">\(n_f\)</span> sparsity patterns containing <span class="math">\(((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))\)</span> will be returned.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the hessians sparsity pattern.</dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the sparsity pattern returned by the UDP is invalid (specifically, if its size is invalid, if it contains duplicate pairs of indices or if the returned indices do not correspond to a lower triangular representation of a symmetric matrix). </li>
-<li><code class="docutils literal"><a class="reference internal" href="miscellanea/exceptions.html#pagmostructpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the UDP is invoked without being available. This indicates in general an inconsistency in the implementation of the UDP. </li>
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: memory errors in standard containers. </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if a sparsity pattern returned by the UDP is invalid (specifically, if if it is not strictly sorted lexicographically, if the returned indices do not correspond to a lower triangular representation of a symmetric matrix, or if the size of the pattern differs from the size recorded upon construction). </li>
 </ul>
 </dd>
 </dl>
@@ -926,7 +925,7 @@
     </p>
     <p>
         &copy; Copyright 2017, PaGMO development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.4.<br/>
     </p>
   </div>
 </footer>

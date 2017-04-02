@@ -693,7 +693,7 @@ between C++ and Python (e.g., type conversion errors, mismatched function signat
 <dt id="pygmo.core.problem.gradient_sparsity">
 <code class="descname">gradient_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.gradient_sparsity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gradient sparsity pattern.</p>
-<p>This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a
+<p>This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a lexicographically sorted
 collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of <span class="math">\(g_{ij} = \frac{\partial f_i}{\partial x_j}\)</span>.</p>
 <p>If <a class="reference internal" href="#pygmo.core.problem.has_gradient_sparsity" title="pygmo.core.problem.has_gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">has_gradient_sparsity()</span></code></a> returns <code class="docutils literal"><span class="pre">True</span></code>, then the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method of the
 UDP will be invoked, and its result returned (after sanity checks). Otherwise, a a dense pattern is assumed and the
@@ -721,8 +721,9 @@ containing each exactly 2 elements representing the indices <span class="math">\
 shape, dimensions, etc.),</li>
 <li>at least one element of the returned iterable Python object does not consist of a collection of exactly
 2 elements,</li>
-<li>if the sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
-or if the indices in the pattern are incompatible with the properties of the problem)</li>
+<li>if the sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically,
+or if the indices in the pattern are incompatible with the properties of the problem, or if the size of the
+returned pattern is different from the size recorded upon construction)</li>
 </ul>
 </li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the NumPy array returned by the UDP contains integer values which are negative or outside an
@@ -914,8 +915,9 @@ array, and it must return the hessians vector as an iterable Python object (e.g.
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.core.problem.get_nx" title="pygmo.core.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
-the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.core.problem.get_nx" title="pygmo.core.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
+the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions, or
+the size of the return value is not equal to the fitness dimension</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if the UDP does not provide a <code class="docutils literal"><span class="pre">hessians()</span></code> method</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP, or by failures at the intersection
 between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
@@ -931,7 +933,7 @@ between C++ and Python (e.g., type conversion errors, mismatched function signat
 <code class="descname">hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.problem.hessians_sparsity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hessians sparsity pattern.</p>
 <p>This method will return the hessians sparsity pattern of the problem. Each component <span class="math">\(l\)</span> of the hessians
-sparsity pattern is a collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of
+sparsity pattern is a lexicographically sorted collection of the indices <span class="math">\((i,j)\)</span> of the non-zero elements of
 <span class="math">\(h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\)</span>. Since the Hessian matrix is symmetric, only
 lower triangular elements are allowed.</p>
 <p>If <a class="reference internal" href="#pygmo.core.problem.has_hessians_sparsity" title="pygmo.core.problem.has_hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">has_hessians_sparsity()</span></code></a> returns <code class="docutils literal"><span class="pre">True</span></code>, then the <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the
@@ -961,8 +963,9 @@ containing each exactly 2 elements representing the indices <span class="math">\
 shape, dimensions, etc.),</li>
 <li>at least one element of a returned iterable Python object does not consist of a collection of exactly
 2 elements,</li>
-<li>if a sparsity pattern returned by the UDP is invalid (specifically, if it contains duplicate pairs of indices
-or if the indices in the pattern are incompatible with the properties of the problem)</li>
+<li>if a sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically,
+if the indices in the pattern are incompatible with the properties of the problem or if the size of the pattern
+differs from the size recorded upon construction)</li>
 </ul>
 </li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
@@ -1054,7 +1057,7 @@ between C++ and Python (e.g., type conversion errors, mismatched function signat
     </p>
     <p>
         &copy; Copyright 2017, PaGMO development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.4.<br/>
     </p>
   </div>
 </footer>
