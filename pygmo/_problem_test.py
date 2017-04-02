@@ -1210,13 +1210,13 @@ class problem_test_case(_ut.TestCase):
         class p(object):
 
             def get_bounds(self):
-                return ([0]*6, [1]*6)
+                return ([0] * 6, [1] * 6)
 
             def fitness(self, a):
                 return [42]
 
             def gradient_sparsity(self):
-                return [(0, 0),(0,2),(0,1)]
+                return [(0, 0), (0, 2), (0, 1)]
 
         self.assertRaises(ValueError, lambda: problem(p()))
 
@@ -1375,7 +1375,7 @@ class problem_test_case(_ut.TestCase):
         class p(object):
 
             def get_bounds(self):
-                return ([0]*6, [1]*6)
+                return ([0] * 6, [1] * 6)
 
             def fitness(self, a):
                 return [42, -42]
@@ -1386,7 +1386,7 @@ class problem_test_case(_ut.TestCase):
             def hessians(self, a):
                 return []
 
-        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]*6))
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1] * 6))
 
     def run_has_hessians_sparsity_tests(self):
         from .core import problem
@@ -1728,7 +1728,7 @@ class problem_test_case(_ut.TestCase):
             counter = 0
 
             def get_bounds(self):
-                return ([0]*6, [1]*6)
+                return ([0] * 6, [1] * 6)
 
             def fitness(self, a):
                 return [42, 42]
@@ -1747,7 +1747,7 @@ class problem_test_case(_ut.TestCase):
         class p(object):
 
             def get_bounds(self):
-                return ([0]*6, [1]*6)
+                return ([0] * 6, [1] * 6)
 
             def fitness(self, a):
                 return [42, 42]
@@ -1756,7 +1756,7 @@ class problem_test_case(_ut.TestCase):
                 return 2
 
             def hessians_sparsity(self):
-                return [[(1, 0)], [(1, 0), (2, 0), (1,1)]]
+                return [[(1, 0)], [(1, 0), (2, 0), (1, 1)]]
 
         self.assertRaises(ValueError, lambda: problem(p()))
 
