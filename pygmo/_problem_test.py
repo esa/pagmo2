@@ -1207,6 +1207,19 @@ class problem_test_case(_ut.TestCase):
 
         self.assertRaises(ValueError, lambda: problem(p()).gradient_sparsity())
 
+        class p(object):
+
+            def get_bounds(self):
+                return ([0]*6, [1]*6)
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [(0, 0),(0,2),(0,1)]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
     def run_has_hessians_tests(self):
         from .core import problem
 
@@ -1730,6 +1743,22 @@ class problem_test_case(_ut.TestCase):
                 return [[(1, 0)], [(1, 0), (2, 0)]]
 
         self.assertRaises(ValueError, lambda: problem(p()).hessians_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0]*6, [1]*6)
+
+            def fitness(self, a):
+                return [42, 42]
+
+            def get_nobj(self):
+                return 2
+
+            def hessians_sparsity(self):
+                return [[(1, 0)], [(1, 0), (2, 0), (1,1)]]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
 
     def run_seed_tests(self):
         from .core import problem
