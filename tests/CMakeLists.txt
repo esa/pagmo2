@@ -63,6 +63,7 @@ if(PAGMO_WITH_EIGEN3)
 endif()
 
 if(PAGMO_WITH_NLOPT)
+    ADD_PAGMO_TESTCASE(nlopt)
     ADD_PAGMO_TESTCASE(nlopt_utils)
 endif()
 
