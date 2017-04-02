@@ -178,33 +178,6 @@ inline vector_double random_decision_vector(const vector_double &lb, const vecto
     return random_decision_vector({lb, ub}, r_engine);
 }
 
-/// Safely cast between unsigned types
-/**
- * Performs a cast between unsigned types throwing if the input cannot be represented in the new type
- *
- * Example:
- * @code{.unparsed}
- * unsigned short s = std::numeric_limits<unsigned short>::max();
- * unsigned long l = std::numeric_limits<unsigned long>::max();
- * auto res1 = safe_cast<unsigned long>(s); // Will always work
- * auto res2 = safe_cast<unsigned short>(l); // Will throw an std::overflow_error if precision is lost
- * @endcode
- *
- * @param x an unsigned value \p x to be casted to \p T
- * @return the input \p x safey casted to \p T
- * @throws std::overflow_error if \p x cannot be represented by the new type
- */
-template <typename T, typename U>
-inline T safe_cast(const U &x)
-{
-    static_assert(std::is_unsigned<T>::value && std::is_unsigned<U>::value,
-                  "Safe cast can only be used on unsigned types");
-    if (x > std::numeric_limits<T>::max()) {
-        pagmo_throw(std::overflow_error, "Converting between unsigned types caused a loss");
-    }
-    return static_cast<T>(x);
-}
-
 /// Binomial coefficient
 /**
  * An implementation of the binomial coefficient using gamma functions

@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <atomic>
+#include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -1118,10 +1119,8 @@ public:
             }
             // We resize rather than push back here, so that an std::length_error is called quickly rather
             // than an std::bad_alloc after waiting the growth
-            m_hs_dim.resize(nf);
-            for (vector_double::size_type i = 0u; i < nf; ++i) {
-                m_hs_dim[i] = (nx * (nx - 1u) / 2u + nx); // lower triangular
-            }
+            m_hs_dim.resize(boost::numeric_cast<decltype(m_hs_dim.size())>(nf));
+            std::fill(m_hs_dim.begin(), m_hs_dim.end(), nx * (nx - 1u) / 2u + nx); // lower triangular
         }
         // 8 - Constraint tolerance
         m_c_tol.resize(m_nec + m_nic);
@@ -1361,7 +1360,7 @@ public:
     /// Gradient sparsity pattern.
     /**
      * This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a
-     * collection of the indices \f$(i,j)\f$ of the non-zero elements of
+     * lexicographically sorted collection of the indices \f$(i,j)\f$ of the non-zero elements of
      * \f$ g_{ij} = \frac{\partial f_i}{\partial x_j}\f$.
      *
      * If problem::has_gradient_sparsity() returns \p true,
@@ -1372,8 +1371,9 @@ public:
      * @return the gradient sparsity pattern.
      *
      * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
-     * it contains duplicate pairs of indices or if the indices in the pattern are incompatible with the properties of
-     * the problem).
+     * it is not strictly sorted lexicographically, or if the indices in the pattern are incompatible with the
+     * properties of the problem, or if the size of the returned pattern is different from the size recorded upon
+     * construction).
      * @throws unspecified memory errors in standard containers.
      */
     sparsity_pattern gradient_sparsity() const
@@ -1381,6 +1381,17 @@ public:
         if (has_gradient_sparsity()) {
             auto retval = ptr()->gradient_sparsity();
             check_gradient_sparsity(retval);
+            // Check the size is consistent with the stored size.
+            // NOTE: we need to do this check here, and not in check_gradient_sparsity(),
+            // because check_gradient_sparsity() is sometimes called when m_gs_dim has not been
+            // initialised yet (e.g., in the ctor).
+            if (retval.size() != m_gs_dim) {
+                pagmo_throw(std::invalid_argument,
+                            "Invalid gradient sparsity pattern: the returned sparsity pattern has a size of "
+                                + std::to_string(retval.size())
+                                + ", while the sparsity pattern size stored upon problem construction is "
+                                + std::to_string(m_gs_dim));
+            }
             return retval;
         }
         return detail::dense_gradient(get_nf(), get_nx());
@@ -1433,7 +1444,8 @@ public:
      *
      * @throws std::invalid_argument if either:
      * - the length of \p dv differs from the output of get_nx(), or
-     * - the length of the returned hessians does not match the corresponding hessians sparsity pattern dimensions.
+     * - the length of the returned hessians does not match the corresponding hessians sparsity pattern dimensions, or
+     * - the size of the return value is not equal to the fitness dimension.
      * @throws not_implemented_error if the UDP does not satisfy pagmo::has_hessians.
      * @throws unspecified any exception thrown by the <tt>%hessians()</tt> method of the UDP.
      */
@@ -1442,7 +1454,7 @@ public:
         // 1 - checks the decision vector
         check_decision_vector(dv);
         // 2 - computes the hessians
-        std::vector<vector_double> retval(ptr()->hessians(dv));
+        auto retval(ptr()->hessians(dv));
         // 3 - checks the hessians
         check_hessians_vector(retval);
         // 4 - increments hessians evaluation counter
@@ -1471,7 +1483,7 @@ public:
     /// Hessians sparsity pattern.
     /**
      * This method will return the hessians sparsity pattern of the problem. Each component \f$ l\f$ of the hessians
-     * sparsity pattern is a collection of the indices \f$(i,j)\f$ of the non-zero elements of
+     * sparsity pattern is a lexicographically sorted collection of the indices \f$(i,j)\f$ of the non-zero elements of
      * \f$h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}\f$. Since the Hessian matrix
      * is symmetric, only lower triangular elements are allowed.
      *
@@ -1482,18 +1494,35 @@ public:
      *
      * @return the hessians sparsity pattern.
      *
-     * @throws std::invalid_argument if the sparsity pattern returned by the UDP is invalid (specifically, if
-     * its size is invalid, if it contains duplicate pairs of indices or if the returned indices do not correspond
-     * to  a lower triangular representation of a symmetric matrix).
-     * @throws not_implemented_error if the <tt>%hessians_sparsity()</tt> method of the UDP is invoked without being
-     * available. This indicates in general an inconsistency in the implementation of the UDP.
-     * @throws unspecified memory errors in standard containers.
+     * @throws std::invalid_argument if a sparsity pattern returned by the UDP is invalid (specifically, if
+     * if it is not strictly sorted lexicographically, if the returned indices do not
+     * correspond to a lower triangular representation of a symmetric matrix, or if the size of the pattern differs
+     * from the size recorded upon construction).
      */
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
         if (m_has_hessians_sparsity) {
             auto retval = ptr()->hessians_sparsity();
             check_hessians_sparsity(retval);
+            // Check the sizes are consistent with the stored sizes.
+            // NOTE: we need to do this check here, and not in check_hessians_sparsity(),
+            // because check_hessians_sparsity() is sometimes called when m_hs_dim has not been
+            // initialised yet (e.g., in the ctor).
+            // NOTE: in check_hessians_sparsity() we have already checked the size of retval. It has
+            // to be the same as the fitness dimension. The same check is run when m_hs_dim is originally
+            // created, hence they must be equal.
+            assert(retval.size() == m_hs_dim.size());
+            auto r_it = retval.begin();
+            for (const auto &dim : m_hs_dim) {
+                if (r_it->size() != dim) {
+                    pagmo_throw(std::invalid_argument,
+                                "Invalid hessian sparsity pattern: the returned sparsity pattern has a size of "
+                                    + std::to_string(r_it->size())
+                                    + ", while the sparsity pattern size stored upon problem construction is "
+                                    + std::to_string(dim));
+                }
+                ++r_it;
+            }
             return retval;
         }
         return detail::dense_hessians(get_nf(), get_nx());
@@ -1925,43 +1954,31 @@ private:
         return m_ptr.get();
     }
 
-    // A small helper to check if a vector containes unique elements.
-    // This version for floating point types is also protected against possible nans
-    template <typename U, detail::enable_if_is_floating_point<U> = 0>
-    static bool all_unique(std::vector<U> x)
-    {
-        std::sort(x.begin(), x.end(), detail::less_than_f<U>);
-        auto it = std::unique(x.begin(), x.end(), detail::equal_to_f<U>);
-        return it == x.end();
-    }
-    // The version for non floating point types is not protected vs possible nans
-    // (e.g if used with std::pair it could be troublesome)
-    template <typename U, detail::enable_if_is_not_floating_point<U> = 0>
-    static bool all_unique(std::vector<U> x)
-    {
-        std::sort(x.begin(), x.end());
-        auto it = std::unique(x.begin(), x.end());
-        return it == x.end();
-    }
-
     void check_gradient_sparsity(const sparsity_pattern &gs) const
     {
+        // Cache a couple of quantities.
         const auto nx = get_nx();
         const auto nf = get_nf();
-        // 1 - We check that the gradient sparsity pattern has
-        // valid indices.
-        for (const auto &pair : gs) {
-            if ((pair.first >= nf) || (pair.second >= nx)) {
+
+        // Check the pattern.
+        for (auto it = gs.begin(); it != gs.end(); ++it) {
+            if ((it->first >= nf) || (it->second >= nx)) {
                 pagmo_throw(std::invalid_argument, "Invalid pair detected in the gradient sparsity pattern: ("
-                                                       + std::to_string(pair.first) + ", " + std::to_string(pair.second)
+                                                       + std::to_string(it->first) + ", " + std::to_string(it->second)
                                                        + ")\nFitness dimension is: " + std::to_string(nf)
                                                        + "\nDecision vector dimension is: " + std::to_string(nx));
             }
-        }
-        // 2 - We check all pairs are unique
-        if (!all_unique(gs)) {
-            pagmo_throw(std::invalid_argument,
-                        "Multiple entries of the same index pair was detected in the gradient sparsity pattern");
+            if (it == gs.begin()) {
+                continue;
+            }
+            if (!(*(it - 1) < *it)) {
+                pagmo_throw(
+                    std::invalid_argument,
+                    "The gradient sparsity pattern is not strictly sorted in ascending order: the indices pair ("
+                        + std::to_string((it - 1)->first) + ", " + std::to_string((it - 1)->second)
+                        + ") is greater than or equal to the successive indices pair (" + std::to_string(it->first)
+                        + ", " + std::to_string(it->second) + ")");
+            }
         }
     }
     void check_hessians_sparsity(const std::vector<sparsity_pattern> &hs) const
@@ -1974,7 +1991,7 @@ private:
                                                    + std::to_string(hs.size()) + ", expected: " + std::to_string(nf));
         }
         // 2 - We check that all hessian sparsity patterns have
-        // valid indexes.
+        // valid indices.
         for (const auto &one_hs : hs) {
             check_hessian_sparsity(one_hs);
         }
@@ -1982,23 +1999,28 @@ private:
     void check_hessian_sparsity(const sparsity_pattern &hs) const
     {
         const auto nx = get_nx();
-        // 1 - We check that the hessian sparsity pattern has
-        // valid indexes. Assuming a lower triangular representation of
+        // We check that the hessian sparsity pattern has
+        // valid indices. Assuming a lower triangular representation of
         // a symmetric matrix. Example, for a 4x4 dense symmetric
         // [(0,0), (1,0), (1,1), (2,0), (2,1), (2,2), (3,0), (3,1), (3,2), (3,3)]
-        for (const auto &pair : hs) {
-            if ((pair.first >= nx) || (pair.second > pair.first)) {
+        for (auto it = hs.begin(); it != hs.end(); ++it) {
+            if ((it->first >= nx) || (it->second > it->first)) {
                 pagmo_throw(std::invalid_argument, "Invalid pair detected in the hessians sparsity pattern: ("
-                                                       + std::to_string(pair.first) + ", " + std::to_string(pair.second)
+                                                       + std::to_string(it->first) + ", " + std::to_string(it->second)
                                                        + ")\nDecision vector dimension is: " + std::to_string(nx)
                                                        + "\nNOTE: hessian is a symmetric matrix and PaGMO represents "
                                                          "it as lower triangular: i.e (i,j) is not valid if j>i");
             }
-        }
-        // 2 -  We check all pairs are unique
-        if (!all_unique(hs)) {
-            pagmo_throw(std::invalid_argument,
-                        "Multiple entries of the same index pair were detected in the hessian sparsity pattern");
+            if (it == hs.begin()) {
+                continue;
+            }
+            if (!(*(it - 1) < *it)) {
+                pagmo_throw(std::invalid_argument,
+                            "The hessian sparsity pattern is not strictly sorted in ascending order: the indices pair ("
+                                + std::to_string((it - 1)->first) + ", " + std::to_string((it - 1)->second)
+                                + ") is greater than or equal to the successive indices pair ("
+                                + std::to_string(it->first) + ", " + std::to_string(it->second) + ")");
+            }
         }
     }
     void check_decision_vector(const vector_double &dv) const
@@ -2033,8 +2055,15 @@ private:
 
     void check_hessians_vector(const std::vector<vector_double> &hs) const
     {
-        // Checks that the hessians returned have the same dimensions of the
+        // 1 - Check that hs has size get_nf()
+        if (hs.size() != get_nf()) {
+            pagmo_throw(std::invalid_argument, "The hessians vector has a size of " + std::to_string(hs.size())
+                                                   + ", but the fitness dimension of the problem is "
+                                                   + std::to_string(get_nf()) + ". The two values must be equal");
+        }
+        // 2 - Check that the hessians returned have the same dimensions of the
         // corresponding sparsity patterns
+        // NOTE: the dimension of m_hs_dim is guaranteed to be get_nf() on construction.
         for (decltype(hs.size()) i = 0u; i < hs.size(); ++i) {
             if (hs[i].size() != m_hs_dim[i]) {
                 pagmo_throw(std::invalid_argument, "On the hessian no. " + std::to_string(i) + ": Components returned: "

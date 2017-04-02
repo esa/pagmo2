@@ -1190,6 +1190,36 @@ class problem_test_case(_ut.TestCase):
 
         self.assertRaises(TypeError, lambda: problem(p()))
 
+        class p(object):
+            counter = 0
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                if p.counter == 0:
+                    p.counter = p.counter + 1
+                    return []
+                return [(0, 0)]
+
+        self.assertRaises(ValueError, lambda: problem(p()).gradient_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0]*6, [1]*6)
+
+            def fitness(self, a):
+                return [42]
+
+            def gradient_sparsity(self):
+                return [(0, 0),(0,2),(0,1)]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
+
     def run_has_hessians_tests(self):
         from .core import problem
 
@@ -1341,6 +1371,22 @@ class problem_test_case(_ut.TestCase):
         self.assert_(all(array([4., 5., 6.]) ==
                          problem(p()).hessians([1, 2])[1]))
         self.assertRaises(ValueError, lambda: problem(p()).hessians([1]))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0]*6, [1]*6)
+
+            def fitness(self, a):
+                return [42, -42]
+
+            def get_nobj(self):
+                return 2
+
+            def hessians(self, a):
+                return []
+
+        self.assertRaises(ValueError, lambda: problem(p()).hessians([1]*6))
 
     def run_has_hessians_sparsity_tests(self):
         from .core import problem
@@ -1677,6 +1723,42 @@ class problem_test_case(_ut.TestCase):
                       == array([[0, 0], [1, 1]])).all())
         self.assert_((problem(p()).hessians_sparsity()[1]
                       == array([[0, 0], [1, 0]])).all())
+
+        class p(object):
+            counter = 0
+
+            def get_bounds(self):
+                return ([0]*6, [1]*6)
+
+            def fitness(self, a):
+                return [42, 42]
+
+            def get_nobj(self):
+                return 2
+
+            def hessians_sparsity(self):
+                if p.counter == 0:
+                    p.counter = p.counter + 1
+                    return [[(1, 0)], [(1, 0)]]
+                return [[(1, 0)], [(1, 0), (2, 0)]]
+
+        self.assertRaises(ValueError, lambda: problem(p()).hessians_sparsity())
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0]*6, [1]*6)
+
+            def fitness(self, a):
+                return [42, 42]
+
+            def get_nobj(self):
+                return 2
+
+            def hessians_sparsity(self):
+                return [[(1, 0)], [(1, 0), (2, 0), (1,1)]]
+
+        self.assertRaises(ValueError, lambda: problem(p()))
 
     def run_seed_tests(self):
         from .core import problem
