@@ -39,6 +39,6 @@ using namespace pagmo;
 BOOST_AUTO_TEST_CASE(nlopt_algorithm_construction)
 {
     population pop{ackley{10}, 20};
-    algorithm algo{nlopt{NLOPT_LD_MMA}};
+    algorithm algo{nlopt{"cobylsa"}};
     std::cout << algo.evolve(pop) << '\n';
 }
