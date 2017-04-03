@@ -99,6 +99,10 @@ inline typename nlopt_data<>::names_map_t nlopt_names_map()
     retval.insert(value_type("praxis", NLOPT_LN_PRAXIS));
     retval.insert(value_type("neldermead", NLOPT_LN_NELDERMEAD));
     retval.insert(value_type("sbplx", NLOPT_LN_SBPLX));
+    retval.insert(value_type("mma", NLOPT_LD_MMA));
+    retval.insert(value_type("ccsaq", NLOPT_LD_CCSAQ));
+    retval.insert(value_type("slsqp", NLOPT_LD_SLSQP));
+    retval.insert(value_type("lbfgs", NLOPT_LD_LBFGS));
     return retval;
 }
 
