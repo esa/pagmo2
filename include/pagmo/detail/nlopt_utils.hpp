@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <initializer_list>
+#include <iomanip>
 #include <memory>
 #include <nlopt.h>
 #include <stdexcept>
@@ -41,8 +42,10 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <type_traits>
 #include <unordered_map>
+#include <vector>
 
 #include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
 
@@ -117,10 +120,15 @@ inline std::string nlopt_res2string(::nlopt_result err)
 }
 
 struct nlopt_obj {
+    // Single entry of the log (feval, fitness, dv).
+    using log_line_type = std::tuple<unsigned long, double, vector_double>;
+    // The log.
+    using log_type = std::vector<log_line_type>;
+    // Shortcut to the static data.
     using data = nlopt_data<>;
     explicit nlopt_obj(::nlopt_algorithm algo, problem &prob, double stopval, double ftol_rel, double ftol_abs,
-                       double xtol_rel, double xtol_abs, int maxeval, int maxtime)
-        : m_prob(prob), m_sp(prob.gradient_sparsity()), m_value(nullptr, ::nlopt_destroy)
+                       double xtol_rel, double xtol_abs, int maxeval, int maxtime, unsigned verbosity)
+        : m_prob(prob), m_sp(prob.gradient_sparsity()), m_value(nullptr, ::nlopt_destroy), m_verbosity(verbosity)
     {
         // Extract and set problem dimension.
         const auto n = boost::numeric_cast<unsigned>(prob.get_nx());
@@ -141,6 +149,7 @@ struct nlopt_obj {
             pagmo_throw(std::invalid_argument, "");
         }
 
+        // Variable to hold the result of various operations.
         ::nlopt_result res;
 
         // Box bounds.
@@ -172,6 +181,9 @@ struct nlopt_obj {
                 auto &p = nlo.m_prob;
                 auto &dv = nlo.m_dv;
                 auto &sp = nlo.m_sp;
+                const auto verb = nlo.m_verbosity;
+                auto &f_count = nlo.m_objfun_counter;
+                auto &log = nlo.m_log;
 
                 // A couple of sanity checks.
                 assert(dim == p.get_nx());
@@ -216,6 +228,21 @@ struct nlopt_obj {
                         grad[it->second] = *g_it;
                     }
                 }
+
+                // Update the log if requested.
+                if (verb && !(f_count % verb)) {
+                    if (!(f_count / verb % 50u)) {
+                        // Every 50 lines print the column names.
+                        print("\n", std::setw(10), "fevals:", std::setw(15), "fitness:", '\n');
+                    }
+                    // Print to screen the log line.
+                    print(std::setw(10), f_count, std::setw(15), fitness[0], '\n');
+                    // Record the log.
+                    log.emplace_back(f_count, fitness[0], dv);
+                }
+
+                // Update the counter.
+                ++f_count;
 
                 // Return the objfun value.
                 return fitness[0];
@@ -278,6 +305,8 @@ struct nlopt_obj {
                                                    + nlopt_res2string(res));
         }
     }
+
+    // Delete all other ctors/assignment ops.
     nlopt_obj(const nlopt_obj &) = delete;
     nlopt_obj(nlopt_obj &&) = delete;
     nlopt_obj &operator=(const nlopt_obj &) = delete;
@@ -288,6 +317,9 @@ struct nlopt_obj {
     sparsity_pattern m_sp;
     std::unique_ptr<std::remove_pointer<::nlopt_opt>::type, void (*)(::nlopt_opt)> m_value;
     vector_double m_dv;
+    unsigned m_verbosity;
+    unsigned long m_objfun_counter = 0;
+    log_type m_log;
 };
 }
 }

@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(nlopt_algorithm_construction)
 {
     population pop{rosenbrock{100}, 20};
     algorithm algo{nlopt{"lbfgs"}};
+    algo.set_verbosity(10);
     pop = algo.evolve(pop);
-    std::cout << algo << '\n';
-    std::cout << pop << '\n';
+    std::cout << '\n' << algo << '\n';
 }
