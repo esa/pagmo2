@@ -374,10 +374,15 @@ It is the user&#8217;s responsibility to ensure that <em>f</em> actually corresp
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>array-like object</em>) &#8211; decision vector to be added to the population</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> (<em>array-like object</em>) &#8211; decision vector to be added to the population</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_problem.html#pygmo.core.problem.fitness" title="pygmo.core.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.problem.fitness()</span></code></a> or by failures at the intersection between C++ and
-Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the dimensions of <em>x</em> or <em>f</em> (if provided) are incompatible with the population&#8217;s problem</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_problem.html#pygmo.core.problem.fitness" title="pygmo.core.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.problem.fitness()</span></code></a> or by failures at the intersection between C++ and
+Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
