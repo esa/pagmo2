@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
@@ -153,6 +153,21 @@
 <span class="target" id="pagmoclasspagmo_1_1archipelago_1a16b60eff7da09b3bda3dffd4259250c3"></span><em class="property">using </em><code class="descname">size_type</code> = size_type_implementation<a class="headerlink" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The size type of the archipelago. </p>
 <p>This is an unsigned integer type used to represent the number of islands in the archipelago. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5pagmo11archipelago8iteratorE">
+<span class="target" id="pagmoclasspagmo_1_1archipelago_1a39b9c4cae4e003a89ec3fbbaa59b8bad"></span><em class="property">using </em><code class="descname">iterator</code> = iterator_implementation<a class="headerlink" href="#_CPPv2N5pagmo11archipelago8iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Mutable iterator. </p>
+<p>Dereferencing a mutable iterator will yield a reference to an island within the archipelago.</p>
+<p><strong>NOTE</strong>: mutable iterators are provided solely in order to allow calling non-const methods on the islands. Assigning an island via a mutable iterator will be undefined behaviour. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5pagmo11archipelago14const_iteratorE">
+<span class="target" id="pagmoclasspagmo_1_1archipelago_1ab79f78f4f56b0261aca7faae2e640506"></span><em class="property">using </em><code class="descname">const_iterator</code> = const_iterator_implementation<a class="headerlink" href="#_CPPv2N5pagmo11archipelago14const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Const iterator. </p>
+<p>Dereferencing a const iterator will yield a const reference to an island within the archipelago. </p>
 </dd></dl>
 
 </div>
@@ -403,6 +418,60 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv2N5pagmo11archipelago5beginEv">
+<span id="pagmo::archipelago::begin"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a3ba80d233c2d080280c61d207d12ce79"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago8iteratorE" title="pagmo::archipelago::iterator">iterator</a> <code class="descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Mutable begin iterator. </p>
+<p>This method will return a mutable iterator pointing to the beginning of the internal island container. That is, the returned iterator will either point to the first island of the archipelago (if <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is nonzero) or it will be the same iterator returned by <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1ad1a71671802d460d8b20c8b06e6cb025"><span class="std std-ref">archipelago::end()</span></a> (is <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is zero).</p>
+<p>Adding an island to the archipelago will invalidate all existing iterators.</p>
+<p><strong>NOTE</strong>: mutable iterators are provided solely in order to allow calling non-const methods on the islands. Assigning an island via a mutable iterator will be undefined behaviour.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a mutable iterator to the beginning of the island container. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo11archipelago3endEv">
+<span id="pagmo::archipelago::end"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1ad1a71671802d460d8b20c8b06e6cb025"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago8iteratorE" title="pagmo::archipelago::iterator">iterator</a> <code class="descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Mutable end iterator. </p>
+<p>This method will return a mutable iterator pointing to the end of the internal island container.</p>
+<p>Adding an island to the archipelago will invalidate all existing iterators.</p>
+<p><strong>NOTE</strong>: mutable iterators are provided solely in order to allow calling non-const methods on the islands. Assigning an island via a mutable iterator will be undefined behaviour.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a mutable iterator to the end of the island container. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11archipelago5beginEv">
+<span id="pagmo::archipelago::beginC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a9da1d5dfadeac29db788564dedfafad4"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago14const_iteratorE" title="pagmo::archipelago::const_iterator">const_iterator</a> <code class="descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Const begin iterator. </p>
+<p>This method will return a const iterator pointing to the beginning of the internal island container. That is, the returned iterator will either point to the first island of the archipelago (if <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is nonzero) or it will be the same iterator returned by <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a15cb73e9ddbf356ee86bb43f03ad7df2"><span class="std std-ref">archipelago::end() const </span></a>(is <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is zero).</p>
+<p>Adding an island to the archipelago will invalidate all existing iterators.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const iterator to the beginning of the island container. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo11archipelago3endEv">
+<span id="pagmo::archipelago::endC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a15cb73e9ddbf356ee86bb43f03ad7df2"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago14const_iteratorE" title="pagmo::archipelago::const_iterator">const_iterator</a> <code class="descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Const end iterator. </p>
+<p>This method will return a const iterator pointing to the end of the internal island container.</p>
+<p>Adding an island to the archipelago will invalidate all existing iterators.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const iterator to the end of the island container. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2NK5pagmo11archipelago4saveER7Archive">
@@ -494,7 +563,7 @@
     </p>
     <p>
         &copy; Copyright 2017, PaGMO development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
     </p>
   </div>
 </footer>
