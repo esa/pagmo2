@@ -151,9 +151,7 @@ html_theme_options = {
     # an arbitrary url.
     'navbar_links': [
         ("Home", "index"),
-        ("C++ docs", "docs/cpp/cpp_docs"),
-        ("Python docs", "docs/python/python_docs"),
-        ("Python tutorials", "docs/python/tutorials/python_tut")
+        ("Quickstart", "quickstart"),
     ],
 
     # Render the next and previous page links in navbar. (Default: true)
