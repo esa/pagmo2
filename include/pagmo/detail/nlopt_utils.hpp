@@ -274,15 +274,8 @@ struct nlopt_obj {
                                                    + nlopt_res2string(res));
         }
     }
-    nlopt_obj(const nlopt_obj &other)
-        : m_prob(other.m_prob), m_sp(other.m_sp), m_value(::nlopt_copy(other.m_value.get()), ::nlopt_destroy),
-          m_dv(other.m_dv)
-    {
-        if (!m_value) {
-            pagmo_throw(std::invalid_argument, "the copy of an nlopt_opt object failed");
-        }
-    }
-    nlopt_obj(nlopt_obj &&) = default;
+    nlopt_obj(const nlopt_obj &) = delete;
+    nlopt_obj(nlopt_obj &&) = delete;
     nlopt_obj &operator=(const nlopt_obj &) = delete;
     nlopt_obj &operator=(nlopt_obj &&) = delete;
 

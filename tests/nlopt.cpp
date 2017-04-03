@@ -41,6 +41,7 @@ BOOST_AUTO_TEST_CASE(nlopt_algorithm_construction)
     population pop{rosenbrock{10}, 20};
     algorithm algo{nlopt{"cobyla"}};
     pop = algo.evolve(pop);
+    pop = algo.evolve(pop);
     std::cout << algo << '\n';
     std::cout << pop << '\n';
 }
