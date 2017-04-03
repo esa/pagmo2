@@ -220,6 +220,18 @@ public:
      */
     void push_back(const vector_double &x, const vector_double &f)
     {
+        // Checks on the input vectors.
+        if (f.size() != m_prob.get_nf()) {
+            pagmo_throw(std::invalid_argument, "Trying to add a fitness of dimension: " + std::to_string(f.size())
+                                                   + ", while the problem's fitness has dimension: "
+                                                   + std::to_string(m_prob.get_nf()));
+        }
+        if (x.size() != m_prob.get_nx()) {
+            pagmo_throw(std::invalid_argument, "Trying to add a decision vector of dimension: "
+                                                   + std::to_string(x.size()) + ", while the problem's dimension is: "
+                                                   + std::to_string(m_prob.get_nx()));
+        }
+
         // Prepare quantities to be appended to the internal vectors.
         const auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
         auto x_copy(x);
