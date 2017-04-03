@@ -434,7 +434,10 @@ def _archi_init(self, n=0, **kwargs):
             "the 'n' parameter must be non-negative, but it is {} instead".format(n))
 
     # Call the original init.
-    __original_archi_init(self, n, island(**kwargs))
+    __original_archi_init(self)
+    # Push back islands.
+    for _ in range(n):
+        self.push_back(**kwargs)
 
 setattr(archipelago, "__init__", _archi_init)
 

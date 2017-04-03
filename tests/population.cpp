@@ -170,6 +170,12 @@ BOOST_AUTO_TEST_CASE(population_push_back_test)
     // 2 - Malformed problem. The user declares 2 objectives but returns something else
     population pop2{problem{malformed{}}};
     BOOST_CHECK_THROW(pop2.push_back({1.}), std::invalid_argument);
+    // 3 - Consistency checks on the second push_back() overload.
+    population pop3{problem{zdt{1u, 30u}}};
+    BOOST_CHECK_THROW(pop3.push_back({}, {}), std::invalid_argument);
+    BOOST_CHECK_THROW(pop3.push_back(vector_double(30u, 0.5), {}), std::invalid_argument);
+    BOOST_CHECK_THROW(pop3.push_back(vector_double(30u, 0.5), {0.}), std::invalid_argument);
+    BOOST_CHECK_THROW(pop3.push_back(vector_double(30u, 0.5), {0., 0., 0.}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(population_random_decision_vector_test)

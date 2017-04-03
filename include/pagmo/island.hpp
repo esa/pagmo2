@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <array>
 #include <boost/any.hpp>
+#include <boost/iterator/indirect_iterator.hpp>
 #include <chrono>
 #include <functional>
 #include <future>
@@ -961,7 +962,10 @@ inline void thread_island::run_evolve(island &isl) const
  */
 class archipelago
 {
-    using size_type_implementation = std::vector<std::unique_ptr<island>>::size_type;
+    using container_t = std::vector<std::unique_ptr<island>>;
+    using size_type_implementation = container_t::size_type;
+    using iterator_implementation = boost::indirect_iterator<container_t::iterator>;
+    using const_iterator_implementation = boost::indirect_iterator<container_t::const_iterator>;
 
 public:
     /// The size type of the archipelago.
@@ -970,6 +974,19 @@ public:
      * archipelago.
      */
     using size_type = size_type_implementation;
+    /// Mutable iterator.
+    /**
+     * Dereferencing a mutable iterator will yield a reference to an island within the archipelago.
+     *
+     * **NOTE**: mutable iterators are provided solely in order to allow calling non-const methods
+     * on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     */
+    using iterator = iterator_implementation;
+    /// Const iterator.
+    /**
+     * Dereferencing a const iterator will yield a const reference to an island within the archipelago.
+     */
+    using const_iterator = const_iterator_implementation;
     /// Default constructor.
     /**
      * The default constructor will initialise an empty archipelago.
@@ -1243,6 +1260,64 @@ public:
         return std::any_of(m_islands.begin(), m_islands.end(),
                            [](const std::unique_ptr<island> &iptr) { return iptr->busy(); });
     }
+    /// Mutable begin iterator.
+    /**
+     * This method will return a mutable iterator pointing to the beginning of the internal island container. That is,
+     * the returned iterator will either point to the first island of the archipelago (if size() is nonzero)
+     * or it will be the same iterator returned by archipelago::end() (is size() is zero).
+     *
+     * Adding an island to the archipelago will invalidate all existing iterators.
+     *
+     * **NOTE**: mutable iterators are provided solely in order to allow calling non-const methods
+     * on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     *
+     * @return a mutable iterator to the beginning of the island container.
+     */
+    iterator begin()
+    {
+        return iterator(m_islands.begin());
+    }
+    /// Mutable end iterator.
+    /**
+     * This method will return a mutable iterator pointing to the end of the internal island container.
+     *
+     * Adding an island to the archipelago will invalidate all existing iterators.
+     *
+     * **NOTE**: mutable iterators are provided solely in order to allow calling non-const methods
+     * on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     *
+     * @return a mutable iterator to the end of the island container.
+     */
+    iterator end()
+    {
+        return iterator(m_islands.end());
+    }
+    /// Const begin iterator.
+    /**
+     * This method will return a const iterator pointing to the beginning of the internal island container. That is,
+     * the returned iterator will either point to the first island of the archipelago (if size() is nonzero)
+     * or it will be the same iterator returned by archipelago::end() const (is size() is zero).
+     *
+     * Adding an island to the archipelago will invalidate all existing iterators.
+     *
+     * @return a const iterator to the beginning of the island container.
+     */
+    const_iterator begin() const
+    {
+        return const_iterator(m_islands.begin());
+    }
+    /// Const end iterator.
+    /**
+     * This method will return a const iterator pointing to the end of the internal island container.
+     *
+     * Adding an island to the archipelago will invalidate all existing iterators.
+     *
+     * @return a const iterator to the end of the island container.
+     */
+    const_iterator end() const
+    {
+        return const_iterator(m_islands.end());
+    }
     /// Stream operator.
     /**
      * This operator will stream to \p os a human-readable representation of the input
@@ -1302,7 +1377,7 @@ public:
     }
 
 private:
-    std::vector<std::unique_ptr<island>> m_islands;
+    container_t m_islands;
 };
 }
 
