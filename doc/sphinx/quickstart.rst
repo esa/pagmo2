@@ -1,8 +1,7 @@
 .. _quickstart:
 
-
-Quick start examples
-====================
+Quick start 
+============
 
 .. contents::
 
@@ -10,7 +9,7 @@ Quick start examples
 C++
 ---
 
-After following the :ref:`installationguide` you will be able to compile and run your first C++ pagmo program:
+After following the :ref:`install` you will be able to compile and run your first C++ pagmo program:
 
 .. _getting_started_c++:
 
@@ -22,14 +21,14 @@ Place it into a getting_started.cpp text file and compile it (for eaxmple) with:
 
 .. code-block:: bash
 
-   g++ -std=c++11 getting_started.cpp -lmpfr -lgmp -pthread
+   g++ -std=c++11 getting_started.cpp -pthread
 
 -----------------------------------------------------------------------
 
 Python
 ------
 
-If you have successfully installed pygmo following the :ref:`installationguide` you can try the following script:
+If you have successfully installed pygmo following the :ref:`install` you can try the following script:
 
 .. _getting_started_py:
 
@@ -43,5 +42,5 @@ Place it into a getting_started.py text file and run it with:
 
    python getting_started.py
 
-We recommend the use of Jupyter or Ipython do enjoy pygmo the most.
+We recommend the use of Jupyter or Ipython to enjoy pygmo the most.
 

@@ -151,6 +151,7 @@ html_theme_options = {
     # an arbitrary url.
     'navbar_links': [
         ("Home", "index"),
+        ("Install", "install"),
         ("Quickstart", "quickstart"),
     ],
 

@@ -29,6 +29,12 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
+   install
+   quickstart
+
+.. toctree::
+   :maxdepth: 1
+
    docs/cpp/cpp_docs
    docs/python/python_docs
    docs/python/tutorials/python_tut
