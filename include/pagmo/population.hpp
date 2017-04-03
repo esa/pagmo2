@@ -216,10 +216,24 @@ public:
      * @param x decision vector to be added to the population.
      * @param f fitness vector corresponding to the decision vector
      *
+     * @throws std::invalid_argument if the size of \p x differs from the problem's dimension,
+     * or if the size of \p f differs from the fitness dimension.
      * @throws unspecified any exception thrown by memory errors in standard containers.
      */
     void push_back(const vector_double &x, const vector_double &f)
     {
+        // Checks on the input vectors.
+        if (x.size() != m_prob.get_nx()) {
+            pagmo_throw(std::invalid_argument, "Trying to add a decision vector of dimension: "
+                                                   + std::to_string(x.size()) + ", while the problem's dimension is: "
+                                                   + std::to_string(m_prob.get_nx()));
+        }
+        if (f.size() != m_prob.get_nf()) {
+            pagmo_throw(std::invalid_argument, "Trying to add a fitness of dimension: " + std::to_string(f.size())
+                                                   + ", while the problem's fitness has dimension: "
+                                                   + std::to_string(m_prob.get_nf()));
+        }
+
         // Prepare quantities to be appended to the internal vectors.
         const auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
         auto x_copy(x);
@@ -468,6 +482,10 @@ public:
 
     /// Getter for the pagmo::problem.
     /**
+     * **NOTE**: the ability to extract a mutable reference to the problem is provided solely in order to
+     * allow calling non-const methods on the problem. Assigning the population's problem via a reference
+     * returned by this method is undefined behaviour.
+     *
      * @return a reference to the internal pagmo::problem.
      */
     problem &get_problem()

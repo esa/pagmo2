@@ -202,6 +202,12 @@ class population_test_case(_ut.TestCase):
         self.assertEqual(len(pop), 9)
         self.assertEqual(pop.problem.get_fevals(), 7)
         self.assertEqual(pop.best_idx(), 7)
+        # Test bogus x, f dimensions.
+        pop = population(rosenbrock(5), size=5)
+        self.assertRaises(ValueError, lambda: pop.push_back([]))
+        self.assertRaises(ValueError, lambda: pop.push_back([], []))
+        self.assertRaises(ValueError, lambda: pop.push_back([1] * 5, []))
+        self.assertRaises(ValueError, lambda: pop.push_back([1] * 5, [1, 2]))
 
     def run_random_dv_test(self):
         from .core import population, rosenbrock
