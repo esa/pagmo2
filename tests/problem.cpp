@@ -1108,3 +1108,166 @@ BOOST_AUTO_TEST_CASE(thread_safety_test)
     BOOST_CHECK(problem{ts2{}}.get_thread_safety() == thread_safety::none);
     BOOST_CHECK(problem{ts3{}}.get_thread_safety() == thread_safety::basic);
 }
+
+struct gs1 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}};
+    }
+    sparsity_pattern gradient_sparsity() const
+    {
+        if (!n_grad_invs) {
+            ++n_grad_invs;
+            return {};
+        }
+        return {{0, 0}};
+    }
+    static int n_grad_invs;
+};
+
+int gs1::n_grad_invs = 0;
+
+struct gs2 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}};
+    }
+    sparsity_pattern gradient_sparsity() const
+    {
+        return {{0, 0}};
+    }
+};
+
+struct gs3 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}};
+    }
+    sparsity_pattern gradient_sparsity() const
+    {
+        return {{0, 0}, {0, 2}, {0, 1}};
+    }
+};
+
+BOOST_AUTO_TEST_CASE(custom_gs)
+{
+    // Test a gradient sparsity that changes after the first invocation of gradient_sparsity().
+    problem p{gs1{}};
+    BOOST_CHECK_THROW(p.gradient_sparsity(), std::invalid_argument);
+    p = problem{gs2{}};
+    BOOST_CHECK_NO_THROW(p.gradient_sparsity());
+    // Gradient sparsity not sorted.
+    BOOST_CHECK_THROW(p = problem{gs3{}}, std::invalid_argument);
+}
+
+struct hs1 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2;
+    }
+    std::vector<sparsity_pattern> hessians_sparsity() const
+    {
+        if (!n_hess_invs) {
+            ++n_hess_invs;
+            return {{{1, 0}}, {{1, 0}}};
+        }
+        return {{{1, 0}}, {{1, 0}, {2, 0}}};
+    }
+    static int n_hess_invs;
+};
+
+int hs1::n_hess_invs = 0;
+
+struct hs2 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2;
+    }
+    std::vector<sparsity_pattern> hessians_sparsity() const
+    {
+        return {{{1, 0}}, {{1, 0}, {2, 0}}};
+    }
+};
+
+struct hs3 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2;
+    }
+    std::vector<sparsity_pattern> hessians_sparsity() const
+    {
+        return {{{1, 0}, {2, 1}, {1, 1}}, {{1, 0}, {2, 0}}};
+    }
+};
+
+BOOST_AUTO_TEST_CASE(custom_hs)
+{
+    // Test a hessians sparsity that changes after the first invocation of hessians_sparsity().
+    problem p{hs1{}};
+    BOOST_CHECK_THROW(p.hessians_sparsity(), std::invalid_argument);
+    p = problem{hs2{}};
+    BOOST_CHECK_NO_THROW(p.hessians_sparsity());
+    BOOST_CHECK_THROW(p = problem{hs3{}}, std::invalid_argument);
+}
+
+struct hess1 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2;
+    }
+    std::vector<vector_double> hessians(const vector_double &) const
+    {
+        return {{}};
+    }
+};
+
+BOOST_AUTO_TEST_CASE(broken_hessian)
+{
+    // Test a hessians method that returns a number of vectors different from get_nf().
+    problem p{hess1{}};
+    BOOST_CHECK_THROW(p.hessians({1, 1, 1, 1, 1, 1}), std::invalid_argument);
+}

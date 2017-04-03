@@ -43,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include "../problem.hpp"
 #include "../problems/decompose.hpp"
 #include "../rng.hpp"
-#include "../utils/generic.hpp"         // safe_cast, kNN
+#include "../utils/generic.hpp"         // kNN
 #include "../utils/multi_objective.hpp" // ideal
 
 namespace pagmo

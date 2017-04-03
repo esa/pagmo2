@@ -44,9 +44,10 @@ namespace detail
 // Less than compares floating point types placing nans after inf or before -inf
 // It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
 // and avoid an undefined behaviour
-template <typename T, bool After = true, enable_if_is_floating_point<T> = 0>
+template <typename T, bool After = true>
 inline bool less_than_f(T a, T b)
 {
+    static_assert(std::is_floating_point<T>::value, "less_than_f can be used only with floating-point types.");
     if (!std::isnan(a)) {
         if (!std::isnan(b))
             return a < b; // a < b
@@ -63,9 +64,10 @@ inline bool less_than_f(T a, T b)
 // Greater than compares floating point types placing nans after inf or before -inf
 // It is a useful function when calling e.g. std::sort to guarantee a weak strict ordering
 // and avoid an undefined behaviour
-template <typename T, bool After = true, detail::enable_if_is_floating_point<T> = 0>
+template <typename T, bool After = true>
 inline bool greater_than_f(T a, T b)
 {
+    static_assert(std::is_floating_point<T>::value, "greater_than_f can be used only with floating-point types.");
     if (!std::isnan(a)) {
         if (!std::isnan(b))
             return a > b; // a > b
@@ -80,9 +82,10 @@ inline bool greater_than_f(T a, T b)
 }
 
 // equal_to than compares floating point types considering nan==nan
-template <typename T, detail::enable_if_is_floating_point<T> = 0>
+template <typename T>
 inline bool equal_to_f(T a, T b)
 {
+    static_assert(std::is_floating_point<T>::value, "equal_to_f can be used only with floating-point types.");
     if (!std::isnan(a) && !std::isnan(b)) {
         return a == b;
     }
@@ -94,6 +97,8 @@ template <typename T>
 struct equal_to_vf {
     bool operator()(const std::vector<T> &lhs, const std::vector<T> &rhs) const
     {
+        static_assert(std::is_floating_point<T>::value,
+                      "This class (equal_to_vf) can be used only with floating-point types.");
         if (lhs.size() != rhs.size()) {
             return false;
         } else {
@@ -107,6 +112,8 @@ template <typename T>
 struct hash_vf {
     std::size_t operator()(std::vector<T> const &in) const
     {
+        static_assert(std::is_floating_point<T>::value,
+                      "This class (hash_vf) can be used only with floating-point types.");
         std::size_t retval = 0u;
         for (T el : in) {
             // Combine the hash of the current vector with the hashes of the previous ones
@@ -115,7 +122,6 @@ struct hash_vf {
         return retval;
     }
 };
-
 } // end of detail namespace
 } // end of pagmo namespace
 

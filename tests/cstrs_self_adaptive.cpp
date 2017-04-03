@@ -256,3 +256,109 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_inner_algo_get_test)
         BOOST_CHECK(!std::is_const<std::remove_reference<decltype(uda.get_inner_algorithm())>::type>::value);
     }
 }
+
+BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_all_feasible_test)
+{
+    // We check the behavior when all individuals are feasible
+
+    // We build an all feasible population
+    problem prob{hock_schittkowsky_71{}};
+    population pop{prob, 4u};
+    BOOST_CHECK_EQUAL(prob.get_nf(), 3u);
+    BOOST_CHECK_EQUAL(prob.get_nobj(), 1u);
+    BOOST_CHECK_EQUAL(prob.get_nec(), 1u);
+    BOOST_CHECK_EQUAL(prob.get_nic(), 1u);
+    pop.set_xf(0, vector_double{1., 2., 3., 4.}, vector_double{2, 0., -1});
+    pop.set_xf(1, vector_double{2., 2., 3., 4.}, vector_double{3, 0., -2});
+    pop.set_xf(2, vector_double{3., 2., 3., 4.}, vector_double{5, 0., -2});
+    pop.set_xf(3, vector_double{4., 2., 3., 4.}, vector_double{7, 0., -23});
+
+    // We define the penalized_udp problem. Upon construction the update method will be called
+    // and all penalties assigned. We test the correctness of their value
+    detail::penalized_udp udp_p{pop};
+    BOOST_CHECK_EQUAL(udp_p.m_scaling_factor, 0.);
+    BOOST_CHECK_EQUAL(udp_p.m_i_hat_up, 0.);
+    BOOST_CHECK_EQUAL(udp_p.m_i_hat_down, 0.);
+    BOOST_CHECK_EQUAL(udp_p.m_i_hat_round, 0.);
+    BOOST_CHECK_EQUAL(udp_p.m_apply_penalty_1, false);
+    BOOST_CHECK((udp_p.m_c_max == vector_double{0., 0.}));
+    BOOST_CHECK_EQUAL(udp_p.m_n_feasible, 4);
+    BOOST_CHECK((udp_p.m_f_hat_up == vector_double{2, 0., -1}));
+    BOOST_CHECK((udp_p.m_f_hat_round == vector_double{2, 0., -1}));
+}
+
+BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_infeasible_better_than_hat_down_test)
+{
+    // We check the behavior when all individuals are feasible
+
+    // We build an all feasible population
+    problem prob{hock_schittkowsky_71{}};
+    population pop{prob, 4u};
+    BOOST_CHECK_EQUAL(prob.get_nf(), 3u);
+    BOOST_CHECK_EQUAL(prob.get_nobj(), 1u);
+    BOOST_CHECK_EQUAL(prob.get_nec(), 1u);
+    BOOST_CHECK_EQUAL(prob.get_nic(), 1u);
+    pop.set_xf(0, vector_double{1., 2., 3., 4.}, vector_double{2, 0., -1.}); // feasible (hat_down)
+    pop.set_xf(1, vector_double{2., 2., 3., 4.}, vector_double{1, 0., 1.});  // infeasible (better than hat_down)
+    pop.set_xf(2, vector_double{2., 2., 3., 4.}, vector_double{0, 0., 1.});  // infeasible (better than hat_down)
+    pop.set_xf(3, vector_double{4., 2., 3., 4.}, vector_double{7, 3.4, 23});
+
+    // We define the penalized_udp problem. Upon construction the update method will be called
+    // and all penalties assigned. We test the correctness of their value
+    detail::penalized_udp udp_p{pop};
+    BOOST_CHECK((udp_p.m_f_hat_up == vector_double{0, 0., 1.}));
+    BOOST_CHECK((udp_p.m_f_hat_down == vector_double{2, 0., -1.}));
+    BOOST_CHECK((udp_p.m_f_hat_round == vector_double{7, 3.4, 23}));
+    BOOST_CHECK_EQUAL(udp_p.m_apply_penalty_1, true);
+}
+
+BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_infeasible_not_better_than_hat_down_test)
+{
+    // We check the behavior when all individuals are feasible
+
+    // We build an all feasible population
+    problem prob{hock_schittkowsky_71{}};
+    population pop{prob, 5u};
+    BOOST_CHECK_EQUAL(prob.get_nf(), 3u);
+    BOOST_CHECK_EQUAL(prob.get_nobj(), 1u);
+    BOOST_CHECK_EQUAL(prob.get_nec(), 1u);
+    BOOST_CHECK_EQUAL(prob.get_nic(), 1u);
+    pop.set_xf(0, vector_double{1., 2., 3., 4.}, vector_double{2, 0., -1.});  // feasible (hat_down)
+    pop.set_xf(1, vector_double{2., 2., 3., 4.}, vector_double{3, 21, 10.});  // infeasible (worse than hat_down)
+    pop.set_xf(2, vector_double{2., 2., 3., 4.}, vector_double{3, 22, 10.});  // infeasible (worse than hat_down)
+    pop.set_xf(3, vector_double{2., 2., 3., 4.}, vector_double{4, 22., 10.}); // infeasible (worse than hat_down)
+    pop.set_xf(4, vector_double{4., 2., 3., 4.}, vector_double{7, 3.4, 23});
+
+    // We define the penalized_udp problem. Upon construction the update method will be called
+    // and all penalties assigned. We test the correctness of their value
+    detail::penalized_udp udp_p{pop};
+    BOOST_CHECK((udp_p.m_f_hat_up == vector_double{4, 22., 10.}));
+    BOOST_CHECK((udp_p.m_f_hat_down == vector_double{2, 0., -1.}));
+    BOOST_CHECK((udp_p.m_f_hat_round == vector_double{7, 3.4, 23}));
+    BOOST_CHECK_EQUAL(udp_p.m_apply_penalty_1, false);
+}
+
+BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_all_infeasible_test)
+{
+    // We check the behavior when all individuals are feasible
+
+    // We build an all feasible population
+    problem prob{hock_schittkowsky_71{}};
+    population pop{prob, 4u};
+    BOOST_CHECK_EQUAL(prob.get_nf(), 3u);
+    BOOST_CHECK_EQUAL(prob.get_nobj(), 1u);
+    BOOST_CHECK_EQUAL(prob.get_nec(), 1u);
+    BOOST_CHECK_EQUAL(prob.get_nic(), 1u);
+    pop.set_xf(0, vector_double{1., 2., 3., 4.}, vector_double{2., 1., 1.});
+    pop.set_xf(1, vector_double{2., 2., 3., 4.}, vector_double{1., 1., 1.});
+    pop.set_xf(2, vector_double{2., 2., 3., 4.}, vector_double{4, 22., 10.});
+    pop.set_xf(3, vector_double{4., 2., 3., 4.}, vector_double{7, 22., 10.});
+
+    // We define the penalized_udp problem. Upon construction the update method will be called
+    // and all penalties assigned. We test the correctness of their value
+    detail::penalized_udp udp_p{pop};
+    BOOST_CHECK((udp_p.m_f_hat_up == vector_double{7, 22., 10.}));
+    BOOST_CHECK((udp_p.m_f_hat_down == vector_double{1., 1., 1.}));
+    BOOST_CHECK((udp_p.m_f_hat_round == vector_double{7, 22., 10.}));
+    BOOST_CHECK_EQUAL(udp_p.m_apply_penalty_1, true);
+}
