@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/included/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
+#include <cmath>
 #include <exception>
 #include <iostream>
 #include <string>
@@ -61,6 +62,16 @@ BOOST_AUTO_TEST_CASE(rosenbrock_test)
     // Best known test
     auto x_best = ros2.best_known();
     BOOST_CHECK((x_best == vector_double{1., 1.}));
+    // Gradient test.
+    auto g2 = ros2.gradient({.1, .2});
+    BOOST_CHECK(std::abs(g2[0] + 9.4) < 1E-8);
+    BOOST_CHECK(std::abs(g2[1] - 38.) < 1E-8);
+    auto g5 = ros5.gradient({.1, .2, .3, .4, .5});
+    BOOST_CHECK(std::abs(g5[0] + 9.4) < 1E-8);
+    BOOST_CHECK(std::abs(g5[1] - 15.6) < 1E-8);
+    BOOST_CHECK(std::abs(g5[2] - 13.4) < 1E-8);
+    BOOST_CHECK(std::abs(g5[3] - 6.4) < 1E-8);
+    BOOST_CHECK(std::abs(g5[4] - 68.) < 1E-8);
 }
 
 BOOST_AUTO_TEST_CASE(rosenbrock_serialization_test)
