@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <cmath>
+#include <functional>
 #include <initializer_list>
 #include <iomanip>
 #include <iterator>
@@ -60,6 +61,18 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
 
+#if defined(_MSC_VER)
+
+#define pagmo_disable_checked_iter(expr)                                                                               \
+    _Pragma("warning(push, 0)") _Pragma("warning(disable : 4996)") expr;                                               \
+    _Pragma("warning(pop)")
+
+#else
+
+#define pagmo_disable_checked_iter(expr) expr
+
+#endif
+
 namespace pagmo
 {
 
@@ -79,29 +92,6 @@ struct nlopt_data {
     using result_map_t = std::unordered_map<::nlopt_result, std::string>;
     static const result_map_t results;
 };
-
-// Static init.
-template <typename T>
-const typename nlopt_data<T>::result_map_t nlopt_data<T>::results = {
-    {NLOPT_SUCCESS, "NLOPT_SUCCESS (value = " + std::to_string(NLOPT_SUCCESS) + ", Generic success return value)"},
-    {NLOPT_STOPVAL_REACHED, "NLOPT_STOPVAL_REACHED (value = " + std::to_string(NLOPT_STOPVAL_REACHED)
-                                + ", Optimization stopped because stopval was reached)"},
-    {NLOPT_FTOL_REACHED, "NLOPT_FTOL_REACHED (value = " + std::to_string(NLOPT_FTOL_REACHED)
-                             + ", Optimization stopped because ftol_rel or ftol_abs was reached)"},
-    {NLOPT_XTOL_REACHED, "NLOPT_XTOL_REACHED (value = " + std::to_string(NLOPT_XTOL_REACHED)
-                             + ", Optimization stopped because xtol_rel or xtol_abs was reached)"},
-    {NLOPT_MAXEVAL_REACHED, "NLOPT_MAXEVAL_REACHED (value = " + std::to_string(NLOPT_MAXEVAL_REACHED)
-                                + ", Optimization stopped because maxeval was reached)"},
-    {NLOPT_MAXTIME_REACHED, "NLOPT_MAXTIME_REACHED (value = " + std::to_string(NLOPT_MAXTIME_REACHED)
-                                + ", Optimization stopped because maxtime was reached)"},
-    {NLOPT_FAILURE, "NLOPT_FAILURE (value = " + std::to_string(NLOPT_FAILURE) + ", Generic failure code)"},
-    {NLOPT_INVALID_ARGS, "NLOPT_INVALID_ARGS (value = " + std::to_string(NLOPT_INVALID_ARGS) + ", Invalid arguments)"},
-    {NLOPT_OUT_OF_MEMORY,
-     "NLOPT_OUT_OF_MEMORY (value = " + std::to_string(NLOPT_OUT_OF_MEMORY) + ", Ran out of memory)"},
-    {NLOPT_ROUNDOFF_LIMITED, "NLOPT_ROUNDOFF_LIMITED (value = " + std::to_string(NLOPT_ROUNDOFF_LIMITED)
-                                 + ", Halted because roundoff errors limited progress)"},
-    {NLOPT_FORCED_STOP,
-     "NLOPT_FORCED_STOP (value = " + std::to_string(NLOPT_FORCED_STOP) + ", Halted because of a forced termination)"}};
 
 // Initialise the mapping between algo names and enums for the supported algorithms.
 inline typename nlopt_data<>::names_map_t nlopt_names_map()
@@ -132,6 +122,29 @@ inline typename nlopt_data<>::names_map_t nlopt_names_map()
 template <typename T>
 const typename nlopt_data<T>::names_map_t nlopt_data<T>::names = nlopt_names_map();
 
+// Other static init.
+template <typename T>
+const typename nlopt_data<T>::result_map_t nlopt_data<T>::results = {
+    {NLOPT_SUCCESS, "NLOPT_SUCCESS (value = " + std::to_string(NLOPT_SUCCESS) + ", Generic success return value)"},
+    {NLOPT_STOPVAL_REACHED, "NLOPT_STOPVAL_REACHED (value = " + std::to_string(NLOPT_STOPVAL_REACHED)
+                                + ", Optimization stopped because stopval was reached)"},
+    {NLOPT_FTOL_REACHED, "NLOPT_FTOL_REACHED (value = " + std::to_string(NLOPT_FTOL_REACHED)
+                             + ", Optimization stopped because ftol_rel or ftol_abs was reached)"},
+    {NLOPT_XTOL_REACHED, "NLOPT_XTOL_REACHED (value = " + std::to_string(NLOPT_XTOL_REACHED)
+                             + ", Optimization stopped because xtol_rel or xtol_abs was reached)"},
+    {NLOPT_MAXEVAL_REACHED, "NLOPT_MAXEVAL_REACHED (value = " + std::to_string(NLOPT_MAXEVAL_REACHED)
+                                + ", Optimization stopped because maxeval was reached)"},
+    {NLOPT_MAXTIME_REACHED, "NLOPT_MAXTIME_REACHED (value = " + std::to_string(NLOPT_MAXTIME_REACHED)
+                                + ", Optimization stopped because maxtime was reached)"},
+    {NLOPT_FAILURE, "NLOPT_FAILURE (value = " + std::to_string(NLOPT_FAILURE) + ", Generic failure code)"},
+    {NLOPT_INVALID_ARGS, "NLOPT_INVALID_ARGS (value = " + std::to_string(NLOPT_INVALID_ARGS) + ", Invalid arguments)"},
+    {NLOPT_OUT_OF_MEMORY,
+     "NLOPT_OUT_OF_MEMORY (value = " + std::to_string(NLOPT_OUT_OF_MEMORY) + ", Ran out of memory)"},
+    {NLOPT_ROUNDOFF_LIMITED, "NLOPT_ROUNDOFF_LIMITED (value = " + std::to_string(NLOPT_ROUNDOFF_LIMITED)
+                                 + ", Halted because roundoff errors limited progress)"},
+    {NLOPT_FORCED_STOP,
+     "NLOPT_FORCED_STOP (value = " + std::to_string(NLOPT_FORCED_STOP) + ", Halted because of a forced termination)"}};
+
 // Convert an NLopt result in a more descriptive string.
 inline std::string nlopt_res2string(::nlopt_result err)
 {
@@ -147,8 +160,13 @@ struct nlopt_obj {
     using data = nlopt_data<>;
     explicit nlopt_obj(::nlopt_algorithm algo, problem &prob, double stopval, double ftol_rel, double ftol_abs,
                        double xtol_rel, double xtol_abs, int maxeval, int maxtime, unsigned verbosity)
-        : m_prob(prob), m_sp(prob.gradient_sparsity()), m_value(nullptr, ::nlopt_destroy), m_verbosity(verbosity)
+        : m_prob(prob), m_value(nullptr, ::nlopt_destroy), m_verbosity(verbosity)
     {
+        // If needed, init the sparsity pattern.
+        if (prob.has_gradient_sparsity()) {
+            m_sp = prob.gradient_sparsity();
+        }
+
         // Extract and set problem dimension.
         const auto n = boost::numeric_cast<unsigned>(prob.get_nx());
         m_value.reset(::nlopt_create(algo, n));
@@ -183,6 +201,7 @@ struct nlopt_obj {
         // This is just a vector_double that is re-used across objfun invocations.
         // It will hold the current decision vector.
         m_dv.resize(prob.get_nx());
+
         // Set the objfun + gradient.
         res = ::nlopt_set_min_objective(
             m_value.get(),
@@ -193,7 +212,6 @@ struct nlopt_obj {
                 // A few shortcuts.
                 auto &p = nlo.m_prob;
                 auto &dv = nlo.m_dv;
-                auto &sp = nlo.m_sp;
                 const auto verb = nlo.m_verbosity;
                 auto &f_count = nlo.m_objfun_counter;
                 auto &log = nlo.m_log;
@@ -215,24 +233,26 @@ struct nlopt_obj {
 
                 // Copy the decision vector in our temporary dv vector_double,
                 // for use in the pagmo API.
-                std::copy(x, x + dim, dv.begin());
+                pagmo_disable_checked_iter(std::copy(x, x + dim, dv.begin()));
 
                 // Compute fitness and, if needed, gradient.
                 const auto fitness = p.fitness(dv);
                 if (grad) {
                     const auto gradient = p.gradient(dv);
-                    auto g_it = gradient.begin();
-                    // NOTE: problem::gradient() has already checked that
-                    // the returned vector has size m_gs_dim, i.e., the stored
-                    // size of the sparsity pattern. On the other hand,
-                    // problem::gradient_sparsity() also checks that the returned
-                    // vector has size m_gs_dim, so these two must have the same size.
-                    assert(gradient.size() == sp.size());
 
                     if (p.has_gradient_sparsity()) {
                         // Sparse gradient case.
+                        auto &sp = nlo.m_sp;
+                        // NOTE: problem::gradient() has already checked that
+                        // the returned vector has size m_gs_dim, i.e., the stored
+                        // size of the sparsity pattern. On the other hand,
+                        // problem::gradient_sparsity() also checks that the returned
+                        // vector has size m_gs_dim, so these two must have the same size.
+                        assert(gradient.size() == sp.size());
+                        auto g_it = gradient.begin();
+
                         // First we fill the dense output gradient with zeroes.
-                        std::fill(grad, grad + dim, 0.);
+                        pagmo_disable_checked_iter(std::fill(grad, grad + dim, 0.));
                         // Then we iterate over the sparsity pattern, and fill in the
                         // nonzero bits in grad.
                         for (auto it = sp.begin(); it != sp.end() && it->first == 0u; ++it, ++g_it) {
@@ -244,7 +264,7 @@ struct nlopt_obj {
                         }
                     } else {
                         // Dense gradient case.
-                        std::copy(gradient.data(), gradient.data() + p.get_nx(), grad);
+                        pagmo_disable_checked_iter(std::copy(gradient.data(), gradient.data() + p.get_nx(), grad));
                     }
                 }
 
@@ -304,7 +324,6 @@ struct nlopt_obj {
                     // A few shortcuts.
                     auto &p = nlo.m_prob;
                     auto &dv = nlo.m_dv;
-                    auto &sp = nlo.m_sp;
 
                     // A couple of sanity checks.
                     assert(dim == p.get_nx());
@@ -325,28 +344,30 @@ struct nlopt_obj {
 
                     // Copy the decision vector in our temporary dv vector_double,
                     // for use in the pagmo API.
-                    std::copy(x, x + dim, dv.begin());
+                    pagmo_disable_checked_iter(std::copy(x, x + dim, dv.begin()));
 
                     // Compute fitness and write IC to the output.
                     // NOTE: fitness is nobj + nec + nic.
                     const auto fitness = p.fitness(dv);
-                    std::copy(fitness.data() + 1 + p.get_nec(), fitness.data() + 1 + p.get_nec() + m, result);
+                    pagmo_disable_checked_iter(
+                        std::copy(fitness.data() + 1 + p.get_nec(), fitness.data() + 1 + p.get_nec() + m, result));
 
                     if (grad) {
                         // Handle gradient, if requested.
                         const auto gradient = p.gradient(dv);
 
-                        // NOTE: problem::gradient() has already checked that
-                        // the returned vector has size m_gs_dim, i.e., the stored
-                        // size of the sparsity pattern. On the other hand,
-                        // problem::gradient_sparsity() also checks that the returned
-                        // vector has size m_gs_dim, so these two must have the same size.
-                        assert(gradient.size() == sp.size());
-
                         if (p.has_gradient_sparsity()) {
                             // Sparse gradient.
+                            auto &sp = nlo.m_sp;
+                            // NOTE: problem::gradient() has already checked that
+                            // the returned vector has size m_gs_dim, i.e., the stored
+                            // size of the sparsity pattern. On the other hand,
+                            // problem::gradient_sparsity() also checks that the returned
+                            // vector has size m_gs_dim, so these two must have the same size.
+                            assert(gradient.size() == sp.size());
+
                             // Let's first fill it with zeroes.
-                            std::fill(grad, grad + p.get_nx() * p.get_nic(), 0.);
+                            pagmo_disable_checked_iter(std::fill(grad, grad + p.get_nx() * p.get_nic(), 0.));
 
                             // Now we need to go into the sparsity pattern and find where
                             // the sparsity data for the constraints start.
@@ -377,8 +398,8 @@ struct nlopt_obj {
                             }
                         } else {
                             // Dense gradient.
-                            std::copy(gradient.data() + p.get_nx() * (1u + p.get_nec()),
-                                      gradient.data() + gradient.size(), grad);
+                            pagmo_disable_checked_iter(std::copy(gradient.data() + p.get_nx() * (1u + p.get_nec()),
+                                                                 gradient.data() + gradient.size(), grad));
                         }
                     }
                 },
@@ -402,7 +423,6 @@ struct nlopt_obj {
                     // A few shortcuts.
                     auto &p = nlo.m_prob;
                     auto &dv = nlo.m_dv;
-                    auto &sp = nlo.m_sp;
 
                     // A couple of sanity checks.
                     assert(dim == p.get_nx());
@@ -423,28 +443,29 @@ struct nlopt_obj {
 
                     // Copy the decision vector in our temporary dv vector_double,
                     // for use in the pagmo API.
-                    std::copy(x, x + dim, dv.begin());
+                    pagmo_disable_checked_iter(std::copy(x, x + dim, dv.begin()));
 
                     // Compute fitness and write EC to the output.
                     // NOTE: fitness is nobj + nec + nic.
                     const auto fitness = p.fitness(dv);
-                    std::copy(fitness.data() + 1, fitness.data() + 1 + p.get_nec(), result);
+                    pagmo_disable_checked_iter(std::copy(fitness.data() + 1, fitness.data() + 1 + p.get_nec(), result));
 
                     if (grad) {
                         // Handle gradient, if requested.
                         const auto gradient = p.gradient(dv);
 
-                        // NOTE: problem::gradient() has already checked that
-                        // the returned vector has size m_gs_dim, i.e., the stored
-                        // size of the sparsity pattern. On the other hand,
-                        // problem::gradient_sparsity() also checks that the returned
-                        // vector has size m_gs_dim, so these two must have the same size.
-                        assert(gradient.size() == sp.size());
-
                         if (p.has_gradient_sparsity()) {
                             // Sparse gradient case.
+                            auto &sp = nlo.m_sp;
+                            // NOTE: problem::gradient() has already checked that
+                            // the returned vector has size m_gs_dim, i.e., the stored
+                            // size of the sparsity pattern. On the other hand,
+                            // problem::gradient_sparsity() also checks that the returned
+                            // vector has size m_gs_dim, so these two must have the same size.
+                            assert(gradient.size() == sp.size());
+
                             // Let's first fill it with zeroes.
-                            std::fill(grad, grad + p.get_nx() * p.get_nec(), 0.);
+                            pagmo_disable_checked_iter(std::fill(grad, grad + p.get_nx() * p.get_nec(), 0.));
 
                             // Now we need to go into the sparsity pattern and find where
                             // the sparsity data for the constraints start.
@@ -478,8 +499,8 @@ struct nlopt_obj {
                             }
                         } else {
                             // Dense gradient.
-                            std::copy(gradient.data() + p.get_nx(), gradient.data() + p.get_nx() * (1u + p.get_nec()),
-                                      grad);
+                            pagmo_disable_checked_iter(std::copy(
+                                gradient.data() + p.get_nx(), gradient.data() + p.get_nx() * (1u + p.get_nec()), grad));
                         }
                     }
                 },

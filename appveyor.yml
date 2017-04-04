@@ -3,12 +3,12 @@ environment:
     PLATFORMTOOLSET: "v140"
 
   matrix:
-    - BUILD_TYPE: "Python35"
-      COMPILER: MSVC15
-      PLATFORM: "x64"
-    - BUILD_TYPE: "Python36"
-      COMPILER: MSVC15
-      PLATFORM: "x64"
+    # - BUILD_TYPE: "Python35"
+    #   COMPILER: MSVC15
+    #   PLATFORM: "x64"
+    # - BUILD_TYPE: "Python36"
+    #   COMPILER: MSVC15
+    #   PLATFORM: "x64"
     - BUILD_TYPE: "Debug"
       COMPILER: MSVC15
       PLATFORM: "x64"
