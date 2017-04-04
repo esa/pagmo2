@@ -18,9 +18,9 @@ install:
 - if [%BUILD_TYPE%]==[Python35] set PATH=C:\Miniconda35-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
 - conda config --add channels conda-forge --force
-- if [%BUILD_TYPE%]==[Debug] conda create -y --name pagmo python=3.6 cmake boost eigen
-- if [%BUILD_TYPE%]==[Python35] conda create -y --name pagmo python=3.5 cmake boost eigen
-- if [%BUILD_TYPE%]==[Python36] conda create -y --name pagmo python=3.6 cmake boost eigen
+- if [%BUILD_TYPE%]==[Debug] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt
+- if [%BUILD_TYPE%]==[Python35] conda create -y --name pagmo python=3.5 cmake boost eigen nlopt
+- if [%BUILD_TYPE%]==[Python36] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt
 - activate pagmo
 - if [%BUILD_TYPE%]==[Python35] conda install -y numpy dill ipyparallel
 - if [%BUILD_TYPE%]==[Python36] conda install -y numpy dill ipyparallel
@@ -28,11 +28,11 @@ install:
 build_script:
 - mkdir build
 - cd build
-- if [%BUILD_TYPE%]==[Debug] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=YES ..
+- if [%BUILD_TYPE%]==[Debug] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ..
 - if [%BUILD_TYPE%]==[Debug] cmake --build . --config Debug --target install
-- if [%BUILD_TYPE%]==[Python35] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DPAGMO_WITH_EIGEN3=YES -DPAGMO_BUILD_PYGMO=yes ..
+- if [%BUILD_TYPE%]==[Python35] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes ..
 - if [%BUILD_TYPE%]==[Python35] cmake --build . --config Release --target install
-- if [%BUILD_TYPE%]==[Python36] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DPAGMO_WITH_EIGEN3=YES -DPAGMO_BUILD_PYGMO=yes ..
+- if [%BUILD_TYPE%]==[Python36] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes ..
 - if [%BUILD_TYPE%]==[Python36] cmake --build . --config Release --target install
 
 test_script:
