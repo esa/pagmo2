@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_PROBLEM_LUKSANVLCECK_HPP
 #define PAGMO_PROBLEM_LUKSANVLCECK_HPP
 
+#include <cassert>
 #include <exception>
 #include <iostream>
 #include <stdexcept>
@@ -89,8 +90,9 @@ struct luksan_vlcek1 {
                         "luksan_vlcek1 must have minimum 3 dimension, " + std::to_string(dim) + " requested");
         }
         if (clb > cub) {
-            pagmo_throw(std::invalid_argument, , "constraints lower bound " + std::to_string(clb)
-                                                     + "is higher than the upper bound " + std::to_string(cub));
+            pagmo_throw(std::invalid_argument, ,
+                        "constraints lower bound " + std::to_string(clb) + "is higher than the upper bound "
+                            + std::to_string(cub));
         }
     };
     /// Fitness computation
@@ -136,6 +138,45 @@ struct luksan_vlcek1 {
         vector_double lb(m_dim, -5.);
         vector_double ub(m_dim, 5.);
         return {lb, ub};
+    }
+    /// Inequality constraint dimension
+    /**
+     *
+     * It returns the number of inequality constraints
+     *
+     * @return the number of inequality constraints
+     */
+    vector_double::size_type get_nic() const
+    {
+        return 2 * (m_dim - 2);
+    }
+    /// Gradients sparsity
+    /**
+     *
+     * It returns the gradent sparisty structure for the Luksan Vlcek 1 problem
+     *
+     * The gradients sparisty is represented in the form required by
+     * problem::gradient_sparsity().
+     *
+     * @return the gradient sparsity structure of the fitness function
+     */
+    sparsity_pattern gradient_sparsity() const
+    {
+        sparsity_pattern retval;
+        // The part relative to the objective function is dense
+        for (decltype(m_dim) i = 0u; i < m_dim; ++i) {
+            retval.push_back({0, i});
+        }
+        // The part relative to the inequality constraints is sparse as each
+        // constraint c_k depends on x_k, x_{k+1} and x_{k+2}
+        for (decltype(m_dim) i = 0u; i < m_dim - 2u; ++i) {
+            retval.push_back({2 * i + 1, i});
+            retval.push_back({2 * i + 1, i + 1});
+            retval.push_back({2 * i + 1, i + 2});
+            retval.push_back({2 * i + 2, i});
+            retval.push_back({2 * i + 2, i + 1});
+            retval.push_back({2 * i + 2, i + 2});
+        }
     }
     /// Problem name
     /**
