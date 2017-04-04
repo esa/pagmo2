@@ -28,7 +28,8 @@ and configure your build using ``cmake``. When done, type (in your build directo
 
    make install
 
-The headers will be installed in the CMAKE_INSTALL_PREFIX/include directory. To check that all went well compile the :ref:`quick-start example <getting_started_c++>`.
+The headers will be installed in the ``CMAKE_INSTALL_PREFIX/include directory``. To check that all went well
+compile the :ref:`quick-start example <getting_started_c++>`.
 
 -----------------------------------------------------------------------
 
@@ -49,17 +50,18 @@ or
 
 .. code-block:: bash
 
+   conda config --add channels conda-forge 
    conda install pygmo
 
 Building the module
 ^^^^^^^^^^^^^^^^^^^
 
-To build the module you need to have the Boost Python libraries installed and to activate the BUILD_PYGMO option from within ``cmake``.
+To build the module you need to have the Boost Python libraries installed and to activate the ``BUILD_PYGMO`` option from within ``cmake``.
 
 Check carefully what Python version is detected and what libraries are linked to. In particular select the correct boost_python
 according to the Python version (2 or 3) you want to compile the module for.
 
-The CMAKE_INSTALL_PREFIX will be used to construct the final location of headers and Python module after install.
+The ``CMAKE_INSTALL_PREFIX`` will be used to construct the final location of headers and Python module after install.
 
 When done, type (in your build directory):
 

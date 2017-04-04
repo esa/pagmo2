@@ -5,7 +5,7 @@ Coding a simple User Defined Problem
 
 While pagmo provides a number of UDPs to help you test your own optimization strategy or user defined algorithm, the possibility
 to write your own UDP is at the core of pygmo's use. In this tutorial we will show how to code a UDP. Remember that UDPs are classes that can be used 
-to construct a :class:`~pygmo.core.problem` which, in turn, is what a :class:`~pygmo.core.algorithm` can solve.
+to construct a :class:`~pygmo.core.problem` which, in turn, is what an :class:`~pygmo.core.algorithm` can solve.
 
 We encourage the user to read the documentation of the class :class:`~pygmo.core.problem` to have a detailed list of methods that can be, or have to be,
 implemented in a UDP. To start simple we consider the simple problem of minimizing the two dimensional sphere function.
@@ -27,14 +27,14 @@ In pagmo minimization is always assumed and should you need to maximize some obj
     ...     def get_bounds(self):
     ...         return ([-1,-1],[1,1])
 
-The two mandatory methods you must implement in your class are ``fitness(self, x)`` and ``def get_bounds(self)``. The problem dimension
+The two mandatory methods you must implement in your class are ``fitness(self, x)`` and ``get_bounds(self)``. The problem dimension
 will be inferred by the return value of the second, while the actual fitness of decision vectors will be computed calling the first method 
 and passing as argument ``x`` as a NumPy array. It is important to remember that ``x`` is a NumPy array, so that the NumPy
-array arithmetic applies in the body of ``fitness``. Note also how to define a UDP we do not need to inherit from some other
+array arithmetic applies in the body of ``fitness()``. Note also how to define a UDP we do not need to inherit from some other
 pygmo related class.  Since we do not define, in this case, any other method pygmo will assume a single objective, no constraints,
 no gradients etc...
 
-Lets now build a :class:`~pygmo.core.problem` from our new UDP.
+Let's now build a :class:`~pygmo.core.problem` from our new UDP.
 
 .. doctest::
 
@@ -45,7 +45,7 @@ That easy! To inspect what type of problem pygmo has detected from our UDP we ma
 
 .. doctest::
 
-    >>> print(prob) #doctest: +NORMALIZE_WHITESPACE
+    >>> print(prob) #doctest: +SKIP
     Problem name: <class 'sphere_function'>
     	Global dimension:			2
     	Fitness dimension:			1
@@ -65,7 +65,7 @@ That easy! To inspect what type of problem pygmo has detected from our UDP we ma
     	Thread safety: none
     <BLANKLINE>
 
-Lets now add some (mild) complexity. We want our UDP to be scalable:
+Let's now add some (mild) complexity. We want our UDP to be scalable:
 
 .. math::
    \begin{array}{ll}
@@ -129,7 +129,7 @@ Possible pitfalls
 ^^^^^^^^^^^^^^^^^
 
 Well that was nice as it worked like a charm. But the UDP can also be a rather complex class and the chances
-that it is some how malformed are high. Lets see some common mistakes.
+that it is somehow malformed are high. Let's see some common mistakes.
 
 .. doctest::
 
@@ -144,7 +144,7 @@ that it is some how malformed are high. Lets see some common mistakes.
     '<sphere_function object at 0x1108cad68>' of type '<class 'sphere_function'>': the method is either not present or not callable
 
 
-oops, I forgot to implement one of the two mandatory methods. In this case its not possible to construct a :class:`~pygmo.core.problem`
+oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a :class:`~pygmo.core.problem`
 and, when we try, we then get a rather helpful error message. 
 
 In other cases while the UDP is still malformed, the construction of :class:`~pygmo.core.problem` will succeed and the issue will
@@ -170,7 +170,7 @@ Notes on computational speed
 The most performant way to write a UDP is to code it in C++ and expose it to python. Most UDPs that
 are included in pygmo (see :ref:`py_problems`) are like that. When writing your own UDP, though, it is often quicker and less
 painful to code, as shown in this tutorial, directly in python. What effect does this have w.r.t. the ideal
-situation? Well, lets see, on a test machine, a simple example: the scalable Rosenbrock function:
+situation? Well, Let's see, on a test machine, a simple example: the scalable Rosenbrock function:
 
 .. math::
    \begin{array}{ll}
@@ -206,7 +206,7 @@ We now make a quick and dirty profiling instantiating a high dimensional instanc
     0.0114226...
 
 wait a minute ... really? Python is two orders of magnitude slower than cpp? Do not panic. This is a very large problem and that for loop is not going to be
-super optimized in python. Lets see if we can do better in these cases .... Let us use the jit decorator from numba to compile 
+super optimized in python. Let's see if we can do better in these cases .... Let us use the jit decorator from numba to compile 
 our fitness method into C code.
 
 .. doctest::
