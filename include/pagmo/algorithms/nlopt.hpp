@@ -110,6 +110,8 @@ inline typename nlopt_data<>::names_map_t nlopt_names_map()
     using value_type = typename nlopt_data<>::names_map_t::value_type;
     retval.insert(value_type("cobyla", NLOPT_LN_COBYLA));
     retval.insert(value_type("bobyqa", NLOPT_LN_BOBYQA));
+    retval.insert(value_type("newuoa", NLOPT_LN_NEWUOA));
+    retval.insert(value_type("newuoa_bound", NLOPT_LN_NEWUOA_BOUND));
     retval.insert(value_type("praxis", NLOPT_LN_PRAXIS));
     retval.insert(value_type("neldermead", NLOPT_LN_NELDERMEAD));
     retval.insert(value_type("sbplx", NLOPT_LN_SBPLX));
@@ -117,6 +119,12 @@ inline typename nlopt_data<>::names_map_t nlopt_names_map()
     retval.insert(value_type("ccsaq", NLOPT_LD_CCSAQ));
     retval.insert(value_type("slsqp", NLOPT_LD_SLSQP));
     retval.insert(value_type("lbfgs", NLOPT_LD_LBFGS));
+    retval.insert(value_type("tnewton_precond_restart", NLOPT_LD_TNEWTON_PRECOND_RESTART));
+    retval.insert(value_type("tnewton_precond", NLOPT_LD_TNEWTON_PRECOND));
+    retval.insert(value_type("tnewton_restart", NLOPT_LD_TNEWTON_RESTART));
+    retval.insert(value_type("tnewton", NLOPT_LD_TNEWTON));
+    retval.insert(value_type("var2", NLOPT_LD_VAR2));
+    retval.insert(value_type("var1", NLOPT_LD_VAR1));
     return retval;
 }
 
@@ -238,12 +246,15 @@ struct nlopt_obj {
                 if (verb && !(f_count % verb)) {
                     // Constraints bits.
                     const auto ctol = p.get_c_tol();
-                    auto c1eq = detail::test_eq_constraints(fitness.data() + 1, fitness.data() + 1 + p.get_nec(),
-                                                            ctol.data());
-                    auto c1ineq = detail::test_ineq_constraints(
+                    const auto c1eq = detail::test_eq_constraints(fitness.data() + 1, fitness.data() + 1 + p.get_nec(),
+                                                                  ctol.data());
+                    const auto c1ineq = detail::test_ineq_constraints(
                         fitness.data() + 1 + p.get_nec(), fitness.data() + fitness.size(), ctol.data() + p.get_nec());
-                    auto nv = p.get_nc() - c1eq.first - c1ineq.first;
-                    auto l = c1eq.second + c1ineq.second;
+                    // This will be the total number of violated constraints.
+                    const auto nv = p.get_nc() - c1eq.first - c1ineq.first;
+                    // This will be the norm of the violation.
+                    const auto l = c1eq.second + c1ineq.second;
+                    // Test feasibility.
                     const auto feas = p.feasibility_f(fitness);
 
                     if (!(f_count / verb % 50u)) {
@@ -310,7 +321,7 @@ struct nlopt_obj {
                     // for use in the pagmo API.
                     std::copy(x, x + dim, dv.begin());
 
-                    // Compute fitness and write it to the output.
+                    // Compute fitness and write IC to the output.
                     // NOTE: fitness is nobj + nec + nic.
                     const auto fitness = p.fitness(dv);
                     std::copy(fitness.data() + 1 + p.get_nec(), fitness.data() + 1 + p.get_nec() + m, result);
@@ -334,7 +345,7 @@ struct nlopt_obj {
                         using pair_t = sparsity_pattern::value_type;
                         auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(p.get_nec() + 1u, 0u));
                         if (it_sp == sp.end()) {
-                            // This means that there sparsity data for ineq constraints is empty. Just return.
+                            // This means that the sparsity data for ineq constraints is empty. Just return.
                             return;
                         }
 
@@ -345,12 +356,13 @@ struct nlopt_obj {
                             pagmo_throw(std::overflow_error, "Overflow error, the sparsity pattern size is too large.");
                         }
                         // This is the index at which the ineq constraints start.
-                        auto idx = std::distance(sp.begin(), it_sp);
+                        const auto idx = std::distance(sp.begin(), it_sp);
                         // Grab the start of the gradient data for the ineq constraints.
                         auto g_it = gradient.data() + idx;
 
                         // Then we iterate over the sparsity pattern, and fill in the
-                        // nonzero bits in grad.
+                        // nonzero bits in grad. Run until sp.end() as the IC are at the
+                        // end of the sparsity/gradient vector.
                         for (; it_sp != sp.end(); ++it_sp, ++g_it) {
                             grad[it_sp->second] = *g_it;
                         }
@@ -358,9 +370,10 @@ struct nlopt_obj {
                 },
                 static_cast<void *>(this), c_tol.data() + nec);
             if (res != NLOPT_SUCCESS) {
-                pagmo_throw(std::invalid_argument, "could not set the inequality constraints for the NLopt algorithm '"
-                                                       + data::names.right.at(algo) + "', the error is: "
-                                                       + nlopt_res2string(res));
+                pagmo_throw(std::invalid_argument,
+                            "could not set the inequality constraints for the NLopt algorithm '"
+                                + data::names.right.at(algo) + "', the error is: " + nlopt_res2string(res)
+                                + "\nThis usually means that the algorithm does not support inequality constraints");
             }
         }
 
@@ -398,7 +411,7 @@ struct nlopt_obj {
                     // for use in the pagmo API.
                     std::copy(x, x + dim, dv.begin());
 
-                    // Compute fitness and write it to the output.
+                    // Compute fitness and write EC to the output.
                     // NOTE: fitness is nobj + nec + nic.
                     const auto fitness = p.fitness(dv);
                     std::copy(fitness.data() + 1, fitness.data() + 1 + p.get_nec(), result);
@@ -435,12 +448,13 @@ struct nlopt_obj {
                             pagmo_throw(std::overflow_error, "Overflow error, the sparsity pattern size is too large.");
                         }
                         // This is the index at which the eq constraints start.
-                        auto idx = std::distance(sp.begin(), it_sp);
+                        const auto idx = std::distance(sp.begin(), it_sp);
                         // Grab the start of the gradient data for the eq constraints.
                         auto g_it = gradient.data() + idx;
 
                         // Then we iterate over the sparsity pattern, and fill in the
-                        // nonzero bits in grad.
+                        // nonzero bits in grad. We terminate either at the end of sp, or when
+                        // we encounter the first inequality constraint.
                         for (; it_sp != sp.end() && it_sp->first < p.get_nec() + 1u; ++it_sp, ++g_it) {
                             grad[it_sp->second] = *g_it;
                         }
@@ -448,9 +462,10 @@ struct nlopt_obj {
                 },
                 static_cast<void *>(this), c_tol.data());
             if (res != NLOPT_SUCCESS) {
-                pagmo_throw(std::invalid_argument, "could not set the equality constraints for the NLopt algorithm '"
-                                                       + data::names.right.at(algo) + "', the error is: "
-                                                       + nlopt_res2string(res));
+                pagmo_throw(std::invalid_argument,
+                            "could not set the equality constraints for the NLopt algorithm '"
+                                + data::names.right.at(algo) + "', the error is: " + nlopt_res2string(res)
+                                + "\nThis usually means that the algorithm does not support equality constraints");
             }
         }
 
@@ -526,7 +541,6 @@ struct nlopt_obj {
 // TODO
 // - cache
 // - optimisation for dense gradients
-// - error messages mentioning some algos don't support constraints etc.
 class nlopt
 {
     using nlopt_obj = detail::nlopt_obj;
