@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <atomic>
 #include <boost/lexical_cast.hpp>
 #include <initializer_list>
+#include <iterator>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -298,4 +299,36 @@ BOOST_AUTO_TEST_CASE(archipelago_serialization)
     }
     auto after = boost::lexical_cast<std::string>(a);
     BOOST_CHECK_EQUAL(before, after);
+}
+
+BOOST_AUTO_TEST_CASE(archipelago_iterator_tests)
+{
+    archipelago archi;
+    BOOST_CHECK(archi.begin() == archi.end());
+    BOOST_CHECK(static_cast<const archipelago &>(archi).begin() == archi.end());
+    BOOST_CHECK(static_cast<const archipelago &>(archi).end() == archi.begin());
+    BOOST_CHECK(static_cast<const archipelago &>(archi).begin() == static_cast<const archipelago &>(archi).end());
+    BOOST_CHECK_EQUAL(std::distance(archi.begin(), archi.end()), 0);
+    BOOST_CHECK_EQUAL(std::distance(std::begin(archi), std::end(archi)), 0);
+    BOOST_CHECK_EQUAL(
+        std::distance(static_cast<const archipelago &>(archi).begin(), static_cast<const archipelago &>(archi).end()),
+        0);
+    BOOST_CHECK_EQUAL(std::distance(std::begin(static_cast<const archipelago &>(archi)),
+                                    std::end(static_cast<const archipelago &>(archi))),
+                      0);
+    archi.push_back(de{}, rosenbrock{}, 10u);
+    archi.push_back(de{}, rosenbrock{}, 10u);
+    archi.push_back(de{}, rosenbrock{}, 10u);
+    archi.push_back(de{}, rosenbrock{}, 10u);
+    BOOST_CHECK_EQUAL(std::distance(std::begin(archi), std::end(archi)), 4);
+    BOOST_CHECK_EQUAL(std::distance(std::begin(static_cast<const archipelago &>(archi)),
+                                    std::end(static_cast<const archipelago &>(archi))),
+                      4);
+    for (auto &isl : archi) {
+        BOOST_CHECK_EQUAL(isl.get_population().size(), 10u);
+    }
+    for (const auto &isl : static_cast<const archipelago &>(archi)) {
+        BOOST_CHECK_EQUAL(isl.get_population().size(), 10u);
+    }
+    BOOST_CHECK(archi.begin() + 4 == archi.end());
 }

@@ -71,6 +71,7 @@ Args:
     x (array-like object): decision vector to be added to the population
 
 Raises:
+    ValueError: if the dimensions of *x* or *f* (if provided) are incompatible with the population's problem
     unspecified: any exception thrown by :func:`pygmo.core.problem.fitness()` or by failures at the intersection between C++ and
       Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
