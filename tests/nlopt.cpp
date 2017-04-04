@@ -32,15 +32,18 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nlopt.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 
 using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(nlopt_algorithm_construction)
 {
-    population pop{rosenbrock{100}, 20};
-    algorithm algo{nlopt{"lbfgs"}};
+    population pop{hock_schittkowsky_71{}, 5};
+    pop.get_problem().set_c_tol({1E-6, 1E-6});
+    algorithm algo{nlopt{"slsqp"}};
     algo.set_verbosity(10);
     pop = algo.evolve(pop);
     std::cout << '\n' << algo << '\n';
+    std::cout << '\n' << pop << '\n';
 }

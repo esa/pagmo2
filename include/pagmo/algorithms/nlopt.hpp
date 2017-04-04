@@ -53,6 +53,10 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+// TODO
+// - cache
+// - optimisation for dense gradients
+// - error messages mentioning some algos don't support constraints etc.
 class nlopt
 {
     using nlopt_obj = detail::nlopt_obj;
@@ -138,6 +142,7 @@ public:
         }
 
         auto &prob = pop.get_problem();
+        const auto nc = prob.get_nc();
 
         // Create the nlopt obj.
         // NOTE: this will check also the problem's properties.
@@ -196,13 +201,25 @@ public:
         if (boost::any_cast<std::string>(&m_replace)) {
             const auto &s_replace = boost::any_cast<const std::string &>(m_replace);
             if (s_replace == "best") {
-                pop.set_xf(pop.best_idx(), initial_guess, {fitness});
+                if (nc) {
+                    pop.set_x(pop.best_idx(), initial_guess);
+                } else {
+                    pop.set_xf(pop.best_idx(), initial_guess, {fitness});
+                }
             } else if (s_replace == "worst") {
-                pop.set_xf(pop.worst_idx(), initial_guess, {fitness});
+                if (nc) {
+                    pop.set_x(pop.worst_idx(), initial_guess);
+                } else {
+                    pop.set_xf(pop.worst_idx(), initial_guess, {fitness});
+                }
             } else {
                 assert(s_replace == "random");
                 std::uniform_int_distribution<population::size_type> dist(0, pop.size() - 1u);
-                pop.set_xf(dist(m_e), initial_guess, {fitness});
+                if (nc) {
+                    pop.set_x(dist(m_e), initial_guess);
+                } else {
+                    pop.set_xf(dist(m_e), initial_guess, {fitness});
+                }
             }
         } else {
             const auto idx = boost::any_cast<population::size_type>(m_replace);
@@ -211,7 +228,11 @@ public:
                                                    + " after evolution: the population has a size of only "
                                                    + std::to_string(pop.size()));
             }
-            pop.set_xf(idx, initial_guess, {fitness});
+            if (nc) {
+                pop.set_x(idx, initial_guess);
+            } else {
+                pop.set_xf(idx, initial_guess, {fitness});
+            }
         }
 
         // Return the evolved pop.
@@ -258,9 +279,9 @@ private:
     mutable ::nlopt_result m_last_opt_result = NLOPT_SUCCESS;
     // Stopping criteria.
     double m_sc_stopval = -HUGE_VAL;
-    double m_sc_ftol_rel = 1E-8;
+    double m_sc_ftol_rel = 0.;
     double m_sc_ftol_abs = 0.;
-    double m_sc_xtol_rel = 0.;
+    double m_sc_xtol_rel = 1E-8;
     double m_sc_xtol_abs = 0.;
     int m_sc_maxeval = 0;
     int m_sc_maxtime = 0;
