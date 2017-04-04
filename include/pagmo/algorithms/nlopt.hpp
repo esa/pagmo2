@@ -229,16 +229,22 @@ struct nlopt_obj {
                     // vector has size m_gs_dim, so these two must have the same size.
                     assert(gradient.size() == sp.size());
 
-                    // First we fill the dense output gradient with zeroes.
-                    std::fill(grad, grad + dim, 0.);
-                    // Then we iterate over the sparsity pattern, and fill in the
-                    // nonzero bits in grad.
-                    for (auto it = sp.begin(); it != sp.end() && it->first == 0u; ++it, ++g_it) {
-                        // NOTE: we just need the gradient of the objfun,
-                        // i.e., those (i,j) pairs in which i == 0. We know that the gradient
-                        // of the objfun, if present, starts at the beginning of sp, as sp is
-                        // sorted in lexicographic fashion.
-                        grad[it->second] = *g_it;
+                    if (p.has_gradient_sparsity()) {
+                        // Sparse gradient case.
+                        // First we fill the dense output gradient with zeroes.
+                        std::fill(grad, grad + dim, 0.);
+                        // Then we iterate over the sparsity pattern, and fill in the
+                        // nonzero bits in grad.
+                        for (auto it = sp.begin(); it != sp.end() && it->first == 0u; ++it, ++g_it) {
+                            // NOTE: we just need the gradient of the objfun,
+                            // i.e., those (i,j) pairs in which i == 0. We know that the gradient
+                            // of the objfun, if present, starts at the beginning of sp, as sp is
+                            // sorted in lexicographic fashion.
+                            grad[it->second] = *g_it;
+                        }
+                    } else {
+                        // Dense gradient case.
+                        std::copy(gradient.data(), gradient.data() + p.get_nx(), grad);
                     }
                 }
 
@@ -337,34 +343,42 @@ struct nlopt_obj {
                         // vector has size m_gs_dim, so these two must have the same size.
                         assert(gradient.size() == sp.size());
 
-                        // Let's first fill it with zeroes.
-                        std::fill(grad, grad + p.get_nx() * p.get_nic(), 0.);
+                        if (p.has_gradient_sparsity()) {
+                            // Sparse gradient.
+                            // Let's first fill it with zeroes.
+                            std::fill(grad, grad + p.get_nx() * p.get_nic(), 0.);
 
-                        // Now we need to go into the sparsity pattern and find where
-                        // the sparsity data for the constraints start.
-                        using pair_t = sparsity_pattern::value_type;
-                        auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(p.get_nec() + 1u, 0u));
-                        if (it_sp == sp.end()) {
-                            // This means that the sparsity data for ineq constraints is empty. Just return.
-                            return;
-                        }
+                            // Now we need to go into the sparsity pattern and find where
+                            // the sparsity data for the constraints start.
+                            using pair_t = sparsity_pattern::value_type;
+                            auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(p.get_nec() + 1u, 0u));
+                            if (it_sp == sp.end()) {
+                                // This means that the sparsity data for ineq constraints is empty. Just return.
+                                return;
+                            }
 
-                        // Need to do a bit of horrid overflow checking :/.
-                        using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
-                        using udiff_type = std::make_unsigned<diff_type>::type;
-                        if (sp.size() > static_cast<udiff_type>(std::numeric_limits<diff_type>::max())) {
-                            pagmo_throw(std::overflow_error, "Overflow error, the sparsity pattern size is too large.");
-                        }
-                        // This is the index at which the ineq constraints start.
-                        const auto idx = std::distance(sp.begin(), it_sp);
-                        // Grab the start of the gradient data for the ineq constraints.
-                        auto g_it = gradient.data() + idx;
+                            // Need to do a bit of horrid overflow checking :/.
+                            using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
+                            using udiff_type = std::make_unsigned<diff_type>::type;
+                            if (sp.size() > static_cast<udiff_type>(std::numeric_limits<diff_type>::max())) {
+                                pagmo_throw(std::overflow_error,
+                                            "Overflow error, the sparsity pattern size is too large.");
+                            }
+                            // This is the index at which the ineq constraints start.
+                            const auto idx = std::distance(sp.begin(), it_sp);
+                            // Grab the start of the gradient data for the ineq constraints.
+                            auto g_it = gradient.data() + idx;
 
-                        // Then we iterate over the sparsity pattern, and fill in the
-                        // nonzero bits in grad. Run until sp.end() as the IC are at the
-                        // end of the sparsity/gradient vector.
-                        for (; it_sp != sp.end(); ++it_sp, ++g_it) {
-                            grad[it_sp->second] = *g_it;
+                            // Then we iterate over the sparsity pattern, and fill in the
+                            // nonzero bits in grad. Run until sp.end() as the IC are at the
+                            // end of the sparsity/gradient vector.
+                            for (; it_sp != sp.end(); ++it_sp, ++g_it) {
+                                grad[it_sp->second] = *g_it;
+                            }
+                        } else {
+                            // Dense gradient.
+                            std::copy(gradient.data() + p.get_nx() * (1u + p.get_nec()),
+                                      gradient.data() + gradient.size(), grad);
                         }
                     }
                 },
@@ -427,36 +441,45 @@ struct nlopt_obj {
                         // vector has size m_gs_dim, so these two must have the same size.
                         assert(gradient.size() == sp.size());
 
-                        // Let's first fill it with zeroes.
-                        std::fill(grad, grad + p.get_nx() * p.get_nec(), 0.);
+                        if (p.has_gradient_sparsity()) {
+                            // Sparse gradient case.
+                            // Let's first fill it with zeroes.
+                            std::fill(grad, grad + p.get_nx() * p.get_nec(), 0.);
 
-                        // Now we need to go into the sparsity pattern and find where
-                        // the sparsity data for the constraints start.
-                        using pair_t = sparsity_pattern::value_type;
-                        auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(1u, 0u));
-                        if (it_sp == sp.end() || it_sp->first >= p.get_nec() + 1u) {
-                            // This means that there sparsity data for eq constraints is empty: either we went
-                            // at the end of sp, or the first index pair found refers to inequality constraints. Just
-                            // return.
-                            return;
-                        }
+                            // Now we need to go into the sparsity pattern and find where
+                            // the sparsity data for the constraints start.
+                            using pair_t = sparsity_pattern::value_type;
+                            auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(1u, 0u));
+                            if (it_sp == sp.end() || it_sp->first >= p.get_nec() + 1u) {
+                                // This means that there sparsity data for eq constraints is empty: either we went
+                                // at the end of sp, or the first index pair found refers to inequality constraints.
+                                // Just
+                                // return.
+                                return;
+                            }
 
-                        // Need to do a bit of horrid overflow checking :/.
-                        using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
-                        using udiff_type = std::make_unsigned<diff_type>::type;
-                        if (sp.size() > static_cast<udiff_type>(std::numeric_limits<diff_type>::max())) {
-                            pagmo_throw(std::overflow_error, "Overflow error, the sparsity pattern size is too large.");
-                        }
-                        // This is the index at which the eq constraints start.
-                        const auto idx = std::distance(sp.begin(), it_sp);
-                        // Grab the start of the gradient data for the eq constraints.
-                        auto g_it = gradient.data() + idx;
+                            // Need to do a bit of horrid overflow checking :/.
+                            using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
+                            using udiff_type = std::make_unsigned<diff_type>::type;
+                            if (sp.size() > static_cast<udiff_type>(std::numeric_limits<diff_type>::max())) {
+                                pagmo_throw(std::overflow_error,
+                                            "Overflow error, the sparsity pattern size is too large.");
+                            }
+                            // This is the index at which the eq constraints start.
+                            const auto idx = std::distance(sp.begin(), it_sp);
+                            // Grab the start of the gradient data for the eq constraints.
+                            auto g_it = gradient.data() + idx;
 
-                        // Then we iterate over the sparsity pattern, and fill in the
-                        // nonzero bits in grad. We terminate either at the end of sp, or when
-                        // we encounter the first inequality constraint.
-                        for (; it_sp != sp.end() && it_sp->first < p.get_nec() + 1u; ++it_sp, ++g_it) {
-                            grad[it_sp->second] = *g_it;
+                            // Then we iterate over the sparsity pattern, and fill in the
+                            // nonzero bits in grad. We terminate either at the end of sp, or when
+                            // we encounter the first inequality constraint.
+                            for (; it_sp != sp.end() && it_sp->first < p.get_nec() + 1u; ++it_sp, ++g_it) {
+                                grad[it_sp->second] = *g_it;
+                            }
+                        } else {
+                            // Dense gradient.
+                            std::copy(gradient.data() + p.get_nx(), gradient.data() + p.get_nx() * (1u + p.get_nec()),
+                                      grad);
                         }
                     }
                 },
@@ -540,7 +563,6 @@ struct nlopt_obj {
 
 // TODO
 // - cache
-// - optimisation for dense gradients
 class nlopt
 {
     using nlopt_obj = detail::nlopt_obj;
