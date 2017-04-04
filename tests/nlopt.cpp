@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(nlopt_algorithm_construction)
     population pop{hock_schittkowsky_71{}, 5};
     pop.get_problem().set_c_tol({1E-6, 1E-6});
     algorithm algo{nlopt{"slsqp"}};
-    algo.set_verbosity(10);
+    algo.set_verbosity(1);
     pop = algo.evolve(pop);
     std::cout << '\n' << algo << '\n';
     std::cout << '\n' << pop << '\n';

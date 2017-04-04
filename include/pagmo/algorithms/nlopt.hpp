@@ -63,7 +63,7 @@ class nlopt
     using nlopt_data = detail::nlopt_data<>;
 
 public:
-    using log_line_type = std::tuple<unsigned long, double, vector_double>;
+    using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
     using log_type = std::vector<log_line_type>;
 
 private:

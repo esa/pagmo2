@@ -50,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
+#include <pagmo/utils/constrained.hpp>
 
 namespace pagmo
 {
@@ -123,7 +124,7 @@ inline std::string nlopt_res2string(::nlopt_result err)
 
 struct nlopt_obj {
     // Single entry of the log (feval, fitness, dv).
-    using log_line_type = std::tuple<unsigned long, double, vector_double>;
+    using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
     // The log.
     using log_type = std::vector<log_line_type>;
     // Shortcut to the static data.
@@ -192,8 +193,8 @@ struct nlopt_obj {
                     pagmo_throw(std::invalid_argument,
                                 "during an optimization with the NLopt algorithm '"
                                     + data::names.right.at(::nlopt_get_algorithm(nlo.m_value.get()))
-                                    + "' a gradient was requested, but the optimisation problem '" + p.get_name()
-                                    + "' does not provide it");
+                                    + "' a fitness gradient was requested, but the optimisation problem '"
+                                    + p.get_name() + "' does not provide it");
                 }
 
                 // Copy the decision vector in our temporary dv vector_double,
@@ -227,14 +228,26 @@ struct nlopt_obj {
 
                 // Update the log if requested.
                 if (verb && !(f_count % verb)) {
+                    // Constraints bits.
+                    const auto ctol = p.get_c_tol();
+                    auto c1eq = detail::test_eq_constraints(fitness.data() + 1, fitness.data() + 1 + p.get_nec(),
+                                                            ctol.data());
+                    auto c1ineq = detail::test_ineq_constraints(
+                        fitness.data() + 1 + p.get_nec(), fitness.data() + fitness.size(), ctol.data() + p.get_nec());
+                    auto nv = p.get_nc() - c1eq.first - c1ineq.first;
+                    auto l = c1eq.second + c1ineq.second;
+                    const auto feas = p.feasibility_f(fitness);
+
                     if (!(f_count / verb % 50u)) {
                         // Every 50 lines print the column names.
-                        print("\n", std::setw(10), "fevals:", std::setw(15), "fitness:", '\n');
+                        print("\n", std::setw(10), "fevals:", std::setw(15), "fitness:", std::setw(15), "violated:",
+                              std::setw(15), "viol. norm:", '\n');
                     }
                     // Print to screen the log line.
-                    print(std::setw(10), f_count, std::setw(15), fitness[0], '\n');
+                    print(std::setw(10), f_count, std::setw(15), fitness[0], std::setw(15), nv, std::setw(15), l,
+                          feas ? "" : " i", '\n');
                     // Record the log.
-                    log.emplace_back(f_count, fitness[0], dv);
+                    log.emplace_back(f_count, fitness[0], nv, l, feas);
                 }
 
                 // Update the counter.
@@ -259,7 +272,7 @@ struct nlopt_obj {
         if (nic) {
             res = ::nlopt_add_inequality_mconstraint(
                 m_value.get(), nic,
-                [](unsigned m, double *result, unsigned n, const double *x, double *grad, void *f_data) {
+                [](unsigned m, double *result, unsigned dim, const double *x, double *grad, void *f_data) {
                     // Get *this back from the function data.
                     auto &nlo = *static_cast<nlopt_obj *>(f_data);
 
@@ -269,8 +282,8 @@ struct nlopt_obj {
                     auto &sp = nlo.m_sp;
 
                     // A couple of sanity checks.
-                    assert(n == p.get_nx());
-                    assert(dv.size() == n);
+                    assert(dim == p.get_nx());
+                    assert(dv.size() == dim);
                     assert(m == p.get_nic());
 
                     if (grad && !p.has_gradient()) {
@@ -287,7 +300,7 @@ struct nlopt_obj {
 
                     // Copy the decision vector in our temporary dv vector_double,
                     // for use in the pagmo API.
-                    std::copy(x, x + n, dv.begin());
+                    std::copy(x, x + dim, dv.begin());
 
                     // Compute fitness and write it to the output.
                     // NOTE: fitness is nobj + nec + nic.
@@ -347,7 +360,7 @@ struct nlopt_obj {
         if (nec) {
             res = ::nlopt_add_equality_mconstraint(
                 m_value.get(), nec,
-                [](unsigned m, double *result, unsigned n, const double *x, double *grad, void *f_data) {
+                [](unsigned m, double *result, unsigned dim, const double *x, double *grad, void *f_data) {
                     // Get *this back from the function data.
                     auto &nlo = *static_cast<nlopt_obj *>(f_data);
 
@@ -357,8 +370,8 @@ struct nlopt_obj {
                     auto &sp = nlo.m_sp;
 
                     // A couple of sanity checks.
-                    assert(n == p.get_nx());
-                    assert(dv.size() == n);
+                    assert(dim == p.get_nx());
+                    assert(dv.size() == dim);
                     assert(m == p.get_nec());
 
                     if (grad && !p.has_gradient()) {
@@ -375,7 +388,7 @@ struct nlopt_obj {
 
                     // Copy the decision vector in our temporary dv vector_double,
                     // for use in the pagmo API.
-                    std::copy(x, x + n, dv.begin());
+                    std::copy(x, x + dim, dv.begin());
 
                     // Compute fitness and write it to the output.
                     // NOTE: fitness is nobj + nec + nic.
