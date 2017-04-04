@@ -69,12 +69,12 @@ its :func:`~pygmo.core.population.push_back()` method:
 
 .. doctest::
 
-    >>> pop1.push_back([0.1,0.2,0.3,0.4]) # correct size
+    >>> pop1.push_back(x = [0.1,0.2,0.3,0.4]) # correct size
     >>> len(pop1) == 1
     True
     >>> pop1.problem.get_fevals() == 1
     True
-    >>> pop1.push_back([0.1,0.2,0.3]) # wrong size
+    >>> pop1.push_back(x = [0.1,0.2,0.3]) # wrong size
     Traceback (most recent call last):
       File ".../lib/python3.6/doctest.py", line 1330, in __run
         compileflags, 1), test.globs)
@@ -90,6 +90,15 @@ length.
 
 .. note:: Decision vectors that are outside of the box bounds are allowed to be
           pushed back into a population
+
+The snippet above will trigger fitness function evaluations as the decision vector is always associated to a fitness vector in a pop:func:`~pygmo.core.population`.
+If the fitness vector associated to a chromosome is known, you may still push it back in a population and avoid triggering a fitness re-evaluation by typing:
+
+    >>> pop1.push_back(x = [0.2,0.3,1.3,0.2], f = [11.2]) 
+    >>> len(pop1) == 2
+    True
+    >>> pop1.problem.get_fevals() == 1
+    True
 
 When designing user-defined algorithms (UDAs) it is often important to be able to change
 some individual decision vector:
@@ -111,8 +120,8 @@ some individual decision vector:
     >>> print(pop1.get_f()[0])
     [ 8.43469444]
 
-.. note:: Using the method :class:`~pygmo.core.population.set_xf` it is possible to avoid
-          triggering the fitness function evaluation, but it is also possible to inject
+.. note:: Using the method :class:`~pygmo.core.population.set_xf` or:class:`~pygmo.core.population.push_back` it is possible to avoid
+          triggering fitness function evaluations, but it is also possible to inject
           spurious information into the population (i.e. breaking the relation between
           decision vectors and fitness vectors imposed by the problem)
 

@@ -75,6 +75,8 @@ Lets now add some (mild) complexity. We want our UDP to be scalable:
 
 and to have a human readable name.
 
+.. doctest::
+
     >>> class sphere_function:
     ...     def __init__(self, dim):
     ...         self.dim = dim
@@ -129,6 +131,8 @@ Possible pitfalls
 Well that was nice as it worked like a charm. But the UDP can also be a rather complex class and the chances
 that it is some how malformed are high. Lets see some common mistakes.
 
+.. doctest::
+
     >>> class sphere_function:
     ...     def fitness(self, x):
     ...         return [sum(x*x)]
@@ -145,6 +149,8 @@ and, when we try, we then get a rather helpful error message.
 
 In other cases while the UDP is still malformed, the construction of :class:`~pygmo.core.problem` will succeed and the issue will
 be revealed only when calling the malformed method:
+
+.. doctest::
 
     >>> class sphere_function:
     ...     def fitness(self, x):
@@ -164,7 +170,7 @@ Notes on computational speed
 The most performant way to write a UDP is to code it in C++ and expose it to python. Most UDPs that
 are included in pygmo (see :ref:`py_problems`) are like that. When writing your own UDP, though, it is often quicker and less
 painful to code, as shown in this tutorial, directly in python. What effect does this have w.r.t. the ideal
-situation? Well, lets see, on an old test machine, a simple example: the scalable Rosenbrock function:
+situation? Well, lets see, on a test machine, a simple example: the scalable Rosenbrock function:
 
 .. math::
    \begin{array}{ll}
@@ -188,18 +194,22 @@ which in pygmo can be quickly written as:
 
 We now make a quick and dirty profiling instantiating a high dimensional instance of Rosenbrock: 2000 variables!!
 
+.. doctest::
+
     >>> prob_python = pg.problem(py_rosenbrock(2000))
     >>> prob_cpp = pg.problem(pg.rosenbrock(2000))
-    >>> dummy_x = np.full((2000,), 1)
+    >>> dummy_x = np.full((2000,), 1.)
     >>> import time
-    >>> start_time = time.time(); [prob.fitness(arr) for i in range(100)]; print(time.time() - start_time) #doctest: +SKIP
-    0.4034...
-    >>> start_time = time.time(); [prob2.fitness(arr) for i in range(100)]; print(time.time() - start_time) #doctest: +SKIP
-    0.001353...
+    >>> start_time = time.time(); [prob_python.fitness(dummy_x) for i in range(1000)]; print(time.time() - start_time) #doctest: +SKIP
+    2.3352...
+    >>> start_time = time.time(); [prob_cpp.fitness(dummy_x) for i in range(1000)]; print(time.time() - start_time) #doctest: +SKIP
+    0.0114226...
 
-wait a minute ... really? two orders of magnitude? Do not panic. This is a very large problem and that for loop is not going to be
+wait a minute ... really? Python is two orders of magnitude slower than cpp? Do not panic. This is a very large problem and that for loop is not going to be
 super optimized in python. Lets see if we can do better in these cases .... Let us use the jit decorator from numba to compile 
 our fitness method into C code.
+
+.. doctest::
 
     >>> from numba import jit
     >>> class jit_rosenbrock:
@@ -214,11 +224,35 @@ our fitness method into C code.
     ...     def get_bounds(self):
     ...         return (np.full((self.dim,),-5.),np.full((self.dim,),10.))
     >>> prob_jit = pg.problem(jit_rosenbrock(2000))
-    >>> start_time = time.time(); [prob_jit.fitness(arr) for i in range(100)]; print(time.time() - start_time) #doctest: +SKIP
-    0.0059030...
+    >>> start_time = time.time(); [prob_jit.fitness(dummy_x) for i in range(1000)]; print(time.time() - start_time) #doctest: +SKIP
+    0.03771...
 
-much better right? For more information on using Numba to speed up your python code see `Numba documentation pages <http://numba.pydata.org/>`_.
-Note that only a limited part on NumPy and the python language in general is suported by this use, and you can
-easily run into problems using the ``@jit`` decorator if you are using a number of features of the language.
+.. doctest::
+
+    >>> from numba import jit, float64
+    >>> class jit_rosenbrock2:
+    ...      def fitness(self,x):
+    ...          return jit_rosenbrock2._fitness(x)
+    ...      @jit(float64[:](float64[:]),nopython=True)
+    ...      def _fitness(x):
+    ...          retval = np.zeros((1,))
+    ...          for i in range(len(x) - 1):
+    ...              tmp1 = (x[i + 1]-x[i]*x[i])
+    ...              tmp2 = (1.-x[i])
+    ...              retval[0] += 100.*tmp1*tmp1+tmp2*tmp2
+    ...          return retval
+    ...      def get_bounds(self):
+    ...          return (np.full((self.dim,),-5.),np.full((self.dim,),10.))
+    ...      def __init__(self,dim):
+    ...          self.dim = dim
+    >>> prob_jit2 = pg.problem(jit_rosenbrock2(2000))
+    >>> start_time = time.time(); [prob_jit2.fitness(dummy_x) for i in range(1000)]; print(time.time() - start_time) #doctest: +SKIP
+    0.01687...
+
+
+much better right? 
+
+.. note:: For more information on using Numba to speed up your python code see `Numba documentation pages <http://numba.pydata.org/>`_.
+          In particular, note that only a limited part of NumPy and the python language in general is supported by this use.
 
 
