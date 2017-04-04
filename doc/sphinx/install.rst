@@ -34,8 +34,8 @@ The headers will be installed in the CMAKE_INSTALL_PREFIX/include directory. To 
 
 Python
 ------
-The python module exposing most of the functionalities is called pygmo
-It can be installed either directly from conda / pip or by building the module.
+The python module correponding to pagmo is called pygmo
+It can be installed either directly from ``conda`` or ``pip`` or by building the module from source.
 
 Installing with pip
 ^^^^^^^^^^^^^^^^^^^
