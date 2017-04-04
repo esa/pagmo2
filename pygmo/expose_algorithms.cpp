@@ -56,7 +56,9 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <tuple>
 
-#ifdef PAGMO_WITH_EIGEN3
+#include <pagmo/config.hpp>
+
+#if defined(PAGMO_WITH_EIGEN3)
 #include <pagmo/algorithms/cmaes.hpp>
 #endif
 #include <pagmo/algorithms/bee_colony.hpp>
@@ -273,7 +275,7 @@ void expose_algorithms()
     expose_algo_log(de1220_, de1220_get_log_docstring().c_str());
     de1220_.def("get_seed", &de1220::get_seed, generic_uda_get_seed_docstring().c_str());
 // CMA-ES
-#ifdef PAGMO_WITH_EIGEN3
+#if defined(PAGMO_WITH_EIGEN3)
     auto cmaes_ = expose_algorithm<cmaes>("cmaes", cmaes_docstring().c_str());
     cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool>(
         (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,

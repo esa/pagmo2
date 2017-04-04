@@ -1,8 +1,8 @@
-project(pagmo)
+cmake_minimum_required(VERSION 3.2)
+
+project(pagmo VERSION 2.0)
 
 enable_testing()
-
-cmake_minimum_required(VERSION 3.2)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules" "${CMAKE_SOURCE_DIR}/cmake_modules/yacma")
 
@@ -100,6 +100,7 @@ add_library(pagmo INTERFACE)
 target_link_libraries(pagmo INTERFACE Threads::Threads Boost::boost)
 target_include_directories(pagmo INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 
 if(PAGMO_WITH_EIGEN3)
@@ -107,8 +108,7 @@ if(PAGMO_WITH_EIGEN3)
     add_library(Eigen3::eigen3 INTERFACE IMPORTED)
     set_target_properties(Eigen3::eigen3 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${EIGEN3_INCLUDE_DIR}")
     target_link_libraries(pagmo INTERFACE Eigen3::eigen3)
-    # FIXME: this needs to go into config.hpp, once implemented.
-    target_compile_definitions(pagmo INTERFACE PAGMO_WITH_EIGEN3)
+    set(PAGMO_ENABLE_EIGEN3 "#define PAGMO_WITH_EIGEN3")
 endif()
 
 if(PAGMO_WITH_NLOPT)
@@ -117,7 +117,11 @@ if(PAGMO_WITH_NLOPT)
     set_target_properties(NLOPT::nlopt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${NLOPT_INCLUDE_DIRS}")
     set_target_properties(NLOPT::nlopt PROPERTIES IMPORTED_LINK_INTERFACE_LANGUAGES "C" IMPORTED_LOCATION "${NLOPT_LIBRARIES}")
     target_link_libraries(pagmo INTERFACE NLOPT::nlopt)
+    set(PAGMO_ENABLE_NLOPT "#define PAGMO_WITH_NLOPT")
 endif()
+
+# Configure config.hpp.
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_BINARY_DIR}/include/pagmo/config.hpp")
 
 if(PAGMO_BUILD_TESTS)
     add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
@@ -133,4 +137,5 @@ endif()
 
 if(PAGMO_INSTALL_HEADERS)
   install(DIRECTORY include/ DESTINATION include)
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pagmo/config.hpp" DESTINATION include/pagmo)
 endif()
