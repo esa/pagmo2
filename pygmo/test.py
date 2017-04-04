@@ -177,10 +177,10 @@ class population_test_case(_ut.TestCase):
         pop = population(rosenbrock(), size=10)
         self.assertTrue(pop.problem.extract(null_problem) is None)
         self.assertTrue(pop.problem.extract(rosenbrock) is not None)
-        pop.problem = problem(zdt(param=10))
-        self.assertRaises(ValueError, lambda: pop.best_idx())
-        self.assertTrue(pop.problem.extract(null_problem) is None)
-        self.assertTrue(pop.problem.extract(zdt) is not None)
+
+        def prob_setter():
+            pop.problem = problem(zdt(param=10))
+        self.assertRaises(AttributeError, prob_setter)
 
     def run_push_back_test(self):
         from .core import population, rosenbrock
