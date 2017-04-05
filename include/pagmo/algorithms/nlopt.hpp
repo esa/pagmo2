@@ -64,13 +64,9 @@ see https://www.gnu.org/licenses/. */
 
 #if defined(_MSC_VER)
 
-#define pagmo_disable_checked_iter(expr)                                                                               \
-    __pragma(warning(push)) __pragma(warning(disable : 4996)) expr;                                                    \
-    __pragma(warning(pop))
-
-#else
-
-#define pagmo_disable_checked_iter(expr) expr
+// Disable a warning from MSVC.
+#pragma warning(push, 0)
+#pragma warning(disable : 4996)
 
 #endif
 
@@ -241,7 +237,7 @@ struct nlopt_obj {
 
                 // Copy the decision vector in our temporary dv vector_double,
                 // for use in the pagmo API.
-                pagmo_disable_checked_iter(std::copy(x, x + dim, dv.begin()));
+                std::copy(x, x + dim, dv.begin());
 
                 // Compute fitness and, if needed, gradient.
                 const auto fitness = p.fitness(dv);
@@ -260,7 +256,7 @@ struct nlopt_obj {
                         auto g_it = gradient.begin();
 
                         // First we fill the dense output gradient with zeroes.
-                        pagmo_disable_checked_iter(std::fill(grad, grad + dim, 0.));
+                        std::fill(grad, grad + dim, 0.);
                         // Then we iterate over the sparsity pattern, and fill in the
                         // nonzero bits in grad.
                         for (auto it = sp.begin(); it != sp.end() && it->first == 0u; ++it, ++g_it) {
@@ -272,7 +268,7 @@ struct nlopt_obj {
                         }
                     } else {
                         // Dense gradient case.
-                        pagmo_disable_checked_iter(std::copy(gradient.data(), gradient.data() + p.get_nx(), grad));
+                        std::copy(gradient.data(), gradient.data() + p.get_nx(), grad);
                     }
                 }
 
@@ -352,13 +348,12 @@ struct nlopt_obj {
 
                     // Copy the decision vector in our temporary dv vector_double,
                     // for use in the pagmo API.
-                    pagmo_disable_checked_iter(std::copy(x, x + dim, dv.begin()));
+                    std::copy(x, x + dim, dv.begin());
 
                     // Compute fitness and write IC to the output.
                     // NOTE: fitness is nobj + nec + nic.
                     const auto fitness = p.fitness(dv);
-                    pagmo_disable_checked_iter(
-                        std::copy(fitness.data() + 1 + p.get_nec(), fitness.data() + 1 + p.get_nec() + m, result));
+                    std::copy(fitness.data() + 1 + p.get_nec(), fitness.data() + 1 + p.get_nec() + m, result);
 
                     if (grad) {
                         // Handle gradient, if requested.
@@ -375,7 +370,7 @@ struct nlopt_obj {
                             assert(gradient.size() == sp.size());
 
                             // Let's first fill it with zeroes.
-                            pagmo_disable_checked_iter(std::fill(grad, grad + p.get_nx() * p.get_nic(), 0.));
+                            std::fill(grad, grad + p.get_nx() * p.get_nic(), 0.);
 
                             // Now we need to go into the sparsity pattern and find where
                             // the sparsity data for the constraints start.
@@ -406,8 +401,8 @@ struct nlopt_obj {
                             }
                         } else {
                             // Dense gradient.
-                            pagmo_disable_checked_iter(std::copy(gradient.data() + p.get_nx() * (1u + p.get_nec()),
-                                                                 gradient.data() + gradient.size(), grad));
+                            std::copy(gradient.data() + p.get_nx() * (1u + p.get_nec()),
+                                      gradient.data() + gradient.size(), grad);
                         }
                     }
                 },
@@ -451,12 +446,12 @@ struct nlopt_obj {
 
                     // Copy the decision vector in our temporary dv vector_double,
                     // for use in the pagmo API.
-                    pagmo_disable_checked_iter(std::copy(x, x + dim, dv.begin()));
+                    std::copy(x, x + dim, dv.begin());
 
                     // Compute fitness and write EC to the output.
                     // NOTE: fitness is nobj + nec + nic.
                     const auto fitness = p.fitness(dv);
-                    pagmo_disable_checked_iter(std::copy(fitness.data() + 1, fitness.data() + 1 + p.get_nec(), result));
+                    std::copy(fitness.data() + 1, fitness.data() + 1 + p.get_nec(), result);
 
                     if (grad) {
                         // Handle gradient, if requested.
@@ -473,7 +468,7 @@ struct nlopt_obj {
                             assert(gradient.size() == sp.size());
 
                             // Let's first fill it with zeroes.
-                            pagmo_disable_checked_iter(std::fill(grad, grad + p.get_nx() * p.get_nec(), 0.));
+                            std::fill(grad, grad + p.get_nx() * p.get_nec(), 0.);
 
                             // Now we need to go into the sparsity pattern and find where
                             // the sparsity data for the constraints start.
@@ -507,8 +502,8 @@ struct nlopt_obj {
                             }
                         } else {
                             // Dense gradient.
-                            pagmo_disable_checked_iter(std::copy(
-                                gradient.data() + p.get_nx(), gradient.data() + p.get_nx() * (1u + p.get_nec()), grad));
+                            std::copy(gradient.data() + p.get_nx(), gradient.data() + p.get_nx() * (1u + p.get_nec()),
+                                      grad);
                         }
                     }
                 },
@@ -825,5 +820,11 @@ private:
     mutable log_type m_log;
 };
 }
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif
 
 #endif
