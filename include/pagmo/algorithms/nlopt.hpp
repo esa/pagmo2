@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
@@ -64,8 +65,8 @@ see https://www.gnu.org/licenses/. */
 #if defined(_MSC_VER)
 
 #define pagmo_disable_checked_iter(expr)                                                                               \
-    _Pragma("warning(push, 0)") _Pragma("warning(disable : 4996)") expr;                                               \
-    _Pragma("warning(pop)")
+    __pragma(warning(push)) __pragma(warning(disable : 4996)) expr;                                                    \
+    __pragma(warning(pop))
 
 #else
 
@@ -89,7 +90,14 @@ struct nlopt_data {
     using names_map_t = boost::bimap<std::string, ::nlopt_algorithm>;
     static const names_map_t names;
     // A map to link a human-readable description to NLopt return codes.
-    using result_map_t = std::unordered_map<::nlopt_result, std::string>;
+    // NOTE: in C++11 hashing of enums might not be available. Provide our own.
+    struct res_hasher {
+        std::size_t operator()(::nlopt_result res) const
+        {
+            return std::hash<int>{}(static_cast<int>(res));
+        }
+    };
+    using result_map_t = std::unordered_map<::nlopt_result, std::string, res_hasher>;
     static const result_map_t results;
 };
 
