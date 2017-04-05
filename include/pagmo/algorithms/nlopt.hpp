@@ -670,8 +670,8 @@ private:
 public:
     /// Default constructor.
     /**
-     * The default constructor initialises the pagmo::nlopt algorithm with the ``cobyla`` solver,
-     * the ``"best"`` individual selection strategy and the ``"worst"`` individual replacement strategy.
+     * The default constructor initialises the pagmo::nlopt algorithm with the ``"cobyla"`` solver,
+     * the ``"best"`` individual selection strategy and the ``"best"`` individual replacement strategy.
      *
      * @throws unspecified any exception thrown by pagmo::nlopt(const std::string &).
      */
@@ -681,7 +681,7 @@ public:
     /// Constructor from solver name.
     /**
      * This constructor will initialise a pagmo::nlopt object which will use the NLopt algorithm specified by
-     * the input string \p algo, the ``"best"`` individual selection strategy and the ``"worst"`` individual
+     * the input string \p algo, the ``"best"`` individual selection strategy and the ``"best"`` individual
      * replacement strategy. \p algo is translated to an NLopt algorithm type according to the following
      * translation table:
      * \verbatim embed:rst:leading-asterisk
@@ -723,7 +723,7 @@ public:
      * @throws std::invalid_argument if \p algo is not one of the allowed algorithm names.
      */
     explicit nlopt(const std::string &algo)
-        : m_algo(algo), m_select(std::string("best")), m_replace(std::string("worst")),
+        : m_algo(algo), m_select(std::string("best")), m_replace(std::string("best")),
           m_rselect_seed(random_device::next()), m_e(static_cast<std::mt19937::result_type>(m_rselect_seed))
     {
         // Check version.
@@ -1061,6 +1061,197 @@ public:
                + (m_sc_xtol_abs <= 0. ? "disabled" : detail::to_string(m_sc_xtol_abs)) + "\n\t\tmaxeval:  "
                + (m_sc_maxeval <= 0. ? "disabled" : detail::to_string(m_sc_maxeval)) + "\n\t\tmaxtime:  "
                + (m_sc_maxtime <= 0. ? "disabled" : detail::to_string(m_sc_maxtime)) + "\n";
+    }
+    /// Get the optimisation log.
+    /**
+     * See nlopt::log_type for a description of the optimisation log. Logging is turned on/off via
+     * set_verbosity().
+     *
+     * @return a const reference to the log.
+     */
+    const log_type &get_log() const
+    {
+        return m_log;
+    }
+    /// Get the name of the solver that was used to construct this pagmo::nlopt algorithm.
+    /**
+     * @return the name of the NLopt solver used upon construction.
+     */
+    std::string solver_name() const
+    {
+        return m_algo;
+    }
+    /// Get the result of the last optimisation.
+    /**
+     * @return the result of the last evolve() call, or ``NLOPT_SUCCESS`` if no optimisations have been
+     * run yet.
+     */
+    ::nlopt_result last_opt_result() const
+    {
+        return m_last_opt_result;
+    }
+    /// Get the ``stopval`` stopping criterion.
+    /**
+     * The ``stopval`` stopping criterion instructs the solver to stop when an objective value less than
+     * or equal to ``stopval`` is found. Defaults to ``-HUGE_VAL`` (that is, this stopping criterion
+     * is disabled by default).
+     *
+     * @return the ``stopval`` stopping criterion for this pagmo::nlopt.
+     */
+    double get_stopval() const
+    {
+        return m_sc_stopval;
+    }
+    /// Set the ``stopval`` stopping criterion.
+    /**
+     * @param stopval the desired value for the ``stopval`` stopping criterion (see get_stopval()).
+     *
+     * @throws std::invalid_argument if \p stopval is NaN.
+     */
+    void set_stopval(double stopval)
+    {
+        if (std::isnan(stopval)) {
+            pagmo_throw(std::invalid_argument, "The 'stopval' stopping criterion cannot be NaN");
+        }
+        m_sc_stopval = stopval;
+    }
+    /// Get the ``ftol_rel`` stopping criterion.
+    /**
+     * The ``ftol_rel`` stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
+     * optimum) changes the objective function value by less than ``ftol_rel`` multiplied by the absolute value of the
+     * function value. Defaults to 0 (that is, this stopping criterion is disabled by default).
+     *
+     * @return the ``ftol_rel`` stopping criterion for this pagmo::nlopt.
+     */
+    double get_ftol_rel() const
+    {
+        return m_sc_ftol_rel;
+    }
+    /// Set the ``ftol_rel`` stopping criterion.
+    /**
+     * @param ftol_rel the desired value for the ``ftol_rel`` stopping criterion (see get_ftol_rel()).
+     *
+     * @throws std::invalid_argument if \p ftol_rel is NaN.
+     */
+    void set_ftol_rel(double ftol_rel)
+    {
+        if (std::isnan(ftol_rel)) {
+            pagmo_throw(std::invalid_argument, "The 'ftol_rel' stopping criterion cannot be NaN");
+        }
+        m_sc_ftol_rel = ftol_rel;
+    }
+    /// Get the ``ftol_abs`` stopping criterion.
+    /**
+     * The ``ftol_abs`` stopping criterion instructs the solver to stop when an optimization step
+     * (or an estimate of the optimum) changes the function value by less than ``ftol_abs``.
+     * Defaults to 0 (that is, this stopping criterion is disabled by default).
+     *
+     * @return the ``ftol_abs`` stopping criterion for this pagmo::nlopt.
+     */
+    double get_ftol_abs() const
+    {
+        return m_sc_ftol_abs;
+    }
+    /// Set the ``ftol_abs`` stopping criterion.
+    /**
+     * @param ftol_abs the desired value for the ``ftol_abs`` stopping criterion (see get_ftol_abs()).
+     *
+     * @throws std::invalid_argument if \p ftol_abs is NaN.
+     */
+    void set_ftol_abs(double ftol_abs)
+    {
+        if (std::isnan(ftol_abs)) {
+            pagmo_throw(std::invalid_argument, "The 'ftol_abs' stopping criterion cannot be NaN");
+        }
+        m_sc_ftol_abs = ftol_abs;
+    }
+    /// Get the ``xtol_rel`` stopping criterion.
+    /**
+     * The ``xtol_rel`` stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
+     * optimum) changes every parameter by less than ``xtol_rel`` multiplied by the absolute value of the parameter.
+     * Defaults to 1E-8.
+     *
+     * @return the ``xtol_rel`` stopping criterion for this pagmo::nlopt.
+     */
+    double get_xtol_rel() const
+    {
+        return m_sc_xtol_rel;
+    }
+    /// Set the ``xtol_rel`` stopping criterion.
+    /**
+     * @param xtol_rel the desired value for the ``xtol_rel`` stopping criterion (see get_xtol_rel()).
+     *
+     * @throws std::invalid_argument if \p xtol_rel is NaN.
+     */
+    void set_xtol_rel(double xtol_rel)
+    {
+        if (std::isnan(xtol_rel)) {
+            pagmo_throw(std::invalid_argument, "The 'xtol_rel' stopping criterion cannot be NaN");
+        }
+        m_sc_xtol_rel = xtol_rel;
+    }
+    /// Get the ``xtol_abs`` stopping criterion.
+    /**
+     * The ``xtol_abs`` stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
+     * optimum) changes every parameter by less than ``xtol_abs``.
+     * Defaults to 0 (that is, this stopping criterion is disabled by default).
+     *
+     * @return the ``xtol_abs`` stopping criterion for this pagmo::nlopt.
+     */
+    double get_xtol_abs() const
+    {
+        return m_sc_xtol_abs;
+    }
+    /// Set the ``xtol_abs`` stopping criterion.
+    /**
+     * @param xtol_abs the desired value for the ``xtol_abs`` stopping criterion (see get_xtol_abs()).
+     *
+     * @throws std::invalid_argument if \p xtol_abs is NaN.
+     */
+    void set_xtol_abs(double xtol_abs)
+    {
+        if (std::isnan(xtol_abs)) {
+            pagmo_throw(std::invalid_argument, "The 'xtol_abs' stopping criterion cannot be NaN");
+        }
+        m_sc_xtol_abs = xtol_abs;
+    }
+    /// Get the ``maxeval`` stopping criterion.
+    /**
+     * The ``maxeval`` stopping criterion instructs the solver to stop when the number of function evaluations exceeds
+     * ``maxeval``. Defaults to 0 (that is, this stopping criterion is disabled by default).
+     *
+     * @return the ``maxeval`` stopping criterion for this pagmo::nlopt.
+     */
+    int get_maxeval() const
+    {
+        return m_sc_maxeval;
+    }
+    /// Set the ``maxeval`` stopping criterion.
+    /**
+     * @param n the desired value for the ``maxeval`` stopping criterion (see get_maxeval()).
+     */
+    void set_maxeval(int n)
+    {
+        m_sc_maxeval = n;
+    }
+    /// Get the ``maxtime`` stopping criterion.
+    /**
+     * The ``maxtime`` stopping criterion instructs the solver to stop when the optimization time (in seconds) exceeds
+     * ``maxtime``. Defaults to 0 (that is, this stopping criterion is disabled by default).
+     *
+     * @return the ``maxtime`` stopping criterion for this pagmo::nlopt.
+     */
+    int get_maxtime() const
+    {
+        return m_sc_maxtime;
+    }
+    /// Set the ``maxtime`` stopping criterion.
+    /**
+     * @param n the desired value for the ``maxtime`` stopping criterion (see get_maxtime()).
+     */
+    void set_maxtime(int n)
+    {
+        m_sc_maxtime = n;
     }
 
 private:
