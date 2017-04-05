@@ -66,7 +66,7 @@ struct problem_basic {
     // the default stream operator
     std::string get_extra_info() const
     {
-        return "This is a simple toy stochastic problem with one fitness, no constraint and a fixed dimension of 4.";
+        return "This is a simple toy stochastic problem with one objective, no constraints and a fixed dimension of 4.";
     }
 
     // Optional methods-data can also be accessed later via

@@ -51,7 +51,7 @@ public:
      *
      * @throws std::invalid_argument if limit equals 0
      */
-    bee_colony(unsigned gen = 1u, unsigned limit = 1u, unsigned seed = pagmo::random_device::next())
+    bee_colony(unsigned gen = 1u, unsigned limit = 20u, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_limit(limit), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (limit == 0u) {

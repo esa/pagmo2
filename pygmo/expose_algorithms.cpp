@@ -176,7 +176,7 @@ void expose_algorithms()
     auto bee_colony_ = expose_algorithm<bee_colony>("bee_colony", bee_colony_docstring().c_str());
     bee_colony_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 1u)));
     bee_colony_.def(
-        bp::init<unsigned, unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 1u, bp::arg("seed"))));
+        bp::init<unsigned, unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 20u, bp::arg("seed"))));
     expose_algo_log(bee_colony_, bee_colony_get_log_docstring().c_str());
     bee_colony_.def("get_seed", &bee_colony::get_seed, generic_uda_get_seed_docstring().c_str());
     // DE
