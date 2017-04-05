@@ -137,7 +137,7 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 # documentation.
 html_theme_options = {
     # Navigation bar title. (Default: ``project`` value)
-    'navbar_title': "PaGMO",
+    'navbar_title': "Pagmo",
 
     # Tab name for entire site. (Default: "Site")
     'navbar_site_name': "Site",
@@ -151,8 +151,8 @@ html_theme_options = {
     # an arbitrary url.
     'navbar_links': [
         ("Home", "index"),
-        ("C++ docs", "docs/cpp/cpp_docs"),
-        ("Python docs", "docs/python/python_docs")
+        ("Install", "install"),
+        ("Quickstart", "quickstart"),
     ],
 
     # Render the next and previous page links in navbar. (Default: true)

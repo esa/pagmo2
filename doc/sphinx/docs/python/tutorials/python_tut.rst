@@ -14,6 +14,14 @@ Basics
   using_population
   evolving_a_population
 
+Coding your own problem (UDP)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 2
+
+  coding_udp_simple
+
 Multi-objective optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
