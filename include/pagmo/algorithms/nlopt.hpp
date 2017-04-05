@@ -180,7 +180,7 @@ struct nlopt_obj {
         m_value.reset(::nlopt_create(algo, n));
         // Try to init the nlopt_obj.
         if (!m_value) {
-            pagmo_throw(std::invalid_argument, "the creation of the nlopt_opt object failed");
+            pagmo_throw(std::runtime_error, "the creation of the nlopt_opt object failed");
         }
 
         // NLopt does not handle MOO.
@@ -593,7 +593,8 @@ struct nlopt_obj {
 /**
  * \image html nlopt.png "NLopt logo." width=3cm
  *
- * This user-defined algorithm wraps a selection of solvers from the NLopt library, focusing on
+ * This user-defined algorithm wraps a selection of solvers from the <a
+ * href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> library, focusing on
  * local optimisation (both gradient-based and derivative-free). The complete list of supported
  * NLopt algorithms is:
  * - COBYLA,
@@ -614,13 +615,28 @@ struct nlopt_obj {
  * by this class.
  *
  * All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
- * is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient
- * (otherwise a runtime error during the optimisation will be raised). Some solvers support equality and/or
- * inequality constaints. Trying to solve a constrained problem with a solver which does not support
- * constraints will raise a runtime error during the optimisation.
+ * is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
+ * Some solvers support equality and/or inequality constaints.
  *
- * This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_NLOPT`` option
- * enabled.
+ * In order to support pagmo's population-based optimisation model, nlopt::evolve() will select
+ * a single individual from the input pagmo::population to be optimised by the NLopt solver.
+ * The optimised individual will then be inserted back into the population at the end of the optimisation.
+ * The selection and replacement strategies can be configured via set_selection(const std::string &),
+ * set_selection(population::size_type), set_replacement(const std::string &) and
+ * set_replacement(population::size_type).
+ *
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_NLOPT`` option
+ *    enabled (see the :ref:`installation instructions <install>`).
+ *
+ * .. seealso::
+ *
+ *    The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed description
+ *    of each supported solver.
+ *
+ * \endverbatim
  */
 // TODO:
 // - investiagate the use of a fitness cache, after we have good perf testing in place.
@@ -630,25 +646,91 @@ class nlopt
     using nlopt_data = detail::nlopt_data<>;
 
 public:
+    /// Single data line for the algorithm's log.
+    /**
+     * A log data line is a tuple consisting of:
+     * - the number of objective function evaluations made so far,
+     * - the objective function value for the current decision vector,
+     * - the number of constraints violated by the current decision vector,
+     * - the constraints violation norm for the current decision vector,
+     * - a boolean flag signalling the feasibility of the current decision vector.
+     */
     using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
+    /// Log type.
+    /**
+     * The algorithm log is a collection of nlopt::log_line_type data lines, stored in chronological order
+     * during the optimisation if the verbosity of the algorithm is set to a nonzero value
+     * (see nlopt::set_verbosity()).
+     */
     using log_type = std::vector<log_line_type>;
 
 private:
     static_assert(std::is_same<log_line_type, detail::nlopt_obj::log_line_type>::value, "Invalid log line type.");
 
 public:
-    nlopt() : nlopt("sbplx")
+    /// Default constructor.
+    /**
+     * The default constructor initialises the pagmo::nlopt algorithm with the ``cobyla`` solver,
+     * the ``"best"`` individual selection strategy and the ``"worst"`` individual replacement strategy.
+     *
+     * @throws unspecified any exception thrown by pagmo::nlopt(const std::string &).
+     */
+    nlopt() : nlopt("cobyla")
     {
     }
+    /// Constructor from solver name.
+    /**
+     * This constructor will initialise a pagmo::nlopt object which will use the NLopt algorithm specified by
+     * the input string \p algo, the ``"best"`` individual selection strategy and the ``"worst"`` individual
+     * replacement strategy. \p algo is translated to an NLopt algorithm type according to the following
+     * translation table:
+     * \verbatim embed:rst:leading-asterisk
+     *  ================================  ====================================
+     *  ``algo`` string                   NLopt algorithm
+     *  ================================  ====================================
+     *  ``"cobyla"``                      ``NLOPT_LN_COBYLA``
+     *  ``"bobyqa"``                      ``NLOPT_LN_BOBYQA``
+     *  ``"newuoa"``                      ``NLOPT_LN_NEWUOA``
+     *  ``"newuoa_bound"``                ``NLOPT_LN_NEWUOA_BOUND``
+     *  ``"praxis"``                      ``NLOPT_LN_PRAXIS``
+     *  ``"neldermead"``                  ``NLOPT_LN_NELDERMEAD``
+     *  ``"sbplx"``                       ``NLOPT_LN_SBPLX``
+     *  ``"mma"``                         ``NLOPT_LD_MMA``
+     *  ``"ccsaq"``                       ``NLOPT_LD_CCSAQ``
+     *  ``"slsqp"``                       ``NLOPT_LD_SLSQP``
+     *  ``"lbfgs"``                       ``NLOPT_LD_LBFGS``
+     *  ``"tnewton_precond_restart"``     ``NLOPT_LD_TNEWTON_PRECOND_RESTART``
+     *  ``"tnewton_precond"``             ``NLOPT_LD_TNEWTON_PRECOND``
+     *  ``"tnewton_restart"``             ``NLOPT_LD_TNEWTON_RESTART``
+     *  ``"tnewton"``                     ``NLOPT_LD_TNEWTON``
+     *  ``"var2"``                        ``NLOPT_LD_VAR2``
+     *  ``"var1"``                        ``NLOPT_LD_VAR1``
+     *  ================================  ====================================
+     * \endverbatim
+     * The parameters of the selected algorithm can be specified via the methods of this class.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. seealso::
+     *
+     *    The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed
+     *    description of each supported solver.
+     *
+     * \endverbatim
+     *
+     * @param algo the name of the NLopt algorithm that will be used by this pagmo::nlopt object.
+     *
+     * @throws std::runtime_error if the NLopt version is not at least 2.
+     * @throws std::invalid_argument if \p algo is not one of the allowed algorithm names.
+     */
     explicit nlopt(const std::string &algo)
-        : m_algo(algo), m_select(std::string("best")), m_replace(std::string("best")),
+        : m_algo(algo), m_select(std::string("best")), m_replace(std::string("worst")),
           m_rselect_seed(random_device::next()), m_e(static_cast<std::mt19937::result_type>(m_rselect_seed))
     {
         // Check version.
         int major, minor, bugfix;
         ::nlopt_version(&major, &minor, &bugfix);
         if (major < 2) {
-            pagmo_throw(std::runtime_error, "Only NLopt version >= 2 is supported");
+            pagmo_throw(std::runtime_error, "Only NLopt version >= 2 is supported"); // LCOV_EXCL_LINE
         }
 
         // Check the algorithm.
@@ -662,11 +744,35 @@ public:
                                                    + "'. The supported algorithms are:\n" + oss.str());
         }
     }
-    void set_random_selection_seed(unsigned seed)
+    /// Set the seed for the ``"random"`` selection/replacement policies.
+    /**
+     * @param seed the value that will be used to seed the random number generator used by the ``"random"``
+     * selection/replacement policies.
+     */
+    void set_random_sr_seed(unsigned seed)
     {
         m_rselect_seed = seed;
         m_e.seed(static_cast<std::mt19937::result_type>(m_rselect_seed));
     }
+    /// Set the individual selection policy.
+    /**
+     * This method will set the policy that is used in evolve() to select the individual
+     * that will be optimised.
+     *
+     * The input string must be one of ``"best"``, ``"worst"`` and ``"random"``:
+     * - ``"best"`` will select the best individual in the population,
+     * - ``"worst"`` will select the worst individual in the population,
+     * - ``"random"`` will randomly choose one individual in the population.
+     *
+     * set_random_sr_seed() can be used to seed the random number generator used by the ``"random"`` policy.
+     *
+     * Instead of a selection policy, a specific individual in the population can be selected via
+     * set_selection(population::size_type).
+     *
+     * @param select the selection policy.
+     *
+     * @throws std::invalid_argument if \p select is not one of ``"best"``, ``"worst"`` or ``"random"``.
+     */
     void set_selection(const std::string &select)
     {
         if (select != "best" && select != "worst" && select != "random") {
@@ -676,14 +782,48 @@ public:
         }
         m_select = select;
     }
+    /// Set the individual selection index.
+    /**
+     * This method will set the index of the individual that is selected for optimisation
+     * in evolve().
+     *
+     * @param n the index in the population of the individual to be selected for optimisation.
+     */
     void set_selection(population::size_type n)
     {
         m_select = n;
     }
+    /// Get the individual selection policy or index.
+    /**
+     * This method will return a \p boost::any containing either the individual selection policy (as an \p std::string)
+     * or the individual selection index (as a population::size_type). The selection policy or index is set via
+     * set_selection(const std::string &) and set_selection(population::size_type).
+     *
+     * @return the individual selection policy or index.
+     */
     boost::any get_selection() const
     {
         return m_select;
     }
+    /// Set the individual replacement policy.
+    /**
+     * This method will set the policy that is used in evolve() to select the individual
+     * that will be replaced by the optimised individual.
+     *
+     * The input string must be one of ``"best"``, ``"worst"`` and ``"random"``:
+     * - ``"best"`` will select the best individual in the population,
+     * - ``"worst"`` will select the worst individual in the population,
+     * - ``"random"`` will randomly choose one individual in the population.
+     *
+     * set_random_sr_seed() can be used to seed the random number generator used by the ``"random"`` policy.
+     *
+     * Instead of a replacement policy, a specific individual in the population can be selected via
+     * set_replacement(population::size_type).
+     *
+     * @param replace the replacement policy.
+     *
+     * @throws std::invalid_argument if \p replace is not one of ``"best"``, ``"worst"`` or ``"random"``.
+     */
     void set_replacement(const std::string &replace)
     {
         if (replace != "best" && replace != "worst" && replace != "random") {
@@ -693,14 +833,53 @@ public:
         }
         m_replace = replace;
     }
+    /// Set the individual replacement index.
+    /**
+     * This method will set the index of the individual that is replaced after the optimisation
+     * in evolve().
+     *
+     * @param n the index in the population of the individual to be replaced after the optimisation.
+     */
     void set_replacement(population::size_type n)
     {
         m_replace = n;
     }
+    /// Get the individual replacement policy or index.
+    /**
+     * This method will return a \p boost::any containing either the individual replacement policy (as an \p
+     * std::string) or the individual replacement index (as a population::size_type). The replacement policy or index is
+     * set via set_replacement(const std::string &) and set_replacement(population::size_type).
+     *
+     * @return the individual replacement policy or index.
+     */
     boost::any get_replacement() const
     {
         return m_replace;
     }
+    /// Evolve population.
+    /**
+     * This method will select an individual from \p pop, optimise it with the NLopt algorithm specified upon
+     * construction, replace an individual in \p pop with the optimised individual, and finally return \p pop.
+     * The individual selection and replacement criteria can be set via set_selection(const std::string &),
+     * set_selection(population::size_type), set_replacement(const std::string &) and
+     * set_replacement(population::size_type).
+     *
+     * @param pop the population to be optimised.
+     *
+     * @return the optimised population.
+     *
+     * @throws std::invalid_argument in the following cases:
+     * - the population's problem is multi-objective,
+     * - the setup of the NLopt algorithm fails (e.g., if the problem is constrained but the selected
+     *   NLopt solver does not support constrained optimisation),
+     * - the selected NLopt solver needs gradients but they are not provided by the population's
+     *   problem,
+     * - the components of the individual selected for optimisation contain NaNs or they are outside
+     *   the problem's bounds,
+     * - the individual selection/replacement index if not smaller
+     *   than the population's size
+     * @throws unspecified any exception thrown by the public interface of pagmo::problem.
+     */
     population evolve(population pop) const
     {
         if (!pop.size()) {
@@ -732,9 +911,9 @@ public:
         } else {
             const auto idx = boost::any_cast<population::size_type>(m_select);
             if (idx >= pop.size()) {
-                pagmo_throw(std::out_of_range, "cannot select the individual at index " + std::to_string(idx)
-                                                   + " for evolution: the population has a size of only "
-                                                   + std::to_string(pop.size()));
+                pagmo_throw(std::invalid_argument, "cannot select the individual at index " + std::to_string(idx)
+                                                       + " for evolution: the population has a size of only "
+                                                       + std::to_string(pop.size()));
             }
             initial_guess = pop.get_x()[idx];
         }
@@ -805,14 +984,61 @@ public:
         // Return the evolved pop.
         return pop;
     }
+    /// Algorithm's name.
+    /**
+     * @return a human-readable name for the algorithm.
+     */
     std::string get_name() const
     {
         return "NLopt - " + m_algo;
     }
+    /// Set verbosity.
+    /**
+     * This method will set the algorithm's verbosity. If \p n is zero, no output is produced during the optimisation
+     * and no logging is performed. If \p n is nonzero, then every \p n objective function evaluations the status
+     * of the optimisation will be both printed to screen and recorded internally. See nlopt::log_line_type and
+     * nlopt::log_type for information on the logging format.
+     *
+     * Example (verbosity 1):
+     * @code{.unparsed}
+     * fevals:       fitness:      violated:    viol. norm:
+     *       0        68.6966              1       0.252343 i
+     *       1        29.3926              1        15.1127 i
+     *       2        54.2992              1        2.05694 i
+     *       3        54.2992              1        2.05694 i
+     *       4        15.4544              2        9.56984 i
+     *       5        16.6126              2        1.80223 i
+     *       6        16.8454              2       0.414897 i
+     *       7        16.9794              2      0.0818469 i
+     *       8        17.0132              2     0.00243968 i
+     *       9         17.014              2    2.58628e-05 i
+     *      10         17.014              0              0
+     *      11         17.014              0              0
+     *      12         17.014              0              0
+     *      13         17.014              0              0
+     *      14         17.014              0              0
+     *      15         17.014              0              0
+     *      16         17.014              0              0
+     *      17         17.014              0              0
+     *      18         17.014              0              0
+     *      19         17.014              0              0
+     * @endcode
+     * The little ``i`` at the end of some rows indicates that the decision vector
+     * is infeasible.
+     *
+     * By default, the verbosity level is zero.
+     *
+     * @param n the desired verbosity level.
+     */
     void set_verbosity(unsigned n)
     {
         m_verbosity = n;
     }
+    /// Get extra information about the algorithm.
+    /**
+     * @return a human-readable string containing useful information about the algorithm's properties
+     * (e.g., the stopping criteria, the selection/replacement policies, etc.).
+     */
     std::string get_extra_info() const
     {
         int major, minor, bugfix;
