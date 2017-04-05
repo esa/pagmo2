@@ -74,25 +74,17 @@ namespace pagmo
 struct luksan_vlcek1 {
     /// Constructor from dimension and bounds
     /**
-     * Constructs the luksan_vlcek1 problem. Setting \plb = \p ub = 0
-     * corresponds to the original formulation
+     * Constructs the luksan_vlcek1 problem.
      *
      * @param dim the problem dimensions.
-     * @param clb lower bounds for the constraints
-     * @param cub upper bounds for the constraints
      *
-     * @throw std::invalid_argument if \p dim is < 1
+     * @throw std::invalid_argument if \p dim is < 3
      */
-    luksan_vlcek1(unsigned int dim = 1u, double clb = 0., double cub = 0.) : m_dim(dim), m_clb(clb), m_cub(cub)
+    luksan_vlcek1(unsigned int dim = 3u) : m_dim(dim)
     {
         if (dim < 3u) {
             pagmo_throw(std::invalid_argument,
                         "luksan_vlcek1 must have minimum 3 dimension, " + std::to_string(dim) + " requested");
-        }
-        if (clb > cub) {
-            pagmo_throw(std::invalid_argument, ,
-                        "constraints lower bound " + std::to_string(clb) + "is higher than the upper bound "
-                            + std::to_string(cub));
         }
     };
     /// Fitness computation
@@ -107,8 +99,8 @@ struct luksan_vlcek1 {
     {
         assert(x.size() == m_dim);
         auto n = x.size();
-        // 1 objective and 2 * (n-2) inequalities
-        vector_double f(1 + 2 * (n - 2), 0.);
+        // 1 objective and (n-2) equalities
+        vector_double f(1 + (n - 2), 0.);
         f[0] = 0.;
         for (decltype(n) i = 0u; i < n - 1u; ++i) {
             double a1 = x[i] * x[i] - x[i + 1];
@@ -116,15 +108,11 @@ struct luksan_vlcek1 {
             f[0] += 100. * a1 * a1 + a2 * a2;
         }
         for (decltype(n) i = 0u; i < n - 2u; ++i) {
-            f[2 * i + 1] = (3. * std::pow(x[i + 1], 3.) + 2. * x[i + 2] - 5.
-                            + std::sin(x[i + 1] - x[i + 2]) * std::sin(x[i + 1] + x[i + 2]) + 4. * x[i + 1]
-                            - x[i] * std::exp(x[i] - x[i + 1]) - 3.)
-                           - m_cub[i];
-            f[2 * i + 1 + 1] = -(3. * std::pow(x[i + 1], 3.) + 2. * x[i + 2] - 5.
-                                 + std::sin(x[i + 1] - x[i + 2]) * std::sin(x[i + 1] + x[i + 2]) + 4. * x[i + 1]
-                                 - x[i] * std::exp(x[i] - x[i + 1]) - 3.)
-                               + m_clb[i];
+            f[i + 1] = (3. * std::pow(x[i + 1], 3.) + 2. * x[i + 2] - 5.
+                        + std::sin(x[i + 1] - x[i + 2]) * std::sin(x[i + 1] + x[i + 2]) + 4. * x[i + 1]
+                        - x[i] * std::exp(x[i] - x[i + 1]) - 3.);
         }
+        return f;
     }
     /// Box-bounds
     /**
@@ -146,9 +134,43 @@ struct luksan_vlcek1 {
      *
      * @return the number of inequality constraints
      */
-    vector_double::size_type get_nic() const
+    vector_double::size_type get_nec() const
     {
-        return 2 * (m_dim - 2);
+        return (m_dim - 2);
+    }
+    /// Gradients
+    /**
+     * It returns the fitness gradient.
+     *
+     * The gradient is represented in a sparse form as required by
+     * problem::gradient().
+     *
+     * @param x the decision vector.
+     *
+     * @return the gradient of the fitness function
+     */
+    vector_double gradient(const vector_double &x) const
+    {
+        assert(x.size() == m_dim);
+        auto n = x.size();
+        vector_double grad(n + 3 * (n - 2), 0.);
+        for (decltype(n) i = 0u; i < n - 1; ++i) {
+            grad[i] += 400. * x[i] * (x[i] * x[i] - x[i + 1]) + 2. * (x[i] - 1.);
+            grad[i + 1] = -200. * (x[i] * x[i] - x[i + 1]);
+        }
+        for (decltype(n) i = 0u; i < n - 2; ++i) {
+            // x[i]
+            grad[n + 3 * i] = -(1. + x[i]) * std::exp(x[i] - x[i + 1]);
+            // x[i+1]
+            grad[n + 1 + 3 * i] = 9. * x[i + 1] * x[i + 1]
+                                  + std::cos(x[i + 1] - x[i + 2]) * std::sin(x[i + 1] + x[i + 2])
+                                  + std::sin(x[i + 1] - x[i + 2]) * std::cos(x[i + 1] + x[i + 2]) + 4.
+                                  + x[i] * std::exp(x[i] - x[i + 1]);
+            // x[i+2]
+            grad[n + 2 + 3 * i] = 2. - std::cos(x[i + 1] - x[i + 2]) * std::sin(x[i + 1] + x[i + 2])
+                                  + std::sin(x[i + 1] - x[i + 2]) * std::cos(x[i + 1] + x[i + 2]);
+        }
+        return grad;
     }
     /// Gradients sparsity
     /**
@@ -170,13 +192,11 @@ struct luksan_vlcek1 {
         // The part relative to the inequality constraints is sparse as each
         // constraint c_k depends on x_k, x_{k+1} and x_{k+2}
         for (decltype(m_dim) i = 0u; i < m_dim - 2u; ++i) {
-            retval.push_back({2 * i + 1, i});
-            retval.push_back({2 * i + 1, i + 1});
-            retval.push_back({2 * i + 1, i + 2});
-            retval.push_back({2 * i + 2, i});
-            retval.push_back({2 * i + 2, i + 1});
-            retval.push_back({2 * i + 2, i + 2});
+            retval.push_back({i + 1, i});
+            retval.push_back({i + 1, i + 1});
+            retval.push_back({i + 1, i + 2});
         }
+        return retval;
     }
     /// Problem name
     /**
@@ -197,12 +217,10 @@ struct luksan_vlcek1 {
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_dim, m_lb, m_ub);
+        ar(m_dim);
     }
     /// Problem dimensions
     unsigned int m_dim;
-    double m_lb;
-    double m_ub;
 };
 
 } // namespace pagmo
