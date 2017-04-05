@@ -52,7 +52,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../../../index.html">
-          PaGMO</a>
+          Pagmo</a>
         <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
@@ -60,8 +60,8 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../../../index.html">Home</a></li>
-                <li><a href="../../cpp/cpp_docs.html">C++ docs</a></li>
-                <li><a href="../python_docs.html">Python docs</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -72,7 +72,19 @@
      href="../../../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -90,6 +102,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -197,12 +210,12 @@ via its methods or glancing to the screen print of the entire class:</p>
 </div>
 <p>Individuals, i.e. new candidate solutions can be put into a population calling
 its <a class="reference internal" href="../py_population.html#pygmo.core.population.push_back" title="pygmo.core.population.push_back"><code class="xref py py-func docutils literal"><span class="pre">push_back()</span></code></a> method:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.4</span><span class="p">])</span> <span class="c1"># correct size</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.4</span><span class="p">])</span> <span class="c1"># correct size</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pop1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">])</span> <span class="c1"># wrong size</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">])</span> <span class="c1"># wrong size</span>
 <span class="gt">Traceback (most recent call last):</span>
   File <span class="nb">&quot;.../lib/python3.6/doctest.py&quot;</span>, line <span class="m">1330</span>, in <span class="n">__run</span>
     <span class="n">compileflags</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">test</span><span class="o">.</span><span class="n">globs</span><span class="p">)</span>
@@ -220,6 +233,16 @@ length.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">Decision vectors that are outside of the box bounds are allowed to be
 pushed back into a population</p>
+</div>
+<p>The snippet above will trigger fitness function evaluations as the decision vector is always associated to a
+fitness vector in a <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>. If the fitness vector associated to a chromosome is known,
+you may still push it back in a population and avoid triggering a fitness re-evaluation by typing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">1.3</span><span class="p">,</span><span class="mf">0.2</span><span class="p">],</span> <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="mf">11.2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pop1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="go">True</span>
+</pre></div>
 </div>
 <p>When designing user-defined algorithms (UDAs) it is often important to be able to change
 some individual decision vector:</p>
@@ -241,8 +264,8 @@ some individual decision vector:</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Using the method <a class="reference internal" href="../py_population.html#pygmo.core.population.set_xf" title="pygmo.core.population.set_xf"><code class="xref py py-class docutils literal"><span class="pre">set_xf</span></code></a> it is possible to avoid
-triggering the fitness function evaluation, but it is also possible to inject
+<p class="last">Using the method <a class="reference internal" href="../py_population.html#pygmo.core.population.set_xf" title="pygmo.core.population.set_xf"><code class="xref py py-func docutils literal"><span class="pre">set_xf()</span></code></a> or:func:<cite>~pygmo.core.population.push_back()</cite> it is possible to avoid
+triggering fitness function evaluations, but it is also possible to inject
 spurious information into the population (i.e. breaking the relation between
 decision vectors and fitness vectors imposed by the problem)</p>
 </div>
