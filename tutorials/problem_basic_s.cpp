@@ -101,7 +101,7 @@ public:
     // the default stream operator
     std::string get_extra_info() const
     {
-        return "This is just a simple toy problem with one fitness,\n no constraint and a fixed dimension of 4.\n";
+        return "This is just a simple toy problem with one objective,\n no constraints and a fixed dimension of 4.\n";
     }
 
     // Optional methods-data can also be accessed later via
