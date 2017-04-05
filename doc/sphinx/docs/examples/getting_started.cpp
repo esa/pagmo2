@@ -21,7 +21,7 @@ int main()
     archi.wait();
 
     // 6 - Print the fitness of the best solution in each island
-    for (const isl & : archi) {
+    for (const auto &isl : archi) {
         print(isl.get_population().get_champion_f(), "\n");
     }
 }

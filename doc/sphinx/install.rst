@@ -40,7 +40,7 @@ It can be installed either directly from ``conda`` or ``pip`` or by building the
 
 Installing with pip
 ^^^^^^^^^^^^^^^^^^^
-The Python package pygmo (Python binding of the C++ code) can be installed using ``pip`` or ``conda``:
+The python package pygmo (python binding of the C++ code) can be installed using ``pip`` or ``conda``:
 
 .. code-block:: bash
 
@@ -56,10 +56,10 @@ or
 Building the module
 ^^^^^^^^^^^^^^^^^^^
 
-To build the module you need to have the Boost Python libraries installed and to activate the ``BUILD_PYGMO`` option from within ``cmake``.
+To build the module you need to have the boost python libraries installed and to activate the ``BUILD_PYGMO`` option from within ``cmake``.
 
-Check carefully what Python version is detected and what libraries are linked to. In particular select the correct boost_python
-according to the Python version (2 or 3) you want to compile the module for.
+Check carefully what python version is detected and what libraries are linked to. In particular select the correct boost_python
+according to the python version (2 or 3) you want to compile the module for.
 
 The ``CMAKE_INSTALL_PREFIX`` will be used to construct the final location of headers and Python module after install.
 
@@ -69,4 +69,4 @@ When done, type (in your build directory):
 
    make install
 
-To check that all went well fire-up your Python console and try the example in :ref:`quick-start example <getting_started_py>`.
+To check that all went well fire-up your python console and try the example in :ref:`quick-start example <getting_started_py>`.
