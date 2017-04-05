@@ -612,7 +612,9 @@ struct nlopt_obj {
  *
  * The desired NLopt solver is selected upon construction of a pagmo::nlopt algorithm. Various properties
  * of the solver (e.g., the stopping criteria) can be configured after construction via methods provided
- * by this class.
+ * by this class. Note that multiple stopping criteria can be active at the same time: the optimisation will
+ * stop as soon as at least one stopping criterion is satisfied. By default, only the ``xtol_rel`` stopping
+ * criterion is active (see get_xtol_rel()).
  *
  * All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
  * is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
@@ -862,7 +864,9 @@ public:
      * construction, replace an individual in \p pop with the optimised individual, and finally return \p pop.
      * The individual selection and replacement criteria can be set via set_selection(const std::string &),
      * set_selection(population::size_type), set_replacement(const std::string &) and
-     * set_replacement(population::size_type).
+     * set_replacement(population::size_type). The NLopt solver will run until one of the stopping criteria
+     * is satisfied, and the return status of the NLopt solver will be recorded (it can be fetched with
+     * get_last_opt_result()).
      *
      * @param pop the population to be optimised.
      *
@@ -876,8 +880,7 @@ public:
      *   problem,
      * - the components of the individual selected for optimisation contain NaNs or they are outside
      *   the problem's bounds,
-     * - the individual selection/replacement index if not smaller
-     *   than the population's size
+     * - the individual selection/replacement index is not smaller than the population's size.
      * @throws unspecified any exception thrown by the public interface of pagmo::problem.
      */
     population evolve(population pop) const
@@ -997,7 +1000,7 @@ public:
      * This method will set the algorithm's verbosity. If \p n is zero, no output is produced during the optimisation
      * and no logging is performed. If \p n is nonzero, then every \p n objective function evaluations the status
      * of the optimisation will be both printed to screen and recorded internally. See nlopt::log_line_type and
-     * nlopt::log_type for information on the logging format.
+     * nlopt::log_type for information on the logging format. The internal log can be fetched via get_log().
      *
      * Example (verbosity 1):
      * @code{.unparsed}
@@ -1077,7 +1080,7 @@ public:
     /**
      * @return the name of the NLopt solver used upon construction.
      */
-    std::string solver_name() const
+    std::string get_solver_name() const
     {
         return m_algo;
     }
@@ -1086,14 +1089,14 @@ public:
      * @return the result of the last evolve() call, or ``NLOPT_SUCCESS`` if no optimisations have been
      * run yet.
      */
-    ::nlopt_result last_opt_result() const
+    ::nlopt_result get_last_opt_result() const
     {
         return m_last_opt_result;
     }
     /// Get the ``stopval`` stopping criterion.
     /**
      * The ``stopval`` stopping criterion instructs the solver to stop when an objective value less than
-     * or equal to ``stopval`` is found. Defaults to ``-HUGE_VAL`` (that is, this stopping criterion
+     * or equal to ``stopval`` is found. Defaults to the C constant ``-HUGE_VAL`` (that is, this stopping criterion
      * is disabled by default).
      *
      * @return the ``stopval`` stopping criterion for this pagmo::nlopt.
