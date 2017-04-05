@@ -32,6 +32,7 @@ Implemented algorithms
   algorithms/moead
   algorithms/mbh
   algorithms/cstrs_self_adaptive
+  algorithms/nlopt
   algorithms/nsga2
   algorithms/pso
   algorithms/sade

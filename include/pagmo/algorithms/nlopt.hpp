@@ -29,6 +29,10 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_NLOPT_HPP
 #define PAGMO_ALGORITHMS_NLOPT_HPP
 
+#include <pagmo/config.hpp>
+
+#if defined(PAGMO_WITH_NLOPT)
+
 #include <algorithm>
 #include <boost/any.hpp>
 #include <boost/bimap.hpp>
@@ -156,7 +160,7 @@ inline std::string nlopt_res2string(::nlopt_result err)
 }
 
 struct nlopt_obj {
-    // Single entry of the log (feval, fitness, dv).
+    // Single entry of the log (feval, fitness, n of unsatisfied const, constr. violation, feasibility).
     using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
     // The log.
     using log_type = std::vector<log_line_type>;
@@ -585,8 +589,41 @@ struct nlopt_obj {
 };
 }
 
-// TODO
-// - cache
+/// NLopt algorithms.
+/**
+ * \image html nlopt.png "NLopt logo." width=3cm
+ *
+ * This user-defined algorithm wraps a selection of solvers from the NLopt library, focusing on
+ * local optimisation (both gradient-based and derivative-free). The complete list of supported
+ * NLopt algorithms is:
+ * - COBYLA,
+ * - BOBYQA,
+ * - NEWUOA + bound constraints,
+ * - PRAXIS,
+ * - Nelder-Mead simplex,
+ * - sbplx,
+ * - MMA (Method of Moving Asymptotes),
+ * - CCSA,
+ * - SLSQP,
+ * - low-storage BFGS,
+ * - preconditioned truncated Newton,
+ * - shifted limited-memory variable-metric.
+ *
+ * The desired NLopt solver is selected upon construction of a pagmo::nlopt algorithm. Various properties
+ * of the solver (e.g., the stopping criteria) can be configured after construction via methods provided
+ * by this class.
+ *
+ * All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
+ * is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient
+ * (otherwise a runtime error during the optimisation will be raised). Some solvers support equality and/or
+ * inequality constaints. Trying to solve a constrained problem with a solver which does not support
+ * constraints will raise a runtime error during the optimisation.
+ *
+ * This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_NLOPT`` option
+ * enabled.
+ */
+// TODO:
+// - investiagate the use of a fitness cache, after we have good perf testing in place.
 class nlopt
 {
     using nlopt_obj = detail::nlopt_obj;
@@ -826,5 +863,11 @@ private:
 #pragma warning(pop)
 
 #endif
+
+#else // PAGMO_WITH_NLOPT
+
+#error The nlopt.hpp header was included, but pagmo was not compiled with NLopt support
+
+#endif // PAGMO_WITH_NLOPT
 
 #endif
