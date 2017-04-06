@@ -67,4 +67,21 @@ BOOST_AUTO_TEST_CASE(luksan_vlcek1_test)
                                     vector_double(100, 0.1), 1e-8);
         BOOST_CHECK(prob2.gradient_sparsity() == sp);
     }
+    auto res = prob.gradient({1., 2., 3.});
+    auto gh = estimate_gradient_h([prob](const vector_double &x) { return prob.fitness(x); }, {1., 2., 3.}, 1e-2);
+    for (int i = 0; i < res.size(); ++i) {
+        BOOST_CHECK_CLOSE(gh[i], res[i], 1e-8);
+    }
+    res = prob2.gradient(vector_double(100, 0.1));
+    gh = estimate_gradient_h([prob2](const vector_double &x) { return prob2.fitness(x); }, vector_double(100, 0.1),
+                             1e-2);
+    auto ghs = estimate_sparsity([prob2](const vector_double &x) { return prob2.fitness(x); }, vector_double(100, 0.1),
+                                 1e-8);
+    int counter = 0;
+    for (auto &pair : ghs) {
+        auto i = pair.first;
+        auto j = pair.second;
+        BOOST_CHECK_CLOSE(gh[i * 100 + j], res[counter], 1e-8);
+        ++counter;
+    }
 }
