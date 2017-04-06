@@ -688,7 +688,7 @@ BOOST_PYTHON_MODULE(core)
                 auto retval = estimate_sparsity(f, pygmo::to_vd(x), dx);
                 return pygmo::sp_to_a(retval);
             }),
-            pygmo::ideal_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx")));
+            pygmo::estimate_sparsity_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
 
     // Island.
     pygmo::island_ptr

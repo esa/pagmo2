@@ -2805,6 +2805,42 @@ Returns:
 )";
 }
 
+std::string estimate_sparsity_docstring()
+{
+    return R"(estimate_sparsity_docstring(callable, x, dx = 1e-8)
+
+Performs a numerical estimation of the sparsity pattern of same callable object by numerically
+computing it around the input point *x* and detecting the components that are changed.
+
+The *callable* must accept an iterable as input and return an array-like object
+
+Note that estimate_sparsity may fail to detect the real sparsity as it only considers one variation around the input
+point. It is of use, though, in tests or cases where its not possible to write the sparsity or where the user is
+confident the estimate will be correct.
+
+Args:
+    callable (a callable object): The function we want to estimate sparsity (typically a fitness)
+    x (array-like-object): decision vector to use when testing for sparisty
+    dx (``float``): To detect the sparsity each component of *x* will be changed by :math:`\max(|x_i|,1) dx`
+
+Raises:
+    ValueError: if *points* is malformed
+    TypeError: if *x* cannot be converted to a vector of vector floats
+
+Returns:
+    2D NumPy float array: the sparsity_pattern of *callable* detected around *x*
+
+Examples:
+    >>> import pygmo as pg
+    >>> def call(x, d):
+    ...     return [x[0]+x[3], x[2], x[1]]
+    ... pg.estimate_sparsity(callable = call, x = [1,2,3,4,6], dx = 1e-8)
+
+
+
+)";
+}
+
 std::string hvwfg_docstring()
 {
     return R"(__init__(stop_dimension = 2)

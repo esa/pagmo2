@@ -162,6 +162,7 @@ std::string bf_fpras_docstring();
 std::string fast_non_dominated_sorting_docstring();
 std::string ideal_docstring();
 std::string nadir_docstring();
+std::string estimate_sparsity_docstring();
 
 // island.
 std::string island_docstring();
