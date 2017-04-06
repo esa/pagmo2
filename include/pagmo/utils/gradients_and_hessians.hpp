@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_UTILS_GENERIC_HPP
-#define PAGMO_UTILS_GENERIC_HPP
+#ifndef PAGMO_UTILS_GRADIENTS_AND_HESSIANS_HPP
+#define PAGMO_UTILS_GRADIENTS_AND_HESSIANS_HPP
 
 /** \file gradients_and_hessians.hpp
  * \brief Utilities of general interest for gradients and hessians related calculations
