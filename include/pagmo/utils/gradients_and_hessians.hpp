@@ -46,10 +46,10 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-/// Heuristics to estimate the sparsity pattern of some fitness function
+/// Heuristic to estimate the sparsity pattern
 /**
- * A numerical estimation of the sparsity pattern of same callable function is made by numerically
- * computing the fitness around a given decision vector and detecting the components that are changed.
+ * A numerical estimation of the sparsity pattern of same callable object is made by numerically
+ * computing it around a given input point and detecting the components that are changed.
  *
  * The callable function \p f must have the prototype:
  *
@@ -57,10 +57,11 @@ namespace pagmo
  * vector_double f(vector_double x)
  * @endcode
  *
- * otherwise compiler errors will appear.
+ * otherwise compiler errors will be generated.
  *
- * The use of estimate_sparsity is risky, it is of use, though, in tests or cases where its
- * not possible to write the sparsity or where the user is confident the estimate will be correct.
+ * Note that estimate_sparsity may fail to detect the real sparsity as it only considers one variation around the input
+ * point. It is of use, though, in tests or cases where its not possible to write the sparsity or where the user is
+ * confident the estimate will be correct.
  *
  * @tparam Func a callable object assumed to be returning a fitness vector when called on \p x
  * @param f instance of the callable object
@@ -72,18 +73,19 @@ namespace pagmo
  * @throw std::invalid_argument if \p f returns fitness vecors of different sizes when perturbing \p x
  */
 template <typename Func>
-sparsity_pattern estimate_sparsity(Func fitness, const vector_double &x, double dx = 1e-8)
+sparsity_pattern estimate_sparsity(Func f, const vector_double &x, double dx = 1e-8)
 {
-    vector_double f0 = fitness(x);
+    vector_double f0 = f(x);
     vector_double x_new = x;
     sparsity_pattern retval;
-    // We change one by one each variable by dx and detect changes in the fitness
+    // We change one by one each variable by dx and detect changes in the f call
     for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
         x_new[j] = x[j] + std::max(std::abs(x[j]), 1.0) * dx;
-        auto f_new = fitness(x_new);
+        auto f_new = f(x_new);
         if (f_new.size() != f0.size()) {
-            pagmo_throw(std::invalid_argument,
-                        "Change in fitness size detected around the reference point. Cannot estimate a sparisty.");
+            pagmo_throw(
+                std::invalid_argument,
+                "Change in the size of the returned vector around the reference point. Cannot estimate a sparisty.");
         }
         for (decltype(f_new.size()) i = 0u; i < f_new.size(); ++i) {
             if (f_new[i] != f0[i]) {
@@ -107,8 +109,8 @@ sparsity_pattern estimate_sparsity(Func fitness, const vector_double &x, double 
  * vector_double f(vector_double x)
  * @endcode
  *
- * otherwise compiler errors will appear. The gradient returned will contain, in the dense format
- * requested by pagmo::problem::gradient(), \f$\frac{df_i}{dx_j}\f$.
+ * otherwise compiler errors will be generated. The gradient returned will be dense and contain, in the lexicographic
+ * order requested by pagmo::problem::gradient(), \f$\frac{df_i}{dx_j}\f$.
  *
  * The numerical approximation of each derivative is made by central difference, according to the formula:
  *
@@ -127,7 +129,7 @@ sparsity_pattern estimate_sparsity(Func fitness, const vector_double &x, double 
  *
  * @throw std::invalid_argument if \p f returns vecors of different sizes when perturbing \p x
  *
- * Note: The gradient returned is assumed as dense: elements equal to zero are not excluded.
+ * **NOTE** The gradient returned is assumed as dense: elements equal to zero are not excluded.
  */
 template <typename Func>
 vector_double estimate_gradient(Func f, const vector_double &x, double dx = 1e-8)
@@ -165,8 +167,8 @@ vector_double estimate_gradient(Func f, const vector_double &x, double dx = 1e-8
  * vector_double f(vector_double x)
  * @endcode
  *
- * otherwise compiler errors will appear. The gradient returned will contain, in the dense format
- * requested by pagmo::problem::gradient(), \f$\frac{df_i}{dx_j}\f$.
+ * otherwise compiler errors will be generated. The gradient returned will be dense and contain, in the lexicographic
+ * order requested by pagmo::problem::gradient(), \f$\frac{df_i}{dx_j}\f$.
  *
  * The numerical approximation of each derivative is made by central difference, according to the formula:
  *
@@ -191,7 +193,7 @@ vector_double estimate_gradient(Func f, const vector_double &x, double dx = 1e-8
  *
  * @throw std::invalid_argument if \p f returns vecors of different sizes when perturbing \p x
  *
- * Note: The gradient returned is assumed as dense: elements equal to zero are not excluded.
+ * **NOTE** The gradient returned is assumed as dense: elements equal to zero are not excluded.
  */
 template <typename Func>
 vector_double estimate_gradient_h(Func f, const vector_double &x, double dx = 1e-2)

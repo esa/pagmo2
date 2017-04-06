@@ -85,3 +85,26 @@ BOOST_AUTO_TEST_CASE(luksan_vlcek1_test)
         ++counter;
     }
 }
+
+BOOST_AUTO_TEST_CASE(luksan_vlcek1_serialization_test)
+{
+    problem p{luksan_vlcek1{3}};
+    // Call objfun to increase the internal counters.
+    p.fitness({1., 1., 1.});
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(p);
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(p);
+    }
+    // Change the content of p before deserializing.
+    p = problem{null_problem{}};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(p);
+    }
+    auto after = boost::lexical_cast<std::string>(p);
+    BOOST_CHECK_EQUAL(before, after);
+}
