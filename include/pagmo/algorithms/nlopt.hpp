@@ -651,6 +651,9 @@ struct nlopt_obj {
  *    of each supported solver.
  *
  * \endverbatim
+ *
+ * **NOTE**: a moved-from pagmo::nlopt is destructible and assignable. Any other operation will result
+ * in undefined behaviour.
  */
 // TODO:
 // - investiagate the use of a fitness cache, after we have good perf testing in place.
