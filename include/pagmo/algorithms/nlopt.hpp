@@ -66,19 +66,29 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
 
-#if defined(_MSC_VER)
-
-// Disable a warning from MSVC.
-#pragma warning(push, 0)
-#pragma warning(disable : 4996)
-
-#endif
-
 namespace pagmo
 {
 
 namespace detail
 {
+
+#if defined(_MSC_VER)
+
+template <typename Int, typename T>
+void inline unchecked_copy(Int size, const T *begin, T *dest)
+{
+  std::copy(stdext::make_checked_array_iterator(begin,size), stdext::make_checked_array_iterator(begin,size,size), stdext::make_checked_array_iterator(dest,size));
+}
+
+#else
+
+template <typename Int, typename T>
+void inline unchecked_copy(Int size, const T *begin, T *dest)
+{
+  std::copy(begin, begin + size, dest);
+}
+
+#endif
 
 // Usual trick with global read-only data useful to the NLopt wrapper.
 template <typename = void>
@@ -272,7 +282,7 @@ struct nlopt_obj {
                         }
                     } else {
                         // Dense gradient case.
-                        std::copy(gradient.data(), gradient.data() + p.get_nx(), grad);
+                        detail::unchecked_copy(p.get_nx(), gradient.data(), grad);
                     }
                 }
 
@@ -357,7 +367,7 @@ struct nlopt_obj {
                     // Compute fitness and write IC to the output.
                     // NOTE: fitness is nobj + nec + nic.
                     const auto fitness = p.fitness(dv);
-                    std::copy(fitness.data() + 1 + p.get_nec(), fitness.data() + 1 + p.get_nec() + m, result);
+                    detail::unchecked_copy(p.get_nic(), fitness.data() + 1 + p.get_nec(), result);
 
                     if (grad) {
                         // Handle gradient, if requested.
@@ -405,8 +415,7 @@ struct nlopt_obj {
                             }
                         } else {
                             // Dense gradient.
-                            std::copy(gradient.data() + p.get_nx() * (1u + p.get_nec()),
-                                      gradient.data() + gradient.size(), grad);
+                            detail::unchecked_copy(p.get_nic() * p.get_nx(), gradient.data() + p.get_nx() * (1u + p.get_nec()), grad);
                         }
                     }
                 },
@@ -455,7 +464,7 @@ struct nlopt_obj {
                     // Compute fitness and write EC to the output.
                     // NOTE: fitness is nobj + nec + nic.
                     const auto fitness = p.fitness(dv);
-                    std::copy(fitness.data() + 1, fitness.data() + 1 + p.get_nec(), result);
+                    detail::unchecked_copy(p.get_nec(), fitness.data() + 1, result);
 
                     if (grad) {
                         // Handle gradient, if requested.
@@ -506,8 +515,7 @@ struct nlopt_obj {
                             }
                         } else {
                             // Dense gradient.
-                            std::copy(gradient.data() + p.get_nx(), gradient.data() + p.get_nx() * (1u + p.get_nec()),
-                                      grad);
+                            detail::unchecked_copy(p.get_nx() * p.get_nec(), gradient.data() + p.get_nx(), grad);
                         }
                     }
                 },
@@ -1277,12 +1285,6 @@ private:
     mutable log_type m_log;
 };
 }
-
-#if defined(_MSC_VER)
-
-#pragma warning(pop)
-
-#endif
 
 #else // PAGMO_WITH_NLOPT
 
