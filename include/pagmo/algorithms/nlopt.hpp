@@ -74,10 +74,13 @@ namespace detail
 
 #if defined(_MSC_VER)
 
+// NOTE: this is a wrapper around std::copy() for use in MSVC in conjunction with raw pointers.
+// In debug mode, MSVC will complain about unchecked iterators unless instructed otherwise.
 template <typename Int, typename T>
 void inline unchecked_copy(Int size, const T *begin, T *dest)
 {
-  std::copy(stdext::make_checked_array_iterator(begin,size), stdext::make_checked_array_iterator(begin,size,size), stdext::make_checked_array_iterator(dest,size));
+    std::copy(stdext::make_checked_array_iterator(begin, size), stdext::make_checked_array_iterator(begin, size, size),
+              stdext::make_checked_array_iterator(dest, size));
 }
 
 #else
@@ -85,7 +88,7 @@ void inline unchecked_copy(Int size, const T *begin, T *dest)
 template <typename Int, typename T>
 void inline unchecked_copy(Int size, const T *begin, T *dest)
 {
-  std::copy(begin, begin + size, dest);
+    std::copy(begin, begin + size, dest);
 }
 
 #endif
@@ -415,7 +418,8 @@ struct nlopt_obj {
                             }
                         } else {
                             // Dense gradient.
-                            detail::unchecked_copy(p.get_nic() * p.get_nx(), gradient.data() + p.get_nx() * (1u + p.get_nec()), grad);
+                            detail::unchecked_copy(p.get_nic() * p.get_nx(),
+                                                   gradient.data() + p.get_nx() * (1u + p.get_nec()), grad);
                         }
                     }
                 },
@@ -1025,17 +1029,9 @@ public:
      *       9         17.014              2    2.58628e-05 i
      *      10         17.014              0              0
      *      11         17.014              0              0
-     *      12         17.014              0              0
-     *      13         17.014              0              0
-     *      14         17.014              0              0
-     *      15         17.014              0              0
-     *      16         17.014              0              0
-     *      17         17.014              0              0
-     *      18         17.014              0              0
-     *      19         17.014              0              0
      * @endcode
-     * The little ``i`` at the end of some rows indicates that the decision vector
-     * is infeasible.
+     * The ``i`` at the end of some rows indicates that the decision vector is infeasible. Feasibility
+     * is checked against the problem's tolerance.
      *
      * By default, the verbosity level is zero.
      *
