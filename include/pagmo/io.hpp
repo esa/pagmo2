@@ -42,7 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include "exceptions.hpp"
 #include "threading.hpp"
 
-#define PAGMO_MAX_OUTPUT_LENGTH 20u
+#define PAGMO_MAX_OUTPUT_LENGTH 5u
 
 namespace pagmo
 {

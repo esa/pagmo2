@@ -48,8 +48,6 @@ namespace pagmo
 /// Test problem from the Luksan and Vlcek
 /**
  * Implementation of Example 5.1 in the report from Luksan and Vlcek.
- * Each equality constraint is here considered as two inequalities so that
- * the problem formulation is identical to the one provided in IPOPT examples/ScalableProblems folder.
  *
  * The problem is the Chanied Rosenbrock function with trigonometric-exponential
  * constraints.
@@ -80,7 +78,7 @@ struct luksan_vlcek1 {
      *
      * @throw std::invalid_argument if \p dim is < 3
      */
-    luksan_vlcek1(unsigned int dim = 3u) : m_dim(dim)
+    luksan_vlcek1(unsigned dim = 3u) : m_dim(dim)
     {
         if (dim < 3u) {
             pagmo_throw(std::invalid_argument,
