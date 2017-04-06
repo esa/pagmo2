@@ -41,11 +41,15 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/zdt.hpp>
+#include <pagmo/rng.hpp>
 
 using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(nlopt_construction)
 {
+    random_device::set_seed(42);
+
     algorithm a{nlopt{}};
     BOOST_CHECK_EQUAL(a.extract<nlopt>()->get_solver_name(), "cobyla");
     // Check params of default-constructed instance.
@@ -145,4 +149,18 @@ BOOST_AUTO_TEST_CASE(nlopt_selection_replacement)
     a.set_replacement(0);
     BOOST_CHECK_EQUAL(boost::any_cast<population::size_type>(a.get_replacement()), 0u);
     a.set_random_sr_seed(123);
+}
+
+BOOST_AUTO_TEST_CASE(nlopt_evolve)
+{
+    algorithm a{nlopt{"lbfgs"}};
+    population pop(rosenbrock{10}, 20);
+    a.evolve(pop);
+    BOOST_CHECK(a.extract<nlopt>()->get_last_opt_result() >= 0);
+    pop = population{zdt{}, 20};
+    // MOO not supported by NLopt.
+    BOOST_CHECK_THROW(a.evolve(pop), std::invalid_argument);
+    // Solver wants gradient, but problem does not provide it.
+    pop = population{null_problem{}, 20};
+    BOOST_CHECK_THROW(a.evolve(pop), std::invalid_argument);
 }
