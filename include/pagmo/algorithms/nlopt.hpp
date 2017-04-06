@@ -267,8 +267,10 @@ struct nlopt_obj {
                     // for use in the pagmo API.
                     std::copy(x, x + dim, dv.begin());
 
-                    // Compute fitness and, if needed, gradient.
+                    // Compute fitness.
                     const auto fitness = p.fitness(dv);
+
+                    // Compute gradient, if needed.
                     if (grad) {
                         const auto gradient = p.gradient(dv);
 
@@ -322,10 +324,10 @@ struct nlopt_obj {
                                   std::setw(15), "viol. norm:", '\n');
                         }
                         // Print to screen the log line.
-                        print(std::setw(10), f_count, std::setw(15), fitness[0], std::setw(15), nv, std::setw(15), l,
-                              feas ? "" : " i", '\n');
+                        print(std::setw(10), f_count + 1u, std::setw(15), fitness[0], std::setw(15), nv, std::setw(15),
+                              l, feas ? "" : " i", '\n');
                         // Record the log.
-                        log.emplace_back(f_count, fitness[0], nv, l, feas);
+                        log.emplace_back(f_count + 1u, fitness[0], nv, l, feas);
                     }
 
                     // Update the counter.
@@ -689,6 +691,8 @@ struct nlopt_obj {
  */
 // TODO:
 // - investiagate the use of a fitness cache, after we have good perf testing in place.
+// - move unchecked copy into class
+// - update the log example, after recent change.
 class nlopt
 {
     using nlopt_obj = detail::nlopt_obj;
