@@ -143,10 +143,10 @@ BOOST_AUTO_TEST_CASE(estimate_gradient_test)
     auto g = estimate_gradient([udp](const vector_double &x) { return udp.fitness(x); }, {0.1, 0.2, 0.3, 0.4}, 1e-8);
     auto gh = estimate_gradient_h([udp](const vector_double &x) { return udp.fitness(x); }, {0.1, 0.2, 0.3, 0.4}, 1e-2);
     vector_double res = {1, 0.4, 0.6, 0.48, 0.024, 0.012, 0.008, 0.006, 0.9950041652780257660956, 0, 0, 0};
-    for (int i = 0; i < res.size(); ++i) {
+    for (unsigned i = 0u; i < res.size(); ++i) {
         BOOST_CHECK_CLOSE(gh[i], res[i], 1e-7);
     }
-    for (int i = 0; i < res.size(); ++i) {
+    for (unsigned i = 0u; i < res.size(); ++i) {
         BOOST_CHECK_CLOSE(gh[i], res[i], 1e-11);
     }
 }
