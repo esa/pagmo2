@@ -35,7 +35,7 @@ see https://www.gnu.org/licenses/. */
  * This header contains exception-related utils used within pagmo.
  */
 
-#include <exception>
+#include <stdexcept>
 #include <stdexcept>
 #include <string>
 #include <type_traits>

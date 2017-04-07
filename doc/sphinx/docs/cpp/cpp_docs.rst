@@ -80,6 +80,7 @@ Various optimization utilities.
   utils/constrained
   utils/discrepancy
   utils/hypervolume
+  utils/gradient_and_hessians
 
 Miscellanea
 ^^^^^^^^^^^

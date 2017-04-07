@@ -29,7 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_PROBLEM_ACKLEY_HPP
 #define PAGMO_PROBLEM_ACKLEY_HPP
 
-#include <exception>
 #include <iostream>
 #include <stdexcept>
 #include <string>

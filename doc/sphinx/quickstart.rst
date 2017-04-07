@@ -17,7 +17,7 @@ After following the :ref:`install` you will be able to compile and run your firs
    :language: c++
    :linenos:
 
-Place it into a getting_started.cpp text file and compile it (for eaxmple) with:
+Place it into a getting_started.cpp text file and compile it (for example) with:
 
 .. code-block:: bash
 

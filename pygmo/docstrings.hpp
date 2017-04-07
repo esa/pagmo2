@@ -100,6 +100,7 @@ std::string zdt_p_distance_docstring();
 std::string cec2006_docstring();
 std::string cec2009_docstring();
 std::string cec2013_docstring();
+std::string luksan_vlcek1_docstring();
 std::string translate_docstring();
 std::string translate_translation_docstring();
 std::string decompose_docstring();
@@ -162,6 +163,9 @@ std::string bf_fpras_docstring();
 std::string fast_non_dominated_sorting_docstring();
 std::string ideal_docstring();
 std::string nadir_docstring();
+std::string estimate_sparsity_docstring();
+std::string estimate_gradient_docstring();
+std::string estimate_gradient_h_docstring();
 
 // island.
 std::string island_docstring();

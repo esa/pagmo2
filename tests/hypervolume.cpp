@@ -28,7 +28,7 @@ see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE hypervolume_utilities_test
 #include <boost/test/included/unit_test.hpp>
-#include <exception>
+#include <stdexcept>
 #include <tuple>
 
 #include <fstream>
