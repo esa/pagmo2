@@ -165,7 +165,7 @@ be revealed only when calling the malformed method:
     AttributeError: 'numpy.float64' object has no attribute '__iter__'
 
 In this case, the issue is that the ``fitness()`` method returns a scalar instead of an array-like object (remember that pygmo is also
-able to solve multi-objective and constrained problems, thus the fitness value will be, in general, a vector). pygmo will complain
+able to solve multi-objective and constrained problems, thus the fitness value must be, in general, a vector). pygmo will complain
 about the wrong return type the first time the ``fitness()`` method is invoked.
 
 Notes on computational speed
@@ -231,6 +231,8 @@ our fitness method into C code.
     >>> start_time = time.time(); [prob_jit.fitness(dummy_x) for i in range(1000)]; print(time.time() - start_time) #doctest: +SKIP
     0.03771...
 
+With a bit more elbow grease, we can further improve performance:
+
 .. doctest::
 
     >>> from numba import jit, float64
@@ -254,9 +256,9 @@ our fitness method into C code.
     0.01687...
 
 
-much better right? 
+Much better, right?
 
-.. note:: For more information on using Numba to speed up your python code see `Numba documentation pages <http://numba.pydata.org/>`_.
+.. note:: For more information on using Numba to speed up your python code see the `Numba documentation pages <http://numba.pydata.org/>`_.
           In particular, note that only a limited part of NumPy and the python language in general is supported by this use.
 
 

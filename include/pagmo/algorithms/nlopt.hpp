@@ -73,27 +73,6 @@ namespace pagmo
 namespace detail
 {
 
-#if defined(_MSC_VER)
-
-// NOTE: this is a wrapper around std::copy() for use in MSVC in conjunction with raw pointers.
-// In debug mode, MSVC will complain about unchecked iterators unless instructed otherwise.
-template <typename Int, typename T>
-void inline unchecked_copy(Int size, const T *begin, T *dest)
-{
-    std::copy(stdext::make_checked_array_iterator(begin, size), stdext::make_checked_array_iterator(begin, size, size),
-              stdext::make_checked_array_iterator(dest, size));
-}
-
-#else
-
-template <typename Int, typename T>
-void inline unchecked_copy(Int size, const T *begin, T *dest)
-{
-    std::copy(begin, begin + size, dest);
-}
-
-#endif
-
 // Usual trick with global read-only data useful to the NLopt wrapper.
 template <typename = void>
 struct nlopt_data {
@@ -178,6 +157,23 @@ struct nlopt_obj {
     using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
     // The log.
     using log_type = std::vector<log_line_type>;
+#if defined(_MSC_VER)
+    // NOTE: this is a wrapper around std::copy() for use in MSVC in conjunction with raw pointers.
+    // In debug mode, MSVC will complain about unchecked iterators unless instructed otherwise.
+    template <typename Int, typename T>
+    static void unchecked_copy(Int size, const T *begin, T *dest)
+    {
+        std::copy(stdext::make_checked_array_iterator(begin, size),
+                  stdext::make_checked_array_iterator(begin, size, size),
+                  stdext::make_checked_array_iterator(dest, size));
+    }
+#else
+    template <typename Int, typename T>
+    static void unchecked_copy(Int size, const T *begin, T *dest)
+    {
+        std::copy(begin, begin + size, dest);
+    }
+#endif
     // Shortcut to the static data.
     using data = nlopt_data<>;
     explicit nlopt_obj(::nlopt_algorithm algo, problem &prob, double stopval, double ftol_rel, double ftol_abs,
@@ -298,7 +294,7 @@ struct nlopt_obj {
                             }
                         } else {
                             // Dense gradient case.
-                            detail::unchecked_copy(p.get_nx(), gradient.data(), grad);
+                            unchecked_copy(p.get_nx(), gradient.data(), grad);
                         }
                     }
 
@@ -392,7 +388,7 @@ struct nlopt_obj {
                         // Compute fitness and write IC to the output.
                         // NOTE: fitness is nobj + nec + nic.
                         const auto fitness = p.fitness(dv);
-                        detail::unchecked_copy(p.get_nic(), fitness.data() + 1 + p.get_nec(), result);
+                        unchecked_copy(p.get_nic(), fitness.data() + 1 + p.get_nec(), result);
 
                         if (grad) {
                             // Handle gradient, if requested.
@@ -436,8 +432,8 @@ struct nlopt_obj {
                                 }
                             } else {
                                 // Dense gradient.
-                                detail::unchecked_copy(p.get_nic() * p.get_nx(),
-                                                       gradient.data() + p.get_nx() * (1u + p.get_nec()), grad);
+                                unchecked_copy(p.get_nic() * p.get_nx(),
+                                               gradient.data() + p.get_nx() * (1u + p.get_nec()), grad);
                             }
                         }
                     } catch (...) {
@@ -492,7 +488,7 @@ struct nlopt_obj {
                         // Compute fitness and write EC to the output.
                         // NOTE: fitness is nobj + nec + nic.
                         const auto fitness = p.fitness(dv);
-                        detail::unchecked_copy(p.get_nec(), fitness.data() + 1, result);
+                        unchecked_copy(p.get_nec(), fitness.data() + 1, result);
 
                         if (grad) {
                             // Handle gradient, if requested.
@@ -540,7 +536,7 @@ struct nlopt_obj {
                                 }
                             } else {
                                 // Dense gradient.
-                                detail::unchecked_copy(p.get_nx() * p.get_nec(), gradient.data() + p.get_nx(), grad);
+                                unchecked_copy(p.get_nx() * p.get_nec(), gradient.data() + p.get_nx(), grad);
                             }
                         }
                     } catch (...) {
@@ -688,8 +684,6 @@ struct nlopt_obj {
  */
 // TODO:
 // - investiagate the use of a fitness cache, after we have good perf testing in place.
-// - move unchecked copy into class
-// - update the log example, after recent change.
 class nlopt
 {
     using nlopt_obj = detail::nlopt_obj;
@@ -1054,21 +1048,13 @@ public:
      * of the optimisation will be both printed to screen and recorded internally. See nlopt::log_line_type and
      * nlopt::log_type for information on the logging format. The internal log can be fetched via get_log().
      *
-     * Example (verbosity 1):
+     * Example (verbosity 5):
      * @code{.unparsed}
      * fevals:       fitness:      violated:    viol. norm:
-     *       0        68.6966              1       0.252343 i
-     *       1        29.3926              1        15.1127 i
-     *       2        54.2992              1        2.05694 i
-     *       3        54.2992              1        2.05694 i
-     *       4        15.4544              2        9.56984 i
-     *       5        16.6126              2        1.80223 i
-     *       6        16.8454              2       0.414897 i
-     *       7        16.9794              2      0.0818469 i
-     *       8        17.0132              2     0.00243968 i
-     *       9         17.014              2    2.58628e-05 i
-     *      10         17.014              0              0
-     *      11         17.014              0              0
+     *      1        47.9474              1        2.07944 i
+     *      6        17.1986              2       0.150557 i
+     *     11         17.014              0              0
+     *     16         17.014              0              0
      * @endcode
      * The ``i`` at the end of some rows indicates that the decision vector is infeasible. Feasibility
      * is checked against the problem's tolerance.

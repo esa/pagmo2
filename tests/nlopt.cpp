@@ -196,8 +196,8 @@ BOOST_AUTO_TEST_CASE(nlopt_evolve)
             a.evolve(pop);
         }
     }
-    for (auto s : {0, 2, 15}) {
-        for (auto r : {1, 3, 16}) {
+    for (auto s : {0u, 2u, 15u}) {
+        for (auto r : {1u, 3u, 16u}) {
             a.extract<nlopt>()->set_selection(s);
             a.extract<nlopt>()->set_replacement(r);
             pop = population(rosenbrock{10}, 20);
