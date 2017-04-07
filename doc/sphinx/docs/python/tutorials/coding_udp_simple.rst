@@ -164,6 +164,10 @@ be revealed only when calling the malformed method:
     ...
     AttributeError: 'numpy.float64' object has no attribute '__iter__'
 
+In this case, the issue is that the ``fitness()`` method returns a scalar instead of an array-like object (remember that pygmo is also
+able to solve multi-objective and constrained problems, thus the fitness value will be, in general, a vector). pygmo will complain
+about the wrong return type the first time the ``fitness()`` method is invoked.
+
 Notes on computational speed
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

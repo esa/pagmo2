@@ -336,6 +336,8 @@ struct nlopt_obj {
                     // Return the objfun value.
                     return fitness[0];
                 } catch (...) {
+                    // Store exception, force the stop of the optimisation,
+                    // and return a useless value.
                     nlo.m_eptr = std::current_exception();
                     ::nlopt_force_stop(nlo.m_value.get());
                     return HUGE_VAL;
@@ -413,10 +415,6 @@ struct nlopt_obj {
                                 // the sparsity data for the constraints start.
                                 using pair_t = sparsity_pattern::value_type;
                                 auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(p.get_nec() + 1u, 0u));
-                                if (it_sp == sp.end()) {
-                                    // This means that the sparsity data for ineq constraints is empty. Just return.
-                                    return;
-                                }
 
                                 // Need to do a bit of horrid overflow checking :/.
                                 using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
@@ -443,6 +441,7 @@ struct nlopt_obj {
                             }
                         }
                     } catch (...) {
+                        // Store exception, stop optimisation.
                         nlo.m_eptr = std::current_exception();
                         ::nlopt_force_stop(nlo.m_value.get());
                     }
@@ -515,14 +514,11 @@ struct nlopt_obj {
                                 // Now we need to go into the sparsity pattern and find where
                                 // the sparsity data for the constraints start.
                                 using pair_t = sparsity_pattern::value_type;
+                                // NOTE: it_sp could be end() or point to ineq constraints. This should
+                                // be fine: it_sp is a valid iterator in sp, sp has the same
+                                // size as gradient and we do the proper checks below before accessing
+                                // the values pointed to by it_sp/g_it.
                                 auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(1u, 0u));
-                                if (it_sp == sp.end() || it_sp->first >= p.get_nec() + 1u) {
-                                    // This means that there sparsity data for eq constraints is empty: either we went
-                                    // at the end of sp, or the first index pair found refers to inequality constraints.
-                                    // Just
-                                    // return.
-                                    return;
-                                }
 
                                 // Need to do a bit of horrid overflow checking :/.
                                 using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
@@ -548,6 +544,7 @@ struct nlopt_obj {
                             }
                         }
                     } catch (...) {
+                        // Store exception, stop optimisation.
                         nlo.m_eptr = std::current_exception();
                         ::nlopt_force_stop(nlo.m_value.get());
                     }
