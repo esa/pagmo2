@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/any.hpp>
 #include <cmath>
+#include <initializer_list>
 #include <nlopt.h>
 #include <stdexcept>
 #include <string>
@@ -39,12 +40,15 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nlopt.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
 
 using namespace pagmo;
+
+using hs71 = hock_schittkowsky_71;
 
 BOOST_AUTO_TEST_CASE(nlopt_construction)
 {
@@ -71,7 +75,7 @@ BOOST_AUTO_TEST_CASE(nlopt_construction)
     a.extract<nlopt>()->set_ftol_abs(1E-5);
     a.extract<nlopt>()->set_maxeval(123);
     // Copy.
-    auto b{a};
+    auto b(a);
     BOOST_CHECK_EQUAL(boost::any_cast<population::size_type>(b.extract<nlopt>()->get_selection()), 12u);
     BOOST_CHECK_EQUAL(boost::any_cast<std::string>(b.extract<nlopt>()->get_replacement()), "random");
     BOOST_CHECK(b.extract<nlopt>()->get_last_opt_result() == NLOPT_SUCCESS);
@@ -95,8 +99,8 @@ BOOST_AUTO_TEST_CASE(nlopt_construction)
     BOOST_CHECK_EQUAL(c.extract<nlopt>()->get_maxeval(), 123);
     BOOST_CHECK_EQUAL(c.extract<nlopt>()->get_maxtime(), 0);
     // Move.
-    auto tmp{*a.extract<nlopt>()};
-    auto d{std::move(tmp)};
+    auto tmp(*a.extract<nlopt>());
+    auto d(std::move(tmp));
     BOOST_CHECK_EQUAL(boost::any_cast<population::size_type>(d.get_selection()), 12u);
     BOOST_CHECK_EQUAL(boost::any_cast<std::string>(d.get_replacement()), "random");
     BOOST_CHECK(d.get_last_opt_result() == NLOPT_SUCCESS);
@@ -151,6 +155,14 @@ BOOST_AUTO_TEST_CASE(nlopt_selection_replacement)
     a.set_random_sr_seed(123);
 }
 
+// A version of hs71 which provides the sparsity pattern.
+struct hs71a : hs71 {
+    sparsity_pattern gradient_sparsity() const
+    {
+        return detail::dense_gradient(3, 4);
+    }
+};
+
 BOOST_AUTO_TEST_CASE(nlopt_evolve)
 {
     algorithm a{nlopt{"lbfgs"}};
@@ -163,4 +175,41 @@ BOOST_AUTO_TEST_CASE(nlopt_evolve)
     // Solver wants gradient, but problem does not provide it.
     pop = population{null_problem{}, 20};
     BOOST_CHECK_THROW(a.evolve(pop), std::invalid_argument);
+    pop = population{hs71{}, 20};
+    // lbfgs does not support ineq constraints.
+    BOOST_CHECK_THROW(a.evolve(pop), std::invalid_argument);
+    // mma supports ineq constraints but not eq constraints.
+    BOOST_CHECK_THROW(algorithm{nlopt{"mma"}}.evolve(pop), std::invalid_argument);
+    a = algorithm{nlopt{"slsqp"}};
+    a.extract<nlopt>()->set_verbosity(5);
+    for (auto s : {"best", "worst", "random"}) {
+        for (auto r : {"best", "worst", "random"}) {
+            a.extract<nlopt>()->set_selection(s);
+            a.extract<nlopt>()->set_replacement(r);
+            pop = population(rosenbrock{10}, 20);
+            a.evolve(pop);
+            pop = population{hs71{}, 20};
+            pop.get_problem().set_c_tol({1E-6, 1E-6});
+            a.evolve(pop);
+            pop = population{hs71a{}, 20};
+            pop.get_problem().set_c_tol({1E-6, 1E-6});
+            a.evolve(pop);
+        }
+    }
+    for (auto s : {0, 2, 15}) {
+        for (auto r : {1, 3, 16}) {
+            a.extract<nlopt>()->set_selection(s);
+            a.extract<nlopt>()->set_replacement(r);
+            pop = population(rosenbrock{10}, 20);
+            a.evolve(pop);
+            pop = population{hs71{}, 20};
+            pop.get_problem().set_c_tol({1E-6, 1E-6});
+            a.evolve(pop);
+            pop = population{hs71a{}, 20};
+            pop.get_problem().set_c_tol({1E-6, 1E-6});
+            a.evolve(pop);
+        }
+    }
+    // Empty evolve.
+    a.evolve(population{});
 }
