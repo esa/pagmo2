@@ -152,7 +152,7 @@ void expose_problems()
         (bp::arg("nobj") = 1, bp::arg("nec") = 0, bp::arg("nic") = 0)));
     // Rosenbrock.
     auto rb = expose_problem<rosenbrock>("rosenbrock", rosenbrock_docstring().c_str());
-    rb.def(bp::init<unsigned>((bp::arg("dim"))));
+    rb.def(bp::init<vector_double::size_type>((bp::arg("dim"))));
     rb.def("best_known", &best_known_wrapper<rosenbrock>, problem_get_best_docstring("Rosenbrock").c_str());
     // Hock-Schittkowsky 71
     auto hs71 = expose_problem<hock_schittkowsky_71>("hock_schittkowsky_71",
@@ -211,7 +211,7 @@ void expose_problems()
 
     // CEC 2006
     auto cec2006_ = expose_problem<cec2006>("cec2006", cec2006_docstring().c_str());
-    cec2006_.def(bp::init<unsigned>((bp::arg("prob_id") = 1)));
+    cec2006_.def(bp::init<unsigned>((bp::arg("prob_id"))));
     cec2006_.def("best_known", &best_known_wrapper<cec2006>, problem_get_best_docstring("CEC 2006").c_str());
 
     // CEC 2009
@@ -221,7 +221,7 @@ void expose_problems()
 
     // Luksan Vlcek 1
     auto lv_ = expose_problem<luksan_vlcek1>("luksan_vlcek1", luksan_vlcek1_docstring().c_str());
-    lv_.def(bp::init<unsigned>(bp::arg("dim") = 3u));
+    lv_.def(bp::init<unsigned>(bp::arg("dim")));
 
     // Translate meta-problem
     auto translate_ = expose_problem<translate>("translate", translate_docstring().c_str());
@@ -234,9 +234,8 @@ void expose_problems()
     translate_.add_property("translation", lcast([](const translate &t) { return v_to_a(t.get_translation()); }),
                             translate_translation_docstring().c_str());
     translate_.add_property(
-        "inner_problem",
-        bp::make_function(lcast([](translate &udp) -> problem & { return udp.get_inner_problem(); }),
-                          bp::return_internal_reference<>()),
+        "inner_problem", bp::make_function(lcast([](translate &udp) -> problem & { return udp.get_inner_problem(); }),
+                                           bp::return_internal_reference<>()),
         generic_udp_inner_problem_docstring().c_str());
     // Unconstrain meta-problem.
     auto unconstrain_ = expose_problem<unconstrain>("unconstrain", unconstrain_docstring().c_str());
@@ -248,9 +247,8 @@ void expose_problems()
                                      }),
                                      bp::default_call_policies()));
     unconstrain_.add_property(
-        "inner_problem",
-        bp::make_function(lcast([](unconstrain &udp) -> problem & { return udp.get_inner_problem(); }),
-                          bp::return_internal_reference<>()),
+        "inner_problem", bp::make_function(lcast([](unconstrain &udp) -> problem & { return udp.get_inner_problem(); }),
+                                           bp::return_internal_reference<>()),
         generic_udp_inner_problem_docstring().c_str());
     // Decompose meta-problem.
     auto decompose_ = expose_problem<decompose>("decompose", decompose_docstring().c_str());
@@ -269,9 +267,8 @@ void expose_problems()
     decompose_.add_property("z", lcast([](const pagmo::decompose &p) { return v_to_a(p.get_z()); }),
                             decompose_z_docstring().c_str());
     decompose_.add_property(
-        "inner_problem",
-        bp::make_function(lcast([](decompose &udp) -> problem & { return udp.get_inner_problem(); }),
-                          bp::return_internal_reference<>()),
+        "inner_problem", bp::make_function(lcast([](decompose &udp) -> problem & { return udp.get_inner_problem(); }),
+                                           bp::return_internal_reference<>()),
         generic_udp_inner_problem_docstring().c_str());
 }
 }
