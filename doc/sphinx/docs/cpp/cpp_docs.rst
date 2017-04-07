@@ -55,6 +55,7 @@ Implemented problems
   problems/dtlz
   problems/hock_schittkowsky_71
   problems/inventory
+  problems/luksan_vlcek1.rst
   problems/translate
   problems/decompose
   problems/cec2006
