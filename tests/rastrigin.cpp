@@ -30,8 +30,8 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/included/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
-#include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 #include <pagmo/detail/constants.hpp>

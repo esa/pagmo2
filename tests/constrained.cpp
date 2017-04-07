@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE constrained_utilities_test
 #include <boost/test/included/unit_test.hpp>
 
-#include <exception>
+#include <stdexcept>
 
 #include <pagmo/io.hpp>
 #include <pagmo/types.hpp>

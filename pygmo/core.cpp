@@ -79,6 +79,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
+#include <pagmo/utils/gradients_and_hessians.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_fpras.hpp>
@@ -680,6 +681,25 @@ BOOST_PYTHON_MODULE(core)
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); }),
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
+    // Gradient and Hessians utilities
+    bp::def("estimate_sparsity", lcast([](const bp::object &func, const bp::object &x, double dx) -> bp::object {
+                auto f = [&func](const vector_double &x_) { return pygmo::to_vd(func(pygmo::v_to_a(x_))); };
+                auto retval = estimate_sparsity(f, pygmo::to_vd(x), dx);
+                return pygmo::sp_to_a(retval);
+            }),
+            pygmo::estimate_sparsity_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
+    bp::def("estimate_gradient", lcast([](const bp::object &func, const bp::object &x, double dx) -> bp::object {
+                auto f = [&func](const vector_double &x_) { return pygmo::to_vd(func(pygmo::v_to_a(x_))); };
+                auto retval = estimate_gradient(f, pygmo::to_vd(x), dx);
+                return pygmo::v_to_a(retval);
+            }),
+            pygmo::estimate_gradient_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
+    bp::def("estimate_gradient_h", lcast([](const bp::object &func, const bp::object &x, double dx) -> bp::object {
+                auto f = [&func](const vector_double &x_) { return pygmo::to_vd(func(pygmo::v_to_a(x_))); };
+                auto retval = estimate_gradient_h(f, pygmo::to_vd(x), dx);
+                return pygmo::v_to_a(retval);
+            }),
+            pygmo::estimate_gradient_h_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
 
     // Island.
     pygmo::island_ptr

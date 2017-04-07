@@ -30,7 +30,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/included/unit_test.hpp>
 
 #include <boost/test/floating_point_comparison.hpp>
-#include <exception>
+#include <stdexcept>
 #include <tuple>
 
 #include <pagmo/detail/prime_numbers.hpp>

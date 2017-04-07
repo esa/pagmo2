@@ -30,7 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_PRIME_NUMBERS_HPP
 
 #include <array>
-#include <exception>
+#include <stdexcept>
 
 #include "../exceptions.hpp"
 

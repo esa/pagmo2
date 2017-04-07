@@ -64,6 +64,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/luksan_vlcek1.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
@@ -218,6 +219,10 @@ void expose_problems()
     cec2009_.def(bp::init<unsigned, bool, unsigned>(
         (bp::arg("prob_id") = 1u, bp::arg("is_constrained") = false, bp::arg("dim") = 30u)));
 
+    // Luksan Vlcek 1
+    auto lv_ = expose_problem<luksan_vlcek1>("luksan_vlcek1", luksan_vlcek1_docstring().c_str());
+    lv_.def(bp::init<unsigned>(bp::arg("dim") = 3u));
+
     // Translate meta-problem
     auto translate_ = expose_problem<translate>("translate", translate_docstring().c_str());
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
@@ -229,8 +234,9 @@ void expose_problems()
     translate_.add_property("translation", lcast([](const translate &t) { return v_to_a(t.get_translation()); }),
                             translate_translation_docstring().c_str());
     translate_.add_property(
-        "inner_problem", bp::make_function(lcast([](translate &udp) -> problem & { return udp.get_inner_problem(); }),
-                                           bp::return_internal_reference<>()),
+        "inner_problem",
+        bp::make_function(lcast([](translate &udp) -> problem & { return udp.get_inner_problem(); }),
+                          bp::return_internal_reference<>()),
         generic_udp_inner_problem_docstring().c_str());
     // Unconstrain meta-problem.
     auto unconstrain_ = expose_problem<unconstrain>("unconstrain", unconstrain_docstring().c_str());
@@ -242,8 +248,9 @@ void expose_problems()
                                      }),
                                      bp::default_call_policies()));
     unconstrain_.add_property(
-        "inner_problem", bp::make_function(lcast([](unconstrain &udp) -> problem & { return udp.get_inner_problem(); }),
-                                           bp::return_internal_reference<>()),
+        "inner_problem",
+        bp::make_function(lcast([](unconstrain &udp) -> problem & { return udp.get_inner_problem(); }),
+                          bp::return_internal_reference<>()),
         generic_udp_inner_problem_docstring().c_str());
     // Decompose meta-problem.
     auto decompose_ = expose_problem<decompose>("decompose", decompose_docstring().c_str());
@@ -262,8 +269,9 @@ void expose_problems()
     decompose_.add_property("z", lcast([](const pagmo::decompose &p) { return v_to_a(p.get_z()); }),
                             decompose_z_docstring().c_str());
     decompose_.add_property(
-        "inner_problem", bp::make_function(lcast([](decompose &udp) -> problem & { return udp.get_inner_problem(); }),
-                                           bp::return_internal_reference<>()),
+        "inner_problem",
+        bp::make_function(lcast([](decompose &udp) -> problem & { return udp.get_inner_problem(); }),
+                          bp::return_internal_reference<>()),
         generic_udp_inner_problem_docstring().c_str());
 }
 }

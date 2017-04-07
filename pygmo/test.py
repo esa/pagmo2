@@ -387,6 +387,32 @@ class null_problem_test_case(_ut.TestCase):
         self.assertTrue(problem(np()).get_nobj() == 1)
         self.assertTrue(problem(np(23)).get_nobj() == 23)
 
+class estimate_sparsity_test_case(_ut.TestCase):
+    """Test case for the hypervolume utilities
+
+    """
+    def runTest(self):
+        import pygmo as pg
+        import numpy as np
+        def my_fun(x):
+            return [x[0]+x[3], x[2], x[1]]
+        res = pg.estimate_sparsity(callable = my_fun, x = [0.1,0.1,0.1,0.1], dx = 1e-8)
+        self.assertTrue((res==np.array([[0, 0],[0, 3],[1, 2],[2, 1]])).all())
+
+class estimate_gradient_test_case(_ut.TestCase):
+    """Test case for the hypervolume utilities
+
+    """
+    def runTest(self):
+        import pygmo as pg
+        import numpy as np
+        def my_fun(x):
+            return [x[0]+x[3], x[2], x[1]]
+        out = pg.estimate_gradient(callable = my_fun, x = [0]*4, dx = 1e-8)
+        res = np.array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])
+        self.assertTrue((abs(out-res)<1e-8).all())
+        out = pg.estimate_gradient_h(callable = my_fun, x = [0]*4, dx = 1e-8)
+        self.assertTrue((abs(out-res)<1e-8).all())
 
 class hypervolume_test_case(_ut.TestCase):
     """Test case for the hypervolume utilities
@@ -446,6 +472,16 @@ class dtlz_test_case(_ut.TestCase):
         udp = dtlz(prob_id=3, dim=9, fdim=3, alpha=5)
         udp.p_distance([0.2] * 9)
         udp.p_distance(population(udp, 20))
+
+
+class luksan_vlcek1_test_case(_ut.TestCase):
+    """Test case for the UDP Luksan Vlcek 1
+
+    """
+
+    def runTest(self):
+        from .core import luksan_vlcek1, population
+        udp = luksan_vlcek1(dim=3)
 
 
 class cec2006_test_case(_ut.TestCase):
@@ -996,6 +1032,8 @@ def run_test_suite():
     suite.addTest(archipelago_test_case())
     suite.addTest(null_problem_test_case())
     suite.addTest(hypervolume_test_case())
+    suite.addTest(estimate_sparsity_test_case())
+    suite.addTest(estimate_gradient_test_case())
     try:
         from .core import cmaes
         suite.addTest(cmaes_test_case())
@@ -1005,6 +1043,7 @@ def run_test_suite():
     suite.addTest(cec2006_test_case())
     suite.addTest(cec2009_test_case())
     suite.addTest(cec2013_test_case())
+    suite.addTest(luksan_vlcek1_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
     suite.addTest(unconstrain_test_case())

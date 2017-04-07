@@ -31,8 +31,9 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <exception>
+#include <cmath>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 #include <pagmo/problem.hpp>

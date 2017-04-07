@@ -1800,6 +1800,40 @@ See also the docs of the C++ class :cpp:class:`pagmo::cec2006`.
 )";
 }
 
+std::string luksan_vlcek1_docstring()
+{
+    return R"(__init__(dim = 3)
+
+Implementation of Example 5.1 in the report from Luksan and Vlcek.
+
+The problem is also known as the Chained Rosenbrock function with trigonometric-exponential constraints.
+
+Its formulation in pagmo can be written as:
+
+.. math::
+   \begin{array}{rl}
+   \mbox{find:}      & -5 \le \mathbf x_i \le 5, \forall i=1..n\\
+   \mbox{to minimize: } & \sum_{i=1}^{n-1}\left[100\left(x_i^2-x_{i+1}\right)^2 + \left(x_i-1\right)^2\right]\\
+   \mbox{subject to:} & 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2}})\sin(x_{k+1}+x_{k+2}})
+   +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 \le UB, \forall k=1..n-2 \\
+                      & 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2}})\sin(x_{k+1}+x_{k+2}})
+   +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 \ge LB, \forall k=1..n-2 \\
+   \end{array}
+
+See: Luksan, L., and Jan Vlcek. "Sparse and partially separable test problems for unconstrained and equality
+constrained optimization." (1999). http://folk.uib.no/ssu029/Pdf_file/Luksan99.ps
+
+Args:
+    dim (``int``): problem dimension
+
+Raises:
+    OverflowError: if *dim* is negative or greater than an implementation-defined value
+
+See also the docs of the C++ class :cpp:class:`pagmo::luksan_vlcek1`.
+
+)";
+}
+
 std::string generic_uda_get_seed_docstring()
 {
     return R"(get_seed()
@@ -2798,6 +2832,124 @@ Raises:
 Returns:
     1D NumPy float array: the ideal point
 
+)";
+}
+
+std::string estimate_sparsity_docstring()
+{
+    return R"(estimate_sparsity(callable, x, dx = 1e-8)
+
+Performs a numerical estimation of the sparsity pattern of same callable object by numerically
+computing it around the input point *x* and detecting the components that are changed.
+
+The *callable* must accept an iterable as input and return an array-like object
+
+Note that estimate_sparsity may fail to detect the real sparsity as it only considers one variation around the input
+point. It is of use, though, in tests or cases where its not possible to write the sparsity or where the user is
+confident the estimate will be correct.
+
+Args:
+    callable (a callable object): The function we want to estimate sparsity (typically a fitness).
+    x (array-like-object): decision vector to use when testing for sparisty.
+    dx (``float``): To detect the sparsity each component of *x* will be changed by :math:`\max(|x_i|,1) dx`.
+
+Raises:
+    unspecified: any exception thrown by the *callable* object when called on *x*.
+    TypeError: if *x* cannot be converted to a vector of floats or *callable* is not callable.
+
+Returns:
+    2D NumPy float array: the sparsity_pattern of *callable* detected around *x*
+
+Examples:
+    >>> import pygmo as pg
+    >>> def my_fun(x):
+    ...     return [x[0]+x[3], x[2], x[1]]
+    >>> pg.estimate_sparsity(callable = my_fun, x = [0.1,0.1,0.1,0.1], dx = 1e-8)
+    array([[0, 0],
+       [0, 3],
+       [1, 2],
+       [2, 1]])
+)";
+}
+
+std::string estimate_gradient_docstring()
+{
+    return R"(estimate_gradient(callable, x, dx = 1e-8)
+
+Performs a numerical estimation of the sparsity pattern of same callable object by numerically
+computing it around the input point *x* and detecting the components that are changed.
+
+The *callable* must accept an iterable as input and return an array-like object. The gradient returned will be dense
+and contain, in the lexicographic order requested by :class:`~pygmo.core.hypervoproblem.gradient`, :math:`\frac{df_i}{dx_j}`.
+
+The numerical approximation of each derivative is made by central difference, according to the formula:
+
+.. math::
+   \frac{df}{dx} \approx \frac{f(x+dx) - f(x-dx)}{2dx} + O(dx^2)
+
+The overall cost, in terms of calls to \p f will thus be :math:`n` where :math:`n` is the size of \p x.
+
+Args:
+    callable (a callable object): The function we want to estimate sparsity (typically a fitness).
+    x (array-like-object): decision vector to use when testing for sparisty.
+    dx (``float``): To detect the sparsity each component of *x* will be changed by :math:`\max(|x_i|,1) dx`.
+
+Raises:
+    unspecified: any exception thrown by the *callable* object when called on *x*.
+    TypeError: if *x* cannot be converted to a vector of floats or *callable* is not callable.
+
+Returns:
+    2D NumPy float array: the dense gradient of *callable* detected around *x*
+
+Examples:
+    >>> import pygmo as pg
+    >>> def my_fun(x):
+    ...     return [x[0]+x[3], x[2], x[1]]
+    >>> pg.estimate_gradient(callable = my_fun, x = [0]*4, dx = 1e-8)
+    array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])
+)";
+}
+
+std::string estimate_gradient_h_docstring()
+{
+    return R"(estimate_gradient_h(callable, x, dx = 1e-8)
+
+Performs a numerical estimation of the sparsity pattern of same callable object by numerically
+computing it around the input point *x* and detecting the components that are changed.
+
+The *callable* must accept an iterable as input and return an array-like object. The gradient returned will be dense
+and contain, in the lexicographic order requested by :class:`~pygmo.core.hypervoproblem.gradient`, :math:`\frac{df_i}{dx_j}`.
+
+The numerical approximation of each derivative is made by central difference, according to the formula:
+
+.. math::
+   \frac{df}{dx} \approx \frac 32 m_1 - \frac 35 m_2 +\frac 1{10} m_3 + O(dx^6)
+
+where:
+
+.. math::
+   m_i = \frac{f(x + i dx) - f(x-i dx)}{2i dx}
+
+The overall cost, in terms of calls to \p f will thus be 6:math:`n` where :math:`n` is the size of \p x.
+
+Args:
+    callable (a callable object): The function we want to estimate sparsity (typically a fitness).
+    x (array-like-object): decision vector to use when testing for sparisty.
+    dx (``float``): To detect the sparsity each component of *x* will be changed by :math:`\max(|x_i|,1) dx`.
+
+Raises:
+    unspecified: any exception thrown by the *callable* object when called on *x*.
+    TypeError: if *x* cannot be converted to a vector of floats or *callable* is not callable.
+
+Returns:
+    2D NumPy float array: the dense gradient of *callable* detected around *x*
+
+Examples:
+    >>> import pygmo as pg
+    >>> def my_fun(x):
+    ...     return [x[0]+x[3], x[2], x[1]]
+    >>> pg.estimate_gradient_h(callable = my_fun, x = [0]*4, dx = 1e-2)
+    array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])
 )";
 }
 
