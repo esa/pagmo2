@@ -48,7 +48,7 @@ namespace pagmo
 /**
  * Implementation of Example 5.1 in the report from Luksan and Vlcek.
  *
- * The problem is the Chanied Rosenbrock function with trigonometric-exponential
+ * The problem is the Chained Rosenbrock function with trigonometric-exponential
  * constraints.
  *
  * Its formulation in pagmo can be written as:
@@ -113,7 +113,6 @@ struct luksan_vlcek1 {
     }
     /// Box-bounds
     /**
-     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components.
@@ -171,7 +170,6 @@ struct luksan_vlcek1 {
     }
     /// Gradients sparsity
     /**
-     *
      * It returns the gradent sparisty structure for the Luksan Vlcek 1 problem.
      *
      * The gradients sparisty is represented in the form required by

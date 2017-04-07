@@ -1090,7 +1090,8 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    1D NumPy float array: the best known solution for the )" + name + R"( problem
+    1D NumPy float array: the best known solution for the )"
+           + name + R"( problem
 
 )";
 }
@@ -1809,7 +1810,7 @@ std::string luksan_vlcek1_docstring()
 
 Implementation of Example 5.1 in the report from Luksan and Vlcek.
 
-The problem is also known as the Chanied Rosenbrock function with trigonometric-exponential constraints.
+The problem is also known as the Chained Rosenbrock function with trigonometric-exponential constraints.
 
 Its formulation in pagmo can be written as:
 
@@ -1823,7 +1824,7 @@ Its formulation in pagmo can be written as:
    +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 \ge LB, \forall k=1..n-2 \\
    \end{array}
 
-See: Lukšan, L., and Jan Vlcek. "Sparse and partially separable test problems for unconstrained and equality
+See: Luksan, L., and Jan Vlcek. "Sparse and partially separable test problems for unconstrained and equality
 constrained optimization." (1999). http://folk.uib.no/ssu029/Pdf_file/Luksan99.ps
 
 Args:
@@ -2840,7 +2841,7 @@ Returns:
 
 std::string estimate_sparsity_docstring()
 {
-    return R"(estimate_sparsity_docstring(callable, x, dx = 1e-8)
+    return R"(estimate_sparsity(callable, x, dx = 1e-8)
 
 Performs a numerical estimation of the sparsity pattern of same callable object by numerically
 computing it around the input point *x* and detecting the components that are changed.
@@ -2877,7 +2878,7 @@ Examples:
 
 std::string estimate_gradient_docstring()
 {
-    return R"(estimate_gradient_docstring(callable, x, dx = 1e-8)
+    return R"(estimate_gradient(callable, x, dx = 1e-8)
 
 Performs a numerical estimation of the sparsity pattern of same callable object by numerically
 computing it around the input point *x* and detecting the components that are changed.
@@ -2915,7 +2916,7 @@ Examples:
 
 std::string estimate_gradient_h_docstring()
 {
-    return R"(estimate_gradient_docstring(callable, x, dx = 1e-8)
+    return R"(estimate_gradient_h(callable, x, dx = 1e-8)
 
 Performs a numerical estimation of the sparsity pattern of same callable object by numerically
 computing it around the input point *x* and detecting the components that are changed.
