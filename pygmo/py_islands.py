@@ -122,6 +122,9 @@ class mp_island(object):
             # we need to make sure we are not trying to touch
             # the pool while we are sending tasks to it.
             res = mp_island._pool.apply_async(_evolve_func, (algo, pop))
+        # NOTE: there might be a bug in need of a workaround lurking in here:
+        # http://stackoverflow.com/questions/11312525/catch-ctrlc-sigint-and-exit-multiprocesses-gracefully-in-python
+        # Just keep it in mind.
         return res.get()
 
     def get_name(self):
