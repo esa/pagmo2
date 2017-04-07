@@ -55,12 +55,10 @@ namespace pagmo
  *
  * \f[
  * \begin{array}{rl}
- * \mbox{find:}      & -5 \le \mathbf x_i \le 5, \forall i=1..n\\
+ * \mbox{find:}      & -5 \le \mathbf{x}_i \le 5, \forall i=1..n\\
  * \mbox{to minimize: } & \sum_{i=1}^{n-1}\left[100\left(x_i^2-x_{i+1}\right)^2 + \left(x_i-1\right)^2\right]\\
- * \mbox{subject to:} & 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2}})\sin(x_{k+1}+x_{k+2}})
- * +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 \le UB, \forall k=1..n-2 \\
- *                    & 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2}})\sin(x_{k+1}+x_{k+2}})
- * +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 \ge LB, \forall k=1..n-2 \\
+ * \mbox{subject to:} & 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2})\sin(x_{k+1}+x_{k+2})
+ * +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 = 0, \forall k=1..n-2 \\
  * \end{array}
  * \f]
  *
@@ -119,20 +117,15 @@ struct luksan_vlcek1 {
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        vector_double lb(m_dim, -5.);
-        vector_double ub(m_dim, 5.);
-        return {lb, ub};
+        return std::make_pair(vector_double(m_dim, -5.), vector_double(m_dim, 5.));
     }
-    /// Inequality constraint dimension
+    /// Equality constraint dimension
     /**
-     *
-     * It returns the number of inequality constraints.
-     *
-     * @return the number of inequality constraints.
+     * @return the number of equality constraints.
      */
     vector_double::size_type get_nec() const
     {
-        return (m_dim - 2);
+        return m_dim - 2u;
     }
     /// Gradients
     /**
@@ -184,7 +177,7 @@ struct luksan_vlcek1 {
         for (decltype(m_dim) i = 0u; i < m_dim; ++i) {
             retval.emplace_back(0, i);
         }
-        // The part relative to the inequality constraints is sparse as each
+        // The part relative to the equality constraints is sparse as each
         // constraint c_k depends on x_k, x_{k+1} and x_{k+2}
         for (decltype(m_dim) i = 0u; i < m_dim - 2u; ++i) {
             retval.emplace_back(i + 1, i);
