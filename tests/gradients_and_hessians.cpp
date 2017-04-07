@@ -29,8 +29,8 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE generic_utilities_test
 #include <boost/test/included/unit_test.hpp>
 
-#include <exception>
 #include <limits>
+#include <stdexcept>
 
 #include <pagmo/io.hpp>
 #include <pagmo/rng.hpp>

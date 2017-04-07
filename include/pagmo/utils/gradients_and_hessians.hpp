@@ -54,7 +54,7 @@ namespace pagmo
  * The callable function \p f must have the prototype:
  *
  * @code{.unparsed}
- * vector_double f(vector_double x)
+ * vector_double f(const vector_double &)
  * @endcode
  *
  * otherwise compiler errors will be generated.
@@ -63,14 +63,13 @@ namespace pagmo
  * point. It is of use, though, in tests or cases where its not possible to write the sparsity or where the user is
  * confident the estimate will be correct.
  *
- * @tparam Func a callable object assumed to be returning a fitness vector when called on \p x
- * @param f instance of the callable object
- * @param x decision vector to test the sparisty around
+ * @param f instance of the callable object.
+ * @param x decision vector to test the sparisty around.
  * @param dx To detect the sparsity each component of the input decision vector \p x will be changed by \f$\max(|x_i|,
- * 1) * \f$ \p dx
- * @return the sparsity_pattern of \p f as detected around \p x
+ * 1) * \f$ \p dx.
+ * @return the sparsity_pattern of \p f as detected around \p x.
  *
- * @throw std::invalid_argument if \p f returns fitness vecors of different sizes when perturbing \p x
+ * @throw std::invalid_argument if \p f returns fitness vectors of different sizes when perturbing \p x.
  */
 template <typename Func>
 sparsity_pattern estimate_sparsity(Func f, const vector_double &x, double dx = 1e-8)
@@ -106,7 +105,7 @@ sparsity_pattern estimate_sparsity(Func f, const vector_double &x, double dx = 1
  * The callable function \p f must have the prototype:
  *
  * @code{.unparsed}
- * vector_double f(vector_double x)
+ * vector_double f(const vector_double &)
  * @endcode
  *
  * otherwise compiler errors will be generated. The gradient returned will be dense and contain, in the lexicographic
@@ -120,14 +119,13 @@ sparsity_pattern estimate_sparsity(Func f, const vector_double &x, double dx = 1
  *
  * The overall cost, in terms of calls to \p f will thus be \f$2n\f$ where \f$n\f$ is the size of \p x.
  *
- * @tparam Func a callable object assumed to be returning a fitness vector when called on \p x
- * @param f instance of the callable object
- * @param x decision vector to test the sparisty around
+ * @param f instance of the callable object.
+ * @param x decision vector to test the sparisty around.
  * @param dx To detect the numerical derivative each component of the input decision vector \p x will be varied by
- * \f$\max(|x_i|,1) * \f$ \p dx
- * @return the gradient of \p f approximated around \p x in the format required by pagmo::problem::gradient()
+ * \f$\max(|x_i|,1) * \f$ \p dx.
+ * @return the gradient of \p f approximated around \p x in the format required by pagmo::problem::gradient().
  *
- * @throw std::invalid_argument if \p f returns vecors of different sizes when perturbing \p x
+ * @throw std::invalid_argument if \p f returns vectors of different sizes when perturbing \p x.
  *
  * **NOTE** The gradient returned is assumed as dense: elements equal to zero are not excluded.
  */
@@ -164,7 +162,7 @@ vector_double estimate_gradient(Func f, const vector_double &x, double dx = 1e-8
  * The callable function \p f must have the prototype:
  *
  * @code{.unparsed}
- * vector_double f(vector_double x)
+ * vector_double f(const vector_double &)
  * @endcode
  *
  * otherwise compiler errors will be generated. The gradient returned will be dense and contain, in the lexicographic
@@ -184,14 +182,13 @@ vector_double estimate_gradient(Func f, const vector_double &x, double dx = 1e-8
  *
  * The overall cost, in terms of calls to \p f will thus be \f$6n\f$ where \f$n\f$ is the size of \p x.
  *
- * @tparam Func a callable object assumed to be returning a fitness vector when called on \p x
- * @param f instance of the callable object
- * @param x decision vector to test the sparisty around
+ * @param f instance of the callable object.
+ * @param x decision vector to test the sparisty around.
  * @param dx To detect the numerical derivative each component of the input decision vector \p x will be varied by
- * \f$\max(|x_i|,1) * \f$ \p dx
- * @return the gradient of \p f approximated around \p x in the format required by pagmo::problem::gradient()
+ * \f$\max(|x_i|,1) * \f$ \p dx.
+ * @return the gradient of \p f approximated around \p x in the format required by pagmo::problem::gradient().
  *
- * @throw std::invalid_argument if \p f returns vecors of different sizes when perturbing \p x
+ * @throw std::invalid_argument if \p f returns vectors of different sizes when perturbing \p x.
  *
  * **NOTE** The gradient returned is assumed as dense: elements equal to zero are not excluded.
  */

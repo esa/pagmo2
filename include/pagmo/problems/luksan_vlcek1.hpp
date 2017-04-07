@@ -30,7 +30,6 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_PROBLEM_LUKSANVLCECK_HPP
 
 #include <cassert>
-#include <exception>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -45,7 +44,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Test problem from the Luksan and Vlcek
+/// Test problem from Luksan and Vlcek
 /**
  * Implementation of Example 5.1 in the report from Luksan and Vlcek.
  *
@@ -65,7 +64,7 @@ namespace pagmo
  * \end{array}
  * \f]
  *
- * See: Lukšan, L., and Jan Vlcek. "Sparse and partially separable test problems for unconstrained and equality
+ * See: Luksan, L., and Jan Vlcek. "Sparse and partially separable test problems for unconstrained and equality
  * constrained optimization." (1999). http://folk.uib.no/ssu029/Pdf_file/Luksan99.ps
  *
  */
@@ -76,7 +75,7 @@ struct luksan_vlcek1 {
      *
      * @param dim the problem dimensions.
      *
-     * @throw std::invalid_argument if \p dim is < 3
+     * @throw std::invalid_argument if \p dim is < 3.
      */
     luksan_vlcek1(unsigned dim = 3u) : m_dim(dim)
     {
@@ -87,7 +86,7 @@ struct luksan_vlcek1 {
     };
     /// Fitness computation
     /**
-     * Computes the fitness for this UDP
+     * Computes the fitness for this UDP.
      *
      * @param x the decision vector.
      *
@@ -117,7 +116,7 @@ struct luksan_vlcek1 {
      *
      * It returns the box-bounds for this UDP.
      *
-     * @return the lower and upper bounds for each of the decision vector components
+     * @return the lower and upper bounds for each of the decision vector components.
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -128,9 +127,9 @@ struct luksan_vlcek1 {
     /// Inequality constraint dimension
     /**
      *
-     * It returns the number of inequality constraints
+     * It returns the number of inequality constraints.
      *
-     * @return the number of inequality constraints
+     * @return the number of inequality constraints.
      */
     vector_double::size_type get_nec() const
     {
@@ -145,7 +144,7 @@ struct luksan_vlcek1 {
      *
      * @param x the decision vector.
      *
-     * @return the gradient of the fitness function
+     * @return the gradient of the fitness function.
      */
     vector_double gradient(const vector_double &x) const
     {
@@ -173,32 +172,32 @@ struct luksan_vlcek1 {
     /// Gradients sparsity
     /**
      *
-     * It returns the gradent sparisty structure for the Luksan Vlcek 1 problem
+     * It returns the gradent sparisty structure for the Luksan Vlcek 1 problem.
      *
      * The gradients sparisty is represented in the form required by
      * problem::gradient_sparsity().
      *
-     * @return the gradient sparsity structure of the fitness function
+     * @return the gradient sparsity structure of the fitness function.
      */
     sparsity_pattern gradient_sparsity() const
     {
         sparsity_pattern retval;
         // The part relative to the objective function is dense
         for (decltype(m_dim) i = 0u; i < m_dim; ++i) {
-            retval.push_back({0, i});
+            retval.emplace_back(0, i);
         }
         // The part relative to the inequality constraints is sparse as each
         // constraint c_k depends on x_k, x_{k+1} and x_{k+2}
         for (decltype(m_dim) i = 0u; i < m_dim - 2u; ++i) {
-            retval.push_back({i + 1, i});
-            retval.push_back({i + 1, i + 1});
-            retval.push_back({i + 1, i + 2});
+            retval.emplace_back(i + 1, i);
+            retval.emplace_back(i + 1, i + 1);
+            retval.emplace_back(i + 1, i + 2);
         }
         return retval;
     }
     /// Problem name
     /**
-     * @return a string containing the problem name
+     * @return a string containing the problem name.
      */
     std::string get_name() const
     {
@@ -217,7 +216,7 @@ struct luksan_vlcek1 {
     {
         ar(m_dim);
     }
-    /// Problem dimensions
+    /// Problem dimensions.
     unsigned int m_dim;
 };
 
