@@ -45,10 +45,9 @@ class _temp_disable_sigint(object):
 
     def __enter__(self):
         import signal
-        # Store the previous sigint handler.
-        self._prev_signal = signal.getsignal(signal.SIGINT)
-        # Assign the new sig handler (i.e., ignore SIGINT).
-        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        # Store the previous sigint handler and assign the new sig handler
+        # (i.e., ignore SIGINT).
+        self._prev_signal = signal.signal(signal.SIGINT, signal.SIG_IGN)
 
     def __exit__(self, type, value, traceback):
         import signal
