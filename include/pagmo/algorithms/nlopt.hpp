@@ -428,7 +428,7 @@ struct nlopt_obj {
                                 // nonzero bits in grad. Run until sp.end() as the IC are at the
                                 // end of the sparsity/gradient vector.
                                 for (; it_sp != sp.end(); ++it_sp, ++g_it) {
-                                    grad[it_sp->second] = *g_it;
+                                    grad[(it_sp->first - 1u - p.get_nec()) * p.get_nx() + it_sp->second] = *g_it;
                                 }
                             } else {
                                 // Dense gradient.
@@ -532,7 +532,7 @@ struct nlopt_obj {
                                 // nonzero bits in grad. We terminate either at the end of sp, or when
                                 // we encounter the first inequality constraint.
                                 for (; it_sp != sp.end() && it_sp->first < p.get_nec() + 1u; ++it_sp, ++g_it) {
-                                    grad[it_sp->second] = *g_it;
+                                    grad[(it_sp->first - 1u) * p.get_nx() + it_sp->second] = *g_it;
                                 }
                             } else {
                                 // Dense gradient.
