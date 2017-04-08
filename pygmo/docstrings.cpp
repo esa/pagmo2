@@ -3954,7 +3954,9 @@ Raises:
 
 std::string nlopt_get_log_docstring()
 {
-    return R"(Optimisation log.
+    return R"(get_log()
+
+Optimisation log.
 
 The optimisation log is a collection of log data lines. A log data line is a tuple consisting of:
 
