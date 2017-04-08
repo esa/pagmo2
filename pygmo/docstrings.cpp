@@ -3621,7 +3621,7 @@ NLopt algorithms is:
 * shifted limited-memory variable-metric.
 
 The desired NLopt solver is selected upon construction of an :class:`~pygmo.core.nlopt` algorithm. Various properties
-of the solver (e.g., the stopping criteria) can be configured during construction or afterwards. Note that multiple
+of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
 is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.core.nlopt.xtol_rel`).
 

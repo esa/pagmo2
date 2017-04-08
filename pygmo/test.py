@@ -380,7 +380,7 @@ class nlopt_test_case(_ut.TestCase):
         from .core import nlopt, algorithm, luksan_vlcek1, problem, population
         n = nlopt()
         self.assertEqual(n.get_solver_name(), "cobyla")
-        n = nlopt("slsqp")
+        n = nlopt(solver = "slsqp")
         self.assertEqual(n.get_solver_name(), "slsqp")
         self.assertRaises(ValueError, lambda: nlopt("dsadsa"))
 

@@ -338,7 +338,7 @@ void expose_algorithms()
 #if defined(PAGMO_WITH_NLOPT)
     // NLopt.
     auto nlopt_ = expose_algorithm<nlopt>("nlopt", nlopt_docstring().c_str());
-    nlopt_.def(bp::init<const std::string &>());
+    nlopt_.def(bp::init<const std::string &>((bp::arg("solver"))));
     // Properties for the stopping criteria.
     nlopt_.add_property("stopval", &nlopt::get_stopval, &nlopt::set_stopval, nlopt_stopval_docstring().c_str());
     nlopt_.add_property("ftol_rel", &nlopt::get_ftol_rel, &nlopt::set_ftol_rel, nlopt_ftol_rel_docstring().c_str());
