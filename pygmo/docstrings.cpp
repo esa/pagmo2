@@ -228,14 +228,10 @@ std::string population_problem_docstring()
 {
     return R"(Population's problem.
 
-This property gives direct access to the :class:`~pygmo.core.problem` stored within the population.
+This read-only property gives direct access to the :class:`~pygmo.core.problem` stored within the population.
 
 Returns:
     :class:`~pygmo.core.problem`: a reference to the internal problem
-
-Raises:
-    unspecified: any exception thrown by failures at the intersection between C++ and
-      Python (e.g., type conversion errors, mismatched function signatures, etc.) when setting the property
 
 )";
 }
