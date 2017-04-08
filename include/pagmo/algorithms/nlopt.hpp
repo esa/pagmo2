@@ -341,9 +341,11 @@ struct nlopt_obj {
             },
             static_cast<void *>(this));
         if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the objective function for the NLopt algorithm '"
                                                    + data::names.right.at(algo) + "', the error is: "
                                                    + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
         }
 
         // Vector-valued constraints.
@@ -557,52 +559,66 @@ struct nlopt_obj {
         // Handle the various stopping criteria.
         res = ::nlopt_set_stopval(m_value.get(), stopval);
         if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the 'stopval' stopping criterion to "
                                                    + std::to_string(stopval) + " for the NLopt algorithm '"
                                                    + data::names.right.at(algo) + "', the error is: "
                                                    + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
         }
         res = ::nlopt_set_ftol_rel(m_value.get(), ftol_rel);
         if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the 'ftol_rel' stopping criterion to "
                                                    + std::to_string(ftol_rel) + " for the NLopt algorithm '"
                                                    + data::names.right.at(algo) + "', the error is: "
                                                    + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
         }
         res = ::nlopt_set_ftol_abs(m_value.get(), ftol_abs);
         if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the 'ftol_abs' stopping criterion to "
                                                    + std::to_string(ftol_abs) + " for the NLopt algorithm '"
                                                    + data::names.right.at(algo) + "', the error is: "
                                                    + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
         }
         res = ::nlopt_set_xtol_rel(m_value.get(), xtol_rel);
         if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the 'xtol_rel' stopping criterion to "
                                                    + std::to_string(xtol_rel) + " for the NLopt algorithm '"
                                                    + data::names.right.at(algo) + "', the error is: "
                                                    + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
         }
         res = ::nlopt_set_xtol_abs1(m_value.get(), xtol_abs);
         if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the 'xtol_abs' stopping criterion to "
                                                    + std::to_string(xtol_abs) + " for the NLopt algorithm '"
                                                    + data::names.right.at(algo) + "', the error is: "
                                                    + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
         }
         res = ::nlopt_set_maxeval(m_value.get(), maxeval);
         if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the 'maxeval' stopping criterion to "
                                                    + std::to_string(maxeval) + " for the NLopt algorithm '"
                                                    + data::names.right.at(algo) + "', the error is: "
                                                    + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
         }
         res = ::nlopt_set_maxtime(m_value.get(), maxtime);
         if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the 'maxtime' stopping criterion to "
                                                    + std::to_string(maxtime) + " for the NLopt algorithm '"
                                                    + data::names.right.at(algo) + "', the error is: "
                                                    + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
         }
     }
 
@@ -683,7 +699,7 @@ struct nlopt_obj {
  * in undefined behaviour.
  */
 // TODO:
-// - investiagate the use of a fitness cache, after we have good perf testing in place.
+// - investigate the use of a fitness cache, after we have good perf testing in place.
 class nlopt
 {
     using nlopt_obj = detail::nlopt_obj;
@@ -1019,9 +1035,9 @@ public:
         } else {
             const auto idx = boost::any_cast<population::size_type>(m_replace);
             if (idx >= pop.size()) {
-                pagmo_throw(std::out_of_range, "cannot replace the individual at index " + std::to_string(idx)
-                                                   + " after evolution: the population has a size of only "
-                                                   + std::to_string(pop.size()));
+                pagmo_throw(std::invalid_argument, "cannot replace the individual at index " + std::to_string(idx)
+                                                       + " after evolution: the population has a size of only "
+                                                       + std::to_string(pop.size()));
             }
             if (nc) {
                 pop.set_x(idx, initial_guess);

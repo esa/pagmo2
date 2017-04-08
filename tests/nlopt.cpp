@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/any.hpp>
 #include <cmath>
 #include <initializer_list>
+#include <limits>
 #include <nlopt.h>
 #include <stdexcept>
 #include <string>
@@ -42,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/luksan_vlcek1.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
@@ -196,11 +198,16 @@ BOOST_AUTO_TEST_CASE(nlopt_evolve)
             a.evolve(pop);
         }
     }
-    for (auto s : {0u, 2u, 15u}) {
-        for (auto r : {1u, 3u, 16u}) {
+    BOOST_CHECK(!a.extract<nlopt>()->get_log().empty());
+    for (auto s : {0u, 2u, 15u, 25u}) {
+        for (auto r : {1u, 3u, 16u, 25u}) {
             a.extract<nlopt>()->set_selection(s);
             a.extract<nlopt>()->set_replacement(r);
             pop = population(rosenbrock{10}, 20);
+            if (s >= 20u || r >= 20u) {
+                BOOST_CHECK_THROW(a.evolve(pop), std::invalid_argument);
+                continue;
+            }
             a.evolve(pop);
             pop = population{hs71{}, 20};
             pop.get_problem().set_c_tol({1E-6, 1E-6});
@@ -212,4 +219,47 @@ BOOST_AUTO_TEST_CASE(nlopt_evolve)
     }
     // Empty evolve.
     a.evolve(population{});
+    // Invalid initial guesses.
+    a = algorithm{nlopt{"slsqp"}};
+    pop = population{hs71{}, 1};
+    pop.set_x(0, {-123., -123., -123., -123.});
+    BOOST_CHECK_THROW(a.evolve(pop), std::invalid_argument);
+    pop.set_x(0, {123., 123., 123., 123.});
+    BOOST_CHECK_THROW(a.evolve(pop), std::invalid_argument);
+    if (std::numeric_limits<double>::has_quiet_NaN) {
+        pop.set_x(0, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(),
+                      std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()});
+        BOOST_CHECK_THROW(a.evolve(pop), std::invalid_argument);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(nlopt_set_sc)
+{
+    auto a = nlopt{"slsqp"};
+    a.set_stopval(-1.23);
+    BOOST_CHECK_EQUAL(a.get_stopval(), -1.23);
+    if (std::numeric_limits<double>::has_quiet_NaN) {
+        BOOST_CHECK_THROW(a.set_stopval(std::numeric_limits<double>::quiet_NaN()), std::invalid_argument);
+    }
+    a.set_ftol_rel(-1.23);
+    BOOST_CHECK_EQUAL(a.get_ftol_rel(), -1.23);
+    if (std::numeric_limits<double>::has_quiet_NaN) {
+        BOOST_CHECK_THROW(a.set_ftol_rel(std::numeric_limits<double>::quiet_NaN()), std::invalid_argument);
+    }
+    a.set_ftol_abs(-1.23);
+    BOOST_CHECK_EQUAL(a.get_ftol_abs(), -1.23);
+    if (std::numeric_limits<double>::has_quiet_NaN) {
+        BOOST_CHECK_THROW(a.set_ftol_abs(std::numeric_limits<double>::quiet_NaN()), std::invalid_argument);
+    }
+    a.set_xtol_rel(-1.23);
+    BOOST_CHECK_EQUAL(a.get_xtol_rel(), -1.23);
+    if (std::numeric_limits<double>::has_quiet_NaN) {
+        BOOST_CHECK_THROW(a.set_xtol_rel(std::numeric_limits<double>::quiet_NaN()), std::invalid_argument);
+    }
+    a.set_xtol_abs(-1.23);
+    BOOST_CHECK_EQUAL(a.get_xtol_abs(), -1.23);
+    if (std::numeric_limits<double>::has_quiet_NaN) {
+        BOOST_CHECK_THROW(a.set_xtol_abs(std::numeric_limits<double>::quiet_NaN()), std::invalid_argument);
+    }
+    a.set_maxtime(123);
 }
