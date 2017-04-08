@@ -60,6 +60,7 @@ Implemented problems
   problems/cec2009
   problems/cec2013
   problems/unconstrain
+  problems/luksan_vlcek1
 
 Implemented islands
 ^^^^^^^^^^^^^^^^^^^
