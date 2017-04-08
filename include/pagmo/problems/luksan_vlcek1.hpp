@@ -51,14 +51,15 @@ namespace pagmo
  * The problem is the Chained Rosenbrock function with trigonometric-exponential
  * constraints.
  *
- * Its formulation in pagmo can be written as:
+ * Its formulation can be written as:
  *
  * \f[
- * \begin{array}{rl}
- * \mbox{find:}      & -5 \le \mathbf{x}_i \le 5, \forall i=1..n\\
- * \mbox{to minimize: } & \sum_{i=1}^{n-1}\left[100\left(x_i^2-x_{i+1}\right)^2 + \left(x_i-1\right)^2\right]\\
- * \mbox{subject to:} & 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2})\sin(x_{k+1}+x_{k+2})
- * +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 = 0, \forall k=1..n-2 \\
+ *   \begin{array}{rl}
+ *   \mbox{find:} & -5 \le x_i \le 5, \forall i=1..n \\
+ *   \mbox{to minimize: } & \sum_{i=1}^{n-1}\left[100\left(x_i^2-x_{i+1}\right)^2 + \left(x_i-1\right)^2\right] \\
+ *   \mbox{subject to:} &
+ * 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2})\sin(x_{k+1}+x_{k+2}) + \\
+ * & +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 = 0, \forall k=1..n-2
  * \end{array}
  * \f]
  *
