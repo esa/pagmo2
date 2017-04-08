@@ -1090,8 +1090,7 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    1D NumPy float array: the best known solution for the )"
-           + name + R"( problem
+    1D NumPy float array: the best known solution for the )" + name + R"( problem
 
 )";
 }
@@ -2787,11 +2786,96 @@ Raises:
 Returns:
     ``tuple``: (*ndf*, *dl*, *dc*, *ndr*), where:
 
-    * *ndf* (``list`` of 1D NumPy float array): the non dominated fronts
-    * *dl* (``list`` of 1D NumPy float array): the domination list
+    * *ndf* (``list`` of 1D NumPy int array): the non dominated fronts
+    * *dl* (``list`` of 1D NumPy int array): the domination list
     * *dc* (1D NumPy int array): the domination count
     * *ndr* (1D NumPy int array): the non domination ranks
 
+)";
+}
+
+std::string pareto_dominance_docstring()
+{
+    return R"(pareto_dominance(obj1, obj2)
+
+Returns ``True`` if *obj1* Pareto dominates *obj2*, ``False`` otherwise. Minimization
+is assumed.
+
+Each pair of corresponding elements in  *obj1* and *obj2* is compared: if all
+elements in *obj1* are less or equal to the corresponding element in *obj2*,
+but at least one is different, ``True`` will be returned. Otherwise, ``False`` will be returned.
+
+Args:
+    obj1 (array like object): the first list of objectives
+    obj2 (array like object): the second list of objectives
+
+Raises:
+    ValueError: if the dimensions of *obj1* and *obj2* are different
+    TypeError: if *obj1* or *obj2* cannot be converted to a vector of vector floats
+
+Returns:
+    ``bool``: ``True`` if *obj1* is dominating *obj2*, ``False`` otherwise.
+
+Examples:
+    >>> import pygmo as pg
+    >>> pg.pareto_dominance(obj1 = [1,2], obj2 = [2,2])
+    True
+
+)";
+}
+
+std::string non_dominated_front_2d_docstring()
+{
+    return R"(non_dominated_front_2d(points)
+
+Finds the non dominated front of a set of two dimensional objectives. Complexity is :math:`O(N \log N)`
+and is thus lower than the complexity of calling :func:`~pygmo.core.fast_non_dominated_sorting`
+
+See: Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
+IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
+
+Args:
+    points (2d-array like object): the input points
+
+Raises:
+    ValueError: if *points* contain anything else than 2 dimensional objectives
+    TypeError: if *points* cannot be converted to a vector of vector floats
+
+Returns:
+    (``list`` of 1D NumPy int array): the non dominated fronts
+
+Examples:
+    >>> import pygmo as pg
+    >>> pg.non_dominated_front_2d(points = [[0,5],[1,4],[2,3],[3,2],[4,1],[2,2]])
+    array([0, 1, 5, 4], dtype=uint64)
+)";
+}
+
+std::string crowding_distance_docstring()
+{
+    return R"(non_dominated_front_2d(points)
+
+An implementation of the crowding distance. Complexity is :math:`O(M N \log N)` where :math:`M` is the number of
+objectives and \f$N\f$ is the number of individuals. The function assumes *points* contain a non-dominated front. 
+Failiure to meet this condition will result in undefined behaviour.
+
+See: Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm for multi-objective
+optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.
+
+Args:
+    points (2d-array like object): the input points
+
+Raises:
+    ValueError: if *points* does not contain at least two points, or is malformed
+    TypeError: if *points* cannot be converted to a vector of vector floats
+
+Returns:
+    (``list`` of 1D NumPy int array): the non dominated fronts
+
+Examples:
+    >>> import pygmo as pg
+    >>> pg.crowding_distance(points = [[0,5],[1,4],[2,3],[3,2],[4,1]])
+    array([ inf,   1.,   1.,   1.,  inf])
 )";
 }
 

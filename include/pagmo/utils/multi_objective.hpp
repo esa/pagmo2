@@ -106,9 +106,9 @@ inline void reksum(std::vector<std::vector<double>> &retval, const std::vector<p
 inline bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
 {
     if (obj1.size() != obj2.size()) {
-        pagmo_throw(std::invalid_argument, "Different number of objectives found in input fitnesses: "
-                                               + std::to_string(obj1.size()) + " and " + std::to_string(obj2.size())
-                                               + ". I cannot define dominance");
+        pagmo_throw(std::invalid_argument,
+                    "Different number of objectives found in input fitnesses: " + std::to_string(obj1.size()) + " and "
+                        + std::to_string(obj2.size()) + ". I cannot define dominance");
     }
     vector_double::size_type count1 = 0u;
     vector_double::size_type count2 = 0u;
@@ -292,7 +292,7 @@ inline fnds_return_type fast_non_dominated_sorting(const std::vector<vector_doub
  * @throws std::invalid_argument If \p non_dom_front does not contain at least two points
  * @throws std::invalid_argument If points in \p do not all have at least two objectives
  * @throws std::invalid_argument If points in \p non_dom_front do not all have the same dimensionality
-*/
+ */
 inline vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
 {
     auto N = non_dom_front.size();
@@ -564,16 +564,13 @@ inline vector_double nadir(const std::vector<vector_double> &points)
  * - "grid" generates weights on an uniform grid. This method may only be used when the number of requested weights to
  *be genrated is such that a uniform grid is indeed possible. In
  * two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases
- * - "random" generates weights randomly distributing them uniformly on the simplex (a weight is such that \f$\sum_i
- *\lambda_i = 1\f$)
- * - "low discrepancy" generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of
- *the Pareto front. Halton sequence is used since
- * low dimensionalities are expected in the number of objcetvices (i.e. less than 20), hence Halton sequence is deemes
- *as appropriate.
+ * - "random" generates weights randomly distributing them uniformly on the simplex (weights are such that \f$\sum_i
+ * \lambda_i = 1\f$) - "low discrepancy" generates weights using a low-discrepancy sequence to, eventually, obtain a
+ * better coverage of the Pareto front. Halton sequence is used since low dimensionalities are expected in the number of
+ * objectives (i.e. less than 20), hence Halton sequence is deemed as appropriate.
  *
  * **NOTE** All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All
- *weight generation methods
- * are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
+ * weight generation methods are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
  *
  * Example: to generate 10 weights distributed somehow regularly to decompose a three dimensional problem:
  * @code{.unparsed}

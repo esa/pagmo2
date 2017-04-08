@@ -581,14 +581,16 @@ BOOST_PYTHON_MODULE(core)
     // Exposition of various structured utilities
     // Hypervolume class
     bp::class_<hypervolume>("hypervolume", "Hypervolume Class")
-        .def("__init__", bp::make_constructor(lcast([](const bp::object &points) {
-                                                  auto vvd_points = pygmo::to_vvd(points);
-                                                  return ::new hypervolume(vvd_points, true);
-                                              }),
-                                              bp::default_call_policies(), (bp::arg("points"))),
+        .def("__init__",
+             bp::make_constructor(lcast([](const bp::object &points) {
+                                      auto vvd_points = pygmo::to_vvd(points);
+                                      return ::new hypervolume(vvd_points, true);
+                                  }),
+                                  bp::default_call_policies(), (bp::arg("points"))),
              pygmo::hv_init2_docstring().c_str())
-        .def("__init__", bp::make_constructor(lcast([](const population &pop) { return ::new hypervolume(pop, true); }),
-                                              bp::default_call_policies(), (bp::arg("pop"))),
+        .def("__init__",
+             bp::make_constructor(lcast([](const population &pop) { return ::new hypervolume(pop, true); }),
+                                  bp::default_call_policies(), (bp::arg("pop"))),
              pygmo::hv_init1_docstring().c_str())
         .def("compute",
              lcast([](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); }),
@@ -602,8 +604,9 @@ BOOST_PYTHON_MODULE(core)
                  return hv.exclusive(p_idx, pygmo::to_vd(r_point));
              }),
              (bp::arg("idx"), bp::arg("ref_point")))
-        .def("exclusive", lcast([](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
-                                   boost::shared_ptr<hv_algorithm> hv_algo) {
+        .def("exclusive",
+             lcast([](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
+                      boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo);
              }),
              pygmo::hv_exclusive_docstring().c_str(), (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
@@ -678,6 +681,26 @@ BOOST_PYTHON_MODULE(core)
                                       pygmo::v_to_a(std::get<3>(fnds)));
             }),
             pygmo::fast_non_dominated_sorting_docstring().c_str(), boost::python::arg("points"));
+    bp::def("pareto_dominance", lcast([](const bp::object &obj1, const bp::object &obj2) {
+                return pareto_dominance(pygmo::to_vd(obj1), pygmo::to_vd(obj2));
+            }),
+            pygmo::pareto_dominance_docstring().c_str(), (bp::arg("obj1"), bp::arg("obj2")));
+    bp::def("non_dominated_front_2d", lcast([](const bp::object &points) {
+                return pygmo::v_to_a(non_dominated_front_2d(pygmo::to_vvd(points)));
+            }),
+            pygmo::non_dominated_front_2d_docstring().c_str(), bp::arg("points"));
+    bp::def("crowding_distance", lcast([](const bp::object &points) {
+                return pygmo::v_to_a(crowding_distance(pygmo::to_vvd(points)));
+            }),
+            pygmo::crowding_distance_docstring().c_str(), bp::arg("ndf"));
+    bp::def("sort_population_mo", lcast([](const bp::object &input_f) {
+                return pygmo::v_to_a(sort_population_mo(pygmo::to_vvd(input_f)));
+            }),
+            pygmo::sort_population_mo_docstring().c_str(), bp::arg("points"));
+    bp::def("select_best_N_mo", lcast([](const bp::object &input_f) {
+                return pygmo::v_to_a(select_best_N_mo(pygmo::to_vvd(input_f)));
+            }),
+            pygmo::select_best_N_mo_docstring().c_str(), bp::arg("points"));
     bp::def("nadir", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); }),
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); }),

@@ -160,6 +160,9 @@ std::string hv3d_docstring();
 std::string bf_approx_docstring();
 std::string bf_fpras_docstring();
 // stand alone functions
+std::string pareto_dominance_docstring();
+std::string non_dominated_front_2d_docstring();
+std::string crowding_distance_docstring();
 std::string fast_non_dominated_sorting_docstring();
 std::string ideal_docstring();
 std::string nadir_docstring();
