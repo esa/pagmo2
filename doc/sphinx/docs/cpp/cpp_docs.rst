@@ -55,14 +55,13 @@ Implemented problems
   problems/dtlz
   problems/hock_schittkowsky_71
   problems/inventory
-  problems/luksan_vlcek1.rst
+  problems/luksan_vlcek1
   problems/translate
   problems/decompose
   problems/cec2006
   problems/cec2009
   problems/cec2013
   problems/unconstrain
-  problems/luksan_vlcek1
 
 Implemented islands
 ^^^^^^^^^^^^^^^^^^^
