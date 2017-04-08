@@ -1,4 +1,4 @@
-Luksan Vlceck 1
+Luksan Vlcek 1
 ===============
 
 .. doxygenstruct:: pagmo::luksan_vlcek1

@@ -122,12 +122,12 @@ struct luksan_vlcek1 {
         vector_double ub(m_dim, 5.);
         return {lb, ub};
     }
-    /// Inequality constraint dimension
+    /// Equality constraint dimension
     /**
      *
-     * It returns the number of inequality constraints.
+     * It returns the number of equality constraints.
      *
-     * @return the number of inequality constraints.
+     * @return the number of equality constraints.
      */
     vector_double::size_type get_nec() const
     {
