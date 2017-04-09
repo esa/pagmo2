@@ -26,6 +26,12 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#if defined(_MSC_VER)
+
+#define _SCL_SECURE_NO_WARNINGS
+
+#endif
+
 #define BOOST_TEST_MODULE archipelago_test
 #include <boost/test/included/unit_test.hpp>
 
