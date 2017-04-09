@@ -697,10 +697,10 @@ BOOST_PYTHON_MODULE(core)
                 return pygmo::v_to_a(sort_population_mo(pygmo::to_vvd(input_f)));
             }),
             pygmo::sort_population_mo_docstring().c_str(), bp::arg("points"));
-    bp::def("select_best_N_mo", lcast([](const bp::object &input_f) {
-                return pygmo::v_to_a(select_best_N_mo(pygmo::to_vvd(input_f)));
+    bp::def("select_best_N_mo", lcast([](const bp::object &input_f, unsigned N) {
+                return pygmo::v_to_a(select_best_N_mo(pygmo::to_vvd(input_f), N));
             }),
-            pygmo::select_best_N_mo_docstring().c_str(), bp::arg("points"));
+            pygmo::select_best_N_mo_docstring().c_str(), (bp::arg("points"), bp::arg("N")));
     bp::def("nadir", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); }),
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); }),

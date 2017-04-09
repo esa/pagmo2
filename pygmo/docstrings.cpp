@@ -2828,7 +2828,7 @@ std::string non_dominated_front_2d_docstring()
 {
     return R"(non_dominated_front_2d(points)
 
-Finds the non dominated front of a set of two dimensional objectives. Complexity is :math:`O(N \log N)`
+Finds the non dominated front of a set of two dimensional objectives. Complexity is :math:`\mathcal{O}(N \log N)`
 and is thus lower than the complexity of calling :func:`~pygmo.core.fast_non_dominated_sorting`
 
 See: Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
@@ -2876,6 +2876,73 @@ Examples:
     >>> import pygmo as pg
     >>> pg.crowding_distance(points = [[0,5],[1,4],[2,3],[3,2],[4,1]])
     array([ inf,   1.,   1.,   1.,  inf])
+)";
+}
+
+std::string sort_population_mo_docstring()
+{
+    return R"(sort_population_mo(input_f)
+
+Sorts a multi-objective, unconstrained,  population (intended here as a 2D array-like
+containing objective vectors) with respect to the following strict ordering:
+
+- :math:`f_1 \prec f_2` if the non domination ranks are such that :math:`i_1 < i_2`. In case :math:`i_1 = i_2`,
+   then :math:`f_1 \prec f_2` if the crowding distances are such that :math:`d_1 > d_2`.
+
+Complexity is :math:`\mathcal{O}(M N^2)` where :math:`M` is the size of the objective vector and :math:`N` is the number of individuals.
+
+.. note::
+   This function will also work for single objective optimization, i.e. with objective vector
+   of size 1, in which case, though, it is more efficient to sort using python built-in sorting methods.
+
+Args:
+    input_f (2d-array like object): the input objective vectors
+
+Raises:
+    unspecified: all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
+    TypeError: if *input_f* cannot be converted to a vector of vector floats
+
+Returns:
+    (``list`` of 1D NumPy int array): the indexes of the sorted objectives vectors.
+
+Examples:
+    >>> import pygmo as pg
+    >>> pop = pg.population(prob = pg.dtlz(prob_id = 3, dim=10, fdim=4), size = 20)
+    >>> pg.sort_population_mo(input_f = pop.get_f()) # doctest: +SKIP
+    array([ 4,  7, 14, 15, 16, 18,  9, 13,  5,  3,  6,  2, 12,  0,  1, 19, 17, 8, 10, 11], dtype=uint64)
+)";
+}
+
+std::string select_best_N_mo_docstring()
+{
+    return R"(select_best_N_mo(input_f, N)
+
+Returns (unordered) the best N individuals out of a multi-objective, unconstrained population, (intended here
+as a 2D array-like containing objective vectors). The strict ordering used is the same as that defined
+in :func:`~pygmo.core.sort_population_mo`
+
+Complexity is :math:`\mathcal{O}(M N^2)` where :math:`M` is the number of objectives and :math:`N` is the number of individuals.
+
+While the complexity is the same as that of :func:`~pygmo.core.sort_population_mo`, this function is to be preferred when 
+possible in that it avoids to compute the crowidng distance for all individuals and only computes it for the last
+non-dominated front containing individuals included in the best N.
+
+Args:
+    input_f (2d-array like object): the input objective vectors
+    N (``int``): The size of the returned list of bests.
+
+Raises:
+    unspecified: all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
+    TypeError: if *input_f* cannot be converted to a vector of vector floats
+
+Returns:
+    (``list`` of 1D NumPy int array): the indexes of the *N* best objectives vectors.
+
+Examples:
+    >>> import pygmo as pg
+    >>> pop = pg.population(prob = pg.dtlz(prob_id = 3, dim=10, fdim=4), size = 20)
+    >>> pg.select_best_N_mo(input_f = pop.get_f(), N = 13) # doctest: +SKIP
+    array([ 2,  3,  4,  5,  6,  7,  9, 12, 13, 14, 15, 16, 18], dtype=uint64)
 )";
 }
 
