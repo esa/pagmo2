@@ -166,6 +166,8 @@ std::string crowding_distance_docstring();
 std::string fast_non_dominated_sorting_docstring();
 std::string sort_population_mo_docstring();
 std::string select_best_N_mo_docstring();
+std::string decomposition_weights_docstring();
+std::string decompose_objectives_docstring();
 std::string ideal_docstring();
 std::string nadir_docstring();
 std::string estimate_sparsity_docstring();

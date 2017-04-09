@@ -76,6 +76,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/rng.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
@@ -689,18 +690,33 @@ BOOST_PYTHON_MODULE(core)
                 return pygmo::v_to_a(non_dominated_front_2d(pygmo::to_vvd(points)));
             }),
             pygmo::non_dominated_front_2d_docstring().c_str(), bp::arg("points"));
-    bp::def("crowding_distance", lcast([](const bp::object &points) {
-                return pygmo::v_to_a(crowding_distance(pygmo::to_vvd(points)));
-            }),
+    bp::def("crowding_distance",
+            lcast([](const bp::object &points) { return pygmo::v_to_a(crowding_distance(pygmo::to_vvd(points))); }),
             pygmo::crowding_distance_docstring().c_str(), bp::arg("ndf"));
-    bp::def("sort_population_mo", lcast([](const bp::object &input_f) {
-                return pygmo::v_to_a(sort_population_mo(pygmo::to_vvd(input_f)));
-            }),
+    bp::def("sort_population_mo",
+            lcast([](const bp::object &input_f) { return pygmo::v_to_a(sort_population_mo(pygmo::to_vvd(input_f))); }),
             pygmo::sort_population_mo_docstring().c_str(), bp::arg("points"));
     bp::def("select_best_N_mo", lcast([](const bp::object &input_f, unsigned N) {
                 return pygmo::v_to_a(select_best_N_mo(pygmo::to_vvd(input_f), N));
             }),
             pygmo::select_best_N_mo_docstring().c_str(), (bp::arg("points"), bp::arg("N")));
+    bp::def("decomposition_weights",
+            lcast([](vector_double::size_type n_f, vector_double::size_type n_w, const std::string &weight_generation,
+                     unsigned seed) {
+                using reng_t = pagmo::detail::random_engine_type;
+                reng_t tmp_rng(static_cast<reng_t::result_type>(seed));
+                return pygmo::vv_to_a(decomposition_weights(n_f, n_w, weight_generation, tmp_rng));
+            }),
+            pygmo::decomposition_weights_docstring().c_str(),
+            (bp::arg("n_f"), bp::arg("n_w"), bp::arg("weight_generation"), bp::arg("seed")));
+    bp::def("decompose_objectives",
+            lcast([](const bp::object &objs, const bp::object &weights, const bp::object &ref_point,
+                     const std::string &method) {
+                return pygmo::v_to_a(
+                    decompose_objectives(pygmo::to_vd(objs), pygmo::to_vd(weights), pygmo::to_vd(ref_point), method));
+            }),
+            pygmo::decompose_objectives_docstring().c_str(),
+            (bp::arg("objs"), bp::arg("weight"), bp::arg("ref_point"), bp::arg("method")));
     bp::def("nadir", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); }),
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); }),
