@@ -45,10 +45,9 @@ class _temp_disable_sigint(object):
 
     def __enter__(self):
         import signal
-        # Store the previous sigint handler.
-        self._prev_signal = signal.getsignal(signal.SIGINT)
-        # Assign the new sig handler (i.e., ignore SIGINT).
-        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        # Store the previous sigint handler and assign the new sig handler
+        # (i.e., ignore SIGINT).
+        self._prev_signal = signal.signal(signal.SIGINT, signal.SIG_IGN)
 
     def __exit__(self, type, value, traceback):
         import signal
@@ -123,6 +122,9 @@ class mp_island(object):
             # we need to make sure we are not trying to touch
             # the pool while we are sending tasks to it.
             res = mp_island._pool.apply_async(_evolve_func, (algo, pop))
+        # NOTE: there might be a bug in need of a workaround lurking in here:
+        # http://stackoverflow.com/questions/11312525/catch-ctrlc-sigint-and-exit-multiprocesses-gracefully-in-python
+        # Just keep it in mind.
         return res.get()
 
     def get_name(self):

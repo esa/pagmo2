@@ -57,6 +57,8 @@ see https://www.gnu.org/licenses/. */
 #pragma GCC diagnostic pop
 #endif
 
+#include <pagmo/config.hpp>
+
 #include <cstddef>
 #include <random>
 #include <sstream>

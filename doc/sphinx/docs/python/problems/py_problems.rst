@@ -71,6 +71,11 @@ Problems exposed from C++
 
 -------------------------------------------------------------
 
+.. autoclass:: pygmo.core.luksan_vlcek1
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.core.translate
    :members:
 

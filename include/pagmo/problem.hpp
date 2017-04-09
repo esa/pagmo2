@@ -1864,7 +1864,7 @@ public:
         os << "\tEquality constraints dimension:\t\t" << p.get_nec() << '\n';
         os << "\tInequality constraints dimension:\t" << p.get_nic() << '\n';
         if (p.get_nec() + p.get_nic() > 0u) {
-            stream(os, "\tTolerances on constraints:\t", p.get_c_tol(), '\n');
+            stream(os, "\tTolerances on constraints: ", p.get_c_tol(), '\n');
         }
         os << "\tLower bounds: ";
         stream(os, p.get_bounds().first, '\n');
