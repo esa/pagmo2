@@ -170,6 +170,7 @@
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#W"><strong>W</strong></a>
+ | <a href="#X"><strong>X</strong></a>
  | <a href="#Z"><strong>Z</strong></a>
  
 </div>
@@ -304,11 +305,15 @@
 </li>
       <li><a href="docs/python/py_problem.html#pygmo.core.problem.feasibility_f">feasibility_f() (pygmo.core.problem method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_problem.html#pygmo.core.problem.feasibility_x">feasibility_x() (pygmo.core.problem method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_problem.html#pygmo.core.problem.fitness">fitness() (pygmo.core.problem method)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.ftol_abs">ftol_abs (pygmo.core.nlopt attribute)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.ftol_rel">ftol_rel (pygmo.core.nlopt attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -348,6 +353,8 @@
 </li>
       <li><a href="docs/python/py_population.html#pygmo.core.population.get_ID">get_ID() (pygmo.core.population method)</a>
 </li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.get_last_opt_result">get_last_opt_result() (pygmo.core.nlopt method)</a>
+</li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.bee_colony.get_log">get_log() (pygmo.core.bee_colony method)</a>
 
       <ul>
@@ -364,6 +371,8 @@
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh.get_log">(pygmo.core.mbh method)</a>
 </li>
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.moead.get_log">(pygmo.core.moead method)</a>
+</li>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.get_log">(pygmo.core.nlopt method)</a>
 </li>
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nsga2.get_log">(pygmo.core.nsga2 method)</a>
 </li>
@@ -432,6 +441,8 @@
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.simulated_annealing.get_seed">(pygmo.core.simulated_annealing method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.get_solver_name">get_solver_name() (pygmo.core.nlopt method)</a>
+</li>
       <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.get_thread_safety">get_thread_safety() (pygmo.core.algorithm method)</a>
 
       <ul>
@@ -543,15 +554,23 @@
       <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hypervolume.least_contributor">least_contributor() (pygmo.core.hypervolume method)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.core.luksan_vlcek1">luksan_vlcek1 (class in pygmo.core)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh">mbh (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.maxeval">maxeval (pygmo.core.nlopt attribute)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.maxtime">maxtime (pygmo.core.nlopt attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh">mbh (class in pygmo.core)</a>
+</li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.moead">moead (class in pygmo.core)</a>
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.mp_island">mp_island (class in pygmo.py_islands)</a>
@@ -563,6 +582,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/utils/py_mo_utils.html#pygmo.core.nadir">nadir() (in module pygmo.core)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt">nlopt (class in pygmo.core)</a>
 </li>
       <li><a href="docs/python/py_misc.html#pygmo.thread_safety.none">none (pygmo.thread_safety attribute)</a>
 </li>
@@ -1174,8 +1195,6 @@
 </li>
       <li><a href="docs/cpp/island.html#_CPPv2N5pagmo6island4waitEv">pagmo::island::wait (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/island.html#_CPPv2N5pagmo6islandD0Ev">pagmo::island::~island (C++ function)</a>
 </li>
       <li><a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE">pagmo::kNN (C++ function)</a>
@@ -1208,6 +1227,8 @@
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbh19get_inner_algorithmEv">pagmo::mbh::get_inner_algorithm (C++ function)</a>, <a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh19get_inner_algorithmEv">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh7get_logEv">pagmo::mbh::get_log (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh8get_nameEv">pagmo::mbh::get_name (C++ function)</a>
@@ -1263,6 +1284,66 @@
       <li><a href="docs/cpp/algorithms/moead.html#_CPPv2N5pagmo5moead13set_verbosityEj">pagmo::moead::set_verbosity (C++ function)</a>
 </li>
       <li><a href="docs/cpp/utils/multi_objective.html#_CPPv2N5pagmo5nadirERKNSt6vectorI13vector_doubleEE">pagmo::nadir (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nloptE">pagmo::nlopt (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt6evolveE10population">pagmo::nlopt::evolve (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt14get_extra_infoEv">pagmo::nlopt::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt12get_ftol_absEv">pagmo::nlopt::get_ftol_abs (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt12get_ftol_relEv">pagmo::nlopt::get_ftol_rel (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt19get_last_opt_resultEv">pagmo::nlopt::get_last_opt_result (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt7get_logEv">pagmo::nlopt::get_log (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt11get_maxevalEv">pagmo::nlopt::get_maxeval (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt11get_maxtimeEv">pagmo::nlopt::get_maxtime (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt8get_nameEv">pagmo::nlopt::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt15get_replacementEv">pagmo::nlopt::get_replacement (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt13get_selectionEv">pagmo::nlopt::get_selection (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt15get_solver_nameEv">pagmo::nlopt::get_solver_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt11get_stopvalEv">pagmo::nlopt::get_stopval (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt12get_xtol_absEv">pagmo::nlopt::get_xtol_abs (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt12get_xtol_relEv">pagmo::nlopt::get_xtol_rel (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt13log_line_typeE">pagmo::nlopt::log_line_type (C++ type)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt8log_typeE">pagmo::nlopt::log_type (C++ type)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt5nloptERKNSt6stringE">pagmo::nlopt::nlopt (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt5nloptEv">[1]</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt12set_ftol_absEd">pagmo::nlopt::set_ftol_abs (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt12set_ftol_relEd">pagmo::nlopt::set_ftol_rel (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt11set_maxevalEi">pagmo::nlopt::set_maxeval (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt11set_maxtimeEi">pagmo::nlopt::set_maxtime (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt18set_random_sr_seedEj">pagmo::nlopt::set_random_sr_seed (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt15set_replacementEN10population9size_typeE">pagmo::nlopt::set_replacement (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt15set_replacementERKNSt6stringE">[1]</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt13set_selectionEN10population9size_typeE">pagmo::nlopt::set_selection (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt13set_selectionERKNSt6stringE">[1]</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt11set_stopvalEd">pagmo::nlopt::set_stopval (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt13set_verbosityEj">pagmo::nlopt::set_verbosity (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt12set_xtol_absEd">pagmo::nlopt::set_xtol_abs (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt12set_xtol_relEd">pagmo::nlopt::set_xtol_rel (C++ function)</a>
 </li>
       <li><a href="docs/cpp/utils/multi_objective.html#_CPPv2N5pagmo22non_dominated_front_2dERKNSt6vectorI13vector_doubleEE">pagmo::non_dominated_front_2d (C++ function)</a>
 </li>
@@ -1522,9 +1603,11 @@
 </li>
       <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv2NK5pagmo10rosenbrock8get_nameEv">pagmo::rosenbrock::get_name (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv2NK5pagmo10rosenbrock8gradientERK13vector_double">pagmo::rosenbrock::gradient (C++ function)</a>
+</li>
       <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv2N5pagmo10rosenbrock5m_dimE">pagmo::rosenbrock::m_dim (C++ member)</a>
 </li>
-      <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv2N5pagmo10rosenbrock10rosenbrockEj">pagmo::rosenbrock::rosenbrock (C++ function)</a>
+      <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv2N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE">pagmo::rosenbrock::rosenbrock (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv2N5pagmo10rosenbrock9serializeER7Archive">pagmo::rosenbrock::serialize (C++ function)</a>
 </li>
@@ -1774,6 +1857,8 @@
 </li>
       <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hypervolume.refpoint">refpoint() (pygmo.core.hypervolume method)</a>
 </li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.replacement">replacement (pygmo.core.nlopt attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.mp_island.resize_pool">resize_pool() (pygmo.py_islands.mp_island static method)</a>
@@ -1798,6 +1883,8 @@
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.sea">sea (class in pygmo.core)</a>
 </li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.selection">selection (pygmo.core.nlopt attribute)</a>
+</li>
       <li><a href="docs/python/py_island.html#pygmo.core.island.set_algorithm">set_algorithm() (pygmo.core.island method)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh.set_perturb">set_perturb() (pygmo.core.mbh method)</a>
@@ -1806,6 +1893,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.set_random_sr_seed">set_random_sr_seed() (pygmo.core.nlopt method)</a>
+</li>
       <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.set_seed">set_seed() (pygmo.core.algorithm method)</a>
 
       <ul>
@@ -1819,6 +1908,8 @@
       <li><a href="docs/python/py_population.html#pygmo.core.population.set_xf">set_xf() (pygmo.core.population method)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.simulated_annealing">simulated_annealing (class in pygmo.core)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.stopval">stopval (pygmo.core.nlopt attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1859,6 +1950,18 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_population.html#pygmo.core.population.worst_idx">worst_idx() (pygmo.core.population method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.xtol_abs">xtol_abs (pygmo.core.nlopt attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.xtol_rel">xtol_rel (pygmo.core.nlopt attribute)</a>
 </li>
   </ul></td>
 </tr></table>

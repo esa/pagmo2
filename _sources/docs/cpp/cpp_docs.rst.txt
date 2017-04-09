@@ -32,6 +32,7 @@ Implemented algorithms
   algorithms/moead
   algorithms/mbh
   algorithms/cstrs_self_adaptive
+  algorithms/nlopt
   algorithms/nsga2
   algorithms/pso
   algorithms/sade
@@ -54,13 +55,13 @@ Implemented problems
   problems/dtlz
   problems/hock_schittkowsky_71
   problems/inventory
+  problems/luksan_vlcek1
   problems/translate
   problems/decompose
   problems/cec2006
   problems/cec2009
   problems/cec2013
   problems/unconstrain
-  problems/luksan_vlcek1
 
 Implemented islands
 ^^^^^^^^^^^^^^^^^^^

@@ -124,8 +124,8 @@
 <li><a class="reference internal" href="#">Installation guide</a><ul>
 <li><a class="reference internal" href="#c">C++</a></li>
 <li><a class="reference internal" href="#python">Python</a><ul>
-<li><a class="reference internal" href="#installing-with-pip">Installing with pip</a></li>
-<li><a class="reference internal" href="#building-the-module">Building the module</a></li>
+<li><a class="reference internal" href="#installation-with-pip-conda">Installation with pip/conda</a></li>
+<li><a class="reference internal" href="#installation-from-source">Installation from source</a></li>
 </ul>
 </li>
 </ul>
@@ -167,8 +167,8 @@
 <li><a class="reference internal" href="#installation-guide" id="id1">Installation guide</a><ul>
 <li><a class="reference internal" href="#c" id="id2">C++</a></li>
 <li><a class="reference internal" href="#python" id="id3">Python</a><ul>
-<li><a class="reference internal" href="#installing-with-pip" id="id4">Installing with pip</a></li>
-<li><a class="reference internal" href="#building-the-module" id="id5">Building the module</a></li>
+<li><a class="reference internal" href="#installation-with-pip-conda" id="id4">Installation with pip/conda</a></li>
+<li><a class="reference internal" href="#installation-from-source" id="id5">Installation from source</a></li>
 </ul>
 </li>
 </ul>
@@ -179,10 +179,12 @@
 <h2><a class="toc-backref" href="#id2">C++</a><a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
 <p>Pagmo is a header-only library which has the following third party dependencies:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://www.boost.org/">Boost</a>, headers only (needs the libraries only if you intend to compile the python bindings)</li>
-<li><a class="reference external" href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a>, headers only (optional)</li>
+<li><a class="reference external" href="http://www.boost.org/">Boost</a>, <strong>mandatory</strong>, header-only (needs the libraries only if you
+intend to compile the python bindings)</li>
+<li><a class="reference external" href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a>, optional, header-only</li>
+<li><a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a>, optional, requires linking</li>
 </ul>
-<p>After making sure the dependencies above are installed in your system and their headers visible to your compiler, you can download
+<p>After making sure the dependencies above are installed in your system, you can download the
 pagmo source via the <code class="docutils literal"><span class="pre">git</span></code> command</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/esa/pagmo2.git
 </pre></div>
@@ -191,7 +193,7 @@ pagmo source via the <code class="docutils literal"><span class="pre">git</span>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>make install
 </pre></div>
 </div>
-<p>The headers will be installed in the <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX/include</span> <span class="pre">directory</span></code>. To check that all went well
+<p>The headers will be installed in the <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX/include</span></code> directory. To check that all went well
 compile the <a class="reference internal" href="quickstart.html#getting-started-c"><span class="std std-ref">quick-start example</span></a>.</p>
 </div>
 <hr class="docutils" />
@@ -199,8 +201,8 @@ compile the <a class="reference internal" href="quickstart.html#getting-started-
 <h2><a class="toc-backref" href="#id3">Python</a><a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
 <p>The python module correponding to pagmo is called pygmo
 It can be installed either directly from <code class="docutils literal"><span class="pre">conda</span></code> or <code class="docutils literal"><span class="pre">pip</span></code> or by building the module from source.</p>
-<div class="section" id="installing-with-pip">
-<h3><a class="toc-backref" href="#id4">Installing with pip</a><a class="headerlink" href="#installing-with-pip" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="installation-with-pip-conda">
+<h3><a class="toc-backref" href="#id4">Installation with pip/conda</a><a class="headerlink" href="#installation-with-pip-conda" title="Permalink to this headline">¶</a></h3>
 <p>The python package pygmo (python binding of the C++ code) can be installed using <code class="docutils literal"><span class="pre">pip</span></code> or <code class="docutils literal"><span class="pre">conda</span></code>:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>pip install pygmo
 </pre></div>
@@ -211,11 +213,12 @@ conda install pygmo
 </pre></div>
 </div>
 </div>
-<div class="section" id="building-the-module">
-<h3><a class="toc-backref" href="#id5">Building the module</a><a class="headerlink" href="#building-the-module" title="Permalink to this headline">¶</a></h3>
-<p>To build the module you need to have the boost python libraries installed and to activate the <code class="docutils literal"><span class="pre">BUILD_PYGMO</span></code> option from within <code class="docutils literal"><span class="pre">cmake</span></code>.</p>
-<p>Check carefully what python version is detected and what libraries are linked to. In particular select the correct boost_python
-according to the python version (2 or 3) you want to compile the module for.</p>
+<div class="section" id="installation-from-source">
+<h3><a class="toc-backref" href="#id5">Installation from source</a><a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h3>
+<p>To build the module from source you need to have the Boost.Python libraries installed and to activate the cmake
+<code class="docutils literal"><span class="pre">PAGMO_BUILD_PYGMO</span></code> option.</p>
+<p>Check carefully what python version is detected and what libraries are linked to. In particular, select the correct Boost.Python
+version according to the python version (2 or 3) you want to compile the module for.</p>
 <p>The <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> will be used to construct the final location of headers and Python module after install.</p>
 <p>When done, type (in your build directory):</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>make install

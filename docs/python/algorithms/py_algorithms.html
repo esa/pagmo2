@@ -1453,7 +1453,7 @@ with an <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.m
 <dt id="pygmo.core.mbh.inner_algorithm">
 <code class="descname">inner_algorithm</code><a class="headerlink" href="#pygmo.core.mbh.inner_algorithm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner algorithm of the meta-algorithm</p>
-<p>This property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1523,7 +1523,7 @@ objective function. Using the above definitions the overall pseudo code can be s
 <p><a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.cstrs_self_adaptive</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a> objects.</p>
 <p><strong>NOTE</strong> Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
-The number of function evaluation will be bounded to p iters times the fevals made by one call to the inner UDA. The
+The number of function evaluation will be bounded to <em>iters</em> times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.</p>
 <p><strong>NOTE</strong> Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
@@ -1609,7 +1609,7 @@ with an <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" tit
 <dt id="pygmo.core.cstrs_self_adaptive.inner_algorithm">
 <code class="descname">inner_algorithm</code><a class="headerlink" href="#pygmo.core.cstrs_self_adaptive.inner_algorithm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner algorithm of the meta-algorithm</p>
-<p>This property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1617,6 +1617,541 @@ with an <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" tit
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the inner algorithm</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.core.nlopt">
+<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">nlopt</code><span class="sig-paren">(</span><em>solver = &quot;cobyla&quot;</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>NLopt algorithms.</p>
+<p>This user-defined algorithm wraps a selection of solvers from the
+<a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> library, focusing on
+local optimisation (both gradient-based and derivative-free). The complete list of supported
+NLopt algorithms is:</p>
+<ul class="simple">
+<li>COBYLA,</li>
+<li>BOBYQA,</li>
+<li>NEWUOA + bound constraints,</li>
+<li>PRAXIS,</li>
+<li>Nelder-Mead simplex,</li>
+<li>sbplx,</li>
+<li>MMA (Method of Moving Asymptotes),</li>
+<li>CCSA,</li>
+<li>SLSQP,</li>
+<li>low-storage BFGS,</li>
+<li>preconditioned truncated Newton,</li>
+<li>shifted limited-memory variable-metric.</li>
+</ul>
+<p>The desired NLopt solver is selected upon construction of an <a class="reference internal" href="#pygmo.core.nlopt" title="pygmo.core.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> algorithm. Various properties
+of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
+stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
+is satisfied. By default, only the <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion is active (see <a class="reference internal" href="#pygmo.core.nlopt.xtol_rel" title="pygmo.core.nlopt.xtol_rel"><code class="xref py py-attr docutils literal"><span class="pre">xtol_rel</span></code></a>).</p>
+<p>All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
+is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
+Some solvers support equality and/or inequality constaints.</p>
+<p>In order to support pagmo&#8217;s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
+a single individual from the input <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> to be optimised by the NLopt solver.
+The optimised individual will then be inserted back into the population at the end of the optimisation.
+The selection and replacement strategies can be configured via the <a class="reference internal" href="#pygmo.core.nlopt.selection" title="pygmo.core.nlopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a>
+and <a class="reference internal" href="#pygmo.core.nlopt.replacement" title="pygmo.core.nlopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a> attributes.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal"><span class="pre">PAGMO_WITH_NLOPT</span></code> option
+enabled (see the <a class="reference internal" href="../../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">The <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms">NLopt website</a> contains a detailed description
+of each supported solver.</p>
+</div>
+<p>This constructor will initialise an <a class="reference internal" href="#pygmo.core.nlopt" title="pygmo.core.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> object which will use the NLopt algorithm specified by
+the input string <em>solver</em>, the <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> individual selection strategy and the <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> individual
+replacement strategy. <em>solver</em> is translated to an NLopt algorithm type according to the following
+translation table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><em>solver</em> string</th>
+<th class="head">NLopt algorithm</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;cobyla&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LN_COBYLA</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;bobyqa&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LN_BOBYQA</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;newuoa&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LN_NEWUOA</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;newuoa_bound&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LN_NEWUOA_BOUND</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;praxis&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LN_PRAXIS</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;neldermead&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LN_NELDERMEAD</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;sbplx&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LN_SBPLX</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;mma&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_MMA</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;ccsaq&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_CCSAQ</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;slsqp&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_SLSQP</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;lbfgs&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_LBFGS</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;tnewton_precond_restart&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_TNEWTON_PRECOND_RESTART</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;tnewton_precond&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_TNEWTON_PRECOND</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;tnewton_restart&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_TNEWTON_RESTART</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;tnewton&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_TNEWTON</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;var2&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_VAR2</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;var1&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_LD_VAR1</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>The parameters of the selected solver can be configured via the attributes of this class.</p>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nlopt</span></code></a>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">The <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms">NLopt website</a> contains a detailed
+description of each supported solver.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>solver</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the NLopt algorithm that will be used by this <a class="reference internal" href="#pygmo.core.nlopt" title="pygmo.core.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> object</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code> &#8211; if the NLopt version is not at least 2</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>solver</em> is not one of the allowed algorithm names</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span> <span class="o">=</span> <span class="n">nlopt</span><span class="p">(</span><span class="s1">&#39;slsqp&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span><span class="o">.</span><span class="n">xtol_rel</span> <span class="o">=</span> <span class="mf">1E-6</span> <span class="c1"># Change the default value of the xtol_rel stopping criterion</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span><span class="o">.</span><span class="n">xtol_rel</span> 
+<span class="go">1E-6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-6</span><span class="p">]</span> <span class="o">*</span> <span class="mi">18</span> <span class="c1"># Set constraints tolerance to 1E-6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">   fevals:       fitness:      violated:    viol. norm:</span>
+<span class="go">         1        95959.4             18        538.227 i</span>
+<span class="go">         2        89282.7             18        5177.42 i</span>
+<span class="go">         3          75580             18        464.206 i</span>
+<span class="go">         4          75580             18        464.206 i</span>
+<span class="go">         5        77737.6             18        1095.94 i</span>
+<span class="go">         6          41162             18        350.446 i</span>
+<span class="go">         7          41162             18        350.446 i</span>
+<span class="go">         8          67881             18        362.454 i</span>
+<span class="go">         9        30502.2             18        249.762 i</span>
+<span class="go">        10        30502.2             18        249.762 i</span>
+<span class="go">        11        7266.73             18        95.5946 i</span>
+<span class="go">        12         4510.3             18        42.2385 i</span>
+<span class="go">        13        2400.66             18        35.2507 i</span>
+<span class="go">        14        34051.9             18        749.355 i</span>
+<span class="go">        15        1657.41             18        32.1575 i</span>
+<span class="go">        16        1657.41             18        32.1575 i</span>
+<span class="go">        17        1564.44             18        12.5042 i</span>
+<span class="go">        18        275.987             14        6.22676 i</span>
+<span class="go">        19        232.765             12         12.442 i</span>
+<span class="go">        20        161.892             15        4.00744 i</span>
+<span class="go">        21        161.892             15        4.00744 i</span>
+<span class="go">        22        17.6821             11        1.78909 i</span>
+<span class="go">        23        7.71103              5       0.130386 i</span>
+<span class="go">        24        6.24758              4     0.00736759 i</span>
+<span class="go">        25        6.23325              1    5.12547e-05 i</span>
+<span class="go">        26         6.2325              0              0</span>
+<span class="go">        27        6.23246              0              0</span>
+<span class="go">        28        6.23246              0              0</span>
+<span class="go">        29        6.23246              0              0</span>
+<span class="go">        30        6.23246              0              0</span>
+
+<span class="go">Optimisation return status: NLOPT_XTOL_REACHED (value = 4, Optimization stopped because xtol_rel or xtol_abs was reached)</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="pygmo.core.nlopt.ftol_abs">
+<code class="descname">ftol_abs</code><a class="headerlink" href="#pygmo.core.nlopt.ftol_abs" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">ftol_abs</span></code> stopping criterion.</p>
+<p>The <code class="docutils literal"><span class="pre">ftol_abs</span></code> stopping criterion instructs the solver to stop when an optimization step
+(or an estimate of the optimum) changes the function value by less than <code class="docutils literal"><span class="pre">ftol_abs</span></code>.
+Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the value of the <code class="docutils literal"><span class="pre">ftol_abs</span></code> stopping criterion</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">float</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.nlopt.ftol_rel">
+<code class="descname">ftol_rel</code><a class="headerlink" href="#pygmo.core.nlopt.ftol_rel" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">ftol_rel</span></code> stopping criterion.</p>
+<p>The <code class="docutils literal"><span class="pre">ftol_rel</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
+optimum) changes the objective function value by less than <code class="docutils literal"><span class="pre">ftol_rel</span></code> multiplied by the absolute value of the
+function value. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the value of the <code class="docutils literal"><span class="pre">ftol_rel</span></code> stopping criterion</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">float</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.nlopt.get_last_opt_result">
+<code class="descname">get_last_opt_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt.get_last_opt_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the result of the last optimisation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the NLopt return code for the last optimisation run, or <code class="docutils literal"><span class="pre">NLOPT_SUCCESS</span></code> if no optimisations have been run yet</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.nlopt.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimisation log.</p>
+<p>The optimisation log is a collection of log data lines. A log data line is a tuple consisting of:</p>
+<ul class="simple">
+<li>the number of objective function evaluations made so far,</li>
+<li>the objective function value for the current decision vector,</li>
+<li>the number of constraints violated by the current decision vector,</li>
+<li>the constraints violation norm for the current decision vector,</li>
+<li>a boolean flag signalling the feasibility of the current decision vector.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the optimisation log</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.nlopt.get_solver_name">
+<code class="descname">get_solver_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt.get_solver_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the NLopt solver used during construction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the name of the NLopt solver used during construction</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.nlopt.maxeval">
+<code class="descname">maxeval</code><a class="headerlink" href="#pygmo.core.nlopt.maxeval" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">maxeval</span></code> stopping criterion.</p>
+<p>The <code class="docutils literal"><span class="pre">maxeval</span></code> stopping criterion instructs the solver to stop when the number of function evaluations exceeds
+<code class="docutils literal"><span class="pre">maxeval</span></code>. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the value of the <code class="docutils literal"><span class="pre">maxeval</span></code> stopping criterion</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.nlopt.maxtime">
+<code class="descname">maxtime</code><a class="headerlink" href="#pygmo.core.nlopt.maxtime" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">maxtime</span></code> stopping criterion.</p>
+<p>The <code class="docutils literal"><span class="pre">maxtime</span></code> stopping criterion instructs the solver to stop when the optimization time (in seconds) exceeds
+<code class="docutils literal"><span class="pre">maxtime</span></code>. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the value of the <code class="docutils literal"><span class="pre">maxtime</span></code> stopping criterion</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.nlopt.replacement">
+<code class="descname">replacement</code><a class="headerlink" href="#pygmo.core.nlopt.replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual replacement policy.</p>
+<p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
+that will be replaced by the optimised individual. The attribute can be either a string or an integral.</p>
+<p>If the attribute is a string, it must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+<p><a class="reference internal" href="#pygmo.core.nlopt.set_random_sr_seed" title="pygmo.core.nlopt.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>If the attribute is an integer, it represents the index (in the population) of the individual that will be
+replaced by the optimised individual.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the individual replacement policy or index</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">str</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.nlopt.selection">
+<code class="descname">selection</code><a class="headerlink" href="#pygmo.core.nlopt.selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual selection policy.</p>
+<p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
+that will be optimised. The attribute can be either a string or an integral.</p>
+<p>If the attribute is a string, it must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+<p><a class="reference internal" href="#pygmo.core.nlopt.set_random_sr_seed" title="pygmo.core.nlopt.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>If the attribute is an integer, it represents the index (in the population) of the individual that is selected
+for optimisation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the individual selection policy or index</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">str</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.core.nlopt.set_random_sr_seed">
+<code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt.set_random_sr_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
+election/replacement policies (see <a class="reference internal" href="#pygmo.core.nlopt.selection" title="pygmo.core.nlopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
+<a class="reference internal" href="#pygmo.core.nlopt.replacement" title="pygmo.core.nlopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.nlopt.stopval">
+<code class="descname">stopval</code><a class="headerlink" href="#pygmo.core.nlopt.stopval" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">stopval</span></code> stopping criterion.</p>
+<p>The <code class="docutils literal"><span class="pre">stopval</span></code> stopping criterion instructs the solver to stop when an objective value less than
+or equal to <code class="docutils literal"><span class="pre">stopval</span></code> is found. Defaults to the C constant <code class="docutils literal"><span class="pre">-HUGE_VAL</span></code> (that is, this stopping criterion
+is disabled by default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the value of the <code class="docutils literal"><span class="pre">stopval</span></code> stopping criterion</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">float</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.nlopt.xtol_abs">
+<code class="descname">xtol_abs</code><a class="headerlink" href="#pygmo.core.nlopt.xtol_abs" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">xtol_abs</span></code> stopping criterion.</p>
+<p>The <code class="docutils literal"><span class="pre">xtol_abs</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
+optimum) changes every parameter by less than <code class="docutils literal"><span class="pre">xtol_abs</span></code>. Defaults to 0 (that is, this stopping criterion is disabled
+by default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the value of the <code class="docutils literal"><span class="pre">xtol_abs</span></code> stopping criterion</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">float</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.core.nlopt.xtol_rel">
+<code class="descname">xtol_rel</code><a class="headerlink" href="#pygmo.core.nlopt.xtol_rel" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion.</p>
+<p>The <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
+optimum) changes every parameter by less than <code class="docutils literal"><span class="pre">xtol_rel</span></code> multiplied by the absolute value of the parameter.
+Defaults to 1E-8.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the value of the <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">float</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>

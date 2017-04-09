@@ -225,8 +225,15 @@
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
-<p>Place it into a getting_started.cpp text file and compile it (for example) with:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>g++ -std<span class="o">=</span>c++11 getting_started.cpp -pthread
+<p>Place it into a <code class="docutils literal"><span class="pre">getting_started.cpp</span></code> text file and compile it (for example) with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread
+</pre></div>
+</div>
+<p>If you installed pagmo with support for optional 3rd party libraries, you might need to
+add additional switches to the command-line invocation of the compiler. For instance,
+if you enabled the optional NLopt support, you will have to link your executable to the
+<code class="docutils literal"><span class="pre">nlopt</span></code> library:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread -lnlopt
 </pre></div>
 </div>
 </div>
@@ -277,7 +284,7 @@
 <span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<p>Place it into a getting_started.py text file and run it with:</p>
+<p>Place it into a <code class="docutils literal"><span class="pre">getting_started.py</span></code> text file and run it with:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>python getting_started.py
 </pre></div>
 </div>
