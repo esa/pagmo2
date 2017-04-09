@@ -39,6 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <random>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -1040,6 +1041,42 @@ private:
     template <typename... Args>
     using n_ctor_enabler = enable_if_t<std::is_constructible<island, Args &&...>::value, int>;
 #endif
+    // The "default" constructor from n islands. Just forward
+    // the input arguments to n calls to push_back().
+    template <typename... Args>
+    void n_ctor(size_type n, Args &&... args)
+    {
+        for (size_type i = 0; i < n; ++i) {
+            // NOTE: don't forward, in order to avoid moving twice
+            // from the same objects. This also ensures that, when
+            // using a ctor without seed, the seed is set to random
+            // for each island.
+            push_back(args...);
+        }
+    }
+    // These two implement the constructor which contains a seed argument.
+    // We need to constrain with enable_if otherwise, due to the default
+    // arguments in the island constructors, the wrong constructor would be called.
+    template <typename Algo, typename Prob, typename S1, typename S2,
+              enable_if_t<std::is_constructible<algorithm, Algo &&>::value, int> = 0>
+    void n_ctor(size_type n, Algo &&a, Prob &&p, S1 size, S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(a, p, size, udist(eng));
+        }
+    }
+    template <typename Isl, typename Algo, typename Prob, typename S1, typename S2,
+              enable_if_t<is_udi<uncvref_t<Isl>>::value, int> = 0>
+    void n_ctor(size_type n, Isl &&isl, Algo &&a, Prob &&p, S1 size, S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(isl, a, p, size, udist(eng));
+        }
+    }
 
 public:
     /// Constructor from \p n islands.
@@ -1048,7 +1085,13 @@ public:
      * can be used to construct a pagmo::island.
      *
      * This constructor will forward \p n times the input arguments \p args to the
-     * push_back() method.
+     * push_back() method. If, however, the parameter pack contains an argument which
+     * would be interpreted as a seed by the invoked island constructor, then this seed
+     * will be used to initialise a random number generator that in turn will be used to generate
+     * the seeds of populations of the islands that will be created within the archipelago. In other words,
+     * passing a seed argument to this constructor will not generate \p n islands with the same
+     * seed, but \p n islands whose population seeds have been randomly generated starting from
+     * the supplied seed argument.
      *
      * @param n the desired number of islands.
      * @param args the arguments that will be used for the construction of each island.
@@ -1059,13 +1102,7 @@ public:
     template <typename... Args, n_ctor_enabler<Args...> = 0>
     explicit archipelago(size_type n, Args &&... args)
     {
-        for (size_type i = 0; i < n; ++i) {
-            // NOTE: don't forward, in order to avoid moving twice
-            // from the same objects. This also ensures that, when
-            // using a ctor without seed, the seed is set to random
-            // for each island.
-            push_back(args...);
-        }
+        n_ctor(n, std::forward<Args>(args)...);
     }
     /// Copy assignment.
     /**
