@@ -510,6 +510,18 @@ class nlopt_test_case(_ut.TestCase):
         algo.evolve(pop)
         self.assertTrue(algo.extract(nlopt).get_last_opt_result() >= 0)
 
+        # Refcount.
+        import sys
+        n = nlopt("auglag")
+        loc = nlopt("slsqp")
+        n.local_optimizer = loc
+        old_rc = sys.getrefcount(n)
+        foo = n.local_optimizer
+        self.assertEqual(old_rc + 1, sys.getrefcount(n))
+        del n
+        self.assertTrue(len(str(foo)) != 0)
+        del foo
+
 
 class null_problem_test_case(_ut.TestCase):
     """Test case for the null problem
