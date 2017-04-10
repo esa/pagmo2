@@ -999,7 +999,7 @@ class archipelago_test_case(_ut.TestCase):
         a = archipelago()
         self.assertEqual(len(a), 0)
         self.assertRaises(IndexError, lambda: a[0])
-        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         self.assertEqual(len(a), 5)
         self.assertTrue(a[0].get_algorithm().is_(de))
         self.assertTrue(a[0].get_population().problem.is_(rosenbrock))
@@ -1010,24 +1010,55 @@ class archipelago_test_case(_ut.TestCase):
         self.assertTrue(a[0].get_population().problem.is_(null_problem))
         self.assertEqual(len(a[0].get_population()), 0)
         a = archipelago(5, algo=de(), prob=rosenbrock(),
-                        size=10, udi=thread_island(), seed=5)
+                        pop_size=10, udi=thread_island(), seed=5)
         self.assertEqual(len(a), 5)
         self.assertTrue(a[0].get_algorithm().is_(de))
         self.assertTrue(a[0].get_population().problem.is_(rosenbrock))
-        self.assertEqual(a[0].get_population().get_seed(), 5)
         self.assertEqual(len(a[0].get_population()), 10)
+        # Check unique seeds.
+        seeds = list([_.get_population().get_seed() for _ in a])
+        self.assertEqual(len(seeds), len(set(seeds)))
+        # Check seeding is deterministic.
+        a2 = archipelago(5, algo=de(), prob=rosenbrock(),
+                         pop_size=10, seed=5)
+        seeds2 = list([_.get_population().get_seed() for _ in a2])
+        self.assertEqual(seeds2, seeds)
+        self.assertTrue(all([(t[0].get_population().get_x() == t[
+                        1].get_population().get_x()).all() for t in zip(a, a2)]))
+        self.assertTrue(all([(t[0].get_population().get_f() == t[
+                        1].get_population().get_f()).all() for t in zip(a, a2)]))
+        self.assertTrue(all([(t[0].get_population().get_ID() == t[
+                        1].get_population().get_ID()).all() for t in zip(a, a2)]))
+        # Check the 'size' keyword is not accepted.
+        self.assertRaises(KeyError, lambda: archipelago(5, algo=de(), prob=rosenbrock(),
+                                                        size=10, udi=thread_island(), seed=5))
+        # Check without seed argument, seeding is non-deterministic.
+        a = archipelago(5, algo=de(), prob=rosenbrock(),
+                        pop_size=10, udi=thread_island())
+        a2 = archipelago(5, algo=de(), prob=rosenbrock(),
+                         pop_size=10, udi=thread_island())
+        seeds = sorted(list([_.get_population().get_seed() for _ in a]))
+        seeds2 = sorted(list([_.get_population().get_seed() for _ in a2]))
+        self.assertTrue(all([t[0] != t[1] for t in zip(seeds, seeds2)]))
+        self.assertTrue(all([(t[0].get_population().get_x() != t[
+                        1].get_population().get_x()).all() for t in zip(a, a2)]))
+        self.assertTrue(all([(t[0].get_population().get_f() != t[
+                        1].get_population().get_f()).all() for t in zip(a, a2)]))
+        self.assertTrue(all([(t[0].get_population().get_ID() != t[
+                        1].get_population().get_ID()).all() for t in zip(a, a2)]))
         import sys
         import os
         # The mp island requires either Windows or at least Python 3.4.
         if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
             return
         a = archipelago(5, algo=de(), prob=rosenbrock(),
-                        size=10, udi=mp_island(), seed=5)
+                        pop_size=10, udi=mp_island(), seed=5)
         self.assertEqual(len(a), 5)
         self.assertTrue(a[0].get_algorithm().is_(de))
         self.assertTrue(a[0].get_population().problem.is_(rosenbrock))
-        self.assertEqual(a[0].get_population().get_seed(), 5)
         self.assertEqual(len(a[0].get_population()), 10)
+        seeds = list([_.get_population().get_seed() for _ in a])
+        self.assertEqual(len(seeds), len(set(seeds)))
         self.assertRaises(KeyError, lambda: archipelago(
             5, pop=population(), algo=de(), seed=1))
 
@@ -1036,7 +1067,7 @@ class archipelago_test_case(_ut.TestCase):
         from copy import deepcopy
         a = archipelago()
         self.assertFalse(a.busy())
-        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         a.evolve(10)
         a.evolve(10)
         str(a)
@@ -1056,7 +1087,7 @@ class archipelago_test_case(_ut.TestCase):
         if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
             return
         a = archipelago(5, udi=mp_island(), algo=de(),
-                        prob=rosenbrock(), size=10)
+                        prob=rosenbrock(), pop_size=10)
         a.evolve(10)
         a.evolve(10)
         str(a)
@@ -1073,7 +1104,7 @@ class archipelago_test_case(_ut.TestCase):
 
     def run_access_tests(self):
         from . import archipelago, de, rosenbrock
-        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         i0, i1, i2 = a[0], a[1], a[2]
         a.push_back(algo=de(), prob=rosenbrock(), size=11)
         a.push_back(algo=de(), prob=rosenbrock(), size=11)
@@ -1095,7 +1126,7 @@ class archipelago_test_case(_ut.TestCase):
 
     def run_push_back_tests(self):
         from . import archipelago, de, rosenbrock
-        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         # Push back while evolving.
         a.evolve(10)
         a.evolve(10)
@@ -1126,7 +1157,7 @@ class archipelago_test_case(_ut.TestCase):
 
     def run_io_tests(self):
         from . import archipelago, de, rosenbrock
-        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         self.assertFalse(repr(a) == "")
 
     def run_pickle_tests(self):
@@ -1134,12 +1165,13 @@ class archipelago_test_case(_ut.TestCase):
         from pickle import dumps, loads
         import sys
         import os
-        a = archipelago(5, algo=de(), prob=rosenbrock(), size=10)
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         self.assertEqual(repr(a), repr(loads(dumps(a))))
         # The mp island requires either Windows or at least Python 3.4.
         if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
             return
-        a = archipelago(5, algo=de(), prob=_prob(), size=10, udi=mp_island())
+        a = archipelago(5, algo=de(), prob=_prob(),
+                        pop_size=10, udi=mp_island())
         self.assertEqual(repr(a), repr(loads(dumps(a))))
 
 
