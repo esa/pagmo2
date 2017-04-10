@@ -581,16 +581,14 @@ BOOST_PYTHON_MODULE(core)
     // Exposition of various structured utilities
     // Hypervolume class
     bp::class_<hypervolume>("hypervolume", "Hypervolume Class")
-        .def("__init__",
-             bp::make_constructor(lcast([](const bp::object &points) {
-                                      auto vvd_points = pygmo::to_vvd(points);
-                                      return ::new hypervolume(vvd_points, true);
-                                  }),
-                                  bp::default_call_policies(), (bp::arg("points"))),
+        .def("__init__", bp::make_constructor(lcast([](const bp::object &points) {
+                                                  auto vvd_points = pygmo::to_vvd(points);
+                                                  return ::new hypervolume(vvd_points, true);
+                                              }),
+                                              bp::default_call_policies(), (bp::arg("points"))),
              pygmo::hv_init2_docstring().c_str())
-        .def("__init__",
-             bp::make_constructor(lcast([](const population &pop) { return ::new hypervolume(pop, true); }),
-                                  bp::default_call_policies(), (bp::arg("pop"))),
+        .def("__init__", bp::make_constructor(lcast([](const population &pop) { return ::new hypervolume(pop, true); }),
+                                              bp::default_call_policies(), (bp::arg("pop"))),
              pygmo::hv_init1_docstring().c_str())
         .def("compute",
              lcast([](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); }),
@@ -604,9 +602,8 @@ BOOST_PYTHON_MODULE(core)
                  return hv.exclusive(p_idx, pygmo::to_vd(r_point));
              }),
              (bp::arg("idx"), bp::arg("ref_point")))
-        .def("exclusive",
-             lcast([](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
-                      boost::shared_ptr<hv_algorithm> hv_algo) {
+        .def("exclusive", lcast([](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
+                                   boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo);
              }),
              pygmo::hv_exclusive_docstring().c_str(), (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
@@ -699,23 +696,23 @@ BOOST_PYTHON_MODULE(core)
                 return pygmo::v_to_a(select_best_N_mo(pygmo::to_vvd(input_f), N));
             }),
             pygmo::select_best_N_mo_docstring().c_str(), (bp::arg("points"), bp::arg("N")));
-    bp::def("decomposition_weights",
-            lcast([](vector_double::size_type n_f, vector_double::size_type n_w, const std::string &weight_generation,
-                     unsigned seed) {
+    bp::def("decomposition_weights", lcast([](vector_double::size_type n_f, vector_double::size_type n_w,
+                                              const std::string &method, unsigned seed) {
                 using reng_t = pagmo::detail::random_engine_type;
                 reng_t tmp_rng(static_cast<reng_t::result_type>(seed));
-                return pygmo::vv_to_a(decomposition_weights(n_f, n_w, weight_generation, tmp_rng));
+                return pygmo::vv_to_a(decomposition_weights(n_f, n_w, method, tmp_rng));
             }),
             pygmo::decomposition_weights_docstring().c_str(),
-            (bp::arg("n_f"), bp::arg("n_w"), bp::arg("weight_generation"), bp::arg("seed")));
-    bp::def("decompose_objectives",
-            lcast([](const bp::object &objs, const bp::object &weights, const bp::object &ref_point,
-                     const std::string &method) {
+            (bp::arg("n_f"), bp::arg("n_w"), bp::arg("method"), bp::arg("seed")));
+
+    bp::def("decompose_objectives", lcast([](const bp::object &objs, const bp::object &weights,
+                                             const bp::object &ref_point, const std::string &method) {
                 return pygmo::v_to_a(
                     decompose_objectives(pygmo::to_vd(objs), pygmo::to_vd(weights), pygmo::to_vd(ref_point), method));
             }),
             pygmo::decompose_objectives_docstring().c_str(),
-            (bp::arg("objs"), bp::arg("weight"), bp::arg("ref_point"), bp::arg("method")));
+            (bp::arg("objs"), bp::arg("weights"), bp::arg("ref_point"), bp::arg("method")));
+
     bp::def("nadir", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); }),
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); }),
@@ -739,6 +736,13 @@ BOOST_PYTHON_MODULE(core)
                 return pygmo::v_to_a(retval);
             }),
             pygmo::estimate_gradient_h_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
+
+    // Global random number generator
+    bp::class_<random_device>("global_pygmo_rng", pygmo::global_pygmo_rng_docstring().c_str(), bp::init<>())
+        .def("next", &random_device::next)
+        .staticmethod("next")
+        .def("set_seed", &random_device::set_seed)
+        .staticmethod("set_seed");
 
     // Island.
     pygmo::island_ptr

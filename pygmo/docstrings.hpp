@@ -173,7 +173,7 @@ std::string hv2d_docstring();
 std::string hv3d_docstring();
 std::string bf_approx_docstring();
 std::string bf_fpras_docstring();
-// stand alone functions
+// multi-objective
 std::string pareto_dominance_docstring();
 std::string non_dominated_front_2d_docstring();
 std::string crowding_distance_docstring();
@@ -184,9 +184,12 @@ std::string decomposition_weights_docstring();
 std::string decompose_objectives_docstring();
 std::string ideal_docstring();
 std::string nadir_docstring();
+// gradient and hessians
 std::string estimate_sparsity_docstring();
 std::string estimate_gradient_docstring();
 std::string estimate_gradient_h_docstring();
+// global rng
+std::string global_pygmo_rng_docstring();
 
 // island.
 std::string island_docstring();

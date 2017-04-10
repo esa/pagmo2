@@ -1086,7 +1086,8 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    1D NumPy float array: the best known solution for the )" + name + R"( problem
+    1D NumPy float array: the best known solution for the )"
+           + name + R"( problem
 
 )";
 }
@@ -2941,6 +2942,100 @@ Examples:
 )";
 }
 
+std::string decompose_objectives_docstring()
+{
+    return R"(decompose_objectives(objs, weights, ref_point, method)
+
+Decomposes a vector of objectives.
+
+A vector of objectives is reduced to one only objective using a decomposition technique.
+
+Three different possibilities for *method* are here made available:
+
+- weighted decomposition,
+- Tchebycheff decomposition,
+- boundary interception method (with penalty constraint).
+
+In the case of :math:`n` objectives, we indicate with: :math:`\mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots,
+f_n(\mathbf x)]` the vector containing the original multiple objectives, with: :math:`\boldsymbol \lambda =
+(\lambda_1, \ldots, \lambda_n)` an :math:`n`-dimensional weight vector and with: :math:`\mathbf z^* = (z^*_1, \ldots,
+z^*_n)` an :math:`n`-dimensional reference point. We also ussume :math:`\lambda_i > 0, \forall i=1..n` and :math:`\sum_i
+\lambda_i = 1`.
+
+The resulting single objective is thus defined as:
+
+- weighted decomposition: :math:`f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f`
+- Tchebycheff decomposition: :math:`f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i \vert`
+- boundary interception method (with penalty constraint): :math:`f_d(\mathbf x) = d_1 + \theta d_2`
+
+
+where :math:`d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}` ,
+:math:`d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert` , and 
+:math:`\hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}`
+
+Args:
+    objs (array like object): the objective vectors
+    weights (array like object): the weights :math:`\boldsymbol \lambda`
+    ref_point (array like object): the reference point :math:`\mathbf z^*` . It is not used if *method* is ``"weighted"``
+    method (``string``): the decomposition method: one of ``"weighted"``, ``"tchebycheff"`` or ``"bi"``
+
+Raises:
+    ValueError: if *objs*, *weight* and *ref_point* have different sizes or if *method* is not one of ``"weighted"``, ``"tchebycheff"`` or ``"bi"``.
+    TypeError: if *weights* or *ref_point* or *objs* cannot be converted to a vector of floats.
+
+Returns:
+    1D NumPy float array:  a one dimensional array containing the decomposed objective.
+
+Examples:
+    >>> import pygmo as pg
+    >>> pg.decompose_objectives(objs = [1,2,3], weights = [0.1,0.1,0.8], ref_point=[5,5,5], method = "weighted") # doctest: +SKIP
+    array([ 2.7])
+)";
+}
+
+std::string decomposition_weights_docstring()
+{
+    return R"(decomposition_weights(n_f, n_w, method, seed)
+
+Generates the requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:
+
+- ``"grid"`` generates weights on an uniform grid. This method may only be used when the number of requested weights to be genrated is such that a uniform grid is indeed possible. 
+  In two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases
+- ``"random"`` generates weights randomly distributing them uniformly on the simplex (weights are such that :math:`\sum_i \lambda_i = 1`) 
+- ``"low discrepancy"`` generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of the Pareto front. Halton sequence is used since
+  low dimensionalities are expected in the number of objectives (i.e. less than 20), hence Halton sequence is deemed as appropriate.
+
+.. note::  
+   All genration methods are guaranteed to generate weights on the simplex (:math:`\sum_i \lambda_i = 1`). All weight generation methods are guaranteed
+   to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
+ 
+Args:
+    n_f (``int``): the objective vectors
+    n_w (``int``): the weights :math:`\boldsymbol \lambda`
+    method (``string``): the reference point :math:`\mathbf z^*`. It is not used if *method* is ``"weighted"``
+    seed (``int``): the decomposition method: one of ``"weighted"``, ``"tchebycheff"`` or ``"bi"``
+
+Raises:
+    OverflowError: if *n_f*, *n_w* or *seed* are negative or greater than an implementation-defined value
+    ValueError: if *n_f* and *n_w* are not compatible with the selected weight generation method or if *method* is not
+    one of ``"grid"``, ``"random"`` or ``"low discrepancy"``
+
+
+Returns:
+    1D NumPy float array:  the weights
+
+Examples:
+    >>> import pygmo as pg
+    >>> pg.decomposition_weights(2, 6, "low discrepancy", 33) # doctest: +SKIP
+    array([[ 1.   ,  0.   ],
+           [ 0.   ,  1.   ],
+           [ 0.25 ,  0.75 ],
+           [ 0.75 ,  0.25 ],
+           [ 0.125,  0.875],
+           [ 0.625,  0.375]])
+)";
+}
+
 std::string nadir_docstring()
 {
     return R"(nadir(points)
@@ -3103,6 +3198,32 @@ Examples:
 )";
 }
 
+std::string global_pygmo_rng_docstring()
+{
+    return R"(__init__()
+
+In pygmo it is in general possible to control the seed of all random decisions by a dedicated *seed* argument passed on via the various
+constructors. If no seed is passed pygmo randomly creates a seed for you using its global random number generator. This class allow
+access to it as to be able to reset its seed or advance its state. This can be useful to create a deterministic behaviour of pygmo easily. 
+
+.. note::
+   In complex parallel evolutions obtaining a deterministic behaviour is not possible via setting the global seed as pygmo implements an asynchronous model
+   for parallel execution.
+
+Examples:
+    >>> import pygmo as pg
+    >>> rngp = pg.global_pygmo_rng()
+    >>> rngp.set_seed(32)
+    >>> pop = pg.population(pg.ackley(5), 20)
+    >>> print(pop.champion_f)
+    [ 17.26891503]
+    >>> rngp.set_seed(32)
+    >>> pop = pg.population(pg.ackley(5), 20)
+    >>> print(pop.champion_f)
+    [ 17.26891503]
+    )";
+}
+
 std::string hvwfg_docstring()
 {
     return R"(__init__(stop_dimension = 2)
@@ -3114,7 +3235,7 @@ class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
 class :class:`~pygmo.core._hv_algorithm`
 
 Args:
-    stop_dimension (```int```): the input population
+    stop_dimension (``int``): the input population
 
 Raises:
     OverflowError: if *stop_dimension* is negative or greater than an implementation-defined value

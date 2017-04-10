@@ -28,3 +28,11 @@ Multi-objective optimization utilities
 -------------------------------------------------------
 
 .. autofunction:: pygmo.core.select_best_N_mo
+
+-------------------------------------------------------
+
+.. autofunction:: pygmo.core.decompose_objectives
+
+-------------------------------------------------------
+
+.. autofunction:: pygmo.core.decomposition_weights
