@@ -518,6 +518,8 @@ class nlopt_test_case(_ut.TestCase):
         old_rc = sys.getrefcount(n)
         foo = n.local_optimizer
         self.assertEqual(old_rc + 1, sys.getrefcount(n))
+        if sys.version_info[0] < 3:
+            return
         del n
         self.assertTrue(len(str(foo)) != 0)
         del foo
