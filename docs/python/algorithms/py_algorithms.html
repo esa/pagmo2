@@ -1499,7 +1499,7 @@ extends their use to any-algorithm, in particular to non generational, populatio
 a steady-state reinsertion is used (i.e. as soon as an individual is found fit it is immediately reinserted into the
 population and will influence the next offspring genetic material).</p>
 <p>Each decision vector is assigned an infeasibility measure <span class="math">\(\iota\)</span> which accounts for the normalized violation of
-all the constraints (discounted by the constraints tolerance as returned by pagmo::problem::get_c_tol()). The
+all the constraints (discounted by the constraints tolerance as returned by <a class="reference internal" href="../py_problem.html#pygmo.core.problem.c_tol" title="pygmo.core.problem.c_tol"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.core.problem.c_tol</span></code></a>). The
 normalization factor used <span class="math">\(c_{j_{max}}\)</span> is the maximum violation of the <span class="math">\(j\)</span> constraint.</p>
 <p>As in the original paper, three individuals in the evolving population are then used to penalize the single
 objective.</p>
@@ -1511,7 +1511,7 @@ objective.</p>
 \end{array}\end{split}\]</div>
 <p>The best and worst decision vectors are defined accounting for their infeasibilities and for the value of the
 objective function. Using the above definitions the overall pseudo code can be summarized as follows:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt; Select a pagmo::population (related to a single-objective constrained problem)
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt; Select a pygmo.core.population (related to a single-objective constrained problem)
 &gt; Select a UDA (able to solve single-objective unconstrained problems)
 &gt; while i &lt; iter
 &gt; &gt; Compute the normalization factors (will depend on the current population)
@@ -1520,7 +1520,7 @@ objective function. Using the above definitions the overall pseudo code can be s
 &gt; &gt; Reinsert the best decision vector from the previous evolution
 </pre></div>
 </div>
-<p><a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.cstrs_self_adaptive</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a> objects.</p>
+<p><a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a> objects.</p>
 <p><strong>NOTE</strong> Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
 The number of function evaluation will be bounded to <em>iters</em> times the fevals made by one call to the inner UDA. The
@@ -1529,7 +1529,7 @@ the inner UDA evolve method.</p>
 <p><strong>NOTE</strong> Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
 corner cases and with any UDAs. Most notably, a violation to the f$jf$-th  constraint is ignored if all
 the decision vectors in the population satisfy that particular constraint (i.e. if f$c_{j_{max}} = 0f$).</p>
-<p><strong>NOTE</strong> The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner
+<p><strong>NOTE</strong> The performances of <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> are highly dependent on the particular inner
 algorithm employed and in particular to its parameters (generations / iterations).</p>
 <p>See: Farmani, Raziyeh, and Jonathan A. Wright. &#8220;Self-adaptive fitness formulation for constrained optimization.&#8221; IEEE
 Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>

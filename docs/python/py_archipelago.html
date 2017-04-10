@@ -160,9 +160,17 @@
 <p>An archipelago is a collection of <a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> objects which provides a convenient way to perform
 multiple optimisations in parallel.</p>
 <p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/archipelago.html#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::archipelago</span></code></a>.</p>
-<p>The keyword arguments accept the same format as explained in the constructor of
-<a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>. The constructor will initialise an archipelago with
-<em>n</em> islands built from <em>kwargs</em>.</p>
+<p>The constructor will initialise an archipelago with <em>n</em> islands built from <em>kwargs</em>.
+The keyword arguments accept the same format as explained in the constructor of
+<a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, with the following differences:</p>
+<ul class="simple">
+<li><em>size</em> is replaced by <em>pop_size</em>, for clarity,</li>
+<li>the <em>seed</em> argument, if present, is used to initialise a random number generator
+that, in turn, is used to generate random seeds for each island population. In other
+words, the <em>seed</em> argument allows to generate randomly (but deterministically)
+the seeds of the populations in the archipelago. If <em>seed</em> is not provided, the seeds
+of the populations will be random and non-deterministic.</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -170,7 +178,19 @@ multiple optimisations in parallel.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the number of islands in the archipelago</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>udi</strong> &#8211; a user-defined island (either Python or C++ - note that <em>udi</em> will be deep-copied
+and stored inside the <a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> instances)</li>
+<li><strong>algo</strong> &#8211; a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></li>
+<li><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; a population</li>
+<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></li>
+<li><strong>pop_size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the number of individuals for each island</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the random seed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>n</em> is not an integral type</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>n</em> is negative</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
@@ -180,6 +200,56 @@ or by the underlying C++ constructor</li>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">archipelago</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">de</span><span class="p">(),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">pop_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> 
+<span class="go">Number of islands: 16</span>
+<span class="go">Evolving: false</span>
+
+<span class="go">Islands summaries:</span>
+
+<span class="go">        #   Type           Algo                    Prob                                  Size  Evolving</span>
+<span class="go">        -------------------------------------------------------------------------------------------------</span>
+<span class="go">        0   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        1   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        2   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        3   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        4   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        5   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        6   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        7   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        8   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        9   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        10  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        11  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        12  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        13  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        14  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        15  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">get_population</span><span class="p">()</span><span class="o">.</span><span class="n">champion_f</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">archi</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> 
+<span class="go">[array([ 475165.1020545]),</span>
+<span class="go">array([ 807090.7156793]),</span>
+<span class="go">array([ 229737.91987225]),</span>
+<span class="go">array([ 598229.45585525]),</span>
+<span class="go">array([ 560599.11409213]),</span>
+<span class="go">array([ 417323.13905327]),</span>
+<span class="go">array([ 241436.42395722]),</span>
+<span class="go">array([ 393381.06926308]),</span>
+<span class="go">array([ 212331.35741299]),</span>
+<span class="go">array([ 212218.93755491]),</span>
+<span class="go">array([ 497985.30014]),</span>
+<span class="go">array([ 310792.64466701]),</span>
+<span class="go">array([ 421278.03109775]),</span>
+<span class="go">array([ 557967.33605791]),</span>
+<span class="go">array([ 281039.56040264]),</span>
+<span class="go">array([ 215539.10152038])]</span>
+</pre></div>
+</div>
 <dl class="method">
 <dt id="pygmo.core.archipelago.busy">
 <code class="descname">busy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.archipelago.busy" title="Permalink to this definition">¶</a></dt>
