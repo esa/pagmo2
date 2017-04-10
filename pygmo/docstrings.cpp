@@ -3618,7 +3618,8 @@ NLopt algorithms is:
 * SLSQP,
 * low-storage BFGS,
 * preconditioned truncated Newton,
-* shifted limited-memory variable-metric.
+* shifted limited-memory variable-metric,
+* augmented Lagrangian algorithm.
 
 The desired NLopt solver is selected upon construction of an :class:`~pygmo.core.nlopt` algorithm. Various properties
 of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
@@ -3670,6 +3671,8 @@ translation table:
 ``"tnewton"``                     ``NLOPT_LD_TNEWTON``
 ``"var2"``                        ``NLOPT_LD_VAR2``
 ``"var1"``                        ``NLOPT_LD_VAR1``
+``"auglag"``                      ``NLOPT_AUGLAG``
+``"auglag_eq"``                   ``NLOPT_AUGLAG_EQ``
 ================================  ====================================
 
 The parameters of the selected solver can be configured via the attributes of this class.
@@ -4004,6 +4007,35 @@ Returns:
 Raises:
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_local_optimizer_docstring()
+{
+    return R"(Local optimizer.
+
+Some NLopt algorithms rely on other NLopt algorithms as local/subsidiary optimizers.
+This property, of type :class:`~pygmo.core.nlopt`, allows to set such local optimizer.
+By default, no local optimizer is specified, and the property is set to ``None``.
+
+.. note::
+
+   At the present time, only the ``"auglag"`` and ``"auglag_eq"`` solvers make use
+   of a local optimizer. Setting a local optimizer on any other solver will have no effect.
+
+.. note::
+
+   The objective function, bounds, and nonlinear-constraint parameters of the local
+   optimizer are ignored (as they are provided by the parent optimizer). The verbosity of
+   the local optimizer is also forcibly set to zero during the optimisation.
+
+Returns:
+    :class:`~pygmo.core.nlopt`: the local optimizer, or ``None`` if not set
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python
+      (e.g., type conversion errors, mismatched function signatures, etc.), when setting the property
 
 )";
 }

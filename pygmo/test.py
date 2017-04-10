@@ -380,7 +380,7 @@ class nlopt_test_case(_ut.TestCase):
         from .core import nlopt, algorithm, luksan_vlcek1, problem, population
         n = nlopt()
         self.assertEqual(n.get_solver_name(), "cobyla")
-        n = nlopt(solver = "slsqp")
+        n = nlopt(solver="slsqp")
         self.assertEqual(n.get_solver_name(), "slsqp")
         self.assertRaises(ValueError, lambda: nlopt("dsadsa"))
 
@@ -473,6 +473,26 @@ class nlopt_test_case(_ut.TestCase):
         pop = population(prob, 20)
         pop = algo.evolve(pop)
         self.assertTrue(len(algo.extract(nlopt).get_log()) != 0)
+
+        # Pickling.
+        from pickle import dumps, loads
+        algo = algorithm(nlopt("slsqp"))
+        algo.set_verbosity(5)
+        prob = problem(luksan_vlcek1(20))
+        prob.c_tol = [1E-6] * 18
+        pop = population(prob, 20)
+        algo.evolve(pop)
+        self.assertEqual(str(algo), str(loads(dumps(algo))))
+        self.assertEqual(algo.extract(nlopt).get_log(), loads(
+            dumps(algo)).extract(nlopt).get_log())
+
+        # Local optimizer.
+        self.assertTrue(nlopt("slsqp").local_optimizer is None)
+        self.assertTrue(nlopt("auglag").local_optimizer is None)
+        n = nlopt("auglag")
+        loc = nlopt("slsqp")
+        n.local_optimizer = loc
+        self.assertFalse(n.local_optimizer is None)
 
 
 class null_problem_test_case(_ut.TestCase):

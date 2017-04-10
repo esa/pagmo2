@@ -412,7 +412,8 @@ void expose_algorithms()
                             } else {
                                 n.unset_local_optimizer();
                             }
-                        }));
+                        }),
+                        nlopt_local_optimizer_docstring().c_str());
 #endif
 }
 }
