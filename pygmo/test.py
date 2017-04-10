@@ -177,10 +177,10 @@ class population_test_case(_ut.TestCase):
         pop = population(rosenbrock(), size=10)
         self.assertTrue(pop.problem.extract(null_problem) is None)
         self.assertTrue(pop.problem.extract(rosenbrock) is not None)
-        pop.problem = problem(zdt(param=10))
-        self.assertRaises(ValueError, lambda: pop.best_idx())
-        self.assertTrue(pop.problem.extract(null_problem) is None)
-        self.assertTrue(pop.problem.extract(zdt) is not None)
+
+        def prob_setter():
+            pop.problem = problem(zdt(param=10))
+        self.assertRaises(AttributeError, prob_setter)
 
     def run_push_back_test(self):
         from .core import population, rosenbrock
@@ -371,6 +371,110 @@ class nsga2_test_case(_ut.TestCase):
         seed = uda.get_seed()
 
 
+class nlopt_test_case(_ut.TestCase):
+    """Test case for the UDA nlopt
+
+    """
+
+    def runTest(self):
+        from .core import nlopt, algorithm, luksan_vlcek1, problem, population
+        n = nlopt()
+        self.assertEqual(n.get_solver_name(), "cobyla")
+        n = nlopt(solver = "slsqp")
+        self.assertEqual(n.get_solver_name(), "slsqp")
+        self.assertRaises(ValueError, lambda: nlopt("dsadsa"))
+
+        self.assertEqual(n.get_last_opt_result(), 1)
+
+        self.assertEqual(n.ftol_abs, 0.)
+        n.ftol_abs = 1E-6
+        self.assertEqual(n.ftol_abs, 1E-6)
+
+        def _():
+            n.ftol_abs = float('nan')
+        self.assertRaises(ValueError, _)
+
+        self.assertEqual(n.ftol_rel, 0.)
+        n.ftol_rel = 1E-6
+        self.assertEqual(n.ftol_rel, 1E-6)
+
+        def _():
+            n.ftol_rel = float('nan')
+        self.assertRaises(ValueError, _)
+
+        self.assertEqual(n.maxeval, 0)
+        n.maxeval = 42
+        self.assertEqual(n.maxeval, 42)
+
+        self.assertEqual(n.maxtime, 0)
+        n.maxtime = 43
+        self.assertEqual(n.maxtime, 43)
+
+        self.assertEqual(n.replacement, "best")
+        n.replacement = "worst"
+        self.assertEqual(n.replacement, "worst")
+
+        def _():
+            n.replacement = "rr"
+        self.assertRaises(ValueError, _)
+        n.replacement = 12
+        self.assertEqual(n.replacement, 12)
+
+        def _():
+            n.replacement = -1
+        self.assertRaises(OverflowError, _)
+
+        self.assertEqual(n.selection, "best")
+        n.selection = "worst"
+        self.assertEqual(n.selection, "worst")
+
+        def _():
+            n.selection = "rr"
+        self.assertRaises(ValueError, _)
+        n.selection = 12
+        self.assertEqual(n.selection, 12)
+
+        def _():
+            n.selection = -1
+        self.assertRaises(OverflowError, _)
+
+        n.set_random_sr_seed(12)
+        self.assertRaises(OverflowError, lambda: n.set_random_sr_seed(-1))
+
+        self.assertEqual(n.stopval, -float('inf'))
+        n.stopval = 1E-6
+        self.assertEqual(n.stopval, 1E-6)
+
+        def _():
+            n.stopval = float('nan')
+        self.assertRaises(ValueError, _)
+
+        self.assertEqual(n.xtol_abs, 0.)
+        n.xtol_abs = 1E-6
+        self.assertEqual(n.xtol_abs, 1E-6)
+
+        def _():
+            n.xtol_abs = float('nan')
+        self.assertRaises(ValueError, _)
+
+        self.assertEqual(n.xtol_rel, 1E-8)
+        n.xtol_rel = 1E-6
+        self.assertEqual(n.xtol_rel, 1E-6)
+
+        def _():
+            n.xtol_rel = float('nan')
+        self.assertRaises(ValueError, _)
+
+        n = nlopt("slsqp")
+        algo = algorithm(n)
+        algo.set_verbosity(5)
+        prob = problem(luksan_vlcek1(20))
+        prob.c_tol = [1E-6] * 18
+        pop = population(prob, 20)
+        pop = algo.evolve(pop)
+        self.assertTrue(len(algo.extract(nlopt).get_log()) != 0)
+
+
 class null_problem_test_case(_ut.TestCase):
     """Test case for the null problem
 
@@ -387,32 +491,42 @@ class null_problem_test_case(_ut.TestCase):
         self.assertTrue(problem(np()).get_nobj() == 1)
         self.assertTrue(problem(np(23)).get_nobj() == 23)
 
+
 class estimate_sparsity_test_case(_ut.TestCase):
     """Test case for the hypervolume utilities
 
     """
+
     def runTest(self):
         import pygmo as pg
         import numpy as np
+
         def my_fun(x):
-            return [x[0]+x[3], x[2], x[1]]
-        res = pg.estimate_sparsity(callable = my_fun, x = [0.1,0.1,0.1,0.1], dx = 1e-8)
-        self.assertTrue((res==np.array([[0, 0],[0, 3],[1, 2],[2, 1]])).all())
+            return [x[0] + x[3], x[2], x[1]]
+        res = pg.estimate_sparsity(
+            callable=my_fun, x=[0.1, 0.1, 0.1, 0.1], dx=1e-8)
+        self.assertTrue(
+            (res == np.array([[0, 0], [0, 3], [1, 2], [2, 1]])).all())
+
 
 class estimate_gradient_test_case(_ut.TestCase):
     """Test case for the hypervolume utilities
 
     """
+
     def runTest(self):
         import pygmo as pg
         import numpy as np
+
         def my_fun(x):
-            return [x[0]+x[3], x[2], x[1]]
-        out = pg.estimate_gradient(callable = my_fun, x = [0]*4, dx = 1e-8)
-        res = np.array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])
-        self.assertTrue((abs(out-res)<1e-8).all())
-        out = pg.estimate_gradient_h(callable = my_fun, x = [0]*4, dx = 1e-8)
-        self.assertTrue((abs(out-res)<1e-8).all())
+            return [x[0] + x[3], x[2], x[1]]
+        out = pg.estimate_gradient(callable=my_fun, x=[0] * 4, dx=1e-8)
+        res = np.array([1.,  0.,  0.,  1.,  0.,  0.,
+                        1.,  0.,  0.,  1.,  0.,  0.])
+        self.assertTrue((abs(out - res) < 1e-8).all())
+        out = pg.estimate_gradient_h(callable=my_fun, x=[0] * 4, dx=1e-8)
+        self.assertTrue((abs(out - res) < 1e-8).all())
+
 
 class hypervolume_test_case(_ut.TestCase):
     """Test case for the hypervolume utilities
@@ -1049,6 +1163,11 @@ def run_test_suite():
     suite.addTest(unconstrain_test_case())
     suite.addTest(mbh_test_case())
     suite.addTest(cstrs_self_adaptive_test_case())
+    try:
+        from .core import nlopt
+        suite.addTest(nlopt_test_case())
+    except ImportError:
+        pass
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1

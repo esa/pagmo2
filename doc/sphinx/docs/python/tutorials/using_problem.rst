@@ -33,12 +33,14 @@ Let us start:
     	Lower bounds: [-5, -5, -5, -5, -5]
     	Upper bounds: [10, 10, 10, 10, 10]
     <BLANKLINE>
-    	Has gradient: false
+        Has gradient: true
     	User implemented gradient sparsity: false
+        Expected gradients: 5
     	Has hessians: false
     	User implemented hessians sparsity: false
     <BLANKLINE>
     	Function evaluations: 0
+        Gradient evaluations: 0
     <BLANKLINE>
     	Thread safety: basic
     <BLANKLINE>

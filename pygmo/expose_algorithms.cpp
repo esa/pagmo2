@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 
 #endif
 
+#include <boost/any.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/default_call_policies.hpp>
 #include <boost/python/init.hpp>
@@ -52,11 +53,14 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/make_function.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/return_internal_reference.hpp>
+#include <boost/python/str.hpp>
 #include <boost/python/tuple.hpp>
 #include <string>
 #include <tuple>
 
-#ifdef PAGMO_WITH_EIGEN3
+#include <pagmo/config.hpp>
+
+#if defined(PAGMO_WITH_EIGEN3)
 #include <pagmo/algorithms/cmaes.hpp>
 #endif
 #include <pagmo/algorithms/bee_colony.hpp>
@@ -66,6 +70,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/de1220.hpp>
 #include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/algorithms/moead.hpp>
+#if defined(PAGMO_WITH_NLOPT)
+#include <pagmo/algorithms/nlopt.hpp>
+#endif
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/sade.hpp>
@@ -273,7 +280,7 @@ void expose_algorithms()
     expose_algo_log(de1220_, de1220_get_log_docstring().c_str());
     de1220_.def("get_seed", &de1220::get_seed, generic_uda_get_seed_docstring().c_str());
 // CMA-ES
-#ifdef PAGMO_WITH_EIGEN3
+#if defined(PAGMO_WITH_EIGEN3)
     auto cmaes_ = expose_algorithm<cmaes>("cmaes", cmaes_docstring().c_str());
     cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool>(
         (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
@@ -327,5 +334,76 @@ void expose_algorithms()
                nsga2_get_log_docstring().c_str());
 
     nsga2_.def("get_seed", &nsga2::get_seed, generic_uda_get_seed_docstring().c_str());
+
+#if defined(PAGMO_WITH_NLOPT)
+    // NLopt.
+    auto nlopt_ = expose_algorithm<nlopt>("nlopt", nlopt_docstring().c_str());
+    nlopt_.def(bp::init<const std::string &>((bp::arg("solver"))));
+    // Properties for the stopping criteria.
+    nlopt_.add_property("stopval", &nlopt::get_stopval, &nlopt::set_stopval, nlopt_stopval_docstring().c_str());
+    nlopt_.add_property("ftol_rel", &nlopt::get_ftol_rel, &nlopt::set_ftol_rel, nlopt_ftol_rel_docstring().c_str());
+    nlopt_.add_property("ftol_abs", &nlopt::get_ftol_abs, &nlopt::set_ftol_abs, nlopt_ftol_abs_docstring().c_str());
+    nlopt_.add_property("xtol_rel", &nlopt::get_xtol_rel, &nlopt::set_xtol_rel, nlopt_xtol_rel_docstring().c_str());
+    nlopt_.add_property("xtol_abs", &nlopt::get_xtol_abs, &nlopt::set_xtol_abs, nlopt_xtol_abs_docstring().c_str());
+    nlopt_.add_property("maxeval", &nlopt::get_maxeval, &nlopt::set_maxeval, nlopt_maxeval_docstring().c_str());
+    nlopt_.add_property("maxtime", &nlopt::get_maxtime, &nlopt::set_maxtime, nlopt_maxtime_docstring().c_str());
+    // Selection/replacement.
+    nlopt_.add_property(
+        "selection", lcast([](const nlopt &n) -> bp::object {
+            auto s = n.get_selection();
+            if (boost::any_cast<std::string>(&s)) {
+                return bp::str(boost::any_cast<std::string>(s));
+            }
+            return bp::object(boost::any_cast<population::size_type>(s));
+        }),
+        lcast([](nlopt &n, const bp::object &o) {
+            bp::extract<std::string> e_str(o);
+            if (e_str.check()) {
+                n.set_selection(e_str());
+                return;
+            }
+            bp::extract<population::size_type> e_idx(o);
+            if (e_idx.check()) {
+                n.set_selection(e_idx());
+                return;
+            }
+            pygmo_throw(::PyExc_TypeError,
+                        ("cannot convert the input object '" + str(o) + "' of type '" + str(type(o))
+                         + "' to either a selection policy (one of ['best', 'worst', 'random']) or an individual index")
+                            .c_str());
+        }),
+        nlopt_selection_docstring().c_str());
+    nlopt_.add_property(
+        "replacement", lcast([](const nlopt &n) -> bp::object {
+            auto s = n.get_replacement();
+            if (boost::any_cast<std::string>(&s)) {
+                return bp::str(boost::any_cast<std::string>(s));
+            }
+            return bp::object(boost::any_cast<population::size_type>(s));
+        }),
+        lcast([](nlopt &n, const bp::object &o) {
+            bp::extract<std::string> e_str(o);
+            if (e_str.check()) {
+                n.set_replacement(e_str());
+                return;
+            }
+            bp::extract<population::size_type> e_idx(o);
+            if (e_idx.check()) {
+                n.set_replacement(e_idx());
+                return;
+            }
+            pygmo_throw(
+                ::PyExc_TypeError,
+                ("cannot convert the input object '" + str(o) + "' of type '" + str(type(o))
+                 + "' to either a replacement policy (one of ['best', 'worst', 'random']) or an individual index")
+                    .c_str());
+        }),
+        nlopt_replacement_docstring().c_str());
+    nlopt_.def("set_random_sr_seed", &nlopt::set_random_sr_seed, nlopt_set_random_sr_seed_docstring().c_str());
+    expose_algo_log(nlopt_, nlopt_get_log_docstring().c_str());
+    nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
+               nlopt_get_last_opt_result_docstring().c_str());
+    nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
+#endif
 }
 }

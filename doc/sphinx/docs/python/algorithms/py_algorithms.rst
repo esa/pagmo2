@@ -73,3 +73,8 @@ Algorithms exposed from C++
 
 .. autoclass:: pygmo.core.cstrs_self_adaptive
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.core.nlopt
+   :members:

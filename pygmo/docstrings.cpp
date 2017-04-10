@@ -228,14 +228,10 @@ std::string population_problem_docstring()
 {
     return R"(Population's problem.
 
-This property gives direct access to the :class:`~pygmo.core.problem` stored within the population.
+This read-only property gives direct access to the :class:`~pygmo.core.problem` stored within the population.
 
 Returns:
     :class:`~pygmo.core.problem`: a reference to the internal problem
-
-Raises:
-    unspecified: any exception thrown by failures at the intersection between C++ and
-      Python (e.g., type conversion errors, mismatched function signatures, etc.) when setting the property
 
 )";
 }
@@ -1367,7 +1363,7 @@ std::string generic_uda_inner_algorithm_docstring()
 
     return R"(Inner algorithm of the meta-algorithm
 
-This property gives direct access to the :class:`~pygmo.core.algorithm` stored within the meta-algorithm.
+This read-only property gives direct access to the :class:`~pygmo.core.algorithm` stored within the meta-algorithm.
 
 Returns:
     :class:`~pygmo.core.algorithm`: a reference to the inner algorithm
@@ -1380,7 +1376,7 @@ std::string generic_udp_inner_problem_docstring()
 
     return R"(Inner problem of the meta-problem
 
-This property gives direct access to the :class:`~pygmo.core.problem` stored within the meta-problem.
+This read-only property gives direct access to the :class:`~pygmo.core.problem` stored within the meta-problem.
 
 Returns:
     :class:`~pygmo.core.problem`: a reference to the inner problem
@@ -1566,7 +1562,7 @@ objective function. Using the above definitions the overall pseudo code can be s
 
 **NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
-The number of function evaluation will be bounded to \p iters times the fevals made by one call to the inner UDA. The
+The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.
 
@@ -1815,12 +1811,11 @@ Its formulation in pagmo can be written as:
 
 .. math::
    \begin{array}{rl}
-   \mbox{find:}      & -5 \le \mathbf x_i \le 5, \forall i=1..n\\
-   \mbox{to minimize: } & \sum_{i=1}^{n-1}\left[100\left(x_i^2-x_{i+1}\right)^2 + \left(x_i-1\right)^2\right]\\
-   \mbox{subject to:} & 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2}})\sin(x_{k+1}+x_{k+2}})
-   +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 \le UB, \forall k=1..n-2 \\
-                      & 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2}})\sin(x_{k+1}+x_{k+2}})
-   +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 \ge LB, \forall k=1..n-2 \\
+   \mbox{find:} & -5 \le x_i \le 5, \forall i=1..n \\
+   \mbox{to minimize: } & \sum_{i=1}^{n-1}\left[100\left(x_i^2-x_{i+1}\right)^2 + \left(x_i-1\right)^2\right] \\
+   \mbox{subject to:} &
+    3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2})\sin(x_{k+1}+x_{k+2}) + \\
+    & +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 = 0, \forall k=1..n-2
    \end{array}
 
 See: Luksan, L., and Jan Vlcek. "Sparse and partially separable test problems for unconstrained and equality
@@ -3042,7 +3037,7 @@ The numerical approximation of each derivative is made by central difference, ac
 .. math::
    \frac{df}{dx} \approx \frac{f(x+dx) - f(x-dx)}{2dx} + O(dx^2)
 
-The overall cost, in terms of calls to \p f will thus be :math:`n` where :math:`n` is the size of \p x.
+The overall cost, in terms of calls to *callable* will thus be :math:`n` where :math:`n` is the size of *x*.
 
 Args:
     callable (a callable object): The function we want to estimate sparsity (typically a fitness).
@@ -3085,7 +3080,7 @@ where:
 .. math::
    m_i = \frac{f(x + i dx) - f(x-i dx)}{2i dx}
 
-The overall cost, in terms of calls to \p f will thus be 6:math:`n` where :math:`n` is the size of \p x.
+The overall cost, in terms of calls to *callable* will thus be 6:math:`n` where :math:`n` is the size of *x*.
 
 Args:
     callable (a callable object): The function we want to estimate sparsity (typically a fitness).
@@ -3748,6 +3743,418 @@ inserted via :func:`~pygmo.core.archipelago.push_back()`).
 
 Raises:
     IndexError: if *i* is greater than the size of the archipelago
+
+)";
+}
+
+std::string nlopt_docstring()
+{
+    return R"(__init__(solver = "cobyla")
+
+NLopt algorithms.
+
+This user-defined algorithm wraps a selection of solvers from the
+`NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`_ library, focusing on
+local optimisation (both gradient-based and derivative-free). The complete list of supported
+NLopt algorithms is:
+
+* COBYLA,
+* BOBYQA,
+* NEWUOA + bound constraints,
+* PRAXIS,
+* Nelder-Mead simplex,
+* sbplx,
+* MMA (Method of Moving Asymptotes),
+* CCSA,
+* SLSQP,
+* low-storage BFGS,
+* preconditioned truncated Newton,
+* shifted limited-memory variable-metric.
+
+The desired NLopt solver is selected upon construction of an :class:`~pygmo.core.nlopt` algorithm. Various properties
+of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
+stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
+is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.core.nlopt.xtol_rel`).
+
+All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
+is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
+Some solvers support equality and/or inequality constaints.
+
+In order to support pagmo's population-based optimisation model, the ``evolve()`` method will select
+a single individual from the input :class:`~pygmo.core.population` to be optimised by the NLopt solver.
+The optimised individual will then be inserted back into the population at the end of the optimisation.
+The selection and replacement strategies can be configured via the :attr:`~pygmo.core.nlopt.selection`
+and :attr:`~pygmo.core.nlopt.replacement` attributes.
+
+.. note::
+
+   This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_NLOPT`` option
+   enabled (see the :ref:`installation instructions <install>`).
+
+.. seealso::
+
+   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed description
+   of each supported solver.
+
+This constructor will initialise an :class:`~pygmo.core.nlopt` object which will use the NLopt algorithm specified by
+the input string *solver*, the ``"best"`` individual selection strategy and the ``"best"`` individual
+replacement strategy. *solver* is translated to an NLopt algorithm type according to the following
+translation table:
+
+================================  ====================================
+*solver* string                   NLopt algorithm
+================================  ====================================
+``"cobyla"``                      ``NLOPT_LN_COBYLA``
+``"bobyqa"``                      ``NLOPT_LN_BOBYQA``
+``"newuoa"``                      ``NLOPT_LN_NEWUOA``
+``"newuoa_bound"``                ``NLOPT_LN_NEWUOA_BOUND``
+``"praxis"``                      ``NLOPT_LN_PRAXIS``
+``"neldermead"``                  ``NLOPT_LN_NELDERMEAD``
+``"sbplx"``                       ``NLOPT_LN_SBPLX``
+``"mma"``                         ``NLOPT_LD_MMA``
+``"ccsaq"``                       ``NLOPT_LD_CCSAQ``
+``"slsqp"``                       ``NLOPT_LD_SLSQP``
+``"lbfgs"``                       ``NLOPT_LD_LBFGS``
+``"tnewton_precond_restart"``     ``NLOPT_LD_TNEWTON_PRECOND_RESTART``
+``"tnewton_precond"``             ``NLOPT_LD_TNEWTON_PRECOND``
+``"tnewton_restart"``             ``NLOPT_LD_TNEWTON_RESTART``
+``"tnewton"``                     ``NLOPT_LD_TNEWTON``
+``"var2"``                        ``NLOPT_LD_VAR2``
+``"var1"``                        ``NLOPT_LD_VAR1``
+================================  ====================================
+
+The parameters of the selected solver can be configured via the attributes of this class.
+
+See also the docs of the C++ class :cpp:class:`pagmo::nlopt`.
+
+.. seealso::
+
+   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed
+   description of each supported solver.
+
+Args:
+    solver (``str``): the name of the NLopt algorithm that will be used by this :class:`~pygmo.core.nlopt` object
+
+Raises:
+    RuntimeError: if the NLopt version is not at least 2
+    ValueError: if *solver* is not one of the allowed algorithm names
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> nl = nlopt('slsqp')
+    >>> nl.xtol_rel = 1E-6 # Change the default value of the xtol_rel stopping criterion
+    >>> nl.xtol_rel # doctest: +SKIP
+    1E-6
+    >>> algo = algorithm(nl)
+    >>> algo.set_verbosity(1)
+    >>> prob = problem(luksan_vlcek1(20))
+    >>> prob.c_tol = [1E-6] * 18 # Set constraints tolerance to 1E-6
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+       fevals:       fitness:      violated:    viol. norm:
+             1        95959.4             18        538.227 i
+             2        89282.7             18        5177.42 i
+             3          75580             18        464.206 i
+             4          75580             18        464.206 i
+             5        77737.6             18        1095.94 i
+             6          41162             18        350.446 i
+             7          41162             18        350.446 i
+             8          67881             18        362.454 i
+             9        30502.2             18        249.762 i
+            10        30502.2             18        249.762 i
+            11        7266.73             18        95.5946 i
+            12         4510.3             18        42.2385 i
+            13        2400.66             18        35.2507 i
+            14        34051.9             18        749.355 i
+            15        1657.41             18        32.1575 i
+            16        1657.41             18        32.1575 i
+            17        1564.44             18        12.5042 i
+            18        275.987             14        6.22676 i
+            19        232.765             12         12.442 i
+            20        161.892             15        4.00744 i
+            21        161.892             15        4.00744 i
+            22        17.6821             11        1.78909 i
+            23        7.71103              5       0.130386 i
+            24        6.24758              4     0.00736759 i
+            25        6.23325              1    5.12547e-05 i
+            26         6.2325              0              0
+            27        6.23246              0              0
+            28        6.23246              0              0
+            29        6.23246              0              0
+            30        6.23246              0              0
+    <BLANKLINE>
+    Optimisation return status: NLOPT_XTOL_REACHED (value = 4, Optimization stopped because xtol_rel or xtol_abs was reached)
+    <BLANKLINE>
+
+)";
+}
+
+std::string nlopt_stopval_docstring()
+{
+    return R"(``stopval`` stopping criterion.
+
+The ``stopval`` stopping criterion instructs the solver to stop when an objective value less than
+or equal to ``stopval`` is found. Defaults to the C constant ``-HUGE_VAL`` (that is, this stopping criterion
+is disabled by default).
+
+Returns:
+    ``float``: the value of the ``stopval`` stopping criterion
+
+Raises:
+    ValueError: if, when setting this property, a ``NaN`` is passed
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_ftol_rel_docstring()
+{
+    return R"(``ftol_rel`` stopping criterion.
+
+The ``ftol_rel`` stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
+optimum) changes the objective function value by less than ``ftol_rel`` multiplied by the absolute value of the
+function value. Defaults to 0 (that is, this stopping criterion is disabled by default).
+
+Returns:
+    ``float``: the value of the ``ftol_rel`` stopping criterion
+
+Raises:
+    ValueError: if, when setting this property, a ``NaN`` is passed
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_ftol_abs_docstring()
+{
+    return R"(``ftol_abs`` stopping criterion.
+
+The ``ftol_abs`` stopping criterion instructs the solver to stop when an optimization step
+(or an estimate of the optimum) changes the function value by less than ``ftol_abs``.
+Defaults to 0 (that is, this stopping criterion is disabled by default).
+
+Returns:
+    ``float``: the value of the ``ftol_abs`` stopping criterion
+
+Raises:
+    ValueError: if, when setting this property, a ``NaN`` is passed
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_xtol_rel_docstring()
+{
+    return R"(``xtol_rel`` stopping criterion.
+
+The ``xtol_rel`` stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
+optimum) changes every parameter by less than ``xtol_rel`` multiplied by the absolute value of the parameter.
+Defaults to 1E-8.
+
+Returns:
+    ``float``: the value of the ``xtol_rel`` stopping criterion
+
+Raises:
+    ValueError: if, when setting this property, a ``NaN`` is passed
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_xtol_abs_docstring()
+{
+    return R"(``xtol_abs`` stopping criterion.
+
+The ``xtol_abs`` stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
+optimum) changes every parameter by less than ``xtol_abs``. Defaults to 0 (that is, this stopping criterion is disabled
+by default).
+
+Returns:
+    ``float``: the value of the ``xtol_abs`` stopping criterion
+
+Raises:
+    ValueError: if, when setting this property, a ``NaN`` is passed
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_maxeval_docstring()
+{
+    return R"(``maxeval`` stopping criterion.
+
+The ``maxeval`` stopping criterion instructs the solver to stop when the number of function evaluations exceeds
+``maxeval``. Defaults to 0 (that is, this stopping criterion is disabled by default).
+
+Returns:
+    ``int``: the value of the ``maxeval`` stopping criterion
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_maxtime_docstring()
+{
+    return R"(``maxtime`` stopping criterion.
+
+The ``maxtime`` stopping criterion instructs the solver to stop when the optimization time (in seconds) exceeds
+``maxtime``. Defaults to 0 (that is, this stopping criterion is disabled by default).
+
+Returns:
+    ``int``: the value of the ``maxtime`` stopping criterion
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_selection_docstring()
+{
+    return R"(Individual selection policy.
+
+This attribute represents the policy that is used in the ``evolve()`` method to select the individual
+that will be optimised. The attribute can be either a string or an integral.
+
+If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"random"``:
+
+* ``"best"`` will select the best individual in the population,
+* ``"worst"`` will select the worst individual in the population,
+* ``"random"`` will randomly choose one individual in the population.
+
+:func:`~pygmo.core.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+used by the ``"random"`` policy.
+
+If the attribute is an integer, it represents the index (in the population) of the individual that is selected
+for optimisation.
+
+Returns:
+    ``int`` or ``str``: the individual selection policy or index
+
+Raises:
+    OverflowError: if the attribute is set to an integer which is negative or too large
+    ValueError: if the attribute is set to an invalid string
+    TypeError: if the attribute is set to a value of an invalid type
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_replacement_docstring()
+{
+    return R"(Individual replacement policy.
+
+This attribute represents the policy that is used in the ``evolve()`` method to select the individual
+that will be replaced by the optimised individual. The attribute can be either a string or an integral.
+
+If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"random"``:
+
+* ``"best"`` will select the best individual in the population,
+* ``"worst"`` will select the worst individual in the population,
+* ``"random"`` will randomly choose one individual in the population.
+
+:func:`~pygmo.core.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+used by the ``"random"`` policy.
+
+If the attribute is an integer, it represents the index (in the population) of the individual that will be
+replaced by the optimised individual.
+
+Returns:
+    ``int`` or ``str``: the individual replacement policy or index
+
+Raises:
+    OverflowError: if the attribute is set to an integer which is negative or too large
+    ValueError: if the attribute is set to an invalid string
+    TypeError: if the attribute is set to a value of an invalid type
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_set_random_sr_seed_docstring()
+{
+    return R"(set_random_sr_seed(seed)
+
+Set the seed for the ``"random"`` selection/replacement policies.
+
+Args:
+    seed (``int``): the value that will be used to seed the random number generator used by the ``"random"``
+      election/replacement policies (see :attr:`~pygmo.core.nlopt.selection` and
+      :attr:`~pygmo.core.nlopt.replacement`)
+
+Raises:
+    OverflowError: if the attribute is set to an integer which is negative or too large
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_get_log_docstring()
+{
+    return R"(get_log()
+
+Optimisation log.
+
+The optimisation log is a collection of log data lines. A log data line is a tuple consisting of:
+
+* the number of objective function evaluations made so far,
+* the objective function value for the current decision vector,
+* the number of constraints violated by the current decision vector,
+* the constraints violation norm for the current decision vector,
+* a boolean flag signalling the feasibility of the current decision vector.
+
+Returns:
+    ``list``: the optimisation log
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_get_last_opt_result_docstring()
+{
+    return R"(get_last_opt_result()
+
+Get the result of the last optimisation.
+
+Returns:
+    ``int``: the NLopt return code for the last optimisation run, or ``NLOPT_SUCCESS`` if no optimisations have been run yet
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_get_solver_name_docstring()
+{
+    return R"(get_solver_name()
+
+Get the name of the NLopt solver used during construction.
+
+Returns:
+    ``str``: the name of the NLopt solver used during construction
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
 
 )";
 }

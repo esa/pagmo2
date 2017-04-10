@@ -64,6 +64,10 @@ if(PAGMO_WITH_EIGEN3)
     ADD_PAGMO_TESTCASE(eigen3_serialization)
 endif()
 
+if(PAGMO_WITH_NLOPT)
+    ADD_PAGMO_TESTCASE(nlopt)
+endif()
+
 # Here are problematic tests for MSVC.
 if(NOT YACMA_COMPILER_IS_MSVC)
     # This test compiles but MSVC seems to have troubles in
