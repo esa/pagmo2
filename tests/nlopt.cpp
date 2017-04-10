@@ -331,42 +331,51 @@ BOOST_AUTO_TEST_CASE(nlopt_serialization)
 
 BOOST_AUTO_TEST_CASE(nlopt_loc_opt)
 {
-    nlopt n{"auglag"};
+    for (const auto &str : {"auglag", "auglag_eq"}) {
+        nlopt n{str};
+        n.set_local_optimizer(nlopt{"slsqp"});
+        BOOST_CHECK(n.get_local_optimizer());
+        BOOST_CHECK(static_cast<const nlopt &>(n).get_local_optimizer());
+        // Test serialization.
+        algorithm algo{n};
+        std::stringstream ss;
+        auto before_text = boost::lexical_cast<std::string>(algo);
+        // Now serialize, deserialize and compare the result.
+        {
+            cereal::JSONOutputArchive oarchive(ss);
+            oarchive(algo);
+        }
+        // Change the content of p before deserializing.
+        algo = algorithm{null_algorithm{}};
+        {
+            cereal::JSONInputArchive iarchive(ss);
+            iarchive(algo);
+        }
+        auto after_text = boost::lexical_cast<std::string>(algo);
+        BOOST_CHECK_EQUAL(before_text, after_text);
+        // Test small evolution.
+        auto pop = population{hs71{}, 1};
+        pop.set_x(0, {2., 2., 2., 2.});
+        pop.get_problem().set_c_tol({1E-6, 1E-6});
+        algo.evolve(pop);
+        BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() >= 0);
+        // Unset the local optimizer.
+        algo.extract<nlopt>()->unset_local_optimizer();
+        BOOST_CHECK(!algo.extract<nlopt>()->get_local_optimizer());
+        algo.evolve(pop);
+        BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() == NLOPT_INVALID_ARGS);
+        // Auglag inside auglag. Not sure if this is supposed to work, it gives an error
+        // currently.
+        algo.extract<nlopt>()->set_local_optimizer(nlopt{str});
+        algo.extract<nlopt>()->get_local_optimizer()->set_local_optimizer(nlopt{"lbfgs"});
+        algo.evolve(pop);
+        BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() < 0);
+    }
+    // Check setting a local opt does not do anythig for normal solvers.
+    nlopt n{"slsqp"};
     n.set_local_optimizer(nlopt{"lbfgs"});
-    BOOST_CHECK(n.get_local_optimizer());
-    BOOST_CHECK(static_cast<const nlopt &>(n).get_local_optimizer());
-    // Test serialization.
     algorithm algo{n};
-    std::stringstream ss;
-    auto before_text = boost::lexical_cast<std::string>(algo);
-    // Now serialize, deserialize and compare the result.
-    {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(algo);
-    }
-    // Change the content of p before deserializing.
-    algo = algorithm{null_algorithm{}};
-    {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(algo);
-    }
-    auto after_text = boost::lexical_cast<std::string>(algo);
-    BOOST_CHECK_EQUAL(before_text, after_text);
-    // Test small evolution.
-    auto pop = population{hs71{}, 1};
-    pop.set_x(0, {2., 2., 2., 2.});
-    pop.get_problem().set_c_tol({1E-6, 1E-6});
+    auto pop = population{rosenbrock{20}, 1};
     algo.evolve(pop);
     BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() >= 0);
-    // Unset the local optimizer.
-    algo.extract<nlopt>()->unset_local_optimizer();
-    BOOST_CHECK(!algo.extract<nlopt>()->get_local_optimizer());
-    algo.evolve(pop);
-    BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() == NLOPT_INVALID_ARGS);
-    // Auglag inside auglag.
-    algo.extract<nlopt>()->set_local_optimizer(nlopt{"auglag"});
-    algo.extract<nlopt>()->get_local_optimizer()->set_local_optimizer(nlopt{"lbfgs"});
-    algo.set_verbosity(1);
-    std::cout << algo << '\n';
-    algo.evolve(pop);
 }

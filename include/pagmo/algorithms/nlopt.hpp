@@ -198,15 +198,12 @@ struct nlopt_obj {
             pagmo_throw(std::invalid_argument, "NLopt algorithms cannot handle multi-objective optimization");
         }
 
-        // Variable to hold the result of various operations.
-        ::nlopt_result res;
-
         // This is just a vector_double that is re-used across objfun invocations.
         // It will hold the current decision vector.
         m_dv.resize(prob.get_nx());
 
         // Handle the various stopping criteria.
-        res = ::nlopt_set_stopval(m_value.get(), stopval);
+        auto res = ::nlopt_set_stopval(m_value.get(), stopval);
         if (res != NLOPT_SUCCESS) {
             // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the 'stopval' stopping criterion to "
@@ -680,7 +677,8 @@ struct nlopt_obj {
  * - SLSQP,
  * - low-storage BFGS,
  * - preconditioned truncated Newton,
- * - shifted limited-memory variable-metric.
+ * - shifted limited-memory variable-metric,
+ * - augmented Lagrangian algorithm.
  *
  * The desired NLopt solver is selected upon construction of a pagmo::nlopt algorithm. Various properties
  * of the solver (e.g., the stopping criteria) can be configured after construction via methods provided
@@ -782,6 +780,8 @@ public:
      *  ``"tnewton"``                     ``NLOPT_LD_TNEWTON``
      *  ``"var2"``                        ``NLOPT_LD_VAR2``
      *  ``"var1"``                        ``NLOPT_LD_VAR1``
+     *  ``"auglag"``                      ``NLOPT_AUGLAG``
+     *  ``"auglag_eq"``                   ``NLOPT_AUGLAG_EQ``
      *  ================================  ====================================
      * \endverbatim
      * The parameters of the selected algorithm can be specified via the methods of this class.
@@ -821,6 +821,14 @@ public:
                                                    + "'. The supported algorithms are:\n" + oss.str());
         }
     }
+    /// Copy constructor.
+    /**
+     * The copy constructor will deep-copy the state of \p other.
+     *
+     * @param other the construction argument.
+     *
+     * @throws unspecified any exception thrown by copying the internal state of \p other.
+     */
     nlopt(const nlopt &other)
         : m_algo(other.m_algo), m_select(other.m_select), m_replace(other.m_replace),
           m_rselect_seed(other.m_rselect_seed), m_e(other.m_e), m_last_opt_result(other.m_last_opt_result),
@@ -830,7 +838,12 @@ public:
           m_loc_opt(other.m_loc_opt ? detail::make_unique<nlopt>(*other.m_loc_opt) : nullptr)
     {
     }
+    /// Move constructor.
     nlopt(nlopt &&) = default;
+    /// Move assignment operator.
+    /**
+     * @return a reference to \p this.
+     */
     nlopt &operator=(nlopt &&) = default;
     /// Set the seed for the ``"random"`` selection/replacement policies.
     /**
@@ -1354,22 +1367,66 @@ public:
     {
         m_sc_maxtime = n;
     }
-    void unset_local_optimizer()
-    {
-        m_loc_opt.reset(nullptr);
-    }
+    /// Set the local optimizer.
+    /**
+     * Some NLopt algorithms rely on other NLopt algorithms as local/subsidiary optimizers.
+     * This method allows to set such local optimizer. By default, no local optimizer is specified.
+     *
+     * **NOTE**: at the present time, only the ``"auglag"`` and ``"auglag_eq"`` solvers make use
+     * of a local optimizer. Setting a local optimizer on any other solver will have no effect.
+     *
+     * **NOTE**: the objective function, bounds, and nonlinear-constraint parameters of the local
+     * optimizer are ignored (as they are provided by the parent optimizer). The verbosity of
+     * the local optimizer is also forcibly set to zero during the optimisation.
+     *
+     * @param n the local optimizer that will be used by this pagmo::nlopt algorithm.
+     */
     void set_local_optimizer(nlopt n)
     {
         m_loc_opt = detail::make_unique<nlopt>(std::move(n));
     }
+    /// Get the local optimizer.
+    /**
+     * This method returns a raw const pointer to the local optimizer, if it has been set via set_local_optimizer().
+     * Otherwise, \p nullptr will be returned.
+     *
+     * **NOTE**: the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     * of \p this, and \p delete must never be called on the pointer.
+     *
+     * @return a const pointer to the local optimizer.
+     */
     const nlopt *get_local_optimizer() const
     {
         return m_loc_opt.get();
     }
+    /// Get the local optimizer.
+    /**
+     * This method returns a raw pointer to the local optimizer, if it has been set via set_local_optimizer().
+     * Otherwise, \p nullptr will be returned.
+     *
+     * **NOTE**: the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     * of \p this, and \p delete must never be called on the pointer.
+     *
+     * @return a pointer to the local optimizer.
+     */
     nlopt *get_local_optimizer()
     {
         return m_loc_opt.get();
     }
+    /// Unset the local optimizer.
+    /**
+     * After a call to this method, get_local_optimizer() and get_local_optimizer() const will return \p nullptr.
+     */
+    void unset_local_optimizer()
+    {
+        m_loc_opt.reset(nullptr);
+    }
+    /// Save to archive.
+    /**
+     * @param ar the target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of primitive types.
+     */
     template <typename Archive>
     void save(Archive &ar) const
     {
@@ -1393,6 +1450,14 @@ public:
         ar(m_rselect_seed, m_e, m_last_opt_result, m_sc_stopval, m_sc_ftol_rel, m_sc_ftol_abs, m_sc_xtol_rel,
            m_sc_xtol_abs, m_sc_maxeval, m_sc_maxtime, m_verbosity, m_log, m_loc_opt);
     }
+    /// Load from archive.
+    /**
+     * In case of exceptions, \p this will be unaffected.
+     *
+     * @param ar the source archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of primitive types.
+     */
     template <typename Archive>
     void load(Archive &ar)
     {
