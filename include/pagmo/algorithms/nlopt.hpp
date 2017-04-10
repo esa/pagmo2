@@ -990,7 +990,6 @@ public:
         }
 
         auto &prob = pop.get_problem();
-        const auto nc = prob.get_nc();
 
         // Create the nlopt obj.
         // NOTE: this will check also the problem's properties.
@@ -1010,17 +1009,21 @@ public:
         }
 
         // Setup of the initial guess.
-        vector_double initial_guess;
+        vector_double initial_guess, old_f;
         if (boost::any_cast<std::string>(&m_select)) {
             const auto &s_select = boost::any_cast<const std::string &>(m_select);
             if (s_select == "best") {
                 initial_guess = pop.get_x()[pop.best_idx()];
+                old_f = pop.get_f()[pop.best_idx()];
             } else if (s_select == "worst") {
                 initial_guess = pop.get_x()[pop.worst_idx()];
+                old_f = pop.get_f()[pop.worst_idx()];
             } else {
                 assert(s_select == "random");
                 std::uniform_int_distribution<population::size_type> dist(0, pop.size() - 1u);
-                initial_guess = pop.get_x()[dist(m_e)];
+                const auto idx = dist(m_e);
+                initial_guess = pop.get_x()[idx];
+                old_f = pop.get_f()[idx];
             }
         } else {
             const auto idx = boost::any_cast<population::size_type>(m_select);
@@ -1030,6 +1033,7 @@ public:
                                                        + std::to_string(pop.size()));
             }
             initial_guess = pop.get_x()[idx];
+            old_f = pop.get_f()[idx];
         }
         // Check the initial guess.
         // NOTE: this should be guaranteed by the population's invariants.
@@ -1061,41 +1065,32 @@ public:
             std::rethrow_exception(no.m_eptr);
         }
 
-        // Store the new individual into the population.
-        if (boost::any_cast<std::string>(&m_replace)) {
-            const auto &s_replace = boost::any_cast<const std::string &>(m_replace);
-            if (s_replace == "best") {
-                if (nc) {
-                    pop.set_x(pop.best_idx(), initial_guess);
+        // Compute the new fitness vector.
+        const auto new_f = pop.get_problem().fitness(initial_guess);
+        // Compare to the old fitness.
+        const bool comp = compare_fc(new_f, old_f, pop.get_problem().get_nec(), pop.get_problem().get_c_tol());
+
+        // Store the new individual into the population, but only if better.
+        if (comp) {
+            if (boost::any_cast<std::string>(&m_replace)) {
+                const auto &s_replace = boost::any_cast<const std::string &>(m_replace);
+                if (s_replace == "best") {
+                    pop.set_xf(pop.best_idx(), initial_guess, new_f);
+                } else if (s_replace == "worst") {
+                    pop.set_xf(pop.worst_idx(), initial_guess, new_f);
                 } else {
-                    pop.set_xf(pop.best_idx(), initial_guess, {fitness});
-                }
-            } else if (s_replace == "worst") {
-                if (nc) {
-                    pop.set_x(pop.worst_idx(), initial_guess);
-                } else {
-                    pop.set_xf(pop.worst_idx(), initial_guess, {fitness});
+                    assert(s_replace == "random");
+                    std::uniform_int_distribution<population::size_type> dist(0, pop.size() - 1u);
+                    pop.set_xf(dist(m_e), initial_guess, new_f);
                 }
             } else {
-                assert(s_replace == "random");
-                std::uniform_int_distribution<population::size_type> dist(0, pop.size() - 1u);
-                if (nc) {
-                    pop.set_x(dist(m_e), initial_guess);
-                } else {
-                    pop.set_xf(dist(m_e), initial_guess, {fitness});
+                const auto idx = boost::any_cast<population::size_type>(m_replace);
+                if (idx >= pop.size()) {
+                    pagmo_throw(std::invalid_argument, "cannot replace the individual at index " + std::to_string(idx)
+                                                           + " after evolution: the population has a size of only "
+                                                           + std::to_string(pop.size()));
                 }
-            }
-        } else {
-            const auto idx = boost::any_cast<population::size_type>(m_replace);
-            if (idx >= pop.size()) {
-                pagmo_throw(std::invalid_argument, "cannot replace the individual at index " + std::to_string(idx)
-                                                       + " after evolution: the population has a size of only "
-                                                       + std::to_string(pop.size()));
-            }
-            if (nc) {
-                pop.set_x(idx, initial_guess);
-            } else {
-                pop.set_xf(idx, initial_guess, {fitness});
+                pop.set_xf(idx, initial_guess, new_f);
             }
         }
 
