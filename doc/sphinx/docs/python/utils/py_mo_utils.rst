@@ -3,36 +3,36 @@
 Multi-objective optimization utilities
 ======================================
 
-.. autofunction:: pygmo.core.fast_non_dominated_sorting
+.. autofunction:: pygmo.fast_non_dominated_sorting
 
 -------------------------------------------------------
 
-.. autofunction:: pygmo.core.nadir
+.. autofunction:: pygmo.nadir
 
 -------------------------------------------------------
 
-.. autofunction:: pygmo.core.ideal
+.. autofunction:: pygmo.ideal
 
 -------------------------------------------------------
 
-.. autofunction:: pygmo.core.pareto_dominance
+.. autofunction:: pygmo.pareto_dominance
 
 -------------------------------------------------------
 
-.. autofunction:: pygmo.core.non_dominated_front_2d
+.. autofunction:: pygmo.non_dominated_front_2d
 
 -------------------------------------------------------
 
-.. autofunction:: pygmo.core.sort_population_mo
+.. autofunction:: pygmo.sort_population_mo
 
 -------------------------------------------------------
 
-.. autofunction:: pygmo.core.select_best_N_mo
+.. autofunction:: pygmo.select_best_N_mo
 
 -------------------------------------------------------
 
-.. autofunction:: pygmo.core.decompose_objectives
+.. autofunction:: pygmo.decompose_objectives
 
 -------------------------------------------------------
 
-.. autofunction:: pygmo.core.decomposition_weights
+.. autofunction:: pygmo.decomposition_weights

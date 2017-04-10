@@ -1,20 +1,20 @@
 .. _py_tutorial_using_problem:
 
-Use of the class :class:`~pygmo.core.problem`
+Use of the class :class:`~pygmo.problem`
 =============================================
 
-The :class:`~pygmo.core.problem` class represents a generic optimization
+The :class:`~pygmo.problem` class represents a generic optimization
 problem. The user codes the details of such a problem in a separate class (the
-user-defined problem, or UDP) which is then passed to :class:`~pygmo.core.problem`
+user-defined problem, or UDP) which is then passed to :class:`~pygmo.problem`
 that provides a single unified interface.
 
 .. note:: The User Defined Problems (UDPs) are optimization problems (coded by the user) that can
-          be used to build a pygmo object of type :class:`~pygmo.core.problem`
+          be used to build a pygmo object of type :class:`~pygmo.problem`
 
 Some UDPs (optimization problems) are already provided with pygmo and we refer to them as pygmo UDPs.
 
-For the purpose of this tutorial we are going to use a pygmo UDP called :class:`~pygmo.core.rosenbrock`
-to show the basic construction of a :class:`~pygmo.core.problem`, but the same logic would also
+For the purpose of this tutorial we are going to use a pygmo UDP called :class:`~pygmo.rosenbrock`
+to show the basic construction of a :class:`~pygmo.problem`, but the same logic would also
 apply to a custom UDPs, that is a UDP that is actually coded by the user.
 
 Let us start:
@@ -47,15 +47,15 @@ Let us start:
 
 
 In the code above, after the trivial import of the pygmo package, we define a variable prob
-by constructing a :class:`~pygmo.core.problem` from :class:`~pygmo.core.rosenbrock`, a multidimensional problem
-constructed from its global dimensions. In the following line we inspect the :class:`~pygmo.core.problem`
-We can see, at a glance, that the UDP :class:`~pygmo.core.rosenbrock` is a five dimensional, single objective, box constrained
+by constructing a :class:`~pygmo.problem` from :class:`~pygmo.rosenbrock`, a multidimensional problem
+constructed from its global dimensions. In the following line we inspect the :class:`~pygmo.problem`
+We can see, at a glance, that the UDP :class:`~pygmo.rosenbrock` is a five dimensional, single objective, box constrained
 problem for which neither gradients nor hessians nor sparsity information is provided in the UDP.
 
 We also see that its fitness function has never been called hence the counter for fitness evaluations is
 zero.
 
-All of the information contained in the :class:`~pygmo.core.problem` print out can be retrieved using
+All of the information contained in the :class:`~pygmo.problem` print out can be retrieved using
 the appropriate methods, for example:
 
 .. doctest::
@@ -73,7 +73,7 @@ Lets check how a fitness computation increases the counter:
     True
 
 We may also get back the UDP, and thus access all the methods not exposed in the
-:class:`~pygmo.core.problem` interface at any time via the :class:`~pygmo.core.problem.extract` method:
+:class:`~pygmo.problem` interface at any time via the :class:`~pygmo.problem.extract` method:
 
 .. doctest::
 

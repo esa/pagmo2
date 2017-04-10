@@ -6,75 +6,75 @@ List of algorithms available in pygmo
 Algorithms exposed from C++
 ---------------------------
 
-.. autoclass:: pygmo.core.null_algorithm
+.. autoclass:: pygmo.null_algorithm
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.bee_colony
+.. autoclass:: pygmo.bee_colony
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.de
+.. autoclass:: pygmo.de
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.sea
+.. autoclass:: pygmo.sea
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.sade
+.. autoclass:: pygmo.sade
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.de1220
+.. autoclass:: pygmo.de1220
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.cmaes
+.. autoclass:: pygmo.cmaes
   :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.moead
+.. autoclass:: pygmo.moead
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.compass_search
+.. autoclass:: pygmo.compass_search
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.simulated_annealing
+.. autoclass:: pygmo.simulated_annealing
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.pso
+.. autoclass:: pygmo.pso
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.nsga2
+.. autoclass:: pygmo.nsga2
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.mbh
+.. autoclass:: pygmo.mbh
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.cstrs_self_adaptive
+.. autoclass:: pygmo.cstrs_self_adaptive
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.nlopt
+.. autoclass:: pygmo.nlopt
    :members:

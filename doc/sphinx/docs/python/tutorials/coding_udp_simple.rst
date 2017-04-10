@@ -5,9 +5,9 @@ Coding a simple User Defined Problem
 
 While pagmo provides a number of UDPs to help you test your own optimization strategy or user defined algorithm, the possibility
 to write your own UDP is at the core of pygmo's use. In this tutorial we will show how to code a UDP. Remember that UDPs are classes that can be used 
-to construct a :class:`~pygmo.core.problem` which, in turn, is what an :class:`~pygmo.core.algorithm` can solve.
+to construct a :class:`~pygmo.problem` which, in turn, is what an :class:`~pygmo.algorithm` can solve.
 
-We encourage the user to read the documentation of the class :class:`~pygmo.core.problem` to have a detailed list of methods that can be, or have to be,
+We encourage the user to read the documentation of the class :class:`~pygmo.problem` to have a detailed list of methods that can be, or have to be,
 implemented in a UDP. To start simple we consider the simple problem of minimizing the two dimensional sphere function.
 
 .. math::
@@ -34,7 +34,7 @@ array arithmetic applies in the body of ``fitness()``. Note also how to define a
 pygmo related class.  Since we do not define, in this case, any other method pygmo will assume a single objective, no constraints,
 no gradients etc...
 
-Let's now build a :class:`~pygmo.core.problem` from our new UDP.
+Let's now build a :class:`~pygmo.problem` from our new UDP.
 
 .. doctest::
 
@@ -115,7 +115,7 @@ and to have a human readable name.
     Extra info:
     	Dimensions: 3
 
-Well that was easy, but now have a :class:`~pygmo.core.problem` to solve ... 
+Well that was easy, but now have a :class:`~pygmo.problem` to solve ... 
 
     >>> algo = pg.algorithm(pg.bee_colony(gen = 20, limit = 20))
     >>> pop = pg.population(prob,10)
@@ -144,10 +144,10 @@ that it is somehow malformed are high. Let's see some common mistakes.
     '<sphere_function object at 0x1108cad68>' of type '<class 'sphere_function'>': the method is either not present or not callable
 
 
-oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a :class:`~pygmo.core.problem`
+oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a :class:`~pygmo.problem`
 and, when we try, we then get a rather helpful error message. 
 
-In other cases while the UDP is still malformed, the construction of :class:`~pygmo.core.problem` will succeed and the issue will
+In other cases while the UDP is still malformed, the construction of :class:`~pygmo.problem` will succeed and the issue will
 be revealed only when calling the malformed method:
 
 .. doctest::

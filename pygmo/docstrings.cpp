@@ -42,13 +42,13 @@ individual is determined:
 
 * by a unique ID used to track him across generations and migrations,
 * by a chromosome (a decision vector),
-* by the fitness of the chromosome as evaluated by a :class:`~pygmo.core.problem` and thus including objectives,
+* by the fitness of the chromosome as evaluated by a :class:`~pygmo.problem` and thus including objectives,
   equality constraints and inequality constraints if present.
 
 A special mechanism is implemented to track the best individual that has ever been part of the population. Such an individual
 is called *champion* and its decision vector and fitness vector are automatically kept updated. The *champion* is not necessarily
 an individual currently in the population. The *champion* is only defined and accessible via the population interface if the
-:class:`~pygmo.core.problem` currently contained in the :class:`~pygmo.core.population` is single objective.
+:class:`~pygmo.problem` currently contained in the :class:`~pygmo.population` is single objective.
 
 See also the docs of the C++ class :cpp:class:`pagmo::population`.
 
@@ -72,7 +72,7 @@ Args:
 
 Raises:
     ValueError: if the dimensions of *x* or *f* (if provided) are incompatible with the population's problem
-    unspecified: any exception thrown by :func:`pygmo.core.problem.fitness()` or by failures at the intersection between C++ and
+    unspecified: any exception thrown by :func:`pygmo.problem.fitness()` or by failures at the intersection between C++ and
       Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
@@ -88,7 +88,7 @@ Returns:
     1D NumPy float array: a random decision vector within the problem’s bounds
 
 Raises:
-    unspecified: any exception thrown by :func:`pygmo.core.problem.fitness()` or by failures at the intersection between C++ and
+    unspecified: any exception thrown by :func:`pygmo.problem.fitness()` or by failures at the intersection between C++ and
       Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
@@ -228,10 +228,10 @@ std::string population_problem_docstring()
 {
     return R"(Population's problem.
 
-This read-only property gives direct access to the :class:`~pygmo.core.problem` stored within the population.
+This read-only property gives direct access to the :class:`~pygmo.problem` stored within the population.
 
 Returns:
-    :class:`~pygmo.core.problem`: a reference to the internal problem
+    :class:`~pygmo.problem`: a reference to the internal problem
 
 )";
 }
@@ -334,7 +334,7 @@ In order to define an optimizaztion problem in pygmo, the user must first define
 whose methods describe the properties of the problem and allow to compute
 the objective function, the gradient, the constraints, etc. In pygmo, we refer to such
 a class as a **user-defined problem**, or UDP for short. Once defined and instantiated,
-a UDP can then be used to construct an instance of this class, :class:`~pygmo.core.problem`, which
+a UDP can then be used to construct an instance of this class, :class:`~pygmo.problem`, which
 provides a generic interface to optimization problems.
 
 Every UDP must implement at least the following two methods:
@@ -350,7 +350,7 @@ The ``fitness()`` method is expected to return the fitness of the input decision
 ``get_bounds()`` is expected to return the box bounds of the problem,
 :math:`(\mathbf{lb}, \mathbf{ub})`, which also implicitly define the dimension of the problem.
 The ``fitness()`` and ``get_bounds()`` methods of the UDP are accessible from the corresponding
-:func:`pygmo.core.problem.fitness()` and :func:`pygmo.core.problem.get_bounds()`
+:func:`pygmo.problem.fitness()` and :func:`pygmo.problem.get_bounds()`
 methods (see their documentation for information on how the two methods should be implemented
 in the UDP and other details).
 
@@ -392,7 +392,7 @@ methods:
      ...
 
 See the documentation of the corresponding methods in this class for details on how the optional
-methods in the UDP should be implemented and on how they are used by :class:`~pygmo.core.problem`.
+methods in the UDP should be implemented and on how they are used by :class:`~pygmo.problem`.
 Note that the exposed C++ problems can also be used as UDPs, even if they do not expose any of the
 mandatory or optional methods listed above (see :ref:`here <py_problems>` for the
 full list of UDPs already coded in pygmo).
@@ -401,7 +401,7 @@ This class is the Python counterpart of the C++ class :cpp:class:`pagmo::problem
 
 Args:
     udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
-      and stored inside the :class:`~pygmo.core.problem` instance)
+      and stored inside the :class:`~pygmo.problem` instance)
 
 Raises:
     NotImplementedError: if *udp* does not implement the mandatory methods detailed above
@@ -437,7 +437,7 @@ dimension of :math:`n_{f} = n_{obj} + n_{ec} + n_{ic}` and to contain the concat
 
 In addition to invoking the ``fitness()`` method of the UDP, this method will perform sanity checks on
 *dv* and on the returned fitness vector. A successful call of this method will increase the internal fitness
-evaluation counter (see :func:`~pygmo.core.problem.get_fevals()`).
+evaluation counter (see :func:`~pygmo.problem.get_fevals()`).
 
 The ``fitness()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy array, and it must
 return the fitness vector as an iterable Python object (e.g., 1D NumPy array, list, tuple, etc.).
@@ -449,8 +449,8 @@ Returns:
     1D NumPy float array: the fitness of *dv*
 
 Raises:
-    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
-      the length of the returned fitness vector differs from the value returned by :func:`~pygmo.core.problem.get_nf()`
+    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.problem.get_nx()`, or
+      the length of the returned fitness vector differs from the value returned by :func:`~pygmo.problem.get_nf()`
     unspecified: any exception thrown by the ``fitness()`` method of the UDP, or by failures at the intersection
       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
@@ -469,7 +469,7 @@ This method will invoke the ``get_bounds()`` method of the UDP to return the box
 The ``get_bounds()`` method of the UDP must return the box-bounds as a tuple of 2 elements,
 the lower bounds vector and the upper bounds vector, which must be represented as iterable Python objects (e.g.,
 1D NumPy arrays, lists, tuples, etc.). The box-bounds returned by the UDP are checked upon the construction
-of a :class:`~pygmo.core.problem`.
+of a :class:`~pygmo.problem`.
 
 Returns:
     ``tuple``: a tuple of two 1D NumPy float arrays representing the lower and upper box-bounds of the problem
@@ -492,7 +492,7 @@ This method will return :math:`n_{obj}`, the number of objectives of the problem
 The optional ``get_nobj()`` method of the UDP must return the number of objectives as an ``int``.
 If the UDP does not implement the ``get_nobj()`` method, a single-objective optimizaztion problem
 will be assumed. The number of objectives returned by the UDP is checked upon the construction
-of a :class:`~pygmo.core.problem`.
+of a :class:`~pygmo.problem`.
 
 Returns:
     ``int``: the number of objectives of the problem
@@ -507,7 +507,7 @@ std::string problem_get_nx_docstring()
 Dimension of the problem.
 
 This method will return :math:`n_{x}`, the dimension of the problem as established by the length of
-the bounds returned by :func:`~pygmo.core.problem.get_bounds()`.
+the bounds returned by :func:`~pygmo.problem.get_bounds()`.
 
 Returns:
     ``int``: the dimension of the problem
@@ -541,7 +541,7 @@ This method will return :math:`n_{ec}`, the number of equality constraints of th
 The optional ``get_nec()`` method of the UDP must return the number of equality constraints as an ``int``.
 If the UDP does not implement the ``get_nec()`` method, zero equality constraints will be assumed.
 The number of equality constraints returned by the UDP is checked upon the construction
-of a :class:`~pygmo.core.problem`.
+of a :class:`~pygmo.problem`.
 
 Returns:
     ``int``: the number of equality constraints of the problem
@@ -560,7 +560,7 @@ This method will return :math:`n_{ic}`, the number of inequality constraints of 
 The optional ``get_nic()`` method of the UDP must return the number of inequality constraints as an ``int``.
 If the UDP does not implement the ``get_nic()`` method, zero inequality constraints will be assumed.
 The number of inequality constraints returned by the UDP is checked upon the construction
-of a :class:`~pygmo.core.problem`.
+of a :class:`~pygmo.problem`.
 
 Returns:
     ``int``: the number of inequality constraints of the problem
@@ -574,8 +574,8 @@ std::string problem_get_nc_docstring()
 
 Total number of constraints.
 
-This method will return the sum of the output of :func:`~pygmo.core.problem.get_nic()` and
-:func:`~pygmo.core.problem.get_nec()` (i.e., the total number of constraints).
+This method will return the sum of the output of :func:`~pygmo.problem.get_nic()` and
+:func:`~pygmo.problem.get_nec()` (i.e., the total number of constraints).
 
 Returns:
     ``int``: the total number of constraints of the problem
@@ -609,12 +609,12 @@ std::string problem_get_fevals_docstring()
 
 Number of fitness evaluations.
 
-Each time a call to :func:`~pygmo.core.problem.fitness()` successfully completes, an internal counter
+Each time a call to :func:`~pygmo.problem.fitness()` successfully completes, an internal counter
 is increased by one. The counter is initialised to zero upon problem construction and it is never
 reset. Copy operations copy the counter as well.
 
 Returns:
-    ``int`` : the number of times :func:`~pygmo.core.problem.fitness()` was successfully called
+    ``int`` : the number of times :func:`~pygmo.problem.fitness()` was successfully called
 
 )";
 }
@@ -625,12 +625,12 @@ std::string problem_get_gevals_docstring()
 
 Number of gradient evaluations.
 
-Each time a call to :func:`~pygmo.core.problem.gradient()` successfully completes, an internal counter
+Each time a call to :func:`~pygmo.problem.gradient()` successfully completes, an internal counter
 is increased by one. The counter is initialised to zero upon problem construction and it is never
 reset. Copy operations copy the counter as well.
 
 Returns:
-    ``int`` : the number of times :func:`~pygmo.core.problem.gradient()` was successfully called
+    ``int`` : the number of times :func:`~pygmo.problem.gradient()` was successfully called
 
 )";
 }
@@ -641,12 +641,12 @@ std::string problem_get_hevals_docstring()
 
 Number of hessians evaluations.
 
-Each time a call to :func:`~pygmo.core.problem.hessians()` successfully completes, an internal counter
+Each time a call to :func:`~pygmo.problem.hessians()` successfully completes, an internal counter
 is increased by one. The counter is initialised to zero upon problem construction and it is never
 reset. Copy operations copy the counter as well.
 
 Returns:
-    ``int`` : the number of times :func:`~pygmo.core.problem.hessians()` was successfully called
+    ``int`` : the number of times :func:`~pygmo.problem.hessians()` was successfully called
 
 )";
 }
@@ -668,7 +668,7 @@ The availability of the gradient is determined as follows:
   the output of the ``has_gradient()`` method of the UDP.
 
 The optional ``has_gradient()`` method of the UDP must return a ``bool``. For information on how to
-implement the ``gradient()`` method of the UDP, see :func:`~pygmo.core.problem.gradient()`.
+implement the ``gradient()`` method of the UDP, see :func:`~pygmo.problem.gradient()`.
 
 Returns:
     ``bool``: a flag signalling the availability of the gradient in the UDP
@@ -687,13 +687,13 @@ the ``gradient()`` method of the UDP. The ``gradient()`` method of the UDP must 
 a sparse representation of the gradient: the :math:`k`-th term of the gradient vector
 is expected to contain :math:`\frac{\partial f_i}{\partial x_j}`, where the pair :math:`(i,j)`
 is the :math:`k`-th element of the sparsity pattern (collection of index pairs), as returned by
-:func:`~pygmo.core.problem.gradient_sparsity()`.
+:func:`~pygmo.problem.gradient_sparsity()`.
 
 If the UDP provides a ``gradient()`` method, this method will forward *dv* to the ``gradient()``
 method of the UDP after sanity checks. The output of the ``gradient()`` method of the UDP will
 also be checked before being returned. If the UDP does not provide a ``gradient()`` method, an
 error will be raised. A successful call of this method will increase the internal gradient
-evaluation counter (see :func:`~pygmo.core.problem.get_gevals()`).
+evaluation counter (see :func:`~pygmo.problem.get_gevals()`).
 
 The ``gradient()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy
 array, and it must return the gradient vector as an iterable Python object (e.g., 1D NumPy array,
@@ -706,9 +706,9 @@ Returns:
     1D NumPy float array: the gradient of *dv*
 
 Raises:
-    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
+    ValueError: if either the length of *dv* differs from the value returned by :func:`~pygmo.problem.get_nx()`, or
       the returned gradient vector does not have the same size as the vector returned by
-      :func:`~pygmo.core.problem.gradient_sparsity()`
+      :func:`~pygmo.problem.gradient_sparsity()`
     NotImplementedError: if the UDP does not provide a ``gradient()`` method
     unspecified: any exception thrown by the ``gradient()`` method of the UDP, or by failures at the intersection
       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
@@ -733,11 +733,11 @@ The availability of the gradient sparsity is determined as follows:
   then this method will return the output of the ``has_gradient_sparsity()`` method of the UDP.
 
 The optional ``has_gradient_sparsity()`` method of the UDP must return a ``bool``. For information on how to
-implement the ``gradient_sparsity()`` method of the UDP, see :func:`~pygmo.core.problem.gradient_sparsity()`.
+implement the ``gradient_sparsity()`` method of the UDP, see :func:`~pygmo.problem.gradient_sparsity()`.
 
-**NOTE** regardless of what this method returns, the :func:`~pygmo.core.problem.gradient_sparsity()` method will always
+**NOTE** regardless of what this method returns, the :func:`~pygmo.problem.gradient_sparsity()` method will always
 return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
-pattern of the gradient is dense. See :func:`~pygmo.core.problem.gradient_sparsity()` for more details.
+pattern of the gradient is dense. See :func:`~pygmo.problem.gradient_sparsity()` for more details.
 
 Returns:
     ``bool``: a flag signalling the availability of the gradient sparsity in the UDP
@@ -754,7 +754,7 @@ Gradient sparsity pattern.
 This method will return the gradient sparsity pattern of the problem. The gradient sparsity pattern is a lexicographically sorted
 collection of the indices :math:`(i,j)` of the non-zero elements of :math:`g_{ij} = \frac{\partial f_i}{\partial x_j}`.
 
-If :func:`~pygmo.core.problem.has_gradient_sparsity()` returns ``True``, then the ``gradient_sparsity()`` method of the
+If :func:`~pygmo.problem.has_gradient_sparsity()` returns ``True``, then the ``gradient_sparsity()`` method of the
 UDP will be invoked, and its result returned (after sanity checks). Otherwise, a a dense pattern is assumed and the
 returned vector will be :math:`((0,0),(0,1), ... (0,n_x-1), ...(n_f-1,n_x-1))`.
 
@@ -807,7 +807,7 @@ The availability of the hessians is determined as follows:
   the output of the ``has_hessians()`` method of the UDP.
 
 The optional ``has_hessians()`` method of the UDP must return a ``bool``. For information on how to
-implement the ``hessians()`` method of the UDP, see :func:`~pygmo.core.problem.hessians()`.
+implement the ``hessians()`` method of the UDP, see :func:`~pygmo.problem.hessians()`.
 
 Returns:
     ``bool``: a flag signalling the availability of the hessians in the UDP
@@ -826,14 +826,14 @@ the ``hessians()`` method of the UDP. The ``hessians()`` method of the UDP must 
 a sparse representation of the hessians: the element :math:`l` of the returned vector contains
 :math:`h^l_{ij} = \frac{\partial f^2_l}{\partial x_i\partial x_j}` in the order specified by the
 :math:`l`-th element of the hessians sparsity pattern (a vector of index pairs :math:`(i,j)`)
-as returned by :func:`~pygmo.core.problem.hessians_sparsity()`. Since
+as returned by :func:`~pygmo.problem.hessians_sparsity()`. Since
 the hessians are symmetric, their sparse representation contains only lower triangular elements.
 
 If the UDP provides a ``hessians()`` method, this method will forward *dv* to the ``hessians()``
 method of the UDP after sanity checks. The output of the ``hessians()`` method of the UDP will
 also be checked before being returned. If the UDP does not provide a ``hessians()`` method, an
 error will be raised. A successful call of this method will increase the internal hessians
-evaluation counter (see :func:`~pygmo.core.problem.get_hevals()`).
+evaluation counter (see :func:`~pygmo.problem.get_hevals()`).
 
 The ``hessians()`` method of the UDP must be able to take as input the decision vector as a 1D NumPy
 array, and it must return the hessians vector as an iterable Python object (e.g., list, tuple, etc.).
@@ -845,7 +845,7 @@ Returns:
     ``list`` of 1D NumPy float array: the hessians of *dv*
 
 Raises:
-    ValueError: if the length of *dv* differs from the value returned by :func:`~pygmo.core.problem.get_nx()`, or
+    ValueError: if the length of *dv* differs from the value returned by :func:`~pygmo.problem.get_nx()`, or
       the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions, or
       the size of the return value is not equal to the fitness dimension
     NotImplementedError: if the UDP does not provide a ``hessians()`` method
@@ -872,11 +872,11 @@ The availability of the hessians sparsity is determined as follows:
   then this method will return the output of the ``has_hessians_sparsity()`` method of the UDP.
 
 The optional ``has_hessians_sparsity()`` method of the UDP must return a ``bool``. For information on how to
-implement the ``hessians_sparsity()`` method of the UDP, see :func:`~pygmo.core.problem.hessians_sparsity()`.
+implement the ``hessians_sparsity()`` method of the UDP, see :func:`~pygmo.problem.hessians_sparsity()`.
 
-**NOTE** regardless of what this method returns, the :func:`~pygmo.core.problem.hessians_sparsity()` method will always
+**NOTE** regardless of what this method returns, the :func:`~pygmo.problem.hessians_sparsity()` method will always
 return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
-pattern of the hessians is dense. See :func:`~pygmo.core.problem.hessians_sparsity()` for more details.
+pattern of the hessians is dense. See :func:`~pygmo.problem.hessians_sparsity()` for more details.
 
 Returns:
     ``bool``: a flag signalling the availability of the hessians sparsity in the UDP
@@ -895,13 +895,13 @@ sparsity pattern is a lexicographically sorted collection of the indices :math:`
 :math:`h^l_{ij} = \frac{\partial f^l}{\partial x_i\partial x_j}`. Since the Hessian matrix is symmetric, only
 lower triangular elements are allowed.
 
-If :func:`~pygmo.core.problem.has_hessians_sparsity()` returns ``True``, then the ``hessians_sparsity()`` method of the
+If :func:`~pygmo.problem.has_hessians_sparsity()` returns ``True``, then the ``hessians_sparsity()`` method of the
 UDP will be invoked, and its result returned (after sanity checks). Otherwise, a dense pattern is assumed and
 :math:`n_f` sparsity patterns containing :math:`((0,0),(1,0), (1,1), (2,0) ... (n_x-1,n_x-1))` will be returned.
 
 The ``hessians_sparsity()`` method of the UDP must return an iterable Python object of any kind. Each element of the
 returned object will then be interpreted as a sparsity pattern in the same way as described in
-:func:`~pygmo.core.problem.gradient_sparsity()`. Specifically:
+:func:`~pygmo.problem.gradient_sparsity()`. Specifically:
 
 * if the element is a NumPy array, its shape must be :math:`(n,2)` (with :math:`n \geq 0`),
 * if the element is itself an iterable Python object, then its elements must in turn be iterable Python objects
@@ -974,7 +974,7 @@ The availability of the ``set_seed()`` method is determined as follows:
   the output of the ``has_set_seed()`` method of the UDP.
 
 The optional ``has_set_seed()`` method of the UDP must return a ``bool``. For information on how to
-implement the ``set_seed()`` method of the UDP, see :func:`~pygmo.core.problem.set_seed()`.
+implement the ``set_seed()`` method of the UDP, see :func:`~pygmo.problem.set_seed()`.
 
 Returns:
     ``bool``: a flag signalling the availability of the ``set_seed()`` method in the UDP
@@ -987,7 +987,7 @@ std::string problem_feasibility_f_docstring()
     return R"(feasibility_f(f)
 
 This method will check the feasibility of a fitness vector *f* against the tolerances returned by
-:attr:`~pygmo.core.problem.c_tol`.
+:attr:`~pygmo.problem.c_tol`.
 
 Args:
     f (array-like object): a fitness vector
@@ -1007,7 +1007,7 @@ std::string problem_feasibility_x_docstring()
     return R"(feasibility_x(x)
 
 This method will check the feasibility of the fitness corresponding to a decision vector *x* against
-the tolerances returned by :attr:`~pygmo.core.problem.c_tol`.
+the tolerances returned by :attr:`~pygmo.problem.c_tol`.
 
 **NOTE** This will cause one fitness evaluation.
 
@@ -1018,8 +1018,8 @@ Returns:
     ``bool``: ``True`` if *x* results in a feasible fitness, ``False`` otherwise
 
 Raises:
-     unspecified: any exception thrown by :func:`~pygmo.core.problem.feasibility_f()` or
-       :func:`~pygmo.core.problem.fitness()`
+     unspecified: any exception thrown by :func:`~pygmo.problem.feasibility_f()` or
+       :func:`~pygmo.problem.fitness()`
 
 )";
 }
@@ -1086,8 +1086,7 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    1D NumPy float array: the best known solution for the )"
-           + name + R"( problem
+    1D NumPy float array: the best known solution for the )" + name + R"( problem
 
 )";
 }
@@ -1098,9 +1097,9 @@ std::string translate_docstring()
 
 The translate meta-problem.
 
-This meta-problem translates the whole search space of an input :class:`pygmo.core.problem` or 
-user-defined problem (UDP) by a fixed translation vector. :class:`~pygmo.core.translate` objects 
-are user-defined problems that can be used in the construction of a :class:`pygmo.core.problem`.
+This meta-problem translates the whole search space of an input :class:`pygmo.problem` or 
+user-defined problem (UDP) by a fixed translation vector. :class:`~pygmo.translate` objects 
+are user-defined problems that can be used in the construction of a :class:`pygmo.problem`.
 )";
 }
 
@@ -1128,13 +1127,13 @@ stochastic, deterministic, population based, derivative-free, using hessians,
 using gradients, a meta-heuristic, evolutionary, etc.. Via this class pygmo offers
 a common interface to all types of algorithms that can be applied to find solution
 to a generic matematical programming problem as represented by the
-:class:`~pygmo.core.problem` class.
+:class:`~pygmo.problem` class.
 
 In order to define an optimizaztion algorithm in pygmo, the user must first define a class
 whose methods describe the properties of the algorithm and implement its logic.
 In pygmo, we refer to such a class as a **user-defined algorithm**, or UDA for short. Once
 defined and instantiated, a UDA can then be used to construct an instance of this class,
-:class:`~pygmo.core.algorithm`, which provides a generic interface to optimization algorithms.
+:class:`~pygmo.algorithm`, which provides a generic interface to optimization algorithms.
 
 Every UDA must implement at least the following method:
 
@@ -1143,7 +1142,7 @@ Every UDA must implement at least the following method:
    def evolve(self, pop):
      ...
 
-The ``evolve()`` method takes as input a :class:`~pygmo.core.population`, and it is expected to return
+The ``evolve()`` method takes as input a :class:`~pygmo.population`, and it is expected to return
 a new population generated by the *evolution* (or *optimisation*) of the original population.
 
 Additional optional methods can be implemented in a UDA:
@@ -1164,7 +1163,7 @@ Additional optional methods can be implemented in a UDA:
      ...
 
 See the documentation of the corresponding methods in this class for details on how the optional
-methods in the UDA should be implemented and on how they are used by :class:`~pygmo.core.algorithm`.
+methods in the UDA should be implemented and on how they are used by :class:`~pygmo.algorithm`.
 Note that the exposed C++ algorithms can also be used as UDAs, even if they do not expose any of the
 mandatory or optional methods listed above (see :ref:`here <py_algorithms>` for the
 full list of UDAs already coded in pygmo).
@@ -1173,7 +1172,7 @@ This class is the Python counterpart of the C++ class :cpp:class:`pagmo::algorit
 
 Args:
     uda: a user-defined algorithm (either C++ or Python - note that *uda* will be deep-copied
-      and stored inside the :class:`~pygmo.core.algorithm` instance)
+      and stored inside the :class:`~pygmo.algorithm` instance)
 
 Raises:
     NotImplementedError: if *uda* does not implement the mandatory method detailed above
@@ -1196,10 +1195,10 @@ This method will invoke the ``evolve()`` method of the UDA. This is where the co
 (*evolution*) is made.
 
 Args:
-    pop (:class:`~pygmo.core.population`): starting population
+    pop (:class:`~pygmo.population`): starting population
 
 Returns:
-    :class:`~pygmo.core.population`: evolved population
+    :class:`~pygmo.population`: evolved population
 
 Raises:
     unspecified: any exception thrown by the ``evolve()`` method of the UDA or by failures at the
@@ -1248,7 +1247,7 @@ The availability of the ``set_seed()`` method is determined as follows:
   the output of the ``has_set_seed()`` method of the UDA.
 
 The optional ``has_set_seed()`` method of the UDA must return a ``bool``. For information on how to
-implement the ``set_seed()`` method of the UDA, see :func:`~pygmo.core.algorithm.set_seed()`.
+implement the ``set_seed()`` method of the UDA, see :func:`~pygmo.algorithm.set_seed()`.
 
 Returns:
     ``bool``: a flag signalling the availability of the ``set_seed()`` method in the UDA
@@ -1297,7 +1296,7 @@ The availability of the ``set_verbosity()`` method is determined as follows:
   the output of the ``has_set_verbosity()`` method of the UDA.
 
 The optional ``has_set_verbosity()`` method of the UDA must return a ``bool``. For information on how to
-implement the ``set_verbosity()`` method of the UDA, see :func:`~pygmo.core.algorithm.set_verbosity()`.
+implement the ``set_verbosity()`` method of the UDA, see :func:`~pygmo.algorithm.set_verbosity()`.
 
 Returns:
     ``bool``: a flag signalling the availability of the ``set_verbosity()`` method in the UDA
@@ -1364,10 +1363,10 @@ std::string generic_uda_inner_algorithm_docstring()
 
     return R"(Inner algorithm of the meta-algorithm
 
-This read-only property gives direct access to the :class:`~pygmo.core.algorithm` stored within the meta-algorithm.
+This read-only property gives direct access to the :class:`~pygmo.algorithm` stored within the meta-algorithm.
 
 Returns:
-    :class:`~pygmo.core.algorithm`: a reference to the inner algorithm
+    :class:`~pygmo.algorithm`: a reference to the inner algorithm
 
 )";
 }
@@ -1377,10 +1376,10 @@ std::string generic_udp_inner_problem_docstring()
 
     return R"(Inner problem of the meta-problem
 
-This read-only property gives direct access to the :class:`~pygmo.core.problem` stored within the meta-problem.
+This read-only property gives direct access to the :class:`~pygmo.problem` stored within the meta-problem.
 
 Returns:
-    :class:`~pygmo.core.problem`: a reference to the inner problem
+    :class:`~pygmo.problem`: a reference to the inner problem
 
 )";
 }
@@ -1398,7 +1397,7 @@ cluster or the MGA-1DSM interplanetary trajectory problem that are conjectured t
 funnel structure.
 
 In pygmo we provide an original generalization of this concept resulting in a meta-algorithm that operates
-on any :class:`pygmo.core.population` using any suitable user-defined algorithm (UDA). When a population containing a single
+on any :class:`pygmo.population` using any suitable user-defined algorithm (UDA). When a population containing a single
 individual is used and coupled with a local optimizer, the original method is recovered.
 The pseudo code of our generalized version is:
 
@@ -1416,7 +1415,7 @@ The pseudo code of our generalized version is:
    > > else
    > > > i = 0
 
-:class:`pygmo.core.mbh` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.core.algorithm` objects.
+:class:`pygmo.mbh` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
 See: http://arxiv.org/pdf/cond-mat/9803344 for the paper introducing the basin hopping idea for a Lennard-Jones
 cluster optimization.
@@ -1430,7 +1429,7 @@ std::string mbh_get_seed_docstring()
 {
     return R"(get_seed()
 
-Get the seed value that was used for the construction of this :class:`~pygmo.core.mbh`.
+Get the seed value that was used for the construction of this :class:`~pygmo.mbh`.
 
 Returns:
     ``int``: the seed value
@@ -1442,7 +1441,7 @@ std::string mbh_get_verbosity_docstring()
 {
     return R"(get_verbosity()
 
-Get the verbosity level value that was used for the construction of this :class:`~pygmo.core.mbh`.
+Get the verbosity level value that was used for the construction of this :class:`~pygmo.mbh`.
 
 Returns:
     ``int``: the verbosity level
@@ -1471,8 +1470,8 @@ std::string mbh_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity parameter
-(by default nothing is logged) which can be set calling :func:`~pygmo.core.algorithm.set_verbosity()` on a :class:`~pygmo.core.algorithm` constructed
-with an :class:`~pygmo.core.mbh`. A verbosity level ``N > 0`` will log one line at the end of each call to the inner algorithm.
+(by default nothing is logged) which can be set calling :func:`~pygmo.algorithm.set_verbosity()` on a :class:`~pygmo.algorithm` constructed
+with an :class:`~pygmo.mbh`. A verbosity level ``N > 0`` will log one line at the end of each call to the inner algorithm.
 
 Returns:
     ``list`` of ``tuples``: at each call of the inner algorithm, the values ``Fevals``, ``Best``, ``Violated``, ``Viol. Norm`` and ``Trial``, where:
@@ -1523,7 +1522,7 @@ std::string cstrs_self_adaptive_docstring()
 This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
 (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
 technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire
-underlying population. The resulting approach is an alternative to using the meta-problem :class:`~pygmo.core.unconstrain`
+underlying population. The resulting approach is an alternative to using the meta-problem :class:`~pygmo.unconstrain`
 to transform the constrained fitness into an unconstrained fitness.
 
 The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
@@ -1559,7 +1558,7 @@ objective function. Using the above definitions the overall pseudo code can be s
    > > Reinsert the best decision vector from the previous evolution
 
 
-:class:`pygmo.core.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.core.algorithm` objects.
+:class:`pygmo.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
 **NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
@@ -1587,8 +1586,8 @@ std::string cstrs_self_adaptive_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity parameter
-(by default nothing is logged) which can be set calling :func:`~pygmo.core.algorithm.set_verbosity()` on a :class:`~pygmo.core.algorithm` constructed
-with an :class:`~pygmo.core.cstrs_self_adaptive`. A verbosity level of ``N > 0`` will log one line each ``N`` ``iters``.
+(by default nothing is logged) which can be set calling :func:`~pygmo.algorithm.set_verbosity()` on a :class:`~pygmo.algorithm` constructed
+with an :class:`~pygmo.cstrs_self_adaptive`. A verbosity level of ``N > 0`` will log one line each ``N`` ``iters``.
 
 Returns:
     ``list`` of ``tuples``: at each call of the inner algorithm, the values ``Iters``, ``Fevals``, ``Best``, ``Infeasibility``, 
@@ -1632,7 +1631,7 @@ std::string null_algorithm_docstring()
 
 The null algorithm.
 
-An algorithm used in the default-initialization of :class:`pygmo.core.algorithm` and of the meta-algorithms.
+An algorithm used in the default-initialization of :class:`pygmo.algorithm` and of the meta-algorithms.
 
 )";
 }
@@ -1643,7 +1642,7 @@ std::string null_problem_docstring()
 
 The null problem.
 
-A problem used in the default-initialization of :class:`pygmo.core.problem` and of the meta-problems.
+A problem used in the default-initialization of :class:`pygmo.problem` and of the meta-problems.
 
 Args:
     nobj (``int``): the number of objectives
@@ -1689,12 +1688,12 @@ the pareto front of any DTLZ problem analytically.
 
 Args:
     point (array-like object): decision vector for which the p distance is requested
-    pop (:class:`~pygmo.core.population`): population for which the average p distance is requested
+    pop (:class:`~pygmo.population`): population for which the average p distance is requested
 
 Returns:
     ``float``: the distance (or average distance) from the Pareto front
 
-See also the docs of the C++ class :func:`~pygmo.core.zdt.p_distance()`
+See also the docs of the C++ class :func:`~pygmo.zdt.p_distance()`
 
 )";
 }
@@ -1712,12 +1711,12 @@ the pareto front of any DTLZ problem analytically.
 
 Args:
     point (array-like object): decision vector for which the p distance is requested
-    pop (:class:`~pygmo.core.population`): population for which the average p distance is requested
+    pop (:class:`~pygmo.population`): population for which the average p distance is requested
 
 Returns:
     ``float``: the distance (or average distance) from the Pareto front
 
-See also the docs of the C++ class :func:`~pygmo.core.dtlz.p_distance()`
+See also the docs of the C++ class :func:`~pygmo.dtlz.p_distance()`
 
 )";
 }
@@ -1869,8 +1868,8 @@ std::string bee_colony_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.bee_colony`. A verbosity of ``N`` implies a log line each ``N`` generations.
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.bee_colony`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Current best``, ``Best``, where:
@@ -1945,8 +1944,8 @@ std::string de_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.de`. A verbosity of ``N`` implies a log line each ``N`` generations.
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.de`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``dx``, ``df``, where:
@@ -2006,8 +2005,8 @@ std::string compass_search_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.compass_search`. A verbosity larger than 0 implies one log line at each improvment of the fitness or
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.compass_search`. A verbosity larger than 0 implies one log line at each improvment of the fitness or
 change in the search range.
 
 Returns:
@@ -2117,8 +2116,8 @@ std::string sade_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.sade`. A verbosity of ``N`` implies a log line each ``N`` generations.
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.sade`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``F``, ``CR``, ``dx``, ``df``, where:
@@ -2188,8 +2187,8 @@ std::string nsga2_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.nsga2`. A verbosity of ``N`` implies a log line each ``N`` generations.
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.nsga2`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
@@ -2257,8 +2256,8 @@ std::string moead_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.moead`. A verbosity of ``N`` implies a log line each ``N`` generations.
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.moead`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ADR``, ``ideal_point``, where:
@@ -2322,8 +2321,8 @@ std::string cmaes_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.cmaes`. A verbosity of ``N`` implies a log line each ``N`` generations.
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.cmaes`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``dx``, ``df``, ``sigma``, where:
@@ -2363,7 +2362,7 @@ std::string de1220_docstring()
     return R"(__init__(gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
 
 Self-adaptive Differential Evolution, pygmo flavour (pDE).
-The adaptation of the mutation variant is added to :class:`~pygmo.core.sade`
+The adaptation of the mutation variant is added to :class:`~pygmo.sade`
 
 Args:
     gen (``int``): number of generations
@@ -2416,8 +2415,8 @@ std::string de1220_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.de1220`. A verbosity of N implies a log line each N generations.
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.de1220`. A verbosity of N implies a log line each N generations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``F``, ``CR``, ``Variant``, ``dx``, ``df``, where:
@@ -2507,8 +2506,8 @@ std::string pso_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm`
-constructed with a :class:`~pygmo.core.de1220`. A verbosity of ``N`` implies a log line each ``N`` generations.
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.de1220`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``gbest``, ``Mean Vel.``, ``Mean lbest``, ``Avg. Dist.``, where:
@@ -2577,8 +2576,8 @@ std::string simulated_annealing_get_log_docstring()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. 
 The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
-the method :func:`~pygmo.core.algorithm.set_verbosity()` on an :class:`~pygmo.core.algorithm` constructed with a
-:class:`~pygmo.core.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
+the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
+:class:`~pygmo.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
 each verbosity function evaluations.
 
 Returns:
@@ -2664,7 +2663,7 @@ where :math:`d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}`,
 it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
 this behaviour so that whenever a new ideal point is found :math:`z^*` is adapted accordingly.
 
-**NOTE** The use of :class:`~pygmo.core.decompose` discards gradients and hessians so that if the original user defined problem
+**NOTE** The use of :class:`~pygmo.decompose` discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
 the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.
@@ -2752,7 +2751,7 @@ This meta-problem transforms a constrained problem into an unconstrained problem
 * Ignore the constraints: simply ignores the constraints.
 * Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraints violation (i.e. the sum of the L2 norms of the equalities and inequalities violations)
 
-**NOTE** The use of :class:`~pygmo.core.unconstrain` discards gradients and hessians so that if the original user defined problem
+**NOTE** The use of :class:`~pygmo.unconstrain` discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the unconstrained problem. The reason for this behaviour is that,
 in general, the methods implemented may not be differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.
@@ -2825,7 +2824,7 @@ std::string non_dominated_front_2d_docstring()
     return R"(non_dominated_front_2d(points)
 
 Finds the non dominated front of a set of two dimensional objectives. Complexity is :math:`\mathcal{O}(N \log N)`
-and is thus lower than the complexity of calling :func:`~pygmo.core.fast_non_dominated_sorting`
+and is thus lower than the complexity of calling :func:`~pygmo.fast_non_dominated_sorting`
 
 See: Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
 IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
@@ -2915,11 +2914,11 @@ std::string select_best_N_mo_docstring()
 
 Returns (unordered) the best N individuals out of a multi-objective, unconstrained population, (intended here
 as a 2D array-like containing objective vectors). The strict ordering used is the same as that defined
-in :func:`~pygmo.core.sort_population_mo`
+in :func:`~pygmo.sort_population_mo`
 
 Complexity is :math:`\mathcal{O}(M N^2)` where :math:`M` is the number of objectives and :math:`N` is the number of individuals.
 
-While the complexity is the same as that of :func:`~pygmo.core.sort_population_mo`, this function is to be preferred when 
+While the complexity is the same as that of :func:`~pygmo.sort_population_mo`, this function is to be preferred when 
 possible in that it avoids to compute the crowidng distance for all individuals and only computes it for the last
 non-dominated front containing individuals included in the best N.
 
@@ -3125,7 +3124,7 @@ Performs a numerical estimation of the sparsity pattern of same callable object 
 computing it around the input point *x* and detecting the components that are changed.
 
 The *callable* must accept an iterable as input and return an array-like object. The gradient returned will be dense
-and contain, in the lexicographic order requested by :class:`~pygmo.core.hypervoproblem.gradient`, :math:`\frac{df_i}{dx_j}`.
+and contain, in the lexicographic order requested by :class:`~pygmo.hypervoproblem.gradient`, :math:`\frac{df_i}{dx_j}`.
 
 The numerical approximation of each derivative is made by central difference, according to the formula:
 
@@ -3163,7 +3162,7 @@ Performs a numerical estimation of the sparsity pattern of same callable object 
 computing it around the input point *x* and detecting the components that are changed.
 
 The *callable* must accept an iterable as input and return an array-like object. The gradient returned will be dense
-and contain, in the lexicographic order requested by :class:`~pygmo.core.hypervoproblem.gradient`, :math:`\frac{df_i}{dx_j}`.
+and contain, in the lexicographic order requested by :class:`~pygmo.hypervoproblem.gradient`, :math:`\frac{df_i}{dx_j}`.
 
 The numerical approximation of each derivative is made by central difference, according to the formula:
 
@@ -3231,8 +3230,8 @@ std::string hvwfg_docstring()
 The hypervolume algorithm from the Walking Fish Group (2011 version).
 
 This object can be passed as parameter to the various methods of the 
-class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
-class :class:`~pygmo.core._hv_algorithm`
+class :class:`~pygmo.hypervolume` as it derives from the hidden base
+class :class:`~pygmo._hv_algorithm`
 
 Args:
     stop_dimension (``int``): the input population
@@ -3256,8 +3255,8 @@ std::string hv2d_docstring()
 Exact hypervolume algorithm for two dimensional points.
 
 This object can be passed as parameter to the various methods of the 
-class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
-class :class:`~pygmo.core._hv_algorithm`
+class :class:`~pygmo.hypervolume` as it derives from the hidden base
+class :class:`~pygmo._hv_algorithm`
 
 Examples:
     >>> import pygmo as pg
@@ -3275,8 +3274,8 @@ std::string hv3d_docstring()
 Exact hypervolume algorithm for three dimensional points.
 
 This object can be passed as parameter to the various methods of the 
-class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
-class :class:`~pygmo.core._hv_algorithm`
+class :class:`~pygmo.hypervolume` as it derives from the hidden base
+class :class:`~pygmo._hv_algorithm`
 
 Examples:
     >>> import pygmo as pg
@@ -3295,8 +3294,8 @@ Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedr
 reduced to the special case of approximating the least contributor.
 
 This object can be passed as parameter to the various methods of the 
-class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
-class :class:`~pygmo.core._hv_algorithm`
+class :class:`~pygmo.hypervolume` as it derives from the hidden base
+class :class:`~pygmo._hv_algorithm`
 
 Examples:
     >>> import pygmo as pg
@@ -3315,8 +3314,8 @@ Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedr
 reduced to the special case of approximating the hypervolume indicator.
 
 This object can be passed as parameter to the various methods of the 
-class :class:`~pygmo.core.hypervolume` as it derives from the hidden base
-class :class:`~pygmo.core._hv_algorithm`
+class :class:`~pygmo.hypervolume` as it derives from the hidden base
+class :class:`~pygmo._hv_algorithm`
 
 Examples:
     >>> import pygmo as pg
@@ -3334,7 +3333,7 @@ std::string hv_init1_docstring()
 Constructor from population
 
 Args:
-    pop (:class:`~pygmo.core.population`): the input population
+    pop (:class:`~pygmo.population`): the input population
 
 Raises:
     ValueError: if *pop* contains a single-objective or a constrained problem
@@ -3381,7 +3380,7 @@ specific for the point dimension.
 
 Args:
     ref_point (2d array-like object): the points
-    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo._hv_algorithm`): hypervolume algorithm to be used
 
 Returns:
     ``float``: the computed hypervolume assuming *ref_point* as reference point
@@ -3404,7 +3403,7 @@ for :func:`~pygmo.hypervolume.exclusive` in a loop).
 
 Args:
     ref_point (2d array-like object): the points
-    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo._hv_algorithm`): hypervolume algorithm to be used
 
 Returns:
     1D NumPy float array: the contribution of all points to the hypervolume
@@ -3426,7 +3425,7 @@ Computes the exclusive contribution to the hypervolume of a particular point.
 Args:
     idx (``int``): index of the point
     ref_point (array-like object): the reference point
-    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo._hv_algorithm`): hypervolume algorithm to be used
 
 
 Returns:
@@ -3449,7 +3448,7 @@ Computes the point contributing the most to the total hypervolume.
 
 Args:
     ref_point (array-like object): the reference point
-    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo._hv_algorithm`): hypervolume algorithm to be used
 
 Raises:
     ValueError: if *ref_point* is not suitable
@@ -3467,7 +3466,7 @@ Computes the point contributing the least to the total hypervolume.
 
 Args:
     ref_point (array-like object): the reference point
-    hv_algo (deriving from :class:`~pygmo.core._hv_algorithm`): hypervolume algorithm to be used
+    hv_algo (deriving from :class:`~pygmo._hv_algorithm`): hypervolume algorithm to be used
 
 Raises:
     ValueError: if *ref_point* is not suitable
@@ -3505,19 +3504,19 @@ std::string island_docstring()
 In the pygmo jargon, an island is a class that encapsulates three entities:
 
 * a user-defined island (**UDI**),
-* an :class:`~pygmo.core.algorithm`,
-* a :class:`~pygmo.core.population`.
+* an :class:`~pygmo.algorithm`,
+* a :class:`~pygmo.population`.
 
 Through the UDI, the island class manages the asynchronous evolution (or optimisation)
-of its :class:`~pygmo.core.population` via the algorithm's :func:`~pygmo.core.algorithm.evolve()`
+of its :class:`~pygmo.population` via the algorithm's :func:`~pygmo.algorithm.evolve()`
 method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
-:class:`~pygmo.core.thread_island`), in a separate process (e.g., if the UDI is a
+:class:`~pygmo.thread_island`), in a separate process (e.g., if the UDI is a
 :class:`~pygmo.py_islands.mp_island`) or even in a separate machine (e.g., if the UDI is a
 :class:`~pygmo.py_islands.ipyparallel_island`). The evolution is always asynchronous (i.e., running in the
-"background") and it is initiated by a call to the :func:`~pygmo.core.island.evolve()` method. At any
+"background") and it is initiated by a call to the :func:`~pygmo.island.evolve()` method. At any
 time the user can query the state of the island and fetch its internal data members. The user can explicitly
-wait for pending evolutions to conclude by calling the :func:`~pygmo.core.island.wait()` and
-:func:`~pygmo.core.island.get()` methods.
+wait for pending evolutions to conclude by calling the :func:`~pygmo.island.wait()` and
+:func:`~pygmo.island.get()` methods.
 
 Typically, pagmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
@@ -3528,9 +3527,9 @@ the following method:
    def run_evolve(self, algo, pop):
      ...
 
-The ``run_evolve()`` method of the UDI will use the input :class:`~pygmo.core.algorithm`'s
-:func:`~pygmo.core.algorithm.evolve()` method to evolve the input :class:`~pygmo.core.population` and, once the evolution
-is finished, it will return the evolved :class:`~pygmo.core.population`. Note that, since internally the :class:`~pygmo.core.island`
+The ``run_evolve()`` method of the UDI will use the input :class:`~pygmo.algorithm`'s
+:func:`~pygmo.algorithm.evolve()` method to evolve the input :class:`~pygmo.population` and, once the evolution
+is finished, it will return the evolved :class:`~pygmo.population`. Note that, since internally the :class:`~pygmo.island`
 class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs to guarantee a certain degree of
 thread-safety: it must be possible to interact with the UDI while evolution is ongoing (e.g., it must be possible to copy
 the UDI while evolution is undergoing, or call the ``get_name()``, ``get_extra_info()`` methods, etc.), otherwise the behaviour
@@ -3546,24 +3545,24 @@ In addition to the mandatory ``run_evolve()`` method, a UDI may implement the fo
      ...
 
 See the documentation of the corresponding methods in this class for details on how the optional
-methods in the UDI are used by :class:`~pygmo.core.island`. This class is the Python counterpart of the C++ class
+methods in the UDI are used by :class:`~pygmo.island`. This class is the Python counterpart of the C++ class
 :cpp:class:`pagmo::island`.
 
 An island can be initialised in a variety of ways using keyword arguments:
 
-* if the arguments list is empty, a default :class:`~pygmo.core.island` is constructed, containing a
-  :class:`~pygmo.core.thread_island` UDI, a :class:`~pygmo.core.null_algorithm` algorithm and an empty
-  population with problem type :class:`~pygmo.core.null_problem`;
+* if the arguments list is empty, a default :class:`~pygmo.island` is constructed, containing a
+  :class:`~pygmo.thread_island` UDI, a :class:`~pygmo.null_algorithm` algorithm and an empty
+  population with problem type :class:`~pygmo.null_problem`;
 * if the arguments list contains *algo*, *pop* and, optionally, *udi*, then the constructor will initialise
-  an :class:`~pygmo.core.island` containing the specified algorithm, population and UDI. If the *udi* parameter
+  an :class:`~pygmo.island` containing the specified algorithm, population and UDI. If the *udi* parameter
   is not supplied, the UDI type is chosen according to a heuristic which depends on the platform, the
   Python version and the supplied *algo* and *pop* parameters:
 
   * if *algo* and *pop*'s problem provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee,
-    then :class:`~pygmo.core.thread_island` will be selected as UDI type;
+    then :class:`~pygmo.thread_island` will be selected as UDI type;
   * otherwise, if the current platform is Windows or the Python version is at least 3.4, then :class:`~pygmo.py_islands.mp_island`
     will be selected as UDI type, else :class:`~pygmo.py_islands.ipyparallel_island` will be chosen;
-* if the arguments list contains *algo*, *prob*, *size* and, optionally, *udi* and *seed*, then a :class:`~pygmo.core.population`
+* if the arguments list contains *algo*, *prob*, *size* and, optionally, *udi* and *seed*, then a :class:`~pygmo.population`
   will be constructed from *prob*, *size* and *seed*, and the construction will then proceed in the same way detailed
   above (i.e., *algo* and the newly-created population are used to initialise the island's algorithm and population,
   and the UDI, if not specified, will be chosen according to the heuristic detailed above).
@@ -3579,16 +3578,16 @@ std::string island_evolve_docstring()
 
 Launch evolution.
 
-This method will evolve the island’s :class:`~pygmo.core.population` using the island’s :class:`~pygmo.core.algorithm`.
-The evolution happens asynchronously: a call to :func:`~pygmo.core.island.evolve()` will create an evolution task that
+This method will evolve the island’s :class:`~pygmo.population` using the island’s :class:`~pygmo.algorithm`.
+The evolution happens asynchronously: a call to :func:`~pygmo.island.evolve()` will create an evolution task that
 will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution
-managed by the :class:`~pygmo.core.island` object. Each task will invoke the ``run_evolve()`` method of the UDI *n*
+managed by the :class:`~pygmo.island` object. Each task will invoke the ``run_evolve()`` method of the UDI *n*
 times consecutively to perform the actual evolution. The island's population will be updated at the end of each ``run_evolve()``
 invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling
-:func:`~pygmo.core.island.get()`.
+:func:`~pygmo.island.get()`.
 
 It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
-first-out) fashion. The user may call :func:`~pygmo.core.island.wait()` or :func:`~pygmo.core.island.get()` to block until all
+first-out) fashion. The user may call :func:`~pygmo.island.wait()` or :func:`~pygmo.island.get()` to block until all
 tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
 
 Args:
@@ -3608,9 +3607,9 @@ std::string island_get_docstring()
 
 Block until evolution ends and re-raise the first stored exception.
 
-This method will block until all the evolution tasks enqueued via :func:`~pygmo.core.island.evolve()` have been completed.
-The method will then raise the first exception raised by any task enqueued since the last time :func:`~pygmo.core.island.wait()`
-or :func:`~pygmo.core.island.get()` were called.
+This method will block until all the evolution tasks enqueued via :func:`~pygmo.island.evolve()` have been completed.
+The method will then raise the first exception raised by any task enqueued since the last time :func:`~pygmo.island.wait()`
+or :func:`~pygmo.island.get()` were called.
 
 Raises:
     unspecified: any exception thrown by evolution tasks or by the underlying C++ method
@@ -3622,7 +3621,7 @@ std::string island_wait_docstring()
 {
     return R"(wait()
 
-This method will block until all the evolution tasks enqueued via :func:`~pygmo.core.island.evolve()` have been completed.
+This method will block until all the evolution tasks enqueued via :func:`~pygmo.island.evolve()` have been completed.
 
 )";
 }
@@ -3648,7 +3647,7 @@ Get the algorithm.
 It is safe to call this method while the island is evolving.
 
 Returns:
-    :class:`~pygmo.core.algorithm`: a copy of the island's algorithm
+    :class:`~pygmo.algorithm`: a copy of the island's algorithm
 
 Raises:
     unspecified: any exception thrown by the underlying C++ method
@@ -3665,7 +3664,7 @@ Set the algorithm.
 It is safe to call this method while the island is evolving.
 
 Args:
-    algo (:class:`~pygmo.core.algorithm`): the algorithm that will be copied into the island
+    algo (:class:`~pygmo.algorithm`): the algorithm that will be copied into the island
 
 Raises:
     unspecified: any exception thrown by the underlying C++ method
@@ -3682,7 +3681,7 @@ Get the population.
 It is safe to call this method while the island is evolving.
 
 Returns:
-    :class:`~pygmo.core.population`: a copy of the island's population
+    :class:`~pygmo.population`: a copy of the island's population
 
 Raises:
     unspecified: any exception thrown by the underlying C++ method
@@ -3699,7 +3698,7 @@ Set the population.
 It is safe to call this method while the island is evolving.
 
 Args:
-    pop (:class:`~pygmo.core.population`): the population that will be copied into the island
+    pop (:class:`~pygmo.population`): the population that will be copied into the island
 
 Raises:
     unspecified: any exception thrown by the underlying C++ method
@@ -3773,8 +3772,8 @@ std::string thread_island_docstring()
 Thread island.
 
 This class is a user-defined island (UDI) that will run evolutions directly inside
-the separate thread of execution within :class:`pygmo.core.island`. Evolution tasks running on this
-UDI must involve :class:`~pygmo.core.algorithm` and :class:`~pygmo.core.problem` instances
+the separate thread of execution within :class:`pygmo.island`. Evolution tasks running on this
+UDI must involve :class:`~pygmo.algorithm` and :class:`~pygmo.problem` instances
 that provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee, otherwise
 errors will be raised during the evolution.
 
@@ -3787,7 +3786,7 @@ std::string archipelago_docstring()
 {
     return R"(Archipelago.
 
-An archipelago is a collection of :class:`~pygmo.core.island` objects which provides a convenient way to perform
+An archipelago is a collection of :class:`~pygmo.island` objects which provides a convenient way to perform
 multiple optimisations in parallel.
 
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::archipelago`.
@@ -3801,15 +3800,15 @@ std::string archipelago_evolve_docstring()
 
 Evolve archipelago.
 
-This method will call :func:`pygmo.core.island.evolve()` on all the islands of the archipelago.
+This method will call :func:`pygmo.island.evolve()` on all the islands of the archipelago.
 The input parameter *n* represent the number of times the ``run_evolve()`` method of the island's
 UDI is called within the evolution task.
 
 Args:
-     n (``int``): the parameter that will be passed to :func:`pygmo.core.island.evolve()`
+     n (``int``): the parameter that will be passed to :func:`pygmo.island.evolve()`
 
 Raises:
-    unspecified: any exception thrown by :func:`pygmo.core.island.evolve()`
+    unspecified: any exception thrown by :func:`pygmo.island.evolve()`
 
 )";
 }
@@ -3832,7 +3831,7 @@ std::string archipelago_wait_docstring()
 
 Block until all evolutions have finished.
 
-This method will call :func:`pygmo.core.island.wait()` on all the islands of the archipelago.
+This method will call :func:`pygmo.island.wait()` on all the islands of the archipelago.
 
 )";
 }
@@ -3843,9 +3842,9 @@ std::string archipelago_get_docstring()
 
 Block until all evolutions have finished and raise the first exception that was encountered.
 
-This method will call :func:`pygmo.core.island.get()` on all the islands of the archipelago.
-If an invocation of :func:`pygmo.core.island.get()` raises an exception, then on the remaining
-islands :func:`pygmo.core.island.wait()` will be called instead, and the raised exception will be re-raised
+This method will call :func:`pygmo.island.get()` on all the islands of the archipelago.
+If an invocation of :func:`pygmo.island.get()` raises an exception, then on the remaining
+islands :func:`pygmo.island.wait()` will be called instead, and the raised exception will be re-raised
 by this method.
 
 Raises:
@@ -3860,7 +3859,7 @@ std::string archipelago_getitem_docstring()
     return R"(__getitem__(i)
 
 This subscript operator can be used to access the *i*-th island of the archipelago (that is, the *i*-th island that was
-inserted via :func:`~pygmo.core.archipelago.push_back()`).
+inserted via :func:`~pygmo.archipelago.push_back()`).
 
 Raises:
     IndexError: if *i* is greater than the size of the archipelago
@@ -3892,20 +3891,20 @@ NLopt algorithms is:
 * preconditioned truncated Newton,
 * shifted limited-memory variable-metric.
 
-The desired NLopt solver is selected upon construction of an :class:`~pygmo.core.nlopt` algorithm. Various properties
+The desired NLopt solver is selected upon construction of an :class:`~pygmo.nlopt` algorithm. Various properties
 of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
-is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.core.nlopt.xtol_rel`).
+is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.nlopt.xtol_rel`).
 
 All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
 Some solvers support equality and/or inequality constaints.
 
 In order to support pagmo's population-based optimisation model, the ``evolve()`` method will select
-a single individual from the input :class:`~pygmo.core.population` to be optimised by the NLopt solver.
+a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.
 The optimised individual will then be inserted back into the population at the end of the optimisation.
-The selection and replacement strategies can be configured via the :attr:`~pygmo.core.nlopt.selection`
-and :attr:`~pygmo.core.nlopt.replacement` attributes.
+The selection and replacement strategies can be configured via the :attr:`~pygmo.nlopt.selection`
+and :attr:`~pygmo.nlopt.replacement` attributes.
 
 .. note::
 
@@ -3917,7 +3916,7 @@ and :attr:`~pygmo.core.nlopt.replacement` attributes.
    The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed description
    of each supported solver.
 
-This constructor will initialise an :class:`~pygmo.core.nlopt` object which will use the NLopt algorithm specified by
+This constructor will initialise an :class:`~pygmo.nlopt` object which will use the NLopt algorithm specified by
 the input string *solver*, the ``"best"`` individual selection strategy and the ``"best"`` individual
 replacement strategy. *solver* is translated to an NLopt algorithm type according to the following
 translation table:
@@ -3954,7 +3953,7 @@ See also the docs of the C++ class :cpp:class:`pagmo::nlopt`.
    description of each supported solver.
 
 Args:
-    solver (``str``): the name of the NLopt algorithm that will be used by this :class:`~pygmo.core.nlopt` object
+    solver (``str``): the name of the NLopt algorithm that will be used by this :class:`~pygmo.nlopt` object
 
 Raises:
     RuntimeError: if the NLopt version is not at least 2
@@ -4154,7 +4153,7 @@ If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"r
 * ``"worst"`` will select the worst individual in the population,
 * ``"random"`` will randomly choose one individual in the population.
 
-:func:`~pygmo.core.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+:func:`~pygmo.nlopt.set_random_sr_seed()` can be used to seed the random number generator
 used by the ``"random"`` policy.
 
 If the attribute is an integer, it represents the index (in the population) of the individual that is selected
@@ -4186,7 +4185,7 @@ If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"r
 * ``"worst"`` will select the worst individual in the population,
 * ``"random"`` will randomly choose one individual in the population.
 
-:func:`~pygmo.core.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+:func:`~pygmo.nlopt.set_random_sr_seed()` can be used to seed the random number generator
 used by the ``"random"`` policy.
 
 If the attribute is an integer, it represents the index (in the population) of the individual that will be
@@ -4213,8 +4212,8 @@ Set the seed for the ``"random"`` selection/replacement policies.
 
 Args:
     seed (``int``): the value that will be used to seed the random number generator used by the ``"random"``
-      election/replacement policies (see :attr:`~pygmo.core.nlopt.selection` and
-      :attr:`~pygmo.core.nlopt.replacement`)
+      election/replacement policies (see :attr:`~pygmo.nlopt.selection` and
+      :attr:`~pygmo.nlopt.replacement`)
 
 Raises:
     OverflowError: if the attribute is set to an integer which is negative or too large

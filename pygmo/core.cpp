@@ -537,7 +537,7 @@ BOOST_PYTHON_MODULE(core)
         .def("set_seed", &problem::set_seed, pygmo::problem_set_seed_docstring().c_str(), (bp::arg("seed")))
         .def("has_set_seed", &problem::has_set_seed, pygmo::problem_has_set_seed_docstring().c_str())
         .def("is_stochastic", &problem::is_stochastic,
-             "is_stochastic()\n\nAlias for :func:`~pygmo.core.problem.has_set_seed()`.\n")
+             "is_stochastic()\n\nAlias for :func:`~pygmo.problem.has_set_seed()`.\n")
         .def("feasibility_x",
              lcast([](const problem &p, const bp::object &x) { return p.feasibility_x(pygmo::to_vd(x)); }),
              pygmo::problem_feasibility_x_docstring().c_str(), (bp::arg("x")))
@@ -568,7 +568,7 @@ BOOST_PYTHON_MODULE(core)
              (bp::arg("level")))
         .def("has_set_verbosity", &algorithm::has_set_verbosity, pygmo::algorithm_has_set_verbosity_docstring().c_str())
         .def("is_stochastic", &algorithm::is_stochastic,
-             "is_stochastic()\n\nAlias for :func:`~pygmo.core.algorithm.has_set_seed()`.\n")
+             "is_stochastic()\n\nAlias for :func:`~pygmo.algorithm.has_set_seed()`.\n")
         .def("get_name", &algorithm::get_name, pygmo::algorithm_get_name_docstring().c_str())
         .def("get_extra_info", &algorithm::get_extra_info, pygmo::algorithm_get_extra_info_docstring().c_str())
         .def("get_thread_safety", &algorithm::get_thread_safety,
