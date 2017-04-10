@@ -34,6 +34,8 @@ see https://www.gnu.org/licenses/. */
 #if defined(PAGMO_WITH_NLOPT)
 
 #include <algorithm>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 #include <boost/any.hpp>
 #include <boost/bimap.hpp>
 #include <boost/numeric/conversion/cast.hpp>
@@ -183,11 +185,6 @@ struct nlopt_obj {
                        double xtol_rel, double xtol_abs, int maxeval, int maxtime, unsigned verbosity)
         : m_algo(algo), m_prob(prob), m_value(nullptr, ::nlopt_destroy), m_verbosity(verbosity)
     {
-        // If needed, init the sparsity pattern.
-        if (prob.has_gradient_sparsity()) {
-            m_sp = prob.gradient_sparsity();
-        }
-
         // Extract and set problem dimension.
         const auto n = boost::numeric_cast<unsigned>(prob.get_nx());
         // Try to init the nlopt_obj.
@@ -203,25 +200,6 @@ struct nlopt_obj {
 
         // Variable to hold the result of various operations.
         ::nlopt_result res;
-
-        // Box bounds.
-        const auto bounds = prob.get_bounds();
-        res = ::nlopt_set_lower_bounds(m_value.get(), bounds.first.data());
-        if (res != NLOPT_SUCCESS) {
-            // LCOV_EXCL_START
-            pagmo_throw(std::invalid_argument, "could not set the lower bounds for the NLopt algorithm '"
-                                                   + data::names.right.at(algo) + "', the error is: "
-                                                   + nlopt_res2string(res));
-            // LCOV_EXCL_STOP
-        }
-        res = ::nlopt_set_upper_bounds(m_value.get(), bounds.second.data());
-        if (res != NLOPT_SUCCESS) {
-            // LCOV_EXCL_START
-            pagmo_throw(std::invalid_argument, "could not set the upper bounds for the NLopt algorithm '"
-                                                   + data::names.right.at(algo) + "', the error is: "
-                                                   + nlopt_res2string(res));
-            // LCOV_EXCL_STOP
-        }
 
         // This is just a vector_double that is re-used across objfun invocations.
         // It will hold the current decision vector.
@@ -293,9 +271,38 @@ struct nlopt_obj {
         }
     }
 
+    // Set box bounds.
+    void set_bounds()
+    {
+        const auto bounds = m_prob.get_bounds();
+        auto res = ::nlopt_set_lower_bounds(m_value.get(), bounds.first.data());
+        if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
+            pagmo_throw(std::invalid_argument, "could not set the lower bounds for the NLopt algorithm '"
+                                                   + data::names.right.at(m_algo) + "', the error is: "
+                                                   + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
+        }
+        res = ::nlopt_set_upper_bounds(m_value.get(), bounds.second.data());
+        if (res != NLOPT_SUCCESS) {
+            // LCOV_EXCL_START
+            pagmo_throw(std::invalid_argument, "could not set the upper bounds for the NLopt algorithm '"
+                                                   + data::names.right.at(m_algo) + "', the error is: "
+                                                   + nlopt_res2string(res));
+            // LCOV_EXCL_STOP
+        }
+    }
+
     // Set the objfun + gradient.
     void set_objfun()
     {
+        // If needed, init the sparsity pattern.
+        // NOTE: we do it here so that, in case this is a local optimiser,
+        // we don't waste memory (set_objfun() etc. are not called when setting up a local
+        // optimiser).
+        if (m_prob.has_gradient_sparsity()) {
+            m_sp = m_prob.gradient_sparsity();
+        }
         auto res = ::nlopt_set_min_objective(
             m_value.get(),
             [](unsigned dim, const double *x, double *grad, void *f_data) -> double {
@@ -824,6 +831,7 @@ public:
     {
     }
     nlopt(nlopt &&) = default;
+    nlopt &operator=(nlopt &&) = default;
     /// Set the seed for the ``"random"`` selection/replacement policies.
     /**
      * @param seed the value that will be used to seed the random number generator used by the ``"random"``
@@ -975,6 +983,7 @@ public:
         // NOTE: this will check also the problem's properties.
         nlopt_obj no(nlopt_data::names.left.at(m_algo), prob, m_sc_stopval, m_sc_ftol_rel, m_sc_ftol_abs, m_sc_xtol_rel,
                      m_sc_xtol_abs, m_sc_maxeval, m_sc_maxtime, m_verbosity);
+        no.set_bounds();
         no.set_objfun();
         no.set_eq_constraints();
         no.set_ineq_constraints();
@@ -1123,24 +1132,36 @@ public:
     {
         int major, minor, bugfix;
         ::nlopt_version(&major, &minor, &bugfix);
-        return "\tNLopt version: " + std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(bugfix)
-               + "\n\tLast optimisation return code: " + detail::nlopt_res2string(m_last_opt_result) + "\n\tVerbosity: "
-               + std::to_string(m_verbosity) + "\n\tIndividual selection "
-               + (boost::any_cast<population::size_type>(&m_select)
-                      ? "idx: " + std::to_string(boost::any_cast<population::size_type>(m_select))
-                      : "policy: " + boost::any_cast<std::string>(m_select))
-               + "\n\tIndividual replacement "
-               + (boost::any_cast<population::size_type>(&m_replace)
-                      ? "idx: " + std::to_string(boost::any_cast<population::size_type>(m_replace))
-                      : "policy: " + boost::any_cast<std::string>(m_replace))
-               + "\n\tStopping criteria:\n\t\tstopval:  "
-               + (m_sc_stopval == -HUGE_VAL ? "disabled" : detail::to_string(m_sc_stopval)) + "\n\t\tftol_rel: "
-               + (m_sc_ftol_rel <= 0. ? "disabled" : detail::to_string(m_sc_ftol_rel)) + "\n\t\tftol_abs: "
-               + (m_sc_ftol_abs <= 0. ? "disabled" : detail::to_string(m_sc_ftol_abs)) + "\n\t\txtol_rel: "
-               + (m_sc_xtol_rel <= 0. ? "disabled" : detail::to_string(m_sc_xtol_rel)) + "\n\t\txtol_abs: "
-               + (m_sc_xtol_abs <= 0. ? "disabled" : detail::to_string(m_sc_xtol_abs)) + "\n\t\tmaxeval:  "
-               + (m_sc_maxeval <= 0. ? "disabled" : detail::to_string(m_sc_maxeval)) + "\n\t\tmaxtime:  "
-               + (m_sc_maxtime <= 0. ? "disabled" : detail::to_string(m_sc_maxtime)) + "\n";
+        auto retval = "\tNLopt version: " + std::to_string(major) + "." + std::to_string(minor) + "."
+                      + std::to_string(bugfix) + "\n\tSolver: '" + m_algo + "'\n\tLast optimisation return code: "
+                      + detail::nlopt_res2string(m_last_opt_result) + "\n\tVerbosity: " + std::to_string(m_verbosity)
+                      + "\n\tIndividual selection "
+                      + (boost::any_cast<population::size_type>(&m_select)
+                             ? "idx: " + std::to_string(boost::any_cast<population::size_type>(m_select))
+                             : "policy: " + boost::any_cast<std::string>(m_select))
+                      + "\n\tIndividual replacement "
+                      + (boost::any_cast<population::size_type>(&m_replace)
+                             ? "idx: " + std::to_string(boost::any_cast<population::size_type>(m_replace))
+                             : "policy: " + boost::any_cast<std::string>(m_replace))
+                      + "\n\tStopping criteria:\n\t\tstopval:  "
+                      + (m_sc_stopval == -HUGE_VAL ? "disabled" : detail::to_string(m_sc_stopval)) + "\n\t\tftol_rel: "
+                      + (m_sc_ftol_rel <= 0. ? "disabled" : detail::to_string(m_sc_ftol_rel)) + "\n\t\tftol_abs: "
+                      + (m_sc_ftol_abs <= 0. ? "disabled" : detail::to_string(m_sc_ftol_abs)) + "\n\t\txtol_rel: "
+                      + (m_sc_xtol_rel <= 0. ? "disabled" : detail::to_string(m_sc_xtol_rel)) + "\n\t\txtol_abs: "
+                      + (m_sc_xtol_abs <= 0. ? "disabled" : detail::to_string(m_sc_xtol_abs)) + "\n\t\tmaxeval:  "
+                      + (m_sc_maxeval <= 0. ? "disabled" : detail::to_string(m_sc_maxeval)) + "\n\t\tmaxtime:  "
+                      + (m_sc_maxtime <= 0. ? "disabled" : detail::to_string(m_sc_maxtime)) + "\n";
+        if (m_loc_opt) {
+            retval += "\tLocal optimizer:\n";
+            const auto loc_info = m_loc_opt->get_extra_info();
+            std::vector<std::string> split_v;
+            boost::algorithm::split(split_v, loc_info, boost::algorithm::is_any_of("\n"),
+                                    boost::algorithm::token_compress_on);
+            for (const auto &s : split_v) {
+                retval += "\t" + s + "\n";
+            }
+        }
+        return retval;
     }
     /// Get the optimisation log.
     /**
@@ -1337,9 +1358,9 @@ public:
     {
         m_loc_opt.reset(nullptr);
     }
-    void set_local_optimizer(const nlopt &n)
+    void set_local_optimizer(nlopt n)
     {
-        m_loc_opt = detail::make_unique<nlopt>(n);
+        m_loc_opt = detail::make_unique<nlopt>(std::move(n));
     }
     const nlopt *get_local_optimizer() const
     {
@@ -1348,6 +1369,58 @@ public:
     nlopt *get_local_optimizer()
     {
         return m_loc_opt.get();
+    }
+    template <typename Archive>
+    void save(Archive &ar) const
+    {
+        ar(m_algo);
+        if (boost::any_cast<std::string>(&m_select)) {
+            // NOTE: true -> string, false -> idx.
+            ar(true);
+            ar(boost::any_cast<std::string>(m_select));
+        } else {
+            ar(false);
+            ar(boost::any_cast<population::size_type>(m_select));
+        }
+        if (boost::any_cast<std::string>(&m_replace)) {
+            // NOTE: true -> string, false -> idx.
+            ar(true);
+            ar(boost::any_cast<std::string>(m_replace));
+        } else {
+            ar(false);
+            ar(boost::any_cast<population::size_type>(m_replace));
+        }
+        ar(m_rselect_seed, m_e, m_last_opt_result, m_sc_stopval, m_sc_ftol_rel, m_sc_ftol_abs, m_sc_xtol_rel,
+           m_sc_xtol_abs, m_sc_maxeval, m_sc_maxtime, m_verbosity, m_log, m_loc_opt);
+    }
+    template <typename Archive>
+    void load(Archive &ar)
+    {
+        nlopt tmp;
+        ar(tmp.m_algo);
+        bool flag;
+        std::string str;
+        population::size_type idx;
+        ar(flag);
+        if (flag) {
+            ar(str);
+            tmp.m_select = str;
+        } else {
+            ar(idx);
+            tmp.m_select = idx;
+        }
+        ar(flag);
+        if (flag) {
+            ar(str);
+            tmp.m_replace = str;
+        } else {
+            ar(idx);
+            tmp.m_replace = idx;
+        }
+        ar(tmp.m_rselect_seed, tmp.m_e, tmp.m_last_opt_result, tmp.m_sc_stopval, tmp.m_sc_ftol_rel, tmp.m_sc_ftol_abs,
+           tmp.m_sc_xtol_rel, tmp.m_sc_xtol_abs, tmp.m_sc_maxeval, tmp.m_sc_maxtime, tmp.m_verbosity, tmp.m_log,
+           tmp.m_loc_opt);
+        *this = std::move(tmp);
     }
 
 private:
@@ -1372,6 +1445,8 @@ private:
     std::unique_ptr<nlopt> m_loc_opt;
 };
 }
+
+PAGMO_REGISTER_ALGORITHM(pagmo::nlopt)
 
 #else // PAGMO_WITH_NLOPT
 
