@@ -493,6 +493,22 @@ class nlopt_test_case(_ut.TestCase):
         loc = nlopt("slsqp")
         n.local_optimizer = loc
         self.assertFalse(n.local_optimizer is None)
+        self.assertEqual(str(algorithm(loc)), str(
+            algorithm(n.local_optimizer)))
+        pop = population(prob, 20, seed=4)
+        algo = algorithm(n)
+        algo.evolve(pop)
+        self.assertTrue(algo.extract(nlopt).get_last_opt_result() >= 0)
+        n = nlopt("auglag_eq")
+        loc = nlopt("slsqp")
+        n.local_optimizer = loc
+        self.assertFalse(n.local_optimizer is None)
+        self.assertEqual(str(algorithm(loc)), str(
+            algorithm(n.local_optimizer)))
+        pop = population(prob, 20, seed=4)
+        algo = algorithm(n)
+        algo.evolve(pop)
+        self.assertTrue(algo.extract(nlopt).get_last_opt_result() >= 0)
 
 
 class null_problem_test_case(_ut.TestCase):

@@ -1008,7 +1008,8 @@ public:
             ::nlopt_set_local_optimizer(no.m_value.get(), no_loc.m_value.get());
         }
 
-        // Setup of the initial guess.
+        // Setup of the initial guess. Store also the original fitness
+        // of the selected individual, old_f, for later use.
         vector_double initial_guess, old_f;
         if (boost::any_cast<std::string>(&m_select)) {
             const auto &s_select = boost::any_cast<const std::string &>(m_select);
