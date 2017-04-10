@@ -65,6 +65,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
 #include <boost/shared_ptr.hpp>
+#include <limits>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -294,6 +295,12 @@ struct py_wait_locks {
     pygmo::gil_releaser gr;
 };
 
+// Small helper function to get the max value of unsigned.
+static inline constexpr unsigned max_unsigned()
+{
+    return std::numeric_limits<unsigned>::max();
+}
+
 BOOST_PYTHON_MODULE(core)
 {
     using pygmo::lcast;
@@ -379,6 +386,9 @@ BOOST_PYTHON_MODULE(core)
 
     // Expose cleanup function.
     bp::def("_cleanup", &cleanup);
+
+    // The max_unsigned() helper.
+    bp::def("_max_unsigned", &max_unsigned);
 
     // Create the problems submodule.
     std::string problems_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".problems");

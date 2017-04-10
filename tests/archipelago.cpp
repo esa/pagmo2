@@ -26,6 +26,12 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#if defined(_MSC_VER)
+
+#define _SCL_SECURE_NO_WARNINGS
+
+#endif
+
 #define BOOST_TEST_MODULE archipelago_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -73,7 +79,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     }
     archi3 = archipelago{5u, thread_island{}, de{}, rosenbrock{}, 10u};
     BOOST_CHECK(archi3.size() == 5u);
-    std::vector<unsigned long long> seeds;
+    std::vector<unsigned> seeds;
     for (size_type i = 0; i < 5u; ++i) {
         BOOST_CHECK(!archi3[i].busy());
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
@@ -100,6 +106,46 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
     }
+    // A couple of tests for the constructor which contains a seed argument.
+    archipelago archi3a{5u, thread_island{}, de{}, rosenbrock{}, 10u, 123u};
+    seeds.clear();
+    std::transform(archi3a.begin(), archi3a.end(), std::back_inserter(seeds),
+                   [](const island &isl) { return isl.get_population().get_seed(); });
+    std::sort(seeds.begin(), seeds.end());
+    BOOST_CHECK(std::unique(seeds.begin(), seeds.end()) == seeds.end());
+    std::vector<unsigned> seeds2;
+    archipelago archi3b{5u, de{}, rosenbrock{}, 10u, 123u};
+    std::transform(archi3b.begin(), archi3b.end(), std::back_inserter(seeds2),
+                   [](const island &isl) { return isl.get_population().get_seed(); });
+    std::sort(seeds2.begin(), seeds2.end());
+    BOOST_CHECK(std::unique(seeds2.begin(), seeds2.end()) == seeds2.end());
+    BOOST_CHECK(std::equal(seeds.begin(), seeds.end(), seeds2.begin()));
+    BOOST_CHECK(
+        std::equal(archi3a.begin(), archi3a.end(), archi3b.begin(), [](const island &isl_a, const island &isl_b) {
+            return isl_a.get_population().get_x() == isl_b.get_population().get_x();
+        }));
+    BOOST_CHECK(
+        std::equal(archi3a.begin(), archi3a.end(), archi3b.begin(), [](const island &isl_a, const island &isl_b) {
+            return isl_a.get_population().get_f() == isl_b.get_population().get_f();
+        }));
+    BOOST_CHECK(
+        std::equal(archi3a.begin(), archi3a.end(), archi3b.begin(), [](const island &isl_a, const island &isl_b) {
+            return isl_a.get_population().get_ID() == isl_b.get_population().get_ID();
+        }));
+    archi3a = archipelago{5u, thread_island{}, de{}, rosenbrock{}, 10u};
+    archi3b = archipelago{5u, thread_island{}, de{}, rosenbrock{}, 10u};
+    BOOST_CHECK(
+        !std::equal(archi3a.begin(), archi3a.end(), archi3b.begin(), [](const island &isl_a, const island &isl_b) {
+            return isl_a.get_population().get_x() == isl_b.get_population().get_x();
+        }));
+    BOOST_CHECK(
+        !std::equal(archi3a.begin(), archi3a.end(), archi3b.begin(), [](const island &isl_a, const island &isl_b) {
+            return isl_a.get_population().get_f() == isl_b.get_population().get_f();
+        }));
+    BOOST_CHECK(
+        !std::equal(archi3a.begin(), archi3a.end(), archi3b.begin(), [](const island &isl_a, const island &isl_b) {
+            return isl_a.get_population().get_ID() == isl_b.get_population().get_ID();
+        }));
     auto archi4 = archi3;
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {

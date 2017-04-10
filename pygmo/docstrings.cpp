@@ -1532,7 +1532,7 @@ a steady-state reinsertion is used (i.e. as soon as an individual is found fit i
 population and will influence the next offspring genetic material).
 
 Each decision vector is assigned an infeasibility measure :math:`\iota` which accounts for the normalized violation of
-all the constraints (discounted by the constraints tolerance as returned by pagmo::problem::get_c_tol()). The
+all the constraints (discounted by the constraints tolerance as returned by :attr:`pygmo.core.problem.c_tol`). The
 normalization factor used :math:`c_{j_{max}}` is the maximum violation of the :math:`j` constraint.
 
 As in the original paper, three individuals in the evolving population are then used to penalize the single
@@ -1550,7 +1550,7 @@ objective function. Using the above definitions the overall pseudo code can be s
 
 .. code-block:: none
 
-   > Select a pagmo::population (related to a single-objective constrained problem)
+   > Select a pygmo.core.population (related to a single-objective constrained problem)
    > Select a UDA (able to solve single-objective unconstrained problems)
    > while i < iter
    > > Compute the normalization factors (will depend on the current population)
@@ -1559,7 +1559,7 @@ objective function. Using the above definitions the overall pseudo code can be s
    > > Reinsert the best decision vector from the previous evolution
 
 
-:class:`pygmo.core.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.core.algorithm` objects.
+:class:`~pygmo.core.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.core.algorithm` objects.
 
 **NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
@@ -1571,7 +1571,7 @@ the inner UDA evolve method.
 corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  constraint is ignored if all
 the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
 
-**NOTE** The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner
+**NOTE** The performances of :class:`~pygmo.core.cstrs_self_adaptive` are highly dependent on the particular inner
 algorithm employed and in particular to its parameters (generations / iterations).
 
 See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
@@ -3212,7 +3212,7 @@ std::string hv_refpoint_docstring()
 Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
 The result is a point that is necessarily dominated by all other points, and thus can be used for hypervolume computations.
 
-**NOTE** This point is different from the one computed by pagmo::nadir as only the non dominated front is considered
+**NOTE** This point is different from the one computed by :func:`~pygmo.core.nadir` as only the non dominated front is considered
 in that method (also its complexity is thus higher)
 
 Args:
