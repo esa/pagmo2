@@ -512,15 +512,13 @@ class nlopt_test_case(_ut.TestCase):
 
         # Refcount.
         import sys
-        n = nlopt("auglag")
+        nl = nlopt("auglag")
         loc = nlopt("slsqp")
-        n.local_optimizer = loc
-        old_rc = sys.getrefcount(n)
-        foo = n.local_optimizer
-        self.assertEqual(old_rc + 1, sys.getrefcount(n))
-        if sys.version_info[0] < 3:
-            return
-        del n
+        nl.local_optimizer = loc
+        old_rc = sys.getrefcount(nl)
+        foo = nl.local_optimizer
+        self.assertEqual(old_rc + 1, sys.getrefcount(nl))
+        del nl
         self.assertTrue(len(str(foo)) != 0)
         del foo
 
