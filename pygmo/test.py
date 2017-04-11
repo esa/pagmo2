@@ -1132,6 +1132,7 @@ class archipelago_test_case(_ut.TestCase):
 
     def run_access_tests(self):
         from . import archipelago, de, rosenbrock
+        import sys
         a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         i0, i1, i2 = a[0], a[1], a[2]
         a.push_back(algo=de(), prob=rosenbrock(), size=11)
@@ -1151,6 +1152,17 @@ class archipelago_test_case(_ut.TestCase):
             self.assertTrue(isl.get_algorithm().is_(de))
             self.assertTrue(isl.get_population().problem.is_(rosenbrock))
             self.assertEqual(len(isl.get_population()), 10)
+        # Check refcount when returning internal ref.
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
+        old_rc = sys.getrefcount(a)
+        i0, i1, i2, i3 = a[0], a[1], a[2], a[3]
+        self.assertEqual(sys.getrefcount(a) - 4, old_rc)
+        del a
+        self.assertTrue(str(i0) != "")
+        self.assertTrue(str(i1) != "")
+        self.assertTrue(str(i2) != "")
+        self.assertTrue(str(i3) != "")
+        del i0, i1, i2, i3
 
     def run_push_back_tests(self):
         from . import archipelago, de, rosenbrock
