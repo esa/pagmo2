@@ -293,4 +293,7 @@ class ipyparallel_island_test_case(_ut.TestCase):
         self.assertEqual(str(isl3), str(isl))
 
         # Pickle.
-        self.assertEqual(str(loads(dumps(isl))), str(isl))
+        pisl = loads(dumps(isl))
+        self.assertEqual(str(pisl.get_population()), str(isl.get_population()))
+        self.assertEqual(str(pisl.get_algorithm()), str(isl.get_algorithm()))
+        self.assertEqual(str(pisl.get_name()), str(isl.get_name()))
