@@ -3632,7 +3632,8 @@ Some solvers support equality and/or inequality constaints.
 
 In order to support pagmo's population-based optimisation model, the ``evolve()`` method will select
 a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.
-The optimised individual will then be inserted back into the population at the end of the optimisation.
+If the optimisation produces a better individual (as established by :func:`~pygmo.compare_fc()`),
+the optimised individual will be inserted back into the population.
 The selection and replacement strategies can be configured via the :attr:`~pygmo.nlopt.selection`
 and :attr:`~pygmo.nlopt.replacement` attributes.
 
@@ -4027,7 +4028,8 @@ By default, no local optimizer is specified, and the property is set to ``None``
 .. note::
 
    The objective function, bounds, and nonlinear-constraint parameters of the local
-   optimizer are ignored (as they are provided by the parent optimizer). The verbosity of
+   optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping
+   criteria should be specified in the local optimizer.The verbosity of
    the local optimizer is also forcibly set to zero during the optimisation.
 
 Returns:

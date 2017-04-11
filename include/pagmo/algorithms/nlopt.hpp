@@ -692,7 +692,8 @@ struct nlopt_obj {
  *
  * In order to support pagmo's population-based optimisation model, nlopt::evolve() will select
  * a single individual from the input pagmo::population to be optimised by the NLopt solver.
- * The optimised individual will then be inserted back into the population at the end of the optimisation.
+ * If the optimisation produces a better individual (as established by pagmo::compare_fc()),
+ * the optimised individual will be inserted back into the population.
  * The selection and replacement strategies can be configured via set_selection(const std::string &),
  * set_selection(population::size_type), set_replacement(const std::string &) and
  * set_replacement(population::size_type).
@@ -1068,11 +1069,9 @@ public:
 
         // Compute the new fitness vector.
         const auto new_f = pop.get_problem().fitness(initial_guess);
-        // Compare to the old fitness.
-        const bool comp = compare_fc(new_f, old_f, pop.get_problem().get_nec(), pop.get_problem().get_c_tol());
 
         // Store the new individual into the population, but only if better.
-        if (comp) {
+        if (compare_fc(new_f, old_f, pop.get_problem().get_nec(), pop.get_problem().get_c_tol())) {
             if (boost::any_cast<std::string>(&m_replace)) {
                 const auto &s_replace = boost::any_cast<const std::string &>(m_replace);
                 if (s_replace == "best") {
@@ -1372,7 +1371,8 @@ public:
      * of a local optimizer. Setting a local optimizer on any other solver will have no effect.
      *
      * **NOTE**: the objective function, bounds, and nonlinear-constraint parameters of the local
-     * optimizer are ignored (as they are provided by the parent optimizer). The verbosity of
+     * optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping
+     * criteria should be specified in the local optimizer. The verbosity of
      * the local optimizer is also forcibly set to zero during the optimisation.
      *
      * @param n the local optimizer that will be used by this pagmo::nlopt algorithm.
