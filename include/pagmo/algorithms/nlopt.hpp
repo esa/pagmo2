@@ -1160,6 +1160,8 @@ public:
                       + (m_sc_maxeval <= 0. ? "disabled" : detail::to_string(m_sc_maxeval)) + "\n\t\tmaxtime:  "
                       + (m_sc_maxtime <= 0. ? "disabled" : detail::to_string(m_sc_maxtime)) + "\n";
         if (m_loc_opt) {
+            // Add a tab to the output of the extra_info() of the local opt,
+            // and append the result.
             retval += "\tLocal optimizer:\n";
             const auto loc_info = m_loc_opt->get_extra_info();
             std::vector<std::string> split_v;
