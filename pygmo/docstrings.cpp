@@ -2786,6 +2786,9 @@ Returns:
     * *dc* (1D NumPy int array): the domination count
     * *ndr* (1D NumPy int array): the non domination ranks
 
+Examples:
+    >>> import pygmo as pg
+    >>> ndf, dl, dc, ndr = pg.fast_non_dominated_sorting(points = [[0,1],[-1,3],[2.3,-0.2],[1.1,-0.12],[1.1, 2.12],[-1.1,-1.1]])
 )";
 }
 
@@ -2876,7 +2879,7 @@ Examples:
 
 std::string sort_population_mo_docstring()
 {
-    return R"(sort_population_mo(input_f)
+    return R"(sort_population_mo(points)
 
 Sorts a multi-objective, unconstrained,  population (intended here as a 2D array-like
 containing objective vectors) with respect to the following strict ordering:
@@ -2891,11 +2894,11 @@ Complexity is :math:`\mathcal{O}(M N^2)` where :math:`M` is the size of the obje
    of size 1, in which case, though, it is more efficient to sort using python built-in sorting methods.
 
 Args:
-    input_f (2d-array-like object): the input objective vectors
+    points (2d-array-like object): the input objective vectors
 
 Raises:
     unspecified: all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
-    TypeError: if *input_f* cannot be converted to a vector of vector floats
+    TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
     (``list`` of 1D NumPy int array): the indexes of the sorted objectives vectors.
@@ -2903,14 +2906,14 @@ Returns:
 Examples:
     >>> import pygmo as pg
     >>> pop = pg.population(prob = pg.dtlz(prob_id = 3, dim=10, fdim=4), size = 20)
-    >>> pg.sort_population_mo(input_f = pop.get_f()) # doctest: +SKIP
+    >>> pg.sort_population_mo(points = pop.get_f()) # doctest: +SKIP
     array([ 4,  7, 14, 15, 16, 18,  9, 13,  5,  3,  6,  2, 12,  0,  1, 19, 17, 8, 10, 11], dtype=uint64)
 )";
 }
 
 std::string select_best_N_mo_docstring()
 {
-    return R"(select_best_N_mo(input_f, N)
+    return R"(select_best_N_mo(points, N)
 
 Returns (unordered) the best N individuals out of a multi-objective, unconstrained population, (intended here
 as a 2D array-like containing objective vectors). The strict ordering used is the same as that defined
@@ -2923,12 +2926,12 @@ possible in that it avoids to compute the crowidng distance for all individuals 
 non-dominated front containing individuals included in the best N.
 
 Args:
-    input_f (2d-array-like object): the input objective vectors
+    points (2d-array-like object): the input objective vectors
     N (``int``): The size of the returned list of bests.
 
 Raises:
     unspecified: all exceptions thrown by :cpp:func:`pagmo::fast_non_dominated_sorting()` and :cpp:func:`pagmo::crowding_distance()`
-    TypeError: if *input_f* cannot be converted to a vector of vector floats
+    TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
     (``list`` of 1D NumPy int array): the indexes of the *N* best objectives vectors.
@@ -2936,7 +2939,7 @@ Returns:
 Examples:
     >>> import pygmo as pg
     >>> pop = pg.population(prob = pg.dtlz(prob_id = 3, dim=10, fdim=4), size = 20)
-    >>> pg.select_best_N_mo(input_f = pop.get_f(), N = 13) # doctest: +SKIP
+    >>> pg.select_best_N_mo(points = pop.get_f(), N = 13) # doctest: +SKIP
     array([ 2,  3,  4,  5,  6,  7,  9, 12, 13, 14, 15, 16, 18], dtype=uint64)
 )";
 }
@@ -3025,7 +3028,7 @@ Returns:
 
 Examples:
     >>> import pygmo as pg
-    >>> pg.decomposition_weights(2, 6, "low discrepancy", 33) # doctest: +SKIP
+    >>> pg.decomposition_weights(n_f = 2, n_w = 6, method = "low discrepancy", seed = 33) # doctest: +SKIP
     array([[ 1.   ,  0.   ],
            [ 0.   ,  1.   ],
            [ 0.25 ,  0.75 ],

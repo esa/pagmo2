@@ -528,6 +528,54 @@ class estimate_gradient_test_case(_ut.TestCase):
         self.assertTrue((abs(out - res) < 1e-8).all())
 
 
+class mo_utils_test_case(_ut.TestCase):
+    """Test case for the multi-objective utilities (only the interface is tested)
+
+    """
+
+    def runTest(self):
+        from .core import fast_non_dominated_sorting, pareto_dominance, non_dominated_front_2d, crowding_distance, sort_population_mo, select_best_N_mo, decompose_objectives, decomposition_weights, nadir, ideal, population, dtlz
+        ndf, dl, dc, ndr = fast_non_dominated_sorting(
+            points=[[0, 1], [-1, 3], [2.3, -0.2], [1.1, -0.12], [1.1, 2.12], [-1.1, -1.1]])
+        self.assertTrue(pareto_dominance(obj1=[1, 2], obj2=[2, 2]))
+        non_dominated_front_2d(
+            points=[[0, 5], [1, 4], [2, 3], [3, 2], [4, 1], [2, 2]])
+        crowding_distance(points=[[0, 5], [1, 4], [2, 3], [3, 2], [4, 1]])
+        pop = population(prob=dtlz(prob_id=3, dim=10, fdim=4), size=20)
+        sort_population_mo(points=pop.get_f())
+        select_best_N_mo(points=pop.get_f(), N=13)
+        decompose_objectives(objs=[1, 2, 3], weights=[0.1, 0.1, 0.8], ref_point=[
+                             5, 5, 5], method="weighted")
+        decomposition_weights(n_f=2, n_w=6, method="low discrepancy", seed=33)
+        nadir(points=[[1, 1], [-1, 1], [2.2, 3], [0.1, -0.1]])
+        ideal(points=[[1, 1], [-1, 1], [2.2, 3], [0.1, -0.1]])
+
+
+class con_utils_test_case(_ut.TestCase):
+    """Test case for the constrained utilities (only the interface is tested)
+
+    """
+
+    def runTest(self):
+        from .core import compare_fc, sort_population_con
+        compare_fc(f1 = [1,1,1], f2 = [1,2.1,-1.2], nec = 1, tol = [0]*2)
+        sort_population_con(input_f = [[1.2,0.1,-1],[0.2,1.1,1.1],[2,-0.5,-2]], nec = 1, tol = [1e-8]*2)
+
+class global_rng_test_case(_ut.TestCase):
+    """Test case for the global random number generator
+
+    """
+
+    def runTest(self):
+        from .core import set_global_rng_seed, population, ackley
+        set_global_rng_seed(seed = 32)
+        pop = population(prob = ackley(5), size = 20)
+        f1 = pop.champion_f
+        set_global_rng_seed(seed = 32)
+        pop = population(prob = ackley(5), size = 20)
+        f2 = pop.champion_f
+        self.assertTrue(f1 == f2)
+
 class hypervolume_test_case(_ut.TestCase):
     """Test case for the hypervolume utilities
 
@@ -1178,6 +1226,9 @@ def run_test_suite():
     suite.addTest(archipelago_test_case())
     suite.addTest(null_problem_test_case())
     suite.addTest(hypervolume_test_case())
+    suite.addTest(mo_utils_test_case())  
+    suite.addTest(con_utils_test_case())  
+    suite.addTest(global_rng_test_case())  
     suite.addTest(estimate_sparsity_test_case())
     suite.addTest(estimate_gradient_test_case())
     try:

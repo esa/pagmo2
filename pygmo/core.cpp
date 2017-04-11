@@ -698,7 +698,7 @@ BOOST_PYTHON_MODULE(core)
             pygmo::non_dominated_front_2d_docstring().c_str(), bp::arg("points"));
     bp::def("crowding_distance",
             lcast([](const bp::object &points) { return pygmo::v_to_a(crowding_distance(pygmo::to_vvd(points))); }),
-            pygmo::crowding_distance_docstring().c_str(), bp::arg("ndf"));
+            pygmo::crowding_distance_docstring().c_str(), bp::arg("points"));
     bp::def("sort_population_mo",
             lcast([](const bp::object &input_f) { return pygmo::v_to_a(sort_population_mo(pygmo::to_vvd(input_f))); }),
             pygmo::sort_population_mo_docstring().c_str(), bp::arg("points"));
