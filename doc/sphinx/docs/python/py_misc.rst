@@ -6,4 +6,4 @@ Miscellanea
 
 --------------------------------------
 
-.. autoclass:: pygmo.global_pygmo_rng
+.. autofunction:: pygmo.set_global_rng_seed

@@ -745,7 +745,7 @@ BOOST_PYTHON_MODULE(core)
                 auto retval = estimate_gradient_h(f, pygmo::to_vd(x), dx);
                 return pygmo::v_to_a(retval);
             }),
-            pygmo::estimate_gradient_h_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
+            pygmo::estimate_gradient_h_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-2));
     // Constrained optimization utilities
     bp::def("compare_fc",
             lcast([](const bp::object &f1, const bp::object &f2, vector_double::size_type nec, const bp::object &tol) {

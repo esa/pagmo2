@@ -2772,7 +2772,7 @@ std::string fast_non_dominated_sorting_docstring()
 Runs the fast non dominated sorting algorithm on the input *points*
 
 Args:
-    points (2d-array like object): the input points
+    points (2d-array-like object): the input points
 
 Raises:
     ValueError: if *points* is malformed
@@ -2801,8 +2801,8 @@ elements in *obj1* are less or equal to the corresponding element in *obj2*,
 but at least one is different, ``True`` will be returned. Otherwise, ``False`` will be returned.
 
 Args:
-    obj1 (array like object): the first list of objectives
-    obj2 (array like object): the second list of objectives
+    obj1 (array-like object): the first list of objectives
+    obj2 (array-like object): the second list of objectives
 
 Raises:
     ValueError: if the dimensions of *obj1* and *obj2* are different
@@ -2830,7 +2830,7 @@ See: Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: 
 IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
 
 Args:
-    points (2d-array like object): the input points
+    points (2d-array-like object): the input points
 
 Raises:
     ValueError: if *points* contain anything else than 2 dimensional objectives
@@ -2858,7 +2858,7 @@ See: Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algori
 optimization: NSGA-II." Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.
 
 Args:
-    points (2d-array like object): the input points
+    points (2d-array-like object): the input points
 
 Raises:
     ValueError: if *points* does not contain at least two points, or is malformed
@@ -2891,7 +2891,7 @@ Complexity is :math:`\mathcal{O}(M N^2)` where :math:`M` is the size of the obje
    of size 1, in which case, though, it is more efficient to sort using python built-in sorting methods.
 
 Args:
-    input_f (2d-array like object): the input objective vectors
+    input_f (2d-array-like object): the input objective vectors
 
 Raises:
     unspecified: all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
@@ -2923,7 +2923,7 @@ possible in that it avoids to compute the crowidng distance for all individuals 
 non-dominated front containing individuals included in the best N.
 
 Args:
-    input_f (2d-array like object): the input objective vectors
+    input_f (2d-array-like object): the input objective vectors
     N (``int``): The size of the returned list of bests.
 
 Raises:
@@ -2973,9 +2973,9 @@ where :math:`d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}` ,
 :math:`\hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}`
 
 Args:
-    objs (array like object): the objective vectors
-    weights (array like object): the weights :math:`\boldsymbol \lambda`
-    ref_point (array like object): the reference point :math:`\mathbf z^*` . It is not used if *method* is ``"weighted"``
+    objs (array-like object): the objective vectors
+    weights (array-like object): the weights :math:`\boldsymbol \lambda`
+    ref_point (array-like object): the reference point :math:`\mathbf z^*` . It is not used if *method* is ``"weighted"``
     method (``string``): the decomposition method: one of ``"weighted"``, ``"tchebycheff"`` or ``"bi"``
 
 Raises:
@@ -3045,7 +3045,7 @@ value of the objective function in the points of the non-dominated front.
 Complexity is :math:`\mathcal{O}(MN^2)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
 
 Args:
-    points (2d-array like object): the input points
+    points (2d-array-like object): the input points
 
 Raises:
     ValueError: if *points* is malformed
@@ -3067,7 +3067,7 @@ component, the minimum value of the objective functions of the input points.
 Complexity is :math:`\mathcal{O}(MN)` where :math:`M` is the number of objectives and :math:`N` is the number of points.
 
 Args:
-    points (2d-array like object): the input points
+    points (2d-array-like object): the input points
 
 Raises:
     ValueError: if *points* is malformed
@@ -3087,39 +3087,78 @@ Compares two fitness vectors in a single-objective, constrained, case.
 
 The following strict ordering is used:
 
-- \f$f_1 \prec f_2\f$ if \f$f_1\f$ is feasible and \f$f_2\f$ is not.
-- \f$f_1 \prec f_2\f$ if \f$f_1\f$ is they are both infeasible, but \f$f_1\f$
-  violates less constraints than \f$f_2\f$, or in case they both violate the same
-  number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
+- :math:`f_1 \prec f_2` if :math:`f_1` is feasible and :math:`f_2` is not.
+- :math:`f_1 \prec f_2` if :math:`f_1` is they are both infeasible, but :math:`f_1`
+  violates less constraints than :math:`f_2`, or in case they both violate the same
+  number of constraints, if the :math:`L_2` norm of the overall constraint violation
   is smaller.
-- \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
-  in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
+- :math:`f_1 \prec f_2` if both fitness vectors are feasible and the objective value
+  in :math:`f_1` is smaller than the objectve value in :math:`f_2`
 
 .. note::
-   the fitness vectors are assumed to contain exactly one objective, \p neq equality constraints and the rest (if any) inequality constraints
- *
- * @param f1 first fitness vector
- * @param f2 second fitness vector
- * @param neq number of equality constraints
- * @param tol a vector_double containing the tolerances to be accounted for in the constraints
- *
- * @return true if \p f1 is "better" than \p f2
- *
- * @throws std::invalid_argument If \p f1 and \p f2 do not have equal size \f$n\f$
- * @throws std::invalid_argument If \p f1 does not have at least size 1
- * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
- * @throws std::invalid_argument If the size of the \p tol is not exactly the size of \p f1 - 1
+   the fitness vectors are assumed to contain exactly one objective, \p neq equality constraints and the rest (if any) inequality constraints.
 
 Args:
-    points (2d-array like object): the input points
+    f1 (array-like object): the first fitness vector
+    f2 (array-like object): the second fitness vector
+    nec (``int``): the number of equality consraints in the fitness vectors
+    tol (array-like object): tolerances to be accounted for in the constraints
 
 Raises:
-    ValueError: if *points* is malformed
-    TypeError: if *points* cannot be converted to a vector of vector floats
+    OverflowError: if *nec* is negative or greater than an implementation-defined value
+    ValueError: if *f1* and *f2* do not have equal size :math:`n`, if *f1* does not have at least size 1, 
+    if *neq* is larger than :math:`n-1` (too many constraints) or if the size of *tol* is not :math:`n - 1`
+    TypeError: if *f1*, *f2* or *tol* cannot be converted to a vector of floats
 
 Returns:
-    1D NumPy float array: the ideal point
+    ``bool``: ``True`` if *f1* is better than *f2*, ``False`` otherwise.
 
+Examples:
+    >>> import pygmo as pg
+    >>> pg.compare_fc(f1 = [1,1,1], f2 = [1,2.1,-1.2], nec = 1, tol = [0]*2)
+    False
+)";
+}
+
+std::string sort_population_con_docstring()
+{
+    return R"(sort_population_con(input_f, nec, tol)
+
+Sorts a population (intended here as a 2D array-like
+containing fitness vectors) assuming a single-objective, constrained case. 
+
+The following strict ordering is used (same as the one used in :func:`pygmo.compare_fc`):
+
+- :math:`f_1 \prec f_2` if :math:`f_1` is feasible and :math:`f_2` is not.
+- :math:`f_1 \prec f_2` if :math:`f_1` is they are both infeasible, but :math:`f_1`
+  violates less constraints than :math:`f_2`, or in case they both violate the same
+  number of constraints, if the :math:`L_2` norm of the overall constraint violation
+  is smaller.
+- :math:`f_1 \prec f_2` if both fitness vectors are feasible and the objective value
+  in :math:`f_1` is smaller than the objectve value in :math:`f_2`
+
+.. note::
+   the fitness vectors are assumed to contain exactly one objective, \p neq equality constraints and the rest (if any) inequality constraints.
+
+Args:
+    input_f (2-D array-like object): the fitness vectors
+    nec (``int``): the number of equality constraints in the fitness vectors
+    tol (array-like object): tolerances to be accounted for in the constraints
+
+Raises:
+    OverflowError: if *nec* is negative or greater than an implementation-defined value
+    ValueError: if the input fitness vectors do not have all the same size :math:`n >=1`, or if *neq* is larger than :math:`n-1` (too many constraints)
+    or if the size of *tol* is not equal to :math:`n-1`
+    TypeError: if *input_f* cannot be converted to a vector of vector of floats or *tol* cannot be converted to a vector of floats.
+
+Returns:
+    ``list`` of 1D NumPy int array: the indexes of the sorted fitnesses vectors.
+
+Examples:
+    >>> import pygmo as pg
+    >>> idxs = pg.sort_population_con(input_f = [[1.2,0.1,-1],[0.2,1.1,1.1],[2,-0.5,-2]], nec = 1, tol = [1e-8]*2)
+    >>> print(idxs)
+    [0 2 1]
 )";
 }
 
@@ -3138,7 +3177,7 @@ confident the estimate will be correct.
 
 Args:
     callable (a callable object): The function we want to estimate sparsity (typically a fitness).
-    x (array-like-object): decision vector to use when testing for sparisty.
+    x (array-like object): decision vector to use when testing for sparisty.
     dx (``float``): To detect the sparsity each component of *x* will be changed by :math:`\max(|x_i|,1) dx`.
 
 Raises:
@@ -3154,9 +3193,10 @@ Examples:
     ...     return [x[0]+x[3], x[2], x[1]]
     >>> pg.estimate_sparsity(callable = my_fun, x = [0.1,0.1,0.1,0.1], dx = 1e-8)
     array([[0, 0],
-       [0, 3],
-       [1, 2],
-       [2, 1]])
+           [0, 3],
+           [1, 2],
+           [2, 1]])
+
 )";
 }
 
@@ -3179,7 +3219,7 @@ The overall cost, in terms of calls to *callable* will thus be :math:`n` where :
 
 Args:
     callable (a callable object): The function we want to estimate sparsity (typically a fitness).
-    x (array-like-object): decision vector to use when testing for sparisty.
+    x (array-like object): decision vector to use when testing for sparisty.
     dx (``float``): To detect the sparsity each component of *x* will be changed by :math:`\max(|x_i|,1) dx`.
 
 Raises:
@@ -3222,7 +3262,7 @@ The overall cost, in terms of calls to *callable* will thus be 6:math:`n` where 
 
 Args:
     callable (a callable object): The function we want to estimate sparsity (typically a fitness).
-    x (array-like-object): decision vector to use when testing for sparisty.
+    x (array-like object): decision vector to use when testing for sparisty.
     dx (``float``): To detect the sparsity each component of *x* will be changed by :math:`\max(|x_i|,1) dx`.
 
 Raises:

@@ -213,7 +213,7 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
  *
  * @throws std::invalid_argument If the input fitness vectors do not have all the same size \f$n >=1\f$
  * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
- * @throws std::invalid_argument If the size of the \p tol is not exactly the size of \p input_f - 1
+ * @throws std::invalid_argument If the size of the \p tol is not \f$n - 1\f$
  *
  */
 inline std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f,
