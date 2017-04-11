@@ -101,9 +101,9 @@ std::string population_best_idx_docstring()
 Index of the best individual.
 
 If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem
-is, instead, single objective, but with constraints, the best will be defined using the criteria specified in :cpp:func:`pagmo::sort_population_con()`.
+is, instead, single objective, but with constraints, the best will be defined using the criteria specified in :func:`pygmo.sort_population_con()`.
 If the problem is multi-objective one single best is not well defined. In this case the user can still obtain a strict ordering of the population
-individuals by calling the :cpp:func:`pagmo::sort_population_mo()` function.
+individuals by calling the :func:`pygmo.sort_population_ mo()` function.
 
 Args:
     tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints
@@ -125,9 +125,9 @@ std::string population_worst_idx_docstring()
 Index of the worst individual.
 
 If the problem is single-objective and unconstrained, the worst is simply the individual with the largest fitness. If the problem
-is, instead, single objective, but with constraints, the worst will be defined using the criteria specified in :cpp:func:`pagmo::sort_population_con()`.
+is, instead, single objective, but with constraints, the worst will be defined using the criteria specified in :func:`pygmo.sort_population_con()`.
 If the problem is multi-objective one single worst is not well defined. In this case the user can still obtain a strict ordering of the population
-individuals by calling the :cpp:func:`pagmo::sort_population_mo()` function.
+individuals by calling the :func:`pygmo.sort_population_ mo()` function.
 
 Args:
     tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints
@@ -137,7 +137,7 @@ Returns:
 
 Raises:
      ValueError: if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty
-     unspecified: any exception thrown by :cpp:func:`pagmo::sort_population_con()`
+     unspecified: any exception thrown by :func:`pygmo.sort_population_con()`
 
 )";
 }
@@ -2927,7 +2927,7 @@ Args:
     N (``int``): The size of the returned list of bests.
 
 Raises:
-    unspecified: all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
+    unspecified: all exceptions thrown by :cpp:func:`pagmo::fast_non_dominated_sorting()` and :cpp:func:`pagmo::crowding_distance()`
     TypeError: if *input_f* cannot be converted to a vector of vector floats
 
 Returns:
