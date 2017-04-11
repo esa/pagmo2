@@ -3079,6 +3079,50 @@ Returns:
 )";
 }
 
+std::string compare_fc_docstring()
+{
+    return R"(compare_fc(f1, f2, nec, tol)
+
+Compares two fitness vectors in a single-objective, constrained, case.
+
+The following strict ordering is used:
+
+- \f$f_1 \prec f_2\f$ if \f$f_1\f$ is feasible and \f$f_2\f$ is not.
+- \f$f_1 \prec f_2\f$ if \f$f_1\f$ is they are both infeasible, but \f$f_1\f$
+  violates less constraints than \f$f_2\f$, or in case they both violate the same
+  number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
+  is smaller.
+- \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
+  in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
+
+.. note::
+   the fitness vectors are assumed to contain exactly one objective, \p neq equality constraints and the rest (if any) inequality constraints
+ *
+ * @param f1 first fitness vector
+ * @param f2 second fitness vector
+ * @param neq number of equality constraints
+ * @param tol a vector_double containing the tolerances to be accounted for in the constraints
+ *
+ * @return true if \p f1 is "better" than \p f2
+ *
+ * @throws std::invalid_argument If \p f1 and \p f2 do not have equal size \f$n\f$
+ * @throws std::invalid_argument If \p f1 does not have at least size 1
+ * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
+ * @throws std::invalid_argument If the size of the \p tol is not exactly the size of \p f1 - 1
+
+Args:
+    points (2d-array like object): the input points
+
+Raises:
+    ValueError: if *points* is malformed
+    TypeError: if *points* cannot be converted to a vector of vector floats
+
+Returns:
+    1D NumPy float array: the ideal point
+
+)";
+}
+
 std::string estimate_sparsity_docstring()
 {
     return R"(estimate_sparsity(callable, x, dx = 1e-8)

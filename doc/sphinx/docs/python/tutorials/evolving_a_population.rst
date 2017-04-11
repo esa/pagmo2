@@ -13,7 +13,7 @@ always have to call a method called ``evolve()`` to improve over your initial so
 i.e. your *population*.
 
 The simplest way to evolve a population is to use directly the :class:`~pygmo.algorithm`
-method :class:`~pygmo.algorithm.evolve`
+method :func:`~pygmo.algorithm.evolve`
 
 .. doctest::
 

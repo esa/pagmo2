@@ -184,6 +184,9 @@ std::string decomposition_weights_docstring();
 std::string decompose_objectives_docstring();
 std::string ideal_docstring();
 std::string nadir_docstring();
+// constrained
+std::string compare_fc_docstring();
+std::string sort_population_con_docstring();
 // gradient and hessians
 std::string estimate_sparsity_docstring();
 std::string estimate_gradient_docstring();

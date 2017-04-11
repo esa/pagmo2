@@ -746,11 +746,20 @@ BOOST_PYTHON_MODULE(core)
                 return pygmo::v_to_a(retval);
             }),
             pygmo::estimate_gradient_h_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
-
+    // Constrained optimization utilities
+    bp::def("compare_fc",
+            lcast([](const bp::object &f1, const bp::object &f2, vector_double::size_type nec, const bp::object &tol) {
+                return compare_fc(pygmo::to_vd(f1), pygmo::to_vd(f2), nec, pygmo::to_vd(tol));
+            }),
+            pygmo::compare_fc_docstring().c_str(), (bp::arg("f1"), bp::arg("f2"), bp::arg("nec"), bp::arg("tol")));
+    bp::def("sort_population_con",
+            lcast([](const bp::object &input_f, vector_double::size_type nec, const bp::object &tol) {
+                return pygmo::v_to_a(sort_population_con(pygmo::to_vvd(input_f), nec, pygmo::to_vd(tol)));
+            }),
+            pygmo::sort_population_con_docstring().c_str(), (bp::arg("input_f"), bp::arg("nec"), bp::arg("tol")));
     // Global random number generator
     bp::def("set_global_rng_seed", lcast([](unsigned seed) { random_device::set_seed(seed); }),
             pygmo::set_global_rng_seed_docstring().c_str(), bp::arg("seed"));
-
     // Island.
     pygmo::island_ptr
         = detail::make_unique<bp::class_<island>>("island", pygmo::island_docstring().c_str(), bp::init<>());
