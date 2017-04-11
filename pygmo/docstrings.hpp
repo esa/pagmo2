@@ -189,7 +189,7 @@ std::string estimate_sparsity_docstring();
 std::string estimate_gradient_docstring();
 std::string estimate_gradient_h_docstring();
 // global rng
-std::string global_pygmo_rng_docstring();
+std::string set_global_rng_seed_docstring();
 
 // island.
 std::string island_docstring();

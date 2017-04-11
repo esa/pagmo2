@@ -65,6 +65,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
 #include <boost/shared_ptr.hpp>
+#include <limits>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -295,6 +296,12 @@ struct py_wait_locks {
     pygmo::gil_releaser gr;
 };
 
+// Small helper function to get the max value of unsigned.
+static inline constexpr unsigned max_unsigned()
+{
+    return std::numeric_limits<unsigned>::max();
+}
+
 BOOST_PYTHON_MODULE(core)
 {
     using pygmo::lcast;
@@ -380,6 +387,9 @@ BOOST_PYTHON_MODULE(core)
 
     // Expose cleanup function.
     bp::def("_cleanup", &cleanup);
+
+    // The max_unsigned() helper.
+    bp::def("_max_unsigned", &max_unsigned);
 
     // Create the problems submodule.
     std::string problems_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".problems");
@@ -738,11 +748,8 @@ BOOST_PYTHON_MODULE(core)
             pygmo::estimate_gradient_h_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
 
     // Global random number generator
-    bp::class_<random_device>("global_pygmo_rng", pygmo::global_pygmo_rng_docstring().c_str(), bp::init<>())
-        .def("next", &random_device::next)
-        .staticmethod("next")
-        .def("set_seed", &random_device::set_seed)
-        .staticmethod("set_seed");
+    bp::def("set_global_rng_seed", lcast([](unsigned seed) { random_device::set_seed(seed); }),
+            pygmo::set_global_rng_seed_docstring().c_str(), bp::arg("seed"));
 
     // Island.
     pygmo::island_ptr

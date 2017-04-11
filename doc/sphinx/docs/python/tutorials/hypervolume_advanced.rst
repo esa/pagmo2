@@ -120,8 +120,8 @@ The default algorithm used by pygmo, if not specified otherwise, will be:
 ======================= ========================= ========================= =========
 hypervolume method      2D                        3D                        4D and up
 ======================= ========================= ========================= =========
-``compute``             :class:`pygmo.hv2d`      :class:`pygmo.hv3d`      :class:`pygmo.hvwfg`
-``contribution-based*`` :class:`pygmo.hv2d`      :class:`pygmo.hv3d`      :class:`pygmo.hvwfg`
+``compute``             :class:`pygmo.hv2d`       :class:`pygmo.hv3d`       :class:`pygmo.hvwfg`
+``contribution-based*`` :class:`pygmo.hv2d`       :class:`pygmo.hv3d`       :class:`pygmo.hvwfg`
 ======================= ========================= ========================= =========
 
 The methods supported by the specific algorithms are listed below:
@@ -129,9 +129,9 @@ The methods supported by the specific algorithms are listed below:
 ================================ ======= ========= ================= ==================== =============
 hv_algorithm                     compute exclusive least_contributor greatest_contributor contributions
 ================================ ======= ========= ================= ==================== =============
-:class:`pygmo.hv2d`             Yes     Yes       Yes               Yes                  Yes
-:class:`pygmo.hv3d`             Yes     Yes       Yes               Yes                  Yes
-:class:`pygmo.hvwfg`            Yes     Yes       Yes               Yes                  Yes
-:class:`pygmo.bf_fpras`         No      No        Yes               Yes                  No
-:class:`pygmo.bf_approx`        Yes     No        No                No                   No
+:class:`pygmo.hv2d`              Yes     Yes       Yes               Yes                  Yes
+:class:`pygmo.hv3d`              Yes     Yes       Yes               Yes                  Yes
+:class:`pygmo.hvwfg`             Yes     Yes       Yes               Yes                  Yes
+:class:`pygmo.bf_fpras`          No      No        Yes               Yes                  No
+:class:`pygmo.bf_approx`         Yes     No        No                No                   No
 ================================ ======= ========= ================= ==================== =============

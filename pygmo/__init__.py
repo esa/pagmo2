@@ -410,18 +410,86 @@ __original_archi_init = archipelago.__init__
 
 def _archi_init(self, n=0, **kwargs):
     """
+    The constructor will initialise an archipelago with *n* islands built from *kwargs*.
     The keyword arguments accept the same format as explained in the constructor of
-    :class:`~pygmo.island`. The constructor will initialise an archipelago with
-    *n* islands built from *kwargs*.
+
+    :class:`~pygmo.island`, with the following differences:
+
+    * *size* is replaced by *pop_size*, for clarity,
+    * the *seed* argument, if present, is used to initialise a random number generator
+      that, in turn, is used to generate random seeds for each island population. In other
+      words, the *seed* argument allows to generate randomly (but deterministically)
+      the seeds of the populations in the archipelago. If *seed* is not provided, the seeds
+      of the populations will be random and non-deterministic.
+
 
     Args:
         n (``int``): the number of islands in the archipelago
+
+    Keyword Args:
+        udi: a user-defined island (either Python or C++ - note that *udi* will be deep-copied
+          and stored inside the :class:`~pygmo.island` instances)
+        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.algorithm`
+        pop (:class:`~pygmo.population`): a population
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
+        pop_size (``int``): the number of individuals for each island
+        seed (``int``): the random seed
 
     Raises:
         TypeError: if *n* is not an integral type
         ValueError: if *n* is negative
         unspecified: any exception thrown by the constructor of :class:`~pygmo.island`
           or by the underlying C++ constructor
+
+    Examples:
+        >>> from pygmo import *
+        >>> archi = archipelago(n = 16, algo = de(), prob = rosenbrock(10), pop_size = 20, seed = 32)
+        >>> archi #doctest: +SKIP
+        Number of islands: 16
+        Evolving: false
+        <BLANKLINE>
+        Islands summaries:
+        <BLANKLINE>
+                #   Type           Algo                    Prob                                  Size  Evolving
+                -------------------------------------------------------------------------------------------------
+                0   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                1   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                2   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                3   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                4   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                5   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                6   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                7   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                8   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                9   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                10  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                11  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                12  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                13  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                14  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+                15  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false
+        <BLANKLINE>
+        >>> archi.evolve()
+        >>> archi.wait()
+        >>> res = [isl.get_population().champion_f for isl in archi]
+        >>> res #doctest: +SKIP
+        [array([ 475165.1020545]),
+        array([ 807090.7156793]),
+        array([ 229737.91987225]),
+        array([ 598229.45585525]),
+        array([ 560599.11409213]),
+        array([ 417323.13905327]),
+        array([ 241436.42395722]),
+        array([ 393381.06926308]),
+        array([ 212331.35741299]),
+        array([ 212218.93755491]),
+        array([ 497985.30014]),
+        array([ 310792.64466701]),
+        array([ 421278.03109775]),
+        array([ 557967.33605791]),
+        array([ 281039.56040264]),
+        array([ 215539.10152038])]
+
 
     """
     import sys
@@ -433,11 +501,43 @@ def _archi_init(self, n=0, **kwargs):
         raise ValueError(
             "the 'n' parameter must be non-negative, but it is {} instead".format(n))
 
-    # Call the original init.
+    # Replace the 'pop_size' kw arg with just 'size', for later use in the
+    # island ctor.
+
+    if 'size' in kwargs:
+        raise KeyError(
+            "the 'size' argument cannot appear among the named arguments of the archipelago constructor")
+
+    if 'pop_size' in kwargs:
+        # Extract 'pop_size', replace with just 'size'.
+        ps_val = kwargs.pop('pop_size')
+        kwargs['size'] = ps_val
+
+    # Call the original init, which constructs an empty archi.
     __original_archi_init(self)
-    # Push back islands.
-    for _ in range(n):
-        self.push_back(**kwargs)
+
+    if 'seed' in kwargs:
+        # Special handling of the 'seed' argument.
+        from random import Random
+        from .core import _max_unsigned
+        # Create a random engine with own state.
+        RND = Random()
+        # Get the seed from kwargs.
+        seed = kwargs.pop('seed')
+        if not isinstance(seed, int_types):
+            raise TypeError("the 'seed' parameter must be an integer")
+        # Seed the rng.
+        RND.seed(seed)
+        u_max = _max_unsigned()
+        # Push back the islands with different seed.
+        for _ in range(n):
+            kwargs['seed'] = RND.randint(0, u_max)
+            self.push_back(**kwargs)
+
+    else:
+        # Push back islands.
+        for _ in range(n):
+            self.push_back(**kwargs)
 
 setattr(archipelago, "__init__", _archi_init)
 

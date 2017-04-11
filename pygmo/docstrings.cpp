@@ -1086,7 +1086,8 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    1D NumPy float array: the best known solution for the )" + name + R"( problem
+    1D NumPy float array: the best known solution for the )"
+           + name + R"( problem
 
 )";
 }
@@ -1531,7 +1532,7 @@ a steady-state reinsertion is used (i.e. as soon as an individual is found fit i
 population and will influence the next offspring genetic material).
 
 Each decision vector is assigned an infeasibility measure :math:`\iota` which accounts for the normalized violation of
-all the constraints (discounted by the constraints tolerance as returned by pagmo::problem::get_c_tol()). The
+all the constraints (discounted by the constraints tolerance as returned by :attr:`pygmo.problem.c_tol`). The
 normalization factor used :math:`c_{j_{max}}` is the maximum violation of the :math:`j` constraint.
 
 As in the original paper, three individuals in the evolving population are then used to penalize the single
@@ -1549,14 +1550,13 @@ objective function. Using the above definitions the overall pseudo code can be s
 
 .. code-block:: none
 
-   > Select a pagmo::population (related to a single-objective constrained problem)
+   > Select a pygmo.population (related to a single-objective constrained problem)
    > Select a UDA (able to solve single-objective unconstrained problems)
    > while i < iter
    > > Compute the normalization factors (will depend on the current population)
    > > Compute the best, worst, highest (will depend on the current population)
    > > Evolve the population using the UDA and a penalized objective
    > > Reinsert the best decision vector from the previous evolution
-
 
 :class:`pygmo.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
@@ -1570,7 +1570,7 @@ the inner UDA evolve method.
 corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  constraint is ignored if all
 the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
 
-**NOTE** The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner
+**NOTE** The performances of :class:`~pygmo.cstrs_self_adaptive` are highly dependent on the particular inner
 algorithm employed and in particular to its parameters (generations / iterations).
 
 See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
@@ -2851,7 +2851,7 @@ std::string crowding_distance_docstring()
     return R"(non_dominated_front_2d(points)
 
 An implementation of the crowding distance. Complexity is :math:`O(M N \log N)` where :math:`M` is the number of
-objectives and \f$N\f$ is the number of individuals. The function assumes *points* contain a non-dominated front. 
+objectives and :math:`N` is the number of individuals. The function assumes *points* contain a non-dominated front. 
 Failiure to meet this condition will result in undefined behaviour.
 
 See: Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm for multi-objective
@@ -3197,27 +3197,28 @@ Examples:
 )";
 }
 
-std::string global_pygmo_rng_docstring()
+std::string set_global_rng_seed_docstring()
 {
-    return R"(__init__()
+    return R"(set_global_rng_seed(seed)
 
-In pygmo it is in general possible to control the seed of all random decisions by a dedicated *seed* argument passed on via the various
-constructors. If no seed is passed pygmo randomly creates a seed for you using its global random number generator. This class allow
-access to it as to be able to reset its seed or advance its state. This can be useful to create a deterministic behaviour of pygmo easily. 
+In pygmo it is, in general, possible to control the seed of all random generators by a dedicated *seed* kwarg passed on via various
+constructors. If no *seed* is passed pygmo randomly creates a seed for you using its global random number generator. 
+
+This function allows to be able to reset the seed of auch a global random number generator. This can be useful to create a deterministic behaviour of pygmo easily. 
 
 .. note::
-   In complex parallel evolutions obtaining a deterministic behaviour is not possible via setting the global seed as pygmo implements an asynchronous model
-   for parallel execution.
+   In complex parallel evolutions obtaining a deterministic behaviour is not possible even setting the global seed as
+   pygmo implements an asynchronous model for parallel execution and the exact interplay between threads and processes cannot
+   be reproduced deterministically.
 
 Examples:
     >>> import pygmo as pg
-    >>> rngp = pg.global_pygmo_rng()
-    >>> rngp.set_seed(32)
-    >>> pop = pg.population(pg.ackley(5), 20)
+    >>> pg.set_global_rng_seed(seed = 32)
+    >>> pop = pg.population(prob = pg.ackley(5), size = 20)
     >>> print(pop.champion_f)
     [ 17.26891503]
-    >>> rngp.set_seed(32)
-    >>> pop = pg.population(pg.ackley(5), 20)
+    >>> pg.set_global_rng_seed(seed = 32)
+    >>> pop = pg.population(prob = pg.ackley(5), size = 20)
     >>> print(pop.champion_f)
     [ 17.26891503]
     )";
@@ -3483,7 +3484,7 @@ std::string hv_refpoint_docstring()
 Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
 The result is a point that is necessarily dominated by all other points, and thus can be used for hypervolume computations.
 
-**NOTE** This point is different from the one computed by pagmo::nadir as only the non dominated front is considered
+**NOTE** This point is different from the one computed by :func:`~pygmo.nadir` as only the non dominated front is considered
 in that method (also its complexity is thus higher)
 
 Args:
