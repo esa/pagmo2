@@ -76,5 +76,5 @@ Algorithms exposed from C++
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.nlopt
+.. autoclass:: pygmo.nlopt
    :members:

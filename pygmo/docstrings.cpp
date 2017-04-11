@@ -3621,20 +3621,20 @@ NLopt algorithms is:
 * shifted limited-memory variable-metric,
 * augmented Lagrangian algorithm.
 
-The desired NLopt solver is selected upon construction of an :class:`~pygmo.core.nlopt` algorithm. Various properties
+The desired NLopt solver is selected upon construction of an :class:`~pygmo.nlopt` algorithm. Various properties
 of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
-is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.core.nlopt.xtol_rel`).
+is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.nlopt.xtol_rel`).
 
 All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
 Some solvers support equality and/or inequality constaints.
 
 In order to support pagmo's population-based optimisation model, the ``evolve()`` method will select
-a single individual from the input :class:`~pygmo.core.population` to be optimised by the NLopt solver.
+a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.
 The optimised individual will then be inserted back into the population at the end of the optimisation.
-The selection and replacement strategies can be configured via the :attr:`~pygmo.core.nlopt.selection`
-and :attr:`~pygmo.core.nlopt.replacement` attributes.
+The selection and replacement strategies can be configured via the :attr:`~pygmo.nlopt.selection`
+and :attr:`~pygmo.nlopt.replacement` attributes.
 
 .. note::
 
@@ -3646,7 +3646,7 @@ and :attr:`~pygmo.core.nlopt.replacement` attributes.
    The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed description
    of each supported solver.
 
-This constructor will initialise an :class:`~pygmo.core.nlopt` object which will use the NLopt algorithm specified by
+This constructor will initialise an :class:`~pygmo.nlopt` object which will use the NLopt algorithm specified by
 the input string *solver*, the ``"best"`` individual selection strategy and the ``"best"`` individual
 replacement strategy. *solver* is translated to an NLopt algorithm type according to the following
 translation table:
@@ -3685,7 +3685,7 @@ See also the docs of the C++ class :cpp:class:`pagmo::nlopt`.
    description of each supported solver.
 
 Args:
-    solver (``str``): the name of the NLopt algorithm that will be used by this :class:`~pygmo.core.nlopt` object
+    solver (``str``): the name of the NLopt algorithm that will be used by this :class:`~pygmo.nlopt` object
 
 Raises:
     RuntimeError: if the NLopt version is not at least 2
@@ -3885,7 +3885,7 @@ If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"r
 * ``"worst"`` will select the worst individual in the population,
 * ``"random"`` will randomly choose one individual in the population.
 
-:func:`~pygmo.core.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+:func:`~pygmo.nlopt.set_random_sr_seed()` can be used to seed the random number generator
 used by the ``"random"`` policy.
 
 If the attribute is an integer, it represents the index (in the population) of the individual that is selected
@@ -3917,7 +3917,7 @@ If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"r
 * ``"worst"`` will select the worst individual in the population,
 * ``"random"`` will randomly choose one individual in the population.
 
-:func:`~pygmo.core.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+:func:`~pygmo.nlopt.set_random_sr_seed()` can be used to seed the random number generator
 used by the ``"random"`` policy.
 
 If the attribute is an integer, it represents the index (in the population) of the individual that will be
@@ -3944,8 +3944,8 @@ Set the seed for the ``"random"`` selection/replacement policies.
 
 Args:
     seed (``int``): the value that will be used to seed the random number generator used by the ``"random"``
-      election/replacement policies (see :attr:`~pygmo.core.nlopt.selection` and
-      :attr:`~pygmo.core.nlopt.replacement`)
+      election/replacement policies (see :attr:`~pygmo.nlopt.selection` and
+      :attr:`~pygmo.nlopt.replacement`)
 
 Raises:
     OverflowError: if the attribute is set to an integer which is negative or too large
@@ -4016,7 +4016,7 @@ std::string nlopt_local_optimizer_docstring()
     return R"(Local optimizer.
 
 Some NLopt algorithms rely on other NLopt algorithms as local/subsidiary optimizers.
-This property, of type :class:`~pygmo.core.nlopt`, allows to set such local optimizer.
+This property, of type :class:`~pygmo.nlopt`, allows to set such local optimizer.
 By default, no local optimizer is specified, and the property is set to ``None``.
 
 .. note::
@@ -4031,7 +4031,7 @@ By default, no local optimizer is specified, and the property is set to ``None``
    the local optimizer is also forcibly set to zero during the optimisation.
 
 Returns:
-    :class:`~pygmo.core.nlopt`: the local optimizer, or ``None`` if not set
+    :class:`~pygmo.nlopt`: the local optimizer, or ``None`` if not set
 
 Raises:
     unspecified: any exception thrown by failures at the intersection between C++ and Python
