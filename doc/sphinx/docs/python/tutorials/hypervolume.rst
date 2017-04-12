@@ -16,8 +16,8 @@ a reference point (R). However, to rigorously calcuate the indicator can be time
 and approximate methods can be very important. 
 
 In pygmo the main functionalities allowing to compute the hypervolume indicator (also known as Lebesgue Measure or S-Metric) 
-and related quantities are provided by the class :class:`~pygmo.core.hypervolume`. Instantiating this class from a 
-:class:`~pygmo.core.population` or simply from a NumPy array will allow to compute the hypervolume indicator or
+and related quantities are provided by the class :class:`~pygmo.hypervolume`. Instantiating this class from a 
+:class:`~pygmo.population` or simply from a NumPy array will allow to compute the hypervolume indicator or
 the exclusive contributions of single points using exact or approximated algorithms.
 
 This tutorial will cover the features introduced by the hypervolume functionality of pygmo.
@@ -28,7 +28,7 @@ Later, we will give several examples in order to get you started with the basic 
 Hypervolume interface and construction
 ======================================
 The main class used for the computation of the hypervolume indicator (also known as Lebesgue Measure or S-Metric) and
-hypervolume contributions is class :class:`~pygmo.core.hypervolume`. You can import the hypervolume class using the following:
+hypervolume contributions is :class:`pygmo.hypervolume`. You can import the hypervolume class using the following:
 
 .. doctest::
 
@@ -37,8 +37,8 @@ hypervolume contributions is class :class:`~pygmo.core.hypervolume`. You can imp
     True
     
 Since the computation of the hypervolume indicator and the hypervolume contributions are bound tightly
-to multi-objective optimization, we provide two ways of constructing :class:`~pygmo.core.hypervolume`.
-The first one uses the fitness values of the individuals of a :class:`~pygmo.core.population` for the input point set:
+to multi-objective optimization, we provide two ways of constructing :class:`~pygmo.hypervolume`.
+The first one uses the fitness values of the individuals of a :class:`~pygmo.population` for the input point set:
 
 .. doctest::
 
@@ -50,8 +50,8 @@ The first one uses the fitness values of the individuals of a :class:`~pygmo.cor
   
 .. note::
 
-   You need to reconstruct the :class:`~pygmo.core.hypervolume` if the fitness values of the population are changing. 
-   The point set is saved in the :class:`~pygmo.core.hypervolume` and copied there once upon contruction.
+   You need to reconstruct the :class:`~pygmo.hypervolume` if the fitness values of the population are changing. 
+   The point set is saved in the :class:`~pygmo.hypervolume` and copied there once upon contruction.
 
 The second way of construction uses an explicit representation of coordinates for the input point set:
 
@@ -99,7 +99,7 @@ point is (1.5, 0.75) etc. The plot below shows you the overall geometry of the e
 
 Once the hypervolume object is created, it allows for the computation of the following figures:
 
-1. :class:`~pygmo.core.hypervolume.compute` - Returns the joint hypervolume of the set of points (S-Metric).
+1. :func:`~pygmo.hypervolume.compute()` - Returns the joint hypervolume of the set of points (S-Metric).
 
 .. doctest::
 
@@ -107,7 +107,7 @@ Once the hypervolume object is created, it allows for the computation of the fol
     >>> hv.compute(ref_point)
     3.25
 
-2. :class:`~pygmo.core.hypervolume.exclusive` - Returns the exclusive hypervolume by the point at given index.
+2. :func:`~pygmo.hypervolume.exclusive()` - Returns the exclusive hypervolume by the point at given index.
    The exclusive hypervolume 
    is defined as the part of the space dominated exclusively by one point and is also called its (hypervolume) contribution.
 
@@ -119,7 +119,7 @@ Once the hypervolume object is created, it allows for the computation of the fol
     >>> hv.exclusive(3, ref_point)
     0.0
 
-3. :class:`~pygmo.core.hypervolume.least_contributor` - Returns the index of a point contributing the least to the hypervolume.
+3. :func:`~pygmo.hypervolume.least_contributor()` - Returns the index of a point contributing the least to the hypervolume.
 
 .. doctest::
 
@@ -127,7 +127,7 @@ Once the hypervolume object is created, it allows for the computation of the fol
     >>> hv.least_contributor(ref_point) # doctest: +SKIP
     3
 
-4. :class:`~pygmo.core.hypervolume.greatest_contributor` - Returns the index of a point contributing the most to the hypervolume.
+4. :func:`~pygmo.hypervolume.greatest_contributor()` - Returns the index of a point contributing the most to the hypervolume.
 
 .. doctest::
 
@@ -138,11 +138,11 @@ Once the hypervolume object is created, it allows for the computation of the fol
 .. note::
   In case of several least/greatest contributors, pygmo returns only one contributor out of all candidates arbitrarily.
 
-5. :class:`~pygmo.core.hypervolume.contributions` - Returns a list of contributions for all points in the set.
-   This returns the same results as the successive call to the :class:`~pygmo.core.hypervolume.exclusive` method 
-   for each of the points. Due to the implementation, calling :class:`~pygmo.core.hypervolume.contributions` once can
+5. :func:`~pygmo.hypervolume.contributions()` - Returns a list of contributions for all points in the set.
+   This returns the same results as the successive call to the :func:`~pygmo.hypervolume.exclusive()` method 
+   for each of the points. Due to the implementation, calling :func:`~pygmo.hypervolume.contributions()` once can
    be much faster (up to a linear factor) than computing all contributions separately 
-   by using :class:`~pygmo.core.hypervolume.exclusive`.
+   by using :func:`~pygmo.hypervolume.exclusive()`.
 
 .. doctest::
 
@@ -151,10 +151,10 @@ Once the hypervolume object is created, it allows for the computation of the fol
   array([ 0.5 ,  0.25,  0.5 ,  0.  ])
 
 Since all of the methods above require a reference point, it is useful to generate
-one automatically using the :class:`~pygmo.core.nadir`
+one automatically using the :func:`~pygmo.nadir()`
 
 This following short script makes use of some of the features mentioned above to show the hypervolume
-increase after the evolution of a :class:`~pygmo.core.population`.
+increase after the evolution of a :class:`~pygmo.population`.
 
 .. doctest::
 

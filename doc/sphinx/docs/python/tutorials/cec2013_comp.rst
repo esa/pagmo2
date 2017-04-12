@@ -7,7 +7,7 @@ In this tutorial we will show how to use pygmo to run algorithms on the test pro
 Special Session & Competition on Real-Parameter Single Objective Optimization at CEC-2013, Cancun, Mexico 21-23 June 2013.
 
 All of the CEC 2013 problems are box-bounded, continuous, single objective problems and are provided as UDP (user-defined
-problems) by pygmo in the class :class:`~pygmo.core.cec2013`. Instantiating one of these problems is easy:
+problems) by pygmo in the class :class:`~pygmo.cec2013`. Instantiating one of these problems is easy:
 
 .. doctest::
 
@@ -17,7 +17,7 @@ problems) by pygmo in the class :class:`~pygmo.core.cec2013`. Instantiating one 
     >>> # The pygmo problem
     >>> prob = pg.problem(udp)
 
-as usual, we can quickly inspect the :class:`~pygmo.core.problem` printing it to screen:
+as usual, we can quickly inspect the :class:`~pygmo.problem` printing it to screen:
 
 .. doctest::
 
@@ -41,9 +41,9 @@ as usual, we can quickly inspect the :class:`~pygmo.core.problem` printing it to
     	Thread safety: basic
     <BLANKLINE>
 
-Let us assume we want to assess the performance of (say) the optimization algorithm :class:`~pygmo.core.cmaes` (which
+Let us assume we want to assess the performance of (say) the optimization algorithm :class:`~pygmo.cmaes` (which
 implements as user-defined algorithm the Covariance Matrix Adaptation Evolutionary Strategy) on the whole
-:class:`~pygmo.core.cec2013` problem suite at dimension D=2. Since the competition rules allowed D * 10000
+:class:`~pygmo.cec2013` problem suite at dimension D=2. Since the competition rules allowed D * 10000
 function evaluations, we choose a population of 50 and 400 generations:
 
 .. image:: ../../images/cec2013_2_jde.png
@@ -98,14 +98,14 @@ problem instances:
 
 The same can be done for different user-defined algorithms. In the various figures on the right
 we have reported only a few available from pygmo's core. At this low dimension it can be seen how
-the particular instances choosen for :class:`~pygmo.core.cmaes` and :class:`~pygmo.core.sade` (jDE) are
-performing particularly well. It has to be noted here that :class:`~pygmo.core.cmaes` results, in general,
+the particular instances choosen for :class:`~pygmo.cmaes` and :class:`~pygmo.sade` (jDE) are
+performing particularly well. It has to be noted here that :class:`~pygmo.cmaes` results, in general,
 to spend less than the available budget of function evaluations so that a proper comparison at these low
 dimensionality should allow for restarts as to properly make use of the allowed budget.
 
 The script above can be run again for higher problem dimensions, so that, for example, at D = 10 and using a larger
 population size as to allow for the larger available budget of function evaluations, the following plots are obtained for
-the chosen instances of :class:`~pygmo.core.cmaes` and :class:`~pygmo.core.sade`:
+the chosen instances of :class:`~pygmo.cmaes` and :class:`~pygmo.sade`:
 
 .. image:: ../../images/cec2013_10_cmaes.png
     :scale: 100 %

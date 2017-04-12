@@ -1,5 +1,5 @@
 Problem class
 =============
 
-.. autoclass:: pygmo.core.problem
+.. autoclass:: pygmo.problem
    :members:

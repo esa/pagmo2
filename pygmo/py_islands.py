@@ -98,17 +98,17 @@ class mp_island(object):
     def run_evolve(self, algo, pop):
         """Evolve population.
 
-        This method will evolve the input :class:`~pygmo.core.population` *pop* using the input
-        :class:`~pygmo.core.algorithm` *algo*, and return the evolved population. The evolution
+        This method will evolve the input :class:`~pygmo.population` *pop* using the input
+        :class:`~pygmo.algorithm` *algo*, and return the evolved population. The evolution
         is run on one of the processes of the pool backing backing :class:`~pygmo.py_islands.mp_island`.
 
         Args:
 
-            pop(:class:`~pygmo.core.population`): the input population
-            algo(:class:`~pygmo.core.algorithm`): the input algorithm
+            pop(:class:`~pygmo.population`): the input population
+            algo(:class:`~pygmo.algorithm`): the input algorithm
 
         Returns:
-            :class:`~pygmo.core.population`: the evolved population
+            :class:`~pygmo.population`: the evolved population
 
         Raises:
             unspecified: any exception thrown during the evolution, or by the public interface of the
@@ -379,18 +379,18 @@ class ipyparallel_island(object):
     def run_evolve(self, algo, pop):
         """Evolve population.
 
-        This method will evolve the input :class:`~pygmo.core.population` *pop* using the input
-        :class:`~pygmo.core.algorithm` *algo*, and return the evolved population. The evolution
+        This method will evolve the input :class:`~pygmo.population` *pop* using the input
+        :class:`~pygmo.algorithm` *algo*, and return the evolved population. The evolution
         task is submitted to the ipyparallel cluster via an internal :class:`ipyparallel.LoadBalancedView`
         instance initialised during the construction of the island.
 
         Args:
 
-            pop(:class:`~pygmo.core.population`): the input population
-            algo(:class:`~pygmo.core.algorithm`): the input algorithm
+            pop(:class:`~pygmo.population`): the input population
+            algo(:class:`~pygmo.algorithm`): the input algorithm
 
         Returns:
-            :class:`~pygmo.core.population`: the evolved population
+            :class:`~pygmo.population`: the evolved population
 
         Raises:
             unspecified: any exception thrown during the evolution, or by submitting the evolution task

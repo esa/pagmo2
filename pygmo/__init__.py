@@ -72,15 +72,15 @@ __original_translate_init = translate.__init__
 def _translate_init(self, prob=None, translation=[0.]):
     """
     Args:
-        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
-            (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
+            (if ``None``, the population problem will be :class:`~pygmo.null_problem`)
         translation (array-like object): an array containing the translation to be applied
 
     Raises:
         ValueError: if the length of *translation* is not equal to the dimension of *prob*
         unspecified: any exception thrown by:
 
-        * the constructor of :class:`pygmo.core.problem`,
+        * the constructor of :class:`pygmo.problem`,
         * the constructor of the underlying C++ class,
         * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
             signatures, etc.)
@@ -110,8 +110,8 @@ __original_decompose_init = decompose.__init__
 def _decompose_init(self, prob=None, weight=[0.5, 0.5], z=[0., 0.], method='weighted', adapt_ideal=False):
     """
     Args:
-        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
-            (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
+            (if ``None``, the population problem will be :class:`~pygmo.null_problem`)
         weight (array-like object): the vector of weights :math:`\boldsymbol \lambda`
         z (array-like object): the reference point :math:`\mathbf z^*`
         method (``str``): a string containing the decomposition method chosen
@@ -130,7 +130,7 @@ def _decompose_init(self, prob=None, weight=[0.5, 0.5], z=[0., 0.], method='weig
 
         unspecified: any exception thrown by:
 
-        * the constructor of :class:`pygmo.core.problem`,
+        * the constructor of :class:`pygmo.problem`,
         * the constructor of the underlying C++ class,
         * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
             signatures, etc.)
@@ -162,7 +162,7 @@ def _unconstrain_init(self, prob=None, method="death penalty", weights=[]):
     """
     Args:
         prob: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
-              and stored inside the :class:`~pygmo.core.unconstrained` instance)
+              and stored inside the :class:`~pygmo.unconstrained` instance)
         method (``str``): a string containing the unconstrain method chosen, one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``]
         weights (array-like object): the vector of weights to be used if the method chosen is "weighted"
 
@@ -175,7 +175,7 @@ def _unconstrain_init(self, prob=None, method="death penalty", weights=[]):
 
         unspecified: any exception thrown by:
 
-        * the constructor of :class:`pygmo.core.problem`,
+        * the constructor of :class:`pygmo.problem`,
         * the constructor of the underlying C++ class,
         * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
             signatures, etc.)
@@ -206,16 +206,16 @@ def _mbh_init(self, algo=None, stop=5, perturb=1e-2, seed=None):
     """
     Args:
         algo: a user-defined algorithm (either C++ or Python - note that *algo* will be deep-copied
-             and stored inside the :class:`~pygmo.core.mbh` instance)
+             and stored inside the :class:`~pygmo.mbh` instance)
         stop (``int``): consecutive runs of the inner algorithm that need to result in no improvement for
-             :class:`~pygmo.core.mbh` to stop
+             :class:`~pygmo.mbh` to stop
         perturb (``float`` or array-like object): perturb the perturbation to be applied to each component
         seed (``int``): seed used by the internal random number generator
 
     Raises:
         ValueError: if *perturb* (or one of its components, if *perturb* is an array) is not in the
              (0,1] range
-        unspecified: any exception thrown by the constructor of :class:`pygmo.core.algorithm`, or by
+        unspecified: any exception thrown by the constructor of :class:`pygmo.algorithm`, or by
              failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
              signatures, etc.)
 
@@ -251,12 +251,12 @@ def _cstrs_self_adaptive_init(self, iters=1, algo=None, seed=None):
     Args:
         iter (``int``): number of iterations (i.e. calls to the innel algorithm evolve)
         algo: a user-defined algorithm (either C++ or Python - note that *algo* will be deep-copied
-             and stored inside the :class:`~pygmo.core.cstrs_self_adaptive` instance)
+             and stored inside the :class:`~pygmo.cstrs_self_adaptive` instance)
         seed (``int``): seed used by the internal random number generator
 
     Raises:
         ValueError: if *iters* is negative or greater than an implementation-defined value
-        unspecified: any exception thrown by the constructor of :class:`pygmo.core.algorithm`, or by
+        unspecified: any exception thrown by the constructor of :class:`pygmo.algorithm`, or by
              failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
              signatures, etc.)
 
@@ -291,8 +291,8 @@ def _population_init(self, prob=None, size=0, seed=None):
     # expose the ctor of pop from pagmo::problem.
     """
     Args:
-        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
-            (if ``None``, the population problem will be :class:`~pygmo.core.null_problem`)
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
+            (if ``None``, the population problem will be :class:`~pygmo.null_problem`)
         size (``int``): the number of individuals
         seed (``int``): the random seed (if ``None``, it will be randomly-generated)
 
@@ -300,7 +300,7 @@ def _population_init(self, prob=None, size=0, seed=None):
         TypeError: if *size* is not an ``int`` or *seed* is not ``None`` and not an ``int``
         OverflowError:  is *size* or *seed* are negative
         unspecified: any exception thrown by the invoked C++ constructors or by the constructor of
-            :class:`~pygmo.core.problem`, or by failures at the intersection between C++ and
+            :class:`~pygmo.problem`, or by failures at the intersection between C++ and
             Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
     """
@@ -337,10 +337,10 @@ def _island_init(self, **kwargs):
     """
     Keyword Args:
         udi: a user-defined island (either Python or C++ - note that *udi* will be deep-copied
-          and stored inside the :class:`~pygmo.core.island` instance)
-        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.core.algorithm`
-        pop (:class:`~pygmo.core.population`): a population
-        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
+          and stored inside the :class:`~pygmo.island` instance)
+        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.algorithm`
+        pop (:class:`~pygmo.population`): a population
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
         size (``int``): the number of individuals
         seed (``int``): the random seed (if not specified, it will be randomly-generated)
 
@@ -350,7 +350,7 @@ def _island_init(self, **kwargs):
 
           * the invoked C++ constructors,
           * the deep copy of the UDI,
-          * the constructors of :class:`~pygmo.core.algorithm` and :class:`~pygmo.core.population`,
+          * the constructors of :class:`~pygmo.algorithm` and :class:`~pygmo.population`,
           * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
             signatures, etc.)
 
@@ -412,7 +412,7 @@ def _archi_init(self, n=0, **kwargs):
     """
     The constructor will initialise an archipelago with *n* islands built from *kwargs*.
     The keyword arguments accept the same format as explained in the constructor of
-    :class:`~pygmo.core.island`, with the following differences:
+    :class:`~pygmo.island`, with the following differences:
 
     * *size* is replaced by *pop_size*, for clarity,
     * the *seed* argument, if present, is used to initialise a random number generator
@@ -426,17 +426,17 @@ def _archi_init(self, n=0, **kwargs):
 
     Keyword Args:
         udi: a user-defined island (either Python or C++ - note that *udi* will be deep-copied
-          and stored inside the :class:`~pygmo.core.island` instances)
-        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.core.algorithm`
-        pop (:class:`~pygmo.core.population`): a population
-        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.core.problem`
+          and stored inside the :class:`~pygmo.island` instances)
+        algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.algorithm`
+        pop (:class:`~pygmo.population`): a population
+        prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
         pop_size (``int``): the number of individuals for each island
         seed (``int``): the random seed
 
     Raises:
         TypeError: if *n* is not an integral type
         ValueError: if *n* is negative
-        unspecified: any exception thrown by the constructor of :class:`~pygmo.core.island`
+        unspecified: any exception thrown by the constructor of :class:`~pygmo.island`
           or by the underlying C++ constructor
 
     Examples:
@@ -548,10 +548,10 @@ def _archi_push_back(self, **kwargs):
     equal to the size of the archipelago before the call to this method).
 
     The keyword arguments accept the same format as explained in the constructor of
-    :class:`~pygmo.core.island`.
+    :class:`~pygmo.island`.
 
     Raises:
-        unspecified: any exception thrown by the constructor of :class:`~pygmo.core.island` or by
+        unspecified: any exception thrown by the constructor of :class:`~pygmo.island` or by
           the underlying C++ method
 
     """

@@ -77,6 +77,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/rng.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
@@ -546,7 +547,7 @@ BOOST_PYTHON_MODULE(core)
         .def("set_seed", &problem::set_seed, pygmo::problem_set_seed_docstring().c_str(), (bp::arg("seed")))
         .def("has_set_seed", &problem::has_set_seed, pygmo::problem_has_set_seed_docstring().c_str())
         .def("is_stochastic", &problem::is_stochastic,
-             "is_stochastic()\n\nAlias for :func:`~pygmo.core.problem.has_set_seed()`.\n")
+             "is_stochastic()\n\nAlias for :func:`~pygmo.problem.has_set_seed()`.\n")
         .def("feasibility_x",
              lcast([](const problem &p, const bp::object &x) { return p.feasibility_x(pygmo::to_vd(x)); }),
              pygmo::problem_feasibility_x_docstring().c_str(), (bp::arg("x")))
@@ -577,7 +578,7 @@ BOOST_PYTHON_MODULE(core)
              (bp::arg("level")))
         .def("has_set_verbosity", &algorithm::has_set_verbosity, pygmo::algorithm_has_set_verbosity_docstring().c_str())
         .def("is_stochastic", &algorithm::is_stochastic,
-             "is_stochastic()\n\nAlias for :func:`~pygmo.core.algorithm.has_set_seed()`.\n")
+             "is_stochastic()\n\nAlias for :func:`~pygmo.algorithm.has_set_seed()`.\n")
         .def("get_name", &algorithm::get_name, pygmo::algorithm_get_name_docstring().c_str())
         .def("get_extra_info", &algorithm::get_extra_info, pygmo::algorithm_get_extra_info_docstring().c_str())
         .def("get_thread_safety", &algorithm::get_thread_safety,
@@ -687,6 +688,41 @@ BOOST_PYTHON_MODULE(core)
                                       pygmo::v_to_a(std::get<3>(fnds)));
             }),
             pygmo::fast_non_dominated_sorting_docstring().c_str(), boost::python::arg("points"));
+    bp::def("pareto_dominance", lcast([](const bp::object &obj1, const bp::object &obj2) {
+                return pareto_dominance(pygmo::to_vd(obj1), pygmo::to_vd(obj2));
+            }),
+            pygmo::pareto_dominance_docstring().c_str(), (bp::arg("obj1"), bp::arg("obj2")));
+    bp::def("non_dominated_front_2d", lcast([](const bp::object &points) {
+                return pygmo::v_to_a(non_dominated_front_2d(pygmo::to_vvd(points)));
+            }),
+            pygmo::non_dominated_front_2d_docstring().c_str(), bp::arg("points"));
+    bp::def("crowding_distance",
+            lcast([](const bp::object &points) { return pygmo::v_to_a(crowding_distance(pygmo::to_vvd(points))); }),
+            pygmo::crowding_distance_docstring().c_str(), bp::arg("points"));
+    bp::def("sort_population_mo",
+            lcast([](const bp::object &input_f) { return pygmo::v_to_a(sort_population_mo(pygmo::to_vvd(input_f))); }),
+            pygmo::sort_population_mo_docstring().c_str(), bp::arg("points"));
+    bp::def("select_best_N_mo", lcast([](const bp::object &input_f, unsigned N) {
+                return pygmo::v_to_a(select_best_N_mo(pygmo::to_vvd(input_f), N));
+            }),
+            pygmo::select_best_N_mo_docstring().c_str(), (bp::arg("points"), bp::arg("N")));
+    bp::def("decomposition_weights", lcast([](vector_double::size_type n_f, vector_double::size_type n_w,
+                                              const std::string &method, unsigned seed) {
+                using reng_t = pagmo::detail::random_engine_type;
+                reng_t tmp_rng(static_cast<reng_t::result_type>(seed));
+                return pygmo::vv_to_a(decomposition_weights(n_f, n_w, method, tmp_rng));
+            }),
+            pygmo::decomposition_weights_docstring().c_str(),
+            (bp::arg("n_f"), bp::arg("n_w"), bp::arg("method"), bp::arg("seed")));
+
+    bp::def("decompose_objectives", lcast([](const bp::object &objs, const bp::object &weights,
+                                             const bp::object &ref_point, const std::string &method) {
+                return pygmo::v_to_a(
+                    decompose_objectives(pygmo::to_vd(objs), pygmo::to_vd(weights), pygmo::to_vd(ref_point), method));
+            }),
+            pygmo::decompose_objectives_docstring().c_str(),
+            (bp::arg("objs"), bp::arg("weights"), bp::arg("ref_point"), bp::arg("method")));
+
     bp::def("nadir", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); }),
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); }),
@@ -709,8 +745,21 @@ BOOST_PYTHON_MODULE(core)
                 auto retval = estimate_gradient_h(f, pygmo::to_vd(x), dx);
                 return pygmo::v_to_a(retval);
             }),
-            pygmo::estimate_gradient_h_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
-
+            pygmo::estimate_gradient_h_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-2));
+    // Constrained optimization utilities
+    bp::def("compare_fc",
+            lcast([](const bp::object &f1, const bp::object &f2, vector_double::size_type nec, const bp::object &tol) {
+                return compare_fc(pygmo::to_vd(f1), pygmo::to_vd(f2), nec, pygmo::to_vd(tol));
+            }),
+            pygmo::compare_fc_docstring().c_str(), (bp::arg("f1"), bp::arg("f2"), bp::arg("nec"), bp::arg("tol")));
+    bp::def("sort_population_con",
+            lcast([](const bp::object &input_f, vector_double::size_type nec, const bp::object &tol) {
+                return pygmo::v_to_a(sort_population_con(pygmo::to_vvd(input_f), nec, pygmo::to_vd(tol)));
+            }),
+            pygmo::sort_population_con_docstring().c_str(), (bp::arg("input_f"), bp::arg("nec"), bp::arg("tol")));
+    // Global random number generator
+    bp::def("set_global_rng_seed", lcast([](unsigned seed) { random_device::set_seed(seed); }),
+            pygmo::set_global_rng_seed_docstring().c_str(), bp::arg("seed"));
     // Island.
     pygmo::island_ptr
         = detail::make_unique<bp::class_<island>>("island", pygmo::island_docstring().c_str(), bp::init<>());

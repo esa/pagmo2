@@ -1,5 +1,5 @@
 Archipelago class
 =================
 
-.. autoclass:: pygmo.core.archipelago
+.. autoclass:: pygmo.archipelago
    :members:
