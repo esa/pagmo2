@@ -12,8 +12,8 @@ an interior point optimizer or an evolutionary startegy solver, in pygmo you wil
 always have to call a method called ``evolve()`` to improve over your initial solutions,
 i.e. your *population*.
 
-The simplest way to evolve a population is to use directly the :class:`~pygmo.core.algorithm`
-method :class:`~pygmo.core.algorithm.evolve`
+The simplest way to evolve a population is to use directly the :class:`~pygmo.algorithm`
+method :func:`~pygmo.algorithm.evolve()`
 
 .. doctest::
 
@@ -41,12 +41,12 @@ method :class:`~pygmo.core.algorithm.evolve`
     :alt: sade CR adaptation
     :align: right
 
-Clearly, as :class:`~pygmo.core.sade` is a stochastic optimization algorithm, should we repeat the
+Clearly, as :class:`~pygmo.sade` is a stochastic optimization algorithm, should we repeat the
 evolution starting from the same population, we would obtain different results. If we
 want to monitor multiple runs from different initial populations and see how the final best fitness
 is achieved as the number of fitness evaluations increase. Most pygmo UDAs allow to do this
 as they maintain an internal log that can be accessed after the UDA has been
-extracted (see :class:`~pygmo.core.algorithm.extract`). This allows, for example to obtain
+extracted (see :func:`~pygmo.algorithm.extract()`). This allows, for example to obtain
 plots such as those on the right, where multiple trials are monitored:
 
 .. doctest::

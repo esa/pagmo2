@@ -1,5 +1,5 @@
 Population class
 ================
 
-.. autoclass:: pygmo.core.population
+.. autoclass:: pygmo.population
    :members:

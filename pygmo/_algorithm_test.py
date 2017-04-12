@@ -40,7 +40,7 @@ class _algo(object):
 
 
 class algorithm_test_case(_ut.TestCase):
-    """Test case for the :class:`~pygmo.core.algorithm` class.
+    """Test case for the :class:`~pygmo.algorithm` class.
 
     """
 

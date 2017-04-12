@@ -62,7 +62,7 @@ class _prob(object):
 
 
 class island_test_case(_ut.TestCase):
-    """Test case for the :class:`~pygmo.core.island` class.
+    """Test case for the :class:`~pygmo.island` class.
 
     """
 

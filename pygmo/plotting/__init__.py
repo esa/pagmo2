@@ -36,7 +36,7 @@ from __future__ import absolute_import as _ai
 
 def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
     """
-    Plots the nondominated fronts of a set of points. Makes use of :class:`~pygmo.core.fast_non_dominated_sorting` to
+    Plots the nondominated fronts of a set of points. Makes use of :class:`~pygmo.fast_non_dominated_sorting` to
     compute the non dominated fronts.
 
     Args:
@@ -91,7 +91,7 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
     visualized if the problem id is 2,3 or 4.
 
     Args:
-        pop (:class:`~pygmo.core.population`): population of solutions to a dtlz problem
+        pop (:class:`~pygmo.population`): population of solutions to a dtlz problem
         az (``float``): angle of view on which the 3d-plot is created
         comp (``list``): indexes the fitness dimension for x,y and z axis in that order
 

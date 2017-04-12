@@ -6,7 +6,7 @@ List of islands available in pygmo
 Islands exposed from C++
 -------------------------
 
-.. autoclass:: pygmo.core.thread_island
+.. autoclass:: pygmo.thread_island
    :members:
 
 Islands implemented in Python

@@ -22,6 +22,14 @@ Coding your own problem (UDP)
 
   coding_udp_simple
 
+Local optimization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 2
+
+  nlopt_basics
+
 Multi-objective optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

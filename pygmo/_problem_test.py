@@ -43,7 +43,7 @@ class _prob(object):
 
 
 class problem_test_case(_ut.TestCase):
-    """Test case for the :class:`~pygmo.core.problem` class.
+    """Test case for the :class:`~pygmo.problem` class.
 
     """
 

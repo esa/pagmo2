@@ -292,7 +292,7 @@ inline fnds_return_type fast_non_dominated_sorting(const std::vector<vector_doub
  * @throws std::invalid_argument If \p non_dom_front does not contain at least two points
  * @throws std::invalid_argument If points in \p do not all have at least two objectives
  * @throws std::invalid_argument If points in \p non_dom_front do not all have the same dimensionality
-*/
+ */
 inline vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
 {
     auto N = non_dom_front.size();
@@ -564,16 +564,14 @@ inline vector_double nadir(const std::vector<vector_double> &points)
  * - "grid" generates weights on an uniform grid. This method may only be used when the number of requested weights to
  *be genrated is such that a uniform grid is indeed possible. In
  * two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases
- * - "random" generates weights randomly distributing them uniformly on the simplex (a weight is such that \f$\sum_i
- *\lambda_i = 1\f$)
- * - "low discrepancy" generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of
- *the Pareto front. Halton sequence is used since
- * low dimensionalities are expected in the number of objcetvices (i.e. less than 20), hence Halton sequence is deemes
- *as appropriate.
+ * - "random" generates weights randomly distributing them uniformly on the simplex (weights are such that \f$\sum_i
+ * \lambda_i = 1\f$)
+ * - "low discrepancy" generates weights using a low-discrepancy sequence to, eventually, obtain a
+ * better coverage of the Pareto front. Halton sequence is used since low dimensionalities are expected in the number of
+ * objectives (i.e. less than 20), hence Halton sequence is deemed as appropriate.
  *
  * **NOTE** All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All
- *weight generation methods
- * are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
+ * weight generation methods are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
  *
  * Example: to generate 10 weights distributed somehow regularly to decompose a three dimensional problem:
  * @code{.unparsed}
@@ -583,17 +581,17 @@ inline vector_double nadir(const std::vector<vector_double> &points)
  *
  * @param n_f dimension of each weight vector (i.e. fitness dimension)
  * @param n_w number of weights to be generated
- * @param weight_generation methods to generate the weights of the decomposed problems. One of "grid", "random",
+ * @param method methods to generate the weights of the decomposed problems. One of "grid", "random",
  *"low discrepancy"
  * @param r_engine random engine
  *
  * @returns an <tt>std:vector</tt> containing the weight vectors
  *
- * @throws if the population size is not compatible with the selected weight generation method
+ * @throws if \p nf and \p nw are not compatible with the selected weight generation method or if \p method
+ * is not one of "grid", "random" or "low discrepancy"
  */
 inline std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, vector_double::size_type n_w,
-                                                        const std::string &weight_generation,
-                                                        detail::random_engine_type &r_engine)
+                                                        const std::string &method, detail::random_engine_type &r_engine)
 {
     // Sanity check
     if (n_f > n_w) {
@@ -614,7 +612,7 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
     // Random distributions
     std::uniform_real_distribution<double> drng(0., 1.); // to generate a number in [0, 1)
     std::vector<vector_double> retval;
-    if (weight_generation == "grid") {
+    if (method == "grid") {
         // find the largest H resulting in a population smaller or equal to NP
         decltype(n_w) H;
         if (n_f == 2u) {
@@ -632,7 +630,7 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
         if (std::abs(static_cast<double>(n_w) - binomial_coefficient(H + n_f - 1u, n_f - 1u)) > 1E-8) {
             std::ostringstream error_message;
             error_message << "Population size of " << std::to_string(n_w) << " is detected, but not supported by the '"
-                          << weight_generation << "' weight generation method selected. A size of "
+                          << method << "' weight generation method selected. A size of "
                           << binomial_coefficient(H + n_f - 1u, n_f - 1u) << " or "
                           << binomial_coefficient(H + n_f, n_f - 1u) << " is possible.";
             pagmo_throw(std::invalid_argument, error_message.str());
@@ -646,7 +644,7 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
                 retval[i][j] /= static_cast<double>(H);
             }
         }
-    } else if (weight_generation == "low discrepancy") {
+    } else if (method == "low discrepancy") {
         // We first push back the "corners" [1,0,0,...], [0,1,0,...]
         for (decltype(n_f) i = 0u; i < n_f; ++i) {
             retval.push_back(vector_double(n_f, 0.));
@@ -657,7 +655,7 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
         for (decltype(n_w) i = n_f; i < n_w; ++i) {
             retval.push_back(sample_from_simplex(ld_seq()));
         }
-    } else if (weight_generation == "random") {
+    } else if (method == "random") {
         // We first push back the "corners" [1,0,0,...], [0,1,0,...]
         for (decltype(n_f) i = 0u; i < n_f; ++i) {
             retval.push_back(vector_double(n_f, 0.));
@@ -672,7 +670,7 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
         }
     } else {
         pagmo_throw(std::invalid_argument,
-                    "Weight generation method " + weight_generation
+                    "Weight generation method " + method
                         + " is unknown. One of 'grid', 'random' or 'low discrepancy' was expected");
     }
     return retval;
