@@ -15,12 +15,13 @@ I have the gradient
     >>> import pygmo as pg
     >>> uda = pg.nlopt("slsqp")
     >>> algo = pg.algorithm(uda)
-    >>> print(algo) # doctest: +NORMALIZE_WHITESPACE
+    >>> print(algo) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     Algorithm name: NLopt - slsqp [deterministic]
         Thread safety: basic
     <BLANKLINE>
     Extra info:
-        NLopt version: 2.4.2
+        NLopt version: ...
+        Solver: 'slsqp'
         Last optimisation return code: NLOPT_SUCCESS (value = 1, Generic success return value)
         Verbosity: 0
         Individual selection policy: best
