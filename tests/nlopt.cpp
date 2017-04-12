@@ -26,14 +26,25 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#if defined(_MSC_VER)
+
+// Disable the checked iterators feature in MSVC. We want it for the source code
+// (so it should not be disabled in the headers), but dealing with it in the tests is
+// not as useful and quite painful.
+#define _SCL_SECURE_NO_WARNINGS
+
+#endif
+
 #define BOOST_TEST_MODULE nlopt_test
 #include <boost/test/included/unit_test.hpp>
 
 #include <boost/any.hpp>
+#include <boost/lexical_cast.hpp>
 #include <cmath>
 #include <initializer_list>
 #include <limits>
 #include <nlopt.h>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -47,6 +58,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/serialization.hpp>
 
 using namespace pagmo;
 
@@ -262,4 +274,117 @@ BOOST_AUTO_TEST_CASE(nlopt_set_sc)
         BOOST_CHECK_THROW(a.set_xtol_abs(std::numeric_limits<double>::quiet_NaN()), std::invalid_argument);
     }
     a.set_maxtime(123);
+}
+
+BOOST_AUTO_TEST_CASE(nlopt_serialization)
+{
+    for (auto r : {"best", "worst", "random"}) {
+        for (auto s : {"best", "worst", "random"}) {
+            auto n = nlopt{"slsqp"};
+            n.set_replacement(r);
+            n.set_selection(s);
+            algorithm algo{n};
+            algo.set_verbosity(5);
+            auto pop = population(hs71{}, 10);
+            algo.evolve(pop);
+            auto s_log = algo.extract<nlopt>()->get_log();
+            // Store the string representation of p.
+            std::stringstream ss;
+            auto before_text = boost::lexical_cast<std::string>(algo);
+            // Now serialize, deserialize and compare the result.
+            {
+                cereal::JSONOutputArchive oarchive(ss);
+                oarchive(algo);
+            }
+            // Change the content of p before deserializing.
+            algo = algorithm{null_algorithm{}};
+            {
+                cereal::JSONInputArchive iarchive(ss);
+                iarchive(algo);
+            }
+            auto after_text = boost::lexical_cast<std::string>(algo);
+            BOOST_CHECK_EQUAL(before_text, after_text);
+            BOOST_CHECK(s_log == algo.extract<nlopt>()->get_log());
+        }
+    }
+    for (auto r : {0u, 4u, 7u}) {
+        for (auto s : {0u, 4u, 7u}) {
+            auto n = nlopt{"slsqp"};
+            n.set_replacement(r);
+            n.set_selection(s);
+            algorithm algo{n};
+            algo.set_verbosity(5);
+            auto pop = population(hs71{}, 10);
+            algo.evolve(pop);
+            auto s_log = algo.extract<nlopt>()->get_log();
+            // Store the string representation of p.
+            std::stringstream ss;
+            auto before_text = boost::lexical_cast<std::string>(algo);
+            // Now serialize, deserialize and compare the result.
+            {
+                cereal::JSONOutputArchive oarchive(ss);
+                oarchive(algo);
+            }
+            // Change the content of p before deserializing.
+            algo = algorithm{null_algorithm{}};
+            {
+                cereal::JSONInputArchive iarchive(ss);
+                iarchive(algo);
+            }
+            auto after_text = boost::lexical_cast<std::string>(algo);
+            BOOST_CHECK_EQUAL(before_text, after_text);
+            BOOST_CHECK(s_log == algo.extract<nlopt>()->get_log());
+        }
+    }
+}
+
+BOOST_AUTO_TEST_CASE(nlopt_loc_opt)
+{
+    for (const auto &str : {"auglag", "auglag_eq"}) {
+        nlopt n{str};
+        n.set_local_optimizer(nlopt{"slsqp"});
+        BOOST_CHECK(n.get_local_optimizer());
+        BOOST_CHECK(static_cast<const nlopt &>(n).get_local_optimizer());
+        // Test serialization.
+        algorithm algo{n};
+        std::stringstream ss;
+        auto before_text = boost::lexical_cast<std::string>(algo);
+        // Now serialize, deserialize and compare the result.
+        {
+            cereal::JSONOutputArchive oarchive(ss);
+            oarchive(algo);
+        }
+        // Change the content of p before deserializing.
+        algo = algorithm{null_algorithm{}};
+        {
+            cereal::JSONInputArchive iarchive(ss);
+            iarchive(algo);
+        }
+        auto after_text = boost::lexical_cast<std::string>(algo);
+        BOOST_CHECK_EQUAL(before_text, after_text);
+        // Test small evolution.
+        auto pop = population{hs71{}, 1};
+        pop.set_x(0, {2., 2., 2., 2.});
+        pop.get_problem().set_c_tol({1E-6, 1E-6});
+        algo.evolve(pop);
+        BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() >= 0);
+        // Unset the local optimizer.
+        algo.extract<nlopt>()->unset_local_optimizer();
+        BOOST_CHECK(!algo.extract<nlopt>()->get_local_optimizer());
+        algo.evolve(pop);
+        BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() == NLOPT_INVALID_ARGS);
+        // Auglag inside auglag. Not sure if this is supposed to work, it gives an error
+        // currently.
+        algo.extract<nlopt>()->set_local_optimizer(nlopt{str});
+        algo.extract<nlopt>()->get_local_optimizer()->set_local_optimizer(nlopt{"lbfgs"});
+        algo.evolve(pop);
+        BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() < 0);
+    }
+    // Check setting a local opt does not do anythig for normal solvers.
+    nlopt n{"slsqp"};
+    n.set_local_optimizer(nlopt{"lbfgs"});
+    algorithm algo{n};
+    auto pop = population{rosenbrock{20}, 1};
+    algo.evolve(pop);
+    BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() >= 0);
 }

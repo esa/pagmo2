@@ -1383,6 +1383,36 @@ public:
         stream(os, t);
         return os;
     }
+    /// Get the fitness vectors of the islands' champions.
+    /**
+     * @return a collection of the fitness vectors of the islands' champions.
+     *
+     * @throws unspecified any exception thrown by population::champion_f() or
+     * by memory errors in standard containers.
+     */
+    std::vector<vector_double> get_champions_f() const
+    {
+        std::vector<vector_double> retval;
+        for (const auto &isl_ptr : m_islands) {
+            retval.emplace_back(isl_ptr->get_population().champion_f());
+        }
+        return retval;
+    }
+    /// Get the decision vectors of the islands' champions.
+    /**
+     * @return a collection of the decision vectors of the islands' champions.
+     *
+     * @throws unspecified any exception thrown by population::champion_x() or
+     * by memory errors in standard containers.
+     */
+    std::vector<vector_double> get_champions_x() const
+    {
+        std::vector<vector_double> retval;
+        for (const auto &isl_ptr : m_islands) {
+            retval.emplace_back(isl_ptr->get_population().champion_x());
+        }
+        return retval;
+    }
     /// Save to archive.
     /**
      * This method will save to \p ar the islands of the archipelago.

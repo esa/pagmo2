@@ -76,5 +76,8 @@ Type traits and enums used in PaGMO
 .. doxygenclass:: pagmo::override_has_set_seed
    :members:
 
+.. doxygenclass:: pagmo::has_run_evolve
+   :members:
+
 .. doxygenclass:: pagmo::is_udi
    :members:

@@ -997,7 +997,7 @@ Returns:
 
 Raises:
     ValueError: if the size of *f* is not the same as the output of
-      :func:`~pymog.core.problem.get_nf()`
+      :func:`~pygmo.problem.get_nf()`
 
 )";
 }
@@ -3954,6 +3954,38 @@ Raises:
 )";
 }
 
+std::string archipelago_get_champions_f_docstring()
+{
+    return R"(get_champions_f()
+
+Get the fitness vectors of the islands' champions.
+
+Returns:
+    ``list`` of 1D NumPy float arrays: the fitness vectors of the islands' champions
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+      mismatched function signatures, etc.)
+
+)";
+}
+
+std::string archipelago_get_champions_x_docstring()
+{
+    return R"(get_champions_x()
+
+Get the decision vectors of the islands' champions.
+
+Returns:
+    ``list`` of 1D NumPy float arrays: the decision vectors of the islands' champions
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+      mismatched function signatures, etc.)
+
+)";
+}
+
 std::string nlopt_docstring()
 {
     return R"(__init__(solver = "cobyla")
@@ -3976,7 +4008,8 @@ NLopt algorithms is:
 * SLSQP,
 * low-storage BFGS,
 * preconditioned truncated Newton,
-* shifted limited-memory variable-metric.
+* shifted limited-memory variable-metric,
+* augmented Lagrangian algorithm.
 
 The desired NLopt solver is selected upon construction of an :class:`~pygmo.nlopt` algorithm. Various properties
 of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
@@ -3989,7 +4022,8 @@ Some solvers support equality and/or inequality constaints.
 
 In order to support pagmo's population-based optimisation model, the ``evolve()`` method will select
 a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.
-The optimised individual will then be inserted back into the population at the end of the optimisation.
+If the optimisation produces a better individual (as established by :func:`~pygmo.compare_fc()`),
+the optimised individual will be inserted back into the population.
 The selection and replacement strategies can be configured via the :attr:`~pygmo.nlopt.selection`
 and :attr:`~pygmo.nlopt.replacement` attributes.
 
@@ -4028,6 +4062,8 @@ translation table:
 ``"tnewton"``                     ``NLOPT_LD_TNEWTON``
 ``"var2"``                        ``NLOPT_LD_VAR2``
 ``"var1"``                        ``NLOPT_LD_VAR1``
+``"auglag"``                      ``NLOPT_AUGLAG``
+``"auglag_eq"``                   ``NLOPT_AUGLAG_EQ``
 ================================  ====================================
 
 The parameters of the selected solver can be configured via the attributes of this class.
@@ -4060,37 +4096,37 @@ Examples:
     >>> prob.c_tol = [1E-6] * 18 # Set constraints tolerance to 1E-6
     >>> pop = population(prob, 20)
     >>> pop = algo.evolve(pop) # doctest: +SKIP
-       fevals:       fitness:      violated:    viol. norm:
-             1        95959.4             18        538.227 i
-             2        89282.7             18        5177.42 i
-             3          75580             18        464.206 i
-             4          75580             18        464.206 i
-             5        77737.6             18        1095.94 i
-             6          41162             18        350.446 i
-             7          41162             18        350.446 i
-             8          67881             18        362.454 i
-             9        30502.2             18        249.762 i
-            10        30502.2             18        249.762 i
-            11        7266.73             18        95.5946 i
-            12         4510.3             18        42.2385 i
-            13        2400.66             18        35.2507 i
-            14        34051.9             18        749.355 i
-            15        1657.41             18        32.1575 i
-            16        1657.41             18        32.1575 i
-            17        1564.44             18        12.5042 i
-            18        275.987             14        6.22676 i
-            19        232.765             12         12.442 i
-            20        161.892             15        4.00744 i
-            21        161.892             15        4.00744 i
-            22        17.6821             11        1.78909 i
-            23        7.71103              5       0.130386 i
-            24        6.24758              4     0.00736759 i
-            25        6.23325              1    5.12547e-05 i
-            26         6.2325              0              0
-            27        6.23246              0              0
-            28        6.23246              0              0
-            29        6.23246              0              0
-            30        6.23246              0              0
+       objevals:       objval:      violated:    viol. norm:
+               1       95959.4             18        538.227 i
+               2       89282.7             18        5177.42 i
+               3         75580             18        464.206 i
+               4         75580             18        464.206 i
+               5       77737.6             18        1095.94 i
+               6         41162             18        350.446 i
+               7         41162             18        350.446 i
+               8         67881             18        362.454 i
+               9       30502.2             18        249.762 i
+              10       30502.2             18        249.762 i
+              11       7266.73             18        95.5946 i
+              12        4510.3             18        42.2385 i
+              13       2400.66             18        35.2507 i
+              14       34051.9             18        749.355 i
+              15       1657.41             18        32.1575 i
+              16       1657.41             18        32.1575 i
+              17       1564.44             18        12.5042 i
+              18       275.987             14        6.22676 i
+              19       232.765             12         12.442 i
+              20       161.892             15        4.00744 i
+              21       161.892             15        4.00744 i
+              22       17.6821             11        1.78909 i
+              23       7.71103              5       0.130386 i
+              24       6.24758              4     0.00736759 i
+              25       6.23325              1    5.12547e-05 i
+              26        6.2325              0              0
+              27       6.23246              0              0
+              28       6.23246              0              0
+              29       6.23246              0              0
+              30       6.23246              0              0
     <BLANKLINE>
     Optimisation return status: NLOPT_XTOL_REACHED (value = 4, Optimization stopped because xtol_rel or xtol_abs was reached)
     <BLANKLINE>
@@ -4362,6 +4398,36 @@ Returns:
 Raises:
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string nlopt_local_optimizer_docstring()
+{
+    return R"(Local optimizer.
+
+Some NLopt algorithms rely on other NLopt algorithms as local/subsidiary optimizers.
+This property, of type :class:`~pygmo.nlopt`, allows to set such local optimizer.
+By default, no local optimizer is specified, and the property is set to ``None``.
+
+.. note::
+
+   At the present time, only the ``"auglag"`` and ``"auglag_eq"`` solvers make use
+   of a local optimizer. Setting a local optimizer on any other solver will have no effect.
+
+.. note::
+
+   The objective function, bounds, and nonlinear-constraint parameters of the local
+   optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping
+   criteria should be specified in the local optimizer.The verbosity of
+   the local optimizer is also forcibly set to zero during the optimisation.
+
+Returns:
+    :class:`~pygmo.nlopt`: the local optimizer, or ``None`` if not set
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python
+      (e.g., type conversion errors, mismatched function signatures, etc.), when setting the property
 
 )";
 }
