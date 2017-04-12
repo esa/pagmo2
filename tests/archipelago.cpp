@@ -385,19 +385,19 @@ BOOST_AUTO_TEST_CASE(archipelago_champion_tests)
     archipelago archi;
     BOOST_CHECK(archi.get_champions_f().empty());
     BOOST_CHECK(archi.get_champions_x().empty());
-    archi.push_back(de{}, rosenbrock{}, 20);
-    archi.push_back(de{}, rosenbrock{}, 20);
-    archi.push_back(de{}, rosenbrock{}, 20);
+    archi.push_back(de{}, rosenbrock{}, 20u);
+    archi.push_back(de{}, rosenbrock{}, 20u);
+    archi.push_back(de{}, rosenbrock{}, 20u);
     BOOST_CHECK_EQUAL(archi.get_champions_f().size(), 3u);
     BOOST_CHECK_EQUAL(archi.get_champions_x().size(), 3u);
     for (auto i = 0u; i < 3u; ++i) {
         BOOST_CHECK(archi[i].get_population().champion_x() == archi.get_champions_x()[i]);
         BOOST_CHECK(archi[i].get_population().champion_f() == archi.get_champions_f()[i]);
     }
-    archi.push_back(de{}, rosenbrock{10}, 20);
+    archi.push_back(de{}, rosenbrock{10}, 20u);
     BOOST_CHECK(archi.get_champions_x()[2].size() == 2u);
     BOOST_CHECK(archi.get_champions_x()[3].size() == 10u);
-    archi.push_back(de{}, zdt{}, 20);
+    archi.push_back(de{}, zdt{}, 20u);
     BOOST_CHECK_THROW(archi.get_champions_f(), std::invalid_argument);
     BOOST_CHECK_THROW(archi.get_champions_x(), std::invalid_argument);
 }
