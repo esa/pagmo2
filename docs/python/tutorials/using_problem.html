@@ -103,6 +103,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -152,19 +153,19 @@
     <div class="col-md-12 content">
       
   <div class="section" id="use-of-the-class-problem">
-<span id="py-tutorial-using-problem"></span><h1>Use of the class <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a><a class="headerlink" href="#use-of-the-class-problem" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> class represents a generic optimization
+<span id="py-tutorial-using-problem"></span><h1>Use of the class <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a><a class="headerlink" href="#use-of-the-class-problem" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> class represents a generic optimization
 problem. The user codes the details of such a problem in a separate class (the
-user-defined problem, or UDP) which is then passed to <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+user-defined problem, or UDP) which is then passed to <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
 that provides a single unified interface.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The User Defined Problems (UDPs) are optimization problems (coded by the user) that can
-be used to build a pygmo object of type <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></p>
+be used to build a pygmo object of type <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></p>
 </div>
 <p>Some UDPs (optimization problems) are already provided with pygmo and we refer to them as pygmo UDPs.</p>
-<p>For the purpose of this tutorial we are going to use a pygmo UDP called <a class="reference internal" href="../problems/py_problems.html#pygmo.core.rosenbrock" title="pygmo.core.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a>
-to show the basic construction of a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>, but the same logic would also
+<p>For the purpose of this tutorial we are going to use a pygmo UDP called <a class="reference internal" href="../problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a>
+to show the basic construction of a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>, but the same logic would also
 apply to a custom UDPs, that is a UDP that is actually coded by the user.</p>
 <p>Let us start:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -192,13 +193,13 @@ apply to a custom UDPs, that is a UDP that is actually coded by the user.</p>
 </pre></div>
 </div>
 <p>In the code above, after the trivial import of the pygmo package, we define a variable prob
-by constructing a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> from <a class="reference internal" href="../problems/py_problems.html#pygmo.core.rosenbrock" title="pygmo.core.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a>, a multidimensional problem
-constructed from its global dimensions. In the following line we inspect the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
-We can see, at a glance, that the UDP <a class="reference internal" href="../problems/py_problems.html#pygmo.core.rosenbrock" title="pygmo.core.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a> is a five dimensional, single objective, box constrained
+by constructing a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> from <a class="reference internal" href="../problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a>, a multidimensional problem
+constructed from its global dimensions. In the following line we inspect the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+We can see, at a glance, that the UDP <a class="reference internal" href="../problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a> is a five dimensional, single objective, box constrained
 problem for which neither gradients nor hessians nor sparsity information is provided in the UDP.</p>
 <p>We also see that its fitness function has never been called hence the counter for fitness evaluations is
 zero.</p>
-<p>All of the information contained in the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> print out can be retrieved using
+<p>All of the information contained in the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> print out can be retrieved using
 the appropriate methods, for example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
 <span class="go">True</span>
@@ -212,7 +213,7 @@ the appropriate methods, for example:</p>
 </pre></div>
 </div>
 <p>We may also get back the UDP, and thus access all the methods not exposed in the
-<a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> interface at any time via the <a class="reference internal" href="../py_problem.html#pygmo.core.problem.extract" title="pygmo.core.problem.extract"><code class="xref py py-class docutils literal"><span class="pre">extract</span></code></a> method:</p>
+<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> interface at any time via the <a class="reference internal" href="../py_problem.html#pygmo.problem.extract" title="pygmo.problem.extract"><code class="xref py py-func docutils literal"><span class="pre">extract()</span></code></a> method:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
 <span class="go">&lt;class &#39;pygmo.core.rosenbrock&#39;&gt;</span>

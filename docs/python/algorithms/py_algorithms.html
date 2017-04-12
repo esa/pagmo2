@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -122,6 +123,12 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">List of algorithms available in pygmo</a><ul>
+<li><a class="reference internal" href="#a-quick-look">A Quick Look</a><ul>
+<li><a class="reference internal" href="#heuristic-optimization">Heuristic Optimization</a></li>
+<li><a class="reference internal" href="#meta-algorithms">Meta-algorithms</a></li>
+<li><a class="reference internal" href="#local-optimization">Local optimization</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#algorithms-exposed-from-c">Algorithms exposed from C++</a></li>
 </ul>
 </li>
@@ -156,19 +163,216 @@
       
   <div class="section" id="list-of-algorithms-available-in-pygmo">
 <span id="py-algorithms"></span><h1>List of algorithms available in pygmo<a class="headerlink" href="#list-of-algorithms-available-in-pygmo" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-quick-look">
+<h2>A Quick Look<a class="headerlink" href="#a-quick-look" title="Permalink to this headline">¶</a></h2>
+<p>User defined algorithms (UDAs) are classes that allow the construction of a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> offering a unified access to
+all of them. The user can implement his own UDA, or use any ot the ones we provide in pygmo and that are listed here for convenience.</p>
+<p>Each algorithm can be associated only to problems of certain types S = Single, M = Multi-objective, C = Constrained, U = Unconstrained, sto = stochastic</p>
+<div class="section" id="heuristic-optimization">
+<h3>Heuristic Optimization<a class="headerlink" href="#heuristic-optimization" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="23%" />
+<col width="8%" />
+<col width="37%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Common Name</th>
+<th class="head">Name in PyGMO</th>
+<th class="head">Type</th>
+<th class="head">Comments</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>The null algorithm</td>
+<td><a class="reference internal" href="#pygmo.null_algorithm" title="pygmo.null_algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.null_algorithm</span></code></a></td>
+<td>SM-CU</td>
+<td>Exposed from C++, Used for testing purposes, does nothing</td>
+</tr>
+<tr class="row-odd"><td>Differential Evolution (DE)</td>
+<td><a class="reference internal" href="#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal"><span class="pre">pygmo.de</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>Self-adaptive DE (jDE and iDE)</td>
+<td><a class="reference internal" href="#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">pygmo.sade</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>Self-adaptive DE (de_1220 aka pDE)</td>
+<td><a class="reference internal" href="#pygmo.de1220" title="pygmo.de1220"><code class="xref py py-class docutils literal"><span class="pre">pygmo.de1220</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>Particle Swarm Optimization (PSO)</td>
+<td><a class="reference internal" href="#pygmo.pso" title="pygmo.pso"><code class="xref py py-class docutils literal"><span class="pre">pygmo.pso</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>(N+1)-ES Simple Evolutionary Algorithm</td>
+<td><a class="reference internal" href="#pygmo.sea" title="pygmo.sea"><code class="xref py py-class docutils literal"><span class="pre">pygmo.sea</span></code></a></td>
+<td>S-U (sto)</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>Corana&#8217;s Simulated Annealing (SA)</td>
+<td><code class="xref py py-class docutils literal"><span class="pre">pygmo.sa_corana</span></code></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>Artificial Bee Colony (ABC)</td>
+<td><a class="reference internal" href="#pygmo.bee_colony" title="pygmo.bee_colony"><code class="xref py py-class docutils literal"><span class="pre">pygmo.bee_colony</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>Covariance Matrix Adaptation Evo. Strategy (CMA-ES)</td>
+<td><a class="reference internal" href="#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cmaes</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>Non-dominated Sorting GA (NSGA2)</td>
+<td><code class="xref py py-class docutils literal"><span class="pre">pygmo.nsga_II</span></code></td>
+<td>M-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>Multi-objective EA vith Decomposition (MOEA/D)</td>
+<td><a class="reference internal" href="#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">pygmo.moead</span></code></a></td>
+<td>M-U</td>
+<td>Exposed from C++</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="meta-algorithms">
+<h3>Meta-algorithms<a class="headerlink" href="#meta-algorithms" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="32%" />
+<col width="11%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Common Name</th>
+<th class="head">Name in PyGMO</th>
+<th class="head">Type</th>
+<th class="head">Comments</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Monotonic Basin Hopping (MBH)</td>
+<td><a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">pygmo.mbh</span></code></a></td>
+<td>S-CU</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>Cstrs Self-Adaptive</td>
+<td><a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cstrs_self_adaptive</span></code></a></td>
+<td>S-C</td>
+<td>Exposed from C++</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="local-optimization">
+<h3>Local optimization<a class="headerlink" href="#local-optimization" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="23%" />
+<col width="8%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Common Name</th>
+<th class="head">Name in PyGMO</th>
+<th class="head">Type</th>
+<th class="head">Comments</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Compass Search (CS)</td>
+<td><code class="xref py py-class docutils literal"><span class="pre">pygmo.cs</span></code></td>
+<td>S-CU</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>COBYLA (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-CU</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>BOBYQA (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>NEWUOA + bound constraints (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>PRAXIS (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>Nelder-Mead simplex (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>sbplx (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>MMA (Method of Moving Asymptotes) (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-CU</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>CCSA (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-CU</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>SLSQP (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-CU</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>low-storage BFGS (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>preconditioned truncated Newton (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>shifted limited-memory variable-metric (from nlopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr class="docutils" />
 <div class="section" id="algorithms-exposed-from-c">
 <h2>Algorithms exposed from C++<a class="headerlink" href="#algorithms-exposed-from-c" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="pygmo.core.null_algorithm">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">null_algorithm</code><a class="headerlink" href="#pygmo.core.null_algorithm" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.null_algorithm">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">null_algorithm</code><a class="headerlink" href="#pygmo.null_algorithm" title="Permalink to this definition">¶</a></dt>
 <dd><p>The null algorithm.</p>
-<p>An algorithm used in the default-initialization of <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a> and of the meta-algorithms.</p>
+<p>An algorithm used in the default-initialization of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> and of the meta-algorithms.</p>
 </dd></dl>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.bee_colony">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">bee_colony</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>limit = 1</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.bee_colony" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.bee_colony">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">bee_colony</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>limit = 1</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bee_colony" title="Permalink to this definition">¶</a></dt>
 <dd><p>Artificial Bee Colony.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -191,11 +395,11 @@
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/bee_colony.html#_CPPv2N5pagmo10bee_colonyE" title="pagmo::bee_colony"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::bee_colony</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.bee_colony.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.bee_colony.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.bee_colony.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bee_colony.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.core.bee_colony" title="pygmo.core.bee_colony"><code class="xref py py-class docutils literal"><span class="pre">bee_colony</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.bee_colony" title="pygmo.bee_colony"><code class="xref py py-class docutils literal"><span class="pre">bee_colony</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -234,8 +438,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.bee_colony" t
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.bee_colony.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.bee_colony.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.bee_colony.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bee_colony.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -253,8 +457,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.bee_colony" t
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.de">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">de</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>F = 0.8</em>, <em>CR = 0.9</em>, <em>variant = 2</em>, <em>ftol = 1e-6</em>, <em>xtol = 1e-6</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.de" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.de">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">de</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>F = 0.8</em>, <em>CR = 0.9</em>, <em>variant = 2</em>, <em>ftol = 1e-6</em>, <em>xtol = 1e-6</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.de" title="Permalink to this definition">¶</a></dt>
 <dd><p>Differential Evolution</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -305,11 +509,11 @@ constructed with a <a class="reference internal" href="#pygmo.core.bee_colony" t
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/de.html#_CPPv2N5pagmo2deE" title="pagmo::de"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::de</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.de.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.de.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.de.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.de.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.core.de" title="pygmo.core.de"><code class="xref py py-class docutils literal"><span class="pre">de</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal"><span class="pre">de</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -350,8 +554,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.de" title="py
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.de.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.de.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.de.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.de.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -369,12 +573,12 @@ constructed with a <a class="reference internal" href="#pygmo.core.de" title="py
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.sea">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">sea</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.sea" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.sea">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">sea</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sea" title="Permalink to this definition">¶</a></dt>
 <dd><p>(N+1)-ES simple evolutionary algorithm.</p>
 <dl class="method">
-<dt id="pygmo.core.sea.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.sea.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.sea.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sea.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -392,8 +596,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.de" title="py
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.sade">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">sade</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>variant = 2</em>, <em>variant_adptv = 1</em>, <em>ftol = 1e-6</em>, <em>xtol = 1e-6</em>, <em>memory = False</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.sade" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.sade">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">sade</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>variant = 2</em>, <em>variant_adptv = 1</em>, <em>ftol = 1e-6</em>, <em>xtol = 1e-6</em>, <em>memory = False</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sade" title="Permalink to this definition">¶</a></dt>
 <dd><p>Self-adaptive Differential Evolution.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -468,11 +672,11 @@ constructed with a <a class="reference internal" href="#pygmo.core.de" title="py
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/sade.html#_CPPv2N5pagmo4sadeE" title="pagmo::sade"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sade</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.sade.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.sade.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.sade.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sade.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.core.sade" title="pygmo.core.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -515,8 +719,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.sade" title="
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.sade.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.sade.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.sade.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sade.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -534,10 +738,10 @@ constructed with a <a class="reference internal" href="#pygmo.core.sade" title="
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.de1220">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">de1220</code><span class="sig-paren">(</span><em>gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.de1220" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.de1220">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">de1220</code><span class="sig-paren">(</span><em>gen = 1, allowed_variants = [2,3,7,10,13,14,15,16], variant_adptv = 1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.de1220" title="Permalink to this definition">¶</a></dt>
 <dd><p>Self-adaptive Differential Evolution, pygmo flavour (pDE).
-The adaptation of the mutation variant is added to <a class="reference internal" href="#pygmo.core.sade" title="pygmo.core.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a></p>
+The adaptation of the mutation variant is added to <a class="reference internal" href="#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -611,11 +815,11 @@ The adaptation of the mutation variant is added to <a class="reference internal"
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/de1220.html#_CPPv2N5pagmo6de1220E" title="pagmo::de1220"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::de1220</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.de1220.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.de1220.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.de1220.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.de1220.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.core.de1220" title="pygmo.core.de1220"><code class="xref py py-class docutils literal"><span class="pre">de1220</span></code></a>. A verbosity of N implies a log line each N generations.</p>
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.de1220" title="pygmo.de1220"><code class="xref py py-class docutils literal"><span class="pre">de1220</span></code></a>. A verbosity of N implies a log line each N generations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -659,8 +863,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.de1220" title
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.de1220.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.de1220.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.de1220.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.de1220.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -678,8 +882,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.de1220" title
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.cmaes">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">cmaes</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cc = -1</em>, <em>cs = -1</em>, <em>c1 = -1</em>, <em>cmu = -1</em>, <em>sigma0 = 0.5</em>, <em>ftol = 1e-6</em>, <em>xtol = 1e-6</em>, <em>memory = False</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cmaes" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cmaes">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cmaes</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cc = -1</em>, <em>cs = -1</em>, <em>c1 = -1</em>, <em>cmu = -1</em>, <em>sigma0 = 0.5</em>, <em>ftol = 1e-6</em>, <em>xtol = 1e-6</em>, <em>memory = False</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cmaes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Covariance Matrix Evolutionary Strategy (CMA-ES).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -709,11 +913,11 @@ constructed with a <a class="reference internal" href="#pygmo.core.de1220" title
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/cmaes.html#_CPPv2N5pagmo5cmaesE" title="pagmo::cmaes"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cmaes</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.cmaes.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cmaes.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cmaes.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cmaes.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -755,8 +959,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.cmaes" title=
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.cmaes.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cmaes.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cmaes.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cmaes.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -774,8 +978,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.cmaes" title=
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.moead">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">moead</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>weight_generation = &quot;grid&quot;</em>, <em>decomposition = &quot;tchebycheff&quot;</em>, <em>neighbours = 20</em>, <em>CR = 1</em>, <em>F = 0.5</em>, <em>eta_m = 20</em>, <em>realb = 0.9</em>, <em>limit = 2</em>, <em>preserve_diversity = true</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.moead" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.moead">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">moead</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>weight_generation = &quot;grid&quot;</em>, <em>decomposition = &quot;tchebycheff&quot;</em>, <em>neighbours = 20</em>, <em>CR = 1</em>, <em>F = 0.5</em>, <em>eta_m = 20</em>, <em>realb = 0.9</em>, <em>limit = 2</em>, <em>preserve_diversity = true</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.moead" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multi Objective Evolutionary Algorithms by Decomposition (the DE variant)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -812,11 +1016,11 @@ constructed with a <a class="reference internal" href="#pygmo.core.cmaes" title=
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/moead.html#_CPPv2N5pagmo5moeadE" title="pagmo::moead"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::moead</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.moead.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.moead.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.moead.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.moead.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.core.moead" title="pygmo.core.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -855,8 +1059,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.moead" title=
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.moead.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.moead.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.moead.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.moead.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -874,8 +1078,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.moead" title=
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.compass_search">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">compass_search</code><span class="sig-paren">(</span><em>max_fevals = 1</em>, <em>start_range = .1</em>, <em>stop_range = .01</em>, <em>reduction_coeff = .5</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.compass_search" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.compass_search">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">compass_search</code><span class="sig-paren">(</span><em>max_fevals = 1</em>, <em>start_range = .1</em>, <em>stop_range = .01</em>, <em>reduction_coeff = .5</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.compass_search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compass Search</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -899,11 +1103,11 @@ constructed with a <a class="reference internal" href="#pygmo.core.moead" title=
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/compass_search.html#_CPPv2N5pagmo14compass_searchE" title="pagmo::compass_search"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::compass_search</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.compass_search.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.compass_search.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.compass_search.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.compass_search.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code> and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.core.compass_search" title="pygmo.core.compass_search"><code class="xref py py-class docutils literal"><span class="pre">compass_search</span></code></a>. A verbosity larger than 0 implies one log line at each improvment of the fitness or
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.compass_search" title="pygmo.compass_search"><code class="xref py py-class docutils literal"><span class="pre">compass_search</span></code></a>. A verbosity larger than 0 implies one log line at each improvment of the fitness or
 change in the search range.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -966,8 +1170,8 @@ change in the search range.</p>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.simulated_annealing">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">simulated_annealing</code><span class="sig-paren">(</span><em>Ts = 10.</em>, <em>Tf = .1</em>, <em>n_T_adj = 10</em>, <em>n_range_adj = 10</em>, <em>bin_size = 10</em>, <em>start_range = 1.</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.simulated_annealing" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.simulated_annealing">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">simulated_annealing</code><span class="sig-paren">(</span><em>Ts = 10.</em>, <em>Tf = .1</em>, <em>n_T_adj = 10</em>, <em>n_range_adj = 10</em>, <em>bin_size = 10</em>, <em>start_range = 1.</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.simulated_annealing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simulated Annealing (Corana&#8217;s version)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -995,12 +1199,12 @@ change in the search range.</p>
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/simulated_annealing.html#_CPPv2N5pagmo19simulated_annealingE" title="pagmo::simulated_annealing"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::simulated_annealing</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.simulated_annealing.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.simulated_annealing.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.simulated_annealing.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.simulated_annealing.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code> and printed to screen.
 The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
-the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed with a
-<a class="reference internal" href="#pygmo.core.simulated_annealing" title="pygmo.core.simulated_annealing"><code class="xref py py-class docutils literal"><span class="pre">simulated_annealing</span></code></a>. A verbosity larger than 0 will produce a log with one entry
+the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed with a
+<a class="reference internal" href="#pygmo.simulated_annealing" title="pygmo.simulated_annealing"><code class="xref py py-class docutils literal"><span class="pre">simulated_annealing</span></code></a>. A verbosity larger than 0 will produce a log with one entry
 each verbosity function evaluations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1056,8 +1260,8 @@ each verbosity function evaluations.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.simulated_annealing.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.simulated_annealing.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.simulated_annealing.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.simulated_annealing.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1075,8 +1279,8 @@ each verbosity function evaluations.</p>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.pso">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">pso</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>omega = 0.7298</em>, <em>eta1 = 2.05</em>, <em>eta2 = 2.05</em>, <em>max_vel = 0.5</em>, <em>variant = 5</em>, <em>neighb_type = 2</em>, <em>neighb_param = 4</em>, <em>memory = False</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.pso" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.pso">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">pso</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>omega = 0.7298</em>, <em>eta1 = 2.05</em>, <em>eta2 = 2.05</em>, <em>max_vel = 0.5</em>, <em>variant = 5</em>, <em>neighb_type = 2</em>, <em>neighb_param = 4</em>, <em>memory = False</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.pso" title="Permalink to this definition">¶</a></dt>
 <dd><p>Particle Swarm Optimization</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1141,11 +1345,11 @@ each verbosity function evaluations.</p>
 <p>The topology determines (together with the topology parameter) which particles need to be considered
 when computing the social component of the velocity update.</p>
 <dl class="method">
-<dt id="pygmo.core.pso.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.pso.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.pso.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.pso.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code> and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.core.de1220" title="pygmo.core.de1220"><code class="xref py py-class docutils literal"><span class="pre">de1220</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.de1220" title="pygmo.de1220"><code class="xref py py-class docutils literal"><span class="pre">de1220</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1191,8 +1395,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.de1220" title
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.pso.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.pso.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.pso.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.pso.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1210,8 +1414,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.de1220" title
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.nsga2">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">nsga2</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cr = 0.95</em>, <em>eta_c = 10</em>, <em>m = 0.01</em>, <em>eta_m = 10</em>, <em>int_dim = 0</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nsga2" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nsga2">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">nsga2</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cr = 0.95</em>, <em>eta_c = 10</em>, <em>m = 0.01</em>, <em>eta_m = 10</em>, <em>int_dim = 0</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nsga2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Non dominated Sorting Genetic Algorithm (NSGA-II).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1244,11 +1448,11 @@ constructed with a <a class="reference internal" href="#pygmo.core.de1220" title
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/nsga2.html#_CPPv2N5pagmo5nsga2E" title="pagmo::nsga2"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nsga2</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.nsga2.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nsga2.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nsga2.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nsga2.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code> and printed to screen. The log frequency depends on the verbosity
-parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.core.nsga2" title="pygmo.core.nsga2"><code class="xref py py-class docutils literal"><span class="pre">nsga2</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.nsga2" title="pygmo.nsga2"><code class="xref py py-class docutils literal"><span class="pre">nsga2</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1285,8 +1489,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.nsga2" title=
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.nsga2.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nsga2.get_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nsga2.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nsga2.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1304,8 +1508,8 @@ constructed with a <a class="reference internal" href="#pygmo.core.nsga2" title=
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.mbh">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">mbh</code><span class="sig-paren">(</span><em>algo = compass_search()</em>, <em>stop = 5</em>, <em>perturb = 1e-2</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.mbh" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mbh">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">mbh</code><span class="sig-paren">(</span><em>algo = compass_search()</em>, <em>stop = 5</em>, <em>perturb = 1e-2</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Monotonic Basin Hopping (generalized).</p>
 <p>Monotonic basin hopping, or simply, basin hopping, is an algorithm rooted in the idea of mapping
 the objective function <span class="math">\(f(\mathbf x_0)\)</span> into the local minima found starting from <span class="math">\(\mathbf x_0\)</span>.
@@ -1313,7 +1517,7 @@ This simple idea allows a substantial increase of efficiency in solving problems
 cluster or the MGA-1DSM interplanetary trajectory problem that are conjectured to have a so-called
 funnel structure.</p>
 <p>In pygmo we provide an original generalization of this concept resulting in a meta-algorithm that operates
-on any <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.population</span></code></a> using any suitable user-defined algorithm (UDA). When a population containing a single
+on any <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">pygmo.population</span></code></a> using any suitable user-defined algorithm (UDA). When a population containing a single
 individual is used and coupled with a local optimizer, the original method is recovered.
 The pseudo code of our generalized version is:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>&gt; Select a pygmo population
@@ -1329,7 +1533,7 @@ The pseudo code of our generalized version is:</p>
 &gt; &gt; &gt; i = 0
 </pre></div>
 </div>
-<p><a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.mbh"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.mbh</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a> objects.</p>
+<p><a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">pygmo.mbh</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> objects.</p>
 <p>See: <a class="reference external" href="http://arxiv.org/pdf/cond-mat/9803344">http://arxiv.org/pdf/cond-mat/9803344</a> for the paper introducing the basin hopping idea for a Lennard-Jones
 cluster optimization.</p>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbhE" title="pagmo::mbh"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::mbh</span></code></a>.</p>
@@ -1339,9 +1543,9 @@ cluster optimization.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>algo</strong> &#8211; a user-defined algorithm (either C++ or Python - note that <em>algo</em> will be deep-copied
-and stored inside the <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> instance)</li>
+and stored inside the <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> instance)</li>
 <li><strong>stop</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; consecutive runs of the inner algorithm that need to result in no improvement for
-<a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> to stop</li>
+<a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> to stop</li>
 <li><strong>perturb</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) &#8211; perturb the perturbation to be applied to each component</li>
 <li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
 </ul>
@@ -1350,7 +1554,7 @@ and stored inside the <a class="reference internal" href="#pygmo.core.mbh" title
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>perturb</em> (or one of its components, if <em>perturb</em> is an array) is not in the
 (0,1] range</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a>, or by
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a>, or by
 failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
 signatures, etc.)</li>
 </ul>
@@ -1359,11 +1563,11 @@ signatures, etc.)</li>
 </tbody>
 </table>
 <dl class="method">
-<dt id="pygmo.core.mbh.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.mbh.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mbh.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity parameter
-(by default nothing is logged) which can be set calling <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on a <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed
-with an <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a>. A verbosity level <code class="docutils literal"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> will log one line at the end of each call to the inner algorithm.</p>
+(by default nothing is logged) which can be set calling <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed
+with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a>. A verbosity level <code class="docutils literal"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> will log one line at the end of each call to the inner algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1402,8 +1606,8 @@ with an <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.m
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.mbh.get_perturb">
-<code class="descname">get_perturb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.mbh.get_perturb" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mbh.get_perturb">
+<code class="descname">get_perturb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh.get_perturb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the perturbation vector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1418,9 +1622,9 @@ with an <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.m
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.mbh.get_seed">
-<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.mbh.get_seed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the seed value that was used for the construction of this <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a>.</p>
+<dt id="pygmo.mbh.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh.get_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the seed value that was used for the construction of this <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1434,9 +1638,9 @@ with an <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.m
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.mbh.get_verbosity">
-<code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.mbh.get_verbosity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the verbosity level value that was used for the construction of this <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a>.</p>
+<dt id="pygmo.mbh.get_verbosity">
+<code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh.get_verbosity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the verbosity level value that was used for the construction of this <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1450,25 +1654,25 @@ with an <a class="reference internal" href="#pygmo.core.mbh" title="pygmo.core.m
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.mbh.inner_algorithm">
-<code class="descname">inner_algorithm</code><a class="headerlink" href="#pygmo.core.mbh.inner_algorithm" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mbh.inner_algorithm">
+<code class="descname">inner_algorithm</code><a class="headerlink" href="#pygmo.mbh.inner_algorithm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner algorithm of the meta-algorithm</p>
-<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the inner algorithm</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.mbh.set_perturb">
-<code class="descname">set_perturb</code><span class="sig-paren">(</span><em>perturb</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.mbh.set_perturb" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mbh.set_perturb">
+<code class="descname">set_perturb</code><span class="sig-paren">(</span><em>perturb</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh.set_perturb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the perturbation vector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1487,19 +1691,19 @@ mismatched function signatures, etc.)</td>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.cstrs_self_adaptive">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">cstrs_self_adaptive</code><span class="sig-paren">(</span><em>iters = 1</em>, <em>algo = de()</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cstrs_self_adaptive" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cstrs_self_adaptive">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cstrs_self_adaptive</code><span class="sig-paren">(</span><em>iters = 1</em>, <em>algo = de()</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cstrs_self_adaptive" title="Permalink to this definition">¶</a></dt>
 <dd><p>This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
 (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
 technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire
-underlying population. The resulting approach is an alternative to using the meta-problem <a class="reference internal" href="../problems/py_problems.html#pygmo.core.unconstrain" title="pygmo.core.unconstrain"><code class="xref py py-class docutils literal"><span class="pre">unconstrain</span></code></a>
+underlying population. The resulting approach is an alternative to using the meta-problem <a class="reference internal" href="../problems/py_problems.html#pygmo.unconstrain" title="pygmo.unconstrain"><code class="xref py py-class docutils literal"><span class="pre">unconstrain</span></code></a>
 to transform the constrained fitness into an unconstrained fitness.</p>
 <p>The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
 extends their use to any-algorithm, in particular to non generational, population based, evolutionary approaches where
 a steady-state reinsertion is used (i.e. as soon as an individual is found fit it is immediately reinserted into the
 population and will influence the next offspring genetic material).</p>
 <p>Each decision vector is assigned an infeasibility measure <span class="math">\(\iota\)</span> which accounts for the normalized violation of
-all the constraints (discounted by the constraints tolerance as returned by <a class="reference internal" href="../py_problem.html#pygmo.core.problem.c_tol" title="pygmo.core.problem.c_tol"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.core.problem.c_tol</span></code></a>). The
+all the constraints (discounted by the constraints tolerance as returned by <a class="reference internal" href="../py_problem.html#pygmo.problem.c_tol" title="pygmo.problem.c_tol"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.problem.c_tol</span></code></a>). The
 normalization factor used <span class="math">\(c_{j_{max}}\)</span> is the maximum violation of the <span class="math">\(j\)</span> constraint.</p>
 <p>As in the original paper, three individuals in the evolving population are then used to penalize the single
 objective.</p>
@@ -1511,7 +1715,7 @@ objective.</p>
 \end{array}\end{split}\]</div>
 <p>The best and worst decision vectors are defined accounting for their infeasibilities and for the value of the
 objective function. Using the above definitions the overall pseudo code can be summarized as follows:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt; Select a pygmo.core.population (related to a single-objective constrained problem)
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt; Select a pygmo.population (related to a single-objective constrained problem)
 &gt; Select a UDA (able to solve single-objective unconstrained problems)
 &gt; while i &lt; iter
 &gt; &gt; Compute the normalization factors (will depend on the current population)
@@ -1520,7 +1724,7 @@ objective function. Using the above definitions the overall pseudo code can be s
 &gt; &gt; Reinsert the best decision vector from the previous evolution
 </pre></div>
 </div>
-<p><a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a> objects.</p>
+<p><a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cstrs_self_adaptive</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> objects.</p>
 <p><strong>NOTE</strong> Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
 The number of function evaluation will be bounded to <em>iters</em> times the fevals made by one call to the inner UDA. The
@@ -1529,7 +1733,7 @@ the inner UDA evolve method.</p>
 <p><strong>NOTE</strong> Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
 corner cases and with any UDAs. Most notably, a violation to the f$jf$-th  constraint is ignored if all
 the decision vectors in the population satisfy that particular constraint (i.e. if f$c_{j_{max}} = 0f$).</p>
-<p><strong>NOTE</strong> The performances of <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> are highly dependent on the particular inner
+<p><strong>NOTE</strong> The performances of <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> are highly dependent on the particular inner
 algorithm employed and in particular to its parameters (generations / iterations).</p>
 <p>See: Farmani, Raziyeh, and Jonathan A. Wright. &#8220;Self-adaptive fitness formulation for constrained optimization.&#8221; IEEE
 Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
@@ -1541,14 +1745,14 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>iter</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of iterations (i.e. calls to the innel algorithm evolve)</li>
 <li><strong>algo</strong> &#8211; a user-defined algorithm (either C++ or Python - note that <em>algo</em> will be deep-copied
-and stored inside the <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> instance)</li>
+and stored inside the <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> instance)</li>
 <li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>iters</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.algorithm</span></code></a>, or by
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a>, or by
 failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
 signatures, etc.)</li>
 </ul>
@@ -1557,11 +1761,11 @@ signatures, etc.)</li>
 </tbody>
 </table>
 <dl class="method">
-<dt id="pygmo.core.cstrs_self_adaptive.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cstrs_self_adaptive.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cstrs_self_adaptive.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cstrs_self_adaptive.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity parameter
-(by default nothing is logged) which can be set calling <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.set_verbosity" title="pygmo.core.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on a <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed
-with an <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" title="pygmo.core.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a>. A verbosity level of <code class="docutils literal"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> will log one line each <code class="docutils literal"><span class="pre">N</span></code> <code class="docutils literal"><span class="pre">iters</span></code>.</p>
+(by default nothing is logged) which can be set calling <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed
+with an <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a>. A verbosity level of <code class="docutils literal"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> will log one line each <code class="docutils literal"><span class="pre">N</span></code> <code class="docutils literal"><span class="pre">iters</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1606,17 +1810,17 @@ with an <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" tit
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.cstrs_self_adaptive.inner_algorithm">
-<code class="descname">inner_algorithm</code><a class="headerlink" href="#pygmo.core.cstrs_self_adaptive.inner_algorithm" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cstrs_self_adaptive.inner_algorithm">
+<code class="descname">inner_algorithm</code><a class="headerlink" href="#pygmo.cstrs_self_adaptive.inner_algorithm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner algorithm of the meta-algorithm</p>
-<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the inner algorithm</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -1626,8 +1830,8 @@ with an <a class="reference internal" href="#pygmo.core.cstrs_self_adaptive" tit
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.nlopt">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">nlopt</code><span class="sig-paren">(</span><em>solver = &quot;cobyla&quot;</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">nlopt</code><span class="sig-paren">(</span><em>solver = &quot;cobyla&quot;</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nlopt" title="Permalink to this definition">¶</a></dt>
 <dd><p>NLopt algorithms.</p>
 <p>This user-defined algorithm wraps a selection of solvers from the
 <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> library, focusing on
@@ -1647,18 +1851,18 @@ NLopt algorithms is:</p>
 <li>preconditioned truncated Newton,</li>
 <li>shifted limited-memory variable-metric.</li>
 </ul>
-<p>The desired NLopt solver is selected upon construction of an <a class="reference internal" href="#pygmo.core.nlopt" title="pygmo.core.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> algorithm. Various properties
+<p>The desired NLopt solver is selected upon construction of an <a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> algorithm. Various properties
 of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
-is satisfied. By default, only the <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion is active (see <a class="reference internal" href="#pygmo.core.nlopt.xtol_rel" title="pygmo.core.nlopt.xtol_rel"><code class="xref py py-attr docutils literal"><span class="pre">xtol_rel</span></code></a>).</p>
+is satisfied. By default, only the <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion is active (see <a class="reference internal" href="#pygmo.nlopt.xtol_rel" title="pygmo.nlopt.xtol_rel"><code class="xref py py-attr docutils literal"><span class="pre">xtol_rel</span></code></a>).</p>
 <p>All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
 Some solvers support equality and/or inequality constaints.</p>
 <p>In order to support pagmo&#8217;s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
-a single individual from the input <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> to be optimised by the NLopt solver.
+a single individual from the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> to be optimised by the NLopt solver.
 The optimised individual will then be inserted back into the population at the end of the optimisation.
-The selection and replacement strategies can be configured via the <a class="reference internal" href="#pygmo.core.nlopt.selection" title="pygmo.core.nlopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a>
-and <a class="reference internal" href="#pygmo.core.nlopt.replacement" title="pygmo.core.nlopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a> attributes.</p>
+The selection and replacement strategies can be configured via the <a class="reference internal" href="#pygmo.nlopt.selection" title="pygmo.nlopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a>
+and <a class="reference internal" href="#pygmo.nlopt.replacement" title="pygmo.nlopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a> attributes.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal"><span class="pre">PAGMO_WITH_NLOPT</span></code> option
@@ -1669,7 +1873,7 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <p class="last">The <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms">NLopt website</a> contains a detailed description
 of each supported solver.</p>
 </div>
-<p>This constructor will initialise an <a class="reference internal" href="#pygmo.core.nlopt" title="pygmo.core.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> object which will use the NLopt algorithm specified by
+<p>This constructor will initialise an <a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> object which will use the NLopt algorithm specified by
 the input string <em>solver</em>, the <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> individual selection strategy and the <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> individual
 replacement strategy. <em>solver</em> is translated to an NLopt algorithm type according to the following
 translation table:</p>
@@ -1748,7 +1952,7 @@ description of each supported solver.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>solver</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the NLopt algorithm that will be used by this <a class="reference internal" href="#pygmo.core.nlopt" title="pygmo.core.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> object</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>solver</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the NLopt algorithm that will be used by this <a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> object</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
@@ -1809,8 +2013,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </pre></div>
 </div>
 <dl class="attribute">
-<dt id="pygmo.core.nlopt.ftol_abs">
-<code class="descname">ftol_abs</code><a class="headerlink" href="#pygmo.core.nlopt.ftol_abs" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.ftol_abs">
+<code class="descname">ftol_abs</code><a class="headerlink" href="#pygmo.nlopt.ftol_abs" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">ftol_abs</span></code> stopping criterion.</p>
 <p>The <code class="docutils literal"><span class="pre">ftol_abs</span></code> stopping criterion instructs the solver to stop when an optimization step
 (or an estimate of the optimum) changes the function value by less than <code class="docutils literal"><span class="pre">ftol_abs</span></code>.
@@ -1837,8 +2041,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.nlopt.ftol_rel">
-<code class="descname">ftol_rel</code><a class="headerlink" href="#pygmo.core.nlopt.ftol_rel" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.ftol_rel">
+<code class="descname">ftol_rel</code><a class="headerlink" href="#pygmo.nlopt.ftol_rel" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">ftol_rel</span></code> stopping criterion.</p>
 <p>The <code class="docutils literal"><span class="pre">ftol_rel</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
 optimum) changes the objective function value by less than <code class="docutils literal"><span class="pre">ftol_rel</span></code> multiplied by the absolute value of the
@@ -1865,8 +2069,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.nlopt.get_last_opt_result">
-<code class="descname">get_last_opt_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt.get_last_opt_result" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.get_last_opt_result">
+<code class="descname">get_last_opt_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nlopt.get_last_opt_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the result of the last optimisation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1884,8 +2088,8 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.nlopt.get_log">
-<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt.get_log" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nlopt.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optimisation log.</p>
 <p>The optimisation log is a collection of log data lines. A log data line is a tuple consisting of:</p>
 <ul class="simple">
@@ -1911,8 +2115,8 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.nlopt.get_solver_name">
-<code class="descname">get_solver_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt.get_solver_name" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.get_solver_name">
+<code class="descname">get_solver_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nlopt.get_solver_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the name of the NLopt solver used during construction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1930,8 +2134,8 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.nlopt.maxeval">
-<code class="descname">maxeval</code><a class="headerlink" href="#pygmo.core.nlopt.maxeval" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.maxeval">
+<code class="descname">maxeval</code><a class="headerlink" href="#pygmo.nlopt.maxeval" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">maxeval</span></code> stopping criterion.</p>
 <p>The <code class="docutils literal"><span class="pre">maxeval</span></code> stopping criterion instructs the solver to stop when the number of function evaluations exceeds
 <code class="docutils literal"><span class="pre">maxeval</span></code>. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
@@ -1951,8 +2155,8 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.nlopt.maxtime">
-<code class="descname">maxtime</code><a class="headerlink" href="#pygmo.core.nlopt.maxtime" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.maxtime">
+<code class="descname">maxtime</code><a class="headerlink" href="#pygmo.nlopt.maxtime" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">maxtime</span></code> stopping criterion.</p>
 <p>The <code class="docutils literal"><span class="pre">maxtime</span></code> stopping criterion instructs the solver to stop when the optimization time (in seconds) exceeds
 <code class="docutils literal"><span class="pre">maxtime</span></code>. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
@@ -1972,8 +2176,8 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.nlopt.replacement">
-<code class="descname">replacement</code><a class="headerlink" href="#pygmo.core.nlopt.replacement" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.replacement">
+<code class="descname">replacement</code><a class="headerlink" href="#pygmo.nlopt.replacement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Individual replacement policy.</p>
 <p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
 that will be replaced by the optimised individual. The attribute can be either a string or an integral.</p>
@@ -1983,7 +2187,7 @@ that will be replaced by the optimised individual. The attribute can be either a
 <li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
 <li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
 </ul>
-<p><a class="reference internal" href="#pygmo.core.nlopt.set_random_sr_seed" title="pygmo.core.nlopt.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+<p><a class="reference internal" href="#pygmo.nlopt.set_random_sr_seed" title="pygmo.nlopt.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
 used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>If the attribute is an integer, it represents the index (in the population) of the individual that will be
 replaced by the optimised individual.</p>
@@ -2011,8 +2215,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.nlopt.selection">
-<code class="descname">selection</code><a class="headerlink" href="#pygmo.core.nlopt.selection" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.selection">
+<code class="descname">selection</code><a class="headerlink" href="#pygmo.nlopt.selection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Individual selection policy.</p>
 <p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
 that will be optimised. The attribute can be either a string or an integral.</p>
@@ -2022,7 +2226,7 @@ that will be optimised. The attribute can be either a string or an integral.</p>
 <li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
 <li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
 </ul>
-<p><a class="reference internal" href="#pygmo.core.nlopt.set_random_sr_seed" title="pygmo.core.nlopt.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+<p><a class="reference internal" href="#pygmo.nlopt.set_random_sr_seed" title="pygmo.nlopt.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
 used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>If the attribute is an integer, it represents the index (in the population) of the individual that is selected
 for optimisation.</p>
@@ -2050,16 +2254,16 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.nlopt.set_random_sr_seed">
-<code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.nlopt.set_random_sr_seed" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.set_random_sr_seed">
+<code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nlopt.set_random_sr_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
-election/replacement policies (see <a class="reference internal" href="#pygmo.core.nlopt.selection" title="pygmo.core.nlopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
-<a class="reference internal" href="#pygmo.core.nlopt.replacement" title="pygmo.core.nlopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
+election/replacement policies (see <a class="reference internal" href="#pygmo.nlopt.selection" title="pygmo.nlopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
+<a class="reference internal" href="#pygmo.nlopt.replacement" title="pygmo.nlopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
@@ -2074,8 +2278,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.nlopt.stopval">
-<code class="descname">stopval</code><a class="headerlink" href="#pygmo.core.nlopt.stopval" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.stopval">
+<code class="descname">stopval</code><a class="headerlink" href="#pygmo.nlopt.stopval" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">stopval</span></code> stopping criterion.</p>
 <p>The <code class="docutils literal"><span class="pre">stopval</span></code> stopping criterion instructs the solver to stop when an objective value less than
 or equal to <code class="docutils literal"><span class="pre">stopval</span></code> is found. Defaults to the C constant <code class="docutils literal"><span class="pre">-HUGE_VAL</span></code> (that is, this stopping criterion
@@ -2102,8 +2306,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.nlopt.xtol_abs">
-<code class="descname">xtol_abs</code><a class="headerlink" href="#pygmo.core.nlopt.xtol_abs" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.xtol_abs">
+<code class="descname">xtol_abs</code><a class="headerlink" href="#pygmo.nlopt.xtol_abs" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">xtol_abs</span></code> stopping criterion.</p>
 <p>The <code class="docutils literal"><span class="pre">xtol_abs</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
 optimum) changes every parameter by less than <code class="docutils literal"><span class="pre">xtol_abs</span></code>. Defaults to 0 (that is, this stopping criterion is disabled
@@ -2130,8 +2334,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.nlopt.xtol_rel">
-<code class="descname">xtol_rel</code><a class="headerlink" href="#pygmo.core.nlopt.xtol_rel" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.nlopt.xtol_rel">
+<code class="descname">xtol_rel</code><a class="headerlink" href="#pygmo.nlopt.xtol_rel" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion.</p>
 <p>The <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the
 optimum) changes every parameter by less than <code class="docutils literal"><span class="pre">xtol_rel</span></code> multiplied by the absolute value of the parameter.

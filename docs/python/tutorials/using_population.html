@@ -103,6 +103,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -152,10 +153,10 @@
     <div class="col-md-12 content">
       
   <div class="section" id="use-of-the-class-population">
-<span id="py-tutorial-using-population"></span><h1>Use of the class <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a><a class="headerlink" href="#use-of-the-class-population" title="Permalink to this headline">¶</a></h1>
-<p>In pygmo, a <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> is a storage for candidate solutions
-to some <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> (sometimes called individuals).
-It thus contains a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> and a number of decision
+<span id="py-tutorial-using-population"></span><h1>Use of the class <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a><a class="headerlink" href="#use-of-the-class-population" title="Permalink to this headline">¶</a></h1>
+<p>In pygmo, a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> is a storage for candidate solutions
+to some <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> (sometimes called individuals).
+It thus contains a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> and a number of decision
 vectors (chromosomes) and fitness vectors, each associated to a unique ID as
 to allow some degree of tracking.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -164,11 +165,11 @@ to allow some degree of tracking.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop2</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span> <span class="mi">723782378</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In the code above, after the trivial import of the pygmo package, we first define a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
-from <a class="reference internal" href="../problems/py_problems.html#pygmo.core.rosenbrock" title="pygmo.core.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a>, and then we construct two populations (i.e. two sets of candidate solutions).
+<p>In the code above, after the trivial import of the pygmo package, we first define a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+from <a class="reference internal" href="../problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a>, and then we construct two populations (i.e. two sets of candidate solutions).
 The first population, <code class="docutils literal"><span class="pre">pop1</span></code>, is empty, while the second population is initialized with
 five candidate solutions, hence also causing five fitness evaluations. The candidate solutions in
-<code class="docutils literal"><span class="pre">pop2</span></code> are randomly created within the box-bounds of the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> using
+<code class="docutils literal"><span class="pre">pop2</span></code> are randomly created within the box-bounds of the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> using
 the random seed passed as kwarg.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pop1</span><span class="p">))</span>
 <span class="go">0</span>
@@ -180,7 +181,7 @@ the random seed passed as kwarg.</p>
 <span class="go">5</span>
 </pre></div>
 </div>
-<p>The full inspection of a <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> is possible, as usual,
+<p>The full inspection of a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> is possible, as usual,
 via its methods or glancing to the screen print of the entire class:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop2</span><span class="p">)</span> 
 <span class="gp">...</span>
@@ -209,7 +210,7 @@ via its methods or glancing to the screen print of the entire class:</p>
 </pre></div>
 </div>
 <p>Individuals, i.e. new candidate solutions can be put into a population calling
-its <a class="reference internal" href="../py_population.html#pygmo.core.population.push_back" title="pygmo.core.population.push_back"><code class="xref py py-func docutils literal"><span class="pre">push_back()</span></code></a> method:</p>
+its <a class="reference internal" href="../py_population.html#pygmo.population.push_back" title="pygmo.population.push_back"><code class="xref py py-func docutils literal"><span class="pre">push_back()</span></code></a> method:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.4</span><span class="p">])</span> <span class="c1"># correct size</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pop1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 <span class="go">True</span>
@@ -227,7 +228,7 @@ its <a class="reference internal" href="../py_population.html#pygmo.core.populat
 <span class="go">what: Length of decision vector is 3, should be 4</span>
 </pre></div>
 </div>
-<p>Some consistency checks are done by <a class="reference internal" href="../py_population.html#pygmo.core.population.push_back" title="pygmo.core.population.push_back"><code class="xref py py-func docutils literal"><span class="pre">push_back()</span></code></a>, e.g. on the decision vector
+<p>Some consistency checks are done by <a class="reference internal" href="../py_population.html#pygmo.population.push_back" title="pygmo.population.push_back"><code class="xref py py-func docutils literal"><span class="pre">push_back()</span></code></a>, e.g. on the decision vector
 length.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -235,7 +236,7 @@ length.</p>
 pushed back into a population</p>
 </div>
 <p>The snippet above will trigger fitness function evaluations as the decision vector is always associated to a
-fitness vector in a <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>. If the fitness vector associated to a chromosome is known,
+fitness vector in a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>. If the fitness vector associated to a chromosome is known,
 you may still push it back in a population and avoid triggering a fitness re-evaluation by typing:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">1.3</span><span class="p">,</span><span class="mf">0.2</span><span class="p">],</span> <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="mf">11.2</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pop1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
@@ -264,7 +265,7 @@ some individual decision vector:</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Using the method <a class="reference internal" href="../py_population.html#pygmo.core.population.set_xf" title="pygmo.core.population.set_xf"><code class="xref py py-func docutils literal"><span class="pre">set_xf()</span></code></a> or:func:<cite>~pygmo.core.population.push_back()</cite> it is possible to avoid
+<p class="last">Using the method <a class="reference internal" href="../py_population.html#pygmo.population.set_xf" title="pygmo.population.set_xf"><code class="xref py py-func docutils literal"><span class="pre">set_xf()</span></code></a> or:func:<cite>~pygmo.population.push_back()</cite> it is possible to avoid
 triggering fitness function evaluations, but it is also possible to inject
 spurious information into the population (i.e. breaking the relation between
 decision vectors and fitness vectors imposed by the problem)</p>

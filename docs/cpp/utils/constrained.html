@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -181,7 +182,7 @@ constrained optimization tasks.</p>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If the input fitness vectors do not have all the same size <span class="math">\(n &gt;=1\)</span> </li>
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal"><span class="pre">neq</span></code> is larger than <span class="math">\(n - 1\)</span> (too many constraints) </li>
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If the size of the <code class="docutils literal"><span class="pre">tol</span></code> is not exactly the size of <code class="docutils literal"><span class="pre">input_f</span></code> - 1 </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If the size of the <code class="docutils literal"><span class="pre">tol</span></code> is not <span class="math">\(n - 1\)</span> </li>
 </ul>
 </dd>
 </dl>

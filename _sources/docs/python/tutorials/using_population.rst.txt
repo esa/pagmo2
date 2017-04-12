@@ -1,11 +1,11 @@
 .. _py_tutorial_using_population:
 
-Use of the class :class:`~pygmo.core.population`
+Use of the class :class:`~pygmo.population`
 ================================================
 
-In pygmo, a :class:`~pygmo.core.population` is a storage for candidate solutions
-to some :class:`~pygmo.core.problem` (sometimes called individuals).
-It thus contains a :class:`~pygmo.core.problem` and a number of decision
+In pygmo, a :class:`~pygmo.population` is a storage for candidate solutions
+to some :class:`~pygmo.problem` (sometimes called individuals).
+It thus contains a :class:`~pygmo.problem` and a number of decision
 vectors (chromosomes) and fitness vectors, each associated to a unique ID as
 to allow some degree of tracking.
 
@@ -16,11 +16,11 @@ to allow some degree of tracking.
     >>> pop1 = pg.population(prob)
     >>> pop2 = pg.population(prob, size = 5, seed= 723782378)
 
-In the code above, after the trivial import of the pygmo package, we first define a :class:`~pygmo.core.problem`
-from :class:`~pygmo.core.rosenbrock`, and then we construct two populations (i.e. two sets of candidate solutions).
+In the code above, after the trivial import of the pygmo package, we first define a :class:`~pygmo.problem`
+from :class:`~pygmo.rosenbrock`, and then we construct two populations (i.e. two sets of candidate solutions).
 The first population, ``pop1``, is empty, while the second population is initialized with
 five candidate solutions, hence also causing five fitness evaluations. The candidate solutions in
-``pop2`` are randomly created within the box-bounds of the :class:`~pygmo.core.problem` using
+``pop2`` are randomly created within the box-bounds of the :class:`~pygmo.problem` using
 the random seed passed as kwarg.
 
 .. doctest::
@@ -34,7 +34,7 @@ the random seed passed as kwarg.
     >>> print(pop2.problem.get_fevals())
     5
 
-The full inspection of a :class:`~pygmo.core.population` is possible, as usual,
+The full inspection of a :class:`~pygmo.population` is possible, as usual,
 via its methods or glancing to the screen print of the entire class:
 
 .. doctest::
@@ -65,7 +65,7 @@ via its methods or glancing to the screen print of the entire class:
     	Fitness vector:		[487030]
 
 Individuals, i.e. new candidate solutions can be put into a population calling
-its :func:`~pygmo.core.population.push_back()` method:
+its :func:`~pygmo.population.push_back()` method:
 
 .. doctest::
 
@@ -85,14 +85,14 @@ its :func:`~pygmo.core.population.push_back()` method:
     where: /Users/darioizzo/Documents/pagmo2/include/pagmo/problem.hpp, 1835
     what: Length of decision vector is 3, should be 4
 
-Some consistency checks are done by :func:`~pygmo.core.population.push_back()`, e.g. on the decision vector
+Some consistency checks are done by :func:`~pygmo.population.push_back()`, e.g. on the decision vector
 length.
 
 .. note:: Decision vectors that are outside of the box bounds are allowed to be
           pushed back into a population
 
 The snippet above will trigger fitness function evaluations as the decision vector is always associated to a
-fitness vector in a :class:`~pygmo.core.population`. If the fitness vector associated to a chromosome is known,
+fitness vector in a :class:`~pygmo.population`. If the fitness vector associated to a chromosome is known,
 you may still push it back in a population and avoid triggering a fitness re-evaluation by typing:
 
     >>> pop1.push_back(x = [0.2,0.3,1.3,0.2], f = [11.2]) 
@@ -121,7 +121,7 @@ some individual decision vector:
     >>> print(pop1.get_f()[0])
     [ 8.43469444]
 
-.. note:: Using the method :func:`~pygmo.core.population.set_xf()` or:func:`~pygmo.core.population.push_back()` it is possible to avoid
+.. note:: Using the method :func:`~pygmo.population.set_xf()` or:func:`~pygmo.population.push_back()` it is possible to avoid
           triggering fitness function evaluations, but it is also possible to inject
           spurious information into the population (i.e. breaking the relation between
           decision vectors and fitness vectors imposed by the problem)

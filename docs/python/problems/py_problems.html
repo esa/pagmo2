@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -159,10 +160,10 @@
 <div class="section" id="problems-exposed-from-c">
 <h2>Problems exposed from C++<a class="headerlink" href="#problems-exposed-from-c" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="pygmo.core.null_problem">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">null_problem</code><span class="sig-paren">(</span><em>nobj = 1</em>, <em>nec = 0</em>, <em>nic = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.null_problem" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.null_problem">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">null_problem</code><span class="sig-paren">(</span><em>nobj = 1</em>, <em>nec = 0</em>, <em>nic = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.null_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>The null problem.</p>
-<p>A problem used in the default-initialization of <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.problem</span></code></a> and of the meta-problems.</p>
+<p>A problem used in the default-initialization of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> and of the meta-problems.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -187,8 +188,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.cec2013">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">cec2013</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cec2013" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cec2013">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cec2013</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2013" title="Permalink to this definition">¶</a></dt>
 <dd><p>The CEC 2013 problem suite (continuous, box-bounded, single-objective problems)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -213,8 +214,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.cec2006">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">cec2006</code><span class="sig-paren">(</span><em>prob_id = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cec2006" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cec2006">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cec2006</code><span class="sig-paren">(</span><em>prob_id = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2006" title="Permalink to this definition">¶</a></dt>
 <dd><p>The CEC 2006 problem suite (continuous, constrained, single-objective problems)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -233,8 +234,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/cec2006.html#_CPPv2N5pagmo7cec2006E" title="pagmo::cec2006"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cec2006</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.cec2006.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cec2006.best_known" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cec2006.best_known">
+<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2006.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the CEC 2006 problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -252,8 +253,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.cec2009">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">cec2009</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>is_constrained = false</em>, <em>dim = 30u</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.cec2009" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.cec2009">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cec2009</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>is_constrained = false</em>, <em>dim = 30u</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2009" title="Permalink to this definition">¶</a></dt>
 <dd><p>The CEC 2009 problem suite (continuous, constrained, single-objective problems)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -279,8 +280,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.rosenbrock">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">rosenbrock</code><span class="sig-paren">(</span><em>dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.rosenbrock" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.rosenbrock">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">rosenbrock</code><span class="sig-paren">(</span><em>dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rosenbrock" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Rosenbrock problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -299,8 +300,8 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/rosenbrock.html#_CPPv2N5pagmo10rosenbrockE" title="pagmo::rosenbrock"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::rosenbrock</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.rosenbrock.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.rosenbrock.best_known" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.rosenbrock.best_known">
+<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rosenbrock.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Rosenbrock problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -318,13 +319,13 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.rastrigin">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">rastrigin</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.rastrigin" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.rastrigin">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">rastrigin</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rastrigin" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Rastrigin problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/rastrigin.html#_CPPv2N5pagmo9rastriginE" title="pagmo::rastrigin"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::rastrigin</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.rastrigin.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.rastrigin.best_known" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.rastrigin.best_known">
+<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rastrigin.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Rastrigin problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -342,13 +343,13 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.schwefel">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">schwefel</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.schwefel" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.schwefel">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">schwefel</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.schwefel" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Schwefel problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/schwefel.html#_CPPv2N5pagmo8schwefelE" title="pagmo::schwefel"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::schwefel</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.schwefel.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.schwefel.best_known" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.schwefel.best_known">
+<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.schwefel.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Schwefel problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -366,13 +367,13 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.ackley">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">ackley</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.ackley" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.ackley">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">ackley</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ackley" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Ackley problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/ackley.html#_CPPv2N5pagmo6ackleyE" title="pagmo::ackley"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::ackley</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.ackley.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.ackley.best_known" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.ackley.best_known">
+<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ackley.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Ackley problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -390,13 +391,13 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.griewank">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">griewank</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.griewank" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.griewank">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">griewank</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.griewank" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Griewank problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/griewank.html#_CPPv2N5pagmo8griewankE" title="pagmo::griewank"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::griewank</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.griewank.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.griewank.best_known" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.griewank.best_known">
+<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.griewank.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Griewank problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -414,13 +415,13 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.zdt">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">zdt</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>param = 30</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.zdt" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.zdt">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">zdt</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>param = 30</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.zdt" title="Permalink to this definition">¶</a></dt>
 <dd><p>The ZDT problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/zdt.html#_CPPv2N5pagmo3zdtE" title="pagmo::zdt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::zdt</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.zdt.p_distance">
-<code class="descname">p_distance</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.zdt.p_distance" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.zdt.p_distance">
+<code class="descname">p_distance</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.zdt.p_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>p_distance(pop)</p>
 <p>Convergence metric for decision vectors (0 = on the optimal front)</p>
 <p>Introduced by Martens and Izzo, this metric is able to measure &#8220;a distance&#8221; of any point from
@@ -431,7 +432,7 @@ the pareto front of any DTLZ problem analytically.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>point</strong> (<em>array-like object</em>) &#8211; decision vector for which the p distance is requested</li>
-<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; population for which the average p distance is requested</li>
+<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; population for which the average p distance is requested</li>
 </ul>
 </td>
 </tr>
@@ -443,15 +444,15 @@ the pareto front of any DTLZ problem analytically.</p>
 </tr>
 </tbody>
 </table>
-<p>See also the docs of the C++ class <a class="reference internal" href="#pygmo.core.zdt.p_distance" title="pygmo.core.zdt.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a></p>
+<p>See also the docs of the C++ class <a class="reference internal" href="#pygmo.zdt.p_distance" title="pygmo.zdt.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a></p>
 </dd></dl>
 
 </dd></dl>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.dtlz">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">dtlz</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>dim = 5</em>, <em>fdim = 3</em>, <em>alpha = 100</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.dtlz" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.dtlz">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">dtlz</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>dim = 5</em>, <em>fdim = 3</em>, <em>alpha = 100</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.dtlz" title="Permalink to this definition">¶</a></dt>
 <dd><p>The DTLZ problem suite problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -475,8 +476,8 @@ the pareto front of any DTLZ problem analytically.</p>
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/dtlz.html#_CPPv2N5pagmo4dtlzE" title="pagmo::dtlz"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::dtlz</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.dtlz.p_distance">
-<code class="descname">p_distance</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.dtlz.p_distance" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.dtlz.p_distance">
+<code class="descname">p_distance</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.dtlz.p_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>p_distance(pop)</p>
 <p>Convergence metric for decision vectors (0 = on the optimal front)</p>
 <p>Introduced by Martens and Izzo, this metric is able to measure &#8220;a distance&#8221; of any point from
@@ -487,7 +488,7 @@ the pareto front of any DTLZ problem analytically.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>point</strong> (<em>array-like object</em>) &#8211; decision vector for which the p distance is requested</li>
-<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; population for which the average p distance is requested</li>
+<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; population for which the average p distance is requested</li>
 </ul>
 </td>
 </tr>
@@ -499,12 +500,12 @@ the pareto front of any DTLZ problem analytically.</p>
 </tr>
 </tbody>
 </table>
-<p>See also the docs of the C++ class <a class="reference internal" href="#pygmo.core.dtlz.p_distance" title="pygmo.core.dtlz.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a></p>
+<p>See also the docs of the C++ class <a class="reference internal" href="#pygmo.dtlz.p_distance" title="pygmo.dtlz.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a></p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.dtlz.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>pop, az=40, comp=[0, 1, 2]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.dtlz.plot" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.dtlz.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>pop, az=40, comp=[0, 1, 2]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.dtlz.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots solutions to the DTLZ problems in three dimensions. The Pareto Front is also
 visualized if the problem id is 2,3 or 4.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -512,7 +513,7 @@ visualized if the problem id is 2,3 or 4.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; population of solutions to a dtlz problem</li>
+<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; population of solutions to a dtlz problem</li>
 <li><strong>az</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; angle of view on which the 3d-plot is created</li>
 <li><strong>comp</strong> (<code class="docutils literal"><span class="pre">list</span></code>) &#8211; indexes the fitness dimension for x,y and z axis in that order</li>
 </ul>
@@ -542,21 +543,21 @@ visualized if the problem id is 2,3 or 4.</p>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.inventory">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">inventory</code><span class="sig-paren">(</span><em>weeks = 4</em>, <em>sample_size = 10</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.inventory" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.inventory">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">inventory</code><span class="sig-paren">(</span><em>weeks = 4</em>, <em>sample_size = 10</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.inventory" title="Permalink to this definition">¶</a></dt>
 <dd><p>The inventory problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/inventory.html#_CPPv2N5pagmo9inventoryE" title="pagmo::inventory"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::inventory</span></code></a>.</p>
 </dd></dl>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.hock_schittkowsky_71">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">hock_schittkowsky_71</code><a class="headerlink" href="#pygmo.core.hock_schittkowsky_71" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hock_schittkowsky_71">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">hock_schittkowsky_71</code><a class="headerlink" href="#pygmo.hock_schittkowsky_71" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Hock-Schittkowsky 71 problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/hock_schittkowsky_71.html#_CPPv2N5pagmo20hock_schittkowsky_71E" title="pagmo::hock_schittkowsky_71"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::hock_schittkowsky_71</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.hock_schittkowsky_71.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hock_schittkowsky_71.best_known" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hock_schittkowsky_71.best_known">
+<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hock_schittkowsky_71.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Hock-Schittkowsky 71 problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -574,8 +575,8 @@ visualized if the problem id is 2,3 or 4.</p>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.luksan_vlcek1">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">luksan_vlcek1</code><span class="sig-paren">(</span><em>dim = 3</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.luksan_vlcek1" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.luksan_vlcek1">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">luksan_vlcek1</code><span class="sig-paren">(</span><em>dim = 3</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.luksan_vlcek1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of Example 5.1 in the report from Luksan and Vlcek.</p>
 <p>The problem is also known as the Chained Rosenbrock function with trigonometric-exponential constraints.</p>
 <p>Its formulation in pagmo can be written as:</p>
@@ -604,19 +605,19 @@ constrained optimization.&#8221; (1999). <a class="reference external" href="htt
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.translate">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">translate</code><span class="sig-paren">(</span><em>udp = null_problem(), translation = [0.]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.translate" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.translate">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">translate</code><span class="sig-paren">(</span><em>udp = null_problem(), translation = [0.]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.translate" title="Permalink to this definition">¶</a></dt>
 <dd><p>The translate meta-problem.</p>
-<p>This meta-problem translates the whole search space of an input <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.problem</span></code></a> or
-user-defined problem (UDP) by a fixed translation vector. <a class="reference internal" href="#pygmo.core.translate" title="pygmo.core.translate"><code class="xref py py-class docutils literal"><span class="pre">translate</span></code></a> objects
-are user-defined problems that can be used in the construction of a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.problem</span></code></a>.</p>
+<p>This meta-problem translates the whole search space of an input <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> or
+user-defined problem (UDP) by a fixed translation vector. <a class="reference internal" href="#pygmo.translate" title="pygmo.translate"><code class="xref py py-class docutils literal"><span class="pre">translate</span></code></a> objects
+are user-defined problems that can be used in the construction of a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
-(if <code class="docutils literal"><span class="pre">None</span></code>, the population problem will be <a class="reference internal" href="#pygmo.core.null_problem" title="pygmo.core.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a>)</li>
+<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+(if <code class="docutils literal"><span class="pre">None</span></code>, the population problem will be <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a>)</li>
 <li><strong>translation</strong> (<em>array-like object</em>) &#8211; an array containing the translation to be applied</li>
 </ul>
 </td>
@@ -624,7 +625,7 @@ are user-defined problems that can be used in the construction of a <a class="re
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the length of <em>translation</em> is not equal to the dimension of <em>prob</em></li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:</li>
-<li>* the constructor of <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.problem</span></code></a>,</li>
+<li>* the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>,</li>
 <li>* the constructor of the underlying C++ class,</li>
 <li><em>* failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function</em> &#8211; signatures, etc.)</li>
 </ul>
@@ -633,25 +634,25 @@ are user-defined problems that can be used in the construction of a <a class="re
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="pygmo.core.translate.inner_problem">
-<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.core.translate.inner_problem" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.translate.inner_problem">
+<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.translate.inner_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner problem of the meta-problem</p>
-<p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within the meta-problem.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within the meta-problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the inner problem</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.translate.translation">
-<code class="descname">translation</code><a class="headerlink" href="#pygmo.core.translate.translation" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.translate.translation">
+<code class="descname">translation</code><a class="headerlink" href="#pygmo.translate.translation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translation vector.</p>
 <p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the translation vector used in the
 construction of this problem.</p>
@@ -671,8 +672,8 @@ construction of this problem.</p>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.decompose">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">decompose</code><span class="sig-paren">(</span><em>udp = null_problem(nobj = 2), weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.decompose" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.decompose">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">decompose</code><span class="sig-paren">(</span><em>udp = null_problem(nobj = 2), weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decompose" title="Permalink to this definition">¶</a></dt>
 <dd><p>The decompose meta-problem.</p>
 <p>This meta-problem <em>decomposes</em> a multi-objective input user-defined problem,
 resulting in a single-objective user-defined problem with a fitness function combining the
@@ -701,7 +702,7 @@ according to the decomposition method chosen:</p>
 <p><strong>NOTE</strong> The reference point <span class="math">\(z^*\)</span> is often taken as the ideal point and as such
 it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
 this behaviour so that whenever a new ideal point is found <span class="math">\(z^*\)</span> is adapted accordingly.</p>
-<p><strong>NOTE</strong> The use of <a class="reference internal" href="#pygmo.core.decompose" title="pygmo.core.decompose"><code class="xref py py-class docutils literal"><span class="pre">decompose</span></code></a> discards gradients and hessians so that if the original user defined problem
+<p><strong>NOTE</strong> The use of <a class="reference internal" href="#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal"><span class="pre">decompose</span></code></a> discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
 the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.</p>
@@ -712,8 +713,8 @@ derivative-free optimization.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
-(if <code class="docutils literal"><span class="pre">None</span></code>, the population problem will be <a class="reference internal" href="#pygmo.core.null_problem" title="pygmo.core.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a>)</li>
+<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+(if <code class="docutils literal"><span class="pre">None</span></code>, the population problem will be <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a>)</li>
 <li><strong>weight</strong> (<em>array-like object</em>) &#8211; the vector of weights <span class="math">\(oldsymbol \lambda\)</span></li>
 <li><strong>z</strong> (<em>array-like object</em>) &#8211; the reference point <span class="math">\(\mathbf z^*\)</span></li>
 <li><strong>method</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; a string containing the decomposition method chosen</li>
@@ -731,7 +732,7 @@ to be the ideal point</li>
 <li>* <em>weight</em> is not such that <span class="math">\(\lambda_i &gt; 0, \forall i=1..n\)</span>,</li>
 <li>* <em>weight</em> is not such that <span class="math">\(\sum_i \lambda_i = 1\)</span></li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:</li>
-<li>* the constructor of <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.problem</span></code></a>,</li>
+<li>* the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>,</li>
 <li>* the constructor of the underlying C++ class,</li>
 <li><em>* failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function</em> &#8211; signatures, etc.)</li>
 </ul>
@@ -740,25 +741,25 @@ to be the ideal point</li>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="pygmo.core.decompose.inner_problem">
-<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.core.decompose.inner_problem" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.decompose.inner_problem">
+<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.decompose.inner_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner problem of the meta-problem</p>
-<p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within the meta-problem.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within the meta-problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the inner problem</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.decompose.original_fitness">
-<code class="descname">original_fitness</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.decompose.original_fitness" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.decompose.original_fitness">
+<code class="descname">original_fitness</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decompose.original_fitness" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fitness of the original problem.</p>
 <p>Returns the fitness of the original multi-objective problem used to construct the decomposed problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -779,8 +780,8 @@ intersection between C++ and Python (e.g., type conversion errors, mismatched fu
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pygmo.core.decompose.z">
-<code class="descname">z</code><a class="headerlink" href="#pygmo.core.decompose.z" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.decompose.z">
+<code class="descname">z</code><a class="headerlink" href="#pygmo.decompose.z" title="Permalink to this definition">¶</a></dt>
 <dd><p>Current reference point.</p>
 <p>This read-only property contains the reference point to be used for the decomposition. This is only
 used for Tchebycheff and boundary interception decomposition methods.</p>
@@ -804,8 +805,8 @@ type conversion errors, mismatched function signatures, etc.)</td>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.unconstrain">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">unconstrain</code><span class="sig-paren">(</span><em>prob = null_problem(nobj=2</em>, <em>nec=3</em>, <em>nic=4)</em>, <em>method = &quot;death penalty&quot;</em>, <em>weights = []</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.unconstrain" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.unconstrain">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">unconstrain</code><span class="sig-paren">(</span><em>prob = null_problem(nobj=2</em>, <em>nec=3</em>, <em>nic=4)</em>, <em>method = &quot;death penalty&quot;</em>, <em>weights = []</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.unconstrain" title="Permalink to this definition">¶</a></dt>
 <dd><p>The unconstrain meta-problem.</p>
 <p>This meta-problem transforms a constrained problem into an unconstrained problem applying one of the following methods:</p>
 <ul class="simple">
@@ -815,7 +816,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
 <li>Ignore the constraints: simply ignores the constraints.</li>
 <li>Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraints violation (i.e. the sum of the L2 norms of the equalities and inequalities violations)</li>
 </ul>
-<p><strong>NOTE</strong> The use of <a class="reference internal" href="#pygmo.core.unconstrain" title="pygmo.core.unconstrain"><code class="xref py py-class docutils literal"><span class="pre">unconstrain</span></code></a> discards gradients and hessians so that if the original user defined problem
+<p><strong>NOTE</strong> The use of <a class="reference internal" href="#pygmo.unconstrain" title="pygmo.unconstrain"><code class="xref py py-class docutils literal"><span class="pre">unconstrain</span></code></a> discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the unconstrained problem. The reason for this behaviour is that,
 in general, the methods implemented may not be differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.</p>
@@ -841,7 +842,7 @@ and stored inside the <code class="xref py py-class docutils literal"><span clas
 <li>* <em>method</em> is not one of [<code class="docutils literal"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal"><span class="pre">'kuri'</span></code>, <code class="docutils literal"><span class="pre">'weighted'</span></code>, <code class="docutils literal"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal"><span class="pre">'ignore_o'</span></code>],</li>
 <li>* <em>weight</em> is not of the same size as the problem constraints (if the method <code class="docutils literal"><span class="pre">'weighted'</span></code> is selcted), or not empty otherwise.</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:</li>
-<li>* the constructor of <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.core.problem</span></code></a>,</li>
+<li>* the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>,</li>
 <li>* the constructor of the underlying C++ class,</li>
 <li><em>* failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function</em> &#8211; signatures, etc.)</li>
 </ul>
@@ -850,17 +851,17 @@ and stored inside the <code class="xref py py-class docutils literal"><span clas
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="pygmo.core.unconstrain.inner_problem">
-<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.core.unconstrain.inner_problem" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.unconstrain.inner_problem">
+<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.unconstrain.inner_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner problem of the meta-problem</p>
-<p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within the meta-problem.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within the meta-problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the inner problem</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></td>
 </tr>
 </tbody>
 </table>

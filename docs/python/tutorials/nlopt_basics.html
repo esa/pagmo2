@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>A first tutorial on the use of NLopt solvers &#8212; PaGMO 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Basic Multi-Objective Functionalities" href="moo.html" />
+    <link rel="prev" title="Coding a simple User Defined Problem" href="coding_udp_simple.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Pagmo</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">A first tutorial on the use of NLopt solvers</a><ul>
+<li><a class="reference internal" href="#i-have-the-gradient">I have the gradient</a></li>
+<li><a class="reference internal" href="#i-do-not-have-the-gradient">I do not have the gradient</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="a-first-tutorial-on-the-use-of-nlopt-solvers">
+<span id="py-tutorial-nlopt-basics"></span><h1>A first tutorial on the use of NLopt solvers<a class="headerlink" href="#a-first-tutorial-on-the-use-of-nlopt-solvers" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial we show the basic usage pattern of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a>. This user defined
+algorithm (UDA) wraps the NLopt library making it easily accessible via the pygmo common
+<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> interface. Let see how this miracle occur.</p>
+<div class="section" id="i-have-the-gradient">
+<h2>I have the gradient<a class="headerlink" href="#i-have-the-gradient" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">(</span><span class="s2">&quot;slsqp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span> 
+<span class="go">Algorithm name: NLopt - slsqp [deterministic]</span>
+<span class="go">    Thread safety: basic</span>
+
+<span class="go">Extra info:</span>
+<span class="go">    NLopt version: 2.4.2</span>
+<span class="go">    Last optimisation return code: NLOPT_SUCCESS (value = 1, Generic success return value)</span>
+<span class="go">    Verbosity: 0</span>
+<span class="go">    Individual selection policy: best</span>
+<span class="go">    Individual replacement policy: best</span>
+<span class="go">    Stopping criteria:</span>
+<span class="go">        stopval:  disabled</span>
+<span class="go">        ftol_rel: disabled</span>
+<span class="go">        ftol_abs: disabled</span>
+<span class="go">        xtol_rel: 1e-08</span>
+<span class="go">        xtol_abs: disabled</span>
+<span class="go">        maxeval:  disabled</span>
+<span class="go">        maxtime:  disabled</span>
+</pre></div>
+</div>
+<p>In a few lines we have constructed a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> containing the slsqp solver from
+NLopt. For a list of solvers availbale via the NLopt library check the docs of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a>.
+In this tutorial we will make use of slsqp, a Sequential Quadratic Programming algorithm suited for
+generic Non Linear Programming problems (i.e. non linearly constrained single objective problems).</p>
+<p>All the stopping criteria used by the NLopt library are available via dedicated attributes, so that we may, for
+example, set the <code class="docutils literal"><span class="pre">ftol_rel</span></code> by writing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">)</span><span class="o">.</span><span class="n">ftol_rel</span> <span class="o">=</span> <span class="mf">1e-8</span>
+</pre></div>
+</div>
+<p>Let us algo activate some verbosity as to store a log and have a screen output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We now need a problem to solve. Let us start with one of the UDPs provided in pygmo. The
+<a class="reference internal" href="../problems/py_problems.html#pygmo.luksan_vlcek1" title="pygmo.luksan_vlcek1"><code class="xref py py-class docutils literal"><span class="pre">pygmo.luksan_vlcek1</span></code></a> provides a classic, scalable, equally constrained problem. It
+also has its gradient implemented so that we do not have to worry about that for the moment.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-8</span><span class="p">]</span> <span class="o">*</span> <span class="n">prob</span><span class="o">.</span><span class="n">get_nc</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The lines above can be shortened and are equivalent to:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-8</span><span class="p">]</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_nc</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/nlopt_basic_lv1.png"><img alt="slsqp performance" class="align-right" src="../../../_images/nlopt_basic_lv1.png" style="width: 512.0px; height: 384.0px;" /></a>
+<p>We now solve this problem by writing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">fevals:       fitness:      violated:    viol. norm:</span>
+<span class="go">      1         250153             18        2619.51 i</span>
+<span class="go">      2         132280             18        931.767 i</span>
+<span class="go">      3        26355.2             18        357.548 i</span>
+<span class="go">      4          14509             18        140.055 i</span>
+<span class="go">      5          77119             18        378.603 i</span>
+<span class="go">      6        9104.25             18         116.19 i</span>
+<span class="go">      7        9104.25             18         116.19 i</span>
+<span class="go">      8        2219.94             18        42.8747 i</span>
+<span class="go">      9        947.637             18        16.7015 i</span>
+<span class="go">     10        423.519             18        7.73746 i</span>
+<span class="go">     11        82.8658             18        1.39111 i</span>
+<span class="go">     12        34.2733             15       0.227267 i</span>
+<span class="go">     13        11.9797             11      0.0309227 i</span>
+<span class="go">     14        42.7256              7        0.27342 i</span>
+<span class="go">     15        1.66949             11       0.042859 i</span>
+<span class="go">     16        1.66949             11       0.042859 i</span>
+<span class="go">     17       0.171358              7     0.00425765 i</span>
+<span class="go">     18     0.00186583              5    0.000560166 i</span>
+<span class="go">     19    1.89265e-06              3    4.14711e-06 i</span>
+<span class="go">     20    1.28773e-09              0              0</span>
+<span class="go">     21    7.45125e-14              0              0</span>
+<span class="go">     22    3.61388e-18              0              0</span>
+<span class="go">     23    1.16145e-23              0              0</span>
+
+<span class="go">Optimisation return status: NLOPT_XTOL_REACHED (value = 4, Optimization stopped because xtol_rel or xtol_abs was reached)</span>
+</pre></div>
+</div>
+<p>As usual we can access the values in the log to analyze the algorithm performance and, for example, produce a plot such as that
+shown here.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">log</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">)</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;obj&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;con&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;fevals&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
+</pre></div>
+</div>
+</div>
+<div class="section" id="i-do-not-have-the-gradient">
+<h2>I do not have the gradient<a class="headerlink" href="#i-do-not-have-the-gradient" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, PaGMO development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

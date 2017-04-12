@@ -1,5 +1,5 @@
 Algorithm class
 ===============
 
-.. autoclass:: pygmo.core.algorithm
+.. autoclass:: pygmo.algorithm
    :members:

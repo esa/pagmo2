@@ -103,6 +103,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -161,8 +162,8 @@ of all types, as a form of evolution. Regardless on whether you will be using an
 an interior point optimizer or an evolutionary startegy solver, in pygmo you will
 always have to call a method called <code class="docutils literal"><span class="pre">evolve()</span></code> to improve over your initial solutions,
 i.e. your <em>population</em>.</p>
-<p>The simplest way to evolve a population is to use directly the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.evolve" title="pygmo.core.algorithm.evolve"><code class="xref py py-class docutils literal"><span class="pre">evolve</span></code></a></p>
+<p>The simplest way to evolve a population is to use directly the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.evolve" title="pygmo.algorithm.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The problem</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">10</span><span class="p">))</span>
@@ -180,12 +181,12 @@ method <a class="reference internal" href="../py_algorithm.html#pygmo.core.algor
 </div>
 <a class="reference internal image-reference" href="../../../_images/sade_rosenbrock_10.png"><img alt="sade performance" class="align-right" src="../../../_images/sade_rosenbrock_10.png" style="width: 400.0px; height: 300.0px;" /></a>
 <a class="reference internal image-reference" href="../../../_images/sade_CR_over_rosenbrock_10.png"><img alt="sade CR adaptation" class="align-right" src="../../../_images/sade_CR_over_rosenbrock_10.png" style="width: 400.0px; height: 300.0px;" /></a>
-<p>Clearly, as <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.sade" title="pygmo.core.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a> is a stochastic optimization algorithm, should we repeat the
+<p>Clearly, as <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a> is a stochastic optimization algorithm, should we repeat the
 evolution starting from the same population, we would obtain different results. If we
 want to monitor multiple runs from different initial populations and see how the final best fitness
 is achieved as the number of fitness evaluations increase. Most pygmo UDAs allow to do this
 as they maintain an internal log that can be accessed after the UDA has been
-extracted (see <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.extract" title="pygmo.core.algorithm.extract"><code class="xref py py-class docutils literal"><span class="pre">extract</span></code></a>). This allows, for example to obtain
+extracted (see <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.extract" title="pygmo.algorithm.extract"><code class="xref py py-func docutils literal"><span class="pre">extract()</span></code></a>). This allows, for example to obtain
 plots such as those on the right, where multiple trials are monitored:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># We set the verbosity to 100 (i.e. each 100 gen there will be a log line)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>

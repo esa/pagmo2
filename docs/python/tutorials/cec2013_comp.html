@@ -102,6 +102,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -155,7 +156,7 @@
 <p>In this tutorial we will show how to use pygmo to run algorithms on the test problem suite used in the
 Special Session &amp; Competition on Real-Parameter Single Objective Optimization at CEC-2013, Cancun, Mexico 21-23 June 2013.</p>
 <p>All of the CEC 2013 problems are box-bounded, continuous, single objective problems and are provided as UDP (user-defined
-problems) by pygmo in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.core.cec2013" title="pygmo.core.cec2013"><code class="xref py py-class docutils literal"><span class="pre">cec2013</span></code></a>. Instantiating one of these problems is easy:</p>
+problems) by pygmo in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.cec2013" title="pygmo.cec2013"><code class="xref py py-class docutils literal"><span class="pre">cec2013</span></code></a>. Instantiating one of these problems is easy:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The user-defined problem</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">cec2013</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
@@ -163,7 +164,7 @@ problems) by pygmo in the class <a class="reference internal" href="../problems/
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>as usual, we can quickly inspect the <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> printing it to screen:</p>
+<p>as usual, we can quickly inspect the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> printing it to screen:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> 
 <span class="go">Problem name: CEC2013 - f24(cf04)</span>
 <span class="go">    Global dimension:                       10</span>
@@ -184,9 +185,9 @@ problems) by pygmo in the class <a class="reference internal" href="../problems/
 <span class="go">    Thread safety: basic</span>
 </pre></div>
 </div>
-<p>Let us assume we want to assess the performance of (say) the optimization algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> (which
+<p>Let us assume we want to assess the performance of (say) the optimization algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> (which
 implements as user-defined algorithm the Covariance Matrix Adaptation Evolutionary Strategy) on the whole
-<a class="reference internal" href="../problems/py_problems.html#pygmo.core.cec2013" title="pygmo.core.cec2013"><code class="xref py py-class docutils literal"><span class="pre">cec2013</span></code></a> problem suite at dimension D=2. Since the competition rules allowed D * 10000
+<a class="reference internal" href="../problems/py_problems.html#pygmo.cec2013" title="pygmo.cec2013"><code class="xref py py-class docutils literal"><span class="pre">cec2013</span></code></a> problem suite at dimension D=2. Since the competition rules allowed D * 10000
 function evaluations, we choose a population of 50 and 400 generations:</p>
 <a class="reference internal image-reference" href="../../../_images/cec2013_2_jde.png"><img alt="CEC2013-JDE-2D" class="align-right" src="../../../_images/cec2013_2_jde.png" style="width: 500.0px; height: 150.0px;" /></a>
 <a class="reference internal image-reference" href="../../../_images/cec2013_2_cmaes.png"><img alt="CEC2013-CMAES-2D" class="align-right" src="../../../_images/cec2013_2_cmaes.png" style="width: 500.0px; height: 150.0px;" /></a>
@@ -221,13 +222,13 @@ problem instances:</p>
 </div>
 <p>The same can be done for different user-defined algorithms. In the various figures on the right
 we have reported only a few available from pygmo&#8217;s core. At this low dimension it can be seen how
-the particular instances choosen for <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.sade" title="pygmo.core.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a> (jDE) are
-performing particularly well. It has to be noted here that <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> results, in general,
+the particular instances choosen for <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a> (jDE) are
+performing particularly well. It has to be noted here that <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> results, in general,
 to spend less than the available budget of function evaluations so that a proper comparison at these low
 dimensionality should allow for restarts as to properly make use of the allowed budget.</p>
 <p>The script above can be run again for higher problem dimensions, so that, for example, at D = 10 and using a larger
 population size as to allow for the larger available budget of function evaluations, the following plots are obtained for
-the chosen instances of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.sade" title="pygmo.core.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a>:</p>
+the chosen instances of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a>:</p>
 <a class="reference internal image-reference" href="../../../_images/cec2013_10_cmaes.png"><img alt="CEC2013-CMAES-10D" class="align-center" src="../../../_images/cec2013_10_cmaes.png" style="width: 1000.0px; height: 300.0px;" /></a>
 <a class="reference internal image-reference" href="../../../_images/cec2013_10_jde.png"><img alt="CEC2013-JDE-10D" class="align-center" src="../../../_images/cec2013_10_jde.png" style="width: 1000.0px; height: 300.0px;" /></a>
 </div>

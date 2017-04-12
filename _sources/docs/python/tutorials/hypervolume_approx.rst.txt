@@ -12,11 +12,11 @@ most multiple-objective optimizers.
 In this tutorial we will show a way to compute the hypervolume indicator faster, but at the cost of accuracy.
 Two algorithms are included in pygmo and are capable of computing the hypervolume approximately:
 
-#. :class:`~pygmo.core.bf_fpras` - capable of approximating the hypervolume indicator
-#. :class:`~pygmo.core.bf_approx` - capable of approximating the least and the greatest contributor
+#. :class:`~pygmo.bf_fpras` - capable of approximating the hypervolume indicator
+#. :class:`~pygmo.bf_approx` - capable of approximating the least and the greatest contributor
 
 .. note::
-   The :class:`~pygmo.core.population` object will never delegate the computation to any of the approximated algorithms.
+   The :class:`~pygmo.population` object will never delegate the computation to any of the approximated algorithms.
    The only way to use the approximated algorithms is through the explicit request 
    (see the beginning of the tutorial :ref:`py_tutorial_hypervolume_advanced` for
    more information on how to do that).
@@ -24,7 +24,7 @@ Two algorithms are included in pygmo and are capable of computing the hypervolum
 FPRAS
 ================
 
-The class :class:`~pygmo.core.bf_fpras` found in PyGMO is a Fully Polynomial-Time Randomized Approximation Scheme accustomed
+The class :class:`~pygmo.bf_fpras` found in PyGMO is a Fully Polynomial-Time Randomized Approximation Scheme accustomed
 for the computation of the hypervolume indicator. You can invoke the FPRAS as follows:
 
 .. doctest::
@@ -87,5 +87,5 @@ problems has many objectives.
   >>> hv.least_contributor(ref_point, hv_algo=hv_algo) # doctest: +SKIP
 
 .. note::
- The :class:`~pygmo.core.bf_approx` provides only two features - computation of the least and the greatest contributor.
+ The :class:`~pygmo.bf_approx` provides only two features - computation of the least and the greatest contributor.
  Request for the computation of any other measure will raise and exception.

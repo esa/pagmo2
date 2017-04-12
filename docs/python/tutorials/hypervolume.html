@@ -103,6 +103,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -164,8 +165,8 @@ quality of such fronts, i.e. the quality of a solution, can be measured by sever
 a reference point (R). However, to rigorously calcuate the indicator can be time-consuming, hence efficiency
 and approximate methods can be very important.</p>
 <p>In pygmo the main functionalities allowing to compute the hypervolume indicator (also known as Lebesgue Measure or S-Metric)
-and related quantities are provided by the class <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a>. Instantiating this class from a
-<a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> or simply from a NumPy array will allow to compute the hypervolume indicator or
+and related quantities are provided by the class <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a>. Instantiating this class from a
+<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> or simply from a NumPy array will allow to compute the hypervolume indicator or
 the exclusive contributions of single points using exact or approximated algorithms.</p>
 <p>This tutorial will cover the features introduced by the hypervolume functionality of pygmo.
 First, we will describe how the user interface was designed and point out important notions that ought to be taken into account.
@@ -173,15 +174,15 @@ Later, we will give several examples in order to get you started with the basic 
 <div class="section" id="hypervolume-interface-and-construction">
 <h2>Hypervolume interface and construction<a class="headerlink" href="#hypervolume-interface-and-construction" title="Permalink to this headline">¶</a></h2>
 <p>The main class used for the computation of the hypervolume indicator (also known as Lebesgue Measure or S-Metric) and
-hypervolume contributions is class <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a>. You can import the hypervolume class using the following:</p>
+hypervolume contributions is <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hypervolume</span></code></a>. You can import the hypervolume class using the following:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">hypervolume</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;hypervolume&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">()</span>
 <span class="go">True</span>
 </pre></div>
 </div>
 <p>Since the computation of the hypervolume indicator and the hypervolume contributions are bound tightly
-to multi-objective optimization, we provide two ways of constructing <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a>.
-The first one uses the fitness values of the individuals of a <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> for the input point set:</p>
+to multi-objective optimization, we provide two ways of constructing <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a>.
+The first one uses the fitness values of the individuals of a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> for the input point set:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Construct a DTLZ-2 problem with 3-dimensional fitness space and 10 dimensions</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">dtlz</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">=</span> <span class="mi">3</span><span class="p">))</span>
@@ -191,8 +192,8 @@ The first one uses the fitness values of the individuals of a <a class="referenc
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">You need to reconstruct the <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> if the fitness values of the population are changing.
-The point set is saved in the <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> and copied there once upon contruction.</p>
+<p class="last">You need to reconstruct the <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> if the fitness values of the population are changing.
+The point set is saved in the <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> and copied there once upon contruction.</p>
 </div>
 <p>The second way of construction uses an explicit representation of coordinates for the input point set:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
@@ -226,7 +227,7 @@ point is (1.5, 0.75) etc. The plot below shows you the overall geometry of the e
 <a class="reference internal image-reference" href="../../../_images/hv_front_2d_simple.png"><img alt="../../../_images/hv_front_2d_simple.png" class="align-right" src="../../../_images/hv_front_2d_simple.png" style="width: 600px;" /></a>
 <p>Once the hypervolume object is created, it allows for the computation of the following figures:</p>
 <ol class="arabic simple">
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume.compute" title="pygmo.core.hypervolume.compute"><code class="xref py py-class docutils literal"><span class="pre">compute</span></code></a> - Returns the joint hypervolume of the set of points (S-Metric).</li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume.compute" title="pygmo.hypervolume.compute"><code class="xref py py-func docutils literal"><span class="pre">compute()</span></code></a> - Returns the joint hypervolume of the set of points (S-Metric).</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># hv and ref_point refer to the data above</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ref_point</span><span class="p">)</span>
@@ -234,7 +235,7 @@ point is (1.5, 0.75) etc. The plot below shows you the overall geometry of the e
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume.exclusive" title="pygmo.core.hypervolume.exclusive"><code class="xref py py-class docutils literal"><span class="pre">exclusive</span></code></a> - Returns the exclusive hypervolume by the point at given index.
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume.exclusive" title="pygmo.hypervolume.exclusive"><code class="xref py py-func docutils literal"><span class="pre">exclusive()</span></code></a> - Returns the exclusive hypervolume by the point at given index.
 The exclusive hypervolume
 is defined as the part of the space dominated exclusively by one point and is also called its (hypervolume) contribution.</li>
 </ol>
@@ -246,7 +247,7 @@ is defined as the part of the space dominated exclusively by one point and is al
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume.least_contributor" title="pygmo.core.hypervolume.least_contributor"><code class="xref py py-class docutils literal"><span class="pre">least_contributor</span></code></a> - Returns the index of a point contributing the least to the hypervolume.</li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume.least_contributor" title="pygmo.hypervolume.least_contributor"><code class="xref py py-func docutils literal"><span class="pre">least_contributor()</span></code></a> - Returns the index of a point contributing the least to the hypervolume.</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># hv and ref_point refer to the data above</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span><span class="o">.</span><span class="n">least_contributor</span><span class="p">(</span><span class="n">ref_point</span><span class="p">)</span> 
@@ -254,7 +255,7 @@ is defined as the part of the space dominated exclusively by one point and is al
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume.greatest_contributor" title="pygmo.core.hypervolume.greatest_contributor"><code class="xref py py-class docutils literal"><span class="pre">greatest_contributor</span></code></a> - Returns the index of a point contributing the most to the hypervolume.</li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume.greatest_contributor" title="pygmo.hypervolume.greatest_contributor"><code class="xref py py-func docutils literal"><span class="pre">greatest_contributor()</span></code></a> - Returns the index of a point contributing the most to the hypervolume.</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># hv and ref_point refer to the data above</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span><span class="o">.</span><span class="n">greatest_contributor</span><span class="p">(</span><span class="n">ref_point</span><span class="p">)</span> 
@@ -266,11 +267,11 @@ is defined as the part of the space dominated exclusively by one point and is al
 <p class="last">In case of several least/greatest contributors, pygmo returns only one contributor out of all candidates arbitrarily.</p>
 </div>
 <ol class="arabic simple" start="5">
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume.contributions" title="pygmo.core.hypervolume.contributions"><code class="xref py py-class docutils literal"><span class="pre">contributions</span></code></a> - Returns a list of contributions for all points in the set.
-This returns the same results as the successive call to the <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume.exclusive" title="pygmo.core.hypervolume.exclusive"><code class="xref py py-class docutils literal"><span class="pre">exclusive</span></code></a> method
-for each of the points. Due to the implementation, calling <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume.contributions" title="pygmo.core.hypervolume.contributions"><code class="xref py py-class docutils literal"><span class="pre">contributions</span></code></a> once can
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume.contributions" title="pygmo.hypervolume.contributions"><code class="xref py py-func docutils literal"><span class="pre">contributions()</span></code></a> - Returns a list of contributions for all points in the set.
+This returns the same results as the successive call to the <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume.exclusive" title="pygmo.hypervolume.exclusive"><code class="xref py py-func docutils literal"><span class="pre">exclusive()</span></code></a> method
+for each of the points. Due to the implementation, calling <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume.contributions" title="pygmo.hypervolume.contributions"><code class="xref py py-func docutils literal"><span class="pre">contributions()</span></code></a> once can
 be much faster (up to a linear factor) than computing all contributions separately
-by using <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume.exclusive" title="pygmo.core.hypervolume.exclusive"><code class="xref py py-class docutils literal"><span class="pre">exclusive</span></code></a>.</li>
+by using <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume.exclusive" title="pygmo.hypervolume.exclusive"><code class="xref py py-func docutils literal"><span class="pre">exclusive()</span></code></a>.</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># hv and ref_point refer to the data above</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span><span class="o">.</span><span class="n">contributions</span><span class="p">(</span><span class="n">ref_point</span><span class="p">)</span>
@@ -278,9 +279,9 @@ by using <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.cor
 </pre></div>
 </div>
 <p>Since all of the methods above require a reference point, it is useful to generate
-one automatically using the <a class="reference internal" href="../utils/py_mo_utils.html#pygmo.core.nadir" title="pygmo.core.nadir"><code class="xref py py-class docutils literal"><span class="pre">nadir</span></code></a></p>
+one automatically using the <a class="reference internal" href="../utils/py_mo_utils.html#pygmo.nadir" title="pygmo.nadir"><code class="xref py py-func docutils literal"><span class="pre">nadir()</span></code></a></p>
 <p>This following short script makes use of some of the features mentioned above to show the hypervolume
-increase after the evolution of a <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>.</p>
+increase after the evolution of a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Instantiates a 4-objectives problem</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">dtlz</span><span class="p">(</span><span class="n">prob_id</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span> <span class="n">fdim</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>

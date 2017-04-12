@@ -33,7 +33,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Plotting utilities" href="py_plotting.html" />
-    <link rel="prev" title="Multi-objective optimization utilities" href="py_mo_utils.html" />
+    <link rel="prev" title="Gradient and Hessians utilities" href="py_gh_utils.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -154,8 +155,8 @@
   <div class="section" id="hypervolume-utilities">
 <span id="py-hv-utils"></span><h1>Hypervolume utilities<a class="headerlink" href="#hypervolume-utilities" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="pygmo.core.hypervolume">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">hypervolume</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hypervolume">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">hypervolume</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hypervolume" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hypervolume Class</p>
 <p>Constructor from points</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -181,7 +182,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; the input population</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; the input population</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>pop</em> contains a single-objective or a constrained problem</td>
 </tr>
@@ -195,8 +196,8 @@
 </div>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/utils/hypervolume.html#_CPPv2N5pagmo11hypervolumeE" title="pagmo::hypervolume"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::hypervolume</span></code></a>.</p>
 <dl class="method">
-<dt id="pygmo.core.hypervolume.compute">
-<code class="descname">compute</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.compute" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hypervolume.compute">
+<code class="descname">compute</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hypervolume.compute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the hypervolume with the supplied algorithm. If no algorithm
 is supplied,  then an exact hypervolume algorithm is automatically selected
 specific for the point dimension.</p>
@@ -225,11 +226,11 @@ specific for the point dimension.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.hypervolume.contributions">
-<code class="descname">contributions</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.contributions" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hypervolume.contributions">
+<code class="descname">contributions</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hypervolume.contributions" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method returns the exclusive contribution to the hypervolume of every point.
 According to <em>hv_algo</em> this computation can be implemented optimally (as opposed to calling
-for <code class="xref py py-func docutils literal"><span class="pre">exclusive()</span></code> in a loop).</p>
+for <a class="reference internal" href="#pygmo.hypervolume.exclusive" title="pygmo.hypervolume.exclusive"><code class="xref py py-func docutils literal"><span class="pre">exclusive()</span></code></a> in a loop).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -255,8 +256,8 @@ for <code class="xref py py-func docutils literal"><span class="pre">exclusive()
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.hypervolume.exclusive">
-<code class="descname">exclusive</code><span class="sig-paren">(</span><em>idx</em>, <em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.exclusive" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hypervolume.exclusive">
+<code class="descname">exclusive</code><span class="sig-paren">(</span><em>idx</em>, <em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hypervolume.exclusive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the exclusive contribution to the hypervolume of a particular point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -287,8 +288,8 @@ for <code class="xref py py-func docutils literal"><span class="pre">exclusive()
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.hypervolume.greatest_contributor">
-<code class="descname">greatest_contributor</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.greatest_contributor" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hypervolume.greatest_contributor">
+<code class="descname">greatest_contributor</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hypervolume.greatest_contributor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the point contributing the most to the total hypervolume.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -309,8 +310,8 @@ for <code class="xref py py-func docutils literal"><span class="pre">exclusive()
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.hypervolume.least_contributor">
-<code class="descname">least_contributor</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.least_contributor" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hypervolume.least_contributor">
+<code class="descname">least_contributor</code><span class="sig-paren">(</span><em>ref_point</em>, <em>hv_algo = auto</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hypervolume.least_contributor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the point contributing the least to the total hypervolume.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -331,11 +332,11 @@ for <code class="xref py py-func docutils literal"><span class="pre">exclusive()
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.hypervolume.refpoint">
-<code class="descname">refpoint</code><span class="sig-paren">(</span><em>offset = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hypervolume.refpoint" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hypervolume.refpoint">
+<code class="descname">refpoint</code><span class="sig-paren">(</span><em>offset = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hypervolume.refpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
 The result is a point that is necessarily dominated by all other points, and thus can be used for hypervolume computations.</p>
-<p><strong>NOTE</strong> This point is different from the one computed by <a class="reference internal" href="py_mo_utils.html#pygmo.core.nadir" title="pygmo.core.nadir"><code class="xref py py-func docutils literal"><span class="pre">nadir()</span></code></a> as only the non dominated front is considered
+<p><strong>NOTE</strong> This point is different from the one computed by <a class="reference internal" href="py_mo_utils.html#pygmo.nadir" title="pygmo.nadir"><code class="xref py py-func docutils literal"><span class="pre">nadir()</span></code></a> as only the non dominated front is considered
 in that method (also its complexity is thus higher)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -356,17 +357,17 @@ in that method (also its complexity is thus higher)</p>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.hvwfg">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">hvwfg</code><span class="sig-paren">(</span><em>stop_dimension = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.hvwfg" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hvwfg">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">hvwfg</code><span class="sig-paren">(</span><em>stop_dimension = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hvwfg" title="Permalink to this definition">¶</a></dt>
 <dd><p>The hypervolume algorithm from the Walking Fish Group (2011 version).</p>
 <p>This object can be passed as parameter to the various methods of the
-class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <a class="reference internal" href="#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
 class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>stop_dimension</strong> (<code class="docutils literal"><span class="pre">`int`</span></code>) &#8211; the input population</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>stop_dimension</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the input population</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>stop_dimension</em> is negative or greater than an implementation-defined value</td>
 </tr>
@@ -382,11 +383,11 @@ class <code class="xref py py-class docutils literal"><span class="pre">_hv_algo
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.hv2d">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">hv2d</code><a class="headerlink" href="#pygmo.core.hv2d" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hv2d">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">hv2d</code><a class="headerlink" href="#pygmo.hv2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exact hypervolume algorithm for two dimensional points.</p>
 <p>This object can be passed as parameter to the various methods of the
-class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <a class="reference internal" href="#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
 class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -398,11 +399,11 @@ class <code class="xref py py-class docutils literal"><span class="pre">_hv_algo
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.hv3d">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">hv3d</code><a class="headerlink" href="#pygmo.core.hv3d" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.hv3d">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">hv3d</code><a class="headerlink" href="#pygmo.hv3d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exact hypervolume algorithm for three dimensional points.</p>
 <p>This object can be passed as parameter to the various methods of the
-class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <a class="reference internal" href="#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
 class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -414,12 +415,12 @@ class <code class="xref py py-class docutils literal"><span class="pre">_hv_algo
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.bf_fpras">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">bf_fpras</code><span class="sig-paren">(</span><em>eps = 1e-2</em>, <em>delta = 1e-2</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.bf_fpras" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.bf_fpras">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">bf_fpras</code><span class="sig-paren">(</span><em>eps = 1e-2</em>, <em>delta = 1e-2</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bf_fpras" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedrich approximation scheme (FPRAS),
 reduced to the special case of approximating the hypervolume indicator.</p>
 <p>This object can be passed as parameter to the various methods of the
-class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <a class="reference internal" href="#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
 class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -431,12 +432,12 @@ class <code class="xref py py-class docutils literal"><span class="pre">_hv_algo
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="pygmo.core.bf_approx">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">bf_approx</code><a class="headerlink" href="#pygmo.core.bf_approx" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.bf_approx">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">bf_approx</code><a class="headerlink" href="#pygmo.bf_approx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bringmann-Friedrich approximation method. Implementation of the Bringmann-Friedrich approximation scheme (FPRAS),
 reduced to the special case of approximating the least contributor.</p>
 <p>This object can be passed as parameter to the various methods of the
-class <a class="reference internal" href="#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
+class <a class="reference internal" href="#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
 class <code class="xref py py-class docutils literal"><span class="pre">_hv_algorithm</span></code></p>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>

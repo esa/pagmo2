@@ -1,5 +1,5 @@
 Island class
 ============
 
-.. autoclass:: pygmo.core.island
+.. autoclass:: pygmo.island
    :members:

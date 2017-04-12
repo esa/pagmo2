@@ -32,7 +32,7 @@
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Basic Multi-Objective Functionalities" href="moo.html" />
+    <link rel="next" title="A first tutorial on the use of NLopt solvers" href="nlopt_basics.html" />
     <link rel="prev" title="Evolving a population" href="evolving_a_population.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -103,6 +103,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -159,8 +160,8 @@
 <span id="py-tutorial-coding-udp-simple"></span><h1>Coding a simple User Defined Problem<a class="headerlink" href="#coding-a-simple-user-defined-problem" title="Permalink to this headline">¶</a></h1>
 <p>While pagmo provides a number of UDPs to help you test your own optimization strategy or user defined algorithm, the possibility
 to write your own UDP is at the core of pygmo&#8217;s use. In this tutorial we will show how to code a UDP. Remember that UDPs are classes that can be used
-to construct a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> which, in turn, is what an <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> can solve.</p>
-<p>We encourage the user to read the documentation of the class <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to have a detailed list of methods that can be, or have to be,
+to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> which, in turn, is what an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> can solve.</p>
+<p>We encourage the user to read the documentation of the class <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to have a detailed list of methods that can be, or have to be,
 implemented in a UDP. To start simple we consider the simple problem of minimizing the two dimensional sphere function.</p>
 <div class="math">
 \[\begin{split}\begin{array}{ll}
@@ -182,7 +183,7 @@ and passing as argument <code class="docutils literal"><span class="pre">x</span
 array arithmetic applies in the body of <code class="docutils literal"><span class="pre">fitness()</span></code>. Note also how to define a UDP we do not need to inherit from some other
 pygmo related class.  Since we do not define, in this case, any other method pygmo will assume a single objective, no constraints,
 no gradients etc...</p>
-<p>Let&#8217;s now build a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> from our new UDP.</p>
+<p>Let&#8217;s now build a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> from our new UDP.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">sphere_function</span><span class="p">())</span>
 </pre></div>
@@ -254,7 +255,7 @@ no gradients etc...</p>
 <span class="go">    Dimensions: 3</span>
 </pre></div>
 </div>
-<p>Well that was easy, but now have a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to solve ...</p>
+<p>Well that was easy, but now have a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to solve ...</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">bee_colony</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">limit</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
@@ -278,9 +279,9 @@ that it is somehow malformed are high. Let&#8217;s see some common mistakes.</p>
 <span class="go">&#39;&lt;sphere_function object at 0x1108cad68&gt;&#39; of type &#39;&lt;class &#39;sphere_function&#39;&gt;&#39;: the method is either not present or not callable</span>
 </pre></div>
 </div>
-<p>oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+<p>oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
 and, when we try, we then get a rather helpful error message.</p>
-<p>In other cases while the UDP is still malformed, the construction of <a class="reference internal" href="../py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> will succeed and the issue will
+<p>In other cases while the UDP is still malformed, the construction of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> will succeed and the issue will
 be revealed only when calling the malformed method:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>

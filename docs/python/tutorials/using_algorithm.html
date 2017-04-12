@@ -103,6 +103,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -152,19 +153,19 @@
     <div class="col-md-12 content">
       
   <div class="section" id="use-of-the-class-algorithm">
-<span id="py-tutorial-using-algorithm"></span><h1>Use of the class <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a><a class="headerlink" href="#use-of-the-class-algorithm" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> class represents a generic optimization
+<span id="py-tutorial-using-algorithm"></span><h1>Use of the class <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a><a class="headerlink" href="#use-of-the-class-algorithm" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> class represents a generic optimization
 algorithm. The user codes the details of such an algorithm in a separate class (the
-user-defined algorithm, or UDA) which is then passed to <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+user-defined algorithm, or UDA) which is then passed to <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
 that provides a single unified interface.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The User Defined Algorithms (UDAs) are optimization algorithms (coded by the user) that can
-be used to build a pygmo object of type <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></p>
+be used to build a pygmo object of type <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></p>
 </div>
 <p>Some UDAs (optimization algorithms) are already provided with pygmo and we refer to them as pygmo UDAs.</p>
-<p>For the purpose of this tutorial we are going to use a pygmo UDA called <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>
-to show the basic construction of a <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>, but the same logic would also
+<p>For the purpose of this tutorial we are going to use a pygmo UDA called <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>
+to show the basic construction of a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>, but the same logic would also
 apply to a custom UDAs, that is a UDA that is actually coded by the user.</p>
 <p>Let us start:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -188,15 +189,15 @@ apply to a custom UDAs, that is a UDA that is actually coded by the user.</p>
 </pre></div>
 </div>
 <p>In the code above, after the trivial import of the pygmo package, we define a variable algo
-by constructing a <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> from <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>, our implementation
+by constructing a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> from <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>, our implementation
 of the Covariance Matrix Adaptation Evolutionary Strategy. To construct the pygmo UDA we also pass
-some parameters (<code class="docutils literal"><span class="pre">gen</span></code> and <code class="docutils literal"><span class="pre">sigma0</span></code>) whose meaning is documented in <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>.
-In the following line we inspect the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>. We can see, at a glance, the
-name of the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> and some extra info that indicate the user (in this case us),
-has implemented, in the UDA (in this case <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.cmaes" title="pygmo.core.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>), the optional method
+some parameters (<code class="docutils literal"><span class="pre">gen</span></code> and <code class="docutils literal"><span class="pre">sigma0</span></code>) whose meaning is documented in <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>.
+In the following line we inspect the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>. We can see, at a glance, the
+name of the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> and some extra info that indicate the user (in this case us),
+has implemented, in the UDA (in this case <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>), the optional method
 <code class="docutils literal"><span class="pre">get_extra_info()</span></code> that prints to screen some fundamental parameters defining the UDA.</p>
 <p>We may also get access to the UDA, and thus to its methods not exposed in the
-<a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> interface, at any time via the <a class="reference internal" href="../py_algorithm.html#pygmo.core.algorithm.extract" title="pygmo.core.algorithm.extract"><code class="xref py py-class docutils literal"><span class="pre">extract</span></code></a> method:</p>
+<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> interface, at any time via the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.extract" title="pygmo.algorithm.extract"><code class="xref py py-class docutils literal"><span class="pre">extract</span></code></a> method:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">cmaes</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
 <span class="go">&lt;class &#39;pygmo.core.cmaes&#39;&gt;</span>

@@ -102,6 +102,7 @@
 <li class="toctree-l1"><a class="reference internal" href="docs/python/tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -177,13 +178,13 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.ackley">ackley (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.ackley">ackley (class in pygmo)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm">algorithm (class in pygmo.core)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm">algorithm (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/py_archipelago.html#pygmo.core.archipelago">archipelago (class in pygmo.core)</a>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago">archipelago (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -193,36 +194,36 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_misc.html#pygmo.thread_safety.basic">basic (pygmo.thread_safety attribute)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.bee_colony">bee_colony (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.bee_colony">bee_colony (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.best_idx">best_idx() (pygmo.core.population method)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population.best_idx">best_idx() (pygmo.population method)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.ackley.best_known">best_known() (pygmo.core.ackley method)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.ackley.best_known">best_known() (pygmo.ackley method)</a>
 
       <ul>
-        <li><a href="docs/python/problems/py_problems.html#pygmo.core.cec2006.best_known">(pygmo.core.cec2006 method)</a>
+        <li><a href="docs/python/problems/py_problems.html#pygmo.cec2006.best_known">(pygmo.cec2006 method)</a>
 </li>
-        <li><a href="docs/python/problems/py_problems.html#pygmo.core.griewank.best_known">(pygmo.core.griewank method)</a>
+        <li><a href="docs/python/problems/py_problems.html#pygmo.griewank.best_known">(pygmo.griewank method)</a>
 </li>
-        <li><a href="docs/python/problems/py_problems.html#pygmo.core.hock_schittkowsky_71.best_known">(pygmo.core.hock_schittkowsky_71 method)</a>
+        <li><a href="docs/python/problems/py_problems.html#pygmo.hock_schittkowsky_71.best_known">(pygmo.hock_schittkowsky_71 method)</a>
 </li>
-        <li><a href="docs/python/problems/py_problems.html#pygmo.core.rastrigin.best_known">(pygmo.core.rastrigin method)</a>
+        <li><a href="docs/python/problems/py_problems.html#pygmo.rastrigin.best_known">(pygmo.rastrigin method)</a>
 </li>
-        <li><a href="docs/python/problems/py_problems.html#pygmo.core.rosenbrock.best_known">(pygmo.core.rosenbrock method)</a>
+        <li><a href="docs/python/problems/py_problems.html#pygmo.rosenbrock.best_known">(pygmo.rosenbrock method)</a>
 </li>
-        <li><a href="docs/python/problems/py_problems.html#pygmo.core.schwefel.best_known">(pygmo.core.schwefel method)</a>
+        <li><a href="docs/python/problems/py_problems.html#pygmo.schwefel.best_known">(pygmo.schwefel method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.bf_approx">bf_approx (class in pygmo.core)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.bf_approx">bf_approx (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.bf_fpras">bf_fpras (class in pygmo.core)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.bf_fpras">bf_fpras (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/py_archipelago.html#pygmo.core.archipelago.busy">busy() (pygmo.core.archipelago method)</a>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.busy">busy() (pygmo.archipelago method)</a>
 
       <ul>
-        <li><a href="docs/python/py_island.html#pygmo.core.island.busy">(pygmo.core.island method)</a>
+        <li><a href="docs/python/py_island.html#pygmo.island.busy">(pygmo.island method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -231,29 +232,31 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.c_tol">c_tol (pygmo.core.problem attribute)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.c_tol">c_tol (pygmo.problem attribute)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.cec2006">cec2006 (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.cec2006">cec2006 (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.cec2009">cec2009 (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.cec2009">cec2009 (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.cec2013">cec2013 (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.cec2013">cec2013 (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.champion_f">champion_f (pygmo.core.population attribute)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population.champion_f">champion_f (pygmo.population attribute)</a>
+</li>
+      <li><a href="docs/python/py_population.html#pygmo.population.champion_x">champion_x (pygmo.population attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.champion_x">champion_x (pygmo.core.population attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.cmaes">cmaes (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.cmaes">cmaes (class in pygmo.core)</a>
+      <li><a href="docs/python/utils/py_con_utils.html#pygmo.compare_fc">compare_fc() (in module pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.compass_search">compass_search (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.compass_search">compass_search (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hypervolume.compute">compute() (pygmo.core.hypervolume method)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.compute">compute() (pygmo.hypervolume method)</a>
 </li>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hypervolume.contributions">contributions() (pygmo.core.hypervolume method)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.contributions">contributions() (pygmo.hypervolume method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.cstrs_self_adaptive">cstrs_self_adaptive (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive">cstrs_self_adaptive (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -261,15 +264,19 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.de">de (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.de">de (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.de1220">de1220 (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.de1220">de1220 (class in pygmo)</a>
+</li>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.decompose">decompose (class in pygmo)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.decompose">decompose (class in pygmo.core)</a>
+      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.decompose_objectives">decompose_objectives() (in module pygmo)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.dtlz">dtlz (class in pygmo.core)</a>
+      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.decomposition_weights">decomposition_weights() (in module pygmo)</a>
+</li>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.dtlz">dtlz (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -277,22 +284,28 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.evolve">evolve() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/utils/py_gh_utils.html#pygmo.estimate_gradient">estimate_gradient() (in module pygmo)</a>
+</li>
+      <li><a href="docs/python/utils/py_gh_utils.html#pygmo.estimate_gradient_h">estimate_gradient_h() (in module pygmo)</a>
+</li>
+      <li><a href="docs/python/utils/py_gh_utils.html#pygmo.estimate_sparsity">estimate_sparsity() (in module pygmo)</a>
+</li>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.evolve">evolve() (pygmo.algorithm method)</a>
 
       <ul>
-        <li><a href="docs/python/py_archipelago.html#pygmo.core.archipelago.evolve">(pygmo.core.archipelago method)</a>
+        <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.evolve">(pygmo.archipelago method)</a>
 </li>
-        <li><a href="docs/python/py_island.html#pygmo.core.island.evolve">(pygmo.core.island method)</a>
+        <li><a href="docs/python/py_island.html#pygmo.island.evolve">(pygmo.island method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hypervolume.exclusive">exclusive() (pygmo.core.hypervolume method)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.exclusive">exclusive() (pygmo.hypervolume method)</a>
 </li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.extract">extract() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.extract">extract() (pygmo.algorithm method)</a>
 
       <ul>
-        <li><a href="docs/python/py_problem.html#pygmo.core.problem.extract">(pygmo.core.problem method)</a>
+        <li><a href="docs/python/py_problem.html#pygmo.problem.extract">(pygmo.problem method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -301,19 +314,19 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.core.fast_non_dominated_sorting">fast_non_dominated_sorting() (in module pygmo.core)</a>
+      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.fast_non_dominated_sorting">fast_non_dominated_sorting() (in module pygmo)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.feasibility_f">feasibility_f() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.feasibility_f">feasibility_f() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.feasibility_x">feasibility_x() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.feasibility_x">feasibility_x() (pygmo.problem method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.fitness">fitness() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.fitness">fitness() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.ftol_abs">ftol_abs (pygmo.core.nlopt attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.ftol_abs">ftol_abs (pygmo.nlopt attribute)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.ftol_rel">ftol_rel (pygmo.core.nlopt attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.ftol_rel">ftol_rel (pygmo.nlopt attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -321,74 +334,74 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_archipelago.html#pygmo.core.archipelago.get">get() (pygmo.core.archipelago method)</a>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.get">get() (pygmo.archipelago method)</a>
 
       <ul>
-        <li><a href="docs/python/py_island.html#pygmo.core.island.get">(pygmo.core.island method)</a>
+        <li><a href="docs/python/py_island.html#pygmo.island.get">(pygmo.island method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/py_island.html#pygmo.core.island.get_algorithm">get_algorithm() (pygmo.core.island method)</a>
+      <li><a href="docs/python/py_island.html#pygmo.island.get_algorithm">get_algorithm() (pygmo.island method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_bounds">get_bounds() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_bounds">get_bounds() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.get_extra_info">get_extra_info() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.get_extra_info">get_extra_info() (pygmo.algorithm method)</a>
 
       <ul>
-        <li><a href="docs/python/py_island.html#pygmo.core.island.get_extra_info">(pygmo.core.island method)</a>
+        <li><a href="docs/python/py_island.html#pygmo.island.get_extra_info">(pygmo.island method)</a>
 </li>
-        <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_extra_info">(pygmo.core.problem method)</a>
+        <li><a href="docs/python/py_problem.html#pygmo.problem.get_extra_info">(pygmo.problem method)</a>
 </li>
         <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.ipyparallel_island.get_extra_info">(pygmo.py_islands.ipyparallel_island method)</a>
 </li>
         <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.mp_island.get_extra_info">(pygmo.py_islands.mp_island method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.get_f">get_f() (pygmo.core.population method)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population.get_f">get_f() (pygmo.population method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_fevals">get_fevals() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_fevals">get_fevals() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_gevals">get_gevals() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_gevals">get_gevals() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_hevals">get_hevals() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_hevals">get_hevals() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.get_ID">get_ID() (pygmo.core.population method)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population.get_ID">get_ID() (pygmo.population method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.get_last_opt_result">get_last_opt_result() (pygmo.core.nlopt method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.get_last_opt_result">get_last_opt_result() (pygmo.nlopt method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.bee_colony.get_log">get_log() (pygmo.core.bee_colony method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.bee_colony.get_log">get_log() (pygmo.bee_colony method)</a>
 
       <ul>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.cmaes.get_log">(pygmo.core.cmaes method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.cmaes.get_log">(pygmo.cmaes method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.compass_search.get_log">(pygmo.core.compass_search method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.compass_search.get_log">(pygmo.compass_search method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.cstrs_self_adaptive.get_log">(pygmo.core.cstrs_self_adaptive method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive.get_log">(pygmo.cstrs_self_adaptive method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.de.get_log">(pygmo.core.de method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.de.get_log">(pygmo.de method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.de1220.get_log">(pygmo.core.de1220 method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.de1220.get_log">(pygmo.de1220 method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh.get_log">(pygmo.core.mbh method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.get_log">(pygmo.mbh method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.moead.get_log">(pygmo.core.moead method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.moead.get_log">(pygmo.moead method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.get_log">(pygmo.core.nlopt method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.get_log">(pygmo.nlopt method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nsga2.get_log">(pygmo.core.nsga2 method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nsga2.get_log">(pygmo.nsga2 method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.pso.get_log">(pygmo.core.pso method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.pso.get_log">(pygmo.pso method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.sade.get_log">(pygmo.core.sade method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.sade.get_log">(pygmo.sade method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.simulated_annealing.get_log">(pygmo.core.simulated_annealing method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.simulated_annealing.get_log">(pygmo.simulated_annealing method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.get_name">get_name() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.get_name">get_name() (pygmo.algorithm method)</a>
 
       <ul>
-        <li><a href="docs/python/py_island.html#pygmo.core.island.get_name">(pygmo.core.island method)</a>
+        <li><a href="docs/python/py_island.html#pygmo.island.get_name">(pygmo.island method)</a>
 </li>
-        <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_name">(pygmo.core.problem method)</a>
+        <li><a href="docs/python/py_problem.html#pygmo.problem.get_name">(pygmo.problem method)</a>
 </li>
         <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.ipyparallel_island.get_name">(pygmo.py_islands.ipyparallel_island method)</a>
 </li>
@@ -397,71 +410,71 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_nc">get_nc() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_nc">get_nc() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_nec">get_nec() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_nec">get_nec() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_nf">get_nf() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_nf">get_nf() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_nic">get_nic() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_nic">get_nic() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_nobj">get_nobj() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_nobj">get_nobj() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_nx">get_nx() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_nx">get_nx() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh.get_perturb">get_perturb() (pygmo.core.mbh method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.get_perturb">get_perturb() (pygmo.mbh method)</a>
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.mp_island.get_pool_size">get_pool_size() (pygmo.py_islands.mp_island static method)</a>
 </li>
-      <li><a href="docs/python/py_island.html#pygmo.core.island.get_population">get_population() (pygmo.core.island method)</a>
+      <li><a href="docs/python/py_island.html#pygmo.island.get_population">get_population() (pygmo.island method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.bee_colony.get_seed">get_seed() (pygmo.core.bee_colony method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.bee_colony.get_seed">get_seed() (pygmo.bee_colony method)</a>
 
       <ul>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.cmaes.get_seed">(pygmo.core.cmaes method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.cmaes.get_seed">(pygmo.cmaes method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.de.get_seed">(pygmo.core.de method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.de.get_seed">(pygmo.de method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.de1220.get_seed">(pygmo.core.de1220 method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.de1220.get_seed">(pygmo.de1220 method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh.get_seed">(pygmo.core.mbh method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.get_seed">(pygmo.mbh method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.moead.get_seed">(pygmo.core.moead method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.moead.get_seed">(pygmo.moead method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nsga2.get_seed">(pygmo.core.nsga2 method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nsga2.get_seed">(pygmo.nsga2 method)</a>
 </li>
-        <li><a href="docs/python/py_population.html#pygmo.core.population.get_seed">(pygmo.core.population method)</a>
+        <li><a href="docs/python/py_population.html#pygmo.population.get_seed">(pygmo.population method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.pso.get_seed">(pygmo.core.pso method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.pso.get_seed">(pygmo.pso method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.sade.get_seed">(pygmo.core.sade method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.sade.get_seed">(pygmo.sade method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.sea.get_seed">(pygmo.core.sea method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.sea.get_seed">(pygmo.sea method)</a>
 </li>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.simulated_annealing.get_seed">(pygmo.core.simulated_annealing method)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.simulated_annealing.get_seed">(pygmo.simulated_annealing method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.get_solver_name">get_solver_name() (pygmo.core.nlopt method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.get_solver_name">get_solver_name() (pygmo.nlopt method)</a>
 </li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.get_thread_safety">get_thread_safety() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.get_thread_safety">get_thread_safety() (pygmo.algorithm method)</a>
 
       <ul>
-        <li><a href="docs/python/py_island.html#pygmo.core.island.get_thread_safety">(pygmo.core.island method)</a>
+        <li><a href="docs/python/py_island.html#pygmo.island.get_thread_safety">(pygmo.island method)</a>
 </li>
-        <li><a href="docs/python/py_problem.html#pygmo.core.problem.get_thread_safety">(pygmo.core.problem method)</a>
+        <li><a href="docs/python/py_problem.html#pygmo.problem.get_thread_safety">(pygmo.problem method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh.get_verbosity">get_verbosity() (pygmo.core.mbh method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.get_verbosity">get_verbosity() (pygmo.mbh method)</a>
 </li>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.get_x">get_x() (pygmo.core.population method)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population.get_x">get_x() (pygmo.population method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.gradient">gradient() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.gradient">gradient() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.gradient_sparsity">gradient_sparsity() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.gradient_sparsity">gradient_sparsity() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hypervolume.greatest_contributor">greatest_contributor() (pygmo.core.hypervolume method)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.greatest_contributor">greatest_contributor() (pygmo.hypervolume method)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.griewank">griewank (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.griewank">griewank (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -469,37 +482,37 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.has_gradient">has_gradient() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.has_gradient">has_gradient() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.has_gradient_sparsity">has_gradient_sparsity() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.has_gradient_sparsity">has_gradient_sparsity() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.has_hessians">has_hessians() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.has_hessians">has_hessians() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.has_hessians_sparsity">has_hessians_sparsity() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.has_hessians_sparsity">has_hessians_sparsity() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.has_set_seed">has_set_seed() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.has_set_seed">has_set_seed() (pygmo.algorithm method)</a>
 
       <ul>
-        <li><a href="docs/python/py_problem.html#pygmo.core.problem.has_set_seed">(pygmo.core.problem method)</a>
+        <li><a href="docs/python/py_problem.html#pygmo.problem.has_set_seed">(pygmo.problem method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.has_set_verbosity">has_set_verbosity() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.has_set_verbosity">has_set_verbosity() (pygmo.algorithm method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.hessians">hessians() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.hessians">hessians() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem.hessians_sparsity">hessians_sparsity() (pygmo.core.problem method)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.hessians_sparsity">hessians_sparsity() (pygmo.problem method)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.hock_schittkowsky_71">hock_schittkowsky_71 (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.hock_schittkowsky_71">hock_schittkowsky_71 (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hv2d">hv2d (class in pygmo.core)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hv2d">hv2d (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hv3d">hv3d (class in pygmo.core)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hv3d">hv3d (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hvwfg">hvwfg (class in pygmo.core)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hvwfg">hvwfg (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hypervolume">hypervolume (class in pygmo.core)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume">hypervolume (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -507,43 +520,43 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.core.ideal">ideal() (in module pygmo.core)</a>
+      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.ideal">ideal() (in module pygmo)</a>
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.mp_island.init_pool">init_pool() (pygmo.py_islands.mp_island static method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.cstrs_self_adaptive.inner_algorithm">inner_algorithm (pygmo.core.cstrs_self_adaptive attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive.inner_algorithm">inner_algorithm (pygmo.cstrs_self_adaptive attribute)</a>
 
       <ul>
-        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh.inner_algorithm">(pygmo.core.mbh attribute)</a>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.inner_algorithm">(pygmo.mbh attribute)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.decompose.inner_problem">inner_problem (pygmo.core.decompose attribute)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.decompose.inner_problem">inner_problem (pygmo.decompose attribute)</a>
 
       <ul>
-        <li><a href="docs/python/problems/py_problems.html#pygmo.core.translate.inner_problem">(pygmo.core.translate attribute)</a>
+        <li><a href="docs/python/problems/py_problems.html#pygmo.translate.inner_problem">(pygmo.translate attribute)</a>
 </li>
-        <li><a href="docs/python/problems/py_problems.html#pygmo.core.unconstrain.inner_problem">(pygmo.core.unconstrain attribute)</a>
+        <li><a href="docs/python/problems/py_problems.html#pygmo.unconstrain.inner_problem">(pygmo.unconstrain attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.inventory">inventory (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.inventory">inventory (class in pygmo)</a>
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.ipyparallel_island">ipyparallel_island (class in pygmo.py_islands)</a>
 </li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.is_">is_() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.is_">is_() (pygmo.algorithm method)</a>
 
       <ul>
-        <li><a href="docs/python/py_problem.html#pygmo.core.problem.is_">(pygmo.core.problem method)</a>
+        <li><a href="docs/python/py_problem.html#pygmo.problem.is_">(pygmo.problem method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.is_stochastic">is_stochastic() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.is_stochastic">is_stochastic() (pygmo.algorithm method)</a>
 
       <ul>
-        <li><a href="docs/python/py_problem.html#pygmo.core.problem.is_stochastic">(pygmo.core.problem method)</a>
+        <li><a href="docs/python/py_problem.html#pygmo.problem.is_stochastic">(pygmo.problem method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/py_island.html#pygmo.core.island">island (class in pygmo.core)</a>
+      <li><a href="docs/python/py_island.html#pygmo.island">island (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -551,11 +564,11 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hypervolume.least_contributor">least_contributor() (pygmo.core.hypervolume method)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.least_contributor">least_contributor() (pygmo.hypervolume method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.luksan_vlcek1">luksan_vlcek1 (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.luksan_vlcek1">luksan_vlcek1 (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -563,15 +576,15 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.maxeval">maxeval (pygmo.core.nlopt attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.maxeval">maxeval (pygmo.nlopt attribute)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.maxtime">maxtime (pygmo.core.nlopt attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.maxtime">maxtime (pygmo.nlopt attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh">mbh (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh">mbh (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.moead">moead (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.moead">moead (class in pygmo)</a>
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.mp_island">mp_island (class in pygmo.py_islands)</a>
 </li>
@@ -581,19 +594,21 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.core.nadir">nadir() (in module pygmo.core)</a>
+      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.nadir">nadir() (in module pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt">nlopt (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt">nlopt (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/py_misc.html#pygmo.thread_safety.none">none (pygmo.thread_safety attribute)</a>
+      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.non_dominated_front_2d">non_dominated_front_2d() (in module pygmo)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nsga2">nsga2 (class in pygmo.core)</a>
+      <li><a href="docs/python/py_misc.html#pygmo.thread_safety.none">none (pygmo.thread_safety attribute)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.null_algorithm">null_algorithm (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nsga2">nsga2 (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.null_problem">null_problem (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.null_algorithm">null_algorithm (class in pygmo)</a>
+</li>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.null_problem">null_problem (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -605,7 +620,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.decompose.original_fitness">original_fitness() (pygmo.core.decompose method)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.decompose.original_fitness">original_fitness() (pygmo.decompose method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -613,10 +628,10 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.dtlz.p_distance">p_distance() (pygmo.core.dtlz method)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.dtlz.p_distance">p_distance() (pygmo.dtlz method)</a>
 
       <ul>
-        <li><a href="docs/python/problems/py_problems.html#pygmo.core.zdt.p_distance">(pygmo.core.zdt method)</a>
+        <li><a href="docs/python/problems/py_problems.html#pygmo.zdt.p_distance">(pygmo.zdt method)</a>
 </li>
       </ul></li>
       <li><a href="docs/cpp/problems/ackley.html#_CPPv2N5pagmo6ackleyE">pagmo::ackley (C++ class)</a>
@@ -1825,24 +1840,26 @@
 </li>
       <li><a href="docs/cpp/problems/zdt.html#_CPPv2N5pagmo3zdt3zdtEjj">pagmo::zdt::zdt (C++ function)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.dtlz.plot">plot() (pygmo.core.dtlz method)</a>
+      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.pareto_dominance">pareto_dominance() (in module pygmo)</a>
+</li>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.dtlz.plot">plot() (pygmo.dtlz method)</a>
 </li>
       <li><a href="docs/python/utils/py_plotting.html#pygmo.plotting.plot_non_dominated_fronts">plot_non_dominated_fronts() (in module pygmo.plotting)</a>
 </li>
-      <li><a href="docs/python/py_population.html#pygmo.core.population">population (class in pygmo.core)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population">population (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/py_problem.html#pygmo.core.problem">problem (class in pygmo.core)</a>
+      <li><a href="docs/python/py_problem.html#pygmo.problem">problem (class in pygmo)</a>
 
       <ul>
-        <li><a href="docs/python/py_population.html#pygmo.core.population.problem">(pygmo.core.population attribute)</a>
+        <li><a href="docs/python/py_population.html#pygmo.population.problem">(pygmo.population attribute)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.pso">pso (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.pso">pso (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/py_archipelago.html#pygmo.core.archipelago.push_back">push_back() (pygmo.core.archipelago method)</a>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.push_back">push_back() (pygmo.archipelago method)</a>
 
       <ul>
-        <li><a href="docs/python/py_population.html#pygmo.core.population.push_back">(pygmo.core.population method)</a>
+        <li><a href="docs/python/py_population.html#pygmo.population.push_back">(pygmo.population method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1851,19 +1868,19 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.random_decision_vector">random_decision_vector() (pygmo.core.population method)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population.random_decision_vector">random_decision_vector() (pygmo.population method)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.rastrigin">rastrigin (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.rastrigin">rastrigin (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.core.hypervolume.refpoint">refpoint() (pygmo.core.hypervolume method)</a>
+      <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.refpoint">refpoint() (pygmo.hypervolume method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.replacement">replacement (pygmo.core.nlopt attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.replacement">replacement (pygmo.nlopt attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.mp_island.resize_pool">resize_pool() (pygmo.py_islands.mp_island static method)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.rosenbrock">rosenbrock (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.rosenbrock">rosenbrock (class in pygmo)</a>
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.ipyparallel_island.run_evolve">run_evolve() (pygmo.py_islands.ipyparallel_island method)</a>
 
@@ -1877,39 +1894,47 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.sade">sade (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.sade">sade (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.schwefel">schwefel (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.schwefel">schwefel (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.sea">sea (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.sea">sea (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.selection">selection (pygmo.core.nlopt attribute)</a>
+      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.select_best_N_mo">select_best_N_mo() (in module pygmo)</a>
 </li>
-      <li><a href="docs/python/py_island.html#pygmo.core.island.set_algorithm">set_algorithm() (pygmo.core.island method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.selection">selection (pygmo.nlopt attribute)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.mbh.set_perturb">set_perturb() (pygmo.core.mbh method)</a>
+      <li><a href="docs/python/py_island.html#pygmo.island.set_algorithm">set_algorithm() (pygmo.island method)</a>
 </li>
-      <li><a href="docs/python/py_island.html#pygmo.core.island.set_population">set_population() (pygmo.core.island method)</a>
+      <li><a href="docs/python/py_misc.html#pygmo.set_global_rng_seed">set_global_rng_seed() (in module pygmo)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.set_perturb">set_perturb() (pygmo.mbh method)</a>
+</li>
+      <li><a href="docs/python/py_island.html#pygmo.island.set_population">set_population() (pygmo.island method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.set_random_sr_seed">set_random_sr_seed() (pygmo.core.nlopt method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.set_random_sr_seed">set_random_sr_seed() (pygmo.nlopt method)</a>
 </li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.set_seed">set_seed() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.set_seed">set_seed() (pygmo.algorithm method)</a>
 
       <ul>
-        <li><a href="docs/python/py_problem.html#pygmo.core.problem.set_seed">(pygmo.core.problem method)</a>
+        <li><a href="docs/python/py_problem.html#pygmo.problem.set_seed">(pygmo.problem method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/python/py_algorithm.html#pygmo.core.algorithm.set_verbosity">set_verbosity() (pygmo.core.algorithm method)</a>
+      <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.set_verbosity">set_verbosity() (pygmo.algorithm method)</a>
 </li>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.set_x">set_x() (pygmo.core.population method)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population.set_x">set_x() (pygmo.population method)</a>
 </li>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.set_xf">set_xf() (pygmo.core.population method)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population.set_xf">set_xf() (pygmo.population method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.simulated_annealing">simulated_annealing (class in pygmo.core)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.simulated_annealing">simulated_annealing (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.stopval">stopval (pygmo.core.nlopt attribute)</a>
+      <li><a href="docs/python/utils/py_con_utils.html#pygmo.sort_population_con">sort_population_con() (in module pygmo)</a>
+</li>
+      <li><a href="docs/python/utils/py_mo_utils.html#pygmo.sort_population_mo">sort_population_mo() (in module pygmo)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.stopval">stopval (pygmo.nlopt attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1917,15 +1942,15 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/islands/py_islands.html#pygmo.core.thread_island">thread_island (class in pygmo.core)</a>
+      <li><a href="docs/python/islands/py_islands.html#pygmo.thread_island">thread_island (class in pygmo)</a>
 </li>
       <li><a href="docs/python/py_misc.html#pygmo.thread_safety">thread_safety (class in pygmo)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.translate">translate (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.translate">translate (class in pygmo)</a>
 </li>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.translate.translation">translation (pygmo.core.translate attribute)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.translate.translation">translation (pygmo.translate attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1933,7 +1958,7 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.unconstrain">unconstrain (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.unconstrain">unconstrain (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1941,15 +1966,15 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_archipelago.html#pygmo.core.archipelago.wait">wait() (pygmo.core.archipelago method)</a>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.wait">wait() (pygmo.archipelago method)</a>
 
       <ul>
-        <li><a href="docs/python/py_island.html#pygmo.core.island.wait">(pygmo.core.island method)</a>
+        <li><a href="docs/python/py_island.html#pygmo.island.wait">(pygmo.island method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_population.html#pygmo.core.population.worst_idx">worst_idx() (pygmo.core.population method)</a>
+      <li><a href="docs/python/py_population.html#pygmo.population.worst_idx">worst_idx() (pygmo.population method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1957,11 +1982,11 @@
 <h2 id="X">X</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.xtol_abs">xtol_abs (pygmo.core.nlopt attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.xtol_abs">xtol_abs (pygmo.nlopt attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.core.nlopt.xtol_rel">xtol_rel (pygmo.core.nlopt attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.xtol_rel">xtol_rel (pygmo.nlopt attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1969,11 +1994,11 @@
 <h2 id="Z">Z</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.decompose.z">z (pygmo.core.decompose attribute)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.decompose.z">z (pygmo.decompose attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.core.zdt">zdt (class in pygmo.core)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.zdt">zdt (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>

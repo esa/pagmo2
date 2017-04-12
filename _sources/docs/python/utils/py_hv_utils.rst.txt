@@ -3,30 +3,30 @@
 Hypervolume utilities
 ======================================
 
-.. autoclass:: pygmo.core.hypervolume
+.. autoclass:: pygmo.hypervolume
    :members:
 
 --------------------------------------
 
-.. autoclass:: pygmo.core.hvwfg
+.. autoclass:: pygmo.hvwfg
    :members:
 
 --------------------------------------
 
-.. autoclass:: pygmo.core.hv2d
+.. autoclass:: pygmo.hv2d
    :members:
 
 --------------------------------------
 
-.. autoclass:: pygmo.core.hv3d
+.. autoclass:: pygmo.hv3d
    :members:
 
 --------------------------------------
 
-.. autoclass:: pygmo.core.bf_fpras
+.. autoclass:: pygmo.bf_fpras
    :members:
 
 --------------------------------------
 
-.. autoclass:: pygmo.core.bf_approx
+.. autoclass:: pygmo.bf_approx
    :members:

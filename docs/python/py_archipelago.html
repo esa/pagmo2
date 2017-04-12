@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -154,15 +155,15 @@
   <div class="section" id="archipelago-class">
 <h1>Archipelago class<a class="headerlink" href="#archipelago-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="pygmo.core.archipelago">
-<em class="property">class </em><code class="descclassname">pygmo.core.</code><code class="descname">archipelago</code><span class="sig-paren">(</span><em>n=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.archipelago" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.archipelago">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">archipelago</code><span class="sig-paren">(</span><em>n=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago" title="Permalink to this definition">¶</a></dt>
 <dd><p>Archipelago.</p>
-<p>An archipelago is a collection of <a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> objects which provides a convenient way to perform
+<p>An archipelago is a collection of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> objects which provides a convenient way to perform
 multiple optimisations in parallel.</p>
 <p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/archipelago.html#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::archipelago</span></code></a>.</p>
 <p>The constructor will initialise an archipelago with <em>n</em> islands built from <em>kwargs</em>.
 The keyword arguments accept the same format as explained in the constructor of
-<a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, with the following differences:</p>
+<a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, with the following differences:</p>
 <ul class="simple">
 <li><em>size</em> is replaced by <em>pop_size</em>, for clarity,</li>
 <li>the <em>seed</em> argument, if present, is used to initialise a random number generator
@@ -181,10 +182,10 @@ of the populations will be random and non-deterministic.</li>
 <tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
 <li><strong>udi</strong> &#8211; a user-defined island (either Python or C++ - note that <em>udi</em> will be deep-copied
-and stored inside the <a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> instances)</li>
-<li><strong>algo</strong> &#8211; a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.core.algorithm" title="pygmo.core.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></li>
-<li><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; a population</li>
-<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.core.problem" title="pygmo.core.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></li>
+and stored inside the <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> instances)</li>
+<li><strong>algo</strong> &#8211; a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></li>
+<li><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; a population</li>
+<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></li>
 <li><strong>pop_size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the number of individuals for each island</li>
 <li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the random seed</li>
 </ul>
@@ -193,7 +194,7 @@ and stored inside the <a class="reference internal" href="py_island.html#pygmo.c
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>n</em> is not an integral type</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>n</em> is negative</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
 or by the underlying C++ constructor</li>
 </ul>
 </td>
@@ -251,8 +252,8 @@ or by the underlying C++ constructor</li>
 </pre></div>
 </div>
 <dl class="method">
-<dt id="pygmo.core.archipelago.busy">
-<code class="descname">busy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.archipelago.busy" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.archipelago.busy">
+<code class="descname">busy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.busy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check archipelago status.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -267,31 +268,31 @@ or by the underlying C++ constructor</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.archipelago.evolve">
-<code class="descname">evolve</code><span class="sig-paren">(</span><em>n = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.archipelago.evolve" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.archipelago.evolve">
+<code class="descname">evolve</code><span class="sig-paren">(</span><em>n = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve archipelago.</p>
-<p>This method will call <a class="reference internal" href="py_island.html#pygmo.core.island.evolve" title="pygmo.core.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.island.evolve()</span></code></a> on all the islands of the archipelago.
+<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a> on all the islands of the archipelago.
 The input parameter <em>n</em> represent the number of times the <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the island&#8217;s
 UDI is called within the evolution task.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the parameter that will be passed to <a class="reference internal" href="py_island.html#pygmo.core.island.evolve" title="pygmo.core.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.island.evolve()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the parameter that will be passed to <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_island.html#pygmo.core.island.evolve" title="pygmo.core.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.island.evolve()</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.archipelago.get">
-<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.archipelago.get" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.archipelago.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Block until all evolutions have finished and raise the first exception that was encountered.</p>
-<p>This method will call <a class="reference internal" href="py_island.html#pygmo.core.island.get" title="pygmo.core.island.get"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.island.get()</span></code></a> on all the islands of the archipelago.
-If an invocation of <a class="reference internal" href="py_island.html#pygmo.core.island.get" title="pygmo.core.island.get"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.island.get()</span></code></a> raises an exception, then on the remaining
-islands <a class="reference internal" href="py_island.html#pygmo.core.island.wait" title="pygmo.core.island.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.island.wait()</span></code></a> will be called instead, and the raised exception will be re-raised
+<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.get" title="pygmo.island.get"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.get()</span></code></a> on all the islands of the archipelago.
+If an invocation of <a class="reference internal" href="py_island.html#pygmo.island.get" title="pygmo.island.get"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.get()</span></code></a> raises an exception, then on the remaining
+islands <a class="reference internal" href="py_island.html#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait()</span></code></a> will be called instead, and the raised exception will be re-raised
 by this method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -305,19 +306,19 @@ islands</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.archipelago.push_back">
-<code class="descname">push_back</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.archipelago.push_back" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.archipelago.push_back">
+<code class="descname">push_back</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.push_back" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add island.</p>
 <p>This method will construct an island from the supplied arguments and add it to the archipelago.
 Islands are added at the end of the archipelago (that is, the new island will have an index
 equal to the size of the archipelago before the call to this method).</p>
 <p>The keyword arguments accept the same format as explained in the constructor of
-<a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>.</p>
+<a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.core.island" title="pygmo.core.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> or by
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> or by
 the underlying C++ method</td>
 </tr>
 </tbody>
@@ -325,10 +326,10 @@ the underlying C++ method</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.core.archipelago.wait">
-<code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.core.archipelago.wait" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.archipelago.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Block until all evolutions have finished.</p>
-<p>This method will call <a class="reference internal" href="py_island.html#pygmo.core.island.wait" title="pygmo.core.island.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.core.island.wait()</span></code></a> on all the islands of the archipelago.</p>
+<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait()</span></code></a> on all the islands of the archipelago.</p>
 </dd></dl>
 
 </dd></dl>

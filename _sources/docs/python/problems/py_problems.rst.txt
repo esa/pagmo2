@@ -6,85 +6,85 @@ List of problems available in pygmo
 Problems exposed from C++
 -------------------------
 
-.. autoclass:: pygmo.core.null_problem
+.. autoclass:: pygmo.null_problem
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.cec2013
+.. autoclass:: pygmo.cec2013
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.cec2006
+.. autoclass:: pygmo.cec2006
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.cec2009
+.. autoclass:: pygmo.cec2009
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.rosenbrock
+.. autoclass:: pygmo.rosenbrock
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.rastrigin
+.. autoclass:: pygmo.rastrigin
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.schwefel
+.. autoclass:: pygmo.schwefel
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.ackley
+.. autoclass:: pygmo.ackley
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.griewank
+.. autoclass:: pygmo.griewank
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.zdt
+.. autoclass:: pygmo.zdt
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.dtlz
+.. autoclass:: pygmo.dtlz
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.inventory
+.. autoclass:: pygmo.inventory
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.hock_schittkowsky_71
+.. autoclass:: pygmo.hock_schittkowsky_71
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.luksan_vlcek1
+.. autoclass:: pygmo.luksan_vlcek1
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.translate
+.. autoclass:: pygmo.translate
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.decompose
+.. autoclass:: pygmo.decompose
    :members:
 
 -------------------------------------------------------------
 
-.. autoclass:: pygmo.core.unconstrain
+.. autoclass:: pygmo.unconstrain
    :members:

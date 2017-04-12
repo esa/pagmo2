@@ -103,6 +103,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -184,11 +185,11 @@ algorithm, whereas</p>
 <p>would use (by default) the hv3d algorithm, since it is expected by pygmo to be faster for three dimensions. The following
 algorithms are available in pygmo:</p>
 <ol class="arabic simple">
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv2d" title="pygmo.core.hv2d"><code class="xref py py-class docutils literal"><span class="pre">hv2d</span></code></a></li>
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv3d" title="pygmo.core.hv3d"><code class="xref py py-class docutils literal"><span class="pre">hv3d</span></code></a></li>
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hvwfg" title="pygmo.core.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">hvwfg</span></code></a></li>
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.bf_fpras" title="pygmo.core.bf_fpras"><code class="xref py py-class docutils literal"><span class="pre">bf_fpras</span></code></a></li>
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.bf_approx" title="pygmo.core.bf_approx"><code class="xref py py-class docutils literal"><span class="pre">bf_approx</span></code></a></li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv2d" title="pygmo.hv2d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv2d</span></code></a></li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv3d" title="pygmo.hv3d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv3d</span></code></a></li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hvwfg" title="pygmo.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hvwfg</span></code></a></li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.bf_fpras" title="pygmo.bf_fpras"><code class="xref py py-class docutils literal"><span class="pre">pygmo.bf_fpras</span></code></a></li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.bf_approx" title="pygmo.bf_approx"><code class="xref py py-class docutils literal"><span class="pre">pygmo.bf_approx</span></code></a></li>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -234,9 +235,9 @@ for the default set of algorithms. Since in many cases, multiple objective probl
 it was important to have a dedicated algorithm for each of these scenarios. At the moment, there are
 three exact algorithms in PyGMO, two of which are dedicated for certain dimensions:</p>
 <ol class="arabic simple">
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv2d" title="pygmo.core.hv2d"><code class="xref py py-class docutils literal"><span class="pre">hv2d</span></code></a></li>
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv3d" title="pygmo.core.hv3d"><code class="xref py py-class docutils literal"><span class="pre">hv3d</span></code></a></li>
-<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hvwfg" title="pygmo.core.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">hvwfg</span></code></a></li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv2d" title="pygmo.hv2d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv2d</span></code></a></li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv3d" title="pygmo.hv3d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv3d</span></code></a></li>
+<li><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hvwfg" title="pygmo.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hvwfg</span></code></a></li>
 </ol>
 <p>Even though WFG is regarded one of the state of the art algorithms for hypervolume computation, dedicated algorithms
 for 2 and 3 dimensions perform better than general purpose ones in terms of running time as shown by the plot
@@ -247,10 +248,10 @@ reported below, where the hv3d algorithm shows to have a much lower complexity w
 <p>The default algorithm used by pygmo, if not specified otherwise, will be:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="23%" />
 <col width="25%" />
-<col width="25%" />
-<col width="26%" />
+<col width="27%" />
+<col width="27%" />
+<col width="22%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">hypervolume method</th>
@@ -261,14 +262,14 @@ reported below, where the hv3d algorithm shows to have a much lower complexity w
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">compute</span></code></td>
-<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv2d" title="pygmo.core.hv2d"><code class="xref py py-class docutils literal"><span class="pre">hv2d</span></code></a></td>
-<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv3d" title="pygmo.core.hv3d"><code class="xref py py-class docutils literal"><span class="pre">hv3d</span></code></a></td>
-<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hvwfg" title="pygmo.core.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">hvwfg</span></code></a></td>
+<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv2d" title="pygmo.hv2d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv2d</span></code></a></td>
+<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv3d" title="pygmo.hv3d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv3d</span></code></a></td>
+<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hvwfg" title="pygmo.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hvwfg</span></code></a></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">contribution-based*</span></code></td>
-<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv2d" title="pygmo.core.hv2d"><code class="xref py py-class docutils literal"><span class="pre">hv2d</span></code></a></td>
-<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv3d" title="pygmo.core.hv3d"><code class="xref py py-class docutils literal"><span class="pre">hv3d</span></code></a></td>
-<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hvwfg" title="pygmo.core.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">hvwfg</span></code></a></td>
+<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv2d" title="pygmo.hv2d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv2d</span></code></a></td>
+<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv3d" title="pygmo.hv3d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv3d</span></code></a></td>
+<td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hvwfg" title="pygmo.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hvwfg</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -292,35 +293,35 @@ reported below, where the hv3d algorithm shows to have a much lower complexity w
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv2d" title="pygmo.core.hv2d"><code class="xref py py-class docutils literal"><span class="pre">hv2d</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv2d" title="pygmo.hv2d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv2d</span></code></a></td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hv3d" title="pygmo.core.hv3d"><code class="xref py py-class docutils literal"><span class="pre">hv3d</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hv3d" title="pygmo.hv3d"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hv3d</span></code></a></td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hvwfg" title="pygmo.core.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">hvwfg</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hvwfg" title="pygmo.hvwfg"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hvwfg</span></code></a></td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.bf_fpras" title="pygmo.core.bf_fpras"><code class="xref py py-class docutils literal"><span class="pre">bf_fpras</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.bf_fpras" title="pygmo.bf_fpras"><code class="xref py py-class docutils literal"><span class="pre">pygmo.bf_fpras</span></code></a></td>
 <td>No</td>
 <td>No</td>
 <td>Yes</td>
 <td>Yes</td>
 <td>No</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.bf_approx" title="pygmo.core.bf_approx"><code class="xref py py-class docutils literal"><span class="pre">bf_approx</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../utils/py_hv_utils.html#pygmo.bf_approx" title="pygmo.bf_approx"><code class="xref py py-class docutils literal"><span class="pre">pygmo.bf_approx</span></code></a></td>
 <td>Yes</td>
 <td>No</td>
 <td>No</td>

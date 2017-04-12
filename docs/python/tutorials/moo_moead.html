@@ -103,6 +103,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -152,13 +153,13 @@
     <div class="col-md-12 content">
       
   <div class="section" id="using-pygmo-s-moead">
-<span id="py-tutorial-moo-moead"></span><h1>Using pygmo&#8217;s <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.moead" title="pygmo.core.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a><a class="headerlink" href="#using-pygmo-s-moead" title="Permalink to this headline">¶</a></h1>
-<p>In this tutorial we will see how to use the user-defined algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.moead" title="pygmo.core.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>
+<span id="py-tutorial-moo-moead"></span><h1>Using pygmo&#8217;s <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a><a class="headerlink" href="#using-pygmo-s-moead" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial we will see how to use the user-defined algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>
 provided by pygmo. In particular we will take as test cases problems from the DTLZ suite implemented
-in pygmo as the user-defined problem <a class="reference internal" href="../problems/py_problems.html#pygmo.core.dtlz" title="pygmo.core.dtlz"><code class="xref py py-class docutils literal"><span class="pre">dtlz</span></code></a>.</p>
-<p>The first, quick idea would be to instantiate the problem (say DTLZ1) and run <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.moead" title="pygmo.core.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>
+in pygmo as the user-defined problem <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz" title="pygmo.dtlz"><code class="xref py py-class docutils literal"><span class="pre">dtlz</span></code></a>.</p>
+<p>The first, quick idea would be to instantiate the problem (say DTLZ1) and run <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>
 with the default settings. We can monitor the convergence of the whole population to the Pareto front
-using the <a class="reference internal" href="../problems/py_problems.html#pygmo.core.dtlz.p_distance" title="pygmo.core.dtlz.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a> metric.</p>
+using the <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz.p_distance" title="pygmo.dtlz.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a> metric.</p>
 <a class="reference internal image-reference" href="../../../_images/mo_dtlz_moead_grid_tch.png"><img alt="dtlz1 moead grid tchebycheff" class="align-right" src="../../../_images/mo_dtlz_moead_grid_tch.png" style="width: 480.0px; height: 360.0px;" /></a>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">dtlz</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
@@ -170,20 +171,20 @@ using the <a class="reference internal" href="../problems/py_problems.html#pygmo
 <span class="go">0.0012264939631066003</span>
 </pre></div>
 </div>
-<p>Since the <a class="reference internal" href="../problems/py_problems.html#pygmo.core.dtlz.p_distance" title="pygmo.core.dtlz.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a> does not capture the information on the spread of the solutions we
-also compute the hypervolume indicator using the pygmo class <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.core.hypervolume" title="pygmo.core.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a>:</p>
+<p>Since the <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz.p_distance" title="pygmo.dtlz.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a> does not capture the information on the spread of the solutions we
+also compute the hypervolume indicator using the pygmo class <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span> <span class="o">=</span> <span class="n">hypervolume</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ref_point</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">])</span> 
 </pre></div>
 </div>
 <p>In this case, the reference point can be set manually as the dtlz1 problem is well known. We can also visualize the
-whole population as the user-defined problem <a class="reference internal" href="../problems/py_problems.html#pygmo.core.dtlz" title="pygmo.core.dtlz"><code class="xref py py-class docutils literal"><span class="pre">dtlz</span></code></a> implements a plot functionality:</p>
+whole population as the user-defined problem <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz" title="pygmo.dtlz"><code class="xref py py-class docutils literal"><span class="pre">dtlz</span></code></a> implements a plot functionality:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;DTLZ1 - MOEAD - GRID - TCHEBYCHEFF&quot;</span><span class="p">)</span> 
 </pre></div>
 </div>
-<p>We have used the default parameters of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.moead" title="pygmo.core.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a> in obtaining the results above. In
+<p>We have used the default parameters of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a> in obtaining the results above. In
 particular the <strong>weight_generation</strong> kwarg was set to <strong>grid</strong> and the <strong>decomposition</strong> kwarg was set to
 <strong>tchebycheff</strong>, as can be easily seen inspecting as follows:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span> 
@@ -205,12 +206,12 @@ particular the <strong>weight_generation</strong> kwarg was set to <strong>grid<
 </div>
 <p>The <strong>weight_generation</strong> method <strong>grid</strong> offers a uniform distribution of the decomposed weights, but is
 limiting the population size as it only allows for certaing sizes according to the number of objectives. This
-can reveal to be limiting when using <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.moead" title="pygmo.core.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a> in comparisons or in other advanced setups. In these
+can reveal to be limiting when using <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a> in comparisons or in other advanced setups. In these
 cases pygmo provides alternative methods for weight generation. In particular, the original <strong>low discrepancy</strong> method
 makes sure that any number of weights can be generated while ensuring a low discrepancy spread over the objective space.</p>
 <p>The <strong>decomposition</strong> method <strong>tchebycheff</strong> can also be changed as pygmo implements the boundary intersection method too
 which, when applicable, results in a better spread of the final population over the Pareto front. Repeating the optimization above
-with different instances of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.moead" title="pygmo.core.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a> results in the plots below.</p>
+with different instances of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a> results in the plots below.</p>
 <img alt="../../../_images/mo_dtlz_moead_array.png" class="align-center" src="../../../_images/mo_dtlz_moead_array.png" />
 </div>
 

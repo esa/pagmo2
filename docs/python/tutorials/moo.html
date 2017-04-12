@@ -33,7 +33,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Using pygmo’s moead" href="moo_moead.html" />
-    <link rel="prev" title="Coding a simple User Defined Problem" href="coding_udp_simple.html" />
+    <link rel="prev" title="A first tutorial on the use of NLopt solvers" href="nlopt_basics.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -103,6 +103,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -163,10 +164,10 @@ facilitate the analysis of your problem.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">udp</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">3453412</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We here make use of first problem of the ZDT benchmark suite implemented in <a class="reference internal" href="../problems/py_problems.html#pygmo.core.zdt" title="pygmo.core.zdt"><code class="xref py py-class docutils literal"><span class="pre">zdt</span></code></a>
-and we create a <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>
+<p>We here make use of first problem of the ZDT benchmark suite implemented in <a class="reference internal" href="../problems/py_problems.html#pygmo.zdt" title="pygmo.zdt"><code class="xref py py-class docutils literal"><span class="pre">zdt</span></code></a>
+and we create a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>
 containing 10 individuals randomly created within the box bounds. Which individuals belong to which non-dominated front?
-We can immediately see this by running the fast non-dominated sorting algorithm <a class="reference internal" href="../utils/py_mo_utils.html#pygmo.core.fast_non_dominated_sorting" title="pygmo.core.fast_non_dominated_sorting"><code class="xref py py-func docutils literal"><span class="pre">fast_non_dominated_sorting()</span></code></a>:</p>
+We can immediately see this by running the fast non-dominated sorting algorithm <a class="reference internal" href="../utils/py_mo_utils.html#pygmo.fast_non_dominated_sorting" title="pygmo.fast_non_dominated_sorting"><code class="xref py py-func docutils literal"><span class="pre">fast_non_dominated_sorting()</span></code></a>:</p>
 <a class="reference internal image-reference" href="../../../_images/mo_zdt1_rnd_ndf.png"><img alt="zdt1 random initial population" class="align-right" src="../../../_images/mo_zdt1_rnd_ndf.png" style="width: 480.0px; height: 360.0px;" /></a>
 <a class="reference internal image-reference" href="../../../_images/mo_zdt1_moead_ndf.png"><img alt="zdt1 evolved population" class="align-right" src="../../../_images/mo_zdt1_moead_ndf.png" style="width: 480.0px; height: 360.0px;" /></a>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ndf</span><span class="p">,</span> <span class="n">dl</span><span class="p">,</span> <span class="n">dc</span><span class="p">,</span> <span class="n">ndl</span> <span class="o">=</span> <span class="n">fast_non_dominated_sorting</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">get_f</span><span class="p">())</span> 
@@ -174,7 +175,7 @@ We can immediately see this by running the fast non-dominated sorting algorithm 
 </pre></div>
 </div>
 <p>A visualization of the different non-dominated fronts can also be easily obtained.
-For example, generating a new <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> with 100 individuals:</p>
+For example, generating a new <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> with 100 individuals:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">udp</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_non_dominated_fronts</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">get_f</span><span class="p">())</span> 
@@ -189,9 +190,9 @@ For example, generating a new <a class="reference internal" href="../py_populati
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;ZDT1: ... and the evolved population&quot;</span><span class="p">)</span>  
 </pre></div>
 </div>
-<p>we have instantiated the algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.core.moead" title="pygmo.core.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>, able to tackle
+<p>we have instantiated the algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>, able to tackle
 multi-objective problems, fixing the number of generations to 250. In the following line we use directly
-the method <code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code> of the algorithm to evolve the <a class="reference internal" href="../py_population.html#pygmo.core.population" title="pygmo.core.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a></p>
+the method <code class="xref py py-func docutils literal"><span class="pre">pygmo.moead.evolve()</span></code> of the algorithm to evolve the <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a></p>
 <p>The entire population is now on one non-dominated front as can be easily verified typing:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ndf</span><span class="p">,</span> <span class="n">dl</span><span class="p">,</span> <span class="n">dc</span><span class="p">,</span> <span class="n">ndl</span> <span class="o">=</span> <span class="n">fast_non_dominated_sorting</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">get_f</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ndf</span><span class="p">)</span> 
@@ -203,7 +204,7 @@ the method <code class="xref py py-func docutils literal"><span class="pre">evol
 <span class="go">       85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99], dtype=uint64)]</span>
 </pre></div>
 </div>
-<p>The problems in the <a class="reference internal" href="../problems/py_problems.html#pygmo.core.zdt" title="pygmo.core.zdt"><code class="xref py py-class docutils literal"><span class="pre">zdt</span></code></a> problem suite (as well as those in the <a class="reference internal" href="../problems/py_problems.html#pygmo.core.dtlz" title="pygmo.core.dtlz"><code class="xref py py-class docutils literal"><span class="pre">dtlz</span></code></a>) have a nice convergence metric
+<p>The problems in the <a class="reference internal" href="../problems/py_problems.html#pygmo.zdt" title="pygmo.zdt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.zdt</span></code></a> problem suite (as well as those in the <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz" title="pygmo.dtlz"><code class="xref py py-class docutils literal"><span class="pre">pygmo.dtlz</span></code></a>) have a nice convergence metric
 implemented called <em>p_distance</em>. We can check how well the non dominated front is covering the known Pareto-front</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span><span class="o">.</span><span class="n">p_distance</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">0.03926512747685471</span>

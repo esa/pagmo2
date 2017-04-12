@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
@@ -376,12 +377,12 @@ for multi-objective optimization: NSGA-II.&#8221; Parallel problem solving from 
 <hr class="docutils" />
 <dl class="function">
 <dt id="_CPPv2N5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringERN6detail18random_engine_typeE">
-<span id="pagmo::decomposition_weights__vector_double::size_type.vector_double::size_type.ssCR.detail::random_engine_typeR"></span><span class="target" id="pagmonamespacepagmo_1abcfdfc5f23cee7d5654777f5c1328ef7"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descclassname">pagmo::</code><code class="descname">decomposition_weights</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n_f</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n_w</em>, <em class="property">const</em> std::string &amp;<em>weight_generation</em>, detail::random_engine_type &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringERN6detail18random_engine_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::decomposition_weights__vector_double::size_type.vector_double::size_type.ssCR.detail::random_engine_typeR"></span><span class="target" id="pagmonamespacepagmo_1a0fdfd2f9b4cee07e14a89e0075a54baf"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descclassname">pagmo::</code><code class="descname">decomposition_weights</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n_f</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n_w</em>, <em class="property">const</em> std::string &amp;<em>method</em>, detail::random_engine_type &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringERN6detail18random_engine_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Decomposition weights generation. </p>
 <p>Generates a requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:<ul class="simple">
 <li>&#8220;grid&#8221; generates weights on an uniform grid. This method may only be used when the number of requested weights to be genrated is such that a uniform grid is indeed possible. In two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases</li>
-<li>&#8220;random&#8221; generates weights randomly distributing them uniformly on the simplex (a weight is such that <span class="math">\(\sum_i *\lambda_i = 1\)</span>)</li>
-<li>&#8220;low discrepancy&#8221; generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of the Pareto front. Halton sequence is used since low dimensionalities are expected in the number of objcetvices (i.e. less than 20), hence Halton sequence is deemes as appropriate.</li>
+<li>&#8220;random&#8221; generates weights randomly distributing them uniformly on the simplex (weights are such that <span class="math">\(\sum_i \lambda_i = 1\)</span>)</li>
+<li>&#8220;low discrepancy&#8221; generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of the Pareto front. Halton sequence is used since low dimensionalities are expected in the number of objectives (i.e. less than 20), hence Halton sequence is deemed as appropriate.</li>
 </ul>
 </p>
 <p><strong>NOTE</strong> All genration methods are guaranteed to generate weights on the simplex ( <span class="math">\(\sum_i \lambda_i = 1\)</span>). All weight generation methods are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.</p>
@@ -397,13 +398,13 @@ for multi-objective optimization: NSGA-II.&#8221; Parallel problem solving from 
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">n_f</span></code>: dimension of each weight vector (i.e. fitness dimension) </li>
 <li><code class="docutils literal"><span class="pre">n_w</span></code>: number of weights to be generated </li>
-<li><code class="docutils literal"><span class="pre">weight_generation</span></code>: methods to generate the weights of the decomposed problems. One of &#8220;grid&#8221;, &#8220;random&#8221;, &#8220;low discrepancy&#8221; </li>
+<li><code class="docutils literal"><span class="pre">method</span></code>: methods to generate the weights of the decomposed problems. One of &#8220;grid&#8221;, &#8220;random&#8221;, &#8220;low discrepancy&#8221; </li>
 <li><code class="docutils literal"><span class="pre">r_engine</span></code>: random engine</li>
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">if</span></code>: the population size is not compatible with the selected weight generation method </li>
+<li><code class="docutils literal"><span class="pre">if</span></code>: <code class="docutils literal"><span class="pre">nf</span></code> and <code class="docutils literal"><span class="pre">nw</span></code> are not compatible with the selected weight generation method or if <code class="docutils literal"><span class="pre">method</span></code> is not one of &#8220;grid&#8221;, &#8220;random&#8221; or &#8220;low discrepancy&#8221; </li>
 </ul>
 </dd>
 </dl>
