@@ -72,7 +72,7 @@ The lines above can be shortened and are equivalent to:
 
 .. image:: ../../images/nlopt_basic_lv1.png
    :scale: 80 %
-   :alt: sade performance
+   :alt: slsqp performance
    :align: right
 
 We now solve this problem by writing:
