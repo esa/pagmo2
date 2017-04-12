@@ -73,7 +73,7 @@ Lets check how a fitness computation increases the counter:
     True
 
 We may also get back the UDP, and thus access all the methods not exposed in the
-:class:`~pygmo.problem` interface at any time via the :class:`~pygmo.problem.extract` method:
+:class:`~pygmo.problem` interface at any time via the :func:`~pygmo.problem.extract()` method:
 
 .. doctest::
 

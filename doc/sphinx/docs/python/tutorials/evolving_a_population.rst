@@ -13,7 +13,7 @@ always have to call a method called ``evolve()`` to improve over your initial so
 i.e. your *population*.
 
 The simplest way to evolve a population is to use directly the :class:`~pygmo.algorithm`
-method :func:`~pygmo.algorithm.evolve`
+method :func:`~pygmo.algorithm.evolve()`
 
 .. doctest::
 
@@ -46,7 +46,7 @@ evolution starting from the same population, we would obtain different results. 
 want to monitor multiple runs from different initial populations and see how the final best fitness
 is achieved as the number of fitness evaluations increase. Most pygmo UDAs allow to do this
 as they maintain an internal log that can be accessed after the UDA has been
-extracted (see :class:`~pygmo.algorithm.extract`). This allows, for example to obtain
+extracted (see :func:`~pygmo.algorithm.extract()`). This allows, for example to obtain
 plots such as those on the right, where multiple trials are monitored:
 
 .. doctest::

@@ -45,17 +45,17 @@ Common Name                                             Name in PyGMO           
 ====================================================== ========================================= =============== =====================================================================
 Compass Search (CS)                                    :class:`pygmo.cs`                         S-CU            Exposed from C++
 COBYLA (from nlopt)                                    :class:`pygmo.nlopt`                      S-CU            Exposed from C++
-BOBYQA (from nlopt)                                    :class:`pygmo.nlopt`                      S-CU            Exposed from C++
-NEWUOA + bound constraints (from nlopt)                :class:`pygmo.nlopt`                      S-CU            Exposed from C++
-PRAXIS (from nlopt)                                    :class:`pygmo.nlopt`                      S-CU            Exposed from C++
-Nelder-Mead simplex (from nlopt)                       :class:`pygmo.nlopt`                      S-CU            Exposed from C++
-sbplx (from nlopt)                                     :class:`pygmo.nlopt`                      S-CU            Exposed from C++
+BOBYQA (from nlopt)                                    :class:`pygmo.nlopt`                      S-U             Exposed from C++
+NEWUOA + bound constraints (from nlopt)                :class:`pygmo.nlopt`                      S-U             Exposed from C++
+PRAXIS (from nlopt)                                    :class:`pygmo.nlopt`                      S-U             Exposed from C++
+Nelder-Mead simplex (from nlopt)                       :class:`pygmo.nlopt`                      S-U             Exposed from C++
+sbplx (from nlopt)                                     :class:`pygmo.nlopt`                      S-U             Exposed from C++
 MMA (Method of Moving Asymptotes) (from nlopt)         :class:`pygmo.nlopt`                      S-CU            Exposed from C++
 CCSA (from nlopt)                                      :class:`pygmo.nlopt`                      S-CU            Exposed from C++
 SLSQP (from nlopt)                                     :class:`pygmo.nlopt`                      S-CU            Exposed from C++
-low-storage BFGS (from nlopt)                          :class:`pygmo.nlopt`                      S-CU            Exposed from C++
-preconditioned truncated Newton (from nlopt)           :class:`pygmo.nlopt`                      S-CU            Exposed from C++
-shifted limited-memory variable-metric (from nlopt)    :class:`pygmo.nlopt`                      S-CU            Exposed from C++
+low-storage BFGS (from nlopt)                          :class:`pygmo.nlopt`                      S-U             Exposed from C++
+preconditioned truncated Newton (from nlopt)           :class:`pygmo.nlopt`                      S-U             Exposed from C++
+shifted limited-memory variable-metric (from nlopt)    :class:`pygmo.nlopt`                      S-U             Exposed from C++
 ====================================================== ========================================= =============== =====================================================================
 
 ----------------------------------------------------------------------------------------------------------------------

@@ -20,7 +20,7 @@ Let us start to define our population:
 We here make use of first problem of the ZDT benchmark suite implemented in :class:`~pygmo.zdt` 
 and we create a :class:`~pygmo.population`
 containing 10 individuals randomly created within the box bounds. Which individuals belong to which non-dominated front? 
-We can immediately see this by running the fast non-dominated sorting algorithm :func:`~pygmo.fast_non_dominated_sorting`:
+We can immediately see this by running the fast non-dominated sorting algorithm :func:`~pygmo.fast_non_dominated_sorting()`:
 
 .. image:: ../../images/mo_zdt1_rnd_ndf.png
    :scale: 60 %
@@ -59,7 +59,7 @@ where each successive pareto front is plotted in darker colour. If we now type:
 
 we have instantiated the algorithm :class:`~pygmo.moead`, able to tackle
 multi-objective problems, fixing the number of generations to 250. In the following line we use directly
-the method :func:`~pygmo.moead.evolve` of the algorithm to evolve the :class:`~pygmo.population`
+the method :func:`pygmo.moead.evolve()` of the algorithm to evolve the :class:`~pygmo.population`
 
 The entire population is now on one non-dominated front as can be easily verified typing:
 
@@ -75,7 +75,7 @@ The entire population is now on one non-dominated front as can be easily verifie
            85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99], dtype=uint64)]
 
 
-The problems in the :class:`~pygmo.zdt` problem suite (as well as those in the :class:`~pygmo.dtlz`) have a nice convergence metric
+The problems in the :class:`pygmo.zdt` problem suite (as well as those in the :class:`pygmo.dtlz`) have a nice convergence metric
 implemented called *p_distance*. We can check how well the non dominated front is covering the known Pareto-front
 
 .. doctest::

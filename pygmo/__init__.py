@@ -412,7 +412,6 @@ def _archi_init(self, n=0, **kwargs):
     """
     The constructor will initialise an archipelago with *n* islands built from *kwargs*.
     The keyword arguments accept the same format as explained in the constructor of
-
     :class:`~pygmo.island`, with the following differences:
 
     * *size* is replaced by *pop_size*, for clarity,
@@ -421,7 +420,6 @@ def _archi_init(self, n=0, **kwargs):
       words, the *seed* argument allows to generate randomly (but deterministically)
       the seeds of the populations in the archipelago. If *seed* is not provided, the seeds
       of the populations will be random and non-deterministic.
-
 
     Args:
         n (``int``): the number of islands in the archipelago

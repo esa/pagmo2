@@ -10,7 +10,7 @@ in pygmo as the user-defined problem :class:`~pygmo.dtlz`.
 
 The first, quick idea would be to instantiate the problem (say DTLZ1) and run :class:`~pygmo.moead`
 with the default settings. We can monitor the convergence of the whole population to the Pareto front
-using the :func:`~pygmo.dtlz.p_distance` metric.
+using the :func:`~pygmo.dtlz.p_distance()` metric.
 
 
 .. image:: ../../images/mo_dtlz_moead_grid_tch.png
@@ -29,7 +29,7 @@ using the :func:`~pygmo.dtlz.p_distance` metric.
     >>> print(udp.p_distance(pop)) # doctest: +SKIP
     0.0012264939631066003
 
-Since the :func:`~pygmo.dtlz.p_distance` does not capture the information on the spread of the solutions we
+Since the :func:`~pygmo.dtlz.p_distance()` does not capture the information on the spread of the solutions we
 also compute the hypervolume indicator using the pygmo class :class:`~pygmo.hypervolume`:
 
 .. doctest::

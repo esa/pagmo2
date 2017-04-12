@@ -2827,7 +2827,7 @@ std::string non_dominated_front_2d_docstring()
     return R"(non_dominated_front_2d(points)
 
 Finds the non dominated front of a set of two dimensional objectives. Complexity is :math:`\mathcal{O}(N \log N)`
-and is thus lower than the complexity of calling :func:`~pygmo.fast_non_dominated_sorting`
+and is thus lower than the complexity of calling :func:`~pygmo.fast_non_dominated_sorting()`
 
 See: Jensen, Mikkel T. "Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms."
 IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.
@@ -2917,11 +2917,11 @@ std::string select_best_N_mo_docstring()
 
 Returns (unordered) the best N individuals out of a multi-objective, unconstrained population, (intended here
 as a 2D array-like containing objective vectors). The strict ordering used is the same as that defined
-in :func:`~pygmo.sort_population_mo`
+in :func:`~pygmo.sort_population_mo()`
 
 Complexity is :math:`\mathcal{O}(M N^2)` where :math:`M` is the number of objectives and :math:`N` is the number of individuals.
 
-While the complexity is the same as that of :func:`~pygmo.sort_population_mo`, this function is to be preferred when 
+While the complexity is the same as that of :func:`~pygmo.sort_population_mo()`, this function is to be preferred when 
 possible in that it avoids to compute the crowidng distance for all individuals and only computes it for the last
 non-dominated front containing individuals included in the best N.
 
@@ -2970,7 +2970,6 @@ The resulting single objective is thus defined as:
 - Tchebycheff decomposition: :math:`f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i \vert`
 - boundary interception method (with penalty constraint): :math:`f_d(\mathbf x) = d_1 + \theta d_2`
 
-
 where :math:`d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}` ,
 :math:`d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert` , and 
 :math:`\hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}`
@@ -3008,7 +3007,7 @@ Generates the requested number of weight vectors to be used to decompose a multi
   low dimensionalities are expected in the number of objectives (i.e. less than 20), hence Halton sequence is deemed as appropriate.
 
 .. note::  
-   All genration methods are guaranteed to generate weights on the simplex (:math:`\sum_i \lambda_i = 1`). All weight generation methods are guaranteed
+   All methods are guaranteed to generate weights on the simplex (:math:`\sum_i \lambda_i = 1`). All weight generation methods are guaranteed
    to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
  
 Args:
@@ -3130,7 +3129,7 @@ std::string sort_population_con_docstring()
 Sorts a population (intended here as a 2D array-like
 containing fitness vectors) assuming a single-objective, constrained case. 
 
-The following strict ordering is used (same as the one used in :func:`pygmo.compare_fc`):
+The following strict ordering is used (same as the one used in :func:`pygmo.compare_fc()`):
 
 - :math:`f_1 \prec f_2` if :math:`f_1` is feasible and :math:`f_2` is not.
 - :math:`f_1 \prec f_2` if :math:`f_1` is they are both infeasible, but :math:`f_1`
@@ -3211,7 +3210,7 @@ Performs a numerical estimation of the sparsity pattern of same callable object 
 computing it around the input point *x* and detecting the components that are changed.
 
 The *callable* must accept an iterable as input and return an array-like object. The gradient returned will be dense
-and contain, in the lexicographic order requested by :class:`~pygmo.hypervoproblem.gradient`, :math:`\frac{df_i}{dx_j}`.
+and contain, in the lexicographic order requested by :func:`~pygmo.problem.gradient()`, :math:`\frac{df_i}{dx_j}`.
 
 The numerical approximation of each derivative is made by central difference, according to the formula:
 
@@ -3249,7 +3248,7 @@ Performs a numerical estimation of the sparsity pattern of same callable object 
 computing it around the input point *x* and detecting the components that are changed.
 
 The *callable* must accept an iterable as input and return an array-like object. The gradient returned will be dense
-and contain, in the lexicographic order requested by :class:`~pygmo.hypervoproblem.gradient`, :math:`\frac{df_i}{dx_j}`.
+and contain, in the lexicographic order requested by :func:`~pygmo.problem.gradient`, :math:`\frac{df_i}{dx_j}`.
 
 The numerical approximation of each derivative is made by central difference, according to the formula:
 
@@ -3571,7 +3570,7 @@ std::string hv_refpoint_docstring()
 Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
 The result is a point that is necessarily dominated by all other points, and thus can be used for hypervolume computations.
 
-**NOTE** This point is different from the one computed by :func:`~pygmo.nadir` as only the non dominated front is considered
+**NOTE** This point is different from the one computed by :func:`~pygmo.nadir()` as only the non dominated front is considered
 in that method (also its complexity is thus higher)
 
 Args:
