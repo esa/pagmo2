@@ -158,7 +158,7 @@ inline std::string nlopt_res2string(::nlopt_result err)
 }
 
 struct nlopt_obj {
-    // Single entry of the log (feval, fitness, n of unsatisfied const, constr. violation, feasibility).
+    // Single entry of the log (objevals, objval, n of unsatisfied const, constr. violation, feasibility).
     using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
     // The log.
     using log_type = std::vector<log_line_type>;
@@ -327,11 +327,12 @@ struct nlopt_obj {
                         // If grad is not null, it means we are in an algorithm
                         // that needs the gradient. If the problem does not support it,
                         // we error out.
-                        pagmo_throw(std::invalid_argument,
-                                    "during an optimization with the NLopt algorithm '"
-                                        + data::names.right.at(::nlopt_get_algorithm(nlo.m_value.get()))
-                                        + "' a fitness gradient was requested, but the optimisation problem '"
-                                        + p.get_name() + "' does not provide it");
+                        pagmo_throw(
+                            std::invalid_argument,
+                            "during an optimization with the NLopt algorithm '"
+                                + data::names.right.at(::nlopt_get_algorithm(nlo.m_value.get()))
+                                + "' an objective function gradient was requested, but the optimisation problem '"
+                                + p.get_name() + "' does not provide it");
                     }
 
                     // Copy the decision vector in our temporary dv vector_double,
@@ -391,8 +392,8 @@ struct nlopt_obj {
 
                         if (!(f_count / verb % 50u)) {
                             // Every 50 lines print the column names.
-                            print("\n", std::setw(10), "fevals:", std::setw(15), "fitness:", std::setw(15), "violated:",
-                                  std::setw(15), "viol. norm:", '\n');
+                            print("\n", std::setw(10), "objevals:", std::setw(15), "objval:", std::setw(15),
+                                  "violated:", std::setw(15), "viol. norm:", '\n');
                         }
                         // Print to screen the log line.
                         print(std::setw(10), f_count + 1u, std::setw(15), fitness[0], std::setw(15), nv, std::setw(15),
@@ -1053,8 +1054,8 @@ public:
         }
 
         // Run the optimisation and store the status returned by NLopt.
-        double fitness;
-        m_last_opt_result = ::nlopt_optimize(no.m_value.get(), initial_guess.data(), &fitness);
+        double objval;
+        m_last_opt_result = ::nlopt_optimize(no.m_value.get(), initial_guess.data(), &objval);
         if (m_verbosity) {
             // Print to screen the result of the optimisation, if we are being verbose.
             std::cout << "\nOptimisation return status: " << detail::nlopt_res2string(m_last_opt_result) << '\n';
@@ -1114,11 +1115,11 @@ public:
      *
      * Example (verbosity 5):
      * @code{.unparsed}
-     * fevals:       fitness:      violated:    viol. norm:
-     *      1        47.9474              1        2.07944 i
-     *      6        17.1986              2       0.150557 i
-     *     11         17.014              0              0
-     *     16         17.014              0              0
+     * objevals:       objval:      violated:    viol. norm:
+     *        1       47.9474              1        2.07944 i
+     *        6       17.1986              2       0.150557 i
+     *       11        17.014              0              0
+     *       16        17.014              0              0
      * @endcode
      * The ``i`` at the end of some rows indicates that the decision vector is infeasible. Feasibility
      * is checked against the problem's tolerance.
