@@ -231,7 +231,7 @@ or by the underlying C++ constructor</li>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">get_population</span><span class="p">()</span><span class="o">.</span><span class="n">champion_f</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">archi</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">archi</span><span class="o">.</span><span class="n">get_champions_f</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> 
 <span class="go">[array([ 475165.1020545]),</span>
 <span class="go">array([ 807090.7156793]),</span>
@@ -300,6 +300,44 @@ by this method.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by any evolution task queued in the archipelago&#8217;s
 islands</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.archipelago.get_champions_f">
+<code class="descname">get_champions_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.get_champions_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the fitness vectors of the islands&#8217; champions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the fitness vectors of the islands&#8217; champions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of 1D NumPy float arrays</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.archipelago.get_champions_x">
+<code class="descname">get_champions_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.get_champions_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the decision vectors of the islands&#8217; champions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the decision vectors of the islands&#8217; champions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of 1D NumPy float arrays</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
 </table>

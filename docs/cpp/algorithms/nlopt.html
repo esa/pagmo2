@@ -171,12 +171,13 @@
 <li>SLSQP,</li>
 <li>low-storage BFGS,</li>
 <li>preconditioned truncated Newton,</li>
-<li>shifted limited-memory variable-metric.</li>
+<li>shifted limited-memory variable-metric,</li>
+<li>augmented Lagrangian algorithm.</li>
 </ul>
 </p>
 <p>The desired NLopt solver is selected upon construction of a <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm. Various properties of the solver (e.g., the stopping criteria) can be configured after construction via methods provided by this class. Note that multiple stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion is satisfied. By default, only the <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion is active (see <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a9bbe3d1fbaa1dc7fc03590afcea4fd51"><span class="std std-ref">get_xtol_rel()</span></a>).</p>
 <p>All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient. Some solvers support equality and/or inequality constaints.</p>
-<p>In order to support pagmo&#8217;s population-based optimisation model, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">nlopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised by the NLopt solver. The optimised individual will then be inserted back into the population at the end of the optimisation. The selection and replacement strategies can be configured via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a8534d6a463d08d1c863bc5a52a7307b7"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a768881bce66bac201009eb3d121b2488"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a3da13a41a8af03aebe14058bda7cc42f"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a240d93fdd92b39cf8043ec852f74b021"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p>In order to support pagmo&#8217;s population-based optimisation model, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">nlopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised by the NLopt solver. If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/constrained.html#pagmonamespacepagmo_1accb4f0cfb71555ffec215cc381ea87bc"><span class="std std-ref">pagmo::compare_fc()</span></a>), the optimised individual will be inserted back into the population. The selection and replacement strategies can be configured via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a8534d6a463d08d1c863bc5a52a7307b7"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a768881bce66bac201009eb3d121b2488"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a3da13a41a8af03aebe14058bda7cc42f"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a240d93fdd92b39cf8043ec852f74b021"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal"><span class="pre">PAGMO_WITH_NLOPT</span></code> option
@@ -296,6 +297,12 @@ of each supported solver.</p>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;var1&quot;</span></code></td>
 <td><code class="docutils literal"><span class="pre">NLOPT_LD_VAR1</span></code></td>
 </tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;auglag&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_AUGLAG</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;auglag_eq&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_AUGLAG_EQ</span></code></td>
+</tr>
 </tbody>
 </table>
  The parameters of the selected algorithm can be specified via the methods of this class.</p>
@@ -317,6 +324,43 @@ description of each supported solver.</p>
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">algo</span></code> is not one of the allowed algorithm names. </li>
 </ul>
 </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo5nlopt5nloptERK5nlopt">
+<span id="pagmo::nlopt::nlopt__nloptCR"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a71357b63d8bee5b59b8d5476a1d31869"></span><code class="descname">nlopt</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo5nlopt5nloptEv" title="pagmo::nlopt::nlopt">nlopt</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt5nloptERK5nlopt" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy constructor. </p>
+<p>The copy constructor will deep-copy the state of <code class="docutils literal"><span class="pre">other</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">other</span></code>: the construction argument.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by copying the internal state of <code class="docutils literal"><span class="pre">other</span></code>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo5nlopt5nloptERR5nlopt">
+<span id="pagmo::nlopt::nlopt__nloptRR"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1adff7b3ec099c9d95fec9e8fab349dbec"></span><code class="descname">nlopt</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo5nlopt5nloptEv" title="pagmo::nlopt::nlopt">nlopt</a>&amp;&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt5nloptERR5nlopt" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Move constructor. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo5nloptaSERR5nlopt">
+<span id="pagmo::nlopt::assign-operator__nloptRR"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a5a0efcfb74531b83a966ec6f2fba3691"></span><a class="reference internal" href="#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt">nlopt</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt">nlopt</a>&amp;&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nloptaSERR5nlopt" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Move assignment operator. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a reference to <code class="docutils literal"><span class="pre">this</span></code>. </dd>
 </dl>
 </p>
 </dd></dl>
@@ -491,11 +535,11 @@ description of each supported solver.</p>
 <span id="pagmo::nlopt::set_verbosity__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a96226e26c0b8174bfa890f8050bb0f4f"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set verbosity. </p>
 <p>This method will set the algorithm&#8217;s verbosity. If <code class="docutils literal"><span class="pre">n</span></code> is zero, no output is produced during the optimisation and no logging is performed. If <code class="docutils literal"><span class="pre">n</span></code> is nonzero, then every <code class="docutils literal"><span class="pre">n</span></code> objective function evaluations the status of the optimisation will be both printed to screen and recorded internally. See <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1ac073586cae8175d0de2b389f3fdb509e"><span class="std std-ref">nlopt::log_line_type</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a0bbd40bdc7321bd0caab5e010c95daa2"><span class="std std-ref">nlopt::log_type</span></a> for information on the logging format. The internal log can be fetched via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1acf448ec909867566b04a4b9ce54d036b"><span class="std std-ref">get_log()</span></a>.</p>
-<p>Example (verbosity 5): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fevals</span><span class="p">:</span>       <span class="n">fitness</span><span class="p">:</span>      <span class="n">violated</span><span class="p">:</span>    <span class="n">viol</span><span class="o">.</span> <span class="n">norm</span><span class="p">:</span>
-     <span class="mi">1</span>        <span class="mf">47.9474</span>              <span class="mi">1</span>        <span class="mf">2.07944</span> <span class="n">i</span>
-     <span class="mi">6</span>        <span class="mf">17.1986</span>              <span class="mi">2</span>       <span class="mf">0.150557</span> <span class="n">i</span>
-    <span class="mi">11</span>         <span class="mf">17.014</span>              <span class="mi">0</span>              <span class="mi">0</span>
-    <span class="mi">16</span>         <span class="mf">17.014</span>              <span class="mi">0</span>              <span class="mi">0</span>
+<p>Example (verbosity 5): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">objevals</span><span class="p">:</span>       <span class="n">objval</span><span class="p">:</span>      <span class="n">violated</span><span class="p">:</span>    <span class="n">viol</span><span class="o">.</span> <span class="n">norm</span><span class="p">:</span>
+       <span class="mi">1</span>       <span class="mf">47.9474</span>              <span class="mi">1</span>        <span class="mf">2.07944</span> <span class="n">i</span>
+       <span class="mi">6</span>       <span class="mf">17.1986</span>              <span class="mi">2</span>       <span class="mf">0.150557</span> <span class="n">i</span>
+      <span class="mi">11</span>        <span class="mf">17.014</span>              <span class="mi">0</span>              <span class="mi">0</span>
+      <span class="mi">16</span>        <span class="mf">17.014</span>              <span class="mi">0</span>              <span class="mi">0</span>
 </pre></div>
 </div>
  The <code class="docutils literal"><span class="pre">i</span></code> at the end of some rows indicates that the decision vector is infeasible. Feasibility is checked against the problem&#8217;s tolerance.</p>
@@ -756,6 +800,99 @@ description of each supported solver.</p>
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">n</span></code>: the desired value for the <code class="docutils literal"><span class="pre">maxtime</span></code> stopping criterion (see <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a390ad95ad30162b91c79bfc8bf14e28c"><span class="std std-ref">get_maxtime()</span></a>). </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo5nlopt19set_local_optimizerE5nlopt">
+<span id="pagmo::nlopt::set_local_optimizer__nlopt"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1ab86c27d160a902c25e5f95757d2c76c6"></span>void <code class="descname">set_local_optimizer</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt">nlopt</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt19set_local_optimizerE5nlopt" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the local optimizer. </p>
+<p>Some NLopt algorithms rely on other NLopt algorithms as local/subsidiary optimizers. This method allows to set such local optimizer. By default, no local optimizer is specified.</p>
+<p><strong>NOTE</strong>: at the present time, only the <code class="docutils literal"><span class="pre">&quot;auglag&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;auglag_eq&quot;</span></code> solvers make use of a local optimizer. Setting a local optimizer on any other solver will have no effect.</p>
+<p><strong>NOTE</strong>: the objective function, bounds, and nonlinear-constraint parameters of the local optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping criteria should be specified in the local optimizer. The verbosity of the local optimizer is also forcibly set to zero during the optimisation.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">n</span></code>: the local optimizer that will be used by this <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo5nlopt19get_local_optimizerEv">
+<span id="pagmo::nlopt::get_local_optimizerC"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1ad590dda8dee32d984479635c7874442d"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt">nlopt</a> *<code class="descname">get_local_optimizer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nlopt19get_local_optimizerEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the local optimizer. </p>
+<p>This method returns a raw const pointer to the local optimizer, if it has been set via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1ab86c27d160a902c25e5f95757d2c76c6"><span class="std std-ref">set_local_optimizer()</span></a>. Otherwise, <code class="docutils literal"><span class="pre">nullptr</span></code> will be returned.</p>
+<p><strong>NOTE</strong>: the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const pointer to the local optimizer. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo5nlopt19get_local_optimizerEv">
+<span id="pagmo::nlopt::get_local_optimizer"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a705357b0c3e1b1f22ba061069ec84253"></span><a class="reference internal" href="#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt">nlopt</a> *<code class="descname">get_local_optimizer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt19get_local_optimizerEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the local optimizer. </p>
+<p>This method returns a raw pointer to the local optimizer, if it has been set via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1ab86c27d160a902c25e5f95757d2c76c6"><span class="std std-ref">set_local_optimizer()</span></a>. Otherwise, <code class="docutils literal"><span class="pre">nullptr</span></code> will be returned.</p>
+<p><strong>NOTE</strong>: the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a pointer to the local optimizer. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo5nlopt21unset_local_optimizerEv">
+<span id="pagmo::nlopt::unset_local_optimizer"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1aa15446e239e81b9f6736448ac7f42c56"></span>void <code class="descname">unset_local_optimizer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt21unset_local_optimizerEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Unset the local optimizer. </p>
+<p>After a call to this method, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a705357b0c3e1b1f22ba061069ec84253"><span class="std std-ref">get_local_optimizer()</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1ad590dda8dee32d984479635c7874442d"><span class="std std-ref">get_local_optimizer() const </span></a>will return <code class="docutils literal"><span class="pre">nullptr</span></code>. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2NK5pagmo5nlopt4saveER7Archive">
+<span id="pagmo::nlopt::save__ArchiveRC"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1ab32a8c6a3ddbe92f8ce55d9422da01b3"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nlopt4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Save to archive. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: the target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo5nlopt4loadER7Archive">
+<span id="pagmo::nlopt::load__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a81c25e0e91e686bda95b6ab6cd9d778c"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Load from archive. </p>
+<p>In case of exceptions, <code class="docutils literal"><span class="pre">this</span></code> will be unaffected.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: the source archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of primitive types. </li>
 </ul>
 </dd>
 </dl>

@@ -344,6 +344,10 @@
 </li>
       <li><a href="docs/python/py_problem.html#pygmo.problem.get_bounds">get_bounds() (pygmo.problem method)</a>
 </li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.get_champions_f">get_champions_f() (pygmo.archipelago method)</a>
+</li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.get_champions_x">get_champions_x() (pygmo.archipelago method)</a>
+</li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.get_extra_info">get_extra_info() (pygmo.algorithm method)</a>
 
       <ul>
@@ -568,6 +572,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.local_optimizer">local_optimizer (pygmo.nlopt attribute)</a>
+</li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.luksan_vlcek1">luksan_vlcek1 (class in pygmo)</a>
 </li>
   </ul></td>
@@ -697,6 +703,10 @@
       <li><a href="docs/cpp/archipelago.html#_CPPv2N5pagmo11archipelago6evolveEj">pagmo::archipelago::evolve (C++ function)</a>
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv2N5pagmo11archipelago3getEv">pagmo::archipelago::get (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv2NK5pagmo11archipelago15get_champions_fEv">pagmo::archipelago::get_champions_f (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv2NK5pagmo11archipelago15get_champions_xEv">pagmo::archipelago::get_champions_x (C++ function)</a>
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv2N5pagmo11archipelago8iteratorE">pagmo::archipelago::iterator (C++ type)</a>
 </li>
@@ -1080,6 +1090,10 @@
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo8has_name5valueE">pagmo::has_name::value (C++ member)</a>
 </li>
+      <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo14has_run_evolveE">pagmo::has_run_evolve (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo14has_run_evolve5valueE">pagmo::has_run_evolve::value (C++ member)</a>
+</li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo12has_set_seedE">pagmo::has_set_seed (C++ class)</a>
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo12has_set_seed5valueE">pagmo::has_set_seed::value (C++ member)</a>
@@ -1242,10 +1256,10 @@
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbh19get_inner_algorithmEv">pagmo::mbh::get_inner_algorithm (C++ function)</a>, <a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh19get_inner_algorithmEv">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh7get_logEv">pagmo::mbh::get_log (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh8get_nameEv">pagmo::mbh::get_name (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh11get_perturbEv">pagmo::mbh::get_perturb (C++ function)</a>
@@ -1312,6 +1326,8 @@
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt19get_last_opt_resultEv">pagmo::nlopt::get_last_opt_result (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt19get_local_optimizerEv">pagmo::nlopt::get_local_optimizer (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt19get_local_optimizerEv">[1]</a>
+</li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt7get_logEv">pagmo::nlopt::get_log (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt11get_maxevalEv">pagmo::nlopt::get_maxeval (C++ function)</a>
@@ -1332,15 +1348,23 @@
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt12get_xtol_relEv">pagmo::nlopt::get_xtol_rel (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt4loadER7Archive">pagmo::nlopt::load (C++ function)</a>
+</li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt13log_line_typeE">pagmo::nlopt::log_line_type (C++ type)</a>
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt8log_typeE">pagmo::nlopt::log_type (C++ type)</a>
 </li>
-      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt5nloptERKNSt6stringE">pagmo::nlopt::nlopt (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt5nloptEv">[1]</a>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt5nloptERK5nlopt">pagmo::nlopt::nlopt (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt5nloptERKNSt6stringE">[1]</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt5nloptERR5nlopt">[2]</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt5nloptEv">[3]</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nloptaSERR5nlopt">pagmo::nlopt::operator= (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt4saveER7Archive">pagmo::nlopt::save (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt12set_ftol_absEd">pagmo::nlopt::set_ftol_abs (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt12set_ftol_relEd">pagmo::nlopt::set_ftol_rel (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt19set_local_optimizerE5nlopt">pagmo::nlopt::set_local_optimizer (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt11set_maxevalEi">pagmo::nlopt::set_maxeval (C++ function)</a>
 </li>
@@ -1359,6 +1383,8 @@
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt12set_xtol_absEd">pagmo::nlopt::set_xtol_abs (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt12set_xtol_relEd">pagmo::nlopt::set_xtol_rel (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt21unset_local_optimizerEv">pagmo::nlopt::unset_local_optimizer (C++ function)</a>
 </li>
       <li><a href="docs/cpp/utils/multi_objective.html#_CPPv2N5pagmo22non_dominated_front_2dERKNSt6vectorI13vector_doubleEE">pagmo::non_dominated_front_2d (C++ function)</a>
 </li>

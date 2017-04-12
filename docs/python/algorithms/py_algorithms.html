@@ -188,7 +188,7 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 <tr class="row-even"><td>The null algorithm</td>
 <td><a class="reference internal" href="#pygmo.null_algorithm" title="pygmo.null_algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.null_algorithm</span></code></a></td>
 <td>SM-CU</td>
-<td>Exposed from C++, Used for testing purposes, does nothing</td>
+<td>Exposed from C++, used for initialization purposes, does nothing</td>
 </tr>
 <tr class="row-odd"><td>Differential Evolution (DE)</td>
 <td><a class="reference internal" href="#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal"><span class="pre">pygmo.de</span></code></a></td>
@@ -216,7 +216,7 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 <td>Exposed from C++</td>
 </tr>
 <tr class="row-even"><td>Corana&#8217;s Simulated Annealing (SA)</td>
-<td><code class="xref py py-class docutils literal"><span class="pre">pygmo.sa_corana</span></code></td>
+<td><a class="reference internal" href="#pygmo.simulated_annealing" title="pygmo.simulated_annealing"><code class="xref py py-class docutils literal"><span class="pre">pygmo.simulated_annealing</span></code></a></td>
 <td>S-U</td>
 <td>Exposed from C++</td>
 </tr>
@@ -231,7 +231,7 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 <td>Exposed from C++</td>
 </tr>
 <tr class="row-odd"><td>Non-dominated Sorting GA (NSGA2)</td>
-<td><code class="xref py py-class docutils literal"><span class="pre">pygmo.nsga_II</span></code></td>
+<td><a class="reference internal" href="#pygmo.nsga2" title="pygmo.nsga2"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nsga2</span></code></a></td>
 <td>M-U</td>
 <td>Exposed from C++</td>
 </tr>
@@ -291,68 +291,73 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>Compass Search (CS)</td>
-<td><code class="xref py py-class docutils literal"><span class="pre">pygmo.cs</span></code></td>
+<td><a class="reference internal" href="#pygmo.compass_search" title="pygmo.compass_search"><code class="xref py py-class docutils literal"><span class="pre">pygmo.compass_search</span></code></a></td>
 <td>S-CU</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-odd"><td>COBYLA (from nlopt)</td>
-<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
-<td>S-CU</td>
-<td>Exposed from C++</td>
-</tr>
-<tr class="row-even"><td>BOBYQA (from nlopt)</td>
-<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
-<td>S-U</td>
-<td>Exposed from C++</td>
-</tr>
-<tr class="row-odd"><td>NEWUOA + bound constraints (from nlopt)</td>
-<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
-<td>S-U</td>
-<td>Exposed from C++</td>
-</tr>
-<tr class="row-even"><td>PRAXIS (from nlopt)</td>
-<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
-<td>S-U</td>
-<td>Exposed from C++</td>
-</tr>
-<tr class="row-odd"><td>Nelder-Mead simplex (from nlopt)</td>
-<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
-<td>S-U</td>
-<td>Exposed from C++</td>
-</tr>
-<tr class="row-even"><td>sbplx (from nlopt)</td>
-<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
-<td>S-U</td>
-<td>Exposed from C++</td>
-</tr>
-<tr class="row-odd"><td>MMA (Method of Moving Asymptotes) (from nlopt)</td>
+<tr class="row-odd"><td>COBYLA (from NLopt)</td>
 <td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-CU</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-even"><td>CCSA (from nlopt)</td>
+<tr class="row-even"><td>BOBYQA (from NLopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>NEWUOA + bound constraints (from NLopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>PRAXIS (from NLopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>Nelder-Mead simplex (from NLopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>sbplx (from NLopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>MMA (Method of Moving Asymptotes) (from NLopt)</td>
 <td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-CU</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-odd"><td>SLSQP (from nlopt)</td>
+<tr class="row-even"><td>CCSA (from NLopt)</td>
 <td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-CU</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-even"><td>low-storage BFGS (from nlopt)</td>
+<tr class="row-odd"><td>SLSQP (from NLopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-CU</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-even"><td>low-storage BFGS (from NLopt)</td>
 <td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-U</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-odd"><td>preconditioned truncated Newton (from nlopt)</td>
+<tr class="row-odd"><td>preconditioned truncated Newton (from NLopt)</td>
 <td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-U</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-even"><td>shifted limited-memory variable-metric (from nlopt)</td>
+<tr class="row-even"><td>Shifted limited-memory variable-metric (from NLopt)</td>
 <td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-U</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>Augmented Lagrangian algorithm (from NLopt)</td>
+<td><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-CU</td>
 <td>Exposed from C++</td>
 </tr>
 </tbody>
@@ -1849,7 +1854,8 @@ NLopt algorithms is:</p>
 <li>SLSQP,</li>
 <li>low-storage BFGS,</li>
 <li>preconditioned truncated Newton,</li>
-<li>shifted limited-memory variable-metric.</li>
+<li>shifted limited-memory variable-metric,</li>
+<li>augmented Lagrangian algorithm.</li>
 </ul>
 <p>The desired NLopt solver is selected upon construction of an <a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> algorithm. Various properties
 of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
@@ -1860,7 +1866,8 @@ is always assumed. The gradient-based algorithms require the optimisation proble
 Some solvers support equality and/or inequality constaints.</p>
 <p>In order to support pagmo&#8217;s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
 a single individual from the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> to be optimised by the NLopt solver.
-The optimised individual will then be inserted back into the population at the end of the optimisation.
+If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/py_con_utils.html#pygmo.compare_fc" title="pygmo.compare_fc"><code class="xref py py-func docutils literal"><span class="pre">compare_fc()</span></code></a>),
+the optimised individual will be inserted back into the population.
 The selection and replacement strategies can be configured via the <a class="reference internal" href="#pygmo.nlopt.selection" title="pygmo.nlopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a>
 and <a class="reference internal" href="#pygmo.nlopt.replacement" title="pygmo.nlopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a> attributes.</p>
 <div class="admonition note">
@@ -1939,6 +1946,12 @@ translation table:</p>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;var1&quot;</span></code></td>
 <td><code class="docutils literal"><span class="pre">NLOPT_LD_VAR1</span></code></td>
 </tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&quot;auglag&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_AUGLAG</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;auglag_eq&quot;</span></code></td>
+<td><code class="docutils literal"><span class="pre">NLOPT_AUGLAG_EQ</span></code></td>
+</tr>
 </tbody>
 </table>
 <p>The parameters of the selected solver can be configured via the attributes of this class.</p>
@@ -1977,37 +1990,37 @@ type conversion errors, mismatched function signatures, etc.)</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-6</span><span class="p">]</span> <span class="o">*</span> <span class="mi">18</span> <span class="c1"># Set constraints tolerance to 1E-6</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
-<span class="go">   fevals:       fitness:      violated:    viol. norm:</span>
-<span class="go">         1        95959.4             18        538.227 i</span>
-<span class="go">         2        89282.7             18        5177.42 i</span>
-<span class="go">         3          75580             18        464.206 i</span>
-<span class="go">         4          75580             18        464.206 i</span>
-<span class="go">         5        77737.6             18        1095.94 i</span>
-<span class="go">         6          41162             18        350.446 i</span>
-<span class="go">         7          41162             18        350.446 i</span>
-<span class="go">         8          67881             18        362.454 i</span>
-<span class="go">         9        30502.2             18        249.762 i</span>
-<span class="go">        10        30502.2             18        249.762 i</span>
-<span class="go">        11        7266.73             18        95.5946 i</span>
-<span class="go">        12         4510.3             18        42.2385 i</span>
-<span class="go">        13        2400.66             18        35.2507 i</span>
-<span class="go">        14        34051.9             18        749.355 i</span>
-<span class="go">        15        1657.41             18        32.1575 i</span>
-<span class="go">        16        1657.41             18        32.1575 i</span>
-<span class="go">        17        1564.44             18        12.5042 i</span>
-<span class="go">        18        275.987             14        6.22676 i</span>
-<span class="go">        19        232.765             12         12.442 i</span>
-<span class="go">        20        161.892             15        4.00744 i</span>
-<span class="go">        21        161.892             15        4.00744 i</span>
-<span class="go">        22        17.6821             11        1.78909 i</span>
-<span class="go">        23        7.71103              5       0.130386 i</span>
-<span class="go">        24        6.24758              4     0.00736759 i</span>
-<span class="go">        25        6.23325              1    5.12547e-05 i</span>
-<span class="go">        26         6.2325              0              0</span>
-<span class="go">        27        6.23246              0              0</span>
-<span class="go">        28        6.23246              0              0</span>
-<span class="go">        29        6.23246              0              0</span>
-<span class="go">        30        6.23246              0              0</span>
+<span class="go">   objevals:       objval:      violated:    viol. norm:</span>
+<span class="go">           1       95959.4             18        538.227 i</span>
+<span class="go">           2       89282.7             18        5177.42 i</span>
+<span class="go">           3         75580             18        464.206 i</span>
+<span class="go">           4         75580             18        464.206 i</span>
+<span class="go">           5       77737.6             18        1095.94 i</span>
+<span class="go">           6         41162             18        350.446 i</span>
+<span class="go">           7         41162             18        350.446 i</span>
+<span class="go">           8         67881             18        362.454 i</span>
+<span class="go">           9       30502.2             18        249.762 i</span>
+<span class="go">          10       30502.2             18        249.762 i</span>
+<span class="go">          11       7266.73             18        95.5946 i</span>
+<span class="go">          12        4510.3             18        42.2385 i</span>
+<span class="go">          13       2400.66             18        35.2507 i</span>
+<span class="go">          14       34051.9             18        749.355 i</span>
+<span class="go">          15       1657.41             18        32.1575 i</span>
+<span class="go">          16       1657.41             18        32.1575 i</span>
+<span class="go">          17       1564.44             18        12.5042 i</span>
+<span class="go">          18       275.987             14        6.22676 i</span>
+<span class="go">          19       232.765             12         12.442 i</span>
+<span class="go">          20       161.892             15        4.00744 i</span>
+<span class="go">          21       161.892             15        4.00744 i</span>
+<span class="go">          22       17.6821             11        1.78909 i</span>
+<span class="go">          23       7.71103              5       0.130386 i</span>
+<span class="go">          24       6.24758              4     0.00736759 i</span>
+<span class="go">          25       6.23325              1    5.12547e-05 i</span>
+<span class="go">          26        6.2325              0              0</span>
+<span class="go">          27       6.23246              0              0</span>
+<span class="go">          28       6.23246              0              0</span>
+<span class="go">          29       6.23246              0              0</span>
+<span class="go">          30       6.23246              0              0</span>
 
 <span class="go">Optimisation return status: NLOPT_XTOL_REACHED (value = 4, Optimization stopped because xtol_rel or xtol_abs was reached)</span>
 </pre></div>
@@ -2128,6 +2141,40 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.nlopt.local_optimizer">
+<code class="descname">local_optimizer</code><a class="headerlink" href="#pygmo.nlopt.local_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local optimizer.</p>
+<p>Some NLopt algorithms rely on other NLopt algorithms as local/subsidiary optimizers.
+This property, of type <a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a>, allows to set such local optimizer.
+By default, no local optimizer is specified, and the property is set to <code class="docutils literal"><span class="pre">None</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">At the present time, only the <code class="docutils literal"><span class="pre">&quot;auglag&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;auglag_eq&quot;</span></code> solvers make use
+of a local optimizer. Setting a local optimizer on any other solver will have no effect.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The objective function, bounds, and nonlinear-constraint parameters of the local
+optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping
+criteria should be specified in the local optimizer.The verbosity of
+the local optimizer is also forcibly set to zero during the optimisation.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the local optimizer, or <code class="docutils literal"><span class="pre">None</span></code> if not set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python
+(e.g., type conversion errors, mismatched function signatures, etc.), when setting the property</td>
 </tr>
 </tbody>
 </table>

@@ -160,7 +160,7 @@
 <span id="py-tutorial-nlopt-basics"></span><h1>A first tutorial on the use of NLopt solvers<a class="headerlink" href="#a-first-tutorial-on-the-use-of-nlopt-solvers" title="Permalink to this headline">¶</a></h1>
 <p>In this tutorial we show the basic usage pattern of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a>. This user defined
 algorithm (UDA) wraps the NLopt library making it easily accessible via the pygmo common
-<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> interface. Let see how this miracle occur.</p>
+<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> interface. Let us see how this miracle occurs.</p>
 <div class="section" id="i-have-the-gradient">
 <h2>I have the gradient<a class="headerlink" href="#i-have-the-gradient" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -171,7 +171,8 @@ algorithm (UDA) wraps the NLopt library making it easily accessible via the pygm
 <span class="go">    Thread safety: basic</span>
 
 <span class="go">Extra info:</span>
-<span class="go">    NLopt version: 2.4.2</span>
+<span class="go">    NLopt version: ...</span>
+<span class="go">    Solver: &#39;slsqp&#39;</span>
 <span class="go">    Last optimisation return code: NLOPT_SUCCESS (value = 1, Generic success return value)</span>
 <span class="go">    Verbosity: 0</span>
 <span class="go">    Individual selection policy: best</span>
@@ -186,9 +187,9 @@ algorithm (UDA) wraps the NLopt library making it easily accessible via the pygm
 <span class="go">        maxtime:  disabled</span>
 </pre></div>
 </div>
-<p>In a few lines we have constructed a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> containing the slsqp solver from
+<p>In a few lines we have constructed a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> containing the <code class="docutils literal"><span class="pre">&quot;slsqp&quot;</span></code> solver from
 NLopt. For a list of solvers availbale via the NLopt library check the docs of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a>.
-In this tutorial we will make use of slsqp, a Sequential Quadratic Programming algorithm suited for
+In this tutorial we will make use of <code class="docutils literal"><span class="pre">&quot;slsqp&quot;</span></code>, a Sequential Quadratic Programming algorithm suited for
 generic Non Linear Programming problems (i.e. non linearly constrained single objective problems).</p>
 <p>All the stopping criteria used by the NLopt library are available via dedicated attributes, so that we may, for
 example, set the <code class="docutils literal"><span class="pre">ftol_rel</span></code> by writing:</p>
@@ -200,7 +201,7 @@ example, set the <code class="docutils literal"><span class="pre">ftol_rel</span
 </pre></div>
 </div>
 <p>We now need a problem to solve. Let us start with one of the UDPs provided in pygmo. The
-<a class="reference internal" href="../problems/py_problems.html#pygmo.luksan_vlcek1" title="pygmo.luksan_vlcek1"><code class="xref py py-class docutils literal"><span class="pre">pygmo.luksan_vlcek1</span></code></a> provides a classic, scalable, equally constrained problem. It
+<a class="reference internal" href="../problems/py_problems.html#pygmo.luksan_vlcek1" title="pygmo.luksan_vlcek1"><code class="xref py py-class docutils literal"><span class="pre">pygmo.luksan_vlcek1</span></code></a> problem is a classic, scalable, equality-constrained problem. It
 also has its gradient implemented so that we do not have to worry about that for the moment.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
@@ -213,33 +214,32 @@ also has its gradient implemented so that we do not have to worry about that for
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-8</span><span class="p">]</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_nc</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../../../_images/nlopt_basic_lv1.png"><img alt="slsqp performance" class="align-right" src="../../../_images/nlopt_basic_lv1.png" style="width: 512.0px; height: 384.0px;" /></a>
 <p>We now solve this problem by writing:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
-<span class="go">fevals:       fitness:      violated:    viol. norm:</span>
-<span class="go">      1         250153             18        2619.51 i</span>
-<span class="go">      2         132280             18        931.767 i</span>
-<span class="go">      3        26355.2             18        357.548 i</span>
-<span class="go">      4          14509             18        140.055 i</span>
-<span class="go">      5          77119             18        378.603 i</span>
-<span class="go">      6        9104.25             18         116.19 i</span>
-<span class="go">      7        9104.25             18         116.19 i</span>
-<span class="go">      8        2219.94             18        42.8747 i</span>
-<span class="go">      9        947.637             18        16.7015 i</span>
-<span class="go">     10        423.519             18        7.73746 i</span>
-<span class="go">     11        82.8658             18        1.39111 i</span>
-<span class="go">     12        34.2733             15       0.227267 i</span>
-<span class="go">     13        11.9797             11      0.0309227 i</span>
-<span class="go">     14        42.7256              7        0.27342 i</span>
-<span class="go">     15        1.66949             11       0.042859 i</span>
-<span class="go">     16        1.66949             11       0.042859 i</span>
-<span class="go">     17       0.171358              7     0.00425765 i</span>
-<span class="go">     18     0.00186583              5    0.000560166 i</span>
-<span class="go">     19    1.89265e-06              3    4.14711e-06 i</span>
-<span class="go">     20    1.28773e-09              0              0</span>
-<span class="go">     21    7.45125e-14              0              0</span>
-<span class="go">     22    3.61388e-18              0              0</span>
-<span class="go">     23    1.16145e-23              0              0</span>
+<span class="go">objevals:       objval:      violated:    viol. norm:</span>
+<span class="go">        1        250153             18        2619.51 i</span>
+<span class="go">        2        132280             18        931.767 i</span>
+<span class="go">        3       26355.2             18        357.548 i</span>
+<span class="go">        4         14509             18        140.055 i</span>
+<span class="go">        5         77119             18        378.603 i</span>
+<span class="go">        6       9104.25             18         116.19 i</span>
+<span class="go">        7       9104.25             18         116.19 i</span>
+<span class="go">        8       2219.94             18        42.8747 i</span>
+<span class="go">        9       947.637             18        16.7015 i</span>
+<span class="go">       10       423.519             18        7.73746 i</span>
+<span class="go">       11       82.8658             18        1.39111 i</span>
+<span class="go">       12       34.2733             15       0.227267 i</span>
+<span class="go">       13       11.9797             11      0.0309227 i</span>
+<span class="go">       14       42.7256              7        0.27342 i</span>
+<span class="go">       15       1.66949             11       0.042859 i</span>
+<span class="go">       16       1.66949             11       0.042859 i</span>
+<span class="go">       17      0.171358              7     0.00425765 i</span>
+<span class="go">       18    0.00186583              5    0.000560166 i</span>
+<span class="go">       19   1.89265e-06              3    4.14711e-06 i</span>
+<span class="go">       20   1.28773e-09              0              0</span>
+<span class="go">       21   7.45125e-14              0              0</span>
+<span class="go">       22   3.61388e-18              0              0</span>
+<span class="go">       23   1.16145e-23              0              0</span>
 
 <span class="go">Optimisation return status: NLOPT_XTOL_REACHED (value = 4, Optimization stopped because xtol_rel or xtol_abs was reached)</span>
 </pre></div>
@@ -250,11 +250,12 @@ shown here.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;obj&quot;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;con&quot;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;fevals&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;objevals&quot;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
 </pre></div>
 </div>
+<a class="reference internal image-reference" href="../../../_images/nlopt_basic_lv1.png"><img alt="slsqp performance" src="../../../_images/nlopt_basic_lv1.png" style="width: 843.0px; height: 484.0px;" /></a>
 </div>
 <div class="section" id="i-do-not-have-the-gradient">
 <h2>I do not have the gradient<a class="headerlink" href="#i-do-not-have-the-gradient" title="Permalink to this headline">¶</a></h2>
