@@ -15,7 +15,7 @@ I have the gradient
     >>> import pygmo as pg
     >>> uda = pg.nlopt("slsqp")
     >>> algo = pg.algorithm(uda)
-    >>> print(algo)
+    >>> print(algo) # doctest: +NORMALIZE_WHITESPACE
     Algorithm name: NLopt - slsqp [deterministic]
         Thread safety: basic
     <BLANKLINE>
@@ -33,6 +33,8 @@ I have the gradient
             xtol_abs: disabled
             maxeval:  disabled
             maxtime:  disabled
+    <BLANKLINE>
+
 
 In a few lines we have constructed a :class:`pygmo.algorithm` containing the slsqp solver from
 NLopt. For a list of solvers availbale via the NLopt library check the docs of :class:`~pygmo.nlopt`.
@@ -79,7 +81,7 @@ We now solve this problem by writing:
 
 .. doctest::
    
-    >>> pop = algo.evolve(pop) # doctest: +SKIP
+   >>> pop = algo.evolve(pop) # doctest: +SKIP
    fevals:       fitness:      violated:    viol. norm:
          1         250153             18        2619.51 i
          2         132280             18        931.767 i
