@@ -219,6 +219,8 @@ std::string archipelago_busy_docstring();
 std::string archipelago_wait_docstring();
 std::string archipelago_get_docstring();
 std::string archipelago_getitem_docstring();
+std::string archipelago_get_champions_f_docstring();
+std::string archipelago_get_champions_x_docstring();
 }
 
 #endif

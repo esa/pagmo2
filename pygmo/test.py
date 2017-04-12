@@ -606,8 +606,10 @@ class con_utils_test_case(_ut.TestCase):
 
     def runTest(self):
         from .core import compare_fc, sort_population_con
-        compare_fc(f1 = [1,1,1], f2 = [1,2.1,-1.2], nec = 1, tol = [0]*2)
-        sort_population_con(input_f = [[1.2,0.1,-1],[0.2,1.1,1.1],[2,-0.5,-2]], nec = 1, tol = [1e-8]*2)
+        compare_fc(f1=[1, 1, 1], f2=[1, 2.1, -1.2], nec=1, tol=[0] * 2)
+        sort_population_con(
+            input_f=[[1.2, 0.1, -1], [0.2, 1.1, 1.1], [2, -0.5, -2]], nec=1, tol=[1e-8] * 2)
+
 
 class global_rng_test_case(_ut.TestCase):
     """Test case for the global random number generator
@@ -616,13 +618,14 @@ class global_rng_test_case(_ut.TestCase):
 
     def runTest(self):
         from .core import set_global_rng_seed, population, ackley
-        set_global_rng_seed(seed = 32)
-        pop = population(prob = ackley(5), size = 20)
+        set_global_rng_seed(seed=32)
+        pop = population(prob=ackley(5), size=20)
         f1 = pop.champion_f
-        set_global_rng_seed(seed = 32)
-        pop = population(prob = ackley(5), size = 20)
+        set_global_rng_seed(seed=32)
+        pop = population(prob=ackley(5), size=20)
         f2 = pop.champion_f
         self.assertTrue(f1 == f2)
+
 
 class hypervolume_test_case(_ut.TestCase):
     """Test case for the hypervolume utilities
@@ -1069,6 +1072,7 @@ class archipelago_test_case(_ut.TestCase):
         self.run_push_back_tests()
         self.run_io_tests()
         self.run_pickle_tests()
+        self.run_champions_tests()
 
     def run_init_tests(self):
         from . import archipelago, de, rosenbrock, population, null_problem, thread_island, mp_island
@@ -1262,6 +1266,26 @@ class archipelago_test_case(_ut.TestCase):
                         pop_size=10, udi=mp_island())
         self.assertEqual(repr(a), repr(loads(dumps(a))))
 
+    def run_champions_tests(self):
+        from . import archipelago, de, rosenbrock, zdt
+        from numpy import ndarray
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
+        cf = a.get_champions_f()
+        self.assertEqual(type(cf), list)
+        self.assertEqual(len(cf), 5)
+        self.assertEqual(type(cf[0]), ndarray)
+        cx = a.get_champions_x()
+        self.assertEqual(type(cx), list)
+        self.assertEqual(len(cx), 5)
+        self.assertEqual(type(cx[0]), ndarray)
+        a.push_back(algo=de(), prob=rosenbrock(10), size=20)
+        cx = a.get_champions_x()
+        self.assertEqual(len(cx[4]), 2)
+        self.assertEqual(len(cx[5]), 10)
+        a.push_back(algo=de(), prob=zdt(), size=20)
+        self.assertRaises(ValueError, lambda: a.get_champions_x())
+        self.assertRaises(ValueError, lambda: a.get_champions_f())
+
 
 def run_test_suite():
     """Run the full test suite.
@@ -1286,9 +1310,9 @@ def run_test_suite():
     suite.addTest(archipelago_test_case())
     suite.addTest(null_problem_test_case())
     suite.addTest(hypervolume_test_case())
-    suite.addTest(mo_utils_test_case())  
-    suite.addTest(con_utils_test_case())  
-    suite.addTest(global_rng_test_case())  
+    suite.addTest(mo_utils_test_case())
+    suite.addTest(con_utils_test_case())
+    suite.addTest(global_rng_test_case())
     suite.addTest(estimate_sparsity_test_case())
     suite.addTest(estimate_gradient_test_case())
     try:

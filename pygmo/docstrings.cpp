@@ -3954,6 +3954,38 @@ Raises:
 )";
 }
 
+std::string archipelago_get_champions_f_docstring()
+{
+    return R"(get_champions_f()
+
+Get the fitness vectors of the islands' champions.
+
+Returns:
+    ``list`` of 1D NumPy float arrays: the fitness vectors of the islands' champions
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+      mismatched function signatures, etc.)
+
+)";
+}
+
+std::string archipelago_get_champions_x_docstring()
+{
+    return R"(get_champions_x()
+
+Get the decision vectors of the islands' champions.
+
+Returns:
+    ``list`` of 1D NumPy float arrays: the decision vectors of the islands' champions
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+      mismatched function signatures, etc.)
+
+)";
+}
+
 std::string nlopt_docstring()
 {
     return R"(__init__(solver = "cobyla")
