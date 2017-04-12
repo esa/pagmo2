@@ -5,7 +5,7 @@ A first tutorial on the use of NLopt solvers
 
 In this tutorial we show the basic usage pattern of :class:`pygmo.nlopt`. This user defined
 algorithm (UDA) wraps the NLopt library making it easily accessible via the pygmo common
-:class:`pygmo.algorithm` interface. Let see how this miracle occur.
+:class:`pygmo.algorithm` interface. Let us see how this miracle occurs.
 
 I have the gradient
 ^^^^^^^^^^^^^^^^^^^
@@ -34,9 +34,9 @@ I have the gradient
             maxeval:  disabled
             maxtime:  disabled
 
-In a few lines we have constructed a :class:`pygmo.algorithm` containing the slsqp solver from
+In a few lines we have constructed a :class:`pygmo.algorithm` containing the ``"slsqp"`` solver from
 NLopt. For a list of solvers availbale via the NLopt library check the docs of :class:`~pygmo.nlopt`.
-In this tutorial we will make use of slsqp, a Sequential Quadratic Programming algorithm suited for 
+In this tutorial we will make use of ``"slsqp"``, a Sequential Quadratic Programming algorithm suited for
 generic Non Linear Programming problems (i.e. non linearly constrained single objective problems).
 
 All the stopping criteria used by the NLopt library are available via dedicated attributes, so that we may, for
@@ -53,7 +53,7 @@ Let us algo activate some verbosity as to store a log and have a screen output:
     >>> algo.set_verbosity(1)
 
 We now need a problem to solve. Let us start with one of the UDPs provided in pygmo. The
-:class:`pygmo.luksan_vlcek1` provides a classic, scalable, equally constrained problem. It 
+:class:`pygmo.luksan_vlcek1` problem is a classic, scalable, equality-constrained problem. It
 also has its gradient implemented so that we do not have to worry about that for the moment.
 
 .. doctest::
