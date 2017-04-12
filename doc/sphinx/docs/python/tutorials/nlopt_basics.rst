@@ -122,5 +122,77 @@ shown here.
    >>> plt.ylabel("value") # doctest: +SKIP
    >>> plt.show() # doctest: +SKIP
 
+----------------------------------------------------------------------------------------------------------------------
+
 I do not have the gradient
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The example above made use of an UDP, :class:`pygmo.luksan_vlcek1`, that provides also explicit gradients for both the objective and the constraints.
+In many cases this is not the case for UDPs the user may code in a hurry or that are just too complex to allow explicit gradient computations. Lets see
+an example:
+
+.. doctest::
+
+    >>> class my_udp:
+    ...     def fitness(self, x):
+    ...         return (np.sin(x[0]+x[1]-x[2]), x[0] + np.cos(x[2]*x[1]), x[2])
+    ...     def get_bounds(self):
+    ...         return ([-1,-1,-1],[1,1,1])
+    ...     def get_nec(self):
+    ...         return 1
+    ...     def get_nic(self):
+    ...         return 1
+    >>> import numpy as np
+    >>> pop = pg.population(prob = my_udp(), size = 1)
+    >>> pop = algo.evolve(pop)
+    Traceback (most recent call last):
+      File "/home/dario/miniconda3/envs/pagmo/lib/python3.6/doctest.py", line 1330, in __run
+        compileflags, 1), test.globs)
+      File "<doctest default[3]>", line 1, in <module>
+        pop = algo.evolve(pop)
+    ValueError: 
+    function: operator()
+    where: /home/user/Documents/pagmo2/include/pagmo/algorithms/nlopt.hpp, 259
+    what: during an optimization with the NLopt algorithm 'slsqp' a fitness gradient was requested, but the optimisation problem '<class 'my_udp'>' does not provide it
+
+Bummer! How can I possibly provide a gradient for such a difficult expression of the fitness? Clearly making the derivatives here is not an option :)
+Fortunately pygmo provides some utilities to perform numerical differentiation. In particular :func:`pygmo.estimate_gradient` and :func:`pygmo.estimate_gradient_h`
+can be used quite straight forwardly. The difference between the two is in the finite difference formula used to estimate numerically the gradient, the little ``_h``
+standing for high-fidelity (a formula accurate to the sixth order is used: see the docs). So all we need to do, then, is to provide the gradients in our UDP:
+
+.. doctest::
+
+    >>> class my_udp:
+    ...     def fitness(self, x):
+    ...         return (np.sin(x[0]+x[1]-x[2]), x[0] + np.cos(x[2]*x[1]), x[2])
+    ...     def get_bounds(self):
+    ...         return ([-1,-1,-1],[1,1,1])
+    ...     def get_nec(self):
+    ...         return 1
+    ...     def get_nic(self):
+    ...         return 1
+    ...     def gradient(self, x):
+    ...         return pg.estimate_gradient_h(lambda x: self.fitness(x), x)
+    >>> pop = pg.population(prob = my_udp(), size = 1)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    fevals:       fitness:      violated:    viol. norm:
+          1       0.694978              2        1.92759 i
+          2       -0.97723              1    9.87066e-05 i
+          3      -0.999189              1     0.00295056 i
+          4             -1              1     3.2815e-05 i
+          5             -1              1    1.11149e-08 i
+          6             -1              1    8.12683e-14 i
+          7             -1              0              0
+
+Let's assess the cost of this optimization in terms of calls to the various functions:
+
+.. doctest::
+
+    >>> pop.problem.get_fevals() # doctest: +SKIP
+    23
+    >>> pop.problem.get_gevals() # doctest: +SKIP
+    21
+
+The :func:`pygmo.problem.fitness()` was called a total of 23 times, while :func:`pygmo.problem.gradient()` a total of 21 times. Since we are using
+:func:`pygmo.estimate_gradient_h()` to provide the gradient numerically, each call to the :func:`pygmo.problem.gradient()`
+causes 6 evaluations of ``my_udp.fitness()``. So, at the end a total of 23 + 6 * 21 calls to ``my_udp.fitness()`` have been made.
