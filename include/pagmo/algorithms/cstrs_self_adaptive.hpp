@@ -609,7 +609,7 @@ public:
                     auto n_feasible = penalized_udp_ptr->m_n_feasible;
                     print(std::setw(7), iter, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), cur_best_f[0],
                           std::setw(15), infeas, std::setw(15), n, std::setw(15), l, std::setw(15), n_feasible);
-                    if (!prob.feasibility_f(pop.get_f()[pop.best_idx()])) {
+                    if (!prob.feasibility_f(cur_best_f) {
                         std::cout << " i";
                     }
                     ++count;

@@ -434,6 +434,8 @@ This method will invoke the ``fitness()`` method of the UDP to compute the fitne
 input decision vector *dv*. The return value of the ``fitness()`` method of the UDP is expected to have a
 dimension of :math:`n_{f} = n_{obj} + n_{ec} + n_{ic}` and to contain the concatenated values of
 :math:`\mathbf f, \mathbf c_e` and :math:`\mathbf c_i` (in this order).
+Equality constraints are all assumed in the form :math:`c_{e_i}(\mathbf x) = 0` while inequalities are assumed in
+the form :math:`c_{i_i}(\mathbf x) <= 0` so that negative values are associated to satisfied inequalities.
 
 In addition to invoking the ``fitness()`` method of the UDP, this method will perform sanity checks on
 *dv* and on the returned fitness vector. A successful call of this method will increase the internal fitness
