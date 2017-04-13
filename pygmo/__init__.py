@@ -469,7 +469,7 @@ def _archi_init(self, n=0, **kwargs):
         <BLANKLINE>
         >>> archi.evolve()
         >>> archi.wait()
-        >>> res = [isl.get_population().champion_f for isl in archi]
+        >>> res = archi.get_champions_f()
         >>> res #doctest: +SKIP
         [array([ 475165.1020545]),
         array([ 807090.7156793]),

@@ -809,5 +809,24 @@ BOOST_PYTHON_MODULE(core)
         .def("__getitem__", lcast([](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; }),
              pygmo::archipelago_getitem_docstring().c_str(), bp::return_internal_reference<>())
         // NOTE: docs for push_back() are in the Python reimplementation.
-        .def("_push_back", lcast([](archipelago &archi, const island &isl) { archi.push_back(isl); }));
+        .def("_push_back", lcast([](archipelago &archi, const island &isl) { archi.push_back(isl); }))
+        // Champions.
+        .def("get_champions_f", lcast([](const archipelago &archi) -> bp::list {
+                 bp::list retval;
+                 auto fs = archi.get_champions_f();
+                 for (const auto &f : fs) {
+                     retval.append(pygmo::v_to_a(f));
+                 }
+                 return retval;
+             }),
+             pygmo::archipelago_get_champions_f_docstring().c_str())
+        .def("get_champions_x", lcast([](const archipelago &archi) -> bp::list {
+                 bp::list retval;
+                 auto xs = archi.get_champions_x();
+                 for (const auto &x : xs) {
+                     retval.append(pygmo::v_to_a(x));
+                 }
+                 return retval;
+             }),
+             pygmo::archipelago_get_champions_x_docstring().c_str());
 }

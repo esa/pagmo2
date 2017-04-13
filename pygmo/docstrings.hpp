@@ -157,6 +157,7 @@ std::string nlopt_set_random_sr_seed_docstring();
 std::string nlopt_get_log_docstring();
 std::string nlopt_get_last_opt_result_docstring();
 std::string nlopt_get_solver_name_docstring();
+std::string nlopt_local_optimizer_docstring();
 
 // utilities
 // hypervolume
@@ -218,6 +219,8 @@ std::string archipelago_busy_docstring();
 std::string archipelago_wait_docstring();
 std::string archipelago_get_docstring();
 std::string archipelago_getitem_docstring();
+std::string archipelago_get_champions_f_docstring();
+std::string archipelago_get_champions_x_docstring();
 }
 
 #endif

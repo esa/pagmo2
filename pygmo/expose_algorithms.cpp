@@ -404,6 +404,16 @@ void expose_algorithms()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
+    nlopt_.add_property("local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
+                                                             bp::return_internal_reference<>()),
+                        lcast([](nlopt &n, const nlopt *ptr) {
+                            if (ptr) {
+                                n.set_local_optimizer(*ptr);
+                            } else {
+                                n.unset_local_optimizer();
+                            }
+                        }),
+                        nlopt_local_optimizer_docstring().c_str());
 #endif
 }
 }
