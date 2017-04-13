@@ -96,7 +96,7 @@ Raises:
 
 std::string population_best_idx_docstring()
 {
-    return R"(best_idx(tol = 0.)
+    return R"(best_idx(tol = self.problem.c_tol)
 
 Index of the best individual.
 
@@ -106,7 +106,8 @@ If the problem is multi-objective one single best is not well defined. In this c
 individuals by calling the :func:`pygmo.sort_population_ mo()` function.
 
 Args:
-    tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints
+    tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints. By default, the c_tol attribute 
+    from the population problem is used.
 
 Returns:
     ``int``: the index of the best individual

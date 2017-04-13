@@ -231,7 +231,7 @@ def _mbh_init(self, algo=None, stop=5, perturb=1e-2, seed=None):
         # Otherwise, we attempt to create an algorithm from it. This will
         # work if algo is an exposed C++ algorithm or a Python UDA.
         algo_arg = algorithm(algo)
-    if type(perturb) is float:
+    if type(perturb) is float or type(perturb) is int:
         perturb = [perturb]
     if seed is None:
         __original_mbh_init(self, algo_arg, stop, perturb)

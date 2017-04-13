@@ -266,16 +266,32 @@ public:
         return pagmo::random_decision_vector(m_prob.get_bounds(), m_e);
     }
 
-    /// Index of the best individual (accounting for a vector tolerance)
+    /// Index of the best individual
     /**
      * If the problem is single-objective and unconstrained, the best
      * is simply the individual with the smallest fitness. If the problem
      * is, instead, single objective, but with constraints, the best
      * will be defined using the criteria specified in pagmo::sort_population_con().
-     * If the problem is multi-objective one single best is not well defined. In
+     * If the problem is multi-objective one single best is not defined. In
      * this case the user can still obtain a strict ordering of the population
      * individuals by calling the pagmo::sort_population_mo() function.
      *
+     * The pagmo::population::get_c_tol() tolerances are accounted by default.
+     * If different tolerances are required the other overloads can be used.
+     *
+     * @returns the index of the best individual.
+     *
+     * @throws std::invalid_argument if the problem is multiobjective and thus
+     * a best individual is not well defined, or if the population is empty.
+     * @throws unspecified any exception thrown by pagmo::sort_population_con().
+     */
+    size_type best_idx() const
+    {
+        return best_idx(get_problem().get_c_tol());
+    }
+
+    /// Index of the best individual (accounting for a vector tolerance)
+    /**
      * @param tol vector of tolerances to be applied to each constraints.
      *
      * @returns the index of the best individual.
@@ -309,7 +325,7 @@ public:
      *
      * @return index of the best individual.
      */
-    size_type best_idx(double tol = 0.) const
+    size_type best_idx(double tol) const
     {
         vector_double tol_vector(m_prob.get_nf() - 1u, tol);
         return best_idx(tol_vector);

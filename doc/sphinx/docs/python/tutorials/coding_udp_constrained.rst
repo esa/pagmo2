@@ -96,3 +96,13 @@ In order to check that the UDP above is wll formed for pygmo we try to construct
         Thread safety: none
 
 All seems in order. The dimensions are corresponding to what we wanted, the gradient is detected etc.
+
+Solving a constrained User Defined Problem
+----------------------------------------------
+
+    >>> algo = pg.algorithm(pg.nlopt('auglag'))
+    >>> algo.extract(pg.nlopt).local_optimizer = pg.nlopt('var2')
+    >>> algo.set_verbosity(100)
+    >>> pop = pg.population(prob = my_constrained_udp(), size = 1)
+    >>> pop.problem.c_tol = [1E-6] * 6
+    >>> algo.evolve(pop)
