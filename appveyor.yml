@@ -1,10 +1,6 @@
 environment:
   TWINE_PASSWORD:
     secure: fqy2DKVE2zM+97vNPB8xgw3ae3SDPkL/T8RvC6s4ncY=
-
-  global:
-    PLATFORMTOOLSET: "v140"
-
   matrix:
     # - BUILD_TYPE: "MSVC_64_Python35"
     #   COMPILER: MSVC15
@@ -15,10 +11,12 @@ environment:
     # - BUILD_TYPE: "MSVC_64_Debug"
     #   COMPILER: MSVC15
     #   PLATFORM: "x64"
-    #- BUILD_TYPE: "MinGW_64_Debug"
+    # - BUILD_TYPE: "MinGW_64_Debug"
     # - BUILD_TYPE: "MinGW_64_Python27"
-    - BUILD_TYPE: "MinGW_64_Python35"
+    # - BUILD_TYPE: "MinGW_64_Python35"
     - BUILD_TYPE: "MinGW_64_Python36"
+  global:
+    PLATFORMTOOLSET: "v140"
 
 install:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
