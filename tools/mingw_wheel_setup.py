@@ -58,7 +58,7 @@ setup(name=NAME,
       keywords=KEYWORDS,
       platforms=PLATFORMS,
       install_requires=INSTALL_REQUIRES,
-      packages=['pygmo'],
+      packages=['pygmo', 'pygmo.plotting'],
       # Include pre-compiled extension
       package_data={'pygmo': ['core.pyd'] + DLL_LIST},
       distclass=BinaryDistribution)
