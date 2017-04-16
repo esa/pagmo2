@@ -140,8 +140,6 @@ run_command(r'mingw32-make install VERBOSE=1 -j2')
 # Testing, packaging.
 if is_python_build:
     # Run the Python tests.
-    run_command(r'start /b ipcluster start')
-    run_command(r'timeout 20')
     run_command(
         pinterp + r' -c "import pygmo; pygmo.test.run_test_suite()"')
     # Build the wheel.
