@@ -61,6 +61,12 @@ if(YACMA_COMPILER_IS_INTELXX)
   list(APPEND PAGMO_CXX_FLAGS_DEBUG "-diag-disable" "2259,1682,68")
   list(APPEND PAGMO_CXX_FLAGS_RELEASE "-diag-disable" "2259,1682,68")
 endif()
+if(MINGW)
+	# Flag needed to deal with big binaries in MinGW.
+	message(STATUS "Enabling the '-Wa,-mbig-obj' flag in MinGW builds.")
+	list(APPEND PAGMO_CXX_FLAGS_DEBUG "-Wa,-mbig-obj")
+	list(APPEND PAGMO_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
+endif()
 
 # Setting up Eigen3
 if(PAGMO_WITH_EIGEN3)
