@@ -109,7 +109,7 @@ if is_python_build:
     run_command(pinterp + ' get-pip.py --force-reinstall')
     run_command(pip + ' install numpy dill')
     #run_command(pip + ' install numpy dill ipyparallel')
-    if is_release_build:
+    if is_release_build or True:
         run_command(pip + ' install twine')
 
 # Set the path so that the precompiled libs can be found.
@@ -155,8 +155,8 @@ if is_python_build:
     run_command(pip + r' install dist\\' + os.listdir('dist')[0])
     run_command(
         pinterp + r' -c "import pygmo; pygmo.test.run_test_suite()"', directory=r'c:\\')
-    if is_release_build:
-        run_command(twine + r' upload -u bluescarni dist\\' +
+    if is_release_build or True:
+        run_command(twine + r' upload -u ci4esa dist\\' +
                     os.listdir('dist')[0])
 elif 'Debug' in BUILD_TYPE:
     run_command(r'ctest')
