@@ -468,10 +468,8 @@ BOOST_PYTHON_MODULE(core)
                  pop.set_x(i, pygmo::to_vd(x));
              }),
              pygmo::population_set_x_docstring().c_str())
-        .add_property("problem",
-                      bp::make_function(lcast([](population &pop) -> problem & { return pop.get_problem(); }),
-                                        bp::return_internal_reference<>()),
-                      pygmo::population_problem_docstring().c_str())
+        .def("_problem", static_cast<problem &(population::*)()>(&population::get_problem),
+             pygmo::population_problem_docstring().c_str(), bp::return_internal_reference<>())
         .def("get_f", lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_f()); }),
              pygmo::population_get_f_docstring().c_str())
         .def("get_x", lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_x()); }),

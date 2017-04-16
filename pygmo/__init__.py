@@ -329,6 +329,8 @@ def _population_init(self, prob=None, size=0, seed=None):
 
 setattr(population, "__init__", _population_init)
 
+population.problem = property(lambda self: self._problem())
+
 # Override of the island constructor.
 __original_island_init = island.__init__
 
