@@ -53,6 +53,8 @@ build_script:
 
 - if [%BUILD_TYPE%]==[MinGW_64_Debug] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
 
+- if [%BUILD_TYPE%]==[MinGW_64_Python27] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
+
 test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] ctest --output-on-failure
 
