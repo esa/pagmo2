@@ -35,6 +35,8 @@ install:
 # Rename sh.exe as sh.exe in PATH interferes with MinGW.
 - if [%BUILD_TYPE%]==[MinGW_64_Debug] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 
+- if [%BUILD_TYPE%]==[MinGW_64_Python27] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+
 build_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] mkdir build
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] cd build
