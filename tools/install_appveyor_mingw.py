@@ -162,6 +162,6 @@ if is_python_build:
         run_command(twine + r' upload -u bluescarni dist\\' +
                     os.listdir('dist')[0])
 elif 'Debug' in BUILD_TYPE:
-    run_command(r'ctest -VV')
+    run_command(r'ctest')
 else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)
