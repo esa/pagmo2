@@ -70,7 +70,7 @@ os.environ['PATH'] = r'C:\\mingw64\\bin;' + os.environ['PATH']
 # Download common deps.
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mingw_64.7z', 'boost.7z')
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/nlopt_mingw_64.7z', 'nlopt.7z')
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/eigne3.7z', 'eigen3.7z')
+wget(r'https://github.com/bluescarni/binary_deps/raw/master/eigen3.7z', 'eigen3.7z')
 # Extract them.
 run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
 run_command(r'7z x -aoa -oC:\\ nlopt.7z', verbose=False)
