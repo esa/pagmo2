@@ -156,7 +156,7 @@ if is_python_build:
     run_command(
         pinterp + r' -c "import pygmo; pygmo.test.run_test_suite()"', directory=r'c:\\')
     if is_release_build or True:
-        run_command(twine + r' upload -u ci4esa dist\\' +
+        run_command(twine + r' upload -u ci4esa -r https://pypi.python.org/pypi dist\\' +
                     os.listdir('dist')[0])
 elif 'Debug' in BUILD_TYPE:
     run_command(r'ctest')
