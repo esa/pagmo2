@@ -56,7 +56,7 @@ is_python_build = 'Python' in BUILD_TYPE
 
 # Just exit if this is a release build but not a Python one. The release of the source code
 # is done in travis, from appveyor we manage only the release of the
-# pyranha packages for Windows.
+# pygmo packages for Windows.
 if is_release_build and not is_python_build:
     print("Non-python release build detected, exiting.")
     sys.exit()
@@ -77,13 +77,12 @@ run_command(r'7z x -aoa -oC:\\ nlopt.7z', verbose=False)
 run_command(r'7z x -aoa -oC:\\ eigen3.7z', verbose=False)
 
 # Setup of the dependencies for a Python build.
-# FIXME
 if is_python_build:
-    if BUILD_TYPE == 'Python36':
+    if 'Python36' in BUILD_TYPE:
         python_version = '36'
-    elif BUILD_TYPE == 'Python35':
+    elif 'Python35' in BUILD_TYPE:
         python_version = '35'
-    elif BUILD_TYPE == 'Python27':
+    elif 'Python27' in BUILD_TYPE:
         python_version = '27'
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
@@ -95,8 +94,8 @@ if is_python_build:
     pinterp = r'c:\\Python' + python_version + r'\\python.exe'
     pip = r'c:\\Python' + python_version + r'\\scripts\\pip'
     twine = r'c:\\Python' + python_version + r'\\scripts\\twine'
-    pyranha_install_path = r'C:\\Python' + \
-        python_version + r'\\Lib\\site-packages\\pyranha'
+    pygmo_install_path = r'C:\\Python' + \
+        python_version + r'\\Lib\\site-packages\\pygmo'
     # Get Python.
     wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
          python_package, 'python.7z')
@@ -108,8 +107,7 @@ if is_python_build:
     # Install pip and deps.
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
     run_command(pinterp + ' get-pip.py --force-reinstall')
-    run_command(pip + ' install numpy')
-    run_command(pip + ' install mpmath')
+    run_command(pip + ' install numpy dill ipyparallel')
     if is_release_build:
         run_command(pip + ' install twine')
 
@@ -124,8 +122,7 @@ common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DPAGMO_WITH_EIGEN3=yes -DPA
 
 # Configuration step.
 if is_python_build:
-    # FIXME
-    run_command(r'cmake -G "MinGW Makefiles" ..  -DPIRANHA_BUILD_PYRANHA=yes -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-s ' + common_cmake_opts + r' -DBoost_PYTHON_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' +
+    run_command(r'cmake -G "MinGW Makefiles" ..  -DPAGMO_BUILD_PYGMO=yes -DPAGMO_INSTALL_HEADERS=no -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-s ' + common_cmake_opts + r' -DBoost_PYTHON_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' +
                 (python_version[0] if python_version[0] == '3' else r'') + r'-mgw62-mt-1_63.dll -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\libs\\python' + python_version + r'.dll' +
                 r' -DPYTHON_INCLUDE_DIR=C:\\Python' + python_version + r'\\include')
 elif 'Debug' in BUILD_TYPE:
@@ -141,23 +138,24 @@ run_command(r'mingw32-make install VERBOSE=1 -j2')
 
 # Testing, packaging.
 if is_python_build:
-    # FIXME
     # Run the Python tests.
+    run_command(r'start /b ipcluster start')
+    run_command(r'timeout 20')
     run_command(
-        pinterp + r' -c "import pyranha.test; pyranha.test.run_test_suite()"')
+        pinterp + r' -c "import pygmo; pygmo.test.run_test_suite()"')
     # Build the wheel.
     import shutil
     os.chdir('wheel')
-    shutil.move(pyranha_install_path, r'.')
+    shutil.move(pygmo_install_path, r'.')
     wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version[0])
     DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
     for _ in DLL_LIST:
-        shutil.copy(_, 'pyranha')
+        shutil.copy(_, 'pygmo')
     run_command(pinterp + r' setup.py bdist_wheel')
     os.environ['PATH'] = ORIGINAL_PATH
     run_command(pip + r' install dist\\' + os.listdir('dist')[0])
     run_command(
-        pinterp + r' -c "import pyranha.test; pyranha.test.run_test_suite()"', directory=r'c:\\')
+        pinterp + r' -c "import pygmo; pygmo.test.run_test_suite()"', directory=r'c:\\')
     if is_release_build:
         run_command(twine + r' upload -u bluescarni dist\\' +
                     os.listdir('dist')[0])
