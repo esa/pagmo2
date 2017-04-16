@@ -322,6 +322,7 @@ BOOST_PYTHON_MODULE(core)
             u8"Please make sure that NumPy has been correctly installed.\n====ERROR====\033[0m");
         pygmo_throw(PyExc_ImportError, "");
     }
+    wrap_import_array();
 
     // Check that dill is available.
     try {
@@ -828,6 +829,4 @@ BOOST_PYTHON_MODULE(core)
                  return retval;
              }),
              pygmo::archipelago_get_champions_x_docstring().c_str());
-
-    wrap_import_array();
 }
