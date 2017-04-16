@@ -19,8 +19,6 @@ environment:
     PLATFORMTOOLSET: "v140"
 
 install:
-- echo on
-- echo %TWINE_PASSWORD%
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda config --add channels conda-forge --force
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt

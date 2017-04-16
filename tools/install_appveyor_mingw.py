@@ -54,6 +54,9 @@ if is_release_build:
           os.environ['APPVEYOR_REPO_TAG_NAME'] + "'")
 is_python_build = 'Python' in BUILD_TYPE
 
+TPASSWD = os.environ['TWINE_PASSWORD']
+print("TPASSWD: '{}'".format(TPASSWD))
+
 # Just exit if this is a release build but not a Python one. The release of the source code
 # is done in travis, from appveyor we manage only the release of the
 # pygmo packages for Windows.
