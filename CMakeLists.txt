@@ -139,6 +139,12 @@ endif()
 
 if(PAGMO_BUILD_PYGMO)
     add_subdirectory("${CMAKE_SOURCE_DIR}/pygmo")
+
+	if(MINGW)
+		message(STATUS "Creating the files for the generation of a binary wheel for MinGW.")
+		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py")
+		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt")
+	endif()
 endif()
 
 if(PAGMO_INSTALL_HEADERS)
