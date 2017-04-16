@@ -224,18 +224,6 @@ Raises:
 )";
 }
 
-std::string population_problem_docstring()
-{
-    return R"(Population's problem.
-
-This read-only property gives direct access to the :class:`~pygmo.problem` stored within the population.
-
-Returns:
-    :class:`~pygmo.problem`: a reference to the internal problem
-
-)";
-}
-
 std::string population_get_f_docstring()
 {
     return R"(get_f()

@@ -468,8 +468,14 @@ BOOST_PYTHON_MODULE(core)
                  pop.set_x(i, pygmo::to_vd(x));
              }),
              pygmo::population_set_x_docstring().c_str())
-        .def("_problem", static_cast<problem &(population::*)()>(&population::get_problem),
-             pygmo::population_problem_docstring().c_str(), bp::return_internal_reference<>())
+        // NOTE: this used to be a property added via add_property() and the usual make_function()
+        // trickery. However, such usage inexplicably results in Python bombing out during 'import pygmo'
+        // on MinGW 64 bit + Python 3. The puzzling part is that the same usage pattern is adopted
+        // in the exposition of algorithms/problems, and there it does not cause any issue (see, e.g.,
+        // in the exposition of mbh). For now, we expose this as a normal method and we turn it into a property
+        // on the Python side.
+        .def("_problem", static_cast<problem &(population::*)()>(&population::get_problem), "",
+             bp::return_internal_reference<>())
         .def("get_f", lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_f()); }),
              pygmo::population_get_f_docstring().c_str())
         .def("get_x", lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_x()); }),
