@@ -54,9 +54,6 @@ if is_release_build:
           os.environ['APPVEYOR_REPO_TAG_NAME'] + "'")
 is_python_build = 'Python' in BUILD_TYPE
 
-TPASSWD = os.environ['TWINE_PASSWORD']
-print("TPASSWD: '{}'".format(TPASSWD))
-
 # Just exit if this is a release build but not a Python one. The release of the source code
 # is done in travis, from appveyor we manage only the release of the
 # pygmo packages for Windows.
@@ -110,9 +107,11 @@ if is_python_build:
     # Install pip and deps.
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
     run_command(pinterp + ' get-pip.py --force-reinstall')
+    # NOTE: at the moment we have troubles installing ipyparallel.
+    # Just skip it.
+    # run_command(pip + ' install numpy dill ipyparallel')
     run_command(pip + ' install numpy dill')
-    #run_command(pip + ' install numpy dill ipyparallel')
-    if is_release_build or True:
+    if is_release_build:
         run_command(pip + ' install twine')
 
 # Set the path so that the precompiled libs can be found.
@@ -158,7 +157,7 @@ if is_python_build:
     run_command(pip + r' install dist\\' + os.listdir('dist')[0])
     run_command(
         pinterp + r' -c "import pygmo; pygmo.test.run_test_suite()"', directory=r'c:\\')
-    if is_release_build or True:
+    if is_release_build:
         run_command(twine + r' upload -u ci4esa dist\\' +
                     os.listdir('dist')[0])
 elif 'Debug' in BUILD_TYPE:
