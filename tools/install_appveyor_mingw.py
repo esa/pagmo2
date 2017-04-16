@@ -129,7 +129,8 @@ if is_python_build:
                 (python_version[0] if python_version[0] == '3' else r'') + r'-mgw62-mt-1_63.dll -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\libs\\python' + python_version + r'.dll' +
                 r' -DPYTHON_INCLUDE_DIR=C:\\Python' + python_version + r'\\include')
 elif 'Debug' in BUILD_TYPE:
-    cmake_opts = r'-DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes ' + common_cmake_opts
+    cmake_opts = r'-DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes ' + \
+        common_cmake_opts + r' -DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os"'
     run_command(r'cmake -G "MinGW Makefiles" .. ' + cmake_opts)
 else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)
