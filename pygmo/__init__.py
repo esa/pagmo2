@@ -329,6 +329,21 @@ def _population_init(self, prob=None, size=0, seed=None):
 
 setattr(population, "__init__", _population_init)
 
+# Add the problem property (see comments in core.pp).
+
+
+def _problem_prop(self):
+    """Population's problem.
+
+    This read-only property gives direct access to the :class:`~pygmo.problem` stored within the population.
+
+    Returns:
+        :class:`~pygmo.problem`: a reference to the internal problem
+    """
+    return self._problem()
+
+population.problem = property(_problem_prop)
+
 # Override of the island constructor.
 __original_island_init = island.__init__
 

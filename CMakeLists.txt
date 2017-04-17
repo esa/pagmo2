@@ -61,6 +61,12 @@ if(YACMA_COMPILER_IS_INTELXX)
   list(APPEND PAGMO_CXX_FLAGS_DEBUG "-diag-disable" "2259,1682,68")
   list(APPEND PAGMO_CXX_FLAGS_RELEASE "-diag-disable" "2259,1682,68")
 endif()
+if(MINGW)
+	# Flag needed to deal with big binaries in MinGW.
+	message(STATUS "Enabling the '-Wa,-mbig-obj' flag in MinGW builds.")
+	list(APPEND PAGMO_CXX_FLAGS_DEBUG "-Wa,-mbig-obj")
+	list(APPEND PAGMO_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
+endif()
 
 # Setting up Eigen3
 if(PAGMO_WITH_EIGEN3)
@@ -133,6 +139,11 @@ endif()
 
 if(PAGMO_BUILD_PYGMO)
     add_subdirectory("${CMAKE_SOURCE_DIR}/pygmo")
+    if(MINGW)
+        message(STATUS "Creating the files for the generation of a binary wheel for MinGW.")
+        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py")
+        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt")
+	endif()
 endif()
 
 if(PAGMO_INSTALL_HEADERS)
