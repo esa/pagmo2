@@ -118,7 +118,7 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     # Give some time for the cluster to start up.
     sleep 20;
     python -c "import pygmo; pygmo.test.run_test_suite()"
-elif [[ "${PAGMO_BUILD}" == manylinux* ]]
+elif [[ "${PAGMO_BUILD}" == manylinux* ]]; then
     cd ..;
     cd ..;
     docker pull ${DOCKER_IMAGE};
