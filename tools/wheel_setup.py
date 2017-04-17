@@ -41,10 +41,12 @@ class BinaryDistribution(Distribution):
         return True
 
 # Setup the list of external dlls.
-import os.path
-mingw_wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(sys.version_info[0])
-l = open(mingw_wheel_libs, 'r').readlines()
-DLL_LIST = [os.path.basename(_[:-1]) for _ in l]
+import os
+if os.name == 'nt':
+    mingw_wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(
+        sys.version_info[0])
+    l = open(mingw_wheel_libs, 'r').readlines()
+    DLL_LIST = [os.path.basename(_[:-1]) for _ in l]
 
 setup(name=NAME,
       version=VERSION,
@@ -60,5 +62,6 @@ setup(name=NAME,
       install_requires=INSTALL_REQUIRES,
       packages=['pygmo', 'pygmo.plotting'],
       # Include pre-compiled extension
-      package_data={'pygmo': ['core.pyd'] + DLL_LIST},
+      package_data={'pygmo': ['core.pyd'] + \
+                    DLL_LIST if os.name == 'nt' else ['core.so']},
       distclass=BinaryDistribution)
