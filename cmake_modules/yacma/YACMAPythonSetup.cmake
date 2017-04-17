@@ -5,7 +5,13 @@ endif()
 # Need this to detect compiler.
 include(YACMACompilerLinkerSettings)
 
-if(MINGW)
+# NOTE: this is a heuristic to determine whether we need to link to the Python library.
+# In theory, Python extensions don't need to, as they are dlopened() by the Python process
+# and thus they don't need to be linked to the Python library at compile time. However,
+# the dependency on Boost.Python muddies the waters, as BP itself does link to the Python
+# library, at least on some platforms. The following setup seems to be working fine
+# on various CI setups.
+if(WIN OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   message(STATUS "Python modules require linking to the Python library.")
   set(_YACMA_MODULE_NEED_LINK TRUE)
 else()
@@ -16,34 +22,42 @@ endif()
 # Find Python interpreter.
 find_package(PythonInterp REQUIRED)
 
-# We always try to find the Python libraries, as this module gives us the include dirs as well
-# which we always need. However, actually linking to the Python libs is only needed
-# on a few platforms. Therefore, on these platforms we mark the dependency as mandatory,
-# on the others we mark it as optional but we error out if the include dirs are not found.
 if(_YACMA_MODULE_NEED_LINK)
+  # NOTE: this will give us both the Python lib and the Python include dir.
   find_package(PythonLibs REQUIRED)
+  if(NOT YACMA_PYTHON_INCLUDE_DIR)
+    set(YACMA_PYTHON_INCLUDE_DIR "${PYTHON_INCLUDE_DIRS}" CACHE PATH "Path to the Python include dir.")
+  endif()
 else()
-  find_package(PythonLibs)
-  if(NOT PYTHON_INCLUDE_DIRS)
-    message(FATAL_ERROR "Could not detect the Python include dirs.")
+  # NOTE: we need to determine the include dir on our own.
+  if(NOT YACMA_PYTHON_INCLUDE_DIR)
+    execute_process(COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/yacma_python_include_dir.py"
+      OUTPUT_VARIABLE _YACMA_PYTHON_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+    if(_YACMA_PYTHON_INCLUDE_DIR)
+      set(YACMA_PYTHON_INCLUDE_DIR "${_YACMA_PYTHON_INCLUDE_DIR}" CACHE PATH "Path to the Python include dir.")
+      mark_as_advanced(YACMA_PYTHON_INCLUDE_DIR)
+    endif()
+  endif()
+  if(NOT YACMA_PYTHON_INCLUDE_DIR)
+      message(FATAL_ERROR "Could not determine the Python include dir.")
   endif()
 endif()
 
-message(STATUS "Python interpreter version: ${PYTHON_VERSION_STRING}")
 message(STATUS "Python interpreter: ${PYTHON_EXECUTABLE}")
+message(STATUS "Python interpreter version: ${PYTHON_VERSION_STRING}")
 if(_YACMA_MODULE_NEED_LINK)
   message(STATUS "Python libraries: ${PYTHON_LIBRARIES}")
 endif()
-message(STATUS "Python include dirs: ${PYTHON_INCLUDE_DIRS}")
+message(STATUS "Python include dir: ${YACMA_PYTHON_INCLUDE_DIR}")
 
 # Setup the imported target for the compilation of Python modules.
 if(_YACMA_MODULE_NEED_LINK)
   add_library(YACMA::PythonModule UNKNOWN IMPORTED)
-  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${PYTHON_INCLUDE_DIRS}"
+  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}"
     IMPORTED_LOCATION "${PYTHON_LIBRARIES}" IMPORTED_LINK_INTERFACE_LANGUAGES "C")
 else()
   add_library(YACMA::PythonModule INTERFACE IMPORTED)
-  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${PYTHON_INCLUDE_DIRS}")
+  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}")
 endif()
 
 # This flag is used to signal the need to override the default extension of the Python modules
@@ -126,17 +140,17 @@ function(YACMA_PYTHON_MODULE name)
 endfunction()
 
 # Look for the NumPy headers.
-if(NOT YACMA_NUMPY_INCLUDES_DIR)
+if(NOT YACMA_NUMPY_INCLUDE_DIR)
   # Look if NumPy is avaiable.
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/yacma_numpy_includes_dir.py"
-    OUTPUT_VARIABLE _YACMA_NUMPY_INCLUDES_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-  if(_YACMA_NUMPY_INCLUDES_DIR)
-    set(YACMA_NUMPY_INCLUDES_DIR "${_YACMA_NUMPY_INCLUDES_DIR}" CACHE PATH "Path to the include files for NumPy.")
-    mark_as_advanced(YACMA_NUMPY_INCLUDES_DIR)
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/yacma_numpy_include_dir.py"
+    OUTPUT_VARIABLE _YACMA_NUMPY_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+  if(_YACMA_NUMPY_INCLUDE_DIR)
+    set(YACMA_NUMPY_INCLUDE_DIR "${_YACMA_NUMPY_INCLUDE_DIR}" CACHE PATH "Path to the include files for NumPy.")
+    mark_as_advanced(YACMA_NUMPY_INCLUDE_DIR)
   endif()
 endif()
-if(YACMA_NUMPY_INCLUDES_DIR)
-    message(STATUS "NumPy includes dir: ${YACMA_NUMPY_INCLUDES_DIR}")
+if(YACMA_NUMPY_INCLUDE_DIR)
+    message(STATUS "NumPy include dir: ${YACMA_NUMPY_INCLUDE_DIR}")
 else()
     message(STATUS "NumPy headers were not found.")
 endif()
