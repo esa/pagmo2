@@ -39,9 +39,9 @@ cd install
 wget https://github.com/Kitware/CMake/archive/v${CMAKE_VERSION}.tar.gz
 tar xzf v${CMAKE_VERSION}
 cd CMake-${CMAKE_VERSION}/
-./configure
-gmake -j2
-gmake install
+./configure > /dev/null
+gmake -j2 > /dev/null
+gmake install > /dev/null
 cd ..
 
 # Eigen
@@ -50,8 +50,8 @@ tar xzf ${EIGEN3_VERSION}
 cd eigen-${EIGEN3_VERSION}
 mkdir build
 cd build
-cmake ../
-make install
+cmake ../ > /dev/null
+make install > /dev/null
 cd ..
 cd ..
 
@@ -59,17 +59,16 @@ cd ..
 wget https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2
 tar xjf boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2
 cd boost_`echo ${BOOST_VERSION}|tr "." "_"`
-sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python
-./bjam --toolset=gcc link=shared threading=multi cxxflags="-std=c++11" variant=release --with-python -j2 install
+sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
+./bjam --toolset=gcc link=shared threading=multi cxxflags="-std=c++11" variant=release --with-python -j2 install > /dev/null
 cd ..
 
 # NLopt
 wget http://ab-initio.mit.edu/nlopt/nlopt-${NLOPT_VERSION}.tar.gz
 tar xzf nlopt-${NLOPT_VERSION}.tar.gz
 cd nlopt-${NLOPT_VERSION}
-./configure --enable-shared --disable-static
-make -j2
-make install
+./configure --enable-shared --disable-static > /dev/null
+make -j2 install > /dev/null
 cd ..
 
 # Python deps
