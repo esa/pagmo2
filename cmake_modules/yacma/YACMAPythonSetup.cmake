@@ -11,7 +11,7 @@ include(YACMACompilerLinkerSettings)
 # the dependency on Boost.Python muddies the waters, as BP itself does link to the Python
 # library, at least on some platforms. The following setup seems to be working fine
 # on various CI setups.
-if(WIN OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   message(STATUS "Python modules require linking to the Python library.")
   set(_YACMA_MODULE_NEED_LINK TRUE)
 else()
