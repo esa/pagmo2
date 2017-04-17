@@ -53,7 +53,7 @@ cd ..
 wget http://ab-initio.mit.edu/nlopt/nlopt-${NLOPT_VERSION}.tar.gz
 tar xzf nlopt-${NLOPT_VERSION}.tar.gz
 cd nlopt-${NLOPT_VERSION}
-./configure --disable-shared --enable-static
+./configure --enable-shared --disable-static
 make -j2
 make install
 cd ..
