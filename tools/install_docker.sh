@@ -36,7 +36,7 @@ mkdir install
 cd install
 
 # CMake
-wget https://github.com/Kitware/CMake/archive/v${CMAKE_VERSION}.tar.gz
+wget https://github.com/Kitware/CMake/archive/v${CMAKE_VERSION}.tar.gz > /dev/null
 tar xzf v${CMAKE_VERSION}
 cd CMake-${CMAKE_VERSION}/
 ./configure > /dev/null
@@ -45,7 +45,7 @@ gmake install > /dev/null
 cd ..
 
 # Eigen
-wget https://github.com/RLovelett/eigen/archive/${EIGEN3_VERSION}.tar.gz
+wget https://github.com/RLovelett/eigen/archive/${EIGEN3_VERSION}.tar.gz > /dev/null
 tar xzf ${EIGEN3_VERSION}
 cd eigen-${EIGEN3_VERSION}
 mkdir build
@@ -56,7 +56,7 @@ cd ..
 cd ..
 
 # Boost
-wget https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2
+wget https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2 > /dev/null
 tar xjf boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2
 cd boost_`echo ${BOOST_VERSION}|tr "." "_"`
 sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
@@ -64,7 +64,7 @@ sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
 cd ..
 
 # NLopt
-wget http://ab-initio.mit.edu/nlopt/nlopt-${NLOPT_VERSION}.tar.gz
+wget http://ab-initio.mit.edu/nlopt/nlopt-${NLOPT_VERSION}.tar.gz > /dev/null
 tar xzf nlopt-${NLOPT_VERSION}.tar.gz
 cd nlopt-${NLOPT_VERSION}
 ./configure --enable-shared --disable-static > /dev/null
@@ -78,3 +78,13 @@ cd ..
 cd /pagmo2/build
 cmake ../ -DPAGMO_INSTALL_HEADERS=no -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python
 make -j2 install
+cd wheel
+cp -a `find /usr/local/lib -type d -iname 'pygmo'` ./
+/opt/python/${PYTHON_DIR}/bin/python setup.py bdist_wheel
+/opt/python/${PYTHON_DIR}/bin/auditwheel repair dist/pygmo* -w ./dist2
+cd /
+/opt/python/${PYTHON_DIR}/bin/pip install /pagmo2/build/wheel/dist2/pygmo*
+/opt/python/${PYTHON_DIR}/bin/python -c "import pygmo; pygmo.test.run_test_suite()"
+
+/opt/python/${PYTHON_DIR}/bin/pip install twine
+/opt/python/${PYTHON_DIR}/bin/twine upload -u ci4esa /pagmo2/build/wheel/dist2/pygmo*
