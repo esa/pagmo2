@@ -93,7 +93,7 @@ if(PAGMO_BUILD_PYGMO)
         message(FATAL_ERROR "Minimum supported Python version is 2.7.")
     endif()
 
-    if(NOT YACMA_NUMPY_INCLUDES_DIR)
+    if(NOT YACMA_NUMPY_INCLUDE_DIR)
         message(FATAL_ERROR "The NumPy headers could not be located.")
     endif()
 endif()
