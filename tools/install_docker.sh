@@ -1,9 +1,23 @@
+#!/usr/bin/env bash
+
+# Exit on error
+set -e
+# Echo each command
+set -x
+
 CMAKE_VERSION="3.8.0"
 EIGEN3_VERSION="3.3.3"
 BOOST_VERSION="1.63.0"
 NLOPT_VERSION="2.4.2"
 
-PYTHON_DIR="cp36-cp36m"
+if [[ ${PAGMO_BUILD} == *36 ]]; then
+	PYTHON_DIR="cp36-cp36m"
+elif [[ ${PAGMO_BUILD} == *35 ]]; then
+	PYTHON_DIR="cp35-cp35m"
+else
+	echo "Invalid build type: ${PAGMO_BUILD}"
+	exit 1
+fi
 
 # HACK: for python 3.x, the include directory
 # is called 'python3.xm' rather than just 'python3.x'.
@@ -58,3 +72,10 @@ make -j2
 make install
 cd ..
 
+# Python deps
+/opt/python/${PYTHON_DIR}/bin/pip install dill numpy
+
+# pagmo
+cd /pagmo2/build
+cmake ../ -DPAGMO_INSTALL_HEADERS=no -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python
+make -j2 install

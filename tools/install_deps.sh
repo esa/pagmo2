@@ -5,6 +5,10 @@ set -e
 # Echo each command
 set -x
 
+if [[ "${PAGMO_BUILD}" == manylinux* ]]; then
+    exit 0
+fi
+
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
     wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -O miniconda.sh;
 else
@@ -23,7 +27,7 @@ elif [[ "${PAGMO_BUILD}" == "Python27" || "${PAGMO_BUILD}" == "OSXPython27" ]]; 
     conda_pkgs="$conda_pkgs python=2.7 numpy dill ipyparallel numba"
 fi
 
-if [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; then
+if [[ "${PAGMO_BUILD}" == Python* ]]; then
     conda_pkgs="$conda_pkgs graphviz doxygen"
 fi
 
