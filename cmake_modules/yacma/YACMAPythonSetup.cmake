@@ -5,21 +5,46 @@ endif()
 # Need this to detect compiler.
 include(YACMACompilerLinkerSettings)
 
-# Find Python interpreter and libraries. This is the order suggested by CMake's documentation.
+if(MINGW)
+  message(STATUS "Python modules require linking to the Python library.")
+  set(_YACMA_MODULE_NEED_LINK TRUE)
+else()
+  message(STATUS "Python modules do NOT require linking to the Python library.")
+  set(_YACMA_MODULE_NEED_LINK FALSE)
+endif()
+
+# Find Python interpreter.
 find_package(PythonInterp REQUIRED)
-find_package(PythonLibs REQUIRED)
+
+# We always try to find the Python libraries, as this module gives us the include dirs as well
+# which we always need. However, actually linking to the Python libs is only needed
+# on a few platforms. Therefore, on these platforms we mark the dependency as mandatory,
+# on the others we mark it as optional but we error out if the include dirs are not found.
+if(_YACMA_MODULE_NEED_LINK)
+  find_package(PythonLibs REQUIRED)
+else()
+  find_package(PythonLibs)
+  if(NOT PYTHON_INCLUDE_DIRS)
+    message(FATAL_ERROR "Could not detect the Python include dirs.")
+  endif()
+endif()
+
+message(STATUS "Python interpreter version: ${PYTHON_VERSION_STRING}")
 message(STATUS "Python interpreter: ${PYTHON_EXECUTABLE}")
-message(STATUS "Python libraries: ${PYTHON_LIBRARIES}")
+if(_YACMA_MODULE_NEED_LINK)
+  message(STATUS "Python libraries: ${PYTHON_LIBRARIES}")
+endif()
 message(STATUS "Python include dirs: ${PYTHON_INCLUDE_DIRS}")
-message(STATUS "Python library version: " ${PYTHONLIBS_VERSION_STRING})
 
 # Setup the imported target for the compilation of Python modules.
-add_library(YACMA::PythonModule UNKNOWN IMPORTED)
-# NOTE: probably down the line we would want to have separate targets for the Python includes
-# and lib. Right now, we are always using this in conjunction with Boost.Python, where we never
-# need the two separated.
-set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${PYTHON_INCLUDE_DIRS}"
-  IMPORTED_LOCATION "${PYTHON_LIBRARIES}" IMPORTED_LINK_INTERFACE_LANGUAGES "C")
+if(_YACMA_MODULE_NEED_LINK)
+  add_library(YACMA::PythonModule UNKNOWN IMPORTED)
+  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${PYTHON_INCLUDE_DIRS}"
+    IMPORTED_LOCATION "${PYTHON_LIBRARIES}" IMPORTED_LINK_INTERFACE_LANGUAGES "C")
+else()
+  add_library(YACMA::PythonModule INTERFACE IMPORTED)
+  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${PYTHON_INCLUDE_DIRS}")
+endif()
 
 # This flag is used to signal the need to override the default extension of the Python modules
 # depending on the architecture. Under Windows, for instance, CMake produces shared objects as
@@ -69,11 +94,13 @@ message(STATUS "Python modules install path: ${YACMA_PYTHON_MODULES_INSTALL_PATH
 
 function(YACMA_PYTHON_MODULE name)
     message(STATUS "Setting up the compilation of the Python module '${name}'.")
-    # A Python module is a shared library.
-    # NOTE: can this become a MODULE? It is supposed to be the right way of doing it,
-    # but it's not clear if this will work when linking to Boost.Python as well. Let's keep
-    # it like this for now.
-    add_library("${name}" SHARED ${ARGN})
+    # If we need an explicit link to the Python library, we compile it as a normal shared library.
+    # Otherwise, we compile it as a module.
+    if(_YACMA_MODULE_NEED_LINK)
+      add_library("${name}" SHARED ${ARGN})
+    else()
+      add_library("${name}" MODULE ${ARGN})
+    endif()
     # Any "lib" prefix normally added by CMake must be removed.
     set_target_properties("${name}" PROPERTIES PREFIX "")
     if(NOT ${_YACMA_PY_MODULE_EXTENSION} STREQUAL "")
