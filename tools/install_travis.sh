@@ -120,7 +120,6 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     python -c "import pygmo; pygmo.test.run_test_suite()"
 elif [[ "${PAGMO_BUILD}" == manylinux* ]]; then
     cd ..;
-    cd ..;
     docker pull ${DOCKER_IMAGE};
     docker run --rm -e TWINE_PASSWORD -e PAGMO_BUILD -e TRAVIS_TAG -v `pwd`:/pagmo2 $DOCKER_IMAGE /pagmo2/tools/install_docker.sh
 fi
