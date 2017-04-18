@@ -1345,6 +1345,7 @@ def run_test_suite():
 
     # Re-seed to random just in case anyone ever uses this function
     # in an interactive session or something.
+    import random
     set_global_rng_seed(random.randint(0, 2**30))
 
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
