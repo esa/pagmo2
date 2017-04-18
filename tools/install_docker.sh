@@ -74,7 +74,7 @@ make -j2 install > /dev/null
 cd ..
 
 # Python deps
-/opt/python/${PYTHON_DIR}/bin/pip install dill numpy auditwheel
+/opt/python/${PYTHON_DIR}/bin/pip install dill numpy
 
 # pagmo
 cd /pagmo2/build
@@ -83,7 +83,7 @@ make -j2 install
 cd wheel
 cp -a `find /usr/local/lib -type d -iname 'pygmo'` ./
 /opt/python/${PYTHON_DIR}/bin/python setup.py bdist_wheel
-/opt/python/${PYTHON_DIR}/bin/auditwheel repair dist/pygmo* -w ./dist2
+auditwheel repair dist/pygmo* -w ./dist2
 cd /
 /opt/python/${PYTHON_DIR}/bin/pip install /pagmo2/build/wheel/dist2/pygmo*
 /opt/python/${PYTHON_DIR}/bin/python -c "import pygmo; pygmo.test.run_test_suite()"
