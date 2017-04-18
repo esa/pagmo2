@@ -14,6 +14,8 @@ if [[ ${PAGMO_BUILD} == *36 ]]; then
 	PYTHON_DIR="cp36-cp36m"
 elif [[ ${PAGMO_BUILD} == *35 ]]; then
 	PYTHON_DIR="cp35-cp35m"
+elif [[ ${PAGMO_BUILD} == *27 ]]; then
+	PYTHON_DIR="cp27-cp27mu"
 else
 	echo "Invalid build type: ${PAGMO_BUILD}"
 	exit 1
@@ -36,7 +38,7 @@ mkdir install
 cd install
 
 # CMake
-wget https://github.com/Kitware/CMake/archive/v${CMAKE_VERSION}.tar.gz 2>&1 > /dev/null
+wget https://github.com/Kitware/CMake/archive/v${CMAKE_VERSION}.tar.gz --no-verbose
 tar xzf v${CMAKE_VERSION}
 cd CMake-${CMAKE_VERSION}/
 ./configure > /dev/null
@@ -45,7 +47,7 @@ gmake install > /dev/null
 cd ..
 
 # Eigen
-wget https://github.com/RLovelett/eigen/archive/${EIGEN3_VERSION}.tar.gz 2>&1 > /dev/null
+wget https://github.com/RLovelett/eigen/archive/${EIGEN3_VERSION}.tar.gz --no-verbose
 tar xzf ${EIGEN3_VERSION}
 cd eigen-${EIGEN3_VERSION}
 mkdir build
@@ -56,7 +58,7 @@ cd ..
 cd ..
 
 # Boost
-wget https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2 2>&1 > /dev/null
+wget https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2 --no-verbose
 tar xjf boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2
 cd boost_`echo ${BOOST_VERSION}|tr "." "_"`
 sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
@@ -64,7 +66,7 @@ sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
 cd ..
 
 # NLopt
-wget http://ab-initio.mit.edu/nlopt/nlopt-${NLOPT_VERSION}.tar.gz 2>&1 > /dev/null
+wget http://ab-initio.mit.edu/nlopt/nlopt-${NLOPT_VERSION}.tar.gz --no-verbose
 tar xzf nlopt-${NLOPT_VERSION}.tar.gz
 cd nlopt-${NLOPT_VERSION}
 ./configure --enable-shared --disable-static > /dev/null
@@ -72,7 +74,7 @@ make -j2 install > /dev/null
 cd ..
 
 # Python deps
-/opt/python/${PYTHON_DIR}/bin/pip install dill numpy
+/opt/python/${PYTHON_DIR}/bin/pip install dill numpy auditwheel
 
 # pagmo
 cd /pagmo2/build
