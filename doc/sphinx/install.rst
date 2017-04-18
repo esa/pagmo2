@@ -96,7 +96,7 @@ your conda installation.
 
 Installation with pip
 ^^^^^^^^^^^^^^^^^^^^^
-The installation of pygmo with conda is also straightforward:
+The installation of pygmo with pip is also straightforward:
 
 .. code-block:: bash
 
