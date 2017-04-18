@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #pragma warning(push, 0)
 #pragma warning(disable : 4275)
 #pragma warning(disable : 4996)
+#pragma warning(disable : 4503)
 
 #endif
 

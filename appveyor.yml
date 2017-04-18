@@ -1,50 +1,85 @@
 environment:
+  TWINE_PASSWORD:
+    secure: fqy2DKVE2zM+97vNPB8xgw3ae3SDPkL/T8RvC6s4ncY=
+  matrix:
+    - BUILD_TYPE: "MSVC_64_Python35"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
+    - BUILD_TYPE: "MSVC_64_Python36"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
+    - BUILD_TYPE: "MSVC_64_Debug"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
+    - BUILD_TYPE: "MinGW_64_Debug"
+    - BUILD_TYPE: "MinGW_64_Python27"
+    - BUILD_TYPE: "MinGW_64_Python35"
+    - BUILD_TYPE: "MinGW_64_Python36"
   global:
     PLATFORMTOOLSET: "v140"
 
-  matrix:
-    - BUILD_TYPE: "Python35"
-      COMPILER: MSVC15
-      PLATFORM: "x64"
-    - BUILD_TYPE: "Python36"
-      COMPILER: MSVC15
-      PLATFORM: "x64"
-    - BUILD_TYPE: "Debug"
-      COMPILER: MSVC15
-      PLATFORM: "x64"
-
 install:
-- if [%BUILD_TYPE%]==[Debug] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
-- if [%BUILD_TYPE%]==[Python35] set PATH=C:\Miniconda35-x64\Scripts;%PATH%
-- if [%BUILD_TYPE%]==[Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
-- conda config --add channels conda-forge --force
-- if [%BUILD_TYPE%]==[Debug] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt
-- if [%BUILD_TYPE%]==[Python35] conda create -y --name pagmo python=3.5 cmake boost eigen nlopt
-- if [%BUILD_TYPE%]==[Python36] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt
-- activate pagmo
-- if [%BUILD_TYPE%]==[Python35] conda install -y numpy dill ipyparallel
-- if [%BUILD_TYPE%]==[Python36] conda install -y numpy dill ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda config --add channels conda-forge --force
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt
+# NOTE: need to use "call" because otherwise it won't work within an if block.
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
+
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] set PATH=C:\Miniconda35-x64\Scripts;%PATH%
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda config --add channels conda-forge --force
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost eigen nlopt numpy dill ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] call activate pagmo
+
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda config --add channels conda-forge --force
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt numpy dill ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] call activate pagmo
+
+# Rename sh.exe as sh.exe in PATH interferes with MinGW.
+- if [%BUILD_TYPE%]==[MinGW_64_Debug] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+
+- if [%BUILD_TYPE%]==[MinGW_64_Python27] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+- if [%BUILD_TYPE%]==[MinGW_64_Python35] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+- if [%BUILD_TYPE%]==[MinGW_64_Python36] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 
 build_script:
-- mkdir build
-- cd build
-- if [%BUILD_TYPE%]==[Debug] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ..
-- if [%BUILD_TYPE%]==[Debug] cmake --build . --config Debug --target install
-- if [%BUILD_TYPE%]==[Python35] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes ..
-- if [%BUILD_TYPE%]==[Python35] cmake --build . --config Release --target install
-- if [%BUILD_TYPE%]==[Python36] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes ..
-- if [%BUILD_TYPE%]==[Python36] cmake --build . --config Release --target install
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] mkdir build
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] cd build
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ..
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake --build . --config Debug --target install
+
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] mkdir build
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cd build
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes ..
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cmake --build . --config Release --target install
+
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] mkdir build
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cd build
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes ..
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cmake --build . --config Release --target install
+
+- if [%BUILD_TYPE%]==[MinGW_64_Debug] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
+
+- if [%BUILD_TYPE%]==[MinGW_64_Python27] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
+- if [%BUILD_TYPE%]==[MinGW_64_Python35] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
+- if [%BUILD_TYPE%]==[MinGW_64_Python36] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
 
 test_script:
-- if [%BUILD_TYPE%]==[Debug] ctest --output-on-failure
-- if [%BUILD_TYPE%]==[Python35] cd c:\
-- if [%BUILD_TYPE%]==[Python35] start /b ipcluster start
-- if [%BUILD_TYPE%]==[Python35] timeout 20
-- if [%BUILD_TYPE%]==[Python35] python -c "import pygmo; pygmo.test.run_test_suite()"
-- if [%BUILD_TYPE%]==[Python36] cd c:\
-- if [%BUILD_TYPE%]==[Python36] start /b ipcluster start
-- if [%BUILD_TYPE%]==[Python36] timeout 20
-- if [%BUILD_TYPE%]==[Python36] python -c "import pygmo; pygmo.test.run_test_suite()"
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] ctest --output-on-failure
+
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cd c:\
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] start /b ipcluster start
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] timeout 20
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] python -c "import pygmo; pygmo.test.run_test_suite()"
+
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cd c:\
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] start /b ipcluster start
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] timeout 20
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] python -c "import pygmo; pygmo.test.run_test_suite()"
+
+artifacts:
+  - path: build\wheel\dist
+    name: wheels
 
 notifications:
   - provider: Webhook
