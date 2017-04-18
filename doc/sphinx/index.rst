@@ -6,10 +6,25 @@
 Home
 ====
 
-.. image:: ../sphinx/docs/images/pagmo_logo.png
-   :height: 300px
-   :alt: pagmo2.0 logo
-   :align: right
+.. image:: ../sphinx/docs/images/prob.png
+   :width: 15%
+
+.. image:: ../sphinx/docs/images/algo.png
+   :width: 15%
+
+.. image:: ../sphinx/docs/images/pop.png
+   :width: 15%
+
+.. image:: ../sphinx/docs/images/island.png
+   :width: 15%
+
+.. image:: ../sphinx/docs/images/archi.png
+   :width: 15%
+
+.. image:: ../sphinx/docs/images/migration.png
+   :width: 15%
+
+
 
 Pagmo (C++) or pygmo (Python) is a scientific library for massively parallel optimization. It is built
 around the idea of providing a unified interface to optimization algorithms and to optimization problems and to
@@ -38,3 +53,4 @@ Contents:
    docs/cpp/cpp_docs
    docs/python/python_docs
    docs/python/tutorials/python_tut
+
