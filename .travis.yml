@@ -17,102 +17,102 @@ env:
 
 matrix:
   include:
-    # - env: PAGMO_BUILD="DebugGCC48"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-4.8
-    #       - g++-4.8
-    #       - binutils-gold
-    # - env: PAGMO_BUILD="ReleaseGCC48"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-4.8
-    #       - g++-4.8
-    #       - binutils-gold
-    # - env: PAGMO_BUILD="CoverageGCC5"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-5
-    #       - g++-5
-    #       - binutils-gold
-    # - env: PAGMO_BUILD="DebugGCC6"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-6
-    #       - g++-6
-    #       - binutils-gold
-    # - env: PAGMO_BUILD="DebugClang38"
-    #   compiler: clang
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - llvm-toolchain-precise-3.8
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - clang-3.8
-    # - env: PAGMO_BUILD="ReleaseClang38"
-    #   compiler: clang
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - llvm-toolchain-precise-3.8
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - clang-3.8
-    # - env: PAGMO_BUILD="Python36"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-4.8
-    #       - g++-4.8
-    # - env: PAGMO_BUILD="Python27"
-    #   compiler: gcc
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #       - ubuntu-toolchain-r-test
-    #       packages:
-    #       - gcc-4.8
-    #       - g++-4.8
-    # - env: PAGMO_BUILD="OSXDebug"
-    #   os: osx
-    #   osx_image: xcode6.4
-    # - env: PAGMO_BUILD="OSXRelease"
-    #   os: osx
-    #   osx_image: xcode6.4
-    # - env: PAGMO_BUILD="OSXPython36"
-    #   os: osx
-    #   osx_image: xcode6.4
-    # - env: PAGMO_BUILD="OSXPython27"
-    #   os: osx
-    #   osx_image: xcode6.4
+    - env: PAGMO_BUILD="DebugGCC48"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-4.8
+          - g++-4.8
+          - binutils-gold
+    - env: PAGMO_BUILD="ReleaseGCC48"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-4.8
+          - g++-4.8
+          - binutils-gold
+    - env: PAGMO_BUILD="CoverageGCC5"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-5
+          - g++-5
+          - binutils-gold
+    - env: PAGMO_BUILD="DebugGCC6"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-6
+          - g++-6
+          - binutils-gold
+    - env: PAGMO_BUILD="DebugClang38"
+      compiler: clang
+      os: linux
+      addons:
+        apt:
+          sources:
+          - llvm-toolchain-precise-3.8
+          - ubuntu-toolchain-r-test
+          packages:
+          - clang-3.8
+    - env: PAGMO_BUILD="ReleaseClang38"
+      compiler: clang
+      os: linux
+      addons:
+        apt:
+          sources:
+          - llvm-toolchain-precise-3.8
+          - ubuntu-toolchain-r-test
+          packages:
+          - clang-3.8
+    - env: PAGMO_BUILD="Python36"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-4.8
+          - g++-4.8
+    - env: PAGMO_BUILD="Python27"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-4.8
+          - g++-4.8
+    - env: PAGMO_BUILD="OSXDebug"
+      os: osx
+      osx_image: xcode6.4
+    - env: PAGMO_BUILD="OSXRelease"
+      os: osx
+      osx_image: xcode6.4
+    - env: PAGMO_BUILD="OSXPython36"
+      os: osx
+      osx_image: xcode6.4
+    - env: PAGMO_BUILD="OSXPython27"
+      os: osx
+      osx_image: xcode6.4
     - env: PAGMO_BUILD="manylinux64Py27" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
       sudo: required
       services:

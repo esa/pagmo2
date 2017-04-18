@@ -83,9 +83,13 @@ cd /pagmo2/build
 cmake ../ -DPAGMO_INSTALL_HEADERS=no -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python
 make -j2 install
 cd wheel
+# Copy the installed pygmo files, wherever they might be in /usr/local,
+# into the current dir.
 cp -a `find /usr/local/lib -type d -iname 'pygmo'` ./
+# Create the wheel and repair it.
 /opt/python/${PYTHON_DIR}/bin/python setup.py bdist_wheel
 auditwheel repair dist/pygmo* -w ./dist2
+# Try to install it and run the tests.
 cd /
 /opt/python/${PYTHON_DIR}/bin/pip install /pagmo2/build/wheel/dist2/pygmo*
 /opt/python/${PYTHON_DIR}/bin/python -c "import pygmo; pygmo.test.run_test_suite()"
