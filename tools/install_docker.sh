@@ -74,7 +74,9 @@ make -j2 install > /dev/null
 cd ..
 
 # Python deps
-/opt/python/${PYTHON_DIR}/bin/pip install dill numpy
+/opt/python/${PYTHON_DIR}/bin/pip install dill numpy ipyparallel
+/opt/python/${PYTHON_DIR}/bin/ipcluster start --daemonize=True
+sleep 20
 
 # pagmo
 cd /pagmo2/build
