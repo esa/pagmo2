@@ -52,7 +52,7 @@ The following table summarizes the pros and cons of the various installation met
 ========= ============ ============ ========== ========== ================ ==========
 Method    Linux Py 2.7 Linux Py 3.x OSX Py 2.7 OSX Py 3.x Win Py 2.7       Win Py 3.x
 ========= ============ ============ ========== ========== ================ ==========
-conda     64bit        64bit        64bit      64bit      ✘                32/64bit
+conda     64bit        64bit        64bit      64bit      ✘                64bit
 pip       64bit        64bit        ✘          ✘          64bit (MinGW)    64bit (MinGW)
 source    32/64bit     32/64bit     32/64bit   32/64bit   32/64bit (MinGW) 32/64bit
 ========= ============ ============ ========== ========== ================ ==========
