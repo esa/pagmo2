@@ -1,5 +1,5 @@
-PaGMO v2.0
-==========
+pagmo
+=====
 
 [![Join the chat at https://gitter.im/pagmo2/Lobby](https://badges.gitter.im/pagmo2/Lobby.svg)](https://gitter.im/pagmo2/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/esa/pagmo2.svg?branch=master)](https://travis-ci.org/esa/pagmo2)
