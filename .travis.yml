@@ -10,7 +10,10 @@ branches:
 
 env:
   global:
+    # github pages token.
     - secure: "T5IAwX5V7gF+ALggE8wppXyhRe2rh0KCrM6H/JLzBM/hJ122blu9PGadRx7vXSoHkMB9InwLBpnUVf5NXvFJX7+0RmpMp6taj0/hlhl4mP+b6B7+UIg7b07XCvEm4Eyj25UqvoxKaUpsqd3BbCljNLkwHeRZ+P0eKL9m8YUjuqlRKW1BN1QkYGmrT0+1KT4gxXAql+/TS1RH4bnQsnXfau8bdrN7z21fMFMHHTH6e5OvFRsox0QS71miJf6VMPbpZ6HkAyfFywflQPRsJiHbhEGWt7AcE2DixKkJ4zJRD0IBuz2QbTs8irSQb03Upxni4BwRNezFNtgLWJmtgIN/Ww26ZgEXWC0O51OguvwTKkA2u/Sr7Fb2V1/22skj8OQPzBdPp/h1I8tUOZo0Ze5l12gcmDJEeGFA3hEGG1GZ9/zVANvVfCpFHl7rx7D4ggm1bN+Oi1C/JoXT7u1KhfiJtT5L77i4XJ1WBeQOpIV88UfGf28lhJxrt/HzkSoVT9N+t9GN9tPOWbvPqKOUIZqkxr+xz6FapL5eAySOUOJKOyUZ5Wcxa80aZFZHXfYOD8wVpImIxgxEI0LGznhftWY44bVegr1aSDeMCHVA34LZ62zJ+Ee7F40eKaX8HIzXt8F35i+LBVEiglteLd6KgNH3iSvp+EtAtSsu8eijD5fq6Lo="
+    # twine password.
+    - secure: "AyVcnmZELuDJHqd3M5KEUomCzOZt6QECoD6OWQgBFgrxwVxpSLzu1fvdepnIJ+ZKY21YImaIqu+A6Vr+1o7Tit/vw3qEtZqy/WyztPEPD3EZRskNuFaI6QDKp5RfmARKqxAJea72KsIdCCPCPvvUcMV6yNMlzsOg85PN+O8PmHcDHFkfKAOCByV6GFc9pTA5h57ExUvI9bNdWfDQMr8id1Rn5j5Qys6Dllujxfhao8vD8Ja40950ay6OXem40N7joewXVspVPM8W/Rs2K8Q9gjtklTFap01mmToReqkifADaZzxW5Sf7LYgv3wTqVeAlUsen8gxvutyNJ7XoacCmu2MObrBaiwCawMWVz7TvOh6G02UvO7e+GnBJnI0kT/Pzvhj/DFQh99qX8gBmM1ioPud4Rfz143rAGUYqRovXY4mJxLKzeecQsEZ4BdYgQzT1EtvPgDIp5zqar679ZIiFJEvGmkM1t2htmbui8hny4IGTY9LmFES2zLH1xer3aD3uvA9po/DJ9j002mlQzch2ttwVNgOi0kTouxFeFNJ6Zin2r6IH5FVGc4bA7FzoddJxooiMMKUAdhMAGsGL6nfYkpF1lLUn+YH6Kukqcx3BfONaN3s5hJ4Xut6tURdBduabhBfd58QIk34bdJZCv3pZUdOPAmGTiRUcygLvKGfbJGI="
 
 matrix:
   include:
@@ -110,6 +113,18 @@ matrix:
     - env: PAGMO_BUILD="OSXPython27"
       os: osx
       osx_image: xcode6.4
+    - env: PAGMO_BUILD="manylinux64Py27" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+      sudo: required
+      services:
+      - docker
+    - env: PAGMO_BUILD="manylinux64Py36" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+      sudo: required
+      services:
+      - docker
+    - env: PAGMO_BUILD="manylinux64Py35" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+      sudo: required
+      services:
+      - docker
 
 script:
     - mkdir build

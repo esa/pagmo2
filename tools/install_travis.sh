@@ -5,7 +5,9 @@ set -e
 # Echo each command
 set -x
 
-export PATH="$deps_dir/bin:$PATH"
+if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
+    export PATH="$deps_dir/bin:$PATH"
+fi
 
 if [[ "${PAGMO_BUILD}" == "ReleaseGCC48" ]]; then
     CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ../;
@@ -40,7 +42,7 @@ elif [[ "${PAGMO_BUILD}" == "OSXRelease" ]]; then
     CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ../;
     make -j2 VERBOSE=1;
     ctest;
-elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; then
+elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_INSTALL_HEADERS=no -DPAGMO_BUILD_PYGMO=yes ../;
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
@@ -109,13 +111,17 @@ elif [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "Python27" ]]; the
             exit 1;
         fi
     done
-elif [[ "${PAGMO_BUILD}" == "OSXPython36" || "${PAGMO_BUILD}" == "OSXPython27" ]]; then
+elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     CXX=clang++ CC=clang cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_INSTALL_HEADERS=no -DPAGMO_BUILD_PYGMO=yes -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
     sleep 20;
     python -c "import pygmo; pygmo.test.run_test_suite()"
+elif [[ "${PAGMO_BUILD}" == manylinux* ]]; then
+    cd ..;
+    docker pull ${DOCKER_IMAGE};
+    docker run --rm -e TWINE_PASSWORD -e PAGMO_BUILD -e TRAVIS_TAG -v `pwd`:/pagmo2 $DOCKER_IMAGE bash /pagmo2/tools/install_docker.sh
 fi
 
 set +e

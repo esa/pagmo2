@@ -52,7 +52,7 @@ The following table summarizes the pros and cons of the various installation met
 ========= ============ ============ ========== ========== ================ ==========
 Method    Linux Py 2.7 Linux Py 3.x OSX Py 2.7 OSX Py 3.x Win Py 2.7       Win Py 3.x
 ========= ============ ============ ========== ========== ================ ==========
-conda     64bit        64bit        64bit      64bit      ✘                32/64bit
+conda     64bit        64bit        64bit      64bit      ✘                64bit
 pip       64bit        64bit        ✘          ✘          64bit (MinGW)    64bit (MinGW)
 source    32/64bit     32/64bit     32/64bit   32/64bit   32/64bit (MinGW) 32/64bit
 ========= ============ ============ ========== ========== ================ ==========
@@ -71,10 +71,13 @@ Thus, the pygmo packages for conda on Windows might lack some Fortran-based feat
 Thus, in order to provide a better experience to our Windows users, we publish `pip <https://pip.pypa.io/en/stable/>`_
 packages for pygmo built with `MinGW <https://mingw-w64.org/doku.php>`_. These packages allow us both to support Python 2.7
 and to provide a full-featured pygmo on Windows, thanks to the ``gfortran`` compiler. The pip packages are also available on
-Linux for those users who might prefer pip to conda, but **not** on OSX.
+Linux for those users who might prefer pip to conda, but they are **not** available on OSX.
 
 Finally, it is always possible to compile pygmo from source. This is the most flexible and powerful option, but of course
 also the least user-friendly.
+
+.. note::
+   As a general policy, we are committed to providing packages for Python 2.7 and for the latest two versions of Python 3.x.
 
 
 Installation with conda
@@ -93,11 +96,17 @@ your conda installation.
 
 Installation with pip
 ^^^^^^^^^^^^^^^^^^^^^
-The installation of pygmo with conda is also straightforward:
+The installation of pygmo with pip is also straightforward:
 
 .. code-block:: bash
 
    pip install pygmo
+
+If you want to install pygmo for a single user instead of system-wide, which is in general a good idea, you can do:
+
+.. code-block:: bash
+
+   pip install --user pygmo
 
 
 Installation from source
