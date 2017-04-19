@@ -241,7 +241,7 @@ of pygmo:</p>
 <td>64bit</td>
 <td>64bit</td>
 <td>✘</td>
-<td>32/64bit</td>
+<td>64bit</td>
 </tr>
 <tr class="row-odd"><td>pip</td>
 <td>64bit</td>
@@ -273,9 +273,13 @@ Thus, the pygmo packages for conda on Windows might lack some Fortran-based feat
 <p>Thus, in order to provide a better experience to our Windows users, we publish <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a>
 packages for pygmo built with <a class="reference external" href="https://mingw-w64.org/doku.php">MinGW</a>. These packages allow us both to support Python 2.7
 and to provide a full-featured pygmo on Windows, thanks to the <code class="docutils literal"><span class="pre">gfortran</span></code> compiler. The pip packages are also available on
-Linux for those users who might prefer pip to conda, but <strong>not</strong> on OSX.</p>
+Linux for those users who might prefer pip to conda, but they are <strong>not</strong> available on OSX.</p>
 <p>Finally, it is always possible to compile pygmo from source. This is the most flexible and powerful option, but of course
 also the least user-friendly.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As a general policy, we are committed to providing packages for Python 2.7 and for the latest two versions of Python 3.x.</p>
+</div>
 <div class="section" id="installation-with-conda">
 <h3><a class="toc-backref" href="#id6">Installation with conda</a><a class="headerlink" href="#installation-with-conda" title="Permalink to this headline">¶</a></h3>
 <p>The installation of pygmo with conda is straightforward. We just need to add <code class="docutils literal"><span class="pre">conda-forge</span></code> to the channels,
@@ -289,8 +293,12 @@ your conda installation.</p>
 </div>
 <div class="section" id="installation-with-pip">
 <h3><a class="toc-backref" href="#id7">Installation with pip</a><a class="headerlink" href="#installation-with-pip" title="Permalink to this headline">¶</a></h3>
-<p>The installation of pygmo with conda is also straightforward:</p>
+<p>The installation of pygmo with pip is also straightforward:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>pip install pygmo
+</pre></div>
+</div>
+<p>If you want to install pygmo for a single user instead of system-wide, which is in general a good idea, you can do:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install --user pygmo
 </pre></div>
 </div>
 </div>
