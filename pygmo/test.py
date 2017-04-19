@@ -1293,7 +1293,13 @@ def run_test_suite():
     This function will raise an exception if at least one test fails.
 
     """
-    from . import _problem_test, _algorithm_test, _island_test
+    from . import _problem_test, _algorithm_test, _island_test, set_global_rng_seed
+
+    # Make test runs deterministic.
+    # NOTE: we'll need to place the async/migration tests at the end, so that at
+    # least the first N tests are really deterministic.
+    set_global_rng_seed(42)
+
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(_problem_test.problem_test_case())
@@ -1336,6 +1342,12 @@ def run_test_suite():
     except ImportError:
         pass
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
+
+    # Re-seed to random just in case anyone ever uses this function
+    # in an interactive session or something.
+    import random
+    set_global_rng_seed(random.randint(0, 2**30))
+
     if len(test_result.failures) > 0 or len(test_result.errors) > 0:
         retval = 1
     if retval != 0:
