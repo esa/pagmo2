@@ -157,6 +157,19 @@ inline std::string nlopt_res2string(::nlopt_result err)
     return (nlopt_data<>::results.find(err) == nlopt_data<>::results.end() ? "??" : nlopt_data<>::results.at(err));
 }
 
+extern "C" {
+
+// Wrappers to connect our objfun/constraints calculation machinery to NLopt's. Declared here,
+// defined as inline functions later in order to avoid circular deps.
+// NOTE: these functions need to be passed to the NLopt C API, and as such they need to be
+// declated within an 'extern "C"' block (otherwise, it might be UB to pass C++ function pointers
+// to a C API).
+// https://www.reddit.com/r/cpp/comments/4fqfy7/using_c11_capturing_lambdas_w_vanilla_c_api/d2b9bh0/
+double nlopt_objfun_wrapper(unsigned, const double *, double *, void *);
+void nlopt_ineq_c_wrapper(unsigned, double *, unsigned, const double *, double *, void *);
+void nlopt_eq_c_wrapper(unsigned, double *, unsigned, const double *, double *, void *);
+}
+
 struct nlopt_obj {
     // Single entry of the log (objevals, objval, n of unsatisfied const, constr. violation, feasibility).
     using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
@@ -300,122 +313,7 @@ struct nlopt_obj {
         if (m_prob.has_gradient_sparsity()) {
             m_sp = m_prob.gradient_sparsity();
         }
-        auto res = ::nlopt_set_min_objective(
-            m_value.get(),
-            [](unsigned dim, const double *x, double *grad, void *f_data) -> double {
-                // Get *this back from the function data.
-                auto &nlo = *static_cast<nlopt_obj *>(f_data);
-
-                // NOTE: the idea here is that we wrap everything in a try/catch block,
-                // and, if any exception is thrown, we record it into the nlo object
-                // and re-throw it later. We do this because we are using the NLopt C API,
-                // and if we let exceptions out of here we run in undefined behaviour.
-                // We do the same for the constraints functions.
-                try {
-                    // A few shortcuts.
-                    auto &p = nlo.m_prob;
-                    auto &dv = nlo.m_dv;
-                    const auto verb = nlo.m_verbosity;
-                    auto &f_count = nlo.m_objfun_counter;
-                    auto &log = nlo.m_log;
-
-                    // A couple of sanity checks.
-                    assert(dim == p.get_nx());
-                    assert(dv.size() == dim);
-
-                    if (grad && !p.has_gradient()) {
-                        // If grad is not null, it means we are in an algorithm
-                        // that needs the gradient. If the problem does not support it,
-                        // we error out.
-                        pagmo_throw(
-                            std::invalid_argument,
-                            "during an optimization with the NLopt algorithm '"
-                                + data::names.right.at(::nlopt_get_algorithm(nlo.m_value.get()))
-                                + "' an objective function gradient was requested, but the optimisation problem '"
-                                + p.get_name() + "' does not provide it");
-                    }
-
-                    // Copy the decision vector in our temporary dv vector_double,
-                    // for use in the pagmo API.
-                    std::copy(x, x + dim, dv.begin());
-
-                    // Compute fitness.
-                    const auto fitness = p.fitness(dv);
-
-                    // Compute gradient, if needed.
-                    if (grad) {
-                        const auto gradient = p.gradient(dv);
-
-                        if (p.has_gradient_sparsity()) {
-                            // Sparse gradient case.
-                            auto &sp = nlo.m_sp;
-                            // NOTE: problem::gradient() has already checked that
-                            // the returned vector has size m_gs_dim, i.e., the stored
-                            // size of the sparsity pattern. On the other hand,
-                            // problem::gradient_sparsity() also checks that the returned
-                            // vector has size m_gs_dim, so these two must have the same size.
-                            assert(gradient.size() == sp.size());
-                            auto g_it = gradient.begin();
-
-                            // First we fill the dense output gradient with zeroes.
-                            std::fill(grad, grad + dim, 0.);
-                            // Then we iterate over the sparsity pattern, and fill in the
-                            // nonzero bits in grad.
-                            for (auto it = sp.begin(); it != sp.end() && it->first == 0u; ++it, ++g_it) {
-                                // NOTE: we just need the gradient of the objfun,
-                                // i.e., those (i,j) pairs in which i == 0. We know that the gradient
-                                // of the objfun, if present, starts at the beginning of sp, as sp is
-                                // sorted in lexicographic fashion.
-                                grad[it->second] = *g_it;
-                            }
-                        } else {
-                            // Dense gradient case.
-                            unchecked_copy(p.get_nx(), gradient.data(), grad);
-                        }
-                    }
-
-                    // Update the log if requested.
-                    if (verb && !(f_count % verb)) {
-                        // Constraints bits.
-                        const auto ctol = p.get_c_tol();
-                        const auto c1eq = detail::test_eq_constraints(fitness.data() + 1,
-                                                                      fitness.data() + 1 + p.get_nec(), ctol.data());
-                        const auto c1ineq
-                            = detail::test_ineq_constraints(fitness.data() + 1 + p.get_nec(),
-                                                            fitness.data() + fitness.size(), ctol.data() + p.get_nec());
-                        // This will be the total number of violated constraints.
-                        const auto nv = p.get_nc() - c1eq.first - c1ineq.first;
-                        // This will be the norm of the violation.
-                        const auto l = c1eq.second + c1ineq.second;
-                        // Test feasibility.
-                        const auto feas = p.feasibility_f(fitness);
-
-                        if (!(f_count / verb % 50u)) {
-                            // Every 50 lines print the column names.
-                            print("\n", std::setw(10), "objevals:", std::setw(15), "objval:", std::setw(15),
-                                  "violated:", std::setw(15), "viol. norm:", '\n');
-                        }
-                        // Print to screen the log line.
-                        print(std::setw(10), f_count + 1u, std::setw(15), fitness[0], std::setw(15), nv, std::setw(15),
-                              l, feas ? "" : " i", '\n');
-                        // Record the log.
-                        log.emplace_back(f_count + 1u, fitness[0], nv, l, feas);
-                    }
-
-                    // Update the counter.
-                    ++f_count;
-
-                    // Return the objfun value.
-                    return fitness[0];
-                } catch (...) {
-                    // Store exception, force the stop of the optimisation,
-                    // and return a useless value.
-                    nlo.m_eptr = std::current_exception();
-                    ::nlopt_force_stop(nlo.m_value.get());
-                    return HUGE_VAL;
-                }
-            },
-            static_cast<void *>(this));
+        auto res = ::nlopt_set_min_objective(m_value.get(), nlopt_objfun_wrapper, static_cast<void *>(this));
         if (res != NLOPT_SUCCESS) {
             // LCOV_EXCL_START
             pagmo_throw(std::invalid_argument, "could not set the objective function for the NLopt algorithm '"
@@ -431,94 +329,7 @@ struct nlopt_obj {
         if (m_prob.get_nic()) {
             const auto c_tol = m_prob.get_c_tol();
             auto res = ::nlopt_add_inequality_mconstraint(
-                m_value.get(), boost::numeric_cast<unsigned>(m_prob.get_nic()),
-                [](unsigned m, double *result, unsigned dim, const double *x, double *grad, void *f_data) {
-                    // Get *this back from the function data.
-                    auto &nlo = *static_cast<nlopt_obj *>(f_data);
-
-                    try {
-                        // A few shortcuts.
-                        auto &p = nlo.m_prob;
-                        auto &dv = nlo.m_dv;
-
-                        // A couple of sanity checks.
-                        assert(dim == p.get_nx());
-                        assert(dv.size() == dim);
-                        assert(m == p.get_nic());
-
-                        if (grad && !p.has_gradient()) {
-                            // If grad is not null, it means we are in an algorithm
-                            // that needs the gradient. If the problem does not support it,
-                            // we error out.
-                            pagmo_throw(std::invalid_argument,
-                                        "during an optimization with the NLopt algorithm '"
-                                            + data::names.right.at(::nlopt_get_algorithm(nlo.m_value.get()))
-                                            + "' an inequality constraints gradient was requested, but the "
-                                              "optimisation problem '"
-                                            + p.get_name() + "' does not provide it");
-                        }
-
-                        // Copy the decision vector in our temporary dv vector_double,
-                        // for use in the pagmo API.
-                        std::copy(x, x + dim, dv.begin());
-
-                        // Compute fitness and write IC to the output.
-                        // NOTE: fitness is nobj + nec + nic.
-                        const auto fitness = p.fitness(dv);
-                        unchecked_copy(p.get_nic(), fitness.data() + 1 + p.get_nec(), result);
-
-                        if (grad) {
-                            // Handle gradient, if requested.
-                            const auto gradient = p.gradient(dv);
-
-                            if (p.has_gradient_sparsity()) {
-                                // Sparse gradient.
-                                auto &sp = nlo.m_sp;
-                                // NOTE: problem::gradient() has already checked that
-                                // the returned vector has size m_gs_dim, i.e., the stored
-                                // size of the sparsity pattern. On the other hand,
-                                // problem::gradient_sparsity() also checks that the returned
-                                // vector has size m_gs_dim, so these two must have the same size.
-                                assert(gradient.size() == sp.size());
-
-                                // Let's first fill it with zeroes.
-                                std::fill(grad, grad + p.get_nx() * p.get_nic(), 0.);
-
-                                // Now we need to go into the sparsity pattern and find where
-                                // the sparsity data for the constraints start.
-                                using pair_t = sparsity_pattern::value_type;
-                                auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(p.get_nec() + 1u, 0u));
-
-                                // Need to do a bit of horrid overflow checking :/.
-                                using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
-                                using udiff_type = std::make_unsigned<diff_type>::type;
-                                if (sp.size() > static_cast<udiff_type>(std::numeric_limits<diff_type>::max())) {
-                                    pagmo_throw(std::overflow_error,
-                                                "Overflow error, the sparsity pattern size is too large.");
-                                }
-                                // This is the index at which the ineq constraints start.
-                                const auto idx = std::distance(sp.begin(), it_sp);
-                                // Grab the start of the gradient data for the ineq constraints.
-                                auto g_it = gradient.data() + idx;
-
-                                // Then we iterate over the sparsity pattern, and fill in the
-                                // nonzero bits in grad. Run until sp.end() as the IC are at the
-                                // end of the sparsity/gradient vector.
-                                for (; it_sp != sp.end(); ++it_sp, ++g_it) {
-                                    grad[(it_sp->first - 1u - p.get_nec()) * p.get_nx() + it_sp->second] = *g_it;
-                                }
-                            } else {
-                                // Dense gradient.
-                                unchecked_copy(p.get_nic() * p.get_nx(),
-                                               gradient.data() + p.get_nx() * (1u + p.get_nec()), grad);
-                            }
-                        }
-                    } catch (...) {
-                        // Store exception, stop optimisation.
-                        nlo.m_eptr = std::current_exception();
-                        ::nlopt_force_stop(nlo.m_value.get());
-                    }
-                },
+                m_value.get(), boost::numeric_cast<unsigned>(m_prob.get_nic()), nlopt_ineq_c_wrapper,
                 static_cast<void *>(this), c_tol.data() + m_prob.get_nec());
             if (res != NLOPT_SUCCESS) {
                 pagmo_throw(std::invalid_argument,
@@ -534,99 +345,8 @@ struct nlopt_obj {
     {
         if (m_prob.get_nec()) {
             const auto c_tol = m_prob.get_c_tol();
-            auto res = ::nlopt_add_equality_mconstraint(
-                m_value.get(), boost::numeric_cast<unsigned>(m_prob.get_nec()),
-                [](unsigned m, double *result, unsigned dim, const double *x, double *grad, void *f_data) {
-                    // Get *this back from the function data.
-                    auto &nlo = *static_cast<nlopt_obj *>(f_data);
-
-                    try {
-                        // A few shortcuts.
-                        auto &p = nlo.m_prob;
-                        auto &dv = nlo.m_dv;
-
-                        // A couple of sanity checks.
-                        assert(dim == p.get_nx());
-                        assert(dv.size() == dim);
-                        assert(m == p.get_nec());
-
-                        if (grad && !p.has_gradient()) {
-                            // If grad is not null, it means we are in an algorithm
-                            // that needs the gradient. If the problem does not support it,
-                            // we error out.
-                            pagmo_throw(
-                                std::invalid_argument,
-                                "during an optimization with the NLopt algorithm '"
-                                    + data::names.right.at(::nlopt_get_algorithm(nlo.m_value.get()))
-                                    + "' an equality constraints gradient was requested, but the optimisation problem '"
-                                    + p.get_name() + "' does not provide it");
-                        }
-
-                        // Copy the decision vector in our temporary dv vector_double,
-                        // for use in the pagmo API.
-                        std::copy(x, x + dim, dv.begin());
-
-                        // Compute fitness and write EC to the output.
-                        // NOTE: fitness is nobj + nec + nic.
-                        const auto fitness = p.fitness(dv);
-                        unchecked_copy(p.get_nec(), fitness.data() + 1, result);
-
-                        if (grad) {
-                            // Handle gradient, if requested.
-                            const auto gradient = p.gradient(dv);
-
-                            if (p.has_gradient_sparsity()) {
-                                // Sparse gradient case.
-                                auto &sp = nlo.m_sp;
-                                // NOTE: problem::gradient() has already checked that
-                                // the returned vector has size m_gs_dim, i.e., the stored
-                                // size of the sparsity pattern. On the other hand,
-                                // problem::gradient_sparsity() also checks that the returned
-                                // vector has size m_gs_dim, so these two must have the same size.
-                                assert(gradient.size() == sp.size());
-
-                                // Let's first fill it with zeroes.
-                                std::fill(grad, grad + p.get_nx() * p.get_nec(), 0.);
-
-                                // Now we need to go into the sparsity pattern and find where
-                                // the sparsity data for the constraints start.
-                                using pair_t = sparsity_pattern::value_type;
-                                // NOTE: it_sp could be end() or point to ineq constraints. This should
-                                // be fine: it_sp is a valid iterator in sp, sp has the same
-                                // size as gradient and we do the proper checks below before accessing
-                                // the values pointed to by it_sp/g_it.
-                                auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(1u, 0u));
-
-                                // Need to do a bit of horrid overflow checking :/.
-                                using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
-                                using udiff_type = std::make_unsigned<diff_type>::type;
-                                if (sp.size() > static_cast<udiff_type>(std::numeric_limits<diff_type>::max())) {
-                                    pagmo_throw(std::overflow_error,
-                                                "Overflow error, the sparsity pattern size is too large.");
-                                }
-                                // This is the index at which the eq constraints start.
-                                const auto idx = std::distance(sp.begin(), it_sp);
-                                // Grab the start of the gradient data for the eq constraints.
-                                auto g_it = gradient.data() + idx;
-
-                                // Then we iterate over the sparsity pattern, and fill in the
-                                // nonzero bits in grad. We terminate either at the end of sp, or when
-                                // we encounter the first inequality constraint.
-                                for (; it_sp != sp.end() && it_sp->first < p.get_nec() + 1u; ++it_sp, ++g_it) {
-                                    grad[(it_sp->first - 1u) * p.get_nx() + it_sp->second] = *g_it;
-                                }
-                            } else {
-                                // Dense gradient.
-                                unchecked_copy(p.get_nx() * p.get_nec(), gradient.data() + p.get_nx(), grad);
-                            }
-                        }
-                    } catch (...) {
-                        // Store exception, stop optimisation.
-                        nlo.m_eptr = std::current_exception();
-                        ::nlopt_force_stop(nlo.m_value.get());
-                    }
-                },
-                static_cast<void *>(this), c_tol.data());
+            auto res = ::nlopt_add_equality_mconstraint(m_value.get(), boost::numeric_cast<unsigned>(m_prob.get_nec()),
+                                                        nlopt_eq_c_wrapper, static_cast<void *>(this), c_tol.data());
             if (res != NLOPT_SUCCESS) {
                 pagmo_throw(std::invalid_argument,
                             "could not set the equality constraints for the NLopt algorithm '"
@@ -657,6 +377,297 @@ struct nlopt_obj {
     // in the evolve() method.
     std::exception_ptr m_eptr;
 };
+
+inline double nlopt_objfun_wrapper(unsigned dim, const double *x, double *grad, void *f_data)
+{
+    // Get *this back from the function data.
+    auto &nlo = *static_cast<nlopt_obj *>(f_data);
+
+    // NOTE: the idea here is that we wrap everything in a try/catch block,
+    // and, if any exception is thrown, we record it into the nlo object
+    // and re-throw it later. We do this because we are using the NLopt C API,
+    // and if we let exceptions out of here we run in undefined behaviour.
+    // We do the same for the constraints functions.
+    try {
+        // A few shortcuts.
+        auto &p = nlo.m_prob;
+        auto &dv = nlo.m_dv;
+        const auto verb = nlo.m_verbosity;
+        auto &f_count = nlo.m_objfun_counter;
+        auto &log = nlo.m_log;
+
+        // A couple of sanity checks.
+        assert(dim == p.get_nx());
+        assert(dv.size() == dim);
+
+        if (grad && !p.has_gradient()) {
+            // If grad is not null, it means we are in an algorithm
+            // that needs the gradient. If the problem does not support it,
+            // we error out.
+            pagmo_throw(std::invalid_argument,
+                        "during an optimization with the NLopt algorithm '"
+                            + nlopt_data<>::names.right.at(::nlopt_get_algorithm(nlo.m_value.get()))
+                            + "' an objective function gradient was requested, but the optimisation problem '"
+                            + p.get_name() + "' does not provide it");
+        }
+
+        // Copy the decision vector in our temporary dv vector_double,
+        // for use in the pagmo API.
+        std::copy(x, x + dim, dv.begin());
+
+        // Compute fitness.
+        const auto fitness = p.fitness(dv);
+
+        // Compute gradient, if needed.
+        if (grad) {
+            const auto gradient = p.gradient(dv);
+
+            if (p.has_gradient_sparsity()) {
+                // Sparse gradient case.
+                auto &sp = nlo.m_sp;
+                // NOTE: problem::gradient() has already checked that
+                // the returned vector has size m_gs_dim, i.e., the stored
+                // size of the sparsity pattern. On the other hand,
+                // problem::gradient_sparsity() also checks that the returned
+                // vector has size m_gs_dim, so these two must have the same size.
+                assert(gradient.size() == sp.size());
+                auto g_it = gradient.begin();
+
+                // First we fill the dense output gradient with zeroes.
+                std::fill(grad, grad + dim, 0.);
+                // Then we iterate over the sparsity pattern, and fill in the
+                // nonzero bits in grad.
+                for (auto it = sp.begin(); it != sp.end() && it->first == 0u; ++it, ++g_it) {
+                    // NOTE: we just need the gradient of the objfun,
+                    // i.e., those (i,j) pairs in which i == 0. We know that the gradient
+                    // of the objfun, if present, starts at the beginning of sp, as sp is
+                    // sorted in lexicographic fashion.
+                    grad[it->second] = *g_it;
+                }
+            } else {
+                // Dense gradient case.
+                nlopt_obj::unchecked_copy(p.get_nx(), gradient.data(), grad);
+            }
+        }
+
+        // Update the log if requested.
+        if (verb && !(f_count % verb)) {
+            // Constraints bits.
+            const auto ctol = p.get_c_tol();
+            const auto c1eq
+                = detail::test_eq_constraints(fitness.data() + 1, fitness.data() + 1 + p.get_nec(), ctol.data());
+            const auto c1ineq = detail::test_ineq_constraints(
+                fitness.data() + 1 + p.get_nec(), fitness.data() + fitness.size(), ctol.data() + p.get_nec());
+            // This will be the total number of violated constraints.
+            const auto nv = p.get_nc() - c1eq.first - c1ineq.first;
+            // This will be the norm of the violation.
+            const auto l = c1eq.second + c1ineq.second;
+            // Test feasibility.
+            const auto feas = p.feasibility_f(fitness);
+
+            if (!(f_count / verb % 50u)) {
+                // Every 50 lines print the column names.
+                print("\n", std::setw(10), "objevals:", std::setw(15), "objval:", std::setw(15), "violated:",
+                      std::setw(15), "viol. norm:", '\n');
+            }
+            // Print to screen the log line.
+            print(std::setw(10), f_count + 1u, std::setw(15), fitness[0], std::setw(15), nv, std::setw(15), l,
+                  feas ? "" : " i", '\n');
+            // Record the log.
+            log.emplace_back(f_count + 1u, fitness[0], nv, l, feas);
+        }
+
+        // Update the counter.
+        ++f_count;
+
+        // Return the objfun value.
+        return fitness[0];
+    } catch (...) {
+        // Store exception, force the stop of the optimisation,
+        // and return a useless value.
+        nlo.m_eptr = std::current_exception();
+        ::nlopt_force_stop(nlo.m_value.get());
+        return HUGE_VAL;
+    }
+}
+
+inline void nlopt_ineq_c_wrapper(unsigned m, double *result, unsigned dim, const double *x, double *grad, void *f_data)
+{
+    // Get *this back from the function data.
+    auto &nlo = *static_cast<nlopt_obj *>(f_data);
+
+    try {
+        // A few shortcuts.
+        auto &p = nlo.m_prob;
+        auto &dv = nlo.m_dv;
+
+        // A couple of sanity checks.
+        assert(dim == p.get_nx());
+        assert(dv.size() == dim);
+        assert(m == p.get_nic());
+
+        if (grad && !p.has_gradient()) {
+            // If grad is not null, it means we are in an algorithm
+            // that needs the gradient. If the problem does not support it,
+            // we error out.
+            pagmo_throw(std::invalid_argument,
+                        "during an optimization with the NLopt algorithm '"
+                            + nlopt_data<>::names.right.at(::nlopt_get_algorithm(nlo.m_value.get()))
+                            + "' an inequality constraints gradient was requested, but the "
+                              "optimisation problem '"
+                            + p.get_name() + "' does not provide it");
+        }
+
+        // Copy the decision vector in our temporary dv vector_double,
+        // for use in the pagmo API.
+        std::copy(x, x + dim, dv.begin());
+
+        // Compute fitness and write IC to the output.
+        // NOTE: fitness is nobj + nec + nic.
+        const auto fitness = p.fitness(dv);
+        nlopt_obj::unchecked_copy(p.get_nic(), fitness.data() + 1 + p.get_nec(), result);
+
+        if (grad) {
+            // Handle gradient, if requested.
+            const auto gradient = p.gradient(dv);
+
+            if (p.has_gradient_sparsity()) {
+                // Sparse gradient.
+                auto &sp = nlo.m_sp;
+                // NOTE: problem::gradient() has already checked that
+                // the returned vector has size m_gs_dim, i.e., the stored
+                // size of the sparsity pattern. On the other hand,
+                // problem::gradient_sparsity() also checks that the returned
+                // vector has size m_gs_dim, so these two must have the same size.
+                assert(gradient.size() == sp.size());
+
+                // Let's first fill it with zeroes.
+                std::fill(grad, grad + p.get_nx() * p.get_nic(), 0.);
+
+                // Now we need to go into the sparsity pattern and find where
+                // the sparsity data for the constraints start.
+                using pair_t = sparsity_pattern::value_type;
+                auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(p.get_nec() + 1u, 0u));
+
+                // Need to do a bit of horrid overflow checking :/.
+                using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
+                using udiff_type = std::make_unsigned<diff_type>::type;
+                if (sp.size() > static_cast<udiff_type>(std::numeric_limits<diff_type>::max())) {
+                    pagmo_throw(std::overflow_error, "Overflow error, the sparsity pattern size is too large.");
+                }
+                // This is the index at which the ineq constraints start.
+                const auto idx = std::distance(sp.begin(), it_sp);
+                // Grab the start of the gradient data for the ineq constraints.
+                auto g_it = gradient.data() + idx;
+
+                // Then we iterate over the sparsity pattern, and fill in the
+                // nonzero bits in grad. Run until sp.end() as the IC are at the
+                // end of the sparsity/gradient vector.
+                for (; it_sp != sp.end(); ++it_sp, ++g_it) {
+                    grad[(it_sp->first - 1u - p.get_nec()) * p.get_nx() + it_sp->second] = *g_it;
+                }
+            } else {
+                // Dense gradient.
+                nlopt_obj::unchecked_copy(p.get_nic() * p.get_nx(), gradient.data() + p.get_nx() * (1u + p.get_nec()),
+                                          grad);
+            }
+        }
+    } catch (...) {
+        // Store exception, stop optimisation.
+        nlo.m_eptr = std::current_exception();
+        ::nlopt_force_stop(nlo.m_value.get());
+    }
+}
+
+inline void nlopt_eq_c_wrapper(unsigned m, double *result, unsigned dim, const double *x, double *grad, void *f_data)
+{
+    // Get *this back from the function data.
+    auto &nlo = *static_cast<nlopt_obj *>(f_data);
+
+    try {
+        // A few shortcuts.
+        auto &p = nlo.m_prob;
+        auto &dv = nlo.m_dv;
+
+        // A couple of sanity checks.
+        assert(dim == p.get_nx());
+        assert(dv.size() == dim);
+        assert(m == p.get_nec());
+
+        if (grad && !p.has_gradient()) {
+            // If grad is not null, it means we are in an algorithm
+            // that needs the gradient. If the problem does not support it,
+            // we error out.
+            pagmo_throw(std::invalid_argument,
+                        "during an optimization with the NLopt algorithm '"
+                            + nlopt_data<>::names.right.at(::nlopt_get_algorithm(nlo.m_value.get()))
+                            + "' an equality constraints gradient was requested, but the optimisation problem '"
+                            + p.get_name() + "' does not provide it");
+        }
+
+        // Copy the decision vector in our temporary dv vector_double,
+        // for use in the pagmo API.
+        std::copy(x, x + dim, dv.begin());
+
+        // Compute fitness and write EC to the output.
+        // NOTE: fitness is nobj + nec + nic.
+        const auto fitness = p.fitness(dv);
+        nlopt_obj::unchecked_copy(p.get_nec(), fitness.data() + 1, result);
+
+        if (grad) {
+            // Handle gradient, if requested.
+            const auto gradient = p.gradient(dv);
+
+            if (p.has_gradient_sparsity()) {
+                // Sparse gradient case.
+                auto &sp = nlo.m_sp;
+                // NOTE: problem::gradient() has already checked that
+                // the returned vector has size m_gs_dim, i.e., the stored
+                // size of the sparsity pattern. On the other hand,
+                // problem::gradient_sparsity() also checks that the returned
+                // vector has size m_gs_dim, so these two must have the same size.
+                assert(gradient.size() == sp.size());
+
+                // Let's first fill it with zeroes.
+                std::fill(grad, grad + p.get_nx() * p.get_nec(), 0.);
+
+                // Now we need to go into the sparsity pattern and find where
+                // the sparsity data for the constraints start.
+                using pair_t = sparsity_pattern::value_type;
+                // NOTE: it_sp could be end() or point to ineq constraints. This should
+                // be fine: it_sp is a valid iterator in sp, sp has the same
+                // size as gradient and we do the proper checks below before accessing
+                // the values pointed to by it_sp/g_it.
+                auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(1u, 0u));
+
+                // Need to do a bit of horrid overflow checking :/.
+                using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
+                using udiff_type = std::make_unsigned<diff_type>::type;
+                if (sp.size() > static_cast<udiff_type>(std::numeric_limits<diff_type>::max())) {
+                    pagmo_throw(std::overflow_error, "Overflow error, the sparsity pattern size is too large.");
+                }
+                // This is the index at which the eq constraints start.
+                const auto idx = std::distance(sp.begin(), it_sp);
+                // Grab the start of the gradient data for the eq constraints.
+                auto g_it = gradient.data() + idx;
+
+                // Then we iterate over the sparsity pattern, and fill in the
+                // nonzero bits in grad. We terminate either at the end of sp, or when
+                // we encounter the first inequality constraint.
+                for (; it_sp != sp.end() && it_sp->first < p.get_nec() + 1u; ++it_sp, ++g_it) {
+                    grad[(it_sp->first - 1u) * p.get_nx() + it_sp->second] = *g_it;
+                }
+            } else {
+                // Dense gradient.
+                nlopt_obj::unchecked_copy(p.get_nx() * p.get_nec(), gradient.data() + p.get_nx(), grad);
+            }
+        }
+    } catch (...) {
+        // Store exception, stop optimisation.
+        nlo.m_eptr = std::current_exception();
+        ::nlopt_force_stop(nlo.m_value.get());
+    }
+}
 }
 
 /// NLopt algorithms.
