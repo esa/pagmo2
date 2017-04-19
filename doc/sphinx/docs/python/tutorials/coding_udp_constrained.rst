@@ -24,7 +24,7 @@ for unconstrained and equality constrained optimization." (1999). The modificati
 for the purpose of this tutorial, considered as inequalities rather than equality constraints.
 
 The problem at hand has box bounds, 4 equality constraints, two inequalities (note the different form of these) and one objective. Neglecting
-for the time being the fitness, the basic structure for the UDP to have pagmo understand the problem type will be:
+for the time being the fitness, the basic structure for the UDP to have pygmo understand the problem type will be:
 
 .. doctest::
 

@@ -127,7 +127,7 @@ I do not have the gradient
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The example above made use of an UDP, :class:`pygmo.luksan_vlcek1`, that provides also explicit gradients for both the objective and the constraints.
-In many cases this is not the case for UDPs the user may code in a hurry or that are just too complex to allow explicit gradient computations. Lets see
+In many cases this is not the case for UDPs the user may code in a hurry or that are just too complex to allow explicit gradient computations. Let's see
 an example:
 
 .. doctest::
@@ -155,7 +155,7 @@ an example:
     what: during an optimization with the NLopt algorithm 'slsqp' a fitness gradient was requested, but the optimisation problem '<class 'my_udp'>' does not provide it
 
 Bummer! How can I possibly provide a gradient for such a difficult expression of the fitness? Clearly making the derivatives here is not an option :)
-Fortunately pygmo provides some utilities to perform numerical differentiation. In particular :func:`pygmo.estimate_gradient` and :func:`pygmo.estimate_gradient_h`
+Fortunately pygmo provides some utilities to perform numerical differentiation. In particular :func:`pygmo.estimate_gradient()` and :func:`pygmo.estimate_gradient_h()`
 can be used quite straight forwardly. The difference between the two is in the finite difference formula used to estimate numerically the gradient, the little ``_h``
 standing for high-fidelity (a formula accurate to the sixth order is used: see the docs). So all we need to do, then, is to provide the gradients in our UDP:
 
