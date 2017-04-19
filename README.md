@@ -6,6 +6,7 @@ pagmo
 [![Build status](https://ci.appveyor.com/api/projects/status/sus3dsyg3376tiri/branch/master?svg=true)](https://ci.appveyor.com/project/ci4esa/pagmo2/branch/master)
 [![codecov.io](https://codecov.io/github/esa/pagmo2/coverage.svg?branch=master)](https://codecov.io/github/esa/pagmo2?branch=master)
 [![PyPI](https://img.shields.io/pypi/v/pygmo.svg)](https://pypi.python.org/pypi/pygmo)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/pagmo/badges/version.svg)](https://anaconda.org/conda-forge/pagmo)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygmo/badges/version.svg)](https://anaconda.org/conda-forge/pygmo)
 
 pagmo (C++) or pygmo (Python) is a scientific library for massively parallel optimization. It is built around the idea of providing a unified interface to optimization algorithms and to optimization problems and to make their deployment in massively parallel environments easy.
