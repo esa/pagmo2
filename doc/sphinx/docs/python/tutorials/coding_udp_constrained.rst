@@ -72,28 +72,30 @@ In order to check that the UDP above is wll formed for pygmo we try to construct
 
 .. doctest::
 
+    >>> import pygmo as pg
     >>> prob = pg.problem(my_constrained_udp())
-    >>> print(prob)
-    Problem name: <class '__main__.my_constrained_udp'>
-        Global dimension:			6
-        Fitness dimension:			7
-        Number of objectives:			1
-        Equality constraints dimension:		4
-        Inequality constraints dimension:	2
-        Tolerances on constraints: [0, 0, 0, 0, 0, ... ]
-        Lower bounds: [-5, -5, -5, -5, -5, ... ]
-        Upper bounds: [5, 5, 5, 5, 5, ... ]
-
-        Has gradient: true
-        User implemented gradient sparsity: false
-        Expected gradients: 42
-        Has hessians: false
-        User implemented hessians sparsity: false
-
-        Function evaluations: 0
-        Gradient evaluations: 0
-
-        Thread safety: none
+    >>> print(prob) # doctest: +NORMALIZE_WHITESPACE
+    Problem name: <class 'my_constrained_udp'>
+    	Global dimension:			6
+    	Fitness dimension:			7
+    	Number of objectives:			1
+    	Equality constraints dimension:		4
+    	Inequality constraints dimension:	2
+    	Tolerances on constraints: [0, 0, 0, 0, 0, ... ]
+    	Lower bounds: [-5, -5, -5, -5, -5, ... ]
+    	Upper bounds: [5, 5, 5, 5, 5, ... ]
+    <BLANKLINE>
+    	Has gradient: true
+    	User implemented gradient sparsity: false
+    	Expected gradients: 42
+    	Has hessians: false
+    	User implemented hessians sparsity: false
+    <BLANKLINE>
+    	Function evaluations: 0
+    	Gradient evaluations: 0
+    <BLANKLINE>
+    	Thread safety: none
+    <BLANKLINE>
 
 All seems in order. The dimensions are corresponding to what we wanted, the gradient is detected etc.
 
@@ -105,4 +107,4 @@ Solving a constrained User Defined Problem
     >>> algo.set_verbosity(100)
     >>> pop = pg.population(prob = my_constrained_udp(), size = 1)
     >>> pop.problem.c_tol = [1E-6] * 6
-    >>> algo.evolve(pop)
+    >>> algo.evolve(pop) # doctest: +SKIP
