@@ -392,7 +392,7 @@ struct algo_inner final : algo_inner_base {
 
 /// Algorithm class.
 /**
- * \image html algorithm.jpg
+ * \image html algo_no_text.png
  *
  * This class represents an optimization algorithm. An algorithm can be
  * stochastic, deterministic, population based, derivative-free, using hessians,

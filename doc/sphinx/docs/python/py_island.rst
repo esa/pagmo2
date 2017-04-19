@@ -1,8 +1,7 @@
 Island class
 ============
 
-.. image:: ../images/island.png
-   :width: 30%
+.. image:: ../images/island_no_text.png
 
 .. autoclass:: pygmo.island
    :members:

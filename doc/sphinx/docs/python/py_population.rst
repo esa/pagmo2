@@ -1,8 +1,7 @@
 Population class
 ================
 
-.. image:: ../images/pop.png
-   :width: 30%
+.. image:: ../images/pop_no_text.png
 
 .. autoclass:: pygmo.population
    :members:

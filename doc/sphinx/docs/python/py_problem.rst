@@ -1,8 +1,7 @@
 Problem class
 =============
 
-.. image:: ../images/prob.png
-   :width: 30%
+.. image:: ../images/prob_no_text.png
 
 .. autoclass:: pygmo.problem
    :members:

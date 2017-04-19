@@ -1,8 +1,7 @@
 Archipelago class
 =================
 
-.. image:: ../images/archi.png
-   :width: 30%
+.. image:: ../images/archi_no_text.png
 
 .. autoclass:: pygmo.archipelago
    :members:

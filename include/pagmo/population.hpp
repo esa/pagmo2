@@ -52,7 +52,7 @@ namespace pagmo
 {
 /// Population class.
 /**
- * \image html population.jpg
+ * \image html pop_no_text.png
  *
  * This class represents a population of individuals, i.e., potential
  * candidate solutions to a given problem. In pagmo an

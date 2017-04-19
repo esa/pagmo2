@@ -933,7 +933,7 @@ struct prob_inner final : prob_inner_base {
 
 /// Problem class.
 /**
- * \image html problem.png
+ * \image html prob_no_text.png
  *
  * This class represents a generic *mathematical programming* or *evolutionary optimization* problem in the form:
  * \f[

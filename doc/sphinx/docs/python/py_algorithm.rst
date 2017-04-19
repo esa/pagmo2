@@ -1,8 +1,7 @@
 Algorithm class
 ===============
 
-.. image:: ../images/algo.png
-   :width: 30%
+.. image:: ../images/algo_no_text.png
 
 .. autoclass:: pygmo.algorithm
    :members:
