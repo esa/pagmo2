@@ -74,8 +74,8 @@ In order to check that the UDP above is wll formed for pygmo we try to construct
 
     >>> import pygmo as pg
     >>> prob = pg.problem(my_constrained_udp())
-    >>> print(prob) # doctest: +NORMALIZE_WHITESPACE
-    Problem name: <class 'my_constrained_udp'>
+    >>> print(prob) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+    Problem name: ...
     	Global dimension:			6
     	Fitness dimension:			7
     	Number of objectives:			1
@@ -108,3 +108,22 @@ Solving a constrained User Defined Problem
     >>> pop = pg.population(prob = my_constrained_udp(), size = 1)
     >>> pop.problem.c_tol = [1E-6] * 6
     >>> algo.evolve(pop) # doctest: +SKIP
+
+    >>> class add_gradient:
+    ...     def __init__(self, prob):
+    ...         if type(prob) is not pg.core.problem:
+    ...             self.prob = pg.problem(prob)
+    ...         else:
+    ...             self.prob = prob
+    ...     def fitness(self, x):
+    ...         return self.prob.fitness(x)
+    ...     def get_bounds(self):
+    ...         return self.prob.get_bounds()
+    ...     def get_nec(self):
+    ...         return self.prob.get_nec()
+    ...     def get_nic(self):
+    ...         return self.prob.get_nic()
+    ...     def get_nobj(self):
+    ...         return self.prob.get_nobj()
+    ...     def gradient(self, x):
+    ...         return pg.estimate_gradient_h(lambda x: self.fitness(x), x)
