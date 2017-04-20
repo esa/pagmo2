@@ -47,6 +47,7 @@ std::string population_get_ID_docstring();
 std::string population_get_seed_docstring();
 std::string population_champion_x_docstring();
 std::string population_champion_f_docstring();
+std::string population_problem_docstring();
 
 // problem
 std::string problem_docstring();
