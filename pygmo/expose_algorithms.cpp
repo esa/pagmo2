@@ -221,7 +221,8 @@ void expose_algorithms()
     expose_algo_log(pso_, pso_get_log_docstring().c_str());
     pso_.def("get_seed", &pso::get_seed, generic_uda_get_seed_docstring().c_str());
     // SEA
-    auto sea_ = expose_algorithm<sea>("sea", sea_docstring().c_str());
+    auto sea_ = expose_algorithm<sea>("sea", "__init__(gen = 1, seed = random)\n\n"
+                                             "(N+1)-ES simple evolutionary algorithm.\n\n");
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(sea_, "");
