@@ -231,12 +231,12 @@ void expose_problems()
                                                         return ::new pagmo::translate(p, to_vd(tv));
                                                     }),
                                                     bp::default_call_policies()));
-    translate_.add_property("translation", lcast([](const translate &t) { return v_to_a(t.get_translation()); }),
-                            translate_translation_docstring().c_str());
-    translate_.add_property(
-        "inner_problem", bp::make_function(lcast([](translate &udp) -> problem & { return udp.get_inner_problem(); }),
-                                           bp::return_internal_reference<>()),
-        generic_udp_inner_problem_docstring().c_str());
+    add_property(translate_, "translation", lcast([](const translate &t) { return v_to_a(t.get_translation()); }),
+                 translate_translation_docstring().c_str());
+    add_property(translate_, "inner_problem",
+                 bp::make_function(lcast([](translate &udp) -> problem & { return udp.get_inner_problem(); }),
+                                   bp::return_internal_reference<>()),
+                 generic_udp_inner_problem_docstring().c_str());
     // Unconstrain meta-problem.
     auto unconstrain_ = expose_problem<unconstrain>("unconstrain", unconstrain_docstring().c_str());
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
@@ -246,10 +246,10 @@ void expose_problems()
                                          return ::new pagmo::unconstrain(p, method, to_vd(weights));
                                      }),
                                      bp::default_call_policies()));
-    unconstrain_.add_property(
-        "inner_problem", bp::make_function(lcast([](unconstrain &udp) -> problem & { return udp.get_inner_problem(); }),
-                                           bp::return_internal_reference<>()),
-        generic_udp_inner_problem_docstring().c_str());
+    add_property(unconstrain_, "inner_problem",
+                 bp::make_function(lcast([](unconstrain &udp) -> problem & { return udp.get_inner_problem(); }),
+                                   bp::return_internal_reference<>()),
+                 generic_udp_inner_problem_docstring().c_str());
     // Decompose meta-problem.
     auto decompose_ = expose_problem<decompose>("decompose", decompose_docstring().c_str());
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
@@ -264,11 +264,11 @@ void expose_problems()
                        return v_to_a(p.original_fitness(to_vd(x)));
                    }),
                    decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
-    decompose_.add_property("z", lcast([](const pagmo::decompose &p) { return v_to_a(p.get_z()); }),
-                            decompose_z_docstring().c_str());
-    decompose_.add_property(
-        "inner_problem", bp::make_function(lcast([](decompose &udp) -> problem & { return udp.get_inner_problem(); }),
-                                           bp::return_internal_reference<>()),
-        generic_udp_inner_problem_docstring().c_str());
+    add_property(decompose_, "z", lcast([](const pagmo::decompose &p) { return v_to_a(p.get_z()); }),
+                 decompose_z_docstring().c_str());
+    add_property(decompose_, "inner_problem",
+                 bp::make_function(lcast([](decompose &udp) -> problem & { return udp.get_inner_problem(); }),
+                                   bp::return_internal_reference<>()),
+                 generic_udp_inner_problem_docstring().c_str());
 }
 }

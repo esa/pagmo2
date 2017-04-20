@@ -34,11 +34,13 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <array>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/python/class.hpp>
 #include <boost/python/dict.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/handle.hpp>
 #include <boost/python/import.hpp>
+#include <boost/python/make_function.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/stl_iterator.hpp>
@@ -714,6 +716,43 @@ inline auto lcast(T func) -> decltype(+func)
 }
 
 #endif
+
+template <typename T>
+inline void add_property(bp::class_<T> &c, const char *name, const bp::object &getter, const char *doc = "")
+{
+    c.setattr(name, builtin().attr("property")(getter, bp::object(), bp::object(), doc));
+}
+
+template <typename T, typename G>
+inline void add_property(bp::class_<T> &c, const char *name, G getter, const char *doc = "")
+{
+    add_property(c, name, bp::make_function(getter), doc);
+}
+
+template <typename T>
+inline void add_property(bp::class_<T> &c, const char *name, const bp::object &getter, const bp::object &setter,
+                         const char *doc = "")
+{
+    c.setattr(name, builtin().attr("property")(getter, setter, bp::object(), doc));
+}
+
+template <typename T, typename G, typename S>
+inline void add_property(bp::class_<T> &c, const char *name, G getter, S setter, const char *doc = "")
+{
+    add_property(c, name, bp::make_function(getter), bp::make_function(setter), doc);
+}
+
+template <typename T, typename S>
+inline void add_property(bp::class_<T> &c, const char *name, const bp::object &getter, S setter, const char *doc = "")
+{
+    add_property(c, name, getter, bp::make_function(setter), doc);
+}
+
+template <typename T, typename G>
+inline void add_property(bp::class_<T> &c, const char *name, G getter, const bp::object &setter, const char *doc = "")
+{
+    add_property(c, name, bp::make_function(getter), setter, doc);
+}
 }
 
 #endif
