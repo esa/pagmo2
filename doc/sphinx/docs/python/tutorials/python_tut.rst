@@ -21,6 +21,7 @@ Coding your own problem (UDP)
   :maxdepth: 2
 
   coding_udp_simple
+  coding_udp_constrained
 
 Local optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

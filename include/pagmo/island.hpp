@@ -357,7 +357,7 @@ struct island_data {
 
 /// Island class.
 /**
- * \image html island.jpg
+ * \image html island_no_text.png
  *
  * In the pagmo jargon, an island is a class that encapsulates three entities:
  * - a user-defined island (UDI),
@@ -956,7 +956,7 @@ inline void thread_island::run_evolve(island &isl) const
 
 /// Archipelago.
 /**
- * \image html archi.png
+ * \image html archi_no_text.png
  *
  * An archipelago is a collection of pagmo::island objects which provides a convenient way to perform
  * multiple optimisations in parallel.
