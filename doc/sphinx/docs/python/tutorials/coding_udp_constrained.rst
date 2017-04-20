@@ -36,9 +36,9 @@ for the time being the fitness, the basic structure for the UDP to have pygmo un
     ...     def get_nec(self):
     ...         return 4
 
-Note how we need to specify both the number of equality constraints and the number of inequality constraints (as pygmo by default assumes 0 for both).
-There is no need to specify the number of objectives as by default pygmo assumes single objective optimization. The full documenation on the UDP specification can 
-be found in the :class:`pygmo.problem` docs.
+Note how we need to specify both the number of equality constraints and the number of inequality constraints (as pygmo by default assumes
+0 for both). There is no need to specify the number of objectives as by default pygmo assumes single objective optimization. 
+The full documenation on the UDP specification can be found in the :class:`pygmo.problem` docs.
 
 We still have to write the fitness function as that is a mandatory method (together with ``get_bounds()``) for all UDPs. Constructing a :class:`~pygmo.problem` with
 an incomplete UDP will fail. In pygmo the fitness includes both the objectives and the constraints according to the described order [obj,ec,ic]. All equality constraints
