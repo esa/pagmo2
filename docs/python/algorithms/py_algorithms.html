@@ -579,6 +579,26 @@ constructed with a <a class="reference internal" href="#pygmo.de" title="pygmo.d
 <dt id="pygmo.sea">
 <em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">sea</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sea" title="Permalink to this definition">¶</a></dt>
 <dd><p>(N+1)-ES simple evolutionary algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations to consider (each generation will compute the objective function once)</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python
+(e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/sea.html#_CPPv2N5pagmo3seaE" title="pagmo::sea"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sea</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.sea.get_seed">
 <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sea.get_seed" title="Permalink to this definition">¶</a></dt>
