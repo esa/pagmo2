@@ -47,6 +47,7 @@ std::string population_get_ID_docstring();
 std::string population_get_seed_docstring();
 std::string population_champion_x_docstring();
 std::string population_champion_f_docstring();
+std::string population_problem_docstring();
 
 // problem
 std::string problem_docstring();
@@ -140,6 +141,7 @@ std::string mbh_get_verbosity_docstring();
 std::string mbh_set_perturb_docstring();
 std::string mbh_get_log_docstring();
 std::string mbh_get_perturb_docstring();
+std::string sea_docstring();
 std::string generic_uda_get_seed_docstring();
 std::string generic_uda_inner_algorithm_docstring();
 std::string nlopt_docstring();

@@ -225,6 +225,18 @@ Raises:
 )";
 }
 
+std::string population_problem_docstring()
+{
+    return R"(Population's problem.
+
+This read-only property gives direct access to the :class:`~pygmo.problem` stored within the population.
+
+Returns:
+    :class:`~pygmo.problem`: a reference to the internal problem
+
+)";
+}
+
 std::string population_get_f_docstring()
 {
     return R"(get_f()
@@ -4419,6 +4431,26 @@ Returns:
 Raises:
     unspecified: any exception thrown by failures at the intersection between C++ and Python
       (e.g., type conversion errors, mismatched function signatures, etc.), when setting the property
+
+)";
+}
+
+std::string sea_docstring()
+{
+    return R"(__init__(gen = 1, seed = random)
+
+(N+1)-ES simple evolutionary algorithm.
+
+Args:
+    gen (``int``): number of generations to consider (each generation will compute the objective function once)
+    seed (``int``): seed used by the internal random number generator
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    unspecified: any exception thrown by failures at the intersection between C++ and Python
+      (e.g., type conversion errors, mismatched function signatures, etc.)
+
+See also the docs of the C++ class :cpp:class:`pagmo::sea`.
 
 )";
 }

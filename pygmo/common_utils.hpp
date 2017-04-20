@@ -34,11 +34,13 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <array>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/python/class.hpp>
 #include <boost/python/dict.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/handle.hpp>
 #include <boost/python/import.hpp>
+#include <boost/python/make_function.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/stl_iterator.hpp>
@@ -714,6 +716,50 @@ inline auto lcast(T func) -> decltype(+func)
 }
 
 #endif
+
+// NOTE: these are alternative implementations of BP's add_property() functionality for classes.
+// The reason they exist (and why they should be used instead of the BP implementation) is because
+// we are running into a nasty crash on MinGW upon module import that I did not manage to debug fully, but which seems
+// to be somehow related to BP's add_property() (at least judging from the limited stacktrace
+// I could obtain on windows). These alternative wrappers seem to sidestep the issue, at least so far.
+// They can be used exactly like BP's add_property(), the only difference being that they are functions
+// rather than methods, and they thus require the BP class to be passed in as first argument.
+template <typename T>
+inline void add_property(bp::class_<T> &c, const char *name, const bp::object &getter, const char *doc = "")
+{
+    c.setattr(name, builtin().attr("property")(getter, bp::object(), bp::object(), doc));
+}
+
+template <typename T, typename G>
+inline void add_property(bp::class_<T> &c, const char *name, G getter, const char *doc = "")
+{
+    add_property(c, name, bp::make_function(getter), doc);
+}
+
+template <typename T>
+inline void add_property(bp::class_<T> &c, const char *name, const bp::object &getter, const bp::object &setter,
+                         const char *doc = "")
+{
+    c.setattr(name, builtin().attr("property")(getter, setter, bp::object(), doc));
+}
+
+template <typename T, typename G, typename S>
+inline void add_property(bp::class_<T> &c, const char *name, G getter, S setter, const char *doc = "")
+{
+    add_property(c, name, bp::make_function(getter), bp::make_function(setter), doc);
+}
+
+template <typename T, typename S>
+inline void add_property(bp::class_<T> &c, const char *name, const bp::object &getter, S setter, const char *doc = "")
+{
+    add_property(c, name, getter, bp::make_function(setter), doc);
+}
+
+template <typename T, typename G>
+inline void add_property(bp::class_<T> &c, const char *name, G getter, const bp::object &setter, const char *doc = "")
+{
+    add_property(c, name, bp::make_function(getter), setter, doc);
+}
 }
 
 #endif

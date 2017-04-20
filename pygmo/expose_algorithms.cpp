@@ -149,10 +149,10 @@ void expose_algorithms()
     expose_algo_log(mbh_, mbh_get_log_docstring().c_str());
     mbh_.def("get_perturb", lcast([](const mbh &a) { return v_to_a(a.get_perturb()); }),
              mbh_get_perturb_docstring().c_str());
-    mbh_.add_property("inner_algorithm",
-                      bp::make_function(lcast([](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
-                                        bp::return_internal_reference<>()),
-                      generic_uda_inner_algorithm_docstring().c_str());
+    add_property(mbh_, "inner_algorithm",
+                 bp::make_function(lcast([](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
+                                   bp::return_internal_reference<>()),
+                 generic_uda_inner_algorithm_docstring().c_str());
     // cstrs_self_adaptive meta-algo.
     auto cstrs_sa
         = expose_algorithm<cstrs_self_adaptive>("cstrs_self_adaptive", cstrs_self_adaptive_docstring().c_str());
@@ -166,8 +166,8 @@ void expose_algorithms()
                                                   }),
                                                   bp::default_call_policies()));
     expose_algo_log(cstrs_sa, cstrs_self_adaptive_get_log_docstring().c_str());
-    cstrs_sa.add_property(
-        "inner_algorithm",
+    add_property(
+        cstrs_sa, "inner_algorithm",
         bp::make_function(lcast([](cstrs_self_adaptive &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
                           bp::return_internal_reference<>()),
         generic_uda_inner_algorithm_docstring().c_str());
@@ -221,8 +221,7 @@ void expose_algorithms()
     expose_algo_log(pso_, pso_get_log_docstring().c_str());
     pso_.def("get_seed", &pso::get_seed, generic_uda_get_seed_docstring().c_str());
     // SEA
-    auto sea_ = expose_algorithm<sea>("sea", "__init__(gen = 1, seed = random)\n\n"
-                                             "(N+1)-ES simple evolutionary algorithm.\n\n");
+    auto sea_ = expose_algorithm<sea>("sea", sea_docstring().c_str());
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(sea_, "");
@@ -341,16 +340,16 @@ void expose_algorithms()
     auto nlopt_ = expose_algorithm<nlopt>("nlopt", nlopt_docstring().c_str());
     nlopt_.def(bp::init<const std::string &>((bp::arg("solver"))));
     // Properties for the stopping criteria.
-    nlopt_.add_property("stopval", &nlopt::get_stopval, &nlopt::set_stopval, nlopt_stopval_docstring().c_str());
-    nlopt_.add_property("ftol_rel", &nlopt::get_ftol_rel, &nlopt::set_ftol_rel, nlopt_ftol_rel_docstring().c_str());
-    nlopt_.add_property("ftol_abs", &nlopt::get_ftol_abs, &nlopt::set_ftol_abs, nlopt_ftol_abs_docstring().c_str());
-    nlopt_.add_property("xtol_rel", &nlopt::get_xtol_rel, &nlopt::set_xtol_rel, nlopt_xtol_rel_docstring().c_str());
-    nlopt_.add_property("xtol_abs", &nlopt::get_xtol_abs, &nlopt::set_xtol_abs, nlopt_xtol_abs_docstring().c_str());
-    nlopt_.add_property("maxeval", &nlopt::get_maxeval, &nlopt::set_maxeval, nlopt_maxeval_docstring().c_str());
-    nlopt_.add_property("maxtime", &nlopt::get_maxtime, &nlopt::set_maxtime, nlopt_maxtime_docstring().c_str());
+    add_property(nlopt_, "stopval", &nlopt::get_stopval, &nlopt::set_stopval, nlopt_stopval_docstring().c_str());
+    add_property(nlopt_, "ftol_rel", &nlopt::get_ftol_rel, &nlopt::set_ftol_rel, nlopt_ftol_rel_docstring().c_str());
+    add_property(nlopt_, "ftol_abs", &nlopt::get_ftol_abs, &nlopt::set_ftol_abs, nlopt_ftol_abs_docstring().c_str());
+    add_property(nlopt_, "xtol_rel", &nlopt::get_xtol_rel, &nlopt::set_xtol_rel, nlopt_xtol_rel_docstring().c_str());
+    add_property(nlopt_, "xtol_abs", &nlopt::get_xtol_abs, &nlopt::set_xtol_abs, nlopt_xtol_abs_docstring().c_str());
+    add_property(nlopt_, "maxeval", &nlopt::get_maxeval, &nlopt::set_maxeval, nlopt_maxeval_docstring().c_str());
+    add_property(nlopt_, "maxtime", &nlopt::get_maxtime, &nlopt::set_maxtime, nlopt_maxtime_docstring().c_str());
     // Selection/replacement.
-    nlopt_.add_property(
-        "selection", lcast([](const nlopt &n) -> bp::object {
+    add_property(
+        nlopt_, "selection", lcast([](const nlopt &n) -> bp::object {
             auto s = n.get_selection();
             if (boost::any_cast<std::string>(&s)) {
                 return bp::str(boost::any_cast<std::string>(s));
@@ -374,8 +373,8 @@ void expose_algorithms()
                             .c_str());
         }),
         nlopt_selection_docstring().c_str());
-    nlopt_.add_property(
-        "replacement", lcast([](const nlopt &n) -> bp::object {
+    add_property(
+        nlopt_, "replacement", lcast([](const nlopt &n) -> bp::object {
             auto s = n.get_replacement();
             if (boost::any_cast<std::string>(&s)) {
                 return bp::str(boost::any_cast<std::string>(s));
@@ -405,16 +404,16 @@ void expose_algorithms()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    nlopt_.add_property("local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
-                                                             bp::return_internal_reference<>()),
-                        lcast([](nlopt &n, const nlopt *ptr) {
-                            if (ptr) {
-                                n.set_local_optimizer(*ptr);
-                            } else {
-                                n.unset_local_optimizer();
-                            }
-                        }),
-                        nlopt_local_optimizer_docstring().c_str());
+    add_property(nlopt_, "local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
+                                                              bp::return_internal_reference<>()),
+                 lcast([](nlopt &n, const nlopt *ptr) {
+                     if (ptr) {
+                         n.set_local_optimizer(*ptr);
+                     } else {
+                         n.unset_local_optimizer();
+                     }
+                 }),
+                 nlopt_local_optimizer_docstring().c_str());
 #endif
 }
 }
