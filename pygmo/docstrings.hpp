@@ -140,6 +140,7 @@ std::string mbh_get_verbosity_docstring();
 std::string mbh_set_perturb_docstring();
 std::string mbh_get_log_docstring();
 std::string mbh_get_perturb_docstring();
+std::string sea_docstring();
 std::string generic_uda_get_seed_docstring();
 std::string generic_uda_inner_algorithm_docstring();
 std::string nlopt_docstring();

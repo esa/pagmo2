@@ -4423,4 +4423,24 @@ Raises:
 )";
 }
 
+std::string sea_docstring()
+{
+    return R"(__init__(gen = 1, seed = random)
+
+(N+1)-ES simple evolutionary algorithm.
+
+Args:
+    gen (``int``): number of generations to consider (each generation will compute the objective function once)
+    seed (``int``): seed used by the internal random number generator
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    unspecified: any exception thrown by failures at the intersection between C++ and Python
+      (e.g., type conversion errors, mismatched function signatures, etc.)
+
+See also the docs of the C++ class :cpp:class:`pagmo::sea`.
+
+)";
+}
+
 } // namespace
