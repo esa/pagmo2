@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -30,15 +31,12 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Algorithm" href="algorithm.html" />
     <link rel="prev" title="Types" href="types.html" />
-<meta charset='utf-8'>
-<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
-
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
   <body role="document">
 
@@ -51,8 +49,8 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../../index.html">
-          pagmo</a>
+        <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/logo_small_html.png"></span>
+           </a>
         <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
@@ -69,7 +67,7 @@
      id="dLabelGlobalToc"
      data-toggle="dropdown"
      data-target="#"
-     href="../../index.html">Site <b class="caret"></b></a>
+     href="../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
@@ -158,7 +156,7 @@
 <dt id="_CPPv2N5pagmo7problemE">
 <span id="pagmo::problem"></span><span class="target" id="pagmoclasspagmo_1_1problem"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">problem</code><a class="headerlink" href="#_CPPv2N5pagmo7problemE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem class. </p>
-<p><img alt="../../_images/problem.png" src="../../_images/problem.png" /></p>
+<p><img alt="../../_images/prob_no_text.png" src="../../_images/prob_no_text.png" /></p>
 <p>This class represents a generic <em>mathematical programming</em> or <em>evolutionary optimization</em> problem in the form: <div class="math">
 \[\begin{split} \begin{array}{rl} \mbox{find:} &amp; \mathbf {lb} \le \mathbf x \le \mathbf{ub}\\ \mbox{to minimize: } &amp; \mathbf f(\mathbf x, s) \in \mathbb R^{n_{obj}}\\ \mbox{subject to:} &amp; \mathbf {c}_e(\mathbf x, s) = 0 \\ &amp; \mathbf {c}_i(\mathbf x, s) \le 0 \end{array} \end{split}\]</div>
 </p>
@@ -362,7 +360,7 @@
 <dt id="_CPPv2NK5pagmo7problem7fitnessERK13vector_double">
 <span id="pagmo::problem::fitness__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a8e29c2c806377fd1855274dac8376add"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>dv</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness. </p>
-<p>This method will invoke the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP to compute the fitness of the input decision vector <code class="docutils literal"><span class="pre">dv</span></code>. The return value of the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP is expected to have a dimension of <span class="math">\(n_{f} = n_{obj} + n_{ec} + n_{ic}\)</span> and to contain the concatenated values of <span class="math">\(\mathbf f, \mathbf c_e\)</span> and <span class="math">\(\mathbf c_i\)</span> (in this order).</p>
+<p>This method will invoke the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP to compute the fitness of the input decision vector <code class="docutils literal"><span class="pre">dv</span></code>. The return value of the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP is expected to have a dimension of <span class="math">\(n_{f} = n_{obj} + n_{ec} + n_{ic}\)</span> and to contain the concatenated values of <span class="math">\(\mathbf f, \mathbf c_e\)</span> and <span class="math">\(\mathbf c_i\)</span> (in this order). Equality constraints are all assumed in the form <span class="math">\(c_{e_i}(\mathbf x) = 0\)</span> while inequalities are assumed in the form <span class="math">\(c_{i_i}(\mathbf x) &lt;= 0\)</span> so that negative values are associated to satisfied inequalities.</p>
 <p>In addition to invoking the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP, this method will perform sanity checks on <code class="docutils literal"><span class="pre">dv</span></code> and on the returned fitness vector. A successful call of this method will increase the internal fitness evaluation counter (see <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a8477607f9fd9cb22a53f9e2e2511d8e0"><span class="std std-ref">problem::get_fevals()</span></a>).</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>

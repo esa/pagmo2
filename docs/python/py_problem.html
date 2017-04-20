@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -30,15 +31,12 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Population class" href="py_population.html" />
     <link rel="prev" title="Algorithm class" href="py_algorithm.html" />
-<meta charset='utf-8'>
-<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
-
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
   <body role="document">
 
@@ -51,8 +49,8 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../../index.html">
-          pagmo</a>
+        <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/logo_small_html.png"></span>
+           </a>
         <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
@@ -69,7 +67,7 @@
      id="dLabelGlobalToc"
      data-toggle="dropdown"
      data-target="#"
-     href="../../index.html">Site <b class="caret"></b></a>
+     href="../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
@@ -154,6 +152,7 @@
       
   <div class="section" id="problem-class">
 <h1>Problem class<a class="headerlink" href="#problem-class" title="Permalink to this headline">¶</a></h1>
+<img alt="../../_images/prob_no_text1.png" src="../../_images/prob_no_text1.png" />
 <dl class="class">
 <dt id="pygmo.problem">
 <em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">problem</code><span class="sig-paren">(</span><em>udp = null_problem</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem" title="Permalink to this definition">¶</a></dt>
@@ -368,7 +367,9 @@ the tolerances returned by <a class="reference internal" href="#pygmo.problem.c_
 <p>This method will invoke the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP to compute the fitness of the
 input decision vector <em>dv</em>. The return value of the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP is expected to have a
 dimension of <span class="math">\(n_{f} = n_{obj} + n_{ec} + n_{ic}\)</span> and to contain the concatenated values of
-<span class="math">\(\mathbf f, \mathbf c_e\)</span> and <span class="math">\(\mathbf c_i\)</span> (in this order).</p>
+<span class="math">\(\mathbf f, \mathbf c_e\)</span> and <span class="math">\(\mathbf c_i\)</span> (in this order).
+Equality constraints are all assumed in the form <span class="math">\(c_{e_i}(\mathbf x) = 0\)</span> while inequalities are assumed in
+the form <span class="math">\(c_{i_i}(\mathbf x) &lt;= 0\)</span> so that negative values are associated to satisfied inequalities.</p>
 <p>In addition to invoking the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP, this method will perform sanity checks on
 <em>dv</em> and on the returned fitness vector. A successful call of this method will increase the internal fitness
 evaluation counter (see <a class="reference internal" href="#pygmo.problem.get_fevals" title="pygmo.problem.get_fevals"><code class="xref py py-func docutils literal"><span class="pre">get_fevals()</span></code></a>).</p>

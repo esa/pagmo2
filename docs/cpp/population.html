@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -30,15 +31,12 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Island" href="island.html" />
     <link rel="prev" title="Algorithm" href="algorithm.html" />
-<meta charset='utf-8'>
-<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
-
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
   <body role="document">
 
@@ -51,8 +49,8 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../../index.html">
-          pagmo</a>
+        <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/logo_small_html.png"></span>
+           </a>
         <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
@@ -69,7 +67,7 @@
      id="dLabelGlobalToc"
      data-toggle="dropdown"
      data-target="#"
-     href="../../index.html">Site <b class="caret"></b></a>
+     href="../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
@@ -158,7 +156,7 @@
 <dt id="_CPPv2N5pagmo10populationE">
 <span id="pagmo::population"></span><span class="target" id="pagmoclasspagmo_1_1population"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">population</code><a class="headerlink" href="#_CPPv2N5pagmo10populationE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Population class. </p>
-<p><img alt="../../_images/population.jpg" src="../../_images/population.jpg" /></p>
+<p><img alt="../../_images/pop_no_text.png" src="../../_images/pop_no_text.png" /></p>
 <p>This class represents a population of individuals, i.e., potential candidate solutions to a given problem. In pagmo an individual is determined by:<ul class="simple">
 <li>a unique ID used to track it across generations and migrations,</li>
 <li>a chromosome (a decision vector),</li>
@@ -345,10 +343,28 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv2NK5pagmo10population8best_idxEv">
+<span id="pagmo::population::best_idxC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a336395f04ade40f2f2c7c99a1c68011d"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">best_idx</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population8best_idxEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Index of the best individual. </p>
+<p>If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem is, instead, single objective, but with constraints, the best will be defined using the criteria specified in <a class="reference internal" href="utils/constrained.html#pagmonamespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. If the problem is multi-objective one single best is not defined. In this case the user can still obtain a strict ordering of the population individuals by calling the <a class="reference internal" href="utils/multi_objective.html#pagmonamespacepagmo_1a564410c4164043e81c3c0d2d44f34b44"><span class="std std-ref">pagmo::sort_population_mo()</span></a> function.</p>
+<p>The pagmo::population::get_c_tol() tolerances are accounted by default. If different tolerances are required the other overloads can be used.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the index of the best individual.</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="utils/constrained.html#pagmonamespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv2NK5pagmo10population8best_idxERK13vector_double">
 <span id="pagmo::population::best_idx__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1population_1abb2f96e7ec6f2c1bd6b2d23ed16e5f81"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">best_idx</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>tol</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population8best_idxERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Index of the best individual (accounting for a vector tolerance) </p>
-<p>If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem is, instead, single objective, but with constraints, the best will be defined using the criteria specified in <a class="reference internal" href="utils/constrained.html#pagmonamespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. If the problem is multi-objective one single best is not well defined. In this case the user can still obtain a strict ordering of the population individuals by calling the <a class="reference internal" href="utils/multi_objective.html#pagmonamespacepagmo_1a564410c4164043e81c3c0d2d44f34b44"><span class="std std-ref">pagmo::sort_population_mo()</span></a> function.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the index of the best individual.</dd>
@@ -369,7 +385,7 @@
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo10population8best_idxEd">
-<span id="pagmo::population::best_idx__doubleC"></span><span class="target" id="pagmoclasspagmo_1_1population_1acac93268af841f549f942fb21914c3f1"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">best_idx</code><span class="sig-paren">(</span>double <em>tol</em> = 0.<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population8best_idxEd" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::population::best_idx__doubleC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a707b931d65ee46a608bb92c27c0573db"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">best_idx</code><span class="sig-paren">(</span>double <em>tol</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population8best_idxEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Index of the best individual (accounting for a scalar tolerance) </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>

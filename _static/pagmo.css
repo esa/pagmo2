@@ -1,0 +1,54 @@
+@font-face {
+    font-family: 'bebas_neuebook';
+    src: url('bebasneue_book-webfont.woff2') format('woff2'),
+         url('bebasneue_book-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+}
+
+code, pre {
+    font-family: "Space Mono", monospace;
+}
+
+.caption {
+    font-size: 12px;
+    font-style: italic;
+}
+
+.navbar-default .navbar-brand {
+    padding: 15px;
+    font-family: "bebas_neuebook";
+    font-weight: bold;
+    font-size: 30px;
+    color: #2C3E50;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.admonition.note.alert.alert-info a {
+    color: #FFFFFF;
+}
+
+h1, .h1 {
+    font-family: "bebas_neuebook";
+    color: #008cba;
+}
+
+h2, .h2 {
+    font-family: "bebas_neuebook";
+    color: #008cba;
+}
+
+h3, .h3 {
+    font-family: "bebas_neuebook";
+    color: #008cba;
+}
