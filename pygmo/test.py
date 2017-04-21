@@ -51,6 +51,8 @@ class core_test_case(_ut.TestCase):
         import sys
         from numpy import random, all, array
         from .core import _builtin, _test_to_vd, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
+        from . import __version__
+        self.assertTrue(__version__ != "")
         if sys.version_info[0] < 3:
             import __builtin__ as b
         else:
