@@ -14,6 +14,8 @@ if [[ ${PAGMO_BUILD} == *36 ]]; then
 	PYTHON_DIR="cp36-cp36m"
 elif [[ ${PAGMO_BUILD} == *35 ]]; then
 	PYTHON_DIR="cp35-cp35m"
+elif [[ ${PAGMO_BUILD} == *34 ]]; then
+	PYTHON_DIR="cp34-cp34m"
 elif [[ ${PAGMO_BUILD} == *27 ]]; then
 	PYTHON_DIR="cp27-cp27mu"
 else
