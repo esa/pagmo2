@@ -9,7 +9,7 @@ Installation guide
 C++
 ---
 
-Pagmo is a header-only library which has the following third party dependencies:
+pagmo is a header-only library which has the following third party dependencies:
 
 * `Boost <http://www.boost.org/>`_, **mandatory**, header-only (needs the libraries only if you
   intend to compile the python bindings)
@@ -36,10 +36,21 @@ you can install pagmo via the command
 The headers will be installed in the ``CMAKE_INSTALL_PREFIX/include`` directory. To check that all went well
 compile the :ref:`quick-start example <getting_started_c++>`.
 
------------------------------------------------------------------------
+pagmo is also available via the `conda <https://conda.io/docs/>`_ package manager for Linux, OSX and Windows.
+In order to install pagmo via conda, you just need to add ``conda-forge`` to the channels,
+and then we can immediately install pagmo:
+
+.. code-block:: bash
+
+   conda config --add channels conda-forge
+   conda install pagmo
+
+Please refer to the `conda documentation <https://conda.io/docs/>`_ for instructions on how to setup and manage
+your conda installation.
 
 Python
 ------
+
 The python module corresponding to pagmo is called pygmo. There are various options for the installation
 of pygmo:
 
@@ -87,7 +98,7 @@ and then we can immediately install pygmo:
 
 .. code-block:: bash
 
-   conda config --add channels conda-forge 
+   conda config --add channels conda-forge
    conda install pygmo
 
 Please refer to the `conda documentation <https://conda.io/docs/>`_ for instructions on how to setup and manage
