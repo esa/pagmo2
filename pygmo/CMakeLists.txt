@@ -6,6 +6,9 @@ set_property(TARGET core PROPERTY CXX_STANDARD 11)
 set_property(TARGET core PROPERTY CXX_STANDARD_REQUIRED YES)
 set_property(TARGET core PROPERTY CXX_EXTENSIONS NO)
 
+# Helper file with version number.
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/_version.py.in" "${CMAKE_CURRENT_BINARY_DIR}/_version.py" @ONLY)
+
 # Setup the installation path.
 set(PYGMO_INSTALL_PATH "${YACMA_PYTHON_MODULES_INSTALL_PATH}/pygmo")
 install(TARGETS core
@@ -18,4 +21,5 @@ ADD_SUBDIRECTORY(plotting)
 
 # Add the Python files.
 install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py _problem_test.py
-     _algorithm_test.py _island_test.py py_islands.py DESTINATION ${PYGMO_INSTALL_PATH})
+     _algorithm_test.py _island_test.py py_islands.py "${CMAKE_CURRENT_BINARY_DIR}/_version.py"
+     DESTINATION ${PYGMO_INSTALL_PATH})
