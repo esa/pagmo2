@@ -99,8 +99,8 @@ In order to check that the UDP above is wll formed for pygmo we try to construct
 
 All seems in order. The dimensions are corresponding to what we wanted, the gradient is detected etc.
 
-Solving it
-^^^^^^^^^^^^^^^
+Solving your constrained UDP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 So we now have a UDP with constraints and a numerical gradient. Let's solve it. Many different startegies can be deployed
 and we here will just try two a) using the augmented lagrangian method b) using monotonic basin hopping.

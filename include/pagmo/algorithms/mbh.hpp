@@ -379,7 +379,7 @@ public:
     {
         return m_algorithm;
     }
-    /// Getter for the inner problem.
+    /// Getter for the inner algorithm.
     /**
      * Returns a reference to the inner pagmo::algorithm.
      *
@@ -392,6 +392,16 @@ public:
     algorithm &get_inner_algorithm()
     {
         return m_algorithm;
+    }
+    /// Setter for the inner algorithm.
+    /**
+     * Sets the inner pagmo::algorithm.
+     *
+     * @param al pagmo::algorithm
+     */
+    void set_inner_algorithm(const algorithm& al)
+    {
+        m_algorithm = al;
     }
     /// Get log.
     /**
