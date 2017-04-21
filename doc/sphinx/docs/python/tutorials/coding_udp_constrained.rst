@@ -99,15 +99,42 @@ In order to check that the UDP above is wll formed for pygmo we try to construct
 
 All seems in order. The dimensions are corresponding to what we wanted, the gradient is detected etc.
 
-Solving a constrained User Defined Problem
-----------------------------------------------
+Solving it
+^^^^^^^^^^^^^^^
+
+So we now have a UDP with constraints and a numerical gradient. Let's solve it. Many different startegies can be deployed
+and we here will just try two a) using the augmented lagrangian method b) using monotonic basin hopping.
+Consider the following script:
+
+.. doctest::
 
     >>> algo = pg.algorithm(pg.nlopt('auglag'))
     >>> algo.extract(pg.nlopt).local_optimizer = pg.nlopt('var2')
-    >>> algo.set_verbosity(100)
+    >>> algo.set_verbosity(200)
     >>> pop = pg.population(prob = my_constrained_udp(), size = 1)
     >>> pop.problem.c_tol = [1E-6] * 6
-    >>> algo.evolve(pop) # doctest: +SKIP
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    objevals:        objval:      violated:    viol. norm:
+            1      5.148e+30              6        203.761 i
+          201        1.27621              5       0.179321 i
+          401        1.71251              5      0.0550095 i
+          601        1.96643              5      0.0269182 i
+          801        2.21529              5     0.00340511 i
+         1001        2.25337              5    0.000478665 i
+         1201        2.25875              4    6.60584e-05 i
+    >>> print(pop.get_fevals()) # doctest: +SKIP
+    3740
+    >>> print(pop.get_gevals()) # doctest: +SKIP
+    3696
+
+The solution is here found after calling 3740 times the fitness function (~1200 objective evaluations and ~2500 constraints evaluations) and
+3696 times the gradient (each corresponding to 6 fitness evaluations in our case, since :func:`pygmo.estimate_gradient_h()`) is used
+to estimate the gradient numerically.
+
+
+
+Do not use a black-box solver if you do not have to
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     >>> class add_gradient:
     ...     def __init__(self, prob):
