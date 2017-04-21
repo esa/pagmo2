@@ -1889,12 +1889,12 @@ Examples:
     >>> prob = problem(rosenbrock(10))
     >>> pop = population(prob, 20)
     >>> pop = algo.evolve(pop) # doctest: +SKIP
-    Gen:        Fevals:  Current best:          Best:
-       1             40         183728         183728
-     101           4040        506.757        26.4234
-     201           8040        55.6282        14.9136
-     301          12040         65.554        14.9136
-     401          16040        191.654        14.9136
+    Gen:        Fevals:          Best: Current Best:
+       1             40         261363         261363
+     101           4040        112.237        267.969
+     201           8040        20.8885        265.122
+     301          12040        20.6076        20.6076
+     401          16040         18.252        140.079
     >>> uda = algo.extract(bee_colony)
     >>> uda.get_log() # doctest: +SKIP
     [(1, 40, 183727.83934515435, 183727.83934515435), ...

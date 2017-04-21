@@ -181,7 +181,7 @@ the use of appropriate local optimization algorithms is always to be preferred a
 be used in situations where they are needed as they otherwise are just a bad idea. Let's consider here the problem
 suite in constrained optimization that was used during the CEC2006 competition. In pygmo, we have implemented such an UDP
 in the class :class:`pygmo.cec2006`. Such a class does not implement a gradient since the competition was intended for
-heuristic optimization. So we build our own UDP that add numerical gradients to problem without gradients:
+heuristic optimization. So we quickly code a meta-UDP that adds numerical gradients to a UDP without gradients:
 
     >>> class add_gradient:
     ...     def __init__(self, prob):
@@ -199,12 +199,12 @@ heuristic optimization. So we build our own UDP that add numerical gradients to 
     ...     def gradient(self, x):
     ...         return pg.estimate_gradient(lambda x: self.fitness(x), x) # we here use the low precision gradient
 
-Such a meta-problem is useful as it now allows calling, for example, SQP methods on the CEC2006 problem instances. We here report
-only one case: the problem ``g07``. You can complete this tutorial studying wat happens for the remaining ones.
+Super cool, I know. Such a meta-UDP is useful as it now allows calling, for example, SQP methods on the CEC2006 problem instances.
+Consider here only one case: the problem ``g07``. You can complete this tutorial studying what happens in the remaining ones.
 
-    >>> # Start ading the numerical gradient (low-precision) to the UDP
+    >>> # Start adding the numerical gradient (low-precision) to the UDP
     >>> prob = pg.problem(add_gradient(pg.cec2006(prob_id = 7)))
-    >>> # Define a solution strategy
+    >>> # Define a solution strategy (SQP method)
     >>> algo = pg.algorithm(uda = pg.mbh(pg.nlopt("slsqp"), 20, .2))
     >>> pop = pg.population(prob, 1)
     >>> # Solve the problem
