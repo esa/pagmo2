@@ -393,16 +393,6 @@ public:
     {
         return m_algorithm;
     }
-    /// Setter for the inner algorithm.
-    /**
-     * Sets the inner pagmo::algorithm.
-     *
-     * @param al pagmo::algorithm
-     */
-    void set_inner_algorithm(const algorithm& al)
-    {
-        m_algorithm = al;
-    }
     /// Get log.
     /**
      * A log containing relevant quantities monitoring the last call to mbh::evolve(). Each element of the returned

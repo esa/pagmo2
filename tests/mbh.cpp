@@ -224,7 +224,7 @@ struct ia1 {
     double m_data = 0.;
 };
 
-BOOST_AUTO_TEST_CASE(mbh_inner_algo_get_set_test)
+BOOST_AUTO_TEST_CASE(mbh_inner_algo_get_test)
 {
     // We check that the correct overload is called according to (*this) being const or not
     {
@@ -236,10 +236,5 @@ BOOST_AUTO_TEST_CASE(mbh_inner_algo_get_set_test)
         mbh uda(ia1{}, 5u, 1e-2, 23u);
         BOOST_CHECK(!std::is_const<decltype(uda)>::value);
         BOOST_CHECK(!std::is_const<std::remove_reference<decltype(uda.get_inner_algorithm())>::type>::value);
-    }
-    {
-        mbh uda(ts1{}, 5u, 1e-2, 23u);
-        uda.set_inner_algorithm(algorithm(ia1{}));
-        BOOST_CHECK(uda.get_inner_algorithm().is<ia1>());
     }
 }
