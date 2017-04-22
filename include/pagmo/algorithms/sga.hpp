@@ -59,6 +59,10 @@ namespace pagmo
  * In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose the selection
  * schemes, crossover types, mutation types and reinsertion scheme.
  *
+ * **NOTE** This algorithm will work only for box bounded problems.
+ *
+ * **NOTE** Specifying the parameter \p int_dim a part of the decision vector (at the end) will be treated as integers
+ *
  */
 class sga
 {
@@ -77,25 +81,34 @@ public:
      *
      * @throws std::invalid_argument if limit equals 0
      */
-    sga(unsigned gen = 1u, double cr = .95, double m = 0.02, double mut_width = 0.5, unsigned elitism = 1u,
-        std::string mutation = "gaussian", std::string selection = "roulette", std::string crossover = "exponential",
-        vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_cr(cr), m_m(m), m_elitism(elitism), m_mut(mut, width), m_sel(sel), m_cro(cro)
+    sga(unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double eta_m = 0.5,
+        unsigned elitism = 1u, std::string mutation = "gaussian", std::string selection = "roulette",
+        std::string crossover = "exponential", vector_double::size_type int_dim = 0u,
+        unsigned seed = pagmo::random_device::next())
+        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_elitism(elitism), m_mutation(mutation),
+          m_selection(selection), m_crossover(crossover), m_int_dim(int_dim), m_e(seed), m_seed(seed),
+          m_verbosity(0u) //, m_log()
     {
-        if (gen < 0) {
-            pagmo_throw(value_error, "number of generations must be nonnegative");
+        if (cr >= 1. || cr < 0.) {
+            pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1[ range, while a value of "
+                                                   + std::to_string(cr) + " was detected");
         }
-        if (cr > 1 || cr < 0) {
-            pagmo_throw(value_error, "crossover probability must be in the [0,1] range");
+        if (eta_c < 1. || eta_c >= 100.) {
+            pagmo_throw(std::invalid_argument,
+                        "The distribution index for BSX crossover must be in [1, 100[, while a value of "
+                            + std::to_string(eta_c) + " was detected");
         }
-        if (m < 0 || m > 1) {
-            pagmo_throw(value_error, "mutation probability must be in the [0,1] range");
+        if (m < 0. || m > 1.) {
+            pagmo_throw(std::invalid_argument, "The mutation probability must be in the [0,1] range, while a value of "
+                                                   + std::to_string(cr) + " was detected");
         }
-        if (elitism < 1) {
-            pagmo_throw(value_error, "elitisim must be greater than zero");
+        if (elitism < 1u) {
+            pagmo_throw(std::invalid_argument, "elitism must be greater than zero");
         }
-        if (width < 0 || width > 1) {
-            pagmo_throw(value_error, "mutation width must be in the [0,1] range");
+        if (!mutation.compare("gaussian") && !mutation.compare("uniform")) {
+            pagmo_throw(std::invalid_argument,
+                        R"(The mutation type must either be "gaussian" or "uniform": unknown type requested:)"
+                            + mutation);
         }
     }
 
@@ -268,8 +281,8 @@ public:
                     auto best_idx = pop.best_idx();
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
-                              "Best:", std::setw(15), "Current Best:\n");
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
+                              std::setw(15), "Current Best:\n");
                     }
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
                           pop.champion_f()[0], std::setw(15), pop.get_f()[best_idx][0], '\n');
