@@ -167,7 +167,7 @@
 <dl class="type">
 <dt id="_CPPv2N5pagmo10bee_colony13log_line_typeE">
 <span id="pagmo::bee_colony::log_line_type"></span><span class="target" id="pagmoclasspagmo_1_1bee__colony_1a2b678cb586784b57262f50a3580e23ff"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo10bee_colony13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Single entry of the log (gen, fevals, curr_best, best) </p>
+<dd><p>Single entry of the log (gen, fevals, best, cur_best) </p>
 </dd></dl>
 
 <dl class="type">
@@ -258,16 +258,15 @@
 <li>&gt;0: will print and log one line each <code class="docutils literal"><span class="pre">level</span></code> generations.</li>
 </ul>
 </p>
-<p>Example (verbosity 100): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>  <span class="n">Current</span> <span class="n">best</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>
-   <span class="mi">1</span>            <span class="mi">100</span>        <span class="mf">81757.2</span>        <span class="mf">81757.2</span>
- <span class="mi">101</span>          <span class="mi">10100</span>        <span class="mf">28.2248</span>        <span class="mf">28.2248</span>
- <span class="mi">201</span>          <span class="mi">20100</span>         <span class="mf">7.9007</span>       <span class="mf">0.580009</span>
- <span class="mi">301</span>          <span class="mi">30100</span>        <span class="mf">1.48624</span>      <span class="mf">0.0871484</span>
- <span class="mi">401</span>          <span class="mi">40100</span>       <span class="mf">0.415268</span>      <span class="mf">0.0871484</span>
- <span class="mi">501</span>          <span class="mi">50100</span>       <span class="mf">0.533034</span>      <span class="mf">0.0871484</span>
+<p>Example (verbosity 100): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span> <span class="n">Current</span> <span class="n">Best</span><span class="p">:</span>
+   <span class="mi">1</span>             <span class="mi">40</span>         <span class="mi">261363</span>         <span class="mi">261363</span>
+ <span class="mi">101</span>           <span class="mi">4040</span>        <span class="mf">112.237</span>        <span class="mf">267.969</span>
+ <span class="mi">201</span>           <span class="mi">8040</span>        <span class="mf">20.8885</span>        <span class="mf">265.122</span>
+ <span class="mi">301</span>          <span class="mi">12040</span>        <span class="mf">20.6076</span>        <span class="mf">20.6076</span>
+ <span class="mi">401</span>          <span class="mi">16040</span>         <span class="mf">18.252</span>        <span class="mf">140.079</span>
 </pre></div>
 </div>
- Gen is the generation number, Fevals the number of function evaluation used, Current best is the best fitness currently in the population, Best is the best fitness found.</p>
+ Gen is the generation number, Fevals the number of function evaluation used, , Best is the best fitness found, Current best is the best fitness currently in the population.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">

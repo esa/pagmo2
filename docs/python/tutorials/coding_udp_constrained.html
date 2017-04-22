@@ -120,8 +120,11 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Coding a User Defined Problem with constraints</a></li>
-<li><a class="reference internal" href="#solving-a-constrained-user-defined-problem">Solving a constrained User Defined Problem</a></li>
+<li><a class="reference internal" href="#">Coding a User Defined Problem with constraints</a><ul>
+<li><a class="reference internal" href="#solving-your-constrained-udp">Solving your constrained UDP</a></li>
+<li><a class="reference internal" href="#do-not-use-a-black-box-solver-if-you-do-not-have-to">Do not use a black-box solver if you do not have to</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -236,23 +239,88 @@ are in the form <span class="math">\(g(x) = 0\)</span>, while inequalities <span
 </pre></div>
 </div>
 <p>All seems in order. The dimensions are corresponding to what we wanted, the gradient is detected etc.</p>
-</div>
-<div class="section" id="solving-a-constrained-user-defined-problem">
-<h1>Solving a constrained User Defined Problem<a class="headerlink" href="#solving-a-constrained-user-defined-problem" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">(</span><span class="s1">&#39;auglag&#39;</span><span class="p">))</span>
+<div class="section" id="solving-your-constrained-udp">
+<h2>Solving your constrained UDP<a class="headerlink" href="#solving-your-constrained-udp" title="Permalink to this headline">¶</a></h2>
+<p>So we now have a UDP with constraints and a numerical gradient. Let&#8217;s solve it. Many different startegies can be deployed
+and we here will just try two a) using the augmented lagrangian method b) using monotonic basin hopping.
+Consider the following script:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#METHOD A</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">(</span><span class="s1">&#39;auglag&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">)</span><span class="o">.</span><span class="n">local_optimizer</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">(</span><span class="s1">&#39;var2&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="c1"># in this case this correspond to logs each 200 objevals</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">my_constrained_udp</span><span class="p">(),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-6</span><span class="p">]</span> <span class="o">*</span> <span class="mi">6</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">objevals:        objval:      violated:    viol. norm:</span>
+<span class="go">        1      5.148e+30              6        203.761 i</span>
+<span class="go">      201        1.27621              5       0.179321 i</span>
+<span class="go">      401        1.71251              5      0.0550095 i</span>
+<span class="go">      601        1.96643              5      0.0269182 i</span>
+<span class="go">      801        2.21529              5     0.00340511 i</span>
+<span class="go">     1001        2.25337              5    0.000478665 i</span>
+<span class="go">     1201        2.25875              4    6.60584e-05 i</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">())</span> 
+<span class="go">3740</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">get_gevals</span><span class="p">())</span> 
+<span class="go">3696</span>
 </pre></div>
 </div>
+<p>The solution is here found after calling 3740 times the fitness function (~1200 objective evaluations and ~2500 constraints evaluations) and
+3696 times the gradient (each corresponding to 6 fitness evaluations in our case, since <a class="reference internal" href="../utils/py_gh_utils.html#pygmo.estimate_gradient_h" title="pygmo.estimate_gradient_h"><code class="xref py py-func docutils literal"><span class="pre">pygmo.estimate_gradient_h()</span></code></a>) is used
+to estimate the gradient numerically.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#METHOD B</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">mbh</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">(</span><span class="s2">&quot;slsqp&quot;</span><span class="p">),</span> <span class="n">stop</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">perturb</span> <span class="o">=</span> <span class="o">.</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># in this case this correspond to logs each 1 call to slsqp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">my_constrained_udp</span><span class="p">(),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-6</span><span class="p">]</span> <span class="o">*</span> <span class="mi">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Fevals:          Best:      Violated:    Viol. Norm:         Trial:</span>
+<span class="go">    14    3.59547e+36              6        501.393              0 i</span>
+<span class="go">    19    1.89716e+38              5        432.423              0 i</span>
+<span class="go">    39    1.89716e+38              5        432.423              1 i</span>
+<span class="go">    44    1.89716e+38              5        432.423              2 i</span>
+<span class="go">    49    1.18971e+28              5        231.367              0 i</span>
+<span class="go">    171        2.25966             0              0              0</span>
+<span class="go">    176        2.25966             0              0              1</span>
+<span class="go">    379        2.25966             0              0              2</span>
+<span class="go">    384        2.25966             0              0              3</span>
+<span class="go">    389        2.25966             0              0              4</span>
+<span class="go">    682        2.25966             0              0              5</span>
+<span class="go">    780        2.25966             0              0              6</span>
+<span class="go">   1040        2.25966             0              0              7</span>
+<span class="go">   1273        2.25966             0              0              8</span>
+<span class="go">   1278        2.25966             0              0              9</span>
+<span class="go">   1415        2.25966             0              0             10</span>
+<span class="go">   1558        2.25966             0              0             11</span>
+<span class="go">   1563        2.25966             0              0             12</span>
+<span class="go">   1577        2.25966             0              0             13</span>
+<span class="go">   1645        2.25966             0              0             14</span>
+<span class="go">   1878        2.25966             0              0             15</span>
+<span class="go">   2051        2.25966             0              0             16</span>
+<span class="go">   2179        2.25966             0              0             17</span>
+<span class="go">   2184        2.25966             0              0             18</span>
+<span class="go">   2189        2.25966             0              0             19</span>
+<span class="go">   2194        2.25966             0              0             20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> 
+<span class="go">2195</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_gevals</span><span class="p">()</span> 
+<span class="go">1320</span>
+</pre></div>
+</div>
+<p>Both strategies in these runs converge to a local feasible minima of value 2.25966. Repeating the above solution
+strategies from different initial populations, the value of 1.60799 is sometimes also be obtained.</p>
+</div>
+<div class="section" id="do-not-use-a-black-box-solver-if-you-do-not-have-to">
+<h2>Do not use a black-box solver if you do not have to<a class="headerlink" href="#do-not-use-a-black-box-solver-if-you-do-not-have-to" title="Permalink to this headline">¶</a></h2>
+<p>We conclude this tutorial arguing how, contrary to common (bad) practices of part of the scientific community,
+the use of appropriate local optimization algorithms is always to be preferred and heuristic approaches should only
+be used in situations where they are needed as they otherwise are just a bad idea. Let&#8217;s consider here the problem
+suite in constrained optimization that was used during the CEC2006 competition. In pygmo, we have implemented such an UDP
+in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.cec2006" title="pygmo.cec2006"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cec2006</span></code></a>. Such a class does not implement a gradient since the competition was intended for
+heuristic optimization. So we quickly code a meta-UDP that adds numerical gradients to a UDP without gradients:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">add_gradient</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prob</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">pg</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">problem</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="bp">self</span><span class="o">.</span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
-<span class="gp">... </span>        <span class="k">else</span><span class="p">:</span>
-<span class="gp">... </span>            <span class="bp">self</span><span class="o">.</span><span class="n">prob</span> <span class="o">=</span> <span class="n">prob</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prob</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -264,8 +332,32 @@ are in the form <span class="math">\(g(x) = 0\)</span>, while inequalities <span
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_nobj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prob</span><span class="o">.</span><span class="n">get_nobj</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span> <span class="c1"># we here use the low precision gradient</span>
 </pre></div>
+</div>
+<p>Super cool, I know. Such a meta-UDP is useful as it now allows calling, for example, SQP methods on the CEC2006 problem instances.
+Consider here only one case: the problem <code class="docutils literal"><span class="pre">g07</span></code>. You can complete this tutorial studying what happens in the remaining ones.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Start adding the numerical gradient (low-precision) to the UDP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">add_gradient</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">cec2006</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">7</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a solution strategy (SQP method)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">mbh</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">(</span><span class="s2">&quot;slsqp&quot;</span><span class="p">),</span> <span class="mi">20</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Solve the problem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Collect information</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> 
+<span class="go">24.306209068189599</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> 
+<span class="go">1155</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_gevals</span><span class="p">()</span> 
+<span class="go">1022</span>
+</pre></div>
+</div>
+<p>The total number of evaluations made to solve the problem (at a precision of 1e-8) is thus 1155 + 1022 * 2 = 3599.
+To compare, as an example, with what an heuristic method could deliver we check the table that appears in:</p>
+<p>Huang, Vicky Ling, A. Kai Qin, and Ponnuthurai N. Suganthan. &#8220;Self-adaptive differential evolution algorithm
+for constrained real-parameter optimization.&#8221; Evolutionary Computation, 2006. CEC 2006. IEEE Congress on. IEEE, 2006.</p>
+<p>to find that after 5000 fitness evaluations this particular problem is still not solved by the heuristic approach there introduced.</p>
 </div>
 </div>
 

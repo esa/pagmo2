@@ -1,0 +1,229 @@
+ <!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Solving the 20 dimensional Schwefel problem &#8212; pagmo 2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="Participating to the CEC2013 Competition" href="cec2013_comp.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Solving the 20 dimensional Schwefel problem</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="solving-the-20-dimensional-schwefel-problem">
+<span id="py-tutorial-solving-schwefel"></span><h1>Solving the 20 dimensional Schwefel problem<a class="headerlink" href="#solving-the-20-dimensional-schwefel-problem" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial we will be using many different algorithms to solve the 20 dimensional version
+of the Schwefel problem. Such an UDP is coded in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.schwefel" title="pygmo.schwefel"><code class="xref py py-class docutils literal"><span class="pre">schwefel</span></code></a>. The result of the script is the plot
+on the right which is to be produced in a few seconds and that reports the average over 25 runs of some of
+the default instances of selected pygmo solvers. The remaining plots shows some single repetitions of the two most successfull algorithms</p>
+<a class="reference internal image-reference" href="../../../_images/schwefel_20.png"><img alt="../../../_images/schwefel_20.png" class="align-right" src="../../../_images/schwefel_20.png" style="width: 384.0px; height: 288.0px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/sea_schwefel_20.png"><img alt="../../../_images/sea_schwefel_20.png" class="align-right" src="../../../_images/sea_schwefel_20.png" style="width: 384.0px; height: 288.0px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/sa_schwefel_20.png"><img alt="../../../_images/sa_schwefel_20.png" class="align-right" src="../../../_images/sa_schwefel_20.png" style="width: 384.0px; height: 288.0px;" /></a>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The user-defined problem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">schwefel</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The pygmo problem</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># For a number of generation based algorithms we can use a similar script to run and average over 25 runs.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">udas</span> <span class="o">=</span> <span class="p">[</span><span class="n">pg</span><span class="o">.</span><span class="n">sade</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">500</span><span class="p">),</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">500</span><span class="p">),</span> <span class="n">pg</span><span class="o">.</span><span class="n">de1220</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">500</span><span class="p">),</span> <span class="n">pg</span><span class="o">.</span><span class="n">pso</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">500</span><span class="p">),</span> <span class="n">pg</span><span class="o">.</span><span class="n">bee_colony</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">uda</span> <span class="ow">in</span> <span class="n">udas</span><span class="p">:</span> 
+<span class="gp">... </span>    <span class="n">logs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">25</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># regulates both screen and log verbosity</span>
+<span class="gp">... </span>        <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">logs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">uda</span><span class="p">))</span><span class="o">.</span><span class="n">get_log</span><span class="p">())</span>
+<span class="gp">... </span>    <span class="n">logs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">avg_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">logs</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">avg_log</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">avg_log</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mf">418.9829</span><span class="o">*</span><span class="mi">20</span> <span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">algo</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># For simulated annealing, since we will be using some reannealing we have to code a different script (and we will</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># also not take any average for brevity)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">simulated_annealing</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span> 
+<span class="gp">... </span>    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">logs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">simulated_annealing</span><span class="p">)</span><span class="o">.</span><span class="n">get_log</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span> 
+<span class="gp">... </span>     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">2000</span><span class="o">*</span><span class="n">i</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">[</span><span class="n">i</span><span class="p">]],[</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mf">418.9829</span><span class="o">*</span><span class="mi">20</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span><span class="s2">&quot;brown&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">algo</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span> 
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># For the simple evolutionary startegy we also need ad hoc code</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">sea</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logs</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">sea</span><span class="p">)</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">],[</span><span class="n">l</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mf">418.9829</span><span class="o">*</span><span class="mi">20</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span> 
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># We then add details to the plot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="o">-</span><span class="mi">8000</span><span class="p">,</span><span class="o">-</span><span class="mi">7000</span><span class="p">,</span><span class="o">-</span><span class="mi">6000</span><span class="p">,</span><span class="o">-</span><span class="mi">5000</span><span class="p">,</span><span class="o">-</span><span class="mi">4000</span><span class="p">,</span><span class="o">-</span><span class="mi">3000</span><span class="p">,</span><span class="o">-</span><span class="mi">2000</span><span class="p">,</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span> 
+</pre></div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

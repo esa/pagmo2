@@ -426,12 +426,12 @@ constructed with a <a class="reference internal" href="#pygmo.bee_colony" title=
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
-<span class="go">Gen:        Fevals:  Current best:          Best:</span>
-<span class="go">   1             40         183728         183728</span>
-<span class="go"> 101           4040        506.757        26.4234</span>
-<span class="go"> 201           8040        55.6282        14.9136</span>
-<span class="go"> 301          12040         65.554        14.9136</span>
-<span class="go"> 401          16040        191.654        14.9136</span>
+<span class="go">Gen:        Fevals:          Best: Current Best:</span>
+<span class="go">   1             40         261363         261363</span>
+<span class="go"> 101           4040        112.237        267.969</span>
+<span class="go"> 201           8040        20.8885        265.122</span>
+<span class="go"> 301          12040        20.6076        20.6076</span>
+<span class="go"> 401          16040         18.252        140.079</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">bee_colony</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 40, 183727.83934515435, 183727.83934515435), ...</span>
