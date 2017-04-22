@@ -64,7 +64,7 @@ namespace pagmo
 class bee_colony
 {
 public:
-    /// Single entry of the log (gen, fevals, curr_best, best)
+    /// Single entry of the log (gen, fevals, best, cur_best)
     typedef std::tuple<unsigned, unsigned long long, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
@@ -256,14 +256,14 @@ public:
                     auto best_idx = pop.best_idx();
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Current best:",
-                              std::setw(15), "Best:\n");
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
+                              std::setw(15), "Current Best:\n");
                     }
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
-                          pop.get_f()[best_idx][0], std::setw(15), pop.champion_f()[0], '\n');
+                          pop.champion_f()[0], std::setw(15), pop.get_f()[best_idx][0], '\n');
                     ++count;
                     // Logs
-                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], pop.champion_f()[0]);
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.champion_f()[0], pop.get_f()[best_idx][0]);
                 }
             }
         }
@@ -296,16 +296,15 @@ public:
      *
      * Example (verbosity 100):
      * @code{.unparsed}
-     *    Gen:        Fevals:  Current best:          Best:
-     *       1            100        81757.2        81757.2
-     *     101          10100        28.2248        28.2248
-     *     201          20100         7.9007       0.580009
-     *     301          30100        1.48624      0.0871484
-     *     401          40100       0.415268      0.0871484
-     *     501          50100       0.533034      0.0871484
+     *     Gen:        Fevals:          Best: Current Best:
+     *        1             40         261363         261363
+     *      101           4040        112.237        267.969
+     *      201           8040        20.8885        265.122
+     *      301          12040        20.6076        20.6076
+     *      401          16040         18.252        140.079
      * @endcode
-     * Gen is the generation number, Fevals the number of function evaluation used, Current best is the best fitness
-     * currently in the population, Best is the best fitness found.
+     * Gen is the generation number, Fevals the number of function evaluation used, , Best is the best fitness found, 
+     * Current best is the best fitness currently in the population.
      *
      * @param level verbosity level
      */

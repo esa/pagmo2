@@ -57,3 +57,4 @@ Advanced Examples
   :maxdepth: 2
 
   cec2013_comp
+  solving_schwefel_20

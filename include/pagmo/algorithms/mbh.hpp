@@ -379,7 +379,7 @@ public:
     {
         return m_algorithm;
     }
-    /// Getter for the inner problem.
+    /// Getter for the inner algorithm.
     /**
      * Returns a reference to the inner pagmo::algorithm.
      *
