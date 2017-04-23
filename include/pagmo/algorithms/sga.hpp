@@ -74,12 +74,26 @@ public:
 
     /// Constructor
     /**
-     * Constructs an sga algorithm
+     * Constructs a simple genetic algorithm.
      *
      * @param gen number of generations.
+     * @param cr crossover probability.
+     * @param eta_c distribution index for "sbx" crossover. This is an inactive parameter if other types of crossovers
+     * are selected.
+     * @param m mutation probability.
+     * @param param_m distribution index (in polynomial mutation), otherwise width of the mutation.
+     * @param elitism generation frequency fot the reinsertion of the best individual.
+     * @param bestN when "bestN"" selection is used this indicates the percentage of best individuals to use.
+     * This is an inactive parameter if other types of selection are selected.
+     * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
+     * @param mutation the selection strategy. One of "roulette", "bestN".
+     * @param mutation the crossover strategy. One of "exponential", "binomial" or "sbx"
+     * @param int_dim the number of element in the chromosome to be treated as integers.
      *
-     *
-     * @throws std::invalid_argument if limit equals 0
+     * @throws std::invalid_argument if \p cr not in [0,1), \p eta_c not in [1, 100), \p m not in [0,1], \p elitism < 1
+     * \p mutation not one of "gaussian", "uniform" or "polynomial", \p selection not one of "roulette" or "bestN"
+     * \p crossover not one of "exponential", "binomial", "sbx" or "single-point", if \p param_m is not in [0,1] and
+     * \p mutation is not "polynomial" or \p mutation is not in [1,100] and \p mutation is polynomial.
      */
     sga(unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double param_m = 0.5,
         unsigned elitism = 1u, double bestN = 0.2, std::string mutation = "gaussian",
@@ -95,7 +109,7 @@ public:
         }
         if (eta_c < 1. || eta_c >= 100.) {
             pagmo_throw(std::invalid_argument,
-                        "The distribution index for BSX crossover must be in [1, 100[, while a value of "
+                        "The distribution index for SBX crossover must be in [1, 100[, while a value of "
                             + std::to_string(eta_c) + " was detected");
         }
         if (m < 0. || m > 1.) {
@@ -117,16 +131,18 @@ public:
                             + selection);
         }
         if (!crossover.compare("exponential") && !crossover.compare("binomial") && !crossover.compare("sbx")
-            && !crossover.compare("single_point")) {
+            && !crossover.compare("single-point")) {
             pagmo_throw(
                 std::invalid_argument,
-                R"(The crossover type must either be "exponential" or "binomial" or "sbx" or "single_point": unknown type requested: )"
+                R"(The crossover type must either be "exponential" or "binomial" or "sbx" or "single-point": unknown type requested: )"
                     + crossover);
         }
         // param_m represents the distribution index if polynomial mutation is selected
         if (mutation.compare("polynomial") && (param_m < 1. || param_m > 100.)) {
-            pagmo_throw(std::invalid_argument, "Polynomial mutation was selected, the mutation parameter must be in [1, 100], while a value of "
-                                                   + std::to_string(param_m) + " was detected");
+            pagmo_throw(
+                std::invalid_argument,
+                "Polynomial mutation was selected, the mutation parameter must be in [1, 100], while a value of "
+                    + std::to_string(param_m) + " was detected");
         }
         // otherwise it represents a width
         if (!mutation.compare("polynomial") && (param_m < 0 || param_m > 1.)) {
@@ -141,7 +157,7 @@ public:
      *
      * @param pop population to be evolved
      * @return evolved population
-     * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
+     * @throws std::invalid_argument if the problem is multi-objective or constrained
      * @throws std::invalid_argument if the population size is smaller than 2
      */
     population evolve(population pop) const
@@ -164,10 +180,6 @@ public:
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
         }
-        if (prob.is_stochastic()) {
-            pagmo_throw(std::invalid_argument,
-                        "The problem appears to be stochastic. " + get_name() + " cannot deal with it");
-        }
         if (NP < 2u) {
             pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 2 individuals in the population, "
                                                    + std::to_string(NP) + " detected");
@@ -179,142 +191,8 @@ public:
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
-        m_log.clear();
+        // m_log.clear();
 
-        // Some vectors used during evolution are declared.
-        vector_double newsol(dim); // contains the mutated candidate
-        auto X = pop.get_x();
-        auto fit = pop.get_f();
-        std::vector<unsigned> trial(NP, 0u);
-        std::uniform_real_distribution<double> phirng(-1., 1.); // to generate a number in [-1, 1)
-        std::uniform_real_distribution<double> rrng(0., 1.);    // to generate a number in [0, 1)
-        std::uniform_int_distribution<vector_double::size_type> comprng(
-            0u, dim - 1u); // to generate a random index for the component to mutate
-        std::uniform_int_distribution<vector_double::size_type> dvrng(
-            0u, NP - 2u); // to generate a random index for the second decision vector
-
-        for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
-            // 1 - Employed bees phase
-            std::vector<unsigned>::size_type mi = 0u;
-            for (decltype(NP) i = 1u; i < NP; ++i) {
-                if (trial[i] > trial[mi]) {
-                    mi = i;
-                }
-            }
-            bool scout = false;
-            if (trial[mi] >= m_limit) {
-                scout = true;
-            }
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-                if (trial[i] < m_limit || i != mi) {
-                    newsol = X[i];
-                    // selects a random component of the decision vector
-                    auto comp2change = comprng(m_e);
-                    // selects a random decision vector in the population other than the current
-                    auto rdv = dvrng(m_e);
-                    if (rdv >= i) {
-                        ++rdv;
-                    }
-                    // mutate new solution
-                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[rdv][comp2change]);
-                    // if the generated parameter value is out of boundaries, shift it into the boundaries
-                    if (newsol[comp2change] < lb[comp2change]) {
-                        newsol[comp2change] = lb[comp2change];
-                    }
-                    if (newsol[comp2change] > ub[comp2change]) {
-                        newsol[comp2change] = ub[comp2change];
-                    }
-                    // if the new solution is better than the old one replace it and reset its trial counter
-                    auto newfitness = prob.fitness(newsol);
-                    if (newfitness[0] < fit[i][0]) {
-                        fit[i][0] = newfitness[0];
-                        X[i][comp2change] = newsol[comp2change];
-                        pop.set_xf(i, newsol, newfitness);
-                        trial[i] = 0;
-                    } else {
-                        ++trial[i];
-                    }
-                }
-            }
-            // 2 - Scout bee phase
-            if (scout) {
-                for (auto j = 0u; j < dim; ++j) {
-                    X[mi][j] = uniform_real_from_range(lb[j], ub[j], m_e);
-                }
-                pop.set_x(mi, X[mi]); // this causes a fitness evaluation
-                trial[mi] = 0;
-            }
-            // 3 - Onlooker bee phase
-            // compute probabilities
-            vector_double p(NP);
-            auto sump = 0.;
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-                if (fit[i][0] >= 0.) {
-                    p[i] = 1. / (1. + fit[i][0]);
-                } else {
-                    p[i] = 1. - fit[i][0];
-                }
-                sump += p[i];
-            }
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-                p[i] /= sump;
-            }
-            vector_double::size_type s = 0u;
-            decltype(NP) t = 0u;
-            // for each onlooker bee
-            while (t < NP) {
-                // probabilistic selection of a food source
-                auto r = rrng(m_e);
-                if (r < p[s]) {
-                    ++t;
-                    newsol = X[s];
-                    // selects a random component of the decision vector
-                    auto comp2change = comprng(m_e);
-                    // selects a random decision vector in the population other than the current
-                    auto rdv = dvrng(m_e);
-                    if (rdv >= s) {
-                        ++rdv;
-                    }
-                    // mutate new solution
-                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[rdv][comp2change]);
-                    // if the generated parameter value is out of boundaries, shift it into the boundaries
-                    if (newsol[comp2change] < lb[comp2change]) {
-                        newsol[comp2change] = lb[comp2change];
-                    }
-                    if (newsol[comp2change] > ub[comp2change]) {
-                        newsol[comp2change] = ub[comp2change];
-                    }
-                    // if the new solution is better than the old one replace it and reset its trial counter
-                    auto newfitness = prob.fitness(newsol);
-                    if (newfitness[0] < fit[s][0]) {
-                        fit[s][0] = newfitness[0];
-                        X[s][comp2change] = newsol[comp2change];
-                        pop.set_xf(s, newsol, newfitness);
-                        trial[s] = 0;
-                    } else {
-                        ++trial[s];
-                    }
-                }
-                s = (s + 1) % NP;
-            }
-            // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
-            if (m_verbosity > 0u) {
-                // Every m_verbosity generations print a log line
-                if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                    auto best_idx = pop.best_idx();
-                    // Every 50 lines print the column names
-                    if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
-                              std::setw(15), "Current Best:\n");
-                    }
-                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
-                          pop.champion_f()[0], std::setw(15), pop.get_f()[best_idx][0], '\n');
-                    ++count;
-                    // Logs
-                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.champion_f()[0], pop.get_f()[best_idx][0]);
-                }
-            }
-        }
         return pop;
     }
 
@@ -368,21 +246,13 @@ public:
     {
         return m_verbosity;
     }
-    /// Gets the number of generations
-    /**
-     * @return the number of generations to evolve for
-     */
-    unsigned get_gen() const
-    {
-        return m_gen;
-    }
     /// Algorithm name
     /**
      * @return a string containing the algorithm name
      */
     std::string get_name() const
     {
-        return "Artificial Bee Colony";
+        return "Genetic Algorithm";
     }
     /// Extra informations
     /**
@@ -391,12 +261,29 @@ public:
     std::string get_extra_info() const
     {
         std::ostringstream ss;
-        stream(ss, "\tMaximum number of generations: ", m_gen);
-        stream(ss, "\n\tLimit: ", m_limit);
-        stream(ss, "\n\tVerbosity: ", m_verbosity);
+        stream(ss, "\tNumber of generations: ", m_gen);
+        stream(ss, "\tElitism: ", m_elitism);
+        stream(ss, "\n\tCrossover:");
+        stream(ss, "\n\t\tType: " + m_crossover);
+        stream(ss, "\n\t\tProbability: " + m_cr);
+        if (m_crossover.compare("sbx")) stream(ss, "\n\t\tDistribution index: " + m_eta_c);
+        stream(ss, "\n\tMutation:");
+        stream(ss, "\n\t\tType: " + m_mutation);
+        stream(ss, "\n\t\tProbability: " + m_m);
+        if (m_mutation.compare("polynomial")) {
+            stream(ss, "\n\t\tWidth: " + m_param_m);
+        } else {
+            stream(ss, "\n\t\tDistribution index: " + m_param_m);
+        }
+        stream(ss, "\n\tSelection:");
+        stream(ss, "\n\t\tType: " + m_selection);
+        if (m_selection.compare("bestN")) stream(ss, "\n\t\tBest pop fraction: " + m_bestN);
+        stream(ss, "\n\tSize of the integer part: ", m_int_dim);
         stream(ss, "\n\tSeed: ", m_seed);
+        stream(ss, "\n\tVerbosity: ", m_verbosity);
         return ss.str();
     }
+
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
@@ -406,10 +293,10 @@ public:
      * @return an <tt> std::vector</tt> of bee_colony::log_line_type containing the logged values Gen, Fevals, Current
      * best, Best
      */
-    const log_type &get_log() const
-    {
-        return m_log;
-    }
+    // const log_type &get_log() const
+    //{
+    //    return m_log;
+    //}
     /// Object serialization
     /**
      * This method will save/load \p this into the archive \p ar.
@@ -421,20 +308,32 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_limit, m_e, m_seed, m_verbosity, m_log);
+        ar(m_gen, m_cr, m_eta_c, m_m, m_param_m, m_elitism, m_bestN, m_mutation, m_selection, m_crossover, m_int_dim,
+           m_e, m_seed, m_verbosity)
     }
+
+    unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double param_m = 0.5,
+        unsigned elitism = 1u, double bestN = 0.2, std::string mutation = "gaussian",
+        std::string selection = "roulette", std::string crossover = "exponential",
+        vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
 
 private:
     unsigned m_gen;
-    unsigned m_limit;
-    mutable detail::random_engine_type m_e;
+    double m_cr;
+    double m_eta_c;
+    double m_m;
+    double m_param_m;
+    unsigned m_elitism;
+    double m_bestN;
+    std::string m_mutation;
+    std::string m_selection;
+    std::string m_crossover;
+    vector_double::size_type m_int_dim;
     unsigned m_seed;
-    unsigned m_verbosity;
-    mutable log_type m_log;
 };
 
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::bee_colony)
+PAGMO_REGISTER_ALGORITHM(pagmo::sga)
 
 #endif
