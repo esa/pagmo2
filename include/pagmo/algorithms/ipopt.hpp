@@ -33,6 +33,8 @@ see https://www.gnu.org/licenses/. */
 
 #if defined(PAGMO_WITH_IPOPT)
 
+#include <IpIpoptCalculatedQuantities.hpp>
+#include <IpIpoptData.hpp>
 #include <IpTNLP.hpp>
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
@@ -43,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/exceptions.hpp>
@@ -56,12 +59,11 @@ namespace pagmo
 namespace detail
 {
 
-class ipopt_nlp final : public Ipopt::TNLP
-{
-public:
+struct ipopt_nlp final : Ipopt::TNLP {
     // Some shortcuts from the Ipopt namespace.
     using Index = Ipopt::Index;
     using Number = Ipopt::Number;
+    static_assert(std::is_same<Number, double>::value, "I hate everybody.");
     using SolverReturn = Ipopt::SolverReturn;
     using IpoptData = Ipopt::IpoptData;
     using IpoptCalculatedQuantities = Ipopt::IpoptCalculatedQuantities;
@@ -77,15 +79,52 @@ public:
                             + "', but the ipopt algorithm can solve only single-objective problems");
         }
 
-        // Store the gradient sparsity, but only if user-provided. We will optimise the dense
-        // case and avoid stroring the pattern explicitly.
-        if (m_prob.has_gradient_sparsity()) {
-            m_g_sp = prob.gradient_sparsity();
+        // Conversion of the sparsity information to the format required by Ipopt.
+        // Gradients first.
+        {
+            // NOTE: our format for the gradient sparsity matches almost exactly Ipopt's. The only difference
+            // is that we also report the sparsity for the objective function's gradient, while Ipopt's jacobian
+            // contains only constraints' gradients. Thus, we will need to discard the the objfun's sparsity
+            // information and to decrease by one the row indices in the pattern (i.e., a first index of zero in
+            // a pattern element must refer to the first constraint).
+            // https://www.coin-or.org/Ipopt/documentation/node22.html
+            const auto sp = prob.gradient_sparsity();
+            // Determine where the gradients of the constraints start.
+            const auto it = std::lower_bound(sp.begin(), sp.end(), sparsity_pattern::value_type(1u, 0u));
+            // Transform it into the Ipopt format.
+            std::transform(it, sp.end(), std::back_inserter(m_jac_sp), [](const sparsity_pattern::value_type &p) {
+                return std::make_pair(boost::numeric_cast<Index>(p.first - 1u), boost::numeric_cast<Index>(p.second));
+            });
         }
 
-        // Same for the hessians.
-        if (m_prob.has_hessians_sparsity()) {
-            m_h_sp = prob.hessians_sparsity();
+        // Hessians.
+        {
+            // NOTE: Ipopt requires a single sparsity pattern for the hessian of the lagrangian (that is,
+            // the pattern must be valid for objfun and all constraints), but we provide a separate sparsity pattern for
+            // objfun and every constraint. We will thus need to merge our sparsity patterns in a single sparsity
+            // pattern.
+            // https://www.coin-or.org/Ipopt/documentation/node22.html
+            const auto sps = m_prob.hessians_sparsity();
+            sparsity_pattern merged_sp;
+            if (m_prob.has_hessians_sparsity()) {
+                for (const auto &sp : sps) {
+                    // NOTE: we need to create a separate copy each time as std::merge() requires distinct ranges.
+                    const auto old_merged_sp(merged_sp);
+                    merged_sp.clear();
+                    std::merge(old_merged_sp.begin(), old_merged_sp.end(), sp.begin(), sp.end(),
+                               std::back_inserter(merged_sp));
+                }
+            } else {
+                // If the hessians sparsity is not user-provided, we don't need the merge operation:
+                // all patterns are identical, just pick the first one.
+                merged_sp = sps[0];
+            }
+            // Convert into Index pairs.
+            std::transform(merged_sp.begin(), merged_sp.end(), std::back_inserter(m_lag_sp),
+                           [](const sparsity_pattern::value_type &p) {
+                               return std::make_pair(boost::numeric_cast<Index>(p.first),
+                                                     boost::numeric_cast<Index>(p.second));
+                           });
         }
     }
 
@@ -109,58 +148,42 @@ public:
         m = boost::numeric_cast<Index>(m_prob.get_nc());
 
         // Number of nonzero entries in the jacobian.
-        // NOTE: our format for the gradient sparsity matches almost exactly Ipopt's. The only difference
-        // is that we also report the sparsity for the objective function's gradient, while Ipopt is interested
-        // only in the sparsity of the constraints. Thus we will need to discard the the objfun's sparsity
-        // information.
-        if (m_prob.has_gradient_sparsity()) {
-            // Determine where the gradients of the constraints start.
-            const auto it = std::lower_bound(m_g_sp.cbegin(), m_g_sp.cend(), sparsity_pattern::value_type(1u, 0u));
+        nnz_jac_g = boost::numeric_cast<Index>(m_jac_sp.size());
 
-            // Need to do a bit of horrid overflow checking :/.
-            using diff_type = std::iterator_traits<sparsity_pattern::const_iterator>::difference_type;
-            using udiff_type = std::make_unsigned<diff_type>::type;
-            if (m_g_sp.size() > static_cast<udiff_type>(std::numeric_limits<diff_type>::max())) {
-                pagmo_throw(std::overflow_error, "Overflow error, the sparsity pattern size is too large.");
-            }
+        // Number of nonzero entries in the hessian of the lagrangian.
+        nnz_h_lag = boost::numeric_cast<Index>(m_lag_sp.size());
 
-            // nnz_jac_g is the distance between the first sparsity index referring to the constraints
-            // and the end of the sparsity pattern.
-            nnz_jac_g = boost::numeric_cast<Index>(std::distance(it, m_g_sp.cend()));
-        } else {
-            // Dense case.
-            nnz_jac_g = boost::numeric_cast<Index>(m_prob.get_nx() * m_prob.get_nc());
-        }
-
-        // Number of nonzero entries in the constraints hessians.
-        // NOTE: Ipopt requires a single sparsity pattern valid for all constraint hessians, but we
-        // provide a separate sparsity pattern for every constraint. We will thus need to merge
-        // our sparsity patterns in a single sparsity pattern. Also, we need to discard the sparsity
-        // pattern of the hessiand of the objfun as Ipopt does not need that.
-        if (m_prob.has_hessians_sparsity()) {
-            sparsity_pattern merged_sp;
-            for (auto it = m_h_sp.begin() + 1; it != m_h_sp.end(); ++it) {
-                // NOTE: we need to create a separate copy each time as std::merge() requires distinct ranges.
-                const auto old_merged_sp(merged_sp);
-                merged_sp.clear();
-                std::merge(old_merged_sp.begin(), old_merged_sp.end(), it->begin(), it->end(),
-                           std::back_inserter(merged_sp));
-            }
-            nnz_h_lag = boost::numeric_cast<Index>(merged_sp.size());
-        } else {
-            // Dense case.
-            // NOTE: this is the number of elements in the lower triangular half of a square matrix of nx * nx
-            // (including the diagonal).
-            nnz_h_lag = boost::numeric_cast<Index>(m_prob.get_nx() * (m_prob.get_nx() - 1u) / 2u + m_prob.get_nx());
-        }
-
-        // Use the C style indexing (0-based).
+        // We use C style indexing (0-based).
         index_style = TNLP::C_STYLE;
+
+        return true;
     }
 
     // Method to return the bounds of the problem.
     virtual bool get_bounds_info(Index n, Number *x_l, Number *x_u, Index m, Number *g_l, Number *g_u) override final
     {
+        assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
+        assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
+        (void)n;
+
+        // Box bounds.
+        const auto bounds = m_prob.get_bounds();
+        // Lower bounds.
+        std::copy(bounds.first.begin(), bounds.first.end(), x_l);
+        // Upper bounds.
+        std::copy(bounds.second.begin(), bounds.second.end(), x_u);
+
+        // Equality constraints: lb == ub == 0.
+        std::fill(g_l, g_l + m_prob.get_nec(), 0.);
+        std::fill(g_u, g_u + m_prob.get_nec(), 0.);
+
+        // Inequality constraints: lb == -inf, ub == 0.
+        std::fill(g_l + m_prob.get_nec(), g_l + m, std::numeric_limits<double>::has_infinity
+                                                       ? -std::numeric_limits<double>::infinity()
+                                                       : std::numeric_limits<double>::lowest());
+        std::fill(g_u + m_prob.get_nec(), g_u + m, 0.);
+
+        return true;
     }
 
     // Method to return the starting point for the algorithm.
@@ -208,12 +231,15 @@ public:
     {
     }
 
-private:
+    // Data members.
     const problem &m_prob;
-    // Gradient sp.
-    sparsity_pattern m_g_sp;
-    // Hessians sp.
-    std::vector<sparsity_pattern> m_h_sp;
+    // Jacobian sparsity pattern as required by Ipopt: sparse
+    // rectangular matrix represented as a list of (Row,Col)
+    // pairs.
+    // https://www.coin-or.org/Ipopt/documentation/node38.html
+    std::vector<std::pair<Index, Index>> m_jac_sp;
+    // Same format for the hessian of the lagrangian (but it's a square matrix).
+    std::vector<std::pair<Index, Index>> m_lag_sp;
 };
 }
 
