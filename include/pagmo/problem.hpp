@@ -1113,8 +1113,7 @@ public:
             const auto nf = get_nf();
             if (nx == std::numeric_limits<vector_double::size_type>::max()
                 || nx / 2u > std::numeric_limits<vector_double::size_type>::max() / (nx + 1u)) {
-                pagmo_throw(std::invalid_argument, "The size of the (dense) hessians "
-                                                   "sparsity is too large");
+                pagmo_throw(std::invalid_argument, "The size of the (dense) hessians sparsity is too large");
             }
             // We resize rather than push back here, so that an std::length_error is called quickly rather
             // than an std::bad_alloc after waiting the growth
