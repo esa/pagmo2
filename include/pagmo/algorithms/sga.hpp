@@ -81,13 +81,13 @@ public:
      *
      * @throws std::invalid_argument if limit equals 0
      */
-    sga(unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double eta_m = 0.5,
-        unsigned elitism = 1u, std::string mutation = "gaussian", std::string selection = "roulette",
-        std::string crossover = "exponential", vector_double::size_type int_dim = 0u,
-        unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_elitism(elitism), m_mutation(mutation),
-          m_selection(selection), m_crossover(crossover), m_int_dim(int_dim), m_e(seed), m_seed(seed),
-          m_verbosity(0u) //, m_log()
+    sga(unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double param_m = 0.5,
+        unsigned elitism = 1u, double bestN = 0.2, std::string mutation = "gaussian",
+        std::string selection = "roulette", std::string crossover = "exponential",
+        vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
+        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_elitism(elitism), m_bestN(bestN),
+          m_mutation(mutation), m_selection(selection), m_crossover(crossover), m_int_dim(int_dim), m_e(seed),
+          m_seed(seed), m_verbosity(0u) //, m_log()
     {
         if (cr >= 1. || cr < 0.) {
             pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1[ range, while a value of "
@@ -105,10 +105,33 @@ public:
         if (elitism < 1u) {
             pagmo_throw(std::invalid_argument, "elitism must be greater than zero");
         }
-        if (!mutation.compare("gaussian") && !mutation.compare("uniform")) {
+        if (!mutation.compare("gaussian") && !mutation.compare("uniform") && !mutation.compare("polynomial")) {
+            pagmo_throw(
+                std::invalid_argument,
+                R"(The mutation type must either be "gaussian" or "uniform" or "polynomial": unknown type requested: )"
+                    + mutation);
+        }
+        if (!selection.compare("roulette") && !selection.compare("bestN")) {
             pagmo_throw(std::invalid_argument,
-                        R"(The mutation type must either be "gaussian" or "uniform": unknown type requested:)"
-                            + mutation);
+                        R"(The selection type must either be "roulette" or "bestN": unknown type requested: )"
+                            + selection);
+        }
+        if (!crossover.compare("exponential") && !crossover.compare("binomial") && !crossover.compare("sbx")
+            && !crossover.compare("single_point")) {
+            pagmo_throw(
+                std::invalid_argument,
+                R"(The crossover type must either be "exponential" or "binomial" or "sbx" or "single_point": unknown type requested: )"
+                    + crossover);
+        }
+        // param_m represents the distribution index if polynomial mutation is selected
+        if (mutation.compare("polynomial") && (param_m < 1. || param_m > 100.)) {
+            pagmo_throw(std::invalid_argument, "Polynomial mutation was selected, the mutation parameter must be in [1, 100], while a value of "
+                                                   + std::to_string(param_m) + " was detected");
+        }
+        // otherwise it represents a width
+        if (!mutation.compare("polynomial") && (param_m < 0 || param_m > 1.)) {
+            pagmo_throw(std::invalid_argument, "The mutation parameter must be in [0,1], while a value of "
+                                                   + std::to_string(param_m) + " was detected");
         }
     }
 
