@@ -1564,7 +1564,7 @@ objective function. Using the above definitions the overall pseudo code can be s
 :class:`pygmo.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
 **NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
-for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
+for decision vectors already evaluated. This makes the final counter of function evaluations somewhat unpredictable.
 The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.

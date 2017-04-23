@@ -15,6 +15,7 @@ pagmo is a header-only library which has the following third party dependencies:
   intend to compile the python bindings)
 * `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`_, optional, header-only
 * `NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`_, optional, requires linking
+* `Ipopt <https://projects.coin-or.org/Ipopt>`_, optional, requires linking
 
 After making sure the dependencies above are installed in your system, you can download the
 pagmo source code from the `GitHub release page <https://github.com/esa/pagmo2/releases>`_. Alternatively,
