@@ -30,6 +30,9 @@ option(PAGMO_WITH_EIGEN3 "Enable features depending on Eigen3 (such as CMAES). R
 # Build option: enable NLopt.
 option(PAGMO_WITH_NLOPT "Enable wrappers for the NLopt algorithms." OFF)
 
+# Build option: enable Ipopt.
+option(PAGMO_WITH_IPOPT "Enable wrappers for the Ipopt solver." OFF)
+
 # Build option: install header.
 option(PAGMO_INSTALL_HEADERS "Enable the installation of PaGMO's header files." ON)
 
@@ -82,6 +85,15 @@ if(PAGMO_WITH_NLOPT)
     message(STATUS "NLopt libraries: ${NLOPT_LIBRARIES}")
 endif()
 
+# Ipopt setup
+if(PAGMO_WITH_IPOPT)
+    find_package(IPOPT REQUIRED)
+    message(STATUS "Ipopt include directory: ${IPOPT_INCLUDE_DIRS}")
+    message(STATUS "Ipopt libraries: ${IPOPT_LIBRARIES}")
+    message(STATUS "Ipopt definitions: ${IPOPT_DEFINITIONS}")
+    message(STATUS "Ipopt link flags: ${IPOPT_LINK_FLAGS}")
+endif()
+
 # Python setup.
 # NOTE: we do it here because we need to detect the Python bits *before*
 # looking for boost.python.
@@ -124,6 +136,27 @@ if(PAGMO_WITH_NLOPT)
     set_target_properties(NLOPT::nlopt PROPERTIES IMPORTED_LINK_INTERFACE_LANGUAGES "C" IMPORTED_LOCATION "${NLOPT_LIBRARIES}")
     target_link_libraries(pagmo INTERFACE NLOPT::nlopt)
     set(PAGMO_ENABLE_NLOPT "#define PAGMO_WITH_NLOPT")
+endif()
+
+if(PAGMO_WITH_IPOPT)
+    # Link pagmo to Ipopt.
+    add_library(IPOPT::ipopt INTERFACE IMPORTED)
+    set_target_properties(IPOPT::ipopt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${IPOPT_INCLUDE_DIRS}")
+    # NOTE: I have no idea why this happens, but in addition to the -pthread flag (which should be enough
+    # to signal we need pthreads - and indeed it is in any other situation I have encountered so far),
+    # libipopt.so apprently really really strongly wants '-lpthread' to be linked in explicitly at the
+    # very beginning. Why oh why scientific software is always so much of a pain to deal with?
+    if(CMAKE_USE_PTHREADS_INIT)
+        message(STATUS "Explicitly linking ipopt with '-lpthread'.")
+        set_property(TARGET IPOPT::ipopt APPEND PROPERTY INTERFACE_LINK_LIBRARIES "pthread")
+    endif()
+    set_property(TARGET IPOPT::ipopt APPEND PROPERTY INTERFACE_LINK_LIBRARIES "${IPOPT_LIBRARIES}")
+    set_target_properties(IPOPT::ipopt PROPERTIES INTERFACE_COMPILE_DEFINITIONS "${IPOPT_DEFINITIONS}")
+    # NOTE: this is a tentative workaround to setup custom link flags, if existing. See:
+    # https://gitlab.kitware.com/cmake/cmake/issues/16543
+    set_property(TARGET IPOPT::ipopt APPEND PROPERTY INTERFACE_LINK_LIBRARIES "${IPOPT_LINK_FLAGS}")
+    target_link_libraries(pagmo INTERFACE IPOPT::ipopt)
+    set(PAGMO_ENABLE_IPOPT "#define PAGMO_WITH_IPOPT")
 endif()
 
 # Configure config.hpp.

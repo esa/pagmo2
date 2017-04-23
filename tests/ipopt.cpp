@@ -26,16 +26,13 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_CONFIG_HPP
-#define PAGMO_CONFIG_HPP
+#define BOOST_TEST_MODULE ipopt_test
+#include <boost/test/included/unit_test.hpp>
 
-// Start of defines instantiated by CMake.
-// clang-format off
-#define PAGMO_VERSION @pagmo_VERSION@
-@PAGMO_ENABLE_EIGEN3@
-@PAGMO_ENABLE_NLOPT@
-@PAGMO_ENABLE_IPOPT@
-// clang-format on
-// End of defines instantiated by CMake.
+#include <pagmo/algorithms/ipopt.hpp>
 
-#endif
+using namespace pagmo;
+
+BOOST_AUTO_TEST_CASE(ipopt_construction)
+{
+}
