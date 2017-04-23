@@ -1,3 +1,5 @@
+# https://github.com/robotology/icub-main/blob/master/conf/FindIPOPT.cmake
+
 #.rst:
 # FindIPOPT
 # ---------
