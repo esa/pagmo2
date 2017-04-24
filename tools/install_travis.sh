@@ -7,6 +7,7 @@ set -x
 
 if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     export PATH="$deps_dir/bin:$PATH"
+    export LD_LIBRARY_PATH="$deps_dir/lib"
 fi
 
 if [[ "${PAGMO_BUILD}" == "ReleaseGCC48" ]]; then
