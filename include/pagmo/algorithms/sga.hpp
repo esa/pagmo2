@@ -119,6 +119,11 @@ public:
         if (elitism < 1u) {
             pagmo_throw(std::invalid_argument, "elitism must be greater than zero");
         }
+        if (bestN < 0. || bestN > 1.) {
+            pagmo_throw(std::invalid_argument,
+                        "The fraction of the best individuals must be in the [0,1] range, while a value of "
+                            + std::to_string(bestN) + " was detected");
+        }
         if (mutation != "gaussian" && mutation != "uniform" && mutation != "polynomial") {
             pagmo_throw(
                 std::invalid_argument,

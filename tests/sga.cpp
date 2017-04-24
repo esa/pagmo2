@@ -29,9 +29,8 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE sga_problem_test
 #include <boost/test/included/unit_test.hpp>
 
-#include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 #include <pagmo/algorithm.hpp>
@@ -52,7 +51,43 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
     // We check the default constructor, a correct call and the possibility to build a pagmo::algorithm
     BOOST_CHECK_NO_THROW(sga{});
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "roulette", "exponential", 0u, 32u}));
+    BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "uniform", "roulette", "exponential", 0u, 32u}));
+    BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, 20., 1u, .2, "polynomial", "roulette", "exponential", 0u, 32u}));
+    BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "bestN", "exponential", 0u, 32u}));
+    BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "roulette", "binomial", 0u, 32u}));
+    BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "roulette", "sbx", 0u, 32u}));
     BOOST_CHECK_NO_THROW(algorithm(sga{}));
     // We check incorrect calls to the constructor
-    BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "roulette", "exponential", 0u, 32u}));
+    BOOST_CHECK_THROW((sga{1u, 12., 10., .02, .5, 1u, .2, "gaussian", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, -1.1, 10., .02, .5, 1u, .2, "gaussian", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 0.1, .02, .5, 1u, .2, "gaussian", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 101., .02, .5, 1u, .2, "gaussian", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., -0.2, .5, 1u, .2, "gaussian", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., 1.3, .5, 1u, .2, "gaussian", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 0u, .2, "gaussian", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, 1.1, "gaussian", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, -1., "gaussian", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "unknown_method", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "unknown_method", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "roulette", "unknown_method", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "polynomial", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 101, 1u, .2, "polynomial", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, -3, 1u, .2, "uniform", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 1.1, 1u, .2, "uniform", "roulette", "exponential", 0u, 32u}),
+                      std::invalid_argument);
 }
