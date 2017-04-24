@@ -81,8 +81,8 @@ endif()
 # NLopt setup
 if(PAGMO_WITH_NLOPT)
     find_package(NLOPT REQUIRED)
-    message(STATUS "NLopt include directory: ${NLOPT_INCLUDE_DIRS}")
-    message(STATUS "NLopt libraries: ${NLOPT_LIBRARIES}")
+    message(STATUS "NLopt include directory: ${NLOPT_INCLUDE_DIR}")
+    message(STATUS "NLopt library: ${NLOPT_LIBRARY}")
 endif()
 
 # Ipopt setup
@@ -131,9 +131,6 @@ endif()
 
 if(PAGMO_WITH_NLOPT)
     # Link pagmo to NLopt.
-    add_library(NLOPT::nlopt UNKNOWN IMPORTED)
-    set_target_properties(NLOPT::nlopt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${NLOPT_INCLUDE_DIRS}")
-    set_target_properties(NLOPT::nlopt PROPERTIES IMPORTED_LINK_INTERFACE_LANGUAGES "C" IMPORTED_LOCATION "${NLOPT_LIBRARIES}")
     target_link_libraries(pagmo INTERFACE NLOPT::nlopt)
     set(PAGMO_ENABLE_NLOPT "#define PAGMO_WITH_NLOPT")
 endif()

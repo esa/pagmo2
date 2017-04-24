@@ -1,43 +1,22 @@
-# Copyright (c) 2015-2016, Humanoid Lab, Georgia Tech Research Corporation
-# Copyright (c) 2015-2017, Graphics Lab, Georgia Tech Research Corporation
-# Copyright (c) 2016-2017, Personal Robotics Lab, Carnegie Mellon University
-# This file is provided under the "BSD-style" License
+if(NLOPT_INCLUDE_DIR AND NLOPT_LIBRARY)
+	# Already in cache, be silent
+	set(NLOPT_FIND_QUIETLY TRUE)
+endif()
 
-# Find NLOPT
-#
-# This sets the following variables:
-# NLOPT_FOUND
-# NLOPT_INCLUDE_DIRS
-# NLOPT_LIBRARIES
-# NLOPT_DEFINITIONS
-# NLOPT_VERSION
+find_path(NLOPT_INCLUDE_DIR NAMES nlopt.h)
+find_library(NLOPT_LIBRARY NAMES nlopt)
 
-find_package(PkgConfig QUIET)
-
-# Check to see if pkgconfig is installed.
-pkg_check_modules(PC_NLOPT nlopt QUIET)
-
-# Definitions
-set(NLOPT_DEFINITIONS ${PC_NLOPT_CFLAGS_OTHER})
-
-# Include directories
-find_path(NLOPT_INCLUDE_DIRS
-    NAMES nlopt.h
-    HINTS ${PC_NLOPT_INCLUDEDIR}
-    PATHS "${CMAKE_INSTALL_PREFIX}/include")
-
-# Libraries
-find_library(NLOPT_LIBRARIES
-    NAMES nlopt nlopt_cxx
-    HINTS ${PC_NLOPT_LIBDIR})
-
-# Version
-set(NLOPT_VERSION ${PC_NLOPT_VERSION})
-
-# Set (NAME)_FOUND if all the variables and the version are satisfied.
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(NLOPT
-    FAIL_MESSAGE  DEFAULT_MSG
-    REQUIRED_VARS NLOPT_INCLUDE_DIRS NLOPT_LIBRARIES
-    VERSION_VAR   NLOPT_VERSION)
 
+find_package_handle_standard_args(NLOPT DEFAULT_MSG NLOPT_INCLUDE_DIR NLOPT_LIBRARY)
+
+mark_as_advanced(NLOPT_INCLUDE_DIR NLOPT_LIBRARY)
+
+# NOTE: this has been adapted from CMake's FindPNG.cmake.
+if(NLOPT_FOUND AND NOT TARGET NLOPT::nlopt)
+	add_library(NLOPT::nlopt UNKNOWN IMPORTED)
+    set_target_properties(NLOPT::nlopt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${NLOPT_INCLUDE_DIR}")
+    set_target_properties(NLOPT::nlopt PROPERTIES
+        IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+        IMPORTED_LOCATION "${NLOPT_LIBRARY}")
+endif()
