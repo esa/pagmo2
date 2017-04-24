@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 #include <limits>
 #include <vector>
 
+#include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/ipopt.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
@@ -139,4 +140,18 @@ BOOST_AUTO_TEST_CASE(ipopt_nlp_test)
     BOOST_CHECK(std::abs(h[0] - (obj_factor * (2 * x[3]) + lambda[0] * 2)) < 1E-8);
     BOOST_CHECK(std::abs(h[1] - (obj_factor * (x[3]) - lambda[1] * (x[2] * x[3]))) < 1E-8);
     BOOST_CHECK(std::abs(h[2] - (0. + lambda[0] * 2)) < 1E-8);
+    BOOST_CHECK(std::abs(h[3] - (obj_factor * (x[3]) - lambda[1] * (x[1] * x[3]))) < 1E-8);
+    BOOST_CHECK(std::abs(h[4] - (0. - lambda[1] * (x[0] * x[3]))) < 1E-8);
+    BOOST_CHECK(std::abs(h[5] - (0. + lambda[0] * 2)) < 1E-8);
+    BOOST_CHECK(std::abs(h[6] - (obj_factor * (2 * x[0] + x[1] + x[2]) - lambda[1] * (x[1] * x[2]))) < 1E-8);
+    BOOST_CHECK(std::abs(h[7] - (obj_factor * (x[0]) - lambda[1] * (x[0] * x[2]))) < 1E-8);
+    BOOST_CHECK(std::abs(h[8] - (obj_factor * (x[0]) - lambda[1] * (x[0] * x[1]))) < 1E-8);
+    BOOST_CHECK(std::abs(h[9] - (0. + lambda[0] * 2)) < 1E-8);
+}
+
+BOOST_AUTO_TEST_CASE(ipopt_evolve_test)
+{
+    algorithm algo(ipopt{});
+    population pop(hock_schittkowsky_71{}, 1);
+    algo.evolve(pop);
 }

@@ -33,8 +33,10 @@ see https://www.gnu.org/licenses/. */
 
 #if defined(PAGMO_WITH_IPOPT)
 
+#include <IpIpoptApplication.hpp>
 #include <IpIpoptCalculatedQuantities.hpp>
 #include <IpIpoptData.hpp>
+#include <IpSmartPtr.hpp>
 #include <IpTNLP.hpp>
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
@@ -89,6 +91,13 @@ struct ipopt_nlp final : Ipopt::TNLP {
 
         // Prepare the dv used for fitness computation.
         m_dv.resize(m_start.size());
+
+        // This will contain the solution.
+        m_sol.resize(m_start.size());
+
+        // Final values of the constraints.
+        m_final_eq.resize(m_prob.get_nec());
+        m_final_ineq.resize(m_prob.get_nic());
 
         // Conversion of the sparsity information to the format required by Ipopt.
         // Gradients first.
@@ -411,10 +420,25 @@ struct ipopt_nlp final : Ipopt::TNLP {
 
     // Solution Methods.
     // This method is called when the algorithm is complete so the TNLP can store/write the solution.
-    virtual void finalize_solution(SolverReturn status, Index n, const Number *x, const Number *z_L, const Number *z_U,
-                                   Index m, const Number *g, const Number *lambda, Number obj_value,
-                                   const IpoptData *ip_data, IpoptCalculatedQuantities *ip_cq) override final
+    virtual void finalize_solution(SolverReturn status, Index n, const Number *x, const Number *, const Number *,
+                                   Index m, const Number *g, const Number *, Number obj_value, const IpoptData *,
+                                   IpoptCalculatedQuantities *) override final
     {
+        assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
+        assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
+
+        // Store the solution.
+        std::copy(x, x + n, m_sol.begin());
+
+        // Store the values of the constraints.
+        std::copy(g, g + m_prob.get_nec(), m_final_eq.begin());
+        std::copy(g + m_prob.get_nec(), g + m, m_final_ineq.begin());
+
+        // Store the final value of the objfun.
+        m_final_objfun = obj_value;
+
+        // Store the status.
+        m_status = status;
     }
 
     // Data members.
@@ -424,6 +448,15 @@ struct ipopt_nlp final : Ipopt::TNLP {
     const vector_double m_start;
     // Temporary dv used for fitness computation.
     vector_double m_dv;
+    // Dv of the solution.
+    vector_double m_sol;
+    // Final values of the constraints.
+    vector_double m_final_eq;
+    vector_double m_final_ineq;
+    // Final value of the objfun.
+    double m_final_objfun;
+    // Status at the end of the optimisation.
+    SolverReturn m_status;
     // Sparsity pattern of the gradient of the objfun. We need this for the evaluation
     // of the gradient in eval_grad_f(). If the gradient sparsity is not user-provided,
     // it will be empty.
@@ -447,6 +480,25 @@ class ipopt
 public:
     population evolve(population pop) const
     {
+        auto initial_guess = pop.get_x()[pop.best_idx()];
+        Ipopt::SmartPtr<Ipopt::TNLP> nlp = ::new detail::ipopt_nlp(pop.get_problem(), initial_guess);
+        Ipopt::SmartPtr<Ipopt::IpoptApplication> app = ::IpoptApplicationFactory();
+        app->Options()->SetNumericValue("tol", 1e-9);
+
+        Ipopt::ApplicationReturnStatus status = app->Initialize();
+        if (status != Ipopt::Solve_Succeeded) {
+            throw;
+        }
+        status = app->OptimizeTNLP(nlp);
+        if (status != Ipopt::Solve_Succeeded) {
+            throw;
+        }
+        pop.set_x(pop.best_idx(), dynamic_cast<detail::ipopt_nlp &>(*nlp).m_sol);
+        return pop;
+    }
+    std::string get_name() const
+    {
+        return "Ipopt";
     }
     template <typename Archive>
     void save(Archive &) const
