@@ -119,33 +119,34 @@ public:
         if (elitism < 1u) {
             pagmo_throw(std::invalid_argument, "elitism must be greater than zero");
         }
-        if (!mutation.compare("gaussian") && !mutation.compare("uniform") && !mutation.compare("polynomial")) {
+        if (mutation != "gaussian" && mutation != "uniform" && mutation != "polynomial") {
             pagmo_throw(
                 std::invalid_argument,
                 R"(The mutation type must either be "gaussian" or "uniform" or "polynomial": unknown type requested: )"
                     + mutation);
         }
-        if (!selection.compare("roulette") && !selection.compare("bestN")) {
+        if (selection != "roulette" && selection != "bestN") {
             pagmo_throw(std::invalid_argument,
                         R"(The selection type must either be "roulette" or "bestN": unknown type requested: )"
                             + selection);
         }
-        if (!crossover.compare("exponential") && !crossover.compare("binomial") && !crossover.compare("sbx")
-            && !crossover.compare("single-point")) {
+        if (crossover != "exponential" && crossover != "binomial" && crossover != "sbx"
+            && crossover != "single-point") {
             pagmo_throw(
                 std::invalid_argument,
                 R"(The crossover type must either be "exponential" or "binomial" or "sbx" or "single-point": unknown type requested: )"
                     + crossover);
         }
         // param_m represents the distribution index if polynomial mutation is selected
-        if (mutation.compare("polynomial") && (param_m < 1. || param_m > 100.)) {
+        if (mutation == "polynomial" && (param_m < 1. || param_m > 100.)) {
             pagmo_throw(
                 std::invalid_argument,
                 "Polynomial mutation was selected, the mutation parameter must be in [1, 100], while a value of "
                     + std::to_string(param_m) + " was detected");
         }
-        // otherwise it represents a width
-        if (!mutation.compare("polynomial") && (param_m < 0 || param_m > 1.)) {
+
+        // otherwise param_m represents the width of the mutation relative to the box bounds
+        if (mutation != "polynomial" && (param_m < 0 || param_m > 1.)) {
             pagmo_throw(std::invalid_argument, "The mutation parameter must be in [0,1], while a value of "
                                                    + std::to_string(param_m) + " was detected");
         }
@@ -262,22 +263,22 @@ public:
     {
         std::ostringstream ss;
         stream(ss, "\tNumber of generations: ", m_gen);
-        stream(ss, "\tElitism: ", m_elitism);
+        stream(ss, "\n\tElitism: ", m_elitism);
         stream(ss, "\n\tCrossover:");
         stream(ss, "\n\t\tType: " + m_crossover);
-        stream(ss, "\n\t\tProbability: " + m_cr);
-        if (m_crossover.compare("sbx")) stream(ss, "\n\t\tDistribution index: " + m_eta_c);
+        stream(ss, "\n\t\tProbability: ", m_cr);
+        if (m_crossover == "sbx") stream(ss, "\n\t\tDistribution index: ", m_eta_c);
         stream(ss, "\n\tMutation:");
-        stream(ss, "\n\t\tType: " + m_mutation);
-        stream(ss, "\n\t\tProbability: " + m_m);
-        if (m_mutation.compare("polynomial")) {
-            stream(ss, "\n\t\tWidth: " + m_param_m);
+        stream(ss, "\n\t\tType: ", m_mutation);
+        stream(ss, "\n\t\tProbability: ", m_m);
+        if (m_mutation != "polynomial") {
+            stream(ss, "\n\t\tWidth: ", m_param_m);
         } else {
-            stream(ss, "\n\t\tDistribution index: " + m_param_m);
+            stream(ss, "\n\t\tDistribution index: ", m_param_m);
         }
         stream(ss, "\n\tSelection:");
-        stream(ss, "\n\t\tType: " + m_selection);
-        if (m_selection.compare("bestN")) stream(ss, "\n\t\tBest pop fraction: " + m_bestN);
+        stream(ss, "\n\t\tType: ", m_selection);
+        if (m_selection == "bestN") stream(ss, "\n\t\tBest pop fraction: ", m_bestN);
         stream(ss, "\n\tSize of the integer part: ", m_int_dim);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
@@ -309,13 +310,8 @@ public:
     void serialize(Archive &ar)
     {
         ar(m_gen, m_cr, m_eta_c, m_m, m_param_m, m_elitism, m_bestN, m_mutation, m_selection, m_crossover, m_int_dim,
-           m_e, m_seed, m_verbosity)
+           m_e, m_seed, m_verbosity);
     }
-
-    unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double param_m = 0.5,
-        unsigned elitism = 1u, double bestN = 0.2, std::string mutation = "gaussian",
-        std::string selection = "roulette", std::string crossover = "exponential",
-        vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
 
 private:
     unsigned m_gen;
@@ -329,7 +325,10 @@ private:
     std::string m_selection;
     std::string m_crossover;
     vector_double::size_type m_int_dim;
-    unsigned m_seed;
+    mutable detail::random_engine_type m_e;
+    unsigned int m_seed;
+    unsigned int m_verbosity;
+    // mutable log_type m_log;
 };
 
 } // namespace pagmo
