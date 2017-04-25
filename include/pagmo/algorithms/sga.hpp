@@ -57,7 +57,7 @@ namespace detail
 // represented as strings.
 template <typename = void>
 struct sga_statics {
-    enum class selection { ROULETTE, TOURNAMENT, BESTN };
+    enum class selection { TOURNAMENT, BESTN };
     enum class crossover { EXPONENTIAL, BINOMIAL, SINGLE, SBX };
     enum class mutation { GAUSSIAN, UNIFORM, POLYNOMIAL };
     using selection_map_t = boost::bimap<std::string, selection>;
@@ -72,7 +72,6 @@ inline typename sga_statics<>::selection_map_t init_selection_map()
 {
     typename sga_statics<>::selection_map_t retval;
     using value_type = typename sga_statics<>::selection_map_t::value_type;
-    retval.insert(value_type("roulette", sga_statics<>::selection::ROULETTE));
     retval.insert(value_type("tournament", sga_statics<>::selection::TOURNAMENT));
     retval.insert(value_type("bestN", sga_statics<>::selection::BESTN));
     return retval;
@@ -145,9 +144,8 @@ public:
      * @param elitism number of parents that gets carried over to the next generation.
      * @param param_s when "bestN" selection is used this indicates the percentage of best individuals to use. when
      * "tournament" selection is used this indicates the size of the tournament.
-     * This is an inactive parameter if other types of selection are selected.
      * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
-     * @param selection the selection strategy. One of "roulette", "tournament", "bestN".
+     * @param selection the selection strategy. One of "tournament", "bestN".
      * @param crossover the crossover strategy. One of "exponential", "binomial", "single-point" or "sbx"
      * @param int_dim the number of element in the chromosome to be treated as integers.
      *
@@ -158,7 +156,7 @@ public:
      */
     sga(unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double param_m = 0.5,
         unsigned elitism = 5u, unsigned param_s = 5u, std::string mutation = "gaussian",
-        std::string selection = "roulette", std::string crossover = "exponential",
+        std::string selection = "tournament", std::string crossover = "exponential",
         vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_elitism(elitism), m_param_s(param_s),
           m_int_dim(int_dim), m_e(seed), m_seed(seed), m_verbosity(0u) //, m_log()
@@ -186,7 +184,7 @@ public:
                 R"(The mutation type must either be "gaussian" or "uniform" or "polynomial": unknown type requested: )"
                     + mutation);
         }
-        if (selection != "roulette" && selection != "bestN" && selection != "tournament") {
+        if (selection != "bestN" && selection != "tournament") {
             pagmo_throw(
                 std::invalid_argument,
                 R"(The selection type must either be "roulette" or "bestN" or "tournament": unknown type requested: )"
@@ -462,24 +460,24 @@ private:
                 // We make one tournament for each of the offspring to be generated
                 for (decltype(retval.size()) j = 0u; j < retval.size(); ++j) {
                     // Fisher Yates algo http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+                    // to select m_param_s individial at random
                     for (decltype(m_param_s) i = 0u; i < m_param_s; ++i) {
                         auto index = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
                             i, best_idxs.size() - 1)(m_e);
                         std::swap(best_idxs[index], best_idxs[i]);
                     }
-                    // Find the minimum fitness in the m_param_s randomly selected ones
+                    // Find the index of the individual with minimum fitness among the randomly selected ones
                     double winner = best_idxs[0];
                     for (decltype(m_param_s) i = 1u; i < m_param_s; ++i) {
                         if (F[best_idxs[i]] < F[winner]) {
                             winner = best_idxs[i];
                         }
                     }
-                    retval[j] = best_idxs[winner];
+                    retval[j] = winner;
                 }
                 break;
             }
         }
-
         return retval;
     }
     void perform_crossover(const std::vector<vector_double> &X) const
