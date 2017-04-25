@@ -115,8 +115,8 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  * genetic algorithm and on whether the crossover was a useful operator or mutation only algorithms were to be
  * preferred.
  *
- * In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose the selection
- * schemes, crossover types, mutation types and reinsertion scheme.
+ * In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between
+ * choosen selection schemes, crossover types, mutation types and reinsertion scheme.
  *
  * **NOTE** This algorithm will work only for box bounded problems.
  *
@@ -142,7 +142,8 @@ public:
      * @param m mutation probability.
      * @param param_m distribution index (in polynomial mutation), otherwise width of the mutation.
      * @param elitism number of parents that gets carried over to the next generation.
-     * @param bestN when "bestN"" selection is used this indicates the percentage of best individuals to use.
+     * @param param_s when "bestN" selection is used this indicates the percentage of best individuals to use. when
+     * "tournament" selection is used this indicates the size of the tournament.
      * This is an inactive parameter if other types of selection are selected.
      * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
      * @param selection the selection strategy. One of "roulette", "tournament", "bestN".
@@ -155,10 +156,10 @@ public:
      * \p mutation is not "polynomial" or \p mutation is not in [1,100] and \p mutation is polynomial.
      */
     sga(unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double param_m = 0.5,
-        unsigned elitism = 5u, unsigned bestN = 5u, std::string mutation = "gaussian",
+        unsigned elitism = 5u, unsigned param_s = 5u, std::string mutation = "gaussian",
         std::string selection = "roulette", std::string crossover = "exponential",
         vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_elitism(elitism), m_bestN(bestN),
+        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_elitism(elitism), m_param_s(param_s),
           m_int_dim(int_dim), m_e(seed), m_seed(seed), m_verbosity(0u) //, m_log()
     {
         if (cr >= 1. || cr < 0.) {
@@ -174,13 +175,9 @@ public:
             pagmo_throw(std::invalid_argument, "The mutation probability must be in the [0,1] range, while a value of "
                                                    + std::to_string(cr) + " was detected");
         }
-        if (elitism < 1u) {
-            pagmo_throw(std::invalid_argument, "elitism must be greater than zero");
-        }
-        if (bestN == 0u) {
-            pagmo_throw(std::invalid_argument,
-                        "The number of best individuals to select must be larger than 1, while a value of "
-                            + std::to_string(bestN) + " was detected");
+        if (param_s == 0u) {
+            pagmo_throw(std::invalid_argument, "The selection parameter must be at least 1, while a value of "
+                                                   + std::to_string(param_s) + " was detected");
         }
         if (mutation != "gaussian" && mutation != "uniform" && mutation != "polynomial") {
             pagmo_throw(
@@ -253,6 +250,18 @@ public:
             pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 2 individuals in the population, "
                                                    + std::to_string(NP) + " detected");
         }
+        if (m_elitism > pop.size()) {
+            pagmo_throw(std::invalid_argument,
+                        "The elitism must be smaller than the population size, while a value of: "
+                            + std::to_string(m_elitism) + " was detected in a population of size: "
+                            + std::to_string(pop.size()));
+        }
+        if (m_param_s > pop.size()) {
+            pagmo_throw(std::invalid_argument,
+                        "The parameter for selection must be smaller than the population size, while a value of: "
+                            + std::to_string(m_param_s) + " was detected in a population of size: "
+                            + std::to_string(pop.size()));
+        }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
             return pop;
@@ -302,7 +311,7 @@ public:
             std::sort(
                 best_offsprings.begin(), best_offsprings.end(),
                 [FNEW](vector_double::size_type a, vector_double::size_type b) { return FNEW[a][0] < FNEW[b][0]; });
-            // We insert m_elitism best parents and the remaining best children
+            // We re-insert m_elitism best parents and the remaining best children
             population pop_copy(pop);
             for (decltype(m_elitism) i = 0u; i < m_elitism; ++i) {
                 pop.set_xf(i, pop_copy.get_x()[best_parents[i]], pop_copy.get_f()[best_parents[i]]);
@@ -395,7 +404,8 @@ public:
         }
         stream(ss, "\n\tSelection:");
         stream(ss, "\n\t\tType: ", m_selection_map.right.at(m_selection));
-        if (m_selection == selection::BESTN) stream(ss, "\n\t\tBest pop fraction: ", m_bestN);
+        if (m_selection == selection::BESTN) stream(ss, "\n\t\tNumber of best selected: ", m_param_s);
+        if (m_selection == selection::TOURNAMENT) stream(ss, "\n\t\tTournament size: ", m_param_s);
         stream(ss, "\n\tSize of the integer part: ", m_int_dim);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
@@ -426,7 +436,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_cr, m_eta_c, m_m, m_param_m, m_elitism, m_bestN, m_mutation, m_selection, m_crossover, m_int_dim,
+        ar(m_gen, m_cr, m_eta_c, m_m, m_param_m, m_elitism, m_param_s, m_mutation, m_selection, m_crossover, m_int_dim,
            m_e, m_seed, m_verbosity);
     }
 
@@ -450,7 +460,7 @@ private:
     double m_m;
     double m_param_m;
     unsigned m_elitism;
-    unsigned m_bestN;
+    unsigned m_param_s;
     mutation m_mutation;
     selection m_selection;
     crossover m_crossover;

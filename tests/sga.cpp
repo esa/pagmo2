@@ -74,8 +74,6 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 0u, 5u, "gaussian", "roulette", "exponential", 0u, 32u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, 0u, "gaussian", "roulette", "exponential", 0u, 32u}),
-                      std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "unknown_method", "roulette", "exponential", 0u, 32u}),
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "gaussian", "unknown_method", "exponential", 0u, 32u}),
