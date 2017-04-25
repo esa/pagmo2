@@ -29,8 +29,10 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_SGA_HPP
 #define PAGMO_ALGORITHMS_SGA_HPP
 
+#include <algorithm> // std::sort
 #include <boost/bimap.hpp>
 #include <iomanip>
+#include <numeric> // std::iota
 #include <random>
 #include <stdexcept>
 #include <string>
@@ -263,7 +265,7 @@ public:
         // m_log.clear();
 
         for (decltype(m_gen) i = 1u; i <= m_gen; ++i) {
-            // 0 - if the problem is stochastic we change seed and re-evaluate the population
+            // 0 - if the problem is stochastic we change seed and re-evaluate the entire population
             if (prob.is_stochastic()) {
                 pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
                 // re-evaluate the whole population w.r.t. the new seed
@@ -272,16 +274,42 @@ public:
                 }
             }
             auto XNEW = pop.get_x();
+            auto FNEW = pop.get_f();
             // 1 - Selection.
-            auto selected_idx = perform_selection(X, fit);
-            for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
-                XNEW[i] = X[selected_idx[i]];
+            auto selected_idx = perform_selection(XNEW, FNEW);
+            for (decltype(XNEW.size()) i = 0u; i < XNEW.size(); ++i) {
+                XNEW[i] = pop.get_x()[selected_idx[i]];
             }
             // 2 - Crossover
             perform_crossover(XNEW);
             // 3 - Mutation
             perform_mutation(XNEW);
             // 4 - Evaluate the new population
+            for (decltype(XNEW.size()) i = 0u; i < XNEW.size(); ++i) {
+                FNEW[i] = prob.fitness(XNEW[i]);
+            }
+            // 5 - Reinsertion
+            // We sort the original population
+            std::vector<vector_double::size_type> best_parents(pop.get_f().size());
+            std::iota(best_parents.begin(), best_parents.end(), vector_double::size_type(0u));
+            std::sort(best_parents.begin(), best_parents.end(),
+                      [pop](vector_double::size_type a, vector_double::size_type b) {
+                          return pop.get_f()[a][0] < pop.get_f()[b][0];
+                      });
+            // We sort the new population
+            std::vector<vector_double::size_type> best_offsprings(FNEW.size());
+            std::iota(best_offsprings.begin(), best_offsprings.end(), vector_double::size_type(0u));
+            std::sort(
+                best_offsprings.begin(), best_offsprings.end(),
+                [FNEW](vector_double::size_type a, vector_double::size_type b) { return FNEW[a][0] < FNEW[b][0]; });
+            // We insert m_elitism best parents and the remaining best children
+            population pop_copy(pop);
+            for (decltype(m_elitism) i = 0u; i < m_elitism; ++i) {
+                pop.set_xf(i, pop_copy.get_x()[best_parents[i]], pop_copy.get_f()[best_parents[i]]);
+            }
+            for (decltype(pop.size()) i = m_elitism; i < pop.size(); ++i) {
+                pop.set_xf(i, XNEW[best_offsprings[i]], FNEW[best_offsprings[i]]);
+            }
         }
         return pop;
     }
@@ -403,6 +431,19 @@ public:
     }
 
 private:
+    std::vector<vector_double::size_type> perform_selection(const std::vector<vector_double> &X,
+                                                            const std::vector<vector_double> &F) const
+    {
+        std::vector<vector_double::size_type> retval(X.size());
+        std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
+        return retval;
+    }
+    void perform_crossover(const std::vector<vector_double> &X) const
+    {
+    }
+    void perform_mutation(const std::vector<vector_double> &X) const
+    {
+    }
     unsigned m_gen;
     double m_cr;
     double m_eta_c;
