@@ -460,7 +460,6 @@ private:
             }
             case (selection::TOURNAMENT): {
                 // We make one tournament for each of the offspring to be generated
-                ;
                 for (decltype(retval.size()) j = 0u; j < retval.size(); ++j) {
                     // Fisher Yates algo http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
                     for (decltype(m_param_s) i = 0u; i < m_param_s; ++i) {
@@ -469,13 +468,13 @@ private:
                         std::swap(best_idxs[index], best_idxs[i]);
                     }
                     // Find the minimum fitness in the m_param_s randomly selected ones
-                    double min_idx = best_idxs[0];
+                    double winner = best_idxs[0];
                     for (decltype(m_param_s) i = 1u; i < m_param_s; ++i) {
-                        if (F[best_idxs[i]] < F[min_idx]) {
-                            min_idx = best_idxs[i];
+                        if (F[best_idxs[i]] < F[winner]) {
+                            winner = best_idxs[i];
                         }
                     }
-                    retval[j] = best_idxs[min_idx];
+                    retval[j] = best_idxs[winner];
                 }
                 break;
             }
