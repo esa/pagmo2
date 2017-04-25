@@ -48,12 +48,14 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
 {
+    sga udp{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "tournament", "binomial", 0u, 32u};
     // We check the default constructor, a correct call and the possibility to build a pagmo::algorithm
     BOOST_CHECK_NO_THROW(sga{});
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "roulette", "exponential", 0u, 32u}));
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "uniform", "roulette", "exponential", 0u, 32u}));
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, 20., 1u, .2, "polynomial", "roulette", "exponential", 0u, 32u}));
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "bestN", "exponential", 0u, 32u}));
+    BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "tournament", "exponential", 0u, 32u}));
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "roulette", "binomial", 0u, 32u}));
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, .2, "gaussian", "roulette", "sbx", 0u, 32u}));
     BOOST_CHECK_NO_THROW(algorithm(sga{}));

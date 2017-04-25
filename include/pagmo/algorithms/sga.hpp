@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_SGA_HPP
 #define PAGMO_ALGORITHMS_SGA_HPP
 
+#include <boost/bimap.hpp>
 #include <iomanip>
 #include <random>
 #include <stdexcept>
@@ -45,6 +46,62 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
+namespace detail
+{
+// Usual template trick to have static members in header only libraries
+// see: http://stackoverflow.com/questions/18860895/how-to-initialize-static-members-in-the-header
+// All this scaffolding is to establish a one to one correspondance between enums and genetic operator types
+// represented as strings.
+template <typename = void>
+struct sga_statics {
+    enum class selection { ROULETTE, TOURNAMENT, BESTN };
+    enum class crossover { EXPONENTIAL, BINOMIAL, SINGLE, SBX };
+    enum class mutation { GAUSSIAN, UNIFORM, POLYNOMIAL };
+    using selection_map_t = boost::bimap<std::string, selection>;
+    using crossover_map_t = boost::bimap<std::string, crossover>;
+    using mutation_map_t = boost::bimap<std::string, mutation>;
+    const static selection_map_t m_selection_map;
+    const static crossover_map_t m_crossover_map;
+    const static mutation_map_t m_mutation_map;
+};
+// Helper init functions
+inline typename sga_statics<>::selection_map_t init_selection_map()
+{
+    typename sga_statics<>::selection_map_t retval;
+    using value_type = typename sga_statics<>::selection_map_t::value_type;
+    retval.insert(value_type("roulette", sga_statics<>::selection::ROULETTE));
+    retval.insert(value_type("tournament", sga_statics<>::selection::TOURNAMENT));
+    retval.insert(value_type("bestN", sga_statics<>::selection::BESTN));
+    return retval;
+}
+inline typename sga_statics<>::crossover_map_t init_crossover_map()
+{
+    typename sga_statics<>::crossover_map_t retval;
+    using value_type = typename sga_statics<>::crossover_map_t::value_type;
+    retval.insert(value_type("exponential", sga_statics<>::crossover::EXPONENTIAL));
+    retval.insert(value_type("binomial", sga_statics<>::crossover::BINOMIAL));
+    retval.insert(value_type("sbx", sga_statics<>::crossover::SBX));
+    retval.insert(value_type("single-point", sga_statics<>::crossover::SINGLE));
+    return retval;
+}
+inline typename sga_statics<>::mutation_map_t init_mutation_map()
+{
+    typename sga_statics<>::mutation_map_t retval;
+    using value_type = typename sga_statics<>::mutation_map_t::value_type;
+    retval.insert(value_type("gaussian", sga_statics<>::mutation::GAUSSIAN));
+    retval.insert(value_type("uniform", sga_statics<>::mutation::UNIFORM));
+    retval.insert(value_type("polynomial", sga_statics<>::mutation::POLYNOMIAL));
+    return retval;
+}
+// We now init the various members
+template <typename T>
+const typename sga_statics<T>::selection_map_t sga_statics<T>::m_selection_map = init_selection_map();
+template <typename T>
+const typename sga_statics<T>::crossover_map_t sga_statics<T>::m_crossover_map = init_crossover_map();
+template <typename T>
+const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = init_mutation_map();
+} // end namespace detail
+
 /// A Simple Genetic Algorithm
 /**
  * \image html sga.jpg "The DNA Helix" width=3cm
@@ -64,7 +121,7 @@ namespace pagmo
  * **NOTE** Specifying the parameter \p int_dim a part of the decision vector (at the end) will be treated as integers
  *
  */
-class sga
+class sga : private detail::sga_statics<>
 {
 public:
     /// Single entry of the log (gen, fevals, best, cur_best)
@@ -86,8 +143,8 @@ public:
      * @param bestN when "bestN"" selection is used this indicates the percentage of best individuals to use.
      * This is an inactive parameter if other types of selection are selected.
      * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
-     * @param mutation the selection strategy. One of "roulette", "bestN".
-     * @param mutation the crossover strategy. One of "exponential", "binomial" or "sbx"
+     * @param selection the selection strategy. One of "roulette", "tournament", "bestN".
+     * @param crossover the crossover strategy. One of "exponential", "binomial", "single-point" or "sbx"
      * @param int_dim the number of element in the chromosome to be treated as integers.
      *
      * @throws std::invalid_argument if \p cr not in [0,1), \p eta_c not in [1, 100), \p m not in [0,1], \p elitism < 1
@@ -100,8 +157,7 @@ public:
         std::string selection = "roulette", std::string crossover = "exponential",
         vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_elitism(elitism), m_bestN(bestN),
-          m_mutation(mutation), m_selection(selection), m_crossover(crossover), m_int_dim(int_dim), m_e(seed),
-          m_seed(seed), m_verbosity(0u) //, m_log()
+          m_int_dim(int_dim), m_e(seed), m_seed(seed), m_verbosity(0u) //, m_log()
     {
         if (cr >= 1. || cr < 0.) {
             pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1[ range, while a value of "
@@ -130,10 +186,11 @@ public:
                 R"(The mutation type must either be "gaussian" or "uniform" or "polynomial": unknown type requested: )"
                     + mutation);
         }
-        if (selection != "roulette" && selection != "bestN") {
-            pagmo_throw(std::invalid_argument,
-                        R"(The selection type must either be "roulette" or "bestN": unknown type requested: )"
-                            + selection);
+        if (selection != "roulette" && selection != "bestN" && selection != "tournament") {
+            pagmo_throw(
+                std::invalid_argument,
+                R"(The selection type must either be "roulette" or "bestN" or "tournament": unknown type requested: )"
+                    + selection);
         }
         if (crossover != "exponential" && crossover != "binomial" && crossover != "sbx"
             && crossover != "single-point") {
@@ -155,6 +212,10 @@ public:
             pagmo_throw(std::invalid_argument, "The mutation parameter must be in [0,1], while a value of "
                                                    + std::to_string(param_m) + " was detected");
         }
+        // We can now init the data members representing the various choices made using std::string
+        m_selection = m_selection_map.left.at(selection);
+        m_crossover = m_crossover_map.left.at(crossover);
+        m_mutation = m_mutation_map.left.at(mutation);
     }
 
     /// Algorithm evolve method (juice implementation of the algorithm)
@@ -199,6 +260,9 @@ public:
         // No throws, all valid: we clear the logs
         // m_log.clear();
 
+        for (decltype(m_gen) i = 1u; i <= m_gen; ++i) {
+            // 1 - Selection.
+        }
         return pop;
     }
 
@@ -270,20 +334,20 @@ public:
         stream(ss, "\tNumber of generations: ", m_gen);
         stream(ss, "\n\tElitism: ", m_elitism);
         stream(ss, "\n\tCrossover:");
-        stream(ss, "\n\t\tType: " + m_crossover);
+        stream(ss, "\n\t\tType: " + m_crossover_map.right.at(m_crossover));
         stream(ss, "\n\t\tProbability: ", m_cr);
-        if (m_crossover == "sbx") stream(ss, "\n\t\tDistribution index: ", m_eta_c);
+        if (m_crossover == crossover::SBX) stream(ss, "\n\t\tDistribution index: ", m_eta_c);
         stream(ss, "\n\tMutation:");
-        stream(ss, "\n\t\tType: ", m_mutation);
+        stream(ss, "\n\t\tType: ", m_mutation_map.right.at(m_mutation));
         stream(ss, "\n\t\tProbability: ", m_m);
-        if (m_mutation != "polynomial") {
+        if (m_mutation != mutation::POLYNOMIAL) {
             stream(ss, "\n\t\tWidth: ", m_param_m);
         } else {
             stream(ss, "\n\t\tDistribution index: ", m_param_m);
         }
         stream(ss, "\n\tSelection:");
-        stream(ss, "\n\t\tType: ", m_selection);
-        if (m_selection == "bestN") stream(ss, "\n\t\tBest pop fraction: ", m_bestN);
+        stream(ss, "\n\t\tType: ", m_selection_map.right.at(m_selection));
+        if (m_selection == selection::BESTN) stream(ss, "\n\t\tBest pop fraction: ", m_bestN);
         stream(ss, "\n\tSize of the integer part: ", m_int_dim);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
@@ -326,9 +390,9 @@ private:
     double m_param_m;
     unsigned m_elitism;
     double m_bestN;
-    std::string m_mutation;
-    std::string m_selection;
-    std::string m_crossover;
+    mutation m_mutation;
+    selection m_selection;
+    crossover m_crossover;
     vector_double::size_type m_int_dim;
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;

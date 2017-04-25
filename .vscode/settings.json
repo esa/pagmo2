@@ -8,6 +8,7 @@
         "doc/sphinx/_build/": true
     },
     "files.associations": {
-        "initializer_list": "cpp"
+        "initializer_list": "cpp",
+        "utility": "cpp"
     }
 }
