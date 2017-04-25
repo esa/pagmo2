@@ -484,6 +484,7 @@ public:
         Ipopt::SmartPtr<Ipopt::TNLP> nlp = ::new detail::ipopt_nlp(pop.get_problem(), initial_guess);
         Ipopt::SmartPtr<Ipopt::IpoptApplication> app = ::IpoptApplicationFactory();
         app->Options()->SetNumericValue("tol", 1e-9);
+        app->Options()->SetStringValue("hessian_approximation", "limited-memory");
 
         Ipopt::ApplicationReturnStatus status = app->Initialize();
         if (status != Ipopt::Solve_Succeeded) {
