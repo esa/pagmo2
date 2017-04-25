@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include "../algorithm.hpp"
+#include "../detail/custom_comparisons.hpp"
 #include "../exceptions.hpp"
 #include "../io.hpp"
 #include "../population.hpp"
@@ -285,7 +286,7 @@ public:
             auto XNEW = pop.get_x();
             auto FNEW = pop.get_f();
             // 1 - Selection.
-            auto selected_idx = perform_selection(XNEW, FNEW);
+            auto selected_idx = perform_selection(FNEW);
             for (decltype(XNEW.size()) i = 0u; i < XNEW.size(); ++i) {
                 XNEW[i] = pop.get_x()[selected_idx[i]];
             }
@@ -441,11 +442,45 @@ public:
     }
 
 private:
-    std::vector<vector_double::size_type> perform_selection(const std::vector<vector_double> &X,
-                                                            const std::vector<vector_double> &F) const
+    std::vector<vector_double::size_type> perform_selection(const std::vector<vector_double> &F) const
     {
-        std::vector<vector_double::size_type> retval(X.size());
-        std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
+        std::vector<vector_double::size_type> retval(F.size());
+        std::vector<vector_double::size_type> best_idxs;
+        std::iota(best_idxs.begin(), best_idxs.end(), vector_double::size_type(0u));
+        switch (m_selection) {
+            case (selection::BESTN): {
+                std::sort(best_idxs.begin(), best_idxs.end(),
+                          [&F](vector_double::size_type a, vector_double::size_type b) {
+                              return detail::less_than_f(F[a][0], F[b][0]);
+                          });
+                for (decltype(retval.size()) i = 0u; i < retval.size(); ++i) {
+                    retval[i] = best_idxs[i % m_param_s];
+                }
+                break;
+            }
+            case (selection::TOURNAMENT): {
+                // We make one tournament for each of the offspring to be generated
+                ;
+                for (decltype(retval.size()) j = 0u; j < retval.size(); ++j) {
+                    // Fisher Yates algo http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+                    for (decltype(m_param_s) i = 0u; i < m_param_s; ++i) {
+                        auto index = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
+                            i, best_idxs.size() - 1)(m_e);
+                        std::swap(best_idxs[index], best_idxs[i]);
+                    }
+                    // Find the minimum fitness in the m_param_s randomly selected ones
+                    double min_idx = best_idxs[0];
+                    for (decltype(m_param_s) i = 1u; i < m_param_s; ++i) {
+                        if (F[best_idxs[i]] < F[min_idx]) {
+                            min_idx = best_idxs[i];
+                        }
+                    }
+                    retval[j] = best_idxs[min_idx];
+                }
+                break;
+            }
+        }
+
         return retval;
     }
     void perform_crossover(const std::vector<vector_double> &X) const
