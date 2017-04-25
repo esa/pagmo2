@@ -57,7 +57,7 @@ namespace detail
 // represented as strings.
 template <typename = void>
 struct sga_statics {
-    enum class selection { TOURNAMENT, BESTN };
+    enum class selection { TOURNAMENT, TRUNCATED };
     enum class crossover { EXPONENTIAL, BINOMIAL, SINGLE, SBX };
     enum class mutation { GAUSSIAN, UNIFORM, POLYNOMIAL };
     using selection_map_t = boost::bimap<std::string, selection>;
@@ -73,7 +73,7 @@ inline typename sga_statics<>::selection_map_t init_selection_map()
     typename sga_statics<>::selection_map_t retval;
     using value_type = typename sga_statics<>::selection_map_t::value_type;
     retval.insert(value_type("tournament", sga_statics<>::selection::TOURNAMENT));
-    retval.insert(value_type("bestN", sga_statics<>::selection::BESTN));
+    retval.insert(value_type("truncated", sga_statics<>::selection::TRUNCATED));
     return retval;
 }
 inline typename sga_statics<>::crossover_map_t init_crossover_map()
@@ -118,6 +118,12 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  * In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between
  * choosen selection schemes, crossover types, mutation types and reinsertion scheme.
  *
+ * Selection: two selection methods are provided: "tournament" and "truncated". Tournament selection works by
+ * selecting each offspring as the one having the minimal fitness in a random group of \p param_s. The truncated
+ * selection, instead, works selecting the best \p param_s chromosomes in the entire population over and over.
+ * We have deliberately not implemented the popular roulette wheel selection as we are of the opinion that such
+ * a system does not generalize much being highly sensitive to the fitness scaling.
+ *
  * **NOTE** This algorithm will work only for box bounded problems.
  *
  * **NOTE** Specifying the parameter \p int_dim a part of the decision vector (at the end) will be treated as integers
@@ -142,15 +148,15 @@ public:
      * @param m mutation probability.
      * @param param_m distribution index (in polynomial mutation), otherwise width of the mutation.
      * @param elitism number of parents that gets carried over to the next generation.
-     * @param param_s when "bestN" selection is used this indicates the percentage of best individuals to use. when
+     * @param param_s when "truncated" selection is used this indicates the percentage of best individuals to use. when
      * "tournament" selection is used this indicates the size of the tournament.
      * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
-     * @param selection the selection strategy. One of "tournament", "bestN".
+     * @param selection the selection strategy. One of "tournament", "truncated".
      * @param crossover the crossover strategy. One of "exponential", "binomial", "single-point" or "sbx"
      * @param int_dim the number of element in the chromosome to be treated as integers.
      *
      * @throws std::invalid_argument if \p cr not in [0,1), \p eta_c not in [1, 100), \p m not in [0,1], \p elitism < 1
-     * \p mutation not one of "gaussian", "uniform" or "polynomial", \p selection not one of "roulette" or "bestN"
+     * \p mutation not one of "gaussian", "uniform" or "polynomial", \p selection not one of "roulette" or "truncated"
      * \p crossover not one of "exponential", "binomial", "sbx" or "single-point", if \p param_m is not in [0,1] and
      * \p mutation is not "polynomial" or \p mutation is not in [1,100] and \p mutation is polynomial.
      */
@@ -184,10 +190,10 @@ public:
                 R"(The mutation type must either be "gaussian" or "uniform" or "polynomial": unknown type requested: )"
                     + mutation);
         }
-        if (selection != "bestN" && selection != "tournament") {
+        if (selection != "truncated" && selection != "tournament") {
             pagmo_throw(
                 std::invalid_argument,
-                R"(The selection type must either be "roulette" or "bestN" or "tournament": unknown type requested: )"
+                R"(The selection type must either be "roulette" or "truncated" or "tournament": unknown type requested: )"
                     + selection);
         }
         if (crossover != "exponential" && crossover != "binomial" && crossover != "sbx"
@@ -266,8 +272,6 @@ public:
             return pop;
         }
         // ---------------------------------------------------------------------------------------------------------
-
-        // TODO check bestN and elitism
 
         // No throws, all valid: we clear the logs
         // m_log.clear();
@@ -403,7 +407,7 @@ public:
         }
         stream(ss, "\n\tSelection:");
         stream(ss, "\n\t\tType: ", m_selection_map.right.at(m_selection));
-        if (m_selection == selection::BESTN) stream(ss, "\n\t\tNumber of best selected: ", m_param_s);
+        if (m_selection == selection::TRUNCATED) stream(ss, "\n\t\tTruncation size: ", m_param_s);
         if (m_selection == selection::TOURNAMENT) stream(ss, "\n\t\tTournament size: ", m_param_s);
         stream(ss, "\n\tSize of the integer part: ", m_int_dim);
         stream(ss, "\n\tSeed: ", m_seed);
@@ -446,7 +450,7 @@ private:
         std::vector<vector_double::size_type> best_idxs;
         std::iota(best_idxs.begin(), best_idxs.end(), vector_double::size_type(0u));
         switch (m_selection) {
-            case (selection::BESTN): {
+            case (selection::TRUNCATED): {
                 std::sort(best_idxs.begin(), best_idxs.end(),
                           [&F](vector_double::size_type a, vector_double::size_type b) {
                               return detail::less_than_f(F[a][0], F[b][0]);

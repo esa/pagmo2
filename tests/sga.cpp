@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "gaussian", "tournament", "exponential", 0u, 32u}));
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "uniform", "tournament", "exponential", 0u, 32u}));
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, 20., 1u, 5u, "polynomial", "tournament", "exponential", 0u, 32u}));
-    BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "gaussian", "bestN", "exponential", 0u, 32u}));
+    BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "gaussian", "truncated", "exponential", 0u, 32u}));
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "gaussian", "tournament", "binomial", 0u, 32u}));
     BOOST_CHECK_NO_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "gaussian", "tournament", "sbx", 0u, 32u}));
     BOOST_CHECK_NO_THROW(algorithm(sga{}));
@@ -63,11 +63,11 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, -1.1, 10., .02, .5, 1u, 5u, "gaussian", "tournament", "exponential", 0u, 32u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((sga{1u, .95, 0.1, .02, .5, 1u, 5u, "gaussian", "tournament", "exponential", 0u, 32u}),
+    BOOST_CHECK_THROW((sga{1u, .95, 0.1, .02, .5, 1u, 5u, "gaussian", "truncated", "exponential", 0u, 32u}),
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 101., .02, .5, 1u, 5u, "gaussian", "tournament", "exponential", 0u, 32u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((sga{1u, .95, 10., -0.2, .5, 1u, 5u, "gaussian", "tournament", "exponential", 0u, 32u}),
+    BOOST_CHECK_THROW((sga{1u, .95, 10., -0.2, .5, 1u, 5u, "gaussian", "truncated", "exponential", 0u, 32u}),
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., 1.3, .5, 1u, 5u, "gaussian", "tournament", "exponential", 0u, 32u}),
                       std::invalid_argument);
@@ -75,11 +75,11 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "gaussian", "unknown_method", "exponential", 0u, 32u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "gaussian", "tournament", "unknown_method", 0u, 32u}),
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "gaussian", "truncated", "unknown_method", 0u, 32u}),
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 1u, 5u, "polynomial", "tournament", "exponential", 0u, 32u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 101, 1u, 5u, "polynomial", "tournament", "exponential", 0u, 32u}),
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 101, 1u, 5u, "polynomial", "truncated", "exponential", 0u, 32u}),
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, -3, 1u, 5u, "uniform", "tournament", "exponential", 0u, 32u}),
                       std::invalid_argument);
