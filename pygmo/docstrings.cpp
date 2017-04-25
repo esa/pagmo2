@@ -149,6 +149,10 @@ std::string population_champion_x_docstring()
 
 This read-only property contains an array of ``float`` representing the decision vector of the population's champion.
 
+**NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
+some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+fitness.
+
 Returns:
     1D NumPy float array: the champion's decision vector
 
@@ -165,6 +169,10 @@ std::string population_champion_f_docstring()
     return R"(Champion's fitness vector.
 
 This read-only property contains an array of ``float`` representing the fitness vector of the population's champion.
+
+**NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
+some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+fitness.
 
 Returns:
     1D NumPy float array: the champion's fitness vector
@@ -738,7 +746,9 @@ The availability of the gradient sparsity is determined as follows:
 The optional ``has_gradient_sparsity()`` method of the UDP must return a ``bool``. For information on how to
 implement the ``gradient_sparsity()`` method of the UDP, see :func:`~pygmo.problem.gradient_sparsity()`.
 
-**NOTE** regardless of what this method returns, the :func:`~pygmo.problem.gradient_sparsity()` method will always
+.. note:
+
+Regardless of what this method returns, the :func:`~pygmo.problem.gradient_sparsity()` method will always
 return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
 pattern of the gradient is dense. See :func:`~pygmo.problem.gradient_sparsity()` for more details.
 
@@ -877,7 +887,9 @@ The availability of the hessians sparsity is determined as follows:
 The optional ``has_hessians_sparsity()`` method of the UDP must return a ``bool``. For information on how to
 implement the ``hessians_sparsity()`` method of the UDP, see :func:`~pygmo.problem.hessians_sparsity()`.
 
-**NOTE** regardless of what this method returns, the :func:`~pygmo.problem.hessians_sparsity()` method will always
+.. note:
+
+Regardless of what this method returns, the :func:`~pygmo.problem.hessians_sparsity()` method will always
 return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
 pattern of the hessians is dense. See :func:`~pygmo.problem.hessians_sparsity()` for more details.
 
@@ -1012,7 +1024,9 @@ std::string problem_feasibility_x_docstring()
 This method will check the feasibility of the fitness corresponding to a decision vector *x* against
 the tolerances returned by :attr:`~pygmo.problem.c_tol`.
 
-**NOTE** This will cause one fitness evaluation.
+.. note:
+
+This will cause one fitness evaluation.
 
 Args:
     dv (array-like object): a decision vector
@@ -1563,17 +1577,23 @@ objective function. Using the above definitions the overall pseudo code can be s
 
 :class:`pygmo.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
-**NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+.. note:
+
+Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
 The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.
 
-**NOTE** Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+.. note:
+
+Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
 corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  constraint is ignored if all
 the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
 
-**NOTE** The performances of :class:`~pygmo.cstrs_self_adaptive` are highly dependent on the particular inner
+.. note:
+
+The performances of :class:`~pygmo.cstrs_self_adaptive` are highly dependent on the particular inner
 algorithm employed and in particular to its parameters (generations / iterations).
 
 See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
@@ -2662,11 +2682,15 @@ where :math:`d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}`,
 :math:`d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert` and
 :math:`\hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}`.
 
-**NOTE** The reference point :math:`z^*` is often taken as the ideal point and as such
+.. note:
+
+The reference point :math:`z^*` is often taken as the ideal point and as such
 it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
 this behaviour so that whenever a new ideal point is found :math:`z^*` is adapted accordingly.
 
-**NOTE** The use of :class:`~pygmo.decompose` discards gradients and hessians so that if the original user defined problem
+.. note:
+
+The use of :class:`~pygmo.decompose` discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
 the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.
@@ -2728,7 +2752,9 @@ std::string decompose_z_docstring()
 This read-only property contains the reference point to be used for the decomposition. This is only
 used for Tchebycheff and boundary interception decomposition methods.
 
-**NOTE** The reference point is adapted at each call of the fitness.
+.. note:
+
+The reference point is adapted at each call of the fitness.
 
 Returns:
     1D NumPy float array: the reference point
@@ -2754,7 +2780,9 @@ This meta-problem transforms a constrained problem into an unconstrained problem
 * Ignore the constraints: simply ignores the constraints.
 * Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraints violation (i.e. the sum of the L2 norms of the equalities and inequalities violations)
 
-**NOTE** The use of :class:`~pygmo.unconstrain` discards gradients and hessians so that if the original user defined problem
+.. note:
+
+The use of :class:`~pygmo.unconstrain` discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the unconstrained problem. The reason for this behaviour is that,
 in general, the methods implemented may not be differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.
@@ -3573,7 +3601,9 @@ std::string hv_refpoint_docstring()
 Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
 The result is a point that is necessarily dominated by all other points, and thus can be used for hypervolume computations.
 
-**NOTE** This point is different from the one computed by :func:`~pygmo.nadir()` as only the non dominated front is considered
+.. note:
+
+This point is different from the one computed by :func:`~pygmo.nadir()` as only the non dominated front is considered
 in that method (also its complexity is thus higher)
 
 Args:

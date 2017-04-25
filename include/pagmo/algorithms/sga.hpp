@@ -139,7 +139,7 @@ public:
      * are selected.
      * @param m mutation probability.
      * @param param_m distribution index (in polynomial mutation), otherwise width of the mutation.
-     * @param elitism generation frequency fot the reinsertion of the best individual.
+     * @param elitism number of parents that gets carried over to the next generation.
      * @param bestN when "bestN"" selection is used this indicates the percentage of best individuals to use.
      * This is an inactive parameter if other types of selection are selected.
      * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
@@ -153,7 +153,7 @@ public:
      * \p mutation is not "polynomial" or \p mutation is not in [1,100] and \p mutation is polynomial.
      */
     sga(unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double param_m = 0.5,
-        unsigned elitism = 1u, double bestN = 0.2, std::string mutation = "gaussian",
+        unsigned elitism = 5u, unsigned bestN = 5u, std::string mutation = "gaussian",
         std::string selection = "roulette", std::string crossover = "exponential",
         vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_elitism(elitism), m_bestN(bestN),
@@ -175,9 +175,9 @@ public:
         if (elitism < 1u) {
             pagmo_throw(std::invalid_argument, "elitism must be greater than zero");
         }
-        if (bestN < 0. || bestN > 1.) {
+        if (bestN == 0u) {
             pagmo_throw(std::invalid_argument,
-                        "The fraction of the best individuals must be in the [0,1] range, while a value of "
+                        "The number of best individuals to select must be larger than 1, while a value of "
                             + std::to_string(bestN) + " was detected");
         }
         if (mutation != "gaussian" && mutation != "uniform" && mutation != "polynomial") {
@@ -257,11 +257,31 @@ public:
         }
         // ---------------------------------------------------------------------------------------------------------
 
+        // TODO check bestN and elitism
+
         // No throws, all valid: we clear the logs
         // m_log.clear();
 
         for (decltype(m_gen) i = 1u; i <= m_gen; ++i) {
+            // 0 - if the problem is stochastic we change seed and re-evaluate the population
+            if (prob.is_stochastic()) {
+                pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
+                // re-evaluate the whole population w.r.t. the new seed
+                for (decltype(pop.size()) j = 0u; j < pop.size(); ++j) {
+                    pop.set_xf(j, pop.get_x()[j], prob.fitness(pop.get_x()[j]));
+                }
+            }
+            auto XNEW = pop.get_x();
             // 1 - Selection.
+            auto selected_idx = perform_selection(X, fit);
+            for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
+                XNEW[i] = X[selected_idx[i]];
+            }
+            // 2 - Crossover
+            perform_crossover(XNEW);
+            // 3 - Mutation
+            perform_mutation(XNEW);
+            // 4 - Evaluate the new population
         }
         return pop;
     }
@@ -277,57 +297,57 @@ public:
     }
     /// Gets the seed
     /**
-     * @return the seed controlling the algorithm stochastic behaviour
-     */
+    * @return the seed controlling the algorithm stochastic behaviour
+    */
     unsigned get_seed() const
     {
         return m_seed;
     }
     /// Sets the algorithm verbosity
     /**
-     * Sets the verbosity level of the screen output and of the
-     * log returned by get_log(). \p level can be:
-     * - 0: no verbosity
-     * - >0: will print and log one line each \p level generations.
-     *
-     * Example (verbosity 100):
-     * @code{.unparsed}
-     *     Gen:        Fevals:          Best: Current Best:
-     *        1             40         261363         261363
-     *      101           4040        112.237        267.969
-     *      201           8040        20.8885        265.122
-     *      301          12040        20.6076        20.6076
-     *      401          16040         18.252        140.079
-     * @endcode
-     * Gen is the generation number, Fevals the number of function evaluation used, , Best is the best fitness found,
-     * Current best is the best fitness currently in the population.
-     *
-     * @param level verbosity level
-     */
+    * Sets the verbosity level of the screen output and of the
+    * log returned by get_log(). \p level can be:
+    * - 0: no verbosity
+    * - >0: will print and log one line each \p level generations.
+    *
+    * Example (verbosity 100):
+    * @code{.unparsed}
+    *     Gen:        Fevals:          Best: Current Best:
+    *        1             40         261363         261363
+    *      101           4040        112.237        267.969
+    *      201           8040        20.8885        265.122
+    *      301          12040        20.6076        20.6076
+    *      401          16040         18.252        140.079
+    * @endcode
+    * Gen is the generation number, Fevals the number of function evaluation used, , Best is the best fitness found,
+    * Current best is the best fitness currently in the population.
+    *
+    * @param level verbosity level
+    */
     void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
     /// Gets the verbosity level
     /**
-     * @return the verbosity level
-     */
+    * @return the verbosity level
+    */
     unsigned get_verbosity() const
     {
         return m_verbosity;
     }
     /// Algorithm name
     /**
-     * @return a string containing the algorithm name
-     */
+    * @return a string containing the algorithm name
+    */
     std::string get_name() const
     {
         return "Genetic Algorithm";
     }
     /// Extra informations
     /**
-     * @return a string containing extra informations on the algorithm
-     */
+    * @return a string containing extra informations on the algorithm
+    */
     std::string get_extra_info() const
     {
         std::ostringstream ss;
@@ -356,25 +376,25 @@ public:
 
     /// Get log
     /**
-     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a bee_colony::log_line_type containing: Gen, Fevals, Current best, Best as
-     * described in bee_colony::set_verbosity().
-     *
-     * @return an <tt> std::vector</tt> of bee_colony::log_line_type containing the logged values Gen, Fevals, Current
-     * best, Best
-     */
+    * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+    * <tt>std::vector</tt> is a bee_colony::log_line_type containing: Gen, Fevals, Current best, Best as
+    * described in bee_colony::set_verbosity().
+    *
+    * @return an <tt> std::vector</tt> of bee_colony::log_line_type containing the logged values Gen, Fevals, Current
+    * best, Best
+    */
     // const log_type &get_log() const
     //{
     //    return m_log;
     //}
     /// Object serialization
     /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
-     */
+    * This method will save/load \p this into the archive \p ar.
+    *
+    * @param ar target archive.
+    *
+    * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+    */
     template <typename Archive>
     void serialize(Archive &ar)
     {
@@ -389,7 +409,7 @@ private:
     double m_m;
     double m_param_m;
     unsigned m_elitism;
-    double m_bestN;
+    unsigned m_bestN;
     mutation m_mutation;
     selection m_selection;
     crossover m_crossover;
