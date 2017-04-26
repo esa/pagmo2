@@ -475,11 +475,27 @@ struct ipopt_nlp final : Ipopt::TNLP {
 };
 }
 
+/// Ipopt wrapper.
+/**
+ * This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
+ * a software package for large-scale nonlinear optimization.
+ * \verbatim embed:rst:leading-asterisk
+ * .. seealso::
+ *
+ *    https://projects.coin-or.org/Ipopt.
+ *
+ * \endverbatim
+ */
 class ipopt
 {
 public:
     population evolve(population pop) const
     {
+        if (!pop.size()) {
+            // In case of an empty pop, just return it.
+            return pop;
+        }
+
         auto initial_guess = pop.get_x()[pop.best_idx()];
         Ipopt::SmartPtr<Ipopt::TNLP> nlp = ::new detail::ipopt_nlp(pop.get_problem(), initial_guess);
         Ipopt::SmartPtr<Ipopt::IpoptApplication> app = ::IpoptApplicationFactory();
@@ -497,6 +513,10 @@ public:
         pop.set_x(pop.best_idx(), dynamic_cast<detail::ipopt_nlp &>(*nlp).m_sol);
         return pop;
     }
+    /// Get the algorithm's name.
+    /**
+     * @return <tt>"Ipopt"</tt>.
+     */
     std::string get_name() const
     {
         return "Ipopt";
