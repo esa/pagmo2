@@ -593,8 +593,13 @@ public:
             switch (m_mutation) {
                 case (mutation::UNIFORM): {
                     // Start of main loop through the chromosome (continuous part)
-                    for (decltype(dim) j = 0u; j < dimc; ++j) {
+                    for (decltype(dimc) j = 0u; j < dimc; ++j) {
                         X[i][j] = lb[j] + drng(m_e) * (ub[j] - lb[j]);
+                        break;
+                    }
+                    for (decltype(dim) j = dimc; j < dim; ++j) {
+                        X[i][j]
+                            = std::uniform_int_distribution<>(static_cast<int>(lb[j]), static_cast<int>(ub[j]))(m_e);
                         break;
                     }
                 }
