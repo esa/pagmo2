@@ -116,7 +116,9 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  * preferred.
  *
  * In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between
- * choosen selection schemes, crossover types, mutation types and reinsertion scheme.
+ * some selected crossover types, selection schemes,, mutation types and reinsertion scheme.
+ *
+ * The various blocks of pagmo genetic algorithm are listed below:
  *
  * Selection: two selection methods are provided: "tournament" and "truncated". Tournament selection works by
  * selecting each offspring as the one having the minimal fitness in a random group of \p param_s. The truncated
@@ -124,10 +126,22 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  * We have deliberately not implemented the popular roulette wheel selection as we are of the opinion that such
  * a system does not generalize much being highly sensitive to the fitness scaling.
  *
+ * Crossover: four different crossover schemes are provided: "single", "exponential", "binomial", "sbx". The
+ * single point crossover, called "single", works selecting a random point in the parent chromosome and inserting the
+ * partner chromosome thereafter. The exponential crossover is taken from the algorithm differential evolution,
+ * implemented, in pagmo, as pagmo::de. It essentially selects a random point in the parent chromosome and inserts,
+ * in each successive gene, the partner values with probability \p cr up to when it stops. The binomial crossover
+ * inserts each gene from the partner with probability \p cr. The simulated binary crossover (called "sbx"), is taken
+ * from the NSGAII algorithm, implemented in pagmo as pagmo::nsga2, and makes use of an additional parameter called
+ * distribution index \p eta_c.
+ *
+ * Reinsertion: the only reinsertion strategy provided is what we called simple elitism. After one generation
+ * the best \p elitism parents are kept in the new population while the worst \p elitism offsprings are killed.
+ *
  * **NOTE** This algorithm will work only for box bounded problems.
  *
  * **NOTE** Specifying the parameter \p int_dim a part of the decision vector (at the end) will be treated as integers
- *
+ * This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
  */
 class sga : private detail::sga_statics<>
 {
@@ -300,7 +314,7 @@ public:
             // 2 - Crossover
             perform_crossover(XNEW, prob.get_bounds());
             // 3 - Mutation
-            perform_mutation(XNEW);
+            perform_mutation(XNEW, prob.get_bounds());
             // 4 - Evaluate the new population
             for (decltype(XNEW.size()) i = 0u; i < XNEW.size(); ++i) {
                 FNEW[i] = prob.fitness(XNEW[i]);
@@ -550,12 +564,42 @@ public:
                         std::copy(parent2.data() + n, parent2.data() + dim, child.data() + n);
                         break;
                     }
+                    // LCOV_EXCL_START
+                    default: {
+                        pagmo_throw(std::logic_error, "The code should never reach here");
+                        break;
+                    }
+                        // LCOV_EXCL_STOP
                 }
             }
         }
     }
-    void perform_mutation(const std::vector<vector_double> &X) const
+    void perform_mutation(std::vector<vector_double> &X, const std::pair<vector_double, vector_double> &bounds) const
     {
+        // Some dimensions
+        auto dim = X[0].size();
+        auto dimi = m_int_dim;
+        auto dimc = dim - dimi;
+        // Problem bounds
+        const auto &lb = bounds.first;
+        const auto &ub = bounds.second;
+        assert(X.size() > 1u);
+        assert(std::all_of(X.begin(), X.end(), [](const vector_double &item) { return item.size() == dim; }));
+        assert(dimc >= 0u);
+        // Random distributions
+        std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
+        // Start of main loop through the population
+        for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
+            switch (m_mutation) {
+                case (mutation::UNIFORM): {
+                    // Start of main loop through the chromosome (continuous part)
+                    for (decltype(dim) j = 0u; j < dimc; ++j) {
+                        X[i][j] = lb[j] + drng(m_e) * (ub[j] - lb[j]);
+                        break;
+                    }
+                }
+            }
+        }
     }
     std::pair<vector_double, vector_double>
     sbx_crossover_impl(const vector_double &parent1, const vector_double &parent2,
@@ -600,7 +644,6 @@ public:
                         betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
                     }
                     c1 = 0.5 * ((y1 + y2) - betaq * (y2 - y1));
-
                     beta = 1. + (2. * (yu - y2) / (y2 - y1));
                     alpha = 2. - std::pow(beta, -(m_eta_c + 1.));
                     if (rand01 <= (1. / alpha)) {
@@ -609,7 +652,6 @@ public:
                         betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
                     }
                     c2 = 0.5 * ((y1 + y2) + betaq * (y2 - y1));
-
                     if (c1 < lb[i]) c1 = lb[i];
                     if (c2 < lb[i]) c2 = lb[i];
                     if (c1 > ub[i]) c1 = ub[i];
