@@ -89,7 +89,7 @@ struct ipopt_data {
     static const result_map_t results;
 };
 
-#define PAGMO_IPOPT_RES_ENTRY(name)                                                                                    \
+#define PAGMO_DETAIL_IPOPT_RES_ENTRY(name)                                                                             \
     {                                                                                                                  \
         Ipopt::name, #name " (value = " + std::to_string(static_cast<int>(Ipopt::name)) + ")"                          \
     }
@@ -97,26 +97,26 @@ struct ipopt_data {
 // Static init.
 template <typename T>
 const typename ipopt_data<T>::result_map_t ipopt_data<T>::results
-    = {PAGMO_IPOPT_RES_ENTRY(Solve_Succeeded),
-       PAGMO_IPOPT_RES_ENTRY(Solved_To_Acceptable_Level),
-       PAGMO_IPOPT_RES_ENTRY(Infeasible_Problem_Detected),
-       PAGMO_IPOPT_RES_ENTRY(Search_Direction_Becomes_Too_Small),
-       PAGMO_IPOPT_RES_ENTRY(Diverging_Iterates),
-       PAGMO_IPOPT_RES_ENTRY(User_Requested_Stop),
-       PAGMO_IPOPT_RES_ENTRY(Feasible_Point_Found),
-       PAGMO_IPOPT_RES_ENTRY(Maximum_Iterations_Exceeded),
-       PAGMO_IPOPT_RES_ENTRY(Restoration_Failed),
-       PAGMO_IPOPT_RES_ENTRY(Error_In_Step_Computation),
-       PAGMO_IPOPT_RES_ENTRY(Not_Enough_Degrees_Of_Freedom),
-       PAGMO_IPOPT_RES_ENTRY(Invalid_Problem_Definition),
-       PAGMO_IPOPT_RES_ENTRY(Invalid_Option),
-       PAGMO_IPOPT_RES_ENTRY(Invalid_Number_Detected),
-       PAGMO_IPOPT_RES_ENTRY(Unrecoverable_Exception),
-       PAGMO_IPOPT_RES_ENTRY(NonIpopt_Exception_Thrown),
-       PAGMO_IPOPT_RES_ENTRY(Insufficient_Memory),
-       PAGMO_IPOPT_RES_ENTRY(Internal_Error)};
+    = {PAGMO_DETAIL_IPOPT_RES_ENTRY(Solve_Succeeded),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Solved_To_Acceptable_Level),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Infeasible_Problem_Detected),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Search_Direction_Becomes_Too_Small),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Diverging_Iterates),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(User_Requested_Stop),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Feasible_Point_Found),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Maximum_Iterations_Exceeded),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Restoration_Failed),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Error_In_Step_Computation),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Not_Enough_Degrees_Of_Freedom),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Invalid_Problem_Definition),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Invalid_Option),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Invalid_Number_Detected),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Unrecoverable_Exception),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(NonIpopt_Exception_Thrown),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Insufficient_Memory),
+       PAGMO_DETAIL_IPOPT_RES_ENTRY(Internal_Error)};
 
-#undef PAGMO_IPOPT_RES_ENTRY
+#undef PAGMO_DETAIL_IPOPT_RES_ENTRY
 
 // The NLP implementation required by Ipopt's C++ interface.
 struct ipopt_nlp final : Ipopt::TNLP {
@@ -134,7 +134,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
     using IpoptCalculatedQuantities = Ipopt::IpoptCalculatedQuantities;
 
     // Ctor from problem.
-    ipopt_nlp(const problem &prob, vector_double start) : m_prob(prob), m_start(std::move(start))
+    ipopt_nlp(const problem &prob, vector_double start, unsigned verbosity)
+        : m_prob(prob), m_start(std::move(start)), m_verbosity(verbosity)
     {
         assert(m_start.size() == prob.get_nx());
 
@@ -279,21 +280,26 @@ struct ipopt_nlp final : Ipopt::TNLP {
     virtual bool get_starting_point(Index n, bool init_x, Number *x, bool init_z, Number *, Number *, Index m,
                                     bool init_lambda, Number *) override final
     {
-        // NOTE: these come from the tutorial. I think the values of these asserts depend on
-        // the configuration of the Ipopt run.
-        assert(init_x);
-        assert(!init_z);
-        assert(!init_lambda);
         assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
         assert(n == boost::numeric_cast<Index>(m_start.size()));
         assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
-        (void)init_x;
-        (void)init_z;
-        (void)init_lambda;
         (void)n;
         (void)m;
 
-        std::copy(m_start.begin(), m_start.end(), x);
+        if (init_x) {
+            std::copy(m_start.begin(), m_start.end(), x);
+        }
+
+        if (init_z) {
+            pagmo_throw(std::runtime_error, "we are being asked to provide initial values for the bounds multiplier by "
+                                            "the Ipopt API, but in pagmo we do not support them");
+        }
+
+        if (init_lambda) {
+            pagmo_throw(std::runtime_error,
+                        "we are being asked to provide initial values for the constraints multiplier by "
+                        "the Ipopt API, but in pagmo we do not support them");
+        }
 
         return true;
     }
@@ -535,14 +541,28 @@ struct ipopt_nlp final : Ipopt::TNLP {
     std::vector<std::pair<Index, Index>> m_jac_sp;
     // Same format for the hessian of the lagrangian (but it's a square matrix).
     std::vector<std::pair<Index, Index>> m_lag_sp;
+    // Verbosity.
+    const unsigned m_verbosity;
 };
 }
 
 /// Ipopt wrapper.
 /**
+ * \image html ipopt.png "COIN_OR logo." width=3cm
+ *
  * This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
  * a software package for large-scale nonlinear optimization.
  * \verbatim embed:rst:leading-asterisk
+ * .. warning::
+ *
+ *    A moved-from pagmo::ipopt is destructible and assignable. Any other operation will result
+ *    in undefined behaviour.
+ *
+ * .. note::
+ *
+ *    This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_IPOPT`` option
+ *    enabled (see the :ref:`installation instructions <install>`).
+ *
  * .. seealso::
  *
  *    https://projects.coin-or.org/Ipopt.
@@ -613,7 +633,7 @@ public:
         }
 
         // Initialize the Ipopt machinery, following the tutorial.
-        Ipopt::SmartPtr<Ipopt::TNLP> nlp = ::new detail::ipopt_nlp(pop.get_problem(), initial_guess);
+        Ipopt::SmartPtr<Ipopt::TNLP> nlp = ::new detail::ipopt_nlp(pop.get_problem(), initial_guess, m_verbosity);
         Ipopt::SmartPtr<Ipopt::IpoptApplication> app = ::IpoptApplicationFactory();
         app->RethrowNonIpoptException(true);
 
@@ -664,8 +684,7 @@ public:
     std::string get_extra_info() const
     {
         return "\tLast optimisation return code: " + detail::ipopt_data<>::results.at(m_last_opt_res)
-               /*+ "\n\tVerbosity: " + std::to_string(m_verbosity)*/
-               + "\n\tIndividual selection "
+               + "\n\tVerbosity: " + std::to_string(m_verbosity) + "\n\tIndividual selection "
                + (boost::any_cast<population::size_type>(&m_select)
                       ? "idx: " + std::to_string(boost::any_cast<population::size_type>(m_select))
                       : "policy: " + boost::any_cast<std::string>(m_select))
@@ -676,17 +695,26 @@ public:
                + "\n\tString options: " + detail::to_string(m_string_opts) + "\n\tInteger options: "
                + detail::to_string(m_integer_opts) + "\n\tNumeric options: " + detail::to_string(m_numeric_opts) + "\n";
     }
+    void set_verbosity(unsigned n)
+    {
+        m_verbosity = n;
+    }
+    const log_type &get_log() const
+    {
+        return m_log;
+    }
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(cereal::base_class<base_local_solver>(this), m_string_opts, m_integer_opts, m_numeric_opts, m_last_opt_res);
+        ar(cereal::base_class<base_local_solver>(this), m_string_opts, m_integer_opts, m_numeric_opts, m_last_opt_res,
+           m_verbosity, m_log);
     }
     template <typename Archive>
     void load(Archive &ar)
     {
         try {
             ar(cereal::base_class<base_local_solver>(this), m_string_opts, m_integer_opts, m_numeric_opts,
-               m_last_opt_res);
+               m_last_opt_res, m_verbosity, m_log);
         } catch (...) {
             *this = ipopt{};
             throw;

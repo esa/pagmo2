@@ -38,16 +38,20 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/ipopt.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/rng.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(ipopt_nlp_test)
 {
+    random_device::set_seed(42);
+
     using ipopt_nlp = detail::ipopt_nlp;
     using Index = ipopt_nlp::Index;
     problem prob(hock_schittkowsky_71{});
-    ipopt_nlp nlp(prob, {1.1, 1.2, 1.3, 1.4});
+    ipopt_nlp nlp(prob, {1.1, 1.2, 1.3, 1.4}, 5u);
+    BOOST_CHECK_EQUAL(nlp.m_verbosity, 5u);
 
     // Test info getting.
     Index n, m, nnz_jac_g, nnz_h_lag;
