@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_SGA_HPP
 #define PAGMO_ALGORITHMS_SGA_HPP
 
-#include <algorithm> // std::sort
+#include <algorithm> // std::sort, std::all_of, std::copy
 #include <boost/bimap.hpp>
 #include <iomanip>
 #include <numeric> // std::iota
@@ -83,7 +83,7 @@ inline typename sga_statics<>::crossover_map_t init_crossover_map()
     retval.insert(value_type("exponential", sga_statics<>::crossover::EXPONENTIAL));
     retval.insert(value_type("binomial", sga_statics<>::crossover::BINOMIAL));
     retval.insert(value_type("sbx", sga_statics<>::crossover::SBX));
-    retval.insert(value_type("single-point", sga_statics<>::crossover::SINGLE));
+    retval.insert(value_type("single", sga_statics<>::crossover::SINGLE));
     return retval;
 }
 inline typename sga_statics<>::mutation_map_t init_mutation_map()
@@ -142,7 +142,8 @@ public:
      * Constructs a simple genetic algorithm.
      *
      * @param gen number of generations.
-     * @param cr crossover probability.
+     * @param cr crossover probability. This parameter is inactive when the single-point crossover method "single" is
+     * selected.
      * @param eta_c distribution index for "sbx" crossover. This is an inactive parameter if other types of crossovers
      * are selected.
      * @param m mutation probability.
@@ -152,12 +153,12 @@ public:
      * "tournament" selection is used this indicates the size of the tournament.
      * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
      * @param selection the selection strategy. One of "tournament", "truncated".
-     * @param crossover the crossover strategy. One of "exponential", "binomial", "single-point" or "sbx"
+     * @param crossover the crossover strategy. One of "exponential", "binomial", "single" or "sbx"
      * @param int_dim the number of element in the chromosome to be treated as integers.
      *
      * @throws std::invalid_argument if \p cr not in [0,1), \p eta_c not in [1, 100), \p m not in [0,1], \p elitism < 1
      * \p mutation not one of "gaussian", "uniform" or "polynomial", \p selection not one of "roulette" or "truncated"
-     * \p crossover not one of "exponential", "binomial", "sbx" or "single-point", if \p param_m is not in [0,1] and
+     * \p crossover not one of "exponential", "binomial", "sbx" or "single", if \p param_m is not in [0,1] and
      * \p mutation is not "polynomial" or \p mutation is not in [1,100] and \p mutation is polynomial.
      */
     sga(unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double param_m = 0.5,
@@ -167,8 +168,8 @@ public:
         : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_elitism(elitism), m_param_s(param_s),
           m_int_dim(int_dim), m_e(seed), m_seed(seed), m_verbosity(0u) //, m_log()
     {
-        if (cr >= 1. || cr < 0.) {
-            pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1[ range, while a value of "
+        if (cr > 1. || cr < 0.) {
+            pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1] range, while a value of "
                                                    + std::to_string(cr) + " was detected");
         }
         if (eta_c < 1. || eta_c >= 100.) {
@@ -196,11 +197,10 @@ public:
                 R"(The selection type must either be "roulette" or "truncated" or "tournament": unknown type requested: )"
                     + selection);
         }
-        if (crossover != "exponential" && crossover != "binomial" && crossover != "sbx"
-            && crossover != "single-point") {
+        if (crossover != "exponential" && crossover != "binomial" && crossover != "sbx" && crossover != "single") {
             pagmo_throw(
                 std::invalid_argument,
-                R"(The crossover type must either be "exponential" or "binomial" or "sbx" or "single-point": unknown type requested: )"
+                R"(The crossover type must either be "exponential" or "binomial" or "sbx" or "single": unknown type requested: )"
                     + crossover);
         }
         // param_m represents the distribution index if polynomial mutation is selected
@@ -306,14 +306,15 @@ public:
             std::iota(best_parents.begin(), best_parents.end(), vector_double::size_type(0u));
             std::sort(best_parents.begin(), best_parents.end(),
                       [pop](vector_double::size_type a, vector_double::size_type b) {
-                          return pop.get_f()[a][0] < pop.get_f()[b][0];
+                          return detail::less_than_f(pop.get_f()[a][0], pop.get_f()[b][0]);
                       });
             // We sort the new population
             std::vector<vector_double::size_type> best_offsprings(FNEW.size());
             std::iota(best_offsprings.begin(), best_offsprings.end(), vector_double::size_type(0u));
-            std::sort(
-                best_offsprings.begin(), best_offsprings.end(),
-                [FNEW](vector_double::size_type a, vector_double::size_type b) { return FNEW[a][0] < FNEW[b][0]; });
+            std::sort(best_offsprings.begin(), best_offsprings.end(),
+                      [FNEW](vector_double::size_type a, vector_double::size_type b) {
+                          return detail::less_than_f(FNEW[a][0], FNEW[b][0]);
+                      });
             // We re-insert m_elitism best parents and the remaining best children
             population pop_copy(pop);
             for (decltype(m_elitism) i = 0u; i < m_elitism; ++i) {
@@ -443,11 +444,12 @@ public:
            m_e, m_seed, m_verbosity);
     }
 
-private:
+public:
     std::vector<vector_double::size_type> perform_selection(const std::vector<vector_double> &F) const
     {
+        assert(m_param_s <= F.size());
         std::vector<vector_double::size_type> retval(F.size());
-        std::vector<vector_double::size_type> best_idxs;
+        std::vector<vector_double::size_type> best_idxs(F.size());
         std::iota(best_idxs.begin(), best_idxs.end(), vector_double::size_type(0u));
         switch (m_selection) {
             case (selection::TRUNCATED): {
@@ -484,8 +486,57 @@ private:
         }
         return retval;
     }
-    void perform_crossover(const std::vector<vector_double> &X) const
+    void perform_crossover(std::vector<vector_double> &X) const
     {
+        auto dim = X[0].size();
+        assert(X.size() > 1u);
+        assert(std::all_of(X.begin(), X.end(), [](const vector_double &item) { return item.size() == dim; }));
+        std::vector<vector_double::size_type> all_idx(X.size()); // stores indexes to then select one at random
+        std::iota(all_idx.begin(), all_idx.end(), vector_double::size_type(0u));
+        std::uniform_real_distribution<> drng(0., 1.);
+        auto XCOPY = X;
+        // Start of main loop through the X
+        for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
+            // 1 - we select a mating partner
+            std::swap(all_idx[0], all_idx[i]);
+            auto partner_idx = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
+                1, all_idx.size() - 1)(m_e);
+            // 2 - We rename these chromosomes for code clarity
+            auto &child = X[i];
+            const auto &parent2 = XCOPY[all_idx[partner_idx]];
+            // 3 - We perform crossover according to the selected method
+            switch (m_crossover) {
+                case (crossover::EXPONENTIAL): {
+                    auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
+                        0, dim - 1u)(m_e);
+                    decltype(dim) L = 0u;
+                    do {
+                        child[n] = parent2[n];
+                        n = (n + 1u) % dim;
+                        L++;
+                    } while ((drng(m_e) < m_cr) && (L < dim));
+                    break;
+                }
+                case (crossover::BINOMIAL): {
+                    auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
+                        0, dim - 1u)(m_e);
+                    for (decltype(dim) L = 0u; L < dim; ++L) {    /* performs D binomial trials */
+                        if ((drng(m_e) < m_cr) || L + 1 == dim) { /* changes at least one parameter */
+                            child[n] = parent2[n];
+                        }
+                        n = (n + 1) % dim;
+                    }
+                    break;
+                }
+                case (crossover::SINGLE): {
+                    auto n
+                        = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(0, dim)(m_e);
+                    std::copy(parent2.data() + n, parent2.data() + dim, child.data() + n);
+                    break;
+                }
+            }
+        }
+        // For sbx crossover we need a different loop as it creates two offsprings at a time
     }
     void perform_mutation(const std::vector<vector_double> &X) const
     {
