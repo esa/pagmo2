@@ -372,7 +372,7 @@ void expose_algorithms()
                          + "' to either a selection policy (one of ['best', 'worst', 'random']) or an individual index")
                             .c_str());
         }),
-        nlopt_selection_docstring().c_str());
+        bls_selection_docstring("nlopt").c_str());
     add_property(
         nlopt_, "replacement", lcast([](const nlopt &n) -> bp::object {
             auto s = n.get_replacement();
@@ -398,8 +398,8 @@ void expose_algorithms()
                  + "' to either a replacement policy (one of ['best', 'worst', 'random']) or an individual index")
                     .c_str());
         }),
-        nlopt_replacement_docstring().c_str());
-    nlopt_.def("set_random_sr_seed", &nlopt::set_random_sr_seed, nlopt_set_random_sr_seed_docstring().c_str());
+        bls_replacement_docstring("nlopt").c_str());
+    nlopt_.def("set_random_sr_seed", &nlopt::set_random_sr_seed, bls_set_random_sr_seed_docstring("nlopt").c_str());
     expose_algo_log(nlopt_, nlopt_get_log_docstring().c_str());
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());

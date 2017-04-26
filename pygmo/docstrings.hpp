@@ -152,13 +152,15 @@ std::string nlopt_xtol_rel_docstring();
 std::string nlopt_xtol_abs_docstring();
 std::string nlopt_maxeval_docstring();
 std::string nlopt_maxtime_docstring();
-std::string nlopt_selection_docstring();
-std::string nlopt_replacement_docstring();
-std::string nlopt_set_random_sr_seed_docstring();
 std::string nlopt_get_log_docstring();
 std::string nlopt_get_last_opt_result_docstring();
 std::string nlopt_get_solver_name_docstring();
 std::string nlopt_local_optimizer_docstring();
+
+// base local solver common docstrings.
+std::string bls_selection_docstring(const std::string &);
+std::string bls_replacement_docstring(const std::string &);
+std::string bls_set_random_sr_seed_docstring(const std::string &);
 
 // utilities
 // hypervolume

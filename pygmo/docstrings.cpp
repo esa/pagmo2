@@ -4266,7 +4266,7 @@ Raises:
 )";
 }
 
-std::string nlopt_selection_docstring()
+std::string bls_selection_docstring(const std::string &algo)
 {
     return R"(Individual selection policy.
 
@@ -4279,7 +4279,8 @@ If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"r
 * ``"worst"`` will select the worst individual in the population,
 * ``"random"`` will randomly choose one individual in the population.
 
-:func:`~pygmo.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+:func:`~pygmo.)"
+           + algo + R"(.set_random_sr_seed()` can be used to seed the random number generator
 used by the ``"random"`` policy.
 
 If the attribute is an integer, it represents the index (in the population) of the individual that is selected
@@ -4298,7 +4299,7 @@ Raises:
 )";
 }
 
-std::string nlopt_replacement_docstring()
+std::string bls_replacement_docstring(const std::string &algo)
 {
     return R"(Individual replacement policy.
 
@@ -4311,7 +4312,8 @@ If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"r
 * ``"worst"`` will select the worst individual in the population,
 * ``"random"`` will randomly choose one individual in the population.
 
-:func:`~pygmo.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+:func:`~pygmo.)"
+           + algo + R"(.set_random_sr_seed()` can be used to seed the random number generator
 used by the ``"random"`` policy.
 
 If the attribute is an integer, it represents the index (in the population) of the individual that will be
@@ -4330,7 +4332,7 @@ Raises:
 )";
 }
 
-std::string nlopt_set_random_sr_seed_docstring()
+std::string bls_set_random_sr_seed_docstring(const std::string &algo)
 {
     return R"(set_random_sr_seed(seed)
 
@@ -4338,8 +4340,10 @@ Set the seed for the ``"random"`` selection/replacement policies.
 
 Args:
     seed (``int``): the value that will be used to seed the random number generator used by the ``"random"``
-      election/replacement policies (see :attr:`~pygmo.nlopt.selection` and
-      :attr:`~pygmo.nlopt.replacement`)
+      election/replacement policies (see :attr:`~pygmo.)"
+           + algo + R"(.selection` and
+      :attr:`~pygmo.)"
+           + algo + R"(.replacement`)
 
 Raises:
     OverflowError: if the attribute is set to an integer which is negative or too large

@@ -95,3 +95,4 @@ Various coding utilities.
   miscellanea/generic
   miscellanea/type_traits
   miscellanea/exceptions
+  miscellanea/utility_classes
