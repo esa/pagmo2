@@ -37,11 +37,11 @@ elif [[ "${PAGMO_BUILD}" == "ReleaseClang38" ]]; then
     make -j2 VERBOSE=1;
     ctest;
 elif [[ "${PAGMO_BUILD}" == "OSXDebug" ]]; then
-    CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="-g0 -O2 -L$deps_dir/lib -Wl,-rpath,$deps_dir/lib" ../;
+    CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
     make -j2 VERBOSE=1;
     ctest;
 elif [[ "${PAGMO_BUILD}" == "OSXRelease" ]]; then
-    CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
+    CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ../;
     make -j2 VERBOSE=1;
     ctest;
 elif [[ "${PAGMO_BUILD}" == Python* ]]; then
