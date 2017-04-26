@@ -945,10 +945,10 @@ public:
         }
 
         // Compute the new fitness vector.
-        const auto new_f = pop.get_problem().fitness(initial_guess);
+        const auto new_f = prob.fitness(initial_guess);
 
         // Store the new individual into the population, but only if better.
-        if (compare_fc(new_f, old_f, pop.get_problem().get_nec(), pop.get_problem().get_c_tol())) {
+        if (compare_fc(new_f, old_f, prob.get_nec(), prob.get_c_tol())) {
             replace_individual(pop, initial_guess, new_f);
         }
 
