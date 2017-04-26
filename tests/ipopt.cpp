@@ -151,7 +151,10 @@ BOOST_AUTO_TEST_CASE(ipopt_nlp_test)
 
 BOOST_AUTO_TEST_CASE(ipopt_evolve_test)
 {
-    algorithm algo(ipopt{});
+    ipopt ip;
+    print(ip.get_numeric_options(), "\n");
+    algorithm algo(ip);
+    std::cout << algo << '\n';
     population pop(hock_schittkowsky_71{}, 1);
     algo.evolve(pop);
 }

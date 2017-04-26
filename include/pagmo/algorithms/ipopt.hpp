@@ -33,26 +33,39 @@ see https://www.gnu.org/licenses/. */
 
 #if defined(PAGMO_WITH_IPOPT)
 
+//#include <IpAlgTypes.hpp>
 #include <IpIpoptApplication.hpp>
 #include <IpIpoptCalculatedQuantities.hpp>
 #include <IpIpoptData.hpp>
+#include <IpReturnCodes.hpp>
 #include <IpSmartPtr.hpp>
 #include <IpTNLP.hpp>
 #include <algorithm>
+#include <boost/any.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <functional>
+#include <initializer_list>
 #include <iterator>
 #include <limits>
+#include <map>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/base_local_solver.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/serialization.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -61,7 +74,57 @@ namespace pagmo
 namespace detail
 {
 
+// Usual trick with global read-only data useful to the Ipopt wrapper.
+template <typename = void>
+struct ipopt_data {
+    // A map to link a human-readable description to Ipopt return codes.
+    // NOTE: in C++11 hashing of enums might not be available. Provide our own.
+    struct res_hasher {
+        std::size_t operator()(Ipopt::ApplicationReturnStatus res) const
+        {
+            return std::hash<int>{}(static_cast<int>(res));
+        }
+    };
+    using result_map_t = std::unordered_map<Ipopt::ApplicationReturnStatus, std::string, res_hasher>;
+    static const result_map_t results;
+};
+
+#define PAGMO_IPOPT_RES_ENTRY(name)                                                                                    \
+    {                                                                                                                  \
+        Ipopt::name, #name " (value = " + std::to_string(static_cast<int>(Ipopt::name)) + ")"                          \
+    }
+
+// Static init.
+template <typename T>
+const typename ipopt_data<T>::result_map_t ipopt_data<T>::results
+    = {PAGMO_IPOPT_RES_ENTRY(Solve_Succeeded),
+       PAGMO_IPOPT_RES_ENTRY(Solved_To_Acceptable_Level),
+       PAGMO_IPOPT_RES_ENTRY(Infeasible_Problem_Detected),
+       PAGMO_IPOPT_RES_ENTRY(Search_Direction_Becomes_Too_Small),
+       PAGMO_IPOPT_RES_ENTRY(Diverging_Iterates),
+       PAGMO_IPOPT_RES_ENTRY(User_Requested_Stop),
+       PAGMO_IPOPT_RES_ENTRY(Feasible_Point_Found),
+       PAGMO_IPOPT_RES_ENTRY(Maximum_Iterations_Exceeded),
+       PAGMO_IPOPT_RES_ENTRY(Restoration_Failed),
+       PAGMO_IPOPT_RES_ENTRY(Error_In_Step_Computation),
+       PAGMO_IPOPT_RES_ENTRY(Not_Enough_Degrees_Of_Freedom),
+       PAGMO_IPOPT_RES_ENTRY(Invalid_Problem_Definition),
+       PAGMO_IPOPT_RES_ENTRY(Invalid_Option),
+       PAGMO_IPOPT_RES_ENTRY(Invalid_Number_Detected),
+       PAGMO_IPOPT_RES_ENTRY(Unrecoverable_Exception),
+       PAGMO_IPOPT_RES_ENTRY(NonIpopt_Exception_Thrown),
+       PAGMO_IPOPT_RES_ENTRY(Insufficient_Memory),
+       PAGMO_IPOPT_RES_ENTRY(Internal_Error)};
+
+#undef PAGMO_IPOPT_RES_ENTRY
+
+// The NLP implementation required by Ipopt's C++ interface.
 struct ipopt_nlp final : Ipopt::TNLP {
+    // Single entry of the log (objevals, objval, n of unsatisfied const, constr. violation, feasibility).
+    using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
+    // The log.
+    using log_type = std::vector<log_line_type>;
+
     // Some shortcuts from the Ipopt namespace.
     using Index = Ipopt::Index;
     using Number = Ipopt::Number;
@@ -486,8 +549,39 @@ struct ipopt_nlp final : Ipopt::TNLP {
  *
  * \endverbatim
  */
-class ipopt
+class ipopt : public base_local_solver
 {
+    template <typename Pair>
+    static void opt_checker(bool status, const Pair &p, const std::string &op_type)
+    {
+        if (!status) {
+            pagmo_throw(std::invalid_argument, "failed to set the ipopt " + op_type + " option '" + p.first
+                                                   + "' to the value: " + detail::to_string(p.second));
+        }
+    }
+
+public:
+    /// Single data line for the algorithm's log.
+    /**
+     * A log data line is a tuple consisting of:
+     * - the number of objective function evaluations made so far,
+     * - the objective function value for the current decision vector,
+     * - the number of constraints violated by the current decision vector,
+     * - the constraints violation norm for the current decision vector,
+     * - a boolean flag signalling the feasibility of the current decision vector.
+     */
+    using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
+    /// Log type.
+    /**
+     * The algorithm log is a collection of ipopt::log_line_type data lines, stored in chronological order
+     * during the optimisation if the verbosity of the algorithm is set to a nonzero value
+     * (see ipopt::set_verbosity()).
+     */
+    using log_type = std::vector<log_line_type>;
+
+private:
+    static_assert(std::is_same<log_line_type, detail::ipopt_nlp::log_line_type>::value, "Invalid log line type.");
+
 public:
     population evolve(population pop) const
     {
@@ -496,21 +590,67 @@ public:
             return pop;
         }
 
-        auto initial_guess = pop.get_x()[pop.best_idx()];
+        auto &prob = pop.get_problem();
+
+        // Setup of the initial guess. Store also the original fitness
+        // of the selected individual, old_f, for later use.
+        auto sel_xf = select_individual(pop);
+        vector_double initial_guess(std::move(sel_xf.first)), old_f(std::move(sel_xf.second));
+
+        // Check the initial guess.
+        // NOTE: this should be guaranteed by the population's invariants.
+        assert(initial_guess.size() == prob.get_nx());
+        const auto bounds = prob.get_bounds();
+        for (decltype(bounds.first.size()) i = 0; i < bounds.first.size(); ++i) {
+            if (std::isnan(initial_guess[i])) {
+                pagmo_throw(std::invalid_argument,
+                            "the value of the initial guess at index " + std::to_string(i) + " is NaN");
+            }
+            if (initial_guess[i] < bounds.first[i] || initial_guess[i] > bounds.second[i]) {
+                pagmo_throw(std::invalid_argument, "the value of the initial guess at index " + std::to_string(i)
+                                                       + " is outside the problem's bounds");
+            }
+        }
+
+        // Initialize the Ipopt machinery, following the tutorial.
         Ipopt::SmartPtr<Ipopt::TNLP> nlp = ::new detail::ipopt_nlp(pop.get_problem(), initial_guess);
         Ipopt::SmartPtr<Ipopt::IpoptApplication> app = ::IpoptApplicationFactory();
-        app->Options()->SetNumericValue("tol", 1e-9);
-        app->Options()->SetStringValue("hessian_approximation", "limited-memory");
+        app->RethrowNonIpoptException(true);
 
-        Ipopt::ApplicationReturnStatus status = app->Initialize();
-        if (status != Ipopt::Solve_Succeeded) {
-            throw;
+        // Set the options.
+        for (const auto &p : m_string_opts) {
+            opt_checker(app->Options()->SetStringValue(p.first, p.second), p, "string");
         }
-        status = app->OptimizeTNLP(nlp);
-        if (status != Ipopt::Solve_Succeeded) {
-            throw;
+        for (const auto &p : m_numeric_opts) {
+            opt_checker(app->Options()->SetNumericValue(p.first, p.second), p, "numeric");
         }
-        pop.set_x(pop.best_idx(), dynamic_cast<detail::ipopt_nlp &>(*nlp).m_sol);
+        for (const auto &p : m_integer_opts) {
+            opt_checker(app->Options()->SetIntegerValue(p.first, p.second), p, "integer");
+        }
+
+        // NOTE: Initialize() can take a filename as input, defaults to "ipopt.opt". This is a file
+        // which is supposed to contain ipopt's options. Since we can set the options from the code,
+        // let's disable this functionality by passing an empty string.
+        const Ipopt::ApplicationReturnStatus status = app->Initialize("");
+        if (status != Ipopt::Solve_Succeeded) {
+            pagmo_throw(std::runtime_error,
+                        "the initialisation of the ipopt algorithm failed. The return status code is: "
+                            + detail::ipopt_data<>::results.at(status));
+        }
+        // Run the optimisation.
+        m_last_opt_res = app->OptimizeTNLP(nlp);
+
+        // TODO log, verbosity.
+
+        // Compute the new fitness vector.
+        const auto new_f = prob.fitness(dynamic_cast<detail::ipopt_nlp &>(*nlp).m_sol);
+
+        // Store the new individual into the population, but only if better.
+        if (compare_fc(new_f, old_f, prob.get_nec(), prob.get_c_tol())) {
+            replace_individual(pop, dynamic_cast<detail::ipopt_nlp &>(*nlp).m_sol, new_f);
+        }
+
+        // Return the evolved pop.
         return pop;
     }
     /// Get the algorithm's name.
@@ -521,14 +661,84 @@ public:
     {
         return "Ipopt";
     }
-    template <typename Archive>
-    void save(Archive &) const
+    std::string get_extra_info() const
     {
+        return "\tLast optimisation return code: " + detail::ipopt_data<>::results.at(m_last_opt_res)
+               /*+ "\n\tVerbosity: " + std::to_string(m_verbosity)*/
+               + "\n\tIndividual selection "
+               + (boost::any_cast<population::size_type>(&m_select)
+                      ? "idx: " + std::to_string(boost::any_cast<population::size_type>(m_select))
+                      : "policy: " + boost::any_cast<std::string>(m_select))
+               + "\n\tIndividual replacement "
+               + (boost::any_cast<population::size_type>(&m_replace)
+                      ? "idx: " + std::to_string(boost::any_cast<population::size_type>(m_replace))
+                      : "policy: " + boost::any_cast<std::string>(m_replace))
+               + "\n\tString options: " + detail::to_string(m_string_opts) + "\n\tInteger options: "
+               + detail::to_string(m_integer_opts) + "\n\tNumeric options: " + detail::to_string(m_numeric_opts) + "\n";
     }
     template <typename Archive>
-    void load(Archive &)
+    void save(Archive &ar) const
     {
+        ar(cereal::base_class<base_local_solver>(this), m_string_opts, m_integer_opts, m_numeric_opts, m_last_opt_res);
     }
+    template <typename Archive>
+    void load(Archive &ar)
+    {
+        try {
+            ar(cereal::base_class<base_local_solver>(this), m_string_opts, m_integer_opts, m_numeric_opts,
+               m_last_opt_res);
+        } catch (...) {
+            *this = ipopt{};
+            throw;
+        }
+    }
+    void set_string_option(const std::string &name, const std::string &value)
+    {
+        m_string_opts[name] = value;
+    }
+    void set_integer_option(const std::string &name, Ipopt::Index value)
+    {
+        m_integer_opts[name] = value;
+    }
+    void set_numeric_option(const std::string &name, double value)
+    {
+        m_numeric_opts[name] = value;
+    }
+    void set_string_options(const std::map<std::string, std::string> &m)
+    {
+        m_string_opts = m;
+    }
+    void set_integer_options(const std::map<std::string, Ipopt::Index> &m)
+    {
+        m_integer_opts = m;
+    }
+    void set_numeric_options(const std::map<std::string, double> &m)
+    {
+        m_numeric_opts = m;
+    }
+    std::map<std::string, std::string> get_string_options() const
+    {
+        return m_string_opts;
+    }
+    std::map<std::string, Ipopt::Index> get_integer_options() const
+    {
+        return m_integer_opts;
+    }
+    std::map<std::string, double> get_numeric_options() const
+    {
+        return m_numeric_opts;
+    }
+
+private:
+    // Options maps.
+    std::map<std::string, std::string> m_string_opts = {{"hessian_approximation", "limited-memory"}};
+    std::map<std::string, Ipopt::Index> m_integer_opts = {{"print_level", Ipopt::Index(0)}};
+    std::map<std::string, double> m_numeric_opts = {{"tol", 1e-8}};
+    // Solver return status.
+    mutable Ipopt::ApplicationReturnStatus m_last_opt_res = Ipopt::Solve_Succeeded;
+    // Verbosity/log.
+    unsigned m_verbosity = 0;
+    mutable log_type m_log;
 };
 }
 
