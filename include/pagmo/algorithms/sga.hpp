@@ -267,6 +267,11 @@ public:
                             + std::to_string(m_param_s) + " was detected in a population of size: "
                             + std::to_string(pop.size()));
         }
+        if (m_crossover == crossover::SBX && (pop.size() % 2 != 0u)) {
+            pagmo_throw(std::invalid_argument,
+                        "Population size must be even if sbx crossover is selected. Detected pop size is: "
+                            + std::to_string(pop.size()));
+        }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
             return pop;
@@ -293,7 +298,7 @@ public:
                 XNEW[i] = pop.get_x()[selected_idx[i]];
             }
             // 2 - Crossover
-            perform_crossover(XNEW);
+            perform_crossover(XNEW, prob.get_bounds());
             // 3 - Mutation
             perform_mutation(XNEW);
             // 4 - Evaluate the new population
@@ -486,7 +491,7 @@ public:
         }
         return retval;
     }
-    void perform_crossover(std::vector<vector_double> &X) const
+    void perform_crossover(std::vector<vector_double> &X, const std::pair<vector_double, vector_double> &bounds) const
     {
         auto dim = X[0].size();
         assert(X.size() > 1u);
@@ -494,52 +499,159 @@ public:
         std::vector<vector_double::size_type> all_idx(X.size()); // stores indexes to then select one at random
         std::iota(all_idx.begin(), all_idx.end(), vector_double::size_type(0u));
         std::uniform_real_distribution<> drng(0., 1.);
-        auto XCOPY = X;
-        // Start of main loop through the X
-        for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
-            // 1 - we select a mating partner
-            std::swap(all_idx[0], all_idx[i]);
-            auto partner_idx = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
-                1, all_idx.size() - 1)(m_e);
-            // 2 - We rename these chromosomes for code clarity
-            auto &child = X[i];
-            const auto &parent2 = XCOPY[all_idx[partner_idx]];
-            // 3 - We perform crossover according to the selected method
-            switch (m_crossover) {
-                case (crossover::EXPONENTIAL): {
-                    auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
-                        0, dim - 1u)(m_e);
-                    decltype(dim) L = 0u;
-                    do {
-                        child[n] = parent2[n];
-                        n = (n + 1u) % dim;
-                        L++;
-                    } while ((drng(m_e) < m_cr) && (L < dim));
-                    break;
-                }
-                case (crossover::BINOMIAL): {
-                    auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
-                        0, dim - 1u)(m_e);
-                    for (decltype(dim) L = 0u; L < dim; ++L) {    /* performs D binomial trials */
-                        if ((drng(m_e) < m_cr) || L + 1 == dim) { /* changes at least one parameter */
+        // We need different loops if the crossover type is "sbx"" as this method creates two offsprings per
+        // selected couple.
+        if (m_crossover == crossover::SBX) {
+            assert(X.size() % 2u == 0u);
+            std::shuffle(X.begin(), X.end(), m_e);
+            for (decltype(X.size()) i = 0u; i < X.size(); i += 2) {
+                auto children = sbx_crossover_impl(X[i], X[i + 1], bounds);
+                X[i] = children.first;
+                X[i + 1] = children.second;
+            }
+        } else {
+            auto XCOPY = X;
+            // Start of main loop through the X
+            for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
+                // 1 - we select a mating partner
+                std::swap(all_idx[0], all_idx[i]);
+                auto partner_idx = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
+                    1, all_idx.size() - 1)(m_e);
+                // 2 - We rename these chromosomes for code clarity
+                auto &child = X[i];
+                const auto &parent2 = XCOPY[all_idx[partner_idx]];
+                // 3 - We perform crossover according to the selected method
+                switch (m_crossover) {
+                    case (crossover::EXPONENTIAL): {
+                        auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
+                            0, dim - 1u)(m_e);
+                        decltype(dim) L = 0u;
+                        do {
                             child[n] = parent2[n];
-                        }
-                        n = (n + 1) % dim;
+                            n = (n + 1u) % dim;
+                            L++;
+                        } while ((drng(m_e) < m_cr) && (L < dim));
+                        break;
                     }
-                    break;
-                }
-                case (crossover::SINGLE): {
-                    auto n
-                        = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(0, dim)(m_e);
-                    std::copy(parent2.data() + n, parent2.data() + dim, child.data() + n);
-                    break;
+                    case (crossover::BINOMIAL): {
+                        auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
+                            0, dim - 1u)(m_e);
+                        for (decltype(dim) L = 0u; L < dim; ++L) {    /* performs D binomial trials */
+                            if ((drng(m_e) < m_cr) || L + 1 == dim) { /* changes at least one parameter */
+                                child[n] = parent2[n];
+                            }
+                            n = (n + 1) % dim;
+                        }
+                        break;
+                    }
+                    case (crossover::SINGLE): {
+                        auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
+                            0, dim)(m_e);
+                        std::copy(parent2.data() + n, parent2.data() + dim, child.data() + n);
+                        break;
+                    }
                 }
             }
         }
-        // For sbx crossover we need a different loop as it creates two offsprings at a time
     }
     void perform_mutation(const std::vector<vector_double> &X) const
     {
+    }
+    std::pair<vector_double, vector_double>
+    sbx_crossover_impl(const vector_double &parent1, const vector_double &parent2,
+                       const std::pair<vector_double, vector_double> &bounds) const
+    {
+        // Decision vector dimensions
+        auto D = parent1.size();
+        auto Di = m_int_dim;
+        auto Dc = D - Di;
+        // Problem bounds
+        const auto &lb = bounds.first;
+        const auto &ub = bounds.second;
+        // declarations
+        double y1, y2, yl, yu, rand01, beta, alpha, betaq, c1, c2;
+        vector_double::size_type site1, site2;
+        // Initialize the child decision vectors
+        auto child1 = parent1;
+        auto child2 = parent2;
+        // Random distributions
+        std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
+
+        // This implements a Simulated Binary Crossover SBX and applies it to the non integer part of the decision
+        // vector
+        if (drng(m_e) <= m_cr) {
+            for (decltype(Dc) i = 0u; i < Dc; i++) {
+                if ((drng(m_e) <= 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
+                    if (parent1[i] < parent2[i]) {
+                        y1 = parent1[i];
+                        y2 = parent2[i];
+                    } else {
+                        y1 = parent2[i];
+                        y2 = parent1[i];
+                    }
+                    yl = lb[i];
+                    yu = ub[i];
+                    rand01 = drng(m_e);
+                    beta = 1. + (2. * (y1 - yl) / (y2 - y1));
+                    alpha = 2. - std::pow(beta, -(m_eta_c + 1.));
+                    if (rand01 <= (1. / alpha)) {
+                        betaq = std::pow((rand01 * alpha), (1. / (m_eta_c + 1.)));
+                    } else {
+                        betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
+                    }
+                    c1 = 0.5 * ((y1 + y2) - betaq * (y2 - y1));
+
+                    beta = 1. + (2. * (yu - y2) / (y2 - y1));
+                    alpha = 2. - std::pow(beta, -(m_eta_c + 1.));
+                    if (rand01 <= (1. / alpha)) {
+                        betaq = std::pow((rand01 * alpha), (1. / (m_eta_c + 1.)));
+                    } else {
+                        betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
+                    }
+                    c2 = 0.5 * ((y1 + y2) + betaq * (y2 - y1));
+
+                    if (c1 < lb[i]) c1 = lb[i];
+                    if (c2 < lb[i]) c2 = lb[i];
+                    if (c1 > ub[i]) c1 = ub[i];
+                    if (c2 > ub[i]) c2 = ub[i];
+                    if (drng(m_e) <= .5) {
+                        child1[i] = c1;
+                        child2[i] = c2;
+                    } else {
+                        child1[i] = c2;
+                        child2[i] = c1;
+                    }
+                }
+            }
+        }
+        // This implements two-point binary crossover and applies it to the integer part of the chromosome
+        for (decltype(Dc) i = Dc; i < D; ++i) {
+            // in this loop we are sure Di is at least 1
+            std::uniform_int_distribution<vector_double::size_type> ra_num(0, Di - 1u);
+            if (drng(m_e) <= m_cr) {
+                site1 = ra_num(m_e);
+                site2 = ra_num(m_e);
+                if (site1 > site2) {
+                    std::swap(site1, site2);
+                }
+                for (decltype(site1) j = 0u; j < site1; ++j) {
+                    child1[j] = parent1[j];
+                    child2[j] = parent2[j];
+                }
+                for (decltype(site2) j = site1; j < site2; ++j) {
+                    child1[j] = parent2[j];
+                    child2[j] = parent1[j];
+                }
+                for (decltype(Di) j = site2; j < Di; ++j) {
+                    child1[j] = parent1[j];
+                    child2[j] = parent2[j];
+                }
+            } else {
+                child1[i] = parent1[i];
+                child2[i] = parent2[i];
+            }
+        }
+        return std::pair<vector_double, vector_double>(std::move(child1), std::move(child2));
     }
     unsigned m_gen;
     double m_cr;
