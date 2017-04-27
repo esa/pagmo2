@@ -1129,6 +1129,22 @@ public:
     {
         m_numeric_opts.clear();
     }
+    /// Thread safety level.
+    /**
+     * According to the documentation, it is not safe to use Ipopt in a multithreaded environment.
+     *
+     * @return thread_safety::none.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. seealso::
+     *    https://projects.coin-or.org/Ipopt/wiki/FAQ
+     *
+     * \endverbatim
+     */
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
 
 private:
     // Options maps.
