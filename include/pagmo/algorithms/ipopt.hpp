@@ -46,8 +46,10 @@ see https://www.gnu.org/licenses/. */
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <exception>
 #include <functional>
 #include <initializer_list>
+#include <iomanip>
 #include <iterator>
 #include <limits>
 #include <map>
@@ -67,6 +69,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/types.hpp>
+#include <pagmo/utils/constrained.hpp>
 
 namespace pagmo
 {
@@ -231,141 +234,204 @@ struct ipopt_nlp final : Ipopt::TNLP {
     virtual bool get_nlp_info(Index &n, Index &m, Index &nnz_jac_g, Index &nnz_h_lag,
                               IndexStyleEnum &index_style) override final
     {
-        // Number of dimensions of the problem.
-        n = boost::numeric_cast<Index>(m_prob.get_nx());
+        try {
+            // Number of dimensions of the problem.
+            n = boost::numeric_cast<Index>(m_prob.get_nx());
 
-        // Total number of constraints.
-        m = boost::numeric_cast<Index>(m_prob.get_nc());
+            // Total number of constraints.
+            m = boost::numeric_cast<Index>(m_prob.get_nc());
 
-        // Number of nonzero entries in the jacobian.
-        nnz_jac_g = boost::numeric_cast<Index>(m_jac_sp.size());
+            // Number of nonzero entries in the jacobian.
+            nnz_jac_g = boost::numeric_cast<Index>(m_jac_sp.size());
 
-        // Number of nonzero entries in the hessian of the lagrangian.
-        nnz_h_lag = boost::numeric_cast<Index>(m_lag_sp.size());
+            // Number of nonzero entries in the hessian of the lagrangian.
+            nnz_h_lag = boost::numeric_cast<Index>(m_lag_sp.size());
 
-        // We use C style indexing (0-based).
-        index_style = TNLP::C_STYLE;
+            // We use C style indexing (0-based).
+            index_style = TNLP::C_STYLE;
 
-        return true;
+            return true;
+        } catch (...) {
+            m_eptr = std::current_exception();
+            return false;
+        }
     }
 
     // Method to return the bounds of the problem.
     virtual bool get_bounds_info(Index n, Number *x_l, Number *x_u, Index m, Number *g_l, Number *g_u) override final
     {
-        assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
-        assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
-        (void)n;
+        try {
+            assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
+            assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
+            (void)n;
 
-        // Box bounds.
-        const auto bounds = m_prob.get_bounds();
-        // Lower bounds.
-        std::copy(bounds.first.begin(), bounds.first.end(), x_l);
-        // Upper bounds.
-        std::copy(bounds.second.begin(), bounds.second.end(), x_u);
+            // Box bounds.
+            const auto bounds = m_prob.get_bounds();
+            // Lower bounds.
+            std::copy(bounds.first.begin(), bounds.first.end(), x_l);
+            // Upper bounds.
+            std::copy(bounds.second.begin(), bounds.second.end(), x_u);
 
-        // Equality constraints: lb == ub == 0.
-        std::fill(g_l, g_l + m_prob.get_nec(), 0.);
-        std::fill(g_u, g_u + m_prob.get_nec(), 0.);
+            // Equality constraints: lb == ub == 0.
+            std::fill(g_l, g_l + m_prob.get_nec(), 0.);
+            std::fill(g_u, g_u + m_prob.get_nec(), 0.);
 
-        // Inequality constraints: lb == -inf, ub == 0.
-        std::fill(g_l + m_prob.get_nec(), g_l + m, std::numeric_limits<double>::has_infinity
-                                                       ? -std::numeric_limits<double>::infinity()
-                                                       : std::numeric_limits<double>::lowest());
-        std::fill(g_u + m_prob.get_nec(), g_u + m, 0.);
+            // Inequality constraints: lb == -inf, ub == 0.
+            std::fill(g_l + m_prob.get_nec(), g_l + m, std::numeric_limits<double>::has_infinity
+                                                           ? -std::numeric_limits<double>::infinity()
+                                                           : std::numeric_limits<double>::lowest());
+            std::fill(g_u + m_prob.get_nec(), g_u + m, 0.);
 
-        return true;
+            return true;
+        } catch (...) {
+            m_eptr = std::current_exception();
+            return false;
+        }
     }
 
     // Method to return the starting point for the algorithm.
     virtual bool get_starting_point(Index n, bool init_x, Number *x, bool init_z, Number *, Number *, Index m,
                                     bool init_lambda, Number *) override final
     {
-        assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
-        assert(n == boost::numeric_cast<Index>(m_start.size()));
-        assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
-        (void)n;
-        (void)m;
+        try {
+            assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
+            assert(n == boost::numeric_cast<Index>(m_start.size()));
+            assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
+            (void)n;
+            (void)m;
 
-        if (init_x) {
-            std::copy(m_start.begin(), m_start.end(), x);
+            if (init_x) {
+                std::copy(m_start.begin(), m_start.end(), x);
+            }
+
+            if (init_z) {
+                pagmo_throw(std::runtime_error,
+                            "we are being asked to provide initial values for the bounds multiplier by "
+                            "the Ipopt API, but in pagmo we do not support them");
+            }
+
+            if (init_lambda) {
+                pagmo_throw(std::runtime_error,
+                            "we are being asked to provide initial values for the constraints multiplier by "
+                            "the Ipopt API, but in pagmo we do not support them");
+            }
+
+            return true;
+        } catch (...) {
+            m_eptr = std::current_exception();
+            return false;
         }
-
-        if (init_z) {
-            pagmo_throw(std::runtime_error, "we are being asked to provide initial values for the bounds multiplier by "
-                                            "the Ipopt API, but in pagmo we do not support them");
-        }
-
-        if (init_lambda) {
-            pagmo_throw(std::runtime_error,
-                        "we are being asked to provide initial values for the constraints multiplier by "
-                        "the Ipopt API, but in pagmo we do not support them");
-        }
-
-        return true;
     }
 
     // Method to return the objective value.
     virtual bool eval_f(Index n, const Number *x, bool new_x, Number &obj_value) override final
     {
-        assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
-        // NOTE: the new_x boolean flag will be false if the last call to any of the eval_* function
-        // used the same x value. Probably we can ignore this in favour of the upcoming caches work.
-        (void)new_x;
+        try {
+            assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
+            // NOTE: the new_x boolean flag will be false if the last call to any of the eval_* function
+            // used the same x value. Probably we can ignore this in favour of the upcoming caches work.
+            (void)new_x;
 
-        std::copy(x, x + n, m_dv.begin());
-        obj_value = m_prob.fitness(m_dv)[0];
+            std::copy(x, x + n, m_dv.begin());
+            const auto fitness = m_prob.fitness(m_dv);
+            obj_value = fitness[0];
 
-        return true;
+            // Update the log if requested.
+            if (m_verbosity && !(m_objfun_counter % m_verbosity)) {
+                // Constraints bits.
+                const auto ctol = m_prob.get_c_tol();
+                const auto c1eq = detail::test_eq_constraints(fitness.data() + 1, fitness.data() + 1 + m_prob.get_nec(),
+                                                              ctol.data());
+                const auto c1ineq
+                    = detail::test_ineq_constraints(fitness.data() + 1 + m_prob.get_nec(),
+                                                    fitness.data() + fitness.size(), ctol.data() + m_prob.get_nec());
+                // This will be the total number of violated constraints.
+                const auto nv = m_prob.get_nc() - c1eq.first - c1ineq.first;
+                // This will be the norm of the violation.
+                const auto l = c1eq.second + c1ineq.second;
+                // Test feasibility.
+                const auto feas = m_prob.feasibility_f(fitness);
+
+                if (!(m_objfun_counter / m_verbosity % 50u)) {
+                    // Every 50 lines print the column names.
+                    print("\n", std::setw(10), "objevals:", std::setw(15), "objval:", std::setw(15), "violated:",
+                          std::setw(15), "viol. norm:", '\n');
+                }
+                // Print to screen the log line.
+                print(std::setw(10), m_objfun_counter + 1u, std::setw(15), obj_value, std::setw(15), nv, std::setw(15),
+                      l, feas ? "" : " i", '\n');
+                // Record the log.
+                m_log.emplace_back(m_objfun_counter + 1u, obj_value, nv, l, feas);
+            }
+
+            // Update the counter.
+            ++m_objfun_counter;
+
+            return true;
+        } catch (...) {
+            m_eptr = std::current_exception();
+            return false;
+        }
     }
 
     // Method to return the gradient of the objective.
     virtual bool eval_grad_f(Index n, const Number *x, bool new_x, Number *grad_f) override final
     {
-        assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
-        (void)new_x;
+        try {
+            assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
+            (void)new_x;
 
-        std::copy(x, x + n, m_dv.begin());
-        // Compute the full gradient (this includes the cosntraints as well).
-        const auto gradient = m_prob.gradient(m_dv);
+            std::copy(x, x + n, m_dv.begin());
+            // Compute the full gradient (this includes the cosntraints as well).
+            const auto gradient = m_prob.gradient(m_dv);
 
-        if (m_prob.has_gradient_sparsity()) {
-            // Sparse gradient case.
-            auto g_it = gradient.begin();
+            if (m_prob.has_gradient_sparsity()) {
+                // Sparse gradient case.
+                auto g_it = gradient.begin();
 
-            // First we fill the dense output gradient with zeroes.
-            std::fill(grad_f, grad_f + n, 0.);
-            // Then we iterate over the sparsity pattern of the objfun, and fill in the
-            // nonzero bits in grad_f.
-            for (auto it = m_obj_g_sp.begin(); it != m_obj_g_sp.end(); ++it, ++g_it) {
-                assert(it->first == 0u);
-                assert(g_it != gradient.end());
-                grad_f[it->second] = *g_it;
+                // First we fill the dense output gradient with zeroes.
+                std::fill(grad_f, grad_f + n, 0.);
+                // Then we iterate over the sparsity pattern of the objfun, and fill in the
+                // nonzero bits in grad_f.
+                for (auto it = m_obj_g_sp.begin(); it != m_obj_g_sp.end(); ++it, ++g_it) {
+                    assert(it->first == 0u);
+                    assert(g_it != gradient.end());
+                    grad_f[it->second] = *g_it;
+                }
+            } else {
+                // Dense gradient.
+                std::copy(gradient.data(), gradient.data() + n, grad_f);
             }
-        } else {
-            // Dense gradient.
-            std::copy(gradient.data(), gradient.data() + n, grad_f);
-        }
 
-        return true;
+            return true;
+        } catch (...) {
+            m_eptr = std::current_exception();
+            return false;
+        }
     }
 
     // Value of the constraints.
     virtual bool eval_g(Index n, const Number *x, bool new_x, Index m, Number *g) override final
     {
-        assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
-        assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
-        (void)new_x;
+        try {
+            assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
+            assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
+            (void)new_x;
 
-        std::copy(x, x + n, m_dv.begin());
-        const auto fitness = m_prob.fitness(m_dv);
+            std::copy(x, x + n, m_dv.begin());
+            const auto fitness = m_prob.fitness(m_dv);
 
-        // Eq. constraints.
-        std::copy(fitness.data() + 1, fitness.data() + 1 + m_prob.get_nec(), g);
+            // Eq. constraints.
+            std::copy(fitness.data() + 1, fitness.data() + 1 + m_prob.get_nec(), g);
 
-        // Ineq. constraints.
-        std::copy(fitness.data() + 1 + m_prob.get_nec(), fitness.data() + 1 + m, g + m_prob.get_nec());
+            // Ineq. constraints.
+            std::copy(fitness.data() + 1 + m_prob.get_nec(), fitness.data() + 1 + m, g + m_prob.get_nec());
 
-        return true;
+            return true;
+        } catch (...) {
+            m_eptr = std::current_exception();
+            return false;
+        }
     }
 
     // Method to return:
@@ -374,27 +440,32 @@ struct ipopt_nlp final : Ipopt::TNLP {
     virtual bool eval_jac_g(Index n, const Number *x, bool new_x, Index m, Index nele_jac, Index *iRow, Index *jCol,
                             Number *values) override final
     {
-        assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
-        assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
-        assert(nele_jac == boost::numeric_cast<Index>(m_jac_sp.size()));
-        (void)new_x;
+        try {
+            assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
+            assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
+            assert(nele_jac == boost::numeric_cast<Index>(m_jac_sp.size()));
+            (void)new_x;
 
-        if (values) {
-            std::copy(x, x + n, m_dv.begin());
-            const auto gradient = m_prob.gradient(m_dv);
-            // NOTE: here we need the gradients of the constraints only, so we need to discard the gradient of the
-            // objfun. If the gradient sparsity is user-provided, then the size of the objfun sparse gradient is
-            // m_obj_g_sp.size(), otherwise the gradient is dense and its size is nx.
-            std::copy(gradient.data() + (m_prob.has_gradient_sparsity() ? m_obj_g_sp.size() : m_prob.get_nx()),
-                      gradient.data() + gradient.size(), values);
-        } else {
-            for (decltype(m_jac_sp.size()) k = 0; k < m_jac_sp.size(); ++k) {
-                iRow[k] = m_jac_sp[k].first;
-                jCol[k] = m_jac_sp[k].second;
+            if (values) {
+                std::copy(x, x + n, m_dv.begin());
+                const auto gradient = m_prob.gradient(m_dv);
+                // NOTE: here we need the gradients of the constraints only, so we need to discard the gradient of the
+                // objfun. If the gradient sparsity is user-provided, then the size of the objfun sparse gradient is
+                // m_obj_g_sp.size(), otherwise the gradient is dense and its size is nx.
+                std::copy(gradient.data() + (m_prob.has_gradient_sparsity() ? m_obj_g_sp.size() : m_prob.get_nx()),
+                          gradient.data() + gradient.size(), values);
+            } else {
+                for (decltype(m_jac_sp.size()) k = 0; k < m_jac_sp.size(); ++k) {
+                    iRow[k] = m_jac_sp[k].first;
+                    jCol[k] = m_jac_sp[k].second;
+                }
             }
-        }
 
-        return true;
+            return true;
+        } catch (...) {
+            m_eptr = std::current_exception();
+            return false;
+        }
     }
 
     // Method to return:
@@ -403,88 +474,96 @@ struct ipopt_nlp final : Ipopt::TNLP {
     virtual bool eval_h(Index n, const Number *x, bool new_x, Number obj_factor, Index m, const Number *lambda,
                         bool new_lambda, Index nele_hess, Index *iRow, Index *jCol, Number *values) override final
     {
-        assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
-        assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
-        assert(nele_hess == boost::numeric_cast<Index>(m_lag_sp.size()));
-        (void)new_x;
-        (void)new_lambda;
+        try {
+            assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
+            assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
+            assert(nele_hess == boost::numeric_cast<Index>(m_lag_sp.size()));
+            (void)new_x;
+            (void)new_lambda;
 
-        if (!m_prob.has_hessians()) {
-            // If the problem does not provide hessians, return false. Ipopt will
-            // do a numerical estimation.
-            return false;
-        }
+            if (!m_prob.has_hessians()) {
+                pagmo_throw(
+                    std::invalid_argument,
+                    "the exact evaluation of the Hessian of the Lagrangian was requested, but the problem named '"
+                        + m_prob.get_name()
+                        + "' does not provide it. Please consider providing the Hessian or, alternatively, "
+                          "set the option 'hessian_approximation' to 'limited-memory' in the ipopt algorithm options");
+            }
 
-        if (values) {
-            std::copy(x, x + n, m_dv.begin());
-            const auto hessians = m_prob.hessians(m_dv);
-            if (m_prob.has_hessians_sparsity()) {
-                // Sparse case.
-                // Objfun first.
-                assert(hessians[0].size() <= m_lag_sp.size());
-                auto it_h_sp = m_h_sp[0].begin();
-                auto it = hessians[0].begin();
-                assert(hessians[0].size() == m_h_sp[0].size());
-                // NOTE: the idea here is that we need to fill up values with m_lag_sp.size()
-                // numbers. Some of these numbers will be zero because, in general, our hessians
-                // may contain fewer elements. In order to establish which elements to take
-                // from our hessians and which elements to set to zero, we need to iterate at the
-                // same time on the original sparsity pattern and compare the indices pairs.
-                for (decltype(m_lag_sp.size()) i = 0; i < m_lag_sp.size(); ++i) {
-                    // NOTE: static_cast is ok as we already converted via numeric_cast
-                    // earlier.
-                    if (it_h_sp != m_h_sp[0].end() && static_cast<Index>(it_h_sp->first) == m_lag_sp[i].first
-                        && static_cast<Index>(it_h_sp->second) == m_lag_sp[i].second) {
-                        assert(it != hessians[0].end());
-                        values[i] = (*it) * obj_factor;
-                        ++it;
-                        ++it_h_sp;
-                    } else {
-                        values[i] = 0.;
-                    }
-                }
-                // Constraints.
-                for (decltype(hessians.size()) j = 1; j < hessians.size(); ++j) {
-                    assert(hessians[j].size() <= m_lag_sp.size());
-                    it_h_sp = m_h_sp[j].begin();
-                    it = hessians[j].begin();
-                    assert(hessians[j].size() == m_h_sp[j].size());
-                    const auto lam = lambda[j - 1u];
+            if (values) {
+                std::copy(x, x + n, m_dv.begin());
+                const auto hessians = m_prob.hessians(m_dv);
+                if (m_prob.has_hessians_sparsity()) {
+                    // Sparse case.
+                    // Objfun first.
+                    assert(hessians[0].size() <= m_lag_sp.size());
+                    auto it_h_sp = m_h_sp[0].begin();
+                    auto it = hessians[0].begin();
+                    assert(hessians[0].size() == m_h_sp[0].size());
+                    // NOTE: the idea here is that we need to fill up values with m_lag_sp.size()
+                    // numbers. Some of these numbers will be zero because, in general, our hessians
+                    // may contain fewer elements. In order to establish which elements to take
+                    // from our hessians and which elements to set to zero, we need to iterate at the
+                    // same time on the original sparsity pattern and compare the indices pairs.
                     for (decltype(m_lag_sp.size()) i = 0; i < m_lag_sp.size(); ++i) {
-                        if (it_h_sp != m_h_sp[j].end() && static_cast<Index>(it_h_sp->first) == m_lag_sp[i].first
+                        // NOTE: static_cast is ok as we already converted via numeric_cast
+                        // earlier.
+                        if (it_h_sp != m_h_sp[0].end() && static_cast<Index>(it_h_sp->first) == m_lag_sp[i].first
                             && static_cast<Index>(it_h_sp->second) == m_lag_sp[i].second) {
-                            assert(it != hessians[j].end());
-                            values[i] += (*it) * lam;
+                            assert(it != hessians[0].end());
+                            values[i] = (*it) * obj_factor;
                             ++it;
                             ++it_h_sp;
+                        } else {
+                            values[i] = 0.;
                         }
+                    }
+                    // Constraints.
+                    for (decltype(hessians.size()) j = 1; j < hessians.size(); ++j) {
+                        assert(hessians[j].size() <= m_lag_sp.size());
+                        it_h_sp = m_h_sp[j].begin();
+                        it = hessians[j].begin();
+                        assert(hessians[j].size() == m_h_sp[j].size());
+                        const auto lam = lambda[j - 1u];
+                        for (decltype(m_lag_sp.size()) i = 0; i < m_lag_sp.size(); ++i) {
+                            if (it_h_sp != m_h_sp[j].end() && static_cast<Index>(it_h_sp->first) == m_lag_sp[i].first
+                                && static_cast<Index>(it_h_sp->second) == m_lag_sp[i].second) {
+                                assert(it != hessians[j].end());
+                                values[i] += (*it) * lam;
+                                ++it;
+                                ++it_h_sp;
+                            }
+                        }
+                    }
+                } else {
+                    // Dense case.
+                    // First the objfun.
+                    assert(hessians[0].size() == m_lag_sp.size());
+                    std::transform(hessians[0].begin(), hessians[0].end(), values,
+                                   [obj_factor](double a) { return obj_factor * a; });
+                    // The constraints (to be added iteratively to the existing values).
+                    for (decltype(hessians.size()) i = 1; i < hessians.size(); ++i) {
+                        assert(hessians[i].size() == m_lag_sp.size());
+                        // NOTE: the lambda factors refer to the constraints only, hence we need
+                        // to decrease i by 1.
+                        const auto lam = lambda[i - 1u];
+                        std::transform(hessians[i].begin(), hessians[i].end(), values, values,
+                                       [lam](double a, double b) { return b + lam * a; });
                     }
                 }
             } else {
-                // Dense case.
-                // First the objfun.
-                assert(hessians[0].size() == m_lag_sp.size());
-                std::transform(hessians[0].begin(), hessians[0].end(), values,
-                               [obj_factor](double a) { return obj_factor * a; });
-                // The constraints (to be added iteratively to the existing values).
-                for (decltype(hessians.size()) i = 1; i < hessians.size(); ++i) {
-                    assert(hessians[i].size() == m_lag_sp.size());
-                    // NOTE: the lambda factors refer to the constraints only, hence we need
-                    // to decrease i by 1.
-                    const auto lam = lambda[i - 1u];
-                    std::transform(hessians[i].begin(), hessians[i].end(), values, values,
-                                   [lam](double a, double b) { return b + lam * a; });
+                // Fill in the sp of the hessian of the lagrangian.
+                for (decltype(m_lag_sp.size()) k = 0; k < m_lag_sp.size(); ++k) {
+                    iRow[k] = m_lag_sp[k].first;
+                    jCol[k] = m_lag_sp[k].second;
                 }
             }
-        } else {
-            // Fill in the sp of the hessian of the lagrangian.
-            for (decltype(m_lag_sp.size()) k = 0; k < m_lag_sp.size(); ++k) {
-                iRow[k] = m_lag_sp[k].first;
-                jCol[k] = m_lag_sp[k].second;
-            }
-        }
 
-        return true;
+            return true;
+        } catch (...) {
+            m_eptr = std::current_exception();
+            return false;
+        }
     }
 
     // Solution Methods.
@@ -493,6 +572,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
                                    Index m, const Number *g, const Number *, Number obj_value, const IpoptData *,
                                    IpoptCalculatedQuantities *) override final
     {
+        // NOTE: no need for try/catch here, nothing can throw.
+
         assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
         assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
 
@@ -543,6 +624,14 @@ struct ipopt_nlp final : Ipopt::TNLP {
     std::vector<std::pair<Index, Index>> m_lag_sp;
     // Verbosity.
     const unsigned m_verbosity;
+    // Objfun counter.
+    unsigned long m_objfun_counter = 0;
+    // Log.
+    log_type m_log;
+    // This exception pointer will be null, unless
+    // an error is raised in one of the virtual methods. If not null, it will be re-thrown
+    // in the evolve() method.
+    std::exception_ptr m_eptr;
 };
 }
 
@@ -634,10 +723,42 @@ public:
 
         // Initialize the Ipopt machinery, following the tutorial.
         Ipopt::SmartPtr<Ipopt::TNLP> nlp = ::new detail::ipopt_nlp(pop.get_problem(), initial_guess, m_verbosity);
+        // Store a reference to the derived class for later use.
+        detail::ipopt_nlp &inlp = dynamic_cast<detail::ipopt_nlp &>(*nlp);
         Ipopt::SmartPtr<Ipopt::IpoptApplication> app = ::IpoptApplicationFactory();
         app->RethrowNonIpoptException(true);
 
-        // Set the options.
+        // Logic for the handling of constraints tolerances. The logic is as follows:
+        // - if the user provides the "constr_viol_tol" option, use that *unconditionally*. Otherwise,
+        // - compute the minimum tolerance min_tol among those provided by the problem. If zero, ignore
+        //   it and use the ipopt default value for "constr_viol_tol" (1e-4). Otherwise, use min_tol as the value for
+        //   "constr_viol_tol".
+        if (prob.get_nc() && !m_numeric_opts.count("constr_viol_tol")) {
+            const auto c_tol = prob.get_c_tol();
+            assert(!c_tol.empty());
+            const double min_tol = *std::min_element(c_tol.begin(), c_tol.end());
+            if (min_tol > 0.) {
+                const auto tmp_p = std::make_pair(std::string("constr_viol_tol"), min_tol);
+                opt_checker(app->Options()->SetNumericValue(tmp_p.first, tmp_p.second), tmp_p, "numeric");
+            }
+        }
+
+        // Logic for the hessians computation:
+        // - if the problem does *not* provide the hessians, and the "hessian_approximation" is *not*
+        //   set, then we set it to "limited-memory".
+        // This way, problems without hessians will work out of the box.
+        if (!prob.has_hessians() && !m_string_opts.count("hessian_approximation")) {
+            const auto tmp_p = std::make_pair(std::string("hessian_approximation"), std::string("limited-memory"));
+            opt_checker(app->Options()->SetStringValue(tmp_p.first, tmp_p.second), tmp_p, "string");
+        }
+
+        // Logic for print_level: change the default to zero.
+        if (!m_integer_opts.count("print_level")) {
+            const auto tmp_p = std::make_pair(std::string("print_level"), Ipopt::Index(0));
+            opt_checker(app->Options()->SetIntegerValue(tmp_p.first, tmp_p.second), tmp_p, "integer");
+        }
+
+        // Set the other options.
         for (const auto &p : m_string_opts) {
             opt_checker(app->Options()->SetStringValue(p.first, p.second), p, "string");
         }
@@ -659,15 +780,24 @@ public:
         }
         // Run the optimisation.
         m_last_opt_res = app->OptimizeTNLP(nlp);
+        if (m_verbosity) {
+            // Print to screen the result of the optimisation, if we are being verbose.
+            std::cout << "\nOptimisation return status: " << detail::ipopt_data<>::results.at(m_last_opt_res) << '\n';
+        }
+        // Replace the log.
+        m_log = std::move(inlp.m_log);
 
-        // TODO log, verbosity.
+        // Handle any exception that might've been thrown.
+        if (inlp.m_eptr) {
+            std::rethrow_exception(inlp.m_eptr);
+        }
 
         // Compute the new fitness vector.
-        const auto new_f = prob.fitness(dynamic_cast<detail::ipopt_nlp &>(*nlp).m_sol);
+        const auto new_f = prob.fitness(inlp.m_sol);
 
         // Store the new individual into the population, but only if better.
         if (compare_fc(new_f, old_f, prob.get_nec(), prob.get_c_tol())) {
-            replace_individual(pop, dynamic_cast<detail::ipopt_nlp &>(*nlp).m_sol, new_f);
+            replace_individual(pop, inlp.m_sol, new_f);
         }
 
         // Return the evolved pop.
@@ -692,8 +822,9 @@ public:
                + (boost::any_cast<population::size_type>(&m_replace)
                       ? "idx: " + std::to_string(boost::any_cast<population::size_type>(m_replace))
                       : "policy: " + boost::any_cast<std::string>(m_replace))
-               + "\n\tString options: " + detail::to_string(m_string_opts) + "\n\tInteger options: "
-               + detail::to_string(m_integer_opts) + "\n\tNumeric options: " + detail::to_string(m_numeric_opts) + "\n";
+               + (m_string_opts.size() ? "\n\tString options: " + detail::to_string(m_string_opts) : "")
+               + (m_integer_opts.size() ? "\n\tInteger options: " + detail::to_string(m_integer_opts) : "")
+               + (m_numeric_opts.size() ? "\n\tNumeric options: " + detail::to_string(m_numeric_opts) : "") + "\n";
     }
     void set_verbosity(unsigned n)
     {
@@ -759,9 +890,9 @@ public:
 
 private:
     // Options maps.
-    std::map<std::string, std::string> m_string_opts = {{"hessian_approximation", "limited-memory"}};
-    std::map<std::string, Ipopt::Index> m_integer_opts = {{"print_level", Ipopt::Index(0)}};
-    std::map<std::string, double> m_numeric_opts = {{"tol", 1e-8}};
+    std::map<std::string, std::string> m_string_opts;
+    std::map<std::string, Ipopt::Index> m_integer_opts;
+    std::map<std::string, double> m_numeric_opts;
     // Solver return status.
     mutable Ipopt::ApplicationReturnStatus m_last_opt_res = Ipopt::Solve_Succeeded;
     // Verbosity/log.

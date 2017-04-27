@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/ipopt.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/luksan_vlcek1.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/types.hpp>
 
@@ -158,7 +159,11 @@ BOOST_AUTO_TEST_CASE(ipopt_evolve_test)
     ipopt ip;
     print(ip.get_numeric_options(), "\n");
     algorithm algo(ip);
+    algo.set_verbosity(1);
     std::cout << algo << '\n';
-    population pop(hock_schittkowsky_71{}, 1);
+    problem prob(hock_schittkowsky_71{});
+    prob.set_c_tol({1E-8, 1E-8});
+    population pop(prob, 1);
     algo.evolve(pop);
+    std::cout << algo << '\n';
 }
