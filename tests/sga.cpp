@@ -85,4 +85,10 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 1.1, 1u, 5u, "uniform", "tournament", "exponential", 0u, 32u}),
                       std::invalid_argument);
+    sga uda{1000u, .95, 50., 0.2, 50., 1u, 5u, "polynomial", "tournament", "sbx", 0u, 32u};
+    rosenbrock udp{10u};
+    population pop{udp, 20u};
+    print(pop.champion_f(), "\n");
+    pop = uda.evolve(pop);
+    print(pop.champion_f(), "\n");
 }
