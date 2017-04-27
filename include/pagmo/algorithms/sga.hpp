@@ -45,7 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include "../io.hpp"
 #include "../population.hpp"
 #include "../rng.hpp"
-#include "../utils/generic.hpp"
+#include "../utils/generic.hpp" // detail::force_bounds_stick
 
 namespace pagmo
 {
@@ -285,6 +285,13 @@ public:
             pagmo_throw(std::invalid_argument,
                         "Population size must be even if sbx crossover is selected. Detected pop size is: "
                             + std::to_string(pop.size()));
+        }
+        if (m_int_dim > dim) {
+            pagmo_throw(
+                std::invalid_argument,
+                "Invalid int_dim selected: larger than the problem dimension. The integer dimension was set to: "
+                    + std::to_string(m_int_dim) + " but the problem dimension was detected to be: "
+                    + std::to_string(dim));
         }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
@@ -576,34 +583,40 @@ public:
     }
     void perform_mutation(std::vector<vector_double> &X, const std::pair<vector_double, vector_double> &bounds) const
     {
-        // Some dimensions
+        // Asserting the correct behaviour of input parameters
+        assert(X.size() > 1u);
+        assert(std::all_of(X.begin(), X.end(), [](const vector_double &item) { return item.size() == dim; }));
+        assert(bounds.first.size() == bounds.second.size());
+        assert(bounds.first.size() == X[0].size());
+        assert(m_int_dim <= X[0].size());
+        // Renaming some dimensions
         auto dim = X[0].size();
         auto dimi = m_int_dim;
         auto dimc = dim - dimi;
         // Problem bounds
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
-        assert(X.size() > 1u);
-        assert(std::all_of(X.begin(), X.end(), [](const vector_double &item) { return item.size() == dim; }));
-        assert(dimc >= 0u);
         // Random distributions
-        std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
+        std::uniform_real_distribution<> drng(0., 1.);  // to generate a number in [0, 1)
+        std::uniform_real_distribution<> drngs(-1, 1.); // to generate a number in [-1, 1)
         // Start of main loop through the population
         for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
             switch (m_mutation) {
                 case (mutation::UNIFORM): {
                     // Start of main loop through the chromosome (continuous part)
                     for (decltype(dimc) j = 0u; j < dimc; ++j) {
-                        X[i][j] = lb[j] + drng(m_e) * (ub[j] - lb[j]);
-                        break;
+                        X[i][j] += drngs(m_e) * (ub[j] - lb[j]) * m_param_m;
                     }
                     for (decltype(dim) j = dimc; j < dim; ++j) {
-                        X[i][j]
-                            = std::uniform_int_distribution<>(static_cast<int>(lb[j]), static_cast<int>(ub[j]))(m_e);
-                        break;
+                        auto lb_new = static_cast<int>(X[i][j] - (ub[j] - lb[j]) * m_param_m);
+                        auto ub_new = static_cast<int>(X[i][j] + (ub[j] - lb[j]) * m_param_m);
+                        X[i][j] = std::uniform_int_distribution<>(lb_new, ub_new)(m_e);
                     }
+                    break;
                 }
             }
+            // We fix chromosomes possibly created outside the bounds to stick to the bounds
+            detail::force_bounds_stick(X[i], lb, ub);
         }
     }
     std::pair<vector_double, vector_double>
