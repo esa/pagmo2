@@ -14,6 +14,15 @@
         "slist": "cpp",
         "array": "cpp",
         "hashtable": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "exception": "cpp",
+        "new": "cpp",
+        "cstdint": "cpp",
+        "random": "cpp",
+        "*.tcc": "cpp",
+        "tuple": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "typeinfo": "cpp"
     }
 }

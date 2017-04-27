@@ -85,8 +85,4 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 1.1, 1u, 5u, "uniform", "tournament", "exponential", 0u, 32u}),
                       std::invalid_argument);
-    sga uda{1u, .5, 10., .02, 1., 1u, 2u, "uniform", "truncated", "sbx", 5u};
-    std::vector<vector_double> X({{0, 0, 0, 0, 0}, {1, 1, 1, 1, 1}});
-    uda.perform_mutation(X, std::pair<vector_double, vector_double>({{0, 0, 0, 0, 0}, {1, 1, 1, 1, 1}}));
-    print(X, "\n");
 }
