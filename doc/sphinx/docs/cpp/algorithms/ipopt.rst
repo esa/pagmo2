@@ -1,5 +1,5 @@
-Ipopt wrapper
-=============
+Ipopt
+=====
 
 .. doxygenclass:: pagmo::ipopt
    :members:

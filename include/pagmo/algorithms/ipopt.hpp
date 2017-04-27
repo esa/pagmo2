@@ -68,6 +68,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
 
@@ -136,7 +137,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
     using IpoptData = Ipopt::IpoptData;
     using IpoptCalculatedQuantities = Ipopt::IpoptCalculatedQuantities;
 
-    // Ctor from problem.
+    // Ctor from problem, initial guess, verbosity.
     ipopt_nlp(const problem &prob, vector_double start, unsigned verbosity)
         : m_prob(prob), m_start(std::move(start)), m_verbosity(verbosity)
     {
@@ -234,6 +235,13 @@ struct ipopt_nlp final : Ipopt::TNLP {
     virtual bool get_nlp_info(Index &n, Index &m, Index &nnz_jac_g, Index &nnz_h_lag,
                               IndexStyleEnum &index_style) override final
     {
+        // NOTE: these try catches and the mechanism to handle exceptions outside the Ipopt
+        // callbacks are needed because, apparently, Ipopt does not handle gracefully exceptions
+        // thrown from the callbacks (I suspect this has something to do with the support of
+        // interfaces for languages other than C++?). This is the same approach we adopt in the
+        // NLopt wrapper: trap everything in a try/catch block, and store the exception for re-throw
+        // in ipopt::evolve(). In case of errors we return "false" from the callback, as this
+        // signals to the the Ipopt API that something went wrong.
         try {
             // Number of dimensions of the problem.
             n = boost::numeric_cast<Index>(m_prob.get_nx());
@@ -510,11 +518,15 @@ struct ipopt_nlp final : Ipopt::TNLP {
                         // earlier.
                         if (it_h_sp != m_h_sp[0].end() && static_cast<Index>(it_h_sp->first) == m_lag_sp[i].first
                             && static_cast<Index>(it_h_sp->second) == m_lag_sp[i].second) {
+                            // This means that we are at a sparsity entry which is both in our original sparsity
+                            // pattern and in the merged one.
                             assert(it != hessians[0].end());
                             values[i] = (*it) * obj_factor;
                             ++it;
                             ++it_h_sp;
                         } else {
+                            // This means we are at a sparsity entry which is in the merged patterns but not in our
+                            // original sparsity pattern. Thus, set the value to zero.
                             values[i] = 0.;
                         }
                     }
@@ -524,6 +536,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
                         it_h_sp = m_h_sp[j].begin();
                         it = hessians[j].begin();
                         assert(hessians[j].size() == m_h_sp[j].size());
+                        // NOTE: the lambda factors refer to the constraints only, hence we need
+                        // to decrease i by 1.
                         const auto lam = lambda[j - 1u];
                         for (decltype(m_lag_sp.size()) i = 0; i < m_lag_sp.size(); ++i) {
                             if (it_h_sp != m_h_sp[j].end() && static_cast<Index>(it_h_sp->first) == m_lag_sp[i].first
@@ -568,12 +582,11 @@ struct ipopt_nlp final : Ipopt::TNLP {
 
     // Solution Methods.
     // This method is called when the algorithm is complete so the TNLP can store/write the solution.
+    // NOTE: no need for try/catch here, nothing can throw.
     virtual void finalize_solution(SolverReturn status, Index n, const Number *x, const Number *, const Number *,
                                    Index m, const Number *g, const Number *, Number obj_value, const IpoptData *,
                                    IpoptCalculatedQuantities *) override final
     {
-        // NOTE: no need for try/catch here, nothing can throw.
-
         assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
         assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));
 
@@ -628,19 +641,64 @@ struct ipopt_nlp final : Ipopt::TNLP {
     unsigned long m_objfun_counter = 0;
     // Log.
     log_type m_log;
-    // This exception pointer will be null, unless
-    // an error is raised in one of the virtual methods. If not null, it will be re-thrown
-    // in the evolve() method.
+    // This exception pointer will be null, unless an error is raised in one of the virtual methods. If not null, it
+    // will be re-thrown in the ipopt::evolve() method.
     std::exception_ptr m_eptr;
 };
 }
 
-/// Ipopt wrapper.
+/// Ipopt.
 /**
  * \image html ipopt.png "COIN_OR logo." width=3cm
  *
  * This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
- * a software package for large-scale nonlinear optimization.
+ * a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that
+ * is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.
+ *
+ * Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the
+ * optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt
+ * can estimate numerically the Hessians if needed).
+ *
+ * In order to support pagmo's population-based optimisation model, ipopt::evolve() will select
+ * a single individual from the input pagmo::population to be optimised.
+ * If the optimisation produces a better individual (as established by pagmo::compare_fc()),
+ * the optimised individual will be inserted back into the population.
+ * The selection and replacement strategies can be configured via set_selection(const std::string &),
+ * set_selection(population::size_type), set_replacement(const std::string &) and
+ * set_replacement(population::size_type).
+ *
+ * Configuring the optimsation run
+ * -------------------------------
+ *
+ * Ipopt supports a large amount of options for the configuration of the optimisation run. The options
+ * are divided into three categories:
+ * - *string* options (i.e., the type of the option is ``std::string``),
+ * - *integer* options (i.e., the type of the option is ``Ipopt::Index`` - an alias for some integer type, typically
+ *   ``int``),
+ * - *numeric* options (i.e., the type of the option is ``double``).
+ *
+ * The full list of options is available on the
+ * <a href="https://www.coin-or.org/Ipopt/documentation/node40.html">Ipopt website</a>. pagmo::ipopt allows to configure
+ * any Ipopt option via methods such as ipopt::set_string_options(), ipopt::set_string_option(),
+ * ipopt::set_integer_options(), etc., which need to be used before invoking ipopt::evolve().
+ *
+ * If the user does not set any option, pagmo::ipopt will use Ipopt's default values for the options (see the
+ * <a href="https://www.coin-or.org/Ipopt/documentation/node40.html">documentation</a>), with the following
+ * modifications:
+ * - if the ``"print_level"`` integer option is **not** set by the user, it will be set to 0 by pagmo::ipopt (this will
+ *   suppress most screen output produced by the solver - note that we support an alternative form of logging via
+ *   the ipopt::set_verbosity() method);
+ * - if the ``"hessian_approximation"`` string option is **not** set by the user and the optimisation problem does
+ *   **not** provide the Hessians, then the option will be set to ``"limited-memory"`` by pagmo::ipopt. This makes it
+ *   possible to optimise problems without Hessians out-of-the-box (i.e., Ipopt will approximate numerically the
+ *   Hessians for you);
+ * - if the ``"constr_viol_tol"`` numeric option is **not** set by the user and the optimisation problem is constrained,
+ *   then pagmo::ipopt will compute the minimum value ``min_tol`` in the vector returned by pagmo::problem::get_c_tol()
+ *   for the optimisation problem at hand. If ``min_tol`` is nonzero, then the ``"constr_viol_tol"`` Ipopt option will
+ *   be set to ``min_tol``, otherwise the default Ipopt value (1E-4) will be used for the option. This ensures that,
+ *   if the constraint tolerance is not explicitly set by the user, a solution deemed feasible by Ipopt is also
+ *   deemed feasible by pagmo (but the opposite is not necessarily true).
+ *
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
  *
@@ -692,6 +750,28 @@ private:
     static_assert(std::is_same<log_line_type, detail::ipopt_nlp::log_line_type>::value, "Invalid log line type.");
 
 public:
+    /// Evolve population.
+    /**
+     * This method will select an individual from \p pop, optimise it with Ipopt, replace an individual in \p pop with
+     * the optimised individual, and finally return \p pop.
+     * The individual selection and replacement criteria can be set via set_selection(const std::string &),
+     * set_selection(population::size_type), set_replacement(const std::string &) and
+     * set_replacement(population::size_type). The return status of the Ipopt optimisation run will be recorded (it can
+     * be fetched with get_last_opt_result()).
+     *
+     * @param pop the population to be optimised.
+     *
+     * @return the optimised population.
+     *
+     * @throws std::invalid_argument in the following cases:
+     * - the population's problem is multi-objective or it does not provide the gradient,
+     * - the setup of the Ipopt solver options fails (e.g., an invalid option was specified by the user),
+     * - the components of the individual selected for optimisation contain NaNs or they are outside
+     *   the problem's bounds,
+     * - the exact evaluation of the Hessians was requested, but the problem does not support it.
+     * @throws std::runtime_error if the initialization of the Ipopt solver fails.
+     * @throws unspecified any exception thrown by the public interface of pagmo::problem or pagmo::base_local_solver.
+     */
     population evolve(population pop) const
     {
         if (!pop.size()) {
@@ -803,6 +883,15 @@ public:
         // Return the evolved pop.
         return pop;
     }
+    /// Get the result of the last optimisation.
+    /**
+     * @return the result of the last evolve() call, or ``Ipopt::Solve_Succeeded`` if no optimisations have been
+     * run yet.
+     */
+    Ipopt::ApplicationReturnStatus get_last_opt_result() const
+    {
+        return m_last_opt_res;
+    }
     /// Get the algorithm's name.
     /**
      * @return <tt>"Ipopt"</tt>.
@@ -811,6 +900,11 @@ public:
     {
         return "Ipopt";
     }
+    /// Get extra information about the algorithm.
+    /**
+     * @return a human-readable string containing useful information about the algorithm's properties
+     * (e.g., the Ipopt optimisation options, the selection/replacement policies, etc.).
+     */
     std::string get_extra_info() const
     {
         return "\tLast optimisation return code: " + detail::ipopt_data<>::results.at(m_last_opt_res)
@@ -826,20 +920,87 @@ public:
                + (m_integer_opts.size() ? "\n\tInteger options: " + detail::to_string(m_integer_opts) : "")
                + (m_numeric_opts.size() ? "\n\tNumeric options: " + detail::to_string(m_numeric_opts) : "") + "\n";
     }
+    /// Set verbosity.
+    /**
+     * This method will set the algorithm's verbosity. If \p n is zero, no output is produced during the optimisation
+     * and no logging is performed. If \p n is nonzero, then every \p n objective function evaluations the status
+     * of the optimisation will be both printed to screen and recorded internally. See ipopt::log_line_type and
+     * ipopt::log_type for information on the logging format. The internal log can be fetched via get_log().
+     *
+     * Example (verbosity 1):
+     * @code{.unparsed}
+     * objevals:        objval:      violated:    viol. norm:
+     *         1        48.9451              1        1.25272 i
+     *         2         30.153              1       0.716591 i
+     *         3        26.2884              1        1.04269 i
+     *         4        14.6958              2        7.80753 i
+     *         5        14.7742              2        5.41342 i
+     *         6         17.093              1      0.0905025 i
+     *         7        17.1772              1      0.0158448 i
+     *         8        17.0254              2      0.0261289 i
+     *         9        17.0162              2     0.00435195 i
+     *        10        17.0142              2    0.000188461 i
+     *        11         17.014              1    1.90997e-07 i
+     *        12         17.014              0              0
+     * @endcode
+     * The ``i`` at the end of some rows indicates that the decision vector is infeasible. Feasibility
+     * is checked against the problem's tolerance.
+     *
+     * By default, the verbosity level is zero.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. warning::
+     *
+     *    The number of constraints violated, the constraints violation norm and the feasibility flag stored in the log
+     *    are all determined via the facilities and the tolerances specified within :cpp:class:`pagmo::problem`. That
+     *    is, they might not necessarily be consistent with Ipopt's notion of feasibility. See the explanation
+     *    of how the ``"constr_viol_tol"`` numeric option is handled in :cpp:class:`pagmo::ipopt`.
+     *
+     * .. note::
+     *
+     *    Ipopt support its own logging format and protocol, including the ability to print to screen and write to file.
+     *    Ipopt's screen logging is disabled by default (i.e., the Ipopt verbosity setting is set to 0 - see
+     *    :cpp:class:`pagmo::ipopt`). On-screen logging can be enabled via the ``"print_level"`` string option.
+     *
+     * \endverbatim
+     *
+     * @param n the desired verbosity level.
+     */
     void set_verbosity(unsigned n)
     {
         m_verbosity = n;
     }
+    /// Get the optimisation log.
+    /**
+     * See ipopt::log_type for a description of the optimisation log. Logging is turned on/off via
+     * set_verbosity().
+     *
+     * @return a const reference to the log.
+     */
     const log_type &get_log() const
     {
         return m_log;
     }
+    /// Save to archive.
+    /**
+     * @param ar the target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of primitive types or pagmo::base_local_solver.
+     */
     template <typename Archive>
     void save(Archive &ar) const
     {
         ar(cereal::base_class<base_local_solver>(this), m_string_opts, m_integer_opts, m_numeric_opts, m_last_opt_res,
            m_verbosity, m_log);
     }
+    /// Load from archive.
+    /**
+     * In case of exceptions, \p this will be reset to a default-constructed state.
+     *
+     * @param ar the source archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of primitive types or pagmo::base_local_solver.
+     */
     template <typename Archive>
     void load(Archive &ar)
     {
@@ -851,41 +1012,122 @@ public:
             throw;
         }
     }
+    /// Set string option.
+    /**
+     * This method will set the optimisation string option \p name to \p value.
+     * The optimisation options are passed to the Ipopt API when calling evolve().
+     *
+     * @param name of the option.
+     * @param value of the option.
+     */
     void set_string_option(const std::string &name, const std::string &value)
     {
         m_string_opts[name] = value;
     }
+    /// Set integer option.
+    /**
+     * This method will set the optimisation integer option \p name to \p value.
+     * The optimisation options are passed to the Ipopt API when calling evolve().
+     *
+     * @param name of the option.
+     * @param value of the option.
+     */
     void set_integer_option(const std::string &name, Ipopt::Index value)
     {
         m_integer_opts[name] = value;
     }
+    /// Set numeric option.
+    /**
+     * This method will set the optimisation numeric option \p name to \p value.
+     * The optimisation options are passed to the Ipopt API when calling evolve().
+     *
+     * @param name of the option.
+     * @param value of the option.
+     */
     void set_numeric_option(const std::string &name, double value)
     {
         m_numeric_opts[name] = value;
     }
+    /// Set string options.
+    /**
+     * This method will set the optimisation string options contained in \p m.
+     * It is equivalent to calling set_string_option() passing all the name-value pairs in \p m
+     * as arguments.
+     *
+     * @param m the name-value map that will be used to set the options.
+     */
     void set_string_options(const std::map<std::string, std::string> &m)
     {
-        m_string_opts = m;
+        for (const auto &p : m) {
+            set_string_option(p.first, p.second);
+        }
     }
+    /// Set integer options.
+    /**
+     * This method will set the optimisation integer options contained in \p m.
+     * It is equivalent to calling set_integer_option() passing all the name-value pairs in \p m
+     * as arguments.
+     *
+     * @param m the name-value map that will be used to set the options.
+     */
     void set_integer_options(const std::map<std::string, Ipopt::Index> &m)
     {
-        m_integer_opts = m;
+        for (const auto &p : m) {
+            set_integer_option(p.first, p.second);
+        }
     }
+    /// Set numeric options.
+    /**
+     * This method will set the optimisation numeric options contained in \p m.
+     * It is equivalent to calling set_numeric_option() passing all the name-value pairs in \p m
+     * as arguments.
+     *
+     * @param m the name-value map that will be used to set the options.
+     */
     void set_numeric_options(const std::map<std::string, double> &m)
     {
-        m_numeric_opts = m;
+        for (const auto &p : m) {
+            set_numeric_option(p.first, p.second);
+        }
     }
+    /// Get string options.
+    /**
+     * @return the name-value map of optimisation string options.
+     */
     std::map<std::string, std::string> get_string_options() const
     {
         return m_string_opts;
     }
+    /// Get integer options.
+    /**
+     * @return the name-value map of optimisation integer options.
+     */
     std::map<std::string, Ipopt::Index> get_integer_options() const
     {
         return m_integer_opts;
     }
+    /// Get integer options.
+    /**
+     * @return the name-value map of optimisation numeric options.
+     */
     std::map<std::string, double> get_numeric_options() const
     {
         return m_numeric_opts;
+    }
+    /// Clear all string options.
+    void reset_string_options()
+    {
+        m_string_opts.clear();
+    }
+    /// Clear all integer options.
+    void reset_integer_options()
+    {
+        m_integer_opts.clear();
+    }
+    /// Clear all numeric options.
+    void reset_numeric_options()
+    {
+        m_numeric_opts.clear();
     }
 
 private:
