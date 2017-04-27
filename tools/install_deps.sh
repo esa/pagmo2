@@ -16,12 +16,7 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     export PATH="$HOME/miniconda/bin:$PATH"
     conda config --add channels conda-forge --force
 
-    conda_pkgs="boost>=1.55 cmake>=3.2 eigen nlopt"
-
-    # Temporary workaround.
-    if [[ "${PAGMO_BUILD}" != "DebugGCC6" ]]; then
-        conda_pkgs="$conda_pkgs ipopt"
-    fi
+    conda_pkgs="boost>=1.55 cmake>=3.2 eigen nlopt ipopt"
 
     if [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "OSXPython36" ]]; then
         conda_pkgs="$conda_pkgs python=3.6 numpy dill ipyparallel numba"
