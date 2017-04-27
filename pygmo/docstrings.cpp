@@ -4019,11 +4019,11 @@ of the solver (e.g., the stopping criteria) can be configured via class attribut
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
 is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.nlopt.xtol_rel`).
 
-All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
+All NLopt solvers support only single-objective optimisation, and, as usual in pygmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
 Some solvers support equality and/or inequality constaints.
 
-In order to support pagmo's population-based optimisation model, the ``evolve()`` method will select
+In order to support pygmo's population-based optimisation model, the ``evolve()`` method will select
 a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.
 If the optimisation produces a better individual (as established by :func:`~pygmo.compare_fc()`),
 the optimised individual will be inserted back into the population.
@@ -4032,7 +4032,7 @@ and :attr:`~pygmo.nlopt.replacement` attributes.
 
 .. note::
 
-   This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_NLOPT`` option
+   This user-defined algorithm is available only if pygmo was compiled with the ``PAGMO_WITH_NLOPT`` option
    enabled (see the :ref:`installation instructions <install>`).
 
 .. seealso::
@@ -4455,6 +4455,253 @@ Raises:
       (e.g., type conversion errors, mismatched function signatures, etc.)
 
 See also the docs of the C++ class :cpp:class:`pagmo::sea`.
+
+)";
+}
+
+std::string ipopt_docstring()
+{
+    return R"(__init__()
+
+Ipopt.
+
+This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
+a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that
+is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.
+
+Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the
+optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt
+can estimate numerically the Hessians if needed).
+
+In order to support pygmo's population-based optimisation model, the ``evolve()`` method will select
+a single individual from the input :class:`~pygmo.population` to be optimised.
+If the optimisation produces a better individual (as established by :func:`~pygmo.compare_fc()`),
+the optimised individual will be inserted back into the population. The selection and replacement strategies
+can be configured via the :attr:`~pygmo.ipopt.selection` and :attr:`~pygmo.ipopt.replacement` attributes.
+
+Ipopt supports a large amount of options for the configuration of the optimisation run. The options
+are divided into three categories:
+
+* *string* options (i.e., the type of the option is ``str``),
+* *integer* options (i.e., the type of the option is ``int``),
+* *numeric* options (i.e., the type of the option is ``float``).
+
+The full list of options is available on the `Ipopt website <https://www.coin-or.org/Ipopt/documentation/node40.html>`_.
+:class:`pygmo.ipopt` allows to configure any Ipopt option via methods such as :func:`~pygmo.ipopt.set_string_options()`,
+:func:`~pygmo.ipopt.set_string_option()`, :func:`~pygmo.ipopt.set_integer_options()`, etc., which need to be used before
+invoking the ``evolve()`` method.
+
+If the user does not set any option, :class:`pygmo.ipopt` use Ipopt's default values for the options (see the
+`documentation <https://www.coin-or.org/Ipopt/documentation/node40.html>`_), with the following
+modifications:
+
+* if the ``"print_level"`` integer option is **not** set by the user, it will be set to 0 by :class:`pygmo.ipopt` (this will
+  suppress most screen output produced by the solver - note that we support an alternative form of logging via
+  the :func:`pygmo.algorithm.set_verbosity()` machinery);
+* if the ``"hessian_approximation"`` string option is **not** set by the user and the optimisation problem does
+  **not** provide the Hessians, then the option will be set to ``"limited-memory"`` by :class:`pygmo.ipopt`. This makes it
+  possible to optimise problems without Hessians out-of-the-box (i.e., Ipopt will approximate numerically the
+  Hessians for you);
+* if the ``"constr_viol_tol"`` numeric option is **not** set by the user and the optimisation problem is constrained,
+  then :class:`pygmo.ipopt` will compute the minimum value ``min_tol`` in the vector returned by :attr:`pygmo.problem.c_tol`
+  for the optimisation problem at hand. If ``min_tol`` is nonzero, then the ``"constr_viol_tol"`` Ipopt option will
+  be set to ``min_tol``, otherwise the default Ipopt value (1E-4) will be used for the option. This ensures that,
+  if the constraint tolerance is not explicitly set by the user, a solution deemed feasible by Ipopt is also
+  deemed feasible by pygmo (but the opposite is not necessarily true).
+
+.. note::
+
+   This user-defined algorithm is available only if pygmo was compiled with the ``PAGMO_WITH_IPOPT`` option
+   enabled (see the :ref:`installation instructions <install>`).
+
+.. seealso::
+
+   https://projects.coin-or.org/Ipopt.
+
+See also the docs of the C++ class :cpp:class:`pagmo::ipopt`.
+
+Examples:
+    >>> from pygmo import *
+    >>> nl = nlopt('slsqp')
+    >>> nl.xtol_rel = 1E-6 # Change the default value of the xtol_rel stopping criterion
+    >>> nl.xtol_rel # doctest: +SKIP
+    1E-6
+    >>> algo = algorithm(nl)
+    >>> algo.set_verbosity(1)
+    >>> prob = problem(luksan_vlcek1(20))
+    >>> prob.c_tol = [1E-6] * 18 # Set constraints tolerance to 1E-6
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+       objevals:       objval:      violated:    viol. norm:
+               1       95959.4             18        538.227 i
+               2       89282.7             18        5177.42 i
+               3         75580             18        464.206 i
+               4         75580             18        464.206 i
+               5       77737.6             18        1095.94 i
+               6         41162             18        350.446 i
+               7         41162             18        350.446 i
+               8         67881             18        362.454 i
+               9       30502.2             18        249.762 i
+              10       30502.2             18        249.762 i
+              11       7266.73             18        95.5946 i
+              12        4510.3             18        42.2385 i
+              13       2400.66             18        35.2507 i
+              14       34051.9             18        749.355 i
+              15       1657.41             18        32.1575 i
+              16       1657.41             18        32.1575 i
+              17       1564.44             18        12.5042 i
+              18       275.987             14        6.22676 i
+              19       232.765             12         12.442 i
+              20       161.892             15        4.00744 i
+              21       161.892             15        4.00744 i
+              22       17.6821             11        1.78909 i
+              23       7.71103              5       0.130386 i
+              24       6.24758              4     0.00736759 i
+              25       6.23325              1    5.12547e-05 i
+              26        6.2325              0              0
+              27       6.23246              0              0
+              28       6.23246              0              0
+              29       6.23246              0              0
+              30       6.23246              0              0
+    <BLANKLINE>
+    Optimisation return status: NLOPT_XTOL_REACHED (value = 4, Optimization stopped because xtol_rel or xtol_abs was reached)
+    <BLANKLINE>
+
+)";
+}
+
+std::string ipopt_get_log_docstring()
+{
+    // NOTE: these are identical.
+    return nlopt_get_log_docstring();
+}
+
+std::string ipopt_get_last_opt_result_docstring()
+{
+    return R"(get_last_opt_result()
+
+Get the result of the last optimisation.
+
+Returns:
+    ``int``: the Ipopt return code for the last optimisation run, or ``Ipopt::Solve_Succeeded`` if no optimisations have been run yet
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.get_last_opt_result()
+    0
+
+)";
+}
+
+std::string ipopt_set_string_option_docstring()
+{
+    return R"(set_string_option(name, value)
+
+Set string option.
+
+This method will set the optimisation string option *name* to *value*.
+The optimisation options are passed to the Ipopt API when calling the ``evolve()`` method.
+
+Args:
+    name (``str``): the name of the option
+    value(``str``): the value of the option
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_string_option("hessian_approximation","limited-memory")
+    >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
+    Algorithm name: Ipopt [deterministic]
+            Thread safety: none
+    <BLANKLINE>
+    Extra info:
+            Last optimisation return code: Solve_Succeeded (value = 0)
+            Verbosity: 0
+            Individual selection policy: best
+            Individual replacement policy: best
+            String options: {hessian_approximation : limited-memory}
+
+)";
+}
+
+std::string ipopt_set_string_options_docstring()
+{
+    return R"(set_string_options(opts)
+
+Set string options.
+
+This method will set the optimisation string options contained in *opts*.
+It is equivalent to calling :func:`~pygmo.ipopt.set_string_option()` passing all the name-value pairs in *opts*
+as arguments.
+
+Args:
+    opts (``dict`` of ``str``-``str`` pairs): the name-value map that will be used to set the options
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_string_options({"hessian_approximation":"limited-memory", "limited_memory_initialization":"scalar1"})
+    >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
+    Algorithm name: Ipopt [deterministic]
+            Thread safety: none
+    <BLANKLINE>
+    Extra info:
+            Last optimisation return code: Solve_Succeeded (value = 0)
+            Verbosity: 0
+            Individual selection policy: best
+            Individual replacement policy: best
+            String options: {hessian_approximation : limited-memory,  limited_memory_initialization : scalar1}
+
+)";
+}
+
+std::string ipopt_get_string_options_docstring()
+{
+    return R"(get_string_options()
+
+Get string options.
+
+Returns:
+    ``dict`` of ``str``-``str`` pairs: a name-value dictionary of optimisation string options
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_string_option("hessian_approximation","limited-memory")
+    >>> ip.get_string_options()
+    {'hessian_approximation': 'limited-memory'}
+
+)";
+}
+
+std::string ipopt_reset_string_options_docstring()
+{
+    return R"(reset_string_options()
+
+Clear all string options.
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_string_option("hessian_approximation","limited-memory")
+    >>> ip.get_string_options()
+    {'hessian_approximation': 'limited-memory'}
+    >>> ip.reset_string_options()
+    >>> ip.get_string_options()
+    {'hessian_approximation': 'limited-memory'}
 
 )";
 }

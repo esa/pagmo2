@@ -156,6 +156,13 @@ std::string nlopt_get_log_docstring();
 std::string nlopt_get_last_opt_result_docstring();
 std::string nlopt_get_solver_name_docstring();
 std::string nlopt_local_optimizer_docstring();
+std::string ipopt_docstring();
+std::string ipopt_get_log_docstring();
+std::string ipopt_get_last_opt_result_docstring();
+std::string ipopt_set_string_option_docstring();
+std::string ipopt_set_string_options_docstring();
+std::string ipopt_get_string_options_docstring();
+std::string ipopt_reset_string_options_docstring();
 
 // base local solver common docstrings.
 std::string bls_selection_docstring(const std::string &);

@@ -37,7 +37,6 @@ see https://www.gnu.org/licenses/. */
 #if defined(_MSC_VER)
 
 // Disable various warnings from MSVC.
-#pragma warning(push, 0)
 #pragma warning(disable : 4275)
 #pragma warning(disable : 4996)
 
@@ -828,9 +827,3 @@ BOOST_PYTHON_MODULE(core)
              }),
              pygmo::archipelago_get_champions_x_docstring().c_str());
 }
-
-#if defined(_MSC_VER)
-
-#pragma warning(pop)
-
-#endif
