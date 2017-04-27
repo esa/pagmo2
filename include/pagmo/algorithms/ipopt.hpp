@@ -259,9 +259,11 @@ struct ipopt_nlp final : Ipopt::TNLP {
             index_style = TNLP::C_STYLE;
 
             return true;
+            // LCOV_EXCL_START
         } catch (...) {
             m_eptr = std::current_exception();
             return false;
+            // LCOV_EXCL_STOP
         }
     }
 
@@ -291,9 +293,11 @@ struct ipopt_nlp final : Ipopt::TNLP {
             std::fill(g_u + m_prob.get_nec(), g_u + m, 0.);
 
             return true;
+            // LCOV_EXCL_START
         } catch (...) {
             m_eptr = std::current_exception();
             return false;
+            // LCOV_EXCL_STOP
         }
     }
 
@@ -312,6 +316,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
                 std::copy(m_start.begin(), m_start.end(), x);
             }
 
+            // LCOV_EXCL_START
             if (init_z) {
                 pagmo_throw(std::runtime_error,
                             "we are being asked to provide initial values for the bounds multiplier by "
@@ -328,6 +333,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
         } catch (...) {
             m_eptr = std::current_exception();
             return false;
+            // LCOV_EXCL_STOP
         }
     }
 
@@ -854,9 +860,11 @@ public:
         // let's disable this functionality by passing an empty string.
         const Ipopt::ApplicationReturnStatus status = app->Initialize("");
         if (status != Ipopt::Solve_Succeeded) {
+            // LCOV_EXCL_START
             pagmo_throw(std::runtime_error,
                         "the initialisation of the ipopt algorithm failed. The return status code is: "
                             + detail::ipopt_data<>::results.at(status));
+            // LCOV_EXCL_STOP
         }
         // Run the optimisation.
         m_last_opt_res = app->OptimizeTNLP(nlp);
@@ -1007,9 +1015,11 @@ public:
         try {
             ar(cereal::base_class<base_local_solver>(this), m_string_opts, m_integer_opts, m_numeric_opts,
                m_last_opt_res, m_verbosity, m_log);
+            // LCOV_EXCL_START
         } catch (...) {
             *this = ipopt{};
             throw;
+            // LCOV_EXCL_STOP
         }
     }
     /// Set string option.
