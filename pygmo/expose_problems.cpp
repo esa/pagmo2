@@ -78,12 +78,6 @@ see https://www.gnu.org/licenses/. */
 #include "docstrings.hpp"
 #include "problem_exposition_suite.hpp"
 
-#if defined(_MSC_VER)
-
-#pragma warning(pop)
-
-#endif
-
 using namespace pagmo;
 namespace bp = boost::python;
 
@@ -272,3 +266,9 @@ void expose_problems()
                  generic_udp_inner_problem_docstring().c_str());
 }
 }
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif

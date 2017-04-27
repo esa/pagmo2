@@ -102,12 +102,6 @@ see https://www.gnu.org/licenses/. */
 #include "problem.hpp"
 #include "pygmo_classes.hpp"
 
-#if defined(_MSC_VER)
-
-#pragma warning(pop)
-
-#endif
-
 // This is necessary because the NumPy macro import_array() has different return values
 // depending on the Python version.
 #if PY_MAJOR_VERSION < 3
@@ -834,3 +828,9 @@ BOOST_PYTHON_MODULE(core)
              }),
              pygmo::archipelago_get_champions_x_docstring().c_str());
 }
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif
