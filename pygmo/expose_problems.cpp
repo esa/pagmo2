@@ -26,6 +26,15 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#if defined(_MSC_VER)
+
+// Disable various warnings from MSVC.
+#pragma warning(disable : 4275)
+#pragma warning(disable : 4996)
+#pragma warning(disable : 4244
+
+#endif
+
 #include "python_includes.hpp"
 
 // See: https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
@@ -34,14 +43,6 @@ see https://www.gnu.org/licenses/. */
 #define NO_IMPORT_ARRAY
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
 #include "numpy.hpp"
-
-#if defined(_MSC_VER)
-
-// Disable various warnings from MSVC.
-#pragma warning(disable : 4275)
-#pragma warning(disable : 4996)
-
-#endif
 
 #include <boost/python/args.hpp>
 #include <boost/python/default_call_policies.hpp>

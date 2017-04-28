@@ -966,7 +966,8 @@ public:
      *
      * .. note::
      *
-     *    Ipopt support its own logging format and protocol, including the ability to print to screen and write to file.
+     *    Ipopt supports its own logging format and protocol, including the ability to print to screen and write to
+     * file.
      *    Ipopt's screen logging is disabled by default (i.e., the Ipopt verbosity setting is set to 0 - see
      *    :cpp:class:`pagmo::ipopt`). On-screen logging can be enabled via the ``"print_level"`` string option.
      *

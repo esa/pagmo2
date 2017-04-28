@@ -163,6 +163,14 @@ std::string ipopt_set_string_option_docstring();
 std::string ipopt_set_string_options_docstring();
 std::string ipopt_get_string_options_docstring();
 std::string ipopt_reset_string_options_docstring();
+std::string ipopt_set_integer_option_docstring();
+std::string ipopt_set_integer_options_docstring();
+std::string ipopt_get_integer_options_docstring();
+std::string ipopt_reset_integer_options_docstring();
+std::string ipopt_set_numeric_option_docstring();
+std::string ipopt_set_numeric_options_docstring();
+std::string ipopt_get_numeric_options_docstring();
+std::string ipopt_reset_numeric_options_docstring();
 
 // base local solver common docstrings.
 std::string bls_selection_docstring(const std::string &);

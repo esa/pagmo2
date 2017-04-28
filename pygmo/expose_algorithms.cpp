@@ -26,6 +26,16 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#if defined(_MSC_VER)
+
+// Disable various warnings from MSVC.
+#pragma warning(disable : 4275)
+#pragma warning(disable : 4996)
+#pragma warning(disable : 4503)
+#pragma warning(disable : 4244)
+
+#endif
+
 #include "python_includes.hpp"
 
 // See: https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
@@ -34,15 +44,6 @@ see https://www.gnu.org/licenses/. */
 #define NO_IMPORT_ARRAY
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
 #include "numpy.hpp"
-
-#if defined(_MSC_VER)
-
-// Disable various warnings from MSVC.
-#pragma warning(disable : 4275)
-#pragma warning(disable : 4996)
-#pragma warning(disable : 4503)
-
-#endif
 
 #include <boost/any.hpp>
 #include <boost/python/args.hpp>
@@ -73,6 +74,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
 #if defined(PAGMO_WITH_IPOPT)
+#include <IpTNLP.hpp>
 #include <pagmo/algorithms/ipopt.hpp>
 #endif
 #include <pagmo/algorithms/mbh.hpp>
@@ -452,6 +454,50 @@ void expose_algorithms()
                }),
                ipopt_get_string_options_docstring().c_str());
     ipopt_.def("reset_string_options", &ipopt::reset_string_options, ipopt_reset_string_options_docstring().c_str());
+    // Integer options.
+    ipopt_.def("set_integer_option", &ipopt::set_integer_option, ipopt_set_integer_option_docstring().c_str(),
+               (bp::arg("name"), bp::arg("value")));
+    ipopt_.def("set_integer_options", lcast([](ipopt &ip, const bp::dict &d) {
+                   std::map<std::string, Ipopt::Index> m;
+                   bp::stl_input_iterator<std::string> begin(d), end;
+                   for (; begin != end; ++begin) {
+                       m[*begin] = bp::extract<Ipopt::Index>(d[*begin])();
+                   }
+                   ip.set_integer_options(m);
+               }),
+               ipopt_set_integer_options_docstring().c_str(), bp::arg("opts"));
+    ipopt_.def("get_integer_options", lcast([](const ipopt &ip) -> bp::dict {
+                   const auto opts = ip.get_integer_options();
+                   bp::dict retval;
+                   for (const auto &p : opts) {
+                       retval[p.first] = p.second;
+                   }
+                   return retval;
+               }),
+               ipopt_get_integer_options_docstring().c_str());
+    ipopt_.def("reset_integer_options", &ipopt::reset_integer_options, ipopt_reset_integer_options_docstring().c_str());
+    // Numeric options.
+    ipopt_.def("set_numeric_option", &ipopt::set_numeric_option, ipopt_set_numeric_option_docstring().c_str(),
+               (bp::arg("name"), bp::arg("value")));
+    ipopt_.def("set_numeric_options", lcast([](ipopt &ip, const bp::dict &d) {
+                   std::map<std::string, double> m;
+                   bp::stl_input_iterator<std::string> begin(d), end;
+                   for (; begin != end; ++begin) {
+                       m[*begin] = bp::extract<double>(d[*begin])();
+                   }
+                   ip.set_numeric_options(m);
+               }),
+               ipopt_set_numeric_options_docstring().c_str(), bp::arg("opts"));
+    ipopt_.def("get_numeric_options", lcast([](const ipopt &ip) -> bp::dict {
+                   const auto opts = ip.get_numeric_options();
+                   bp::dict retval;
+                   for (const auto &p : opts) {
+                       retval[p.first] = p.second;
+                   }
+                   return retval;
+               }),
+               ipopt_get_numeric_options_docstring().c_str());
+    ipopt_.def("reset_numeric_options", &ipopt::reset_numeric_options, ipopt_reset_numeric_options_docstring().c_str());
 #endif
 }
 }
