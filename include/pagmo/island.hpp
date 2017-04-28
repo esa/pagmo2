@@ -662,11 +662,13 @@ public:
                     this->m_ptr->isl_ptr->run_evolve(*this);
                 }
             });
+            // LCOV_EXCL_START
         } catch (...) {
             // We end up here only if enqueue threw. In such a case, we need to cleanup
             // the empty future we added above before re-throwing and exiting.
             m_ptr->futures.pop_back();
             throw;
+            // LCOV_EXCL_STOP
         }
     }
     /// Block until evolution ends and re-raise the first stored exception.
