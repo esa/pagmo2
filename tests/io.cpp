@@ -31,9 +31,11 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE io_test
 #include <boost/test/included/unit_test.hpp>
 
+#include <initializer_list>
 #include <iomanip>
 #include <map>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -113,4 +115,10 @@ BOOST_AUTO_TEST_CASE(stream_print_test_01)
     ss.str("");
     stream(ss, pair_t{1, 2});
     print(pair_t{1, 2});
+}
+
+BOOST_AUTO_TEST_CASE(stream_table_test)
+{
+    detail::table t({"a", "b", "c"});
+    BOOST_CHECK_THROW(t.add_row(), std::invalid_argument);
 }

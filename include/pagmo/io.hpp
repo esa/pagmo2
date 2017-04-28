@@ -50,9 +50,11 @@ namespace pagmo
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
+// LCOV_EXCL_START
 // Forward declaration
 template <typename... Args>
 inline void stream(std::ostream &, const Args &...);
+// LCOV_EXCL_STOP
 
 #endif
 
