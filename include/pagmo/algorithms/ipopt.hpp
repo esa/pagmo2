@@ -33,7 +33,6 @@ see https://www.gnu.org/licenses/. */
 
 #if defined(PAGMO_WITH_IPOPT)
 
-//#include <IpAlgTypes.hpp>
 #include <IpIpoptApplication.hpp>
 #include <IpIpoptCalculatedQuantities.hpp>
 #include <IpIpoptData.hpp>

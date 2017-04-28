@@ -14,8 +14,7 @@ mark_as_advanced(IPOPT_INCLUDE_DIR IPOPT_LIBRARY)
 
 # NOTE: this has been adapted from CMake's FindPNG.cmake.
 if(IPOPT_FOUND AND NOT TARGET IPOPT::ipopt)
-	add_library(IPOPT::ipopt UNKNOWN IMPORTED)
+    add_library(IPOPT::ipopt UNKNOWN IMPORTED)
     set_target_properties(IPOPT::ipopt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${IPOPT_INCLUDE_DIR}")
-    set_target_properties(IPOPT::ipopt PROPERTIES
-        IMPORTED_LOCATION "${IPOPT_LIBRARY}")
+    set_target_properties(IPOPT::ipopt PROPERTIES IMPORTED_LOCATION "${IPOPT_LIBRARY}")
 endif()

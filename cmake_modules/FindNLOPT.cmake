@@ -14,9 +14,8 @@ mark_as_advanced(NLOPT_INCLUDE_DIR NLOPT_LIBRARY)
 
 # NOTE: this has been adapted from CMake's FindPNG.cmake.
 if(NLOPT_FOUND AND NOT TARGET NLOPT::nlopt)
-	add_library(NLOPT::nlopt UNKNOWN IMPORTED)
+    add_library(NLOPT::nlopt UNKNOWN IMPORTED)
     set_target_properties(NLOPT::nlopt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${NLOPT_INCLUDE_DIR}")
-    set_target_properties(NLOPT::nlopt PROPERTIES
-        IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+    set_target_properties(NLOPT::nlopt PROPERTIES IMPORTED_LINK_INTERFACE_LANGUAGES "C"
         IMPORTED_LOCATION "${NLOPT_LIBRARY}")
 endif()
