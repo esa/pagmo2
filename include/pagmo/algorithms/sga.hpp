@@ -538,8 +538,9 @@ private:
                     // Fisher Yates algo http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
                     // to select m_param_s individial at random
                     for (decltype(m_param_s) i = 0u; i < m_param_s; ++i) {
-                        std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>::param_type(
-                            i, best_idxs.size() - 1u);
+                        dist.param(
+                            std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>::param_type(
+                                i, best_idxs.size() - 1u));
                         auto index = dist(m_e);
                         std::swap(best_idxs[index], best_idxs[i]);
                     }
@@ -577,20 +578,21 @@ private:
             }
         } else {
             auto XCOPY = X;
+            std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type> rnd_gene_idx(0, dim - 1u);
+            std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type> rnd_skip_first_idx(
+                1, all_idx.size() - 1);
             // Start of main loop through the X
             for (decltype(X.size()) i = 0u; i < X.size(); ++i) {
                 // 1 - we select a mating partner
                 std::swap(all_idx[0], all_idx[i]);
-                auto partner_idx = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
-                    1, all_idx.size() - 1)(m_e);
+                auto partner_idx = rnd_skip_first_idx(m_e);
                 // 2 - We rename these chromosomes for code clarity
                 auto &child = X[i];
                 const auto &parent2 = XCOPY[all_idx[partner_idx]];
                 // 3 - We perform crossover according to the selected method
                 switch (m_crossover) {
                     case (crossover::EXPONENTIAL): {
-                        auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
-                            0, dim - 1u)(m_e);
+                        auto n = rnd_gene_idx(m_e);
                         decltype(dim) L = 0u;
                         do {
                             child[n] = parent2[n];
@@ -600,8 +602,7 @@ private:
                         break;
                     }
                     case (crossover::BINOMIAL): {
-                        auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
-                            0, dim - 1u)(m_e);
+                        auto n = rnd_gene_idx(m_e);
                         for (decltype(dim) L = 0u; L < dim; ++L) {    /* performs D binomial trials */
                             if ((drng(m_e) < m_cr) || L + 1 == dim) { /* changes at least one parameter */
                                 child[n] = parent2[n];
@@ -611,9 +612,10 @@ private:
                         break;
                     }
                     case (crossover::SINGLE): {
-                        auto n = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
-                            0, dim)(m_e);
-                        std::copy(parent2.data() + n, parent2.data() + dim, child.data() + n);
+                        auto n = rnd_gene_idx(m_e);
+                        for (decltype(dim) j = n; j < dim; ++j) {
+                            child[j] = parent2[j];
+                        }
                         break;
                     }
                     // LCOV_EXCL_START
