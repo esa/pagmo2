@@ -31,7 +31,10 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm> // std::sort, std::all_of, std::copy
 #include <boost/bimap.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 #include <iomanip>
+#include <iostream>
 #include <numeric> // std::iota
 #include <random>
 #include <stdexcept>
@@ -508,7 +511,7 @@ public:
     void serialize(Archive &ar)
     {
         ar(m_gen, m_cr, m_eta_c, m_m, m_param_m, m_param_s, m_mutation, m_selection, m_crossover, m_int_dim, m_e,
-           m_seed, m_verbosity);
+           m_seed, m_verbosity, m_log);
     }
 
 private:
