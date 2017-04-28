@@ -345,7 +345,6 @@ public:
                     if (FNEW[j][0] < bestf) bestf = FNEW[j][0];
                 }
                 improvement = pop.get_f()[pop.best_idx()][0] - bestf;
-
                 // (verbosity modes = 1: a line is added at each improvement
                 // (verbosity modes > 1: a line is added every m_verbosity generations)
                 if (((i % m_verbosity == 1u) && (m_verbosity > 1u)) || ((improvement > 0) && (m_verbosity == 1u))) {
@@ -430,7 +429,7 @@ public:
 
     * @endcode
     * Gen is the generation number, Fevals the number of fitness evaluations , Best is the best fitness found,
-    * Improvement is the improvement of the offsprings w.r.t. the parents
+    * Improvement is the improvement of the new population of offspring with respect to the parents.
     *
     * @param level verbosity level
     */
@@ -487,16 +486,16 @@ public:
     /// Get log
     /**
     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-    * <tt>std::vector</tt> is a bee_colony::log_line_type containing: Gen, Fevals, Current best, Best as
-    * described in bee_colony::set_verbosity().
+    * <tt>std::vector</tt> is a sga::log_line_type containing: Gen, Fevals, Current best, Best as
+    * described in sga::set_verbosity().
     *
-    * @return an <tt> std::vector</tt> of bee_colony::log_line_type containing the logged values Gen, Fevals, Current
-    * best, Best
+    * @return an <tt> std::vector</tt> of sga::log_line_type containing the logged values Gen, Fevals, Best
+    * improvement
     */
-    // const log_type &get_log() const
-    //{
-    //    return m_log;
-    //}
+    const log_type &get_log() const
+    {
+        return m_log;
+    }
     /// Object serialization
     /**
     * This method will save/load \p this into the archive \p ar.
