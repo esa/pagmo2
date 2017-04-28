@@ -116,7 +116,18 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  * preferred.
  *
  * In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between
- * some selected crossover types, selection schemes,, mutation types and reinsertion scheme.
+ * some selected crossover types, selection schemes and mutation types.
+ *
+ * The pseudo code of our version is:
+ * @code{.unparsed}
+ * > Start from a pagmo::population (pop) of dimension N
+ * > while i < gen
+ * > > Selection: create a new population (pop2) with selected N individuals from pop
+ * > > Crossover: create a new population (pop3) with N individuals obtained applying crossover to pop2
+ * > > Mutation:  create a new population (pop4) with N individuals obtained applying mutation to pop3
+ * > > Evaluate all new chromosomes in pop4
+ * > > Reinsertion: set pop to contain the best N individuals in pop and pop4
+ * @endcode
  *
  * The various blocks of pagmo genetic algorithm are listed below:
  *
@@ -147,7 +158,7 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  *
  * **NOTE** Specifying the parameter \p int_dim a part of the decision vector (at the end) will be treated as integers
  * This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
- * The various mutation and crossover strategies do different things on an integer gene or a real valued one.
+ * The various mutation and crossover strategies will do different things on an integer gene or a real valued one.
  */
 class sga : private detail::sga_statics<>
 {
@@ -247,8 +258,10 @@ public:
      *
      * @param pop population to be evolved
      * @return evolved population
-     * @throws std::invalid_argument if the problem is multi-objective or constrained
-     * @throws std::invalid_argument if the population size is smaller than 2
+     * @throws std::invalid_argument if the problem is multi-objective or constrained, if the population size is smaller
+     * than 2, if \p param_s is larger than the population size, if the size of \p pop is odd and a "sbx" crossover has
+     * been selected upon construction, if the problem dimension is smaller than the \p int_dim chosen upon
+     * construction.
      */
     population evolve(population pop) const
     {
@@ -391,7 +404,8 @@ public:
     * Sets the verbosity level of the screen output and of the
     * log returned by get_log(). \p level can be:
     * - 0: no verbosity
-    * - >0: will print and log one line each \p level generations.
+    * - 1: will only print and log when the population is improved
+    * - >1: will print and log one line each \p level generations.
     *
     * Example (verbosity 1):
     * @code{.unparsed}
@@ -415,7 +429,7 @@ public:
     *   25            500        2354.07        22.6248
 
     * @endcode
-    * Gen is the generation number, Fevals the number of function evaluation used, , Best is the best fitness found,
+    * Gen is the generation number, Fevals the number of fitness evaluations , Best is the best fitness found,
     * Improvement is the improvement of the offsprings w.r.t. the parents
     *
     * @param level verbosity level

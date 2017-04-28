@@ -60,7 +60,7 @@ That easy! To inspect what type of problem pygmo has detected from our UDP we ma
     	Has hessians: false
     	User implemented hessians sparsity: false
     <BLANKLINE>
-    	Function evaluations: 0
+    	Fitness evaluations: 0
     <BLANKLINE>
     	Thread safety: none
     <BLANKLINE>
@@ -108,7 +108,7 @@ and to have a human readable name.
     	Has hessians: false
     	User implemented hessians sparsity: false
     <BLANKLINE>
-    	Function evaluations: 0
+    	Fitness evaluations: 0
     <BLANKLINE>
     	Thread safety: none
     <BLANKLINE>

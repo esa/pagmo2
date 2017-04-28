@@ -1881,7 +1881,7 @@ public:
         if (p.has_hessians()) {
             stream(os, "\tExpected hessian components: ", p.m_hs_dim, '\n');
         }
-        stream(os, "\n\tFunction evaluations: ", p.get_fevals(), '\n');
+        stream(os, "\n\tFitness evaluations: ", p.get_fevals(), '\n');
         if (p.has_gradient()) {
             stream(os, "\tGradient evaluations: ", p.get_gevals(), '\n');
         }

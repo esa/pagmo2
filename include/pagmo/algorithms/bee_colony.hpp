@@ -73,7 +73,7 @@ public:
     /**
      * Constructs a bee_colony algorithm
      *
-     * @param gen number of generations. Note that the total number of function evaluations will be 2*gen
+     * @param gen number of generations. Note that the total number of fitness evaluations will be 2*gen
      * @param limit maximum number of trials for abandoning a source
      * @param seed seed used by the internal random number generator (default is random)
      *
@@ -303,7 +303,7 @@ public:
      *      301          12040        20.6076        20.6076
      *      401          16040         18.252        140.079
      * @endcode
-     * Gen is the generation number, Fevals the number of function evaluation used, , Best is the best fitness found, 
+     * Gen is the generation number, Fevals the number of function evaluation used, , Best is the best fitness found,
      * Current best is the best fitness currently in the population.
      *
      * @param level verbosity level

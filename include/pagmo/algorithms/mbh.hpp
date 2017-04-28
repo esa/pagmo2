@@ -64,7 +64,7 @@ namespace pagmo
  * individual is used and coupled with a local optimizer, the original method is recovered.
  * The pseudo code of our generalized version is:
  * @code{.unparsed}
- * > Select a pagmo::population
+ * > Create a pagmo::population
  * > Select a UDA
  * > Store best individual
  * > while i < stop_criteria

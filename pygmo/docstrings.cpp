@@ -1580,7 +1580,7 @@ objective function. Using the above definitions the overall pseudo code can be s
 .. note:
 
 Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
-for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
+for decision vectors already evaluated. This makes the final counter of fitness evaluations somehow unpredictable.
 The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.
@@ -2601,7 +2601,7 @@ Returns a log containing relevant parameters recorded during the last call to ``
 The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
 the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
 :class:`~pygmo.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
-each verbosity function evaluations.
+each verbosity fitness evaluations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Fevals``, ``Best``, ``Current``, ``Mean range``, ``Temperature``, where:

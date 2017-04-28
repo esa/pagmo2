@@ -63,7 +63,7 @@ namespace pagmo
  * **NOTE** The algorithm does not work for multi-objective problems, stochastic problems nor for
  * constrained problems
  *
- * **NOTE** At each call of the evolve method the number of function evaluations will be
+ * **NOTE** At each call of the evolve method the number of fitness evaluations will be
  * \p n_T_adj * \p n_range_adj * \p bin_size times the problem dimension
  *
  * See: Corana, A., Marchesi, M., Martini, C., & Ridella, S. (1987). Minimizing multimodal
@@ -233,7 +233,7 @@ public:
                         }
                         // 2 - We log to screen
                         if (m_verbosity > 0u) {
-                            // Prints a log line every m_verbosity function evaluations
+                            // Prints a log line every m_verbosity fitness evaluations
                             auto fevals_count = prob.get_fevals() - fevals0;
                             if (fevals_count >= (count - 1u) * m_verbosity) {
                                 // 1 - Every 50 lines print the column names
@@ -286,7 +286,7 @@ public:
      * Sets the verbosity level of the screen output and of the
      * log returned by get_log(). \p level can be:
      * - 0: no verbosity
-     * - >=1: will print and log one line at minimum every \p level function evaluations.
+     * - >=1: will print and log one line at minimum every \p level fitness evaluations.
      *
      * Example (verbosity 5000):
      * @code{.unparsed}

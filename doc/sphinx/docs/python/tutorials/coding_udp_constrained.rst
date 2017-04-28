@@ -91,7 +91,7 @@ In order to check that the UDP above is wll formed for pygmo we try to construct
     	Has hessians: false
     	User implemented hessians sparsity: false
     <BLANKLINE>
-    	Function evaluations: 0
+    	Fitness evaluations: 0
     	Gradient evaluations: 0
     <BLANKLINE>
     	Thread safety: none
