@@ -4701,7 +4701,7 @@ Examples:
     {'hessian_approximation': 'limited-memory'}
     >>> ip.reset_string_options()
     >>> ip.get_string_options()
-    {'hessian_approximation': 'limited-memory'}
+    {}
 
 )";
 }
