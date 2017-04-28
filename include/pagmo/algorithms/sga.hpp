@@ -137,11 +137,11 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  *
  * Mutation: three different mutations schemes are provided: "uniform", "gaussian" and "polynomial". Uniform mutation
  * simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution
- * with standard deviation proportional to the \p m_param_m and the bounds width. The last scheme, polynomial mutation
- * is taken from the NSGA-II algorithm, implemented in pagmo as pagmo::nsga2.
+ * with standard deviation proportional to the \p m_param_m and the bounds width. The last scheme is the polynomial
+ * mutation.
  *
- * Reinsertion: the only reinsertion strategy provided is what we called simple elitism. After one generation
- * the best \p elitism parents are kept in the new population while the worst \p elitism offsprings are killed.
+ * Reinsertion: the only reinsertion strategy provided is what we call pure elitism. After each generation
+ * all parents and children are put in the same pool and only the best are passed to the next generation.
  *
  * **NOTE** This algorithm will work only for box bounded problems.
  *
@@ -152,10 +152,10 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
 class sga : private detail::sga_statics<>
 {
 public:
-    /// Single entry of the log (gen, fevals, best, cur_best)
-    // typedef std::tuple<unsigned, unsigned long long, double, double> log_line_type;
+    /// Single entry of the log (gen, fevals, best, improvement)
+    typedef std::tuple<unsigned int, unsigned long long, double, double> log_line_type;
     /// The log
-    // typedef std::vector<log_line_type> log_type;
+    typedef std::vector<log_line_type> log_type;
 
     /// Constructor
     /**
@@ -167,9 +167,9 @@ public:
      * @param eta_c distribution index for "sbx" crossover. This is an inactive parameter if other types of crossovers
      * are selected.
      * @param m mutation probability.
-     * @param param_m distribution index (in polynomial mutation), otherwise width of the mutation.
-     * @param elitism number of parents that gets carried over to the next generation.
-     * @param param_s when "truncated" selection is used this indicates the percentage of best individuals to use. when
+     * @param param_m distribution index (in polynomial mutation), otherwise width of the mutation relative to bounds
+     * width.
+     * @param param_s when "truncated" selection is used this indicates the number of best individuals to use. When
      * "tournament" selection is used this indicates the size of the tournament.
      * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
      * @param selection the selection strategy. One of "tournament", "truncated".
@@ -181,12 +181,12 @@ public:
      * \p crossover not one of "exponential", "binomial", "sbx" or "single", if \p param_m is not in [0,1] and
      * \p mutation is not "polynomial" or \p mutation is not in [1,100] and \p mutation is polynomial.
      */
-    sga(unsigned gen = 1u, double cr = .95, double eta_c = 10., double m = 0.02, double param_m = 0.5,
-        unsigned elitism = 5u, unsigned param_s = 5u, std::string mutation = "gaussian",
-        std::string selection = "tournament", std::string crossover = "exponential",
-        vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_elitism(elitism), m_param_s(param_s),
-          m_int_dim(int_dim), m_e(seed), m_seed(seed), m_verbosity(0u) //, m_log()
+    sga(unsigned gen = 1u, double cr = .95, double eta_c = 1., double m = 0.02, double param_m = 1.,
+        unsigned param_s = 5u, std::string crossover = "exponential", std::string mutation = "polynomial",
+        std::string selection = "tournament", vector_double::size_type int_dim = 0u,
+        unsigned seed = pagmo::random_device::next())
+        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_param_s(param_s), m_int_dim(int_dim),
+          m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (cr > 1. || cr < 0.) {
             pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1] range, while a value of "
@@ -224,11 +224,10 @@ public:
                     + crossover);
         }
         // param_m represents the distribution index if polynomial mutation is selected
-        if (mutation == "polynomial" && (param_m < 1. || param_m >= 100.)) {
-            pagmo_throw(
-                std::invalid_argument,
-                "Polynomial mutation was selected, the mutation parameter must be in [1, 100], while a value of "
-                    + std::to_string(param_m) + " was detected");
+        if (mutation == "polynomial" && (param_m < 1. || param_m > 100.)) {
+            pagmo_throw(std::invalid_argument, "Polynomial mutation was selected, the mutation parameter (distribution "
+                                               "index) must be in [1, 100], while a value of "
+                                                   + std::to_string(param_m) + " was detected");
         }
 
         // otherwise param_m represents the width of the mutation relative to the box bounds
@@ -237,9 +236,9 @@ public:
                                                    + std::to_string(param_m) + " was detected");
         }
         // We can now init the data members representing the various choices made using std::string
-        m_selection = m_selection_map.left.at(selection);
         m_crossover = m_crossover_map.left.at(crossover);
         m_mutation = m_mutation_map.left.at(mutation);
+        m_selection = m_selection_map.left.at(selection);
     }
 
     /// Algorithm evolve method (juice implementation of the algorithm)
@@ -257,8 +256,8 @@ public:
         auto dim = prob.get_nx();
         const auto bounds = prob.get_bounds();
         auto NP = pop.size();
-        // auto fevals0 = prob.get_fevals(); // fevals already made
-        // auto count = 1u;                  // regulates the screen output
+        auto fevals0 = prob.get_fevals(); // fevals already made
+        auto count = 1u;                  // regulates the screen output
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // Check whether the problem/population are suitable for bee_colony
         if (prob.get_nc() != 0u) {
@@ -272,12 +271,6 @@ public:
         if (NP < 2u) {
             pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 2 individuals in the population, "
                                                    + std::to_string(NP) + " detected");
-        }
-        if (m_elitism > pop.size()) {
-            pagmo_throw(std::invalid_argument,
-                        "The elitism must be smaller than the population size, while a value of: "
-                            + std::to_string(m_elitism) + " was detected in a population of size: "
-                            + std::to_string(pop.size()));
         }
         if (m_param_s > pop.size()) {
             pagmo_throw(std::invalid_argument,
@@ -304,10 +297,12 @@ public:
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
-        // m_log.clear();
+        m_log.clear();
+
+        double improvement; // stores the difference in fitness between parents and offsprings
 
         for (decltype(m_gen) i = 1u; i <= m_gen; ++i) {
-            // 0 - if the problem is stochastic we change seed and re-evaluate the entire population
+            // 1 - if the problem is stochastic we change seed and re-evaluate the entire population
             if (prob.is_stochastic()) {
                 pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
                 // re-evaluate the whole population w.r.t. the new seed
@@ -317,41 +312,58 @@ public:
             }
             auto XNEW = pop.get_x();
             auto FNEW = pop.get_f();
-            // 1 - Selection.
+            // 2 - Selection.
             auto selected_idx = perform_selection(FNEW);
-            for (decltype(XNEW.size()) j = 0u; j < XNEW.size(); ++j) {
+            for (decltype(NP) j = 0u; j < NP; ++j) {
                 XNEW[j] = pop.get_x()[selected_idx[j]];
             }
-            // 2 - Crossover
+            // 3 - Crossover
             perform_crossover(XNEW, prob.get_bounds());
-            // 3 - Mutation
+            // 4 - Mutation
             perform_mutation(XNEW, prob.get_bounds());
-            // 4 - Evaluate the new population
-            for (decltype(XNEW.size()) j = 0u; j < XNEW.size(); ++j) {
+            // 5 - Evaluate the new population
+            for (decltype(NP) j = 0u; j < NP; ++j) {
                 FNEW[j] = prob.fitness(XNEW[j]);
             }
-            // 5 - Reinsertion
-            // We sort the original population
-            std::vector<vector_double::size_type> best_parents(pop.get_f().size());
-            std::iota(best_parents.begin(), best_parents.end(), vector_double::size_type(0u));
-            std::sort(best_parents.begin(), best_parents.end(),
-                      [pop](vector_double::size_type a, vector_double::size_type b) {
-                          return detail::less_than_f(pop.get_f()[a][0], pop.get_f()[b][0]);
-                      });
-            // We sort the new population
-            std::vector<vector_double::size_type> best_offsprings(FNEW.size());
-            std::iota(best_offsprings.begin(), best_offsprings.end(), vector_double::size_type(0u));
-            std::sort(best_offsprings.begin(), best_offsprings.end(),
-                      [FNEW](vector_double::size_type a, vector_double::size_type b) {
+            // 6 - Logs and prints
+            if (m_verbosity > 0u) {
+                double bestf = std::numeric_limits<double>::max();
+                for (decltype(NP) j = 0u; j < NP; ++j) {
+                    if (FNEW[j][0] < bestf) bestf = FNEW[j][0];
+                }
+                improvement = pop.get_f()[pop.best_idx()][0] - bestf;
+
+                // (verbosity modes = 1: a line is added at each improvement
+                // (verbosity modes > 1: a line is added every m_verbosity generations)
+                if (((i % m_verbosity == 1u) && (m_verbosity > 1u)) || ((improvement > 0) && (m_verbosity == 1u))) {
+
+                    // Every 50 lines print the column names
+                    if (count % 50u == 1u) {
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
+                              std::setw(15), "Improvement:", '\n');
+                    }
+                    print(std::setw(7), i, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
+                          pop.get_f()[pop.best_idx()][0], std::setw(15), improvement, '\n');
+                    ++count;
+                    // Logs
+                    m_log.emplace_back(i, prob.get_fevals() - fevals0, pop.get_f()[pop.best_idx()][0], improvement);
+                }
+            }
+            // 7 - And insert the best into pop
+            // We add all the parents to the new population
+            for (decltype(NP) j = 0u; j < NP; ++j) {
+                XNEW.push_back(pop.get_x()[j]);
+                FNEW.push_back(pop.get_f()[j]);
+            }
+            // sort the entire pool
+            std::vector<vector_double::size_type> best_idxs(FNEW.size());
+            std::iota(best_idxs.begin(), best_idxs.end(), vector_double::size_type(0u));
+            std::sort(best_idxs.begin(), best_idxs.end(),
+                      [&FNEW](vector_double::size_type a, vector_double::size_type b) {
                           return detail::less_than_f(FNEW[a][0], FNEW[b][0]);
                       });
-            // We re-insert m_elitism best parents and the remaining best children
-            population pop_copy(pop);
-            for (decltype(m_elitism) j = 0u; j < m_elitism; ++j) {
-                pop.set_xf(j, pop_copy.get_x()[best_parents[j]], pop_copy.get_f()[best_parents[j]]);
-            }
-            for (decltype(pop.size()) j = m_elitism; j < pop.size(); ++j) {
-                pop.set_xf(j, XNEW[best_offsprings[j]], FNEW[best_offsprings[j]]);
+            for (decltype(NP) j = 0u; j < NP; ++j) {
+                pop.set_xf(j, XNEW[best_idxs[j]], FNEW[best_idxs[j]]);
             }
         }
         return pop;
@@ -381,17 +393,30 @@ public:
     * - 0: no verbosity
     * - >0: will print and log one line each \p level generations.
     *
-    * Example (verbosity 100):
+    * Example (verbosity 1):
     * @code{.unparsed}
-    *     Gen:        Fevals:          Best: Current Best:
-    *        1             40         261363         261363
-    *      101           4040        112.237        267.969
-    *      201           8040        20.8885        265.122
-    *      301          12040        20.6076        20.6076
-    *      401          16040         18.252        140.079
+    * Gen:        Fevals:          Best:   Improvement:
+    *    1             20        6605.75         415.95
+    *    3             60        6189.79        500.359
+    *    4             80        5689.44        477.663
+    *    5            100        5211.77        218.231
+    *    6            120        4993.54        421.684
+    *    8            160        4571.86        246.532
+    *   10            200        4325.33        166.685
+    *   11            220        4158.64        340.382
+    *   14            280        3818.26        294.232
+    *   15            300        3524.03        55.0358
+    *   16            320        3468.99        452.544
+    *   17            340        3016.45        16.7273
+    *   19            380        2999.72         150.68
+    *   21            420        2849.04        301.156
+    *   22            440        2547.88        1.25038
+    *   23            460        2546.63        192.561
+    *   25            500        2354.07        22.6248
+
     * @endcode
     * Gen is the generation number, Fevals the number of function evaluation used, , Best is the best fitness found,
-    * Current best is the best fitness currently in the population.
+    * Improvement is the improvement of the offsprings w.r.t. the parents
     *
     * @param level verbosity level
     */
@@ -423,7 +448,6 @@ public:
     {
         std::ostringstream ss;
         stream(ss, "\tNumber of generations: ", m_gen);
-        stream(ss, "\n\tElitism: ", m_elitism);
         stream(ss, "\n\tCrossover:");
         stream(ss, "\n\t\tType: " + m_crossover_map.right.at(m_crossover));
         stream(ss, "\n\t\tProbability: ", m_cr);
@@ -470,8 +494,8 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_cr, m_eta_c, m_m, m_param_m, m_elitism, m_param_s, m_mutation, m_selection, m_crossover, m_int_dim,
-           m_e, m_seed, m_verbosity);
+        ar(m_gen, m_cr, m_eta_c, m_m, m_param_m, m_param_s, m_mutation, m_selection, m_crossover, m_int_dim, m_e,
+           m_seed, m_verbosity);
     }
 
 private:
@@ -612,13 +636,17 @@ private:
             // We select the indexes to be mutated (the first N of to_be_mutated)
             std::shuffle(to_be_mutated.begin(), to_be_mutated.end(), m_e);
             auto N = std::binomial_distribution<vector_double::size_type>(dim, m_m)(m_e);
+            // We ensure at least one is mutated if m_m > 0
+            // if (m_m > 0. and N == 0u) N = 1;
+            // We apply the mutation scheme
             switch (m_mutation) {
                 case (mutation::UNIFORM): {
                     // Start of main loop through the chromosome
                     for (decltype(N) j = 0u; j < N; ++j) {
                         auto gene_idx = to_be_mutated[j];
                         if (gene_idx < dimc) {
-                            X[i][gene_idx] += drngs(m_e) * (ub[gene_idx] - lb[gene_idx]) * m_param_m;
+                            // X[i][gene_idx] += drngs(m_e) * (ub[gene_idx] - lb[gene_idx]) * m_param_m;
+                            X[i][gene_idx] = uniform_real_from_range(lb[gene_idx], ub[gene_idx], m_e);
                         } else {
                             X[i][gene_idx]
                                 = static_cast<double>(std::uniform_int_distribution<vector_double::size_type>(
@@ -641,8 +669,26 @@ private:
                     }
                     break;
                 }
-                case (mutation::POLYNOMIAL): {
-                    poly_mutation_impl(X[i], bounds);
+                case (mutation::POLYNOMIAL): { // https://www.iitk.ac.in/kangal/papers/k2012016.pdf
+                    // Start of main loop through the chromosome
+                    for (decltype(N) j = 0u; j < N; ++j) {
+                        auto gene_idx = to_be_mutated[j];
+                        if (gene_idx < dimc) {
+                            double u = drng(m_e);
+                            if (u <= 0.5) {
+                                auto delta_l = std::pow(2. * u, 1. / (1. + m_param_m)) - 1.;
+                                X[i][gene_idx] += delta_l * (X[i][gene_idx] - lb[gene_idx]);
+                            } else {
+                                auto delta_r = 1 - std::pow(2. * (1. - u), 1. / (1. + m_param_m));
+                                X[i][gene_idx] += delta_r * (ub[gene_idx] - X[i][gene_idx]);
+                            }
+                        } else {
+                            X[i][gene_idx]
+                                = static_cast<double>(std::uniform_int_distribution<vector_double::size_type>(
+                                    static_cast<vector_double::size_type>(lb[gene_idx]),
+                                    static_cast<vector_double::size_type>(ub[gene_idx]))(m_e));
+                        }
+                    }
                     break;
                 }
             }
@@ -744,62 +790,11 @@ private:
         }
         return std::pair<vector_double, vector_double>(std::move(child1), std::move(child2));
     }
-    void poly_mutation_impl(vector_double &child, const std::pair<vector_double, vector_double> &bounds) const
-    {
-        // Decision vector dimensions
-        auto D = child.size();
-        auto Di = m_int_dim;
-        auto Dc = D - Di;
-        // Problem bounds
-        const auto &lb = bounds.first;
-        const auto &ub = bounds.second;
-        // declarations
-        double rnd, delta1, delta2, mut_pow, deltaq;
-        double y, yl, yu, val, xy;
-        // Random distributions
-        std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
-
-        // This implements the real polinomial mutation and applies it to the non integer part of the decision vector
-        for (decltype(Dc) j = 0u; j < Dc; ++j) {
-            if (drng(m_e) <= m_m && lb[j] != ub[j]) {
-                y = child[j];
-                yl = lb[j];
-                yu = ub[j];
-                delta1 = (y - yl) / (yu - yl);
-                delta2 = (yu - y) / (yu - yl);
-                rnd = drng(m_e);
-                mut_pow = 1. / (m_param_m + 1.);
-                if (rnd <= 0.5) {
-                    xy = 1. - delta1;
-                    val = 2. * rnd + (1. - 2. * rnd) * (std::pow(xy, (m_param_m + 1.)));
-                    deltaq = std::pow(val, mut_pow) - 1.;
-                } else {
-                    xy = 1. - delta2;
-                    val = 2. * (1. - rnd) + 2. * (rnd - 0.5) * (std::pow(xy, (m_param_m + 1.)));
-                    deltaq = 1. - (std::pow(val, mut_pow));
-                }
-                y = y + deltaq * (yu - yl);
-                if (y < yl) y = yl;
-                if (y > yu) y = yu;
-                child[j] = y;
-            }
-        }
-
-        // This implements the integer mutation for an individual
-        for (decltype(D) j = Dc; j < D; ++j) {
-            if (drng(m_e) <= m_m) {
-                std::uniform_int_distribution<vector_double::size_type> ra_num(
-                    static_cast<vector_double::size_type>(lb[j]), static_cast<vector_double::size_type>(ub[j]));
-                child[j] = static_cast<double>(ra_num(m_e));
-            }
-        }
-    }
     unsigned m_gen;
     double m_cr;
     double m_eta_c;
     double m_m;
     double m_param_m;
-    unsigned m_elitism;
     unsigned m_param_s;
     mutation m_mutation;
     selection m_selection;
@@ -808,7 +803,7 @@ private:
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;
-    // mutable log_type m_log;
+    mutable log_type m_log;
 };
 
 } // namespace pagmo
