@@ -37,6 +37,7 @@ Implemented algorithms
   algorithms/pso
   algorithms/sade
   algorithms/sea
+  algorithms/sga
   algorithms/simulated_annealing
 
 Implemented problems

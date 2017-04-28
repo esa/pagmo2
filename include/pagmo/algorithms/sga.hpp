@@ -111,7 +111,7 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
 /**
  * \image html sga.jpg "The DNA Helix" width=3cm
  *
- * Approximately in the same decade as Evolutionary Strategies (see pagmo::sea) were studied, a different group
+ * Approximately during the same decades as Evolutionary Strategies (see pagmo::sea) were studied, a different group
  * led by John Holland, and later by his student David Goldberg, introduced and studied an algorithmic framework called
  * "genetic algorithms" that were, essentially, leveraging on the same idea but introducing also crossover as a genetic
  * operator. This led to a few decades of confusion and discussions on what was an evolutionary startegy and what a
@@ -125,22 +125,22 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  * @code{.unparsed}
  * > Start from a pagmo::population (pop) of dimension N
  * > while i < gen
- * > > Selection: create a new population (pop2) with selected N individuals from pop
+ * > > Selection: create a new population (pop2) with N individuals selected from pop (with repetition allowed)
  * > > Crossover: create a new population (pop3) with N individuals obtained applying crossover to pop2
  * > > Mutation:  create a new population (pop4) with N individuals obtained applying mutation to pop3
  * > > Evaluate all new chromosomes in pop4
- * > > Reinsertion: set pop to contain the best N individuals in pop and pop4
+ * > > Reinsertion: set pop to contain the best N individuals taken from pop and pop4
  * @endcode
  *
  * The various blocks of pagmo genetic algorithm are listed below:
  *
- * Selection: two selection methods are provided: "tournament" and "truncated". Tournament selection works by
+ * *Selection*: two selection methods are provided: "tournament" and "truncated". Tournament selection works by
  * selecting each offspring as the one having the minimal fitness in a random group of \p param_s. The truncated
  * selection, instead, works selecting the best \p param_s chromosomes in the entire population over and over.
  * We have deliberately not implemented the popular roulette wheel selection as we are of the opinion that such
  * a system does not generalize much being highly sensitive to the fitness scaling.
  *
- * Crossover: four different crossover schemes are provided: "single", "exponential", "binomial", "sbx". The
+ * *Crossover*: four different crossover schemes are provided: "single", "exponential", "binomial", "sbx". The
  * single point crossover, called "single", works selecting a random point in the parent chromosome and inserting the
  * partner chromosome thereafter. The exponential crossover is taken from the algorithm differential evolution,
  * implemented, in pagmo, as pagmo::de. It essentially selects a random point in the parent chromosome and inserts,
@@ -149,12 +149,12 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  * from the NSGA-II algorithm, implemented in pagmo as pagmo::nsga2, and makes use of an additional parameter called
  * distribution index \p eta_c.
  *
- * Mutation: three different mutations schemes are provided: "uniform", "gaussian" and "polynomial". Uniform mutation
+ * *Mutation*: three different mutations schemes are provided: "uniform", "gaussian" and "polynomial". Uniform mutation
  * simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution
  * with standard deviation proportional to the \p m_param_m and the bounds width. The last scheme is the polynomial
  * mutation.
  *
- * Reinsertion: the only reinsertion strategy provided is what we call pure elitism. After each generation
+ * *Reinsertion*: the only reinsertion strategy provided is what we call pure elitism. After each generation
  * all parents and children are put in the same pool and only the best are passed to the next generation.
  *
  * **NOTE** This algorithm will work only for box bounded problems.
@@ -181,14 +181,15 @@ public:
      * @param eta_c distribution index for "sbx" crossover. This is an inactive parameter if other types of crossovers
      * are selected.
      * @param m mutation probability.
-     * @param param_m distribution index (in polynomial mutation), otherwise width of the mutation relative to bounds
-     * width.
+     * @param param_m distribution index ("polynomial" mutation), gaussian width ("gaussian" mutation) or inactive
+     * ("uniform" mutation)
      * @param param_s when "truncated" selection is used this indicates the number of best individuals to use. When
      * "tournament" selection is used this indicates the size of the tournament.
      * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
      * @param selection the selection strategy. One of "tournament", "truncated".
      * @param crossover the crossover strategy. One of "exponential", "binomial", "single" or "sbx"
      * @param int_dim the number of element in the chromosome to be treated as integers.
+     * @param seed seed used by the internal random number generator
      *
      * @throws std::invalid_argument if \p cr not in [0,1), \p eta_c not in [1, 100), \p m not in [0,1], \p elitism < 1
      * \p mutation not one of "gaussian", "uniform" or "polynomial", \p selection not one of "roulette" or "truncated"
@@ -664,7 +665,6 @@ private:
                     for (decltype(N) j = 0u; j < N; ++j) {
                         auto gene_idx = to_be_mutated[j];
                         if (gene_idx < dimc) {
-                            // X[i][gene_idx] += drngs(m_e) * (ub[gene_idx] - lb[gene_idx]) * m_param_m;
                             X[i][gene_idx] = uniform_real_from_range(lb[gene_idx], ub[gene_idx], m_e);
                         } else {
                             X[i][gene_idx]
