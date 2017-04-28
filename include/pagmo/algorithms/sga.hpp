@@ -316,11 +316,11 @@ public:
         m_log.clear();
 
         double improvement; // stores the difference in fitness between parents and offsprings
-
+        std::uniform_int_distribution<unsigned int> urng;
         for (decltype(m_gen) i = 1u; i <= m_gen; ++i) {
             // 1 - if the problem is stochastic we change seed and re-evaluate the entire population
             if (prob.is_stochastic()) {
-                pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
+                pop.get_problem().set_seed(urng(m_e));
                 // re-evaluate the whole population w.r.t. the new seed
                 for (decltype(pop.size()) j = 0u; j < pop.size(); ++j) {
                     pop.set_xf(j, pop.get_x()[j], prob.fitness(pop.get_x()[j]));
@@ -429,7 +429,6 @@ public:
     *   22            440        2547.88        1.25038
     *   23            460        2546.63        192.561
     *   25            500        2354.07        22.6248
-
     * @endcode
     * Gen is the generation number, Fevals the number of fitness evaluations , Best is the best fitness found,
     * Improvement is the improvement of the new population of offspring with respect to the parents.
@@ -533,13 +532,15 @@ private:
                 break;
             }
             case (selection::TOURNAMENT): {
+                std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type> dist;
                 // We make one tournament for each of the offspring to be generated
                 for (decltype(retval.size()) j = 0u; j < retval.size(); ++j) {
                     // Fisher Yates algo http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
                     // to select m_param_s individial at random
                     for (decltype(m_param_s) i = 0u; i < m_param_s; ++i) {
-                        auto index = std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>(
-                            i, best_idxs.size() - 1)(m_e);
+                        std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>::param_type(
+                            i, best_idxs.size() - 1u);
+                        auto index = dist(m_e);
                         std::swap(best_idxs[index], best_idxs[i]);
                     }
                     // Find the index of the individual with minimum fitness among the randomly selected ones
@@ -617,7 +618,7 @@ private:
                     }
                     // LCOV_EXCL_START
                     default: {
-                        pagmo_throw(std::logic_error, "The code should never reach here");
+                        assert(false); // the code should never reach this point
                         break;
                     }
                         // LCOV_EXCL_STOP
@@ -804,7 +805,7 @@ private:
                 child2[i] = parent2[i];
             }
         }
-        return std::pair<vector_double, vector_double>(std::move(child1), std::move(child2));
+        return std::make_pair(std::move(child1), std::move(child2));
     }
     unsigned m_gen;
     double m_cr;
