@@ -2,19 +2,19 @@ environment:
   TWINE_PASSWORD:
     secure: fqy2DKVE2zM+97vNPB8xgw3ae3SDPkL/T8RvC6s4ncY=
   matrix:
-    #- BUILD_TYPE: "MSVC_64_Python35"
-    #  COMPILER: MSVC15
-    #  PLATFORM: "x64"
-    #- BUILD_TYPE: "MSVC_64_Python36"
-    #  COMPILER: MSVC15
-    #  PLATFORM: "x64"
+    - BUILD_TYPE: "MSVC_64_Python35"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
+    - BUILD_TYPE: "MSVC_64_Python36"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
     - BUILD_TYPE: "MSVC_64_Debug"
       COMPILER: MSVC15
       PLATFORM: "x64"
-    #- BUILD_TYPE: "MinGW_64_Debug"
-    #- BUILD_TYPE: "MinGW_64_Python27"
-    #- BUILD_TYPE: "MinGW_64_Python35"
-    #- BUILD_TYPE: "MinGW_64_Python36"
+    - BUILD_TYPE: "MinGW_64_Debug"
+    - BUILD_TYPE: "MinGW_64_Python27"
+    - BUILD_TYPE: "MinGW_64_Python35"
+    - BUILD_TYPE: "MinGW_64_Python36"
   global:
     PLATFORMTOOLSET: "v140"
 
@@ -88,5 +88,5 @@ notifications:
 # Enable this to be able to login to the build worker. You can use the
 # `remmina` program in Ubuntu, use the login information that the line below
 # prints into the log.
-on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+# on_finish:
+# - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
