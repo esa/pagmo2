@@ -289,8 +289,12 @@ class ipyparallel_island_test_case(_ut.TestCase):
         # Copy/deepcopy.
         isl2 = copy(isl)
         isl3 = deepcopy(isl)
-        self.assertEqual(str(isl2), str(isl))
-        self.assertEqual(str(isl3), str(isl))
+        self.assertEqual(str(isl2.get_population()), str(isl.get_population()))
+        self.assertEqual(str(isl2.get_algorithm()), str(isl.get_algorithm()))
+        self.assertEqual(str(isl2.get_name()), str(isl.get_name()))
+        self.assertEqual(str(isl3.get_population()), str(isl.get_population()))
+        self.assertEqual(str(isl3.get_algorithm()), str(isl.get_algorithm()))
+        self.assertEqual(str(isl3.get_name()), str(isl.get_name()))
 
         # Pickle.
         pisl = loads(dumps(isl))

@@ -14,7 +14,11 @@ pagmo is a header-only library which has the following third party dependencies:
 * `Boost <http://www.boost.org/>`_, **mandatory**, header-only (needs the libraries only if you
   intend to compile the python bindings)
 * `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`_, optional, header-only
+  (enabled via the ``PAGMO_WITH_EIGEN3`` CMake option)
 * `NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`_, optional, requires linking
+  (enabled via the ``PAGMO_WITH_NLOPT`` CMake option)
+* `Ipopt <https://projects.coin-or.org/Ipopt>`_, optional, requires linking
+  (enabled via the ``PAGMO_WITH_IPOPT`` CMake option)
 
 After making sure the dependencies above are installed in your system, you can download the
 pagmo source code from the `GitHub release page <https://github.com/esa/pagmo2/releases>`_. Alternatively,

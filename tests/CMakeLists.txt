@@ -68,6 +68,10 @@ if(PAGMO_WITH_NLOPT)
     ADD_PAGMO_TESTCASE(nlopt)
 endif()
 
+if(PAGMO_WITH_IPOPT)
+    ADD_PAGMO_TESTCASE(ipopt)
+endif()
+
 # Here are problematic tests.
 if(NOT YACMA_COMPILER_IS_MSVC AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     # This test compiles but MSVC seems to have troubles in

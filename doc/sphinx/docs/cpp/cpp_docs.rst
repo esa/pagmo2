@@ -29,6 +29,7 @@ Implemented algorithms
   algorithms/compass_search
   algorithms/de
   algorithms/de1220
+  algorithms/ipopt
   algorithms/moead
   algorithms/mbh
   algorithms/cstrs_self_adaptive
@@ -94,3 +95,4 @@ Various coding utilities.
   miscellanea/generic
   miscellanea/type_traits
   miscellanea/exceptions
+  miscellanea/utility_classes

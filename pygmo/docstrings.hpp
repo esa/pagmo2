@@ -152,13 +152,30 @@ std::string nlopt_xtol_rel_docstring();
 std::string nlopt_xtol_abs_docstring();
 std::string nlopt_maxeval_docstring();
 std::string nlopt_maxtime_docstring();
-std::string nlopt_selection_docstring();
-std::string nlopt_replacement_docstring();
-std::string nlopt_set_random_sr_seed_docstring();
 std::string nlopt_get_log_docstring();
 std::string nlopt_get_last_opt_result_docstring();
 std::string nlopt_get_solver_name_docstring();
 std::string nlopt_local_optimizer_docstring();
+std::string ipopt_docstring();
+std::string ipopt_get_log_docstring();
+std::string ipopt_get_last_opt_result_docstring();
+std::string ipopt_set_string_option_docstring();
+std::string ipopt_set_string_options_docstring();
+std::string ipopt_get_string_options_docstring();
+std::string ipopt_reset_string_options_docstring();
+std::string ipopt_set_integer_option_docstring();
+std::string ipopt_set_integer_options_docstring();
+std::string ipopt_get_integer_options_docstring();
+std::string ipopt_reset_integer_options_docstring();
+std::string ipopt_set_numeric_option_docstring();
+std::string ipopt_set_numeric_options_docstring();
+std::string ipopt_get_numeric_options_docstring();
+std::string ipopt_reset_numeric_options_docstring();
+
+// base local solver common docstrings.
+std::string bls_selection_docstring(const std::string &);
+std::string bls_replacement_docstring(const std::string &);
+std::string bls_set_random_sr_seed_docstring(const std::string &);
 
 // utilities
 // hypervolume

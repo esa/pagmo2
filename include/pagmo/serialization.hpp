@@ -45,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include "external/cereal/archives/portable_binary.hpp"
 #include "external/cereal/types/base_class.hpp"
 #include "external/cereal/types/common.hpp"
+#include "external/cereal/types/map.hpp"
 #include "external/cereal/types/memory.hpp"
 #include "external/cereal/types/polymorphic.hpp"
 #include "external/cereal/types/tuple.hpp"
