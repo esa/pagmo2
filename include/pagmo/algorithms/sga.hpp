@@ -538,7 +538,6 @@ private:
                     // Fisher Yates algo http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
                     // to select m_param_s individial at random
                     for (decltype(m_param_s) i = 0u; i < m_param_s; ++i) {
-                        assert(i >= best_idxs.size() - 1u);
                         dist.param(
                             std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>::param_type(
                                 i, best_idxs.size() - 1u));
@@ -579,7 +578,6 @@ private:
             }
         } else {
             auto XCOPY = X;
-            assert(dim - 1u >= 0u);
             std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type> rnd_gene_idx(0, dim - 1u);
             std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type> rnd_skip_first_idx(
                 1, all_idx.size() - 1);
@@ -651,6 +649,7 @@ private:
         std::uniform_real_distribution<> drng(0., 1.);  // to generate a number in [0, 1)
         std::uniform_real_distribution<> drngs(-1, 1.); // to generate a number in [-1, 1)
         std::normal_distribution<> normal(0., 1.);
+        std::uniform_int_distribution<int> rnd_lb_ub; // to generate a random int between int bounds
         // This will contain the indexes of the genes to be mutated
         std::vector<vector_double::size_type> to_be_mutated(dim);
         std::iota(to_be_mutated.begin(), to_be_mutated.end(), vector_double::size_type(0u));
@@ -670,12 +669,9 @@ private:
                         if (gene_idx < dimc) {
                             X[i][gene_idx] = uniform_real_from_range(lb[gene_idx], ub[gene_idx], m_e);
                         } else {
-                            assert(static_cast<vector_double::size_type>(lb[gene_idx])
-                                   <= static_cast<vector_double::size_type>(ub[gene_idx]));
-                            X[i][gene_idx]
-                                = static_cast<double>(std::uniform_int_distribution<vector_double::size_type>(
-                                    static_cast<vector_double::size_type>(lb[gene_idx]),
-                                    static_cast<vector_double::size_type>(ub[gene_idx]))(m_e));
+                            rnd_lb_ub.param(std::uniform_int_distribution<int>::param_type(
+                                static_cast<int>(lb[gene_idx]), static_cast<int>(ub[gene_idx])));
+                            X[i][gene_idx] = static_cast<double>(rnd_lb_ub(m_e));
                         }
                     }
                     break;
@@ -707,12 +703,9 @@ private:
                                 X[i][gene_idx] += delta_r * (ub[gene_idx] - X[i][gene_idx]);
                             }
                         } else {
-                            assert(static_cast<vector_double::size_type>(lb[gene_idx])
-                                   <= static_cast<vector_double::size_type>(ub[gene_idx]));
-                            X[i][gene_idx]
-                                = static_cast<double>(std::uniform_int_distribution<vector_double::size_type>(
-                                    static_cast<vector_double::size_type>(lb[gene_idx]),
-                                    static_cast<vector_double::size_type>(ub[gene_idx]))(m_e));
+                            rnd_lb_ub.param(std::uniform_int_distribution<int>::param_type(
+                                static_cast<int>(lb[gene_idx]), static_cast<int>(ub[gene_idx])));
+                            X[i][gene_idx] = static_cast<double>(rnd_lb_ub(m_e));
                         }
                     }
                     break;
@@ -790,7 +783,6 @@ private:
         // This implements two-point binary crossover and applies it to the integer part of the chromosome
         for (decltype(Dc) i = Dc; i < D; ++i) {
             // in this loop we are sure Di is at least 1
-            assert(0 >= Di - 1u);
             std::uniform_int_distribution<vector_double::size_type> ra_num(0, Di - 1u);
             if (drng(m_e) <= m_cr) {
                 site1 = ra_num(m_e);
