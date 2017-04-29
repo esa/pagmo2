@@ -49,6 +49,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
+#include <pagmo/algorithms/sga.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
 #include <pagmo/archipelago.hpp>
 #include <pagmo/exceptions.hpp>

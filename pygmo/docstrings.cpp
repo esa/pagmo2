@@ -1830,7 +1830,7 @@ Implementation of Example 5.1 in the report from Luksan and Vlcek.
 
 The problem is also known as the Chained Rosenbrock function with trigonometric-exponential constraints.
 
-Its formulation in pagmo can be written as:
+Its formulation in pygmo is written as:
 
 .. math::
    \begin{array}{rl}
@@ -3638,7 +3638,7 @@ time the user can query the state of the island and fetch its internal data memb
 wait for pending evolutions to conclude by calling the :func:`~pygmo.island.wait()` and
 :func:`~pygmo.island.get()` methods.
 
-Typically, pagmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
+Typically, pygmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
 the following method:
 
@@ -4049,11 +4049,11 @@ of the solver (e.g., the stopping criteria) can be configured via class attribut
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
 is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.nlopt.xtol_rel`).
 
-All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
+All NLopt solvers support only single-objective optimisation, and, as usual in pygmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
 Some solvers support equality and/or inequality constaints.
 
-In order to support pagmo's population-based optimisation model, the ``evolve()`` method will select
+In order to support pygmo's population-based optimisation model, the ``evolve()`` method will select
 a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.
 If the optimisation produces a better individual (as established by :func:`~pygmo.compare_fc()`),
 the optimised individual will be inserted back into the population.
@@ -4481,6 +4481,190 @@ Raises:
       (e.g., type conversion errors, mismatched function signatures, etc.)
 
 See also the docs of the C++ class :cpp:class:`pagmo::sea`.
+
+)";
+}
+
+std::string sea_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. 
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
+:class:`~pygmo.sea`. 
+A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
+A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``Improvement``, ``Mutations``
+
+    ``Gen`` (``int``), generation.
+    ``Fevals`` (``int``), number of functions evaluation made.
+    ``Best`` (``float``), the best fitness function found so far.
+    ``Improvement`` (``float``), improvement made by the last mutation.
+    ``Mutations`` (``float``), number of mutated components for the decision vector.
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(sea(500))
+    >>> algo.set_verbosity(50)
+    >>> prob = problem(schwefel(dim = 20))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:          Best:   Improvement:     Mutations:
+       1              1        6363.44        2890.49              2
+    1001           1001        1039.92       -562.407              3
+    2001           2001        358.966         -632.6              2
+    3001           3001         106.08       -995.927              3
+    4001           4001         83.391         -266.8              1
+    5001           5001        62.4994       -1018.38              3
+    6001           6001        39.2851       -732.695              2
+    7001           7001        37.2185       -518.847              1
+    8001           8001        20.9452        -450.75              1
+    9001           9001        17.9193       -270.679              1
+    >>> uda = algo.extract(sea)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::sea::get_log()`.
+
+)";
+}
+
+std::string sga_docstring()
+{
+    return R"(__init__(gen = 1u, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2u, crossover = "exponential", 
+        mutation = "polynomial", selection = "tournament", int_dim = 0u, seed = random)
+
+A Simple Genetic Algorithm
+
+Approximately during the same decades as Evolutionary Strategies (see :class:`~pygmo.sea`) were studied, 
+a different group led by John Holland, and later by his student David Goldberg, introduced and
+studied an algorithmic framework called "genetic algorithms" that were, essentially, leveraging on
+the same idea but introducing also crossover as a genetic operator. This led to a few decades of
+confusion and discussions on what was an evolutionary startegy and what a genetic algorithm and on
+whether the crossover was a useful operator or mutation only algorithms were to be preferred.
+
+In pygmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between
+selected crossover types, selection schemes and mutation types.
+
+The pseudo code of our version is:
+
+.. code-block:: none
+
+   > Start from a population (pop) of dimension N
+   > while i < gen
+   > > Selection: create a new population (pop2) with N individuals selected from pop (with repetition allowed)
+   > > Crossover: create a new population (pop3) with N individuals obtained applying crossover to pop2
+   > > Mutation:  create a new population (pop4) with N individuals obtained applying mutation to pop3
+   > > Evaluate all new chromosomes in pop4
+   > > Reinsertion: set pop to contain the best N individuals taken from pop and pop4
+
+The various blocks of pygmo genetic algorithm are listed below:
+
+*Selection*: two selection methods are provided: ``tournament`` and ``truncated``. ``Tournament`` selection works by
+selecting each offspring as the one having the minimal fitness in a random group of size *param_s*. The ``truncated``
+selection, instead, works selecting the best *param_s* chromosomes in the entire population over and over.
+We have deliberately not implemented the popular roulette wheel selection as we are of the opinion that such
+a system does not generalize much being highly sensitive to the fitness scaling.
+
+*Crossover*: four different crossover schemes are provided:``single``, ``exponential``, ``binomial``, ``sbx``. The
+``single`` point crossover, works selecting a random point in the parent chromosome and, with probability *cr*, inserting the
+partner chromosome thereafter. The ``exponential`` crossover is taken from the algorithm differential evolution,
+implemented, in pygmo, as :class:`~pygmo.de`. It essentially selects a random point in the parent chromosome and inserts,
+in each successive gene, the partner values with probability  *cr* up to when it stops. The binomial crossover
+inserts each gene from the partner with probability *cr*. The simulated binary crossover (called ``sbx``), is taken
+from the NSGA-II algorithm, implemented in pygmo as :class:`~pygmo.nsga2`, and makes use of an additional parameter called
+distribution index *eta_c*.
+
+*Mutation*: three different mutations schemes are provided: ``uniform``, ``gaussian`` and ``polynomial``. Uniform mutation
+simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution
+with standard deviation proportional to the *param_m* and the bounds width. The last scheme is the ``polynomial``
+mutation from Deb.
+
+*Reinsertion*: the only reinsertion strategy provided is what we call pure elitism. After each generation
+all parents and children are put in the same pool and only the best are passed to the next generation.
+ 
+.. note:
+
+This algorithm will work only for box bounded problems.
+
+.. note:
+
+Specifying the parameter *int_dim* a part of the decision vector (at the end) will be treated as integers
+This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
+The various mutation and crossover strategies will do different things on an integer gene or a real valued one.
+
+Args:
+    gen (``int``): number of generations.
+    cr (``float``): crossover probability.
+    eta_c (``float``): distribution index for ``sbx`` crossover. This parameter is inactive if other types of crossover are selected.
+    m (``float``): mutation probability.
+    param_m (``float``): distribution index (``polynomial`` mutation), gaussian width (``gaussian`` mutation) or inactive (``uniform`` mutation)
+    param_s (``float``): the number of best individuals to use in "truncated" selection or the size of the tournament in ``tournament`` selection.
+    crossover (``str``): the crossover strategy. One of ``exponential``, ``binomial``, ``single`` or ``sbx``
+    mutation (``str``): the mutation strategy. One of ``gaussian``, ``polynomial`` or ``uniform``.
+    selection (``str``): the selection strategy. One of ``tournament``, "truncated".
+    int_dim (``int``): the number of element in the chromosome to be treated as integers.
+    seed (``int``): seed used by the internal random number generator
+
+Raises:
+    OverflowError: if *gen* or *seed* or *int_dim* are negative or greater than an implementation-defined value
+    ValueError: if *cr* is not in [0,1], if *eta_c* is not in [1,100], if *m* is not in [0,1], input_f *mutation* 
+      is not one of ``gaussian``, ``uniform`` or ``polynomial``, if *selection* not one of "roulette", 
+      "truncated" or *crossover* is not one of ``exponential``, ``binomial``, ``sbx``, ``single``, if *param_m* is
+      not in [0,1] and *mutation* is not ``polynomial``, if *mutation* is not in [1,100] and *mutation* is ``polynomial``.
+    unspecified: any exception thrown by failures at the intersection between C++ and Python
+      (e.g., type conversion errors, mismatched function signatures, etc.)
+
+See also the docs of the C++ class :cpp:class:`pagmo::sga`.
+
+)";
+}
+
+std::string sga_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. 
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
+:class:`~pygmo.sga`. 
+A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
+A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``Improvement``
+
+    ``Gen`` (``int``), generation.
+    ``Fevals`` (``int``), number of functions evaluation made.
+    ``Best`` (``float``), the best fitness function found so far.
+    ``Improvement`` (``float``), improvement made by the last generation.
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(sga(gen = 500))
+    >>> algo.set_verbosity(50)
+    >>> prob = problem(schwefel(dim = 20))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:          Best:   Improvement:     Mutations:
+       1              1        6363.44        2890.49              2
+    1001           1001        1039.92       -562.407              3
+    2001           2001        358.966         -632.6              2
+    3001           3001         106.08       -995.927              3
+    4001           4001         83.391         -266.8              1
+    5001           5001        62.4994       -1018.38              3
+    6001           6001        39.2851       -732.695              2
+    7001           7001        37.2185       -518.847              1
+    8001           8001        20.9452        -450.75              1
+    9001           9001        17.9193       -270.679              1
+    >>> uda = algo.extract(sea)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::sga::get_log()`.
 
 )";
 }

@@ -142,8 +142,9 @@ std::string mbh_set_perturb_docstring();
 std::string mbh_get_log_docstring();
 std::string mbh_get_perturb_docstring();
 std::string sea_docstring();
-std::string generic_uda_get_seed_docstring();
-std::string generic_uda_inner_algorithm_docstring();
+std::string sea_get_log_docstring();
+std::string sga_docstring();
+std::string sga_get_log_docstring();
 std::string nlopt_docstring();
 std::string nlopt_stopval_docstring();
 std::string nlopt_ftol_rel_docstring();
@@ -159,6 +160,8 @@ std::string nlopt_get_log_docstring();
 std::string nlopt_get_last_opt_result_docstring();
 std::string nlopt_get_solver_name_docstring();
 std::string nlopt_local_optimizer_docstring();
+std::string generic_uda_get_seed_docstring();
+std::string generic_uda_inner_algorithm_docstring();
 
 // utilities
 // hypervolume

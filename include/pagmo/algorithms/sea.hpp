@@ -219,8 +219,8 @@ public:
      * 668           4013        1487.34        73.2677              2
      * @endcode
      * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
-     * function currently in the population, Improvement is the improvement made by the las mutation and Mutations
-     * is the number of mutated componnets of the decision vector
+     * function currently in the population, Improvement is the improvement made by the last mutation and Mutations
+     * is the number of mutated componets of the decision vector
      *
      * @param level verbosity level
      */

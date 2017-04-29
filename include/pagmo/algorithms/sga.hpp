@@ -135,7 +135,7 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  * The various blocks of pagmo genetic algorithm are listed below:
  *
  * *Selection*: two selection methods are provided: "tournament" and "truncated". Tournament selection works by
- * selecting each offspring as the one having the minimal fitness in a random group of \p param_s. The truncated
+ * selecting each offspring as the one having the minimal fitness in a random group of size \p param_s. The truncated
  * selection, instead, works selecting the best \p param_s chromosomes in the entire population over and over.
  * We have deliberately not implemented the popular roulette wheel selection as we are of the opinion that such
  * a system does not generalize much being highly sensitive to the fitness scaling.
@@ -176,8 +176,7 @@ public:
      * Constructs a simple genetic algorithm.
      *
      * @param gen number of generations.
-     * @param cr crossover probability. This parameter is inactive when the single-point crossover method "single" is
-     * selected.
+     * @param cr crossover probability.
      * @param eta_c distribution index for "sbx" crossover. This is an inactive parameter if other types of crossovers
      * are selected.
      * @param m mutation probability.
@@ -191,13 +190,13 @@ public:
      * @param int_dim the number of element in the chromosome to be treated as integers.
      * @param seed seed used by the internal random number generator
      *
-     * @throws std::invalid_argument if \p cr not in [0,1), \p eta_c not in [1, 100), \p m not in [0,1], \p elitism < 1
+     * @throws std::invalid_argument if \p cr not in [0,1], \p eta_c not in [1, 100], \p m not in [0,1],
      * \p mutation not one of "gaussian", "uniform" or "polynomial", \p selection not one of "roulette" or "truncated"
      * \p crossover not one of "exponential", "binomial", "sbx" or "single", if \p param_m is not in [0,1] and
      * \p mutation is not "polynomial" or \p mutation is not in [1,100] and \p mutation is polynomial.
      */
-    sga(unsigned gen = 1u, double cr = .95, double eta_c = 1., double m = 0.02, double param_m = 1.,
-        unsigned param_s = 5u, std::string crossover = "exponential", std::string mutation = "polynomial",
+    sga(unsigned gen = 1u, double cr = .90, double eta_c = 1., double m = 0.02, double param_m = 1.,
+        unsigned param_s = 2u, std::string crossover = "exponential", std::string mutation = "polynomial",
         std::string selection = "tournament", vector_double::size_type int_dim = 0u,
         unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_param_s(param_s), m_int_dim(int_dim),
@@ -613,9 +612,11 @@ private:
                         break;
                     }
                     case (crossover::SINGLE): {
-                        auto n = rnd_gene_idx(m_e);
-                        for (decltype(dim) j = n; j < dim; ++j) {
-                            child[j] = parent2[j];
+                        if (drng(m_e) < m_cr) {
+                            auto n = rnd_gene_idx(m_e);
+                            for (decltype(dim) j = n; j < dim; ++j) {
+                                child[j] = parent2[j];
+                            }
                         }
                         break;
                     }
