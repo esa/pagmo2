@@ -358,6 +358,11 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 <td>S-CU</td>
 <td>Exposed from C++</td>
 </tr>
+<tr class="row-even"><td>Ipopt</td>
+<td><a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a></td>
+<td>S-CU</td>
+<td>Exposed from C++</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1749,7 +1754,7 @@ objective function. Using the above definitions the overall pseudo code can be s
 </div>
 <p><a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cstrs_self_adaptive</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> objects.</p>
 <p><strong>NOTE</strong> Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
-for decision vectors already evaluated. This makes the final counter of function evaluations somehow unpredictable.
+for decision vectors already evaluated. This makes the final counter of function evaluations somewhat unpredictable.
 The number of function evaluation will be bounded to <em>iters</em> times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.</p>
@@ -1879,10 +1884,10 @@ NLopt algorithms is:</p>
 of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
 is satisfied. By default, only the <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion is active (see <a class="reference internal" href="#pygmo.nlopt.xtol_rel" title="pygmo.nlopt.xtol_rel"><code class="xref py py-attr docutils literal"><span class="pre">xtol_rel</span></code></a>).</p>
-<p>All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
+<p>All NLopt solvers support only single-objective optimisation, and, as usual in pygmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
 Some solvers support equality and/or inequality constaints.</p>
-<p>In order to support pagmo&#8217;s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
+<p>In order to support pygmo&#8217;s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
 a single individual from the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> to be optimised by the NLopt solver.
 If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/py_con_utils.html#pygmo.compare_fc" title="pygmo.compare_fc"><code class="xref py py-func docutils literal"><span class="pre">compare_fc()</span></code></a>),
 the optimised individual will be inserted back into the population.
@@ -1890,7 +1895,7 @@ The selection and replacement strategies can be configured via the <a class="ref
 and <a class="reference internal" href="#pygmo.nlopt.replacement" title="pygmo.nlopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a> attributes.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal"><span class="pre">PAGMO_WITH_NLOPT</span></code> option
+<p class="last">This user-defined algorithm is available only if pygmo was compiled with the <code class="docutils literal"><span class="pre">PAGMO_WITH_NLOPT</span></code> option
 enabled (see the <a class="reference internal" href="../../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
 </div>
 <div class="admonition seealso">
@@ -2424,6 +2429,627 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.ipopt">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">ipopt</code><a class="headerlink" href="#pygmo.ipopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ipopt.</p>
+<p>This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
+a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that
+is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.</p>
+<p>Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the
+optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt
+can estimate numerically the Hessians if needed).</p>
+<p>In order to support pygmo&#8217;s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
+a single individual from the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> to be optimised.
+If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/py_con_utils.html#pygmo.compare_fc" title="pygmo.compare_fc"><code class="xref py py-func docutils literal"><span class="pre">compare_fc()</span></code></a>),
+the optimised individual will be inserted back into the population. The selection and replacement strategies
+can be configured via the <a class="reference internal" href="#pygmo.ipopt.selection" title="pygmo.ipopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and <a class="reference internal" href="#pygmo.ipopt.replacement" title="pygmo.ipopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a> attributes.</p>
+<p>Ipopt supports a large amount of options for the configuration of the optimisation run. The options
+are divided into three categories:</p>
+<ul class="simple">
+<li><em>string</em> options (i.e., the type of the option is <code class="docutils literal"><span class="pre">str</span></code>),</li>
+<li><em>integer</em> options (i.e., the type of the option is <code class="docutils literal"><span class="pre">int</span></code>),</li>
+<li><em>numeric</em> options (i.e., the type of the option is <code class="docutils literal"><span class="pre">float</span></code>).</li>
+</ul>
+<p>The full list of options is available on the <a class="reference external" href="https://www.coin-or.org/Ipopt/documentation/node40.html">Ipopt website</a>.
+<a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a> allows to configure any Ipopt option via methods such as <a class="reference internal" href="#pygmo.ipopt.set_string_options" title="pygmo.ipopt.set_string_options"><code class="xref py py-func docutils literal"><span class="pre">set_string_options()</span></code></a>,
+<a class="reference internal" href="#pygmo.ipopt.set_string_option" title="pygmo.ipopt.set_string_option"><code class="xref py py-func docutils literal"><span class="pre">set_string_option()</span></code></a>, <a class="reference internal" href="#pygmo.ipopt.set_integer_options" title="pygmo.ipopt.set_integer_options"><code class="xref py py-func docutils literal"><span class="pre">set_integer_options()</span></code></a>, etc., which need to be used before
+invoking the <code class="docutils literal"><span class="pre">evolve()</span></code> method.</p>
+<p>If the user does not set any option, <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a> use Ipopt&#8217;s default values for the options (see the
+<a class="reference external" href="https://www.coin-or.org/Ipopt/documentation/node40.html">documentation</a>), with the following
+modifications:</p>
+<ul class="simple">
+<li>if the <code class="docutils literal"><span class="pre">&quot;print_level&quot;</span></code> integer option is <strong>not</strong> set by the user, it will be set to 0 by <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a> (this will
+suppress most screen output produced by the solver - note that we support an alternative form of logging via
+the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">pygmo.algorithm.set_verbosity()</span></code></a> machinery);</li>
+<li>if the <code class="docutils literal"><span class="pre">&quot;hessian_approximation&quot;</span></code> string option is <strong>not</strong> set by the user and the optimisation problem does
+<strong>not</strong> provide the Hessians, then the option will be set to <code class="docutils literal"><span class="pre">&quot;limited-memory&quot;</span></code> by <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a>. This makes it
+possible to optimise problems without Hessians out-of-the-box (i.e., Ipopt will approximate numerically the
+Hessians for you);</li>
+<li>if the <code class="docutils literal"><span class="pre">&quot;constr_viol_tol&quot;</span></code> numeric option is <strong>not</strong> set by the user and the optimisation problem is constrained,
+then <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a> will compute the minimum value <code class="docutils literal"><span class="pre">min_tol</span></code> in the vector returned by <a class="reference internal" href="../py_problem.html#pygmo.problem.c_tol" title="pygmo.problem.c_tol"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.problem.c_tol</span></code></a>
+for the optimisation problem at hand. If <code class="docutils literal"><span class="pre">min_tol</span></code> is nonzero, then the <code class="docutils literal"><span class="pre">&quot;constr_viol_tol&quot;</span></code> Ipopt option will
+be set to <code class="docutils literal"><span class="pre">min_tol</span></code>, otherwise the default Ipopt value (1E-4) will be used for the option. This ensures that,
+if the constraint tolerance is not explicitly set by the user, a solution deemed feasible by Ipopt is also
+deemed feasible by pygmo (but the opposite is not necessarily true).</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This user-defined algorithm is available only if pygmo was compiled with the <code class="docutils literal"><span class="pre">PAGMO_WITH_IPOPT</span></code> option
+enabled (see the <a class="reference internal" href="../../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ipopt is not thread-safe, and thus it cannot be used in a <a class="reference internal" href="../islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal"><span class="pre">pygmo.thread_island</span></code></a>.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="https://projects.coin-or.org/Ipopt">https://projects.coin-or.org/Ipopt</a>.</p>
+</div>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipoptE" title="pagmo::ipopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::ipopt</span></code></a>.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span><span class="mf">1E-9</span><span class="p">)</span> <span class="c1"># Change the relative convergence tolerance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span> 
+<span class="go">{&#39;tol&#39;: 1e-09}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-6</span><span class="p">]</span> <span class="o">*</span> <span class="mi">18</span> <span class="c1"># Set constraints tolerance to 1E-6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+
+<span class="go">******************************************************************************</span>
+<span class="go">This program contains Ipopt, a library for large-scale nonlinear optimization.</span>
+<span class="go">Ipopt is released as open source code under the Eclipse Public License (EPL).</span>
+<span class="go">        For more information visit http://projects.coin-or.org/Ipopt</span>
+<span class="go">******************************************************************************</span>
+
+
+<span class="go">objevals:        objval:      violated:    viol. norm:</span>
+<span class="go">        1         201174             18         1075.3 i</span>
+<span class="go">        2         209320             18        691.814 i</span>
+<span class="go">        3        36222.3             18        341.639 i</span>
+<span class="go">        4        11158.1             18        121.097 i</span>
+<span class="go">        5        4270.38             18        46.4742 i</span>
+<span class="go">        6        2054.03             18        20.7306 i</span>
+<span class="go">        7        705.959             18        5.43118 i</span>
+<span class="go">        8        37.8304             18        1.52099 i</span>
+<span class="go">        9        2.89066             12       0.128862 i</span>
+<span class="go">       10       0.300807              3      0.0165902 i</span>
+<span class="go">       11     0.00430279              3    0.000496496 i</span>
+<span class="go">       12    7.54121e-06              2    9.70735e-06 i</span>
+<span class="go">       13    4.34249e-08              0              0</span>
+<span class="go">       14    3.71925e-10              0              0</span>
+<span class="go">       15    3.54406e-13              0              0</span>
+<span class="go">       16    2.37071e-18              0              0</span>
+
+<span class="go">Optimisation return status: Solve_Succeeded (value = 0)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pygmo.ipopt.get_integer_options">
+<code class="descname">get_integer_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.get_integer_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get integer options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a name-value dictionary of optimisation integer options</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">int</span></code> pairs</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_integer_options</span><span class="p">()</span>
+<span class="go">{&#39;print_level&#39;: 3}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.get_last_opt_result">
+<code class="descname">get_last_opt_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.get_last_opt_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the result of the last optimisation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the Ipopt return code for the last optimisation run, or <code class="docutils literal"><span class="pre">Ipopt::Solve_Succeeded</span></code> if no optimisations have been run yet</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_last_opt_result</span><span class="p">()</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimisation log.</p>
+<p>The optimisation log is a collection of log data lines. A log data line is a tuple consisting of:</p>
+<ul class="simple">
+<li>the number of objective function evaluations made so far,</li>
+<li>the objective function value for the current decision vector,</li>
+<li>the number of constraints violated by the current decision vector,</li>
+<li>the constraints violation norm for the current decision vector,</li>
+<li>a boolean flag signalling the feasibility of the current decision vector.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the optimisation log</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The number of constraints violated, the constraints violation norm and the feasibility flag stored in the log
+are all determined via the facilities and the tolerances specified within <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>. That
+is, they might not necessarily be consistent with Ipopt&#8217;s notion of feasibility. See the explanation
+of how the <code class="docutils literal"><span class="pre">&quot;constr_viol_tol&quot;</span></code> numeric option is handled in <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ipopt supports its own logging format and protocol, including the ability to print to screen and write to file.
+Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbosity setting is set to 0 - see
+<a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a>). On-screen logging can be enabled via the <code class="docutils literal"><span class="pre">&quot;print_level&quot;</span></code> string option.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.get_numeric_options">
+<code class="descname">get_numeric_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.get_numeric_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get numeric options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a name-value dictionary of optimisation numeric options</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">float</span></code> pairs</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span><span class="mf">1E-4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span> 
+<span class="go">{&#39;tol&#39;: 1E-4}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.get_string_options">
+<code class="descname">get_string_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.get_string_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get string options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a name-value dictionary of optimisation string options</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">str</span></code> pairs</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span><span class="s2">&quot;hessian_approximation&quot;</span><span class="p">,</span><span class="s2">&quot;limited-memory&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_string_options</span><span class="p">()</span>
+<span class="go">{&#39;hessian_approximation&#39;: &#39;limited-memory&#39;}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.ipopt.replacement">
+<code class="descname">replacement</code><a class="headerlink" href="#pygmo.ipopt.replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual replacement policy.</p>
+<p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
+that will be replaced by the optimised individual. The attribute can be either a string or an integral.</p>
+<p>If the attribute is a string, it must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+<p><a class="reference internal" href="#pygmo.ipopt.set_random_sr_seed" title="pygmo.ipopt.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>If the attribute is an integer, it represents the index (in the population) of the individual that will be
+replaced by the optimised individual.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the individual replacement policy or index</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">str</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.reset_integer_options">
+<code class="descname">reset_integer_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.reset_integer_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear all integer options.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_integer_options</span><span class="p">()</span>
+<span class="go">{&#39;print_level&#39;: 3}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">reset_integer_options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_integer_options</span><span class="p">()</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.reset_numeric_options">
+<code class="descname">reset_numeric_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.reset_numeric_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear all numeric options.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span><span class="mf">1E-4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span> 
+<span class="go">{&#39;tol&#39;: 1E-4}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">reset_numeric_options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.reset_string_options">
+<code class="descname">reset_string_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.reset_string_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear all string options.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span><span class="s2">&quot;hessian_approximation&quot;</span><span class="p">,</span><span class="s2">&quot;limited-memory&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_string_options</span><span class="p">()</span>
+<span class="go">{&#39;hessian_approximation&#39;: &#39;limited-memory&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">reset_string_options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_string_options</span><span class="p">()</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.ipopt.selection">
+<code class="descname">selection</code><a class="headerlink" href="#pygmo.ipopt.selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual selection policy.</p>
+<p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
+that will be optimised. The attribute can be either a string or an integral.</p>
+<p>If the attribute is a string, it must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+<p><a class="reference internal" href="#pygmo.ipopt.set_random_sr_seed" title="pygmo.ipopt.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>If the attribute is an integer, it represents the index (in the population) of the individual that is selected
+for optimisation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the individual selection policy or index</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">str</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.set_integer_option">
+<code class="descname">set_integer_option</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.set_integer_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set integer option.</p>
+<p>This method will set the optimisation integer option <em>name</em> to <em>value</em>.
+The optimisation options are passed to the Ipopt API when calling the <code class="docutils literal"><span class="pre">evolve()</span></code> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the option</li>
+<li><strong>value</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value of the option</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
+<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">        Thread safety: none</span>
+
+<span class="go">Extra info:</span>
+<span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
+<span class="go">        Verbosity: 0</span>
+<span class="go">        Individual selection policy: best</span>
+<span class="go">        Individual replacement policy: best</span>
+<span class="go">        Integer options: {print_level : 3}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.set_integer_options">
+<code class="descname">set_integer_options</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.set_integer_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set integer options.</p>
+<p>This method will set the optimisation integer options contained in <em>opts</em>.
+It is equivalent to calling <a class="reference internal" href="#pygmo.ipopt.set_integer_option" title="pygmo.ipopt.set_integer_option"><code class="xref py py-func docutils literal"><span class="pre">set_integer_option()</span></code></a> passing all the name-value pairs in <em>opts</em>
+as arguments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>opts</strong> (<code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">int</span></code> pairs) &#8211; the name-value map that will be used to set the options</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_integer_options</span><span class="p">({</span><span class="s2">&quot;filter_reset_trigger&quot;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;print_level&quot;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
+<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">        Thread safety: none</span>
+
+<span class="go">Extra info:</span>
+<span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
+<span class="go">        Verbosity: 0</span>
+<span class="go">        Individual selection policy: best</span>
+<span class="go">        Individual replacement policy: best</span>
+<span class="go">        Integer options: {filter_reset_trigger : 4,  print_level : 3}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.set_numeric_option">
+<code class="descname">set_numeric_option</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.set_numeric_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set numeric option.</p>
+<p>This method will set the optimisation numeric option <em>name</em> to <em>value</em>.
+The optimisation options are passed to the Ipopt API when calling the <code class="docutils literal"><span class="pre">evolve()</span></code> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the option</li>
+<li><strong>value</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; the value of the option</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span><span class="mf">1E-6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
+<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">        Thread safety: none</span>
+
+<span class="go">Extra info:</span>
+<span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
+<span class="go">        Verbosity: 0</span>
+<span class="go">        Individual selection policy: best</span>
+<span class="go">        Individual replacement policy: best</span>
+<span class="go">        Numeric options: {tol : 1E-6}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.set_numeric_options">
+<code class="descname">set_numeric_options</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.set_numeric_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set numeric options.</p>
+<p>This method will set the optimisation numeric options contained in <em>opts</em>.
+It is equivalent to calling <a class="reference internal" href="#pygmo.ipopt.set_numeric_option" title="pygmo.ipopt.set_numeric_option"><code class="xref py py-func docutils literal"><span class="pre">set_numeric_option()</span></code></a> passing all the name-value pairs in <em>opts</em>
+as arguments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>opts</strong> (<code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">float</span></code> pairs) &#8211; the name-value map that will be used to set the options</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_options</span><span class="p">({</span><span class="s2">&quot;tol&quot;</span><span class="p">:</span><span class="mf">1E-4</span><span class="p">,</span> <span class="s2">&quot;constr_viol_tol&quot;</span><span class="p">:</span><span class="mf">1E-3</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
+<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">        Thread safety: none</span>
+
+<span class="go">Extra info:</span>
+<span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
+<span class="go">        Verbosity: 0</span>
+<span class="go">        Individual selection policy: best</span>
+<span class="go">        Individual replacement policy: best</span>
+<span class="go">        Numeric options: {constr_viol_tol : 1E-3,  tol : 1E-4}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.set_random_sr_seed">
+<code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.set_random_sr_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
+election/replacement policies (see <a class="reference internal" href="#pygmo.ipopt.selection" title="pygmo.ipopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
+<a class="reference internal" href="#pygmo.ipopt.replacement" title="pygmo.ipopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.set_string_option">
+<code class="descname">set_string_option</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.set_string_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set string option.</p>
+<p>This method will set the optimisation string option <em>name</em> to <em>value</em>.
+The optimisation options are passed to the Ipopt API when calling the <code class="docutils literal"><span class="pre">evolve()</span></code> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the option</li>
+<li><strong>value</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the value of the option</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span><span class="s2">&quot;hessian_approximation&quot;</span><span class="p">,</span><span class="s2">&quot;limited-memory&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
+<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">        Thread safety: none</span>
+
+<span class="go">Extra info:</span>
+<span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
+<span class="go">        Verbosity: 0</span>
+<span class="go">        Individual selection policy: best</span>
+<span class="go">        Individual replacement policy: best</span>
+<span class="go">        String options: {hessian_approximation : limited-memory}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipopt.set_string_options">
+<code class="descname">set_string_options</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipopt.set_string_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set string options.</p>
+<p>This method will set the optimisation string options contained in <em>opts</em>.
+It is equivalent to calling <a class="reference internal" href="#pygmo.ipopt.set_string_option" title="pygmo.ipopt.set_string_option"><code class="xref py py-func docutils literal"><span class="pre">set_string_option()</span></code></a> passing all the name-value pairs in <em>opts</em>
+as arguments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>opts</strong> (<code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">str</span></code> pairs) &#8211; the name-value map that will be used to set the options</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_string_options</span><span class="p">({</span><span class="s2">&quot;hessian_approximation&quot;</span><span class="p">:</span><span class="s2">&quot;limited-memory&quot;</span><span class="p">,</span> <span class="s2">&quot;limited_memory_initialization&quot;</span><span class="p">:</span><span class="s2">&quot;scalar1&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
+<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">        Thread safety: none</span>
+
+<span class="go">Extra info:</span>
+<span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
+<span class="go">        Verbosity: 0</span>
+<span class="go">        Individual selection policy: best</span>
+<span class="go">        Individual replacement policy: best</span>
+<span class="go">        String options: {hessian_approximation : limited-memory,  limited_memory_initialization : scalar1}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

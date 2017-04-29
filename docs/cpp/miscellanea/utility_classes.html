@@ -1,0 +1,453 @@
+ <!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Utility classes &#8212; pagmo 2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Python Documentation" href="../../python/python_docs.html" />
+    <link rel="prev" title="Exceptions" href="exceptions.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Utility classes</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="utility-classes">
+<span id="cpp-utility-classes"></span><h1>Utility classes<a class="headerlink" href="#utility-classes" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo17base_local_solverE">
+<span id="pagmo::base_local_solver"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">base_local_solver</code><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solverE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Base class for local solvers. </p>
+<p>This class contains common methods useful in the implementation of user-defined algorithms for local optimisation.</p>
+<p>Currently, this class implements policies for the selection and replacement of a single individual in a population, which are meant to be used in the implementation of the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the user-defined algorithm (see, e.g., <a class="reference internal" href="../algorithms/nlopt.html#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">pagmo::nlopt::evolve()</span></a>). </p>
+<p>Subclassed by <a class="reference internal" href="../algorithms/ipopt.html#pagmoclasspagmo_1_1ipopt"><span class="std std-ref">pagmo::ipopt</span></a>, <a class="reference internal" href="../algorithms/nlopt.html#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver17base_local_solverEv">
+<span id="pagmo::base_local_solver::base_local_solver"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a0218c92d827d1289819976a276581772"></span><code class="descname">base_local_solver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver17base_local_solverEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default constructor. </p>
+<p>The default constructor sets the selection and replacement policies to <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, and it initialises the RNG of the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacements policies via random_device::next(). </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver18set_random_sr_seedEj">
+<span id="pagmo::base_local_solver::set_random_sr_seed__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1af1f29272f5106c5bbfe6beb89e03d498"></span>void <code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver18set_random_sr_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seed</span></code>: the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver13set_selectionERKNSt6stringE">
+<span id="pagmo::base_local_solver::set_selection__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>select</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver13set_selectionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the individual selection policy. </p>
+<p>This method will set the policy that is used to select the individual that will be optimised when calling the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+</p>
+<p><a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1af1f29272f5106c5bbfe6beb89e03d498"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>Instead of a selection policy, a specific individual in the population can be selected via <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">select</span></code>: the selection policy.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">select</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver13set_selectionEN10population9size_typeE">
+<span id="pagmo::base_local_solver::set_selection__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver13set_selectionEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the individual selection index. </p>
+<p>This method will set the index of the individual that is selected for optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be selected for optimisation. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo17base_local_solver13get_selectionEv">
+<span id="pagmo::base_local_solver::get_selectionC"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a22cbdaf0e4087bfb37e35145aee5f258"></span>boost::any <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo17base_local_solver13get_selectionEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the individual selection policy or index. </p>
+<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the individual selection policy or index. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver15set_replacementERKNSt6stringE">
+<span id="pagmo::base_local_solver::set_replacement__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>replace</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver15set_replacementERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the individual replacement policy. </p>
+<p>This method will set the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm to select the individual that will be replaced by the optimised individual.</p>
+<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+</p>
+<p><a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1af1f29272f5106c5bbfe6beb89e03d498"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>Instead of a replacement policy, a specific individual in the population can be selected via <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">replace</span></code>: the replacement policy.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">replace</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver15set_replacementEN10population9size_typeE">
+<span id="pagmo::base_local_solver::set_replacement__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver15set_replacementEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the individual replacement index. </p>
+<p>This method will set the index of the individual that is replaced after the optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be replaced after the optimisation. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo17base_local_solver15get_replacementEv">
+<span id="pagmo::base_local_solver::get_replacementC"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a482c4178f0d7acd8c786359761622f9c"></span>boost::any <code class="descname">get_replacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo17base_local_solver15get_replacementEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the individual replacement policy or index. </p>
+<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the individual replacement policy or index. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2NK5pagmo17base_local_solver4saveER7Archive">
+<span id="pagmo::base_local_solver::save__ArchiveRC"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1ae2c1575ab3b7b21d961f5e622a1b2d38"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo17base_local_solver4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Save to archive. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: the target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo17base_local_solver4loadER7Archive">
+<span id="pagmo::base_local_solver::load__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a4a85b987e5fe575c9de03cd6fde9d940"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Load from archive. </p>
+<p>In case of exceptions, <code class="docutils literal"><span class="pre">this</span></code> will be unaffected.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: the source archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Functions</p>
+<dl class="function">
+<dt id="_CPPv2NK5pagmo17base_local_solver17select_individualERK10population">
+<span id="pagmo::base_local_solver::select_individual__populationCRC"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1adc00bcba4a111afd42a8c4236a9851ec"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">select_individual</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo17base_local_solver17select_individualERK10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Select individual. </p>
+<p>This method will select a single individual from the input population <code class="docutils literal"><span class="pre">pop</span></code>, returning its decision vector and fitness as a pair. The selection is done according to the currently active selection policy:<ul class="simple">
+<li>if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a663318ca6304a6a6dfa5dede8efdc4ff"><span class="std std-ref">base_local_solver::m_select</span></a> is <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, then the decision and fitness vectors of the best individual are returned,</li>
+<li>if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a663318ca6304a6a6dfa5dede8efdc4ff"><span class="std std-ref">base_local_solver::m_select</span></a> is <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code>, then the decision and fitness vectors of the worst individual are returned,</li>
+<li>if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a663318ca6304a6a6dfa5dede8efdc4ff"><span class="std std-ref">base_local_solver::m_select</span></a> is <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>, then the decision and fitness vectors of a randomly-selected individual are returned,</li>
+<li>if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a663318ca6304a6a6dfa5dede8efdc4ff"><span class="std std-ref">base_local_solver::m_select</span></a> is an index, then the decision and fitness vectors of the individual at the corresponding position in the population are returned.</li>
+</ul>
+</p>
+<p>Note that selecting a best or worst individual is meaningful only in single-objective problems.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a pair containing the decision and fitness vectors of the selected individual.</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: the input population.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a663318ca6304a6a6dfa5dede8efdc4ff"><span class="std std-ref">base_local_solver::m_select</span></a> is an index and the index is not smaller than the size of <code class="docutils literal"><span class="pre">pop</span></code>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a336395f04ade40f2f2c7c99a1c68011d"><span class="std std-ref">population::best_idx()</span></a> or <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a997570eee98e774ed0c704b24a89995c"><span class="std std-ref">population::worst_idx()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo17base_local_solver18replace_individualER10populationRK13vector_doubleRK13vector_double">
+<span id="pagmo::base_local_solver::replace_individual__populationR.vector_doubleCR.vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a6338cb531cf648eaf72bccf68410197f"></span>void <code class="descname">replace_individual</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>f</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo17base_local_solver18replace_individualER10populationRK13vector_doubleRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Replace individual. </p>
+<p>This method will replace a single individual in the input population <code class="docutils literal"><span class="pre">pop</span></code>, setting its decision vector to <code class="docutils literal"><span class="pre">x</span></code> and its fitness vector to <code class="docutils literal"><span class="pre">f</span></code>. The selection is done according to the currently active selection policy:<ul class="simple">
+<li>if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a22d6be60ac9fbaf994597deae84b35e4"><span class="std std-ref">base_local_solver::m_replace</span></a> is <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, then the best individual will be replaced,</li>
+<li>if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a22d6be60ac9fbaf994597deae84b35e4"><span class="std std-ref">base_local_solver::m_replace</span></a> is <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code>, then the worst individual will be replaced,</li>
+<li>if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a22d6be60ac9fbaf994597deae84b35e4"><span class="std std-ref">base_local_solver::m_replace</span></a> is <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>, then a randomly-selected individual will be replaced,</li>
+<li>if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a22d6be60ac9fbaf994597deae84b35e4"><span class="std std-ref">base_local_solver::m_replace</span></a> is an index, then the individual at the corresponding position in the population will be replaced.</li>
+</ul>
+</p>
+<p>Note that selecting a best or worst individual is meaningful only in single-objective problems.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: the input population. </li>
+<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector of the new individual. </li>
+<li><code class="docutils literal"><span class="pre">f</span></code>: the fitness vector of the new individual.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <a class="reference internal" href="#pagmoclasspagmo_1_1base__local__solver_1a22d6be60ac9fbaf994597deae84b35e4"><span class="std std-ref">base_local_solver::m_replace</span></a> is an index and the index is not smaller than the size of <code class="docutils literal"><span class="pre">pop</span></code>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a336395f04ade40f2f2c7c99a1c68011d"><span class="std std-ref">population::best_idx()</span></a>, <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a997570eee98e774ed0c704b24a89995c"><span class="std std-ref">population::worst_idx()</span></a>, or <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a20b2999f3db76d156c9ca801ee0a0158"><span class="std std-ref">population::set_xf()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Attributes</p>
+<dl class="member">
+<dt id="_CPPv2N5pagmo17base_local_solver8m_selectE">
+<span id="pagmo::base_local_solver::m_select__boost::any"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a663318ca6304a6a6dfa5dede8efdc4ff"></span>boost::any <code class="descname">m_select</code><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver8m_selectE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Individual selection policy. </p>
+<p>This <code class="docutils literal"><span class="pre">boost::any</span></code> instance must contain either an <code class="docutils literal"><span class="pre">std::string</span></code> or a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>, otherwise the behaviour will be undefined. </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv2N5pagmo17base_local_solver9m_replaceE">
+<span id="pagmo::base_local_solver::m_replace__boost::any"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a22d6be60ac9fbaf994597deae84b35e4"></span>boost::any <code class="descname">m_replace</code><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver9m_replaceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Individual replacement policy. </p>
+<p>This <code class="docutils literal"><span class="pre">boost::any</span></code> instance must contain either an <code class="docutils literal"><span class="pre">std::string</span></code> or a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>, otherwise the behaviour will be undefined. </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv2N5pagmo17base_local_solver14m_rselect_seedE">
+<span id="pagmo::base_local_solver::m_rselect_seed__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a8824858b1cb711ac50a4da49c54237d6"></span>unsigned <code class="descname">m_rselect_seed</code><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver14m_rselect_seedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv2N5pagmo17base_local_solver3m_eE">
+<span id="pagmo::base_local_solver::m_e__detail::random_engine_type"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a17a8d125e053f4ae105f4671c3caa0da"></span>detail::random_engine_type <code class="descname">m_e</code><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver3m_eE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Random engine for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

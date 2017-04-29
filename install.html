@@ -182,8 +182,12 @@
 <ul class="simple">
 <li><a class="reference external" href="http://www.boost.org/">Boost</a>, <strong>mandatory</strong>, header-only (needs the libraries only if you
 intend to compile the python bindings)</li>
-<li><a class="reference external" href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a>, optional, header-only</li>
-<li><a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a>, optional, requires linking</li>
+<li><a class="reference external" href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a>, optional, header-only
+(enabled via the <code class="docutils literal"><span class="pre">PAGMO_WITH_EIGEN3</span></code> CMake option)</li>
+<li><a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a>, optional, requires linking
+(enabled via the <code class="docutils literal"><span class="pre">PAGMO_WITH_NLOPT</span></code> CMake option)</li>
+<li><a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a>, optional, requires linking
+(enabled via the <code class="docutils literal"><span class="pre">PAGMO_WITH_IPOPT</span></code> CMake option)</li>
 </ul>
 <p>After making sure the dependencies above are installed in your system, you can download the
 pagmo source code from the <a class="reference external" href="https://github.com/esa/pagmo2/releases">GitHub release page</a>. Alternatively,

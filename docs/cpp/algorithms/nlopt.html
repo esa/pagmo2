@@ -175,8 +175,13 @@
 </p>
 <p>The desired NLopt solver is selected upon construction of a <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm. Various properties of the solver (e.g., the stopping criteria) can be configured after construction via methods provided by this class. Note that multiple stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion is satisfied. By default, only the <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion is active (see <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a9bbe3d1fbaa1dc7fc03590afcea4fd51"><span class="std std-ref">get_xtol_rel()</span></a>).</p>
 <p>All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient. Some solvers support equality and/or inequality constaints.</p>
-<p>In order to support pagmo&#8217;s population-based optimisation model, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">nlopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised by the NLopt solver. If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/constrained.html#pagmonamespacepagmo_1accb4f0cfb71555ffec215cc381ea87bc"><span class="std std-ref">pagmo::compare_fc()</span></a>), the optimised individual will be inserted back into the population. The selection and replacement strategies can be configured via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a8534d6a463d08d1c863bc5a52a7307b7"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a768881bce66bac201009eb3d121b2488"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a3da13a41a8af03aebe14058bda7cc42f"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a240d93fdd92b39cf8043ec852f74b021"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
-<p><div class="admonition note">
+<p>In order to support pagmo&#8217;s population-based optimisation model, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">nlopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised by the NLopt solver. If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/constrained.html#pagmonamespacepagmo_1accb4f0cfb71555ffec215cc381ea87bc"><span class="std std-ref">pagmo::compare_fc()</span></a>), the optimised individual will be inserted back into the population. The selection and replacement strategies can be configured via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">A moved-from pagmo::nlopt is destructible and assignable. Any other operation will result
+in undefined behaviour.</p>
+</div>
+<div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal"><span class="pre">PAGMO_WITH_NLOPT</span></code> option
 enabled (see the <a class="reference internal" href="../../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
@@ -186,8 +191,8 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <p class="last">The <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms">NLopt website</a> contains a detailed description
 of each supported solver.</p>
 </div>
-</p>
-<p><strong>NOTE</strong>: a moved-from <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> is destructible and assignable. Any other operation will result in undefined behaviour. </p>
+ </p>
+<p>Inherits from <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver"><span class="std std-ref">pagmo::base_local_solver</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
@@ -218,7 +223,7 @@ of each supported solver.</p>
 <dt id="_CPPv2N5pagmo5nlopt5nloptEv">
 <span id="pagmo::nlopt::nlopt"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a50339f55ee0906583a6693fe3456c3a5"></span><code class="descname">nlopt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt5nloptEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor. </p>
-<p>The default constructor initialises the <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm with the <code class="docutils literal"><span class="pre">&quot;cobyla&quot;</span></code> solver, the <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> individual selection strategy and the <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> individual replacement strategy.</p>
+<p>The default constructor initialises the <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm with the <code class="docutils literal"><span class="pre">&quot;cobyla&quot;</span></code> solver. The individual selection/replacement strategies are those specified by <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a0218c92d827d1289819976a276581772"><span class="std std-ref">base_local_solver::base_local_solver()</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -233,7 +238,7 @@ of each supported solver.</p>
 <dt id="_CPPv2N5pagmo5nlopt5nloptERKNSt6stringE">
 <span id="pagmo::nlopt::nlopt__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1aa3d990621bda657af13f464201d6300b"></span><code class="descname">nlopt</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>algo</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt5nloptERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from solver name. </p>
-<p>This constructor will initialise a <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> object which will use the NLopt algorithm specified by the input string <code class="docutils literal"><span class="pre">algo</span></code>, the <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> individual selection strategy and the <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> individual replacement strategy. <code class="docutils literal"><span class="pre">algo</span></code> is translated to an NLopt algorithm type according to the following translation table: <table border="1" class="docutils">
+<p>This constructor will initialise a <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> object which will use the NLopt algorithm specified by the input string <code class="docutils literal"><span class="pre">algo</span></code>. The individual selection/replacement strategies are those specified by <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a0218c92d827d1289819976a276581772"><span class="std std-ref">base_local_solver::base_local_solver()</span></a>. <code class="docutils literal"><span class="pre">algo</span></code> is translated to an NLopt algorithm type according to the following table: <table border="1" class="docutils">
 <colgroup>
 <col width="47%" />
 <col width="53%" />
@@ -320,6 +325,7 @@ description of each supported solver.</p>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">std::runtime_error</span></code>: if the NLopt version is not at least 2. </li>
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">algo</span></code> is not one of the allowed algorithm names. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception throw by <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a0218c92d827d1289819976a276581772"><span class="std std-ref">base_local_solver::base_local_solver()</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -364,134 +370,10 @@ description of each supported solver.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo5nlopt18set_random_sr_seedEj">
-<span id="pagmo::nlopt::set_random_sr_seed__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a48c2b797e712beabc775e206d523df70"></span>void <code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt18set_random_sr_seedEj" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">seed</span></code>: the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="_CPPv2N5pagmo5nlopt13set_selectionERKNSt6stringE">
-<span id="pagmo::nlopt::set_selection__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a8534d6a463d08d1c863bc5a52a7307b7"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>select</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt13set_selectionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Set the individual selection policy. </p>
-<p>This method will set the policy that is used in <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">evolve()</span></a> to select the individual that will be optimised.</p>
-<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
-</ul>
-</p>
-<p><a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a48c2b797e712beabc775e206d523df70"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
-<p>Instead of a selection policy, a specific individual in the population can be selected via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a768881bce66bac201009eb3d121b2488"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">select</span></code>: the selection policy.</li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">select</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="_CPPv2N5pagmo5nlopt13set_selectionEN10population9size_typeE">
-<span id="pagmo::nlopt::set_selection__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a768881bce66bac201009eb3d121b2488"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt13set_selectionEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Set the individual selection index. </p>
-<p>This method will set the index of the individual that is selected for optimisation in <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">evolve()</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be selected for optimisation. </li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="_CPPv2NK5pagmo5nlopt13get_selectionEv">
-<span id="pagmo::nlopt::get_selectionC"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1af63f9f088d8a631e674410201b4bcc59"></span>boost::any <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nlopt13get_selectionEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get the individual selection policy or index. </p>
-<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a8534d6a463d08d1c863bc5a52a7307b7"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a768881bce66bac201009eb3d121b2488"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the individual selection policy or index. </dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="_CPPv2N5pagmo5nlopt15set_replacementERKNSt6stringE">
-<span id="pagmo::nlopt::set_replacement__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a3da13a41a8af03aebe14058bda7cc42f"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>replace</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt15set_replacementERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Set the individual replacement policy. </p>
-<p>This method will set the policy that is used in <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">evolve()</span></a> to select the individual that will be replaced by the optimised individual.</p>
-<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
-</ul>
-</p>
-<p><a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a48c2b797e712beabc775e206d523df70"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
-<p>Instead of a replacement policy, a specific individual in the population can be selected via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a240d93fdd92b39cf8043ec852f74b021"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">replace</span></code>: the replacement policy.</li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">replace</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="_CPPv2N5pagmo5nlopt15set_replacementEN10population9size_typeE">
-<span id="pagmo::nlopt::set_replacement__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a240d93fdd92b39cf8043ec852f74b021"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt15set_replacementEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Set the individual replacement index. </p>
-<p>This method will set the index of the individual that is replaced after the optimisation in <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">evolve()</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be replaced after the optimisation. </li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="_CPPv2NK5pagmo5nlopt15get_replacementEv">
-<span id="pagmo::nlopt::get_replacementC"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1af35ce1786c8a214de76c7da1d4e89f84"></span>boost::any <code class="descname">get_replacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nlopt15get_replacementEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get the individual replacement policy or index. </p>
-<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a3da13a41a8af03aebe14058bda7cc42f"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a240d93fdd92b39cf8043ec852f74b021"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the individual replacement policy or index. </dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="_CPPv2NK5pagmo5nlopt6evolveE10population">
 <span id="pagmo::nlopt::evolve__populationC"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nlopt6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evolve population. </p>
-<p>This method will select an individual from <code class="docutils literal"><span class="pre">pop</span></code>, optimise it with the NLopt algorithm specified upon construction, replace an individual in <code class="docutils literal"><span class="pre">pop</span></code> with the optimised individual, and finally return <code class="docutils literal"><span class="pre">pop</span></code>. The individual selection and replacement criteria can be set via <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a8534d6a463d08d1c863bc5a52a7307b7"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a768881bce66bac201009eb3d121b2488"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a3da13a41a8af03aebe14058bda7cc42f"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a240d93fdd92b39cf8043ec852f74b021"><span class="std std-ref">set_replacement(population::size_type)</span></a>. The NLopt solver will run until one of the stopping criteria is satisfied, and the return status of the NLopt solver will be recorded (it can be fetched with <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a16f3d305530abde452143f93006ce0ad"><span class="std std-ref">get_last_opt_result()</span></a>).</p>
+<p>This method will select an individual from <code class="docutils literal"><span class="pre">pop</span></code>, optimise it with the NLopt algorithm specified upon construction, replace an individual in <code class="docutils literal"><span class="pre">pop</span></code> with the optimised individual, and finally return <code class="docutils literal"><span class="pre">pop</span></code>. The individual selection and replacement criteria can be set via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>. The NLopt solver will run until one of the stopping criteria is satisfied, and the return status of the NLopt solver will be recorded (it can be fetched with <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a16f3d305530abde452143f93006ce0ad"><span class="std std-ref">get_last_opt_result()</span></a>).</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the optimised population.</dd>
@@ -506,11 +388,10 @@ description of each supported solver.</p>
 <li>the population&#8217;s problem is multi-objective,</li>
 <li>the setup of the NLopt algorithm fails (e.g., if the problem is constrained but the selected NLopt solver does not support constrained optimisation),</li>
 <li>the selected NLopt solver needs gradients but they are not provided by the population&#8217;s problem,</li>
-<li>the components of the individual selected for optimisation contain NaNs or they are outside the problem&#8217;s bounds,</li>
-<li>the individual selection/replacement index is not smaller than the population&#8217;s size. </li>
+<li>the components of the individual selected for optimisation contain NaNs or they are outside the problem&#8217;s bounds. </li>
 </ul>
 </li>
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the public interface of <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the public interface of <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> or <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver"><span class="std std-ref">pagmo::base_local_solver</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -868,7 +749,7 @@ description of each supported solver.</p>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types or <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver"><span class="std std-ref">pagmo::base_local_solver</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -881,7 +762,7 @@ description of each supported solver.</p>
 <dt id="_CPPv2N5pagmo5nlopt4loadER7Archive">
 <span id="pagmo::nlopt::load__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1nlopt_1a81c25e0e91e686bda95b6ab6cd9d778c"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load from archive. </p>
-<p>In case of exceptions, <code class="docutils literal"><span class="pre">this</span></code> will be unaffected.</p>
+<p>In case of exceptions, <code class="docutils literal"><span class="pre">this</span></code> will be reset to a default-constructed state.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -890,9 +771,133 @@ description of each supported solver.</p>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of primitive types. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of primitive types or <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver"><span class="std std-ref">pagmo::base_local_solver</span></a>. </li>
 </ul>
 </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver18set_random_sr_seedEj">
+<span id="pagmo::base_local_solver::set_random_sr_seed__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1af1f29272f5106c5bbfe6beb89e03d498"></span>void <code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver18set_random_sr_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seed</span></code>: the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver13set_selectionERKNSt6stringE">
+<span id="pagmo::base_local_solver::set_selection__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>select</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver13set_selectionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the individual selection policy. </p>
+<p>This method will set the policy that is used to select the individual that will be optimised when calling the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+</p>
+<p><a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1af1f29272f5106c5bbfe6beb89e03d498"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>Instead of a selection policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">select</span></code>: the selection policy.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">select</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver13set_selectionEN10population9size_typeE">
+<span id="pagmo::base_local_solver::set_selection__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver13set_selectionEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the individual selection index. </p>
+<p>This method will set the index of the individual that is selected for optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be selected for optimisation. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo17base_local_solver13get_selectionEv">
+<span id="pagmo::base_local_solver::get_selectionC"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a22cbdaf0e4087bfb37e35145aee5f258"></span>boost::any <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo17base_local_solver13get_selectionEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the individual selection policy or index. </p>
+<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the individual selection policy or index. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver15set_replacementERKNSt6stringE">
+<span id="pagmo::base_local_solver::set_replacement__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>replace</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver15set_replacementERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the individual replacement policy. </p>
+<p>This method will set the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm to select the individual that will be replaced by the optimised individual.</p>
+<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+</p>
+<p><a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1af1f29272f5106c5bbfe6beb89e03d498"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>Instead of a replacement policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">replace</span></code>: the replacement policy.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">replace</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo17base_local_solver15set_replacementEN10population9size_typeE">
+<span id="pagmo::base_local_solver::set_replacement__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver15set_replacementEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the individual replacement index. </p>
+<p>This method will set the index of the individual that is replaced after the optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be replaced after the optimisation. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo17base_local_solver15get_replacementEv">
+<span id="pagmo::base_local_solver::get_replacementC"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a482c4178f0d7acd8c786359761622f9c"></span>boost::any <code class="descname">get_replacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo17base_local_solver15get_replacementEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the individual replacement policy or index. </p>
+<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the individual replacement policy or index. </dd>
 </dl>
 </p>
 </dd></dl>

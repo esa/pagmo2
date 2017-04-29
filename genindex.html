@@ -368,8 +368,14 @@
 </li>
       <li><a href="docs/python/py_population.html#pygmo.population.get_ID">get_ID() (pygmo.population method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.get_last_opt_result">get_last_opt_result() (pygmo.nlopt method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.get_integer_options">get_integer_options() (pygmo.ipopt method)</a>
 </li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.get_last_opt_result">get_last_opt_result() (pygmo.ipopt method)</a>
+
+      <ul>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.get_last_opt_result">(pygmo.nlopt method)</a>
+</li>
+      </ul></li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.bee_colony.get_log">get_log() (pygmo.bee_colony method)</a>
 
       <ul>
@@ -382,6 +388,8 @@
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.de.get_log">(pygmo.de method)</a>
 </li>
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.de1220.get_log">(pygmo.de1220 method)</a>
+</li>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.get_log">(pygmo.ipopt method)</a>
 </li>
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.get_log">(pygmo.mbh method)</a>
 </li>
@@ -422,6 +430,8 @@
 </li>
       <li><a href="docs/python/py_problem.html#pygmo.problem.get_nobj">get_nobj() (pygmo.problem method)</a>
 </li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.get_numeric_options">get_numeric_options() (pygmo.ipopt method)</a>
+</li>
       <li><a href="docs/python/py_problem.html#pygmo.problem.get_nx">get_nx() (pygmo.problem method)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.get_perturb">get_perturb() (pygmo.mbh method)</a>
@@ -457,6 +467,8 @@
 </li>
       </ul></li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.get_solver_name">get_solver_name() (pygmo.nlopt method)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.get_string_options">get_string_options() (pygmo.ipopt method)</a>
 </li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.get_thread_safety">get_thread_safety() (pygmo.algorithm method)</a>
 
@@ -543,6 +555,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/problems/py_problems.html#pygmo.inventory">inventory (class in pygmo)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt">ipopt (class in pygmo)</a>
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.ipyparallel_island">ipyparallel_island (class in pygmo.py_islands)</a>
 </li>
@@ -725,6 +739,36 @@
       <li><a href="docs/cpp/archipelago.html#_CPPv2N5pagmo11archipelago4waitEv">pagmo::archipelago::wait (C++ function)</a>
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv2N5pagmo11archipelagoD0Ev">pagmo::archipelago::~archipelago (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solverE">pagmo::base_local_solver (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver17base_local_solverEv">pagmo::base_local_solver::base_local_solver (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo17base_local_solver15get_replacementEv">pagmo::base_local_solver::get_replacement (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo17base_local_solver15get_replacementEv">[1]</a>, <a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2NK5pagmo17base_local_solver15get_replacementEv">[2]</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo17base_local_solver13get_selectionEv">pagmo::base_local_solver::get_selection (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo17base_local_solver13get_selectionEv">[1]</a>, <a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2NK5pagmo17base_local_solver13get_selectionEv">[2]</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver4loadER7Archive">pagmo::base_local_solver::load (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver3m_eE">pagmo::base_local_solver::m_e (C++ member)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver9m_replaceE">pagmo::base_local_solver::m_replace (C++ member)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver14m_rselect_seedE">pagmo::base_local_solver::m_rselect_seed (C++ member)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver8m_selectE">pagmo::base_local_solver::m_select (C++ member)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2NK5pagmo17base_local_solver18replace_individualER10populationRK13vector_doubleRK13vector_double">pagmo::base_local_solver::replace_individual (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2NK5pagmo17base_local_solver4saveER7Archive">pagmo::base_local_solver::save (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2NK5pagmo17base_local_solver17select_individualERK10population">pagmo::base_local_solver::select_individual (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo17base_local_solver18set_random_sr_seedEj">pagmo::base_local_solver::set_random_sr_seed (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo17base_local_solver18set_random_sr_seedEj">[1]</a>, <a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver18set_random_sr_seedEj">[2]</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo17base_local_solver15set_replacementEN10population9size_typeE">pagmo::base_local_solver::set_replacement (C++ function)</a>, <a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo17base_local_solver15set_replacementERKNSt6stringE">[1]</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo17base_local_solver15set_replacementEN10population9size_typeE">[2]</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo17base_local_solver15set_replacementERKNSt6stringE">[3]</a>, <a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver15set_replacementEN10population9size_typeE">[4]</a>, <a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver15set_replacementERKNSt6stringE">[5]</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo17base_local_solver13set_selectionEN10population9size_typeE">pagmo::base_local_solver::set_selection (C++ function)</a>, <a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo17base_local_solver13set_selectionERKNSt6stringE">[1]</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo17base_local_solver13set_selectionEN10population9size_typeE">[2]</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo17base_local_solver13set_selectionERKNSt6stringE">[3]</a>, <a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver13set_selectionEN10population9size_typeE">[4]</a>, <a href="docs/cpp/miscellanea/utility_classes.html#_CPPv2N5pagmo17base_local_solver13set_selectionERKNSt6stringE">[5]</a>
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo5basicE">pagmo::basic (C++ class)</a>
 </li>
@@ -1178,6 +1222,54 @@
 </li>
       <li><a href="docs/cpp/problems/inventory.html#_CPPv2N5pagmo9inventory8set_seedEj">pagmo::inventory::set_seed (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipoptE">pagmo::ipopt (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt6evolveE10population">pagmo::ipopt::evolve (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt14get_extra_infoEv">pagmo::ipopt::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt19get_integer_optionsEv">pagmo::ipopt::get_integer_options (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt19get_last_opt_resultEv">pagmo::ipopt::get_last_opt_result (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt7get_logEv">pagmo::ipopt::get_log (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt8get_nameEv">pagmo::ipopt::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt19get_numeric_optionsEv">pagmo::ipopt::get_numeric_options (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt18get_string_optionsEv">pagmo::ipopt::get_string_options (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt17get_thread_safetyEv">pagmo::ipopt::get_thread_safety (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt4loadER7Archive">pagmo::ipopt::load (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt13log_line_typeE">pagmo::ipopt::log_line_type (C++ type)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt8log_typeE">pagmo::ipopt::log_type (C++ type)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt21reset_integer_optionsEv">pagmo::ipopt::reset_integer_options (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt21reset_numeric_optionsEv">pagmo::ipopt::reset_numeric_options (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt20reset_string_optionsEv">pagmo::ipopt::reset_string_options (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2NK5pagmo5ipopt4saveER7Archive">pagmo::ipopt::save (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt18set_integer_optionERKNSt6stringEN5Ipopt5IndexE">pagmo::ipopt::set_integer_option (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt19set_integer_optionsERKNSt3mapINSt6stringEN5Ipopt5IndexEEE">pagmo::ipopt::set_integer_options (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt18set_numeric_optionERKNSt6stringEd">pagmo::ipopt::set_numeric_option (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt19set_numeric_optionsERKNSt3mapINSt6stringEdEE">pagmo::ipopt::set_numeric_options (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt17set_string_optionERKNSt6stringERKNSt6stringE">pagmo::ipopt::set_string_option (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt18set_string_optionsERKNSt3mapINSt6stringENSt6stringEEE">pagmo::ipopt::set_string_options (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/algorithms/ipopt.html#_CPPv2N5pagmo5ipopt13set_verbosityEj">pagmo::ipopt::set_verbosity (C++ function)</a>
+</li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo6is_udaE">pagmo::is_uda (C++ class)</a>
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo6is_uda5valueE">pagmo::is_uda::value (C++ member)</a>
@@ -1212,6 +1304,8 @@
 </li>
       <li><a href="docs/cpp/island.html#_CPPv2N5pagmo6island4loadER7Archive">pagmo::island::load (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/island.html#_CPPv2N5pagmo6islandaSERK6island">pagmo::island::operator= (C++ function)</a>, <a href="docs/cpp/island.html#_CPPv2N5pagmo6islandaSERR6island">[1]</a>
 </li>
       <li><a href="docs/cpp/island.html#_CPPv2NK5pagmo6island4saveER7Archive">pagmo::island::save (C++ function)</a>
@@ -1256,8 +1350,6 @@
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh7get_logEv">pagmo::mbh::get_log (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh8get_nameEv">pagmo::mbh::get_name (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh11get_perturbEv">pagmo::mbh::get_perturb (C++ function)</a>
@@ -1334,10 +1426,6 @@
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt8get_nameEv">pagmo::nlopt::get_name (C++ function)</a>
 </li>
-      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt15get_replacementEv">pagmo::nlopt::get_replacement (C++ function)</a>
-</li>
-      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt13get_selectionEv">pagmo::nlopt::get_selection (C++ function)</a>
-</li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt15get_solver_nameEv">pagmo::nlopt::get_solver_name (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2NK5pagmo5nlopt11get_stopvalEv">pagmo::nlopt::get_stopval (C++ function)</a>
@@ -1367,12 +1455,6 @@
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt11set_maxevalEi">pagmo::nlopt::set_maxeval (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt11set_maxtimeEi">pagmo::nlopt::set_maxtime (C++ function)</a>
-</li>
-      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt18set_random_sr_seedEj">pagmo::nlopt::set_random_sr_seed (C++ function)</a>
-</li>
-      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt15set_replacementEN10population9size_typeE">pagmo::nlopt::set_replacement (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt15set_replacementERKNSt6stringE">[1]</a>
-</li>
-      <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt13set_selectionEN10population9size_typeE">pagmo::nlopt::set_selection (C++ function)</a>, <a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt13set_selectionERKNSt6stringE">[1]</a>
 </li>
       <li><a href="docs/cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nlopt11set_stopvalEd">pagmo::nlopt::set_stopval (C++ function)</a>
 </li>
@@ -1898,10 +1980,20 @@
 </li>
       <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.refpoint">refpoint() (pygmo.hypervolume method)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.replacement">replacement (pygmo.nlopt attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.replacement">replacement (pygmo.ipopt attribute)</a>
+
+      <ul>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.replacement">(pygmo.nlopt attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.reset_integer_options">reset_integer_options() (pygmo.ipopt method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.reset_numeric_options">reset_numeric_options() (pygmo.ipopt method)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.reset_string_options">reset_string_options() (pygmo.ipopt method)</a>
+</li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.py_islands.mp_island.resize_pool">resize_pool() (pygmo.py_islands.mp_island static method)</a>
 </li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.rosenbrock">rosenbrock (class in pygmo)</a>
@@ -1926,26 +2018,46 @@
 </li>
       <li><a href="docs/python/utils/py_mo_utils.html#pygmo.select_best_N_mo">select_best_N_mo() (in module pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.selection">selection (pygmo.nlopt attribute)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.selection">selection (pygmo.ipopt attribute)</a>
+
+      <ul>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.selection">(pygmo.nlopt attribute)</a>
 </li>
+      </ul></li>
       <li><a href="docs/python/py_island.html#pygmo.island.set_algorithm">set_algorithm() (pygmo.island method)</a>
 </li>
       <li><a href="docs/python/py_misc.html#pygmo.set_global_rng_seed">set_global_rng_seed() (in module pygmo)</a>
 </li>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.set_perturb">set_perturb() (pygmo.mbh method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_integer_option">set_integer_option() (pygmo.ipopt method)</a>
 </li>
-      <li><a href="docs/python/py_island.html#pygmo.island.set_population">set_population() (pygmo.island method)</a>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_integer_options">set_integer_options() (pygmo.ipopt method)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_numeric_option">set_numeric_option() (pygmo.ipopt method)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_numeric_options">set_numeric_options() (pygmo.ipopt method)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.set_perturb">set_perturb() (pygmo.mbh method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.set_random_sr_seed">set_random_sr_seed() (pygmo.nlopt method)</a>
+      <li><a href="docs/python/py_island.html#pygmo.island.set_population">set_population() (pygmo.island method)</a>
 </li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_random_sr_seed">set_random_sr_seed() (pygmo.ipopt method)</a>
+
+      <ul>
+        <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.set_random_sr_seed">(pygmo.nlopt method)</a>
+</li>
+      </ul></li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.set_seed">set_seed() (pygmo.algorithm method)</a>
 
       <ul>
         <li><a href="docs/python/py_problem.html#pygmo.problem.set_seed">(pygmo.problem method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_string_option">set_string_option() (pygmo.ipopt method)</a>
+</li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_string_options">set_string_options() (pygmo.ipopt method)</a>
+</li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.set_verbosity">set_verbosity() (pygmo.algorithm method)</a>
 </li>
       <li><a href="docs/python/py_population.html#pygmo.population.set_x">set_x() (pygmo.population method)</a>
