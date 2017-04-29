@@ -357,6 +357,21 @@ class cmaes_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 
+class sga_test_case(_ut.TestCase):
+    """Test case for the UDA sga
+
+    """
+
+    def runTest(self):
+        from .core import sga
+        uda = sga()
+        uda = sga(gen = 1, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2, crossover = "exponential", 
+        mutation = "polynomial", selection = "tournament", int_dim = 0)
+        uda = sga(gen = 1, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2, crossover = "exponential", 
+        mutation = "polynomial", selection = "tournament", int_dim = 0, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        seed = uda.get_seed()
+
 
 class nsga2_test_case(_ut.TestCase):
     """Test case for the UDA nsga2
@@ -1314,6 +1329,7 @@ def run_test_suite():
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())
     suite.addTest(moead_test_case())
+    suite.addTest(sga_test_case())
     suite.addTest(population_test_case())
     suite.addTest(archipelago_test_case())
     suite.addTest(null_problem_test_case())
