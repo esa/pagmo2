@@ -87,6 +87,8 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 1.1, 5u, "exponential", "uniform", "tournament", 0u, 32u}),
                       std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 0.9, 0u, "exponential", "uniform", "tournament", 0u, 32u}),
+                      std::invalid_argument);
 }
 BOOST_AUTO_TEST_CASE(sga_evolve_test)
 {
@@ -104,6 +106,9 @@ BOOST_AUTO_TEST_CASE(sga_evolve_test)
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 2u, "sbx", "gaussian", "tournament", 35u, 32u}.evolve(
                           population{schwefel{20u}, 24u, 23u})),
                       std::invalid_argument);
+    // And a clean exit for 0 generations
+    population pop{schwefel{25u}, 10u};
+    BOOST_CHECK(sga{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
     // The we test that evolution is deterministic if the
     // seed is controlled.
     std::vector<sga> udps = {
@@ -146,6 +151,10 @@ BOOST_AUTO_TEST_CASE(sga_evolve_test)
         auto log2 = udp.get_log();
 
         BOOST_CHECK(log1 == log2);
+    }
+    // We call the extra info and chech they do not throw
+    for (sga &udp : udps) {
+        udp.get_extra_info();
     }
 }
 
