@@ -538,6 +538,7 @@ private:
                     // Fisher Yates algo http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
                     // to select m_param_s individial at random
                     for (decltype(m_param_s) i = 0u; i < m_param_s; ++i) {
+                        assert(i >= best_idxs.size() - 1u);
                         dist.param(
                             std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>::param_type(
                                 i, best_idxs.size() - 1u));
@@ -578,6 +579,7 @@ private:
             }
         } else {
             auto XCOPY = X;
+            assert(dim - 1u >= 0u);
             std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type> rnd_gene_idx(0, dim - 1u);
             std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type> rnd_skip_first_idx(
                 1, all_idx.size() - 1);
@@ -668,6 +670,8 @@ private:
                         if (gene_idx < dimc) {
                             X[i][gene_idx] = uniform_real_from_range(lb[gene_idx], ub[gene_idx], m_e);
                         } else {
+                            assert(static_cast<vector_double::size_type>(lb[gene_idx])
+                                   <= static_cast<vector_double::size_type>(ub[gene_idx]));
                             X[i][gene_idx]
                                 = static_cast<double>(std::uniform_int_distribution<vector_double::size_type>(
                                     static_cast<vector_double::size_type>(lb[gene_idx]),
@@ -703,6 +707,8 @@ private:
                                 X[i][gene_idx] += delta_r * (ub[gene_idx] - X[i][gene_idx]);
                             }
                         } else {
+                            assert(static_cast<vector_double::size_type>(lb[gene_idx])
+                                   <= static_cast<vector_double::size_type>(ub[gene_idx]));
                             X[i][gene_idx]
                                 = static_cast<double>(std::uniform_int_distribution<vector_double::size_type>(
                                     static_cast<vector_double::size_type>(lb[gene_idx]),
@@ -784,6 +790,7 @@ private:
         // This implements two-point binary crossover and applies it to the integer part of the chromosome
         for (decltype(Dc) i = Dc; i < D; ++i) {
             // in this loop we are sure Di is at least 1
+            assert(0 >= Di - 1u);
             std::uniform_int_distribution<vector_double::size_type> ra_num(0, Di - 1u);
             if (drng(m_e) <= m_cr) {
                 site1 = ra_num(m_e);
