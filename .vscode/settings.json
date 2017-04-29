@@ -6,19 +6,5 @@
         "doc/doxygen/latex/": true,
         "doc/doxygen/xml/": true,
         "doc/sphinx/_build/": true
-    },
-    "python.linting.pylintEnabled": false,
-    "files.associations": {
-        "exception": "cpp",
-        "new": "cpp",
-        "array": "cpp",
-        "cstdint": "cpp",
-        "hashtable": "cpp",
-        "random": "cpp",
-        "*.tcc": "cpp",
-        "tuple": "cpp",
-        "unordered_map": "cpp",
-        "unordered_set": "cpp",
-        "typeinfo": "cpp"
     }
 }
