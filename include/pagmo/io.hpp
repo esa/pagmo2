@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <initializer_list>
 #include <iostream>
 #include <iterator>
+#include <map>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -49,9 +50,11 @@ namespace pagmo
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
+// LCOV_EXCL_START
 // Forward declaration
 template <typename... Args>
 inline void stream(std::ostream &, const Args &...);
+// LCOV_EXCL_STOP
 
 #endif
 
@@ -111,6 +114,25 @@ template <typename T, typename U>
 inline void stream_impl(std::ostream &os, const std::pair<T, U> &p)
 {
     stream(os, '(', p.first, ',', p.second, ')');
+}
+
+template <typename T, typename U>
+inline void stream_impl(std::ostream &os, const std::map<T, U> &m)
+{
+    unsigned counter = 0;
+    stream(os, '{');
+    for (auto it = m.begin(); it != m.end(); ++counter) {
+        if (counter == PAGMO_MAX_OUTPUT_LENGTH) {
+            stream(os, "...");
+            break;
+        }
+        stream(os, it->first, " : ", it->second);
+        ++it;
+        if (it != m.end()) {
+            stream(os, ",  ");
+        }
+    }
+    stream(os, '}');
 }
 
 template <typename T, typename... Args>

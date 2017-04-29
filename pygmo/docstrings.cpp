@@ -1577,10 +1577,15 @@ objective function. Using the above definitions the overall pseudo code can be s
 
 :class:`pygmo.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
+<<<<<<< HEAD
 .. note:
 
 Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of fitness evaluations somehow unpredictable.
+=======
+**NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+for decision vectors already evaluated. This makes the final counter of function evaluations somewhat unpredictable.
+>>>>>>> upstream/master
 The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.
@@ -4062,7 +4067,7 @@ and :attr:`~pygmo.nlopt.replacement` attributes.
 
 .. note::
 
-   This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_NLOPT`` option
+   This user-defined algorithm is available only if pygmo was compiled with the ``PAGMO_WITH_NLOPT`` option
    enabled (see the :ref:`installation instructions <install>`).
 
 .. seealso::
@@ -4296,7 +4301,7 @@ Raises:
 )";
 }
 
-std::string nlopt_selection_docstring()
+std::string bls_selection_docstring(const std::string &algo)
 {
     return R"(Individual selection policy.
 
@@ -4309,7 +4314,8 @@ If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"r
 * ``"worst"`` will select the worst individual in the population,
 * ``"random"`` will randomly choose one individual in the population.
 
-:func:`~pygmo.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+:func:`~pygmo.)"
+           + algo + R"(.set_random_sr_seed()` can be used to seed the random number generator
 used by the ``"random"`` policy.
 
 If the attribute is an integer, it represents the index (in the population) of the individual that is selected
@@ -4328,7 +4334,7 @@ Raises:
 )";
 }
 
-std::string nlopt_replacement_docstring()
+std::string bls_replacement_docstring(const std::string &algo)
 {
     return R"(Individual replacement policy.
 
@@ -4341,7 +4347,8 @@ If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"r
 * ``"worst"`` will select the worst individual in the population,
 * ``"random"`` will randomly choose one individual in the population.
 
-:func:`~pygmo.nlopt.set_random_sr_seed()` can be used to seed the random number generator
+:func:`~pygmo.)"
+           + algo + R"(.set_random_sr_seed()` can be used to seed the random number generator
 used by the ``"random"`` policy.
 
 If the attribute is an integer, it represents the index (in the population) of the individual that will be
@@ -4360,7 +4367,7 @@ Raises:
 )";
 }
 
-std::string nlopt_set_random_sr_seed_docstring()
+std::string bls_set_random_sr_seed_docstring(const std::string &algo)
 {
     return R"(set_random_sr_seed(seed)
 
@@ -4368,8 +4375,10 @@ Set the seed for the ``"random"`` selection/replacement policies.
 
 Args:
     seed (``int``): the value that will be used to seed the random number generator used by the ``"random"``
-      election/replacement policies (see :attr:`~pygmo.nlopt.selection` and
-      :attr:`~pygmo.nlopt.replacement`)
+      election/replacement policies (see :attr:`~pygmo.)"
+           + algo + R"(.selection` and
+      :attr:`~pygmo.)"
+           + algo + R"(.replacement`)
 
 Raises:
     OverflowError: if the attribute is set to an integer which is negative or too large
@@ -4528,7 +4537,6 @@ Examples:
     [(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::sea::get_log()`.
-
 )";
 }
 
@@ -4619,7 +4627,6 @@ Raises:
       (e.g., type conversion errors, mismatched function signatures, etc.)
 
 See also the docs of the C++ class :cpp:class:`pagmo::sga`.
-
 )";
 }
 
@@ -4665,7 +4672,495 @@ Examples:
     [(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::sga::get_log()`.
+)";
+}
 
+std::string ipopt_docstring()
+{
+    return R"(__init__()
+
+Ipopt.
+
+This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
+a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that
+is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.
+
+Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the
+optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt
+can estimate numerically the Hessians if needed).
+
+In order to support pygmo's population-based optimisation model, the ``evolve()`` method will select
+a single individual from the input :class:`~pygmo.population` to be optimised.
+If the optimisation produces a better individual (as established by :func:`~pygmo.compare_fc()`),
+the optimised individual will be inserted back into the population. The selection and replacement strategies
+can be configured via the :attr:`~pygmo.ipopt.selection` and :attr:`~pygmo.ipopt.replacement` attributes.
+
+Ipopt supports a large amount of options for the configuration of the optimisation run. The options
+are divided into three categories:
+
+* *string* options (i.e., the type of the option is ``str``),
+* *integer* options (i.e., the type of the option is ``int``),
+* *numeric* options (i.e., the type of the option is ``float``).
+
+The full list of options is available on the `Ipopt website <https://www.coin-or.org/Ipopt/documentation/node40.html>`_.
+:class:`pygmo.ipopt` allows to configure any Ipopt option via methods such as :func:`~pygmo.ipopt.set_string_options()`,
+:func:`~pygmo.ipopt.set_string_option()`, :func:`~pygmo.ipopt.set_integer_options()`, etc., which need to be used before
+invoking the ``evolve()`` method.
+
+If the user does not set any option, :class:`pygmo.ipopt` use Ipopt's default values for the options (see the
+`documentation <https://www.coin-or.org/Ipopt/documentation/node40.html>`_), with the following
+modifications:
+
+* if the ``"print_level"`` integer option is **not** set by the user, it will be set to 0 by :class:`pygmo.ipopt` (this will
+  suppress most screen output produced by the solver - note that we support an alternative form of logging via
+  the :func:`pygmo.algorithm.set_verbosity()` machinery);
+* if the ``"hessian_approximation"`` string option is **not** set by the user and the optimisation problem does
+  **not** provide the Hessians, then the option will be set to ``"limited-memory"`` by :class:`pygmo.ipopt`. This makes it
+  possible to optimise problems without Hessians out-of-the-box (i.e., Ipopt will approximate numerically the
+  Hessians for you);
+* if the ``"constr_viol_tol"`` numeric option is **not** set by the user and the optimisation problem is constrained,
+  then :class:`pygmo.ipopt` will compute the minimum value ``min_tol`` in the vector returned by :attr:`pygmo.problem.c_tol`
+  for the optimisation problem at hand. If ``min_tol`` is nonzero, then the ``"constr_viol_tol"`` Ipopt option will
+  be set to ``min_tol``, otherwise the default Ipopt value (1E-4) will be used for the option. This ensures that,
+  if the constraint tolerance is not explicitly set by the user, a solution deemed feasible by Ipopt is also
+  deemed feasible by pygmo (but the opposite is not necessarily true).
+
+.. note::
+
+   This user-defined algorithm is available only if pygmo was compiled with the ``PAGMO_WITH_IPOPT`` option
+   enabled (see the :ref:`installation instructions <install>`).
+
+.. note::
+
+   Ipopt is not thread-safe, and thus it cannot be used in a :class:`pygmo.thread_island`.
+
+.. seealso::
+
+   https://projects.coin-or.org/Ipopt.
+
+See also the docs of the C++ class :cpp:class:`pagmo::ipopt`.
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_numeric_option("tol",1E-9) # Change the relative convergence tolerance
+    >>> ip.get_numeric_options() # doctest: +SKIP
+    {'tol': 1e-09}
+    >>> algo = algorithm(ip)
+    >>> algo.set_verbosity(1)
+    >>> prob = problem(luksan_vlcek1(20))
+    >>> prob.c_tol = [1E-6] * 18 # Set constraints tolerance to 1E-6
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    <BLANKLINE>
+    ******************************************************************************
+    This program contains Ipopt, a library for large-scale nonlinear optimization.
+    Ipopt is released as open source code under the Eclipse Public License (EPL).
+            For more information visit http://projects.coin-or.org/Ipopt
+    ******************************************************************************
+    <BLANKLINE>
+    <BLANKLINE>
+    objevals:        objval:      violated:    viol. norm:
+            1         201174             18         1075.3 i
+            2         209320             18        691.814 i
+            3        36222.3             18        341.639 i
+            4        11158.1             18        121.097 i
+            5        4270.38             18        46.4742 i
+            6        2054.03             18        20.7306 i
+            7        705.959             18        5.43118 i
+            8        37.8304             18        1.52099 i
+            9        2.89066             12       0.128862 i
+           10       0.300807              3      0.0165902 i
+           11     0.00430279              3    0.000496496 i
+           12    7.54121e-06              2    9.70735e-06 i
+           13    4.34249e-08              0              0
+           14    3.71925e-10              0              0
+           15    3.54406e-13              0              0
+           16    2.37071e-18              0              0
+    <BLANKLINE>
+    Optimisation return status: Solve_Succeeded (value = 0)
+    <BLANKLINE>
+)";
+}
+
+std::string ipopt_get_log_docstring()
+{
+    return R"(get_log()
+
+Optimisation log.
+
+The optimisation log is a collection of log data lines. A log data line is a tuple consisting of:
+
+* the number of objective function evaluations made so far,
+* the objective function value for the current decision vector,
+* the number of constraints violated by the current decision vector,
+* the constraints violation norm for the current decision vector,
+* a boolean flag signalling the feasibility of the current decision vector.
+
+Returns:
+    ``list``: the optimisation log
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+.. warning::
+
+   The number of constraints violated, the constraints violation norm and the feasibility flag stored in the log
+   are all determined via the facilities and the tolerances specified within :class:`pygmo.problem`. That
+   is, they might not necessarily be consistent with Ipopt's notion of feasibility. See the explanation
+   of how the ``"constr_viol_tol"`` numeric option is handled in :class:`pygmo.ipopt`.
+
+.. note::
+
+   Ipopt supports its own logging format and protocol, including the ability to print to screen and write to file.
+   Ipopt's screen logging is disabled by default (i.e., the Ipopt verbosity setting is set to 0 - see
+   :class:`pygmo.ipopt`). On-screen logging can be enabled via the ``"print_level"`` string option.
+
+)";
+}
+
+std::string ipopt_get_last_opt_result_docstring()
+{
+    return R"(get_last_opt_result()
+
+Get the result of the last optimisation.
+
+Returns:
+    ``int``: the Ipopt return code for the last optimisation run, or ``Ipopt::Solve_Succeeded`` if no optimisations have been run yet
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.get_last_opt_result()
+    0
+
+)";
+}
+
+std::string ipopt_set_string_option_docstring()
+{
+    return R"(set_string_option(name, value)
+
+Set string option.
+
+This method will set the optimisation string option *name* to *value*.
+The optimisation options are passed to the Ipopt API when calling the ``evolve()`` method.
+
+Args:
+    name (``str``): the name of the option
+    value (``str``): the value of the option
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_string_option("hessian_approximation","limited-memory")
+    >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
+    Algorithm name: Ipopt [deterministic]
+            Thread safety: none
+    <BLANKLINE>
+    Extra info:
+            Last optimisation return code: Solve_Succeeded (value = 0)
+            Verbosity: 0
+            Individual selection policy: best
+            Individual replacement policy: best
+            String options: {hessian_approximation : limited-memory}
+)";
+}
+
+std::string ipopt_set_string_options_docstring()
+{
+    return R"(set_string_options(opts)
+
+Set string options.
+
+This method will set the optimisation string options contained in *opts*.
+It is equivalent to calling :func:`~pygmo.ipopt.set_string_option()` passing all the name-value pairs in *opts*
+as arguments.
+
+Args:
+    opts (``dict`` of ``str``-``str`` pairs): the name-value map that will be used to set the options
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_string_options({"hessian_approximation":"limited-memory", "limited_memory_initialization":"scalar1"})
+    >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
+    Algorithm name: Ipopt [deterministic]
+            Thread safety: none
+    <BLANKLINE>
+    Extra info:
+            Last optimisation return code: Solve_Succeeded (value = 0)
+            Verbosity: 0
+            Individual selection policy: best
+            Individual replacement policy: best
+            String options: {hessian_approximation : limited-memory,  limited_memory_initialization : scalar1}
+
+)";
+}
+
+std::string ipopt_get_string_options_docstring()
+{
+    return R"(get_string_options()
+
+Get string options.
+
+Returns:
+    ``dict`` of ``str``-``str`` pairs: a name-value dictionary of optimisation string options
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_string_option("hessian_approximation","limited-memory")
+    >>> ip.get_string_options()
+    {'hessian_approximation': 'limited-memory'}
+
+)";
+}
+
+std::string ipopt_reset_string_options_docstring()
+{
+    return R"(reset_string_options()
+
+Clear all string options.
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_string_option("hessian_approximation","limited-memory")
+    >>> ip.get_string_options()
+    {'hessian_approximation': 'limited-memory'}
+    >>> ip.reset_string_options()
+    >>> ip.get_string_options()
+    {}
+
+)";
+}
+
+std::string ipopt_set_integer_option_docstring()
+{
+    return R"(set_integer_option(name, value)
+
+Set integer option.
+
+This method will set the optimisation integer option *name* to *value*.
+The optimisation options are passed to the Ipopt API when calling the ``evolve()`` method.
+
+Args:
+    name (``str``): the name of the option
+    value (``int``): the value of the option
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_integer_option("print_level",3)
+    >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
+    Algorithm name: Ipopt [deterministic]
+            Thread safety: none
+    <BLANKLINE>
+    Extra info:
+            Last optimisation return code: Solve_Succeeded (value = 0)
+            Verbosity: 0
+            Individual selection policy: best
+            Individual replacement policy: best
+            Integer options: {print_level : 3}
+
+)";
+}
+
+std::string ipopt_set_integer_options_docstring()
+{
+    return R"(set_integer_options(opts)
+
+Set integer options.
+
+This method will set the optimisation integer options contained in *opts*.
+It is equivalent to calling :func:`~pygmo.ipopt.set_integer_option()` passing all the name-value pairs in *opts*
+as arguments.
+
+Args:
+    opts (``dict`` of ``str``-``int`` pairs): the name-value map that will be used to set the options
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_integer_options({"filter_reset_trigger":4, "print_level":3})
+    >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
+    Algorithm name: Ipopt [deterministic]
+            Thread safety: none
+    <BLANKLINE>
+    Extra info:
+            Last optimisation return code: Solve_Succeeded (value = 0)
+            Verbosity: 0
+            Individual selection policy: best
+            Individual replacement policy: best
+            Integer options: {filter_reset_trigger : 4,  print_level : 3}
+
+)";
+}
+
+std::string ipopt_get_integer_options_docstring()
+{
+    return R"(get_integer_options()
+
+Get integer options.
+
+Returns:
+    ``dict`` of ``str``-``int`` pairs: a name-value dictionary of optimisation integer options
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_integer_option("print_level",3)
+    >>> ip.get_integer_options()
+    {'print_level': 3}
+
+)";
+}
+
+std::string ipopt_reset_integer_options_docstring()
+{
+    return R"(reset_integer_options()
+
+Clear all integer options.
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_integer_option("print_level",3)
+    >>> ip.get_integer_options()
+    {'print_level': 3}
+    >>> ip.reset_integer_options()
+    >>> ip.get_integer_options()
+    {}
+
+)";
+}
+
+std::string ipopt_set_numeric_option_docstring()
+{
+    return R"(set_numeric_option(name, value)
+
+Set numeric option.
+
+This method will set the optimisation numeric option *name* to *value*.
+The optimisation options are passed to the Ipopt API when calling the ``evolve()`` method.
+
+Args:
+    name (``str``): the name of the option
+    value (``float``): the value of the option
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_numeric_option("tol",1E-6)
+    >>> algorithm(ip) # doctest: +SKIP
+    Algorithm name: Ipopt [deterministic]
+            Thread safety: none
+    <BLANKLINE>
+    Extra info:
+            Last optimisation return code: Solve_Succeeded (value = 0)
+            Verbosity: 0
+            Individual selection policy: best
+            Individual replacement policy: best
+            Numeric options: {tol : 1E-6}
+
+)";
+}
+
+std::string ipopt_set_numeric_options_docstring()
+{
+    return R"(set_numeric_options(opts)
+
+Set numeric options.
+
+This method will set the optimisation numeric options contained in *opts*.
+It is equivalent to calling :func:`~pygmo.ipopt.set_numeric_option()` passing all the name-value pairs in *opts*
+as arguments.
+
+Args:
+    opts (``dict`` of ``str``-``float`` pairs): the name-value map that will be used to set the options
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_numeric_options({"tol":1E-4, "constr_viol_tol":1E-3})
+    >>> algorithm(ip) # doctest: +SKIP
+    Algorithm name: Ipopt [deterministic]
+            Thread safety: none
+    <BLANKLINE>
+    Extra info:
+            Last optimisation return code: Solve_Succeeded (value = 0)
+            Verbosity: 0
+            Individual selection policy: best
+            Individual replacement policy: best
+            Numeric options: {constr_viol_tol : 1E-3,  tol : 1E-4}
+
+)";
+}
+
+std::string ipopt_get_numeric_options_docstring()
+{
+    return R"(get_numeric_options()
+
+Get numeric options.
+
+Returns:
+    ``dict`` of ``str``-``float`` pairs: a name-value dictionary of optimisation numeric options
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_numeric_option("tol",1E-4)
+    >>> ip.get_numeric_options() # doctest: +SKIP
+    {'tol': 1E-4}
+
+)";
+}
+
+std::string ipopt_reset_numeric_options_docstring()
+{
+    return R"(reset_numeric_options()
+
+Clear all numeric options.
+
+Examples:
+    >>> from pygmo import *
+    >>> ip = ipopt()
+    >>> ip.set_numeric_option("tol",1E-4)
+    >>> ip.get_numeric_options() # doctest: +SKIP
+    {'tol': 1E-4}
+    >>> ip.reset_numeric_options()
+    >>> ip.get_numeric_options()
+    {}
 )";
 }
 

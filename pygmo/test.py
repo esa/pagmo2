@@ -541,6 +541,107 @@ class nlopt_test_case(_ut.TestCase):
         del foo
 
 
+class ipopt_test_case(_ut.TestCase):
+    """Test case for the UDA ipopt
+
+    """
+
+    def runTest(self):
+        from .core import ipopt, algorithm, luksan_vlcek1, problem, population
+        ip = ipopt()
+        # Check the def-cted state.
+        self.assertEqual(ip.get_last_opt_result(), 0)
+        self.assertEqual(ip.get_log(), [])
+        self.assertEqual(ip.get_numeric_options(), {})
+        self.assertEqual(ip.get_integer_options(), {})
+        self.assertEqual(ip.get_numeric_options(), {})
+        self.assertEqual(ip.selection, "best")
+        self.assertEqual(ip.replacement, "best")
+        self.assertTrue(len(str(algorithm(ip))) != 0)
+
+        # Options testing.
+        ip.set_string_option("marge", "simpson")
+        self.assertEqual(ip.get_string_options(), {"marge": "simpson"})
+        ip.set_string_options({"homer": "simpson", "bart": "simpson"})
+        self.assertEqual(ip.get_string_options(), {
+                         "marge": "simpson", "bart": "simpson", "homer": "simpson"})
+        ip.reset_string_options()
+        self.assertEqual(ip.get_string_options(), {})
+
+        ip.set_integer_option("marge", 0)
+        self.assertEqual(ip.get_integer_options(), {"marge": 0})
+        ip.set_integer_options({"homer": 1, "bart": 2})
+        self.assertEqual(ip.get_integer_options(), {
+                         "marge": 0, "bart": 2, "homer": 1})
+        ip.reset_integer_options()
+        self.assertEqual(ip.get_integer_options(), {})
+
+        ip.set_numeric_option("marge", 0.)
+        self.assertEqual(ip.get_numeric_options(), {"marge": 0.})
+        ip.set_numeric_options({"homer": 1., "bart": 2.})
+        self.assertEqual(ip.get_numeric_options(), {
+                         "marge": 0., "bart": 2., "homer": 1.})
+        ip.reset_numeric_options()
+        self.assertEqual(ip.get_numeric_options(), {})
+
+        # Select/replace.
+        self.assertEqual(ip.replacement, "best")
+        ip.replacement = "worst"
+        self.assertEqual(ip.replacement, "worst")
+
+        def _():
+            ip.replacement = "rr"
+        self.assertRaises(ValueError, _)
+        ip.replacement = 12
+        self.assertEqual(ip.replacement, 12)
+
+        def _():
+            ip.replacement = -1
+        self.assertRaises(OverflowError, _)
+
+        self.assertEqual(ip.selection, "best")
+        ip.selection = "worst"
+        self.assertEqual(ip.selection, "worst")
+
+        def _():
+            ip.selection = "rr"
+        self.assertRaises(ValueError, _)
+        ip.selection = 12
+        self.assertEqual(ip.selection, 12)
+
+        def _():
+            ip.selection = -1
+        self.assertRaises(OverflowError, _)
+
+        ip.set_random_sr_seed(12)
+        self.assertRaises(OverflowError, lambda: ip.set_random_sr_seed(-1))
+
+        ip = ipopt()
+        algo = algorithm(ip)
+        algo.set_verbosity(5)
+        prob = problem(luksan_vlcek1(20))
+        prob.c_tol = [1E-6] * 18
+        pop = population(prob, 20)
+        pop = algo.evolve(pop)
+        self.assertTrue(len(algo.extract(ipopt).get_log()) != 0)
+
+        # Pickling.
+        from pickle import dumps, loads
+        ip = ipopt()
+        ip.set_numeric_option("tol", 1E-7)
+        algo = algorithm(ip)
+        algo.set_verbosity(5)
+        prob = problem(luksan_vlcek1(20))
+        prob.c_tol = [1E-6] * 18
+        pop = population(prob, 20)
+        algo.evolve(pop)
+        self.assertEqual(str(algo), str(loads(dumps(algo))))
+        self.assertEqual(algo.extract(ipopt).get_log(), loads(
+            dumps(algo)).extract(ipopt).get_log())
+        self.assertEqual(algo.extract(ipopt).get_numeric_options(), loads(
+            dumps(algo)).extract(ipopt).get_numeric_options())
+
+
 class null_problem_test_case(_ut.TestCase):
     """Test case for the null problem
 
@@ -1358,6 +1459,11 @@ def run_test_suite():
     try:
         from .core import nlopt
         suite.addTest(nlopt_test_case())
+    except ImportError:
+        pass
+    try:
+        from .core import ipopt
+        suite.addTest(ipopt_test_case())
     except ImportError:
         pass
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)

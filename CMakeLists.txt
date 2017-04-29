@@ -30,6 +30,9 @@ option(PAGMO_WITH_EIGEN3 "Enable features depending on Eigen3 (such as CMAES). R
 # Build option: enable NLopt.
 option(PAGMO_WITH_NLOPT "Enable wrappers for the NLopt algorithms." OFF)
 
+# Build option: enable Ipopt.
+option(PAGMO_WITH_IPOPT "Enable wrappers for the Ipopt solver." OFF)
+
 # Build option: install header.
 option(PAGMO_INSTALL_HEADERS "Enable the installation of PaGMO's header files." ON)
 
@@ -78,8 +81,15 @@ endif()
 # NLopt setup
 if(PAGMO_WITH_NLOPT)
     find_package(NLOPT REQUIRED)
-    message(STATUS "NLopt include directory: ${NLOPT_INCLUDE_DIRS}")
-    message(STATUS "NLopt libraries: ${NLOPT_LIBRARIES}")
+    message(STATUS "NLopt include directory: ${NLOPT_INCLUDE_DIR}")
+    message(STATUS "NLopt library: ${NLOPT_LIBRARY}")
+endif()
+
+# Ipopt setup
+if(PAGMO_WITH_IPOPT)
+    find_package(IPOPT REQUIRED)
+    message(STATUS "Ipopt include directory: ${IPOPT_INCLUDE_DIR}")
+    message(STATUS "Ipopt library: ${IPOPT_LIBRARY}")
 endif()
 
 # Python setup.
@@ -119,11 +129,14 @@ endif()
 
 if(PAGMO_WITH_NLOPT)
     # Link pagmo to NLopt.
-    add_library(NLOPT::nlopt UNKNOWN IMPORTED)
-    set_target_properties(NLOPT::nlopt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${NLOPT_INCLUDE_DIRS}")
-    set_target_properties(NLOPT::nlopt PROPERTIES IMPORTED_LINK_INTERFACE_LANGUAGES "C" IMPORTED_LOCATION "${NLOPT_LIBRARIES}")
     target_link_libraries(pagmo INTERFACE NLOPT::nlopt)
     set(PAGMO_ENABLE_NLOPT "#define PAGMO_WITH_NLOPT")
+endif()
+
+if(PAGMO_WITH_IPOPT)
+    # Link pagmo to Ipopt.
+    target_link_libraries(pagmo INTERFACE IPOPT::ipopt)
+    set(PAGMO_ENABLE_IPOPT "#define PAGMO_WITH_IPOPT")
 endif()
 
 # Configure config.hpp.

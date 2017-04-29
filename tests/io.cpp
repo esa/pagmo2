@@ -31,16 +31,20 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE io_test
 #include <boost/test/included/unit_test.hpp>
 
+#include <initializer_list>
 #include <iomanip>
+#include <map>
 #include <sstream>
+#include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <pagmo/threading.hpp>
 
 using namespace pagmo;
 
-BOOST_AUTO_TEST_CASE(stream_print_test)
+BOOST_AUTO_TEST_CASE(stream_print_test_00)
 {
     // A few simple tests.
     std::ostringstream ss1, ss2;
@@ -94,4 +98,27 @@ BOOST_AUTO_TEST_CASE(stream_print_test)
     ss1.str("");
     stream(ss1, thread_safety::basic);
     BOOST_CHECK_EQUAL(ss1.str(), "basic");
+}
+
+BOOST_AUTO_TEST_CASE(stream_print_test_01)
+{
+    // Map.
+    using map_t = std::map<int, int>;
+    std::stringstream ss;
+    stream(ss, map_t{{0, 0}, {1, 1}, {2, 2}});
+    print(map_t{{0, 0}, {1, 1}, {2, 2}});
+    ss.str("");
+    stream(ss, map_t{{0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}});
+    print(map_t{{0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}});
+    // Pair.
+    using pair_t = std::pair<int, int>;
+    ss.str("");
+    stream(ss, pair_t{1, 2});
+    print(pair_t{1, 2});
+}
+
+BOOST_AUTO_TEST_CASE(stream_table_test)
+{
+    detail::table t({"a", "b", "c"});
+    BOOST_CHECK_THROW(t.add_row(), std::invalid_argument);
 }

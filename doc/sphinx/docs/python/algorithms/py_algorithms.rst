@@ -58,6 +58,7 @@ low-storage BFGS (from NLopt)                          :class:`pygmo.nlopt`     
 preconditioned truncated Newton (from NLopt)           :class:`pygmo.nlopt`                      S-U             Exposed from C++
 Shifted limited-memory variable-metric (from NLopt)    :class:`pygmo.nlopt`                      S-U             Exposed from C++
 Augmented Lagrangian algorithm (from NLopt)            :class:`pygmo.nlopt`                      S-CU            Exposed from C++
+Ipopt                                                  :class:`pygmo.ipopt`                      S-CU            Exposed from C++
 ====================================================== ========================================= =============== =====================================================================
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -142,4 +143,9 @@ Algorithms exposed from C++
 -------------------------------------------------------------
 
 .. autoclass:: pygmo.nlopt
+   :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.ipopt
    :members:

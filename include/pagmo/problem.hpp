@@ -566,20 +566,27 @@ inline void check_problem_bounds(const std::pair<vector_double, vector_double> &
     }
 }
 
-// Two helper functions to compute sparsity patterns in the dense case.
-inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
+// Helper functions to compute sparsity patterns in the dense case.
+// A single dense hessian (lower triangular symmetric matrix).
+inline sparsity_pattern dense_hessian(vector_double::size_type dim)
 {
-    std::vector<sparsity_pattern> retval(f_dim);
-    for (auto &Hs : retval) {
-        for (decltype(dim) j = 0u; j < dim; ++j) {
-            for (decltype(dim) i = 0u; i <= j; ++i) {
-                Hs.emplace_back(j, i);
-            }
+    sparsity_pattern retval;
+    for (decltype(dim) j = 0u; j < dim; ++j) {
+        for (decltype(dim) i = 0u; i <= j; ++i) {
+            retval.emplace_back(j, i);
         }
     }
     return retval;
 }
 
+// A collection of f_dim identical dense hessians.
+inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
+{
+    return std::vector<sparsity_pattern>(boost::numeric_cast<std::vector<sparsity_pattern>::size_type>(f_dim),
+                                         dense_hessian(dim));
+}
+
+// Dense gradient.
 inline sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim)
 {
     sparsity_pattern retval;
@@ -1113,8 +1120,7 @@ public:
             const auto nf = get_nf();
             if (nx == std::numeric_limits<vector_double::size_type>::max()
                 || nx / 2u > std::numeric_limits<vector_double::size_type>::max() / (nx + 1u)) {
-                pagmo_throw(std::invalid_argument, "The size of the (dense) hessians "
-                                                   "sparsity is too large");
+                pagmo_throw(std::invalid_argument, "The size of the (dense) hessians sparsity is too large");
             }
             // We resize rather than push back here, so that an std::length_error is called quickly rather
             // than an std::bad_alloc after waiting the growth

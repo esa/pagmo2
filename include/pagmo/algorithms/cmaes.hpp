@@ -58,17 +58,27 @@ namespace pagmo
  * optimization. The version implemented in PaGMO is the "classic" version described in the 2006 paper titled
  * "The CMA evolution strategy: a comparing review.".
  *
- * **NOTE** Since at each generation all newly generated individuals sampled from the adapted distribution are
- * reinserted into the population, CMA-ES may not preserve the best individual (not elitist). As a consequence the plot
- * of the population best fitness may not be perfectly monotonically decreasing
+ * \verbatim embed:rst:leading-asterisk
+ * .. warning::
  *
- * **NOTE** The cmaes::evolve method cannot be called concurrently by different threads even if it is marked as const.
- * The mutable members make such an operation result in an undefined behaviour in terms of algorithmic convergence.
+ *    A moved-from pagmo::cmaes is destructible and assignable. Any other operation will result
+ *    in undefined behaviour.
  *
- * **NOTE** This algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_EIGEN3`` option enabled.
+ * .. note::
  *
- * See: Hansen, Nikolaus. "The CMA evolution strategy: a comparing review." Towards a new evolutionary computation.
- * Springer Berlin Heidelberg, 2006. 75-102.
+ *    This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_EIGEN3`` option
+ *    enabled (see the :ref:`installation instructions <install>`).
+ *
+ * .. note::
+ *    Since at each generation all newly generated individuals sampled from the adapted distribution are
+ *    reinserted into the population, CMA-ES may not preserve the best individual (not elitist). As a consequence the
+ *    plot of the population best fitness may not be perfectly monotonically decreasing.
+ *
+ * .. seealso::
+ *
+ *    Hansen, Nikolaus. "The CMA evolution strategy: a comparing review." Towards a new evolutionary computation.
+ *    Springer Berlin Heidelberg, 2006. 75-102.
+ * \endverbatim
  */
 class cmaes
 {
