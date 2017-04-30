@@ -63,10 +63,10 @@ BOOST_AUTO_TEST_CASE(nsga2_algorithm_construction)
     BOOST_CHECK_THROW((nsga2{1u, .95, 10., 1.1, 50., 0u, 32u}), std::invalid_argument);
     BOOST_CHECK_THROW((nsga2{1u, .95, 10., -1.1, 50., 0u, 32u}), std::invalid_argument);
     // Wrong eta_m
-    BOOST_CHECK_THROW((nsga2{1u, .95, 100., 0.01, 50., 0u, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga2{1u, .95, 100.1, 0.01, 50., 0u, 32u}), std::invalid_argument);
     BOOST_CHECK_THROW((nsga2{1u, .95, .98, 0.01, 50., 0u, 32u}), std::invalid_argument);
     // Wrong eta_m
-    BOOST_CHECK_THROW((nsga2{1u, .95, 10., 0.01, 100, 0u, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga2{1u, .95, 10., 0.01, 100.1, 0u, 32u}), std::invalid_argument);
     BOOST_CHECK_THROW((nsga2{1u, .95, 10., 0.01, .98, 0u, 32u}), std::invalid_argument);
 }
 

@@ -439,7 +439,7 @@ public:
             if (m_verbosity > 0u) {
                 // Every m_verbosity generations print a log line
                 if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                    // We compute the number of function evaluations made
+                    // We compute the number of fitness evaluations made
                     auto feval_count = prob.get_fevals() - fevals0;
                     // We compute the average across the swarm of the best fitness encountered
                     vector_double local_fits(swarm_size);

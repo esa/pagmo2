@@ -384,6 +384,10 @@ public:
     /**
      * @return the champion decision vector.
      *
+     * **NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
+     * some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+     * fitness.
+     *
      * @throw std::invalid_argument if the current problem is not single objective.
      */
     vector_double champion_x() const
@@ -398,6 +402,10 @@ public:
     /// Champion fitness
     /**
      * @return the champion fitness.
+     *
+     * **NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
+     * some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+     * fitness.
      *
      * @throw std::invalid_argument if the current problem is not single objective.
      */

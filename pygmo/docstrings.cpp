@@ -149,6 +149,10 @@ std::string population_champion_x_docstring()
 
 This read-only property contains an array of ``float`` representing the decision vector of the population's champion.
 
+**NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
+some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+fitness.
+
 Returns:
     1D NumPy float array: the champion's decision vector
 
@@ -165,6 +169,10 @@ std::string population_champion_f_docstring()
     return R"(Champion's fitness vector.
 
 This read-only property contains an array of ``float`` representing the fitness vector of the population's champion.
+
+**NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
+some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+fitness.
 
 Returns:
     1D NumPy float array: the champion's fitness vector
@@ -738,7 +746,9 @@ The availability of the gradient sparsity is determined as follows:
 The optional ``has_gradient_sparsity()`` method of the UDP must return a ``bool``. For information on how to
 implement the ``gradient_sparsity()`` method of the UDP, see :func:`~pygmo.problem.gradient_sparsity()`.
 
-**NOTE** regardless of what this method returns, the :func:`~pygmo.problem.gradient_sparsity()` method will always
+.. note:
+
+Regardless of what this method returns, the :func:`~pygmo.problem.gradient_sparsity()` method will always
 return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
 pattern of the gradient is dense. See :func:`~pygmo.problem.gradient_sparsity()` for more details.
 
@@ -877,7 +887,9 @@ The availability of the hessians sparsity is determined as follows:
 The optional ``has_hessians_sparsity()`` method of the UDP must return a ``bool``. For information on how to
 implement the ``hessians_sparsity()`` method of the UDP, see :func:`~pygmo.problem.hessians_sparsity()`.
 
-**NOTE** regardless of what this method returns, the :func:`~pygmo.problem.hessians_sparsity()` method will always
+.. note:
+
+Regardless of what this method returns, the :func:`~pygmo.problem.hessians_sparsity()` method will always
 return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
 pattern of the hessians is dense. See :func:`~pygmo.problem.hessians_sparsity()` for more details.
 
@@ -1012,7 +1024,9 @@ std::string problem_feasibility_x_docstring()
 This method will check the feasibility of the fitness corresponding to a decision vector *x* against
 the tolerances returned by :attr:`~pygmo.problem.c_tol`.
 
-**NOTE** This will cause one fitness evaluation.
+.. note:
+
+This will cause one fitness evaluation.
 
 Args:
     dv (array-like object): a decision vector
@@ -1563,17 +1577,24 @@ objective function. Using the above definitions the overall pseudo code can be s
 
 :class:`pygmo.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
-**NOTE** Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
-for decision vectors already evaluated. This makes the final counter of function evaluations somewhat unpredictable.
+.. note:
+
+Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+for decision vectors already evaluated. This makes the final counter of fitness evaluations somewhat unpredictable.
+
 The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.
 
-**NOTE** Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+.. note:
+
+Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
 corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  constraint is ignored if all
 the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
 
-**NOTE** The performances of :class:`~pygmo.cstrs_self_adaptive` are highly dependent on the particular inner
+.. note:
+
+The performances of :class:`~pygmo.cstrs_self_adaptive` are highly dependent on the particular inner
 algorithm employed and in particular to its parameters (generations / iterations).
 
 See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
@@ -1810,7 +1831,7 @@ Implementation of Example 5.1 in the report from Luksan and Vlcek.
 
 The problem is also known as the Chained Rosenbrock function with trigonometric-exponential constraints.
 
-Its formulation in pagmo can be written as:
+Its formulation in pygmo is written as:
 
 .. math::
    \begin{array}{rl}
@@ -2581,7 +2602,7 @@ Returns a log containing relevant parameters recorded during the last call to ``
 The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
 the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
 :class:`~pygmo.simulated_annealing`. A verbosity larger than 0 will produce a log with one entry
-each verbosity function evaluations.
+each verbosity fitness evaluations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Fevals``, ``Best``, ``Current``, ``Mean range``, ``Temperature``, where:
@@ -2662,11 +2683,15 @@ where :math:`d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}`,
 :math:`d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert` and
 :math:`\hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}`.
 
-**NOTE** The reference point :math:`z^*` is often taken as the ideal point and as such
+.. note:
+
+The reference point :math:`z^*` is often taken as the ideal point and as such
 it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
 this behaviour so that whenever a new ideal point is found :math:`z^*` is adapted accordingly.
 
-**NOTE** The use of :class:`~pygmo.decompose` discards gradients and hessians so that if the original user defined problem
+.. note:
+
+The use of :class:`~pygmo.decompose` discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
 the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.
@@ -2728,7 +2753,9 @@ std::string decompose_z_docstring()
 This read-only property contains the reference point to be used for the decomposition. This is only
 used for Tchebycheff and boundary interception decomposition methods.
 
-**NOTE** The reference point is adapted at each call of the fitness.
+.. note:
+
+The reference point is adapted at each call of the fitness.
 
 Returns:
     1D NumPy float array: the reference point
@@ -2754,7 +2781,9 @@ This meta-problem transforms a constrained problem into an unconstrained problem
 * Ignore the constraints: simply ignores the constraints.
 * Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraints violation (i.e. the sum of the L2 norms of the equalities and inequalities violations)
 
-**NOTE** The use of :class:`~pygmo.unconstrain` discards gradients and hessians so that if the original user defined problem
+.. note:
+
+The use of :class:`~pygmo.unconstrain` discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the unconstrained problem. The reason for this behaviour is that,
 in general, the methods implemented may not be differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.
@@ -3573,7 +3602,9 @@ std::string hv_refpoint_docstring()
 Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object.
 The result is a point that is necessarily dominated by all other points, and thus can be used for hypervolume computations.
 
-**NOTE** This point is different from the one computed by :func:`~pygmo.nadir()` as only the non dominated front is considered
+.. note:
+
+This point is different from the one computed by :func:`~pygmo.nadir()` as only the non dominated front is considered
 in that method (also its complexity is thus higher)
 
 Args:
@@ -3608,7 +3639,7 @@ time the user can query the state of the island and fetch its internal data memb
 wait for pending evolutions to conclude by calling the :func:`~pygmo.island.wait()` and
 :func:`~pygmo.island.get()` methods.
 
-Typically, pagmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
+Typically, pygmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
 the following method:
 
@@ -4459,6 +4490,187 @@ See also the docs of the C++ class :cpp:class:`pagmo::sea`.
 )";
 }
 
+std::string sea_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. 
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
+:class:`~pygmo.sea`. 
+A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
+A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``Improvement``, ``Mutations``
+
+    ``Gen`` (``int``), generation.
+    ``Fevals`` (``int``), number of functions evaluation made.
+    ``Best`` (``float``), the best fitness function found so far.
+    ``Improvement`` (``float``), improvement made by the last mutation.
+    ``Mutations`` (``float``), number of mutated components for the decision vector.
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(sea(500))
+    >>> algo.set_verbosity(50)
+    >>> prob = problem(schwefel(dim = 20))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:          Best:   Improvement:     Mutations:
+       1              1        6363.44        2890.49              2
+    1001           1001        1039.92       -562.407              3
+    2001           2001        358.966         -632.6              2
+    3001           3001         106.08       -995.927              3
+    4001           4001         83.391         -266.8              1
+    5001           5001        62.4994       -1018.38              3
+    6001           6001        39.2851       -732.695              2
+    7001           7001        37.2185       -518.847              1
+    8001           8001        20.9452        -450.75              1
+    9001           9001        17.9193       -270.679              1
+    >>> uda = algo.extract(sea)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::sea::get_log()`.
+)";
+}
+
+std::string sga_docstring()
+{
+    return R"(__init__(gen = 1u, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2u, crossover = "exponential", 
+        mutation = "polynomial", selection = "tournament", int_dim = 0u, seed = random)
+
+A Simple Genetic Algorithm
+
+Approximately during the same decades as Evolutionary Strategies (see :class:`~pygmo.sea`) were studied, 
+a different group led by John Holland, and later by his student David Goldberg, introduced and
+studied an algorithmic framework called "genetic algorithms" that were, essentially, leveraging on
+the same idea but introducing also crossover as a genetic operator. This led to a few decades of
+confusion and discussions on what was an evolutionary startegy and what a genetic algorithm and on
+whether the crossover was a useful operator or mutation only algorithms were to be preferred.
+
+In pygmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between
+selected crossover types, selection schemes and mutation types.
+
+The pseudo code of our version is:
+
+.. code-block:: none
+
+   > Start from a population (pop) of dimension N
+   > while i < gen
+   > > Selection: create a new population (pop2) with N individuals selected from pop (with repetition allowed)
+   > > Crossover: create a new population (pop3) with N individuals obtained applying crossover to pop2
+   > > Mutation:  create a new population (pop4) with N individuals obtained applying mutation to pop3
+   > > Evaluate all new chromosomes in pop4
+   > > Reinsertion: set pop to contain the best N individuals taken from pop and pop4
+
+The various blocks of pygmo genetic algorithm are listed below:
+
+*Selection*: two selection methods are provided: ``tournament`` and ``truncated``. ``Tournament`` selection works by
+selecting each offspring as the one having the minimal fitness in a random group of size *param_s*. The ``truncated``
+selection, instead, works selecting the best *param_s* chromosomes in the entire population over and over.
+We have deliberately not implemented the popular roulette wheel selection as we are of the opinion that such
+a system does not generalize much being highly sensitive to the fitness scaling.
+
+*Crossover*: four different crossover schemes are provided:``single``, ``exponential``, ``binomial``, ``sbx``. The
+``single`` point crossover, works selecting a random point in the parent chromosome and, with probability *cr*, inserting the
+partner chromosome thereafter. The ``exponential`` crossover is taken from the algorithm differential evolution,
+implemented, in pygmo, as :class:`~pygmo.de`. It essentially selects a random point in the parent chromosome and inserts,
+in each successive gene, the partner values with probability  *cr* up to when it stops. The binomial crossover
+inserts each gene from the partner with probability *cr*. The simulated binary crossover (called ``sbx``), is taken
+from the NSGA-II algorithm, implemented in pygmo as :class:`~pygmo.nsga2`, and makes use of an additional parameter called
+distribution index *eta_c*.
+
+*Mutation*: three different mutations schemes are provided: ``uniform``, ``gaussian`` and ``polynomial``. Uniform mutation
+simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution
+with standard deviation proportional to the *param_m* and the bounds width. The last scheme is the ``polynomial``
+mutation from Deb.
+
+*Reinsertion*: the only reinsertion strategy provided is what we call pure elitism. After each generation
+all parents and children are put in the same pool and only the best are passed to the next generation.
+ 
+.. note:
+
+This algorithm will work only for box bounded problems.
+
+.. note:
+
+Specifying the parameter *int_dim* a part of the decision vector (at the end) will be treated as integers
+This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
+The various mutation and crossover strategies will do different things on an integer gene or a real valued one.
+
+Args:
+    gen (``int``): number of generations.
+    cr (``float``): crossover probability.
+    eta_c (``float``): distribution index for ``sbx`` crossover. This parameter is inactive if other types of crossover are selected.
+    m (``float``): mutation probability.
+    param_m (``float``): distribution index (``polynomial`` mutation), gaussian width (``gaussian`` mutation) or inactive (``uniform`` mutation)
+    param_s (``float``): the number of best individuals to use in "truncated" selection or the size of the tournament in ``tournament`` selection.
+    crossover (``str``): the crossover strategy. One of ``exponential``, ``binomial``, ``single`` or ``sbx``
+    mutation (``str``): the mutation strategy. One of ``gaussian``, ``polynomial`` or ``uniform``.
+    selection (``str``): the selection strategy. One of ``tournament``, "truncated".
+    int_dim (``int``): the number of element in the chromosome to be treated as integers.
+    seed (``int``): seed used by the internal random number generator
+
+Raises:
+    OverflowError: if *gen* or *seed* or *int_dim* are negative or greater than an implementation-defined value
+    ValueError: if *cr* is not in [0,1], if *eta_c* is not in [1,100], if *m* is not in [0,1], input_f *mutation* 
+      is not one of ``gaussian``, ``uniform`` or ``polynomial``, if *selection* not one of "roulette", 
+      "truncated" or *crossover* is not one of ``exponential``, ``binomial``, ``sbx``, ``single``, if *param_m* is
+      not in [0,1] and *mutation* is not ``polynomial``, if *mutation* is not in [1,100] and *mutation* is ``polynomial``.
+    unspecified: any exception thrown by failures at the intersection between C++ and Python
+      (e.g., type conversion errors, mismatched function signatures, etc.)
+
+See also the docs of the C++ class :cpp:class:`pagmo::sga`.
+)";
+}
+
+std::string sga_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. 
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
+:class:`~pygmo.sga`. 
+A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
+A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``Improvement``
+
+    ``Gen`` (``int``), generation.
+    ``Fevals`` (``int``), number of functions evaluation made.
+    ``Best`` (``float``), the best fitness function found so far.
+    ``Improvement`` (``float``), improvement made by the last generation.
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(sga(gen = 500))
+    >>> algo.set_verbosity(50)
+    >>> prob = problem(schwefel(dim = 20))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:          Best:   Improvement:     Mutations:
+       1              1        6363.44        2890.49              2
+    1001           1001        1039.92       -562.407              3
+    2001           2001        358.966         -632.6              2
+    3001           3001         106.08       -995.927              3
+    4001           4001         83.391         -266.8              1
+    5001           5001        62.4994       -1018.38              3
+    6001           6001        39.2851       -732.695              2
+    7001           7001        37.2185       -518.847              1
+    8001           8001        20.9452        -450.75              1
+    9001           9001        17.9193       -270.679              1
+    >>> uda = algo.extract(sea)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::sga::get_log()`.
+)";
+}
+
 std::string ipopt_docstring()
 {
     return R"(__init__()
@@ -4564,7 +4776,6 @@ Examples:
     <BLANKLINE>
     Optimisation return status: Solve_Succeeded (value = 0)
     <BLANKLINE>
-
 )";
 }
 
@@ -4658,7 +4869,6 @@ Examples:
             Individual selection policy: best
             Individual replacement policy: best
             String options: {hessian_approximation : limited-memory}
-
 )";
 }
 
@@ -4947,7 +5157,6 @@ Examples:
     >>> ip.reset_numeric_options()
     >>> ip.get_numeric_options()
     {}
-
 )";
 }
 

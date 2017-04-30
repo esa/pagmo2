@@ -86,6 +86,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
+#include <pagmo/algorithms/sga.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
@@ -284,8 +285,22 @@ void expose_algorithms()
     auto sea_ = expose_algorithm<sea>("sea", sea_docstring().c_str());
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
-    expose_algo_log(sea_, "");
+    expose_algo_log(sea_, sea_get_log_docstring().c_str());
     sea_.def("get_seed", &sea::get_seed, generic_uda_get_seed_docstring().c_str());
+    // SGA
+    auto sga_ = expose_algorithm<sga>("sga", sga_docstring().c_str());
+    sga_.def(
+        bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string, unsigned>(
+            (bp::arg("gen") = 1u, bp::arg("cr") = 0.9, bp::arg("eta_c") = 1., bp::arg("m") = 0.02,
+             bp::arg("param_m") = 1., bp::arg("param_s") = 2u, bp::arg("crossover") = "exponential",
+             bp::arg("mutation") = "polynomial", bp::arg("selection") = "tournament", bp::arg("int_dim") = 0u)));
+    sga_.def(bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string,
+                      unsigned, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("cr") = 0.9, bp::arg("eta_c") = 1., bp::arg("m") = 0.02, bp::arg("param_m") = 1.,
+         bp::arg("param_s") = 2u, bp::arg("crossover") = "exponential", bp::arg("mutation") = "polynomial",
+         bp::arg("selection") = "tournament", bp::arg("int_dim") = 0u, bp::arg("seed"))));
+    expose_algo_log(sga_, sga_get_log_docstring().c_str());
+    sga_.def("get_seed", &sga::get_seed, generic_uda_get_seed_docstring().c_str());
     // SIMULATED ANNEALING
     auto simulated_annealing_
         = expose_algorithm<simulated_annealing>("simulated_annealing", simulated_annealing_docstring().c_str());

@@ -99,14 +99,14 @@ public:
             pagmo_throw(std::invalid_argument, "The mutation probability must be in the [0,1] range, while a value of "
                                                    + std::to_string(cr) + " was detected");
         }
-        if (eta_c < 1. || eta_c >= 100.) {
+        if (eta_c < 1. || eta_c > 100.) {
             pagmo_throw(std::invalid_argument,
-                        "The distribution index for crossover must be in [1, 100[, while a value of "
+                        "The distribution index for crossover must be in [1, 100], while a value of "
                             + std::to_string(eta_c) + " was detected");
         }
-        if (eta_m < 1. || eta_m >= 100.) {
+        if (eta_m < 1. || eta_m > 100.) {
             pagmo_throw(std::invalid_argument,
-                        "The distribution index for mutation must be in [1, 100[, while a value of "
+                        "The distribution index for mutation must be in [1, 100], while a value of "
                             + std::to_string(eta_m) + " was detected");
         }
     }

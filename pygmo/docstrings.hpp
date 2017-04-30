@@ -142,8 +142,9 @@ std::string mbh_set_perturb_docstring();
 std::string mbh_get_log_docstring();
 std::string mbh_get_perturb_docstring();
 std::string sea_docstring();
-std::string generic_uda_get_seed_docstring();
-std::string generic_uda_inner_algorithm_docstring();
+std::string sea_get_log_docstring();
+std::string sga_docstring();
+std::string sga_get_log_docstring();
 std::string nlopt_docstring();
 std::string nlopt_stopval_docstring();
 std::string nlopt_ftol_rel_docstring();
@@ -156,6 +157,7 @@ std::string nlopt_get_log_docstring();
 std::string nlopt_get_last_opt_result_docstring();
 std::string nlopt_get_solver_name_docstring();
 std::string nlopt_local_optimizer_docstring();
+
 std::string ipopt_docstring();
 std::string ipopt_get_log_docstring();
 std::string ipopt_get_last_opt_result_docstring();
@@ -176,6 +178,10 @@ std::string ipopt_reset_numeric_options_docstring();
 std::string bls_selection_docstring(const std::string &);
 std::string bls_replacement_docstring(const std::string &);
 std::string bls_set_random_sr_seed_docstring(const std::string &);
+
+// common docstrings reusable by multiple udas, udps
+std::string generic_uda_get_seed_docstring();
+std::string generic_uda_inner_algorithm_docstring();
 
 // utilities
 // hypervolume

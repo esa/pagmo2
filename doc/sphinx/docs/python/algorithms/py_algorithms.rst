@@ -11,8 +11,8 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 
 Each algorithm can be associated only to problems of certain types S = Single, M = Multi-objective, C = Constrained, U = Unconstrained, sto = stochastic
 
-Heuristic Optimization
-^^^^^^^^^^^^^^^^^^^^^^
+Heuristic Global Optimization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ========================================================== ========================================= =============== ===================================================================
 Common Name                                                Name in PyGMO                             Type            Comments
 ========================================================== ========================================= =============== ===================================================================
@@ -22,6 +22,7 @@ Self-adaptive DE (jDE and iDE)                             :class:`pygmo.sade`  
 Self-adaptive DE (de_1220 aka pDE)                         :class:`pygmo.de1220`                     S-U             Exposed from C++
 Particle Swarm Optimization (PSO)                          :class:`pygmo.pso`                        S-U             Exposed from C++
 (N+1)-ES Simple Evolutionary Algorithm                     :class:`pygmo.sea`                        S-U (sto)       Exposed from C++
+Simple Genetic Algorithm                                   :class:`pygmo.sga`                        S-U (sto)       Exposed from C++
 Corana's Simulated Annealing (SA)                          :class:`pygmo.simulated_annealing`        S-U             Exposed from C++
 Artificial Bee Colony (ABC)                                :class:`pygmo.bee_colony`                 S-U             Exposed from C++
 Covariance Matrix Adaptation Evo. Strategy (CMA-ES)        :class:`pygmo.cmaes`                      S-U             Exposed from C++
@@ -82,6 +83,11 @@ Algorithms exposed from C++
 -------------------------------------------------------------
 
 .. autoclass:: pygmo.sea
+   :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.sga
    :members:
 
 -------------------------------------------------------------

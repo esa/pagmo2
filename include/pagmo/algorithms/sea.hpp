@@ -140,8 +140,6 @@ public:
 
         for (unsigned int i = 1u; i <= m_gen; ++i) {
             if (prob.is_stochastic()) {
-                // change the problem seed. This is done via the population_set_seed method as prob.set_seed
-                // is forbidden being prob a const ref.
                 pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
                 // re-evaluate the whole population w.r.t. the new seed
                 for (decltype(pop.size()) j = 0u; j < pop.size(); ++j) {
@@ -221,8 +219,8 @@ public:
      * 668           4013        1487.34        73.2677              2
      * @endcode
      * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
-     * function currently in the population, Improvement is the improvement made by the las mutation and Mutations
-     * is the number of mutated componnets of the decision vector
+     * function currently in the population, Improvement is the improvement made by the last mutation and Mutations
+     * is the number of mutated components of the decision vector
      *
      * @param level verbosity level
      */

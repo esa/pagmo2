@@ -96,7 +96,7 @@ public:
     /**
      * Constructs compass_search
      *
-     * @param max_fevals maximum number of function evaluations
+     * @param max_fevals maximum number of fitness evaluations
      * @param start_range start range
      * @param stop_range stop range
      * @param reduction_coeff range reduction coefficient
@@ -282,7 +282,7 @@ public:
      *     159        95.4502              0              0    7.62939e-06
      * Exit condition -- range: 7.62939e-06 <= 1e-05
      * @endcode
-     * Fevals, is the number of function evaluations made, Best is the best fitness
+     * Fevals, is the number of fitness evaluations made, Best is the best fitness
      * Violated and Viol.Norm are the number of constraints violated and the L2 norm of the violation (accounting for
      the
      * tolerances returned by problem::get_c_tol, and Range is the range used at that point of the search
