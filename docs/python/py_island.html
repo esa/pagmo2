@@ -173,7 +173,7 @@ method. Depending on the UDI, the evolution might take place in a separate threa
 time the user can query the state of the island and fetch its internal data members. The user can explicitly
 wait for pending evolutions to conclude by calling the <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> and
 <a class="reference internal" href="#pygmo.island.get" title="pygmo.island.get"><code class="xref py py-func docutils literal"><span class="pre">get()</span></code></a> methods.</p>
-<p>Typically, pagmo users will employ an already-available UDI in conjunction with this class (see <a class="reference internal" href="islands/py_islands.html#py-islands"><span class="std std-ref">here</span></a>
+<p>Typically, pygmo users will employ an already-available UDI in conjunction with this class (see <a class="reference internal" href="islands/py_islands.html#py-islands"><span class="std std-ref">here</span></a>
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
 the following method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run_evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>

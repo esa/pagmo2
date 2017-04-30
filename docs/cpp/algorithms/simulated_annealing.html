@@ -35,7 +35,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Null problem" href="../problems/null.html" />
-    <link rel="prev" title="(N+1)-ES Simple Evolutionary Algorithm" href="sea.html" />
+    <link rel="prev" title="Simple Genetic Algorithm" href="sga.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
   <body role="document">
@@ -161,7 +161,7 @@
 <p>The implementation provided here allows to obtain a reannealing procedure via subsequent calls to the <a class="reference internal" href="#pagmoclasspagmo_1_1simulated__annealing_1af57d3963ed09cc45e8c539310365ba4d"><span class="std std-ref">pagmo::simulated_annealing::evolve()</span></a> method.</p>
 <p><strong>NOTE</strong> When selecting the starting and final temperature values it helps to think about the tempertaure as the deterioration in the objective function value that still has a 37% chance of being accepted.</p>
 <p><strong>NOTE</strong> The algorithm does not work for multi-objective problems, stochastic problems nor for constrained problems</p>
-<p><strong>NOTE</strong> At each call of the evolve method the number of function evaluations will be <code class="docutils literal"><span class="pre">n_T_adj</span></code> * <code class="docutils literal"><span class="pre">n_range_adj</span></code> * <code class="docutils literal"><span class="pre">bin_size</span></code> times the problem dimension</p>
+<p><strong>NOTE</strong> At each call of the evolve method the number of fitness evaluations will be <code class="docutils literal"><span class="pre">n_T_adj</span></code> * <code class="docutils literal"><span class="pre">n_range_adj</span></code> * <code class="docutils literal"><span class="pre">bin_size</span></code> times the problem dimension</p>
 <p>See: Corana, A., Marchesi, M., Martini, C., &amp; Ridella, S. (1987). Minimizing multimodal functions of continuous variables with the “simulated annealing” algorithm Corrigenda for this article is available here. ACM Transactions on Mathematical Software (TOMS), 13(3), 262-280. <a class="reference external" href="http://people.sc.fsu.edu/~inavon/5420a/corana.pdf">http://people.sc.fsu.edu/~inavon/5420a/corana.pdf</a> </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
@@ -235,7 +235,7 @@
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#pagmoclasspagmo_1_1simulated__annealing_1ab9549e3397579562592ab5dea2361d2e"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
 <li>0: no verbosity</li>
-<li>&gt;=1: will print and log one line at minimum every <code class="docutils literal"><span class="pre">level</span></code> function evaluations.</li>
+<li>&gt;=1: will print and log one line at minimum every <code class="docutils literal"><span class="pre">level</span></code> fitness evaluations.</li>
 </ul>
 </p>
 <p>Example (verbosity 5000): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>       <span class="n">Current</span><span class="p">:</span>    <span class="n">Mean</span> <span class="nb">range</span><span class="p">:</span>   <span class="n">Temperature</span><span class="p">:</span>

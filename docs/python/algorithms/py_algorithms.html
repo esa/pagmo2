@@ -122,7 +122,7 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">List of algorithms available in pygmo</a><ul>
 <li><a class="reference internal" href="#a-quick-look">A Quick Look</a><ul>
-<li><a class="reference internal" href="#heuristic-optimization">Heuristic Optimization</a></li>
+<li><a class="reference internal" href="#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li><a class="reference internal" href="#meta-algorithms">Meta-algorithms</a></li>
 <li><a class="reference internal" href="#local-optimization">Local optimization</a></li>
 </ul>
@@ -166,8 +166,8 @@
 <p>User defined algorithms (UDAs) are classes that allow the construction of a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> offering a unified access to
 all of them. The user can implement his own UDA, or use any ot the ones we provide in pygmo and that are listed here for convenience.</p>
 <p>Each algorithm can be associated only to problems of certain types S = Single, M = Multi-objective, C = Constrained, U = Unconstrained, sto = stochastic</p>
-<div class="section" id="heuristic-optimization">
-<h3>Heuristic Optimization<a class="headerlink" href="#heuristic-optimization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="heuristic-global-optimization">
+<h3>Heuristic Global Optimization<a class="headerlink" href="#heuristic-global-optimization" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="docutils">
 <colgroup>
 <col width="32%" />
@@ -213,27 +213,32 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 <td>S-U (sto)</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-even"><td>Corana&#8217;s Simulated Annealing (SA)</td>
+<tr class="row-even"><td>Simple Genetic Algorithm</td>
+<td><a class="reference internal" href="#pygmo.sga" title="pygmo.sga"><code class="xref py py-class docutils literal"><span class="pre">pygmo.sga</span></code></a></td>
+<td>S-U (sto)</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>Corana&#8217;s Simulated Annealing (SA)</td>
 <td><a class="reference internal" href="#pygmo.simulated_annealing" title="pygmo.simulated_annealing"><code class="xref py py-class docutils literal"><span class="pre">pygmo.simulated_annealing</span></code></a></td>
 <td>S-U</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-odd"><td>Artificial Bee Colony (ABC)</td>
+<tr class="row-even"><td>Artificial Bee Colony (ABC)</td>
 <td><a class="reference internal" href="#pygmo.bee_colony" title="pygmo.bee_colony"><code class="xref py py-class docutils literal"><span class="pre">pygmo.bee_colony</span></code></a></td>
 <td>S-U</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-even"><td>Covariance Matrix Adaptation Evo. Strategy (CMA-ES)</td>
+<tr class="row-odd"><td>Covariance Matrix Adaptation Evo. Strategy (CMA-ES)</td>
 <td><a class="reference internal" href="#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cmaes</span></code></a></td>
 <td>S-U</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-odd"><td>Non-dominated Sorting GA (NSGA2)</td>
+<tr class="row-even"><td>Non-dominated Sorting GA (NSGA2)</td>
 <td><a class="reference internal" href="#pygmo.nsga2" title="pygmo.nsga2"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nsga2</span></code></a></td>
 <td>M-U</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-even"><td>Multi-objective EA vith Decomposition (MOEA/D)</td>
+<tr class="row-odd"><td>Multi-objective EA vith Decomposition (MOEA/D)</td>
 <td><a class="reference internal" href="#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">pygmo.moead</span></code></a></td>
 <td>M-U</td>
 <td>Exposed from C++</td>
@@ -605,8 +610,209 @@ constructed with a <a class="reference internal" href="#pygmo.de" title="pygmo.d
 </table>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/sea.html#_CPPv2N5pagmo3seaE" title="pagmo::sea"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sea</span></code></a>.</p>
 <dl class="method">
+<dt id="pygmo.sea.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sea.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code> and printed to screen.
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed with a
+<a class="reference internal" href="#pygmo.sea" title="pygmo.sea"><code class="xref py py-class docutils literal"><span class="pre">sea</span></code></a>.
+A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
+A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">at each logged epoch, the values <code class="docutils literal"><span class="pre">Gen</span></code>, <code class="docutils literal"><span class="pre">Fevals</span></code>, <code class="docutils literal"><span class="pre">Best</span></code>, <code class="docutils literal"><span class="pre">Improvement</span></code>, <code class="docutils literal"><span class="pre">Mutations</span></code><p><code class="docutils literal"><span class="pre">Gen</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), generation.
+<code class="docutils literal"><span class="pre">Fevals</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), number of functions evaluation made.
+<code class="docutils literal"><span class="pre">Best</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the best fitness function found so far.
+<code class="docutils literal"><span class="pre">Improvement</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), improvement made by the last mutation.
+<code class="docutils literal"><span class="pre">Mutations</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), number of mutated components for the decision vector.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">tuples</span></code></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">sea</span><span class="p">(</span><span class="mi">500</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">schwefel</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Gen:        Fevals:          Best:   Improvement:     Mutations:</span>
+<span class="go">   1              1        6363.44        2890.49              2</span>
+<span class="go">1001           1001        1039.92       -562.407              3</span>
+<span class="go">2001           2001        358.966         -632.6              2</span>
+<span class="go">3001           3001         106.08       -995.927              3</span>
+<span class="go">4001           4001         83.391         -266.8              1</span>
+<span class="go">5001           5001        62.4994       -1018.38              3</span>
+<span class="go">6001           6001        39.2851       -732.695              2</span>
+<span class="go">7001           7001        37.2185       -518.847              1</span>
+<span class="go">8001           8001        20.9452        -450.75              1</span>
+<span class="go">9001           9001        17.9193       -270.679              1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">sea</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
+<span class="go">[(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...</span>
+</pre></div>
+</div>
+<p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/sea.html#_CPPv2NK5pagmo3sea7get_logEv" title="pagmo::sea::get_log"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sea::get_log()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pygmo.sea.get_seed">
 <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sea.get_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the random seed used internally by this uda.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the random seed of the population</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.sga">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">sga</code><a class="headerlink" href="#pygmo.sga" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>__init__(gen = 1u, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2u, crossover = &#8220;exponential&#8221;,</dt>
+<dd>mutation = &#8220;polynomial&#8221;, selection = &#8220;tournament&#8221;, int_dim = 0u, seed = random)</dd>
+</dl>
+<p>A Simple Genetic Algorithm</p>
+<p>Approximately during the same decades as Evolutionary Strategies (see <a class="reference internal" href="#pygmo.sea" title="pygmo.sea"><code class="xref py py-class docutils literal"><span class="pre">sea</span></code></a>) were studied,
+a different group led by John Holland, and later by his student David Goldberg, introduced and
+studied an algorithmic framework called &#8220;genetic algorithms&#8221; that were, essentially, leveraging on
+the same idea but introducing also crossover as a genetic operator. This led to a few decades of
+confusion and discussions on what was an evolutionary startegy and what a genetic algorithm and on
+whether the crossover was a useful operator or mutation only algorithms were to be preferred.</p>
+<p>In pygmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between
+selected crossover types, selection schemes and mutation types.</p>
+<p>The pseudo code of our version is:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt; Start from a population (pop) of dimension N
+&gt; while i &lt; gen
+&gt; &gt; Selection: create a new population (pop2) with N individuals selected from pop (with repetition allowed)
+&gt; &gt; Crossover: create a new population (pop3) with N individuals obtained applying crossover to pop2
+&gt; &gt; Mutation:  create a new population (pop4) with N individuals obtained applying mutation to pop3
+&gt; &gt; Evaluate all new chromosomes in pop4
+&gt; &gt; Reinsertion: set pop to contain the best N individuals taken from pop and pop4
+</pre></div>
+</div>
+<p>The various blocks of pygmo genetic algorithm are listed below:</p>
+<p><em>Selection</em>: two selection methods are provided: <code class="docutils literal"><span class="pre">tournament</span></code> and <code class="docutils literal"><span class="pre">truncated</span></code>. <code class="docutils literal"><span class="pre">Tournament</span></code> selection works by
+selecting each offspring as the one having the minimal fitness in a random group of size <em>param_s</em>. The <code class="docutils literal"><span class="pre">truncated</span></code>
+selection, instead, works selecting the best <em>param_s</em> chromosomes in the entire population over and over.
+We have deliberately not implemented the popular roulette wheel selection as we are of the opinion that such
+a system does not generalize much being highly sensitive to the fitness scaling.</p>
+<p><em>Crossover</em>: four different crossover schemes are provided:<code class="docutils literal"><span class="pre">single</span></code>, <code class="docutils literal"><span class="pre">exponential</span></code>, <code class="docutils literal"><span class="pre">binomial</span></code>, <code class="docutils literal"><span class="pre">sbx</span></code>. The
+<code class="docutils literal"><span class="pre">single</span></code> point crossover, works selecting a random point in the parent chromosome and, with probability <em>cr</em>, inserting the
+partner chromosome thereafter. The <code class="docutils literal"><span class="pre">exponential</span></code> crossover is taken from the algorithm differential evolution,
+implemented, in pygmo, as <a class="reference internal" href="#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal"><span class="pre">de</span></code></a>. It essentially selects a random point in the parent chromosome and inserts,
+in each successive gene, the partner values with probability  <em>cr</em> up to when it stops. The binomial crossover
+inserts each gene from the partner with probability <em>cr</em>. The simulated binary crossover (called <code class="docutils literal"><span class="pre">sbx</span></code>), is taken
+from the NSGA-II algorithm, implemented in pygmo as <a class="reference internal" href="#pygmo.nsga2" title="pygmo.nsga2"><code class="xref py py-class docutils literal"><span class="pre">nsga2</span></code></a>, and makes use of an additional parameter called
+distribution index <em>eta_c</em>.</p>
+<p><em>Mutation</em>: three different mutations schemes are provided: <code class="docutils literal"><span class="pre">uniform</span></code>, <code class="docutils literal"><span class="pre">gaussian</span></code> and <code class="docutils literal"><span class="pre">polynomial</span></code>. Uniform mutation
+simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution
+with standard deviation proportional to the <em>param_m</em> and the bounds width. The last scheme is the <code class="docutils literal"><span class="pre">polynomial</span></code>
+mutation from Deb.</p>
+<p><em>Reinsertion</em>: the only reinsertion strategy provided is what we call pure elitism. After each generation
+all parents and children are put in the same pool and only the best are passed to the next generation.</p>
+<p>This algorithm will work only for box bounded problems.</p>
+<p>Specifying the parameter <em>int_dim</em> a part of the decision vector (at the end) will be treated as integers
+This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
+The various mutation and crossover strategies will do different things on an integer gene or a real valued one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations.</li>
+<li><strong>cr</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; crossover probability.</li>
+<li><strong>eta_c</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; distribution index for <code class="docutils literal"><span class="pre">sbx</span></code> crossover. This parameter is inactive if other types of crossover are selected.</li>
+<li><strong>m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; mutation probability.</li>
+<li><strong>param_m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; distribution index (<code class="docutils literal"><span class="pre">polynomial</span></code> mutation), gaussian width (<code class="docutils literal"><span class="pre">gaussian</span></code> mutation) or inactive (<code class="docutils literal"><span class="pre">uniform</span></code> mutation)</li>
+<li><strong>param_s</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; the number of best individuals to use in &#8220;truncated&#8221; selection or the size of the tournament in <code class="docutils literal"><span class="pre">tournament</span></code> selection.</li>
+<li><strong>crossover</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the crossover strategy. One of <code class="docutils literal"><span class="pre">exponential</span></code>, <code class="docutils literal"><span class="pre">binomial</span></code>, <code class="docutils literal"><span class="pre">single</span></code> or <code class="docutils literal"><span class="pre">sbx</span></code></li>
+<li><strong>mutation</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the mutation strategy. One of <code class="docutils literal"><span class="pre">gaussian</span></code>, <code class="docutils literal"><span class="pre">polynomial</span></code> or <code class="docutils literal"><span class="pre">uniform</span></code>.</li>
+<li><strong>selection</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the selection strategy. One of <code class="docutils literal"><span class="pre">tournament</span></code>, &#8220;truncated&#8221;.</li>
+<li><strong>int_dim</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the number of element in the chromosome to be treated as integers.</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em> or <em>seed</em> or <em>int_dim</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>cr</em> is not in [0,1], if <em>eta_c</em> is not in [1,100], if <em>m</em> is not in [0,1], input_f <em>mutation</em>
+is not one of <code class="docutils literal"><span class="pre">gaussian</span></code>, <code class="docutils literal"><span class="pre">uniform</span></code> or <code class="docutils literal"><span class="pre">polynomial</span></code>, if <em>selection</em> not one of &#8220;roulette&#8221;,
+&#8220;truncated&#8221; or <em>crossover</em> is not one of <code class="docutils literal"><span class="pre">exponential</span></code>, <code class="docutils literal"><span class="pre">binomial</span></code>, <code class="docutils literal"><span class="pre">sbx</span></code>, <code class="docutils literal"><span class="pre">single</span></code>, if <em>param_m</em> is
+not in [0,1] and <em>mutation</em> is not <code class="docutils literal"><span class="pre">polynomial</span></code>, if <em>mutation</em> is not in [1,100] and <em>mutation</em> is <code class="docutils literal"><span class="pre">polynomial</span></code>.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python
+(e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/sga.html#_CPPv2N5pagmo3sgaE" title="pagmo::sga"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sga</span></code></a>.</p>
+<dl class="method">
+<dt id="pygmo.sga.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sga.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code> and printed to screen.
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed with a
+<a class="reference internal" href="#pygmo.sga" title="pygmo.sga"><code class="xref py py-class docutils literal"><span class="pre">sga</span></code></a>.
+A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
+A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">at each logged epoch, the values <code class="docutils literal"><span class="pre">Gen</span></code>, <code class="docutils literal"><span class="pre">Fevals</span></code>, <code class="docutils literal"><span class="pre">Best</span></code>, <code class="docutils literal"><span class="pre">Improvement</span></code><p><code class="docutils literal"><span class="pre">Gen</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), generation.
+<code class="docutils literal"><span class="pre">Fevals</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), number of functions evaluation made.
+<code class="docutils literal"><span class="pre">Best</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the best fitness function found so far.
+<code class="docutils literal"><span class="pre">Improvement</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), improvement made by the last generation.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">tuples</span></code></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">sga</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">500</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">schwefel</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Gen:        Fevals:          Best:   Improvement:     Mutations:</span>
+<span class="go">   1              1        6363.44        2890.49              2</span>
+<span class="go">1001           1001        1039.92       -562.407              3</span>
+<span class="go">2001           2001        358.966         -632.6              2</span>
+<span class="go">3001           3001         106.08       -995.927              3</span>
+<span class="go">4001           4001         83.391         -266.8              1</span>
+<span class="go">5001           5001        62.4994       -1018.38              3</span>
+<span class="go">6001           6001        39.2851       -732.695              2</span>
+<span class="go">7001           7001        37.2185       -518.847              1</span>
+<span class="go">8001           8001        20.9452        -450.75              1</span>
+<span class="go">9001           9001        17.9193       -270.679              1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">sea</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
+<span class="go">[(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...</span>
+</pre></div>
+</div>
+<p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/sga.html#_CPPv2NK5pagmo3sga7get_logEv" title="pagmo::sga::get_log"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sga::get_log()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.sga.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sga.get_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will return the random seed used internally by this uda.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1233,7 +1439,7 @@ change in the search range.</p>
 The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
 the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed with a
 <a class="reference internal" href="#pygmo.simulated_annealing" title="pygmo.simulated_annealing"><code class="xref py py-class docutils literal"><span class="pre">simulated_annealing</span></code></a>. A verbosity larger than 0 will produce a log with one entry
-each verbosity function evaluations.</p>
+each verbosity fitness evaluations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1753,15 +1959,15 @@ objective function. Using the above definitions the overall pseudo code can be s
 </pre></div>
 </div>
 <p><a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cstrs_self_adaptive</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> objects.</p>
-<p><strong>NOTE</strong> Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
-for decision vectors already evaluated. This makes the final counter of function evaluations somewhat unpredictable.
-The number of function evaluation will be bounded to <em>iters</em> times the fevals made by one call to the inner UDA. The
+<p>Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+for decision vectors already evaluated. This makes the final counter of fitness evaluations somewhat unpredictable.</p>
+<p>The number of function evaluation will be bounded to <em>iters</em> times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.</p>
-<p><strong>NOTE</strong> Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+<p>Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
 corner cases and with any UDAs. Most notably, a violation to the f$jf$-th  constraint is ignored if all
 the decision vectors in the population satisfy that particular constraint (i.e. if f$c_{j_{max}} = 0f$).</p>
-<p><strong>NOTE</strong> The performances of <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> are highly dependent on the particular inner
+<p>The performances of <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> are highly dependent on the particular inner
 algorithm employed and in particular to its parameters (generations / iterations).</p>
 <p>See: Farmani, Raziyeh, and Jonathan A. Wright. &#8220;Self-adaptive fitness formulation for constrained optimization.&#8221; IEEE
 Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>

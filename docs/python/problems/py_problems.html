@@ -577,7 +577,7 @@ visualized if the problem id is 2,3 or 4.</p>
 <em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">luksan_vlcek1</code><span class="sig-paren">(</span><em>dim = 3</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.luksan_vlcek1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of Example 5.1 in the report from Luksan and Vlcek.</p>
 <p>The problem is also known as the Chained Rosenbrock function with trigonometric-exponential constraints.</p>
-<p>Its formulation in pagmo can be written as:</p>
+<p>Its formulation in pygmo is written as:</p>
 <div class="math">
 \[\begin{split}\begin{array}{rl}
 \mbox{find:} &amp; -5 \le x_i \le 5, \forall i=1..n \\
@@ -697,10 +697,10 @@ according to the decomposition method chosen:</p>
 <p>where <span class="math">\(d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}\)</span>,
 <span class="math">\(d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\)</span> and
 <span class="math">\(\hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\)</span>.</p>
-<p><strong>NOTE</strong> The reference point <span class="math">\(z^*\)</span> is often taken as the ideal point and as such
+<p>The reference point <span class="math">\(z^*\)</span> is often taken as the ideal point and as such
 it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
 this behaviour so that whenever a new ideal point is found <span class="math">\(z^*\)</span> is adapted accordingly.</p>
-<p><strong>NOTE</strong> The use of <a class="reference internal" href="#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal"><span class="pre">decompose</span></code></a> discards gradients and hessians so that if the original user defined problem
+<p>The use of <a class="reference internal" href="#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal"><span class="pre">decompose</span></code></a> discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
 the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.</p>
@@ -783,7 +783,7 @@ intersection between C++ and Python (e.g., type conversion errors, mismatched fu
 <dd><p>Current reference point.</p>
 <p>This read-only property contains the reference point to be used for the decomposition. This is only
 used for Tchebycheff and boundary interception decomposition methods.</p>
-<p><strong>NOTE</strong> The reference point is adapted at each call of the fitness.</p>
+<p>The reference point is adapted at each call of the fitness.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -814,7 +814,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
 <li>Ignore the constraints: simply ignores the constraints.</li>
 <li>Ignore the objectives: ignores the objectives and defines as a new single objective the overall constraints violation (i.e. the sum of the L2 norms of the equalities and inequalities violations)</li>
 </ul>
-<p><strong>NOTE</strong> The use of <a class="reference internal" href="#pygmo.unconstrain" title="pygmo.unconstrain"><code class="xref py py-class docutils literal"><span class="pre">unconstrain</span></code></a> discards gradients and hessians so that if the original user defined problem
+<p>The use of <a class="reference internal" href="#pygmo.unconstrain" title="pygmo.unconstrain"><code class="xref py py-class docutils literal"><span class="pre">unconstrain</span></code></a> discards gradients and hessians so that if the original user defined problem
 implements them, they will not be available in the unconstrained problem. The reason for this behaviour is that,
 in general, the methods implemented may not be differentiable. Also, the use of this class was originally intended for
 derivative-free optimization.</p>

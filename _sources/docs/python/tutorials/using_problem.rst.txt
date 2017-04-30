@@ -39,7 +39,7 @@ Let us start:
     	Has hessians: false
     	User implemented hessians sparsity: false
     <BLANKLINE>
-    	Function evaluations: 0
+    	Fitness evaluations: 0
         Gradient evaluations: 0
     <BLANKLINE>
     	Thread safety: basic

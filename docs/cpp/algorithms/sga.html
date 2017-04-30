@@ -1,0 +1,405 @@
+ <!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Simple Genetic Algorithm &#8212; pagmo 2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Simulated Annealing (Corana’s version)" href="simulated_annealing.html" />
+    <link rel="prev" title="(N+1)-ES Simple Evolutionary Algorithm" href="sea.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Simple Genetic Algorithm</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="simple-genetic-algorithm">
+<h1>Simple Genetic Algorithm<a class="headerlink" href="#simple-genetic-algorithm" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo3sgaE">
+<span id="pagmo::sga"></span><span class="target" id="pagmoclasspagmo_1_1sga"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">sga</code><a class="headerlink" href="#_CPPv2N5pagmo3sgaE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A Simple Genetic Algorithm. </p>
+<p><img alt="../../../_images/sga.jpg" src="../../../_images/sga.jpg" /></p>
+<p>Approximately during the same decades as Evolutionary Strategies (see <a class="reference internal" href="sea.html#pagmoclasspagmo_1_1sea"><span class="std std-ref">pagmo::sea</span></a>) were studied, a different group led by John Holland, and later by his student David Goldberg, introduced and studied an algorithmic framework called &#8220;genetic algorithms&#8221; that were, essentially, leveraging on the same idea but introducing also crossover as a genetic operator. This led to a few decades of confusion and discussions on what was an evolutionary startegy and what a genetic algorithm and on whether the crossover was a useful operator or mutation only algorithms were to be preferred.</p>
+<p>In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between some selected crossover types, selection schemes and mutation types.</p>
+<p>The pseudo code of our version is: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Start</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">population</span> <span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="n">of</span> <span class="n">dimension</span> <span class="n">N</span>
+<span class="o">&gt;</span> <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">gen</span>
+<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Selection</span><span class="p">:</span> <span class="n">create</span> <span class="n">a</span> <span class="n">new</span> <span class="n">population</span> <span class="p">(</span><span class="n">pop2</span><span class="p">)</span> <span class="k">with</span> <span class="n">N</span> <span class="n">individuals</span> <span class="n">selected</span> <span class="kn">from</span> <span class="nn">pop</span> <span class="p">(</span><span class="k">with</span> <span class="n">repetition</span> <span class="n">allowed</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Crossover</span><span class="p">:</span> <span class="n">create</span> <span class="n">a</span> <span class="n">new</span> <span class="n">population</span> <span class="p">(</span><span class="n">pop3</span><span class="p">)</span> <span class="k">with</span> <span class="n">N</span> <span class="n">individuals</span> <span class="n">obtained</span> <span class="n">applying</span> <span class="n">crossover</span> <span class="n">to</span> <span class="n">pop2</span>
+<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Mutation</span><span class="p">:</span>  <span class="n">create</span> <span class="n">a</span> <span class="n">new</span> <span class="n">population</span> <span class="p">(</span><span class="n">pop4</span><span class="p">)</span> <span class="k">with</span> <span class="n">N</span> <span class="n">individuals</span> <span class="n">obtained</span> <span class="n">applying</span> <span class="n">mutation</span> <span class="n">to</span> <span class="n">pop3</span>
+<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Evaluate</span> <span class="nb">all</span> <span class="n">new</span> <span class="n">chromosomes</span> <span class="ow">in</span> <span class="n">pop4</span>
+<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Reinsertion</span><span class="p">:</span> <span class="nb">set</span> <span class="n">pop</span> <span class="n">to</span> <span class="n">contain</span> <span class="n">the</span> <span class="n">best</span> <span class="n">N</span> <span class="n">individuals</span> <span class="n">taken</span> <span class="kn">from</span> <span class="nn">pop</span> <span class="ow">and</span> <span class="n">pop4</span>
+</pre></div>
+</div>
+</p>
+<p>The various blocks of pagmo genetic algorithm are listed below:</p>
+<p><em>Selection</em>: two selection methods are provided: &#8220;tournament&#8221; and &#8220;truncated&#8221;. Tournament selection works by selecting each offspring as the one having the minimal fitness in a random group of size <code class="docutils literal"><span class="pre">param_s</span></code>. The truncated selection, instead, works selecting the best <code class="docutils literal"><span class="pre">param_s</span></code> chromosomes in the entire population over and over. We have deliberately not implemented the popular roulette wheel selection as we are of the opinion that such a system does not generalize much being highly sensitive to the fitness scaling.</p>
+<p><em>Crossover</em>: four different crossover schemes are provided: &#8220;single&#8221;, &#8220;exponential&#8221;, &#8220;binomial&#8221;, &#8220;sbx&#8221;. The single point crossover, called &#8220;single&#8221;, works selecting a random point in the parent chromosome and inserting the partner chromosome thereafter. The exponential crossover is taken from the algorithm differential evolution, implemented, in pagmo, as <a class="reference internal" href="de.html#pagmoclasspagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>. It essentially selects a random point in the parent chromosome and inserts, in each successive gene, the partner values with probability <code class="docutils literal"><span class="pre">cr</span></code> up to when it stops. The binomial crossover inserts each gene from the partner with probability <code class="docutils literal"><span class="pre">cr</span></code>. The simulated binary crossover (called &#8220;sbx&#8221;), is taken from the NSGA-II algorithm, implemented in pagmo as <a class="reference internal" href="nsga2.html#pagmoclasspagmo_1_1nsga2"><span class="std std-ref">pagmo::nsga2</span></a>, and makes use of an additional parameter called distribution index <code class="docutils literal"><span class="pre">eta_c</span></code>.</p>
+<p><em>Mutation</em>: three different mutations schemes are provided: &#8220;uniform&#8221;, &#8220;gaussian&#8221; and &#8220;polynomial&#8221;. Uniform mutation simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution with standard deviation proportional to the <code class="docutils literal"><span class="pre">m_param_m</span></code> and the bounds width. The last scheme is the polynomial mutation.</p>
+<p><em>Reinsertion</em>: the only reinsertion strategy provided is what we call pure elitism. After each generation all parents and children are put in the same pool and only the best are passed to the next generation.</p>
+<p><strong>NOTE</strong> This algorithm will work only for box bounded problems.</p>
+<p><strong>NOTE</strong> Specifying the parameter <code class="docutils literal"><span class="pre">int_dim</span></code> a part of the decision vector (at the end) will be treated as integers This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds. The various mutation and crossover strategies will do different things on an integer gene or a real valued one. </p>
+<p>Inherits from pagmo::detail::sga_statics&lt;&gt;</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv2N5pagmo3sga13log_line_typeE">
+<span id="pagmo::sga::log_line_type"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a8437b6d6cb997cd5ea46e993b1e707a4"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo3sga13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Single entry of the log (gen, fevals, best, improvement) </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5pagmo3sga8log_typeE">
+<span id="pagmo::sga::log_type"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a09fcc512df1d95b7a3bac7a7d0ac6ddb"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo3sga13log_line_typeE" title="pagmo::sga::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo3sga8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The log. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEN13vector_double9size_typeEj">
+<span id="pagmo::sga::sga__unsigned.double.double.double.double.unsigned.ss.ss.ss.vector_double::size_type.unsigned"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a48ed0df72ab1efb8c7b2e56b7279135c"></span><code class="descname">sga</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>cr</em> = .90, double <em>eta_c</em> = 1., double <em>m</em> = 0.02, double <em>param_m</em> = 1., unsigned <em>param_s</em> = 2u, std::string <em>crossover</em> = &quot;exponential&quot;, std::string <em>mutation</em> = &quot;polynomial&quot;, std::string <em>selection</em> = &quot;tournament&quot;, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>int_dim</em> = 0u, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEN13vector_double9size_typeEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor. </p>
+<p>Constructs a simple genetic algorithm.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">gen</span></code>: number of generations. </li>
+<li><code class="docutils literal"><span class="pre">cr</span></code>: crossover probability. </li>
+<li><code class="docutils literal"><span class="pre">eta_c</span></code>: distribution index for &#8220;sbx&#8221; crossover. This is an inactive parameter if other types of crossovers are selected. </li>
+<li><code class="docutils literal"><span class="pre">m</span></code>: mutation probability. </li>
+<li><code class="docutils literal"><span class="pre">param_m</span></code>: distribution index (&#8220;polynomial&#8221; mutation), gaussian width (&#8220;gaussian&#8221; mutation) or inactive (&#8220;uniform&#8221; mutation) </li>
+<li><code class="docutils literal"><span class="pre">param_s</span></code>: when &#8220;truncated&#8221; selection is used this indicates the number of best individuals to use. When &#8220;tournament&#8221; selection is used this indicates the size of the tournament. </li>
+<li><code class="docutils literal"><span class="pre">mutation</span></code>: the mutation strategy. One of &#8220;gaussian&#8221;, &#8220;polynomial&#8221; or &#8220;uniform&#8221;. </li>
+<li><code class="docutils literal"><span class="pre">selection</span></code>: the selection strategy. One of &#8220;tournament&#8221;, &#8220;truncated&#8221;. </li>
+<li><code class="docutils literal"><span class="pre">crossover</span></code>: the crossover strategy. One of &#8220;exponential&#8221;, &#8220;binomial&#8221;, &#8220;single&#8221; or &#8220;sbx&#8221; </li>
+<li><code class="docutils literal"><span class="pre">int_dim</span></code>: the number of element in the chromosome to be treated as integers. </li>
+<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">cr</span></code> not in [0,1], <code class="docutils literal"><span class="pre">eta_c</span></code> not in [1, 100], <code class="docutils literal"><span class="pre">m</span></code> not in [0,1], <code class="docutils literal"><span class="pre">mutation</span></code> not one of &#8220;gaussian&#8221;, &#8220;uniform&#8221; or &#8220;polynomial&#8221;, <code class="docutils literal"><span class="pre">selection</span></code> not one of &#8220;roulette&#8221; or &#8220;truncated&#8221; <code class="docutils literal"><span class="pre">crossover</span></code> not one of &#8220;exponential&#8221;, &#8220;binomial&#8221;, &#8220;sbx&#8221; or &#8220;single&#8221;, if <code class="docutils literal"><span class="pre">param_m</span></code> is not in [0,1] and <code class="docutils literal"><span class="pre">mutation</span></code> is not &#8220;polynomial&#8221; or <code class="docutils literal"><span class="pre">mutation</span></code> is not in [1,100] and <code class="docutils literal"><span class="pre">mutation</span></code> is polynomial. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3sga6evolveE10population">
+<span id="pagmo::sga::evolve__populationC"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a2c2b7114744080acff93ede55f311abb"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sga6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
+<p>Evolves the population for a maximum number of generations</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>evolved population </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or constrained, if the population size is smaller than 2, if <code class="docutils literal"><span class="pre">param_s</span></code> is larger than the population size, if the size of <code class="docutils literal"><span class="pre">pop</span></code> is odd and a &#8220;sbx&#8221; crossover has been selected upon construction, if the problem dimension is smaller than the <code class="docutils literal"><span class="pre">int_dim</span></code> chosen upon construction. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo3sga8set_seedEj">
+<span id="pagmo::sga::set_seed__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a675b6f80c5d75c5e045bb4a1fb70e39e"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3sga8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3sga8get_seedEv">
+<span id="pagmo::sga::get_seedC"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a1ebc365ae8858de8070a7638fa43e7dc"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sga8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the seed controlling the algorithm stochastic behaviour </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo3sga13set_verbosityEj">
+<span id="pagmo::sga::set_verbosity__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1sga_1af08dadcfa3655105bca658135a9460f1"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3sga13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the algorithm verbosity. </p>
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#pagmoclasspagmo_1_1sga_1a1e042772ef93956f1d6873e4d173a0e2"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
+<li>0: no verbosity</li>
+<li>1: will only print and log when the population is improved</li>
+<li>&gt;1: will print and log one line each <code class="docutils literal"><span class="pre">level</span></code> generations.</li>
+</ul>
+</p>
+<p>Example (verbosity 1): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>   <span class="n">Improvement</span><span class="p">:</span>
+   <span class="mi">1</span>             <span class="mi">20</span>        <span class="mf">6605.75</span>         <span class="mf">415.95</span>
+   <span class="mi">3</span>             <span class="mi">60</span>        <span class="mf">6189.79</span>        <span class="mf">500.359</span>
+   <span class="mi">4</span>             <span class="mi">80</span>        <span class="mf">5689.44</span>        <span class="mf">477.663</span>
+   <span class="mi">5</span>            <span class="mi">100</span>        <span class="mf">5211.77</span>        <span class="mf">218.231</span>
+   <span class="mi">6</span>            <span class="mi">120</span>        <span class="mf">4993.54</span>        <span class="mf">421.684</span>
+   <span class="mi">8</span>            <span class="mi">160</span>        <span class="mf">4571.86</span>        <span class="mf">246.532</span>
+  <span class="mi">10</span>            <span class="mi">200</span>        <span class="mf">4325.33</span>        <span class="mf">166.685</span>
+  <span class="mi">11</span>            <span class="mi">220</span>        <span class="mf">4158.64</span>        <span class="mf">340.382</span>
+  <span class="mi">14</span>            <span class="mi">280</span>        <span class="mf">3818.26</span>        <span class="mf">294.232</span>
+  <span class="mi">15</span>            <span class="mi">300</span>        <span class="mf">3524.03</span>        <span class="mf">55.0358</span>
+  <span class="mi">16</span>            <span class="mi">320</span>        <span class="mf">3468.99</span>        <span class="mf">452.544</span>
+  <span class="mi">17</span>            <span class="mi">340</span>        <span class="mf">3016.45</span>        <span class="mf">16.7273</span>
+  <span class="mi">19</span>            <span class="mi">380</span>        <span class="mf">2999.72</span>         <span class="mf">150.68</span>
+  <span class="mi">21</span>            <span class="mi">420</span>        <span class="mf">2849.04</span>        <span class="mf">301.156</span>
+  <span class="mi">22</span>            <span class="mi">440</span>        <span class="mf">2547.88</span>        <span class="mf">1.25038</span>
+  <span class="mi">23</span>            <span class="mi">460</span>        <span class="mf">2546.63</span>        <span class="mf">192.561</span>
+  <span class="mi">25</span>            <span class="mi">500</span>        <span class="mf">2354.07</span>        <span class="mf">22.6248</span>
+</pre></div>
+</div>
+ Gen is the generation number, Fevals the number of fitness evaluations , Best is the best fitness found, Improvement is the improvement of the new population of offspring with respect to the parents.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3sga13get_verbosityEv">
+<span id="pagmo::sga::get_verbosityC"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a2b20e6f5d9da05a7f291c869c83c29e3"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sga13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the verbosity level. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the verbosity level </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3sga8get_nameEv">
+<span id="pagmo::sga::get_nameC"></span><span class="target" id="pagmoclasspagmo_1_1sga_1aa042a6ab989ca4a0de7b69788a9f74e9"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sga8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm name. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing the algorithm name </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3sga14get_extra_infoEv">
+<span id="pagmo::sga::get_extra_infoC"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a64cd03149e55536c3605a44ec79a6efa"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sga14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extra informations. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing extra informations on the algorithm </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3sga7get_logEv">
+<span id="pagmo::sga::get_logC"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a1e042772ef93956f1d6873e4d173a0e2"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo3sga8log_typeE" title="pagmo::sga::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sga7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get log. </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#pagmoclasspagmo_1_1sga_1a8437b6d6cb997cd5ea46e993b1e707a4"><span class="std std-ref">sga::log_line_type</span></a> containing: Gen, Fevals, Current best, Best as described in <a class="reference internal" href="#pagmoclasspagmo_1_1sga_1af08dadcfa3655105bca658135a9460f1"><span class="std std-ref">sga::set_verbosity()</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an <code class="docutils literal"> <span class="pre">std::vector</span></code> of <a class="reference internal" href="#pagmoclasspagmo_1_1sga_1a8437b6d6cb997cd5ea46e993b1e707a4"><span class="std std-ref">sga::log_line_type</span></a> containing the logged values Gen, Fevals, Best improvement </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo3sga9serializeER7Archive">
+<span id="pagmo::sga::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1sga_1a17c6b6480c3577bff5161764aedba8dc"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3sga9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

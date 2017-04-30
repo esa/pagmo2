@@ -232,6 +232,9 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
 <code class="descname">champion_f</code><a class="headerlink" href="#pygmo.population.champion_f" title="Permalink to this definition">¶</a></dt>
 <dd><p>Champion&#8217;s fitness vector.</p>
 <p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the fitness vector of the population&#8217;s champion.</p>
+<p><strong>NOTE</strong>: if the problem is stochastic the champion is the individual that had the lowest fitness for
+some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+fitness.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -258,6 +261,9 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 <code class="descname">champion_x</code><a class="headerlink" href="#pygmo.population.champion_x" title="Permalink to this definition">¶</a></dt>
 <dd><p>Champion&#8217;s decision vector.</p>
 <p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the decision vector of the population&#8217;s champion.</p>
+<p><strong>NOTE</strong>: if the problem is stochastic the champion is the individual that had the lowest fitness for
+some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+fitness.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

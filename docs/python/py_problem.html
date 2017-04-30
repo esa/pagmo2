@@ -342,7 +342,7 @@ the internal user-defined problem will be returned. Otherwise, <code class="docu
 <code class="descname">feasibility_x</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.feasibility_x" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method will check the feasibility of the fitness corresponding to a decision vector <em>x</em> against
 the tolerances returned by <a class="reference internal" href="#pygmo.problem.c_tol" title="pygmo.problem.c_tol"><code class="xref py py-attr docutils literal"><span class="pre">c_tol</span></code></a>.</p>
-<p><strong>NOTE</strong> This will cause one fitness evaluation.</p>
+<p>This will cause one fitness evaluation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -799,7 +799,7 @@ then this method will return the output of the <code class="docutils literal"><s
 </ul>
 <p>The optional <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
 implement the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method of the UDP, see <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a>.</p>
-<p><strong>NOTE</strong> regardless of what this method returns, the <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a> method will always
+<p>Regardless of what this method returns, the <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a> method will always
 return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
 pattern of the gradient is dense. See <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a> for more details.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -856,7 +856,7 @@ then this method will return the output of the <code class="docutils literal"><s
 </ul>
 <p>The optional <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
 implement the <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the UDP, see <a class="reference internal" href="#pygmo.problem.hessians_sparsity" title="pygmo.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a>.</p>
-<p><strong>NOTE</strong> regardless of what this method returns, the <a class="reference internal" href="#pygmo.problem.hessians_sparsity" title="pygmo.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a> method will always
+<p>Regardless of what this method returns, the <a class="reference internal" href="#pygmo.problem.hessians_sparsity" title="pygmo.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a> method will always
 return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
 pattern of the hessians is dense. See <a class="reference internal" href="#pygmo.problem.hessians_sparsity" title="pygmo.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a> for more details.</p>
 <table class="docutils field-list" frame="void" rules="none">
