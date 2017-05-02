@@ -3747,9 +3747,9 @@ This method will block until all the evolution tasks enqueued via :func:`~pygmo.
 )";
 }
 
-std::string island_busy_docstring()
+std::string island_status_docstring()
 {
-    return R"(busy()
+    return R"(status()
 
 Check island status.
 
@@ -3934,9 +3934,9 @@ Raises:
 )";
 }
 
-std::string archipelago_busy_docstring()
+std::string archipelago_status_docstring()
 {
-    return R"(busy()
+    return R"(status()
 
 Check archipelago status.
 

@@ -224,7 +224,7 @@ std::string island_docstring();
 std::string island_evolve_docstring();
 std::string island_wait_docstring();
 std::string island_get_docstring();
-std::string island_busy_docstring();
+std::string island_status_docstring();
 std::string island_get_algorithm_docstring();
 std::string island_set_algorithm_docstring();
 std::string island_get_population_docstring();
@@ -239,7 +239,7 @@ std::string thread_island_docstring();
 // archipelago.
 std::string archipelago_docstring();
 std::string archipelago_evolve_docstring();
-std::string archipelago_busy_docstring();
+std::string archipelago_status_docstring();
 std::string archipelago_wait_docstring();
 std::string archipelago_get_docstring();
 std::string archipelago_getitem_docstring();

@@ -368,6 +368,13 @@ BOOST_PYTHON_MODULE(core)
     // The thread_safety enum.
     bp::enum_<thread_safety>("_thread_safety").value("none", thread_safety::none).value("basic", thread_safety::basic);
 
+    // The evolve_status enum.
+    bp::enum_<evolve_status>("_evolve_status")
+        .value("idle", evolve_status::idle)
+        .value("busy", evolve_status::busy)
+        .value("idle_error", evolve_status::idle_error)
+        .value("busy_error", evolve_status::busy_error);
+
     // Expose utility functions for testing purposes.
     bp::def("_builtin", &pygmo::builtin);
     bp::def("_type", &pygmo::type);
@@ -771,7 +778,6 @@ BOOST_PYTHON_MODULE(core)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
         .def("evolve", lcast([](island &isl, unsigned n) { isl.evolve(n); }), pygmo::island_evolve_docstring().c_str(),
              boost::python::arg("n") = 1u)
-        .def("busy", &island::busy, pygmo::island_busy_docstring().c_str())
         .def("wait", &island::wait, pygmo::island_wait_docstring().c_str())
         .def("wait_check", &island::wait_check, pygmo::island_get_docstring().c_str())
         .def("get_population", &island::get_population, pygmo::island_get_population_docstring().c_str())
@@ -786,6 +792,7 @@ BOOST_PYTHON_MODULE(core)
              pygmo::island_get_thread_safety_docstring().c_str())
         .def("get_name", &island::get_name, pygmo::island_get_name_docstring().c_str())
         .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
+    pygmo::add_property(island_class, "status", &island::status, pygmo::island_status_docstring().c_str());
 
     // Thread island.
     auto ti = pygmo::expose_island<thread_island>("thread_island", pygmo::thread_island_docstring().c_str());
@@ -801,7 +808,6 @@ BOOST_PYTHON_MODULE(core)
         .def("__len__", &archipelago::size)
         .def("evolve", lcast([](archipelago &archi, unsigned n) { archi.evolve(n); }),
              pygmo::archipelago_evolve_docstring().c_str(), boost::python::arg("n") = 1u)
-        .def("busy", &archipelago::busy, pygmo::archipelago_busy_docstring().c_str())
         .def("wait", &archipelago::wait, pygmo::archipelago_wait_docstring().c_str())
         .def("wait_check", &archipelago::wait_check, pygmo::archipelago_get_docstring().c_str())
         .def("__getitem__", lcast([](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; }),
@@ -827,4 +833,5 @@ BOOST_PYTHON_MODULE(core)
                  return retval;
              }),
              pygmo::archipelago_get_champions_x_docstring().c_str());
+    pygmo::add_property(archi_class, "status", &archipelago::status, pygmo::archipelago_status_docstring().c_str());
 }

@@ -65,6 +65,15 @@ class thread_safety(object):
     basic = core._thread_safety.basic
 
 
+class evolve_status(object):
+
+    # TODO put the values as well?
+    idle = core._evolve_status.idle
+    busy = core._evolve_status.busy
+    idle_error = core._evolve_status.idle_error
+    busy_error = core._evolve_status.busy_error
+
+
 # Override of the translate meta-problem constructor.
 __original_translate_init = translate.__init__
 
