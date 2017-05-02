@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archipelago archi3(5u, de{}, rosenbrock{}, 10u);
     BOOST_CHECK(archi3.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi3[i].busy());
+        BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     BOOST_CHECK(archi3.size() == 5u);
     std::vector<unsigned> seeds;
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi3[i].busy());
+        BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archi3 = archipelago{5u, thread_island{}, de{}, population{rosenbrock{}, 10u}};
     BOOST_CHECK(archi3.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi3[i].busy());
+        BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archi3 = archipelago{5u, thread_island{}, de{}, population{rosenbrock{}, 10u, 123u}};
     BOOST_CHECK(archi3.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi3[i].busy());
+        BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     auto archi4 = archi3;
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     auto archi5 = archi4;
     BOOST_CHECK(archi5.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi5[i].busy());
+        BOOST_CHECK(archi5[i].status() != evolve_status::busy);
         BOOST_CHECK(archi5[i].get_algorithm().is<de>());
         BOOST_CHECK(archi5[i].get_population().size() == 10u);
         BOOST_CHECK(archi5[i].get_population().get_problem().is<rosenbrock>());
@@ -169,7 +169,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     auto archi6(std::move(archi4));
     BOOST_CHECK(archi6.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi6[i].busy());
+        BOOST_CHECK(archi6[i].status() != evolve_status::busy);
         BOOST_CHECK(archi6[i].get_algorithm().is<de>());
         BOOST_CHECK(archi6[i].get_population().size() == 10u);
         BOOST_CHECK(archi6[i].get_population().get_problem().is<rosenbrock>());
@@ -178,7 +178,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archi4 = archi5;
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -186,7 +186,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archi4 = std::move(archi5);
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     BOOST_CHECK((std::is_same<archipelago &, decltype(archi4 = archi4)>::value));
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -207,7 +207,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     BOOST_CHECK((std::is_same<archipelago &, decltype(archi4 = std::move(archi4))>::value));
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -252,9 +252,9 @@ BOOST_AUTO_TEST_CASE(archipelago_evolve)
         auto archi2(archi);
         archi3 = archi;
         archi.wait_check();
-        BOOST_CHECK(!archi.busy());
-        BOOST_CHECK(!archi3.busy());
-        BOOST_CHECK(!archi2.busy());
+        BOOST_CHECK(archi.status() != evolve_status::busy);
+        BOOST_CHECK(archi3.status() != evolve_status::busy);
+        BOOST_CHECK(archi2.status() != evolve_status::busy);
         BOOST_CHECK(archi2.size() == 10u);
         BOOST_CHECK(archi3.size() == 10u);
         BOOST_CHECK(archi2[2].get_algorithm().is<de>());
@@ -302,10 +302,10 @@ BOOST_AUTO_TEST_CASE(archipelago_get_wait_busy)
 {
     flag.store(true);
     archipelago a{10, de{}, population{prob_01{}, 25}};
-    BOOST_CHECK(!a.busy());
+    BOOST_CHECK(a.status() != evolve_status::busy);
     flag.store(false);
     a.evolve();
-    BOOST_CHECK(a.busy());
+    BOOST_CHECK(a.status() == evolve_status::busy);
     flag.store(true);
     a.wait();
     flag.store(false);

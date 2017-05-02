@@ -226,10 +226,10 @@ BOOST_AUTO_TEST_CASE(island_get_wait_busy)
 {
     flag.store(true);
     island isl{de{}, population{prob_01{}, 25}};
-    BOOST_CHECK(!isl.busy());
+    BOOST_CHECK(isl.status() != evolve_status::busy);
     flag.store(false);
     isl.evolve();
-    BOOST_CHECK(isl.busy());
+    BOOST_CHECK(isl.status() == evolve_status::busy);
     flag.store(true);
     isl.wait();
     flag.store(false);

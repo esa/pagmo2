@@ -34,8 +34,11 @@ see https://www.gnu.org/licenses/. */
 #include <boost/any.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
 #include <chrono>
+#include <cstddef>
+#include <exception>
 #include <functional>
 #include <future>
+#include <initializer_list>
 #include <iostream>
 #include <memory>
 #include <mutex>
@@ -44,6 +47,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <type_traits>
 #include <typeinfo>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -225,6 +229,19 @@ struct isl_inner final : isl_inner_base {
     }
     T m_value;
 };
+
+// Implementation from:
+// http://en.cppreference.com/w/cpp/experimental/make_exceptional_future
+// We mark it as noexcept because we don't want this to throw, as it is being
+// used in a try/catch block. In the unlikely case of memory allocation issues,
+// the program will just terminate.
+template <typename T>
+inline std::future<T> make_exceptional_future(std::exception_ptr ex) noexcept
+{
+    std::promise<T> p;
+    p.set_exception(ex);
+    return p.get_future();
+}
 }
 
 /// Thread island.
@@ -353,6 +370,33 @@ struct island_data {
     archipelago *archi_ptr = nullptr;
     task_queue queue;
 };
+}
+
+enum class evolve_status { idle, busy, idle_error, busy_error };
+
+namespace detail
+{
+
+template <typename = void>
+struct island_static_data {
+    // A map to link a human-readable description to evolve_status.
+    // NOTE: in C++11 hashing of enums might not be available. Provide our own.
+    struct status_hasher {
+        std::size_t operator()(evolve_status es) const
+        {
+            return std::hash<int>{}(static_cast<int>(es));
+        }
+    };
+    using status_map_t = std::unordered_map<evolve_status, std::string, status_hasher>;
+    static const status_map_t statuses;
+};
+
+template <typename T>
+const typename island_static_data<T>::status_map_t island_static_data<T>::statuses
+    = {{evolve_status::idle, "Idle"},
+       {evolve_status::busy, "Busy"},
+       {evolve_status::idle_error, "Idle - **error occurred**"},
+       {evolve_status::busy_error, "Busy - **error occurred**"}};
 }
 
 /// Island class.
@@ -722,14 +766,37 @@ public:
         m_ptr->futures.clear();
     }
     /// Check island status.
-    /**
-     * @return \p true if the island is evolving, \p false otherwise.
-     */
-    bool busy() const
+    evolve_status status() const
     {
-        return std::any_of(m_ptr->futures.begin(), m_ptr->futures.end(), [](const std::future<void> &f) {
-            return f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready;
-        });
+        // Error flag. It will be set to true if at least one completed task raised an exception.
+        bool error = false;
+        // Iterate over all current evolve() tasks.
+        for (auto &f : m_ptr->futures) {
+            if (f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready) {
+                // We have at least one busy task. The return status will be either "busy"
+                // or "busy_error", depending on whether at least one completed task raised an
+                // exception.
+                if (error) {
+                    return evolve_status::busy_error;
+                }
+                return evolve_status::busy;
+            }
+            // The current task is not running. Check if it generated an error.
+            try {
+                f.get();
+            } catch (...) {
+                // An error was generated. Update the error flag and re-store the exception
+                // in the future.
+                error = true;
+                f = detail::make_exceptional_future<void>(std::current_exception());
+            }
+        }
+        if (error) {
+            // All tasks have finished and at least one generated an error.
+            return evolve_status::idle_error;
+        }
+        // All tasks have finished, no errors generated.
+        return evolve_status::idle;
     }
     /// Get the algorithm.
     /**
@@ -874,7 +941,7 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const island &isl)
     {
         stream(os, "Island name: ", isl.get_name());
-        stream(os, "\n\tEvolving: ", isl.busy(), "\n\n");
+        stream(os, "\n\tStatus: ", detail::island_static_data<>::statuses.at(isl.status()), "\n\n");
         const auto extra_str = isl.get_extra_info();
         if (!extra_str.empty()) {
             stream(os, "Extra info:\n", extra_str, "\n\n");
@@ -1293,13 +1360,46 @@ public:
         }
     }
     /// Check archipelago status.
-    /**
-     * @return \p true if at least one island is evolving, \p false otherwise.
-     */
-    bool busy() const
+    evolve_status status() const
     {
-        return std::any_of(m_islands.begin(), m_islands.end(),
-                           [](const std::unique_ptr<island> &iptr) { return iptr->busy(); });
+        decltype(m_islands.size()) n_idle = 0, n_busy = 0, n_idle_error = 0, n_busy_error = 0;
+        for (const auto &iptr : m_islands) {
+            switch (iptr->status()) {
+                case evolve_status::idle:
+                    ++n_idle;
+                    break;
+                case evolve_status::busy:
+                    ++n_busy;
+                    break;
+                case evolve_status::idle_error:
+                    ++n_idle_error;
+                    break;
+                case evolve_status::busy_error:
+                    ++n_busy_error;
+                    break;
+            }
+        }
+
+        // If we have at last one busy error, the global state
+        // is also busy error.
+        if (n_busy_error) {
+            return evolve_status::busy_error;
+        }
+
+        // The other error case.
+        if (n_idle_error) {
+            if (n_busy) {
+                // At least one island is idle with error. If any other
+                // island is busy, we return busy error.
+                return evolve_status::busy_error;
+            }
+            // No island is busy at all, at least one island is idle with error.
+            return evolve_status::idle_error;
+        }
+
+        // No error in any island. If they are all idle, the global state is idle,
+        // otherwise busy.
+        return n_idle == m_islands.size() ? evolve_status::idle : evolve_status::busy;
     }
     /// Mutable begin iterator.
     /**
@@ -1376,13 +1476,13 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const archipelago &archi)
     {
         stream(os, "Number of islands: ", archi.size(), "\n");
-        stream(os, "Evolving: ", archi.busy(), "\n\n");
+        stream(os, "Status: ", detail::island_static_data<>::statuses.at(archi.status()), "\n\n");
         stream(os, "Islands summaries:\n\n");
-        detail::table t({"#", "Type", "Algo", "Prob", "Size", "Evolving"}, "\t");
+        detail::table t({"#", "Type", "Algo", "Prob", "Size", "Status"}, "\t");
         for (decltype(archi.size()) i = 0; i < archi.size(); ++i) {
             const auto pop = archi[i].get_population();
             t.add_row(i, archi[i].get_name(), archi[i].get_algorithm().get_name(), pop.get_problem().get_name(),
-                      pop.size(), archi[i].busy());
+                      pop.size(), detail::island_static_data<>::statuses.at(archi[i].status()));
         }
         stream(os, t);
         return os;
