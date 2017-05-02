@@ -185,11 +185,11 @@ BOOST_AUTO_TEST_CASE(island_evolve)
 {
     island isl{de{}, population{rosenbrock{}, 25}};
     isl.evolve(0);
-    isl.get();
+    isl.wait_check();
     isl.evolve();
-    isl.get();
+    isl.wait_check();
     isl.evolve(20);
-    isl.get();
+    isl.wait_check();
     // Copy/move operations with a few tasks queued.
     auto enqueue_n = [](island &is, int n) {
         for (auto i = 0; i < n; ++i) {
@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE(island_evolve)
     isl2 = isl;
     isl3 = std::move(isl);
     isl2.wait();
-    isl3.get();
+    isl3.wait_check();
 }
 
 static std::atomic_bool flag = ATOMIC_VAR_INIT(false);
@@ -238,8 +238,8 @@ BOOST_AUTO_TEST_CASE(island_get_wait_busy)
     isl.evolve(10);
     isl.evolve(10);
     isl.evolve(10);
-    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
-    isl.get();
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
+    isl.wait_check();
     isl.wait();
 }
 
@@ -276,25 +276,25 @@ BOOST_AUTO_TEST_CASE(island_tread_safety)
     BOOST_CHECK(ts[0] == thread_safety::basic);
     BOOST_CHECK(ts[1] == thread_safety::basic);
     isl.evolve();
-    isl.get();
+    isl.wait_check();
     isl = island{de{}, population{prob_02{}, 25}};
     ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::basic);
     BOOST_CHECK(ts[1] == thread_safety::none);
     isl.evolve();
-    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
     isl = island{algo_01{}, population{rosenbrock{}, 25}};
     ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::none);
     BOOST_CHECK(ts[1] == thread_safety::basic);
     isl.evolve();
-    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
     isl = island{algo_01{}, population{prob_02{}, 25}};
     ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::none);
     BOOST_CHECK(ts[1] == thread_safety::none);
     isl.evolve();
-    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(island_name_info_stream)
@@ -317,7 +317,7 @@ BOOST_AUTO_TEST_CASE(island_serialization)
 {
     island isl{de{}, population{rosenbrock{}, 25}};
     isl.evolve();
-    isl.get();
+    isl.wait_check();
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(isl);
     // Now serialize, deserialize and compare the result.

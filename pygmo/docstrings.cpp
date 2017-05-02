@@ -3637,7 +3637,7 @@ method. Depending on the UDI, the evolution might take place in a separate threa
 "background") and it is initiated by a call to the :func:`~pygmo.island.evolve()` method. At any
 time the user can query the state of the island and fetch its internal data members. The user can explicitly
 wait for pending evolutions to conclude by calling the :func:`~pygmo.island.wait()` and
-:func:`~pygmo.island.get()` methods.
+:func:`~pygmo.island.wait_check()` methods.
 
 Typically, pygmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
@@ -3705,10 +3705,10 @@ will be pushed to a queue, and then return immediately. The tasks in the queue a
 managed by the :class:`~pygmo.island` object. Each task will invoke the ``run_evolve()`` method of the UDI *n*
 times consecutively to perform the actual evolution. The island's population will be updated at the end of each ``run_evolve()``
 invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling
-:func:`~pygmo.island.get()`.
+:func:`~pygmo.island.wait_check()`.
 
 It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
-first-out) fashion. The user may call :func:`~pygmo.island.wait()` or :func:`~pygmo.island.get()` to block until all
+first-out) fashion. The user may call :func:`~pygmo.island.wait()` or :func:`~pygmo.island.wait_check()` to block until all
 tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
 
 Args:
@@ -3724,13 +3724,13 @@ Raises:
 
 std::string island_get_docstring()
 {
-    return R"(get()
+    return R"(wait_check()
 
 Block until evolution ends and re-raise the first stored exception.
 
 This method will block until all the evolution tasks enqueued via :func:`~pygmo.island.evolve()` have been completed.
 The method will then raise the first exception raised by any task enqueued since the last time :func:`~pygmo.island.wait()`
-or :func:`~pygmo.island.get()` were called.
+or :func:`~pygmo.island.wait_check()` were called.
 
 Raises:
     unspecified: any exception thrown by evolution tasks or by the underlying C++ method
@@ -3959,12 +3959,12 @@ This method will call :func:`pygmo.island.wait()` on all the islands of the arch
 
 std::string archipelago_get_docstring()
 {
-    return R"(get()
+    return R"(wait_check()
 
 Block until all evolutions have finished and raise the first exception that was encountered.
 
-This method will call :func:`pygmo.island.get()` on all the islands of the archipelago.
-If an invocation of :func:`pygmo.island.get()` raises an exception, then on the remaining
+This method will call :func:`pygmo.island.wait_check()` on all the islands of the archipelago.
+If an invocation of :func:`pygmo.island.wait_check()` raises an exception, then on the remaining
 islands :func:`pygmo.island.wait()` will be called instead, and the raised exception will be re-raised
 by this method.
 

@@ -259,10 +259,10 @@ class archipelago;
 namespace detail
 {
 // NOTE: this construct is used to create a RAII-style object at the beginning
-// of island::wait()/island::get(). Normally this object's constructor and destructor will not
+// of island::wait()/island::wait_check(). Normally this object's constructor and destructor will not
 // do anything, but in Python we need to override this getter so that it returns
 // a RAII object that unlocks the GIL, otherwise we could run into deadlocks in Python
-// if isl::wait()/isl::get() holds the GIL while waiting.
+// if isl::wait()/isl::wait_check() holds the GIL while waiting.
 template <typename = void>
 struct wait_raii {
     static std::function<boost::any()> getter;
@@ -371,7 +371,7 @@ struct island_data {
  * is always asynchronous (i.e., running in the "background") and it is initiated by a call
  * to the island::evolve() method. At any time the user can query the state of the island
  * and fetch its internal data members. The user can explicitly wait for pending evolutions
- * to conclude by calling the island::wait() and island::get() methods.
+ * to conclude by calling the island::wait() and island::wait_check() methods.
  *
  * Typically, pagmo users will employ an already-available UDI (such as pagmo::thread_island) in
  * conjunction with this class, but advanced users can implement their own UDI types. A user-defined
@@ -633,10 +633,10 @@ public:
      * method of the UDI \p n times consecutively to perform the actual evolution.
      * The island's population will be updated at the end of each <tt>run_evolve()</tt>
      * invocation. Exceptions raised inside the
-     * tasks are stored within the island object, and can be re-raised by calling get().
+     * tasks are stored within the island object, and can be re-raised by calling wait_check().
      *
      * It is possible to call this method multiple times to enqueue multiple evolution tasks, which
-     * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() or island::get()
+     * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() or island::wait_check()
      * to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
      *
      * @param n the number of times the <tt>run_evolve()</tt> method of the UDI will be called
@@ -675,11 +675,11 @@ public:
     /**
      * This method will block until all the evolution tasks enqueued via island::evolve() have been completed.
      * The method will then raise the first exception raised by any task enqueued since the last time wait()
-     * or get() were called.
+     * or wait_check() were called.
      *
      * @throws unspecified any exception thrown by evolution tasks.
      */
-    void get()
+    void wait_check()
     {
         auto iwr = detail::wait_raii<>::getter();
         (void)iwr;
@@ -718,7 +718,7 @@ public:
             assert(f.valid());
             f.wait();
         }
-        // NOTE: we clear the futures for symmetry with the get() behaviour.
+        // NOTE: we clear the futures for symmetry with the wait_check() behaviour.
         m_ptr->futures.clear();
     }
     /// Check island status.
@@ -1180,8 +1180,9 @@ public:
     island &operator[](size_type i)
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
-                                               + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range,
+                        "cannot access the island at index " + std::to_string(i)
+                            + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
@@ -1201,8 +1202,9 @@ public:
     const island &operator[](size_type i) const
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
-                                               + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range,
+                        "cannot access the island at index " + std::to_string(i)
+                            + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
@@ -1269,19 +1271,19 @@ public:
     }
     /// Block until all evolutions have finished and raise the first exception that was encountered.
     /**
-     * This method will call island::get() on all the islands of the archipelago.
-     * If an invocation of island::get() raises an exception, then on the remaining
+     * This method will call island::wait_check() on all the islands of the archipelago.
+     * If an invocation of island::wait_check() raises an exception, then on the remaining
      * islands island::wait() will be called instead, and the raised exception will be re-raised
      * by this method.
      *
      * @throws unspecified any exception thrown by any evolution task queued in the archipelago's
      * islands.
      */
-    void get()
+    void wait_check()
     {
         for (auto it = m_islands.begin(); it != m_islands.end(); ++it) {
             try {
-                (*it)->get();
+                (*it)->wait_check();
             } catch (...) {
                 for (it = it + 1; it != m_islands.end(); ++it) {
                     (*it)->wait();

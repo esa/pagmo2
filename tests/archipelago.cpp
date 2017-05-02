@@ -164,7 +164,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
         BOOST_CHECK(archi5[i].get_population().size() == 10u);
         BOOST_CHECK(archi5[i].get_population().get_problem().is<rosenbrock>());
     }
-    archi4.get();
+    archi4.wait_check();
     archi4.evolve(10);
     auto archi6(std::move(archi4));
     BOOST_CHECK(archi6.size() == 5u);
@@ -251,7 +251,7 @@ BOOST_AUTO_TEST_CASE(archipelago_evolve)
         // Copy while evolving.
         auto archi2(archi);
         archi3 = archi;
-        archi.get();
+        archi.wait_check();
         BOOST_CHECK(!archi.busy());
         BOOST_CHECK(!archi3.busy());
         BOOST_CHECK(!archi2.busy());
@@ -271,7 +271,7 @@ BOOST_AUTO_TEST_CASE(archipelago_evolve)
         // Move while evolving.
         auto archi2(std::move(archi));
         archi3 = std::move(archi_b);
-        archi.get();
+        archi.wait_check();
         BOOST_CHECK(archi2.size() == 10u);
         BOOST_CHECK(archi3.size() == 10u);
         BOOST_CHECK(archi2[2].get_algorithm().is<de>());
@@ -314,8 +314,8 @@ BOOST_AUTO_TEST_CASE(archipelago_get_wait_busy)
     a.evolve(10);
     a.evolve(10);
     a.evolve(10);
-    BOOST_CHECK_THROW(a.get(), std::invalid_argument);
-    a.get();
+    BOOST_CHECK_THROW(a.wait_check(), std::invalid_argument);
+    a.wait_check();
     a.wait();
 }
 
@@ -331,7 +331,7 @@ BOOST_AUTO_TEST_CASE(archipelago_serialization)
 {
     archipelago a{10, de{}, population{rosenbrock{}, 25}};
     a.evolve();
-    a.get();
+    a.wait_check();
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(a);
     // Now serialize, deserialize and compare the result.

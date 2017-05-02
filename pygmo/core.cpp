@@ -773,7 +773,7 @@ BOOST_PYTHON_MODULE(core)
              boost::python::arg("n") = 1u)
         .def("busy", &island::busy, pygmo::island_busy_docstring().c_str())
         .def("wait", &island::wait, pygmo::island_wait_docstring().c_str())
-        .def("get", &island::get, pygmo::island_get_docstring().c_str())
+        .def("wait_check", &island::wait_check, pygmo::island_get_docstring().c_str())
         .def("get_population", &island::get_population, pygmo::island_get_population_docstring().c_str())
         .def("get_algorithm", &island::get_algorithm, pygmo::island_get_algorithm_docstring().c_str())
         .def("set_population", &island::set_population, pygmo::island_set_population_docstring().c_str(),
@@ -803,7 +803,7 @@ BOOST_PYTHON_MODULE(core)
              pygmo::archipelago_evolve_docstring().c_str(), boost::python::arg("n") = 1u)
         .def("busy", &archipelago::busy, pygmo::archipelago_busy_docstring().c_str())
         .def("wait", &archipelago::wait, pygmo::archipelago_wait_docstring().c_str())
-        .def("get", &archipelago::get, pygmo::archipelago_get_docstring().c_str())
+        .def("wait_check", &archipelago::wait_check, pygmo::archipelago_get_docstring().c_str())
         .def("__getitem__", lcast([](archipelago &archi, archipelago::size_type n) -> island & { return archi[n]; }),
              pygmo::archipelago_getitem_docstring().c_str(), bp::return_internal_reference<>())
         // NOTE: docs for push_back() are in the Python reimplementation.

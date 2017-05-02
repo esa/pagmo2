@@ -1274,12 +1274,12 @@ class archipelago_test_case(_ut.TestCase):
         a.evolve(10)
         a.evolve(10)
         str(a)
-        a.get()
+        a.wait_check()
         # Copy while evolving.
         a.evolve(10)
         a.evolve(10)
         a2 = deepcopy(a)
-        a.get()
+        a.wait_check()
         import sys
         import os
         # The mp island requires either Windows or at least Python 3.4.
@@ -1294,12 +1294,12 @@ class archipelago_test_case(_ut.TestCase):
         a.evolve(10)
         a.evolve(10)
         str(a)
-        a.get()
+        a.wait_check()
         # Copy while evolving.
         a.evolve(10)
         a.evolve(10)
         a2 = deepcopy(a)
-        a.get()
+        a.wait_check()
 
     def run_access_tests(self):
         from . import archipelago, de, rosenbrock
@@ -1355,7 +1355,7 @@ class archipelago_test_case(_ut.TestCase):
         a.push_back(algo=de(), prob=rosenbrock(), size=11)
         a.push_back(algo=de(), prob=rosenbrock(), size=11)
         a.push_back(algo=de(), prob=rosenbrock(), size=11)
-        a.get()
+        a.wait_check()
         self.assertEqual(len(a), 18)
         for i in range(5):
             self.assertTrue(a[i].get_algorithm().is_(de))
