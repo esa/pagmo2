@@ -10,6 +10,7 @@ Pagmo & Pygmo
    :width: 15%
 
 .. image:: ../sphinx/docs/images/algo.png
+   :target: docs/algorithm_list.html
    :width: 15%
 
 .. image:: ../sphinx/docs/images/pop.png
