@@ -862,7 +862,7 @@ public:
             m_ptr->futures.emplace_back(std::move(tmp_f));
         }
     }
-    /// Check island status.
+    /// Status of the island.
     /**
      * This method will return a pagmo::evolve_status flag indicating the current status of
      * asynchronous operations in the island. The flag will be:
@@ -1479,7 +1479,26 @@ public:
             }
         }
     }
-    /// Check archipelago status.
+    /// Status of the archipelago.
+    /**
+     * This method will return a pagmo::evolve_status flag indicating the current status of
+     * asynchronous operations in the archipelago. The flag will be:
+     *
+     * * evolve_status::idle if, for all the islands in the archipelago, island::status() returns
+     *   evolve_status::idle;
+     * * evolve_status::busy if, for at least one island in the archipelago, island::status() returns
+     *   evolve_status::busy, and for no island island::status() returns an error status;
+     * * evolve_status::idle_error if no island in the archipelago is busy and for at least one island
+     *   island::status() returns evolve_status::idle_error;
+     * * evolve_status::busy_error if, for at least one island in the archipelago, island::status() returns
+     *   an error status and at least one island is busy.
+     *
+     * Note that after a call to wait_check(), status() will always return evolve_status::idle,
+     * and after a call to wait(), status() will always return either evolve_status::idle or
+     * evolve_status::idle_error.
+     *
+     * @return a flag indicating the current status of asynchronous operations in the archipelago.
+     */
     evolve_status status() const
     {
         decltype(m_islands.size()) n_idle = 0, n_busy = 0, n_idle_error = 0, n_busy_error = 0;

@@ -50,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/archipelago.hpp>
+#include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
@@ -400,4 +401,45 @@ BOOST_AUTO_TEST_CASE(archipelago_champion_tests)
     archi.push_back(de{}, zdt{}, 20u);
     BOOST_CHECK_THROW(archi.get_champions_f(), std::invalid_argument);
     BOOST_CHECK_THROW(archi.get_champions_x(), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(archipelago_status)
+{
+    flag.store(true);
+    archipelago a{10, de{}, population{prob_01{}, 25}};
+    BOOST_CHECK(a.status() != evolve_status::busy);
+    flag.store(false);
+    a.evolve();
+    BOOST_CHECK(a.status() == evolve_status::busy);
+    flag.store(true);
+    a.wait();
+    BOOST_CHECK(a.status() == evolve_status::idle);
+    flag.store(false);
+    a = archipelago{10, de{}, population{rosenbrock{}, 3}};
+    a.evolve(10);
+    a.evolve(10);
+    a.evolve(10);
+    a.evolve(10);
+    a.wait();
+    BOOST_CHECK(a.status() == evolve_status::idle_error);
+    // A few idle with errors, one busy.
+    a = archipelago{10, de{}, population{rosenbrock{}, 3}};
+    a.evolve();
+    a.wait();
+    flag.store(true);
+    a.push_back(de{}, population{prob_01{}, 25});
+    flag.store(false);
+    a.evolve();
+    BOOST_CHECK(a.status() == evolve_status::busy_error);
+    flag.store(true);
+    // No busy errors, but only idle errors.
+    a = archipelago{10, de{}, population{rosenbrock{}, 3}};
+    a.evolve();
+    a.wait();
+    flag.store(true);
+    a.push_back(de{}, population{prob_01{}, 25});
+    flag.store(false);
+    a[10].evolve();
+    BOOST_CHECK(a.status() == evolve_status::busy_error);
+    flag.store(true);
 }
