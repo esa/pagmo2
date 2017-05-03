@@ -442,10 +442,10 @@ struct island_static_data {
 
 template <typename T>
 const typename island_static_data<T>::status_map_t island_static_data<T>::statuses
-    = {{evolve_status::idle, "Idle"},
-       {evolve_status::busy, "Busy"},
-       {evolve_status::idle_error, "Idle - **error occurred**"},
-       {evolve_status::busy_error, "Busy - **error occurred**"}};
+    = {{evolve_status::idle, "idle"},
+       {evolve_status::busy, "busy"},
+       {evolve_status::idle_error, "idle - **error occurred**"},
+       {evolve_status::busy_error, "busy - **error occurred**"}};
 }
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)

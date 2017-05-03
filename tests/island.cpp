@@ -388,14 +388,14 @@ BOOST_AUTO_TEST_CASE(island_evolve_status)
 {
     std::ostringstream ss;
     stream(ss, evolve_status::idle);
-    BOOST_CHECK_EQUAL(ss.str(), "Idle");
+    BOOST_CHECK_EQUAL(ss.str(), "idle");
     ss.str("");
     stream(ss, evolve_status::busy);
-    BOOST_CHECK_EQUAL(ss.str(), "Busy");
+    BOOST_CHECK_EQUAL(ss.str(), "busy");
     ss.str("");
     stream(ss, evolve_status::busy_error);
-    BOOST_CHECK_EQUAL(ss.str(), "Busy - **error occurred**");
+    BOOST_CHECK_EQUAL(ss.str(), "busy - **error occurred**");
     ss.str("");
     stream(ss, evolve_status::idle_error);
-    BOOST_CHECK_EQUAL(ss.str(), "Idle - **error occurred**");
+    BOOST_CHECK_EQUAL(ss.str(), "idle - **error occurred**");
 }
