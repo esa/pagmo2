@@ -827,15 +827,15 @@ public:
         const auto it_f = m_ptr->futures.end();
         auto it_first_exc = it_f;
         for (auto it = m_ptr->futures.begin(); it != it_f; ++it) {
-            assert(it->valid());
-            // NOTE: future_has_exception() calls get() (and thus waits) internally.
+            // Wait on the task.
+            detail::wait_f(*it);
             if (it_first_exc == it_f && detail::future_has_exception(*it)) {
                 // Store an iterator to the throwing future.
                 it_first_exc = it;
             }
         }
         if (it_first_exc == it_f) {
-            // No exceptions were raised. Clear everything.
+            // No exceptions were raised, just clear everything.
             m_ptr->futures.clear();
         } else {
             // We had a throwing future: preserve it and erase all the other futures.
@@ -880,7 +880,8 @@ public:
                 return evolve_status::busy;
             }
             // The current task is not running. Check if it generated an error.
-            error = detail::future_has_exception(f);
+            // NOTE: the '||' is because this flag, once set to true, needs to stay true.
+            error = error || detail::future_has_exception(f);
         }
         if (error) {
             // All tasks have finished and at least one generated an error.
