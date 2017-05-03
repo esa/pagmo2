@@ -265,6 +265,12 @@ inline bool future_has_exception(std::future<void> &f) noexcept
     f = p.get_future();
     return false;
 }
+
+// Small helper to check if a future is still running.
+inline bool future_running(const std::future<void> &f)
+{
+    return f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready;
+}
 }
 
 /// Thread island.
@@ -782,17 +788,17 @@ public:
     {
         auto iwr = detail::wait_raii<>::getter();
         (void)iwr;
-        for (decltype(m_ptr->futures.size()) i = 0; i < m_ptr->futures.size(); ++i) {
-            assert(m_ptr->futures[i].valid());
+        for (auto it = m_ptr->futures.begin(); it != m_ptr->futures.end(); ++it) {
+            assert(it->valid());
             try {
-                m_ptr->futures[i].get();
+                it->get();
             } catch (...) {
                 // If any of the futures stores an exception, we will re-raise it.
                 // But first, we need to get all the other futures and erase the futures
                 // vector.
                 // NOTE: everything is this block is noexcept.
-                for (i = i + 1u; i < m_ptr->futures.size(); ++i) {
-                    detail::wait_f(m_ptr->futures[i]);
+                for (it = it + 1; it != m_ptr->futures.end(); ++it) {
+                    detail::wait_f(*it);
                 }
                 m_ptr->futures.clear();
                 throw;
@@ -823,7 +829,7 @@ public:
         for (auto it = m_ptr->futures.begin(); it != it_f; ++it) {
             assert(it->valid());
             // NOTE: future_has_exception() calls get() (and thus waits) internally.
-            if (detail::future_has_exception(*it) && it_first_exc == it_f) {
+            if (it_first_exc == it_f && detail::future_has_exception(*it)) {
                 // Store an iterator to the throwing future.
                 it_first_exc = it;
             }
@@ -864,7 +870,7 @@ public:
         bool error = false;
         // Iterate over all current evolve() tasks.
         for (auto &f : m_ptr->futures) {
-            if (f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready) {
+            if (detail::future_running(f)) {
                 // We have at least one busy task. The return status will be either "busy"
                 // or "busy_error", depending on whether at least one completed task raised an
                 // exception.
