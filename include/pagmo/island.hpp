@@ -405,6 +405,12 @@ struct island_data {
 /**
  * This enumeration contains status flags used to represent the current
  * status of asynchronous evolution/optimisation in pagmo::island and pagmo::archipelago.
+ *
+ * \verbatim embed:rst:leading-asterisk
+ * .. seealso::
+ *
+ *    :cpp:func:`pagmo::island::status()` and :cpp:func:`pagmo::archipelago::status()`.
+ * \endverbatim
  */
 enum class evolve_status {
     idle = 0,       ///< No asynchronous operations are ongoing, and no error was generated
