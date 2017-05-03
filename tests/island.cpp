@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -381,4 +382,20 @@ BOOST_AUTO_TEST_CASE(island_status)
     isl.wait();
     BOOST_CHECK(isl.status() == evolve_status::idle_error);
     BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(island_evolve_status)
+{
+    std::ostringstream ss;
+    stream(ss, evolve_status::idle);
+    BOOST_CHECK_EQUAL(ss.str(), "Idle");
+    ss.str("");
+    stream(ss, evolve_status::busy);
+    BOOST_CHECK_EQUAL(ss.str(), "Busy");
+    ss.str("");
+    stream(ss, evolve_status::busy_error);
+    BOOST_CHECK_EQUAL(ss.str(), "Busy - **error occurred**");
+    ss.str("");
+    stream(ss, evolve_status::idle_error);
+    BOOST_CHECK_EQUAL(ss.str(), "Idle - **error occurred**");
 }

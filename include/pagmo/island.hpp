@@ -448,6 +448,16 @@ const typename island_static_data<T>::status_map_t island_static_data<T>::status
        {evolve_status::busy_error, "Busy - **error occurred**"}};
 }
 
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// Provide the stream operator overload for evolve_status.
+inline std::ostream &operator<<(std::ostream &os, evolve_status es)
+{
+    return os << detail::island_static_data<>::statuses.at(es);
+}
+
+#endif
+
 /// Island class.
 /**
  * \image html island_no_text.png
@@ -1041,7 +1051,7 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const island &isl)
     {
         stream(os, "Island name: ", isl.get_name());
-        stream(os, "\n\tStatus: ", detail::island_static_data<>::statuses.at(isl.status()), "\n\n");
+        stream(os, "\n\tStatus: ", isl.status(), "\n\n");
         const auto extra_str = isl.get_extra_info();
         if (!extra_str.empty()) {
             stream(os, "Extra info:\n", extra_str, "\n\n");
@@ -1586,13 +1596,13 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const archipelago &archi)
     {
         stream(os, "Number of islands: ", archi.size(), "\n");
-        stream(os, "Status: ", detail::island_static_data<>::statuses.at(archi.status()), "\n\n");
+        stream(os, "Status: ", archi.status(), "\n\n");
         stream(os, "Islands summaries:\n\n");
         detail::table t({"#", "Type", "Algo", "Prob", "Size", "Status"}, "\t");
         for (decltype(archi.size()) i = 0; i < archi.size(); ++i) {
             const auto pop = archi[i].get_population();
             t.add_row(i, archi[i].get_name(), archi[i].get_algorithm().get_name(), pop.get_problem().get_name(),
-                      pop.size(), detail::island_static_data<>::statuses.at(archi[i].status()));
+                      pop.size(), archi[i].status());
         }
         stream(os, t);
         return os;
