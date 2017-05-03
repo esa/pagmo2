@@ -410,6 +410,7 @@ struct island_data {
  * .. seealso::
  *
  *    :cpp:func:`pagmo::island::status()` and :cpp:func:`pagmo::archipelago::status()`.
+ *
  * \endverbatim
  */
 enum class evolve_status {
@@ -472,10 +473,10 @@ inline std::ostream &operator<<(std::ostream &os, evolve_status es)
  * on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
  * pagmo::thread_island), in a separate process or even in a separate machine. The evolution
  * is always asynchronous (i.e., running in the "background") and it is initiated by a call
- * to the island::evolve() method. At any time the user can query the state of the island
+ * to the evolve() method. At any time the user can query the state of the island
  * and fetch its internal data members. The user can explicitly wait for pending evolutions
- * to conclude by calling the island::wait() and island::wait_check() methods. The status of
- * ongoing evolutions in the island can be queried via island::status().
+ * to conclude by calling the wait() and wait_check() methods. The status of
+ * ongoing evolutions in the island can be queried via status().
  *
  * Typically, pagmo users will employ an already-available UDI (such as pagmo::thread_island) in
  * conjunction with this class, but advanced users can implement their own UDI types. A user-defined
@@ -1139,6 +1140,12 @@ inline void thread_island::run_evolve(island &isl) const
  *
  * An archipelago is a collection of pagmo::island objects which provides a convenient way to perform
  * multiple optimisations in parallel.
+ *
+ * The interface of pagmo::archipelago mirrors partially the interface
+ * of pagmo::island: the evolution is initiated by a call to evolve(), and at any time the user can query the
+ * state of the archipelago and access its island members. The user can explicitly wait for pending evolutions
+ * to conclude by calling the wait() and wait_check() methods. The status of
+ * ongoing evolutions in the archipelago can be queried via status().
  */
 class archipelago
 {
@@ -1433,8 +1440,9 @@ public:
     /// Evolve archipelago.
     /**
      * This method will call island::evolve() on all the islands of the archipelago.
-     * The input parameter \p n represent the number of times the <tt>run_evolve()</tt>
-     * method of the island's UDI is called within the evolution task.
+     * The input parameter \p n will be passed to the invocations of island::evolve() for each island.
+     * archipelago::status() can be used to query the status of the asynchronous operations in the
+     * archipelago.
      *
      * @param n the parameter that will be passed to island::evolve().
      *
@@ -1448,7 +1456,10 @@ public:
     }
     /// Block until all evolutions have finished.
     /**
-     * This method will call island::wait() on all the islands of the archipelago.
+     * This method will call island::wait() on all the islands of the archipelago. Exceptions thrown by island
+     * evolutions can be re-raised via wait_check(): they will **not** be re-thrown by this method. Also, contrary to
+     * wait_check(), this method will **not** reset the status of the archipelago: after a call to wait(), status() will
+     * always return either evolve_status::idle or evolve_status::idle_error.
      */
     void wait() noexcept
     {
@@ -1462,6 +1473,9 @@ public:
      * the order in which the islands were inserted into the archipelago).
      * The first exception raised by island::wait_check() will be re-raised by this method,
      * and all the exceptions thrown by the other calls to island::wait_check() will be ignored.
+     *
+     * Note that wait_check() resets the status of the archipelago: after a call to wait_check(), status() will always
+     * return evolve_status::idle.
      *
      * @throws unspecified any exception thrown by any evolution task queued in the archipelago's
      * islands.

@@ -166,6 +166,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
         BOOST_CHECK(archi5[i].get_population().get_problem().is<rosenbrock>());
     }
     archi4.wait_check();
+    BOOST_CHECK(archi4.status() == evolve_status::idle);
     archi4.evolve(10);
     auto archi6(std::move(archi4));
     BOOST_CHECK(archi6.size() == 5u);
@@ -253,7 +254,7 @@ BOOST_AUTO_TEST_CASE(archipelago_evolve)
         auto archi2(archi);
         archi3 = archi;
         archi.wait_check();
-        BOOST_CHECK(archi.status() != evolve_status::busy);
+        BOOST_CHECK(archi.status() == evolve_status::idle);
         BOOST_CHECK(archi3.status() != evolve_status::busy);
         BOOST_CHECK(archi2.status() != evolve_status::busy);
         BOOST_CHECK(archi2.size() == 10u);
@@ -273,6 +274,7 @@ BOOST_AUTO_TEST_CASE(archipelago_evolve)
         auto archi2(std::move(archi));
         archi3 = std::move(archi_b);
         archi.wait_check();
+        BOOST_CHECK(archi.status() == evolve_status::idle);
         BOOST_CHECK(archi2.size() == 10u);
         BOOST_CHECK(archi3.size() == 10u);
         BOOST_CHECK(archi2[2].get_algorithm().is<de>());
@@ -309,6 +311,7 @@ BOOST_AUTO_TEST_CASE(archipelago_get_wait_busy)
     BOOST_CHECK(a.status() == evolve_status::busy);
     flag.store(true);
     a.wait();
+    BOOST_CHECK(a.status() == evolve_status::idle);
     flag.store(false);
     a = archipelago{10, de{}, population{rosenbrock{}, 3}};
     a.evolve(10);
@@ -316,6 +319,7 @@ BOOST_AUTO_TEST_CASE(archipelago_get_wait_busy)
     a.evolve(10);
     a.evolve(10);
     BOOST_CHECK_THROW(a.wait_check(), std::invalid_argument);
+    BOOST_CHECK(a.status() == evolve_status::idle);
     a.wait_check();
     a.wait();
 }
@@ -333,6 +337,7 @@ BOOST_AUTO_TEST_CASE(archipelago_serialization)
     archipelago a{10, de{}, population{rosenbrock{}, 25}};
     a.evolve();
     a.wait_check();
+    BOOST_CHECK(a.status() == evolve_status::idle);
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(a);
     // Now serialize, deserialize and compare the result.
@@ -442,4 +447,6 @@ BOOST_AUTO_TEST_CASE(archipelago_status)
     a[10].evolve();
     BOOST_CHECK(a.status() == evolve_status::busy_error);
     flag.store(true);
+    BOOST_CHECK_THROW(a.wait_check(), std::invalid_argument);
+    BOOST_CHECK(a.status() == evolve_status::idle);
 }
