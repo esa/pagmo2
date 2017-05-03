@@ -7,6 +7,7 @@ Pagmo & Pygmo
 =============
 
 .. image:: ../sphinx/docs/images/prob.png
+   :target: docs/problem_list.html
    :width: 15%
 
 .. image:: ../sphinx/docs/images/algo.png
