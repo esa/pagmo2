@@ -372,4 +372,13 @@ BOOST_AUTO_TEST_CASE(island_status)
     isl.wait();
     s = isl.status();
     BOOST_CHECK(s == evolve_status::idle_error);
+    // Two consecutive errors, one good.
+    isl = island{de{}, population{rosenbrock{}, 3}};
+    isl.evolve();
+    isl.evolve();
+    isl.set_population(population{rosenbrock{}, 30});
+    isl.evolve();
+    isl.wait();
+    BOOST_CHECK(isl.status() == evolve_status::idle_error);
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
 }
