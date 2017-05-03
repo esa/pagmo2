@@ -507,8 +507,10 @@ class island
     {
         try {
             wait_check();
+            // LCOV_EXCL_START
         } catch (...) {
         }
+        // LCOV_EXCL_STOP
     }
 
 public:
