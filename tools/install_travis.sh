@@ -118,9 +118,9 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     done
 elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     if [[ "${PAGMO_BUILD}" == OSXPython3* ]]; then
-        export BP_LIB="libboost_python3.so"
+        export BP_LIB="libboost_python3.dylib"
     else
-        export BP_LIB="libboost_python.so"
+        export BP_LIB="libboost_python.dylib"
     fi
     CXX=clang++ CC=clang cmake -DBoost_PYTHON_LIBRARY_RELEASE=$deps_dir/lib/$BP_LIB -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DPAGMO_INSTALL_HEADERS=no -DPAGMO_BUILD_PYGMO=yes -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
     make install VERBOSE=1;
