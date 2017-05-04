@@ -6,11 +6,5 @@
         "doc/doxygen/latex/": true,
         "doc/doxygen/xml/": true,
         "doc/sphinx/_build/": true
-    },
-    "files.associations": {
-        "system_error": "cpp",
-        "*.ipp": "cpp",
-        "slist": "cpp",
-        "initializer_list": "cpp"
     }
 }
