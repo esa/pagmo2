@@ -1192,6 +1192,7 @@ class archipelago_test_case(_ut.TestCase):
         self.run_io_tests()
         self.run_pickle_tests()
         self.run_champions_tests()
+        self.run_status_tests()
 
     def run_init_tests(self):
         from . import archipelago, de, rosenbrock, population, null_problem, thread_island, mp_island
@@ -1300,6 +1301,10 @@ class archipelago_test_case(_ut.TestCase):
         a.evolve(10)
         a2 = deepcopy(a)
         a.wait_check()
+        # Throws on wait_check().
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=3)
+        a.evolve()
+        self.assertRaises(ValueError, lambda: a.wait_check())
 
     def run_access_tests(self):
         from . import archipelago, de, rosenbrock
@@ -1404,6 +1409,16 @@ class archipelago_test_case(_ut.TestCase):
         a.push_back(algo=de(), prob=zdt(), size=20)
         self.assertRaises(ValueError, lambda: a.get_champions_x())
         self.assertRaises(ValueError, lambda: a.get_champions_f())
+
+    def run_status_tests(self):
+        from . import archipelago, de, rosenbrock, evolve_status
+        a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=3)
+        self.assertTrue(a.status == evolve_status.idle)
+        a.evolve()
+        a.wait()
+        self.assertTrue(a.status == evolve_status.idle_error)
+        self.assertRaises(ValueError, lambda: a.wait_check())
+        self.assertTrue(a.status == evolve_status.idle)
 
 
 def run_test_suite():

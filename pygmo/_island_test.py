@@ -73,6 +73,7 @@ class island_test_case(_ut.TestCase):
         self.run_get_busy_wait_tests()
         self.run_thread_safety_tests()
         self.run_io_tests()
+        self.run_status_tests()
 
     def run_basic_tests(self):
         from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock
@@ -132,6 +133,15 @@ class island_test_case(_ut.TestCase):
         isl2 = deepcopy(isl)
         isl2.wait_check()
         isl.wait_check()
+
+    def run_status_tests(self):
+        from . import island, de, rosenbrock, evolve_status
+        isl = island(algo=de(), prob=rosenbrock(), size=3)
+        isl.evolve(20)
+        isl.wait()
+        self.assertTrue(isl.status == evolve_status.idle_error)
+        self.assertRaises(BaseException, lambda: isl.wait_check())
+        self.assertTrue(isl.status == evolve_status.idle)
 
     def run_get_busy_wait_tests(self):
         from . import island, de, rosenbrock, evolve_status
