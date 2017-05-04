@@ -313,6 +313,7 @@ void expose_algorithms()
          bp::arg("bin_size") = 10u, bp::arg("start_range") = 1., bp::arg("seed"))));
     expose_algo_log(simulated_annealing_, simulated_annealing_get_log_docstring().c_str());
     simulated_annealing_.def("get_seed", &simulated_annealing::get_seed, generic_uda_get_seed_docstring().c_str());
+    expose_not_population_based(simulated_annealing_, "simulated_annealing");
     // SADE
     auto sade_ = expose_algorithm<sade>("sade", sade_docstring().c_str());
     sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool>(
