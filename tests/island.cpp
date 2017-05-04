@@ -351,6 +351,7 @@ BOOST_AUTO_TEST_CASE(island_status)
     BOOST_CHECK(s == evolve_status::idle_error);
     isl = island{de{}, population{rosenbrock{}, 3}};
     isl.evolve();
+    isl.wait();
     flag.store(true);
     isl.set_population(population{prob_01{}, 30});
     flag.store(false);
@@ -377,6 +378,7 @@ BOOST_AUTO_TEST_CASE(island_status)
     isl = island{de{}, population{rosenbrock{}, 3}};
     isl.evolve();
     isl.evolve();
+    isl.wait();
     isl.set_population(population{rosenbrock{}, 30});
     isl.evolve();
     isl.wait();

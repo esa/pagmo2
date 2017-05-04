@@ -437,6 +437,7 @@ BOOST_AUTO_TEST_CASE(archipelago_status)
     a.evolve();
     BOOST_CHECK(a.status() == evolve_status::busy_error);
     flag.store(true);
+    a.wait();
     // No busy errors, but only idle errors.
     a = archipelago{10, de{}, population{rosenbrock{}, 3}};
     a.evolve();
