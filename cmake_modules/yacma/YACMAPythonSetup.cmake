@@ -13,13 +13,13 @@ include(YACMACompilerLinkerSettings)
 # on various CI setups.
 # NOTE: apparently homebrew requires NOT to link to the Python library. We might want
 # to add a config option to accommodate that eventually.
-if(WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# if(WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   message(STATUS "Python modules require linking to the Python library.")
   set(_YACMA_MODULE_NEED_LINK TRUE)
-else()
-  message(STATUS "Python modules do NOT require linking to the Python library.")
-  set(_YACMA_MODULE_NEED_LINK FALSE)
-endif()
+# else()
+  # message(STATUS "Python modules do NOT require linking to the Python library.")
+  # set(_YACMA_MODULE_NEED_LINK FALSE)
+# endif()
 
 # Find Python interpreter.
 find_package(PythonInterp REQUIRED)
