@@ -34,9 +34,9 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include "../exceptions.hpp"
-#include "../problem.hpp" // needed for cereal registration macro
-#include "../types.hpp"
+#include <pagmo/exceptions.hpp>
+#include <pagmo/problem.hpp> // needed for cereal registration macro
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {

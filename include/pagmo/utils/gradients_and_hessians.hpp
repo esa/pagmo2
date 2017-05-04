@@ -40,9 +40,9 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <vector>
 
-#include "../exceptions.hpp"
-#include "../problem.hpp"
-#include "../types.hpp"
+#include <pagmo/exceptions.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {

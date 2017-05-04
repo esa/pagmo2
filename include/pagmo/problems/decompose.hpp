@@ -39,12 +39,10 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <type_traits>
 
-#include "../exceptions.hpp"
-#include "../problem.hpp"
-#include "../serialization.hpp"
-#include "../type_traits.hpp"
-#include "../types.hpp"
-#include "../utils/multi_objective.hpp" // pagmo::decompose_objectives
+#include <pagmo/exceptions.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/multi_objective.hpp> // pagmo::decompose_objectives
 
 namespace pagmo
 {

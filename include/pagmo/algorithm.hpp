@@ -34,12 +34,12 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
-#include "detail/make_unique.hpp"
-#include "exceptions.hpp"
-#include "population.hpp"
-#include "serialization.hpp"
-#include "threading.hpp"
-#include "type_traits.hpp"
+#include <pagmo/detail/make_unique.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
+#include <pagmo/type_traits.hpp>
 
 /// Macro for the registration of the serialization functionality for user-defined algorithms.
 /**

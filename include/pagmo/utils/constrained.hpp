@@ -41,10 +41,10 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
-#include "../detail/custom_comparisons.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../types.hpp"
+#include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {

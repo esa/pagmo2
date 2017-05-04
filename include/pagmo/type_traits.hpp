@@ -36,7 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 #include <utility>
 
-#include "threading.hpp"
+#include <pagmo/threading.hpp>
 
 namespace pagmo
 {

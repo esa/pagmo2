@@ -40,13 +40,13 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <vector>
 
-#include "problem.hpp"
-#include "rng.hpp"
-#include "serialization.hpp"
-#include "type_traits.hpp"
-#include "types.hpp"
 #include "utils/constrained.hpp"
 #include "utils/generic.hpp"
+#include <pagmo/problem.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {

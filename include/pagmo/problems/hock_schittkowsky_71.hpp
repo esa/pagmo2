@@ -34,9 +34,9 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include "../io.hpp"
-#include "../problem.hpp"
-#include "../types.hpp"
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/io.hpp>
 
 namespace pagmo
 {

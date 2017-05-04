@@ -45,12 +45,12 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
-#include "../detail/custom_comparisons.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../types.hpp"
-#include "../utils/discrepancy.hpp" // halton
+#include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/discrepancy.hpp> // halton
 
 namespace pagmo
 {

@@ -37,15 +37,15 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <unordered_map>
 
-#include "../algorithm.hpp"
-#include "../algorithms/de.hpp"
-#include "../detail/custom_comparisons.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../rng.hpp"
-#include "../types.hpp"
-#include "../utils/generic.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/de.hpp>
+#include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {

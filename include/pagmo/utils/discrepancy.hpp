@@ -40,11 +40,11 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
-#include "../detail/custom_comparisons.hpp"
 #include "../detail/prime_numbers.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../types.hpp"
+#include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {

@@ -36,12 +36,11 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../problem.hpp"
-#include "../rng.hpp"
-#include "../serialization.hpp"
-#include "../types.hpp"
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {

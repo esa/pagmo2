@@ -36,15 +36,15 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <tuple>
 
-#include "../algorithm.hpp" // needed for the cereal macro
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../problem.hpp"
-#include "../problems/decompose.hpp"
-#include "../rng.hpp"
-#include "../utils/generic.hpp"         // kNN
-#include "../utils/multi_objective.hpp" // ideal
+#include <pagmo/algorithm.hpp> // needed for the cereal macro
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/decompose.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>         // kNN
+#include <pagmo/utils/multi_objective.hpp> // ideal
 
 namespace pagmo
 {

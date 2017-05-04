@@ -34,12 +34,12 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <tuple>
 
-#include "../algorithm.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../rng.hpp"
-#include "../utils/generic.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {

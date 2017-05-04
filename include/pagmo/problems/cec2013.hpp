@@ -35,11 +35,11 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include "../detail/cec2013_data.hpp"
-#include "../detail/constants.hpp"
-#include "../exceptions.hpp"
-#include "../problem.hpp" // needed for cereal registration macro
-#include "../types.hpp"
+#include <pagmo/detail/cec2013_data.hpp>
+#include <pagmo/detail/constants.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/problem.hpp> // needed for cereal registration macro
+#include <pagmo/types.hpp>
 
 #define E 2.7182818284590452353602874713526625
 

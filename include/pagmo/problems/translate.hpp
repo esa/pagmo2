@@ -34,12 +34,10 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <type_traits>
 
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../problem.hpp"
-#include "../serialization.hpp"
-#include "../type_traits.hpp"
-#include "../types.hpp"
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {

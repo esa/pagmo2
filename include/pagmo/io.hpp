@@ -40,8 +40,8 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include "exceptions.hpp"
-#include "threading.hpp"
+#include <pagmo/exceptions.hpp>
+#include <pagmo/threading.hpp>
 
 #define PAGMO_MAX_OUTPUT_LENGTH 5u
 

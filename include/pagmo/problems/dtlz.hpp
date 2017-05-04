@@ -38,12 +38,12 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
-#include "../detail/constants.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../problem.hpp"
-#include "../types.hpp"
+#include <pagmo/detail/constants.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {
