@@ -111,8 +111,12 @@ public:
     }
     /// Constructor (scalar perturbation).
     /**
-     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::algorithm.
-
+     * \verbatim embed:rst:leading-asterisk
+     * .. warning::
+     *
+     *    This constructor is enabled only if \p T can be used to construct a :cpp:class:`pagmo::algorithm`.
+     *
+     * \endverbatim
      *
      * This constructor will construct a monotonic basin hopping algorithm using a scalar perturbation.
      *
@@ -138,8 +142,13 @@ public:
     }
     /// Constructor (vector perturbation).
     /**
-     * **NOTE** This constructor is enabled only if \p T, after the removal of cv/reference qualifiers,
-     * is not pagmo::algorithm.
+     * \verbatim embed:rst:leading-asterisk
+     * .. warning::
+     *
+     *    This constructor is enabled only if \p T, after the removal of cv/reference qualifiers,
+     *    is not :cpp:class:`pagmo::algorithm`.
+     *
+     * \endverbatim
      *
      * This constructor will construct a monotonic basin hopping algorithm using a vector perturbation.
      *
@@ -383,9 +392,14 @@ public:
     /**
      * Returns a reference to the inner pagmo::algorithm.
      *
-     * **NOTE** The ability to extract a non const reference is provided only in order to allow to call
-     * non-const methods on the internal pagmo::algorithm instance. Assigning a new pagmo::algorithm via
-     * this reference is undefined behaviour.
+     * \verbatim embed:rst:leading-asterisk
+     * .. warning::
+     *
+     *    The ability to extract a non const reference is provided only in order to allow to call
+     *    non-const methods on the internal pagmo::algorithm instance. Assigning a new :cpp:class:`pagmo::algorithm` via
+     *    this reference is undefined behaviour.
+     *
+     * \endverbatim
      *
      * @return a reference to the inner pagmo::algorithm.
      */

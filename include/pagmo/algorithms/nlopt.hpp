@@ -1227,13 +1227,20 @@ public:
      * Some NLopt algorithms rely on other NLopt algorithms as local/subsidiary optimizers.
      * This method allows to set such local optimizer. By default, no local optimizer is specified.
      *
-     * **NOTE**: at the present time, only the ``"auglag"`` and ``"auglag_eq"`` solvers make use
-     * of a local optimizer. Setting a local optimizer on any other solver will have no effect.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
      *
-     * **NOTE**: the objective function, bounds, and nonlinear-constraint parameters of the local
-     * optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping
-     * criteria should be specified in the local optimizer. The verbosity of
-     * the local optimizer is also forcibly set to zero during the optimisation.
+     *    At the present time, only the ``"auglag"`` and ``"auglag_eq"`` solvers make use
+     *    of a local optimizer. Setting a local optimizer on any other solver will have no effect.
+     *
+     * .. warning::
+     *
+     *    the objective function, bounds, and nonlinear-constraint parameters of the local
+     *    optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping
+     *    criteria should be specified in the local optimizer. The verbosity of
+     *    the local optimizer is also forcibly set to zero during the optimisation.
+     *
+     * \endverbatim
      *
      * @param n the local optimizer that will be used by this pagmo::nlopt algorithm.
      */
@@ -1246,8 +1253,14 @@ public:
      * This method returns a raw const pointer to the local optimizer, if it has been set via set_local_optimizer().
      * Otherwise, \p nullptr will be returned.
      *
-     * **NOTE**: the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     * of \p this, and \p delete must never be called on the pointer.
+     * \verbatim embed:rst:leading-asterisk
+     *
+     * .. warning::
+     *
+     *    the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of \p this, and \p delete must never be called on the pointer.
+     *
+     * \endverbatim
      *
      * @return a const pointer to the local optimizer.
      */
@@ -1260,8 +1273,14 @@ public:
      * This method returns a raw pointer to the local optimizer, if it has been set via set_local_optimizer().
      * Otherwise, \p nullptr will be returned.
      *
-     * **NOTE**: the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     * of \p this, and \p delete must never be called on the pointer.
+     * \verbatim embed:rst:leading-asterisk
+     *
+     * .. warning::
+     *
+     *    the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of \p this, and \p delete must never be called on the pointer.
+     *
+     * \endverbatim
      *
      * @return a pointer to the local optimizer.
      */

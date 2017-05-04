@@ -70,19 +70,30 @@ namespace pagmo
  * a standard in the scientific computing community for exactly the reason observed
  * by Davidon: it is slow but sure'.
  *
- * **NOTE** This algorithm does not work for multi-objective problems, nor for stochastic problems.
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
  *
- * **NOTE** The search range is defined relative to the box-bounds. Hence, unbounded problems
- * will produce an error.
+ *    This algorithm does not work for multi-objective problems, nor for stochastic problems.
  *
- * **NOTE** Compass search is a fully deterministic algorithms and will produce identical results if its evolve method
- * is
- * called from two identical populations.
+ * .. note::
  *
- * See: Kolda, Lewis, Torczon: 'Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods'
- * published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)
+ *    The search range is defined relative to the box-bounds. Hence, unbounded problems
+ *    will produce an error.
  *
- * See: http://www.cs.wm.edu/~va/research/sirev.pdf
+ * .. note::
+ *
+ *    Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
+ *    called from two identical populations.
+ *
+ * .. seealso::
+ *
+ *    Kolda, Lewis, Torczon: 'Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods'
+ *    published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)
+ *
+ *    http://www.cs.wm.edu/~va/research/sirev.pdf
+ *
+ * \endverbatim
+ *
  */
 class compass_search
 {

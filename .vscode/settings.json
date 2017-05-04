@@ -9,6 +9,8 @@
     },
     "files.associations": {
         "system_error": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "slist": "cpp",
+        "initializer_list": "cpp"
     }
 }
