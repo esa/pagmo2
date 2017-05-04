@@ -746,11 +746,11 @@ The availability of the gradient sparsity is determined as follows:
 The optional ``has_gradient_sparsity()`` method of the UDP must return a ``bool``. For information on how to
 implement the ``gradient_sparsity()`` method of the UDP, see :func:`~pygmo.problem.gradient_sparsity()`.
 
-.. note:
+.. note::
 
-Regardless of what this method returns, the :func:`~pygmo.problem.gradient_sparsity()` method will always
-return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
-pattern of the gradient is dense. See :func:`~pygmo.problem.gradient_sparsity()` for more details.
+   Regardless of what this method returns, the :func:`~pygmo.problem.gradient_sparsity()` method will always
+   return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
+   pattern of the gradient is dense. See :func:`~pygmo.problem.gradient_sparsity()` for more details.
 
 Returns:
     ``bool``: a flag signalling the availability of the gradient sparsity in the UDP
@@ -887,11 +887,11 @@ The availability of the hessians sparsity is determined as follows:
 The optional ``has_hessians_sparsity()`` method of the UDP must return a ``bool``. For information on how to
 implement the ``hessians_sparsity()`` method of the UDP, see :func:`~pygmo.problem.hessians_sparsity()`.
 
-.. note:
+.. note::
 
-Regardless of what this method returns, the :func:`~pygmo.problem.hessians_sparsity()` method will always
-return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
-pattern of the hessians is dense. See :func:`~pygmo.problem.hessians_sparsity()` for more details.
+   Regardless of what this method returns, the :func:`~pygmo.problem.hessians_sparsity()` method will always
+   return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
+   pattern of the hessians is dense. See :func:`~pygmo.problem.hessians_sparsity()` for more details.
 
 Returns:
     ``bool``: a flag signalling the availability of the hessians sparsity in the UDP
