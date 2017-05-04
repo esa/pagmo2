@@ -43,7 +43,12 @@ elif [[ "${PAGMO_BUILD}" == "OSXRelease" ]]; then
     make -j2 VERBOSE=1;
     ctest;
 elif [[ "${PAGMO_BUILD}" == Python* ]]; then
-    CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DPAGMO_INSTALL_HEADERS=no -DPAGMO_BUILD_PYGMO=yes ../;
+    if [[ "${PAGMO_BUILD}" == Python3* ]]; then
+        export BP_LIB = "libboost_python3.so"
+    else
+        export BP_LIB = "libboost_python.so"
+    fi
+    CXX=g++-4.8 CC=gcc-4.8 cmake -DBoost_PYTHON_LIBRARY_RELEASE=$deps_dir/lib/$BP_LIB -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DPAGMO_INSTALL_HEADERS=no -DPAGMO_BUILD_PYGMO=yes ../;
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
@@ -112,7 +117,12 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
         fi
     done
 elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
-    CXX=clang++ CC=clang cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DPAGMO_INSTALL_HEADERS=no -DPAGMO_BUILD_PYGMO=yes -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
+    if [[ "${PAGMO_BUILD}" == OSXPython3* ]]; then
+        export BP_LIB = "libboost_python3.so"
+    else
+        export BP_LIB = "libboost_python.so"
+    fi
+    CXX=clang++ CC=clang cmake -DBoost_PYTHON_LIBRARY_RELEASE=$deps_dir/lib/$BP_LIB -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DPAGMO_INSTALL_HEADERS=no -DPAGMO_BUILD_PYGMO=yes -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
