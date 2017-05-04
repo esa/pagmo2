@@ -36,15 +36,15 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
-#include "../algorithm.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../rng.hpp"
-#include "../type_traits.hpp"
-#include "../utils/constrained.hpp"
-#include "../utils/generic.hpp" // pagmo::uniform_real_from_range
-#include "compass_search.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/compass_search.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/type_traits.hpp>
+#include <pagmo/utils/constrained.hpp>
+#include <pagmo/utils/generic.hpp> // pagmo::uniform_real_from_range
 
 namespace pagmo
 {

@@ -60,7 +60,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include <pagmo/algorithms/base_local_solver.hpp>
+#include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -731,7 +731,7 @@ inline void nlopt_eq_c_wrapper(unsigned m, double *result, unsigned dim, const d
  */
 // TODO:
 // - investigate the use of a fitness cache, after we have good perf testing in place.
-class nlopt : public base_local_solver
+class nlopt : public not_population_based
 {
     using nlopt_obj = detail::nlopt_obj;
     using nlopt_data = detail::nlopt_data<>;
@@ -762,7 +762,8 @@ public:
     /// Default constructor.
     /**
      * The default constructor initialises the pagmo::nlopt algorithm with the ``"cobyla"`` solver.
-     * The individual selection/replacement strategies are those specified by base_local_solver::base_local_solver().
+     * The individual selection/replacement strategies are those specified by
+     * not_population_based::not_population_based().
      *
      * @throws unspecified any exception thrown by pagmo::nlopt(const std::string &).
      */
@@ -773,7 +774,7 @@ public:
     /**
      * This constructor will initialise a pagmo::nlopt object which will use the NLopt algorithm specified by
      * the input string \p algo. The individual selection/replacement strategies are those specified by
-     * base_local_solver::base_local_solver(). \p algo is translated to an NLopt algorithm type according to the
+     * not_population_based::not_population_based(). \p algo is translated to an NLopt algorithm type according to the
      * following table:
      * \verbatim embed:rst:leading-asterisk
      *  ================================  ====================================
@@ -814,7 +815,7 @@ public:
      *
      * @throws std::runtime_error if the NLopt version is not at least 2.
      * @throws std::invalid_argument if \p algo is not one of the allowed algorithm names.
-     * @throws unspecified any exception throw by base_local_solver::base_local_solver().
+     * @throws unspecified any exception throw by not_population_based::not_population_based().
      */
     explicit nlopt(const std::string &algo) : m_algo(algo)
     {
@@ -845,7 +846,7 @@ public:
      * @throws unspecified any exception thrown by copying the internal state of \p other.
      */
     nlopt(const nlopt &other)
-        : base_local_solver(other), m_algo(other.m_algo), m_last_opt_result(other.m_last_opt_result),
+        : not_population_based(other), m_algo(other.m_algo), m_last_opt_result(other.m_last_opt_result),
           m_sc_stopval(other.m_sc_stopval), m_sc_ftol_rel(other.m_sc_ftol_rel), m_sc_ftol_abs(other.m_sc_ftol_abs),
           m_sc_xtol_rel(other.m_sc_xtol_rel), m_sc_xtol_abs(other.m_sc_xtol_abs), m_sc_maxeval(other.m_sc_maxeval),
           m_sc_maxtime(other.m_sc_maxtime), m_verbosity(other.m_verbosity), m_log(other.m_log),
@@ -881,7 +882,8 @@ public:
      *   problem,
      * - the components of the individual selected for optimisation contain NaNs or they are outside
      *   the problem's bounds.
-     * @throws unspecified any exception thrown by the public interface of pagmo::problem or pagmo::base_local_solver.
+     * @throws unspecified any exception thrown by the public interface of pagmo::problem or
+     * pagmo::not_population_based.
      */
     population evolve(population pop) const
     {
@@ -1300,12 +1302,12 @@ public:
     /**
      * @param ar the target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of primitive types or pagmo::base_local_solver.
+     * @throws unspecified any exception thrown by the serialization of primitive types or pagmo::not_population_based.
      */
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(cereal::base_class<base_local_solver>(this), m_algo, m_last_opt_result, m_sc_stopval, m_sc_ftol_rel,
+        ar(cereal::base_class<not_population_based>(this), m_algo, m_last_opt_result, m_sc_stopval, m_sc_ftol_rel,
            m_sc_ftol_abs, m_sc_xtol_rel, m_sc_xtol_abs, m_sc_maxeval, m_sc_maxtime, m_verbosity, m_log, m_loc_opt);
     }
     /// Load from archive.
@@ -1314,13 +1316,14 @@ public:
      *
      * @param ar the source archive.
      *
-     * @throws unspecified any exception thrown by the deserialization of primitive types or pagmo::base_local_solver.
+     * @throws unspecified any exception thrown by the deserialization of primitive types or
+     * pagmo::not_population_based.
      */
     template <typename Archive>
     void load(Archive &ar)
     {
         try {
-            ar(cereal::base_class<base_local_solver>(this), m_algo, m_last_opt_result, m_sc_stopval, m_sc_ftol_rel,
+            ar(cereal::base_class<not_population_based>(this), m_algo, m_last_opt_result, m_sc_stopval, m_sc_ftol_rel,
                m_sc_ftol_abs, m_sc_xtol_rel, m_sc_xtol_abs, m_sc_maxeval, m_sc_maxtime, m_verbosity, m_log, m_loc_opt);
         } catch (...) {
             *this = nlopt{};

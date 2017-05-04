@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_BASE_LOCAL_SOLVER_HPP
-#define PAGMO_BASE_LOCAL_SOLVER_HPP
+#ifndef PAGMO_not_population_based_HPP
+#define PAGMO_not_population_based_HPP
 
 #include <boost/any.hpp>
 #include <cassert>
@@ -45,16 +45,16 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Base class for local solvers.
+/// Base class for non population based solvers
 /**
  * This class contains common methods useful in the implementation of user-defined algorithms
- * for local optimisation.
+ * that are non population based as established a common interface to the population.
  *
  * Currently, this class implements policies for the selection and replacement of a single individual
  * in a population, which are meant to be used in the implementation of the <tt>evolve()</tt> method of the
  * user-defined algorithm (see, e.g., pagmo::nlopt::evolve()).
  */
-class base_local_solver
+class not_population_based
 {
 public:
     /// Default constructor.
@@ -63,7 +63,7 @@ public:
      * and it initialises the RNG of the <tt>"random"</tt> selection/replacements policies via
      * random_device::next().
      */
-    base_local_solver()
+    not_population_based()
         : m_select(std::string("best")), m_replace(std::string("best")), m_rselect_seed(random_device::next()),
           m_e(static_cast<std::mt19937::result_type>(m_rselect_seed))
     {
@@ -218,7 +218,7 @@ public:
     template <typename Archive>
     void load(Archive &ar)
     {
-        base_local_solver tmp;
+        not_population_based tmp;
         bool flag;
         std::string str;
         population::size_type idx;
@@ -248,13 +248,13 @@ protected:
      * This method will select a single individual from the input population \p pop, returning
      * its decision vector and fitness as a pair. The selection is done according to the currently
      * active selection policy:
-     * - if base_local_solver::m_select is <tt>"best"</tt>, then the decision and fitness vectors of the
+     * - if not_population_based::m_select is <tt>"best"</tt>, then the decision and fitness vectors of the
      *   best individual are returned,
-     * - if base_local_solver::m_select is <tt>"worst"</tt>, then the decision and fitness vectors of the
+     * - if not_population_based::m_select is <tt>"worst"</tt>, then the decision and fitness vectors of the
      *   worst individual are returned,
-     * - if base_local_solver::m_select is <tt>"random"</tt>, then the decision and fitness vectors of a
+     * - if not_population_based::m_select is <tt>"random"</tt>, then the decision and fitness vectors of a
      *   randomly-selected individual are returned,
-     * - if base_local_solver::m_select is an index, then the decision and fitness vectors of the individual
+     * - if not_population_based::m_select is an index, then the decision and fitness vectors of the individual
      *   at the corresponding position in the population are returned.
      *
      * Note that selecting a best or worst individual is meaningful only in single-objective
@@ -264,7 +264,7 @@ protected:
      *
      * @return a pair containing the decision and fitness vectors of the selected individual.
      *
-     * @throws std::invalid_argument if base_local_solver::m_select is an index and the index is not smaller than the
+     * @throws std::invalid_argument if not_population_based::m_select is an index and the index is not smaller than the
      * size of \p pop.
      * @throws unspecified any exception thrown by population::best_idx() or population::worst_idx().
      */
@@ -303,10 +303,10 @@ protected:
      * This method will replace a single individual in the input population \p pop, setting its decision
      * vector to \p x and its fitness vector to \p f. The selection is done according to the currently
      * active selection policy:
-     * - if base_local_solver::m_replace is <tt>"best"</tt>, then the best individual will be replaced,
-     * - if base_local_solver::m_replace is <tt>"worst"</tt>, then the worst individual will be replaced,
-     * - if base_local_solver::m_replace is <tt>"random"</tt>, then a randomly-selected individual will be replaced,
-     * - if base_local_solver::m_replace is an index, then the individual at the corresponding position in the
+     * - if not_population_based::m_replace is <tt>"best"</tt>, then the best individual will be replaced,
+     * - if not_population_based::m_replace is <tt>"worst"</tt>, then the worst individual will be replaced,
+     * - if not_population_based::m_replace is <tt>"random"</tt>, then a randomly-selected individual will be replaced,
+     * - if not_population_based::m_replace is an index, then the individual at the corresponding position in the
      *   population will be replaced.
      *
      * Note that selecting a best or worst individual is meaningful only in single-objective
@@ -316,8 +316,8 @@ protected:
      * @param x the decision vector of the new individual.
      * @param f the fitness vector of the new individual.
      *
-     * @throws std::invalid_argument if base_local_solver::m_replace is an index and the index is not smaller than the
-     * size of \p pop.
+     * @throws std::invalid_argument if not_population_based::m_replace is an index and the index is not smaller than
+     * the size of \p pop.
      * @throws unspecified any exception thrown by population::best_idx(), population::worst_idx(),
      * or population::set_xf().
      */

@@ -37,7 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/base_local_solver.hpp>
+#include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/utils/constrained.hpp>
@@ -96,7 +96,7 @@ namespace pagmo
  * \endverbatim
  *
  */
-class compass_search : public base_local_solver
+class compass_search : public not_population_based
 {
 public:
     /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, range)
@@ -397,7 +397,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<base_local_solver>(this), m_max_fevals, m_start_range, m_stop_range, m_reduction_coeff,
+        ar(cereal::base_class<not_population_based>(this), m_max_fevals, m_start_range, m_stop_range, m_reduction_coeff,
            m_verbosity, m_log);
     }
 
