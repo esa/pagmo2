@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_not_population_based_HPP
-#define PAGMO_not_population_based_HPP
+#ifndef PAGMO_NOT_POPULATION_BASED_HPP
+#define PAGMO_NOT_POPULATION_BASED_HPP
 
 #include <boost/any.hpp>
 #include <cassert>

@@ -182,9 +182,7 @@ public:
         // No throws, all valid: we clear the logs
         m_log.clear();
 
-        // We run the compass search starting from the best individual of the population
-        // Setup of the initial guess. Store also the original fitness
-        // of the selected individual, old_f, for later use.
+        // We init the starting point
         auto sel_xf = select_individual(pop);
         vector_double cur_best_x(std::move(sel_xf.first)), cur_best_f(std::move(sel_xf.second));
 
