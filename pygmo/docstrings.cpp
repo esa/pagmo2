@@ -3637,7 +3637,8 @@ method. Depending on the UDI, the evolution might take place in a separate threa
 "background") and it is initiated by a call to the :func:`~pygmo.island.evolve()` method. At any
 time the user can query the state of the island and fetch its internal data members. The user can explicitly
 wait for pending evolutions to conclude by calling the :func:`~pygmo.island.wait()` and
-:func:`~pygmo.island.wait_check()` methods.
+:func:`~pygmo.island.wait_check()` methods. The status of ongoing evolutions in the island can be queried via
+the :attr:`~pygmo.island.status` attribute.
 
 Typically, pygmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
@@ -3709,7 +3710,8 @@ invocation. Exceptions raised inside the tasks are stored within the island obje
 
 It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
 first-out) fashion. The user may call :func:`~pygmo.island.wait()` or :func:`~pygmo.island.wait_check()` to block until all
-tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
+tasks have been completed, and to fetch exceptions raised during the execution of the tasks. The :attr:`~pygmo.island.status`
+attribute can be used to query the status of the asynchronous operations in the island.
 
 Args:
      n (``int``): the number of times the ``run_evolve()`` method of the UDI will be called within the evolution task
@@ -3722,15 +3724,19 @@ Raises:
 )";
 }
 
-std::string island_get_docstring()
+std::string island_wait_check_docstring()
 {
     return R"(wait_check()
 
 Block until evolution ends and re-raise the first stored exception.
 
-This method will block until all the evolution tasks enqueued via :func:`~pygmo.island.evolve()` have been completed.
-The method will then raise the first exception raised by any task enqueued since the last time :func:`~pygmo.island.wait()`
-or :func:`~pygmo.island.wait_check()` were called.
+If one task enqueued after the last call to :func:`~pygmo.island.wait_check()` threw an exception, the exception will be re-thrown
+by this method. If more than one task enqueued after the last call to :func:`~pygmo.island.wait_check()` threw an exception,
+this method will re-throw the exception raised by the first enqueued task that threw, and the exceptions
+from all the other tasks that threw will be ignored.
+
+Note that :func:`~pygmo.island.wait_check()` resets the status of the island: after a call to :func:`~pygmo.island.wait_check()`,
+:attr:`~pygmo.island.status` will always return :attr:`pygmo.evolve_status.idle`.
 
 Raises:
     unspecified: any exception thrown by evolution tasks or by the underlying C++ method
@@ -3743,18 +3749,36 @@ std::string island_wait_docstring()
     return R"(wait()
 
 This method will block until all the evolution tasks enqueued via :func:`~pygmo.island.evolve()` have been completed.
+Exceptions thrown by the enqueued tasks can be re-raised via :func:`~pygmo.island.wait_check()`: they will **not** be
+re-thrown by this method. Also, contrary to :func:`~pygmo.island.wait_check()`, this method will **not** reset the
+status of the island: after a call to :func:`~pygmo.island.wait()`, :attr:`~pygmo.island.status` will always return
+either :attr:`pygmo.evolve_status.idle` or :attr:`pygmo.evolve_status.idle_error`.
 
 )";
 }
 
 std::string island_status_docstring()
 {
-    return R"(status()
+    return R"(Status of the island.
 
-Check island status.
+This read-only property will return an :class:`~pygmo.evolve_status` flag indicating the current status of
+asynchronous operations in the island. The flag will be:
+
+* :attr:`~pygmo.evolve_status.idle` if the island is currently not evolving and no exceptions
+  were thrown by evolution tasks since the last call to :func:`~pygmo.island.wait_check()`;
+* :attr:`~pygmo.evolve_status.busy` if the island is evolving and no exceptions
+  have (yet) been thrown by evolution tasks since the last call to :func:`~pygmo.island.wait_check()`;
+* :attr:`~pygmo.evolve_status.idle_error` if the island is currently not evolving and at least one
+  evolution task threw an exception since the last call to :func:`~pygmo.island.wait_check()`;
+* :attr:`~pygmo.evolve_status.busy_error` if the island is currently evolving and at least one
+  evolution task has already thrown an exception since the last call to :func:`~pygmo.island.wait_check()`.
+
+Note that after a call to :func:`~pygmo.island.wait_check()`, :attr:`~pygmo.island.status` will always return
+:attr:`~pygmo.evolve_status.idle`, and after a call to :func:`~pygmo.island.wait()`, :attr:`~pygmo.island.status`
+will always return either :attr:`~pygmo.evolve_status.idle` or :attr:`~pygmo.evolve_status.idle_error`.
 
 Returns:
-    ``bool``: ``True`` if the island is evolving, ``False`` otherwise
+    :class:`~pygmo.evolve_status`: a flag indicating the current status of asynchronous operations in the island
 
 )";
 }
@@ -3910,7 +3934,11 @@ std::string archipelago_docstring()
 An archipelago is a collection of :class:`~pygmo.island` objects which provides a convenient way to perform
 multiple optimisations in parallel.
 
-This class is the Python counterpart of the C++ class :cpp:class:`pagmo::archipelago`.
+The interface of :class:`~pygmo.archipelago` mirrors partially the interface of :class:`~pygmo.island`: the
+evolution is initiated by a call to :func:`~pygmo.archipelago.evolve()`, and at any time the user can query the
+state of the archipelago and access its island members. The user can explicitly wait for pending evolutions
+to conclude by calling the :func:`~pygmo.archipelago.wait()` and :func:`~pygmo.archipelago.wait_check()` methods.
+The status of ongoing evolutions in the archipelago can be queried via the :attr:`~pygmo.archipelago.status` attribute.
 
 )";
 }
@@ -3922,8 +3950,9 @@ std::string archipelago_evolve_docstring()
 Evolve archipelago.
 
 This method will call :func:`pygmo.island.evolve()` on all the islands of the archipelago.
-The input parameter *n* represent the number of times the ``run_evolve()`` method of the island's
-UDI is called within the evolution task.
+The input parameter *n* will be passed to the invocations of :func:`pygmo.island.evolve()` for each island.
+The :attr:`~pygmo.archipelago.status` attribute can be used to query the status of the asynchronous operations in the
+archipelago.
 
 Args:
      n (``int``): the parameter that will be passed to :func:`pygmo.island.evolve()`
@@ -3936,12 +3965,26 @@ Raises:
 
 std::string archipelago_status_docstring()
 {
-    return R"(status()
+    return R"(Status of the archipelago.
 
-Check archipelago status.
+This method will return an :class:`~pygmo.evolve_status` flag indicating the current status of
+asynchronous operations in the archipelago. The flag will be:
+
+* :attr:`~pygmo.evolve_status.idle` if, for all the islands in the archipelago, :attr:`pygmo.island.status`
+  returns :attr:`~pygmo.evolve_status.idle`;
+* :attr:`~pygmo.evolve_status.busy` if, for at least one island in the archipelago, :attr:`pygmo.island.status`
+  returns :attr:`~pygmo.evolve_status.busy`, and for no island :attr:`pygmo.island.status` returns an error status;
+* :attr:`~pygmo.evolve_status.idle_error` if no island in the archipelago is busy and for at least one island
+  :attr:`pygmo.island.status` returns :attr:`~pygmo.evolve_status.idle_error`;
+* :attr:`~pygmo.evolve_status.busy_error` if, for at least one island in the archipelago, :attr:`pygmo.island.status`
+  returns an error status and at least one island is busy.
+
+Note that after a call to :func:`~pygmo.archipelago.wait_check()`, :attr:`pygmo.archipelago.status` will always return
+:attr:`~pygmo.evolve_status.idle`, and after a call to :func:`~pygmo.archipelago.wait()`, :attr:`pygmo.archipelago.status`
+will always return either :attr:`~pygmo.evolve_status.idle` or :attr:`~pygmo.evolve_status.idle_error`.
 
 Returns:
-    ``bool``: ``True`` if at least one island is evolving, ``False`` otherwise
+    :class:`~pygmo.evolve_status`:  a flag indicating the current status of asynchronous operations in the archipelago
 
 )";
 }
@@ -3952,21 +3995,29 @@ std::string archipelago_wait_docstring()
 
 Block until all evolutions have finished.
 
-This method will call :func:`pygmo.island.wait()` on all the islands of the archipelago.
+This method will call :func:`pygmo.island.wait()` on all the islands of the archipelago. Exceptions thrown by island
+evolutions can be re-raised via :func:`~pygmo.archipelago.wait_check()`: they will **not** be re-thrown by this method.
+Also, contrary to :func:`~pygmo.archipelago.wait_check()`, this method will **not** reset the status of the archipelago:
+after a call to :func:`~pygmo.archipelago.wait()`, the :attr:`~pygmo.archipelago.status` attribute will
+always return either :attr:`pygmo.evolve_status.idle` or :attr:`pygmo.evolve_status.idle_error`.
 
 )";
 }
 
-std::string archipelago_get_docstring()
+std::string archipelago_wait_check_docstring()
 {
     return R"(wait_check()
 
 Block until all evolutions have finished and raise the first exception that was encountered.
 
-This method will call :func:`pygmo.island.wait_check()` on all the islands of the archipelago.
-If an invocation of :func:`pygmo.island.wait_check()` raises an exception, then on the remaining
-islands :func:`pygmo.island.wait()` will be called instead, and the raised exception will be re-raised
-by this method.
+This method will call :func:`pygmo.island.wait_check()` on all the islands of the archipelago (following
+the order in which the islands were inserted into the archipelago).
+The first exception raised by :func:`pygmo.island.wait_check()` will be re-raised by this method,
+and all the exceptions thrown by the other calls to :func:`pygmo.island.wait_check()` will be ignored.
+
+Note that :func:`~pygmo.archipelago.wait_check()` resets the status of the archipelago: after a call to
+:func:`~pygmo.archipelago.wait_check()`, the :attr:`~pygmo.archipelago.status` attribute will
+always return :attr:`pygmo.evolve_status.idle`.
 
 Raises:
     unspecified: any exception thrown by any evolution task queued in the archipelago's
