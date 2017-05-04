@@ -36,10 +36,11 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
-#include "../algorithm.hpp"
-#include "../exceptions.hpp"
-#include "../population.hpp"
-#include "../utils/constrained.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/base_local_solver.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/utils/constrained.hpp>
 
 namespace pagmo
 {
@@ -95,7 +96,7 @@ namespace pagmo
  * \endverbatim
  *
  */
-class compass_search
+class compass_search : public base_local_solver
 {
 public:
     /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, range)
@@ -182,9 +183,10 @@ public:
         m_log.clear();
 
         // We run the compass search starting from the best individual of the population
-        auto best_idx = pop.best_idx();
-        auto cur_best_x = pop.get_x()[best_idx];
-        auto cur_best_f = pop.get_f()[best_idx];
+        // Setup of the initial guess. Store also the original fitness
+        // of the selected individual, old_f, for later use.
+        auto sel_xf = select_individual(pop);
+        vector_double cur_best_x(std::move(sel_xf.first)), cur_best_f(std::move(sel_xf.second));
 
         // We need some auxiliary variables
         bool flag = false;
@@ -261,7 +263,7 @@ public:
         }
 
         // Force the current best into the original population
-        pop.set_xf(best_idx, cur_best_x, cur_best_f);
+        replace_individual(pop, cur_best_x, cur_best_f);
         return pop;
     };
 
@@ -395,7 +397,8 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_max_fevals, m_start_range, m_stop_range, m_reduction_coeff, m_verbosity, m_log);
+        ar(cereal::base_class<base_local_solver>(this), m_max_fevals, m_start_range, m_stop_range, m_reduction_coeff,
+           m_verbosity, m_log);
     }
 
 private:
@@ -405,6 +408,11 @@ private:
     double m_reduction_coeff;
     unsigned int m_verbosity;
     mutable log_type m_log;
+    // Deleting the methods load save public in base as to avoid conflict with serialize
+    template <typename Archive>
+    void load(Archive &ar) = delete;
+    template <typename Archive>
+    void save(Archive &ar) const = delete;
 };
 
 } // namespaces
