@@ -134,9 +134,9 @@ class island_test_case(_ut.TestCase):
         isl.wait_check()
 
     def run_get_busy_wait_tests(self):
-        from .core import island, de, rosenbrock
+        from . import island, de, rosenbrock, evolve_status
         isl = island(algo=de(), prob=rosenbrock(), size=25)
-        self.assertFalse(isl.busy())
+        self.assertTrue(isl.status == evolve_status.idle)
         isl = island(algo=de(), prob=rosenbrock(), size=3)
         isl.evolve(20)
         self.assertRaises(BaseException, lambda: isl.wait_check())

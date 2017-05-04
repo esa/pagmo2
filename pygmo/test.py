@@ -1262,10 +1262,10 @@ class archipelago_test_case(_ut.TestCase):
             5, pop=population(), algo=de(), seed=1))
 
     def run_evolve_tests(self):
-        from . import archipelago, de, rosenbrock, mp_island
+        from . import archipelago, de, rosenbrock, mp_island, evolve_status
         from copy import deepcopy
         a = archipelago()
-        self.assertFalse(a.busy())
+        self.assertTrue(a.status == evolve_status.idle)
         a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         a.evolve(10)
         a.evolve(10)
