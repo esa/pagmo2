@@ -99,11 +99,6 @@ namespace pagmo
  *    The algorithm is not suitable for multi-objective problems, nor for
  *    constrained or stochastic optimization
  *
- * .. note::
- *
- *    Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
- *    called from two identical populations.
- *
  * .. seealso::
  *
  *    http://www.particleswarm.info/ for a repository of information related to PSO

@@ -171,7 +171,7 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  *
  * .. note::
  *
- *    Specifying the parameter \p int_dim a part of the decision vector (at the end) will be treated as integers
+ *    Specifying the parameter ``int_dim`` a part of the decision vector (at the end) will be treated as integers
  *    This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
  *    The various mutation and crossover strategies will do different things on an integer gene or a real valued one.
  *

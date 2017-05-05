@@ -174,7 +174,7 @@ This read-only property contains an array of ``float`` representing the fitness 
 
 .. note::
 
-   if the problem is stochastic the champion is the individual that had the lowest fitness for
+   If the problem is stochastic the champion is the individual that had the lowest fitness for
    some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
    fitness.
 
@@ -199,7 +199,7 @@ Sets simultaneously the :math:`i`-th individual decision vector and fitness thus
 
 .. note::
 
-   the user must make sure that the input fitness *f* makes sense as pygmo will only check its dimension.
+   The user must make sure that the input fitness *f* makes sense as pygmo will only check its dimension.
 
 Args:
     i (``int``): individual’s index in the population
@@ -226,7 +226,7 @@ individual's ID remains the same.
 
 .. note::
 
-   a call to this method triggers one fitness function evaluation.
+   A call to this method triggers one fitness function evaluation.
 
 Args:
     i (``int``): individual’s index in the population

@@ -815,7 +815,7 @@ public:
      *
      * @throws std::runtime_error if the NLopt version is not at least 2.
      * @throws std::invalid_argument if \p algo is not one of the allowed algorithm names.
-     * @throws unspecified any exception throw by not_population_based::not_population_based().
+     * @throws unspecified any exception thrown by not_population_based::not_population_based().
      */
     explicit nlopt(const std::string &algo) : m_algo(algo)
     {
@@ -1237,7 +1237,7 @@ public:
      *
      * .. warning::
      *
-     *    the objective function, bounds, and nonlinear-constraint parameters of the local
+     *    The objective function, bounds, and nonlinear-constraint parameters of the local
      *    optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping
      *    criteria should be specified in the local optimizer. The verbosity of
      *    the local optimizer is also forcibly set to zero during the optimisation.
@@ -1259,8 +1259,8 @@ public:
      *
      * .. warning::
      *
-     *    the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     *    of \p this, and \p delete must never be called on the pointer.
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
      *
      * \endverbatim
      *
@@ -1279,8 +1279,8 @@ public:
      *
      * .. warning::
      *
-     *    the returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     *    of \p this, and \p delete must never be called on the pointer.
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
      *
      * \endverbatim
      *

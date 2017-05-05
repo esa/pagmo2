@@ -471,8 +471,8 @@ public:
  *
  * .. note::
  *
- *    The performances of pagmo::cstrs_self_adaptive are highly dependent on the particular inner UDA employed and
- *    in particular to its parameters (generations / iterations).
+ *    The performances of :cpp:class:`pagmo::cstrs_self_adaptive` are highly dependent on the particular inner UDA
+ *    employed and in particular to its parameters (generations / iterations).
  *
  * .. seealso::
  *
@@ -774,8 +774,8 @@ public:
      * .. note::
      *
      *    The ability to extract a non const reference is provided only in order to allow to call
-     *    non-const methods on the internal pagmo::algorithm instance. Assigning a new pagmo::algorithm via
-     *    this reference is undefined behaviour.
+     *    non-const methods on the internal :cpp:class:`pagmo::algorithm` instance. Assigning a new
+     *    :cpp:class:`pagmo::algorithm` via this reference is undefined behaviour.
      *
      * \endverbatim
      *

@@ -432,7 +432,7 @@ struct algo_inner final : algo_inner_base {
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    a moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
+ *    A moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
  *    in undefined behaviour.
  *
  * \endverbatim
@@ -460,9 +460,9 @@ public:
      * \verbatim embed:rst:leading-asterisk
      * .. note::
      *
-     *    this constructor is not enabled if, after the removal of cv and reference qualifiers,
-     *    \p T is of type pagmo::algorithm (that is, this constructor does not compete with the copy/move
-     *    constructors of pagmo::algorithm), or if \p T does not satisfy pagmo::is_uda.
+     *    This constructor is not enabled if, after the removal of cv and reference qualifiers,
+     *    ``T`` is of type :cpp:class:`pagmo::algorithm` (that is, this constructor does not compete with the copy/move
+     *    constructors of :cpp:class:`pagmo::algorithm`), or if  ``T`` does not satisfy :cpp:class:`pagmo::is_uda`.
      *
      * \endverbatim
      *
@@ -556,7 +556,7 @@ public:
      * .. note::
      *
      *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     *    of \p this and \p delete must never be called on the pointer.
+     *    of ``this`` and ``delete`` must never be called on the pointer.
      *
      * \endverbatim
      *

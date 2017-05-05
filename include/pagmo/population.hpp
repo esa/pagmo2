@@ -40,12 +40,12 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <vector>
 
-#include "utils/constrained.hpp"
-#include "utils/generic.hpp"
+#include <pagmo/generic.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
+#include <pagmo/utils/constrained.hpp>
 
 namespace pagmo
 {

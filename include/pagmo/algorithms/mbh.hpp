@@ -112,9 +112,9 @@ public:
     /// Constructor (scalar perturbation).
     /**
      * \verbatim embed:rst:leading-asterisk
-     * .. warning::
+     * .. note::
      *
-     *    This constructor is enabled only if \p T can be used to construct a :cpp:class:`pagmo::algorithm`.
+     *    This constructor is enabled only if ``T`` can be used to construct a :cpp:class:`pagmo::algorithm`.
      *
      * \endverbatim
      *
@@ -145,7 +145,7 @@ public:
      * \verbatim embed:rst:leading-asterisk
      * .. warning::
      *
-     *    This constructor is enabled only if \p T, after the removal of cv/reference qualifiers,
+     *    This constructor is enabled only if ``T``, after the removal of cv/reference qualifiers,
      *    is not :cpp:class:`pagmo::algorithm`.
      *
      * \endverbatim
@@ -396,8 +396,8 @@ public:
      * .. warning::
      *
      *    The ability to extract a non const reference is provided only in order to allow to call
-     *    non-const methods on the internal pagmo::algorithm instance. Assigning a new :cpp:class:`pagmo::algorithm` via
-     *    this reference is undefined behaviour.
+     *    non-const methods on the internal :cpp:class:`pagmo::algorithm` instance. Assigning a new
+     *    :cpp:class:`pagmo::algorithm` via this reference is undefined behaviour.
      *
      * \endverbatim
      *
