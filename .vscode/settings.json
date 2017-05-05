@@ -6,30 +6,5 @@
         "doc/doxygen/latex/": true,
         "doc/doxygen/xml/": true,
         "doc/sphinx/_build/": true
-    },
-    "files.associations": {
-        "chrono": "cpp",
-        "ratio": "cpp",
-        "cctype": "cpp",
-        "clocale": "cpp",
-        "cmath": "cpp",
-        "csetjmp": "cpp",
-        "csignal": "cpp",
-        "cstdarg": "cpp",
-        "cstddef": "cpp",
-        "cstdio": "cpp",
-        "cstdlib": "cpp",
-        "cstring": "cpp",
-        "ctime": "cpp",
-        "cwchar": "cpp",
-        "cwctype": "cpp",
-        "cstdint": "cpp",
-        "initializer_list": "cpp",
-        "slist": "cpp",
-        "algorithm": "cpp",
-        "string": "cpp",
-        "typeinfo": "cpp",
-        "future": "cpp",
-        "system_error": "cpp"
     }
 }
