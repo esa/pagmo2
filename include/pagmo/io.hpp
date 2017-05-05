@@ -41,7 +41,6 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/exceptions.hpp>
-#include <pagmo/threading.hpp>
 
 #define PAGMO_MAX_OUTPUT_LENGTH 5u
 
@@ -73,18 +72,6 @@ inline void stream_impl(std::ostream &os, const bool &b)
         os << "true";
     } else {
         os << "false";
-    }
-}
-
-inline void stream_impl(std::ostream &os, thread_safety ts)
-{
-    switch (ts) {
-        case thread_safety::none:
-            os << "none";
-            break;
-        case thread_safety::basic:
-            os << "basic";
-            break;
     }
 }
 
