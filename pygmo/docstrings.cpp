@@ -151,7 +151,7 @@ This read-only property contains an array of ``float`` representing the decision
 
 .. note::
 
-   if the problem is stochastic the champion is the individual that had the lowest fitness for
+   If the problem is stochastic the champion is the individual that had the lowest fitness for
    some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
    fitness.
 
@@ -174,7 +174,7 @@ This read-only property contains an array of ``float`` representing the fitness 
 
 .. note::
 
-   If the problem is stochastic the champion is the individual that had the lowest fitness for
+   If the problem is stochastic, the champion is the individual that had the lowest fitness for
    some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
    fitness.
 

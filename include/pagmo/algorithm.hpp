@@ -555,8 +555,8 @@ public:
      * \verbatim embed:rst:leading-asterisk
      * .. note::
      *
-     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     *    of ``this`` and ``delete`` must never be called on the pointer.
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of
+     *    ``this`` and ``delete`` must never be called on the pointer.
      *
      * \endverbatim
      *
