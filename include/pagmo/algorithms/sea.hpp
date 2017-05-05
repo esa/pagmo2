@@ -58,18 +58,29 @@ namespace pagmo
  * by mutating its best individual uniformly at random within the bounds. Should the
  * offspring be better than the worst individual in the population it will substitute it.
  *
- * **NOTE** The algorithm does not work for multi-objective problems, nor for
- * constrained optimization
+ * \verbatim embed:rst:leading-asterisk
  *
- * **NOTE** The mutation is uniform within box-bounds. Hence, unbounded problems
- * will produce an error.
+ * .. warning::
  *
- * See: Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for
- * combinatorial optimization: A decade of results." International Journal of Automation and Computing
- * 4.3 (2007): 281-293.
+ *    The algorithm is not suitable for multi-objective problems, nor for
+ *    constrained or stochastic optimization
  *
- * See: http://www.scholarpedia.org/article/Evolution_strategies
+ * .. note::
  *
+ *    The mutation is uniform within box-bounds. Hence, unbounded problems will produce undefined
+ *    behaviours.
+ *
+ * .. seealso::
+ *
+ *    Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for
+ *    combinatorial optimization: A decade of results." International Journal of Automation and Computing
+ *    4.3 (2007): 281-293.
+ *
+ * .. seealso::
+ *
+ *    http://www.scholarpedia.org/article/Evolution_strategies
+ *
+ * \endverbatim
  */
 class sea
 {

@@ -157,11 +157,35 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
  * *Reinsertion*: the only reinsertion strategy provided is what we call pure elitism. After each generation
  * all parents and children are put in the same pool and only the best are passed to the next generation.
  *
- * **NOTE** This algorithm will work only for box bounded problems.
+ * \verbatim embed:rst:leading-asterisk
  *
- * **NOTE** Specifying the parameter \p int_dim a part of the decision vector (at the end) will be treated as integers
- * This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
- * The various mutation and crossover strategies will do different things on an integer gene or a real valued one.
+ * .. warning::
+ *
+ *    The algorithm is not suitable for multi-objective problems, nor for
+ *    constrained optimization.
+ *
+ * .. note::
+ *
+ *    Most genetic operators use the lower and upper bound information. Hence, unbounded problems will produce undefined
+ *    behaviours.
+ *
+ * .. note::
+ *
+ *    Specifying the parameter \p int_dim a part of the decision vector (at the end) will be treated as integers
+ *    This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
+ *    The various mutation and crossover strategies will do different things on an integer gene or a real valued one.
+ *
+ * .. seealso::
+ *
+ *    Oliveto, Pietro S., Jun He, and Xin Yao. "Time complexity of evolutionary algorithms for
+ *    combinatorial optimization: A decade of results." International Journal of Automation and Computing
+ *    4.3 (2007): 281-293.
+ *
+ * .. seealso::
+ *
+ *    http://www.scholarpedia.org/article/Evolution_strategies
+ *
+ * \endverbatim
  */
 class sga : private detail::sga_statics<>
 {

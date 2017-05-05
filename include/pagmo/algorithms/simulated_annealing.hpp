@@ -57,20 +57,34 @@ namespace pagmo
  * The implementation provided here allows to obtain a reannealing procedure via subsequent calls
  * to the pagmo::simulated_annealing::evolve() method.
  *
+ * \verbatim embed:rst:leading-asterisk
  *
- * **NOTE** When selecting the starting and final temperature values it helps to think about the tempertaure
- * as the deterioration in the objective function value that still has a 37% chance of being accepted.
+ * .. warning::
  *
- * **NOTE** The algorithm does not work for multi-objective problems, stochastic problems nor for
- * constrained problems
+ *    The algorithm is not suitable for multi-objective problems, nor for
+ *    constrained or stochastic optimization
  *
- * **NOTE** At each call of the evolve method the number of fitness evaluations will be
- * \p n_T_adj * \p n_range_adj * \p bin_size times the problem dimension
+ * .. note::
  *
- * See: Corana, A., Marchesi, M., Martini, C., & Ridella, S. (1987). Minimizing multimodal
- * functions of continuous variables with the “simulated annealing” algorithm Corrigenda
- * for this article is available here. ACM Transactions on Mathematical Software (TOMS), 13(3), 262-280.
- * http://people.sc.fsu.edu/~inavon/5420a/corana.pdf
+ *    When selecting the starting and final temperature values it helps to think about the tempertaure
+ *    as the deterioration in the objective function value that still has a 37% chance of being accepted.
+ *
+ * .. note::
+ *
+ *    At each call of the evolve method the number of fitness evaluations will be
+ *    `n_T_adj` * `n_range_adj` * `bin_size` times the problem dimension
+ *
+ * .. seealso::
+ *
+ *    Corana, A., Marchesi, M., Martini, C., & Ridella, S. (1987). Minimizing multimodal
+ *    functions of continuous variables with the “simulated annealing” algorithm Corrigenda
+ *    for this article is available here. ACM Transactions on Mathematical Software (TOMS), 13(3), 262-280.
+ *
+ * .. seealso::
+ *
+ *    http://people.sc.fsu.edu/~inavon/5420a/corana.pdf
+ *
+ * \endverbatim
  */
 class simulated_annealing : public not_population_based
 {
