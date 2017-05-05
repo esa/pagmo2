@@ -40,8 +40,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
-#include "../detail/prime_numbers.hpp"
 #include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/detail/prime_numbers.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/types.hpp>

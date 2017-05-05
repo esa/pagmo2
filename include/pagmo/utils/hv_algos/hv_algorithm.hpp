@@ -40,10 +40,10 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <vector>
 
-#include "../../exceptions.hpp"
-#include "../../io.hpp"
-#include "../../population.hpp"
-#include "../../types.hpp"
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {

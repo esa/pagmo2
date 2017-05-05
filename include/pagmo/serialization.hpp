@@ -40,17 +40,17 @@ see https://www.gnu.org/licenses/. */
 // http://uscilab.github.io/cereal/thread_safety.html
 #define CEREAL_THREAD_SAFE 1
 
-#include "external/cereal/archives/binary.hpp"
-#include "external/cereal/archives/json.hpp"
-#include "external/cereal/archives/portable_binary.hpp"
-#include "external/cereal/types/base_class.hpp"
-#include "external/cereal/types/common.hpp"
-#include "external/cereal/types/map.hpp"
-#include "external/cereal/types/memory.hpp"
-#include "external/cereal/types/polymorphic.hpp"
-#include "external/cereal/types/tuple.hpp"
-#include "external/cereal/types/utility.hpp"
-#include "external/cereal/types/vector.hpp"
+#include <pagmo/external/cereal/archives/binary.hpp>
+#include <pagmo/external/cereal/archives/json.hpp>
+#include <pagmo/external/cereal/archives/portable_binary.hpp>
+#include <pagmo/external/cereal/types/base_class.hpp>
+#include <pagmo/external/cereal/types/common.hpp>
+#include <pagmo/external/cereal/types/map.hpp>
+#include <pagmo/external/cereal/types/memory.hpp>
+#include <pagmo/external/cereal/types/polymorphic.hpp>
+#include <pagmo/external/cereal/types/tuple.hpp>
+#include <pagmo/external/cereal/types/utility.hpp>
+#include <pagmo/external/cereal/types/vector.hpp>
 
 #undef CEREAL_THREAD_SAFE
 

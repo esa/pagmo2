@@ -31,11 +31,11 @@
 #include <string>
 #include <vector>
 
-#include "hv_algos/hv_algorithm.hpp"
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
+#include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 
 namespace pagmo
 {

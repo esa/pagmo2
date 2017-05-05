@@ -26,6 +26,8 @@
         "cstdint": "cpp",
         "initializer_list": "cpp",
         "slist": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "string": "cpp",
+        "typeinfo": "cpp"
     }
 }

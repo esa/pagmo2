@@ -42,15 +42,15 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
-#include "detail/custom_comparisons.hpp"
-#include "io.hpp"
-#include "utils/constrained.hpp"
+#include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
+#include <pagmo/utils/constrained.hpp>
 
 /// Macro for the registration of the serialization functionality for user-defined problems.
 /**
