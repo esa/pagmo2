@@ -714,7 +714,7 @@ inline void nlopt_eq_c_wrapper(unsigned m, double *result, unsigned dim, const d
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
  *
- *    A moved-from pagmo::nlopt is destructible and assignable. Any other operation will result
+ *    A moved-from :cpp:class:`pagmo::nlopt` is destructible and assignable. Any other operation will result
  *    in undefined behaviour.
  *
  * .. note::

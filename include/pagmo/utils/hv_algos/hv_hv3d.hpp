@@ -36,11 +36,11 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/exceptions.hpp>
-#include <pagmo/hv_algos/hv_algorithm.hpp>
-#include <pagmo/hv_algos/hv_hvwfg.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
+#include <pagmo/utils/hv_algos/hv_algorithm.hpp>
+#include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
 #include <pagmo/utils/hypervolume.hpp>
 
 namespace pagmo

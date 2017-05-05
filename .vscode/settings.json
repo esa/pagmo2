@@ -28,6 +28,8 @@
         "slist": "cpp",
         "algorithm": "cpp",
         "string": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "future": "cpp",
+        "system_error": "cpp"
     }
 }

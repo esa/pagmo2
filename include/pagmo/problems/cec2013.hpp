@@ -53,13 +53,22 @@ namespace pagmo
  * The 28 problems of the competition on real-parameter single objective optimization problems that
  * was organized for the 2013 IEEE Congress on Evolutionary Computation.
  *
- * **NOTE**: the code for these UDAs is adapted from the original C code distributed during the competition and
- * linked below.
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
  *
- * **NOTE** All problems are box-bounded, continuous, single objective problems.
+ *    The code for these UDAs is adapted from the original C code distributed during the competition and
+ *    linked below.
  *
- * See: http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC2013/CEC2013.htm
- * See: http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip
+ * .. note::
+ *
+ *    All problems are box-bounded, continuous, single objective problems.
+ *
+ * .. seealso:
+ *
+ *    http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC2013/CEC2013.htm
+ *    http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC2013/cec13-c-code.zip
+ *
+ * \endverbatim
  */
 class cec2013
 {

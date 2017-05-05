@@ -157,8 +157,13 @@ public:
     * alter the original set, but may result in unexpected behaviour when used incorrectly
     * (e.g. requesting the computation twice out of the same object)
     *
-    * **NOTE** When this flag is set to true the object can raliably be used only once to compute
-    * the hypervolume
+    * \verbatim embed:rst:leading-asterisk
+    * .. warning::
+    *
+    *    When this flag is set to true the object can reliably be used only once to compute
+    *    the hypervolume. Successive usages are undefined behaviour.
+    *
+    * \endverbatim
     *
     * @param copy_points boolean value stating whether the hypervolume computation may use original set
     */
@@ -213,8 +218,13 @@ public:
     * The result is a point that is necessarily dominated by all other points, frequently used
     * for hypervolume computations.
     *
-    * **NOTE** This point is different from the one computed by pagmo::nadir as only the non dominated front
-    * is considered in that method (also its complexity is thus higher)
+    * \verbatim embed:rst:leading-asterisk
+    * .. note::
+    *
+    *    This point is different from the one computed by :cpp:class:`pagmo::nadir` as only the non dominated front
+    *    is considered in that method (also its complexity is thus higher)
+    *
+    * \endverbatim
     *
     * @param offset value that can be added to each objective to assure strict domination
     *

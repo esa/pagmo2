@@ -102,8 +102,13 @@ inline std::pair<vector_double::size_type, double> test_ineq_constraints(It1 cin
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
  * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
  *
- * **NOTE**: the fitness vectors are assumed to contain exactly one objective, \p neq equality
- * constraints and the rest (if any) inequality constraints
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    The fitness vectors are assumed to contain exactly one objective, ``neq`` equality
+ *    constraints and the rest (if any) inequality constraints
+ *
+ * \endverbatim
  *
  * @param f1 first fitness vector
  * @param f2 second fitness vector
@@ -198,12 +203,17 @@ inline bool compare_fc(const vector_double &f1, const vector_double &f2, vector_
  * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is they are both infeasible, but \f$f_1\f$
  * violates less constraints than \f$f_2\f$, or in case they both violate the same
  * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
- is smaller.
+ * is smaller.
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
  * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
  *
- * **NOTE**: the fitness vectors are assumed to contain exactly one objective, \p neq equality
- * constraints and the rest (if any) inequality constraints
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    The fitness vectors are assumed to contain exactly one objective, ``neq`` equality
+ *    constraints and the rest (if any) inequality constraints
+ *
+ * \endverbatim
  *
  * @param input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
  * @param neq number of equality constraints

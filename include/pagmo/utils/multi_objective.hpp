@@ -340,8 +340,9 @@ inline vector_double crowding_distance(const std::vector<vector_double> &non_dom
  *
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
- * **NOTE** This function will also work for single objective optimization, i.e. with 1 objective
+ * This function will also work for single objective optimization, i.e. with 1 objective
  * in which case, though, it is more efficient to sort using directly on of the following forms:
+ *
  * @code{.unparsed}
  * std::sort(input_f.begin(), input_f.end(), [] (auto a, auto b) {return a[0] < b[0];});
  * @endcode
@@ -570,8 +571,13 @@ inline vector_double nadir(const std::vector<vector_double> &points)
  * better coverage of the Pareto front. Halton sequence is used since low dimensionalities are expected in the number of
  * objectives (i.e. less than 20), hence Halton sequence is deemed as appropriate.
  *
- * **NOTE** All genration methods are guaranteed to generate weights on the simplex (\f$\sum_i \lambda_i = 1\f$). All
- * weight generation methods are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    All genration methods are guaranteed to generate weights on the simplex (:math:`\sum_i \lambda_i = 1`). All
+ *    weight generation methods are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
+ *
+ * \endverbatim
  *
  * Example: to generate 10 weights distributed somehow regularly to decompose a three dimensional problem:
  * @code{.unparsed}
