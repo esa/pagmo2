@@ -581,7 +581,7 @@ public:
      * .. note::
      *
      *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     *    of \p this and \p delete must never be called on the pointer.
+     *    of ``this`` and ``delete`` must never be called on the pointer.
      *
      * \endverbatim
      *

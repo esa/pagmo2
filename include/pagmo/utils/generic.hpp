@@ -61,7 +61,7 @@ namespace pagmo
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    This helper function has to be preferred to std::uniform_real<double>(r_engine) as it
+ *    This helper function has to be preferred to ``std::uniform_real<double>(r_engine)`` as it
  *    also performs additional checks avoiding undefined behaviour in pagmo.
  *
  * \endverbatim

@@ -84,7 +84,7 @@ public:
      * \verbatim embed:rst:leading-asterisk
      * .. note::
      *
-     *    This constructor is enabled only if ``T`` can be used to construct a pagmo::problem.
+     *    This constructor is enabled only if ``T`` can be used to construct a :cpp:class:`pagmo::problem`.
      *
      * \endverbatim
      *

@@ -240,7 +240,7 @@ public:
      * .. note::
      *
      *    This is *not* the fitness of the decomposed problem. Such a fitness is instead returned by calling
-     *    :cpp:class:`decompose::fitness()`.
+     *    :cpp:func:`decompose::fitness()`.
      *
      * \endverbatim
      *

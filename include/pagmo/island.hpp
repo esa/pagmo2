@@ -1311,7 +1311,7 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if the parameter pack ``Args``
-     *    can be used to construct a pagmo::island.
+     *    can be used to construct a :cpp:class:`pagmo::island`.
      *
      * \endverbatim
      *
