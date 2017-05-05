@@ -69,8 +69,13 @@ namespace pagmo
  * only defined and accessible via the population interface if the pagmo::problem
  * currently contained in the pagmo::population is single objective.
  *
- * **NOTE**: a moved-from pagmo::population is destructible and assignable. Any other operation will result
- * in undefined behaviour.
+ * \verbatim embed:rst:leading-asterisk
+ * .. warning::
+ *
+ *    A moved-from pagmo::population is destructible and assignable. Any other operation will result
+ *    in undefined behaviour.
+ *
+ * \endverbatim
  */
 class population
 {
@@ -97,8 +102,13 @@ public:
 
     /// Constructor from a problem.
     /**
-     * **NOTE**: this constructor is enabled only if, after the removal of cv/reference qualifiers,
-     * \p T is not pagmo::population, and if pagmo::problem is constructible from \p T.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if, after the removal of cv/reference qualifiers,
+     *    ``T`` is not :cpp:class:`pagmo::population`, and if :cpp:class:`pagmo::problem` is constructible from ``T``.
+     *
+     * \endverbatim
      *
      * Constructs a population with \p pop_size individuals associated
      * to the problem \p x and setting the population random seed
@@ -383,9 +393,14 @@ public:
     /**
      * @return the champion decision vector.
      *
-     * **NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
-     * some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
-     * fitness.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    If the problem is stochastic the champion is the individual that had the lowest fitness for
+     *    some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+     *    fitness.
+     *
+     * \endverbatim
      *
      * @throw std::invalid_argument if the current problem is not single objective.
      */
@@ -402,9 +417,14 @@ public:
     /**
      * @return the champion fitness.
      *
-     * **NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
-     * some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
-     * fitness.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    If the problem is stochastic the champion is the individual that had the lowest fitness for
+     *    some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+     *    fitness.
+     *
+     * \endverbatim
      *
      * @throw std::invalid_argument if the current problem is not single objective.
      */
@@ -433,8 +453,13 @@ public:
      * Sets simultaneously the \f$i\f$-th individual decision vector
      * and fitness thus avoiding to trigger a fitness function evaluation.
      *
-     * **NOTE**: The user must make sure that the input fitness \p f makes sense
-     * as pagmo will only check its dimension.
+     * \verbatim embed:rst:leading-asterisk
+     * .. warning::
+     *
+     *    Pagmo will only control the input fitness ``f`` dimension, so the user can associate decision vector, fitness
+     *    vectors pairs that are not consistent with the fitness function.
+     *
+     * \endverbatim
      *
      * @param i individual's index in the population.
      * @param x a decision vector (chromosome).
@@ -482,7 +507,12 @@ public:
      * value \p x and changes its fitness accordingly. The
      * individual's ID remains the same.
      *
-     * **NOTE** a call to this method triggers one fitness function evaluation.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    A call to this method triggers one fitness function evaluation.
+     *
+     * \endverbatim
      *
      * @param i individual's index in the population
      * @param x decision vector
@@ -505,9 +535,14 @@ public:
 
     /// Getter for the pagmo::problem.
     /**
-     * **NOTE**: the ability to extract a mutable reference to the problem is provided solely in order to
-     * allow calling non-const methods on the problem. Assigning the population's problem via a reference
-     * returned by this method is undefined behaviour.
+     * \verbatim embed:rst:leading-asterisk
+     * .. warning::
+     *
+     *    The ability to extract a mutable reference to the problem is provided solely in order to
+     *    allow calling non-const methods on the problem. Assigning the population's problem via a reference
+     *    returned by this method is undefined behaviour.
+     *
+     * \endverbatim
      *
      * @return a reference to the internal pagmo::problem.
      */
