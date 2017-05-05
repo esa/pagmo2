@@ -172,7 +172,8 @@ method. Depending on the UDI, the evolution might take place in a separate threa
 &#8220;background&#8221;) and it is initiated by a call to the <a class="reference internal" href="#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> method. At any
 time the user can query the state of the island and fetch its internal data members. The user can explicitly
 wait for pending evolutions to conclude by calling the <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> and
-<a class="reference internal" href="#pygmo.island.get" title="pygmo.island.get"><code class="xref py py-func docutils literal"><span class="pre">get()</span></code></a> methods.</p>
+<a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> methods. The status of ongoing evolutions in the island can be queried via
+the <a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> attribute.</p>
 <p>Typically, pygmo users will employ an already-available UDI in conjunction with this class (see <a class="reference internal" href="islands/py_islands.html#py-islands"><span class="std std-ref">here</span></a>
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
 the following method:</p>
@@ -250,22 +251,6 @@ signatures, etc.)</li>
 </tbody>
 </table>
 <dl class="method">
-<dt id="pygmo.island.busy">
-<code class="descname">busy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.island.busy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check island status.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">True</span></code> if the island is evolving, <code class="docutils literal"><span class="pre">False</span></code> otherwise</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="pygmo.island.evolve">
 <code class="descname">evolve</code><span class="sig-paren">(</span><em>n = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.island.evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Launch evolution.</p>
@@ -275,10 +260,11 @@ will be pushed to a queue, and then return immediately. The tasks in the queue a
 managed by the <a class="reference internal" href="#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> object. Each task will invoke the <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI <em>n</em>
 times consecutively to perform the actual evolution. The island&#8217;s population will be updated at the end of each <code class="docutils literal"><span class="pre">run_evolve()</span></code>
 invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling
-<a class="reference internal" href="#pygmo.island.get" title="pygmo.island.get"><code class="xref py py-func docutils literal"><span class="pre">get()</span></code></a>.</p>
+<a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>.</p>
 <p>It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
-first-out) fashion. The user may call <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> or <a class="reference internal" href="#pygmo.island.get" title="pygmo.island.get"><code class="xref py py-func docutils literal"><span class="pre">get()</span></code></a> to block until all
-tasks have been completed, and to fetch exceptions raised during the execution of the tasks.</p>
+first-out) fashion. The user may call <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> or <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> to block until all
+tasks have been completed, and to fetch exceptions raised during the execution of the tasks. The <a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a>
+attribute can be used to query the status of the asynchronous operations in the island.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -292,23 +278,6 @@ tasks have been completed, and to fetch exceptions raised during the execution o
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pygmo.island.get">
-<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.island.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Block until evolution ends and re-raise the first stored exception.</p>
-<p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> have been completed.
-The method will then raise the first exception raised by any task enqueued since the last time <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a>
-or <a class="reference internal" href="#pygmo.island.get" title="pygmo.island.get"><code class="xref py py-func docutils literal"><span class="pre">get()</span></code></a> were called.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by evolution tasks or by the underlying C++ method</td>
 </tr>
 </tbody>
 </table>
@@ -448,10 +417,65 @@ Otherwise, an implementation-defined name based on the type of the UDI will be r
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="pygmo.island.status">
+<code class="descname">status</code><a class="headerlink" href="#pygmo.island.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status of the island.</p>
+<p>This read-only property will return an <a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal"><span class="pre">evolve_status</span></code></a> flag indicating the current status of
+asynchronous operations in the island. The flag will be:</p>
+<ul class="simple">
+<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a> if the island is currently not evolving and no exceptions
+were thrown by evolution tasks since the last call to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>;</li>
+<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy" title="pygmo.evolve_status.busy"><code class="xref py py-attr docutils literal"><span class="pre">busy</span></code></a> if the island is evolving and no exceptions
+have (yet) been thrown by evolution tasks since the last call to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>;</li>
+<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">idle_error</span></code></a> if the island is currently not evolving and at least one
+evolution task threw an exception since the last call to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>;</li>
+<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy_error" title="pygmo.evolve_status.busy_error"><code class="xref py py-attr docutils literal"><span class="pre">busy_error</span></code></a> if the island is currently evolving and at least one
+evolution task has already thrown an exception since the last call to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>.</li>
+</ul>
+<p>Note that after a call to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>, <a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> will always return
+<a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a>, and after a call to <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a>, <a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a>
+will always return either <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a> or <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">idle_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag indicating the current status of asynchronous operations in the island</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal"><span class="pre">evolve_status</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="pygmo.island.wait">
 <code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.island.wait" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> have been completed.</p>
+<dd><p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> have been completed.
+Exceptions thrown by the enqueued tasks can be re-raised via <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>: they will <strong>not</strong> be
+re-thrown by this method. Also, contrary to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>, this method will <strong>not</strong> reset the
+status of the island: after a call to <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a>, <a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> will always return
+either <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.evolve_status.idle</span></code></a> or <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.evolve_status.idle_error</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.island.wait_check">
+<code class="descname">wait_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.island.wait_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Block until evolution ends and re-raise the first stored exception.</p>
+<p>If one task enqueued after the last call to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> threw an exception, the exception will be re-thrown
+by this method. If more than one task enqueued after the last call to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> threw an exception,
+this method will re-throw the exception raised by the first enqueued task that threw, and the exceptions
+from all the other tasks that threw will be ignored.</p>
+<p>Note that <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> resets the status of the island: after a call to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>,
+<a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> will always return <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.evolve_status.idle</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by evolution tasks or by the underlying C++ method</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>

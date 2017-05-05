@@ -159,7 +159,11 @@
 <dd><p>Archipelago.</p>
 <p>An archipelago is a collection of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> objects which provides a convenient way to perform
 multiple optimisations in parallel.</p>
-<p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/archipelago.html#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::archipelago</span></code></a>.</p>
+<p>The interface of <a class="reference internal" href="#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> mirrors partially the interface of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>: the
+evolution is initiated by a call to <a class="reference internal" href="#pygmo.archipelago.evolve" title="pygmo.archipelago.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a>, and at any time the user can query the
+state of the archipelago and access its island members. The user can explicitly wait for pending evolutions
+to conclude by calling the <a class="reference internal" href="#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> and <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> methods.
+The status of ongoing evolutions in the archipelago can be queried via the <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> attribute.</p>
 <p>The constructor will initialise an archipelago with <em>n</em> islands built from <em>kwargs</em>.
 The keyword arguments accept the same format as explained in the constructor of
 <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, with the following differences:</p>
@@ -171,6 +175,7 @@ words, the <em>seed</em> argument allows to generate randomly (but deterministic
 the seeds of the populations in the archipelago. If <em>seed</em> is not provided, the seeds
 of the populations will be random and non-deterministic.</li>
 </ul>
+<p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/archipelago.html#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::archipelago</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -203,76 +208,61 @@ or by the underlying C++ constructor</li>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">archipelago</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">de</span><span class="p">(),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">pop_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> 
 <span class="go">Number of islands: 16</span>
-<span class="go">Evolving: false</span>
+<span class="go">Status: busy</span>
 
 <span class="go">Islands summaries:</span>
 
-<span class="go">        #   Type           Algo                    Prob                                  Size  Evolving</span>
-<span class="go">        -------------------------------------------------------------------------------------------------</span>
-<span class="go">        0   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        1   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        2   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        3   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        4   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        5   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        6   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        7   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        8   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        9   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        10  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        11  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        12  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        13  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        14  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
-<span class="go">        15  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    false</span>
+<span class="go">        #   Type           Algo                    Prob                                  Size  Status</span>
+<span class="go">        -----------------------------------------------------------------------------------------------</span>
+<span class="go">        0   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        1   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        2   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        3   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        4   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    busy</span>
+<span class="go">        5   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        6   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    busy</span>
+<span class="go">        7   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    busy</span>
+<span class="go">        8   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        9   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        10  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        11  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        12  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
+<span class="go">        13  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    busy</span>
+<span class="go">        14  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    busy</span>
+<span class="go">        15  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">archi</span><span class="o">.</span><span class="n">get_champions_f</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> 
-<span class="go">[array([ 475165.1020545]),</span>
-<span class="go">array([ 807090.7156793]),</span>
-<span class="go">array([ 229737.91987225]),</span>
-<span class="go">array([ 598229.45585525]),</span>
-<span class="go">array([ 560599.11409213]),</span>
-<span class="go">array([ 417323.13905327]),</span>
-<span class="go">array([ 241436.42395722]),</span>
-<span class="go">array([ 393381.06926308]),</span>
-<span class="go">array([ 212331.35741299]),</span>
-<span class="go">array([ 212218.93755491]),</span>
-<span class="go">array([ 497985.30014]),</span>
-<span class="go">array([ 310792.64466701]),</span>
-<span class="go">array([ 421278.03109775]),</span>
-<span class="go">array([ 557967.33605791]),</span>
-<span class="go">array([ 281039.56040264]),</span>
-<span class="go">array([ 215539.10152038])]</span>
+<span class="go">[array([ 125441.77328885]),</span>
+<span class="go">array([ 144025.63904164]),</span>
+<span class="go">array([ 25387.38989711]),</span>
+<span class="go">array([ 56029.44160232]),</span>
+<span class="go">array([ 47760.99082202]),</span>
+<span class="go">array([ 118552.94891993]),</span>
+<span class="go">array([ 118405.29575447]),</span>
+<span class="go">array([ 101866.81846325]),</span>
+<span class="go">array([ 166106.12039851]),</span>
+<span class="go">array([ 167408.00058506]),</span>
+<span class="go">array([ 148815.47953885]),</span>
+<span class="go">array([ 165186.74476375]),</span>
+<span class="go">array([ 326615.28881936]),</span>
+<span class="go">array([ 167301.16445135]),</span>
+<span class="go">array([ 166871.42760503]),</span>
+<span class="go">array([ 75133.38815736])]</span>
 </pre></div>
 </div>
-<dl class="method">
-<dt id="pygmo.archipelago.busy">
-<code class="descname">busy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.busy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check archipelago status.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">True</span></code> if at least one island is evolving, <code class="docutils literal"><span class="pre">False</span></code> otherwise</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="pygmo.archipelago.evolve">
 <code class="descname">evolve</code><span class="sig-paren">(</span><em>n = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve archipelago.</p>
 <p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a> on all the islands of the archipelago.
-The input parameter <em>n</em> represent the number of times the <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the island&#8217;s
-UDI is called within the evolution task.</p>
+The input parameter <em>n</em> will be passed to the invocations of <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a> for each island.
+The <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> attribute can be used to query the status of the asynchronous operations in the
+archipelago.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -280,25 +270,6 @@ UDI is called within the evolution task.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the parameter that will be passed to <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pygmo.archipelago.get">
-<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Block until all evolutions have finished and raise the first exception that was encountered.</p>
-<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.get" title="pygmo.island.get"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.get()</span></code></a> on all the islands of the archipelago.
-If an invocation of <a class="reference internal" href="py_island.html#pygmo.island.get" title="pygmo.island.get"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.get()</span></code></a> raises an exception, then on the remaining
-islands <a class="reference internal" href="py_island.html#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait()</span></code></a> will be called instead, and the raised exception will be re-raised
-by this method.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by any evolution task queued in the archipelago&#8217;s
-islands</td>
 </tr>
 </tbody>
 </table>
@@ -362,11 +333,68 @@ the underlying C++ method</td>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="pygmo.archipelago.status">
+<code class="descname">status</code><a class="headerlink" href="#pygmo.archipelago.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status of the archipelago.</p>
+<p>This method will return an <a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal"><span class="pre">evolve_status</span></code></a> flag indicating the current status of
+asynchronous operations in the archipelago. The flag will be:</p>
+<ul class="simple">
+<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a> if, for all the islands in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a>
+returns <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a>;</li>
+<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy" title="pygmo.evolve_status.busy"><code class="xref py py-attr docutils literal"><span class="pre">busy</span></code></a> if, for at least one island in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a>
+returns <a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy" title="pygmo.evolve_status.busy"><code class="xref py py-attr docutils literal"><span class="pre">busy</span></code></a>, and for no island <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a> returns an error status;</li>
+<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">idle_error</span></code></a> if no island in the archipelago is busy and for at least one island
+<a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a> returns <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">idle_error</span></code></a>;</li>
+<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy_error" title="pygmo.evolve_status.busy_error"><code class="xref py py-attr docutils literal"><span class="pre">busy_error</span></code></a> if, for at least one island in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a>
+returns an error status and at least one island is busy.</li>
+</ul>
+<p>Note that after a call to <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>, <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.archipelago.status</span></code></a> will always return
+<a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a>, and after a call to <a class="reference internal" href="#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a>, <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.archipelago.status</span></code></a>
+will always return either <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a> or <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">idle_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag indicating the current status of asynchronous operations in the archipelago</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal"><span class="pre">evolve_status</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="pygmo.archipelago.wait">
 <code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Block until all evolutions have finished.</p>
-<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait()</span></code></a> on all the islands of the archipelago.</p>
+<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait()</span></code></a> on all the islands of the archipelago. Exceptions thrown by island
+evolutions can be re-raised via <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>: they will <strong>not</strong> be re-thrown by this method.
+Also, contrary to <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>, this method will <strong>not</strong> reset the status of the archipelago:
+after a call to <a class="reference internal" href="#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a>, the <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> attribute will
+always return either <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.evolve_status.idle</span></code></a> or <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.evolve_status.idle_error</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.archipelago.wait_check">
+<code class="descname">wait_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.wait_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Block until all evolutions have finished and raise the first exception that was encountered.</p>
+<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait_check()</span></code></a> on all the islands of the archipelago (following
+the order in which the islands were inserted into the archipelago).
+The first exception raised by <a class="reference internal" href="py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait_check()</span></code></a> will be re-raised by this method,
+and all the exceptions thrown by the other calls to <a class="reference internal" href="py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait_check()</span></code></a> will be ignored.</p>
+<p>Note that <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> resets the status of the archipelago: after a call to
+<a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>, the <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> attribute will
+always return <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.evolve_status.idle</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by any evolution task queued in the archipelago&#8217;s
+islands</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>

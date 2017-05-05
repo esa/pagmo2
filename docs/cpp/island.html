@@ -163,7 +163,7 @@
 <li>a <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>.</li>
 </ul>
 </p>
-<p>Through the UDI, the island class manages the asynchronous evolution (or optimisation) of its <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> via the algorithm&#8217;s <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a <a class="reference internal" href="islands/thread_island.html#pagmoclasspagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>), in a separate process or even in a separate machine. The evolution is always asynchronous (i.e., running in the &#8220;background&#8221;) and it is initiated by a call to the <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> method. At any time the user can query the state of the island and fetch its internal data members. The user can explicitly wait for pending evolutions to conclude by calling the <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a9e145afb335a7934786abd176cc74cf0"><span class="std std-ref">island::wait()</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a327a0fe19590a0af8155bf9c418d04c3"><span class="std std-ref">island::get()</span></a> methods.</p>
+<p>Through the UDI, the island class manages the asynchronous evolution (or optimisation) of its <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> via the algorithm&#8217;s <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a <a class="reference internal" href="islands/thread_island.html#pagmoclasspagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>), in a separate process or even in a separate machine. The evolution is always asynchronous (i.e., running in the &#8220;background&#8221;) and it is initiated by a call to the <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">evolve()</span></a> method. At any time the user can query the state of the island and fetch its internal data members. The user can explicitly wait for pending evolutions to conclude by calling the <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> methods. The status of ongoing evolutions in the island can be queried via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a>.</p>
 <p>Typically, pagmo users will employ an already-available UDI (such as <a class="reference internal" href="islands/thread_island.html#pagmoclasspagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>) in conjunction with this class, but advanced users can implement their own UDI types. A user-defined island must implement the following method: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">run_evolve</span><span class="p">(</span><span class="n">island</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -357,7 +357,7 @@
 <dt id="_CPPv2N5pagmo6islandD0Ev">
 <span id="pagmo::island::~island"></span><span class="target" id="pagmoclasspagmo_1_1island_1aa5c469fff8c1ce0588e1f4d56c874fe5"></span><code class="descname">~island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6islandD0Ev" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Destructor. </p>
-<p>If the island has not been moved-from, the destructor will call <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a9e145afb335a7934786abd176cc74cf0"><span class="std std-ref">island::wait()</span></a>. </p>
+<p>If the island has not been moved-from, the destructor will call <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a>, ignoring any exception that might be thrown. </p>
 </dd></dl>
 
 <dl class="function">
@@ -403,8 +403,8 @@
 <dt id="_CPPv2N5pagmo6island6evolveEj">
 <span id="pagmo::island::evolve__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"></span>void <code class="descname">evolve</code><span class="sig-paren">(</span>unsigned <em>n</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6evolveEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Launch evolution. </p>
-<p>This method will evolve the island&#8217;s <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> using the island&#8217;s <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. The evolution happens asynchronously: a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> will create an evolution task that will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution managed by the <a class="reference internal" href="#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> object. Each task will invoke the <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI <code class="docutils literal"><span class="pre">n</span></code> times consecutively to perform the actual evolution. The island&#8217;s population will be updated at the end of each <code class="docutils literal"><span class="pre">run_evolve()</span></code> invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a327a0fe19590a0af8155bf9c418d04c3"><span class="std std-ref">get()</span></a>.</p>
-<p>It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in first-out) fashion. The user may call <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a9e145afb335a7934786abd176cc74cf0"><span class="std std-ref">island::wait()</span></a> or <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a327a0fe19590a0af8155bf9c418d04c3"><span class="std std-ref">island::get()</span></a> to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.</p>
+<p>This method will evolve the island&#8217;s <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> using the island&#8217;s <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. The evolution happens asynchronously: a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> will create an evolution task that will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution managed by the <a class="reference internal" href="#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> object. Each task will invoke the <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI <code class="docutils literal"><span class="pre">n</span></code> times consecutively to perform the actual evolution. The island&#8217;s population will be updated at the end of each <code class="docutils literal"><span class="pre">run_evolve()</span></code> invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>.</p>
+<p>It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in first-out) fashion. The user may call <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">island::wait()</span></a> or <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks. <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> can be used to query the status of the asynchronous operations in the island.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -426,10 +426,11 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo6island3getEv">
-<span id="pagmo::island::get"></span><span class="target" id="pagmoclasspagmo_1_1island_1a327a0fe19590a0af8155bf9c418d04c3"></span>void <code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island3getEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2N5pagmo6island10wait_checkEv">
+<span id="pagmo::island::wait_check"></span><span class="target" id="pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"></span>void <code class="descname">wait_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island10wait_checkEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Block until evolution ends and re-raise the first stored exception. </p>
-<p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> have been completed. The method will then raise the first exception raised by any task enqueued since the last time <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a9e145afb335a7934786abd176cc74cf0"><span class="std std-ref">wait()</span></a> or <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a327a0fe19590a0af8155bf9c418d04c3"><span class="std std-ref">get()</span></a> were called.</p>
+<p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> have been completed. If one task enqueued after the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> threw an exception, the exception will be re-thrown by this method. If more than one task enqueued after the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> threw an exception, this method will re-throw the exception raised by the first enqueued task that threw, and the exceptions from all the other tasks that threw will be ignored.</p>
+<p>Note that <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> resets the status of the island: after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -442,18 +443,27 @@
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island4waitEv">
-<span id="pagmo::island::wait"></span><span class="target" id="pagmoclasspagmo_1_1island_1a9e145afb335a7934786abd176cc74cf0"></span>void <code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island4waitEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::wait"></span><span class="target" id="pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"></span>void <code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island4waitEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Block until evolution ends. </p>
-<p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> have been completed. </p>
+<p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> have been completed. Exceptions thrown by the enqueued tasks can be re-raised via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>: they will <strong>not</strong> be re-thrown by this method. Also, contrary to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>, this method will <strong>not</strong> reset the status of the island: after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>. </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo6island4busyEv">
-<span id="pagmo::island::busyC"></span><span class="target" id="pagmoclasspagmo_1_1island_1a8a25f53193cd506b847ed91e67cfcae4"></span>bool <code class="descname">busy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island4busyEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Check island status. </p>
+<dt id="_CPPv2NK5pagmo6island6statusEv">
+<span id="pagmo::island::statusC"></span><span class="target" id="pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"></span><a class="reference internal" href="#_CPPv2N5pagmo13evolve_statusE" title="pagmo::evolve_status">evolve_status</a> <code class="descname">status</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island6statusEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Status of the island. </p>
+<p>This method will return a <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43af"><span class="std std-ref">pagmo::evolve_status</span></a> flag indicating the current status of asynchronous operations in the island. The flag will be:</p>
+<p><ul class="simple">
+<li><a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> if the island is currently not evolving and no exceptions were thrown by evolution tasks since the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>;</li>
+<li><a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"><span class="std std-ref">evolve_status::busy</span></a> if the island is evolving and no exceptions have (yet) been thrown by evolution tasks since the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>;</li>
+<li><a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a> if the island is currently not evolving and at least one evolution task threw an exception since the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>;</li>
+<li><a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa58a98eff293532aae63491d2cdc0ef6e"><span class="std std-ref">evolve_status::busy_error</span></a> if the island is currently evolving and at least one evolution task has already thrown an exception since the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>.</li>
+</ul>
+</p>
+<p>Note that after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>, and after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd><code class="docutils literal"><span class="pre">true</span></code> if the island is evolving, <code class="docutils literal"><span class="pre">false</span></code> otherwise. </dd>
+<dd>a flag indicating the current status of asynchronous operations in the island. </dd>
 </dl>
 </p>
 </dd></dl>
@@ -666,6 +676,43 @@
 </dd></dl>
 
 </div>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5pagmo13evolve_statusE">
+<span id="pagmo::evolve_status"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43af"></span><em class="property">enum </em><code class="descclassname">pagmo::</code><code class="descname">evolve_status</code><a class="headerlink" href="#_CPPv2N5pagmo13evolve_statusE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Evolution status. </p>
+<p>This enumeration contains status flags used to represent the current status of asynchronous evolution/optimisation in <a class="reference internal" href="#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> and <a class="reference internal" href="archipelago.html#pagmoclasspagmo_1_1archipelago"><span class="std std-ref">pagmo::archipelago</span></a>.</p>
+<p><div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#_CPPv2NK5pagmo6island6statusEv" title="pagmo::island::status"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::island::status()</span></code></a> and <a class="reference internal" href="archipelago.html#_CPPv2NK5pagmo11archipelago6statusEv" title="pagmo::archipelago::status"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::archipelago::status()</span></code></a>.</p>
+</div>
+ </p>
+<p><em>Values:</em></p>
+<dl class="member">
+<dt id="_CPPv2N5pagmo4idleE">
+<span id="pagmo::idle"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"></span><code class="descname">idle</code> = 0<a class="headerlink" href="#_CPPv2N5pagmo4idleE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>No asynchronous operations are ongoing, and no error was generated by an asynchronous operation in the past </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv2N5pagmo4busyE">
+<span id="pagmo::busy"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"></span><code class="descname">busy</code> = 1<a class="headerlink" href="#_CPPv2N5pagmo4busyE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Asynchronous operations are ongoing, and no error was generated by an asynchronous operation in the past </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv2N5pagmo10idle_errorE">
+<span id="pagmo::idle_error"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"></span><code class="descname">idle_error</code> = 2<a class="headerlink" href="#_CPPv2N5pagmo10idle_errorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Idle with error: no asynchronous operations are ongoing, but an error was generated by an asynchronous operation in the past </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv2N5pagmo10busy_errorE">
+<span id="pagmo::busy_error"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa58a98eff293532aae63491d2cdc0ef6e"></span><code class="descname">busy_error</code> = 3<a class="headerlink" href="#_CPPv2N5pagmo10busy_errorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Busy with error: asynchronous operations are ongoing, and an error was generated by an asynchronous operation in the past </p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
