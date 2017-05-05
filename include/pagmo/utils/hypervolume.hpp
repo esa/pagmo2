@@ -221,7 +221,7 @@ public:
     * \verbatim embed:rst:leading-asterisk
     * .. note::
     *
-    *    This point is different from the one computed by :cpp:class:`pagmo::nadir` as only the non dominated front
+    *    This point is different from the one computed by :cpp:func:`pagmo::nadir()` as only the non dominated front
     *    is considered in that method (also its complexity is thus higher)
     *
     * \endverbatim

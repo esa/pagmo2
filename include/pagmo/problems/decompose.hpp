@@ -88,9 +88,8 @@ namespace pagmo
  * .. note::
  *
  *    The use of :cpp:class:`pagmo::decompose` discards gradients and hessians so that if the original user defined
- * problem
- *    implements them, they will not be available in the decomposed problem. The reason for this behaviour is that
- *    the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
+ *    problem implements them, they will not be available in the decomposed problem. The reason for this behaviour is
+ *    that the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
  *    derivative-free optimization.
  *
  * .. seealso::

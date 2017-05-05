@@ -320,7 +320,7 @@ public:
      * .. note::
      *
      *    The ability to extract a non const reference is provided only in order to allow to call
-     *    non-const methods on the internal :cpp:class:`pagmo::problem instance`. Assigning a new
+     *    non-const methods on the internal :cpp:class:`pagmo::problem` instance. Assigning a new
      *    :cpp:class:`pagmo::problem` via this reference is undefined behaviour.
      *
      * \endverbatim
