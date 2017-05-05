@@ -34,12 +34,10 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <type_traits>
 
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../problem.hpp"
-#include "../serialization.hpp"
-#include "../type_traits.hpp"
-#include "../types.hpp"
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {
@@ -67,7 +65,12 @@ public:
 
     /// Constructor from problem and translation vector.
     /**
-     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::problem.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``T`` can be used to construct a :cpp:class:`pagmo::problem`.
+     *
+     * \endverbatim
      *
      * Wraps a user-defined problem so that its fitness , bounds, etc. will be shifted by a
      * translation vector.
@@ -344,9 +347,14 @@ public:
     /**
      * Returns a reference to the inner pagmo::problem.
      *
-     * **NOTE** The ability to extract a non const reference is provided only in order to allow to call
-     * non-const methods on the internal pagmo::problem instance. Assigning a new pagmo::problem via
-     * this reference is undefined behaviour.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    The ability to extract a non const reference is provided only in order to allow to call
+     *    non-const methods on the internal :cpp:class:`pagmo::problem` instance. Assigning a new
+     *    :cpp:class:`pagmo::problem` via this reference is undefined behaviour.
+     *
+     * \endverbatim
      *
      * @return a reference to the inner pagmo::problem.
      */

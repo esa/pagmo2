@@ -34,12 +34,12 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <tuple>
 
-#include "../algorithm.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../rng.hpp"
-#include "../utils/generic.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
@@ -87,15 +87,31 @@ namespace pagmo
  *... (constriction coefficient)
  * \li Variant 6: Fully Informed Particle Swarm (FIPS)
  *
- * **NOTE** The default variant in PaGMO is n. 5 corresponding to the canonical PSO and thus using the
- * constriction coefficient velocity update formula
  *
- * **NOTE** The algorithm does not work for multi-objective problems, nor for
- * constrained or stochastic optimization
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
  *
- * See: http://www.particleswarm.info/ for a repository of information related to PSO
- * See: http://dx.doi.org/10.1007/s11721-007-0002-0 for a survey
- * See: http://www.engr.iupui.edu/~shi/Coference/psopap4.html for the first paper on this algorithm
+ *    The default variant in PaGMO is n. 5 corresponding to the canonical PSO and thus using the constriction
+ *    coefficient velocity update formula
+ *
+ * .. warning::
+ *
+ *    The algorithm is not suitable for multi-objective problems, nor for
+ *    constrained or stochastic optimization
+ *
+ * .. seealso::
+ *
+ *    http://www.particleswarm.info/ for a repository of information related to PSO
+ *
+ * .. seealso::
+ *
+ *    http://dx.doi.org/10.1007/s11721-007-0002-0 for a survey
+ *
+ * .. seealso::
+ *
+ *    http://www.engr.iupui.edu/~shi/Coference/psopap4.html for the first paper on this algorithm
+ *
+ * \endverbatim
  */
 class pso
 {

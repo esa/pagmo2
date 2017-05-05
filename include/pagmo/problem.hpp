@@ -42,15 +42,15 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
-#include "detail/custom_comparisons.hpp"
-#include "detail/make_unique.hpp"
-#include "exceptions.hpp"
-#include "io.hpp"
-#include "serialization.hpp"
-#include "threading.hpp"
-#include "type_traits.hpp"
-#include "types.hpp"
-#include "utils/constrained.hpp"
+#include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/detail/make_unique.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
+#include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/constrained.hpp>
 
 /// Macro for the registration of the serialization functionality for user-defined problems.
 /**
@@ -1006,8 +1006,23 @@ struct prob_inner final : prob_inner_base {
  * See the documentation of the corresponding methods in this class for details on how the optional
  * methods in the UDP are used by pagmo::problem.
  *
- * **NOTE**: a moved-from pagmo::problem is destructible and assignable. Any other operation will result
- * in undefined behaviour.
+ * \verbatim embed:rst:leading-asterisk
+ * .. warning::
+ *
+ *    A moved-from :cpp:class:`pagmo::problem` is destructible and assignable. Any other operation will result
+ *    in undefined behaviour.
+ *
+ * .. note::
+ *
+ *    This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_NLOPT`` option
+ *    enabled (see the :ref:`installation instructions <install>`).
+ *
+ * .. seealso::
+ *
+ *    The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed description
+ *    of each supported solver.
+ *
+ * \endverbatim
  */
 class problem
 {
@@ -1029,9 +1044,14 @@ public:
     }
     /// Constructor from a user-defined problem of type \p T
     /**
-     * **NOTE** this constructor is not enabled if, after the removal of cv and reference qualifiers,
-     * \p T is of type pagmo::problem (that is, this constructor does not compete with the copy/move
-     * constructors of pagmo::problem), or if \p T does not satisfy pagmo::is_udp.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is not enabled if, after the removal of cv and reference qualifiers,
+     *    ``T`` is of type :cpp:class:`pagmo::problem` (that is, this constructor does not compete with the copy/move
+     *    constructors of :cpp:class:`pagmo::problem`), or if ``T`` does not satisfy :cpp:class:`pagmo::is_udp`.
+     *
+     * \endverbatim
      *
      * This constructor will construct a pagmo::problem from the UDP (user-defined problem) \p x of type \p T. In order
      * for the construction to be successful, the UDP must implement a minimal set of methods,
@@ -1223,8 +1243,13 @@ public:
      * as the UDP used during construction (after removal of cv and reference qualifiers), this method will
      * return \p nullptr.
      *
-     * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     * of \p this, and \p delete must never be called on the pointer.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     *
+     * \endverbatim
      *
      * @return a const pointer to the internal UDP, or \p nullptr
      * if \p T does not correspond exactly to the original UDP type used
@@ -1243,11 +1268,18 @@ public:
      * as the UDP used during construction (after removal of cv and reference qualifiers), this method will
      * return \p nullptr.
      *
-     * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     * of \p this, and \p delete must never be called on the pointer.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
      *
-     * **NOTE** The ability to extract a mutable pointer is provided only in order to allow to call non-const
-     * methods on the internal UDP instance. Assigning a new UDP via this pointer is undefined behaviour.
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     *
+     * .. note::
+     *
+     *    The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     *    methods on the internal UDP instance. Assigning a new UDP via this pointer is undefined behaviour.
+     *
+     * \endverbatim
      *
      * @return a pointer to the internal UDP, or \p nullptr
      * if \p T does not correspond exactly to the original UDP type used
@@ -1415,9 +1447,14 @@ public:
      * - if the UDP satisfies both pagmo::has_gradient_sparsity and pagmo::override_has_gradient_sparsity,
      *   then this method will return the output of the <tt>%has_gradient_sparsity()</tt> method of the UDP.
      *
-     * **NOTE** regardless of what this method returns, the problem::gradient_sparsity() method will always return
-     * a sparsity pattern: if the UDP does not provide the gradient sparsity, PaGMO will assume that the sparsity
-     * pattern of the gradient is dense. See problem::gradient_sparsity() for more details.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    Regardless of what this method returns, the :cpp:func:`problem::gradient_sparsity()` method will always return
+     *    a sparsity pattern: if the UDP does not provide the gradient sparsity, PaGMO will assume that the sparsity
+     *    pattern of the gradient is dense. See :cpp:func:`problem::gradient_sparsity()` for more details.
+     *
+     * \endverbatim
      *
      * @return a flag signalling the availability of the gradient sparsity in the UDP.
      */
@@ -1546,9 +1583,14 @@ public:
      * - if the UDP satisfies both pagmo::has_hessians_sparsity and pagmo::override_has_hessians_sparsity,
      *   then this method will return the output of the <tt>%has_hessians_sparsity()</tt> method of the UDP.
      *
-     * **NOTE** regardless of what this method returns, the problem::hessians_sparsity() method will always return
-     * a vector of sparsity patterns: if the UDP does not provide the hessians sparsity, PaGMO will assume that the
-     * sparsity pattern of the hessians is dense. See problem::hessians_sparsity() for more details.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    Regardless of what this method returns, the :cpp:func:`problem::hessians_sparsity()` method will always return
+     *    a vector of sparsity patterns: if the UDP does not provide the hessians sparsity, PaGMO will assume that the
+     *    sparsity pattern of the hessians is dense. See :cpp:func:`problem::hessians_sparsity()` for more details.
+     *
+     * \endverbatim
      *
      * @return a flag signalling the availability of the hessians sparsity in the UDP.
      */
@@ -1740,7 +1782,12 @@ public:
      * a decision vector \p x against
      * the tolerances returned by problem::get_c_tol().
      *
-     * **NOTE** This will cause one fitness evaluation.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    One call of this method will cause one call to the fitness function.
+     *
+     * \endverbatim
      *
      * @param x a decision vector.
      *

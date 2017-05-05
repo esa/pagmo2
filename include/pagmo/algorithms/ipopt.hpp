@@ -61,7 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/base_local_solver.hpp>
+#include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -152,9 +152,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
 
         // We need the gradient.
         if (!m_prob.has_gradient()) {
-            pagmo_throw(std::invalid_argument,
-                        "the ipopt algorithm needs the gradient, but the problem named '" + m_prob.get_name()
-                            + "' does not provide it");
+            pagmo_throw(std::invalid_argument, "the ipopt algorithm needs the gradient, but the problem named '"
+                                                   + m_prob.get_name() + "' does not provide it");
         }
 
         // Prepare the dv used for fitness computation.
@@ -287,9 +286,9 @@ struct ipopt_nlp final : Ipopt::TNLP {
             std::fill(g_u, g_u + m_prob.get_nec(), 0.);
 
             // Inequality constraints: lb == -inf, ub == 0.
-            std::fill(g_l + m_prob.get_nec(), g_l + m,
-                      std::numeric_limits<double>::has_infinity ? -std::numeric_limits<double>::infinity()
-                                                                : std::numeric_limits<double>::lowest());
+            std::fill(g_l + m_prob.get_nec(), g_l + m, std::numeric_limits<double>::has_infinity
+                                                           ? -std::numeric_limits<double>::infinity()
+                                                           : std::numeric_limits<double>::lowest());
             std::fill(g_u + m_prob.get_nec(), g_u + m, 0.);
 
             return true;
@@ -368,8 +367,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
 
                 if (!(m_objfun_counter / m_verbosity % 50u)) {
                     // Every 50 lines print the column names.
-                    print("\n", std::setw(10), "objevals:", std::setw(15), "objval:", std::setw(15),
-                          "violated:", std::setw(15), "viol. norm:", '\n');
+                    print("\n", std::setw(10), "objevals:", std::setw(15), "objval:", std::setw(15), "violated:",
+                          std::setw(15), "viol. norm:", '\n');
                 }
                 // Print to screen the log line.
                 print(std::setw(10), m_objfun_counter + 1u, std::setw(15), obj_value, std::setw(15), nv, std::setw(15),
@@ -722,15 +721,14 @@ struct ipopt_nlp final : Ipopt::TNLP {
  *
  * \endverbatim
  */
-class ipopt : public base_local_solver
+class ipopt : public not_population_based
 {
     template <typename Pair>
     static void opt_checker(bool status, const Pair &p, const std::string &op_type)
     {
         if (!status) {
-            pagmo_throw(std::invalid_argument,
-                        "failed to set the ipopt " + op_type + " option '" + p.first
-                            + "' to the value: " + detail::to_string(p.second));
+            pagmo_throw(std::invalid_argument, "failed to set the ipopt " + op_type + " option '" + p.first
+                                                   + "' to the value: " + detail::to_string(p.second));
         }
     }
 
@@ -777,7 +775,8 @@ public:
      *   the problem's bounds,
      * - the exact evaluation of the Hessians was requested, but the problem does not support it.
      * @throws std::runtime_error if the initialization of the Ipopt solver fails.
-     * @throws unspecified any exception thrown by the public interface of pagmo::problem or pagmo::base_local_solver.
+     * @throws unspecified any exception thrown by the public interface of pagmo::problem or
+     * pagmo::not_population_based.
      */
     population evolve(population pop) const
     {
@@ -803,9 +802,8 @@ public:
                             "the value of the initial guess at index " + std::to_string(i) + " is NaN");
             }
             if (initial_guess[i] < bounds.first[i] || initial_guess[i] > bounds.second[i]) {
-                pagmo_throw(std::invalid_argument,
-                            "the value of the initial guess at index " + std::to_string(i)
-                                + " is outside the problem's bounds");
+                pagmo_throw(std::invalid_argument, "the value of the initial guess at index " + std::to_string(i)
+                                                       + " is outside the problem's bounds");
             }
         }
 
@@ -995,13 +993,13 @@ public:
     /**
      * @param ar the target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of primitive types or pagmo::base_local_solver.
+     * @throws unspecified any exception thrown by the serialization of primitive types or pagmo::not_population_based.
      */
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(cereal::base_class<base_local_solver>(this), m_string_opts, m_integer_opts, m_numeric_opts, m_last_opt_res,
-           m_verbosity, m_log);
+        ar(cereal::base_class<not_population_based>(this), m_string_opts, m_integer_opts, m_numeric_opts,
+           m_last_opt_res, m_verbosity, m_log);
     }
     /// Load from archive.
     /**
@@ -1009,13 +1007,14 @@ public:
      *
      * @param ar the source archive.
      *
-     * @throws unspecified any exception thrown by the deserialization of primitive types or pagmo::base_local_solver.
+     * @throws unspecified any exception thrown by the deserialization of primitive types or
+     * pagmo::not_population_based.
      */
     template <typename Archive>
     void load(Archive &ar)
     {
         try {
-            ar(cereal::base_class<base_local_solver>(this), m_string_opts, m_integer_opts, m_numeric_opts,
+            ar(cereal::base_class<not_population_based>(this), m_string_opts, m_integer_opts, m_numeric_opts,
                m_last_opt_res, m_verbosity, m_log);
             // LCOV_EXCL_START
         } catch (...) {

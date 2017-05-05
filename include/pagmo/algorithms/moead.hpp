@@ -36,15 +36,15 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <tuple>
 
-#include "../algorithm.hpp" // needed for the cereal macro
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../problem.hpp"
-#include "../problems/decompose.hpp"
-#include "../rng.hpp"
-#include "../utils/generic.hpp"         // kNN
-#include "../utils/multi_objective.hpp" // ideal
+#include <pagmo/algorithm.hpp> // needed for the cereal macro
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/decompose.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>         // kNN
+#include <pagmo/utils/multi_objective.hpp> // ideal
 
 namespace pagmo
 {
@@ -56,18 +56,28 @@ namespace pagmo
  * problem decomposition, it leverages on evolutionary operators to combine good solutions of neighbouring problems thus
  * allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particual algorithm
  * implemented in pagmo with the name pagmo::moead uses the rand/2/exp Differential Evolution operator followed by a
- * polynomial mutation to create offsprings, and the tchebycheff, wieghted or boundary intersection decomposition method
+ * polynomial mutation to create offsprings, and the Tchebycheff, wieghted or boundary intersection decomposition method
  * decomposition method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is
  * also implemented.
  *
- * **NOTE** The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This
- * allows to have MOEA/D-DE work on populations having arbitrary size, while preserving a nice coverage of the final
- * non-dominated front.
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
  *
- * See: Zhang, Qingfu, and Hui Li. "MOEA/D: A multiobjective evolutionary algorithm based on decomposition."
- * Evolutionary Computation, IEEE Transactions on 11.6 (2007): 712-731.
- * See: Li, Hui, and Qingfu Zhang. "Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
- * NSGA-II." Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
+ *    The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This
+ *    allows to have MOEA/D-DE work on populations having arbitrary size, while preserving a nice coverage of the final
+ *    non-dominated front.
+ *
+ * .. seealso::
+ *
+ *    Zhang, Qingfu, and Hui Li. "MOEA/D: A multiobjective evolutionary algorithm based on decomposition."
+ *    Evolutionary Computation, IEEE Transactions on 11.6 (2007): 712-731.
+ *
+ * .. seealso::
+ *
+ *    Li, Hui, and Qingfu Zhang. "Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
+ *    NSGA-II." Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
+ *
+ * \endverbatim
  */
 class moead
 {

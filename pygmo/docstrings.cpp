@@ -149,9 +149,11 @@ std::string population_champion_x_docstring()
 
 This read-only property contains an array of ``float`` representing the decision vector of the population's champion.
 
-**NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
-some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
-fitness.
+.. note::
+
+   If the problem is stochastic the champion is the individual that had the lowest fitness for
+   some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+   fitness.
 
 Returns:
     1D NumPy float array: the champion's decision vector
@@ -170,9 +172,11 @@ std::string population_champion_f_docstring()
 
 This read-only property contains an array of ``float`` representing the fitness vector of the population's champion.
 
-**NOTE**: if the problem is stochastic the champion is the individual that had the lowest fitness for
-some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
-fitness.
+.. note::
+
+   If the problem is stochastic, the champion is the individual that had the lowest fitness for
+   some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+   fitness.
 
 Returns:
     1D NumPy float array: the champion's fitness vector
@@ -193,7 +197,9 @@ Sets the :math:`i`-th individual decision vector, and fitness.
 
 Sets simultaneously the :math:`i`-th individual decision vector and fitness thus avoiding to trigger a fitness function evaluation.
 
-**NOTE**: the user must make sure that the input fitness *f* makes sense as pygmo will only check its dimension.
+.. note::
+
+   The user must make sure that the input fitness *f* makes sense as pygmo will only check its dimension.
 
 Args:
     i (``int``): individual’s index in the population
@@ -218,7 +224,9 @@ Sets the :math:`i`-th individual decision vector.
 Sets the chromosome of the :math:`i`-th individual to the value *x* and changes its fitness accordingly. The
 individual's ID remains the same.
 
-**NOTE**: a call to this method triggers one fitness function evaluation.
+.. note::
+
+   A call to this method triggers one fitness function evaluation.
 
 Args:
     i (``int``): individual’s index in the population
@@ -746,11 +754,11 @@ The availability of the gradient sparsity is determined as follows:
 The optional ``has_gradient_sparsity()`` method of the UDP must return a ``bool``. For information on how to
 implement the ``gradient_sparsity()`` method of the UDP, see :func:`~pygmo.problem.gradient_sparsity()`.
 
-.. note:
+.. note::
 
-Regardless of what this method returns, the :func:`~pygmo.problem.gradient_sparsity()` method will always
-return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
-pattern of the gradient is dense. See :func:`~pygmo.problem.gradient_sparsity()` for more details.
+   Regardless of what this method returns, the :func:`~pygmo.problem.gradient_sparsity()` method will always
+   return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
+   pattern of the gradient is dense. See :func:`~pygmo.problem.gradient_sparsity()` for more details.
 
 Returns:
     ``bool``: a flag signalling the availability of the gradient sparsity in the UDP
@@ -887,11 +895,11 @@ The availability of the hessians sparsity is determined as follows:
 The optional ``has_hessians_sparsity()`` method of the UDP must return a ``bool``. For information on how to
 implement the ``hessians_sparsity()`` method of the UDP, see :func:`~pygmo.problem.hessians_sparsity()`.
 
-.. note:
+.. note::
 
-Regardless of what this method returns, the :func:`~pygmo.problem.hessians_sparsity()` method will always
-return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
-pattern of the hessians is dense. See :func:`~pygmo.problem.hessians_sparsity()` for more details.
+   Regardless of what this method returns, the :func:`~pygmo.problem.hessians_sparsity()` method will always
+   return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
+   pattern of the hessians is dense. See :func:`~pygmo.problem.hessians_sparsity()` for more details.
 
 Returns:
     ``bool``: a flag signalling the availability of the hessians sparsity in the UDP
@@ -2922,6 +2930,7 @@ containing objective vectors) with respect to the following strict ordering:
 Complexity is :math:`\mathcal{O}(M N^2)` where :math:`M` is the size of the objective vector and :math:`N` is the number of individuals.
 
 .. note::
+
    This function will also work for single objective optimization, i.e. with objective vector
    of size 1, in which case, though, it is more efficient to sort using python built-in sorting methods.
 

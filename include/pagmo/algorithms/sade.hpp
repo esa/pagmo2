@@ -36,12 +36,12 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <utility> //std::swap
 
-#include "../algorithm.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../rng.hpp"
-#include "../utils/generic.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
@@ -62,18 +62,35 @@ namespace pagmo
  * operator to produce new
  * CR anf F parameters for each individual. We refer to this variant as to iDE.
  *
- * **NOTE** There exist an algorithm referred to as SaDE in the literature. This is not the algorithm implemented in
- * PaGMO.
+ * \verbatim embed:rst:leading-asterisk
+ * .. warning::
  *
- * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
- * the allowed box-bounds, is here done by creating a random number in the bounds.
+ *    A moved-from pagmo::nlopt is destructible and assignable. Any other operation will result
+ *    in undefined behaviour.
  *
- * See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control parameters
- * in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE
- * Transactions on, 10(6), 646-657. Chicago
- * See: (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple
- * strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011
- * IEEE Congress on (pp. 1041-1048). IEEE.
+ * .. warning::
+ *
+ *    The algorithm referred to as SaDE in the literature is not the algorithm implemented in pagmo. We
+ *    use the name sade to indicate, generically, self-adaptation in a differential evolution algorithm
+ *
+ * .. note::
+ *
+ *    The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+ *    the allowed box-bounds, is here done by creating a random number in the bounds.
+ *
+ * .. seealso::
+ *
+ *    (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control parameters
+ *    in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE
+ *    Transactions on, 10(6), 646-657. Chicago
+ *
+ * .. seealso::
+ *
+ *    (iDE) - Elsayed, S. M., Sarker, R. A., & Essam, D. L. (2011, June). Differential evolution with multiple
+ *    strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011
+ *    IEEE Congress on (pp. 1041-1048). IEEE.
+ * \endverbatim
+ *
  */
 class sade
 {

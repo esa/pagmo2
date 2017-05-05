@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_UTIL_hv3d_H
-#define PAGMO_UTIL_hv3d_H
+#ifndef PAGMO_UTIL_HV3D_H
+#define PAGMO_UTIL_HV3D_H
 
 #include <cmath>
 #include <iostream>
@@ -35,13 +35,13 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
-#include "../../exceptions.hpp"
-#include "../../io.hpp"
-#include "../../population.hpp"
-#include "../../types.hpp"
-#include "../hypervolume.hpp"
-#include "hv_algorithm.hpp"
-#include "hv_hvwfg.hpp"
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/hv_algos/hv_algorithm.hpp>
+#include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
+#include <pagmo/utils/hypervolume.hpp>
 
 namespace pagmo
 {

@@ -32,7 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <array>
 #include <stdexcept>
 
-#include "../exceptions.hpp"
+#include <pagmo/exceptions.hpp>
 
 #define PAGMO_PRIME_MAX 1601u
 

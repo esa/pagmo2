@@ -133,7 +133,7 @@ struct tu_test_algorithm {
 };
 
 template <typename T>
-static inline void expose_base_local_solver(bp::class_<T> &c, const std::string &algo_name)
+static inline void expose_not_population_based(bp::class_<T> &c, const std::string &algo_name)
 {
     // Selection/replacement.
     add_property(
@@ -269,6 +269,7 @@ void expose_algorithms()
     compass_search_.def("get_stop_range", &compass_search::get_stop_range);
     compass_search_.def("get_reduction_coeff", &compass_search::get_reduction_coeff);
     compass_search_.def("get_verbosity", &compass_search::get_verbosity);
+    expose_not_population_based(compass_search_, "compass_search");
     // PSO
     auto pso_ = expose_algorithm<pso>("pso", pso_docstring().c_str());
     pso_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(
@@ -312,6 +313,7 @@ void expose_algorithms()
          bp::arg("bin_size") = 10u, bp::arg("start_range") = 1., bp::arg("seed"))));
     expose_algo_log(simulated_annealing_, simulated_annealing_get_log_docstring().c_str());
     simulated_annealing_.def("get_seed", &simulated_annealing::get_seed, generic_uda_get_seed_docstring().c_str());
+    expose_not_population_based(simulated_annealing_, "simulated_annealing");
     // SADE
     auto sade_ = expose_algorithm<sade>("sade", sade_docstring().c_str());
     sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool>(
@@ -422,7 +424,7 @@ void expose_algorithms()
     add_property(nlopt_, "xtol_abs", &nlopt::get_xtol_abs, &nlopt::set_xtol_abs, nlopt_xtol_abs_docstring().c_str());
     add_property(nlopt_, "maxeval", &nlopt::get_maxeval, &nlopt::set_maxeval, nlopt_maxeval_docstring().c_str());
     add_property(nlopt_, "maxtime", &nlopt::get_maxtime, &nlopt::set_maxtime, nlopt_maxtime_docstring().c_str());
-    expose_base_local_solver(nlopt_, "nlopt");
+    expose_not_population_based(nlopt_, "nlopt");
     expose_algo_log(nlopt_, nlopt_get_log_docstring().c_str());
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
@@ -442,7 +444,7 @@ void expose_algorithms()
 #if defined(PAGMO_WITH_IPOPT)
     // Ipopt.
     auto ipopt_ = expose_algorithm<ipopt>("ipopt", ipopt_docstring().c_str());
-    expose_base_local_solver(ipopt_, "ipopt");
+    expose_not_population_based(ipopt_, "ipopt");
     expose_algo_log(ipopt_, ipopt_get_log_docstring().c_str());
     ipopt_.def("get_last_opt_result", lcast([](const ipopt &ip) { return static_cast<int>(ip.get_last_opt_result()); }),
                ipopt_get_last_opt_result_docstring().c_str());

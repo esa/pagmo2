@@ -38,12 +38,12 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include "../detail/constants.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../problem.hpp"
-#include "../types.hpp"
+#include <pagmo/detail/constants.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {
@@ -59,11 +59,18 @@ namespace pagmo
  * any point to the Pareto front while creating interesting problems. They also suggest some
  * dimensions for instantiating the problems, namely \f$m = [30, 30, 30, 10, 11, 10]\f$.
  *
- * **NOTE** The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
- * via std::floor().
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
  *
- * See: Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:
- * Empirical results." Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848
+ *    The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
+ *    via ``std::floor()``.
+ *
+ * .. seealso::
+ *
+ *    Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. "Comparison of multiobjective evolutionary algorithms:
+ *    Empirical results." Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848
+ *
+ * \endverbatim
  *
  * ZDT1:
  *

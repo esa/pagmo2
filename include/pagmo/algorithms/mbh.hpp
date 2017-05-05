@@ -36,15 +36,15 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
-#include "../algorithm.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../rng.hpp"
-#include "../type_traits.hpp"
-#include "../utils/constrained.hpp"
-#include "../utils/generic.hpp" // pagmo::uniform_real_from_range
-#include "compass_search.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/compass_search.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/type_traits.hpp>
+#include <pagmo/utils/constrained.hpp>
+#include <pagmo/utils/generic.hpp> // pagmo::uniform_real_from_range
 
 namespace pagmo
 {
@@ -111,8 +111,12 @@ public:
     }
     /// Constructor (scalar perturbation).
     /**
-     * **NOTE** This constructor is enabled only if \p T can be used to construct a pagmo::algorithm.
-
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``T`` can be used to construct a :cpp:class:`pagmo::algorithm`.
+     *
+     * \endverbatim
      *
      * This constructor will construct a monotonic basin hopping algorithm using a scalar perturbation.
      *
@@ -138,8 +142,13 @@ public:
     }
     /// Constructor (vector perturbation).
     /**
-     * **NOTE** This constructor is enabled only if \p T, after the removal of cv/reference qualifiers,
-     * is not pagmo::algorithm.
+     * \verbatim embed:rst:leading-asterisk
+     * .. warning::
+     *
+     *    This constructor is enabled only if ``T``, after the removal of cv/reference qualifiers,
+     *    is not :cpp:class:`pagmo::algorithm`.
+     *
+     * \endverbatim
      *
      * This constructor will construct a monotonic basin hopping algorithm using a vector perturbation.
      *
@@ -383,9 +392,14 @@ public:
     /**
      * Returns a reference to the inner pagmo::algorithm.
      *
-     * **NOTE** The ability to extract a non const reference is provided only in order to allow to call
-     * non-const methods on the internal pagmo::algorithm instance. Assigning a new pagmo::algorithm via
-     * this reference is undefined behaviour.
+     * \verbatim embed:rst:leading-asterisk
+     * .. warning::
+     *
+     *    The ability to extract a non const reference is provided only in order to allow to call
+     *    non-const methods on the internal :cpp:class:`pagmo::algorithm` instance. Assigning a new
+     *    :cpp:class:`pagmo::algorithm` via this reference is undefined behaviour.
+     *
+     * \endverbatim
      *
      * @return a reference to the inner pagmo::algorithm.
      */

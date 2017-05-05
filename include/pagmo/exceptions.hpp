@@ -41,7 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 #include <utility>
 
-#include "type_traits.hpp"
+#include <pagmo/type_traits.hpp>
 
 namespace pagmo
 {

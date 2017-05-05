@@ -37,12 +37,12 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <utility> //std::swap
 
-#include "../algorithm.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../rng.hpp"
-#include "../utils/generic.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
@@ -59,8 +59,8 @@ std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u, 3u, 7u, 10u
 
 /// A Differential Evolution Algorithm (1220, or pDE: our own DE flavour!!)
 /**
-* \image html original.jpg "Our own DE flavour".
-*
+ * \image html original.jpg "Our own DE flavour".
+ *
  * Differential Evolution (pagmo::de, pagmo::sade) is one of the best meta-heuristics in PaGMO, so we
  * dared to propose our own algoritmic variant we call DE 1220 (a.k.a. pDE as in pagmo DE). Our variant
  * makes use of the pagmo::sade adaptation schemes for CR and F and adds self-adaptation for
@@ -82,10 +82,28 @@ std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u, 3u, 7u, 10u
  * where \f$\tau\f$ is set to be 0.1, \f$random\f$ selects a random mutation variant and \f$r_i\f$ is a random
  * uniformly distributed number in [0, 1]
  *
- * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
- * the allowed box-bounds, is here done by creating a random number in the bounds.
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
  *
- * See: pagmo::de, pagmo::sade For other available algorithms based on Differential Evolution
+ *    The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+ *    the allowed box-bounds, is here done by creating a random number in the bounds.
+ *
+ * .. note::
+ *
+ *    The search range is defined relative to the box-bounds. Hence, unbounded problems
+ *    will produce an error.
+ *
+ * .. note::
+ *
+ *    Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
+ *    called from two identical populations.
+ *
+ * .. seealso::
+ *
+ *    :cpp:class:`pagmo::de`, :cpp:class:`pagmo::sade` For other available algorithms based on Differential Evolution
+ *
+ * \endverbatim
+ *
  */
 
 class de1220

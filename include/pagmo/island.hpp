@@ -502,8 +502,13 @@ inline std::ostream &operator<<(std::ostream &os, evolve_status es)
  * See the documentation of the corresponding methods in this class for details on how the optional
  * methods in the UDI are used by pagmo::island.
  *
- * **NOTE**: a moved-from pagmo::island is destructible and assignable. Any other operation will result
- * in undefined behaviour.
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    A moved-from :cpp:class:`pagmo::island` is destructible and assignable. Any other operation will result
+ *    in undefined behaviour.
+ *
+ * \endverbatim
  */
 class island
 {
@@ -576,8 +581,13 @@ private:
 public:
     /// Constructor from algorithm and population.
     /**
-     * **NOTE**: this constructor is enabled only if \p a can be used to construct a
-     * pagmo::algorithm and \p p is an instance of pagmo::population.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    :cpp:class`pagmo::algorithm` and :cpp:class:`p` is an instance of :cpp:class:`pagmo::population`.
+     *
+     * \endverbatim
      *
      * This constructor will use \p a to construct the internal algorithm, and \p p to construct
      * the internal population. A default-constructed pagmo::thread_island will be the internal UDI.
@@ -605,10 +615,15 @@ private:
 public:
     /// Constructor from UDI, algorithm and population.
     /**
-     * **NOTE**: this constructor is enabled only if:
-     * - \p Isl satisfies pagmo::is_udi,
-     * - \p a can be used to construct a pagmo::algorithm,
-     * - \p p is an instance of pagmo::population.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if:
+     *     - ``Isl`` satisfies :cpp:class::`pagmo::is_udi`,
+     *     - ``a`` can be used to construct a :cpp:class:`pagmo::algorithm`,
+     *     - ``p`` is an instance of pagmo::population.
+     *
+     * \endverbatim
      *
      * This constructor will use \p isl to construct the internal UDI, \p a to construct the internal algorithm,
      * and \p p to construct the internal population.
@@ -637,8 +652,13 @@ private:
 public:
     /// Constructor from algorithm, problem, size and seed.
     /**
-     * **NOTE**: this constructor is enabled only if \p a can be used to construct a
-     * pagmo::algorithm, and \p p, \p size and \p seed can be used to construct a pagmo::population.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    pagmo::algorithm, and ``p``, ``size`` and ``seed`` can be used to construct a :cpp:class:`pagmo::population`.
+     *
+     * \endverbatim
      *
      * This constructor will construct a pagmo::population \p pop from \p p, \p size and \p seed, and it will
      * then invoke island(Algo &&, Pop &&) with \p a and \p pop as arguments.
@@ -667,8 +687,14 @@ private:
 public:
     /// Constructor from UDI, algorithm, problem, size and seed.
     /**
-     * **NOTE**: this constructor is enabled only if \p Isl satisfies pagmo::is_udi, \p a can be used to construct a
-     * pagmo::algorithm, and \p p, \p size and \p seed can be used to construct a pagmo::population.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``Isl`` satisfies :cpp:class:`pagmo::is_udi`, ``a`` can be used to
+     *    construct a :cpp:class:`pagmo::algorithm`, and ``p``, ``size`` and ``seed`` can be used to construct a
+     *    :cpp:class:`pagmo::population`.
+     *
+     * \endverbatim
      *
      * This constructor will construct a pagmo::population \p pop from \p p, \p size and \p seed, and it will
      * then invoke island(Isl &&, Algo &&, Pop &&) with \p isl, \p a and \p pop as arguments.
@@ -1174,8 +1200,13 @@ public:
     /**
      * Dereferencing a mutable iterator will yield a reference to an island within the archipelago.
      *
-     * **NOTE**: mutable iterators are provided solely in order to allow calling non-const methods
-     * on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    Mutable iterators are provided solely in order to allow calling non-const methods
+     *    on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     *
+     * \endverbatim
      */
     using iterator = iterator_implementation;
     /// Const iterator.
@@ -1276,8 +1307,13 @@ private:
 public:
     /// Constructor from \p n islands.
     /**
-     * **NOTE**: this constructor is enabled only if the parameter pack \p Args
-     * can be used to construct a pagmo::island.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if the parameter pack ``Args``
+     *    can be used to construct a :cpp:class:`pagmo::island`.
+     *
+     * \endverbatim
      *
      * This constructor will forward \p n times the input arguments \p args to the
      * push_back() method. If, however, the parameter pack contains an argument which
@@ -1361,9 +1397,14 @@ public:
      * after a push_back() invocation. Assignment and destruction of the archipelago will invalidate island references
      * obtained via this method.
      *
-     * **NOTE**: the mutable version of the subscript operator exists solely to allow calling non-const methods
-     * on the islands. Assigning an island via a reference obtained through this operator will result
-     * in undefined behaviour.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    The mutable version of the subscript operator exists solely to allow calling non-const methods
+     *    on the islands. Assigning an island via a reference obtained through this operator will result
+     *    in undefined behaviour.
+     *
+     * \endverbatim
      *
      * @param i the index of the island to be accessed.
      *
@@ -1374,9 +1415,8 @@ public:
     island &operator[](size_type i)
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range,
-                        "cannot access the island at index " + std::to_string(i)
-                            + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
+                                               + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
@@ -1396,9 +1436,8 @@ public:
     const island &operator[](size_type i) const
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range,
-                        "cannot access the island at index " + std::to_string(i)
-                            + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
+                                               + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
@@ -1418,8 +1457,13 @@ private:
 public:
     /// Add island.
     /**
-     * **NOTE**: this method is enabled only if the parameter pack \p Args
-     * can be used to construct a pagmo::island.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This method is enabled only if the parameter pack ``Args``
+     *    can be used to construct a :cpp:class:`pagmo::island`.
+     *
+     * \endverbatim
      *
      * This method will construct an island from the supplied arguments and add it to the archipelago.
      * Islands are added at the end of the archipelago (that is, the new island will have an index
@@ -1562,8 +1606,13 @@ public:
      *
      * Adding an island to the archipelago will invalidate all existing iterators.
      *
-     * **NOTE**: mutable iterators are provided solely in order to allow calling non-const methods
-     * on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    Mutable iterators are provided solely in order to allow calling non-const methods
+     *    on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     *
+     * \endverbatim
      *
      * @return a mutable iterator to the beginning of the island container.
      */
@@ -1577,8 +1626,13 @@ public:
      *
      * Adding an island to the archipelago will invalidate all existing iterators.
      *
-     * **NOTE**: mutable iterators are provided solely in order to allow calling non-const methods
-     * on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    Mutable iterators are provided solely in order to allow calling non-const methods
+     *    on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     *
+     * \endverbatim
      *
      * @return a mutable iterator to the end of the island container.
      */

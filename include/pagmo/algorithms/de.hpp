@@ -37,12 +37,12 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <utility> //std::swap
 
-#include "../algorithm.hpp"
-#include "../exceptions.hpp"
-#include "../io.hpp"
-#include "../population.hpp"
-#include "../rng.hpp"
-#include "../utils/generic.hpp"
+#include <pagmo/algorithm.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
@@ -60,11 +60,19 @@ namespace pagmo
  * The implementation provided for PaGMO is based on the code provided in the official
  * DE web site. pagmo::de is suitable for box-constrained single-objective continuous optimization.
  *
- * **NOTE** The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
- * the allowed box-bounds, is here done by creating a random number in the bounds.
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
  *
- * See: http://www.icsi.berkeley.edu/~storn/code.html for the official DE web site
- * See: http://www.springerlink.com/content/x555692233083677/ for the paper that introduces Differential Evolution
+ *    The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+ *    the allowed box-bounds, is here done by creating a random number in the bounds.
+ *
+ * .. seealso::
+ *
+ *    The official DE web site: http://www.icsi.berkeley.edu/~storn/code.html
+ *
+ *    The paper that introduces Differential Evolution http://www.springerlink.com/content/x555692233083677/
+ *
+ * \endverbatim
  */
 class de
 {

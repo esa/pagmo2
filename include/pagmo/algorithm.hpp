@@ -34,12 +34,12 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
-#include "detail/make_unique.hpp"
-#include "exceptions.hpp"
-#include "population.hpp"
-#include "serialization.hpp"
-#include "threading.hpp"
-#include "type_traits.hpp"
+#include <pagmo/detail/make_unique.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/serialization.hpp>
+#include <pagmo/threading.hpp>
+#include <pagmo/type_traits.hpp>
 
 /// Macro for the registration of the serialization functionality for user-defined algorithms.
 /**
@@ -429,8 +429,13 @@ struct algo_inner final : algo_inner_base {
  * See the documentation of the corresponding methods in this class for details on how the optional
  * methods in the UDA are used by pagmo::algorithm.
  *
- * **NOTE**: a moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
- * in undefined behaviour.
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    A moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
+ *    in undefined behaviour.
+ *
+ * \endverbatim
  */
 class algorithm
 {
@@ -452,9 +457,14 @@ public:
     }
     /// Constructor from a user-defined algorithm of type \p T
     /**
-     * **NOTE** this constructor is not enabled if, after the removal of cv and reference qualifiers,
-     * \p T is of type pagmo::algorithm (that is, this constructor does not compete with the copy/move
-     * constructors of pagmo::algorithm), or if \p T does not satisfy pagmo::is_uda.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is not enabled if, after the removal of cv and reference qualifiers,
+     *    ``T`` is of type :cpp:class:`pagmo::algorithm` (that is, this constructor does not compete with the copy/move
+     *    constructors of :cpp:class:`pagmo::algorithm`), or if  ``T`` does not satisfy :cpp:class:`pagmo::is_uda`.
+     *
+     * \endverbatim
      *
      * This constructor will construct a pagmo::algorithm from the UDA (user-defined algorithm) \p x of type \p T. In
      * order for the construction to be successful, the UDA must implement a minimal set of methods,
@@ -542,8 +552,13 @@ public:
      * as the UDA used during construction (after removal of cv and reference qualifiers), this method will
      * return \p nullptr.
      *
-     * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     * of \p this and \p delete must never be called on the pointer.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of
+     *    ``this`` and ``delete`` must never be called on the pointer.
+     *
+     * \endverbatim
      *
      * @return a const pointer to the internal UDA, or \p nullptr
      * if \p T does not correspond exactly to the original UDA type used
@@ -562,11 +577,21 @@ public:
      * as the UDA used during construction (after removal of cv and reference qualifiers), this method will
      * return \p nullptr.
      *
-     * **NOTE** The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     * of \p this and \p delete must never be called on the pointer.
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
      *
-     * **NOTE** The ability to extract a mutable pointer is provided only in order to allow to call non-const
-     * methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this`` and ``delete`` must never be called on the pointer.
+     *
+     * \endverbatim
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     *    methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.
+     *
+     * \endverbatim
      *
      * @return a pointer to the internal UDA, or \p nullptr
      * if \p T does not correspond exactly to the original UDA type used

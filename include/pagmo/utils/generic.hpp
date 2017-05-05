@@ -42,11 +42,11 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
-#include "../detail/custom_comparisons.hpp"
-#include "../exceptions.hpp"
-#include "../problem.hpp"
-#include "../rng.hpp"
-#include "../types.hpp"
+#include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {
@@ -58,8 +58,13 @@ namespace pagmo
  * \f$ x \f$ will be such that \f$lb \le x < ub\f$. If \f$lb == ub\f$ then \f$lb\f$ is
  * returned.
  *
- * **NOTE**: This has to be preferred to std::uniform_real<double>(r_engine) as it
- * performs checks that avoid undefined behaviour in pagmo.
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    This helper function has to be preferred to ``std::uniform_real<double>(r_engine)`` as it
+ *    also performs additional checks avoiding undefined behaviour in pagmo.
+ *
+ * \endverbatim
  *
  * Example:
  *
