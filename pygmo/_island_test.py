@@ -73,6 +73,7 @@ class island_test_case(_ut.TestCase):
         self.run_get_busy_wait_tests()
         self.run_thread_safety_tests()
         self.run_io_tests()
+        self.run_status_tests()
 
     def run_basic_tests(self):
         from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock
@@ -121,25 +122,34 @@ class island_test_case(_ut.TestCase):
         from copy import deepcopy
         isl = island(algo=de(), prob=rosenbrock(), size=25)
         isl.evolve(0)
-        isl.get()
+        isl.wait_check()
         isl.evolve()
         isl.evolve()
-        isl.get()
+        isl.wait_check()
         isl.evolve(20)
-        isl.get()
+        isl.wait_check()
         for i in range(10):
             isl.evolve(20)
         isl2 = deepcopy(isl)
-        isl2.get()
-        isl.get()
+        isl2.wait_check()
+        isl.wait_check()
 
-    def run_get_busy_wait_tests(self):
-        from .core import island, de, rosenbrock
-        isl = island(algo=de(), prob=rosenbrock(), size=25)
-        self.assertFalse(isl.busy())
+    def run_status_tests(self):
+        from . import island, de, rosenbrock, evolve_status
         isl = island(algo=de(), prob=rosenbrock(), size=3)
         isl.evolve(20)
-        self.assertRaises(BaseException, lambda: isl.get())
+        isl.wait()
+        self.assertTrue(isl.status == evolve_status.idle_error)
+        self.assertRaises(BaseException, lambda: isl.wait_check())
+        self.assertTrue(isl.status == evolve_status.idle)
+
+    def run_get_busy_wait_tests(self):
+        from . import island, de, rosenbrock, evolve_status
+        isl = island(algo=de(), prob=rosenbrock(), size=25)
+        self.assertTrue(isl.status == evolve_status.idle)
+        isl = island(algo=de(), prob=rosenbrock(), size=3)
+        isl.evolve(20)
+        self.assertRaises(BaseException, lambda: isl.wait_check())
         isl.evolve(20)
         isl.wait()
 
@@ -170,7 +180,7 @@ class island_test_case(_ut.TestCase):
         isl = island(algo=algo(), prob=prob(), size=25)
         self.assertEqual(isl.get_thread_safety(), (ts.none, ts.none))
         isl.evolve(20)
-        self.assertRaises(BaseException, lambda: isl.get())
+        self.assertRaises(BaseException, lambda: isl.wait_check())
 
     def run_io_tests(self):
         from .core import island, de, rosenbrock
@@ -223,7 +233,7 @@ class mp_island_test_case(_ut.TestCase):
         isl.evolve(20)
         isl.evolve(20)
         mp_island.resize_pool(4)
-        isl.get()
+        isl.wait_check()
         isl.evolve(20)
         isl.evolve(20)
         isl.wait()
@@ -233,7 +243,7 @@ class mp_island_test_case(_ut.TestCase):
         # Check the picklability of a problem storing a lambda.
         isl = island(algo=de(), prob=_prob(lambda x, y: x + y), size=25)
         isl.evolve()
-        isl.get()
+        isl.wait_check()
 
         # Copy/deepcopy.
         isl2 = copy(isl)
@@ -276,7 +286,7 @@ class ipyparallel_island_test_case(_ut.TestCase):
         self.assertEqual(isl.get_name(), "Ipyparallel island")
         self.assertTrue(isl.get_extra_info() != "")
         isl.evolve(20)
-        isl.get()
+        isl.wait_check()
         isl.evolve(20)
         isl.evolve(20)
         isl.wait()
@@ -284,7 +294,7 @@ class ipyparallel_island_test_case(_ut.TestCase):
         # Check the picklability of a problem storing a lambda.
         isl = island(algo=de(), prob=_prob(lambda x, y: x + y), size=25)
         isl.evolve()
-        isl.get()
+        isl.wait_check()
 
         # Copy/deepcopy.
         isl2 = copy(isl)

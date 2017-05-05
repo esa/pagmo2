@@ -50,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/archipelago.hpp>
+#include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
@@ -73,7 +74,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archipelago archi3(5u, de{}, rosenbrock{}, 10u);
     BOOST_CHECK(archi3.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi3[i].busy());
+        BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
@@ -82,7 +83,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     BOOST_CHECK(archi3.size() == 5u);
     std::vector<unsigned> seeds;
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi3[i].busy());
+        BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
@@ -94,7 +95,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archi3 = archipelago{5u, thread_island{}, de{}, population{rosenbrock{}, 10u}};
     BOOST_CHECK(archi3.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi3[i].busy());
+        BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
@@ -102,7 +103,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archi3 = archipelago{5u, thread_island{}, de{}, population{rosenbrock{}, 10u, 123u}};
     BOOST_CHECK(archi3.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi3[i].busy());
+        BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
@@ -150,7 +151,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     auto archi4 = archi3;
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -159,17 +160,18 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     auto archi5 = archi4;
     BOOST_CHECK(archi5.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi5[i].busy());
+        BOOST_CHECK(archi5[i].status() != evolve_status::busy);
         BOOST_CHECK(archi5[i].get_algorithm().is<de>());
         BOOST_CHECK(archi5[i].get_population().size() == 10u);
         BOOST_CHECK(archi5[i].get_population().get_problem().is<rosenbrock>());
     }
-    archi4.get();
+    archi4.wait_check();
+    BOOST_CHECK(archi4.status() == evolve_status::idle);
     archi4.evolve(10);
     auto archi6(std::move(archi4));
     BOOST_CHECK(archi6.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi6[i].busy());
+        BOOST_CHECK(archi6[i].status() != evolve_status::busy);
         BOOST_CHECK(archi6[i].get_algorithm().is<de>());
         BOOST_CHECK(archi6[i].get_population().size() == 10u);
         BOOST_CHECK(archi6[i].get_population().get_problem().is<rosenbrock>());
@@ -178,7 +180,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archi4 = archi5;
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -186,7 +188,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archi4 = std::move(archi5);
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -197,7 +199,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     BOOST_CHECK((std::is_same<archipelago &, decltype(archi4 = archi4)>::value));
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -207,7 +209,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     BOOST_CHECK((std::is_same<archipelago &, decltype(archi4 = std::move(archi4))>::value));
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
-        BOOST_CHECK(!archi4[i].busy());
+        BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
         BOOST_CHECK(archi4[i].get_population().size() == 10u);
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
@@ -251,10 +253,10 @@ BOOST_AUTO_TEST_CASE(archipelago_evolve)
         // Copy while evolving.
         auto archi2(archi);
         archi3 = archi;
-        archi.get();
-        BOOST_CHECK(!archi.busy());
-        BOOST_CHECK(!archi3.busy());
-        BOOST_CHECK(!archi2.busy());
+        archi.wait_check();
+        BOOST_CHECK(archi.status() == evolve_status::idle);
+        BOOST_CHECK(archi3.status() != evolve_status::busy);
+        BOOST_CHECK(archi2.status() != evolve_status::busy);
         BOOST_CHECK(archi2.size() == 10u);
         BOOST_CHECK(archi3.size() == 10u);
         BOOST_CHECK(archi2[2].get_algorithm().is<de>());
@@ -271,7 +273,8 @@ BOOST_AUTO_TEST_CASE(archipelago_evolve)
         // Move while evolving.
         auto archi2(std::move(archi));
         archi3 = std::move(archi_b);
-        archi.get();
+        archi.wait_check();
+        BOOST_CHECK(archi.status() == evolve_status::idle);
         BOOST_CHECK(archi2.size() == 10u);
         BOOST_CHECK(archi3.size() == 10u);
         BOOST_CHECK(archi2[2].get_algorithm().is<de>());
@@ -302,20 +305,22 @@ BOOST_AUTO_TEST_CASE(archipelago_get_wait_busy)
 {
     flag.store(true);
     archipelago a{10, de{}, population{prob_01{}, 25}};
-    BOOST_CHECK(!a.busy());
+    BOOST_CHECK(a.status() != evolve_status::busy);
     flag.store(false);
     a.evolve();
-    BOOST_CHECK(a.busy());
+    BOOST_CHECK(a.status() == evolve_status::busy);
     flag.store(true);
     a.wait();
+    BOOST_CHECK(a.status() == evolve_status::idle);
     flag.store(false);
     a = archipelago{10, de{}, population{rosenbrock{}, 3}};
     a.evolve(10);
     a.evolve(10);
     a.evolve(10);
     a.evolve(10);
-    BOOST_CHECK_THROW(a.get(), std::invalid_argument);
-    a.get();
+    BOOST_CHECK_THROW(a.wait_check(), std::invalid_argument);
+    BOOST_CHECK(a.status() == evolve_status::idle);
+    a.wait_check();
     a.wait();
 }
 
@@ -331,7 +336,8 @@ BOOST_AUTO_TEST_CASE(archipelago_serialization)
 {
     archipelago a{10, de{}, population{rosenbrock{}, 25}};
     a.evolve();
-    a.get();
+    a.wait_check();
+    BOOST_CHECK(a.status() == evolve_status::idle);
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(a);
     // Now serialize, deserialize and compare the result.
@@ -400,4 +406,48 @@ BOOST_AUTO_TEST_CASE(archipelago_champion_tests)
     archi.push_back(de{}, zdt{}, 20u);
     BOOST_CHECK_THROW(archi.get_champions_f(), std::invalid_argument);
     BOOST_CHECK_THROW(archi.get_champions_x(), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(archipelago_status)
+{
+    flag.store(true);
+    archipelago a{10, de{}, population{prob_01{}, 25}};
+    BOOST_CHECK(a.status() != evolve_status::busy);
+    flag.store(false);
+    a.evolve();
+    BOOST_CHECK(a.status() == evolve_status::busy);
+    flag.store(true);
+    a.wait();
+    BOOST_CHECK(a.status() == evolve_status::idle);
+    flag.store(false);
+    a = archipelago{10, de{}, population{rosenbrock{}, 3}};
+    a.evolve(10);
+    a.evolve(10);
+    a.evolve(10);
+    a.evolve(10);
+    a.wait();
+    BOOST_CHECK(a.status() == evolve_status::idle_error);
+    // A few idle with errors, one busy.
+    a = archipelago{10, de{}, population{rosenbrock{}, 3}};
+    a.evolve();
+    a.wait();
+    flag.store(true);
+    a.push_back(de{}, population{prob_01{}, 25});
+    flag.store(false);
+    a.evolve();
+    BOOST_CHECK(a.status() == evolve_status::busy_error);
+    flag.store(true);
+    a.wait();
+    // No busy errors, but only idle errors.
+    a = archipelago{10, de{}, population{rosenbrock{}, 3}};
+    a.evolve();
+    a.wait();
+    flag.store(true);
+    a.push_back(de{}, population{prob_01{}, 25});
+    flag.store(false);
+    a[10].evolve();
+    BOOST_CHECK(a.status() == evolve_status::busy_error);
+    flag.store(true);
+    BOOST_CHECK_THROW(a.wait_check(), std::invalid_argument);
+    BOOST_CHECK(a.status() == evolve_status::idle);
 }
