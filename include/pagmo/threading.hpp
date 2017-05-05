@@ -29,6 +29,8 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_THREADING_HPP
 #define PAGMO_THREADING_HPP
 
+#include <iostream>
+
 namespace pagmo
 {
 
@@ -41,6 +43,24 @@ enum class thread_safety {
     none, ///< No thread safety: any concurrent operation on distinct instances is unsafe
     basic ///< Basic thread safety: any concurrent operation on distinct instances is safe
 };
+
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// Stream operator for the thread_safety enum.
+inline std::ostream &operator<<(std::ostream &os, thread_safety ts)
+{
+    switch (ts) {
+        case thread_safety::none:
+            os << "none";
+            break;
+        case thread_safety::basic:
+            os << "basic";
+            break;
+    }
+    return os;
+}
+
+#endif
 }
 
 #endif

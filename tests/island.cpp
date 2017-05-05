@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -185,11 +186,11 @@ BOOST_AUTO_TEST_CASE(island_evolve)
 {
     island isl{de{}, population{rosenbrock{}, 25}};
     isl.evolve(0);
-    isl.get();
+    isl.wait_check();
     isl.evolve();
-    isl.get();
+    isl.wait_check();
     isl.evolve(20);
-    isl.get();
+    isl.wait_check();
     // Copy/move operations with a few tasks queued.
     auto enqueue_n = [](island &is, int n) {
         for (auto i = 0; i < n; ++i) {
@@ -204,7 +205,7 @@ BOOST_AUTO_TEST_CASE(island_evolve)
     isl2 = isl;
     isl3 = std::move(isl);
     isl2.wait();
-    isl3.get();
+    isl3.wait_check();
 }
 
 static std::atomic_bool flag = ATOMIC_VAR_INIT(false);
@@ -226,10 +227,10 @@ BOOST_AUTO_TEST_CASE(island_get_wait_busy)
 {
     flag.store(true);
     island isl{de{}, population{prob_01{}, 25}};
-    BOOST_CHECK(!isl.busy());
+    BOOST_CHECK(isl.status() != evolve_status::busy);
     flag.store(false);
     isl.evolve();
-    BOOST_CHECK(isl.busy());
+    BOOST_CHECK(isl.status() == evolve_status::busy);
     flag.store(true);
     isl.wait();
     flag.store(false);
@@ -238,8 +239,13 @@ BOOST_AUTO_TEST_CASE(island_get_wait_busy)
     isl.evolve(10);
     isl.evolve(10);
     isl.evolve(10);
-    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
-    isl.get();
+    isl.wait();
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
+    isl.evolve(10);
+    isl.evolve(10);
+    isl.evolve(10);
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
+    isl.wait_check();
     isl.wait();
 }
 
@@ -276,25 +282,27 @@ BOOST_AUTO_TEST_CASE(island_tread_safety)
     BOOST_CHECK(ts[0] == thread_safety::basic);
     BOOST_CHECK(ts[1] == thread_safety::basic);
     isl.evolve();
-    isl.get();
+    isl.wait_check();
     isl = island{de{}, population{prob_02{}, 25}};
     ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::basic);
     BOOST_CHECK(ts[1] == thread_safety::none);
     isl.evolve();
-    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+    isl.wait();
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
     isl = island{algo_01{}, population{rosenbrock{}, 25}};
     ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::none);
     BOOST_CHECK(ts[1] == thread_safety::basic);
     isl.evolve();
-    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+    isl.wait();
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
     isl = island{algo_01{}, population{prob_02{}, 25}};
     ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::none);
     BOOST_CHECK(ts[1] == thread_safety::none);
     isl.evolve();
-    BOOST_CHECK_THROW(isl.get(), std::invalid_argument);
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(island_name_info_stream)
@@ -317,7 +325,7 @@ BOOST_AUTO_TEST_CASE(island_serialization)
 {
     island isl{de{}, population{rosenbrock{}, 25}};
     isl.evolve();
-    isl.get();
+    isl.wait_check();
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(isl);
     // Now serialize, deserialize and compare the result.
@@ -332,4 +340,64 @@ BOOST_AUTO_TEST_CASE(island_serialization)
     }
     auto after = boost::lexical_cast<std::string>(isl);
     BOOST_CHECK_EQUAL(before, after);
+}
+
+BOOST_AUTO_TEST_CASE(island_status)
+{
+    island isl{de{}, population{rosenbrock{}, 3}};
+    isl.evolve();
+    isl.wait();
+    auto s = isl.status();
+    BOOST_CHECK(s == evolve_status::idle_error);
+    isl = island{de{}, population{rosenbrock{}, 3}};
+    isl.evolve();
+    isl.wait();
+    flag.store(true);
+    isl.set_population(population{prob_01{}, 30});
+    flag.store(false);
+    isl.evolve();
+    s = isl.status();
+    BOOST_CHECK(s == evolve_status::busy_error);
+    flag.store(true);
+    isl.wait();
+    isl = island{de{}, population{prob_01{}, 30}};
+    flag.store(false);
+    isl.evolve();
+    s = isl.status();
+    BOOST_CHECK(s == evolve_status::busy);
+    flag.store(true);
+    isl.wait();
+    s = isl.status();
+    BOOST_CHECK(s == evolve_status::idle);
+    isl = island{de{}, population{rosenbrock{}, 3}};
+    isl.evolve();
+    isl.wait();
+    s = isl.status();
+    BOOST_CHECK(s == evolve_status::idle_error);
+    // Two consecutive errors, one good.
+    isl = island{de{}, population{rosenbrock{}, 3}};
+    isl.evolve();
+    isl.evolve();
+    isl.wait();
+    isl.set_population(population{rosenbrock{}, 30});
+    isl.evolve();
+    isl.wait();
+    BOOST_CHECK(isl.status() == evolve_status::idle_error);
+    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(island_evolve_status)
+{
+    std::ostringstream ss;
+    stream(ss, evolve_status::idle);
+    BOOST_CHECK_EQUAL(ss.str(), "idle");
+    ss.str("");
+    stream(ss, evolve_status::busy);
+    BOOST_CHECK_EQUAL(ss.str(), "busy");
+    ss.str("");
+    stream(ss, evolve_status::busy_error);
+    BOOST_CHECK_EQUAL(ss.str(), "busy - **error occurred**");
+    ss.str("");
+    stream(ss, evolve_status::idle_error);
+    BOOST_CHECK_EQUAL(ss.str(), "idle - **error occurred**");
 }
