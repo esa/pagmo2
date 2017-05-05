@@ -39,7 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <tuple>
 
-#include "../serialization.hpp"
 #include <pagmo/algorithm.hpp>
 #include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>

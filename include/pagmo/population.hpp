@@ -44,7 +44,6 @@ see https://www.gnu.org/licenses/. */
 #include "utils/generic.hpp"
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/serialization.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
