@@ -12,6 +12,7 @@ Basics
   using_problem
   using_algorithm
   using_population
+  using_archipelago
   evolving_a_population
 
 Coding your own problem (UDP)
