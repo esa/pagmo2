@@ -52,6 +52,12 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
+   docs/algorithm_list
+   docs/problem_list
+
+.. toctree::
+   :maxdepth: 1
+
    docs/cpp/cpp_docs
    docs/python/python_docs
    docs/python/tutorials/python_tut
