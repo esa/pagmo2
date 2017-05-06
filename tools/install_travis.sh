@@ -78,14 +78,20 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     make doctest;
     if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
         # Stop here if this is the Python27 build. Docs are uploaded only in the Python36 build.
+        set +e
+        set +x
         exit 0;
     fi
     if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
         echo "Testing a pull request, the generated documentation will not be uploaded.";
+        set +e
+        set +x
         exit 0;
     fi
     if [[ "${TRAVIS_BRANCH}" != "master" ]]; then
         echo "Branch is not master, the generated documentation will not be uploaded.";
+        set +e
+        set +x
         exit 0;
     fi
     # Move out the resulting documentation.
