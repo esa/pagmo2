@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -172,7 +186,11 @@
 <dt id="_CPPv2N5pagmo9translate9translateERR1TRK13vector_double">
 <span id="pagmo::translate::translate__TRR.vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1translate_1ad70bb341ef4fcaed71d03a07b255f31d"></span><code class="descname">translate</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>translation</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9translate9translateERR1TRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from problem and translation vector. </p>
-<p><strong>NOTE</strong> This constructor is enabled only if <code class="docutils literal"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This constructor is enabled only if <code class="docutils literal"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a>.</p>
+</div>
+</p>
 <p>Wraps a user-defined problem so that its fitness , bounds, etc. will be shifted by a translation vector.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
@@ -487,7 +505,13 @@
 <span id="pagmo::translate::get_inner_problem"></span><span class="target" id="pagmoclasspagmo_1_1translate_1a657ff198f52b572655683f65264879fc"></span><a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">get_inner_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9translate17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
-<p><strong>NOTE</strong> The ability to extract a non const reference is provided only in order to allow to call non-const methods on the internal <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> instance. Assigning a new <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> via this reference is undefined behaviour.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ability to extract a non const reference is provided only in order to allow to call
+non-const methods on the internal <a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a> instance. Assigning a new
+<a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a> via this reference is undefined behaviour.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a reference to the inner <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </dd>

@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -164,8 +178,26 @@
 \[\begin{split} V_i = \left\{\begin{array}{ll} random &amp; r_i &lt; \tau \\ V_i &amp; \mbox{otherwise} \end{array}\right. \end{split}\]</div>
 </p>
 <p>where <span class="math">\(\tau\)</span> is set to be 0.1, <span class="math">\(random\)</span> selects a random mutation variant and <span class="math">\(r_i\)</span> is a random uniformly distributed number in [0, 1]</p>
-<p><strong>NOTE</strong> The feasibility correction, that is the correction applied to an allele when some mutation puts it outside the allowed box-bounds, is here done by creating a random number in the bounds.</p>
-<p>See: <a class="reference internal" href="de.html#pagmoclasspagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>, <a class="reference internal" href="sade.html#pagmoclasspagmo_1_1sade"><span class="std std-ref">pagmo::sade</span></a> For other available algorithms based on Differential Evolution </p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+the allowed box-bounds, is here done by creating a random number in the bounds.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The search range is defined relative to the box-bounds. Hence, unbounded problems
+will produce an error.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
+called from two identical populations.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="de.html#_CPPv2N5pagmo2deE" title="pagmo::de"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::de</span></code></a>, <a class="reference internal" href="sade.html#_CPPv2N5pagmo4sadeE" title="pagmo::sade"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sade</span></code></a> For other available algorithms based on Differential Evolution</p>
+</div>
+ </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">

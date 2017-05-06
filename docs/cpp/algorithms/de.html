@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -160,8 +174,17 @@
  Differential Evolution is an heuristic optimizer developed by Rainer Storn and Kenneth Price.<img alt="../../../_images/de.png" src="../../../_images/de.png" /></p>
 <p>&#8216;&#8217;A breakthrough happened, when Ken came up with the idea of using vector differences for perturbing the vector population. Since this seminal idea a lively discussion between Ken and Rainer and endless ruminations and computer simulations on both parts yielded many substantial improvements which make DE the versatile and robust tool it is today&#8217;&#8217; (from the official web pages....)</p>
 <p>The implementation provided for PaGMO is based on the code provided in the official DE web site. <a class="reference internal" href="#pagmoclasspagmo_1_1de"><span class="std std-ref">pagmo::de</span></a> is suitable for box-constrained single-objective continuous optimization.</p>
-<p><strong>NOTE</strong> The feasibility correction, that is the correction applied to an allele when some mutation puts it outside the allowed box-bounds, is here done by creating a random number in the bounds.</p>
-<p>See: <a class="reference external" href="http://www.icsi.berkeley.edu/~storn/code.html">http://www.icsi.berkeley.edu/~storn/code.html</a> for the official DE web site See: <a class="reference external" href="http://www.springerlink.com/content/x555692233083677/">http://www.springerlink.com/content/x555692233083677/</a> for the paper that introduces Differential Evolution </p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+the allowed box-bounds, is here done by creating a random number in the bounds.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>The official DE web site: <a class="reference external" href="http://www.icsi.berkeley.edu/~storn/code.html">http://www.icsi.berkeley.edu/~storn/code.html</a></p>
+<p class="last">The paper that introduces Differential Evolution <a class="reference external" href="http://www.springerlink.com/content/x555692233083677/">http://www.springerlink.com/content/x555692233083677/</a></p>
+</div>
+ </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">

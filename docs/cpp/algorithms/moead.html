@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -157,10 +171,24 @@
 <span id="pagmo::moead"></span><span class="target" id="pagmoclasspagmo_1_1moead"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">moead</code><a class="headerlink" href="#_CPPv2N5pagmo5moeadE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Multi Objective Evolutionary Algorithms by Decomposition (the DE variant) </p>
 <p><img alt="../../../_images/moead.png" src="../../../_images/moead.png" /></p>
-<p>MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of problem decomposition, it leverages on evolutionary operators to combine good solutions of neighbouring problems thus allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particual algorithm implemented in pagmo with the name <a class="reference internal" href="#pagmoclasspagmo_1_1moead"><span class="std std-ref">pagmo::moead</span></a> uses the rand/2/exp Differential Evolution operator followed by a polynomial mutation to create offsprings, and the tchebycheff, wieghted or boundary intersection decomposition method decomposition method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is also implemented.</p>
-<p><strong>NOTE</strong> The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This allows to have MOEA/D-DE work on populations having arbitrary size, while preserving a nice coverage of the final non-dominated front.</p>
-<p>See: Zhang, Qingfu, and Hui Li. &#8220;MOEA/D: A multiobjective evolutionary algorithm based on decomposition.&#8221; Evolutionary Computation, IEEE Transactions on 11.6 (2007): 712-731. See: Li, Hui, and Qingfu Zhang. &#8220;Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
-NSGA-II.&#8221; Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302. </p>
+<p>MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of problem decomposition, it leverages on evolutionary operators to combine good solutions of neighbouring problems thus allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particual algorithm implemented in pagmo with the name <a class="reference internal" href="#pagmoclasspagmo_1_1moead"><span class="std std-ref">pagmo::moead</span></a> uses the rand/2/exp Differential Evolution operator followed by a polynomial mutation to create offsprings, and the Tchebycheff, wieghted or boundary intersection decomposition method decomposition method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is also implemented.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This
+allows to have MOEA/D-DE work on populations having arbitrary size, while preserving a nice coverage of the final
+non-dominated front.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Zhang, Qingfu, and Hui Li. &#8220;MOEA/D: A multiobjective evolutionary algorithm based on decomposition.&#8221;
+Evolutionary Computation, IEEE Transactions on 11.6 (2007): 712-731.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Li, Hui, and Qingfu Zhang. &#8220;Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
+NSGA-II.&#8221; Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.</p>
+</div>
+ </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">

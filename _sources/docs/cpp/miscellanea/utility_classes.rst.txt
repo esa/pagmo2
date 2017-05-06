@@ -3,6 +3,6 @@
 Utility classes
 ===============
 
-.. doxygenclass:: pagmo::base_local_solver
+.. doxygenclass:: pagmo::not_population_based
    :members:
    :protected-members:

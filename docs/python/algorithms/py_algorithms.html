@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
@@ -1400,6 +1414,108 @@ change in the search range.</p>
 <p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/compass_search.html#_CPPv2NK5pagmo14compass_search7get_logEv" title="pagmo::compass_search::get_log"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::compass_search::get_log()</span></code></a>.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="pygmo.compass_search.replacement">
+<code class="descname">replacement</code><a class="headerlink" href="#pygmo.compass_search.replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual replacement policy.</p>
+<p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
+that will be replaced by the optimised individual. The attribute can be either a string or an integral.</p>
+<p>If the attribute is a string, it must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+<p><a class="reference internal" href="#pygmo.compass_search.set_random_sr_seed" title="pygmo.compass_search.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>If the attribute is an integer, it represents the index (in the population) of the individual that will be
+replaced by the optimised individual.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the individual replacement policy or index</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">str</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.compass_search.selection">
+<code class="descname">selection</code><a class="headerlink" href="#pygmo.compass_search.selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual selection policy.</p>
+<p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
+that will be optimised. The attribute can be either a string or an integral.</p>
+<p>If the attribute is a string, it must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+<p><a class="reference internal" href="#pygmo.compass_search.set_random_sr_seed" title="pygmo.compass_search.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>If the attribute is an integer, it represents the index (in the population) of the individual that is selected
+for optimisation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the individual selection policy or index</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">str</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.compass_search.set_random_sr_seed">
+<code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.compass_search.set_random_sr_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
+election/replacement policies (see <a class="reference internal" href="#pygmo.compass_search.selection" title="pygmo.compass_search.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
+<a class="reference internal" href="#pygmo.compass_search.replacement" title="pygmo.compass_search.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <hr class="docutils" />
@@ -1504,6 +1620,108 @@ each verbosity fitness evaluations.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the random seed of the population</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.simulated_annealing.replacement">
+<code class="descname">replacement</code><a class="headerlink" href="#pygmo.simulated_annealing.replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual replacement policy.</p>
+<p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
+that will be replaced by the optimised individual. The attribute can be either a string or an integral.</p>
+<p>If the attribute is a string, it must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+<p><a class="reference internal" href="#pygmo.simulated_annealing.set_random_sr_seed" title="pygmo.simulated_annealing.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>If the attribute is an integer, it represents the index (in the population) of the individual that will be
+replaced by the optimised individual.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the individual replacement policy or index</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">str</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.simulated_annealing.selection">
+<code class="descname">selection</code><a class="headerlink" href="#pygmo.simulated_annealing.selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual selection policy.</p>
+<p>This attribute represents the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method to select the individual
+that will be optimised. The attribute can be either a string or an integral.</p>
+<p>If the attribute is a string, it must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+</ul>
+<p><a class="reference internal" href="#pygmo.simulated_annealing.set_random_sr_seed" title="pygmo.simulated_annealing.set_random_sr_seed"><code class="xref py py-func docutils literal"><span class="pre">set_random_sr_seed()</span></code></a> can be used to seed the random number generator
+used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>If the attribute is an integer, it represents the index (in the population) of the individual that is selected
+for optimisation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the individual selection policy or index</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">str</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.simulated_annealing.set_random_sr_seed">
+<code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.simulated_annealing.set_random_sr_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
+election/replacement policies (see <a class="reference internal" href="#pygmo.simulated_annealing.selection" title="pygmo.simulated_annealing.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
+<a class="reference internal" href="#pygmo.simulated_annealing.replacement" title="pygmo.simulated_annealing.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>

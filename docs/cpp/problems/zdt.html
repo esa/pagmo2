@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -158,9 +172,17 @@
 <dd><p>ZDT problem test suite. </p>
 <p>This widespread test suite was conceived for two-objective problems and takes its name from its authors Zitzler, Deb and Thiele.</p>
 <p>In their paper the authors propose a set of 6 different scalable problems all originating from a well thought combination of functions allowing, by construction, to measure the distance of any point to the Pareto front while creating interesting problems. They also suggest some dimensions for instantiating the problems, namely <span class="math">\(m = [30, 30, 30, 10, 11, 10]\)</span>.</p>
-<p><strong>NOTE</strong> The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored via std::floor().</p>
-<p>See: Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. &#8220;Comparison of multiobjective evolutionary algorithms:
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
+via <code class="docutils literal"><span class="pre">std::floor()</span></code>.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. &#8220;Comparison of multiobjective evolutionary algorithms:
 Empirical results.&#8221; Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848</p>
+</div>
+</p>
 <p>ZDT1:</p>
 <p>This is a box-constrained continuous <span class="math">\(n\)</span>-dimensional ( <span class="math">\(n\)</span>&gt;1) multi-objecive problem. <div class="math">
 \[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\ F_1 \left(x\right) = x_1 \\ F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>

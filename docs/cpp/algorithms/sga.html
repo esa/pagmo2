@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -174,8 +188,33 @@
 <p><em>Crossover</em>: four different crossover schemes are provided: &#8220;single&#8221;, &#8220;exponential&#8221;, &#8220;binomial&#8221;, &#8220;sbx&#8221;. The single point crossover, called &#8220;single&#8221;, works selecting a random point in the parent chromosome and inserting the partner chromosome thereafter. The exponential crossover is taken from the algorithm differential evolution, implemented, in pagmo, as <a class="reference internal" href="de.html#pagmoclasspagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>. It essentially selects a random point in the parent chromosome and inserts, in each successive gene, the partner values with probability <code class="docutils literal"><span class="pre">cr</span></code> up to when it stops. The binomial crossover inserts each gene from the partner with probability <code class="docutils literal"><span class="pre">cr</span></code>. The simulated binary crossover (called &#8220;sbx&#8221;), is taken from the NSGA-II algorithm, implemented in pagmo as <a class="reference internal" href="nsga2.html#pagmoclasspagmo_1_1nsga2"><span class="std std-ref">pagmo::nsga2</span></a>, and makes use of an additional parameter called distribution index <code class="docutils literal"><span class="pre">eta_c</span></code>.</p>
 <p><em>Mutation</em>: three different mutations schemes are provided: &#8220;uniform&#8221;, &#8220;gaussian&#8221; and &#8220;polynomial&#8221;. Uniform mutation simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution with standard deviation proportional to the <code class="docutils literal"><span class="pre">m_param_m</span></code> and the bounds width. The last scheme is the polynomial mutation.</p>
 <p><em>Reinsertion</em>: the only reinsertion strategy provided is what we call pure elitism. After each generation all parents and children are put in the same pool and only the best are passed to the next generation.</p>
-<p><strong>NOTE</strong> This algorithm will work only for box bounded problems.</p>
-<p><strong>NOTE</strong> Specifying the parameter <code class="docutils literal"><span class="pre">int_dim</span></code> a part of the decision vector (at the end) will be treated as integers This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds. The various mutation and crossover strategies will do different things on an integer gene or a real valued one. </p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The algorithm is not suitable for multi-objective problems, nor for
+constrained optimization.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Most genetic operators use the lower and upper bound information. Hence, unbounded problems will produce undefined
+behaviours.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Specifying the parameter <code class="docutils literal"><span class="pre">int_dim</span></code> a part of the decision vector (at the end) will be treated as integers
+This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
+The various mutation and crossover strategies will do different things on an integer gene or a real valued one.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Oliveto, Pietro S., Jun He, and Xin Yao. &#8220;Time complexity of evolutionary algorithms for
+combinatorial optimization: A decade of results.&#8221; International Journal of Automation and Computing
+4.3 (2007): 281-293.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://www.scholarpedia.org/article/Evolution_strategies">http://www.scholarpedia.org/article/Evolution_strategies</a></p>
+</div>
+ </p>
 <p>Inherits from pagmo::detail::sga_statics&lt;&gt;</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>

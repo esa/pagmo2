@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="cpp_docs.html#core-classes">Core classes</a></li>
@@ -175,7 +189,12 @@
 </div>
 </p>
 <p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDA are used by <a class="reference internal" href="#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
-<p><strong>NOTE</strong>: a moved-from <a class="reference internal" href="#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> is destructible and assignable. Any other operation will result in undefined behaviour. </p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
+in undefined behaviour.</p>
+</div>
+ </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
@@ -199,7 +218,13 @@
 <dt id="_CPPv2N5pagmo9algorithm9algorithmERR1T">
 <span id="pagmo::algorithm::algorithm__TRR"></span><span class="target" id="pagmoclasspagmo_1_1algorithm_1a9c5c7fbd2ed43b09c7fea65222c2cd7a"></span><code class="descname">algorithm</code><span class="sig-paren">(</span>T &amp;&amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm9algorithmERR1T" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from a user-defined algorithm of type <code class="docutils literal"><span class="pre">T</span></code>. </p>
-<p><strong>NOTE</strong> this constructor is not enabled if, after the removal of cv and reference qualifiers, <code class="docutils literal"><span class="pre">T</span></code> is of type <a class="reference internal" href="#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> (that is, this constructor does not compete with the copy/move constructors of <a class="reference internal" href="#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>), or if <code class="docutils literal"><span class="pre">T</span></code> does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1is__uda"><span class="std std-ref">pagmo::is_uda</span></a>.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This constructor is not enabled if, after the removal of cv and reference qualifiers,
+<code class="docutils literal"><span class="pre">T</span></code> is of type <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a> (that is, this constructor does not compete with the copy/move
+constructors of <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a>), or if  <code class="docutils literal"><span class="pre">T</span></code> does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo6is_udaE" title="pagmo::is_uda"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::is_uda</span></code></a>.</p>
+</div>
+</p>
 <p>This constructor will construct a <a class="reference internal" href="#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> from the UDA (user-defined algorithm) <code class="docutils literal"><span class="pre">x</span></code> of type <code class="docutils literal"><span class="pre">T</span></code>. In order for the construction to be successful, the UDA must implement a minimal set of methods, as described in the documentation of <a class="reference internal" href="#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. The constructor will examine the properties of <code class="docutils literal"><span class="pre">x</span></code> and store them as data members of <code class="docutils literal"><span class="pre">this</span></code>.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
@@ -299,7 +324,12 @@
 <span id="pagmo::algorithm::extractC"></span><span class="target" id="pagmoclasspagmo_1_1algorithm_1a5b33d2ff1cc408ca9f90584a2e78dd36"></span><em class="property">const</em> T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm7extractEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a const pointer to the UDA. </p>
 <p>This method will extract a const pointer to the internal instance of the UDA. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
-<p><strong>NOTE</strong> The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of <code class="docutils literal"><span class="pre">this</span></code> and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of
+<code class="docutils literal"><span class="pre">this</span></code> and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a const pointer to the internal UDA, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDA type used in the constructor. </dd>
@@ -314,8 +344,18 @@
 <span id="pagmo::algorithm::extract"></span><span class="target" id="pagmoclasspagmo_1_1algorithm_1abfa120ed91dbe6a8997957b92b958bed"></span>T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm7extractEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a pointer to the UDA. </p>
 <p>This method will extract a pointer to the internal instance of the UDA. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
-<p><strong>NOTE</strong> The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of <code class="docutils literal"><span class="pre">this</span></code> and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
-<p><strong>NOTE</strong> The ability to extract a mutable pointer is provided only in order to allow to call non-const methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal"><span class="pre">this</span></code> and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ability to extract a mutable pointer is provided only in order to allow to call non-const
+methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a pointer to the internal UDA, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDA type used in the constructor. </dd>

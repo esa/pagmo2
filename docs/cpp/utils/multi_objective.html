@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -272,7 +286,8 @@ for multi-objective optimization: NSGA-II.&#8221; Parallel problem solving from 
 </ul>
 </p>
 <p>Complexity is <span class="math">\( O(MN^2)\)</span> where <span class="math">\(M\)</span> is the number of objectives and <span class="math">\(N\)</span> is the number of individuals.</p>
-<p><strong>NOTE</strong> This function will also work for single objective optimization, i.e. with 1 objective in which case, though, it is more efficient to sort using directly on of the following forms: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">sort</span><span class="p">(</span><span class="n">input_f</span><span class="o">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">input_f</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[]</span> <span class="p">(</span><span class="n">auto</span> <span class="n">a</span><span class="p">,</span> <span class="n">auto</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">];});</span>
+<p>This function will also work for single objective optimization, i.e. with 1 objective in which case, though, it is more efficient to sort using directly on of the following forms:</p>
+<p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">sort</span><span class="p">(</span><span class="n">input_f</span><span class="o">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">input_f</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[]</span> <span class="p">(</span><span class="n">auto</span> <span class="n">a</span><span class="p">,</span> <span class="n">auto</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">];});</span>
 </pre></div>
 </div>
  <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span><span class="o">&gt;</span> <span class="n">idx</span><span class="p">(</span><span class="n">input_f</span><span class="o">.</span><span class="n">size</span><span class="p">());</span>
@@ -383,7 +398,12 @@ for multi-objective optimization: NSGA-II.&#8221; Parallel problem solving from 
 <li>&#8220;low discrepancy&#8221; generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of the Pareto front. Halton sequence is used since low dimensionalities are expected in the number of objectives (i.e. less than 20), hence Halton sequence is deemed as appropriate.</li>
 </ul>
 </p>
-<p><strong>NOTE</strong> All genration methods are guaranteed to generate weights on the simplex ( <span class="math">\(\sum_i \lambda_i = 1\)</span>). All weight generation methods are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All genration methods are guaranteed to generate weights on the simplex (<span class="math">\(\sum_i \lambda_i = 1\)</span>). All
+weight generation methods are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.</p>
+</div>
+</p>
 <p>Example: to generate 10 weights distributed somehow regularly to decompose a three dimensional problem: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">detail</span><span class="p">::</span><span class="n">random_engine_type</span> <span class="n">r_engine</span><span class="p">();</span>
 <span class="n">auto</span> <span class="n">lambdas</span> <span class="o">=</span> <span class="n">decomposition_weights</span><span class="p">(</span><span class="mi">3</span><span class="n">u</span><span class="p">,</span> <span class="mi">10</span><span class="n">u</span><span class="p">,</span> <span class="s2">&quot;low discrepancy&quot;</span><span class="p">,</span> <span class="n">r_engine</span><span class="p">);</span>
 </pre></div>

@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -160,9 +174,34 @@
 .<img alt="../../../_images/adaptation.jpg" src="../../../_images/adaptation.jpg" /></p>
 <p>Two different variants of the Differential Evolution algorithm exploiting the idea of self-adaptation.</p>
 <p>The original Differential Evolution algorithm (<a class="reference internal" href="de.html#pagmoclasspagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>) can be significantly improved introducing the idea of parameter self-adaptation. Many different proposals have been made to self-adapt both the CR and the F parameters of the original differential evolution algorithm. In PaGMO we implement two different mechanisms we found effective. The first one, proposed by Brest et al., does not make use of the DE operators to produce new values for F and CR and, strictly speaking, is thus not self-adaptation, rather parameter control. The resulting DE variant is often referred to as jDE. The second variant here implemented is inspired by the ideas introduced by Elsayed et al. and uses a variaton of the selected DE operator to produce new CR anf F parameters for each individual. We refer to this variant as to iDE.</p>
-<p><strong>NOTE</strong> There exist an algorithm referred to as SaDE in the literature. This is not the algorithm implemented in PaGMO.</p>
-<p><strong>NOTE</strong> The feasibility correction, that is the correction applied to an allele when some mutation puts it outside the allowed box-bounds, is here done by creating a random number in the bounds.</p>
-<p>See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V. (2006). Self-adapting control parameters in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE Transactions on, 10(6), 646-657. Chicago See: (iDE) - Elsayed, S. M., Sarker, R. A., &amp; Essam, D. L. (2011, June). Differential evolution with multiple strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011 IEEE Congress on (pp. 1041-1048). IEEE. </p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">A moved-from pagmo::nlopt is destructible and assignable. Any other operation will result
+in undefined behaviour.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The algorithm referred to as SaDE in the literature is not the algorithm implemented in pagmo. We
+use the name sade to indicate, generically, self-adaptation in a differential evolution algorithm</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+the allowed box-bounds, is here done by creating a random number in the bounds.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">(jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V. (2006). Self-adapting control parameters
+in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE
+Transactions on, 10(6), 646-657. Chicago</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">(iDE) - Elsayed, S. M., Sarker, R. A., &amp; Essam, D. L. (2011, June). Differential evolution with multiple
+strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011
+IEEE Congress on (pp. 1041-1048). IEEE.</p>
+</div>
+ </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">

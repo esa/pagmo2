@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -290,7 +304,12 @@ Example: <div class="highlight-default"><div class="highlight"><pre><span></span
 <span id="pagmo::hypervolume::set_copy_points__b"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a967ff107741f68d32e83d5a69230bc0f"></span>void <code class="descname">set_copy_points</code><span class="sig-paren">(</span>bool <em>copy_points</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume15set_copy_pointsEb" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Setter for &#8216;copy_points&#8217; flag. </p>
 <p>It is used in cases where we are certain that we can alter the original set of points from the hypervolume object. This is useful when we don&#8217;t want to make a copy of the points first, as most algorithms alter the original set, but may result in unexpected behaviour when used incorrectly (e.g. requesting the computation twice out of the same object)</p>
-<p><strong>NOTE</strong> When this flag is set to true the object can raliably be used only once to compute the hypervolume</p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When this flag is set to true the object can reliably be used only once to compute
+the hypervolume. Successive usages are undefined behaviour.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -346,7 +365,12 @@ Example: <div class="highlight-default"><div class="highlight"><pre><span></span
 <span id="pagmo::hypervolume::refpoint__doubleC"></span><span class="target" id="pagmoclasspagmo_1_1hypervolume_1a9380aaf15d7663536b1a95102d205247"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">refpoint</code><span class="sig-paren">(</span>double <em>offset</em> = 0.0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11hypervolume8refpointEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Calculate a default reference point. </p>
 <p>Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object. The result is a point that is necessarily dominated by all other points, frequently used for hypervolume computations.</p>
-<p><strong>NOTE</strong> This point is different from the one computed by <a class="reference internal" href="multi_objective.html#pagmonamespacepagmo_1a88a611f76187a58dcdcfb813ef4ffcb9"><span class="std std-ref">pagmo::nadir</span></a> as only the non dominated front is considered in that method (also its complexity is thus higher)</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This point is different from the one computed by <a class="reference internal" href="multi_objective.html#_CPPv2N5pagmo5nadirERKNSt6vectorI13vector_doubleEE" title="pagmo::nadir"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::nadir()</span></code></a> as only the non dominated front
+is considered in that method (also its complexity is thus higher)</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>reference point </dd>

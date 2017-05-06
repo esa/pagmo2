@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#core-classes">Core classes</a></li>
@@ -799,9 +813,12 @@ then this method will return the output of the <code class="docutils literal"><s
 </ul>
 <p>The optional <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
 implement the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method of the UDP, see <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a>.</p>
-<p>Regardless of what this method returns, the <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a> method will always
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Regardless of what this method returns, the <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a> method will always
 return a sparsity pattern: if the UDP does not provide the gradient sparsity, pygmo will assume that the sparsity
 pattern of the gradient is dense. See <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a> for more details.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -856,9 +873,12 @@ then this method will return the output of the <code class="docutils literal"><s
 </ul>
 <p>The optional <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
 implement the <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method of the UDP, see <a class="reference internal" href="#pygmo.problem.hessians_sparsity" title="pygmo.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a>.</p>
-<p>Regardless of what this method returns, the <a class="reference internal" href="#pygmo.problem.hessians_sparsity" title="pygmo.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a> method will always
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Regardless of what this method returns, the <a class="reference internal" href="#pygmo.problem.hessians_sparsity" title="pygmo.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a> method will always
 return a sparsity pattern: if the UDP does not provide the hessians sparsity, pygmo will assume that the sparsity
 pattern of the hessians is dense. See <a class="reference internal" href="#pygmo.problem.hessians_sparsity" title="pygmo.problem.hessians_sparsity"><code class="xref py py-func docutils literal"><span class="pre">hessians_sparsity()</span></code></a> for more details.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

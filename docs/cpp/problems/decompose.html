@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -173,10 +187,25 @@
 </ul>
 </p>
 <p>where <span class="math">\(d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}\)</span>, <span class="math">\(d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert\)</span> and <span class="math">\( \hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}\)</span>.</p>
-<p><strong>NOTE</strong> The reference point <span class="math">\(z^*\)</span> is often taken as the ideal point and as such it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates this behaviour so that whenever a new ideal point is found <span class="math">\(z^*\)</span> is adapted accordingly.</p>
-<p><strong>NOTE</strong> The use of <a class="reference internal" href="#pagmoclasspagmo_1_1decompose"><span class="std std-ref">pagmo::decompose</span></a> discards gradients and hessians so that if the original user defined problem implements them, they will not be available in the decomposed problem. The reason for this behaviour is that the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for derivative-free optimization.</p>
-<p>See: &#8220;Q. Zhang &#8211; MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition&#8221;</p>
-<p>See: <a class="reference external" href="https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems">https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems</a> </p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The reference point <span class="math">\(z^*\)</span> is often taken as the ideal point and as such
+it may be allowed to change during the course of the optimization / evolution. The argument adapt_ideal activates
+this behaviour so that whenever a new ideal point is found <span class="math">\(z^*\)</span> is adapted accordingly.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The use of <a class="reference internal" href="#_CPPv2N5pagmo9decomposeE" title="pagmo::decompose"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::decompose</span></code></a> discards gradients and hessians so that if the original user defined
+problem implements them, they will not be available in the decomposed problem. The reason for this behaviour is
+that the Tchebycheff decomposition is not differentiable. Also, the use of this class was originally intended for
+derivative-free optimization.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">&#8220;Q. Zhang &#8211; MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition&#8221;
+<a class="reference external" href="https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems">https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems</a></p>
+</div>
+ </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
@@ -199,7 +228,11 @@
 <dt id="_CPPv2N5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb">
 <span id="pagmo::decompose::decompose__TRR.vector_doubleCR.vector_doubleCR.ssCR.b"></span><span class="target" id="pagmoclasspagmo_1_1decompose_1adbd72847955fe14a3b24841a6bda8c40"></span><code class="descname">decompose</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>weight</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>z</em>, <em class="property">const</em> std::string &amp;<em>method</em> = &quot;weighted&quot;, bool <em>adapt_ideal</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from problem. </p>
-<p><strong>NOTE</strong> This constructor is enabled only if <code class="docutils literal"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This constructor is enabled only if <code class="docutils literal"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a>.</p>
+</div>
+</p>
 <p>Wraps a user-defined problem (UDP) or a <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> so that its fitness will be decomposed using one of three decomposition methods. <a class="reference internal" href="#pagmoclasspagmo_1_1decompose"><span class="std std-ref">pagmo::decompose</span></a> objects are user-defined problems that can be used to define a <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
@@ -255,7 +288,12 @@
 <span id="pagmo::decompose::original_fitness__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1decompose_1a76bc898e38a293aac967be305916d220"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">original_fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9decompose16original_fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness of the original problem. </p>
 <p>Returns the fitness of the original multi-objective problem used to construct the decomposed problem.</p>
-<p><strong>NOTE</strong> This is <em>not</em> the fitness of the decomposed problem, that is returned by calling <a class="reference internal" href="#pagmoclasspagmo_1_1decompose_1a82890354aca6a5b68004f1a2ee7048e3"><span class="std std-ref">decompose::fitness()</span></a>.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is <em>not</em> the fitness of the decomposed problem. Such a fitness is instead returned by calling
+<code class="xref cpp cpp-func docutils literal"><span class="pre">decompose::fitness()</span></code>.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the fitness of the original multi-objective problem.</dd>
@@ -306,7 +344,11 @@
 <span id="pagmo::decompose::get_zC"></span><span class="target" id="pagmoclasspagmo_1_1decompose_1a1689e38f4a38654aea7c101f41026ae1"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">get_z</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9decompose5get_zEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the current reference point. </p>
 <p>The reference point to be used for the decomposition. This is only used for Tchebycheff and boundary interception decomposition methods.</p>
-<p><strong>NOTE</strong> The reference point is adapted at each call of the fitness.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The reference point is adapted (and thus may change) at each call of the fitness.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the reference point. </dd>
@@ -399,7 +441,13 @@
 <span id="pagmo::decompose::get_inner_problem"></span><span class="target" id="pagmoclasspagmo_1_1decompose_1a33da1aa8353b93d73738dd97d61100a7"></span><a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">get_inner_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9decompose17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
-<p><strong>NOTE</strong> The ability to extract a non const reference is provided only in order to allow to call non-const methods on the internal <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> instance. Assigning a new <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> via this reference is undefined behaviour.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ability to extract a non const reference is provided only in order to allow to call
+non-const methods on the internal <a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a> instance. Assigning a new
+<code class="xref py py-class docutils literal"><span class="pre">pagmo::problem</span></code> via this reference is undefined behaviour.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a reference to the inner <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </dd>

@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -159,7 +173,12 @@
 <span id="pagmo::uniform_real_from_range__double.double.detail::random_engine_typeR"></span><span class="target" id="pagmonamespacepagmo_1ad65ef1a7b6c32f708387f82db4012037"></span>double <code class="descclassname">pagmo::</code><code class="descname">uniform_real_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, detail::random_engine_type &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo23uniform_real_from_rangeEddRN6detail18random_engine_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Generates a random number within some lower and upper bounds. </p>
 <p>Creates a random number within a closed range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math">\( x \)</span> will be such that <span class="math">\(lb \le x &lt; ub\)</span>. If <span class="math">\(lb == ub\)</span> then <span class="math">\(lb\)</span> is returned.</p>
-<p><strong>NOTE</strong>: This has to be preferred to std::uniform_real&lt;double&gt;(r_engine) as it performs checks that avoid undefined behaviour in pagmo.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This helper function has to be preferred to <code class="docutils literal"><span class="pre">std::uniform_real&lt;double&gt;(r_engine)</span></code> as it
+also performs additional checks avoiding undefined behaviour in pagmo.</p>
+</div>
+</p>
 <p>Example:</p>
 <p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
 <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_real_from_range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">a</span> <span class="n">random</span> <span class="n">value</span>

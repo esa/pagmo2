@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="cpp_docs.html#core-classes">Core classes</a></li>
@@ -164,7 +178,12 @@
 </ul>
 </p>
 <p>A special mechanism is implemented to track the best individual that has ever been part of the population. Such an individual is called <em>champion</em> and its decision vector and fitness vector are automatically kept updated. The <em>champion</em> is not necessarily an individual currently in the population. The <em>champion</em> is only defined and accessible via the population interface if the <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> currently contained in the <a class="reference internal" href="#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> is single objective.</p>
-<p><strong>NOTE</strong>: a moved-from <a class="reference internal" href="#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> is destructible and assignable. Any other operation will result in undefined behaviour. </p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">A moved-from pagmo::population is destructible and assignable. Any other operation will result
+in undefined behaviour.</p>
+</div>
+ </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
@@ -197,7 +216,12 @@
 <dt id="_CPPv2N5pagmo10population10populationERR1T9size_typej">
 <span id="pagmo::population::population__TRR.size_type.unsigned"></span><span class="target" id="pagmoclasspagmo_1_1population_1adb1dae0fccddd5bfb6937fb80282879f"></span><code class="descname">population</code><span class="sig-paren">(</span>T &amp;&amp;<em>x</em>, <a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>pop_size</em> = 0u, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population10populationERR1T9size_typej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from a problem. </p>
-<p><strong>NOTE</strong>: this constructor is enabled only if, after the removal of cv/reference qualifiers, <code class="docutils literal"><span class="pre">T</span></code> is not <a class="reference internal" href="#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>, and if <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> is constructible from <code class="docutils literal"><span class="pre">T</span></code>.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This constructor is enabled only if, after the removal of cv/reference qualifiers,
+<code class="docutils literal"><span class="pre">T</span></code> is not <a class="reference internal" href="#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>, and if <a class="reference internal" href="problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a> is constructible from <code class="docutils literal"><span class="pre">T</span></code>.</p>
+</div>
+</p>
 <p>Constructs a population with <code class="docutils literal"><span class="pre">pop_size</span></code> individuals associated to the problem <code class="docutils literal"><span class="pre">x</span></code> and setting the population random seed to <code class="docutils literal"><span class="pre">seed</span></code>. The input problem <code class="docutils literal"><span class="pre">x</span></code> can be either a <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> or a user-defined problem (UDP).</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
@@ -442,7 +466,13 @@
 <dt id="_CPPv2NK5pagmo10population10champion_xEv">
 <span id="pagmo::population::champion_xC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a292747373029eeac75b14c57055a19c2"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">champion_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population10champion_xEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Champion decision vector. </p>
-<p><strong>NOTE</strong>: if the problem is stochastic the champion is the individual that had the lowest fitness for some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different fitness.<dl class="docutils">
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the problem is stochastic the champion is the individual that had the lowest fitness for
+some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+fitness.</p>
+</div>
+<dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the champion decision vector.</dd>
 </dl>
@@ -461,7 +491,13 @@
 <dt id="_CPPv2NK5pagmo10population10champion_fEv">
 <span id="pagmo::population::champion_fC"></span><span class="target" id="pagmoclasspagmo_1_1population_1a775980b4c4e94153e5e1f50c97681816"></span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">champion_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population10champion_fEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Champion fitness. </p>
-<p><strong>NOTE</strong>: if the problem is stochastic the champion is the individual that had the lowest fitness for some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different fitness.<dl class="docutils">
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the problem is stochastic the champion is the individual that had the lowest fitness for
+some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+fitness.</p>
+</div>
+<dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the champion fitness.</dd>
 </dl>
@@ -492,7 +528,12 @@
 <span id="pagmo::population::set_xf__size_type.vector_doubleCR.vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1population_1a20b2999f3db76d156c9ca801ee0a0158"></span>void <code class="descname">set_xf</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>i</em>, <em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, <em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population6set_xfE9size_typeRK13vector_doubleRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the <span class="math">\(i\)</span>-th individual decision vector, and fitness. </p>
 <p>Sets simultaneously the <span class="math">\(i\)</span>-th individual decision vector and fitness thus avoiding to trigger a fitness function evaluation.</p>
-<p><strong>NOTE</strong>: The user must make sure that the input fitness <code class="docutils literal"><span class="pre">f</span></code> makes sense as pagmo will only check its dimension.</p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Pagmo will only control the input fitness <code class="docutils literal"><span class="pre">f</span></code> dimension, so the user can associate decision vector, fitness
+vectors pairs that are not consistent with the fitness function.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -520,7 +561,11 @@
 <span id="pagmo::population::set_x__size_type.vector_doubleCR"></span><span class="target" id="pagmoclasspagmo_1_1population_1afff13ff7928ec60d061cd525d654adaf"></span>void <code class="descname">set_x</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>i</em>, <em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population5set_xE9size_typeRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the <span class="math">\(i\)</span>-th individual&#8217;s chromosome. </p>
 <p>Sets the chromosome of the <span class="math">\(i\)</span>-th individual to the value <code class="docutils literal"><span class="pre">x</span></code> and changes its fitness accordingly. The individual&#8217;s ID remains the same.</p>
-<p><strong>NOTE</strong> a call to this method triggers one fitness function evaluation.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A call to this method triggers one fitness function evaluation.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -552,7 +597,13 @@
 <dt id="_CPPv2N5pagmo10population11get_problemEv">
 <span id="pagmo::population::get_problem"></span><span class="target" id="pagmoclasspagmo_1_1population_1a3021c006c16bfc8172a33296dc3babc7"></span><a class="reference internal" href="problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">get_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population11get_problemEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
-<p><strong>NOTE</strong>: the ability to extract a mutable reference to the problem is provided solely in order to allow calling non-const methods on the problem. Assigning the population&#8217;s problem via a reference returned by this method is undefined behaviour.</p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The ability to extract a mutable reference to the problem is provided solely in order to
+allow calling non-const methods on the problem. Assigning the population&#8217;s problem via a reference
+returned by this method is undefined behaviour.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a reference to the internal <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </dd>

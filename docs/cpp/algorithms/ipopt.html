@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -159,7 +173,7 @@
 <p><img alt="../../../_images/ipopt.png" src="../../../_images/ipopt.png" /></p>
 <p>This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver, a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.</p>
 <p>Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt can estimate numerically the Hessians if needed).</p>
-<p>In order to support pagmo&#8217;s population-based optimisation model, <a class="reference internal" href="#pagmoclasspagmo_1_1ipopt_1a69053fa0154e4b6f2f0e1b67c9490a45"><span class="std std-ref">ipopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised. If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/constrained.html#pagmonamespacepagmo_1accb4f0cfb71555ffec215cc381ea87bc"><span class="std std-ref">pagmo::compare_fc()</span></a>), the optimised individual will be inserted back into the population. The selection and replacement strategies can be configured via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p>In order to support pagmo&#8217;s population-based optimisation model, <a class="reference internal" href="#pagmoclasspagmo_1_1ipopt_1a69053fa0154e4b6f2f0e1b67c9490a45"><span class="std std-ref">ipopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised. If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/constrained.html#pagmonamespacepagmo_1accb4f0cfb71555ffec215cc381ea87bc"><span class="std std-ref">pagmo::compare_fc()</span></a>), the optimised individual will be inserted back into the population. The selection and replacement strategies can be configured via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
 <p><em>Configuring the optimsation run </em></p>
 <p>Ipopt supports a large amount of options for the configuration of the optimisation run. The options are divided into three categories:<ul class="simple">
 <li><em>string</em> options (i.e., the type of the option is <code class="docutils literal"><span class="pre">std::string</span></code>),</li>
@@ -189,7 +203,7 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <p class="last"><a class="reference external" href="https://projects.coin-or.org/Ipopt">https://projects.coin-or.org/Ipopt</a>.</p>
 </div>
  </p>
-<p>Inherits from <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver"><span class="std std-ref">pagmo::base_local_solver</span></a></p>
+<p>Inherits from <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based"><span class="std std-ref">pagmo::not_population_based</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
@@ -220,7 +234,7 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <dt id="_CPPv2NK5pagmo5ipopt6evolveE10population">
 <span id="pagmo::ipopt::evolve__populationC"></span><span class="target" id="pagmoclasspagmo_1_1ipopt_1a69053fa0154e4b6f2f0e1b67c9490a45"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5ipopt6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evolve population. </p>
-<p>This method will select an individual from <code class="docutils literal"><span class="pre">pop</span></code>, optimise it with Ipopt, replace an individual in <code class="docutils literal"><span class="pre">pop</span></code> with the optimised individual, and finally return <code class="docutils literal"><span class="pre">pop</span></code>. The individual selection and replacement criteria can be set via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>. The return status of the Ipopt optimisation run will be recorded (it can be fetched with <a class="reference internal" href="#pagmoclasspagmo_1_1ipopt_1a5500d5fa950098411152a8abf34e249c"><span class="std std-ref">get_last_opt_result()</span></a>).</p>
+<p>This method will select an individual from <code class="docutils literal"><span class="pre">pop</span></code>, optimise it with Ipopt, replace an individual in <code class="docutils literal"><span class="pre">pop</span></code> with the optimised individual, and finally return <code class="docutils literal"><span class="pre">pop</span></code>. The individual selection and replacement criteria can be set via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>. The return status of the Ipopt optimisation run will be recorded (it can be fetched with <a class="reference internal" href="#pagmoclasspagmo_1_1ipopt_1a5500d5fa950098411152a8abf34e249c"><span class="std std-ref">get_last_opt_result()</span></a>).</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the optimised population.</dd>
@@ -239,7 +253,7 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 </ul>
 </li>
 <li><code class="docutils literal"><span class="pre">std::runtime_error</span></code>: if the initialization of the Ipopt solver fails. </li>
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the public interface of <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> or <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver"><span class="std std-ref">pagmo::base_local_solver</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the public interface of <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> or <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based"><span class="std std-ref">pagmo::not_population_based</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -351,7 +365,7 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types or <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver"><span class="std std-ref">pagmo::base_local_solver</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types or <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based"><span class="std std-ref">pagmo::not_population_based</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -373,7 +387,7 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of primitive types or <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver"><span class="std std-ref">pagmo::base_local_solver</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of primitive types or <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based"><span class="std std-ref">pagmo::not_population_based</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -541,8 +555,8 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo17base_local_solver18set_random_sr_seedEj">
-<span id="pagmo::base_local_solver::set_random_sr_seed__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1af1f29272f5106c5bbfe6beb89e03d498"></span>void <code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver18set_random_sr_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2N5pagmo20not_population_based18set_random_sr_seedEj">
+<span id="pagmo::not_population_based::set_random_sr_seed__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"></span>void <code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based18set_random_sr_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
@@ -555,8 +569,8 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo17base_local_solver13set_selectionERKNSt6stringE">
-<span id="pagmo::base_local_solver::set_selection__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>select</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver13set_selectionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2N5pagmo20not_population_based13set_selectionERKNSt6stringE">
+<span id="pagmo::not_population_based::set_selection__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>select</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based13set_selectionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the individual selection policy. </p>
 <p>This method will set the policy that is used to select the individual that will be optimised when calling the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
 <p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
@@ -565,8 +579,8 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 <li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
 </ul>
 </p>
-<p><a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1af1f29272f5106c5bbfe6beb89e03d498"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
-<p>Instead of a selection policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p><a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>Instead of a selection policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -583,8 +597,8 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo17base_local_solver13set_selectionEN10population9size_typeE">
-<span id="pagmo::base_local_solver::set_selection__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver13set_selectionEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2N5pagmo20not_population_based13set_selectionEN10population9size_typeE">
+<span id="pagmo::not_population_based::set_selection__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based13set_selectionEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the individual selection index. </p>
 <p>This method will set the index of the individual that is selected for optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
 <p><dl class="docutils">
@@ -598,10 +612,10 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo17base_local_solver13get_selectionEv">
-<span id="pagmo::base_local_solver::get_selectionC"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a22cbdaf0e4087bfb37e35145aee5f258"></span>boost::any <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo17base_local_solver13get_selectionEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2NK5pagmo20not_population_based13get_selectionEv">
+<span id="pagmo::not_population_based::get_selectionC"></span><span class="target" id="pagmoclasspagmo_1_1not__population__based_1a15516c323e4c8c093eb076eb0da5b026"></span>boost::any <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo20not_population_based13get_selectionEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the individual selection policy or index. </p>
-<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a6c2bcbff3cdf241dca8004332a11e9a8"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1ad96988f5030461fcd2e88054f56c01db"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the individual selection policy or index. </dd>
@@ -610,8 +624,8 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo17base_local_solver15set_replacementERKNSt6stringE">
-<span id="pagmo::base_local_solver::set_replacement__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>replace</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver15set_replacementERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2N5pagmo20not_population_based15set_replacementERKNSt6stringE">
+<span id="pagmo::not_population_based::set_replacement__ssCR"></span><span class="target" id="pagmoclasspagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>replace</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based15set_replacementERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the individual replacement policy. </p>
 <p>This method will set the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm to select the individual that will be replaced by the optimised individual.</p>
 <p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
@@ -620,8 +634,8 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 <li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
 </ul>
 </p>
-<p><a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1af1f29272f5106c5bbfe6beb89e03d498"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
-<p>Instead of a replacement policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p><a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p>Instead of a replacement policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -638,8 +652,8 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo17base_local_solver15set_replacementEN10population9size_typeE">
-<span id="pagmo::base_local_solver::set_replacement__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17base_local_solver15set_replacementEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2N5pagmo20not_population_based15set_replacementEN10population9size_typeE">
+<span id="pagmo::not_population_based::set_replacement__population::size_type"></span><span class="target" id="pagmoclasspagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based15set_replacementEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the individual replacement index. </p>
 <p>This method will set the index of the individual that is replaced after the optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
 <p><dl class="docutils">
@@ -653,10 +667,10 @@ file. Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbo
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo17base_local_solver15get_replacementEv">
-<span id="pagmo::base_local_solver::get_replacementC"></span><span class="target" id="pagmoclasspagmo_1_1base__local__solver_1a482c4178f0d7acd8c786359761622f9c"></span>boost::any <code class="descname">get_replacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo17base_local_solver15get_replacementEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2NK5pagmo20not_population_based15get_replacementEv">
+<span id="pagmo::not_population_based::get_replacementC"></span><span class="target" id="pagmoclasspagmo_1_1not__population__based_1a74c7d941a9b9a317374a9a77a200c255"></span>boost::any <code class="descname">get_replacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo20not_population_based15get_replacementEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the individual replacement policy or index. </p>
-<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1aa7072bb18baa8142ffd3542088eeb019"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1base__local__solver_1a1fff244e27867635994c54bb44379ab8"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the individual replacement policy or index. </dd>

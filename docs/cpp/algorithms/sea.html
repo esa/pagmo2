@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -159,11 +173,27 @@
 <p><img alt="../../../_images/sea.png" src="../../../_images/sea.png" /></p>
 <p>Evolutionary strategies date back to the mid 1960s when P. Bienert, I. Rechenberg, and H.-P. Schwefel at the Technical University of Berlin, Germany, developed the first bionics-inspired schemes for evolving optimal shapes of minimal drag bodies in a wind tunnel using Darwin&#8217;s evolution principle.</p>
 <p>This c++ class represents the simplest evolutionary strategy, where a population of <span class="math">\( \lambda \)</span> individuals at each generation produces one offspring by mutating its best individual uniformly at random within the bounds. Should the offspring be better than the worst individual in the population it will substitute it.</p>
-<p><strong>NOTE</strong> The algorithm does not work for multi-objective problems, nor for constrained optimization</p>
-<p><strong>NOTE</strong> The mutation is uniform within box-bounds. Hence, unbounded problems will produce an error.</p>
-<p>See: Oliveto, Pietro S., Jun He, and Xin Yao. &#8220;Time complexity of evolutionary algorithms for
-combinatorial optimization: A decade of results.&#8221; International Journal of Automation and Computing 4.3 (2007): 281-293.</p>
-<p>See: <a class="reference external" href="http://www.scholarpedia.org/article/Evolution_strategies">http://www.scholarpedia.org/article/Evolution_strategies</a> </p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The algorithm is not suitable for multi-objective problems, nor for
+constrained or stochastic optimization</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The mutation is uniform within box-bounds. Hence, unbounded problems will produce undefined
+behaviours.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Oliveto, Pietro S., Jun He, and Xin Yao. &#8220;Time complexity of evolutionary algorithms for
+combinatorial optimization: A decade of results.&#8221; International Journal of Automation and Computing
+4.3 (2007): 281-293.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://www.scholarpedia.org/article/Evolution_strategies">http://www.scholarpedia.org/article/Evolution_strategies</a></p>
+</div>
+ </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">

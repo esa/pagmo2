@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="cpp_docs.html#core-classes">Core classes</a></li>
@@ -188,7 +202,22 @@
 </div>
 </p>
 <p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDP are used by <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
-<p><strong>NOTE</strong>: a moved-from <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> is destructible and assignable. Any other operation will result in undefined behaviour. </p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">A moved-from <a class="reference internal" href="#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a> is destructible and assignable. Any other operation will result
+in undefined behaviour.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal"><span class="pre">PAGMO_WITH_NLOPT</span></code> option
+enabled (see the <a class="reference internal" href="../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">The <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms">NLopt website</a> contains a detailed description
+of each supported solver.</p>
+</div>
+ </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
@@ -212,7 +241,13 @@
 <dt id="_CPPv2N5pagmo7problem7problemERR1T">
 <span id="pagmo::problem::problem__TRR"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a54f9bfeea18d0a3a5ff7ab5161c20d2a"></span><code class="descname">problem</code><span class="sig-paren">(</span>T &amp;&amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem7problemERR1T" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from a user-defined problem of type <code class="docutils literal"><span class="pre">T</span></code>. </p>
-<p><strong>NOTE</strong> this constructor is not enabled if, after the removal of cv and reference qualifiers, <code class="docutils literal"><span class="pre">T</span></code> is of type <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> (that is, this constructor does not compete with the copy/move constructors of <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>), or if <code class="docutils literal"><span class="pre">T</span></code> does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1is__udp"><span class="std std-ref">pagmo::is_udp</span></a>.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This constructor is not enabled if, after the removal of cv and reference qualifiers,
+<code class="docutils literal"><span class="pre">T</span></code> is of type <a class="reference internal" href="#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a> (that is, this constructor does not compete with the copy/move
+constructors of <a class="reference internal" href="#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a>), or if <code class="docutils literal"><span class="pre">T</span></code> does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo6is_udpE" title="pagmo::is_udp"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::is_udp</span></code></a>.</p>
+</div>
+</p>
 <p>This constructor will construct a <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> from the UDP (user-defined problem) <code class="docutils literal"><span class="pre">x</span></code> of type <code class="docutils literal"><span class="pre">T</span></code>. In order for the construction to be successful, the UDP must implement a minimal set of methods, as described in the documentation of <a class="reference internal" href="#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. The constructor will examine the properties of <code class="docutils literal"><span class="pre">x</span></code> and store them as data members of <code class="docutils literal"><span class="pre">this</span></code>.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
@@ -319,7 +354,12 @@
 <span id="pagmo::problem::extractC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a7209755b283d5bd6d7a166bb6d1787dc"></span><em class="property">const</em> T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem7extractEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a const pointer to the UDP used for construction. </p>
 <p>This method will extract a const pointer to the internal instance of the UDP. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDP used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
-<p><strong>NOTE</strong> The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a const pointer to the internal UDP, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDP type used in the constructor. </dd>
@@ -334,8 +374,17 @@
 <span id="pagmo::problem::extract"></span><span class="target" id="pagmoclasspagmo_1_1problem_1ab14e7bc86db8d7e98c31ae2bf167e151"></span>T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem7extractEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a pointer to the UDP used for construction. </p>
 <p>This method will extract a pointer to the internal instance of the UDP. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDP used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
-<p><strong>NOTE</strong> The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
-<p><strong>NOTE</strong> The ability to extract a mutable pointer is provided only in order to allow to call non-const methods on the internal UDP instance. Assigning a new UDP via this pointer is undefined behaviour.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ability to extract a mutable pointer is provided only in order to allow to call non-const
+methods on the internal UDP instance. Assigning a new UDP via this pointer is undefined behaviour.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a pointer to the internal UDP, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDP type used in the constructor. </dd>
@@ -462,7 +511,13 @@
 <li>if the UDP satisfies both <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__gradient__sparsity"><span class="std std-ref">pagmo::has_gradient_sparsity</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__gradient__sparsity"><span class="std std-ref">pagmo::override_has_gradient_sparsity</span></a>, then this method will return the output of the <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method of the UDP.</li>
 </ul>
 </p>
-<p><strong>NOTE</strong> regardless of what this method returns, the <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d2267a7d2defd716d30480f5c8b8c77"><span class="std std-ref">problem::gradient_sparsity()</span></a> method will always return a sparsity pattern: if the UDP does not provide the gradient sparsity, PaGMO will assume that the sparsity pattern of the gradient is dense. See <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d2267a7d2defd716d30480f5c8b8c77"><span class="std std-ref">problem::gradient_sparsity()</span></a> for more details.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Regardless of what this method returns, the <code class="xref cpp cpp-func docutils literal"><span class="pre">problem::gradient_sparsity()</span></code> method will always return
+a sparsity pattern: if the UDP does not provide the gradient sparsity, PaGMO will assume that the sparsity
+pattern of the gradient is dense. See <code class="xref cpp cpp-func docutils literal"><span class="pre">problem::gradient_sparsity()</span></code> for more details.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a flag signalling the availability of the gradient sparsity in the UDP. </dd>
@@ -548,7 +603,13 @@
 <li>if the UDP satisfies both <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__hessians__sparsity"><span class="std std-ref">pagmo::has_hessians_sparsity</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1override__has__hessians__sparsity"><span class="std std-ref">pagmo::override_has_hessians_sparsity</span></a>, then this method will return the output of the <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method of the UDP.</li>
 </ul>
 </p>
-<p><strong>NOTE</strong> regardless of what this method returns, the <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"><span class="std std-ref">problem::hessians_sparsity()</span></a> method will always return a vector of sparsity patterns: if the UDP does not provide the hessians sparsity, PaGMO will assume that the sparsity pattern of the hessians is dense. See <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"><span class="std std-ref">problem::hessians_sparsity()</span></a> for more details.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Regardless of what this method returns, the <code class="xref cpp cpp-func docutils literal"><span class="pre">problem::hessians_sparsity()</span></code> method will always return
+a vector of sparsity patterns: if the UDP does not provide the hessians sparsity, PaGMO will assume that the
+sparsity pattern of the hessians is dense. See <code class="xref cpp cpp-func docutils literal"><span class="pre">problem::hessians_sparsity()</span></code> for more details.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a flag signalling the availability of the hessians sparsity in the UDP. </dd>
@@ -734,7 +795,11 @@
 <span id="pagmo::problem::feasibility_x__vector_doubleCRC"></span><span class="target" id="pagmoclasspagmo_1_1problem_1a1a7c6d11470c8bca089e740260107457"></span>bool <code class="descname">feasibility_x</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7problem13feasibility_xERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Feasibility of a decision vector. </p>
 <p>This method will check the feasibility of the fitness corresponding to a decision vector <code class="docutils literal"><span class="pre">x</span></code> against the tolerances returned by <a class="reference internal" href="#pagmoclasspagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"><span class="std std-ref">problem::get_c_tol()</span></a>.</p>
-<p><strong>NOTE</strong> This will cause one fitness evaluation.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">One call of this method will cause one call to the fitness function.</p>
+</div>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd><code class="docutils literal"><span class="pre">true</span></code> if the decision vector results in a feasible fitness, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</dd>

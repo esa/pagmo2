@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
@@ -158,12 +172,17 @@
 <dd><p>The CEC 2009 problems: Competition on &#8220;Performance Assessment of Constrained / Bound
  Constrained Multi-Objective Optimization Algorithms&#8221;</p>
 <p>This class instantiates any of the problems from CEC2009&#8217;s competition on multi-objective optimization algorithms, commonly referred to by the literature as UF1-UF10 (unconstrained) and CF1-CF10 (constrained).</p>
-<p><strong>NOTE</strong>: The three problems constructed by some transformation on DTLZ2, DTLZ3 and WFG1 problems as described in the technical report are not included in this implementation.</p>
-<p><dl class="docutils">
-<dt><strong>See</strong></dt>
-<dd><a class="reference external" href="http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm">http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm</a> </dd>
-</dl>
-</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The three problems constructed by some transformation on DTLZ2, DTLZ3
+and WFG1 problems as described in the technical report are not included in
+this implementation.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All problems are continuous, multi objective problems.</p>
+</div>
+ </p>
 <p>Inherits from pagmo::detail::cec2009_statics&lt;&gt;</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>

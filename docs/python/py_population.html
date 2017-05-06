@@ -82,6 +82,20 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+</ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#core-classes">Core classes</a></li>
@@ -232,9 +246,12 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
 <code class="descname">champion_f</code><a class="headerlink" href="#pygmo.population.champion_f" title="Permalink to this definition">¶</a></dt>
 <dd><p>Champion&#8217;s fitness vector.</p>
 <p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the fitness vector of the population&#8217;s champion.</p>
-<p><strong>NOTE</strong>: if the problem is stochastic the champion is the individual that had the lowest fitness for
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the problem is stochastic, the champion is the individual that had the lowest fitness for
 some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
 fitness.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -261,9 +278,12 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 <code class="descname">champion_x</code><a class="headerlink" href="#pygmo.population.champion_x" title="Permalink to this definition">¶</a></dt>
 <dd><p>Champion&#8217;s decision vector.</p>
 <p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the decision vector of the population&#8217;s champion.</p>
-<p><strong>NOTE</strong>: if the problem is stochastic the champion is the individual that had the lowest fitness for
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the problem is stochastic the champion is the individual that had the lowest fitness for
 some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
 fitness.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -432,7 +452,10 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 <dd><p>Sets the <span class="math">\(i\)</span>-th individual decision vector.</p>
 <p>Sets the chromosome of the <span class="math">\(i\)</span>-th individual to the value <em>x</em> and changes its fitness accordingly. The
 individual&#8217;s ID remains the same.</p>
-<p><strong>NOTE</strong>: a call to this method triggers one fitness function evaluation.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A call to this method triggers one fitness function evaluation.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -460,7 +483,10 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 <code class="descname">set_xf</code><span class="sig-paren">(</span><em>i</em>, <em>x</em>, <em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.population.set_xf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the <span class="math">\(i\)</span>-th individual decision vector, and fitness.</p>
 <p>Sets simultaneously the <span class="math">\(i\)</span>-th individual decision vector and fitness thus avoiding to trigger a fitness function evaluation.</p>
-<p><strong>NOTE</strong>: the user must make sure that the input fitness <em>f</em> makes sense as pygmo will only check its dimension.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The user must make sure that the input fitness <em>f</em> makes sense as pygmo will only check its dimension.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
