@@ -451,3 +451,27 @@ BOOST_AUTO_TEST_CASE(archipelago_status)
     BOOST_CHECK_THROW(a.wait_check(), std::invalid_argument);
     BOOST_CHECK(a.status() == evolve_status::idle);
 }
+
+struct pthrower_00 {
+    static int counter;
+    vector_double fitness(const vector_double &) const
+    {
+        if (counter >= 50) {
+            throw std::invalid_argument("");
+        }
+        ++counter;
+        return {0.};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+};
+
+int pthrower_00::counter = 0;
+
+// Small test about proper cleanup when throwing from the ctor.
+BOOST_AUTO_TEST_CASE(archipelago_throw_on_ctor)
+{
+    BOOST_CHECK_THROW((archipelago{100u, de{}, pthrower_00{}, 1u}), std::invalid_argument);
+}
