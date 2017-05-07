@@ -3676,8 +3676,7 @@ In addition to the mandatory ``run_evolve()`` method, a UDI may implement the fo
      ...
 
 See the documentation of the corresponding methods in this class for details on how the optional
-methods in the UDI are used by :class:`~pygmo.island`. This class is the Python counterpart of the C++ class
-:cpp:class:`pagmo::island`.
+methods in the UDI are used by :class:`~pygmo.island`.
 
 An island can be initialised in a variety of ways using keyword arguments:
 
@@ -3699,6 +3698,8 @@ An island can be initialised in a variety of ways using keyword arguments:
   and the UDI, if not specified, will be chosen according to the heuristic detailed above).
 
 If the keyword arguments list is invalid, a :exc:`KeyError` exception will be raised.
+
+This class is the Python counterpart of the C++ class :cpp:class:`pagmo::island`.
 
 )";
 }
@@ -3976,7 +3977,7 @@ std::string archipelago_status_docstring()
 {
     return R"(Status of the archipelago.
 
-This method will return an :class:`~pygmo.evolve_status` flag indicating the current status of
+This read-only property will return an :class:`~pygmo.evolve_status` flag indicating the current status of
 asynchronous operations in the archipelago. The flag will be:
 
 * :attr:`~pygmo.evolve_status.idle` if, for all the islands in the archipelago, :attr:`pygmo.island.status`
