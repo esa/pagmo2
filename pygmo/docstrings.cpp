@@ -152,7 +152,7 @@ This read-only property contains an array of ``float`` representing the decision
 .. note::
 
    If the problem is stochastic the champion is the individual that had the lowest fitness for
-   some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+   some lucky seed, not on average across seeds. Re-evaluating its decision vector may then result in a different
    fitness.
 
 Returns:
@@ -175,7 +175,7 @@ This read-only property contains an array of ``float`` representing the fitness 
 .. note::
 
    If the problem is stochastic, the champion is the individual that had the lowest fitness for
-   some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+   some lucky seed, not on average across seeds. Re-evaluating its decision vector may then result in a different
    fitness.
 
 Returns:
@@ -4599,10 +4599,11 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sea::get_log()`.
 
 std::string sga_docstring()
 {
-    return R"(__init__(gen = 1u, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2u, crossover = "exponential", 
-        mutation = "polynomial", selection = "tournament", int_dim = 0u, seed = random)
+    return R"(__init__(gen = 1, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2, crossover = "exponential", mutation = "polynomial", selection = "tournament", int_dim = 0, seed = random)
 
 A Simple Genetic Algorithm
+
+.. versionadded:: 2.2
 
 Approximately during the same decades as Evolutionary Strategies (see :class:`~pygmo.sea`) were studied, 
 a different group led by John Holland, and later by his student David Goldberg, introduced and
@@ -4737,6 +4738,8 @@ std::string ipopt_docstring()
     return R"(__init__()
 
 Ipopt.
+
+.. versionadded:: 2.2
 
 This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
 a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that

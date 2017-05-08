@@ -72,7 +72,7 @@ namespace pagmo
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
  *
- *    A moved-from pagmo::population is destructible and assignable. Any other operation will result
+ *    A moved-from :cpp:class:`pagmo::population` is destructible and assignable. Any other operation will result
  *    in undefined behaviour.
  *
  * \endverbatim
@@ -233,14 +233,14 @@ public:
     {
         // Checks on the input vectors.
         if (x.size() != m_prob.get_nx()) {
-            pagmo_throw(std::invalid_argument, "Trying to add a decision vector of dimension: "
-                                                   + std::to_string(x.size()) + ", while the problem's dimension is: "
-                                                   + std::to_string(m_prob.get_nx()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to add a decision vector of dimension: " + std::to_string(x.size())
+                            + ", while the problem's dimension is: " + std::to_string(m_prob.get_nx()));
         }
         if (f.size() != m_prob.get_nf()) {
-            pagmo_throw(std::invalid_argument, "Trying to add a fitness of dimension: " + std::to_string(f.size())
-                                                   + ", while the problem's fitness has dimension: "
-                                                   + std::to_string(m_prob.get_nf()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to add a fitness of dimension: " + std::to_string(f.size())
+                            + ", while the problem's fitness has dimension: " + std::to_string(m_prob.get_nf()));
         }
 
         // Prepare quantities to be appended to the internal vectors.
@@ -397,7 +397,7 @@ public:
      * .. note::
      *
      *    If the problem is stochastic the champion is the individual that had the lowest fitness for
-     *    some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+     *    some lucky seed, not on average across seeds. Re-evaluating its decision vector may then result in a different
      *    fitness.
      *
      * \endverbatim
@@ -421,7 +421,7 @@ public:
      * .. note::
      *
      *    If the problem is stochastic the champion is the individual that had the lowest fitness for
-     *    some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+     *    some lucky seed, not on average across seeds. Re-evaluating its decision vector may then result in a different
      *    fitness.
      *
      * \endverbatim
@@ -473,18 +473,19 @@ public:
     void set_xf(size_type i, const vector_double &x, const vector_double &f)
     {
         if (i >= size()) {
-            pagmo_throw(std::invalid_argument, "Trying to access individual at position: " + std::to_string(i)
-                                                   + ", while population has size: " + std::to_string(size()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to access individual at position: " + std::to_string(i)
+                            + ", while population has size: " + std::to_string(size()));
         }
         if (f.size() != m_prob.get_nf()) {
-            pagmo_throw(std::invalid_argument, "Trying to set a fitness of dimension: " + std::to_string(f.size())
-                                                   + ", while the problem's fitness has dimension: "
-                                                   + std::to_string(m_prob.get_nf()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to set a fitness of dimension: " + std::to_string(f.size())
+                            + ", while the problem's fitness has dimension: " + std::to_string(m_prob.get_nf()));
         }
         if (x.size() != m_prob.get_nx()) {
-            pagmo_throw(std::invalid_argument, "Trying to set a decision vector of dimension: "
-                                                   + std::to_string(x.size()) + ", while the problem's dimension is: "
-                                                   + std::to_string(m_prob.get_nx()));
+            pagmo_throw(std::invalid_argument,
+                        "Trying to set a decision vector of dimension: " + std::to_string(x.size())
+                            + ", while the problem's dimension is: " + std::to_string(m_prob.get_nx()));
         }
 
         // Reserve space for the incoming vectors. If any of this throws,
