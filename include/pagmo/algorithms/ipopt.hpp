@@ -152,8 +152,9 @@ struct ipopt_nlp final : Ipopt::TNLP {
 
         // We need the gradient.
         if (!m_prob.has_gradient()) {
-            pagmo_throw(std::invalid_argument, "the ipopt algorithm needs the gradient, but the problem named '"
-                                                   + m_prob.get_name() + "' does not provide it");
+            pagmo_throw(std::invalid_argument,
+                        "the ipopt algorithm needs the gradient, but the problem named '" + m_prob.get_name()
+                            + "' does not provide it");
         }
 
         // Prepare the dv used for fitness computation.
@@ -286,9 +287,9 @@ struct ipopt_nlp final : Ipopt::TNLP {
             std::fill(g_u, g_u + m_prob.get_nec(), 0.);
 
             // Inequality constraints: lb == -inf, ub == 0.
-            std::fill(g_l + m_prob.get_nec(), g_l + m, std::numeric_limits<double>::has_infinity
-                                                           ? -std::numeric_limits<double>::infinity()
-                                                           : std::numeric_limits<double>::lowest());
+            std::fill(g_l + m_prob.get_nec(), g_l + m,
+                      std::numeric_limits<double>::has_infinity ? -std::numeric_limits<double>::infinity()
+                                                                : std::numeric_limits<double>::lowest());
             std::fill(g_u + m_prob.get_nec(), g_u + m, 0.);
 
             return true;
@@ -367,8 +368,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
 
                 if (!(m_objfun_counter / m_verbosity % 50u)) {
                     // Every 50 lines print the column names.
-                    print("\n", std::setw(10), "objevals:", std::setw(15), "objval:", std::setw(15), "violated:",
-                          std::setw(15), "viol. norm:", '\n');
+                    print("\n", std::setw(10), "objevals:", std::setw(15), "objval:", std::setw(15),
+                          "violated:", std::setw(15), "viol. norm:", '\n');
                 }
                 // Print to screen the log line.
                 print(std::setw(10), m_objfun_counter + 1u, std::setw(15), obj_value, std::setw(15), nv, std::setw(15),
@@ -656,6 +657,10 @@ struct ipopt_nlp final : Ipopt::TNLP {
 /**
  * \image html ipopt.png "COIN_OR logo." width=3cm
  *
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.2
+ * \endverbatim
+ *
  * This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
  * a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that
  * is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.
@@ -707,7 +712,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
  *
- *    A moved-from pagmo::ipopt is destructible and assignable. Any other operation will result
+ *    A moved-from :cpp:class:`pagmo::ipopt` is destructible and assignable. Any other operation will result
  *    in undefined behaviour.
  *
  * .. note::
@@ -727,8 +732,9 @@ class ipopt : public not_population_based
     static void opt_checker(bool status, const Pair &p, const std::string &op_type)
     {
         if (!status) {
-            pagmo_throw(std::invalid_argument, "failed to set the ipopt " + op_type + " option '" + p.first
-                                                   + "' to the value: " + detail::to_string(p.second));
+            pagmo_throw(std::invalid_argument,
+                        "failed to set the ipopt " + op_type + " option '" + p.first
+                            + "' to the value: " + detail::to_string(p.second));
         }
     }
 
@@ -802,8 +808,9 @@ public:
                             "the value of the initial guess at index " + std::to_string(i) + " is NaN");
             }
             if (initial_guess[i] < bounds.first[i] || initial_guess[i] > bounds.second[i]) {
-                pagmo_throw(std::invalid_argument, "the value of the initial guess at index " + std::to_string(i)
-                                                       + " is outside the problem's bounds");
+                pagmo_throw(std::invalid_argument,
+                            "the value of the initial guess at index " + std::to_string(i)
+                                + " is outside the problem's bounds");
             }
         }
 

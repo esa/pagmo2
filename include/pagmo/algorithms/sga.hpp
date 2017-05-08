@@ -111,6 +111,10 @@ const typename sga_statics<T>::mutation_map_t sga_statics<T>::m_mutation_map = i
 /**
  * \image html sga.jpg "The DNA Helix" width=3cm
  *
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.2
+ * \endverbatim
+ *
  * Approximately during the same decades as Evolutionary Strategies (see pagmo::sea) were studied, a different group
  * led by John Holland, and later by his student David Goldberg, introduced and studied an algorithmic framework called
  * "genetic algorithms" that were, essentially, leveraging on the same idea but introducing also crossover as a genetic
@@ -227,8 +231,9 @@ public:
           m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (cr > 1. || cr < 0.) {
-            pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1] range, while a value of "
-                                                   + std::to_string(cr) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The crossover probability must be in the [0,1] range, while a value of " + std::to_string(cr)
+                            + " was detected");
         }
         if (eta_c < 1. || eta_c > 100.) {
             pagmo_throw(std::invalid_argument,
@@ -236,12 +241,14 @@ public:
                             + std::to_string(eta_c) + " was detected");
         }
         if (m < 0. || m > 1.) {
-            pagmo_throw(std::invalid_argument, "The mutation probability must be in the [0,1] range, while a value of "
-                                                   + std::to_string(cr) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The mutation probability must be in the [0,1] range, while a value of " + std::to_string(cr)
+                            + " was detected");
         }
         if (param_s == 0u) {
-            pagmo_throw(std::invalid_argument, "The selection parameter must be at least 1, while a value of "
-                                                   + std::to_string(param_s) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The selection parameter must be at least 1, while a value of " + std::to_string(param_s)
+                            + " was detected");
         }
         if (mutation != "gaussian" && mutation != "uniform" && mutation != "polynomial") {
             pagmo_throw(
@@ -263,15 +270,17 @@ public:
         }
         // param_m represents the distribution index if polynomial mutation is selected
         if (mutation == "polynomial" && (param_m < 1. || param_m > 100.)) {
-            pagmo_throw(std::invalid_argument, "Polynomial mutation was selected, the mutation parameter (distribution "
-                                               "index) must be in [1, 100], while a value of "
-                                                   + std::to_string(param_m) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "Polynomial mutation was selected, the mutation parameter (distribution "
+                        "index) must be in [1, 100], while a value of "
+                            + std::to_string(param_m) + " was detected");
         }
 
         // otherwise param_m represents the width of the mutation relative to the box bounds
         if (mutation != "polynomial" && (param_m < 0 || param_m > 1.)) {
-            pagmo_throw(std::invalid_argument, "The mutation parameter must be in [0,1], while a value of "
-                                                   + std::to_string(param_m) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The mutation parameter must be in [0,1], while a value of " + std::to_string(param_m)
+                            + " was detected");
         }
         // We can now init the data members representing the various choices made using std::string
         m_crossover = m_crossover_map.left.at(crossover);
@@ -301,22 +310,25 @@ public:
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // Check whether the problem/population are suitable for bee_colony
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Constraints detected in " + prob.get_name() + " instance. " + get_name()
-                                                   + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Constraints detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob.get_nf() != 1u) {
-            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (NP < 2u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 2 individuals in the population, "
-                                                   + std::to_string(NP) + " detected");
+            pagmo_throw(std::invalid_argument,
+                        prob.get_name() + " needs at least 2 individuals in the population, " + std::to_string(NP)
+                            + " detected");
         }
         if (m_param_s > pop.size()) {
             pagmo_throw(std::invalid_argument,
                         "The parameter for selection must be smaller than the population size, while a value of: "
-                            + std::to_string(m_param_s) + " was detected in a population of size: "
-                            + std::to_string(pop.size()));
+                            + std::to_string(m_param_s)
+                            + " was detected in a population of size: " + std::to_string(pop.size()));
         }
         if (m_crossover == crossover::SBX && (pop.size() % 2 != 0u)) {
             pagmo_throw(std::invalid_argument,
@@ -327,8 +339,8 @@ public:
             pagmo_throw(
                 std::invalid_argument,
                 "Invalid int_dim selected: larger than the problem dimension. The integer dimension was set to: "
-                    + std::to_string(m_int_dim) + " but the problem dimension was detected to be: "
-                    + std::to_string(dim));
+                    + std::to_string(m_int_dim)
+                    + " but the problem dimension was detected to be: " + std::to_string(dim));
         }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
@@ -378,8 +390,8 @@ public:
 
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
-                              std::setw(15), "Improvement:", '\n');
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                              "Best:", std::setw(15), "Improvement:", '\n');
                     }
                     print(std::setw(7), i, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
                           pop.get_f()[pop.best_idx()][0], std::setw(15), improvement, '\n');

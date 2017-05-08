@@ -152,7 +152,7 @@ This read-only property contains an array of ``float`` representing the decision
 .. note::
 
    If the problem is stochastic the champion is the individual that had the lowest fitness for
-   some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+   some lucky seed, not on average across seeds. Re-evaluating its decision vector may then result in a different
    fitness.
 
 Returns:
@@ -175,7 +175,7 @@ This read-only property contains an array of ``float`` representing the fitness 
 .. note::
 
    If the problem is stochastic, the champion is the individual that had the lowest fitness for
-   some lucky seed, not on average across seeds. Re-evaluating its desicion vector may then result in a different
+   some lucky seed, not on average across seeds. Re-evaluating its decision vector may then result in a different
    fitness.
 
 Returns:
@@ -3676,8 +3676,7 @@ In addition to the mandatory ``run_evolve()`` method, a UDI may implement the fo
      ...
 
 See the documentation of the corresponding methods in this class for details on how the optional
-methods in the UDI are used by :class:`~pygmo.island`. This class is the Python counterpart of the C++ class
-:cpp:class:`pagmo::island`.
+methods in the UDI are used by :class:`~pygmo.island`.
 
 An island can be initialised in a variety of ways using keyword arguments:
 
@@ -3699,6 +3698,8 @@ An island can be initialised in a variety of ways using keyword arguments:
   and the UDI, if not specified, will be chosen according to the heuristic detailed above).
 
 If the keyword arguments list is invalid, a :exc:`KeyError` exception will be raised.
+
+This class is the Python counterpart of the C++ class :cpp:class:`pagmo::island`.
 
 )";
 }
@@ -3976,7 +3977,7 @@ std::string archipelago_status_docstring()
 {
     return R"(Status of the archipelago.
 
-This method will return an :class:`~pygmo.evolve_status` flag indicating the current status of
+This read-only property will return an :class:`~pygmo.evolve_status` flag indicating the current status of
 asynchronous operations in the archipelago. The flag will be:
 
 * :attr:`~pygmo.evolve_status.idle` if, for all the islands in the archipelago, :attr:`pygmo.island.status`
@@ -4598,10 +4599,11 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sea::get_log()`.
 
 std::string sga_docstring()
 {
-    return R"(__init__(gen = 1u, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2u, crossover = "exponential", 
-        mutation = "polynomial", selection = "tournament", int_dim = 0u, seed = random)
+    return R"(__init__(gen = 1, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2, crossover = "exponential", mutation = "polynomial", selection = "tournament", int_dim = 0, seed = random)
 
 A Simple Genetic Algorithm
+
+.. versionadded:: 2.2
 
 Approximately during the same decades as Evolutionary Strategies (see :class:`~pygmo.sea`) were studied, 
 a different group led by John Holland, and later by his student David Goldberg, introduced and
@@ -4736,6 +4738,8 @@ std::string ipopt_docstring()
     return R"(__init__()
 
 Ipopt.
+
+.. versionadded:: 2.2
 
 This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
 a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that
