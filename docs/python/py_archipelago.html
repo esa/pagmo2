@@ -70,7 +70,7 @@
      href="../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../install.html#python">Python</a></li>
@@ -81,8 +81,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#python">Python</a></li>
 </ul>
 </li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
@@ -95,8 +93,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../problem_list.html#meta-problems">Meta-problems</a></li>
 </ul>
 </li>
-</ul>
-<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -119,6 +115,10 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">2.2 (unreleased)</a></li>
 </ul>
 </li>
 </ul>
@@ -351,7 +351,7 @@ the underlying C++ method</td>
 <dt id="pygmo.archipelago.status">
 <code class="descname">status</code><a class="headerlink" href="#pygmo.archipelago.status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Status of the archipelago.</p>
-<p>This method will return an <a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal"><span class="pre">evolve_status</span></code></a> flag indicating the current status of
+<p>This read-only property will return an <a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal"><span class="pre">evolve_status</span></code></a> flag indicating the current status of
 asynchronous operations in the archipelago. The flag will be:</p>
 <ul class="simple">
 <li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a> if, for all the islands in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a>

@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Search &#8212; pagmo 2.2 documentation</title>
+    <title>Changelog &#8212; pagmo 2.2 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -27,22 +27,15 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="_static/searchtools.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="#" />
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
-  
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Solving the 20 dimensional Schwefel problem" href="docs/python/tutorials/solving_schwefel_20.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-
   </head>
   <body role="document">
 
@@ -76,7 +69,7 @@
      href="index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install.html#python">Python</a></li>
@@ -123,8 +116,8 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">2.2 (unreleased)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#unreleased">2.2 (unreleased)</a></li>
 </ul>
 </li>
 </ul>
@@ -139,7 +132,18 @@
      href="#">This Page <b class="caret"></b></a>
   <ul class="dropdown-menu localtoc"
       role="menu"
-      aria-labelledby="dLabelLocalToc"></ul>
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#unreleased">2.2 (unreleased)</a><ul>
+<li><a class="reference internal" href="#new">New</a></li>
+<li><a class="reference internal" href="#changes">Changes</a></li>
+<li><a class="reference internal" href="#fix">Fix</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
 </li>
               
             
@@ -151,6 +155,13 @@
 
           
             
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
           
         </div>
     </div>
@@ -160,35 +171,38 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
-  </div>
-  <p>
-    From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.
-  </p>
+  <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="unreleased">
+<h2>2.2 (unreleased)<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="new">
+<h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>New tutorials (Schwefel and constrained problems) <a class="reference external" href="https://github.com/esa/pagmo2/pull/91">(#91)</a>. [Dario Izzo]</li>
+<li>Add support for <a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a> <a class="reference external" href="https://github.com/esa/pagmo2/pull/92">(#92)</a>.
+[Francesco Biscani]</li>
+<li>Implement the simple genetic algorithm (SGA) <a class="reference external" href="https://github.com/esa/pagmo2/pull/93">(#93)</a>.
+[Dario Izzo]</li>
+</ul>
+</div>
+<div class="section" id="changes">
+<h3>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Rename, fix and improve the implementation of various archipelago-related methods
+<a class="reference external" href="https://github.com/esa/pagmo2/issues/94">(#94)</a>. [Francesco Biscani]</li>
+<li>Remove the use of atomic counters in the problem <a class="reference external" href="https://github.com/esa/pagmo2/issues/79">(#79)</a>.
+[Francesco Biscani]</li>
+</ul>
+</div>
+<div class="section" id="fix">
+<h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Various documentation fixes/improvements, headers sanitization, etc. [Dario Izzo, Francesco Biscani]</li>
+</ul>
+</div>
+</div>
+</div>
 
-  
-  <form class="form-inline" action="" method="get">
-    <div class="form-group">
-      <input type="text" class="form-control" name="q" value="" />
-    </div>
-    <input type="submit" class="btn btn-default" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>  
-  
-  
-  
-  <div id="search-results">
-  
-  </div>
 
     </div>
       

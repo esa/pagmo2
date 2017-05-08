@@ -70,7 +70,7 @@
      href="../../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
@@ -81,8 +81,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
 </ul>
 </li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
@@ -95,8 +93,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
 </ul>
 </li>
-</ul>
-<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -119,6 +115,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.2 (unreleased)</a></li>
 </ul>
 </li>
 </ul>
@@ -171,6 +171,10 @@
 <span id="pagmo::sga"></span><span class="target" id="pagmoclasspagmo_1_1sga"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">sga</code><a class="headerlink" href="#_CPPv2N5pagmo3sgaE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A Simple Genetic Algorithm. </p>
 <p><img alt="../../../_images/sga.jpg" src="../../../_images/sga.jpg" /></p>
+<p><div class="versionadded">
+<p><span class="versionmodified">New in version 2.2.</span></p>
+</div>
+</p>
 <p>Approximately during the same decades as Evolutionary Strategies (see <a class="reference internal" href="sea.html#pagmoclasspagmo_1_1sea"><span class="std std-ref">pagmo::sea</span></a>) were studied, a different group led by John Holland, and later by his student David Goldberg, introduced and studied an algorithmic framework called &#8220;genetic algorithms&#8221; that were, essentially, leveraging on the same idea but introducing also crossover as a genetic operator. This led to a few decades of confusion and discussions on what was an evolutionary startegy and what a genetic algorithm and on whether the crossover was a useful operator or mutation only algorithms were to be preferred.</p>
 <p>In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between some selected crossover types, selection schemes and mutation types.</p>
 <p>The pseudo code of our version is: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Start</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">population</span> <span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="n">of</span> <span class="n">dimension</span> <span class="n">N</span>

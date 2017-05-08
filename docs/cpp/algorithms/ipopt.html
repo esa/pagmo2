@@ -70,7 +70,7 @@
      href="../../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
@@ -81,8 +81,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
 </ul>
 </li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
@@ -95,8 +93,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
 </ul>
 </li>
-</ul>
-<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -119,6 +115,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.2 (unreleased)</a></li>
 </ul>
 </li>
 </ul>
@@ -171,6 +171,10 @@
 <span id="pagmo::ipopt"></span><span class="target" id="pagmoclasspagmo_1_1ipopt"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">ipopt</code><a class="headerlink" href="#_CPPv2N5pagmo5ipoptE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Ipopt. </p>
 <p><img alt="../../../_images/ipopt.png" src="../../../_images/ipopt.png" /></p>
+<p><div class="versionadded">
+<p><span class="versionmodified">New in version 2.2.</span></p>
+</div>
+</p>
 <p>This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver, a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.</p>
 <p>Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt can estimate numerically the Hessians if needed).</p>
 <p>In order to support pagmo&#8217;s population-based optimisation model, <a class="reference internal" href="#pagmoclasspagmo_1_1ipopt_1a69053fa0154e4b6f2f0e1b67c9490a45"><span class="std std-ref">ipopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised. If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/constrained.html#pagmonamespacepagmo_1accb4f0cfb71555ffec215cc381ea87bc"><span class="std std-ref">pagmo::compare_fc()</span></a>), the optimised individual will be inserted back into the population. The selection and replacement strategies can be configured via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
@@ -190,7 +194,7 @@
 </p>
 <p><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">A moved-from pagmo::ipopt is destructible and assignable. Any other operation will result
+<p class="last">A moved-from <a class="reference internal" href="#_CPPv2N5pagmo5ipoptE" title="pagmo::ipopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::ipopt</span></code></a> is destructible and assignable. Any other operation will result
 in undefined behaviour.</p>
 </div>
 <div class="admonition note">
