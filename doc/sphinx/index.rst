@@ -18,6 +18,7 @@ Pagmo & Pygmo
    :width: 15%
 
 .. image:: ../sphinx/docs/images/island.png
+   :target: docs/island_list.html
    :width: 15%
 
 .. image:: ../sphinx/docs/images/archi.png
@@ -54,6 +55,7 @@ Contents:
 
    docs/algorithm_list
    docs/problem_list
+   docs/island_list
 
 .. toctree::
    :maxdepth: 1
