@@ -109,6 +109,25 @@ struct topo_inner final : topo_inner_base {
     T m_value;
 };
 }
+
+/// Topology.
+/**
+ * \image html migration_no_text.png
+ *
+ * In the jargon of pagmo, a topology is an object that represents connections among \link pagmo::island islands\endlink
+ * in an \link pagmo::archipelago archipelago\endlink. In essence, a topology is a *weighted directed graph* in which
+ *
+ * * the *nodes* (or *vertices*) are islands,
+ * * the *edges* (or *arcs*) are connections between islands across which information flows during the optimisation
+ *   process (via the migration of individuals between islands),
+ * * the *weights* of the edges (whose numerical values are the [0.,1.] range) represent the migration probability.
+ *
+ * Following the same schema adopted for pagmo::problem, pagmo::algorithm, etc., pagmo::topology exposes a generic
+ * interface to user-defined topologies (UDT).
+ */
+class topology
+{
+};
 }
 
 #endif
