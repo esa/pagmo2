@@ -72,12 +72,12 @@ test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd c:\
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] start /b ipcluster start
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] timeout 20
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] python -c "import pygmo; pygmo.test.run_test_suite()"
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] python -c "import pygmo; pygmo.test.run_test_suite(1)"
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cd c:\
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] start /b ipcluster start
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] timeout 20
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] python -c "import pygmo; pygmo.test.run_test_suite()"
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] python -c "import pygmo; pygmo.test.run_test_suite(1)"
 
 artifacts:
   - path: build\wheel\dist

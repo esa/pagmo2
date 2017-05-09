@@ -88,6 +88,75 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         // This will make a deep copy using the ctor above.
         return make_unique<isl_inner>(m_value);
     }
+    // If Python raises any exception in a separate thread (as signalled by a bp::error_already_set exception),
+    // the following will
+    // happen: the Python error indicator has been set for the *current* thread, but the bp::error_already_set
+    // exception will actually *escape* this thread due to the internal exception transport mechanism of
+    // std::future. In other words, bp::error_already_set will be re-thrown in a thread which, from the
+    // Python side, has no knowledge/information about the Python exception that originated all this, resulting
+    // in an unhelpful error message by Boost Python.
+    //
+    // What we do then is the following: we get the Python exception via PyErr_Fetch(), store its error message in an
+    // ad-hoc C++ exception, which will be thrown and then transferred by std::future to the thread that calls
+    // wait() on the future.
+    // https://docs.python.org/3/c-api/exceptions.html
+    //
+    // NOTE: we used to have here a more sophisticated system that attempted to transport the exception
+    // information for Python into a C++ exception, that would then be translated back to a Python exception via
+    // a translator registered in core.cpp. However, managing the lifetime of the exception data turned out to
+    // be difficult, with either segfaults in certain situations or memory leaks (if the pointers are never
+    // freed). Maybe we can revisit this at one point in the future. The relevant code can be found at the git
+    // revision 13a2d254a62dee5d82858595f95babd145e91e94.
+    static void handle_thread_py_exception(const std::string &err)
+    {
+        // NOTE: my understanding is that this assert should never fail, if we are handling a bp::error_already_set
+        // exception it means a Python exception was generated. However, I have seen snippets of code on the
+        // internet where people do check this flag. Keep this in mind, it should be easy to transform this assert()
+        // in an if/else.
+        assert(::PyErr_Occurred());
+
+        // Small helper to build a bp::object from a raw PyObject ptr.
+        // It assumes that ptr is a new reference, or null. If null, we
+        // return None.
+        auto new_ptr_to_obj = [](::PyObject *ptr) -> bp::object {
+            if (ptr) {
+                return bp::object(bp::handle<>(ptr));
+            }
+            return bp::object();
+        };
+
+        // Fetch the error data that was set by Python: exception type, value and the traceback.
+        ::PyObject *type, *value, *traceback;
+        // PyErr_Fetch() creates new references, and it also clears the error indicator.
+        ::PyErr_Fetch(&type, &value, &traceback);
+        assert(!::PyErr_Occurred());
+        // This normalisation step is apparently needed because sometimes, for some Python-internal reasons,
+        // the values returned by PyErr_Fetch() are “unnormalized” (see the Python documentation for this function).
+        ::PyErr_NormalizeException(&type, &value, &traceback);
+        // Move them into bp::object, so that they are cleaned up at the end of the scope. These are all new
+        // objects.
+        auto tp = new_ptr_to_obj(type);
+        auto v = new_ptr_to_obj(value);
+        auto tb = new_ptr_to_obj(traceback);
+
+        // Try to extract a string description of the exception using the "traceback" module.
+        std::string tmp(err);
+        try {
+            // NOTE: we are about to go back into the Python interpreter. Here Python could throw an exception
+            // and set again the error indicator, which was reset above by PyErr_Fetch(). In case of any issue,
+            // we will give up any attempt of producing a meaningful error message, reset the error indicator,
+            // and throw a pure C++ exception with a generic error message.
+            tmp += bp::extract<std::string>(
+                bp::str("").attr("join")(bp::import("traceback").attr("format_exception")(tp, v, tb)));
+        } catch (const bp::error_already_set &) {
+            // The block above threw from Python. There's not much we can do.
+            ::PyErr_Clear();
+            throw std::runtime_error("While trying to analyze the error message of a Python exception raised in a "
+                                     "separate thread, another Python exception was raised. Giving up now.");
+        }
+        // Throw the C++ exception.
+        throw std::runtime_error(tmp);
+    }
     // Mandatory methods.
     virtual void run_evolve(island &isl) const override final
     {
@@ -95,51 +164,21 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         // doing anything with the interpreter (including the throws in the checks below).
         pygmo::gil_thread_ensurer gte;
 
+        // NOTE: every time we call into the Python interpreter from a separate thread, we need to
+        // handle Python exceptions in a special way.
+        std::string isl_name;
+        try {
+            isl_name = get_name();
+        } catch (const bp::error_already_set &) {
+            handle_thread_py_exception("Could not fetch the name of the pythonic island. The error is:\n");
+        }
+
         try {
             isl.set_population(
                 bp::extract<population>(m_value.attr("run_evolve")(isl.get_algorithm(), isl.get_population()))());
         } catch (const bp::error_already_set &) {
-            // NOTE: run_evolve() is called from a separate thread. If Python raises any exception in this separate
-            // thread (as signalled by the bp::error_already_set exception being handled here), the following will
-            // happen: the Python error indicator has been set for the *current* thread, but the bp::error_already_set
-            // exception will actually *escape* this thread due to the internal exception transport mechanism of
-            // std::future. In other words, bp::error_already_set will be re-thrown in a thread which, from the
-            // Python side, has no knowledge/information about the Python exception that originated all this, resulting
-            // in an unhelpful error message by Boost Python.
-            //
-            // What we do then is the following: we get the Python exception via PyErr_Fetch(), store its data in an
-            // ad-hoc C++ exception, which will be thrown and then transferred by std::future to the thread that calls
-            // wait() on the future.
-            // https://docs.python.org/3/c-api/exceptions.html
-            //
-            // NOTE: we used to have here a more sophisticated system that attempted to transport the exception
-            // information for Python into a C++ exception, that would then be translated back to a Python exception via
-            // a translator registered in core.cpp. However, managing the lifetime of the exception data turned out to
-            // be difficult, with either segfaults in certain situations or memory leaks (if the pointers are never
-            // freed). Maybe we can revisit this at one point in the future. The relevant code can be found at the git
-            // revision 13a2d254a62dee5d82858595f95babd145e91e94.
-            //
-            // NOTE: my understanding is that this assert should never fail, if we are handling a bp::error_already_set
-            // exception it means a Python exception was generated. However, I have seen snippets of code on the
-            // internet where people do check this flag. Keep this in mind, it should be easy to transform this assert()
-            // in an if/else.
-            assert(::PyErr_Occurred());
-            // Fetch the error data that was set by Python: exception type, value and the traceback.
-            ::PyObject *type, *value, *traceback;
-            // PyErr_Fetch() creates new references, and it also clears the error indicator.
-            ::PyErr_Fetch(&type, &value, &traceback);
-            // This normalisation step is apparently needed because sometimes, for some Python-internal reasons,
-            // the values returned by PyErr_Fetch() are “unnormalized” (see the Python documentation for this function).
-            ::PyErr_NormalizeException(&type, &value, &traceback);
-            // Move them into bp::object, so that they are cleaned up at the end of the scope. These are all new
-            // objects.
-            bp::object tp{bp::handle<>{type}}, v{bp::handle<>{value}}, tb{bp::handle<>{traceback}};
-            // Extract a string description of the exception using the "traceback" module.
-            const std::string tmp = bp::extract<std::string>(
-                bp::str("").attr("join")(bp::import("traceback").attr("format_exception")(tp, v, tb)));
-            // Throw the C++ exception.
-            throw std::runtime_error("The asynchronous evolution of a Pythonic island of type '" + get_name()
-                                     + "' raised an error:\n" + tmp);
+            handle_thread_py_exception("The asynchronous evolution of a Pythonic island of type '" + isl_name
+                                       + "' raised an error:\n");
         }
     }
     // Optional methods.
@@ -190,10 +229,11 @@ struct island_pickle_suite : bp::pickle_suite {
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
         if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, ("the state tuple passed for island deserialization "
-                                           "must have a single element, but instead it has "
-                                           + std::to_string(len(state)) + " elements")
-                                              .c_str());
+            pygmo_throw(PyExc_ValueError,
+                        ("the state tuple passed for island deserialization "
+                         "must have a single element, but instead it has "
+                         + std::to_string(len(state)) + " elements")
+                            .c_str());
         }
         // NOTE: PyBytes_AsString is a macro.
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
