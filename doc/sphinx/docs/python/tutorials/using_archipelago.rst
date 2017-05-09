@@ -175,7 +175,7 @@ To show how pygmo handles these situations we use the fake problem below throwin
 
 Let us now instantiate and run a :class:`~pygmo.archipelago`:
 
-    >>> archi = pg.archipelago(n = 5, algo = pg.simulated_annealing(Ts = 10, Tf = 0.1, n_T_adj  = 40), prob = raise_exception(), pop_size = 20, seed = 32)
+    >>> archi = pg.archipelago(n = 5, algo = pg.simulated_annealing(Ts = 10, Tf = 0.1, n_T_adj  = 40), prob = raise_exception(), pop_size = 20)
     >>> archi.evolve()
     >>> archi.wait()
     >>> print(archi) #doctest: +SKIP

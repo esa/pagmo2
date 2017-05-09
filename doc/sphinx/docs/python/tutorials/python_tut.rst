@@ -12,6 +12,7 @@ Basics
   using_problem
   using_algorithm
   using_population
+  using_island
   using_archipelago
   evolving_a_population
 
