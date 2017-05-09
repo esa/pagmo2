@@ -81,3 +81,12 @@ Type traits and enums used in PaGMO
 
 .. doxygenclass:: pagmo::is_udi
    :members:
+
+.. doxygenclass:: pagmo::has_get_inv_adjacent_vertices
+   :members:
+
+.. doxygenclass:: pagmo::has_push_back
+   :members:
+
+.. doxygenclass:: pagmo::has_get_weight
+   :members:

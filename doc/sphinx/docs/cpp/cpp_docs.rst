@@ -74,6 +74,14 @@ Implemented islands
 
   islands/thread_island
 
+Implemented topologies
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  topologies/unconnected
+
 Utilities
 ^^^^^^^^^
 Various optimization utilities.
