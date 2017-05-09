@@ -5,7 +5,8 @@ Coding a simple User Defined Problem
 
 While pagmo provides a number of UDPs to help you test your own optimization strategy or user defined algorithm, the possibility
 to write your own UDP is at the core of pygmo's use. In this tutorial we will show how to code a UDP. Remember that UDPs are classes that can be used 
-to construct a :class:`~pygmo.problem` which, in turn, is what an :class:`~pygmo.algorithm` can solve.
+to construct a :class:`~pygmo.problem` which, in turn, is what an :class:`~pygmo.algorithm` can solve. See :ref:`py_tutorial_using_algorithm` and 
+:ref:`py_tutorial_using_problem` to learn the use of these core classes.
 
 We encourage the user to read the documentation of the class :class:`~pygmo.problem` to have a detailed list of methods that can be, or have to be,
 implemented in a UDP. To start simple we consider the simple problem of minimizing the two dimensional sphere function.

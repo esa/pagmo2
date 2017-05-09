@@ -128,14 +128,14 @@ After inspection, let us now run the evolution.
         7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy   
         ...
 
-Note how the evolution happening on the various islands does not interfere with our main process 
-as as it happens asynchronously on separate threads. We then have to call the :func:`pygmo.archipelago.wait()` 
+Note how the evolution is happening in parallel on 32 separate threads (each one spawning a process, in this case, as a Multiprocessing island is used).
+The evolution happens asynchronously and thus does not interfere directly with our main process. We then have to call the :func:`pygmo.archipelago.wait()` 
 method to have the main process explicitly wait for all islands to be finished.
 
  .. doctest::
 
     >>> archi.wait()
-    >>> archi.get_champions_f() #doctest: +NORMALIZE_WHITESPACE
+    >>> archi.get_champions_f() #doctest: +SKIP
     [array([  1.16514064e-02,   4.03450637e-05,  -1.16514064e-02]),
     array([ 0.02249111,  0.00392739, -0.02249111]),
     array([  6.09564060e-03,  -4.93961313e-05,  -6.09564060e-03]),
@@ -173,7 +173,7 @@ To show how pygmo handles these situations we use the fake problem below throwin
     ...     def get_name(self):
     ...         return "A throwing UDP"
 
-Let u
+Let us now instantiate and run a :class:`~pygmo.archipelago`:
 
     >>> archi = pg.archipelago(n = 5, algo = pg.simulated_annealing(Ts = 10, Tf = 0.1, n_T_adj  = 40), prob = raise_exception(), pop_size = 20, seed = 32)
     >>> archi.evolve()
