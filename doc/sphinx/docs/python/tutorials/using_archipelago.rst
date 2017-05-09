@@ -3,7 +3,7 @@
 Use of the class :class:`~pygmo.archipelago`
 ===============================================
 
-.. image:: ../images/archi_no_text.png
+.. image:: ../../images/archi_no_text.png
 
 The :class:`~pygmo.archipelago` class is the main parallelization engine of pagmo. It essentially is
 a container of :class:`~pygmo.island` able to initiate evolution (optimization tasks) in each :class:`~pygmo.island`
@@ -85,7 +85,7 @@ Now, without further ado, lets use the full power of pygmo and prepare to be sho
 To instantiate the :class:`~pygmo.archipelago` we have used the constructor from a ``problem`` and ``algorithm``.
 This leaves to the ``archi`` object the task of building the various populations and islands. To do so, several
 choices are made for the user, starting with the island type. In this case, as seen from the screen
-printout of the ``archi`` object, 8 Multiprocessing islands are being used. To control what islands will
+printout of the ``archi`` object, Multiprocessing islands are being used. To control what islands will
 assemble an archipelago, the user can instantiate an empty archipelago and use the
 :func:`pygmo.archipelago.push_back()` method to insert one by one all the islands. 
 
@@ -151,20 +151,77 @@ method to have the main process explicitly wait for all islands to be finished.
 Different islands produce different results, in this case, as the various populations and algorithms where
 constructed using random seeds.
 
+.. note::
+   The use of the UDA :class:`~pygmo.cstrs_self_adaptive` is here only chosen to keep the various threads occupied,
+   most likely other local algorithm would, in this case, be a superior choice.
+
 Managing exceptions in the islands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 What happens if, during the optimization task sent to an island, an exception happens?
-To show how pygmo handles these situations we use the fake problem below throwing as soon as more than 3 instances
-are made.
+To show how pygmo handles these situations we use the fake problem below throwing as soon as 300 fitness evaluations are made.
 
     >>> class raise_exception:
-    ...     counter = 0
+    ...     def __init__(self):
+    ...         self.counter=0;
     ...     def fitness(self,dv):
-    ...         if raise_exception.counter == 300:
+    ...         if self.counter == 300:
     ...             raise
-    ...         raise_exception.counter += 1
+    ...         self.counter += 1
     ...         return [0]
     ...     def get_bounds(self):
     ...         return ([0],[1])
+    ...     def get_name(self):
+    ...         return "A throwing UDP"
 
 Let u
+
+    >>> archi = pg.archipelago(n = 5, algo = pg.simulated_annealing(Ts = 10, Tf = 0.1, n_T_adj  = 40), prob = raise_exception(), pop_size = 20, seed = 32)
+    >>> archi.evolve()
+    >>> archi.wait()
+    >>> print(archi) #doctest: +SKIP
+    Number of islands: 5
+    Status: idle - **error occurred**
+    <BLANKLINE>
+    Islands summaries:
+    <BLANKLINE>
+        #  Type                    Algo                            Prob            Size  Status                     
+        ------------------------------------------------------------------------------------------------------------
+        0  Multiprocessing island  Simulated Annealing (Corana's)  A throwing UDP  20    idle - **error occurred**  
+        1  Multiprocessing island  Simulated Annealing (Corana's)  A throwing UDP  20    idle - **error occurred**  
+        2  Multiprocessing island  Simulated Annealing (Corana's)  A throwing UDP  20    idle - **error occurred**  
+        3  Multiprocessing island  Simulated Annealing (Corana's)  A throwing UDP  20    idle - **error occurred**  
+        4  Multiprocessing island  Simulated Annealing (Corana's)  A throwing UDP  20    idle - **error occurred**  
+
+The print statment allows us to visually see that errors occured in all islands (each one is containing a copy of the problem and thus 
+starts at 0 fitness evaluations to then hit the 300 fevals triggering the ``raise`` statement).
+We do not know at this stage what happened exactly as the exception is thrown on a separate thread/process and thus its hidden from our main
+scope. To inspect what happened we can write:
+
+
+    >>> archi.wait_check() #doctest: +SKIP
+    RuntimeError                              Traceback (most recent call last)
+    <ipython-input-22-d8562cc51573> in <module>()
+    ----> 1 archi.wait_check()
+    <BLANKLINE>
+    RuntimeError: The asynchronous evolution of a Pythonic island of type 'Multiprocessing island' raised an error:
+    multiprocessing.pool.RemoteTraceback: 
+    """
+    Traceback (most recent call last):
+    File "/home/dario/miniconda3/envs/pagmo/lib/python3.6/multiprocessing/pool.py", line 119, in worker
+        result = (True, func(*args, **kwds))
+    File "/home/dario/miniconda3/envs/pagmo/lib/python3.6/site-packages/pygmo/_py_islands.py", line 40, in _evolve_func
+        return algo.evolve(pop)
+    File "<ipython-input-19-f5ede4c63180>", line 6, in fitness
+    RuntimeError: No active exception to reraise
+    """
+    <BLANKLINE>
+    The above exception was the direct cause of the following exception:
+    <BLANKLINE>
+    Traceback (most recent call last):
+    File "/home/dario/miniconda3/envs/pagmo/lib/python3.6/site-packages/pygmo/_py_islands.py", line 128, in run_evolve
+        return res.get()
+    File "/home/dario/miniconda3/envs/pagmo/lib/python3.6/multiprocessing/pool.py", line 608, in get
+        raise self._value
+    RuntimeError: No active exception to reraise
+
+which will rethrow the first exception that happened and reset all the island states to ``idle``.

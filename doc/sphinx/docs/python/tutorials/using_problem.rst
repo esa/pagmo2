@@ -3,6 +3,8 @@
 Use of the class :class:`~pygmo.problem`
 =============================================
 
+.. image:: ../../images/prob_no_text.png
+
 The :class:`~pygmo.problem` class represents a generic optimization
 problem. The user codes the details of such a problem in a separate class (the
 user-defined problem, or UDP) which is then passed to :class:`~pygmo.problem`
