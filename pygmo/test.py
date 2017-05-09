@@ -42,6 +42,31 @@ class _prob(object):
         return [42]
 
 
+class _quick_prob:
+
+    def fitness(self, dv):
+        return [sum(dv)]
+
+    def get_bounds(self):
+        return ([0] * 10, [1] * 10)
+
+
+class _raise_exception:
+    counter = 0
+
+    def __init__(self, throw_at=3000):
+        self.throw_at = throw_at
+
+    def fitness(self, dv):
+        if type(self).counter == self.throw_at:
+            raise
+        type(self).counter += 1
+        return [0]
+
+    def get_bounds(self):
+        return ([0], [1])
+
+
 class core_test_case(_ut.TestCase):
     """Test case for core PyGMO functionality.
 
@@ -1184,6 +1209,10 @@ class archipelago_test_case(_ut.TestCase):
 
     """
 
+    def __init__(self, level):
+        _ut.TestCase.__init__(self)
+        self._level = level
+
     def runTest(self):
         self.run_init_tests()
         self.run_evolve_tests()
@@ -1193,6 +1222,8 @@ class archipelago_test_case(_ut.TestCase):
         self.run_pickle_tests()
         self.run_champions_tests()
         self.run_status_tests()
+        if self._level > 0:
+            self.run_torture_test()
 
     def run_init_tests(self):
         from . import archipelago, de, rosenbrock, population, null_problem, thread_island, mp_island
@@ -1420,11 +1451,39 @@ class archipelago_test_case(_ut.TestCase):
         self.assertRaises(ValueError, lambda: a.wait_check())
         self.assertTrue(a.status == evolve_status.idle)
 
+    def run_torture_test(self):
+        from . import archipelago, de, ackley
 
-def run_test_suite():
+        # pure C++
+        archi = archipelago(n=1000, algo=de(
+            10), prob=ackley(5), pop_size=10, seed=32)
+        archi.evolve()
+        archi.wait_check()
+
+        # python prob
+        archi2 = archipelago(n=1000, algo=de(
+            10), prob=_quick_prob(), pop_size=10, seed=32)
+        archi2.evolve()
+        archi2.wait_check()
+
+        # python prob with exceptions (will throw in osx as too many threads
+        # will be opened)
+        def _():
+            archi3 = archipelago(n=1000, algo=simulated_annealing(
+                10, 1, 50), prob=_raise_exception(throw_at=1001), pop_size=1, seed=32)
+            archi3.evolve()
+            archi3.wait_check()
+
+        self.assertRaises(BaseException, _)
+
+
+def run_test_suite(level=0):
     """Run the full test suite.
 
     This function will raise an exception if at least one test fails.
+
+    Args:
+        level(``int``): the test level (higher values run longer tests)
 
     """
     from . import _problem_test, _algorithm_test, _island_test, set_global_rng_seed
@@ -1448,7 +1507,7 @@ def run_test_suite():
     suite.addTest(moead_test_case())
     suite.addTest(sga_test_case())
     suite.addTest(population_test_case())
-    suite.addTest(archipelago_test_case())
+    suite.addTest(archipelago_test_case(level))
     suite.addTest(null_problem_test_case())
     suite.addTest(hypervolume_test_case())
     suite.addTest(mo_utils_test_case())
