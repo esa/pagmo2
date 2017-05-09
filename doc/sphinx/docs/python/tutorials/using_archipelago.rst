@@ -3,6 +3,8 @@
 Use of the class :class:`~pygmo.archipelago`
 ===============================================
 
+.. image:: ../images/archi_no_text.png
+
 The :class:`~pygmo.archipelago` class is the main parallelization engine of pagmo. It essentially is
 a container of :class:`~pygmo.island` able to initiate evolution (optimization tasks) in each :class:`~pygmo.island`
 asynchronously while keeping track of the results and of the information exchange (migration) between the tasks (via the
@@ -58,12 +60,12 @@ Now, without further ado, lets use the full power of pygmo and prepare to be sho
 .. doctest::
 
     >>> import pygmo as pg
-    >>> a_cstrs_sa = pg.algorithm(pg.cstrs_self_adaptive(iters=2000))
-    >>> p_toy = pg.problem(toy_problem(100))
+    >>> a_cstrs_sa = pg.algorithm(pg.cstrs_self_adaptive(iters=1000))
+    >>> p_toy = pg.problem(toy_problem(50))
     >>> p_toy.c_tol = [1e-4, 1e-4]
-    >>> archi = pg.archipelago(n=8,algo=a_cstrs_sa, prob=p_toy, pop_size=100)
+    >>> archi = pg.archipelago(n=32,algo=a_cstrs_sa, prob=p_toy, pop_size=70)
     >>> print(archi) #doctest: +SKIP
-    Number of islands: 8
+    Number of islands: 32
     Status: idle
     <BLANKLINE>
     Islands summaries:
@@ -77,7 +79,8 @@ Now, without further ado, lets use the full power of pygmo and prepare to be sho
         4  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle    
         5  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle    
         6  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle    
-        7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle    
+        7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle 
+        ...  
 
 To instantiate the :class:`~pygmo.archipelago` we have used the constructor from a ``problem`` and ``algorithm``.
 This leaves to the ``archi`` object the task of building the various populations and islands. To do so, several
@@ -87,9 +90,10 @@ assemble an archipelago, the user can instantiate an empty archipelago and use t
 :func:`pygmo.archipelago.push_back()` method to insert one by one all the islands. 
 
 .. note::
-   The island type selected by the :class:`~pygmo.archipelago` constructor used is the ``Multiprocessing island``, 
-   (:class:`pygmo.py_islands.mp_island`) as we run this example on py36 and a linux machine. In general, the exact island used is platform (a dn pop and algo)
-   dependent and is described in the docs of the :class:`~pygmo.island` class constructor.
+   The island type selected by the :class:`~pygmo.archipelago` constructor is, in this case, the
+   ``Multiprocessing island``, (:class:`pygmo.py_islands.mp_island`) as we run this example on py36 and
+   a linux machine. In general, the exact island chosen is platform, population and algorithm
+   dependent and such choice is described in the docs of the :class:`~pygmo.island` class constructor.
 
 After inspection, let us now run the evolution.
 
@@ -103,24 +107,26 @@ After inspection, let us now run the evolution.
     array([  6.53062434, -24.98724057,  -6.53062434]),
     array([  1.02894159, -25.69765425,  -1.02894159]),
     array([  4.07802374, -23.82020921,  -4.07802374]),
-    array([  1.71396489, -25.90794514,  -1.71396489])]
+    array([  1.71396489, -25.90794514,  -1.71396489]),
+    ...]
     >>> archi.evolve()
     >>> print(archi) #doctest: +SKIP
-    Number of islands: 8
+    Number of islands: 32
     Status: busy
     <BLANKLINE>
     Islands summaries:
     <BLANKLINE>
         #  Type                    Algo                                Prob           Size  Status  
         --------------------------------------------------------------------------------------------
-        0  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   busy    
-        1  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   busy    
-        2  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   busy    
-        3  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   busy    
-        4  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   busy    
-        5  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   busy    
-        6  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   busy    
-        7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   busy   
+        0  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy    
+        1  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy    
+        2  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy    
+        3  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy    
+        4  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy    
+        5  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy    
+        6  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy    
+        7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy   
+        ...
 
 Note how the evolution happening on the various islands does not interfere with our main process 
 as as it happens asynchronously on separate threads. We then have to call the :func:`pygmo.archipelago.wait()` 
@@ -130,14 +136,35 @@ method to have the main process explicitly wait for all islands to be finished.
 
     >>> archi.wait()
     >>> archi.get_champions_f() #doctest: +NORMALIZE_WHITESPACE
-    [array([ 0.01219149,  0.00462767, -0.01219149]),
-    array([ 0.00012038,  0.00107938, -0.00012038]),
-    array([  2.47246441e-02,   6.77824904e-05,  -2.47246441e-02]),
-    array([ 0.00791089,  0.00311376, -0.00791089]),
-    array([  4.85915841e-03,  -3.74569709e-10,  -4.85915841e-03]),
-    array([ 0.00752764, -1.1718177 , -0.00752764]),
-    array([  5.29472090e-02,  -3.39153972e-09,  -5.29472090e-02]),
-    array([ 0.07301779, -0.56072333, -0.07301779])]
+    [array([  1.16514064e-02,   4.03450637e-05,  -1.16514064e-02]),
+    array([ 0.02249111,  0.00392739, -0.02249111]),
+    array([  6.09564060e-03,  -4.93961313e-05,  -6.09564060e-03]),
+    array([ 0.01161224, -0.00815189, -0.01161224]),
+    array([ -1.90431378e-05,   7.65501702e-05,   1.90431378e-05]),
+    array([ -5.45044897e-05,   5.70199057e-05,   5.45044897e-05]),
+    array([ 0.00541601, -0.08208163, -0.00541601]),
+    array([ -6.95677113e-05,  -7.42268924e-05,   6.95677113e-05]),
+    array([ 0.00335729,  0.00684969, -0.00335729]),
+    ...
+
 
 Different islands produce different results, in this case, as the various populations and algorithms where
 constructed using random seeds.
+
+Managing exceptions in the islands
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+What happens if, during the optimization task sent to an island, an exception happens?
+To show how pygmo handles these situations we use the fake problem below throwing as soon as more than 3 instances
+are made.
+
+    >>> class raise_exception:
+    ...     counter = 0
+    ...     def fitness(self,dv):
+    ...         if raise_exception.counter == 300:
+    ...             raise
+    ...         raise_exception.counter += 1
+    ...         return [0]
+    ...     def get_bounds(self):
+    ...         return ([0],[1])
+
+Let u
