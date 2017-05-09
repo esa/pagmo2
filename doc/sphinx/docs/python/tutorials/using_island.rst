@@ -18,9 +18,19 @@ coded in UDIs provided with pygmo, a list of which can be found at :ref:`islands
    A collection of :class:`pygmo.island` form an :class:`~pygmo.archipelago`, you can skip this tutorial and follow directly the tutorial ":ref:`py_tutorial_using_archipelago`"
    in case you are happy with the defualt choices pygmo will do for you to parallelize your tasks via the :class:`~pygmo.archipelago`.
 
-We start by instantiating an island.
+WeLet us start by instantiating an island.
 
 .. doctest::
 
     >>> import pygmo as pg
     >>> isl = pg.island(algo = pg.de(10), prob = pg.ackley(5), size=20, udi=pg.thread_island())
+
+Regardless of the *udi* kwarg, should the construction be successfull, a new thread will be opened and delegated
+to run the :func:`~pygmo.island.evolve()` method. Since, in this case, we constructed the island specifying an 
+*udi*, and in particular we choose the :class:`~pygmo.thread_island`, the population evolution will happen directly
+on the opened thread. 
+
+.. note::
+   Since an evolution (optimization task) requires both evaluations of the :class:`~pygmo.problem` fitness function and
+   the execution of the :class:`~pygmo.algorithm` logic, both these must be marked as thread safe in order for a 
+   :class:`~pygmo.thread_island` to be successfull.
