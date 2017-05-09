@@ -95,6 +95,19 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         // doing anything with the interpreter (including the throws in the checks below).
         pygmo::gil_thread_ensurer gte;
 
+        // Small helper to build a bp::object from a raw PyObject ptr.
+        // It assumes that ptr is a new reference, or null. If null, we
+        // return None.
+        auto new_ptr_to_obj = [](::PyObject *ptr) -> bp::object {
+            if (ptr) {
+                return bp::object(bp::handle<>(ptr));
+            }
+            return bp::object();
+        };
+
+        // Store it for later.
+        const auto isl_name = get_name();
+
         try {
             isl.set_population(
                 bp::extract<population>(m_value.attr("run_evolve")(isl.get_algorithm(), isl.get_population()))());
@@ -133,13 +146,29 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
             ::PyErr_NormalizeException(&type, &value, &traceback);
             // Move them into bp::object, so that they are cleaned up at the end of the scope. These are all new
             // objects.
-            bp::object tp{bp::handle<>{type}}, v{bp::handle<>{value}}, tb{bp::handle<>{traceback}};
-            // Extract a string description of the exception using the "traceback" module.
-            const std::string tmp = bp::extract<std::string>(
-                bp::str("").attr("join")(bp::import("traceback").attr("format_exception")(tp, v, tb)));
+            auto tp = new_ptr_to_obj(type);
+            auto v = new_ptr_to_obj(value);
+            auto tb = new_ptr_to_obj(traceback);
+            // Try to extract a string description of the exception using the "traceback" module.
+            std::string tmp;
+            try {
+                // NOTE: we are about to go back into the Python interpreter. Here Python could throw an exception
+                // and set again the error indicator, which was reset above by PyErr_Fetch(). In case of any issue,
+                // we will give up any attempt of producing a meaningful error message, reset the error indicator,
+                // and throw a pure C++ exception.
+                tmp = bp::extract<std::string>(
+                    bp::str("").attr("join")(bp::import("traceback").attr("format_exception")(tp, v, tb)));
+                tmp = "The asynchronous evolution of a Pythonic island of type '" + isl_name + "' raised an error:\n"
+                      + tmp;
+            } catch (...) {
+                // The block above threw. There's not much we can do.
+                ::PyErr_Clear();
+                throw std::runtime_error(
+                    "The asynchronous evolution of a Pythonic island of type '" + isl_name
+                    + "' raised an error. While trying to analyze the error, another error was raised. Giving up now.");
+            }
             // Throw the C++ exception.
-            throw std::runtime_error("The asynchronous evolution of a Pythonic island of type '" + get_name()
-                                     + "' raised an error:\n" + tmp);
+            throw std::runtime_error(tmp);
         }
     }
     // Optional methods.
@@ -190,10 +219,11 @@ struct island_pickle_suite : bp::pickle_suite {
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
         if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, ("the state tuple passed for island deserialization "
-                                           "must have a single element, but instead it has "
-                                           + std::to_string(len(state)) + " elements")
-                                              .c_str());
+            pygmo_throw(PyExc_ValueError,
+                        ("the state tuple passed for island deserialization "
+                         "must have a single element, but instead it has "
+                         + std::to_string(len(state)) + " elements")
+                            .c_str());
         }
         // NOTE: PyBytes_AsString is a macro.
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
