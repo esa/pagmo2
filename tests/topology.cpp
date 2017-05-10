@@ -31,15 +31,22 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE problem_test
 #include <boost/test/included/unit_test.hpp>
 
+#include <string>
+
 using namespace pagmo;
 
 struct unconnected2 : unconnected {
+    std::string get_extra_info() const
+    {
+        return "foobar";
+    }
 };
 
 BOOST_AUTO_TEST_CASE(topology_construction_test)
 {
     topology t;
     BOOST_CHECK(t.get_name() == "Unconnected");
+    BOOST_CHECK(t.get_extra_info() == "");
     BOOST_CHECK(t.is<unconnected>());
     BOOST_CHECK(t.extract<unconnected>() != nullptr);
     BOOST_CHECK(static_cast<const topology &>(t).extract<unconnected>() != nullptr);

@@ -29,7 +29,9 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_TOPOLOGY_HPP
 #define PAGMO_TOPOLOGY_HPP
 
+#include <cmath>
 #include <cstddef>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -40,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
@@ -249,6 +252,8 @@ struct topo_inner final : topo_inner_base {
 struct unconnected {
     /// Get the list of connections.
     /**
+     * In an unconnected topology there are no connections for any vertex.
+     *
      * @return a pair of empty vectors.
      */
     std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const
@@ -256,10 +261,13 @@ struct unconnected {
         return std::make_pair(std::vector<std::size_t>{}, vector_double{});
     }
     /// Add the next vertex.
+    /**
+     * This method is a no-op.
+     */
     void push_back()
     {
     }
-    /// Get name.
+    /// Get the name of the topology.
     /**
      * @return ``"Unconnected"``.
      */
@@ -295,6 +303,53 @@ struct unconnected {
  * of methods that describe the properties of (and allow to interact with) a topology. Once
  * defined and instantiated, a UDT can then be used to construct an instance of this class, pagmo::topology, which
  * provides a generic interface to topologies for use by pagmo::archipelago and pagmo::island.
+ *
+ * In pagmo::topology, vertices in the graph are identified by a zero-based unique integral index (represented by
+ * an \p std::size_t). This integral index corresponds to the index of an
+ * \link pagmo::island island\endlink in an \link pagmo::archipelago archipelago\endlink.
+ * Every UDT must implement at least the following methods:
+ * @code{.unparsed}
+ * std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const;
+ * void push_back();
+ * @endcode
+ *
+ * The <tt>%get_connections()</tt> method takes as input a vertex index \p n, and it is expected to return
+ * a pair of vectors containing respectively:
+ * * the indices of the vertices which are connecting to \p n (that is, the list of vertices for which a directed edge
+ *   towards \p n exists),
+ * * the weights (i.e., the migration probabilities) of the edges linking the connecting vertices to \p n.
+ *
+ * The <tt>%push_back()</tt> method is expected to add a new vertex to the topology, assigning it the next
+ * available index and establishing connections to other vertices. The <tt>%push_back()</tt> method is invoked
+ * by pagmo::archipelago::push_back() upon the insertion of a new island into an archipelago, and it is meant
+ * to allow the incremental construction of a topology. That is, after ``N`` calls to <tt>%push_back()</tt>
+ * on an initially-empty topology, the topology should contain ``N`` vertices and any number of edges (depending
+ * on the specifics of the topology).
+ *
+ * In addition to providing the above methods, a UDT must also be default, copy and move constructible.
+ *
+ * Additional optional methods can be implemented in a UDT:
+ * @code{.unparsed}
+ * std::string get_name() const;
+ * std::string get_extra_info() const;
+ * @endcode
+ *
+ * See the documentation of the corresponding methods in this class for details on how the optional
+ * methods in the UDT are used by pagmo::topology.
+ *
+ * Topologies are often used in asynchronous operations involving migration in archipelagos. pagmo
+ * guarantees that only a single thread at a time is interacting with any topology, so there is no
+ * need to protect UDTs against concurrent access. Topologies however are **required** to offer at
+ * least the thread_safety::basic guarantee, in order to make it possible to use different
+ * topologies from different threads.
+ *
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    A moved-from :cpp:class:`pagmo::topology` is destructible and assignable. Any other operation will result
+ *    in undefined behaviour.
+ *
+ * \endverbatim
  */
 class topology
 {
@@ -468,6 +523,104 @@ public:
     std::string get_name() const
     {
         return m_name;
+    }
+
+    /// Topology's extra info.
+    /**
+     * If the UDT satisfies pagmo::has_extra_info, then this method will return the output of its
+     * <tt>%get_extra_info()</tt> method. Otherwise, an empty string will be returned.
+     *
+     * @return extra info about the UDT.
+     *
+     * @throws unspecified any exception thrown by the <tt>%get_extra_info()</tt> method of the UDT.
+     */
+    std::string get_extra_info() const
+    {
+        return ptr()->get_extra_info();
+    }
+
+    /// Get the connections to a vertex.
+    /**
+     * This method will invoke the <tt>%get_connections()</tt> method of the UDT, which is expected to return
+     * a pair of vectors containing respectively:
+     * * the indices of the vertices which are connecting to \p n (that is, the list of vertices for which a directed
+     *   edge towards \p n exists),
+     * * the weights (i.e., the migration probabilities) of the edges linking the connecting vertices to \p n.
+     *
+     * This method will also run sanity checks on the output of the <tt>%get_connections()</tt> method of the UDT.
+     *
+     * @param n the index of the vertex whose incoming connections' details will be returned.
+     *
+     * @return a pair of vectors describing <tt>n</tt>'s incoming connections.
+     *
+     * @throws std::invalid_argument if the sizes of the returned vectors differ, or if any element of the second
+     * vector is not in the \f$ [0.,1.] \f$ range.
+     * @throws unspecified any exception thrown by the <tt>%get_connections()</tt> method of the UDT.
+     */
+    std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t n) const
+    {
+        auto retval = ptr()->get_connections(n);
+        // Check the returned value.
+        if (retval.first.size() != retval.second.size()) {
+            pagmo_throw(std::invalid_argument,
+                        "An invalid pair of vectors was returned by the 'get_connections()' method of the '"
+                            + get_name() + "' topology: the vector of connecting islands has a size of "
+                            + std::to_string(retval.first.size())
+                            + ", while the vector of migration probabilities has a size of "
+                            + std::to_string(retval.second.size()) + " (the two sizes must be equal)");
+        }
+        for (const auto &p : retval.second) {
+            if (!std::isfinite(p)) {
+                pagmo_throw(
+                    std::invalid_argument,
+                    "An invalid non-finite migration probability of " + std::to_string(p)
+                        + " was detected in the vector of migration probabilities returned by the 'get_connections()' "
+                          "method of the '"
+                        + get_name() + "' topology");
+            }
+            if (p < 0. || p > 1.) {
+                pagmo_throw(
+                    std::invalid_argument,
+                    "An invalid migration probability of " + std::to_string(p)
+                        + " was detected in the vector of migration probabilities returned by the 'get_connections()' "
+                          "method of the '"
+                        + get_name() + "' topology: the value must be in the [0.,1.] range");
+            }
+        }
+        return retval;
+    }
+    /// Add a vertex.
+    /**
+     * This method will invoke the <tt>%push_back()</tt> method of the UDT, which is expected to add a new vertex to the
+     * topology, assigning it the next available index and establishing connections to other vertices.
+     *
+     * @throws unspecified any exception thrown by the <tt>%push_back()</tt> method of the UDT.
+     */
+    void push_back()
+    {
+        ptr()->push_back();
+    }
+
+    /// Streaming operator
+    /**
+     * This function will stream to \p os a human-readable representation of the input
+     * topology \p t.
+     *
+     * @param os input <tt>std::ostream</tt>.
+     * @param t pagmo::topology object to be streamed.
+     *
+     * @return a reference to \p os.
+     *
+     * @throws unspecified any exception thrown by querying various topology properties and streaming them into \p os.
+     */
+    friend std::ostream &operator<<(std::ostream &os, const topology &t)
+    {
+        os << "Topology name: " << t.get_name();
+        const auto extra_str = t.get_extra_info();
+        if (!extra_str.empty()) {
+            stream(os, "\nExtra info:\n", extra_str);
+        }
+        return os;
     }
 
     /// Save to archive.
