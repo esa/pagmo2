@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 
@@ -41,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
 
 /// Macro for the registration of the serialization functionality for user-defined topologies.
 /**
@@ -66,23 +68,23 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Detect \p get_inv_adjacent_vertices() method.
+/// Detect \p get_connections() method.
 /**
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
  * @code{.unparsed}
- * std::vector<std::size_t> get_inv_adjacent_vertices(std::size_t) const;
+ * std::pair<std::vector<std::size_t>,vector_double> get_connections(std::size_t) const;
  * @endcode
- * The \p get_inv_adjacent_vertices() method is part of the interface for the definition of a topology
+ * The \p get_connections() method is part of the interface for the definition of a topology
  * (see pagmo::topology).
  */
 template <typename T>
-class has_get_inv_adjacent_vertices
+class has_get_connections
 {
     template <typename U>
-    using get_inv_adjacent_vertices_t = decltype(std::declval<const U &>().get_inv_adjacent_vertices(std::size_t(0)));
+    using get_connections_t = decltype(std::declval<const U &>().get_connections(std::size_t(0)));
     static const bool implementation_defined
-        = std::is_same<std::vector<std::size_t>, detected_t<get_inv_adjacent_vertices_t, T>>::value;
+        = std::is_same<std::pair<std::vector<std::size_t>, vector_double>, detected_t<get_connections_t, T>>::value;
 
 public:
     /// Value of the type trait.
@@ -90,7 +92,7 @@ public:
 };
 
 template <typename T>
-const bool has_get_inv_adjacent_vertices<T>::value;
+const bool has_get_connections<T>::value;
 
 /// Detect \p push_back() method.
 /**
@@ -117,22 +119,33 @@ public:
 template <typename T>
 const bool has_push_back<T>::value;
 
-/// Detect \p get_weight() method.
+namespace detail
+{
+
+// Specialise this to true in order to disable all the UDT checks and mark a type
+// as a UDT regardless of the features provided by it.
+// NOTE: this is needed when implementing the machinery for Python topos.
+// NOTE: leave this as an implementation detail for now.
+template <typename>
+struct disable_udt_checks : std::false_type {
+};
+}
+
+/// Detect user-defined topologies (UDT).
 /**
- * This type trait will be \p true if \p T provides a method with
- * the following signature:
- * @code{.unparsed}
- * double get_weight(std::size_t, std::size_t) const;
- * @endcode
- * The \p get_weight() method is part of the interface for the definition of a topology
- * (see pagmo::topology).
+ * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
+ * constructible, and if it satisfies the pagmo::has_get_connections and pagmo::has_push_back type traits.
+ *
+ * Types satisfying this type trait can be used as user-defined topologies (UDT) in pagmo::topology.
  */
 template <typename T>
-class has_get_weight
+class is_udt
 {
-    template <typename U>
-    using get_weight_t = decltype(std::declval<const U &>().get_weight(std::size_t(0), std::size_t(0)));
-    static const bool implementation_defined = std::is_same<double, detected_t<get_weight_t, T>>::value;
+    static const bool implementation_defined
+        = (std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
+           && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
+           && std::is_destructible<T>::value && has_get_connections<T>::value && has_push_back<T>::value)
+          || detail::disable_udt_checks<T>::value;
 
 public:
     /// Value of the type trait.
@@ -140,7 +153,7 @@ public:
 };
 
 template <typename T>
-const bool has_get_weight<T>::value;
+const bool is_udt<T>::value;
 
 namespace detail
 {
@@ -152,9 +165,8 @@ struct topo_inner_base {
     virtual std::unique_ptr<topo_inner_base> clone() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
-    virtual std::vector<std::size_t> get_inv_adjacent_vertices(std::size_t) const = 0;
+    virtual std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const = 0;
     virtual void push_back() = 0;
-    virtual double get_weight(std::size_t, std::size_t) const = 0;
     template <typename Archive>
     void serialize(Archive &)
     {
@@ -181,6 +193,45 @@ struct topo_inner final : topo_inner_base {
     {
         return make_unique<topo_inner>(m_value);
     }
+    // The mandatory methods.
+    virtual std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t n) const override final
+    {
+        return m_value.get_connections(n);
+    }
+    virtual void push_back() override final
+    {
+        m_value.push_back();
+    }
+    // Optional methods.
+    virtual std::string get_name() const override final
+    {
+        return get_name_impl(m_value);
+    }
+    virtual std::string get_extra_info() const override final
+    {
+        return get_extra_info_impl(m_value);
+    }
+    // Implementation of the optional methods.
+    template <typename U, enable_if_t<has_name<U>::value, int> = 0>
+    static std::string get_name_impl(const U &value)
+    {
+        return value.get_name();
+    }
+    template <typename U, enable_if_t<!has_name<U>::value, int> = 0>
+    static std::string get_name_impl(const U &)
+    {
+        return typeid(U).name();
+    }
+    template <typename U, enable_if_t<has_extra_info<U>::value, int> = 0>
+    static std::string get_extra_info_impl(const U &value)
+    {
+        return value.get_extra_info();
+    }
+    template <typename U, enable_if_t<!has_extra_info<U>::value, int> = 0>
+    static std::string get_extra_info_impl(const U &)
+    {
+        return "";
+    }
     // Serialization
     template <typename Archive>
     void serialize(Archive &ar)
@@ -196,27 +247,33 @@ struct topo_inner final : topo_inner_base {
  * This user-defined topology (UDT) represents an unconnected graph.
  */
 struct unconnected {
-    /// Get the list of inversely adjacent vertices.
+    /// Get the list of connections.
     /**
-     * @return an empty vector.
+     * @return a pair of empty vectors.
      */
-    std::vector<std::size_t> get_inv_adjacent_vertices(std::size_t) const
+    std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const
     {
-        return std::vector<std::size_t>{};
+        return std::make_pair(std::vector<std::size_t>{}, vector_double{});
     }
     /// Add the next vertex.
     void push_back()
     {
     }
-    /// Get the weight of an edge.
+    /// Get name.
     /**
-     * @return nothing, this method never returns.
-     *
-     * @throws std::invalid_argument if invoked.
+     * @return ``"Unconnected"``.
      */
-    double get_weight(std::size_t, std::size_t) const
+    std::string get_name() const
     {
-        pagmo_throw(std::invalid_argument, "An unconnected topology has no connections and thus no weights.");
+        return "Unconnected";
+    }
+    // Serialization.
+    /**
+     * This class is stateless, no data will be loaded or saved during serialization.
+     */
+    template <typename Archive>
+    void serialize(Archive &)
+    {
     }
 };
 
@@ -229,19 +286,241 @@ struct unconnected {
  *
  * * the *vertices* (or *nodes*) are islands,
  * * the *edges* (or *arcs*) are directed connections between islands across which information flows during the
- *   optimisation process (via the migration of individuals between islands),
+ *   optimisation process (via the migration of individuals),
  * * the *weights* of the edges (whose numerical values are the \f$ [0.,1.] \f$ range) represent the migration
  *   probability.
  *
  * Following the same schema adopted for pagmo::problem, pagmo::algorithm, etc., pagmo::topology exposes a generic
  * interface to **user-defined topologies** (or UDT for short). UDTs are classes (or struct) exposing a certain set
- * of methods that describe the properties of a topology (e.g., the number of vertices, the list of edges, etc.). Once
+ * of methods that describe the properties of (and allow to interact with) a topology. Once
  * defined and instantiated, a UDT can then be used to construct an instance of this class, pagmo::topology, which
  * provides a generic interface to topologies for use by pagmo::archipelago and pagmo::island.
  */
 class topology
 {
+    // Enable the generic ctor only if T is not a topo (after removing
+    // const/reference qualifiers), and if T is a udt.
+    template <typename T>
+    using generic_ctor_enabler
+        = enable_if_t<!std::is_same<topology, uncvref_t<T>>::value && is_udt<uncvref_t<T>>::value, int>;
+
+public:
+    /// Default constructor.
+    /**
+     * The default constructor will initialize a pagmo::topology containing a pagmo::unconnected.
+     *
+     * @throws unspecified any exception thrown by the constructor from UDT.
+     */
+    topology() : topology(unconnected{})
+    {
+    }
+    /// Constructor from a user-defined topology of type \p T
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is not enabled if, after the removal of cv and reference qualifiers,
+     *    ``T`` is of type :cpp:class:`pagmo::topology` (that is, this constructor does not compete with the copy/move
+     *    constructors of :cpp:class:`pagmo::topology`), or if ``T`` does not satisfy :cpp:class:`pagmo::is_udt`.
+     *
+     * \endverbatim
+     *
+     * This constructor will construct a pagmo::topology from the UDT (user-defined topology) \p x of type \p T. In
+     * order for the construction to be successful, the UDT must implement a minimal set of methods,
+     * as described in the documentation of pagmo::topology. The constructor will examine the properties of \p x and
+     * store them as data members of \p this.
+     *
+     * @param x the UDT.
+     *
+     * @throws unspecified any exception thrown by methods of the UDT invoked during construction or by memory errors
+     * in strings and standard containers.
+     */
+    template <typename T, generic_ctor_enabler<T> = 0>
+    explicit topology(T &&x) : m_ptr(detail::make_unique<detail::topo_inner<uncvref_t<T>>>(std::forward<T>(x)))
+    {
+        // We store at construction the value returned from the user implemented get_name
+        m_name = ptr()->get_name();
+    }
+    /// Copy constructor
+    /**
+     * The copy constructor will deep copy the input topology \p other.
+     *
+     * @param other the topology to be copied.
+     *
+     * @throws unspecified any exception thrown by:
+     * - memory allocation errors in standard containers,
+     * - the copying of the internal UDT.
+     */
+    topology(const topology &other) : m_ptr(other.m_ptr->clone()), m_name(other.m_name)
+    {
+    }
+    /// Move constructor
+    /**
+     * @param other the topology from which \p this will be move-constructed.
+     */
+    topology(topology &&other) noexcept : m_ptr(std::move(other.m_ptr)), m_name(std::move(other.m_name))
+    {
+    }
+    /// Move assignment operator
+    /**
+     * @param other the assignment target.
+     *
+     * @return a reference to \p this.
+     */
+    topology &operator=(topology &&other) noexcept
+    {
+        if (this != &other) {
+            m_ptr = std::move(other.m_ptr);
+            m_name = std::move(other.m_name);
+        }
+        return *this;
+    }
+    /// Copy assignment operator
+    /**
+     * Copy assignment is implemented as a copy constructor followed by a move assignment.
+     *
+     * @param other the assignment target.
+     *
+     * @return a reference to \p this.
+     *
+     * @throws unspecified any exception thrown by the copy constructor.
+     */
+    topology &operator=(const topology &other)
+    {
+        // Copy ctor + move assignment.
+        return *this = topology(other);
+    }
+
+    /// Extract a const pointer to the UDT used for construction.
+    /**
+     * This method will extract a const pointer to the internal instance of the UDT. If \p T is not the same type
+     * as the UDT used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     *
+     * \endverbatim
+     *
+     * @return a const pointer to the internal UDT, or \p nullptr
+     * if \p T does not correspond exactly to the original UDT type used
+     * in the constructor.
+     */
+    template <typename T>
+    const T *extract() const
+    {
+        auto p = dynamic_cast<const detail::topo_inner<T> *>(ptr());
+        return p == nullptr ? nullptr : &(p->m_value);
+    }
+
+    /// Extract a pointer to the UDT used for construction.
+    /**
+     * This method will extract a pointer to the internal instance of the UDT. If \p T is not the same type
+     * as the UDT used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     *
+     * .. note::
+     *
+     *    The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     *    methods on the internal UDT instance. Assigning a new UDT via this pointer is undefined behaviour.
+     *
+     * \endverbatim
+     *
+     * @return a pointer to the internal UDT, or \p nullptr
+     * if \p T does not correspond exactly to the original UDT type used
+     * in the constructor.
+     */
+    template <typename T>
+    T *extract()
+    {
+        auto p = dynamic_cast<detail::topo_inner<T> *>(ptr());
+        return p == nullptr ? nullptr : &(p->m_value);
+    }
+
+    /// Check if the UDT used for construction is of type \p T.
+    /**
+     * @return \p true if the UDT used in construction is of type \p T, \p false otherwise.
+     */
+    template <typename T>
+    bool is() const
+    {
+        return extract<T>() != nullptr;
+    }
+
+    /// Topology's name.
+    /**
+     * If the UDT satisfies pagmo::has_name, then this method will return the output of its <tt>%get_name()</tt> method.
+     * Otherwise, an implementation-defined name based on the type of the UDT will be returned.
+     *
+     * @return the topology's name.
+     *
+     * @throws unspecified any exception thrown by copying an \p std::string object.
+     */
+    std::string get_name() const
+    {
+        return m_name;
+    }
+
+    /// Save to archive.
+    /**
+     * This method will save \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDT and of primitive types.
+     */
+    template <typename Archive>
+    void save(Archive &ar) const
+    {
+        ar(m_ptr, m_name);
+    }
+    /// Load from archive.
+    /**
+     * This method will load a pagmo::topology from \p ar into \p this.
+     *
+     * @param ar source archive.
+     *
+     * @throws unspecified any exception thrown by the deserialization of the UDT and of primitive types.
+     */
+    template <typename Archive>
+    void load(Archive &ar)
+    {
+        topology tmp;
+        ar(tmp.m_ptr, tmp.m_name);
+        *this = std::move(tmp);
+    }
+
+private:
+    // Just two small helpers to make sure that whenever we require
+    // access to the pointer it actually points to something.
+    detail::topo_inner_base const *ptr() const
+    {
+        assert(m_ptr.get() != nullptr);
+        return m_ptr.get();
+    }
+    detail::topo_inner_base *ptr()
+    {
+        assert(m_ptr.get() != nullptr);
+        return m_ptr.get();
+    }
+
+private:
+    // Pointer to the inner base topo.
+    std::unique_ptr<detail::topo_inner_base> m_ptr;
+    // Name of the topo.
+    std::string m_name;
 };
 }
+
+PAGMO_REGISTER_TOPOLOGY(pagmo::unconnected)
 
 #endif
