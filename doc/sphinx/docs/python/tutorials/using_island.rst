@@ -133,6 +133,12 @@ Everything seems fine as in our thread nothing really happened nor threw. But if
         Champion fitness: [...
     <BLANKLINE>
 
+.. note::
+   Since we have not explicitly passed the *udi* argument to the island constructor the island type is selected by
+   the internal heuristic. In this case, since the UDP is written in python and thus marked without basic thread
+   safety, and since our architecture in linux and py36, a multiprocessin island is selected.
+
+
 What has happened? I need to retreive that message!
 
     >>> isl.wait_check() # doctest: +SKIP
