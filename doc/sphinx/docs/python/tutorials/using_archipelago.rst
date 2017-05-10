@@ -155,9 +155,12 @@ constructed using random seeds.
    The use of the UDA :class:`~pygmo.cstrs_self_adaptive` is here only chosen to keep the various threads occupied,
    most likely other local algorithm would, in this case, be a superior choice.
 
-Managing exceptions in the islands
+Managing exceptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-What happens if, during the optimization task sent to an island, an exception happens?
+What happens if, during the optimization task sent to an :class:`~pygmo.island`, an exception happens? This question is already explored 
+in the :ref:`py_tutorial_using_island` and since an :class:`~pygmo.archipelago` is, basically, a container for multiple :class:`~pygmo.island` 
+here we will overlapwith part of that tutorial, exploring exceptions thrown in the :class:`~pygmo.archipelago` context.
+
 To show how pygmo handles these situations we use the fake problem below throwing as soon as 300 fitness evaluations are made.
 
     >>> class raise_exception:
