@@ -52,7 +52,7 @@ Contents:
 
 .. toctree::
    :maxdepth: 1
-
+   
    docs/algorithm_list
    docs/problem_list
    docs/island_list
@@ -63,4 +63,4 @@ Contents:
    docs/cpp/cpp_docs
    docs/python/python_docs
    docs/python/tutorials/python_tut
-
+   changelog

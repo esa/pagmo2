@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Exit on error
-set -e
 # Echo each command
 set -x
 
@@ -53,7 +51,7 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
     sleep 20;
-    python -c "import pygmo; pygmo.test.run_test_suite()"
+    python -c "import pygmo; pygmo.test.run_test_suite(1)"
     # At the moment conda has these packages only for Python 3.4. Install via pip instead.
     pip install sphinx breathe requests[security] sphinx-bootstrap-theme;
     # Run doxygen and check the output.
@@ -78,20 +76,14 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     make doctest;
     if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
         # Stop here if this is the Python27 build. Docs are uploaded only in the Python36 build.
-        set +e
-        set +x
         exit 0;
     fi
     if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
         echo "Testing a pull request, the generated documentation will not be uploaded.";
-        set +e
-        set +x
         exit 0;
     fi
     if [[ "${TRAVIS_BRANCH}" != "master" ]]; then
         echo "Branch is not master, the generated documentation will not be uploaded.";
-        set +e
-        set +x
         exit 0;
     fi
     # Move out the resulting documentation.
@@ -133,7 +125,7 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
     sleep 20;
-    python -c "import pygmo; pygmo.test.run_test_suite()"
+    python -c "import pygmo; pygmo.test.run_test_suite(1)"
 elif [[ "${PAGMO_BUILD}" == manylinux* ]]; then
     cd ..;
     docker pull ${DOCKER_IMAGE};
