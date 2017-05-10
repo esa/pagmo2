@@ -18,7 +18,7 @@ coded in UDIs provided with pygmo, a list of which can be found at :ref:`islands
    A collection of :class:`pygmo.island` form an :class:`~pygmo.archipelago`, you can skip this tutorial and follow directly the tutorial ":ref:`py_tutorial_using_archipelago`"
    in case you are happy with the defualt choices pygmo will do for you to parallelize your tasks via the :class:`~pygmo.archipelago`.
 
-WeLet us start by instantiating an island.
+We start by instantiating an island.
 
 .. doctest::
 
@@ -52,10 +52,8 @@ Consider the following script, for example:
    :align: right
    :scale: 60 %
 
-In four lines of code we are running, in parallel threads, the same optimization tasks using 16 Differential Evolution algorithm (:class:`~pygmo.de`) with different values for 
+In the above three lines of code we run, in parallel threads, the same optimization tasks using 16 Differential Evolution algorithm (:class:`~pygmo.de`) with different values for 
 its crossover and *F* parameter. Thanks to the *seed* being specified in the island constructor the same population will be fed to the different algorithmic instances.
-Repeating the same computation a hundreds times we can obtain the boxplot on the right, where the best parameters for the algorithm and this task are found. id0: *F* = 0.3, *CR* = 0.3, id11: 
-*F* = 0.7, *CR* = 0.9, id15: *F* = 0.9, *CR* = 0.9.
 
 .. note::
    Since no *udi* argument is specified, the :class:`~pygmo.island` constructor will choose the island type for us using its own internal heuristics (see the documentation). In this
@@ -65,7 +63,8 @@ Repeating the same computation a hundreds times we can obtain the boxplot on the
    This use of the :class:`~pygmo.island` is, essentially, replicating some of the functionalities of the :class:`~pygmo.archipelago`. While interesting to get acquinted with pygmo
    machinery, and thus great in the context of this tutorial, we discourage this type of scripting and encourage the use of an :class:`~pygmo.archipelago` (with no migration) instead.
 
-The script that generates the plot on the right is reported for ceonvenience.
+Repeating the same computation a hundreds times we can obtain the boxplot on the right, where the best parameters for the algorithm and this task are found. id0: *F* = 0.3, *CR* = 0.3, id11: 
+*F* = 0.7, *CR* = 0.9, id15: *F* = 0.9, *CR* = 0.9. The script that generates the plot on the right is reported for convenience.
 
 .. doctest::
 
@@ -87,7 +86,7 @@ Managing exceptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 What happens if, during the optimization task sent to an :class:`~pygmo.island`, an exception happens? The :class:`~pygmo.island` has the
 possibility to rethrow the latest encountered exception, in the main thread, via a call to its method :func:`~pygmo.island.wait_check()`.
-Assume, for example that your problem or algorithm is somehow throwing (what are the chances right?). To illustrate this case, we are going to use the 
+Assume, for example that your problem or algorithm is somehow throwing (I know, what are the chances right?). To illustrate this case, we are going to use the 
 following UDP:
 
 .. doctest::
@@ -110,13 +109,20 @@ We construct an island:
 
     >>> isl = pg.island(algo = pg.de(100), prob = raise_exception(), size=20)
 
+.. note::
+   Since we have not explicitly passed the *udi* argument to the island constructor the island type is selected by
+   the internal heuristic. In this case, since the UDP is written in python and thus marked without basic thread
+   safety, and since our architecture in linux and py36, a multiprocessing island is selected. See the documentation
+   of the :class:`~pygmo.island` to know more on what island is selcted by default accordign to the architecture, the 
+   problem and the algorithm
+
 This construction will trigger :math:`20` function evaluations and thus will not throw. Let us now run an evolution:
 
     >>> isl.evolve()
-
-Everything seems fine as in our thread nothing really happened nor threw. But if we, for example inspect the island we get:
-
     >>> isl.wait()
+
+Everything looks fine as in our thread nothing really happened nor threw. But if we, for example inspect the island we get:
+
     >>> print(isl) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     Island name: Multiprocessing island
         Status: idle - **error occurred**
@@ -132,12 +138,6 @@ Everything seems fine as in our thread nothing really happened nor threw. But if
         Champion decision vector: [...
         Champion fitness: [...
     <BLANKLINE>
-
-.. note::
-   Since we have not explicitly passed the *udi* argument to the island constructor the island type is selected by
-   the internal heuristic. In this case, since the UDP is written in python and thus marked without basic thread
-   safety, and since our architecture in linux and py36, a multiprocessin island is selected.
-
 
 What has happened? I need to retreive that message!
 
