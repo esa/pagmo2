@@ -12,6 +12,8 @@ Basics
   using_problem
   using_algorithm
   using_population
+  using_island
+  using_archipelago
   evolving_a_population
 
 Coding your own problem (UDP)
@@ -22,6 +24,14 @@ Coding your own problem (UDP)
 
   coding_udp_simple
   coding_udp_constrained
+
+Coding your own island (UDI)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 2
+
+  coding_udi
 
 Local optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -93,10 +93,6 @@ std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u, 3u, 7u, 10u
  *    The search range is defined relative to the box-bounds. Hence, unbounded problems
  *    will produce an error.
  *
- * .. note::
- *
- *    Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
- *    called from two identical populations.
  *
  * .. seealso::
  *
@@ -176,8 +172,9 @@ public:
             }
         }
         if (variant_adptv < 1u || variant_adptv > 2u) {
-            pagmo_throw(std::invalid_argument, "The variant for self-adaptation mus be in [1,2], while a value of "
-                                                   + std::to_string(variant_adptv) + " was detected.");
+            pagmo_throw(std::invalid_argument,
+                        "The variant for self-adaptation mus be in [1,2], while a value of "
+                            + std::to_string(variant_adptv) + " was detected.");
         }
     }
 
@@ -209,12 +206,14 @@ public:
         // We start by checking that the problem is suitable for this
         // particular algorithm.
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob_f_dimension != 1u) {
-            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
@@ -225,8 +224,9 @@ public:
             return pop;
         }
         if (pop.size() < 7u) {
-            pagmo_throw(std::invalid_argument, get_name() + " needs at least 7 individuals in the population, "
-                                                   + std::to_string(pop.size()) + " detected");
+            pagmo_throw(std::invalid_argument,
+                        get_name() + " needs at least 7 individuals in the population, " + std::to_string(pop.size())
+                            + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -240,8 +240,8 @@ public:
         std::uniform_int_distribution<vector_double::size_type> c_idx(
             0u, dim - 1u); // to generate a random index in the chromosome
         std::uniform_int_distribution<vector_double::size_type> p_idx(0u, NP - 1u); // to generate a random index in pop
-        std::uniform_int_distribution<vector_double::size_type> v_idx(0u, m_allowed_variants.size()
-                                                                              - 1u); // to generate a random variant
+        std::uniform_int_distribution<vector_double::size_type> v_idx(
+            0u, m_allowed_variants.size() - 1u); // to generate a random variant
 
         // We extract from pop the chromosomes and fitness associated
         auto popold = pop.get_x();
@@ -701,9 +701,9 @@ public:
                     df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
-                              std::setw(15), "F:", std::setw(15), "CR:", std::setw(15), "Variant:", std::setw(15),
-                              "dx:", std::setw(15), std::setw(15), "df:", '\n');
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                              "Best:", std::setw(15), "F:", std::setw(15), "CR:", std::setw(15),
+                              "Variant:", std::setw(15), "dx:", std::setw(15), std::setw(15), "df:", '\n');
                     }
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
                           pop.get_f()[best_idx][0], std::setw(15), gbIterF, std::setw(15), gbIterCR, std::setw(15),

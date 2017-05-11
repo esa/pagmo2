@@ -1083,8 +1083,11 @@ public:
         if (!extra_str.empty()) {
             stream(os, "Extra info:\n", extra_str, "\n\n");
         }
-        stream(os, isl.get_algorithm(), "\n\n");
-        stream(os, isl.get_population(), "\n\n");
+        stream(os, "Algorithm: " + isl.get_algorithm().get_name(), "\n\n");
+        stream(os, "Problem: " + isl.get_population().get_problem().get_name(), "\n\n");
+        stream(os, "Population size: ", isl.get_population().size(), "\n");
+        stream(os, "\tChampion decision vector: ", isl.get_population().champion_x(), "\n");
+        stream(os, "\tChampion fitness: ", isl.get_population().champion_f(), "\n");
         return os;
     }
     /// Save to archive.
@@ -1415,8 +1418,9 @@ public:
     island &operator[](size_type i)
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
-                                               + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range,
+                        "cannot access the island at index " + std::to_string(i)
+                            + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
@@ -1436,8 +1440,9 @@ public:
     const island &operator[](size_type i) const
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
-                                               + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range,
+                        "cannot access the island at index " + std::to_string(i)
+                            + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
