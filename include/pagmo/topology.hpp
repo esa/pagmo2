@@ -73,6 +73,10 @@ namespace pagmo
 
 /// Detect \p get_connections() method.
 /**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.3
+ * \endverbatim
+ *
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
  * @code{.unparsed}
@@ -99,6 +103,10 @@ const bool has_get_connections<T>::value;
 
 /// Detect \p push_back() method.
 /**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.3
+ * \endverbatim
+ *
  * This type trait will be \p true if \p T provides a method with
  * the following signature:
  * @code{.unparsed}
@@ -136,6 +144,10 @@ struct disable_udt_checks : std::false_type {
 
 /// Detect user-defined topologies (UDT).
 /**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.3
+ * \endverbatim
+ *
  * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
  * constructible, and if it satisfies the pagmo::has_get_connections and pagmo::has_push_back type traits.
  *
@@ -247,6 +259,10 @@ struct topo_inner final : topo_inner_base {
 
 /// Unconnected topology.
 /**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.3
+ * \endverbatim
+ *
  * This user-defined topology (UDT) represents an unconnected graph.
  */
 struct unconnected {
@@ -288,6 +304,10 @@ struct unconnected {
 /// Topology.
 /**
  * \image html migration_no_text.png
+ *
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.3
+ * \endverbatim
  *
  * In the jargon of pagmo, a topology is an object that represents connections among \link pagmo::island islands\endlink
  * in an \link pagmo::archipelago archipelago\endlink. In essence, a topology is a *weighted directed graph* in which
