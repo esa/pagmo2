@@ -25,6 +25,14 @@ Coding your own problem (UDP)
   coding_udp_simple
   coding_udp_constrained
 
+Coding your own island (UDI)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 2
+
+  coding_udi
+
 Local optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
