@@ -37,11 +37,16 @@ from ._version import __version__
 # We import the sub-modules into the root namespace
 from .core import *
 from .plotting import *
-from .py_islands import *
+from ._py_islands import *
 
-# And we explicitly import the submodules
-from . import core
-from . import plotting
+# We move into the problems, algorithms and islands namespaces
+# all the pure python UDAs, UDPs and UDIs
+for item in dir(_py_islands):
+    if item[0] != "_":
+        setattr(islands, item, getattr(_py_islands, item))
+del _py_islands
+
+# And we explicitly import the test submodule
 from . import test
 
 # Patch the problem class.

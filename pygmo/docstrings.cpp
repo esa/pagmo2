@@ -3641,8 +3641,8 @@ Through the UDI, the island class manages the asynchronous evolution (or optimis
 of its :class:`~pygmo.population` via the algorithm's :func:`~pygmo.algorithm.evolve()`
 method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
 :class:`~pygmo.thread_island`), in a separate process (e.g., if the UDI is a
-:class:`~pygmo.py_islands.mp_island`) or even in a separate machine (e.g., if the UDI is a
-:class:`~pygmo.py_islands.ipyparallel_island`). The evolution is always asynchronous (i.e., running in the
+:class:`~pygmo.mp_island`) or even in a separate machine (e.g., if the UDI is a
+:class:`~pygmo.ipyparallel_island`). The evolution is always asynchronous (i.e., running in the
 "background") and it is initiated by a call to the :func:`~pygmo.island.evolve()` method. At any
 time the user can query the state of the island and fetch its internal data members. The user can explicitly
 wait for pending evolutions to conclude by calling the :func:`~pygmo.island.wait()` and
@@ -3690,8 +3690,8 @@ An island can be initialised in a variety of ways using keyword arguments:
 
   * if *algo* and *pop*'s problem provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee,
     then :class:`~pygmo.thread_island` will be selected as UDI type;
-  * otherwise, if the current platform is Windows or the Python version is at least 3.4, then :class:`~pygmo.py_islands.mp_island`
-    will be selected as UDI type, else :class:`~pygmo.py_islands.ipyparallel_island` will be chosen;
+  * otherwise, if the current platform is Windows or the Python version is at least 3.4, then :class:`~pygmo.mp_island`
+    will be selected as UDI type, else :class:`~pygmo.ipyparallel_island` will be chosen;
 * if the arguments list contains *algo*, *prob*, *size* and, optionally, *udi* and *seed*, then a :class:`~pygmo.population`
   will be constructed from *prob*, *size* and *seed*, and the construction will then proceed in the same way detailed
   above (i.e., *algo* and the newly-created population are used to initialise the island's algorithm and population,

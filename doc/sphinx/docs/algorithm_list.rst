@@ -1,7 +1,7 @@
 .. _algorithms:
 
-List of UDAs available in pagmo/pygmo
-===========================================
+List of algorithms (UDAs) available in pagmo/pygmo
+==================================================
 
 This is the list of user defined algorithms (UDAs) currently provided with pagmo/pygmo. These are classes that 
 can be used to construct a :cpp:class:`pagmo::algorithm`, or :class:`pygmo.algorithm` which will then provide a unified 

@@ -13,3 +13,10 @@ pagmo
 pagmo (C++) or pygmo (Python) is a scientific library for massively parallel optimization. It is built around the idea of providing a unified interface to optimization algorithms and to optimization problems and to make their deployment in massively parallel environments easy.
 
 The full documentation can be found here https://esa.github.io/pagmo2/
+
+Upgrading from pagmo 1.x.x
+==========================
+
+If you were using the old pagmo, have a look here on some technical data on what and why a completely new API and code was developed: https://github.com/esa/pagmo2/wiki/From-1.x-to-2.x
+
+You will find many tutorials in the documentation, we suggest to skim through them to realize the differences. The new pagmo (version 2) should be considered (and is) as an entirely different code.

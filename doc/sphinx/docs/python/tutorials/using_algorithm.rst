@@ -3,6 +3,8 @@
 Use of the class :class:`~pygmo.algorithm`
 ===============================================
 
+.. image:: ../../images/algo_no_text.png
+
 The :class:`~pygmo.algorithm` class represents a generic optimization
 algorithm. The user codes the details of such an algorithm in a separate class (the
 user-defined algorithm, or UDA) which is then passed to :class:`~pygmo.algorithm`
