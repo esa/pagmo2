@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>List of UDPs available in pagmo/pygmo &#8212; pagmo 2.2 documentation</title>
+    <title>List of problems (UDPs) available in pagmo/pygmo &#8212; pagmo 2.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -34,8 +34,8 @@
     <link rel="shortcut icon" href="../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="C++ Documentation" href="cpp/cpp_docs.html" />
-    <link rel="prev" title="List of UDAs available in pagmo/pygmo" href="algorithm_list.html" />
+    <link rel="next" title="List of islands (UDIs) available in pagmo/pygmo" href="island_list.html" />
+    <link rel="prev" title="List of algorithms (UDAs) available in pagmo/pygmo" href="algorithm_list.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
   <body role="document">
@@ -70,7 +70,7 @@
      href="../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../install.html#python">Python</a></li>
@@ -81,18 +81,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../quickstart.html#python">Python</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithm_list.html#local-optimization">Local optimization</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">List of problems (UDPs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#scalable-problems">Scalable problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#problem-suites">Problem suites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#meta-problems">Meta-problems</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -111,10 +116,17 @@
 <li class="toctree-l1"><a class="reference internal" href="python/tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="python/tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../credits.html#main-developers">Main developers</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
@@ -134,7 +146,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">List of UDPs available in pagmo/pygmo</a><ul>
+<li><a class="reference internal" href="#">List of problems (UDPs) available in pagmo/pygmo</a><ul>
 <li><a class="reference internal" href="#scalable-problems">Scalable problems</a></li>
 <li><a class="reference internal" href="#problem-suites">Problem suites</a></li>
 <li><a class="reference internal" href="#meta-problems">Meta-problems</a></li>
@@ -169,8 +181,8 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <div class="section" id="list-of-udps-available-in-pagmo-pygmo">
-<span id="problems"></span><h1>List of UDPs available in pagmo/pygmo<a class="headerlink" href="#list-of-udps-available-in-pagmo-pygmo" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="list-of-problems-udps-available-in-pagmo-pygmo">
+<span id="problems"></span><h1>List of problems (UDPs) available in pagmo/pygmo<a class="headerlink" href="#list-of-problems-udps-available-in-pagmo-pygmo" title="Permalink to this headline">¶</a></h1>
 <p>This is the list of user defined problems (UDPs) currently provided with pagmo/pygmo. These are classes that
 can be used to construct a <a class="reference internal" href="cpp/problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a>, or <a class="reference internal" href="python/py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> which will then provide a unified
 interface to acces their functionalities.</p>

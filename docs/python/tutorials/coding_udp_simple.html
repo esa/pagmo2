@@ -70,7 +70,7 @@
      href="../../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
@@ -81,18 +81,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -111,10 +116,17 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
@@ -170,9 +182,10 @@
       
   <div class="section" id="coding-a-simple-user-defined-problem">
 <span id="py-tutorial-coding-udp-simple"></span><h1>Coding a simple User Defined Problem<a class="headerlink" href="#coding-a-simple-user-defined-problem" title="Permalink to this headline">¶</a></h1>
-<p>While pagmo provides a number of UDPs to help you test your own optimization strategy or user defined algorithm, the possibility
+<p>While pagmo provides a number of UDPs (see <a class="reference internal" href="../../problem_list.html#problems"><span class="std std-ref">List of problems (UDPs) available in pagmo/pygmo</span></a>) to help you test your own optimization strategy or user defined algorithm, the possibility
 to write your own UDP is at the core of pygmo&#8217;s use. In this tutorial we will show how to code a UDP. Remember that UDPs are classes that can be used
-to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> which, in turn, is what an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> can solve.</p>
+to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> which, in turn, is what an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> can solve. See <a class="reference internal" href="using_algorithm.html#py-tutorial-using-algorithm"><span class="std std-ref">Use of the class algorithm</span></a> and
+<a class="reference internal" href="using_problem.html#py-tutorial-using-problem"><span class="std std-ref">Use of the class problem</span></a> to learn the use of these core classes.</p>
 <p>We encourage the user to read the documentation of the class <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to have a detailed list of methods that can be, or have to be,
 implemented in a UDP. To start simple we consider the simple problem of minimizing the two dimensional sphere function.</p>
 <div class="math">
@@ -180,7 +193,10 @@ implemented in a UDP. To start simple we consider the simple problem of minimizi
   \mbox{minimize: } &amp; x_1^2+x_2^2 \\
   \mbox{subject to:} &amp; -1 \le x_i \le 1, i = 1..2
 \end{array}\end{split}\]</div>
-<p>In pagmo minimization is always assumed and should you need to maximize some objective function, just put a minus sign in front of that objective.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In pagmo minimization is always assumed and should you need to maximize some objective function, just put a minus sign in front of that objective.</p>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)]</span>

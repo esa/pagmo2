@@ -70,7 +70,7 @@
      href="../../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
@@ -81,18 +81,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -111,10 +116,17 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
@@ -137,6 +149,7 @@
 <li><a class="reference internal" href="#">Python tutorials</a><ul>
 <li><a class="reference internal" href="#basics">Basics</a></li>
 <li><a class="reference internal" href="#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li><a class="reference internal" href="#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li><a class="reference internal" href="#local-optimization">Local optimization</a></li>
 <li><a class="reference internal" href="#multi-objective-optimization">Multi-objective optimization</a></li>
 <li><a class="reference internal" href="#hypervolumes">Hypervolumes</a></li>
@@ -181,6 +194,14 @@
 <li class="toctree-l1"><a class="reference internal" href="using_problem.html">Use of the class <code class="docutils literal"><span class="pre">problem</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_algorithm.html">Use of the class <code class="docutils literal"><span class="pre">algorithm</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_population.html">Use of the class <code class="docutils literal"><span class="pre">population</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_island.html">Use of the class <code class="docutils literal"><span class="pre">island</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_island.html#managing-exceptions">Managing exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_archipelago.html">Use of the class <code class="docutils literal"><span class="pre">archipelago</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_archipelago.html#managing-exceptions">Managing exceptions</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="evolving_a_population.html">Evolving a population</a></li>
 </ul>
 </div>
@@ -199,6 +220,14 @@
 <li class="toctree-l2"><a class="reference internal" href="coding_udp_constrained.html#do-not-use-a-black-box-solver-if-you-do-not-have-to">Do not use a black-box solver if you do not have to</a></li>
 </ul>
 </li>
+</ul>
+</div>
+</div>
+<div class="section" id="coding-your-own-island-udi">
+<h2>Coding your own island (UDI)<a class="headerlink" href="#coding-your-own-island-udi" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="coding_udi.html">Coding a User Defined Island</a></li>
 </ul>
 </div>
 </div>

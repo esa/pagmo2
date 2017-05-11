@@ -3,6 +3,8 @@
 Use of the class :class:`~pygmo.population`
 ================================================
 
+.. image:: ../../images/pop_no_text.png
+
 In pygmo, a :class:`~pygmo.population` is a storage for candidate solutions
 to some :class:`~pygmo.problem` (sometimes called individuals).
 It thus contains a :class:`~pygmo.problem` and a number of decision

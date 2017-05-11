@@ -1,0 +1,419 @@
+ <!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Use of the class archipelago &#8212; pagmo 2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Evolving a population" href="evolving_a_population.html" />
+    <link rel="prev" title="Use of the class island" href="using_island.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.2 (unreleased)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Use of the class <code class="docutils literal"><span class="pre">archipelago</span></code></a><ul>
+<li><a class="reference internal" href="#managing-exceptions">Managing exceptions</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="use-of-the-class-archipelago">
+<span id="py-tutorial-using-archipelago"></span><h1>Use of the class <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a><a class="headerlink" href="#use-of-the-class-archipelago" title="Permalink to this headline">¶</a></h1>
+<img alt="../../../_images/archi_no_text2.png" src="../../../_images/archi_no_text2.png" />
+<p>The <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> class is the main parallelization engine of pagmo. It essentially is
+a container of <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> able to initiate evolution (optimization tasks) in each <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
+asynchronously while keeping track of the results and of the information exchange (migration) between the tasks (via the
+generalized island model). The various <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> in an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> can be heterogeneous
+and refer to different UDAs, UDPs and UDIs.</p>
+<p>In this tutorial we will show how to use an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> to run in parallel several
+optimization tasks defined in a UDP. So let us start defining our UDP. We will here define a single objective
+problem with one equality and one inequality constraint. The problem in itself is not important for the
+purpose of this tutorial. Its mathematical definition is:</p>
+<div class="math">
+\[\begin{split}\begin{array}{ll}
+  \mbox{minimize: } &amp; \sum_i x_i \\
+  \mbox{subject to:} &amp; -1 \le x_i \le 1, i = 1..n \\
+                     &amp; \sum_i x_i^2 = 1 \\
+                     &amp; \sum_i x_i \ge 0 \\
+\end{array}\end{split}\]</div>
+<p>and the optimal value for the objectove function is 0. We can write the above problem as a pagmo UDP (see:
+<a class="reference internal" href="coding_udp_simple.html#py-tutorial-coding-udp-simple"><span class="std std-ref">Coding a simple User Defined Problem</span></a> and <a class="reference internal" href="coding_udp_constrained.html#py-tutorial-coding-udp-constrained"><span class="std std-ref">Coding a User Defined Problem with constraints</span></a> to learn how UDPs are
+defined from Python)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">toy_problem</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">),</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span> <span class="c1"># numerical gradient</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_nec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="mi">1</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_nic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="mi">1</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="s2">&quot;A toy problem&quot;</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_extra_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Dimensions: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, without further ado, lets use the full power of pygmo and prepare to be shocked:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a_cstrs_sa</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">cstrs_self_adaptive</span><span class="p">(</span><span class="n">iters</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p_toy</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">toy_problem</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p_toy</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">archipelago</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="n">a_cstrs_sa</span><span class="p">,</span> <span class="n">prob</span><span class="o">=</span><span class="n">p_toy</span><span class="p">,</span> <span class="n">pop_size</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">archi</span><span class="p">)</span> 
+<span class="go">Number of islands: 32</span>
+<span class="go">Status: idle</span>
+
+<span class="go">Islands summaries:</span>
+
+<span class="go">    #  Type                    Algo                                Prob           Size  Status</span>
+<span class="go">    --------------------------------------------------------------------------------------------</span>
+<span class="go">    0  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
+<span class="go">    1  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
+<span class="go">    2  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
+<span class="go">    3  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
+<span class="go">    4  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
+<span class="go">    5  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
+<span class="go">    6  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
+<span class="go">    7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
+<span class="go">    ...</span>
+</pre></div>
+</div>
+<p>To instantiate the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> we have used the constructor from a <code class="docutils literal"><span class="pre">problem</span></code> and <code class="docutils literal"><span class="pre">algorithm</span></code>.
+This leaves to the <code class="docutils literal"><span class="pre">archi</span></code> object the task of building the various populations and islands. To do so, several
+choices are made for the user, starting with the island type. In this case, as seen from the screen
+printout of the <code class="docutils literal"><span class="pre">archi</span></code> object, Multiprocessing islands are being used. To control what islands will
+assemble an archipelago, the user can instantiate an empty archipelago and use the
+<a class="reference internal" href="../py_archipelago.html#pygmo.archipelago.push_back" title="pygmo.archipelago.push_back"><code class="xref py py-func docutils literal"><span class="pre">pygmo.archipelago.push_back()</span></code></a> method to insert one by one all the islands.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The island type selected by the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> constructor is, in this case, the
+<code class="docutils literal"><span class="pre">Multiprocessing</span> <span class="pre">island</span></code>, (<code class="xref py py-class docutils literal"><span class="pre">pygmo.py_islands.mp_island</span></code>) as we run this example on py36 and
+a linux machine. In general, the exact island chosen is platform, population and algorithm
+dependent and such choice is described in the docs of the <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> class constructor.</p>
+</div>
+<p>After inspection, let us now run the evolution.</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">get_champions_f</span><span class="p">()</span> 
+<span class="go">[array([  2.18826798, -26.60899368,  -2.18826798]),</span>
+<span class="go">array([  3.39497588, -24.48739141,  -3.39497588]),</span>
+<span class="go">array([  2.3240917 , -26.88225527,  -2.3240917 ]),</span>
+<span class="go">array([  0.13134093, -28.47299705,  -0.13134093]),</span>
+<span class="go">array([  6.53062434, -24.98724057,  -6.53062434]),</span>
+<span class="go">array([  1.02894159, -25.69765425,  -1.02894159]),</span>
+<span class="go">array([  4.07802374, -23.82020921,  -4.07802374]),</span>
+<span class="go">array([  1.71396489, -25.90794514,  -1.71396489]),</span>
+<span class="go">...]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">archi</span><span class="p">)</span> 
+<span class="go">Number of islands: 32</span>
+<span class="go">Status: busy</span>
+
+<span class="go">Islands summaries:</span>
+
+<span class="go">    #  Type                    Algo                                Prob           Size  Status</span>
+<span class="go">    --------------------------------------------------------------------------------------------</span>
+<span class="go">    0  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
+<span class="go">    1  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
+<span class="go">    2  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
+<span class="go">    3  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
+<span class="go">    4  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
+<span class="go">    5  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
+<span class="go">    6  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
+<span class="go">    7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
+<span class="go">    ...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note how the evolution is happening in parallel on 32 separate threads (each one spawning a process, in this case, as a Multiprocessing island is used).
+The evolution happens asynchronously and thus does not interfere directly with our main process. We then have to call the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.archipelago.wait()</span></code></a>
+method to have the main process explicitly wait for all islands to be finished.</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">get_champions_f</span><span class="p">()</span> 
+<span class="go">[array([  1.16514064e-02,   4.03450637e-05,  -1.16514064e-02]),</span>
+<span class="go">array([ 0.02249111,  0.00392739, -0.02249111]),</span>
+<span class="go">array([  6.09564060e-03,  -4.93961313e-05,  -6.09564060e-03]),</span>
+<span class="go">array([ 0.01161224, -0.00815189, -0.01161224]),</span>
+<span class="go">array([ -1.90431378e-05,   7.65501702e-05,   1.90431378e-05]),</span>
+<span class="go">array([ -5.45044897e-05,   5.70199057e-05,   5.45044897e-05]),</span>
+<span class="go">array([ 0.00541601, -0.08208163, -0.00541601]),</span>
+<span class="go">array([ -6.95677113e-05,  -7.42268924e-05,   6.95677113e-05]),</span>
+<span class="go">array([ 0.00335729,  0.00684969, -0.00335729]),</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Different islands produce different results, in this case, as the various populations and algorithms where
+constructed using random seeds.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The use of the UDA <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> is here only chosen to keep the various threads occupied,
+most likely other local algorithm would, in this case, be a superior choice.</p>
+</div>
+<div class="section" id="managing-exceptions">
+<h2>Managing exceptions<a class="headerlink" href="#managing-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>What happens if, during the optimization task sent to an <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, an exception happens? This question is already explored
+in the <a class="reference internal" href="using_island.html#py-tutorial-using-island"><span class="std std-ref">Use of the class island</span></a> and since an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> is, basically, a container for multiple <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
+here we will overlap with part of that tutorial, exploring exceptions thrown in the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> context.</p>
+<p>To show how pygmo handles these situations we use the fake problem below throwing as soon as 300 fitness evaluations are made.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">raise_exception</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dv</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">==</span> <span class="mi">300</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">raise</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">([</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="s2">&quot;A throwing UDP&quot;</span>
+</pre></div>
+</div>
+<p>Let us now instantiate and run a <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">archipelago</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">simulated_annealing</span><span class="p">(</span><span class="n">Ts</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">Tf</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">n_T_adj</span>  <span class="o">=</span> <span class="mi">40</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">raise_exception</span><span class="p">(),</span> <span class="n">pop_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">archi</span><span class="p">)</span> 
+<span class="go">Number of islands: 5</span>
+<span class="go">Status: idle - **error occurred**</span>
+
+<span class="go">Islands summaries:</span>
+
+<span class="go">    #  Type                    Algo                            Prob            Size  Status</span>
+<span class="go">    ------------------------------------------------------------------------------------------------------------</span>
+<span class="go">    0  Multiprocessing island  Simulated Annealing (Corana&#39;s)  A throwing UDP  20    idle - **error occurred**</span>
+<span class="go">    1  Multiprocessing island  Simulated Annealing (Corana&#39;s)  A throwing UDP  20    idle - **error occurred**</span>
+<span class="go">    2  Multiprocessing island  Simulated Annealing (Corana&#39;s)  A throwing UDP  20    idle - **error occurred**</span>
+<span class="go">    3  Multiprocessing island  Simulated Annealing (Corana&#39;s)  A throwing UDP  20    idle - **error occurred**</span>
+<span class="go">    4  Multiprocessing island  Simulated Annealing (Corana&#39;s)  A throwing UDP  20    idle - **error occurred**</span>
+</pre></div>
+</div>
+<p>The print statment allows us to visually see that errors occured in all islands (each one is containing a copy of the problem and thus
+starts at 0 fitness evaluations to then hit the 300 fevals triggering the <code class="docutils literal"><span class="pre">raise</span></code> statement).
+We do not know at this stage what happened exactly as the exception is thrown on a separate thread/process and thus its hidden from our main
+scope. To inspect what happened we can write:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&gt;&gt;&gt; archi.wait_check() 
+RuntimeError                              Traceback (most recent call last)
+&lt;ipython-input-22-d8562cc51573&gt; in &lt;module&gt;()
+----&gt; 1 archi.wait_check()
+
+RuntimeError: The asynchronous evolution of a Pythonic island of type &#39;Multiprocessing island&#39; raised an error:
+multiprocessing.pool.RemoteTraceback:
+&quot;&quot;&quot;
+Traceback (most recent call last):
+File &quot;/home/dario/miniconda3/envs/pagmo/lib/python3.6/multiprocessing/pool.py&quot;, line 119, in worker
+    result = (True, func(*args, **kwds))
+File &quot;/home/dario/miniconda3/envs/pagmo/lib/python3.6/site-packages/pygmo/_py_islands.py&quot;, line 40, in _evolve_func
+    return algo.evolve(pop)
+File &quot;&lt;ipython-input-19-f5ede4c63180&gt;&quot;, line 6, in fitness
+RuntimeError: No active exception to reraise
+&quot;&quot;&quot;
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+File &quot;/home/dario/miniconda3/envs/pagmo/lib/python3.6/site-packages/pygmo/_py_islands.py&quot;, line 128, in run_evolve
+    return res.get()
+File &quot;/home/dario/miniconda3/envs/pagmo/lib/python3.6/multiprocessing/pool.py&quot;, line 608, in get
+    raise self._value
+RuntimeError: No active exception to reraise
+</pre></div>
+</div>
+<p>which will rethrow the first encountered exception and reset all the island states to <code class="docutils literal"><span class="pre">idle</span></code>.</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

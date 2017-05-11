@@ -1,7 +1,7 @@
 .. _problems:
 
-List of UDPs available in pagmo/pygmo
-===========================================
+List of problems (UDPs) available in pagmo/pygmo
+================================================
 
 This is the list of user defined problems (UDPs) currently provided with pagmo/pygmo. These are classes that 
 can be used to construct a :cpp:class:`pagmo::problem`, or :class:`pygmo.problem` which will then provide a unified 

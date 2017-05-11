@@ -70,7 +70,7 @@
      href="../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../install.html#python">Python</a></li>
@@ -81,18 +81,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#python">Python</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#local-optimization">Local optimization</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../problem_list.html#scalable-problems">Scalable problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../problem_list.html#problem-suites">Problem suites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../problem_list.html#meta-problems">Meta-problems</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -111,10 +116,17 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../credits.html#main-developers">Main developers</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
@@ -181,8 +193,8 @@
 of its <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> via the algorithm&#8217;s <a class="reference internal" href="py_algorithm.html#pygmo.algorithm.evolve" title="pygmo.algorithm.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a>
 method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
 <a class="reference internal" href="islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal"><span class="pre">thread_island</span></code></a>), in a separate process (e.g., if the UDI is a
-<a class="reference internal" href="islands/py_islands.html#pygmo.py_islands.mp_island" title="pygmo.py_islands.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>) or even in a separate machine (e.g., if the UDI is a
-<a class="reference internal" href="islands/py_islands.html#pygmo.py_islands.ipyparallel_island" title="pygmo.py_islands.ipyparallel_island"><code class="xref py py-class docutils literal"><span class="pre">ipyparallel_island</span></code></a>). The evolution is always asynchronous (i.e., running in the
+<code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code>) or even in a separate machine (e.g., if the UDI is a
+<code class="xref py py-class docutils literal"><span class="pre">ipyparallel_island</span></code>). The evolution is always asynchronous (i.e., running in the
 &#8220;background&#8221;) and it is initiated by a call to the <a class="reference internal" href="#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> method. At any
 time the user can query the state of the island and fetch its internal data members. The user can explicitly
 wait for pending evolutions to conclude by calling the <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> and
@@ -222,8 +234,8 @@ is not supplied, the UDI type is chosen according to a heuristic which depends o
 Python version and the supplied <em>algo</em> and <em>pop</em> parameters:<ul>
 <li>if <em>algo</em> and <em>pop</em>&#8216;s problem provide at least the <a class="reference internal" href="py_misc.html#pygmo.thread_safety.basic" title="pygmo.thread_safety.basic"><code class="xref py py-attr docutils literal"><span class="pre">basic</span></code></a> thread safety guarantee,
 then <a class="reference internal" href="islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal"><span class="pre">thread_island</span></code></a> will be selected as UDI type;</li>
-<li>otherwise, if the current platform is Windows or the Python version is at least 3.4, then <a class="reference internal" href="islands/py_islands.html#pygmo.py_islands.mp_island" title="pygmo.py_islands.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>
-will be selected as UDI type, else <a class="reference internal" href="islands/py_islands.html#pygmo.py_islands.ipyparallel_island" title="pygmo.py_islands.ipyparallel_island"><code class="xref py py-class docutils literal"><span class="pre">ipyparallel_island</span></code></a> will be chosen;</li>
+<li>otherwise, if the current platform is Windows or the Python version is at least 3.4, then <code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code>
+will be selected as UDI type, else <code class="xref py py-class docutils literal"><span class="pre">ipyparallel_island</span></code> will be chosen;</li>
 </ul>
 </li>
 <li>if the arguments list contains <em>algo</em>, <em>prob</em>, <em>size</em> and, optionally, <em>udi</em> and <em>seed</em>, then a <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>

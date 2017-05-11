@@ -34,7 +34,7 @@
     <link rel="shortcut icon" href="_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Solving the 20 dimensional Schwefel problem" href="docs/python/tutorials/solving_schwefel_20.html" />
+    <link rel="prev" title="Credits" href="credits.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
   <body role="document">
@@ -69,7 +69,7 @@
      href="index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install.html#python">Python</a></li>
@@ -80,18 +80,23 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#python">Python</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="docs/algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docs/algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/algorithm_list.html#local-optimization">Local optimization</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="docs/problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="docs/problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/problem_list.html#scalable-problems">Scalable problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/problem_list.html#problem-suites">Problem suites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/problem_list.html#meta-problems">Meta-problems</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="docs/island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -110,10 +115,17 @@
 <li class="toctree-l1"><a class="reference internal" href="docs/python/tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="credits.html#main-developers">Main developers</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
@@ -178,26 +190,23 @@
 <div class="section" id="new">
 <h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>New tutorials (Schwefel and constrained problems) <a class="reference external" href="https://github.com/esa/pagmo2/pull/91">(#91)</a>. [Dario Izzo]</li>
-<li>Add support for <a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a> <a class="reference external" href="https://github.com/esa/pagmo2/pull/92">(#92)</a>.
-[Francesco Biscani]</li>
-<li>Implement the simple genetic algorithm (SGA) <a class="reference external" href="https://github.com/esa/pagmo2/pull/93">(#93)</a>.
-[Dario Izzo]</li>
+<li>New tutorials (Schwefel and constrained problems) <a class="reference external" href="https://github.com/esa/pagmo2/pull/91">(#91)</a>.</li>
+<li>Add support for <a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a> <a class="reference external" href="https://github.com/esa/pagmo2/pull/92">(#92)</a>.</li>
+<li>Implement the simple genetic algorithm (SGA) <a class="reference external" href="https://github.com/esa/pagmo2/pull/93">(#93)</a>.</li>
 </ul>
 </div>
 <div class="section" id="changes">
 <h3>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Rename, fix and improve the implementation of various archipelago-related methods
-<a class="reference external" href="https://github.com/esa/pagmo2/issues/94">(#94)</a>. [Francesco Biscani]</li>
-<li>Remove the use of atomic counters in the problem <a class="reference external" href="https://github.com/esa/pagmo2/issues/79">(#79)</a>.
-[Francesco Biscani]</li>
+<a class="reference external" href="https://github.com/esa/pagmo2/issues/94">(#94)</a>.</li>
+<li>Remove the use of atomic counters in the problem <a class="reference external" href="https://github.com/esa/pagmo2/issues/79">(#79)</a>.</li>
 </ul>
 </div>
 <div class="section" id="fix">
 <h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Various documentation fixes/improvements, headers sanitization, etc. [Dario Izzo, Francesco Biscani]</li>
+<li>Various documentation fixes/improvements, headers sanitization, etc.</li>
 </ul>
 </div>
 </div>

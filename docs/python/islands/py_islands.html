@@ -70,7 +70,7 @@
      href="../../../index.html">All <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
@@ -81,18 +81,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of UDAs available in pagmo/pygmo</a><ul>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of UDPs available in pagmo/pygmo</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../cpp/cpp_docs.html">C++ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
@@ -111,10 +116,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
@@ -188,23 +200,23 @@ errors will be raised during the evolution.</p>
 <div class="section" id="islands-implemented-in-python">
 <h2>Islands implemented in Python<a class="headerlink" href="#islands-implemented-in-python" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="pygmo.py_islands.mp_island">
-<em class="property">class </em><code class="descclassname">pygmo.py_islands.</code><code class="descname">mp_island</code><a class="headerlink" href="#pygmo.py_islands.mp_island" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mp_island">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">mp_island</code><a class="headerlink" href="#pygmo.mp_island" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multiprocessing island.</p>
 <p>This user-defined island (UDI) will dispatch evolution tasks to a pool of processes
 created via the standard Python multiprocessing module. The pool is shared between
-different instances of <a class="reference internal" href="#pygmo.py_islands.mp_island" title="pygmo.py_islands.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>, and it is created
-either implicitly by the construction of the first <a class="reference internal" href="#pygmo.py_islands.mp_island" title="pygmo.py_islands.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>
-object or explicitly via the <a class="reference internal" href="#pygmo.py_islands.mp_island.init_pool" title="pygmo.py_islands.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a> static method.
+different instances of <code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code>, and it is created
+either implicitly by the construction of the first <code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code>
+object or explicitly via the <code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code> static method.
 The default number of processes in the pool is equal to the number of logical CPUs on the
-current machine. The pool&#8217;s size can be queried via <a class="reference internal" href="#pygmo.py_islands.mp_island.get_pool_size" title="pygmo.py_islands.mp_island.get_pool_size"><code class="xref py py-func docutils literal"><span class="pre">get_pool_size()</span></code></a>,
-and changed via <a class="reference internal" href="#pygmo.py_islands.mp_island.resize_pool" title="pygmo.py_islands.mp_island.resize_pool"><code class="xref py py-func docutils literal"><span class="pre">resize_pool()</span></code></a>.</p>
+current machine. The pool&#8217;s size can be queried via <code class="xref py py-func docutils literal"><span class="pre">get_pool_size()</span></code>,
+and changed via <code class="xref py py-func docutils literal"><span class="pre">resize_pool()</span></code>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Due to certain implementation details of CPython, it is not possible to initialise or resize the pool
 from a thread different from the main one. Normally this is not a problem, but, for instance, if the first
-<a class="reference internal" href="#pygmo.py_islands.mp_island" title="pygmo.py_islands.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> instance is created in a thread different from the main one, an error
-will be raised. In such a situation, the user should ensure to call <a class="reference internal" href="#pygmo.py_islands.mp_island.init_pool" title="pygmo.py_islands.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a>
+<code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code> instance is created in a thread different from the main one, an error
+will be raised. In such a situation, the user should ensure to call <code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code>
 from the main thread before spawning the secondary thread.</p>
 </div>
 <div class="admonition note">
@@ -216,13 +228,13 @@ this class on non-Windows platforms with a Python version earlier than 3.4 will 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="#pygmo.py_islands.mp_island.init_pool" title="pygmo.py_islands.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
-<dt id="pygmo.py_islands.mp_island.get_extra_info">
-<code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.mp_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mp_island.get_extra_info">
+<code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island&#8217;s extra info.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -237,8 +249,8 @@ this class on non-Windows platforms with a Python version earlier than 3.4 will 
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.py_islands.mp_island.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.mp_island.get_name" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mp_island.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island&#8217;s name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -253,8 +265,8 @@ this class on non-Windows platforms with a Python version earlier than 3.4 will 
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="pygmo.py_islands.mp_island.get_pool_size">
-<em class="property">static </em><code class="descname">get_pool_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.mp_island.get_pool_size" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mp_island.get_pool_size">
+<em class="property">static </em><code class="descname">get_pool_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_pool_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the size of the process pool.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -269,10 +281,10 @@ this class on non-Windows platforms with a Python version earlier than 3.4 will 
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="pygmo.py_islands.mp_island.init_pool">
-<em class="property">static </em><code class="descname">init_pool</code><span class="sig-paren">(</span><em>processes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.mp_island.init_pool" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mp_island.init_pool">
+<em class="property">static </em><code class="descname">init_pool</code><span class="sig-paren">(</span><em>processes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.init_pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise the process pool.</p>
-<p>This method will initialise the process pool backing <a class="reference internal" href="#pygmo.py_islands.mp_island" title="pygmo.py_islands.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>, if the pool
+<p>This method will initialise the process pool backing <code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code>, if the pool
 has not been initialised yet. Otherwise, this method will have no effects.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -295,10 +307,10 @@ from the main one, or if <em>processes</em> is a non-positive value</li>
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="pygmo.py_islands.mp_island.resize_pool">
-<em class="property">static </em><code class="descname">resize_pool</code><span class="sig-paren">(</span><em>processes</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.mp_island.resize_pool" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mp_island.resize_pool">
+<em class="property">static </em><code class="descname">resize_pool</code><span class="sig-paren">(</span><em>processes</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.resize_pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resize pool.</p>
-<p>This method will resize the process pool backing <a class="reference internal" href="#pygmo.py_islands.mp_island" title="pygmo.py_islands.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>.</p>
+<p>This method will resize the process pool backing <code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -309,7 +321,7 @@ from the main one, or if <em>processes</em> is a non-positive value</li>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the <em>processes</em> argument is not an <code class="docutils literal"><span class="pre">int</span></code></li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the <em>processes</em> argument is not strictly positive</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="#pygmo.py_islands.mp_island.init_pool" title="pygmo.py_islands.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -318,12 +330,12 @@ from the main one, or if <em>processes</em> is a non-positive value</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.py_islands.mp_island.run_evolve">
-<code class="descname">run_evolve</code><span class="sig-paren">(</span><em>algo</em>, <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.mp_island.run_evolve" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.mp_island.run_evolve">
+<code class="descname">run_evolve</code><span class="sig-paren">(</span><em>algo</em>, <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.run_evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve population.</p>
 <p>This method will evolve the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> <em>pop</em> using the input
 <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return the evolved population. The evolution
-is run on one of the processes of the pool backing backing <a class="reference internal" href="#pygmo.py_islands.mp_island" title="pygmo.py_islands.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>.</p>
+is run on one of the processes of the pool backing backing <code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -351,8 +363,8 @@ process pool</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="pygmo.py_islands.ipyparallel_island">
-<em class="property">class </em><code class="descclassname">pygmo.py_islands.</code><code class="descname">ipyparallel_island</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.ipyparallel_island" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.ipyparallel_island">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">ipyparallel_island</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ipyparallel island.</p>
 <p>This user-defined island (UDI) will dispatch evolution tasks to an ipyparallel cluster.
 Upon construction, an instance of this UDI will first initialise an <code class="xref py py-class docutils literal"><span class="pre">ipyparallel.Client</span></code>
@@ -365,8 +377,8 @@ object that will be created internally.</p>
 <p class="last"><a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/">https://ipyparallel.readthedocs.io/en/latest/</a></p>
 </div>
 <dl class="method">
-<dt id="pygmo.py_islands.ipyparallel_island.get_extra_info">
-<code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.ipyparallel_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.ipyparallel_island.get_extra_info">
+<code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island&#8217;s extra info.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -381,8 +393,8 @@ object that will be created internally.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.py_islands.ipyparallel_island.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.ipyparallel_island.get_name" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.ipyparallel_island.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island&#8217;s name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -397,8 +409,8 @@ object that will be created internally.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pygmo.py_islands.ipyparallel_island.run_evolve">
-<code class="descname">run_evolve</code><span class="sig-paren">(</span><em>algo</em>, <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.py_islands.ipyparallel_island.run_evolve" title="Permalink to this definition">¶</a></dt>
+<dt id="pygmo.ipyparallel_island.run_evolve">
+<code class="descname">run_evolve</code><span class="sig-paren">(</span><em>algo</em>, <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.run_evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve population.</p>
 <p>This method will evolve the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> <em>pop</em> using the input
 <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return the evolved population. The evolution
