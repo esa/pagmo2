@@ -57,7 +57,7 @@ its crossover and *F* parameter. Thanks to the *seed* being specified in the isl
 
 .. note::
    Since no *udi* argument is specified, the :class:`~pygmo.island` constructor will choose the island type for us using its own internal heuristics (see the documentation). In this
-   case since bith the problem and the algorithm are thread safe, a :class:`~pygmo.thread_island` will be chosen (as can be verified calling the `__repr__()` method).
+   case since bith the problem and the algorithm are thread safe, a :class:`~pygmo.thread_island` will be chosen (as can be verified calling the ``__repr__()`` method).
 
 .. warning::
    This use of the :class:`~pygmo.island` is, essentially, replicating some of the functionalities of the :class:`~pygmo.archipelago`. While interesting to get acquinted with pygmo
@@ -85,7 +85,7 @@ Repeating the same computation a hundreds times we can obtain the boxplot on the
 Managing exceptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 What happens if, during the optimization task sent to an :class:`~pygmo.island`, an exception happens? The :class:`~pygmo.island` has the
-possibility to rethrow the latest encountered exception, in the main thread, via a call to its method :func:`~pygmo.island.wait_check()`.
+possibility to rethrow the first encountered exception, in the main thread, via a call to its method :func:`~pygmo.island.wait_check()`.
 Assume, for example that your problem or algorithm is somehow throwing (I know, what are the chances right?). To illustrate this case, we are going to use the 
 following UDP:
 

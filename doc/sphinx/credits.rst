@@ -6,7 +6,7 @@ Credits
 Who is behind the mysterious and ubiquitous "pagmo development team"?
 What is the elusive and yet so resourceful "pagmo foundation"? Who pays for all of this? Who is using it?
 
-Pagmo/pygmo is a software developed and offered to the users in a full FLOSS phylosophy. We have 
+Pagmo/pygmo is a software developed and offered to the users in a full FLOSS philosophy. We have 
 created it, mostly, in our spare time and as a tool to explore some reserch ideas we started
 nourishing since our early investigations into the evolutionary computations / optimization field.
 
@@ -20,7 +20,7 @@ for having put us together in the Advanced Concepts Team, back in 2006, where it
 
 Main developers
 ^^^^^^^^^^^^^^^
-Francesco Biscani - Max Plank Institute for Astronomy
+Francesco Biscani - Max Planck Institute for Astronomy
 
 Dario Izzo - European Space Agency
 

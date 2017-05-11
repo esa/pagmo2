@@ -21,7 +21,7 @@ the :class:`~pygmo.population` ``pop``.
     ...     def run_evolve(self, algo, pop):
     ...         return algo.evolve(pop)
     ...     def get_name(self):
-    ...         return "Its my island!"
+    ...         return "It's my island!"
 
 We have also included above the optional method ``get_name(self)`` that will be used by various ``__repr__(self)`` to provide humar readable information
 on some pygmo classes. The above UDI can then be used to construct a :class:`~pygmo.island` (similarly to how UDP can be used to construct :class:`~pygmo.problem`, etc..).
@@ -74,8 +74,8 @@ An example on how this can be achieved using, for example the multiprocessing mo
    ...         return res.get()
 
 The full details are here not reported and can be read in the :class:`~pygmo.mp_island` code. In a nutshell, what happens is that the ``algo.evolve(pop)`` gets offloaded to
-a process (in a shared pool inited upon construction calling the ``init_pool`` static method). The instruction ``res.get()``, makes the thread where ``run_evolve``
-remain waiting for the process execution and while doing so it releases the GIL, making parallelizaion effective. 
+a process (in a shared pool inited upon construction calling the :func:`~pygmo.mp_island.init_pool()` static method). The instruction ``res.get()``, makes the thread where ``run_evolve``
+remain waiting for the process execution and while doing so it releases the GIL, making parallelization effective. 
 
 .. warning::
-   When coding a UDI, thus the user thus has to take care, according to the parallelization technology chosen, that the GIL in managed properly.
+   When coding a UDI the user has to take care, according to the parallelization technology chosen, that the GIL is managed properly.

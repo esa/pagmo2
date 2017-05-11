@@ -159,7 +159,7 @@ Managing exceptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 What happens if, during the optimization task sent to an :class:`~pygmo.island`, an exception happens? This question is already explored 
 in the :ref:`py_tutorial_using_island` and since an :class:`~pygmo.archipelago` is, basically, a container for multiple :class:`~pygmo.island` 
-here we will overlapwith part of that tutorial, exploring exceptions thrown in the :class:`~pygmo.archipelago` context.
+here we will overlap with part of that tutorial, exploring exceptions thrown in the :class:`~pygmo.archipelago` context.
 
 To show how pygmo handles these situations we use the fake problem below throwing as soon as 300 fitness evaluations are made.
 
@@ -227,4 +227,4 @@ scope. To inspect what happened we can write:
         raise self._value
     RuntimeError: No active exception to reraise
 
-which will rethrow the first exception that happened and reset all the island states to ``idle``.
+which will rethrow the first encountered exception and reset all the island states to ``idle``.
