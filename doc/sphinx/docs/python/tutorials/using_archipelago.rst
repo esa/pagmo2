@@ -91,7 +91,7 @@ assemble an archipelago, the user can instantiate an empty archipelago and use t
 
 .. note::
    The island type selected by the :class:`~pygmo.archipelago` constructor is, in this case, the
-   ``Multiprocessing island``, (:class:`pygmo.py_islands.mp_island`) as we run this example on py36 and
+   ``multiprocessing island``, (:class:`pygmo.mp_island`) as we run this example on py36 and
    a linux machine. In general, the exact island chosen is platform, population and algorithm
    dependent and such choice is described in the docs of the :class:`~pygmo.island` class constructor.
 
@@ -128,7 +128,7 @@ After inspection, let us now run the evolution.
         7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy   
         ...
 
-Note how the evolution is happening in parallel on 32 separate threads (each one spawning a process, in this case, as a Multiprocessing island is used).
+Note how the evolution is happening in parallel on 32 separate threads (each one spawning a process, in this case, as a multiprocessing island is used).
 The evolution happens asynchronously and thus does not interfere directly with our main process. We then have to call the :func:`pygmo.archipelago.wait()` 
 method to have the main process explicitly wait for all islands to be finished.
 
@@ -158,7 +158,7 @@ constructed using random seeds.
 Managing exceptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 What happens if, during the optimization task sent to an :class:`~pygmo.island`, an exception happens? This question is already explored 
-in the :ref:`py_tutorial_using_island` and since an :class:`~pygmo.archipelago` is, basically, a container for multiple :class:`~pygmo.island` 
+in the :ref:`island tutorial<py_tutorial_using_island>` and since an :class:`~pygmo.archipelago` is, basically, a container for multiple :class:`~pygmo.island`
 here we will overlap with part of that tutorial, exploring exceptions thrown in the :class:`~pygmo.archipelago` context.
 
 To show how pygmo handles these situations we use the fake problem below throwing as soon as 300 fitness evaluations are made.

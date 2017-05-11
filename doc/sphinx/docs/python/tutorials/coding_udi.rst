@@ -47,7 +47,7 @@ That was easy! Lets now understand what we actually did. The object ``isl`` now 
 But there is a catch. We are in python! So it is not possible, in general, to have the same interpreter execute instructions in parallel as,
 in most of the popular python language implementations, memory management is not thread-safe. So, while the code above is perfectly fine and will
 work with pygmo, a set of ``my_isl`` running evolutions will not run in parallel as each :class:`~pygmo.island`, when executing its :func:`~pygmo.island.evolve()` 
-acquires the GIL (Global Interpreter Lock) and holds it during the :func:`~pygmo.island.evolve()` execution. 
+method, acquires the GIL (Global Interpreter Lock) and holds it during the :func:`~pygmo.island.evolve()` execution. 
 
 As a consequence, the following code:
 

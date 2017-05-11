@@ -203,7 +203,7 @@ class island_test_case(_ut.TestCase):
 
 
 class mp_island_test_case(_ut.TestCase):
-    """Test case for the :class:`~pygmo.py_islands.mp_island` class.
+    """Test case for the :class:`~pygmo.mp_island` class.
 
     """
 
@@ -256,7 +256,7 @@ class mp_island_test_case(_ut.TestCase):
 
 
 class ipyparallel_island_test_case(_ut.TestCase):
-    """Test case for the :class:`~pygmo.py_islands.ipyparallel` class.
+    """Test case for the :class:`~pygmo.ipyparallel` class.
 
     """
 

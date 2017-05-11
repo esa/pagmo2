@@ -60,19 +60,19 @@ class mp_island(object):
 
     This user-defined island (UDI) will dispatch evolution tasks to a pool of processes
     created via the standard Python multiprocessing module. The pool is shared between
-    different instances of :class:`~pygmo.py_islands.mp_island`, and it is created
-    either implicitly by the construction of the first :class:`~pygmo.py_islands.mp_island`
-    object or explicitly via the :func:`~pygmo.py_islands.mp_island.init_pool()` static method.
+    different instances of :class:`~pygmo.mp_island`, and it is created
+    either implicitly by the construction of the first :class:`~pygmo.mp_island`
+    object or explicitly via the :func:`~pygmo.mp_island.init_pool()` static method.
     The default number of processes in the pool is equal to the number of logical CPUs on the
-    current machine. The pool's size can be queried via :func:`~pygmo.py_islands.mp_island.get_pool_size()`,
-    and changed via :func:`~pygmo.py_islands.mp_island.resize_pool()`.
+    current machine. The pool's size can be queried via :func:`~pygmo.mp_island.get_pool_size()`,
+    and changed via :func:`~pygmo.mp_island.resize_pool()`.
 
     .. note::
 
        Due to certain implementation details of CPython, it is not possible to initialise or resize the pool
        from a thread different from the main one. Normally this is not a problem, but, for instance, if the first
-       :class:`~pygmo.py_islands.mp_island` instance is created in a thread different from the main one, an error
-       will be raised. In such a situation, the user should ensure to call :func:`~pygmo.py_islands.mp_island.init_pool()`
+       :class:`~pygmo.mp_island` instance is created in a thread different from the main one, an error
+       will be raised. In such a situation, the user should ensure to call :func:`~pygmo.mp_island.init_pool()`
        from the main thread before spawning the secondary thread.
 
     .. note::
@@ -89,7 +89,7 @@ class mp_island(object):
         """
         Raises:
 
-           unspecified: any exception thrown by :func:`~pygmo.py_islands.mp_island.init_pool()`
+           unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
 
         """
         # Init the process pool, if necessary.
@@ -100,7 +100,7 @@ class mp_island(object):
 
         This method will evolve the input :class:`~pygmo.population` *pop* using the input
         :class:`~pygmo.algorithm` *algo*, and return the evolved population. The evolution
-        is run on one of the processes of the pool backing backing :class:`~pygmo.py_islands.mp_island`.
+        is run on one of the processes of the pool backing backing :class:`~pygmo.mp_island`.
 
         Args:
 
@@ -182,7 +182,7 @@ class mp_island(object):
     def init_pool(processes=None):
         """Initialise the process pool.
 
-        This method will initialise the process pool backing :class:`~pygmo.py_islands.mp_island`, if the pool
+        This method will initialise the process pool backing :class:`~pygmo.mp_island`, if the pool
         has not been initialised yet. Otherwise, this method will have no effects.
 
         Args:
@@ -232,7 +232,7 @@ class mp_island(object):
     def resize_pool(processes):
         """Resize pool.
 
-        This method will resize the process pool backing :class:`~pygmo.py_islands.mp_island`.
+        This method will resize the process pool backing :class:`~pygmo.mp_island`.
 
         Args:
 
@@ -242,7 +242,7 @@ class mp_island(object):
 
             TypeError: if the *processes* argument is not an ``int``
             ValueError: if the *processes* argument is not strictly positive
-            unspecified: any exception thrown by :func:`~pygmo.py_islands.mp_island.init_pool()`
+            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
 
         """
         import multiprocessing as mp
