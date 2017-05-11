@@ -26,31 +26,21 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#include <pagmo/topology.hpp>
+#include <pagmo/topologies/base_bgl_topology.hpp>
 
-#define BOOST_TEST_MODULE topology_test
+#define BOOST_TEST_MODULE base_bgl_topology_test
 #include <boost/test/included/unit_test.hpp>
-
-#include <string>
 
 using namespace pagmo;
 
-struct unconnected2 : unconnected {
-    std::string get_extra_info() const
-    {
-        return "foobar";
-    }
-};
+using bb_t = base_bgl_topology;
 
-BOOST_AUTO_TEST_CASE(topology_construction_test)
+BOOST_AUTO_TEST_CASE(base_bgl_topology_construction_test)
 {
-    topology t;
-    BOOST_CHECK(t.get_name() == "Unconnected");
-    BOOST_CHECK(t.get_extra_info() == "");
-    BOOST_CHECK(t.is<unconnected>());
-    BOOST_CHECK(t.extract<unconnected>() != nullptr);
-    BOOST_CHECK(static_cast<const topology &>(t).extract<unconnected>() != nullptr);
-    BOOST_CHECK(!t.is<unconnected2>());
-    BOOST_CHECK(t.extract<unconnected2>() == nullptr);
-    BOOST_CHECK(static_cast<const topology &>(t).extract<unconnected2>() == nullptr);
+    bb_t b;
+    b.add_vertex();
+    b.add_vertex();
+    BOOST_CHECK(b.num_vertices() == 2u);
+    BOOST_CHECK(!b.are_adjacent(0, 1));
+    BOOST_CHECK(!b.are_adjacent(1, 0));
 }

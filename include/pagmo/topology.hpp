@@ -302,7 +302,7 @@ struct unconnected {
  * interface to **user-defined topologies** (or UDT for short). UDTs are classes (or struct) exposing a certain set
  * of methods that describe the properties of (and allow to interact with) a topology. Once
  * defined and instantiated, a UDT can then be used to construct an instance of this class, pagmo::topology, which
- * provides a generic interface to topologies for use by pagmo::archipelago and pagmo::island.
+ * provides a generic interface to topologies for use by pagmo::archipelago.
  *
  * In pagmo::topology, vertices in the graph are identified by a zero-based unique integral index (represented by
  * an \p std::size_t). This integral index corresponds to the index of an
