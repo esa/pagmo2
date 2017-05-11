@@ -130,7 +130,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.2 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -215,7 +215,7 @@ on some pygmo classes. The above UDI can then be used to construct a <a class="r
 <p>But there is a catch. We are in python! So it is not possible, in general, to have the same interpreter execute instructions in parallel as,
 in most of the popular python language implementations, memory management is not thread-safe. So, while the code above is perfectly fine and will
 work with pygmo, a set of <code class="docutils literal"><span class="pre">my_isl</span></code> running evolutions will not run in parallel as each <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, when executing its <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a>
-acquires the GIL (Global Interpreter Lock) and holds it during the <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> execution.</p>
+method, acquires the GIL (Global Interpreter Lock) and holds it during the <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> execution.</p>
 <p>As a consequence, the following code:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">archipelago</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">pop_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">udi</span> <span class="o">=</span> <span class="n">my_isl</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>

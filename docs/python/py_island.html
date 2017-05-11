@@ -130,7 +130,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">2.2 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -193,8 +193,8 @@
 of its <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> via the algorithm&#8217;s <a class="reference internal" href="py_algorithm.html#pygmo.algorithm.evolve" title="pygmo.algorithm.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a>
 method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
 <a class="reference internal" href="islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal"><span class="pre">thread_island</span></code></a>), in a separate process (e.g., if the UDI is a
-<code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code>) or even in a separate machine (e.g., if the UDI is a
-<code class="xref py py-class docutils literal"><span class="pre">ipyparallel_island</span></code>). The evolution is always asynchronous (i.e., running in the
+<a class="reference internal" href="islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>) or even in a separate machine (e.g., if the UDI is a
+<a class="reference internal" href="islands/py_islands.html#pygmo.ipyparallel_island" title="pygmo.ipyparallel_island"><code class="xref py py-class docutils literal"><span class="pre">ipyparallel_island</span></code></a>). The evolution is always asynchronous (i.e., running in the
 &#8220;background&#8221;) and it is initiated by a call to the <a class="reference internal" href="#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> method. At any
 time the user can query the state of the island and fetch its internal data members. The user can explicitly
 wait for pending evolutions to conclude by calling the <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> and
@@ -234,8 +234,8 @@ is not supplied, the UDI type is chosen according to a heuristic which depends o
 Python version and the supplied <em>algo</em> and <em>pop</em> parameters:<ul>
 <li>if <em>algo</em> and <em>pop</em>&#8216;s problem provide at least the <a class="reference internal" href="py_misc.html#pygmo.thread_safety.basic" title="pygmo.thread_safety.basic"><code class="xref py py-attr docutils literal"><span class="pre">basic</span></code></a> thread safety guarantee,
 then <a class="reference internal" href="islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal"><span class="pre">thread_island</span></code></a> will be selected as UDI type;</li>
-<li>otherwise, if the current platform is Windows or the Python version is at least 3.4, then <code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code>
-will be selected as UDI type, else <code class="xref py py-class docutils literal"><span class="pre">ipyparallel_island</span></code> will be chosen;</li>
+<li>otherwise, if the current platform is Windows or the Python version is at least 3.4, then <a class="reference internal" href="islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>
+will be selected as UDI type, else <a class="reference internal" href="islands/py_islands.html#pygmo.ipyparallel_island" title="pygmo.ipyparallel_island"><code class="xref py py-class docutils literal"><span class="pre">ipyparallel_island</span></code></a> will be chosen;</li>
 </ul>
 </li>
 <li>if the arguments list contains <em>algo</em>, <em>prob</em>, <em>size</em> and, optionally, <em>udi</em> and <em>seed</em>, then a <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>

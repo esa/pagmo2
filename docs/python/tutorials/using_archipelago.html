@@ -130,7 +130,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.2 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -261,7 +261,7 @@ assemble an archipelago, the user can instantiate an empty archipelago and use t
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The island type selected by the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> constructor is, in this case, the
-<code class="docutils literal"><span class="pre">Multiprocessing</span> <span class="pre">island</span></code>, (<code class="xref py py-class docutils literal"><span class="pre">pygmo.py_islands.mp_island</span></code>) as we run this example on py36 and
+<code class="docutils literal"><span class="pre">multiprocessing</span> <span class="pre">island</span></code>, (<a class="reference internal" href="../islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">pygmo.mp_island</span></code></a>) as we run this example on py36 and
 a linux machine. In general, the exact island chosen is platform, population and algorithm
 dependent and such choice is described in the docs of the <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> class constructor.</p>
 </div>
@@ -298,7 +298,7 @@ dependent and such choice is described in the docs of the <a class="reference in
 </pre></div>
 </div>
 </div></blockquote>
-<p>Note how the evolution is happening in parallel on 32 separate threads (each one spawning a process, in this case, as a Multiprocessing island is used).
+<p>Note how the evolution is happening in parallel on 32 separate threads (each one spawning a process, in this case, as a multiprocessing island is used).
 The evolution happens asynchronously and thus does not interfere directly with our main process. We then have to call the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.archipelago.wait()</span></code></a>
 method to have the main process explicitly wait for all islands to be finished.</p>
 <blockquote>
@@ -327,7 +327,7 @@ most likely other local algorithm would, in this case, be a superior choice.</p>
 <div class="section" id="managing-exceptions">
 <h2>Managing exceptions<a class="headerlink" href="#managing-exceptions" title="Permalink to this headline">¶</a></h2>
 <p>What happens if, during the optimization task sent to an <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, an exception happens? This question is already explored
-in the <a class="reference internal" href="using_island.html#py-tutorial-using-island"><span class="std std-ref">Use of the class island</span></a> and since an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> is, basically, a container for multiple <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
+in the <a class="reference internal" href="using_island.html#py-tutorial-using-island"><span class="std std-ref">island tutorial</span></a> and since an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> is, basically, a container for multiple <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
 here we will overlap with part of that tutorial, exploring exceptions thrown in the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> context.</p>
 <p>To show how pygmo handles these situations we use the fake problem below throwing as soon as 300 fitness evaluations are made.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">raise_exception</span><span class="p">:</span>
