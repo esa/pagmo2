@@ -182,7 +182,7 @@
   <div class="section" id="use-of-the-class-archipelago">
 <span id="py-tutorial-using-archipelago"></span><h1>Use of the class <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a><a class="headerlink" href="#use-of-the-class-archipelago" title="Permalink to this headline">¶</a></h1>
 <img alt="../../../_images/archi_no_text2.png" src="../../../_images/archi_no_text2.png" />
-<p>The <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> class is the main parallelization engine of pagmo. It essentially is
+<p>The <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> class is the main parallelization engine of pygmo. It essentially is
 a container of <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> able to initiate evolution (optimization tasks) in each <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
 asynchronously while keeping track of the results and of the information exchange (migration) between the tasks (via the
 generalized island model). The various <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> in an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> can be heterogeneous
@@ -198,7 +198,7 @@ purpose of this tutorial. Its mathematical definition is:</p>
                      &amp; \sum_i x_i^2 = 1 \\
                      &amp; \sum_i x_i \ge 0 \\
 \end{array}\end{split}\]</div>
-<p>and the optimal value for the objectove function is 0. We can write the above problem as a pagmo UDP (see:
+<p>and the optimal value for the objective function is 0. We can write the above problem as a pygmo UDP (see:
 <a class="reference internal" href="coding_udp_simple.html#py-tutorial-coding-udp-simple"><span class="std std-ref">Coding a simple User Defined Problem</span></a> and <a class="reference internal" href="coding_udp_constrained.html#py-tutorial-coding-udp-constrained"><span class="std std-ref">Coding a User Defined Problem with constraints</span></a> to learn how UDPs are
 defined from Python)</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">toy_problem</span><span class="p">:</span>
@@ -241,14 +241,14 @@ defined from Python)</p>
 
 <span class="go">    #  Type                    Algo                                Prob           Size  Status</span>
 <span class="go">    --------------------------------------------------------------------------------------------</span>
-<span class="go">    0  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
-<span class="go">    1  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
-<span class="go">    2  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
-<span class="go">    3  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
-<span class="go">    4  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
-<span class="go">    5  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
-<span class="go">    6  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
-<span class="go">    7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  100   idle</span>
+<span class="go">    0  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    idle</span>
+<span class="go">    1  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    idle</span>
+<span class="go">    2  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    idle</span>
+<span class="go">    3  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    idle</span>
+<span class="go">    4  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    idle</span>
+<span class="go">    5  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    idle</span>
+<span class="go">    6  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    idle</span>
+<span class="go">    7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    idle</span>
 <span class="go">    ...</span>
 </pre></div>
 </div>
@@ -266,8 +266,7 @@ a linux machine. In general, the exact island chosen is platform, population and
 dependent and such choice is described in the docs of the <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> class constructor.</p>
 </div>
 <p>After inspection, let us now run the evolution.</p>
-<blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">get_champions_f</span><span class="p">()</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">get_champions_f</span><span class="p">()</span> 
 <span class="go">[array([  2.18826798, -26.60899368,  -2.18826798]),</span>
 <span class="go">array([  3.39497588, -24.48739141,  -3.39497588]),</span>
 <span class="go">array([  2.3240917 , -26.88225527,  -2.3240917 ]),</span>
@@ -286,23 +285,21 @@ dependent and such choice is described in the docs of the <a class="reference in
 
 <span class="go">    #  Type                    Algo                                Prob           Size  Status</span>
 <span class="go">    --------------------------------------------------------------------------------------------</span>
-<span class="go">    0  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
-<span class="go">    1  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
-<span class="go">    2  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
-<span class="go">    3  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
-<span class="go">    4  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
-<span class="go">    5  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
-<span class="go">    6  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
-<span class="go">    7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  50    busy</span>
+<span class="go">    0  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    busy</span>
+<span class="go">    1  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    busy</span>
+<span class="go">    2  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    busy</span>
+<span class="go">    3  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    busy</span>
+<span class="go">    4  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    busy</span>
+<span class="go">    5  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    busy</span>
+<span class="go">    6  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    busy</span>
+<span class="go">    7  Multiprocessing island  Self-adaptive constraints handling  A toy problem  70    busy</span>
 <span class="go">    ...</span>
 </pre></div>
 </div>
-</div></blockquote>
 <p>Note how the evolution is happening in parallel on 32 separate threads (each one spawning a process, in this case, as a multiprocessing island is used).
 The evolution happens asynchronously and thus does not interfere directly with our main process. We then have to call the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.archipelago.wait()</span></code></a>
 method to have the main process explicitly wait for all islands to be finished.</p>
-<blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">get_champions_f</span><span class="p">()</span> 
 <span class="go">[array([  1.16514064e-02,   4.03450637e-05,  -1.16514064e-02]),</span>
 <span class="go">array([ 0.02249111,  0.00392739, -0.02249111]),</span>
@@ -316,7 +313,6 @@ method to have the main process explicitly wait for all islands to be finished.<
 <span class="gp">...</span>
 </pre></div>
 </div>
-</div></blockquote>
 <p>Different islands produce different results, in this case, as the various populations and algorithms where
 constructed using random seeds.</p>
 <div class="admonition note">
