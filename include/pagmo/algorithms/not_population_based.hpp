@@ -48,7 +48,7 @@ namespace pagmo
 /// Base class for non population based solvers
 /**
  * This class contains common methods useful in the implementation of user-defined algorithms
- * that are non population based as established a common interface to the population.
+ * that are not population based and establishes a common interface to a population
  *
  * Currently, this class implements policies for the selection and replacement of a single individual
  * in a population, which are meant to be used in the implementation of the <tt>evolve()</tt> method of the
