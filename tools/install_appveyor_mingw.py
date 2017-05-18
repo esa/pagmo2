@@ -109,8 +109,8 @@ if is_python_build:
     run_command(pinterp + ' get-pip.py --force-reinstall')
     # NOTE: at the moment we have troubles installing ipyparallel.
     # Just skip it.
-    # run_command(pip + ' install numpy dill ipyparallel')
-    run_command(pip + ' install numpy dill')
+    # run_command(pip + ' install numpy cloudpickle ipyparallel')
+    run_command(pip + ' install numpy cloudpickle')
     if is_release_build:
         run_command(pip + ' install twine')
 

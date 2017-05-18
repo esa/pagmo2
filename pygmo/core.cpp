@@ -318,13 +318,13 @@ BOOST_PYTHON_MODULE(core)
     }
     wrap_import_array();
 
-    // Check that dill is available.
+    // Check that cloudpickle is available.
     try {
-        bp::import("dill");
+        bp::import("cloudpickle");
     } catch (...) {
         pygmo::builtin().attr("print")(
-            u8"\033[91m====ERROR====\nThe dill module could not be imported. "
-            u8"Please make sure that dill has been correctly installed.\n====ERROR====\033[0m");
+            u8"\033[91m====ERROR====\nThe cloudpickle module could not be imported. "
+            u8"Please make sure that cloudpickle has been correctly installed.\n====ERROR====\033[0m");
         pygmo_throw(PyExc_ImportError, "");
     }
 

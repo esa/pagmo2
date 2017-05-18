@@ -1,6 +1,21 @@
 Changelog
 =========
 
+2.3 (2017-05-19)
+----------------
+
+Changes
+~~~~~~~
+
+- Move from dill to cloudpickle as a serialization backend. This fixes various serialization issues reported in
+  `#106 <https://github.com/esa/pagmo2/issues/106>`_.
+
+Fix
+~~~
+
+- Various documentation fixes and improvements (`#103 <https://github.com/esa/pagmo2/issues/103>`_,
+  `#104 <https://github.com/esa/pagmo2/issues/104>`_, `#107 <https://github.com/esa/pagmo2/issues/107>`_).
+
 2.2 (2017-05-12)
 ----------------
 
