@@ -275,10 +275,10 @@ class mp_island(object):
                 mp_island._pool.join()
 
 
-# Make sure we use dill for serialization, if ipyparallel is available.
+# Make sure we use cloudpickle for serialization, if ipyparallel is available.
 try:
-    from ipyparallel import use_dill as _use_dill
-    _use_dill()
+    from ipyparallel import use_cloudpickle as _use_cloudpickle
+    _use_cloudpickle()
 except ImportError:
     pass
 
