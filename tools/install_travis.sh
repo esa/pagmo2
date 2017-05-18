@@ -51,7 +51,10 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
     sleep 20;
+    cd ../tools
     python -c "import pygmo; pygmo.test.run_test_suite(1)"
+    python travis_additional_tests.py
+    cd ../build
     # At the moment conda has these packages only for Python 3.4. Install via pip instead.
     pip install 'sphinx<1.6' breathe requests[security] sphinx-bootstrap-theme;
     # Run doxygen and check the output.
@@ -125,7 +128,9 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
     sleep 20;
+    cd ../tools
     python -c "import pygmo; pygmo.test.run_test_suite(1)"
+    python travis_additional_tests.py
 elif [[ "${PAGMO_BUILD}" == manylinux* ]]; then
     cd ..;
     docker pull ${DOCKER_IMAGE};
