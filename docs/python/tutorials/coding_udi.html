@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Coding a User Defined Island &#8212; pagmo 2.2 documentation</title>
+    <title>Coding a User Defined Island &#8212; pagmo 2.3 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '2.2',
+        VERSION:     '2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -51,7 +51,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -130,7 +130,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -198,7 +199,7 @@ the <a class="reference internal" href="../py_population.html#pygmo.population" 
 on some pygmo classes. The above UDI can then be used to construct a <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> (similarly to how UDP can be used to construct <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>, etc..).</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ackley</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">udi</span> <span class="o">=</span> <span class="n">my_isl</span><span class="p">(),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">isl</span><span class="p">)</span> 
-<span class="go">Island name: Its my island!</span>
+<span class="go">Island name: It&#39;s my island!</span>
 <span class="go">    Status: idle</span>
 
 <span class="go">Algorithm: Differential Evolution</span>

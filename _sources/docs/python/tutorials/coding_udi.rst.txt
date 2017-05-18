@@ -30,7 +30,7 @@ on some pygmo classes. The above UDI can then be used to construct a :class:`~py
 
     >>> isl = pg.island(algo = pg.de(100), prob = pg.ackley(5), udi = my_isl(), size = 20)
     >>> print(isl) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
-    Island name: Its my island!
+    Island name: It's my island!
         Status: idle
     <BLANKLINE>
     Algorithm: Differential Evolution

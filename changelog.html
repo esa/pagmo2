@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &#8212; pagmo 2.2 documentation</title>
+    <title>Changelog &#8212; pagmo 2.3 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2.2',
+        VERSION:     '2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -129,7 +129,8 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -146,10 +147,15 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
-<li><a class="reference internal" href="#id1">2.2 (2017-05-12)</a><ul>
-<li><a class="reference internal" href="#new">New</a></li>
+<li><a class="reference internal" href="#id1">2.3 (2017-05-19)</a><ul>
 <li><a class="reference internal" href="#changes">Changes</a></li>
 <li><a class="reference internal" href="#fix">Fix</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">2.2 (2017-05-12)</a><ul>
+<li><a class="reference internal" href="#new">New</a></li>
+<li><a class="reference internal" href="#id10">Changes</a></li>
+<li><a class="reference internal" href="#id13">Fix</a></li>
 </ul>
 </li>
 </ul>
@@ -186,7 +192,24 @@
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
-<h2>2.2 (2017-05-12)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>2.3 (2017-05-19)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="changes">
+<h3>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Move from dill to cloudpickle as a serialization backend. This fixes various serialization issues reported in
+<a class="reference external" href="https://github.com/esa/pagmo2/issues/106">#106</a>.</li>
+</ul>
+</div>
+<div class="section" id="fix">
+<h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Various documentation fixes and improvements (<a class="reference external" href="https://github.com/esa/pagmo2/issues/103">#103</a>,
+<a class="reference external" href="https://github.com/esa/pagmo2/issues/104">#104</a>, <a class="reference external" href="https://github.com/esa/pagmo2/issues/107">#107</a>).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>2.2 (2017-05-12)<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="new">
 <h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -195,16 +218,16 @@
 <li>Implement the simple genetic algorithm (SGA) <a class="reference external" href="https://github.com/esa/pagmo2/pull/93">(#93)</a>.</li>
 </ul>
 </div>
-<div class="section" id="changes">
-<h3>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h3>Changes<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Rename, fix and improve the implementation of various archipelago-related methods
 <a class="reference external" href="https://github.com/esa/pagmo2/issues/94">(#94)</a>.</li>
 <li>Remove the use of atomic counters in the problem <a class="reference external" href="https://github.com/esa/pagmo2/issues/79">(#79)</a>.</li>
 </ul>
 </div>
-<div class="section" id="fix">
-<h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id13">
+<h3>Fix<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Various documentation fixes/improvements, headers sanitization, etc.</li>
 </ul>
