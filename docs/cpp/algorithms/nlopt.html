@@ -5,18 +5,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>NLopt solvers &#8212; pagmo 2.3 documentation</title>
+    <title>NLopt solvers &#8212; pagmo 2.4 documentation</title>
     
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '2.3',
+        VERSION:     '2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -51,7 +48,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.3</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.4</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -201,7 +198,7 @@
 </ul>
 </p>
 <p>The desired NLopt solver is selected upon construction of a <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm. Various properties of the solver (e.g., the stopping criteria) can be configured after construction via methods provided by this class. Note that multiple stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion is satisfied. By default, only the <code class="docutils literal"><span class="pre">xtol_rel</span></code> stopping criterion is active (see <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a9bbe3d1fbaa1dc7fc03590afcea4fd51"><span class="std std-ref">get_xtol_rel()</span></a>).</p>
-<p>All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient. Some solvers support equality and/or inequality constaints.</p>
+<p>All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient. Some solvers support equality and/or inequality constraints.</p>
 <p>In order to support pagmo&#8217;s population-based optimisation model, <a class="reference internal" href="#pagmoclasspagmo_1_1nlopt_1a622ed0c3398fcf717882a101cc332747"><span class="std std-ref">nlopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised by the NLopt solver. If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/constrained.html#pagmonamespacepagmo_1accb4f0cfb71555ffec215cc381ea87bc"><span class="std std-ref">pagmo::compare_fc()</span></a>), the optimised individual will be inserted back into the population. The selection and replacement strategies can be configured via <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#pagmoclasspagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
 <p><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
