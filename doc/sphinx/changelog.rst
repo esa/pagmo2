@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.4 (unreleased)
+----------------
+
+New
+~~~
+
+- Provide a CMake config-file package as part of the install process for the C++ library.
+
 2.3 (2017-05-19)
 ----------------
 

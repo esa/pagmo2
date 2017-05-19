@@ -121,8 +121,6 @@ target_include_directories(pagmo INTERFACE
 
 if(PAGMO_WITH_EIGEN3)
     # Link pagmo to eigen3.
-    add_library(Eigen3::eigen3 INTERFACE IMPORTED)
-    set_target_properties(Eigen3::eigen3 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${EIGEN3_INCLUDE_DIR}")
     target_link_libraries(pagmo INTERFACE Eigen3::eigen3)
     set(PAGMO_ENABLE_EIGEN3 "#define PAGMO_WITH_EIGEN3")
 endif()
@@ -169,7 +167,36 @@ if(PAGMO_BUILD_PYGMO)
 	endif()
 endif()
 
+# Library installation.
 if(PAGMO_INSTALL_HEADERS)
-  install(DIRECTORY include/ DESTINATION include)
-  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pagmo/config.hpp" DESTINATION include/pagmo)
+    # Setup of the export.
+    install(TARGETS pagmo EXPORT pagmo_export)
+
+    # Setup of the optional deps.
+    set(_PAGMO_CONFIG_OPTIONAL_DEPS)
+    if(PAGMO_WITH_EIGEN3)
+        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(Eigen3 REQUIRED)\n")
+    endif()
+    if(PAGMO_WITH_NLOPT)
+        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(NLOPT REQUIRED)\n")
+    endif()
+    if(PAGMO_WITH_IPOPT)
+        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(IPOPT REQUIRED)\n")
+    endif()
+
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pagmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" @ONLY)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "lib/cmake/pagmo")
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindEigen3.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindNLOPT.cmake"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindIPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
+        DESTINATION "lib/cmake/pagmo")
+    install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
+    # Take care of versioning.
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
+        COMPATIBILITY ExactVersion)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" DESTINATION "lib/cmake/pagmo")
+
+    # Do the actual library installation.
+    install(DIRECTORY include/ DESTINATION include)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pagmo/config.hpp" DESTINATION include/pagmo)
 endif()
