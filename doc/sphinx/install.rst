@@ -132,7 +132,7 @@ system-wide, which is in general a good idea, you can do:
 
 Installation from source
 ^^^^^^^^^^^^^^^^^^^^^^^^
-For an installation from source, pygmo has two extra mandatory compile-time dependencies with respect to the
+For the installation from source, pygmo has two extra mandatory dependencies with respect to the
 :ref:`C++ installation <cpp_install>`:
 
 * `Boost.Python <http://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html>`_
