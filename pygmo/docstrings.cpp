@@ -4113,7 +4113,7 @@ is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (se
 
 All NLopt solvers support only single-objective optimisation, and, as usual in pygmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
-Some solvers support equality and/or inequality constaints.
+Some solvers support equality and/or inequality constraints.
 
 In order to support pygmo's population-based optimisation model, the ``evolve()`` method will select
 a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.
