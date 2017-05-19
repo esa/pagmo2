@@ -136,7 +136,7 @@ For an installation from source, pygmo has two extra mandatory compile-time depe
 :ref:`C++ installation <cpp_install>`:
 
 * `Boost.Python <http://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html>`_
-* `NumPy <http://www.numpy.org/>`_ (note that NumPy's devlopment headers must be installed as well).
+* `NumPy <http://www.numpy.org/>`_ (note that NumPy's development headers must be installed as well).
 
 To build the module from source you need to activate the cmake ``PAGMO_BUILD_PYGMO`` option. Check carefully what Python
 version is detected and what libraries are linked to. In particular, select the correct Boost.Python
