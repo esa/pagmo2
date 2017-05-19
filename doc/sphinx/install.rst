@@ -3,16 +3,14 @@
 Installation guide
 ==================
 
-.. contents::
-
+.. _cpp_install:
 
 C++
 ---
 
-pagmo is a header-only library which has the following third party dependencies:
+pagmo is a header-only library which has the following third-party dependencies:
 
-* `Boost <http://www.boost.org/>`_, **mandatory**, header-only (needs the libraries only if you
-  intend to compile the python bindings)
+* `Boost <http://www.boost.org/>`_, **mandatory**, header-only
 * `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`_, optional, header-only
   (enabled via the ``PAGMO_WITH_EIGEN3`` CMake option)
 * `NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`_, optional, requires linking
@@ -52,14 +50,21 @@ and then we can immediately install pagmo:
 Please refer to the `conda documentation <https://conda.io/docs/>`_ for instructions on how to setup and manage
 your conda installation.
 
+.. _py_install:
+
 Python
 ------
 
-The python module corresponding to pagmo is called pygmo. There are various options for the installation
-of pygmo:
+The Python module corresponding to pagmo is called pygmo. pygmo has two mandatory runtime Python dependencies:
 
-* `conda <https://conda.io/docs/>`_,
-* `pip <https://pip.pypa.io/en/stable/>`_,
+* `NumPy <http://www.numpy.org/>`_, the standard Python array library
+* `cloudpickle <https://github.com/cloudpipe/cloudpickle>`_, a package that extends Python's serialization
+  capabilities.
+
+There are various options for the installation of pygmo:
+
+* `conda <https://conda.io/docs/>`_
+* `pip <https://pip.pypa.io/en/stable/>`_
 * installation from source.
 
 The following table summarizes the pros and cons of the various installation methods:
@@ -73,7 +78,7 @@ source    32/64bit     32/64bit     32/64bit   32/64bit   32/64bit (MinGW) 32/64
 ========= ============ ============ ========== ========== ================ ==========
 
 In general, we recommend the use of `conda <https://conda.io/docs/>`_: in addition to making the installation
-of pygmo easy, it also provides user-friendly access to a wealth of packages from the scientific python
+of pygmo easy, it also provides user-friendly access to a wealth of packages from the scientific Python
 ecosystem. Conda is a good default choice in Linux and OSX.
 
 In Windows, the situation is a bit more complicated. The first issue is that the compiler used by conda
@@ -105,8 +110,8 @@ and then we can immediately install pygmo:
    conda config --add channels conda-forge
    conda install pygmo
 
-Please refer to the `conda documentation <https://conda.io/docs/>`_ for instructions on how to setup and manage
-your conda installation.
+conda will automatically install all of pygmo's dependencies for you. Please refer to the `conda documentation <https://conda.io/docs/>`_
+for instructions on how to setup and manage your conda installation.
 
 
 Installation with pip
@@ -117,7 +122,8 @@ The installation of pygmo with pip is also straightforward:
 
    pip install pygmo
 
-If you want to install pygmo for a single user instead of system-wide, which is in general a good idea, you can do:
+Like conda, also pip will automatically install all of pygmo's dependencies for you. If you want to install pygmo for a single user instead of
+system-wide, which is in general a good idea, you can do:
 
 .. code-block:: bash
 
@@ -126,11 +132,15 @@ If you want to install pygmo for a single user instead of system-wide, which is 
 
 Installation from source
 ^^^^^^^^^^^^^^^^^^^^^^^^
-To build the module from source you need to have the Boost.Python libraries installed and to activate the cmake
-``PAGMO_BUILD_PYGMO`` option.
+For an installation from source, pygmo has two extra mandatory compile-time dependencies with respect to the
+:ref:`C++ installation <cpp_install>`:
 
-Check carefully what python version is detected and what libraries are linked to. In particular, select the correct Boost.Python
-version according to the python version (2 or 3) you want to compile the module for.
+* `Boost.Python <http://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html>`_
+* `NumPy <http://www.numpy.org/>`_ (note that NumPy's devlopment headers must be installed as well).
+
+To build the module from source you need to activate the cmake ``PAGMO_BUILD_PYGMO`` option. Check carefully what Python
+version is detected and what libraries are linked to. In particular, select the correct Boost.Python
+version according to the Python version (2 or 3) you want to compile the module for.
 
 The ``CMAKE_INSTALL_PREFIX`` will be used to construct the final location of headers and Python module after install.
 
@@ -140,4 +150,4 @@ When done, type (in your build directory):
 
    make install
 
-To check that all went well fire-up your python console and try the example in :ref:`quick-start example <getting_started_py>`.
+To check that all went well fire-up your Python console and try the example in :ref:`quick-start example <getting_started_py>`.
