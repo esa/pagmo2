@@ -86,8 +86,6 @@ else (EIGEN3_INCLUDE_DIR)
 
   if(EIGEN3_INCLUDE_DIR)
     _eigen3_check_version()
-    add_library(Eigen3::eigen3 INTERFACE IMPORTED)
-    set_target_properties(Eigen3::eigen3 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${EIGEN3_INCLUDE_DIR}")
   endif(EIGEN3_INCLUDE_DIR)
 
   include(FindPackageHandleStandardArgs)
@@ -97,3 +95,7 @@ else (EIGEN3_INCLUDE_DIR)
 
 endif(EIGEN3_INCLUDE_DIR)
 
+if(EIGEN3_INCLUDE_DIR AND NOT TARGET Eigen3::eigen3)
+    add_library(Eigen3::eigen3 INTERFACE IMPORTED)
+    set_target_properties(Eigen3::eigen3 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${EIGEN3_INCLUDE_DIR}")
+endif()
