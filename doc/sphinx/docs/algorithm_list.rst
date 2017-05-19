@@ -36,6 +36,7 @@ Common Name                        Docs of the C++ class                        
 ================================== ============================================ ============================================ =============== 
 Monotonic Basin Hopping (MBH)      :cpp:class:`pagmo::mbh`                      :class:`pygmo.mbh`                           S-CU           
 Cstrs Self-Adaptive                :cpp:class:`pagmo::cstrs_self_adaptive`      :class:`pygmo.cstrs_self_adaptive`           S-C            
+Augmented Lagrangian algorithm     :cpp:class:`pagmo::nlopt`                    :class:`pygmo.nlopt`                         S-CU           
 ================================== ============================================ ============================================ =============== 
 
 Local optimization 
@@ -56,6 +57,5 @@ SLSQP (from NLopt)                                     :cpp:class:`pagmo::nlopt`
 low-storage BFGS (from NLopt)                          :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
 preconditioned truncated Newton (from NLopt)           :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
 Shifted limited-memory variable-metric (from NLopt)    :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
-Augmented Lagrangian algorithm (from NLopt)            :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-CU           
 Ipopt                                                  :cpp:class:`pagmo::ipopt`                 :class:`pygmo.ipopt`                      S-CU           
 ====================================================== ========================================= ========================================= =============== 

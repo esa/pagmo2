@@ -37,6 +37,7 @@ Common Name                        Name in PyGMO                                
 ================================== ============================================ =============== ===========================================
 Monotonic Basin Hopping (MBH)      :class:`pygmo.mbh`                           S-CU            Exposed from C++
 Cstrs Self-Adaptive                :class:`pygmo.cstrs_self_adaptive`           S-C             Exposed from C++
+Augmented Lagrangian algorithm     :class:`pygmo.nlopt`                         S-CU            Exposed from C++
 ================================== ============================================ =============== ===========================================
 
 Local optimization 
@@ -57,7 +58,6 @@ SLSQP (from NLopt)                                     :class:`pygmo.nlopt`     
 low-storage BFGS (from NLopt)                          :class:`pygmo.nlopt`                      S-U             Exposed from C++
 preconditioned truncated Newton (from NLopt)           :class:`pygmo.nlopt`                      S-U             Exposed from C++
 Shifted limited-memory variable-metric (from NLopt)    :class:`pygmo.nlopt`                      S-U             Exposed from C++
-Augmented Lagrangian algorithm (from NLopt)            :class:`pygmo.nlopt`                      S-CU            Exposed from C++
 Ipopt                                                  :class:`pygmo.ipopt`                      S-CU            Exposed from C++
 ====================================================== ========================================= =============== =====================================================================
 
