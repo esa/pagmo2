@@ -145,13 +145,13 @@ static inline bp::object test_object_serialization(const bp::object &o)
 namespace pygmo
 {
 
-// Problem and meta-problem classes.
+// Problem class.
 std::unique_ptr<bp::class_<problem>> problem_ptr{};
 
-// Algorithm and meta-algorithm classes.
+// Algorithm class.
 std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
 
-// Island.
+// Island class.
 std::unique_ptr<bp::class_<island>> island_ptr{};
 }
 
