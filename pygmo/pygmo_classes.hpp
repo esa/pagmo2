@@ -47,6 +47,8 @@ see https://www.gnu.org/licenses/. */
 namespace pygmo
 {
 
+namespace bp = boost::python;
+
 // pagmo::problem.
 extern std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
 
