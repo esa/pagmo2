@@ -21,8 +21,8 @@ option(PAGMO_BUILD_TESTS "Build test set." OFF)
 # Build option: enable tutorials.
 option(PAGMO_BUILD_TUTORIALS "Build tutorials." OFF)
 
-# Build option: enable PyGMO.
-option(PAGMO_BUILD_PYGMO "Build PyGMO." OFF)
+# Build option: enable pygmo.
+option(PAGMO_BUILD_PYGMO "Build pygmo." OFF)
 
 # Build option: enable features depending on Eigen3.
 option(PAGMO_WITH_EIGEN3 "Enable features depending on Eigen3 (such as CMAES). Requires Eigen3." OFF)
