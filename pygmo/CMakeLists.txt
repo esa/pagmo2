@@ -31,3 +31,17 @@ add_subdirectory(plotting)
 install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py _problem_test.py
      _algorithm_test.py _island_test.py _py_islands.py "${CMAKE_CURRENT_BINARY_DIR}/_version.py"
      DESTINATION ${PYGMO_INSTALL_PATH})
+
+set (PYGMO_HEADERS
+    algorithm_exposition_suite.hpp
+    common_utils.hpp
+    function_traits.hpp
+    island_exposition_suite.hpp
+    numpy.hpp
+    problem_exposition_suite.hpp
+    pygmo_classes.hpp
+    python_includes.hpp
+)
+
+# Install the pygmo headers.
+install(FILES ${PYGMO_HEADERS} DESTINATION include/pygmo)
