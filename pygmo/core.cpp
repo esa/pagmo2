@@ -141,20 +141,6 @@ static inline bp::object test_object_serialization(const bp::object &o)
     return retval;
 }
 
-// Instances of the classes in pygmo_classes.hpp.
-namespace pygmo
-{
-
-// Problem class.
-std::unique_ptr<bp::class_<problem>> problem_ptr{};
-
-// Algorithm class.
-std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
-
-// Island class.
-std::unique_ptr<bp::class_<island>> island_ptr{};
-}
-
 // The cleanup function.
 // This function will be registered to be called when the pygmo core module is unloaded
 // (see the __init__.py file). I am not 100% sure it is needed to reset these global
@@ -164,11 +150,11 @@ std::unique_ptr<bp::class_<island>> island_ptr{};
 // supermodule gets unloaded).
 static inline void cleanup()
 {
-    pygmo::problem_ptr.reset();
+    pygmo::pgc_statics::problem_ptr.reset();
 
-    pygmo::algorithm_ptr.reset();
+    pygmo::pgc_statics::algorithm_ptr.reset();
 
-    pygmo::island_ptr.reset();
+    pygmo::pgc_statics::island_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -484,9 +470,9 @@ BOOST_PYTHON_MODULE(core)
                         pygmo::population_problem_docstring().c_str());
 
     // Problem class.
-    pygmo::problem_ptr
+    pygmo::pgc_statics::problem_ptr
         = detail::make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::init<>());
-    auto &problem_class = *pygmo::problem_ptr;
+    auto &problem_class = pygmo::get_problem_class();
     problem_class.def(bp::init<const bp::object &>((bp::arg("udp"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
@@ -563,9 +549,9 @@ BOOST_PYTHON_MODULE(core)
                         pygmo::problem_c_tol_docstring().c_str());
 
     // Algorithm class.
-    pygmo::algorithm_ptr
+    pygmo::pgc_statics::algorithm_ptr
         = detail::make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::init<>());
-    auto &algorithm_class = *pygmo::algorithm_ptr;
+    auto &algorithm_class = pygmo::get_algorithm_class();
     algorithm_class.def(bp::init<const bp::object &>((bp::arg("uda"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::algorithm_pickle_suite())
@@ -766,9 +752,9 @@ BOOST_PYTHON_MODULE(core)
     bp::def("set_global_rng_seed", lcast([](unsigned seed) { random_device::set_seed(seed); }),
             pygmo::set_global_rng_seed_docstring().c_str(), bp::arg("seed"));
     // Island.
-    pygmo::island_ptr
+    pygmo::pgc_statics::island_ptr
         = detail::make_unique<bp::class_<island>>("island", pygmo::island_docstring().c_str(), bp::init<>());
-    auto &island_class = *pygmo::island_ptr;
+    auto &island_class = pygmo::get_island_class();
     island_class.def(bp::init<const algorithm &, const population &>())
         .def(bp::init<const bp::object &, const algorithm &, const population &>())
         .def(repr(bp::self))

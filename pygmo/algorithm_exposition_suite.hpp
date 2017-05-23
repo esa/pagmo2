@@ -37,7 +37,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/list.hpp>
 #include <boost/python/return_internal_reference.hpp>
 #include <boost/python/scope.hpp>
-#include <cassert>
 #include <memory>
 
 #include <pagmo/algorithms/mbh.hpp>
@@ -57,9 +56,7 @@ namespace bp = boost::python;
 template <typename Algo>
 inline void algorithm_expose_init_cpp_uda()
 {
-    assert(algorithm_ptr.get() != nullptr);
-    auto &algo_class = *algorithm_ptr;
-    algo_class.def(bp::init<const Algo &>((bp::arg("uda"))));
+    pygmo::get_algorithm_class().def(bp::init<const Algo &>((bp::arg("uda"))));
 }
 
 // Utils to expose algo log.
@@ -83,8 +80,6 @@ inline void expose_algo_log(bp::class_<Algo> &algo_class, const char *doc)
 template <typename Algo>
 inline bp::class_<Algo> expose_algorithm(const char *name, const char *descr)
 {
-    assert(algorithm_ptr.get() != nullptr);
-    auto &algorithm_class = *algorithm_ptr;
     // We require all algorithms to be def-ctible at the bare minimum.
     bp::class_<Algo> c(name, descr, bp::init<>());
     // Mark it as a C++ algorithm.
@@ -93,8 +88,8 @@ inline bp::class_<Algo> expose_algorithm(const char *name, const char *descr)
     // Expose the algorithm constructor from Algo.
     algorithm_expose_init_cpp_uda<Algo>();
     // Expose extract.
-    algorithm_class.def("_cpp_extract", &generic_cpp_extract<pagmo::algorithm, Algo>,
-                        bp::return_internal_reference<>());
+    pygmo::get_algorithm_class().def("_cpp_extract", &generic_cpp_extract<pagmo::algorithm, Algo>,
+                                     bp::return_internal_reference<>());
 
     // Add the algorithm to the algorithms submodule.
     bp::scope().attr("algorithms").attr(name) = c;

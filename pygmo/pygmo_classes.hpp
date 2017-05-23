@@ -32,6 +32,8 @@ see https://www.gnu.org/licenses/. */
 #include "python_includes.hpp"
 
 #include <boost/python/class.hpp>
+#include <cstdlib>
+#include <iostream>
 #include <memory>
 #include <tuple>
 
@@ -49,14 +51,75 @@ namespace pygmo
 
 namespace bp = boost::python;
 
-// pagmo::problem.
-extern std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
+// Adapted from:
+// https://gcc.gnu.org/wiki/Visibility
+#if defined _WIN32 || defined __CYGWIN__
+#ifdef pygmo_EXPORTS
+#ifdef __GNUC__
+#define DLL_PUBLIC __attribute__((dllexport))
+#else
+#define DLL_PUBLIC __declspec(dllexport) // Note: actually gcc seems to also supports this syntax.
+#endif
+#else
+#ifdef __GNUC__
+#define DLL_PUBLIC __attribute__((dllimport))
+#else
+#define DLL_PUBLIC __declspec(dllimport) // Note: actually gcc seems to also supports this syntax.
+#endif
+#endif
+#else
+#define DLL_PUBLIC __attribute__((visibility("default")))
+#endif
 
-// pagmo::algorithm.
-extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
+template <typename = void>
+struct pygmo_classes_statics {
+    // pagmo::problem.
+    DLL_PUBLIC static std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
+    // pagmo::algorithm.
+    DLL_PUBLIC static std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
+    // pagmo::island.
+    DLL_PUBLIC static std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
+};
 
-// pagmo::island.
-extern std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
+// Static init.
+template <typename T>
+std::unique_ptr<bp::class_<pagmo::problem>> pygmo_classes_statics<T>::problem_ptr;
+
+template <typename T>
+std::unique_ptr<bp::class_<pagmo::algorithm>> pygmo_classes_statics<T>::algorithm_ptr;
+
+template <typename T>
+std::unique_ptr<bp::class_<pagmo::island>> pygmo_classes_statics<T>::island_ptr;
+
+using pgc_statics = pygmo_classes_statics<>;
+
+inline bp::class_<pagmo::problem> &get_problem_class()
+{
+    if (!pgc_statics::problem_ptr) {
+        std::cerr << "Could not access pygmo's problem class: did you forget to import the pygmo module?" << std::endl;
+        std::abort();
+    }
+    return *pgc_statics::problem_ptr;
+}
+
+inline bp::class_<pagmo::algorithm> &get_algorithm_class()
+{
+    if (!pgc_statics::algorithm_ptr) {
+        std::cerr << "Could not access pygmo's algorithm class: did you forget to import the pygmo module?"
+                  << std::endl;
+        std::abort();
+    }
+    return *pgc_statics::algorithm_ptr;
+}
+
+inline bp::class_<pagmo::island> &get_island_class()
+{
+    if (!pgc_statics::island_ptr) {
+        std::cerr << "Could not access pygmo's island class: did you forget to import the pygmo module?" << std::endl;
+        std::abort();
+    }
+    return *pgc_statics::island_ptr;
+}
 }
 
 #endif

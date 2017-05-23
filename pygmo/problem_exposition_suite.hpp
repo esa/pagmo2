@@ -39,7 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/object.hpp>
 #include <boost/python/return_internal_reference.hpp>
 #include <boost/python/scope.hpp>
-#include <cassert>
 #include <memory>
 #include <string>
 #include <utility>
@@ -72,17 +71,13 @@ inline bp::object best_known_wrapper(const Prob &p)
 template <typename Prob>
 inline void problem_expose_init_cpp_udp()
 {
-    assert(problem_ptr.get() != nullptr);
-    auto &prob_class = *problem_ptr;
-    prob_class.def(bp::init<const Prob &>((bp::arg("udp"))));
+    pygmo::get_problem_class().def(bp::init<const Prob &>((bp::arg("udp"))));
 }
 
 // Main C++ UDP exposition function.
 template <typename Prob>
 inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
 {
-    assert(problem_ptr.get() != nullptr);
-    auto &problem_class = *problem_ptr;
     // We require all problems to be def-ctible at the bare minimum.
     bp::class_<Prob> c(name, descr, bp::init<>());
     // Mark it as a C++ problem.
@@ -91,7 +86,8 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
     // Expose the problem constructor from Prob.
     problem_expose_init_cpp_udp<Prob>();
     // Expose extract.
-    problem_class.def("_cpp_extract", &generic_cpp_extract<pagmo::problem, Prob>, bp::return_internal_reference<>());
+    pygmo::get_problem_class().def("_cpp_extract", &generic_cpp_extract<pagmo::problem, Prob>,
+                                   bp::return_internal_reference<>());
 
     // Add the problem to the problems submodule.
     bp::scope().attr("problems").attr(name) = c;
