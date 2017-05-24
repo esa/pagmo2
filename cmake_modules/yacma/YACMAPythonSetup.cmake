@@ -15,16 +15,16 @@ include(YACMACompilerLinkerSettings)
 # to add a config option to accommodate that eventually.
 if(WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   message(STATUS "Python modules require linking to the Python library.")
-  set(_YACMA_MODULE_NEED_LINK TRUE)
+  set(_YACMA_PYTHON_MODULE_NEED_LINK TRUE)
 else()
   message(STATUS "Python modules do NOT require linking to the Python library.")
-  set(_YACMA_MODULE_NEED_LINK FALSE)
+  set(_YACMA_PYTHON_MODULE_NEED_LINK FALSE)
 endif()
 
 # Find Python interpreter.
 find_package(PythonInterp REQUIRED)
 
-if(_YACMA_MODULE_NEED_LINK)
+if(_YACMA_PYTHON_MODULE_NEED_LINK)
   # NOTE: this will give us both the Python lib and the Python include dir.
   find_package(PythonLibs REQUIRED)
   if(NOT YACMA_PYTHON_INCLUDE_DIR)
@@ -37,23 +37,29 @@ else()
       OUTPUT_VARIABLE _YACMA_PYTHON_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
     if(_YACMA_PYTHON_INCLUDE_DIR)
       set(YACMA_PYTHON_INCLUDE_DIR "${_YACMA_PYTHON_INCLUDE_DIR}" CACHE PATH "Path to the Python include dir.")
-      mark_as_advanced(YACMA_PYTHON_INCLUDE_DIR)
     endif()
   endif()
   if(NOT YACMA_PYTHON_INCLUDE_DIR)
       message(FATAL_ERROR "Could not determine the Python include dir.")
   endif()
 endif()
+mark_as_advanced(YACMA_PYTHON_INCLUDE_DIR)
 
 message(STATUS "Python interpreter: ${PYTHON_EXECUTABLE}")
 message(STATUS "Python interpreter version: ${PYTHON_VERSION_STRING}")
-if(_YACMA_MODULE_NEED_LINK)
+if(_YACMA_PYTHON_MODULE_NEED_LINK)
   message(STATUS "Python libraries: ${PYTHON_LIBRARIES}")
 endif()
 message(STATUS "Python include dir: ${YACMA_PYTHON_INCLUDE_DIR}")
 
-# Setup the imported target for the compilation of Python modules.
-if(_YACMA_MODULE_NEED_LINK)
+# Setup of useful imported targets.
+
+# An imported target for Python includes.
+add_library(YACMA::PythonIncludes INTERFACE IMPORTED)
+set_target_properties(YACMA::PythonIncludes PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}")
+
+# An imported target to be used when building extension modules.
+if(_YACMA_PYTHON_MODULE_NEED_LINK)
   add_library(YACMA::PythonModule UNKNOWN IMPORTED)
   set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}"
     IMPORTED_LOCATION "${PYTHON_LIBRARIES}" IMPORTED_LINK_INTERFACE_LANGUAGES "C")
@@ -112,7 +118,7 @@ function(YACMA_PYTHON_MODULE name)
     message(STATUS "Setting up the compilation of the Python module '${name}'.")
     # If we need an explicit link to the Python library, we compile it as a normal shared library.
     # Otherwise, we compile it as a module.
-    if(_YACMA_MODULE_NEED_LINK)
+    if(_YACMA_PYTHON_MODULE_NEED_LINK)
       add_library("${name}" SHARED ${ARGN})
     else()
       add_library("${name}" MODULE ${ARGN})
@@ -140,22 +146,6 @@ function(YACMA_PYTHON_MODULE name)
     endif()
     target_link_libraries("${name}" PRIVATE YACMA::PythonModule)
 endfunction()
-
-# Look for the NumPy headers.
-if(NOT YACMA_NUMPY_INCLUDE_DIR)
-  # Look if NumPy is avaiable.
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/yacma_numpy_include_dir.py"
-    OUTPUT_VARIABLE _YACMA_NUMPY_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-  if(_YACMA_NUMPY_INCLUDE_DIR)
-    set(YACMA_NUMPY_INCLUDE_DIR "${_YACMA_NUMPY_INCLUDE_DIR}" CACHE PATH "Path to the include files for NumPy.")
-    mark_as_advanced(YACMA_NUMPY_INCLUDE_DIR)
-  endif()
-endif()
-if(YACMA_NUMPY_INCLUDE_DIR)
-    message(STATUS "NumPy include dir: ${YACMA_NUMPY_INCLUDE_DIR}")
-else()
-    message(STATUS "NumPy headers were not found.")
-endif()
 
 # Mark as included.
 set(YACMAPythonSetupIncluded YES)
