@@ -103,9 +103,7 @@ if(PAGMO_BUILD_PYGMO)
         message(FATAL_ERROR "Minimum supported Python version is 2.7.")
     endif()
 
-    if(NOT YACMA_NUMPY_INCLUDE_DIR)
-        message(FATAL_ERROR "The NumPy headers could not be located.")
-    endif()
+    find_package(NumPy REQUIRED)
 endif()
 
 # Boost setup.
