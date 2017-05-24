@@ -10,8 +10,21 @@ endif()
 set_property(TARGET pygmo PROPERTY CXX_STANDARD 11)
 set_property(TARGET pygmo PROPERTY CXX_STANDARD_REQUIRED YES)
 set_property(TARGET pygmo PROPERTY CXX_EXTENSIONS NO)
-install(TARGETS pygmo ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
+target_include_directories(pygmo PUBLIC $<INSTALL_INTERFACE:include>)
+# Setup of the export.
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pygmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pygmo-config.cmake" @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pygmo-config.cmake" DESTINATION "lib/cmake/pygmo")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../cmake_modules/FindNumPy.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/../cmake_modules/PagmoFindBoost.cmake"
+    DESTINATION "lib/cmake/pygmo")
+# Take care of versioning.
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pygmo-config-version.cmake" VERSION ${pagmo_VERSION}
+    COMPATIBILITY ExactVersion)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pygmo-config-version.cmake" DESTINATION "lib/cmake/pygmo")
+install(TARGETS pygmo EXPORT pygmo_export ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
+install(EXPORT pygmo_export NAMESPACE Pygmo:: DESTINATION lib/cmake/pygmo)
 
+# Setup of the pygmo core module.
 YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp expose_algorithms.cpp expose_problems.cpp)
 target_link_libraries(core PRIVATE Boost::python Boost::disable_autolinking pagmo pygmo NumPy::numpy)
 if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 63))

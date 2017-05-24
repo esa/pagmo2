@@ -1,0 +1,18 @@
+# Get current dir.
+get_filename_component(_PYGMO_CONFIG_SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+# Find the deps. Alter the cmake module path.
+set(_PYGMO_CONFIG_OLD_MODULE_PATH "${CMAKE_MODULE_PATH}")
+list(APPEND CMAKE_MODULE_PATH "${_PYGMO_CONFIG_SELF_DIR}")
+find_package(pagmo @pagmo_VERSION@ EXACT REQUIRED)
+set(PAGMO_BUILD_PYGMO TRUE)
+include(PagmoFindBoost)
+unset(PAGMO_BUILD_PYGMO)
+# Restore original module path.
+set(CMAKE_MODULE_PATH "${_PYGMO_CONFIG_OLD_MODULE_PATH}")
+unset(_PYGMO_CONFIG_OLD_MODULE_PATH)
+
+include(${_PYGMO_CONFIG_SELF_DIR}/pygmo_export.cmake)
+
+# Clean up.
+unset(_PYGMO_CONFIG_SELF_DIR)
