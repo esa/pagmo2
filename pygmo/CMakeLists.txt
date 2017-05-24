@@ -1,6 +1,6 @@
 # The pygmo shared library.
 add_library(pygmo SHARED pygmo.cpp)
-target_link_libraries(pygmo PUBLIC Boost::python Boost::disable_autolinking pagmo YACMA::PythonIncludes NumPy::numpy)
+target_link_libraries(pygmo PUBLIC Boost::python Boost::disable_autolinking YACMA::PythonModule NumPy::numpy pagmo)
 if(YACMA_COMPILER_IS_GNUCXX OR YACMA_COMPILER_IS_CLANGXX)
     target_compile_options(pygmo PRIVATE "-fwrapv")
     if(${PYTHON_VERSION_MAJOR} LESS 3)

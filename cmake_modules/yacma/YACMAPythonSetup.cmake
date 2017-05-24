@@ -52,12 +52,6 @@ if(_YACMA_PYTHON_MODULE_NEED_LINK)
 endif()
 message(STATUS "Python include dir: ${YACMA_PYTHON_INCLUDE_DIR}")
 
-# Setup of useful imported targets.
-
-# An imported target for Python includes.
-add_library(YACMA::PythonIncludes INTERFACE IMPORTED)
-set_target_properties(YACMA::PythonIncludes PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}")
-
 # An imported target to be used when building extension modules.
 if(_YACMA_PYTHON_MODULE_NEED_LINK)
   add_library(YACMA::PythonModule UNKNOWN IMPORTED)
