@@ -2,9 +2,6 @@ if(YACMAPythonSetupIncluded)
     return()
 endif()
 
-# Need this to detect compiler.
-include(YACMACompilerLinkerSettings)
-
 # NOTE: this is a heuristic to determine whether we need to link to the Python library.
 # In theory, Python extensions don't need to, as they are dlopened() by the Python process
 # and thus they don't need to be linked to the Python library at compile time. However,
@@ -130,7 +127,9 @@ function(YACMA_PYTHON_MODULE name)
     # http://www.python.org/dev/peps/pep-3123/
     # NOTE: not sure here how we should set flags up for MSVC or clang on windows, need
     # to check in the future.
-    if(YACMA_COMPILER_IS_GNUCXX OR YACMA_COMPILER_IS_CLANGXX)
+    # NOTE: do not use the yacma compiler linker settings bits, so this module
+    # can be used stand-alone.
+    if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
         message(STATUS "Setting up extra compiler flag '-fwrapv' for the Python module '${name}'.")
         target_compile_options(${name} PRIVATE "-fwrapv")
         if(${PYTHON_VERSION_MAJOR} LESS 3)
