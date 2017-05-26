@@ -60,6 +60,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/rng.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
+#include <pagmo/topology.hpp>
 #include <pagmo/type_traits.hpp>
 
 /// Macro for the registration of the serialization functionality for user-defined islands.
@@ -960,6 +961,7 @@ public:
         std::unique_lock<std::mutex> lock(m_ptr->algo_mutex);
         auto new_algo_ptr = m_ptr->algo;
         lock.unlock();
+        assert(new_algo_ptr);
         return *new_algo_ptr;
     }
     /// Set the algorithm.
@@ -974,6 +976,10 @@ public:
     void set_algorithm(algorithm algo)
     {
         auto new_algo_ptr = std::make_shared<algorithm>(std::move(algo));
+        // NOTE: here the lock's dtor will run **before** the dtor of algo.
+        // This helps guaranteeing that no python operation is run while the lock
+        // is held (it *should* not happen anyway as algo, after the move, is now
+        // "empty" - it has no UDA - but this pattern adds another layer of safety).
         std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
         m_ptr->algo = new_algo_ptr;
     }
@@ -991,6 +997,7 @@ public:
         std::unique_lock<std::mutex> lock(m_ptr->pop_mutex);
         auto new_pop_ptr = m_ptr->pop;
         lock.unlock();
+        assert(new_pop_ptr);
         return *new_pop_ptr;
     }
     /// Set the population.
@@ -1175,7 +1182,20 @@ inline void thread_island::run_evolve(island &isl) const
  * state of the archipelago and access its island members. The user can explicitly wait for pending evolutions
  * to conclude by calling the wait() and wait_check() methods. The status of
  * ongoing evolutions in the archipelago can be queried via status().
+ *
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    A moved-from :cpp:class:`pagmo::archipelago` is destructible and assignable. Any other operation will result
+ *    in undefined behaviour.
+ *
+ * \endverbatim
  */
+// TODO: topology:
+// - copy constructor support,
+// - documentation,
+// - push back support,
+// - additional ctors with topo args.
 class archipelago
 {
     using container_t = std::vector<std::unique_ptr<island>>;
@@ -1207,7 +1227,7 @@ public:
      * .. note::
      *
      *    Mutable iterators are provided solely in order to allow calling non-const methods
-     *    on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     *    on the islands. Assigning an island via a mutable iterator will result in undefined behaviour.
      *
      * \endverbatim
      */
@@ -1219,32 +1239,39 @@ public:
     using const_iterator = const_iterator_implementation;
     /// Default constructor.
     /**
-     * The default constructor will initialise an empty archipelago.
+     * The default constructor will initialise an empty archipelago with an \link pagmo::unconnected unconnected\endlink
+     * topology.
      */
     archipelago()
     {
     }
     /// Copy constructor.
     /**
-     * The islands of \p other will be copied into \p this via archipelago::push_back().
+     * The copy constructor will perform a deep copy of \p other.
      *
      * @param other the archipelago that will be copied.
      *
-     * @throws unspecified any exception thrown by archipelago::push_back().
+     * @throws unspecified any exception thrown by:
+     * - archipelago::push_back(),
+     * - archipelago::get_topology(),
+     * - archipelago::set_topology().
      */
     archipelago(const archipelago &other)
     {
         for (const auto &iptr : other.m_islands) {
             // This will end up copying the island members,
             // and assign the archi pointer as well.
+            // NOTE: on construction the topology of this will be unconnected,
+            // it will be overridden below.
             push_back(*iptr);
         }
+        // Set the topology.
+        set_topology(other.get_topology());
     }
     /// Move constructor.
     /**
      * The move constructor will wait for any ongoing evolution in \p other to finish
-     * and it will then transfer the state of \p other into \p this. After the move,
-     * \p other is left in an unspecified but valid state.
+     * and it will then transfer the state of \p other into \p this.
      *
      * @param other the archipelago that will be moved.
      */
@@ -1260,6 +1287,10 @@ public:
         for (const auto &iptr : m_islands) {
             iptr->m_ptr->archi_ptr = this;
         }
+        // Move over the topology.
+        // NOTE: no need to protect here as any async operation
+        // on other has finished as we waited above.
+        m_topo = std::move(other.m_topo);
     }
 
 private:
@@ -1318,8 +1349,11 @@ public:
      *
      * \endverbatim
      *
-     * This constructor will forward \p n times the input arguments \p args to the
-     * push_back() method. If, however, the parameter pack contains an argument which
+     * This constructor will first initialize an empty archipelago with unconnected topology, and it will then
+     * forward \p n times the input arguments \p args to the push_back() method, thus creating an archipelago
+     * with \p n islands.
+     *
+     * If the parameter pack \p args contains an argument which
      * would be interpreted as a seed by the invoked island constructor, then this seed
      * will be used to initialise a random number generator that in turn will be used to generate
      * the seeds of populations of the islands that will be created within the archipelago. In other words,
@@ -1377,6 +1411,10 @@ public:
             for (const auto &iptr : m_islands) {
                 iptr->m_ptr->archi_ptr = this;
             }
+            // Move over the topology.
+            // NOTE: no need to protect, we waited above for async operations
+            // to finish.
+            m_topo = std::move(other.m_topo);
         }
         return *this;
     }
@@ -1482,9 +1520,27 @@ public:
     template <typename... Args, push_back_enabler<Args...> = 0>
     void push_back(Args &&... args)
     {
+        // Fetch the topology and add a new element to it.
+        // NOTE: we do it first for exception safety.
+        auto topo = get_topology();
+        topo.push_back();
+
+        // Add the new island. This will either succeed or throw without modifying m_islands.
         m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
-        // NOTE: this is noexcept.
+        // This is noexcept.
         m_islands.back()->m_ptr->archi_ptr = this;
+
+        // NOTE: at this point, the new island has been added but it is not yet connected
+        // and thus it will not participate yet in migration. We'll try to set the new
+        // topology now.
+        try {
+            set_topology(std::move(topo));
+        } catch (...) {
+            // In case of any error setting the topology, remove the added
+            // island before re-throwing.
+            m_islands.pop_back();
+            throw;
+        }
     }
     /// Evolve archipelago.
     /**
@@ -1588,11 +1644,11 @@ public:
             return evolve_status::busy_error;
         }
 
-        // The other error case.
+        // The other error case: at least one island is idle with error.
         if (n_idle_error) {
             if (n_busy) {
-                // At least one island is idle with error. If any other
-                // island is busy, we return busy error.
+                // At least one island is idle with error and at least one island is busy:
+                // return busy error.
                 return evolve_status::busy_error;
             }
             // No island is busy at all, at least one island is idle with error.
@@ -1688,6 +1744,7 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const archipelago &archi)
     {
         stream(os, "Number of islands: ", archi.size(), "\n");
+        stream(os, "Topology: ", archi.get_topology().get_name(), "\n");
         stream(os, "Status: ", archi.status(), "\n\n");
         stream(os, "Islands summaries:\n\n");
         detail::table t({"#", "Type", "Algo", "Prob", "Size", "Status"}, "\t");
@@ -1729,6 +1786,22 @@ public:
         }
         return retval;
     }
+    topology get_topology() const
+    {
+        // NOTE: get/set topology follow the same reasoning as in get/set algorithm
+        // for island. Not gonna repeat it here.
+        std::unique_lock<std::mutex> lock(m_topo_mutex);
+        auto new_topo_ptr = m_topo;
+        lock.unlock();
+        assert(new_topo_ptr);
+        return *new_topo_ptr;
+    }
+    void set_topology(topology topo)
+    {
+        auto new_topo_ptr = std::make_shared<topology>(std::move(topo));
+        std::lock_guard<std::mutex> lock(m_topo_mutex);
+        m_topo = new_topo_ptr;
+    }
     /// Save to archive.
     /**
      * This method will save to \p ar the islands of the archipelago.
@@ -1740,7 +1813,7 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_islands);
+        ar(m_islands, get_topology());
     }
     /// Load from archive.
     /**
@@ -1755,12 +1828,15 @@ public:
     void load(Archive &ar)
     {
         archipelago tmp;
-        ar(tmp.m_islands);
+        // NOTE: no need to lock anything, tmp is idle.
+        ar(tmp.m_islands, *tmp.m_topo);
         *this = std::move(tmp);
     }
 
 private:
     container_t m_islands;
+    mutable std::mutex m_topo_mutex;
+    std::shared_ptr<topology> m_topo = std::make_shared<topology>(unconnected{});
 };
 }
 
