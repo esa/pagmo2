@@ -7,8 +7,11 @@
     
     <title>Self-adaptive Differential Evolution (jDE and iDE) &#8212; pagmo 2.4 documentation</title>
     
-    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -186,7 +189,7 @@
 <p>The original Differential Evolution algorithm (<a class="reference internal" href="de.html#pagmoclasspagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>) can be significantly improved introducing the idea of parameter self-adaptation. Many different proposals have been made to self-adapt both the CR and the F parameters of the original differential evolution algorithm. In PaGMO we implement two different mechanisms we found effective. The first one, proposed by Brest et al., does not make use of the DE operators to produce new values for F and CR and, strictly speaking, is thus not self-adaptation, rather parameter control. The resulting DE variant is often referred to as jDE. The second variant here implemented is inspired by the ideas introduced by Elsayed et al. and uses a variaton of the selected DE operator to produce new CR anf F parameters for each individual. We refer to this variant as to iDE.</p>
 <p><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">A moved-from pagmo::nlopt is destructible and assignable. Any other operation will result
+<p class="last">A moved-from pagmo::sade is destructible and assignable. Any other operation will result
 in undefined behaviour.</p>
 </div>
 <div class="admonition warning">
