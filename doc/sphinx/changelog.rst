@@ -9,6 +9,11 @@ New
 
 - Provide a CMake config-file package as part of the install process for the C++ library.
 
+Fix
+~~~
+
+- Various documentation fixes and improvements.
+
 2.3 (2017-05-19)
 ----------------
 

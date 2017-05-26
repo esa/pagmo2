@@ -1,6 +1,18 @@
+if(UNIX)
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif()
+
+# The name of the BP target to link to depends on the Python version.
+if(${PYTHON_VERSION_MAJOR} EQUAL 2)
+    set(PYGMO_BP_TARGET "Boost::python")
+else()
+    set(PYGMO_BP_TARGET "Boost::python3")
+endif()
+
 # The pygmo shared library.
 add_library(pygmo SHARED pygmo.cpp)
-target_link_libraries(pygmo PUBLIC Boost::python Boost::disable_autolinking YACMA::PythonModule NumPy::numpy pagmo)
+target_link_libraries(pygmo PUBLIC ${PYGMO_BP_TARGET} Boost::disable_autolinking YACMA::PythonModule NumPy::numpy pagmo)
 if(YACMA_COMPILER_IS_GNUCXX OR YACMA_COMPILER_IS_CLANGXX)
     target_compile_options(pygmo PRIVATE "-fwrapv")
     if(${PYTHON_VERSION_MAJOR} LESS 3)
@@ -26,7 +38,7 @@ install(EXPORT pygmo_export NAMESPACE Pygmo:: DESTINATION lib/cmake/pygmo)
 
 # Setup of the pygmo core module.
 YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp expose_algorithms.cpp expose_problems.cpp)
-target_link_libraries(core PRIVATE Boost::python Boost::disable_autolinking pagmo pygmo NumPy::numpy)
+target_link_libraries(core PRIVATE ${PYGMO_BP_TARGET} Boost::disable_autolinking pagmo pygmo NumPy::numpy)
 if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 63))
     list(FIND PAGMO_CXX_FLAGS_DEBUG "-fvisibility=hidden" _PYGMO_HAS_VHIDDEN)
     if (NOT ${_PYGMO_HAS_VHIDDEN} EQUAL -1)
