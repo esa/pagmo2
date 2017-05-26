@@ -86,8 +86,8 @@ public:
     * @throws std::invalid_argument if \p cr is not \f$ \in [0,1[\f$, \p m is not \f$ \in [0,1]\f$, \p eta_c is not in
     * [1,100[ or \p eta_m is not in [1,100[.
     */
-    nsga2(unsigned int gen = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
-          vector_double::size_type int_dim = 0u, unsigned int seed = pagmo::random_device::next())
+    nsga2(unsigned gen = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
+          vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_int_dim(int_dim), m_e(seed), m_seed(seed),
           m_verbosity(0u), m_log()
     {
@@ -358,7 +358,7 @@ public:
         stream(ss, "\tGenerations: ", m_gen);
         stream(ss, "\n\tCrossover probability: ", m_cr);
         stream(ss, "\n\tDistribution index for crossover: ", m_eta_c);
-        stream(ss, "\n\\tMutation probability: ", m_m);
+        stream(ss, "\n\tMutation probability: ", m_m);
         stream(ss, "\n\tDistribution index for mutation: ", m_eta_m);
         stream(ss, "\n\tSize of the integer part: ", m_int_dim);
         stream(ss, "\n\tSeed: ", m_seed);

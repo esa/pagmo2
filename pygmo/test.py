@@ -67,6 +67,19 @@ class _raise_exception:
         return ([0], [1])
 
 
+class _raise_exception_2:
+    counter = 0
+
+    def fitness(self, dv):
+        if _raise_exception_2.counter == 300:
+            raise
+        _raise_exception_2.counter += 1
+        return [0]
+
+    def get_bounds(self):
+        return ([0], [1])
+
+
 class core_test_case(_ut.TestCase):
     """Test case for core PyGMO functionality.
 
@@ -1223,7 +1236,8 @@ class archipelago_test_case(_ut.TestCase):
         self.run_champions_tests()
         self.run_status_tests()
         if self._level > 0:
-            self.run_torture_test()
+            self.run_torture_test_0()
+            self.run_torture_test_1()
 
     def run_init_tests(self):
         from . import archipelago, de, rosenbrock, population, null_problem, thread_island, mp_island
@@ -1451,7 +1465,7 @@ class archipelago_test_case(_ut.TestCase):
         self.assertRaises(ValueError, lambda: a.wait_check())
         self.assertTrue(a.status == evolve_status.idle)
 
-    def run_torture_test(self):
+    def run_torture_test_0(self):
         from . import archipelago, de, ackley
 
         # pure C++
@@ -1475,6 +1489,31 @@ class archipelago_test_case(_ut.TestCase):
             archi3.wait_check()
 
         self.assertRaises(BaseException, _)
+
+    def run_torture_test_1(self):
+        # A torture test inspired by the heisenbug detected by Dario on OSX.
+
+        from . import archipelago, sade, ackley
+
+        archi = archipelago(n=5, algo=sade(
+            50), prob=_raise_exception_2(), pop_size=20)
+        archi.evolve()
+        self.assertRaises(BaseException, lambda: archi.wait_check())
+
+        archi = archipelago(n=5, algo=sade(
+            50), prob=_raise_exception_2(), pop_size=20)
+        archi.evolve()
+        self.assertRaises(BaseException, lambda: archi.wait_check())
+        archi.wait_check()
+
+        archi = archipelago(n=1100, algo=sade(
+            500), prob=ackley(50), pop_size=50)
+        archi = archipelago(n=5, algo=sade(
+            50), prob=_raise_exception_2(), pop_size=20)
+        archi.evolve()
+        archi = archipelago(n=1100, algo=sade(
+            500), prob=ackley(50), pop_size=50)
+        archi.evolve()
 
 
 def run_test_suite(level=0):

@@ -1124,7 +1124,7 @@ public:
     {
         return m_integer_opts;
     }
-    /// Get integer options.
+    /// Get numeric options.
     /**
      * @return the name-value map of optimisation numeric options.
      */

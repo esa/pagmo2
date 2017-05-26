@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(pagmo VERSION 2.2)
+project(pagmo VERSION 2.4)
 
 enable_testing()
 

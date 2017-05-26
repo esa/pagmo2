@@ -396,10 +396,10 @@ void expose_algorithms()
     auto nsga2_ = expose_algorithm<nsga2>("nsga2", nsga2_docstring().c_str());
     nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
         (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
-         bp::arg("int_dim") = 0)));
-    nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
+         bp::arg("int_dim") = 0u)));
+    nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned>(
         (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
-         bp::arg("int_dim") = 0, bp::arg("seed"))));
+         bp::arg("int_dim") = 0u, bp::arg("seed"))));
     // nsga2 needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
     nsga2_.def("get_log", lcast([](const nsga2 &a) -> bp::list {
                    bp::list retval;

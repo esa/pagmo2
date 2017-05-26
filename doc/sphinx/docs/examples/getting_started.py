@@ -8,7 +8,7 @@ prob = pg.problem(pg.schwefel(30))
 algo = pg.algorithm(pg.sade(gen=100))
 
 # 3 - Instantiate an archipelago with 16 islands having each 20 individuals
-archi = pg.archipelago(16, algo=algo, prob=prob, size=20)
+archi = pg.archipelago(16, algo=algo, prob=prob, pop_size=20)
 
 # 4 - Run the evolution in parallel on the 16 separate islands 10 times.
 archi.evolve(10)
