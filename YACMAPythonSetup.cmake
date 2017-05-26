@@ -33,7 +33,7 @@ if(_YACMA_PYTHON_MODULE_NEED_LINK)
 else()
   # NOTE: we need to determine the include dir on our own.
   if(NOT YACMA_PYTHON_INCLUDE_DIR)
-    execute_process(COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/yacma_python_include_dir.py"
+    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "from __future__ import print_function\nfrom distutils import sysconfig\nprint(sysconfig.get_python_inc())"
       OUTPUT_VARIABLE _YACMA_PYTHON_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
     if(_YACMA_PYTHON_INCLUDE_DIR)
       set(YACMA_PYTHON_INCLUDE_DIR "${_YACMA_PYTHON_INCLUDE_DIR}" CACHE PATH "Path to the Python include dir.")
@@ -80,7 +80,7 @@ if(UNIX)
   if(NOT YACMA_PYTHON_MODULES_INSTALL_PATH)
     # NOTE: here we use this contraption (instead of the simple method below for Win32) because like this we can
     # support installation into the CMake prefix (e.g., in the user's home dir).
-    execute_process(COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/yacma_python_packages_dir.py"
+    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "from __future__ import print_function\nimport distutils.sysconfig\nimport os\nprint(os.path.split(distutils.sysconfig.get_python_lib())[-1])"
       OUTPUT_VARIABLE _YACMA_PY_PACKAGES_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
     message(STATUS "Python packages dir is: ${_YACMA_PY_PACKAGES_DIR}")
     set(YACMA_PYTHON_MODULES_INSTALL_PATH "lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/${_YACMA_PY_PACKAGES_DIR}" CACHE PATH "Install path for Python modules.")
