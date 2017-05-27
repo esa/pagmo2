@@ -38,6 +38,8 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/class.hpp>
 #include <memory>
 
+#define PAGMO_SKIP_SERIALIZATION
+
 #include <pagmo/algorithm.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/problem.hpp>

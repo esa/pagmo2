@@ -62,6 +62,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 
+#if defined(PAGMO_SKIP_SERIALIZATION)
+
+#define PAGMO_REGISTER_ISLAND(isl)
+
+#else
+
 /// Macro for the registration of the serialization functionality for user-defined islands.
 /**
  * This macro should always be invoked after the declaration of a user-defined island: it will register
@@ -82,6 +88,8 @@ see https://www.gnu.org/licenses/. */
  * @endcode
  */
 #define PAGMO_REGISTER_ISLAND(isl) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::isl_inner<isl>, "udi " #isl)
+
+#endif
 
 namespace pagmo
 {

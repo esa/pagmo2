@@ -41,6 +41,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 
+#if defined(PAGMO_SKIP_SERIALIZATION)
+
+#define PAGMO_REGISTER_ALGORITHM(algo)
+
+#else
+
 /// Macro for the registration of the serialization functionality for user-defined algorithms.
 /**
  * This macro should always be invoked after the declaration of a user-defined algorithm: it will register
@@ -61,6 +67,8 @@ see https://www.gnu.org/licenses/. */
  * @endcode
  */
 #define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, "uda " #algo)
+
+#endif
 
 namespace pagmo
 {
