@@ -655,6 +655,7 @@ struct prob_inner_base {
     virtual std::pair<vector_double, vector_double> get_bounds() const = 0;
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
+    virtual vector_double::size_type get_nix() const = 0;
     virtual void set_seed(unsigned int) = 0;
     virtual bool has_set_seed() const = 0;
     virtual std::string get_name() const = 0;
@@ -739,6 +740,10 @@ struct prob_inner final : prob_inner_base {
     virtual vector_double::size_type get_nic() const override final
     {
         return get_nic_impl(m_value);
+    }
+    virtual vector_double::size_type get_nix() const override final
+    {
+        return get_nix_impl(m_value);
     }
     virtual void set_seed(unsigned int seed) override final
     {
@@ -906,6 +911,16 @@ struct prob_inner final : prob_inner_base {
     }
     template <typename U, enable_if_t<!has_i_constraints<U>::value, int> = 0>
     static vector_double::size_type get_nic_impl(const U &)
+    {
+        return 0u;
+    }
+    template <typename U, enable_if_t<has_integer_part<U>::value, int> = 0>
+    static vector_double::size_type get_nix_impl(const U &value)
+    {
+        return value.get_nix();
+    }
+    template <typename U, enable_if_t<!has_integer_part<U>::value, int> = 0>
+    static vector_double::size_type get_nix_impl(const U &)
     {
         return 0u;
     }
@@ -1105,6 +1120,14 @@ public:
         : m_ptr(detail::make_unique<detail::prob_inner<uncvref_t<T>>>(std::forward<T>(x))), m_fevals(0u), m_gevals(0u),
           m_hevals(0u)
     {
+        // 0 - Integer part
+        auto tmp_size = ptr()->get_bounds().first.size();
+        m_nix = ptr()->get_nix();
+        if (m_nix > tmp_size) {
+            pagmo_throw(std::invalid_argument, "The integer part of the problem (" + std::to_string(m_nix)
+                                                   + ") is larger than its dimension (" + std::to_string(tmp_size)
+                                                   + ")");
+        }
         // 1 - Bounds.
         auto bounds = ptr()->get_bounds();
         detail::check_problem_bounds(bounds);
@@ -1195,7 +1218,7 @@ public:
     problem(const problem &other)
         : m_ptr(other.ptr()->clone()), m_fevals(other.m_fevals), m_gevals(other.m_gevals), m_hevals(other.m_hevals),
           m_lb(other.m_lb), m_ub(other.m_ub), m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic),
-          m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
+          m_nix(other.m_nix), m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
           m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
           m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
           m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
@@ -1210,11 +1233,11 @@ public:
     problem(problem &&other) noexcept
         : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals), m_gevals(other.m_gevals), m_hevals(other.m_hevals),
           m_lb(std::move(other.m_lb)), m_ub(std::move(other.m_ub)), m_nobj(other.m_nobj), m_nec(other.m_nec),
-          m_nic(other.m_nic), m_c_tol(std::move(other.m_c_tol)), m_has_gradient(other.m_has_gradient),
-          m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
-          m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
-          m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim), m_hs_dim(std::move(other.m_hs_dim)),
-          m_thread_safety(std::move(other.m_thread_safety))
+          m_nic(other.m_nic), m_nix(other.m_nix), m_c_tol(std::move(other.m_c_tol)),
+          m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
+          m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
+          m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
+          m_hs_dim(std::move(other.m_hs_dim)), m_thread_safety(std::move(other.m_thread_safety))
     {
     }
 
@@ -1236,6 +1259,7 @@ public:
             m_nobj = other.m_nobj;
             m_nec = other.m_nec;
             m_nic = other.m_nic;
+            m_nix = other.m_nix;
             m_c_tol = std::move(other.m_c_tol);
             m_has_gradient = other.m_has_gradient;
             m_has_gradient_sparsity = other.m_has_gradient_sparsity;
@@ -1651,6 +1675,31 @@ public:
         return m_lb.size();
     }
 
+    /// Integer Dimension.
+    /**
+     * This method will return \f$ n_{ix} \f$, the dimension of the integer part of the problem.
+     * If the UDP satisfies pagmo::has_integer_part, then the output of
+     * its <tt>%get_nix()</tt> method will be returned. Otherwise, this method will return 0.
+     *
+     * @return \f$ n_{ix}\f$, the integer dimension of the problem.
+     */
+    vector_double::size_type get_nix() const
+    {
+        return m_nix;
+    }
+
+    /// Continuous Dimension.
+    /**
+     * @return \f$ n_{cx}\f$, the continuous dimension of the problem as established
+     * by the relation \f$n_{cx} = n_{x} - n_{ix} \f$.
+     *
+     * @return \f$ n_{cx}\f$, the continuous dimension of the problem.
+     */
+    vector_double::size_type get_ncx() const
+    {
+        return get_nx() - m_nix;
+    }
+
     /// Fitness dimension.
     /**
      * @return \f$ n_{f}\f$, the dimension of the fitness, which is the
@@ -1942,6 +1991,7 @@ public:
             stream(os, " [stochastic]");
         }
         os << "\n\tGlobal dimension:\t\t\t" << p.get_nx() << '\n';
+        os << "\tInteger dimension:\t\t\t" << p.get_nix() << '\n';
         os << "\tFitness dimension:\t\t\t" << p.get_nf() << '\n';
         os << "\tNumber of objectives:\t\t\t" << p.get_nobj() << '\n';
         os << "\tEquality constraints dimension:\t\t" << p.get_nec() << '\n';
@@ -1990,7 +2040,7 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_ptr, m_fevals, m_gevals, m_hevals, m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient,
+        ar(m_ptr, m_fevals, m_gevals, m_hevals, m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol, m_has_gradient,
            m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim,
            m_thread_safety);
     }
@@ -2009,7 +2059,7 @@ public:
         // Deserialize in a separate object and move it in later, for exception safety.
         problem tmp_prob;
         ar(tmp_prob.m_ptr, tmp_prob.m_fevals, tmp_prob.m_gevals, tmp_prob.m_hevals, tmp_prob.m_lb, tmp_prob.m_ub,
-           tmp_prob.m_nobj, tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_c_tol, tmp_prob.m_has_gradient,
+           tmp_prob.m_nobj, tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol, tmp_prob.m_has_gradient,
            tmp_prob.m_has_gradient_sparsity, tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity,
            tmp_prob.m_has_set_seed, tmp_prob.m_name, tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
         *this = std::move(tmp_prob);
@@ -2165,6 +2215,7 @@ private:
     vector_double::size_type m_nobj;
     vector_double::size_type m_nec;
     vector_double::size_type m_nic;
+    vector_double::size_type m_nix;
     vector_double m_c_tol;
     bool m_has_gradient;
     bool m_has_gradient_sparsity;
