@@ -38,7 +38,9 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/class.hpp>
 #include <memory>
 
-#include <pagmo/pagmo.hpp>
+#include <pagmo/algorithm.hpp>
+#include <pagmo/island.hpp>
+#include <pagmo/problem.hpp>
 
 #include "pygmo_classes.hpp"
 
