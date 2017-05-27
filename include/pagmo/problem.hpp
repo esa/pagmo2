@@ -304,6 +304,31 @@ public:
 template <typename T>
 const bool has_i_constraints<T>::value;
 
+/// Detect \p get_nix() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code{.unparsed}
+ * vector_double::size_type get_nix() const;
+ * @endcode
+ * The \p get_nix() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_integer_part
+{
+    template <typename U>
+    using get_nix_t = decltype(std::declval<const U &>().get_nix());
+    static const bool implementation_defined = std::is_same<vector_double::size_type, detected_t<get_nix_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_integer_part<T>::value;
+
 /// Detect \p gradient() method.
 /**
  * This type trait will be \p true if \p T provides a method with
