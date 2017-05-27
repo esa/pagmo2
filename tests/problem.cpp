@@ -1009,13 +1009,17 @@ BOOST_AUTO_TEST_CASE(null_problem_test)
     BOOST_CHECK(null_problem{2}.get_nobj() == 2u);
     BOOST_CHECK(null_problem{2}.get_nec() == 0u);
     BOOST_CHECK(null_problem{2}.get_nic() == 0u);
-    BOOST_CHECK((null_problem{2, 3, 4}.get_nobj() == 2u));
-    BOOST_CHECK((null_problem{2, 3, 4}.get_nec() == 3u));
-    BOOST_CHECK((null_problem{2, 3, 4}.get_nic() == 4u));
+    BOOST_CHECK(null_problem{2}.get_nix() == 0u);
+    BOOST_CHECK((null_problem{2, 3, 4, 1}.get_nobj() == 2u));
+    BOOST_CHECK((null_problem{2, 3, 4, 1}.get_nec() == 3u));
+    BOOST_CHECK((null_problem{2, 3, 4, 1}.get_nic() == 4u));
+    BOOST_CHECK((null_problem{2, 3, 4, 1}.get_nix() == 1u));
+    BOOST_CHECK((null_problem{2, 3, 4, 0}.get_nix() == 0u));
     BOOST_CHECK(p.get_nobj() == 2u);
     BOOST_CHECK((p.fitness(x1) == vector_double{0, 0}));
     BOOST_CHECK((p.fitness(x2) == vector_double{0, 0}));
     BOOST_CHECK_THROW(p = problem{null_problem{0}}, std::invalid_argument);
+    BOOST_CHECK_THROW((p = problem{null_problem{2, 3, 4, 2}}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
