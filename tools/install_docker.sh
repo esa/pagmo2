@@ -3,6 +3,9 @@
 # Echo each command
 set -x
 
+# Exit on error.
+set -e
+
 CMAKE_VERSION="3.8.0"
 EIGEN3_VERSION="3.3.3"
 BOOST_VERSION="1.63.0"
@@ -78,9 +81,14 @@ cd ..
 /opt/python/${PYTHON_DIR}/bin/ipcluster start --daemonize=True
 sleep 20
 
-# pagmo
-cd /pagmo2/build
-cmake ../ -DPAGMO_INSTALL_HEADERS=no -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python
+# pagmo & pygmo
+cd /pagmo2
+mkdir build_pagmo
+cd build_pagmo
+cmake ../ -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DCMAKE_BUILD_TYPE=Release
+make install
+cd ../build
+cmake -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
 make -j2 install
 cd wheel
 # Copy the installed pygmo files, wherever they might be in /usr/local,
