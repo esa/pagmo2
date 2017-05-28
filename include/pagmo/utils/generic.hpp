@@ -146,7 +146,7 @@ inline vector_double random_decision_vector(const std::pair<vector_double, vecto
 {
     // This will check for consistent vector lengths, non-null sizes, lb <= ub, no NaNs and consistency in
     // the integer part
-    detail::check_problem_bounds(bounds);
+    detail::check_problem_bounds(bounds, nix);
     auto nx = bounds.first.size();
     vector_double retval(nx);
     auto ncx = nx - nix;

@@ -1133,6 +1133,7 @@ public:
      * - the <tt>%gradient_sparsity()</tt> and <tt>%hessians_sparsity()</tt> methods of the UDP fail basic sanity checks
      *   (e.g., they return vectors with repeated indices, they contain indices exceeding the problem's dimensions,
      *   etc.).
+     * - the integer part of the problem is larger than the problem size.
      * @throws unspecified any exception thrown by methods of the UDP invoked during construction or by memory errors
      * in strings and standard containers.
      */
@@ -1151,7 +1152,7 @@ public:
         }
         // 1 - Bounds.
         auto bounds = ptr()->get_bounds();
-        detail::check_problem_bounds(bounds);
+        detail::check_problem_bounds(bounds, m_nix);
         m_lb = std::move(bounds.first);
         m_ub = std::move(bounds.second);
         // 2 - Number of objectives.
