@@ -154,7 +154,7 @@ inline vector_double random_decision_vector(const std::pair<vector_double, vecto
     for (decltype(ncx) i = 0u; i < ncx; ++i) {
         retval[i] = uniform_real_from_range(bounds.first[i], bounds.second[i], r_engine);
     }
-    if (nix) {
+    if (nix > 0u) {
         std::uniform_int_distribution<> dist;
         for (decltype(nx) i = ncx; i < nx; ++i) {
             dist.param(std::uniform_int_distribution<>::param_type(bounds.first[i], bounds.second[i]));

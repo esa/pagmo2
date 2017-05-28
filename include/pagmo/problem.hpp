@@ -1026,12 +1026,12 @@ struct prob_inner final : prob_inner_base {
  * \end{array}
  * \f]
  *
- * where \f$\mathbf x \in \mathbb R^{n_x}\f$ is called *decision vector* or
- * *chromosome*, \f$\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_x}\f$ are the *box-bounds*,
- * \f$ \mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}\f$ define the *objectives*,
- * \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality constraints*,
- * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality constraints*.
- * Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
+ * where \f$\mathbf x \in \mathbb R^{n_{cx}} \ times  \mathbb R^{n_{ix}}\f$ is called *decision vector* or
+ * *chromosome*, and is made of $n_{cx}$ real numbers and $n_{ix}$ integers. \f$\mathbf{lb}, \mathbf{ub} \in \mathbb
+ * R^{n_x}\f$ are the *box-bounds*, \f$ \mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}\f$ define the
+ * *objectives*, \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality
+ * constraints*, and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality
+ * constraints*. Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
  * values of any number of stochastic variables. This allows also for stochastic programming
  * tasks to be represented by this class. A tolerance is considered for the verification of the constraints and is set
  * by default to zero, but it can be modified via the problem::set_c_tol() method.
@@ -1056,13 +1056,14 @@ struct prob_inner final : prob_inner_base {
  * problem::fitness() and problem::get_bounds() methods (see their documentation for details).
  * In addition to providing the above methods, a UDP must also be default, copy and move constructible.
  *
- * The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
- * optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following
- * methods:
+ * The two mandatory methods above allow to define a continuous, single objective, deterministic, derivative-free,
+ * unconstrained optimization problem. In order to consider more complex cases, the UDP may implement one or more of the
+ * following methods:
  * @code{.unparsed}
  * vector_double::size_type get_nobj() const;
  * vector_double::size_type get_nec() const;
  * vector_double::size_type get_nic() const;
+ * vector_double::size_type get_nix() const;
  * bool has_gradient() const;
  * vector_double gradient(const vector_double &) const;
  * bool has_gradient_sparsity() const;
