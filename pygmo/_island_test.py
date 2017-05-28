@@ -207,6 +207,10 @@ class mp_island_test_case(_ut.TestCase):
 
     """
 
+    def __init__(self, level):
+        _ut.TestCase.__init__(self)
+        self._level = level
+
     def runTest(self):
         import sys
         import os
@@ -241,7 +245,8 @@ class mp_island_test_case(_ut.TestCase):
         self.assertRaises(TypeError, lambda: mp_island.resize_pool("dasda"))
 
         # Check the picklability of a problem storing a lambda.
-        isl = island(algo=de(), prob=_prob(lambda x, y: x + y), size=25)
+        isl = island(algo=de(), prob=_prob(
+            lambda x, y: x + y), size=25, udi=mp_island())
         isl.evolve()
         isl.wait_check()
 
@@ -254,11 +259,27 @@ class mp_island_test_case(_ut.TestCase):
         # Pickle.
         self.assertEqual(str(loads(dumps(isl))), str(isl))
 
+        if self._level == 0:
+            return
+
+        # Check exception transport.
+        for _ in range(1000):
+            isl = island(algo=de(), prob=_prob(
+                lambda x, y: x + y), size=2, udi=mp_island())
+            isl.evolve()
+            isl.wait()
+            self.assertTrue("**error occurred**" in repr(isl))
+            self.assertRaises(RuntimeError, lambda: isl.wait_check())
+
 
 class ipyparallel_island_test_case(_ut.TestCase):
     """Test case for the :class:`~pygmo.ipyparallel` class.
 
     """
+
+    def __init__(self, level):
+        _ut.TestCase.__init__(self)
+        self._level = level
 
     def runTest(self):
         try:
@@ -292,7 +313,8 @@ class ipyparallel_island_test_case(_ut.TestCase):
         isl.wait()
 
         # Check the picklability of a problem storing a lambda.
-        isl = island(algo=de(), prob=_prob(lambda x, y: x + y), size=25)
+        isl = island(algo=de(), prob=_prob(lambda x, y: x + y),
+                     size=25, udi=ipyparallel_island(timeout=to + .3))
         isl.evolve()
         isl.wait_check()
 
@@ -311,3 +333,15 @@ class ipyparallel_island_test_case(_ut.TestCase):
         self.assertEqual(str(pisl.get_population()), str(isl.get_population()))
         self.assertEqual(str(pisl.get_algorithm()), str(isl.get_algorithm()))
         self.assertEqual(str(pisl.get_name()), str(isl.get_name()))
+
+        if self._level == 0:
+            return
+
+        # Check exception transport.
+        for _ in range(1000):
+            isl = island(algo=de(), prob=_prob(
+                lambda x, y: x + y), size=2, udi=ipyparallel_island(timeout=to + .3))
+            isl.evolve()
+            isl.wait()
+            self.assertTrue("**error occurred**" in repr(isl))
+            self.assertRaises(RuntimeError, lambda: isl.wait_check())
