@@ -261,11 +261,10 @@ following UDP:</p>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dv</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="kn">import</span> <span class="nn">random</span>
 <span class="gp">... </span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">==</span> <span class="mi">300</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Ops!&quot;</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()]</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">]</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="p">([</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">])</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -273,16 +272,13 @@ following UDP:</p>
 </pre></div>
 </div>
 <p>We construct an island:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">raise_exception</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">raise_exception</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">udi</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">ipyparallel_island</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Since we have not explicitly passed the <em>udi</em> argument to the island constructor the island type is selected by
-the internal heuristic. In this case, since the UDP is written in python and thus marked without basic thread
-safety, and since our architecture in linux and py36, a multiprocessing island is selected. See the documentation
-of the <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> to know more on what island is selcted by default accordign to the architecture, the
-problem and the algorithm</p>
+<p class="last">We have explicitly passed the <em>udi</em> argument to the island constructor and selected an ipyparallel island.
+This requires that a cluster is started typing, for example, the command <code class="docutils literal"><span class="pre">ipcluster</span> <span class="pre">start</span></code>.</p>
 </div>
 <p>This construction will trigger <span class="math">\(20\)</span> function evaluations and thus will not throw. Let us now run an evolution:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
@@ -291,47 +287,47 @@ problem and the algorithm</p>
 </div>
 <p>Everything looks fine as in our thread nothing really happened nor threw. But if we, for example inspect the island we get:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">isl</span><span class="p">)</span> 
-<span class="go">Island name: Multiprocessing island</span>
+<span class="go">Island name: Ipyparallel island</span>
 <span class="go">    Status: idle - **error occurred**</span>
 
 <span class="go">Extra info:</span>
-<span class="go">    Number of processes in the pool: ...</span>
+<span class="go">    Queue status:</span>
+
+<span class="go">    (unassigned, 0)</span>
+<span class="go">    (0, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
+<span class="go">    (1, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
+<span class="go">    (2, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
+<span class="go">    (3, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
+<span class="go">    (4, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
+<span class="go">    (5, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
+<span class="go">    (6, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
+<span class="go">    (7, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
 
 <span class="go">Algorithm: Differential Evolution</span>
 
 <span class="go">Problem: A throwing UDP</span>
 
 <span class="go">Population size: 20</span>
-<span class="go">    Champion decision vector: [...</span>
-<span class="go">    Champion fitness: [...</span>
+<span class="go">    Champion decision vector: ...</span>
+<span class="go">    Champion fitness: ...</span>
 </pre></div>
 </div>
-<p>What has happened? I need to retreive that message!</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>&gt;&gt;&gt; isl.wait_check() 
-RuntimeError                              Traceback (most recent call last)
-&lt;ipython-input-8-ad6ea7297291&gt; in &lt;module&gt;()
-----&gt; 1 isl.wait_check()
-
-RuntimeError: The asynchronous evolution of a Pythonic island of type &#39;Multiprocessing island&#39; raised an error:
-multiprocessing.pool.RemoteTraceback:
-&quot;&quot;&quot;
-Traceback (most recent call last):
-File &quot;/usr/lib/python3.6/multiprocessing/pool.py&quot;, line 119, in worker
-    result = (True, func(*args, **kwds))
-File &quot;/home/dario/.local/lib/python3.6/site-packages/pygmo/_py_islands.py&quot;, line 40, in _evolve_func
-    return algo.evolve(pop)
-File &quot;&lt;ipython-input-2-cb4b75dd704c&gt;&quot;, line 7, in fitness
-ValueError: Ops!
-&quot;&quot;&quot;
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-File &quot;/home/dario/.local/lib/python3.6/site-packages/pygmo/_py_islands.py&quot;, line 128, in run_evolve
-    return res.get()
-File &quot;/usr/lib/python3.6/multiprocessing/pool.py&quot;, line 608, in get
-    raise self._value
-ValueError: Ops!
+<p>What has happened? I need to retrieve that message!</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span><span class="o">.</span><span class="n">wait_check</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/Users/darioizzo/miniconda3/envs/pagmo/lib/python3.6/doctest.py&quot;</span>, line <span class="m">1330</span>, in <span class="n">__run</span>
+    <span class="n">compileflags</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">test</span><span class="o">.</span><span class="n">globs</span><span class="p">)</span>
+  File <span class="nb">&quot;&lt;doctest default[0]&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+    <span class="n">isl</span><span class="o">.</span><span class="n">wait_check</span><span class="p">()</span>
+<span class="gr">RuntimeError</span>: <span class="n">The asynchronous evolution of a Pythonic island of type &#39;Ipyparallel island&#39; raised an error:</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/Users/darioizzo/.local/lib/python3.6/site-packages/pygmo/_py_islands.py&quot;</span>, line <span class="m">403</span>, in <span class="n">run_evolve</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+  File <span class="nb">&quot;/Users/darioizzo/miniconda3/envs/pagmo/lib/python3.6/site-packages/ipyparallel/client/asyncresult.py&quot;</span>, line <span class="m">167</span>, in <span class="n">get</span>
+    <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+  File <span class="nb">&quot;/Users/darioizzo/miniconda3/envs/pagmo/lib/python3.6/site-packages/ipyparallel/client/asyncresult.py&quot;</span>, line <span class="m">224</span>, in <span class="n">_resolve_result</span>
+    <span class="k">raise</span> <span class="n">r</span>
+<span class="gr">ipyparallel.error.RemoteError</span>: <span class="n">ValueError(Ops!)</span>
 </pre></div>
 </div>
 </div>
