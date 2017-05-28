@@ -117,7 +117,8 @@ inline double uniform_real_from_range(double lb, double ub, detail::random_engin
  * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
  * component of the randomly generated pagmo::vector_double will be such that
  * \f$lb_i \le x_i < ub_i\f$. If \f$lb_i == ub_i\f$ then \f$lb_i\f$ is
- * returned.
+ * returned. If an integer part is specified then the corresponding components
+ * are guaranteed to be integers.
  *
  * Example:
  *
@@ -125,28 +126,39 @@ inline double uniform_real_from_range(double lb, double ub, detail::random_engin
  * std::mt19937 r_engine(32u);
  * auto x = random_decision_vector({{1,3},{3,5}}, r_engine); // a random vector
  * auto x = random_decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
+ * auto x = random_decision_vector({{1,3},{1,5}}, r_engine, 1); // the vector {1,3} or {1,4} or {1,5}
  * @endcode
  *
  * @param bounds an <tt>std::pair</tt> containing the bounds
  * @param r_engine a <tt>std::mt19937</tt> random engine
+ * @param nix size of the integer part
  *
  * @throws std::invalid_argument if:
  * - the bounds are not of equal length, they have zero size, they contain NaNs or infs,
- *   or \f$ \mathbf{ub} < \mathbf {lb}\f$,
+ *   \f$ \mathbf{ub} < \mathbf {lb}\f$, the integer part is larger than the bounds size or
+ *   the bounds of the integer part are not integers.
  * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
  *
  * @returns a pagmo::vector_double containing a random decision vector
  */
 inline vector_double random_decision_vector(const std::pair<vector_double, vector_double> &bounds,
-                                            detail::random_engine_type &r_engine)
+                                            detail::random_engine_type &r_engine, vector_double::size_type nix = 0u)
 {
     // This will check for consistent vector lengths, non-null sizes, lb <= ub and no NaNs.
     detail::check_problem_bounds(bounds);
-    auto dim = bounds.first.size();
-    vector_double retval(dim);
+    auto nx = bounds.first.size();
+    vector_double retval(nx);
+    auto ncx = nx - nix;
 
-    for (decltype(dim) i = 0u; i < dim; ++i) {
+    for (decltype(ncx) i = 0u; i < ncx; ++i) {
         retval[i] = uniform_real_from_range(bounds.first[i], bounds.second[i], r_engine);
+    }
+    if (nix) {
+        std::uniform_int_distribution<> dist;
+        for (decltype(nx) i = ncx; i < nx; ++i) {
+            dist.param(std::uniform_int_distribution<>::param_type(bounds.first[i], bounds.second[i]));
+            retval[i] = dist(r_engine);
+        }
     }
     return retval;
 }
