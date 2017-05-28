@@ -1323,4 +1323,5 @@ BOOST_AUTO_TEST_CASE(minlp_test)
     BOOST_CHECK((problem{minlp{3u}}.get_nix() == 3u));
     BOOST_CHECK((problem{minlp{3u}}.get_ncx() == 0u));
     BOOST_CHECK((problem{minlp{3u}}.get_nx() == 3u));
+    BOOST_CHECK_THROW(problem{minlp{5u}}, std::invalid_argument);
 }
