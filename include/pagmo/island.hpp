@@ -511,7 +511,7 @@ inline std::ostream &operator<<(std::ostream &os, evolve_status es)
  * methods in the UDI are used by pagmo::island.
  *
  * \verbatim embed:rst:leading-asterisk
- * .. note::
+ * .. warning::
  *
  *    A moved-from :cpp:class:`pagmo::island` is destructible and assignable. Any other operation will result
  *    in undefined behaviour.
