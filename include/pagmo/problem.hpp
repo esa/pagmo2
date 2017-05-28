@@ -577,7 +577,10 @@ namespace detail
 // - inconsistent lengths of the vectors,
 // - nans in the bounds,
 // - lower bounds greater than upper bounds.
-inline void check_problem_bounds(const std::pair<vector_double, vector_double> &bounds)
+// - integer part larger than bounds size
+// - integer bounds not integers
+inline void check_problem_bounds(const std::pair<vector_double, vector_double> &bounds,
+                                 vector_double::size_type nix = 0u)
 {
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
@@ -601,6 +604,24 @@ inline void check_problem_bounds(const std::pair<vector_double, vector_double> &
             pagmo_throw(std::invalid_argument,
                         "The lower bound at position " + std::to_string(i) + " is " + std::to_string(lb[i])
                             + " while the upper bound has the smaller value " + std::to_string(ub[i]));
+        }
+    }
+    // 3 - checks the integer part
+    if (nix) {
+        auto nx = lb.size();
+        auto ncx = nx - nix;
+        if (nix > nx) {
+            pagmo_throw(std::invalid_argument, "The integer part cannot be larger than the bounds size");
+        }
+        for (decltype(ncx) i = ncx; i < nx; ++i) {
+            if (lb[i] != std::floor(lb[i])) {
+                pagmo_throw(std::invalid_argument, "A lower bound of the integer part of the decision vector is: "
+                                                       + std::to_string(lb[i]) + " and is not an integer.");
+            }
+            if (ub[i] != std::floor(ub[i])) {
+                pagmo_throw(std::invalid_argument, "An upper bound of the integer part of the decision vector is: "
+                                                       + std::to_string(ub[i]) + " and is not an integer.");
+            }
         }
     }
 }

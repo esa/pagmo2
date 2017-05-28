@@ -144,7 +144,8 @@ inline double uniform_real_from_range(double lb, double ub, detail::random_engin
 inline vector_double random_decision_vector(const std::pair<vector_double, vector_double> &bounds,
                                             detail::random_engine_type &r_engine, vector_double::size_type nix = 0u)
 {
-    // This will check for consistent vector lengths, non-null sizes, lb <= ub and no NaNs.
+    // This will check for consistent vector lengths, non-null sizes, lb <= ub, no NaNs and consistency in
+    // the integer part
     detail::check_problem_bounds(bounds);
     auto nx = bounds.first.size();
     vector_double retval(nx);
@@ -169,7 +170,8 @@ inline vector_double random_decision_vector(const std::pair<vector_double, vecto
  * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
  * component of the randomly generated pagmo::vector_double will be such that
  * \f$lb_i \le x_i < ub_i\f$. If \f$lb_i == ub_i\f$ then \f$lb_i\f$ is
- * returned.
+ * returned. If an integer part is specified then the corresponding components
+ * are guaranteed to be integers.
  *
  * Example:
  *
@@ -177,22 +179,26 @@ inline vector_double random_decision_vector(const std::pair<vector_double, vecto
  * std::mt19937 r_engine(32u);
  * auto x = random_decision_vector({1,3},{3,5}, r_engine); // a random vector
  * auto x = random_decision_vector({1,3},{1,3}, r_engine); // the vector {1,3}
+ * auto x = random_decision_vector({{1,3},{1,5}}, r_engine, 1); // the vector {1,3} or {1,4} or {1,5}
  * @endcode
  *
  * @param lb a vector_double containing the lower bounds
  * @param ub a vector_double containing the upper bounds
  * @param r_engine a <tt>std::mt19937</tt> random engine
+ * @param nix size of the integer part
  *
  * @throws std::invalid_argument if:
- * - the bounds are not of equal length, they contain NaNs or infs, or \f$ \mathbf{ub} < \mathbf {lb}\f$,
+ * - the bounds are not of equal length, they have zero size, they contain NaNs or infs,
+ *   \f$ \mathbf{ub} < \mathbf {lb}\f$, the integer part is larger than the bounds size or
+ *   the bounds of the integer part are not integers.
  * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
  *
  * @returns a pagmo::vector_double containing a random decision vector
  */
 inline vector_double random_decision_vector(const vector_double &lb, const vector_double &ub,
-                                            detail::random_engine_type &r_engine)
+                                            detail::random_engine_type &r_engine, vector_double::size_type nix = 0u)
 {
-    return random_decision_vector({lb, ub}, r_engine);
+    return random_decision_vector({lb, ub}, r_engine, nix);
 }
 
 /// Binomial coefficient
