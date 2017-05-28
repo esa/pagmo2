@@ -112,8 +112,8 @@ We construct an island:
 .. note::
    Since we have not explicitly passed the *udi* argument to the island constructor the island type is selected by
    the internal heuristic. In this case, since the UDP is written in python and thus marked without basic thread
-   safety, and since our architecture in linux and py36, a multiprocessing island is selected. See the documentation
-   of the :class:`~pygmo.island` to know more on what island is selcted by default accordign to the architecture, the 
+   safety, and since our architecture is linux and py36, a multiprocessing island is selected. See the documentation
+   of the :class:`~pygmo.island` to know more on what island is selected by default according to the architecture, the
    problem and the algorithm
 
 This construction will trigger :math:`20` function evaluations and thus will not throw. Let us now run an evolution:
