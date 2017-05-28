@@ -145,7 +145,7 @@ Everything looks fine as in our thread nothing really happened nor threw. But if
     	Champion fitness: ...
     <BLANKLINE>
 
-What has happened? I need to retreive that message!
+What has happened? I need to retrieve that message!
 
     >>> isl.wait_check()
     Traceback (most recent call last):
