@@ -55,7 +55,7 @@ namespace pagmo
  * 	F\left(x_1,\ldots,x_n\right) = 10 \cdot n + \sum_{i=1}^n x_i^2 - 10\cdot\cos\left( 2\pi \cdot x_i \right)
  * \f]
  *
- * where we constraint the last \f$m\$ components of the decision vector to be integers. The variables are
+ * where we constraint the last \f$m\f$ components of the decision vector to be integers. The variables are
  * box bounded as follows: \f$\quad x_i \ in [-5.12,5.12], \forall i = 1 .. n-m\f$, \f$\quad x_i \ in [-10,-5], \forall
  * i = m+1 .. n\f$
  *
@@ -78,12 +78,11 @@ struct minlp_rastrigin {
      *
      * @throw std::invalid_argument if \p dim_c+ \p dim_i is < 1
      */
-    minlp_rastrigin(unsigned int dim_c = 1u, dim_i = 1u) : m_dim_c(dim_c), m_dim_i(dim_i)
+    minlp_rastrigin(unsigned dim_c = 1u, unsigned dim_i = 1u) : m_dim_c(dim_c), m_dim_i(dim_i)
     {
         if (dim_c + dim_i < 1u) {
-            pagmo_throw(std::invalid_argument,
-                        "Minlp Rastrigin Function must have minimum 1 dimension, " + std::to_string(dim_c + dim_i)
-                            + " requested");
+            pagmo_throw(std::invalid_argument, "Minlp Rastrigin Function must have minimum 1 dimension, "
+                                                   + std::to_string(dim_c + dim_i) + " requested");
         }
     };
     /// Fitness computation
@@ -115,9 +114,9 @@ struct minlp_rastrigin {
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        vector_double lb(dim_c + dim_i, -5.12);
-        vector_double ub(dim_c + dim_i, 5.12);
-        for (decltype(dim_i) i = dim_c; i < dim_i + dim_c; ++i) {
+        vector_double lb(m_dim_c + m_dim_i, -5.12);
+        vector_double ub(m_dim_c + m_dim_i, 5.12);
+        for (decltype(m_dim_i) i = m_dim_c; i < m_dim_i + m_dim_c; ++i) {
             lb[i] = -10;
             ub[i] = -5;
         }
@@ -193,7 +192,7 @@ struct minlp_rastrigin {
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
         sparsity_pattern hs;
-        auto n = m_dim;
+        auto n = m_dim_c + m_dim_i;
         for (decltype(n) i = 0u; i < n; ++i) {
             hs.push_back({i, i});
         }
@@ -234,6 +233,8 @@ struct minlp_rastrigin {
     {
         ar(m_dim_c, m_dim_i);
     }
+
+private:
     /// Problem dimensions
     unsigned int m_dim_c;
     unsigned int m_dim_i;
