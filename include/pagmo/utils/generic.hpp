@@ -157,7 +157,8 @@ inline vector_double random_decision_vector(const std::pair<vector_double, vecto
     if (nix > 0u) {
         std::uniform_int_distribution<> dist;
         for (decltype(nx) i = ncx; i < nx; ++i) {
-            dist.param(std::uniform_int_distribution<>::param_type(bounds.first[i], bounds.second[i]));
+            dist.param(std::uniform_int_distribution<>::param_type(static_cast<int>(bounds.first[i]),
+                                                                   static_cast<int>(bounds.second[i])));
             retval[i] = dist(r_engine);
         }
     }
@@ -214,8 +215,9 @@ inline double binomial_coefficient(vector_double::size_type n, vector_double::si
         return std::round(std::exp(std::lgamma(static_cast<double>(n) + 1.) - std::lgamma(static_cast<double>(k) + 1.)
                                    - std::lgamma(static_cast<double>(n) - static_cast<double>(k) + 1.)));
     } else {
-        pagmo_throw(std::invalid_argument, "The binomial coefficient is only defined for k<=n, you requested n="
-                                               + std::to_string(n) + " and k=" + std::to_string(k));
+        pagmo_throw(std::invalid_argument,
+                    "The binomial coefficient is only defined for k<=n, you requested n=" + std::to_string(n)
+                        + " and k=" + std::to_string(k));
     }
 }
 
