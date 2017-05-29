@@ -50,6 +50,7 @@ That easy! To inspect what type of problem pygmo has detected from our UDP we ma
     >>> print(prob) #doctest: +SKIP
     Problem name: <class 'sphere_function'>
     	Global dimension:			2
+    	Integer dimension:			0
     	Fitness dimension:			1
     	Number of objectives:			1
     	Equality constraints dimension:		0
@@ -98,6 +99,7 @@ and to have a human readable name.
     >>> print(prob) #doctest: +NORMALIZE_WHITESPACE
     Problem name: Sphere Function
     	Global dimension:			3
+    	Integer dimension:			0
     	Fitness dimension:			1
     	Number of objectives:			1
     	Equality constraints dimension:		0

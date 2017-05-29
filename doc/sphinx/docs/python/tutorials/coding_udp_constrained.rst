@@ -77,6 +77,7 @@ In order to check that the UDP above is wll formed for pygmo we try to construct
     >>> print(prob) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     Problem name: ...
     	Global dimension:			6
+    	Integer dimension:			0
     	Fitness dimension:			7
     	Number of objectives:			1
     	Equality constraints dimension:		4

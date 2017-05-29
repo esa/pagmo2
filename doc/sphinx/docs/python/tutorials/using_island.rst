@@ -37,7 +37,7 @@ on the opened thread.
 
 .. doctest::
 
-    >>> isl.evolve()
+    >>> isl.evolve() 
 
 With this simple command, we run the evolution, and since the task is offloaded to a different thread our current python session or script
 is not affected so that we can run other things in the meantime. 
@@ -45,7 +45,7 @@ is not affected so that we can run other things in the meantime.
 Consider the following script, for example:
 
     >>> islands = [pg.island(algo = pg.de(gen = 1000, F=effe, CR=cross), prob = pg.rosenbrock(10), size=20, seed=32) for effe in [0.3,0.5,0.7,0.9] for cross in [0.3,0.5,0.7,0.9]]
-    >>> _ = [isl.evolve() for isl in islands]
+    >>> _ = [isl.evolve() for isl in islands] #doctest: +SKIP
     >>> _ = [isl.wait() for isl in islands]
 
 .. image:: ../../images/ros_10_on_16_isl.png
@@ -71,7 +71,7 @@ Repeating the same computation a hundreds times we can obtain the boxplot on the
     >>> res = []
     >>> for i in range(100):
     ...      islands = [pg.island(algo = pg.de(gen = 1000, F=effe, CR=cross), prob = pg.rosenbrock(10), size=20, seed=32) for effe in [0.3,0.5,0.7,0.9] for cross in [0.3,0.5,0.7,0.9]]
-    ...      _ = [isl.evolve() for isl in islands]
+    ...      _ = [isl.evolve() for isl in islands] #doctest: +SKIP
     ...      _ = [isl.wait() for isl in islands]
     ...      res.append([isl.get_population().champion_f[0] for isl in islands])
     >>> import seaborn as sns # doctest: +SKIP
