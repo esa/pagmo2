@@ -338,14 +338,17 @@ This class represents a generic *mathematical programming* or *evolutionary opti
                      & \mathbf {c}_i(\mathbf x, s) \le 0
    \end{array}
 
-where :math:`\mathbf x \in \mathbb R^{n_x}` is called *decision vector* or
-*chromosome*, :math:`\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_x}` are the *box-bounds*,
-:math:`\mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}` define the *objectives*,
-:math:`\mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}` are non linear *equality constraints*,
-and :math:`\mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}` are non linear *inequality constraints*.
-Note that the objectives and constraints may also depend from an added value :math:`s` seeding the
+where :math:`\mathbf x \in \mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}` is called *decision vector* or
+*chromosome*, and is made of :math:`n_{cx}` real numbers and :math:`n_{ix}` integers. The total problem dimension is then
+indicated with :math:`n_x = n_{cx} + n_{ix}`. :math:`\mathbf{lb}, \mathbf{ub} \in
+\mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}` are the *box-bounds*, :math:`\mathbf f: \mathbb R^{n_x} \rightarrow
+\mathbb R^{n_{obj}}` define the
+*objectives*, :math:`\mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}` are non linear *equality
+constraints*, and :math:`\mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}` are non linear *inequality
+constraints*. Note that the objectives and constraints may also depend from an added value :math:`s` seeding the
 values of any number of stochastic variables. This allows also for stochastic programming
-tasks to be represented by this class.
+tasks to be represented by this class. The tolerance considered for the verification of the constraints is set
+by default to zero and it can be modified via the :attr:`~pygmo.problem.c_tol` attribute.
 
 In order to define an optimizaztion problem in pygmo, the user must first define a class
 whose methods describe the properties of the problem and allow to compute
@@ -363,7 +366,8 @@ Every UDP must implement at least the following two methods:
    def get_bounds(self):
      ...
 
-The ``fitness()`` method is expected to return the fitness of the input decision vector, while
+The ``fitness()`` method is expected to return the fitness of the input decision vector (
+* concatenating the objectives, the equality and the inequality constraints), while
 ``get_bounds()`` is expected to return the box bounds of the problem,
 :math:`(\mathbf{lb}, \mathbf{ub})`, which also implicitly define the dimension of the problem.
 The ``fitness()`` and ``get_bounds()`` methods of the UDP are accessible from the corresponding

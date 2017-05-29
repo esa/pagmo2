@@ -590,9 +590,9 @@ inline void check_problem_bounds(const std::pair<vector_double, vector_double> &
     }
     // 1 - check bounds have equal length
     if (lb.size() != ub.size()) {
-        pagmo_throw(std::invalid_argument, "The length of the lower bounds vector is " + std::to_string(lb.size())
-                                               + ", the length of the upper bounds vector is "
-                                               + std::to_string(ub.size()));
+        pagmo_throw(std::invalid_argument,
+                    "The length of the lower bounds vector is " + std::to_string(lb.size())
+                        + ", the length of the upper bounds vector is " + std::to_string(ub.size()));
     }
     // 2 - checks lower < upper for all values in lb, ub, and check for nans.
     for (decltype(lb.size()) i = 0u; i < lb.size(); ++i) {
@@ -615,12 +615,14 @@ inline void check_problem_bounds(const std::pair<vector_double, vector_double> &
         }
         for (decltype(ncx) i = ncx; i < nx; ++i) {
             if (lb[i] != std::floor(lb[i])) {
-                pagmo_throw(std::invalid_argument, "A lower bound of the integer part of the decision vector is: "
-                                                       + std::to_string(lb[i]) + " and is not an integer.");
+                pagmo_throw(std::invalid_argument,
+                            "A lower bound of the integer part of the decision vector is: " + std::to_string(lb[i])
+                                + " and is not an integer.");
             }
             if (ub[i] != std::floor(ub[i])) {
-                pagmo_throw(std::invalid_argument, "An upper bound of the integer part of the decision vector is: "
-                                                       + std::to_string(ub[i]) + " and is not an integer.");
+                pagmo_throw(std::invalid_argument,
+                            "An upper bound of the integer part of the decision vector is: " + std::to_string(ub[i])
+                                + " and is not an integer.");
             }
         }
     }
@@ -1026,15 +1028,17 @@ struct prob_inner final : prob_inner_base {
  * \end{array}
  * \f]
  *
- * where \f$\mathbf x \in \mathbb R^{n_{cx}} \ times  \mathbb R^{n_{ix}}\f$ is called *decision vector* or
- * *chromosome*, and is made of $n_{cx}$ real numbers and $n_{ix}$ integers. \f$\mathbf{lb}, \mathbf{ub} \in \mathbb
- * R^{n_x}\f$ are the *box-bounds*, \f$ \mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}\f$ define the
+ * where \f$\mathbf x \in \mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}\f$ is called *decision vector* or
+ * *chromosome*, and is made of \f$n_{cx}\f$ real numbers and \f$n_{ix}\f$ integers. The total problem dimension is then
+ * indicated with \f$n_x = n_{cx} + n_{ix}\f$. \f$\mathbf{lb}, \mathbf{ub} \in
+ * \mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}\f$ are the *box-bounds*, \f$ \mathbf f: \mathbb R^{n_x} \rightarrow
+ * \mathbb R^{n_{obj}}\f$ define the
  * *objectives*, \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality
  * constraints*, and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality
  * constraints*. Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
  * values of any number of stochastic variables. This allows also for stochastic programming
- * tasks to be represented by this class. A tolerance is considered for the verification of the constraints and is set
- * by default to zero, but it can be modified via the problem::set_c_tol() method.
+ * tasks to be represented by this class. The tolerance considered for the verification of the constraints is set
+ * by default to zero and it can be modified via the problem::set_c_tol() method.
  *
  * In order to define an optimizaztion problem in pagmo, the user must first define a class
  * (or a struct) whose methods describe the properties of the problem and allow to compute
@@ -1049,7 +1053,8 @@ struct prob_inner final : prob_inner_base {
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  *
- * The <tt>%fitness()</tt> method is expected to return the fitness of the input decision vector, while
+ * The <tt>%fitness()</tt> method is expected to return the fitness of the input decision vector (
+ * concatenating the objectives, the equality and the inequality constraints), while
  * <tt>%get_bounds()</tt> is expected to return the box bounds of the problem,
  * \f$(\mathbf{lb}, \mathbf{ub})\f$, which also implicitly define the dimension of the problem.
  * The <tt>%fitness()</tt> and <tt>%get_bounds()</tt> methods of the UDP are accessible from the corresponding
@@ -1147,9 +1152,9 @@ public:
         auto tmp_size = ptr()->get_bounds().first.size();
         m_nix = ptr()->get_nix();
         if (m_nix > tmp_size) {
-            pagmo_throw(std::invalid_argument, "The integer part of the problem (" + std::to_string(m_nix)
-                                                   + ") is larger than its dimension (" + std::to_string(tmp_size)
-                                                   + ")");
+            pagmo_throw(std::invalid_argument,
+                        "The integer part of the problem (" + std::to_string(m_nix) + ") is larger than its dimension ("
+                            + std::to_string(tmp_size) + ")");
         }
         // 1 - Bounds.
         auto bounds = ptr()->get_bounds();
@@ -1782,9 +1787,9 @@ public:
     void set_c_tol(const vector_double &c_tol)
     {
         if (c_tol.size() != this->get_nc()) {
-            pagmo_throw(std::invalid_argument, "The tolerance vector size should be: " + std::to_string(this->get_nc())
-                                                   + ", while a size of: " + std::to_string(c_tol.size())
-                                                   + " was detected.");
+            pagmo_throw(std::invalid_argument,
+                        "The tolerance vector size should be: " + std::to_string(this->get_nc())
+                            + ", while a size of: " + std::to_string(c_tol.size()) + " was detected.");
         }
         for (decltype(c_tol.size()) i = 0; i < c_tol.size(); ++i) {
             if (std::isnan(c_tol[i])) {
@@ -2111,10 +2116,10 @@ private:
         // Check the pattern.
         for (auto it = gs.begin(); it != gs.end(); ++it) {
             if ((it->first >= nf) || (it->second >= nx)) {
-                pagmo_throw(std::invalid_argument, "Invalid pair detected in the gradient sparsity pattern: ("
-                                                       + std::to_string(it->first) + ", " + std::to_string(it->second)
-                                                       + ")\nFitness dimension is: " + std::to_string(nf)
-                                                       + "\nDecision vector dimension is: " + std::to_string(nx));
+                pagmo_throw(std::invalid_argument,
+                            "Invalid pair detected in the gradient sparsity pattern: (" + std::to_string(it->first)
+                                + ", " + std::to_string(it->second) + ")\nFitness dimension is: " + std::to_string(nf)
+                                + "\nDecision vector dimension is: " + std::to_string(nx));
             }
             if (it == gs.begin()) {
                 continue;
@@ -2135,8 +2140,9 @@ private:
         // of the fitness
         const auto nf = get_nf();
         if (hs.size() != nf) {
-            pagmo_throw(std::invalid_argument, "Invalid dimension of the hessians_sparsity: "
-                                                   + std::to_string(hs.size()) + ", expected: " + std::to_string(nf));
+            pagmo_throw(std::invalid_argument,
+                        "Invalid dimension of the hessians_sparsity: " + std::to_string(hs.size())
+                            + ", expected: " + std::to_string(nf));
         }
         // 2 - We check that all hessian sparsity patterns have
         // valid indices.
@@ -2153,11 +2159,11 @@ private:
         // [(0,0), (1,0), (1,1), (2,0), (2,1), (2,2), (3,0), (3,1), (3,2), (3,3)]
         for (auto it = hs.begin(); it != hs.end(); ++it) {
             if ((it->first >= nx) || (it->second > it->first)) {
-                pagmo_throw(std::invalid_argument, "Invalid pair detected in the hessians sparsity pattern: ("
-                                                       + std::to_string(it->first) + ", " + std::to_string(it->second)
-                                                       + ")\nDecision vector dimension is: " + std::to_string(nx)
-                                                       + "\nNOTE: hessian is a symmetric matrix and PaGMO represents "
-                                                         "it as lower triangular: i.e (i,j) is not valid if j>i");
+                pagmo_throw(std::invalid_argument,
+                            "Invalid pair detected in the hessians sparsity pattern: (" + std::to_string(it->first)
+                                + ", " + std::to_string(it->second) + ")\nDecision vector dimension is: "
+                                + std::to_string(nx) + "\nNOTE: hessian is a symmetric matrix and PaGMO represents "
+                                                       "it as lower triangular: i.e (i,j) is not valid if j>i");
             }
             if (it == hs.begin()) {
                 continue;
@@ -2175,8 +2181,9 @@ private:
     {
         // 1 - check decision vector for length consistency
         if (dv.size() != get_nx()) {
-            pagmo_throw(std::invalid_argument, "Length of decision vector is " + std::to_string(dv.size())
-                                                   + ", should be " + std::to_string(get_nx()));
+            pagmo_throw(std::invalid_argument,
+                        "Length of decision vector is " + std::to_string(dv.size()) + ", should be "
+                            + std::to_string(get_nx()));
         }
         // 2 - Here is where one could check if the decision vector
         // is in the bounds. At the moment not implemented
@@ -2205,18 +2212,19 @@ private:
     {
         // 1 - Check that hs has size get_nf()
         if (hs.size() != get_nf()) {
-            pagmo_throw(std::invalid_argument, "The hessians vector has a size of " + std::to_string(hs.size())
-                                                   + ", but the fitness dimension of the problem is "
-                                                   + std::to_string(get_nf()) + ". The two values must be equal");
+            pagmo_throw(std::invalid_argument,
+                        "The hessians vector has a size of " + std::to_string(hs.size())
+                            + ", but the fitness dimension of the problem is " + std::to_string(get_nf())
+                            + ". The two values must be equal");
         }
         // 2 - Check that the hessians returned have the same dimensions of the
         // corresponding sparsity patterns
         // NOTE: the dimension of m_hs_dim is guaranteed to be get_nf() on construction.
         for (decltype(hs.size()) i = 0u; i < hs.size(); ++i) {
             if (hs[i].size() != m_hs_dim[i]) {
-                pagmo_throw(std::invalid_argument, "On the hessian no. " + std::to_string(i) + ": Components returned: "
-                                                       + std::to_string(hs[i].size()) + ", should be "
-                                                       + std::to_string(m_hs_dim[i]));
+                pagmo_throw(std::invalid_argument,
+                            "On the hessian no. " + std::to_string(i) + ": Components returned: "
+                                + std::to_string(hs[i].size()) + ", should be " + std::to_string(m_hs_dim[i]));
             }
         }
     }
