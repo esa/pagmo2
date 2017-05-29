@@ -71,6 +71,8 @@ BOOST_AUTO_TEST_CASE(random_decision_vector_test)
     BOOST_CHECK_THROW(random_decision_vector({{1, -inf}, {0, 32}}, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(random_decision_vector({{1, 2, 3}, {0, 3}}, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(random_decision_vector({{0, 2, 3}, {1, 4, nan}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, 2, nan}, {1, 4, 4}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, nan, 3}, {1, nan, 4}}, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(random_decision_vector({{0, 2, 3}, {1, 4, 5}}, r_engine, 4u), std::invalid_argument);
     BOOST_CHECK_THROW(random_decision_vector({{0, 2, 3.1}, {1, 4, 5}}, r_engine, 1u), std::invalid_argument);
     BOOST_CHECK_THROW(random_decision_vector({{0, 2, 3}, {1, 4, 5.2}}, r_engine, 1u), std::invalid_argument);
