@@ -2709,6 +2709,32 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_anneali
 )";
 }
 
+std::string random_decision_vector_docstring()
+{
+    return R"(random_decision_vector_docstring(lb, ub, nix = 0)
+
+Creates a random decision vector within some bounds using pygmo's global rng. If
+both the lower and upper bounds are finite numbers, then the :math:`i`-th
+component of the randomly generated pagmo::vector_double will be such that
+:math:`lb_i \le x_i < ub_i`. If :math:`lb_i == ub_i` then :math:`lb_i` is
+returned. If an integer part *nix* is specified then the last *nix* components
+are guaranteed to be integers within the specified (integer) bounds.
+
+Args:
+    lb (array-like object): the lower bounds
+    ub (array-like object): the upper bounds
+    nix (``int``): the integer size
+
+Raises:
+    ValueError: if *nix* is negative or greater than an implementation-defined value
+    ValueError: if *lb* and *ub* are malformed (unequal lenght, zero size, *nix* larger than len(lb) or bounds are not integers in their last *nix* components)
+    TypeError: if *lb* or *ub* cannot be converted to a vector of floats
+
+Returns:
+    1D NumPy float array: the random decision vector
+)";
+}
+
 std::string decompose_docstring()
 {
     return R"(__init__(udp = null_problem(nobj = 2), weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False)

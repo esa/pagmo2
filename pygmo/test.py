@@ -864,6 +864,22 @@ class minlp_rastrigin_test_case(_ut.TestCase):
         self.assertTrue(int(pop.get_x()[0][1]) != pop.get_x()[0][1])
 
 
+class random_decision_vector_test_case(_ut.TestCase):
+    """Test case for random_decision_vector
+
+    """
+
+    def runTest(self):
+        from .core import random_decision_vector, set_global_rng_seed
+        set_global_rng_seed(42)
+        x = random_decision_vector(lb = [1.1,2.1,-3], ub = [2.1, 3.4,5], nix = 1)
+        self.assertTrue(int(x[-1]) == x[-1])
+        self.assertTrue(int(x[1]) != x[1])
+        set_global_rng_seed(42)
+        y = random_decision_vector(lb = [1.1,2.1,-3], ub = [2.1, 3.4,5], nix = 1)
+        self.assertTrue((x == y).all())
+
+
 class luksan_vlcek1_test_case(_ut.TestCase):
     """Test case for the UDP Luksan Vlcek 1
 
@@ -1574,6 +1590,7 @@ def run_test_suite(level=0):
     suite.addTest(global_rng_test_case())
     suite.addTest(estimate_sparsity_test_case())
     suite.addTest(estimate_gradient_test_case())
+    suite.addTest(random_decision_vector_test_case())
     try:
         from .core import cmaes
         suite.addTest(cmaes_test_case())

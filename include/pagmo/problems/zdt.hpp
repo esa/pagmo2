@@ -251,7 +251,7 @@ public:
      */
     vector_double::size_type get_nix() const
     {
-        vector_double::size_type retval;
+        vector_double::size_type retval = 0u;
         switch (m_prob_id) {
             case 1u:
             case 2u:
