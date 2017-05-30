@@ -62,8 +62,9 @@ namespace pagmo
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    The ZDT5 problem is an integer problem, its chromosome is here represented with doubles floored
- *    via ``std::floor()``.
+ *    The ZDT5 problem is an integer problem, its fitness is computed rounding all the chromosome values,
+ *    so that [1,0,1] or [0.97, 0.23, 0.57] will have the same fitness. Integer relaxation techniques are
+ *    thus not appropriate fot this type of fitness.
  *
  * .. seealso::
  *
@@ -152,13 +153,15 @@ public:
     zdt(unsigned int prob_id = 1u, unsigned int param = 30u) : m_prob_id(prob_id), m_param(param)
     {
         if (param < 2u) {
-            pagmo_throw(std::invalid_argument, "ZDT test problems must have a minimum value of 2 for the constructing "
-                                               "parameter (representing the dimension except for ZDT5), "
-                                                   + std::to_string(param) + " requested");
+            pagmo_throw(std::invalid_argument,
+                        "ZDT test problems must have a minimum value of 2 for the constructing "
+                        "parameter (representing the dimension except for ZDT5), "
+                            + std::to_string(param) + " requested");
         }
         if (prob_id == 0u || prob_id > 6u) {
-            pagmo_throw(std::invalid_argument, "ZDT test suite contains six (prob_id=[1 ... 6]) problems, prob_id="
-                                                   + std::to_string(prob_id) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "ZDT test suite contains six (prob_id=[1 ... 6]) problems, prob_id=" + std::to_string(prob_id)
+                            + " was detected");
         }
     };
     /// Fitness computation
@@ -233,20 +236,40 @@ public:
             }
             case 5u: {
                 auto dim = 30u + 5u * (m_param - 1u);
-                retval
-                    = {vector_double(dim, 0.),
-                       vector_double(
-                           dim,
-                           1.)}; // the bounds [0,1] imply that round(x) will be in [0,1] as the rng generates in [0,1)
+                retval = {vector_double(dim, 0.), vector_double(dim, 1.)};
                 break;
             }
         }
         return retval;
     }
+
+    /// Integer dimension
+    /**
+     * It returns the integer dimension for this UDP.
+     *
+     * @return the integer dimension of the UDP
+     */
+    vector_double::size_type get_nix() const
+    {
+        vector_double::size_type retval;
+        switch (m_prob_id) {
+            case 1u:
+            case 2u:
+            case 3u:
+            case 4u:
+            case 6u:
+                retval = 0u;
+                break;
+            case 5u: {
+                retval = 30u + 5u * (m_param - 1u);
+                break;
+            }
+        }
+        return retval;
+    }
+
     /// Problem name
     /**
-     *
-     *
      * @return a string containing the problem name
      */
     std::string get_name() const
