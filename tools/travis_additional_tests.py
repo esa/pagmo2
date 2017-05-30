@@ -2,6 +2,9 @@ import pygmo as pg
 import numpy as np
 
 
+# NOTE: a couple of serialization tests from:
+# https://github.com/esa/pagmo2/issues/106
+
 class toy_problem:
 
     def fitness(self, x):
@@ -43,6 +46,7 @@ def test2():
     archi = pg.archipelago(n=6, algo=mma, prob=p_toy, pop_size=1)
     archi.evolve()
     archi.wait_check()
+
 
 if __name__ == '__main__':
     test1()
