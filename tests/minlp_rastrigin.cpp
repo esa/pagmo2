@@ -78,7 +78,8 @@ BOOST_AUTO_TEST_CASE(min_lp_rastrigin_test)
 
     // Name and extra info tests
     BOOST_CHECK((minlp_rastrigin{0u, 1u}.get_name().find("MINLP Rastrigin Function") != std::string::npos));
-    BOOST_CHECK((problem{minlp_rastrigin{1u, 1u}}.get_extra_info().find("Continuous dimension") != std::string::npos));
+    BOOST_CHECK(
+        (problem{minlp_rastrigin{1u, 1u}}.get_extra_info().find("MINLP continuous dimension") != std::string::npos));
 }
 
 BOOST_AUTO_TEST_CASE(rastrigin_serialization_test)
