@@ -90,14 +90,12 @@ public:
           m_log()
     {
         if (cr >= 1. || cr < 0.) {
-            pagmo_throw(std::invalid_argument,
-                        "The crossover probability must be in the [0,1[ range, while a value of " + std::to_string(cr)
-                            + " was detected");
+            pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1[ range, while a value of "
+                                                   + std::to_string(cr) + " was detected");
         }
         if (m < 0. || m > 1.) {
-            pagmo_throw(std::invalid_argument,
-                        "The mutation probability must be in the [0,1] range, while a value of " + std::to_string(cr)
-                            + " was detected");
+            pagmo_throw(std::invalid_argument, "The mutation probability must be in the [0,1] range, while a value of "
+                                                   + std::to_string(cr) + " was detected");
         }
         if (eta_c < 1. || eta_c > 100.) {
             pagmo_throw(std::invalid_argument,
@@ -141,9 +139,8 @@ public:
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument,
-                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
-                            + " cannot deal with them.");
+            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them.");
         }
         if (prob.get_nf() < 2u) {
             pagmo_throw(std::invalid_argument,
@@ -498,7 +495,6 @@ private:
     {
         // Decision vector dimensions
         auto D = pop.get_problem().get_nx();
-        auto Di = pop.get_problem().get_nix();
         auto Dc = pop.get_problem().get_ncx();
         // Problem bounds
         const auto bounds = pop.get_problem().get_bounds();
