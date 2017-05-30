@@ -538,6 +538,34 @@ Returns:
 )";
 }
 
+std::string problem_get_nix_docstring()
+{
+    return R"(get_nix()
+
+Integer dimension of the problem.
+
+This method will return :math:`n_{ix}`, the integer dimension of the problem.
+
+Returns:
+    ``int``: the integer dimension of the problem
+
+)";
+}
+
+std::string problem_get_ncx_docstring()
+{
+    return R"(get_ncx()
+
+Conrinuous dimension of the problem.
+
+This method will return :math:`n_{cx}`, the continuous dimension of the problem.
+
+Returns:
+    ``int``: the continuous dimension of the problem
+
+)";
+}
+
 std::string problem_get_nf_docstring()
 {
     return R"(get_nf()
@@ -1707,6 +1735,25 @@ Raises:
     ValueError: if *dim* is less than 2
 
 See also the docs of the C++ class :cpp:class:`pagmo::rosenbrock`.
+
+)";
+}
+
+std::string minlp_rastrigin_docstring()
+{
+    return R"(__init__(dim_c = 1, dim_i = 1)
+
+The scalable MINLP Rastrigin problem.
+
+Args:
+    dim_c (``int``): MINLP continuous dimension
+    dim_i (``int``): MINLP integer dimension
+
+Raises:
+    OverflowError: if *dim_c* / *dim_i* is negative or greater than an implementation-defined value
+    ValueError: if *dim_c* + *dim_i* is less than 1
+
+See also the docs of the C++ class :cpp:class:`pagmo::minlp_rastrigin`.
 
 )";
 }

@@ -844,6 +844,26 @@ class dtlz_test_case(_ut.TestCase):
         udp.p_distance(population(udp, 20))
 
 
+class minlp_rastrigin_test_case(_ut.TestCase):
+    """Test case for the MINLP Rastrigin
+
+    """
+
+    def runTest(self):
+        from .core import minlp_rastrigin, problem, population
+        udp = minlp_rastrigin(dim_c=2, dim_i=3)
+        prob = problem(udp)
+        self.assertTrue(prob.get_nx() == 5)
+        self.assertTrue(prob.get_nix() == 3)
+        self.assertTrue(prob.get_ncx() == 2)
+        pop = population(udp, 1)
+        self.assertTrue(int(pop.get_x()[0][-1]) == pop.get_x()[0][-1])
+        self.assertTrue(int(pop.get_x()[0][-2]) == pop.get_x()[0][-2])
+        self.assertTrue(int(pop.get_x()[0][-3]) == pop.get_x()[0][-3])
+        self.assertTrue(int(pop.get_x()[0][0]) != pop.get_x()[0][0])
+        self.assertTrue(int(pop.get_x()[0][1]) != pop.get_x()[0][1])
+
+
 class luksan_vlcek1_test_case(_ut.TestCase):
     """Test case for the UDP Luksan Vlcek 1
 
@@ -1564,6 +1584,7 @@ def run_test_suite(level=0):
     suite.addTest(cec2009_test_case())
     suite.addTest(cec2013_test_case())
     suite.addTest(luksan_vlcek1_test_case())
+    suite.addTest(minlp_rastrigin_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
     suite.addTest(unconstrain_test_case())

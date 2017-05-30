@@ -58,6 +58,8 @@ std::string problem_get_nec_docstring();
 std::string problem_get_nic_docstring();
 std::string problem_get_nobj_docstring();
 std::string problem_get_nx_docstring();
+std::string problem_get_nix_docstring();
+std::string problem_get_ncx_docstring();
 std::string problem_get_nf_docstring();
 std::string problem_get_nc_docstring();
 std::string problem_c_tol_docstring();
@@ -94,6 +96,7 @@ std::string algorithm_get_thread_safety_docstring();
 // user - problems
 std::string null_problem_docstring();
 std::string rosenbrock_docstring();
+std::string minlp_rastrigin_docstring();
 std::string dtlz_docstring();
 std::string dtlz_p_distance_docstring();
 std::string zdt_p_distance_docstring();

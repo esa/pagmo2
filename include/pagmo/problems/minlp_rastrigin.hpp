@@ -56,7 +56,7 @@ namespace pagmo
  * \f]
  *
  * where we constraint the last \f$m\f$ components of the decision vector to be integers. The variables are
- * box bounded as follows: \f$\quad x_i \ in [-5.12,5.12], \forall i = 1 .. n-m\f$, \f$\quad x_i \ in [-10,-5], \forall
+ * box bounded as follows: \f$\quad x_i \in [-5.12,5.12], \forall i = 1 .. n-m\f$, \f$\quad x_i \in [-10,-5], \forall
  * i = m+1 .. n\f$
  *
  * Gradients (dense) are also provided (also for the integer part) as:
@@ -81,8 +81,9 @@ struct minlp_rastrigin {
     minlp_rastrigin(unsigned dim_c = 1u, unsigned dim_i = 1u) : m_dim_c(dim_c), m_dim_i(dim_i)
     {
         if (dim_c + dim_i < 1u) {
-            pagmo_throw(std::invalid_argument, "Minlp Rastrigin Function must have minimum 1 dimension, "
-                                                   + std::to_string(dim_c + dim_i) + " requested");
+            pagmo_throw(std::invalid_argument,
+                        "Minlp Rastrigin Function must have minimum 1 dimension, " + std::to_string(dim_c + dim_i)
+                            + " requested");
         }
     };
     /// Fitness computation
@@ -216,8 +217,8 @@ struct minlp_rastrigin {
     std::string get_extra_info() const
     {
         std::ostringstream ss;
-        ss << "\tContinuous dimension: " << std::to_string(m_dim_c) << "\n";
-        ss << "\tInteger dimension: " << std::to_string(m_dim_i) << "\n";
+        ss << "\tMINLP continuous dimension: " << std::to_string(m_dim_c) << "\n";
+        ss << "\tMINLP integer dimension: " << std::to_string(m_dim_i) << "\n";
         return ss.str();
     }
     /// Object serialization

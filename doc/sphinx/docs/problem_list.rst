@@ -7,7 +7,7 @@ This is the list of user defined problems (UDPs) currently provided with pagmo/p
 can be used to construct a :cpp:class:`pagmo::problem`, or :class:`pygmo.problem` which will then provide a unified 
 interface to acces their functionalities.
 
-Each problem can be can be of type S = Single, M = Multi-objective, C = Constrained, U = Unconstrained, sto = stochastic
+Each problem can be can be of type S = Single, M = Multi-objective, I = has an integer part, C = Constrained, U = Unconstrained, sto = stochastic
 
 Scalable problems
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -20,6 +20,7 @@ Hock Schittkowsky 71                                       :cpp:class:`pagmo::ho
 Inventory                                                  :cpp:class:`pagmo::inventory`             :class:`pygmo.inventory`                  S-U (sto)
 Luksan Vlcek 1                                             :cpp:class:`pagmo::luksan_vlcek1`         :class:`pygmo.luksan_vlcek1`              S-C
 Rastrigin                                                  :cpp:class:`pagmo::rastrigin`             :class:`pygmo.rastrigin`                  S-U
+MINLP Rastrigin                                            :cpp:class:`pagmo::minlp_rastrigin`       :class:`pygmo.minlp_rastrigin`            S-U-I
 Rosenbrock                                                 :cpp:class:`pagmo::rosenbrock`            :class:`pygmo.rosenbrock`                 S-U
 Schwefel                                                   :cpp:class:`pagmo::schwefel`              :class:`pygmo.schwefel`                   S-U
 ========================================================== ========================================= ========================================= ===============

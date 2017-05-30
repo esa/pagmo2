@@ -65,6 +65,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/luksan_vlcek1.hpp>
+#include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
@@ -154,10 +155,13 @@ void expose_problems()
                                                      "See :cpp:class:`pagmo::hock_schittkowsky_71`.\n\n");
     hs71.def("best_known", &best_known_wrapper<hock_schittkowsky_71>,
              problem_get_best_docstring("Hock-Schittkowsky 71").c_str());
+    // MINLP-Rastrigin.
+    auto minlp_rastr = expose_problem<minlp_rastrigin>("minlp_rastrigin", minlp_rastrigin_docstring().c_str());
+    minlp_rastr.def(bp::init<unsigned, unsigned>((bp::arg("dim_c") = 1u, bp::arg("dim_i") = 1u)));
     // Rastrigin.
     auto rastr = expose_problem<rastrigin>("rastrigin", "__init__(dim = 1)\n\nThe Rastrigin problem.\n\n"
                                                         "See :cpp:class:`pagmo::rastrigin`.\n\n");
-    rastr.def(bp::init<unsigned>((bp::arg("dim"))));
+    rastr.def(bp::init<unsigned>((bp::arg("dim") = 1)));
     rastr.def("best_known", &best_known_wrapper<rastrigin>, problem_get_best_docstring("Rastrigin").c_str());
     // Schwefel.
     auto sch = expose_problem<schwefel>("schwefel", "__init__(dim = 1)\n\nThe Schwefel problem.\n\n"
