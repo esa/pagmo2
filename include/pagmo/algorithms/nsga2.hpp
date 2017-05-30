@@ -80,24 +80,24 @@ public:
     * @param[in] eta_c Distribution index for crossover.
     * @param[in] m Mutation probability.
     * @param[in] eta_m Distribution index for mutation.
-    * @param int_dim the dimension of the decision vector to be considered as integer (the last int_dim entries will be
-    * treated as integers when mutation and crossover are applied)
     * @param seed seed used by the internal random number generator (default is random)
     * @throws std::invalid_argument if \p cr is not \f$ \in [0,1[\f$, \p m is not \f$ \in [0,1]\f$, \p eta_c is not in
     * [1,100[ or \p eta_m is not in [1,100[.
     */
     nsga2(unsigned gen = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
-          vector_double::size_type int_dim = 0u, unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_int_dim(int_dim), m_e(seed), m_seed(seed),
-          m_verbosity(0u), m_log()
+          unsigned seed = pagmo::random_device::next())
+        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_e(seed), m_seed(seed), m_verbosity(0u),
+          m_log()
     {
         if (cr >= 1. || cr < 0.) {
-            pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1[ range, while a value of "
-                                                   + std::to_string(cr) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The crossover probability must be in the [0,1[ range, while a value of " + std::to_string(cr)
+                            + " was detected");
         }
         if (m < 0. || m > 1.) {
-            pagmo_throw(std::invalid_argument, "The mutation probability must be in the [0,1] range, while a value of "
-                                                   + std::to_string(cr) + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The mutation probability must be in the [0,1] range, while a value of " + std::to_string(cr)
+                            + " was detected");
         }
         if (eta_c < 1. || eta_c > 100.) {
             pagmo_throw(std::invalid_argument,
@@ -141,20 +141,14 @@ public:
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them.");
+            pagmo_throw(std::invalid_argument,
+                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them.");
         }
         if (prob.get_nf() < 2u) {
             pagmo_throw(std::invalid_argument,
                         "This is a multiobjective algortihm, while number of objectives detected in " + prob.get_name()
                             + " is " + std::to_string(prob.get_nf()));
-        }
-        if (m_int_dim > dim) {
-            pagmo_throw(
-                std::invalid_argument,
-                "The problem dimension is: " + std::to_string(dim)
-                    + ", while this instance of NSGA-II has been instantiated requesting an integer dimension of: "
-                    + std::to_string(m_int_dim));
         }
         if (NP < 5u || (NP % 4 != 0u)) {
             pagmo_throw(std::invalid_argument,
@@ -360,7 +354,6 @@ public:
         stream(ss, "\n\tDistribution index for crossover: ", m_eta_c);
         stream(ss, "\n\tMutation probability: ", m_m);
         stream(ss, "\n\tDistribution index for mutation: ", m_eta_m);
-        stream(ss, "\n\tSize of the integer part: ", m_int_dim);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
         return ss.str();
@@ -388,7 +381,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_cr, m_eta_c, m_m, m_eta_m, m_e, m_int_dim, m_seed, m_verbosity, m_log);
+        ar(m_gen, m_cr, m_eta_c, m_m, m_eta_m, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -408,8 +401,8 @@ private:
     {
         // Decision vector dimensions
         auto D = pop.get_problem().get_nx();
-        auto Di = m_int_dim;
-        auto Dc = D - Di;
+        auto Di = pop.get_problem().get_nix();
+        auto Dc = pop.get_problem().get_ncx();
         // Problem bounds
         const auto bounds = pop.get_problem().get_bounds();
         const auto &lb = bounds.first;
@@ -505,8 +498,8 @@ private:
     {
         // Decision vector dimensions
         auto D = pop.get_problem().get_nx();
-        auto Di = m_int_dim;
-        auto Dc = D - Di;
+        auto Di = pop.get_problem().get_nix();
+        auto Dc = pop.get_problem().get_ncx();
         // Problem bounds
         const auto bounds = pop.get_problem().get_bounds();
         const auto &lb = bounds.first;
@@ -558,7 +551,6 @@ private:
     double m_eta_c;
     double m_m;
     double m_eta_m;
-    vector_double::size_type m_int_dim;
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;

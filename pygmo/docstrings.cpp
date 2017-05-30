@@ -2238,7 +2238,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log()`.
 
 std::string nsga2_docstring()
 {
-    return R"(__init__(gen = 1, cr = 0.95, eta_c = 10, m = 0.01, eta_m = 10, int_dim = 0, seed = random)
+    return R"(__init__(gen = 1, cr = 0.95, eta_c = 10, m = 0.01, eta_m = 10, seed = random)
 
 Non dominated Sorting Genetic Algorithm (NSGA-II).
 
@@ -2248,7 +2248,6 @@ Args:
     eta_c (``float``): distribution index for crossover
     m (``float``): mutation probability
     eta_m (``float``): distribution index for mutation
-    int_dim (``int``): the dimension of the decision vector to be considered as integer (the last int_dim entries will be treated as integers when mutation and crossover are applied)
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
