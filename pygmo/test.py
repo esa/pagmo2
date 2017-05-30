@@ -405,9 +405,9 @@ class sga_test_case(_ut.TestCase):
         from .core import sga
         uda = sga()
         uda = sga(gen=1, cr=.90, eta_c=1., m=0.02, param_m=1., param_s=2, crossover="exponential",
-                  mutation="polynomial", selection="tournament", int_dim=0)
+                  mutation="polynomial", selection="tournament")
         uda = sga(gen=1, cr=.90, eta_c=1., m=0.02, param_m=1., param_s=2, crossover="exponential",
-                  mutation="polynomial", selection="tournament", int_dim=0, seed=32)
+                  mutation="polynomial", selection="tournament", seed=32)
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 

@@ -4675,7 +4675,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sea::get_log()`.
 
 std::string sga_docstring()
 {
-    return R"(__init__(gen = 1, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2, crossover = "exponential", mutation = "polynomial", selection = "tournament", int_dim = 0, seed = random)
+    return R"(__init__(gen = 1, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2, crossover = "exponential", mutation = "polynomial", selection = "tournament", seed = random)
 
 A Simple Genetic Algorithm
 
@@ -4748,11 +4748,10 @@ Args:
     crossover (``str``): the crossover strategy. One of ``exponential``, ``binomial``, ``single`` or ``sbx``
     mutation (``str``): the mutation strategy. One of ``gaussian``, ``polynomial`` or ``uniform``.
     selection (``str``): the selection strategy. One of ``tournament``, "truncated".
-    int_dim (``int``): the number of element in the chromosome to be treated as integers.
     seed (``int``): seed used by the internal random number generator
 
 Raises:
-    OverflowError: if *gen* or *seed* or *int_dim* are negative or greater than an implementation-defined value
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
     ValueError: if *cr* is not in [0,1], if *eta_c* is not in [1,100], if *m* is not in [0,1], input_f *mutation* 
       is not one of ``gaussian``, ``uniform`` or ``polynomial``, if *selection* not one of "roulette", 
       "truncated" or *crossover* is not one of ``exponential``, ``binomial``, ``sbx``, ``single``, if *param_m* is
