@@ -117,9 +117,9 @@ This construction will trigger :math:`20` function evaluations and thus will not
     >>> isl.evolve()
     >>> isl.wait()
 
-Everything looks fine as in our thread nothing really happened nor threw. But if we, for example inspect the island we get:
+Everything looks fine: in our thread nothing really happened nor threw. But if we, for example inspect the island we get:
 
-    >>> print(isl) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+    >>> print(isl) # doctest: +SKIP
     Island name: Ipyparallel island
     	Status: idle - **error occurred**
     <BLANKLINE>
