@@ -42,6 +42,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 
+#include "common_utils.hpp"
+
 namespace pygmo
 {
 
@@ -63,6 +65,10 @@ inline bp::class_<Isl> expose_island(const char *name, const char *descr)
 
     // Expose the island constructor from Isl.
     isl.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
+
+    // Make sure that polymorphic serialization info from the AP is imported into pygmo's
+    // serialization machinery.
+    merge_s11n_data_for_ap();
 
     return c;
 }

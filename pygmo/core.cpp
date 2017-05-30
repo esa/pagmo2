@@ -103,21 +103,6 @@ see https://www.gnu.org/licenses/. */
 #include "problem.hpp"
 #include "pygmo_classes.hpp"
 
-// This is necessary because the NumPy macro import_array() has different return values
-// depending on the Python version.
-#if PY_MAJOR_VERSION < 3
-static inline void wrap_import_array()
-{
-    import_array();
-}
-#else
-static inline void *wrap_import_array()
-{
-    import_array();
-    return nullptr;
-}
-#endif
-
 namespace bp = boost::python;
 using namespace pagmo;
 
@@ -307,7 +292,7 @@ BOOST_PYTHON_MODULE(core)
     // Init numpy.
     // NOTE: only the second import is strictly necessary. We run a first import from BP
     // because that is the easiest way to detect whether numpy is installed or not (rather
-    // than trying to figure out a way to detect it from wrap_import_array()).
+    // than trying to figure out a way to detect it from import_array()).
     try {
         bp::import("numpy.core.multiarray");
     } catch (...) {
@@ -316,7 +301,7 @@ BOOST_PYTHON_MODULE(core)
             u8"Please make sure that NumPy has been correctly installed.\n====ERROR====\033[0m");
         pygmo_throw(PyExc_ImportError, "");
     }
-    wrap_import_array();
+    pygmo::numpy_import_array();
 
     // Check that cloudpickle is available.
     try {
@@ -423,6 +408,22 @@ BOOST_PYTHON_MODULE(core)
     bp::scope().attr("_problem_address") = reinterpret_cast<std::uintptr_t>(&pygmo::problem_ptr);
     bp::scope().attr("_algorithm_address") = reinterpret_cast<std::uintptr_t>(&pygmo::algorithm_ptr);
     bp::scope().attr("_island_address") = reinterpret_cast<std::uintptr_t>(&pygmo::island_ptr);
+
+    // Fetch and store addresses to the internal cereal global objects that contain the
+    // info for the serialization of polymorphic types.
+    // NOTE: this is a hack heavily dependent on cereal's implementation-details. We'll have
+    // to triple-check this if/when we update the bundled cereal.
+    // NOTE: at the moment we are just using the portable binary archives for pygmo's serialization
+    // machinery. If we ever make the archive type configurable, we'll probably have to add bits here.
+    // See also the merge_s11n_data_for_ap() function in common_utils.hpp.
+    bp::scope().attr("_s11n_in_address") = reinterpret_cast<std::uintptr_t>(
+        &cereal::detail::StaticObject<cereal::detail::InputBindingMap<cereal::PortableBinaryInputArchive>>::
+             getInstance()
+                 .map);
+    bp::scope().attr("_s11n_out_address") = reinterpret_cast<std::uintptr_t>(
+        &cereal::detail::StaticObject<cereal::detail::OutputBindingMap<cereal::PortableBinaryOutputArchive>>::
+             getInstance()
+                 .map);
 
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
