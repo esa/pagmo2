@@ -44,22 +44,35 @@ elif [[ "${PAGMO_BUILD}" == "OSXRelease" ]]; then
     make -j2 VERBOSE=1;
     ctest;
 elif [[ "${PAGMO_BUILD}" == Python* ]]; then
+    export CXX=g++-4.8
+    export CC=gcc-4.8
     # Install pagmo first.
     cd ..;
     mkdir build_pagmo;
     cd build_pagmo;
-    CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
     make install VERBOSE=1;
     cd ../build;
     # Now pygmo.
-    CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no ../;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no ../;
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
     sleep 20;
     cd ../tools
-    python -c "import pygmo; pygmo.test.run_test_suite(1)"
-    python travis_additional_tests.py
+    python -c "import pygmo; pygmo.test.run_test_suite(1)";
+    python travis_additional_tests.py;
+
+    # AP examples.
+    cd ../ap_examples/uda_basic;
+    mkdir build;
+    cd build;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+    make install VERBOSE=1;
+    cd ../../;
+    python test1.py
+
+    # Documentation.
     cd ../build
     # At the moment conda has these packages only for Python 3.4. Install via pip instead.
     pip install 'sphinx<1.6' breathe requests[security] 'sphinx-bootstrap-theme<0.5';
