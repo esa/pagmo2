@@ -26,34 +26,13 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#if defined(_MSC_VER)
-
-// Disable various warnings from MSVC.
-#pragma warning(disable : 4275)
-#pragma warning(disable : 4996)
-#pragma warning(disable : 4244)
-
-#endif
-
-#include <boost/python/class.hpp>
-#include <memory>
-
-#define PAGMO_SKIP_SERIALIZATION
-
-#include <pagmo/algorithm.hpp>
-#include <pagmo/island.hpp>
-#include <pagmo/problem.hpp>
-
-#include "pygmo_classes.hpp"
+#ifndef PYGMO_EXPOSE_ISLANDS_HPP
+#define PYGMO_EXPOSE_ISLANDS_HPP
 
 namespace pygmo
 {
 
-namespace bp = boost::python;
-
-PYGMO_DLL_PUBLIC std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr{};
-
-PYGMO_DLL_PUBLIC std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr{};
-
-PYGMO_DLL_PUBLIC std::unique_ptr<bp::class_<pagmo::island>> island_ptr{};
+void expose_islands();
 }
+
+#endif

@@ -47,6 +47,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/any.hpp>
 #include <boost/python/args.hpp>
+#include <boost/python/class.hpp>
 #include <boost/python/default_call_policies.hpp>
 #include <boost/python/dict.hpp>
 #include <boost/python/extract.hpp>
@@ -56,6 +57,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/make_function.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/return_internal_reference.hpp>
+#include <boost/python/scope.hpp>
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/str.hpp>
 #include <boost/python/tuple.hpp>
@@ -65,6 +67,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/config.hpp>
 
+#include <pagmo/algorithm.hpp>
 #if defined(PAGMO_WITH_EIGEN3)
 #include <pagmo/algorithms/cmaes.hpp>
 #endif
@@ -95,6 +98,7 @@ see https://www.gnu.org/licenses/. */
 #include "algorithm_exposition_suite.hpp"
 #include "common_utils.hpp"
 #include "docstrings.hpp"
+#include "pygmo_classes.hpp"
 
 using namespace pagmo;
 namespace bp = boost::python;
@@ -190,10 +194,36 @@ static inline void expose_not_population_based(bp::class_<T> &c, const std::stri
     c.def("set_random_sr_seed", &T::set_random_sr_seed, bls_set_random_sr_seed_docstring(algo_name).c_str());
 }
 
+// Main algorithm exposition function - for *internal* use by pygmo. The exposition function
+// for APs needs to be different.
+template <typename Algo>
+static inline bp::class_<Algo> expose_algorithm_pygmo(const char *name, const char *descr)
+{
+    // We require all algorithms to be def-ctible at the bare minimum.
+    bp::class_<Algo> c(name, descr, bp::init<>());
+
+    // Mark it as a C++ algorithm.
+    c.attr("_pygmo_cpp_algorithm") = true;
+
+    // Get reference to the algorithm class.
+    auto &algo = get_algorithm_class();
+
+    // Expose the algorithm constructor from Algo.
+    algo.def(bp::init<const Algo &>((bp::arg("uda"))));
+
+    // Expose extract.
+    algo.def("_cpp_extract", &generic_cpp_extract<pagmo::algorithm, Algo>, bp::return_internal_reference<>());
+
+    // Add the algorithm to the algorithms submodule.
+    bp::scope().attr("algorithms").attr(name) = c;
+
+    return c;
+}
+
 void expose_algorithms()
 {
     // MBH meta-algo.
-    auto mbh_ = expose_algorithm<mbh>("mbh", mbh_docstring().c_str());
+    auto mbh_ = expose_algorithm_pygmo<mbh>("mbh", mbh_docstring().c_str());
     mbh_.def("__init__",
              bp::make_constructor(lcast([](const algorithm &a, unsigned stop, const bp::object &perturb,
                                            unsigned seed) { return ::new pagmo::mbh(a, stop, to_vd(perturb), seed); }),
@@ -216,7 +246,7 @@ void expose_algorithms()
                  generic_uda_inner_algorithm_docstring().c_str());
     // cstrs_self_adaptive meta-algo.
     auto cstrs_sa
-        = expose_algorithm<cstrs_self_adaptive>("cstrs_self_adaptive", cstrs_self_adaptive_docstring().c_str());
+        = expose_algorithm_pygmo<cstrs_self_adaptive>("cstrs_self_adaptive", cstrs_self_adaptive_docstring().c_str());
     cstrs_sa.def("__init__", bp::make_constructor(lcast([](unsigned iters, const algorithm &a, unsigned seed) {
                                                       return ::new pagmo::cstrs_self_adaptive(iters, a, seed);
                                                   }),
@@ -234,22 +264,22 @@ void expose_algorithms()
         generic_uda_inner_algorithm_docstring().c_str());
 
     // Test algo.
-    auto test_a = expose_algorithm<test_algorithm>("_test_algorithm", "A test algorithm.");
+    auto test_a = expose_algorithm_pygmo<test_algorithm>("_test_algorithm", "A test algorithm.");
     test_a.def("get_n", &test_algorithm::get_n);
     test_a.def("set_n", &test_algorithm::set_n);
     // Thread unsafe test algo.
-    expose_algorithm<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
+    expose_algorithm_pygmo<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
     // Null algo.
-    auto na = expose_algorithm<null_algorithm>("null_algorithm", null_algorithm_docstring().c_str());
+    auto na = expose_algorithm_pygmo<null_algorithm>("null_algorithm", null_algorithm_docstring().c_str());
     // ARTIFICIAL BEE COLONY
-    auto bee_colony_ = expose_algorithm<bee_colony>("bee_colony", bee_colony_docstring().c_str());
+    auto bee_colony_ = expose_algorithm_pygmo<bee_colony>("bee_colony", bee_colony_docstring().c_str());
     bee_colony_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 1u)));
     bee_colony_.def(
         bp::init<unsigned, unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 20u, bp::arg("seed"))));
     expose_algo_log(bee_colony_, bee_colony_get_log_docstring().c_str());
     bee_colony_.def("get_seed", &bee_colony::get_seed, generic_uda_get_seed_docstring().c_str());
     // DE
-    auto de_ = expose_algorithm<de>("de", de_docstring().c_str());
+    auto de_ = expose_algorithm_pygmo<de>("de", de_docstring().c_str());
     de_.def(bp::init<unsigned, double, double, unsigned, double, double>(
         (bp::arg("gen") = 1u, bp::arg("F") = .8, bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6,
          bp::arg("tol") = 1E-6)));
@@ -259,7 +289,7 @@ void expose_algorithms()
     expose_algo_log(de_, de_get_log_docstring().c_str());
     de_.def("get_seed", &de::get_seed, generic_uda_get_seed_docstring().c_str());
     // COMPASS SEARCH
-    auto compass_search_ = expose_algorithm<compass_search>("compass_search", compass_search_docstring().c_str());
+    auto compass_search_ = expose_algorithm_pygmo<compass_search>("compass_search", compass_search_docstring().c_str());
     compass_search_.def(
         bp::init<unsigned, double, double, double>((bp::arg("max_fevals") = 1u, bp::arg("start_range") = .1,
                                                     bp::arg("stop_range") = .01, bp::arg("reduction_coeff") = .5)));
@@ -271,7 +301,7 @@ void expose_algorithms()
     compass_search_.def("get_verbosity", &compass_search::get_verbosity);
     expose_not_population_based(compass_search_, "compass_search");
     // PSO
-    auto pso_ = expose_algorithm<pso>("pso", pso_docstring().c_str());
+    auto pso_ = expose_algorithm_pygmo<pso>("pso", pso_docstring().c_str());
     pso_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(
         (bp::arg("gen") = 1u, bp::arg("omega") = 0.7298, bp::arg("eta1") = 2.05, bp::arg("eta2") = 2.05,
          bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
@@ -283,13 +313,13 @@ void expose_algorithms()
     expose_algo_log(pso_, pso_get_log_docstring().c_str());
     pso_.def("get_seed", &pso::get_seed, generic_uda_get_seed_docstring().c_str());
     // SEA
-    auto sea_ = expose_algorithm<sea>("sea", sea_docstring().c_str());
+    auto sea_ = expose_algorithm_pygmo<sea>("sea", sea_docstring().c_str());
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(sea_, sea_get_log_docstring().c_str());
     sea_.def("get_seed", &sea::get_seed, generic_uda_get_seed_docstring().c_str());
     // SGA
-    auto sga_ = expose_algorithm<sga>("sga", sga_docstring().c_str());
+    auto sga_ = expose_algorithm_pygmo<sga>("sga", sga_docstring().c_str());
     sga_.def(
         bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string, unsigned>(
             (bp::arg("gen") = 1u, bp::arg("cr") = 0.9, bp::arg("eta_c") = 1., bp::arg("m") = 0.02,
@@ -304,7 +334,7 @@ void expose_algorithms()
     sga_.def("get_seed", &sga::get_seed, generic_uda_get_seed_docstring().c_str());
     // SIMULATED ANNEALING
     auto simulated_annealing_
-        = expose_algorithm<simulated_annealing>("simulated_annealing", simulated_annealing_docstring().c_str());
+        = expose_algorithm_pygmo<simulated_annealing>("simulated_annealing", simulated_annealing_docstring().c_str());
     simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double>(
         (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 1u,
          bp::arg("bin_size") = 20u, bp::arg("start_range") = 1.)));
@@ -315,7 +345,7 @@ void expose_algorithms()
     simulated_annealing_.def("get_seed", &simulated_annealing::get_seed, generic_uda_get_seed_docstring().c_str());
     expose_not_population_based(simulated_annealing_, "simulated_annealing");
     // SADE
-    auto sade_ = expose_algorithm<sade>("sade", sade_docstring().c_str());
+    auto sade_ = expose_algorithm_pygmo<sade>("sade", sade_docstring().c_str());
     sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool>(
         (bp::arg("gen") = 1u, bp::arg("variant") = 2u, bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6,
          bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
@@ -325,7 +355,7 @@ void expose_algorithms()
     expose_algo_log(sade_, sade_get_log_docstring().c_str());
     sade_.def("get_seed", &sade::get_seed, generic_uda_get_seed_docstring().c_str());
     // DE-1220
-    auto de1220_ = expose_algorithm<de1220>("de1220", de1220_docstring().c_str());
+    auto de1220_ = expose_algorithm_pygmo<de1220>("de1220", de1220_docstring().c_str());
     // Helper to get the list of default allowed variants for de1220.
     auto de1220_allowed_variants = []() -> bp::list {
         bp::list retval;
@@ -358,7 +388,7 @@ void expose_algorithms()
     de1220_.def("get_seed", &de1220::get_seed, generic_uda_get_seed_docstring().c_str());
 // CMA-ES
 #if defined(PAGMO_WITH_EIGEN3)
-    auto cmaes_ = expose_algorithm<cmaes>("cmaes", cmaes_docstring().c_str());
+    auto cmaes_ = expose_algorithm_pygmo<cmaes>("cmaes", cmaes_docstring().c_str());
     cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool>(
         (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
          bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
@@ -370,7 +400,7 @@ void expose_algorithms()
     cmaes_.def("get_seed", &cmaes::get_seed, generic_uda_get_seed_docstring().c_str());
 #endif
     // MOEA/D - DE
-    auto moead_ = expose_algorithm<moead>("moead", moead_docstring().c_str());
+    auto moead_ = expose_algorithm_pygmo<moead>("moead", moead_docstring().c_str());
     moead_.def(bp::init<unsigned, std::string, std::string, unsigned, double, double, double, double, unsigned, bool>(
         (bp::arg("gen") = 1u, bp::arg("weight_generation") = "grid", bp::arg("decomposition") = "tchebycheff",
          bp::arg("neighbours") = 20u, bp::arg("CR") = 1., bp::arg("F") = 0.5, bp::arg("eta_m") = 20,
@@ -393,7 +423,7 @@ void expose_algorithms()
 
     moead_.def("get_seed", &moead::get_seed, generic_uda_get_seed_docstring().c_str());
     // NSGA2
-    auto nsga2_ = expose_algorithm<nsga2>("nsga2", nsga2_docstring().c_str());
+    auto nsga2_ = expose_algorithm_pygmo<nsga2>("nsga2", nsga2_docstring().c_str());
     nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
         (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
          bp::arg("int_dim") = 0u)));
@@ -414,7 +444,7 @@ void expose_algorithms()
 
 #if defined(PAGMO_WITH_NLOPT)
     // NLopt.
-    auto nlopt_ = expose_algorithm<nlopt>("nlopt", nlopt_docstring().c_str());
+    auto nlopt_ = expose_algorithm_pygmo<nlopt>("nlopt", nlopt_docstring().c_str());
     nlopt_.def(bp::init<const std::string &>((bp::arg("solver"))));
     // Properties for the stopping criteria.
     add_property(nlopt_, "stopval", &nlopt::get_stopval, &nlopt::set_stopval, nlopt_stopval_docstring().c_str());
@@ -443,7 +473,7 @@ void expose_algorithms()
 
 #if defined(PAGMO_WITH_IPOPT)
     // Ipopt.
-    auto ipopt_ = expose_algorithm<ipopt>("ipopt", ipopt_docstring().c_str());
+    auto ipopt_ = expose_algorithm_pygmo<ipopt>("ipopt", ipopt_docstring().c_str());
     expose_not_population_based(ipopt_, "ipopt");
     expose_algo_log(ipopt_, ipopt_get_log_docstring().c_str());
     ipopt_.def("get_last_opt_result", lcast([](const ipopt &ip) { return static_cast<int>(ip.get_last_opt_result()); }),

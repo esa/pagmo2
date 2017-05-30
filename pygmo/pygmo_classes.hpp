@@ -35,36 +35,10 @@ see https://www.gnu.org/licenses/. */
 #include <cstdlib>
 #include <iostream>
 #include <memory>
-#include <tuple>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/island.hpp>
-#include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/decompose.hpp>
-#include <pagmo/problems/translate.hpp>
-#include <pagmo/problems/unconstrain.hpp>
-
-// Adapted from:
-// https://gcc.gnu.org/wiki/Visibility
-#if defined _WIN32 || defined __CYGWIN__
-#ifdef pygmo_EXPORTS
-#ifdef __GNUC__
-#define PYGMO_DLL_PUBLIC __attribute__((dllexport))
-#else
-#define PYGMO_DLL_PUBLIC __declspec(dllexport) // Note: actually gcc seems to also supports this syntax.
-#endif
-#else
-#ifdef __GNUC__
-#define PYGMO_DLL_PUBLIC __attribute__((dllimport))
-#else
-#define PYGMO_DLL_PUBLIC __declspec(dllimport) // Note: actually gcc seems to also supports this syntax.
-#endif
-#endif
-#else
-#define PYGMO_DLL_PUBLIC __attribute__((visibility("default")))
-#endif
 
 namespace pygmo
 {
@@ -72,18 +46,19 @@ namespace pygmo
 namespace bp = boost::python;
 
 // pagmo::problem.
-PYGMO_DLL_PUBLIC extern std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
+extern std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
 
 // pagmo::algorithm.
-PYGMO_DLL_PUBLIC extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
+extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
 
 // pagmo::island.
-PYGMO_DLL_PUBLIC extern std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
+extern std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
 
+// Getters for the objects above.
 inline bp::class_<pagmo::problem> &get_problem_class()
 {
     if (!problem_ptr) {
-        std::cerr << "Could not access pygmo's problem class: did you forget to import the pygmo module?" << std::endl;
+        std::cerr << "Null problem class pointer." << std::endl;
         std::abort();
     }
     return *problem_ptr;
@@ -92,8 +67,7 @@ inline bp::class_<pagmo::problem> &get_problem_class()
 inline bp::class_<pagmo::algorithm> &get_algorithm_class()
 {
     if (!algorithm_ptr) {
-        std::cerr << "Could not access pygmo's algorithm class: did you forget to import the pygmo module?"
-                  << std::endl;
+        std::cerr << "Null algorithm class pointer." << std::endl;
         std::abort();
     }
     return *algorithm_ptr;
@@ -102,7 +76,7 @@ inline bp::class_<pagmo::algorithm> &get_algorithm_class()
 inline bp::class_<pagmo::island> &get_island_class()
 {
     if (!island_ptr) {
-        std::cerr << "Could not access pygmo's island class: did you forget to import the pygmo module?" << std::endl;
+        std::cerr << "Null island class pointer." << std::endl;
         std::abort();
     }
     return *island_ptr;

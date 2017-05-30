@@ -26,30 +26,46 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PYGMO_ISLAND_EXPOSITION_SUITE_HPP
-#define PYGMO_ISLAND_EXPOSITION_SUITE_HPP
+#if defined(_MSC_VER)
+
+// Disable various warnings from MSVC.
+#pragma warning(disable : 4275)
+#pragma warning(disable : 4996)
+#pragma warning(disable : 4503)
+#pragma warning(disable : 4244)
+
+#endif
 
 #include "python_includes.hpp"
 
+// See: https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
+// In every cpp file We need to make sure this is included before everything else,
+// with the correct #defines.
+#define NO_IMPORT_ARRAY
+#define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
+#include "numpy.hpp"
+
 #include <boost/python/class.hpp>
-#include <boost/python/extract.hpp>
-#include <boost/python/import.hpp>
 #include <boost/python/init.hpp>
-#include <cstdint>
-#include <memory>
+#include <boost/python/scope.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 
+#include "docstrings.hpp"
+#include "pygmo_classes.hpp"
+
+using namespace pagmo;
+namespace bp = boost::python;
+
 namespace pygmo
 {
 
-namespace bp = boost::python;
-
-// Main island exposition function for use by APs.
+// Main island exposition function - for *internal* use by pygmo. The exposition function
+// for APs needs to be different.
 template <typename Isl>
-inline bp::class_<Isl> expose_island(const char *name, const char *descr)
+static inline bp::class_<Isl> expose_island_pygmo(const char *name, const char *descr)
 {
     // We require all islands to be def-ctible at the bare minimum.
     bp::class_<Isl> c(name, descr, bp::init<>());
@@ -57,15 +73,18 @@ inline bp::class_<Isl> expose_island(const char *name, const char *descr)
     // Mark it as a C++ island.
     c.attr("_pygmo_cpp_island") = true;
 
-    // Get the island class from the pygmo module.
-    auto &isl = **reinterpret_cast<std::unique_ptr<bp::class_<pagmo::island>> *>(
-        bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_island_address"))());
-
     // Expose the island constructor from Isl.
-    isl.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
+    get_island_class().def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
+
+    // Add the island to the islands submodule.
+    bp::scope().attr("islands").attr(name) = c;
 
     return c;
 }
-}
 
-#endif
+void expose_islands()
+{
+    // Thread island.
+    expose_island_pygmo<thread_island>("thread_island", thread_island_docstring().c_str());
+}
+}

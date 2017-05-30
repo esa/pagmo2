@@ -65,6 +65,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
 #include <boost/shared_ptr.hpp>
+#include <cstdint>
 #include <limits>
 #include <memory>
 #include <sstream>
@@ -89,15 +90,15 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/hv_algos/hv_hv3d.hpp>
 #include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
 #include <pagmo/utils/hypervolume.hpp>
+#include <pagmo/utils/multi_objective.hpp>
 
 #include "algorithm.hpp"
-#include "algorithm_exposition_suite.hpp"
 #include "common_utils.hpp"
 #include "docstrings.hpp"
 #include "expose_algorithms.hpp"
+#include "expose_islands.hpp"
 #include "expose_problems.hpp"
 #include "island.hpp"
-#include "island_exposition_suite.hpp"
 #include "object_serialization.hpp"
 #include "problem.hpp"
 #include "pygmo_classes.hpp"
@@ -139,6 +140,19 @@ static inline bp::object test_object_serialization(const bp::object &o)
         iarchive(retval);
     }
     return retval;
+}
+
+namespace pygmo
+{
+
+// Exposed pagmo::problem.
+std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
+
+// Exposed pagmo::algorithm.
+std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
+
+// Exposed pagmo::island.
+std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
 }
 
 // The cleanup function.
@@ -404,6 +418,11 @@ BOOST_PYTHON_MODULE(core)
     }
     auto islands_module = bp::object(bp::handle<>(bp::borrowed(islands_module_ptr)));
     bp::scope().attr("islands") = islands_module;
+
+    // Store the pointers to the classes that can be extended by APs.
+    bp::scope().attr("_problem_address") = reinterpret_cast<std::uintptr_t>(&pygmo::problem_ptr);
+    bp::scope().attr("_algorithm_address") = reinterpret_cast<std::uintptr_t>(&pygmo::algorithm_ptr);
+    bp::scope().attr("_island_address") = reinterpret_cast<std::uintptr_t>(&pygmo::island_ptr);
 
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
@@ -780,8 +799,8 @@ BOOST_PYTHON_MODULE(core)
         .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
     pygmo::add_property(island_class, "status", &island::status, pygmo::island_status_docstring().c_str());
 
-    // Thread island.
-    auto ti = pygmo::expose_island<thread_island>("thread_island", pygmo::thread_island_docstring().c_str());
+    // Expose islands.
+    pygmo::expose_islands();
 
     // Archi.
     bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(), bp::init<>());
