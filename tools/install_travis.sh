@@ -59,8 +59,11 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
     sleep 20;
+    # Move out of the build dir.
     cd ../tools
     python -c "import pygmo; pygmo.test.run_test_suite(1)";
+
+    # Additional serialization tests.
     python travis_additional_tests.py;
 
     # AP examples.
