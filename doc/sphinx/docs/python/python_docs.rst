@@ -36,6 +36,7 @@ Various optimization utilities implemented in PyGMO.
 .. toctree::
   :maxdepth: 1
 
+  utils/py_generic_utils
   utils/py_mo_utils
   utils/py_con_utils
   utils/py_gh_utils

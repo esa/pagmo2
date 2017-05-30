@@ -215,7 +215,6 @@ public:
      * @param mutation the mutation strategy. One of "gaussian", "polynomial" or "uniform".
      * @param selection the selection strategy. One of "tournament", "truncated".
      * @param crossover the crossover strategy. One of "exponential", "binomial", "single" or "sbx"
-     * @param int_dim the number of element in the chromosome to be treated as integers.
      * @param seed seed used by the internal random number generator
      *
      * @throws std::invalid_argument if \p cr not in [0,1], \p eta_c not in [1, 100], \p m not in [0,1],
@@ -225,10 +224,9 @@ public:
      */
     sga(unsigned gen = 1u, double cr = .90, double eta_c = 1., double m = 0.02, double param_m = 1.,
         unsigned param_s = 2u, std::string crossover = "exponential", std::string mutation = "polynomial",
-        std::string selection = "tournament", vector_double::size_type int_dim = 0u,
-        unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_param_s(param_s), m_int_dim(int_dim),
-          m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        std::string selection = "tournament", unsigned seed = pagmo::random_device::next())
+        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_param_s(param_s), m_e(seed), m_seed(seed),
+          m_verbosity(0u), m_log()
     {
         if (cr > 1. || cr < 0.) {
             pagmo_throw(std::invalid_argument,
@@ -303,6 +301,7 @@ public:
     {
         const auto &prob = pop.get_problem();
         auto dim = prob.get_nx();
+        auto dim_i = prob.get_nix();
         const auto bounds = prob.get_bounds();
         auto NP = pop.size();
         auto fevals0 = prob.get_fevals(); // fevals already made
@@ -335,13 +334,6 @@ public:
                         "Population size must be even if sbx crossover is selected. Detected pop size is: "
                             + std::to_string(pop.size()));
         }
-        if (m_int_dim > dim) {
-            pagmo_throw(
-                std::invalid_argument,
-                "Invalid int_dim selected: larger than the problem dimension. The integer dimension was set to: "
-                    + std::to_string(m_int_dim)
-                    + " but the problem dimension was detected to be: " + std::to_string(dim));
-        }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
             return pop;
@@ -370,9 +362,9 @@ public:
                 XNEW[j] = pop.get_x()[selected_idx[j]];
             }
             // 3 - Crossover
-            perform_crossover(XNEW, prob.get_bounds());
+            perform_crossover(XNEW, prob.get_bounds(), dim_i);
             // 4 - Mutation
-            perform_mutation(XNEW, prob.get_bounds());
+            perform_mutation(XNEW, prob.get_bounds(), dim_i);
             // 5 - Evaluate the new population
             for (decltype(NP) j = 0u; j < NP; ++j) {
                 FNEW[j] = prob.fitness(XNEW[j]);
@@ -515,7 +507,6 @@ public:
         stream(ss, "\n\t\tType: ", m_selection_map.right.at(m_selection));
         if (m_selection == selection::TRUNCATED) stream(ss, "\n\t\tTruncation size: ", m_param_s);
         if (m_selection == selection::TOURNAMENT) stream(ss, "\n\t\tTournament size: ", m_param_s);
-        stream(ss, "\n\tSize of the integer part: ", m_int_dim);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
         return ss.str();
@@ -545,8 +536,8 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_cr, m_eta_c, m_m, m_param_m, m_param_s, m_mutation, m_selection, m_crossover, m_int_dim, m_e,
-           m_seed, m_verbosity, m_log);
+        ar(m_gen, m_cr, m_eta_c, m_m, m_param_m, m_param_s, m_mutation, m_selection, m_crossover, m_e, m_seed,
+           m_verbosity, m_log);
     }
 
 private:
@@ -594,7 +585,8 @@ private:
         }
         return retval;
     }
-    void perform_crossover(std::vector<vector_double> &X, const std::pair<vector_double, vector_double> &bounds) const
+    void perform_crossover(std::vector<vector_double> &X, const std::pair<vector_double, vector_double> &bounds,
+                           vector_double::size_type dim_i) const
     {
         auto dim = X[0].size();
         assert(X.size() > 1u);
@@ -608,7 +600,7 @@ private:
             assert(X.size() % 2u == 0u);
             std::shuffle(X.begin(), X.end(), m_e);
             for (decltype(X.size()) i = 0u; i < X.size(); i += 2) {
-                auto children = sbx_crossover_impl(X[i], X[i + 1], bounds);
+                auto children = sbx_crossover_impl(X[i], X[i + 1], bounds, dim_i);
                 X[i] = children.first;
                 X[i + 1] = children.second;
             }
@@ -666,7 +658,8 @@ private:
             }
         }
     }
-    void perform_mutation(std::vector<vector_double> &X, const std::pair<vector_double, vector_double> &bounds) const
+    void perform_mutation(std::vector<vector_double> &X, const std::pair<vector_double, vector_double> &bounds,
+                          vector_double::size_type dimi) const
     {
         // Asserting the correct behaviour of input parameters
         assert(X.size() > 1u);
@@ -674,9 +667,8 @@ private:
         assert(std::all_of(X.begin(), X.end(), [dim](const vector_double &item) { return item.size() == dim; }));
         assert(bounds.first.size() == bounds.second.size());
         assert(bounds.first.size() == X[0].size());
-        assert(m_int_dim <= X[0].size());
+
         // Renaming some dimensions
-        auto dimi = m_int_dim;
         auto dimc = dim - dimi;
         // Problem bounds
         const auto &lb = bounds.first;
@@ -751,13 +743,13 @@ private:
             detail::force_bounds_stick(X[i], lb, ub);
         }
     }
-    std::pair<vector_double, vector_double>
-    sbx_crossover_impl(const vector_double &parent1, const vector_double &parent2,
-                       const std::pair<vector_double, vector_double> &bounds) const
+    std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &parent1,
+                                                               const vector_double &parent2,
+                                                               const std::pair<vector_double, vector_double> &bounds,
+                                                               vector_double::size_type Di) const
     {
         // Decision vector dimensions
         auto D = parent1.size();
-        auto Di = m_int_dim;
         auto Dc = D - Di;
         // Problem bounds
         const auto &lb = bounds.first;
@@ -854,7 +846,6 @@ private:
     mutation m_mutation;
     selection m_selection;
     crossover m_crossover;
-    vector_double::size_type m_int_dim;
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;
