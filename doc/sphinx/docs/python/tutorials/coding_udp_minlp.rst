@@ -106,8 +106,8 @@ Solving your MINLP by relaxation
 MINLP problems are among the most difficult problems in optimization and not many generic approaches exist that
 are able to effectively tackle these problems. For the purpose of this tutorial we show a possible solution approach for
 the MINLP at hand based on a relaxation technique. In essence, we remove the integer constraints and solve the problem
-in :math:`\mathbb R^6`. We then take the solution, fix the last two components to the nearest feasible integers, and solve again
-the resulting, reduced problem in :math:`\mathbb R^4`.
+in :math:`\mathbb R^6`. We then take the solution, fix the last two components to the nearest feasible integers, and
+solve again the resulting, reduced problem in :math:`\mathbb R^4`.
 
 To actuate the above strategy (which is here just as an example and is indeed not guaranteed to find the best solution)
 we need a good NLP solver for the relaxed version of our problem. Thus we need the gradients of our objective function
@@ -122,8 +122,8 @@ and constraints. So we add them:
 
 
 Pygmo support form MINLP problems is built around the idea of making integer relaxation very easy. So we can just
-call an NLP solver on our MINLP and the relaxed version of the problem will be solved returning a population with decision vectors
-that violate the integer constraints.
+call an NLP solver on our MINLP and the relaxed version of the problem will be solved returning a population
+with decision vectors that violate the integer constraints.
 
     >>> # We run 20 instances of the optimization in parallel via a default archipelago setup
     >>> archi = pg.archipelago(n = 20, algo = pg.ipopt(), prob = my_minlp(), pop_size=1)
@@ -133,7 +133,11 @@ that violate the integer constraints.
     >>> a2 = sorted(archi.get_champions_f(), key = lambda x: x[0])[0]
     >>> best_isl_idx = [(el == a2).all() for el in a].index(True)
     >>> x_best = archi.get_champions_x()[best_isl_idx]
-
+    >>> f_best = archi.get_champions_f()[best_isl_idx]
+    >>> print("Best relaxed solution, x: ", x_best) # doctest: +ELLIPSIS
+    Best relaxed solution, x:  [...  
+    >>> print("Best relaxed solution, f: ", f_best) # doctest: +ELLIPSIS
+    Best relaxed solution, f:  [...  
 
 The relaxed version of the problem has a global optimal solution with :math:`x_5 = 0.75822315`, :math:`x_6 = 0.91463117`, which
 suggests to look for solutions considering the values :math:`x_5 \in [0,1]`, :math:`x_6 \in [0,1]`. For each of the four 
@@ -155,10 +159,9 @@ possible cases we thus fix the box bounds on the last two variables. In case :ma
     >>> print("Best decision vector: ", pop.champion_x) # doctest: +SKIP
     Best decision vector:  [ 0.4378605   0.33368365 -0.75844494 -1.          0.          0.        ]
 
-We found a feasible solution.
+We found a feasible solution!
 
 .. note::
-   The solution strategy above is, in general, flawed in assuming the best solution of the relaxed problem is colse to the integer
-   values of the best solution of the full MINLP problem. We only used it here to show how to define and solve the relaxed
-   problem to then feedback its optimal decision vector into the MINLP solution strategy. In this case one would probably
-   be better off to enumerate all the integers and solve for each case the reduced full problem.
+   The solution strategy above is, in general, flawed in assuming the best solution of the relaxed problem is colse to the 
+   the full MINLP problem solution. More sophisticated techniques would instead search the combinatorial part more exhaustvely.
+   We used here this approach only to show how to define and solve the relaxed problem and to then feedback the optimal decision vector into a MINLP solution strategy. 
