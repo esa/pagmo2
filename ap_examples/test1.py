@@ -12,7 +12,7 @@ isl.evolve()
 isl.wait_check()
 assert risl == repr(isl)
 
-# isl = pygmo.island(algo=ub, prob=pygmo.rosenbrock(),
-#                    size=20, udi=pygmo.mp_island())
-# isl.evolve()
-# isl.wait_check()
+isl = pygmo.island(algo=ub, prob=pygmo.rosenbrock(),
+                   size=20, udi=pygmo.ipyparallel_island())
+isl.evolve()
+isl.wait_check()

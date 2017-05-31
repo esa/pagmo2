@@ -70,10 +70,6 @@ inline bp::class_<Algo> expose_algorithm(const char *name, const char *descr)
     // Expose extract.
     algo.def("_cpp_extract", &generic_cpp_extract<pagmo::algorithm, Algo>, bp::return_internal_reference<>());
 
-    // Make sure that polymorphic serialization info from the AP is imported into pygmo's
-    // serialization machinery.
-    merge_s11n_data_for_ap();
-
     return c;
 }
 

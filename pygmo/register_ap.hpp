@@ -26,47 +26,37 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PYGMO_ISLAND_EXPOSITION_SUITE_HPP
-#define PYGMO_ISLAND_EXPOSITION_SUITE_HPP
+#ifndef PYGMO_REGISTER_AP_HPP
+#define PYGMO_REGISTER_AP_HPP
 
-#include "python_includes.hpp"
-
-#include <boost/python/class.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/import.hpp>
-#include <boost/python/init.hpp>
+#include <boost/python/scope.hpp>
 #include <cstdint>
-#include <memory>
-
-#include <pagmo/algorithm.hpp>
-#include <pagmo/island.hpp>
-#include <pagmo/population.hpp>
+#include <string>
+#include <unordered_set>
 
 #include "common_utils.hpp"
+#include "numpy.hpp"
 
 namespace pygmo
 {
 
 namespace bp = boost::python;
 
-// Main island exposition function for use by APs.
-template <typename Isl>
-inline bp::class_<Isl> expose_island(const char *name, const char *descr)
+inline void register_ap()
 {
-    // We require all islands to be def-ctible at the bare minimum.
-    bp::class_<Isl> c(name, descr, bp::init<>());
+    // Import the numpy API.
+    numpy_import_array();
 
-    // Mark it as a C++ island.
-    c.attr("_pygmo_cpp_island") = true;
+    // Make sure that polymorphic serialization info from the AP is imported into pygmo's
+    // serialization machinery.
+    merge_s11n_data_for_ap();
 
-    // Get the island class from the pygmo module.
-    auto &isl = **reinterpret_cast<std::unique_ptr<bp::class_<pagmo::island>> *>(
-        bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_island_address"))());
-
-    // Expose the island constructor from Isl.
-    isl.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
-
-    return c;
+    // Register the AP with pygmo by adding it to the AP list.
+    auto &ap_set = *reinterpret_cast<std::unordered_set<std::string> *>(
+        bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_ap_set_address"))());
+    ap_set.insert(bp::extract<std::string>(bp::scope().attr("__name__"))());
 }
 }
 

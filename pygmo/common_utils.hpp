@@ -40,11 +40,13 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/extract.hpp>
 #include <boost/python/handle.hpp>
 #include <boost/python/import.hpp>
+#include <boost/python/list.hpp>
 #include <boost/python/make_function.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/tuple.hpp>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <stdexcept>
@@ -52,6 +54,7 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <type_traits>
 #include <typeinfo>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -800,6 +803,38 @@ inline void merge_s11n_data_for_ap()
 
     pygmo_in_ptr->insert(cur_in_ptr->begin(), cur_in_ptr->end());
     pygmo_out_ptr->insert(cur_out_ptr->begin(), cur_out_ptr->end());
+}
+
+// A small helper to get the list of currently-registered APs.
+inline bp::list get_ap_list()
+{
+    // Get the list of registered APs.
+    auto &ap_set = *reinterpret_cast<std::unordered_set<std::string> *>(
+        bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_ap_set_address"))());
+    bp::list retval;
+    for (const auto &s : ap_set) {
+        retval.append(s);
+    }
+    return retval;
+}
+
+// Try to  import all the APs listed in l. This is used when deserializing a pygmo class.
+// If an AP cannot be imported, ignore the error and move to the next AP.
+inline void import_aps(const bp::list &l)
+{
+    bp::stl_input_iterator<std::string> begin(l), end;
+    for (; begin != end; ++begin) {
+        try {
+            bp::import(begin->c_str());
+        } catch (const bp::error_already_set &) {
+            assert(::PyErr_Occurred());
+            if (::PyErr_ExceptionMatches(::PyExc_ImportError)) {
+                ::PyErr_Clear();
+            } else {
+                throw;
+            }
+        }
+    }
 }
 }
 

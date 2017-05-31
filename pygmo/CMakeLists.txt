@@ -67,6 +67,7 @@ set (PYGMO_HEADERS
     numpy.hpp
     problem_exposition_suite.hpp
     python_includes.hpp
+    register_ap.hpp
 )
 
 # Install the pygmo headers.

@@ -71,6 +71,7 @@ see https://www.gnu.org/licenses/. */
 #include <sstream>
 #include <string>
 #include <tuple>
+#include <unordered_set>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
@@ -158,10 +159,6 @@ static inline void cleanup()
 
 // Serialization support for the population class.
 struct population_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const population &)
-    {
-        return bp::make_tuple();
-    }
     static bp::tuple getstate(const population &pop)
     {
         std::ostringstream oss;
@@ -170,13 +167,22 @@ struct population_pickle_suite : bp::pickle_suite {
             oarchive(pop);
         }
         auto s = oss.str();
-        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())),
+                              pygmo::get_ap_list());
     }
     static void setstate(population &pop, bp::tuple state)
     {
-        if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
+        if (len(state) != 2) {
+            pygmo_throw(PyExc_ValueError,
+                        ("the state tuple passed for population deserialization "
+                         "must have 2 elements, but instead it has "
+                         + std::to_string(len(state)) + " elements")
+                            .c_str());
         }
+
+        // Make sure we import all the aps specified in the archive.
+        pygmo::import_aps(bp::list(state[1]));
+
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
             pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize a population");
@@ -194,10 +200,6 @@ struct population_pickle_suite : bp::pickle_suite {
 
 // Serialization support for the archi class.
 struct archipelago_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const archipelago &)
-    {
-        return bp::make_tuple();
-    }
     static bp::tuple getstate(const archipelago &archi)
     {
         std::ostringstream oss;
@@ -206,13 +208,22 @@ struct archipelago_pickle_suite : bp::pickle_suite {
             oarchive(archi);
         }
         auto s = oss.str();
-        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())),
+                              pygmo::get_ap_list());
     }
     static void setstate(archipelago &archi, bp::tuple state)
     {
-        if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
+        if (len(state) != 2) {
+            pygmo_throw(PyExc_ValueError,
+                        ("the state tuple passed for archipelago deserialization "
+                         "must have 2 elements, but instead it has "
+                         + std::to_string(len(state)) + " elements")
+                            .c_str());
         }
+
+        // Make sure we import all the aps specified in the archive.
+        pygmo::import_aps(bp::list(state[1]));
+
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
             pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize an archipelago");
@@ -280,6 +291,9 @@ static inline constexpr unsigned max_unsigned()
 {
     return std::numeric_limits<unsigned>::max();
 }
+
+// The set containing the list of registered APs.
+static std::unordered_set<std::string> ap_set;
 
 BOOST_PYTHON_MODULE(core)
 {
@@ -424,6 +438,9 @@ BOOST_PYTHON_MODULE(core)
         &cereal::detail::StaticObject<cereal::detail::OutputBindingMap<cereal::PortableBinaryOutputArchive>>::
              getInstance()
                  .map);
+
+    // Store the address to the list of registered APs.
+    bp::scope().attr("_ap_set_address") = reinterpret_cast<std::uintptr_t>(&ap_set);
 
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
