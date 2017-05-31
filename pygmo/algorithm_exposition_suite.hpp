@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_ALGORITHM_EXPOSITION_SUITE_HPP
 #define PYGMO_ALGORITHM_EXPOSITION_SUITE_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
@@ -43,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 
-#include "common_utils.hpp"
+#include <pygmo/common_utils.hpp>
 
 namespace pygmo
 {

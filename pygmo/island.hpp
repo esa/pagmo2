@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_ISLAND_HPP
 #define PYGMO_ISLAND_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/class.hpp>
@@ -53,8 +53,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 
-#include "common_base.hpp"
-#include "common_utils.hpp"
+#include <pygmo/common_base.hpp>
+#include <pygmo/common_utils.hpp>
 
 namespace pagmo
 {

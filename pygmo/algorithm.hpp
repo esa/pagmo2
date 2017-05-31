@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_ALGORITHM_HPP
 #define PYGMO_ALGORITHM_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/extract.hpp>
@@ -47,9 +47,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 
-#include "common_base.hpp"
-#include "common_utils.hpp"
-#include "object_serialization.hpp"
+#include <pygmo/common_base.hpp>
+#include <pygmo/common_utils.hpp>
+#include <pygmo/object_serialization.hpp>
 
 namespace pagmo
 {

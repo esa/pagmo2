@@ -36,8 +36,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <unordered_set>
 
-#include "common_utils.hpp"
-#include "numpy.hpp"
+#include <pygmo/common_utils.hpp>
+#include <pygmo/numpy.hpp>
 
 namespace pygmo
 {

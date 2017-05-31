@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_COMMON_UTILS_HPP
 #define PYGMO_COMMON_UTILS_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <algorithm>
 #include <array>
@@ -63,11 +63,11 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
-#include "numpy.hpp"
+#include <pygmo/numpy.hpp>
 
 #if defined(_MSC_VER)
 
-#include "function_traits.hpp"
+#include <pygmo/function_traits.hpp>
 
 #endif
 

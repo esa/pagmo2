@@ -1,3 +1,11 @@
+if(UNIX)
+    # On unix platforms, we set the rpath of the pygmo libraries
+    # to the lib subdirectory of the install prefix. This allows
+    # to install pygmo in nonstandard locations (e.g., ~/.local)
+    # without having to muck around with library search paths.
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif()
+
 # The name of the BP target to link to depends on the Python version.
 if(${PYTHON_VERSION_MAJOR} EQUAL 2)
     set(PYGMO_BP_TARGET "Boost::python")
@@ -15,10 +23,14 @@ if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boo
     endif()
 endif()
 
+# Setup of the config.hpp file for pygmo.
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" @ONLY)
+
 # Setup of the header-only pygmo library.
 add_library(pygmo INTERFACE)
 target_link_libraries(pygmo INTERFACE ${PYGMO_BP_TARGET} Boost::disable_autolinking YACMA::PythonModule NumPy::numpy Pagmo::pagmo)
-target_include_directories(pygmo INTERFACE $<INSTALL_INTERFACE:include>)
+target_include_directories(pygmo INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/pygmo> $<INSTALL_INTERFACE:include>)
 # Setup of the export.
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pygmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pygmo-config.cmake" @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pygmo-config.cmake" DESTINATION "lib/cmake/pygmo")
@@ -31,10 +43,11 @@ write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pygmo-config-versi
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pygmo-config-version.cmake" DESTINATION "lib/cmake/pygmo")
 install(TARGETS pygmo EXPORT pygmo_export)
 install(EXPORT pygmo_export NAMESPACE Pygmo:: DESTINATION lib/cmake/pygmo)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" DESTINATION include/pygmo)
 
 # Setup of the pygmo core module.
 YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp expose_algorithms.cpp expose_islands.cpp expose_problems.cpp)
-target_link_libraries(core PRIVATE ${PYGMO_BP_TARGET} Boost::disable_autolinking Pagmo::pagmo NumPy::numpy)
+target_link_libraries(core PRIVATE ${PYGMO_BP_TARGET} Boost::disable_autolinking Pagmo::pagmo NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
 set_property(TARGET core PROPERTY CXX_STANDARD 11)
 set_property(TARGET core PROPERTY CXX_STANDARD_REQUIRED YES)

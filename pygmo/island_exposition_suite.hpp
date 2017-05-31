@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_ISLAND_EXPOSITION_SUITE_HPP
 #define PYGMO_ISLAND_EXPOSITION_SUITE_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <boost/python/class.hpp>
 #include <boost/python/extract.hpp>
@@ -42,7 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 
-#include "common_utils.hpp"
+#include <pygmo/common_utils.hpp>
 
 namespace pygmo
 {

@@ -26,49 +26,15 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PYGMO_NUMPY_HPP
-#define PYGMO_NUMPY_HPP
+#ifndef PYGMO_CONFIG_HPP
+#define PYGMO_CONFIG_HPP
 
-#include <pygmo/python_includes.hpp>
-
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
-#endif
-
-#include <numpy/arrayobject.h>
-
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-
-#undef NPY_NO_DEPRECATED_API
-
-// NOTE: if the NO_IMPORT_ARRAY definition is active,
-// the import_array() macro is not defined.
-#if !defined(NO_IMPORT_ARRAY)
-
-namespace pygmo
-{
-
-// This is necessary because the NumPy macro import_array() has different return values
-// depending on the Python version.
-#if PY_MAJOR_VERSION < 3
-inline void numpy_import_array()
-{
-    import_array();
-}
-#else
-inline void *numpy_import_array()
-{
-    import_array();
-    return nullptr;
-}
-#endif
-}
-
-#endif
+// Start of defines instantiated by CMake.
+// clang-format off
+#define PYGMO_VERSION "@pygmo_VERSION@"
+#define PYGMO_VERSION_MAJOR @pygmo_VERSION_MAJOR@
+#define PYGMO_VERSION_MINOR @pygmo_VERSION_MINOR@
+// clang-format on
+// End of defines instantiated by CMake.
 
 #endif

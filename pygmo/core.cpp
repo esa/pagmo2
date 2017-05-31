@@ -35,13 +35,13 @@ see https://www.gnu.org/licenses/. */
 
 #endif
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 // See: https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
 // In every cpp file We need to make sure this is included before everything else,
 // with the correct #defines.
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
-#include "numpy.hpp"
+#include <pygmo/numpy.hpp>
 
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
@@ -93,16 +93,16 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/hypervolume.hpp>
 #include <pagmo/utils/multi_objective.hpp>
 
-#include "algorithm.hpp"
-#include "common_utils.hpp"
-#include "docstrings.hpp"
-#include "expose_algorithms.hpp"
-#include "expose_islands.hpp"
-#include "expose_problems.hpp"
-#include "island.hpp"
-#include "object_serialization.hpp"
-#include "problem.hpp"
-#include "pygmo_classes.hpp"
+#include <pygmo/algorithm.hpp>
+#include <pygmo/common_utils.hpp>
+#include <pygmo/docstrings.hpp>
+#include <pygmo/expose_algorithms.hpp>
+#include <pygmo/expose_islands.hpp>
+#include <pygmo/expose_problems.hpp>
+#include <pygmo/island.hpp>
+#include <pygmo/object_serialization.hpp>
+#include <pygmo/problem.hpp>
+#include <pygmo/pygmo_classes.hpp>
 
 namespace bp = boost::python;
 using namespace pagmo;

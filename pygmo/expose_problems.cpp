@@ -35,14 +35,14 @@ see https://www.gnu.org/licenses/. */
 
 #endif
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 // See: https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
 // In every cpp file We need to make sure this is included before everything else,
 // with the correct #defines.
 #define NO_IMPORT_ARRAY
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
-#include "numpy.hpp"
+#include <pygmo/numpy.hpp>
 
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
@@ -77,10 +77,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
-#include "common_utils.hpp"
-#include "docstrings.hpp"
-#include "problem_exposition_suite.hpp"
-#include "pygmo_classes.hpp"
+#include <pygmo/common_utils.hpp>
+#include <pygmo/docstrings.hpp>
+#include <pygmo/problem_exposition_suite.hpp>
+#include <pygmo/pygmo_classes.hpp>
 
 using namespace pagmo;
 namespace bp = boost::python;

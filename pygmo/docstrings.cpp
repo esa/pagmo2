@@ -28,7 +28,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <string>
 
-#include "docstrings.hpp"
+#include <pygmo/docstrings.hpp>
 
 namespace pygmo
 {
