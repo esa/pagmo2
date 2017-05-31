@@ -69,8 +69,9 @@ sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
 cd ..
 
 # NLopt
-wget http://ab-initio.mit.edu/nlopt/nlopt-${NLOPT_VERSION}.tar.gz --no-verbose
-tar xzf nlopt-${NLOPT_VERSION}.tar.gz
+# NOTE: use alternative mirror as the one from the original webpage is faulty.
+wget http://pkgs.fedoraproject.org/repo/pkgs/NLopt/NLopt-${NLOPT_VERSION}.tar.gz/d0b8f139a4acf29b76dbae69ade8ac54/NLopt-${NLOPT_VERSION}.tar.gz --no-verbose
+tar xzf NLopt-${NLOPT_VERSION}.tar.gz
 cd nlopt-${NLOPT_VERSION}
 ./configure --enable-shared --disable-static > /dev/null
 make -j2 install > /dev/null
