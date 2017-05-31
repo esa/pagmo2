@@ -140,22 +140,36 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
         fi
     done
 elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
+    export CXX=clang++
+    export CC=clang
     # Install pagmo first.
     cd ..;
     mkdir build_pagmo;
     cd build_pagmo;
-    CXX=clang++ CC=clang cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
     make install VERBOSE=1;
     cd ../build;
     # Now pygmo.
-    CXX=clang++ CC=clang cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DCMAKE_CXX_FLAGS="-g0 -O2" ../;
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
     sleep 20;
+    # Move out of the build dir.
     cd ../tools
     python -c "import pygmo; pygmo.test.run_test_suite(1)"
+
+    # Additional serialization tests.
     python travis_additional_tests.py
+
+    # AP examples.
+    cd ../ap_examples/uda_basic;
+    mkdir build;
+    cd build;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+    make install VERBOSE=1;
+    cd ../../;
+    python test1.py
 elif [[ "${PAGMO_BUILD}" == manylinux* ]]; then
     cd ..;
     docker pull ${DOCKER_IMAGE};
