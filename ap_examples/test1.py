@@ -12,7 +12,17 @@ isl.evolve()
 isl.wait_check()
 assert risl == repr(isl)
 
-isl = pygmo.island(algo=ub, prob=pygmo.rosenbrock(),
-                   size=20, udi=pygmo.ipyparallel_island())
+
+class py_udp(object):
+
+    def get_bounds(self):
+        return ([0, 0], [1, 1])
+
+    def fitness(self, a):
+        return [42]
+
+isl = pygmo.island(algo=ub, prob=py_udp(), size=20)
 isl.evolve()
 isl.wait_check()
+
+print("All good!")
