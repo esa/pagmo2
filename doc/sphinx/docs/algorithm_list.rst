@@ -21,7 +21,7 @@ Differential Evolution (DE)                                :cpp:class:`pagmo::de
 Self-adaptive DE (jDE and iDE)                             :cpp:class:`pagmo::sade`                  :class:`pygmo.sade`                       S-U            
 Self-adaptive DE (de_1220 aka pDE)                         :cpp:class:`pagmo::de1220`                :class:`pygmo.de1220`                     S-U             
 Particle Swarm Optimization (PSO)                          :cpp:class:`pagmo::pso`                   :class:`pygmo.pso`                        S-U             
-(N+1)-ES Simple Evolutionary Algorithm                     :cpp:class:`pagmo::sea`                   :class:`pygmo.sea`                        S-U (sto)       
+(N+1)-ES Simple Evolutionary Algorithm                     :cpp:class:`pagmo::sea`                   :class:`pygmo.sea`                        S-U   (sto)       
 Simple Genetic Algorithm                                   :cpp:class:`pagmo::sga`                   :class:`pygmo.sga`                        S-U-I (sto)       
 Corana's Simulated Annealing (SA)                          :cpp:class:`pagmo::simulated_annealing`   :class:`pygmo.simulated_annealing`        S-U             
 Artificial Bee Colony (ABC)                                :cpp:class:`pagmo::bee_colony`            :class:`pygmo.bee_colony`                 S-U             
