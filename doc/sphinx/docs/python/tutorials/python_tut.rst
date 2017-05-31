@@ -24,6 +24,7 @@ Coding your own problem (UDP)
 
   coding_udp_simple
   coding_udp_constrained
+  coding_udp_minlp
 
 Coding your own island (UDI)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

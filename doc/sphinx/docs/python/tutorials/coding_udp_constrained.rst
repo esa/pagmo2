@@ -31,8 +31,10 @@ for the time being the fitness, the basic structure for the UDP to have pygmo un
     >>> class my_constrained_udp:
     ...     def get_bounds(self):
     ...         return ([-5]*6,[5]*6)
+    ...     # Inequality Constraints
     ...     def get_nic(self):
     ...         return 2 
+    ...     # Equality Constraints
     ...     def get_nec(self):
     ...         return 4
 
@@ -68,7 +70,7 @@ are in the form :math:`g(x) = 0`, while inequalities :math:`g(x) <= 0` as docume
     ...     def gradient(self, x):
     ...         return pg.estimate_gradient_h(lambda x: self.fitness(x), x)
 
-In order to check that the UDP above is wll formed for pygmo we try to construct a :class:`pygmo.problem` from it and inspect it:
+In order to check that the UDP above is well formed for pygmo we try to construct a :class:`pygmo.problem` from it and inspect it:
 
 .. doctest::
 
