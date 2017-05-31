@@ -52,12 +52,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
 
-#if defined(PAGMO_SKIP_SERIALIZATION)
-
-#define PAGMO_REGISTER_PROBLEM(prob)
-
-#else
-
 /// Macro for the registration of the serialization functionality for user-defined problems.
 /**
  * This macro should always be invoked after the declaration of a user-defined problem: it will register
@@ -78,8 +72,6 @@ see https://www.gnu.org/licenses/. */
  * @endcode
  */
 #define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>, "udp " #prob)
-
-#endif
 
 namespace pagmo
 {
