@@ -1,6 +1,3 @@
-#define PY_ARRAY_UNIQUE_SYMBOL uda_basic_ARRAY_API
-#include <pygmo/numpy.hpp>
-
 #include <boost/python/module.hpp>
 
 #include <pygmo/algorithm_exposition_suite.hpp>
