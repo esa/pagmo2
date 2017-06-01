@@ -111,7 +111,7 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
     import matplotlib.pyplot as plt
     import numpy as np
 
-    if (pop.get_problem().get_name()[:-1] != "DTLZ"):
+    if (pop.problem.get_name()[:-1] != "DTLZ"):
         raise(ValueError, "The problem seems not to be from the DTLZ suite")
 
     if (len(comp) != 3):
@@ -129,7 +129,7 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
         print('Error. Please choose correct fitness dimensions for printing!')
 
     # Plot pareto front for dtlz 1
-    if (pop.get_problem().get_name()[-1] in ["1"]):
+    if (pop.problem.get_name()[-1] in ["1"]):
 
         X, Y = np.meshgrid(np.linspace(0, 0.5, 100), np.linspace(0, 0.5, 100))
         Z = - X - Y + 0.5
@@ -147,7 +147,7 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
         plt.plot([0, 0.5], [0.5, 0], [0, 0])
 
     # Plot pareto fronts for dtlz 2,3,4
-    if (pop.get_problem().get_name()[-1] in ["2", "3", "4"]):
+    if (pop.problem.get_name()[-1] in ["2", "3", "4"]):
         # plot the wireframe of the known optimal pareto front
         thetas = np.linspace(0, (np.pi / 2.0), 30)
         # gammas = np.linspace(-np.pi / 4, np.pi / 4, 30)
