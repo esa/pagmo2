@@ -26,8 +26,18 @@ using the :func:`~pygmo.dtlz.p_distance()` metric.
     >>> algo = algorithm(moead(gen = 100))
     >>> for i in range(10):
     ...     pop = algo.evolve(pop)
-    >>> print(udp.p_distance(pop)) # doctest: +SKIP
-    0.0012264939631066003
+    >>>     print(udp.p_distance(pop)) # doctest: +SKIP
+    11.906892367806368
+    5.7957743802958595
+    5.6155823329927355
+    5.227825963470699
+    3.3244186681980863
+    1.6876728522762465
+    1.2704673513592113
+    1.01938844212957
+    0.9181813093367411
+    0.6759127264898211
+
 
 Since the :func:`~pygmo.dtlz.p_distance()` does not capture the information on the spread of the solutions we
 also compute the hypervolume indicator using the pygmo class :class:`~pygmo.hypervolume`:
