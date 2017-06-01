@@ -1,7 +1,7 @@
 .. _py_tutorial_coding_udp_constrained:
 
-Coding a User Defined Problem with constraints
-----------------------------------------------
+Coding a User Defined Problem with constraints (NLP)
+----------------------------------------------------
 
 We here show how to code a non-trivial user defined problem (UDP) with a single objective, equality and inequality constraints.
 We assume that the mathematical formulation of problem is the following:
@@ -23,8 +23,11 @@ which is a modified instance of the problem 5.9 in Luksan, L., and Jan Vlcek. "S
 for unconstrained and equality constrained optimization." (1999). The modification is in the last two constraints that are,
 for the purpose of this tutorial, considered as inequalities rather than equality constraints.
 
-The problem at hand has box bounds, 4 equality constraints, two inequalities (note the different form of these) and one objective. Neglecting
-for the time being the fitness, the basic structure for the UDP to have pygmo understand the problem type will be:
+The problem at hand has box bounds, 4 equality constraints, two inequalities (note the different form of these) and one objective and,
+in the taxonomy of optimization problems, can be categorized as a non linear programming (NLP) problem.
+
+
+Neglecting for the time being the fitness, the basic structure for the UDP to have pygmo understand the problem type will be:
 
 .. doctest::
 

@@ -4,7 +4,7 @@ Coding a User Defined Problem with an integer part (MINLP)
 -----------------------------------------------------------
 
 We here show how to code a non-trivial user defined problem (UDP) with a single objective, equality and inequality constraints and 
-We assume that the mathematical formulation of problem is the following:
+an integer part. We assume that the mathematical formulation of problem is the following:
 
 .. math::
 
@@ -23,7 +23,7 @@ We assume that the mathematical formulation of problem is the following:
 which is a modified instance of the problem 5.9 in Luksan, L., and Jan Vlcek. "Sparse and partially separable test problems
 for unconstrained and equality constrained optimization." (1999). The modification is in the constraints that are,
 for the purpose of this tutorial, considered as inequalities rather than equalities and in constraining the last two 
-variables of the decision vector to be integers. The final problem, in the taxonomy of optimization problems, can be categorized 
+variables of the decision vector to be integers. The final problem, in the taxonomy of optimization problems, is categorized 
 as a mixed integer non linear programming (MINLP) problem.
 
 Neglecting, for the time being the fitness, the basic structure for the UDP to have pygmo understand the problem type will be:
@@ -45,8 +45,9 @@ dimension (as pygmo otherwise by default assumes 0 for all). There is no need to
 single objective optimization. The full documenation on the UDP optional methods can be found in the :class:`pygmo.problem` docs.
 
 We still have to write the fitness function as that is a mandatory method (together with ``get_bounds()``) for all UDPs. Constructing a :class:`~pygmo.problem` with
-an incomplete UDP will fail. In pygmo the fitness includes both the objectives and the constraints according to the described order [obj,ec,ic]. All equality constraints
-are in the form :math:`g(x) = 0`, while inequalities :math:`g(x) <= 0` as documented in :func:`pygmo.problem.fitness()`.
+an incomplete UDP will fail. In pygmo the fitness includes both the objectives and the constraints according to the described order [obj,ec,ic]. 
+All inequality constraints are in the form :math:`g(x) = 0` as documented in :func:`pygmo.problem.fitness()`. Note that in this particular
+case we do not have equality constraints.
 
 .. doctest::
 
@@ -98,7 +99,7 @@ In order to check that the UDP above is well formed for pygmo we try to construc
     	Thread safety: none
     <BLANKLINE>
 
-All seems in order. The dimensions are corresponding to what we wanted, the gradient is detected etc.
+All seems in order. The dimensions are corresponding to what we wanted, no gradient is detected etc.
 
 Solving your MINLP by relaxation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -121,14 +122,14 @@ and constraints. So we add them:
     >>> prob.c_tol = [1e-8]*6
 
 
-Pygmo support form MINLP problems is built around the idea of making integer relaxation very easy. So we can just
+Pygmo support for MINLP problems is built around the idea of making integer relaxation very easy. So we can just
 call an NLP solver on our MINLP and the relaxed version of the problem will be solved returning a population
 with decision vectors that violate the integer constraints.
 
     >>> # We run 20 instances of the optimization in parallel via a default archipelago setup
     >>> archi = pg.archipelago(n = 20, algo = pg.ipopt(), prob = my_minlp(), pop_size=1)
     >>> archi.evolve(2); archi.wait()
-    >>> # We compute the best of the results
+    >>> # We get the best of the parallel runs
     >>> a = archi.get_champions_f()
     >>> a2 = sorted(archi.get_champions_f(), key = lambda x: x[0])[0]
     >>> best_isl_idx = [(el == a2).all() for el in a].index(True)
@@ -143,12 +144,14 @@ The relaxed version of the problem has a global optimal solution with :math:`x_5
 suggests to look for solutions considering the values :math:`x_5 \in [0,1]`, :math:`x_6 \in [0,1]`. For each of the four 
 possible cases we thus fix the box bounds on the last two variables. In case :math:`x_5 = 0`, :math:`x_6 = 0` we get:
 
+    >>> # We fix the box bounds for x5 and x6
     >>> def get_bounds_(self):
     ...     return ([-5]*4+[0,0],[5]*4+[0,0])
     >>> my_minlp.get_bounds = get_bounds_
     >>> # We need to reconstruct the problem as we changed its definition (modified the bounds)
     >>> prob = pg.problem(my_minlp())
     >>> prob.c_tol = [1e-14]*4 + [0] * 2
+    >>> # We solve the problem, this time using one only process
     >>> pop = pg.population(prob)
     >>> x_best[-1] = 0; x_best[-2] = 0
     >>> pop.push_back(x_best)
@@ -164,4 +167,5 @@ We found a feasible solution!
 .. note::
    The solution strategy above is, in general, flawed in assuming the best solution of the relaxed problem is colse to the 
    the full MINLP problem solution. More sophisticated techniques would instead search the combinatorial part more exhaustvely.
-   We used here this approach only to show how to define and solve the relaxed problem and to then feedback the optimal decision vector into a MINLP solution strategy. 
+   We used here this approach only to show how simple is, in pygmo, to define and solve the relaxed problem and
+   to then feedback the optimal decision vector into a MINLP solution strategy. 
