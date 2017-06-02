@@ -127,6 +127,14 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wodr)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-final-types)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-final-methods)
+        # From GCC 6.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wshift-negative-value)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wshift-overflow=2)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wduplicated-cond)
+        # From GCC 7.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wduplicated-branches)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wrestrict)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Waligned-new)
     endif()
 
     # MSVC setup.
