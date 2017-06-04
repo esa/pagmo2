@@ -878,6 +878,20 @@ class random_decision_vector_test_case(_ut.TestCase):
         set_global_rng_seed(42)
         y = random_decision_vector(lb = [1.1,2.1,-3], ub = [2.1, 3.4,5], nix = 1)
         self.assertTrue((x == y).all())
+        nan = float("nan")
+        inf = float("inf")
+        #self.assertRaises(ValueError, random_decision_vector([1, 2], [0, 3]))
+        #self.assertRaises(ValueError, random_decision_vector([1, -inf], [0, 32]))
+        #self.assertRaises(ValueError, random_decision_vector([1, 2, 3], [0, 3]))
+        #self.assertRaises(ValueError, random_decision_vector([0, 2, 3], [1, 4, nan]))
+        #self.assertRaises(ValueError, random_decision_vector([0, 2, nan], [1, 4, 4]))
+        #self.assertRaises(ValueError, random_decision_vector([0, nan, 3], [1, nan, 4]))
+        #self.assertRaises(ValueError, random_decision_vector([0, 2, 3], [1, 4, 5], 4))
+        #self.assertRaises(ValueError, random_decision_vector([0, 2, 3.1], [1, 4, 5], 1))
+        #self.assertRaises(ValueError, random_decision_vector([0, 2, 3], [1, 4, 5.2], 1))
+        #self.assertRaises(ValueError, random_decision_vector([0, -1.1, 3], [1, 2, 5], 2))
+        #self.assertRaises(ValueError, random_decision_vector([0, -1.1, -inf], [1, 2, inf], 2))
+        #self.assertRaises(ValueError, random_decision_vector([0, -1.1, inf], [1, 2, inf], 2))
 
 
 class luksan_vlcek1_test_case(_ut.TestCase):
