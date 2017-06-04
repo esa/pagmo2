@@ -188,7 +188,8 @@
 can be used to construct a <a class="reference internal" href="cpp/algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a>, or <a class="reference internal" href="python/py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> which will then provide a unified
 interface to acces their functionalities.</p>
 <p>Each algorithm can be
-associated only to problems of certain types S = Single, M = Multi-objective, C = Constrained, U = Unconstrained, sto = stochastic</p>
+associated only to problems of certain types S = Single, M = Multi-objective, C = Constrained, U = Unconstrained, sto = stochastic
+I = integer programming (without this symbol the algorithm will solve the relaxed problem)</p>
 <div class="section" id="heuristic-global-optimization">
 <h2>Heuristic Global Optimization<a class="headerlink" href="#heuristic-global-optimization" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
@@ -234,12 +235,12 @@ associated only to problems of certain types S = Single, M = Multi-objective, C 
 <tr class="row-odd"><td>(N+1)-ES Simple Evolutionary Algorithm</td>
 <td><a class="reference internal" href="cpp/algorithms/sea.html#_CPPv2N5pagmo3seaE" title="pagmo::sea"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sea</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.sea" title="pygmo.sea"><code class="xref py py-class docutils literal"><span class="pre">pygmo.sea</span></code></a></td>
-<td>S-U (sto)</td>
+<td>S-U   (sto)</td>
 </tr>
 <tr class="row-even"><td>Simple Genetic Algorithm</td>
 <td><a class="reference internal" href="cpp/algorithms/sga.html#_CPPv2N5pagmo3sgaE" title="pagmo::sga"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sga</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.sga" title="pygmo.sga"><code class="xref py py-class docutils literal"><span class="pre">pygmo.sga</span></code></a></td>
-<td>S-U (sto)</td>
+<td>S-U-I (sto)</td>
 </tr>
 <tr class="row-odd"><td>Corana&#8217;s Simulated Annealing (SA)</td>
 <td><a class="reference internal" href="cpp/algorithms/simulated_annealing.html#_CPPv2N5pagmo19simulated_annealingE" title="pagmo::simulated_annealing"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::simulated_annealing</span></code></a></td>
@@ -259,7 +260,7 @@ associated only to problems of certain types S = Single, M = Multi-objective, C 
 <tr class="row-even"><td>Non-dominated Sorting GA (NSGA2)</td>
 <td><a class="reference internal" href="cpp/algorithms/nsga2.html#_CPPv2N5pagmo5nsga2E" title="pagmo::nsga2"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nsga2</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nsga2" title="pygmo.nsga2"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nsga2</span></code></a></td>
-<td>M-U</td>
+<td>M-U-I</td>
 </tr>
 <tr class="row-odd"><td>Multi-objective EA vith Decomposition (MOEA/D)</td>
 <td><a class="reference internal" href="cpp/algorithms/moead.html#_CPPv2N5pagmo5moeadE" title="pagmo::moead"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::moead</span></code></a></td>

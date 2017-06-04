@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Python tutorials &#8212; pagmo 2.4 documentation</title>
+    <title>Generic optimization utilities &#8212; pagmo 2.4 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -34,8 +34,8 @@
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Use of the class problem" href="using_problem.html" />
-    <link rel="prev" title="Plotting utilities" href="../utils/py_plotting.html" />
+    <link rel="next" title="Multi-objective optimization utilities" href="py_mo_utils.html" />
+    <link rel="prev" title="List of islands available in pygmo" href="../islands/py_islands.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
   <body role="document">
@@ -107,20 +107,20 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Python tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#basics">Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#local-optimization">Local optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#multi-objective-optimization">Multi-objective optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#hypervolumes">Hypervolumes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#advanced-examples">Advanced Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
 </ul>
 </li>
 </ul>
@@ -147,16 +147,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Python tutorials</a><ul>
-<li><a class="reference internal" href="#basics">Basics</a></li>
-<li><a class="reference internal" href="#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
-<li><a class="reference internal" href="#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
-<li><a class="reference internal" href="#local-optimization">Local optimization</a></li>
-<li><a class="reference internal" href="#multi-objective-optimization">Multi-objective optimization</a></li>
-<li><a class="reference internal" href="#hypervolumes">Hypervolumes</a></li>
-<li><a class="reference internal" href="#advanced-examples">Advanced Examples</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Generic optimization utilities</a></li>
 </ul>
 </ul>
 </li>
@@ -186,96 +177,73 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <div class="section" id="python-tutorials">
-<span id="id1"></span><h1>Python tutorials<a class="headerlink" href="#python-tutorials" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="basics">
-<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="using_problem.html">Use of the class <code class="docutils literal"><span class="pre">problem</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_algorithm.html">Use of the class <code class="docutils literal"><span class="pre">algorithm</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_population.html">Use of the class <code class="docutils literal"><span class="pre">population</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_island.html">Use of the class <code class="docutils literal"><span class="pre">island</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="using_island.html#managing-exceptions">Managing exceptions</a></li>
+  <div class="section" id="generic-optimization-utilities">
+<span id="py-generic-utils"></span><h1>Generic optimization utilities<a class="headerlink" href="#generic-optimization-utilities" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pygmo.random_decision_vector">
+<code class="descclassname">pygmo.</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.random_decision_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>random_decision_vector_docstring(lb, ub, nix = 0)</p>
+<p>Creates a random decision vector within some bounds using pygmo&#8217;s global rng. If
+both the lower and upper bounds are finite numbers, then the <span class="math">\(i\)</span>-th
+component of the randomly generated pagmo::vector_double will be such that
+<span class="math">\(lb_i \le x_i &lt; ub_i\)</span>. If <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is
+returned. If an integer part <em>nix</em> is specified then the last <em>nix</em> components
+are guaranteed to be integers within the specified (integer) bounds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lb</strong> (<em>array-like object</em>) &#8211; the lower bounds</li>
+<li><strong>ub</strong> (<em>array-like object</em>) &#8211; the upper bounds</li>
+<li><strong>nix</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the integer size</li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="using_archipelago.html">Use of the class <code class="docutils literal"><span class="pre">archipelago</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="using_archipelago.html#managing-exceptions">Managing exceptions</a></li>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>nix</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>lb</em> and <em>ub</em> are malformed (unequal lenght, zero size, <em>nix</em> larger than <code class="docutils literal"><span class="pre">len(lb)</span></code> or bounds are not integers in their last <em>nix</em> components)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>lb</em> or <em>ub</em> cannot be converted to a vector of floats</li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="evolving_a_population.html">Evolving a population</a></li>
-</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the random decision vector</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">1D NumPy float array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="pygmo.set_global_rng_seed">
+<code class="descclassname">pygmo.</code><code class="descname">set_global_rng_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.set_global_rng_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>In pygmo it is, in general, possible to control the seed of all random generators by a dedicated <em>seed</em> kwarg passed on via various
+constructors. If no <em>seed</em> is passed pygmo randomly creates a seed for you using its global random number generator.</p>
+<p>This function allows to be able to reset the seed of auch a global random number generator. This can be useful to create a deterministic behaviour of pygmo easily.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In complex parallel evolutions obtaining a deterministic behaviour is not possible even setting the global seed as
+pygmo implements an asynchronous model for parallel execution and the exact interplay between threads and processes cannot
+be reproduced deterministically.</p>
 </div>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">set_global_rng_seed</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ackley</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)</span>
+<span class="go">[ 17.26891503]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">set_global_rng_seed</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ackley</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)</span>
+<span class="go">[ 17.26891503]</span>
+</pre></div>
 </div>
-<div class="section" id="coding-your-own-problem-udp">
-<h2>Coding your own problem (UDP)<a class="headerlink" href="#coding-your-own-problem-udp" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="coding_udp_simple.html">Coding a simple User Defined Problem</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coding_udp_simple.html#possible-pitfalls">Possible pitfalls</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coding_udp_simple.html#notes-on-computational-speed">Notes on computational speed</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="coding_udp_constrained.html">Coding a User Defined Problem with constraints (NLP)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coding_udp_constrained.html#solving-your-constrained-udp">Solving your constrained UDP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coding_udp_constrained.html#do-not-use-a-black-box-solver-if-you-do-not-have-to">Do not use a black-box solver if you do not have to</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="coding_udp_minlp.html">Coding a User Defined Problem with an integer part (MINLP)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coding_udp_minlp.html#solving-your-minlp-by-relaxation">Solving your MINLP by relaxation</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="coding-your-own-island-udi">
-<h2>Coding your own island (UDI)<a class="headerlink" href="#coding-your-own-island-udi" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="coding_udi.html">Coding a User Defined Island</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="local-optimization">
-<h2>Local optimization<a class="headerlink" href="#local-optimization" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="nlopt_basics.html">A first tutorial on the use of NLopt solvers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="nlopt_basics.html#i-have-the-gradient">I have the gradient</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nlopt_basics.html#i-do-not-have-the-gradient">I do not have the gradient</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="multi-objective-optimization">
-<h2>Multi-objective optimization<a class="headerlink" href="#multi-objective-optimization" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="moo.html">Basic Multi-Objective Functionalities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="moo_moead.html">Using pygmo&#8217;s <code class="docutils literal"><span class="pre">moead</span></code></a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="hypervolumes">
-<h2>Hypervolumes<a class="headerlink" href="#hypervolumes" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="hypervolume.html">Getting started with hypervolumes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hypervolume_advanced.html">Advanced hypervolume computation and analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hypervolume_approx.html">Approximating the hypervolume</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="advanced-examples">
-<h2>Advanced Examples<a class="headerlink" href="#advanced-examples" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cec2013_comp.html">Participating to the CEC2013 Competition</a></li>
-<li class="toctree-l1"><a class="reference internal" href="solving_schwefel_20.html">Solving the 20 dimensional Schwefel problem</a></li>
-</ul>
-</div>
-</div>
+</dd></dl>
+
 </div>
 
 

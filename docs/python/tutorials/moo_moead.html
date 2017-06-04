@@ -192,8 +192,17 @@ using the <a class="reference internal" href="../problems/py_problems.html#pygmo
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">moead</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">100</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">p_distance</span><span class="p">(</span><span class="n">pop</span><span class="p">))</span> 
-<span class="go">0.0012264939631066003</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">p_distance</span><span class="p">(</span><span class="n">pop</span><span class="p">))</span> 
+<span class="go">11.906892367806368</span>
+<span class="go">5.7957743802958595</span>
+<span class="go">5.6155823329927355</span>
+<span class="go">5.227825963470699</span>
+<span class="go">3.3244186681980863</span>
+<span class="go">1.6876728522762465</span>
+<span class="go">1.2704673513592113</span>
+<span class="go">1.01938844212957</span>
+<span class="go">0.9181813093367411</span>
+<span class="go">0.6759127264898211</span>
 </pre></div>
 </div>
 <p>Since the <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz.p_distance" title="pygmo.dtlz.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a> does not capture the information on the spread of the solutions we

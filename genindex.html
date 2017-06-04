@@ -447,11 +447,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_problem.html#pygmo.problem.get_nc">get_nc() (pygmo.problem method)</a>
 </li>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_ncx">get_ncx() (pygmo.problem method)</a>
+</li>
       <li><a href="docs/python/py_problem.html#pygmo.problem.get_nec">get_nec() (pygmo.problem method)</a>
 </li>
       <li><a href="docs/python/py_problem.html#pygmo.problem.get_nf">get_nf() (pygmo.problem method)</a>
 </li>
       <li><a href="docs/python/py_problem.html#pygmo.problem.get_nic">get_nic() (pygmo.problem method)</a>
+</li>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_nix">get_nix() (pygmo.problem method)</a>
 </li>
       <li><a href="docs/python/py_problem.html#pygmo.problem.get_nobj">get_nobj() (pygmo.problem method)</a>
 </li>
@@ -629,9 +633,11 @@
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.maxtime">maxtime (pygmo.nlopt attribute)</a>
 </li>
+      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh">mbh (class in pygmo)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh">mbh (class in pygmo)</a>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.minlp_rastrigin">minlp_rastrigin (class in pygmo)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.moead">moead (class in pygmo)</a>
 </li>
@@ -1135,6 +1141,10 @@
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo17has_i_constraints5valueE">pagmo::has_i_constraints::value (C++ member)</a>
 </li>
+      <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo16has_integer_partE">pagmo::has_integer_part (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo16has_integer_part5valueE">pagmo::has_integer_part::value (C++ member)</a>
+</li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo8has_nameE">pagmo::has_name (C++ class)</a>
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv2N5pagmo8has_name5valueE">pagmo::has_name::value (C++ member)</a>
@@ -1353,8 +1363,6 @@
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh6evolveE10population">pagmo::mbh::evolve (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh14get_extra_infoEv">pagmo::mbh::get_extra_info (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbh19get_inner_algorithmEv">pagmo::mbh::get_inner_algorithm (C++ function)</a>, <a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh19get_inner_algorithmEv">[1]</a>
@@ -1369,6 +1377,8 @@
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh17get_thread_safetyEv">pagmo::mbh::get_thread_safety (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh13get_verbosityEv">pagmo::mbh::get_verbosity (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbh13log_line_typeE">pagmo::mbh::log_line_type (C++ type)</a>
@@ -1384,6 +1394,28 @@
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbh8set_seedEj">pagmo::mbh::set_seed (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbh13set_verbosityEj">pagmo::mbh::set_verbosity (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2N5pagmo15minlp_rastriginE">pagmo::minlp_rastrigin (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2NK5pagmo15minlp_rastrigin7fitnessERK13vector_double">pagmo::minlp_rastrigin::fitness (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2NK5pagmo15minlp_rastrigin10get_boundsEv">pagmo::minlp_rastrigin::get_bounds (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2NK5pagmo15minlp_rastrigin14get_extra_infoEv">pagmo::minlp_rastrigin::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2NK5pagmo15minlp_rastrigin8get_nameEv">pagmo::minlp_rastrigin::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2NK5pagmo15minlp_rastrigin7get_nixEv">pagmo::minlp_rastrigin::get_nix (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2NK5pagmo15minlp_rastrigin8gradientERK13vector_double">pagmo::minlp_rastrigin::gradient (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2NK5pagmo15minlp_rastrigin8hessiansERK13vector_double">pagmo::minlp_rastrigin::hessians (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2NK5pagmo15minlp_rastrigin17hessians_sparsityEv">pagmo::minlp_rastrigin::hessians_sparsity (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2N5pagmo15minlp_rastrigin15minlp_rastriginEjj">pagmo::minlp_rastrigin::minlp_rastrigin (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv2N5pagmo15minlp_rastrigin9serializeER7Archive">pagmo::minlp_rastrigin::serialize (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/moead.html#_CPPv2N5pagmo5moeadE">pagmo::moead (C++ class)</a>
 </li>
@@ -1531,7 +1563,7 @@
 </li>
       <li><a href="docs/cpp/algorithms/nsga2.html#_CPPv2N5pagmo5nsga28log_typeE">pagmo::nsga2::log_type (C++ type)</a>
 </li>
-      <li><a href="docs/cpp/algorithms/nsga2.html#_CPPv2N5pagmo5nsga25nsga2EjddddN13vector_double9size_typeEj">pagmo::nsga2::nsga2 (C++ function)</a>
+      <li><a href="docs/cpp/algorithms/nsga2.html#_CPPv2N5pagmo5nsga25nsga2Ejddddj">pagmo::nsga2::nsga2 (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/nsga2.html#_CPPv2N5pagmo5nsga29serializeER7Archive">pagmo::nsga2::serialize (C++ function)</a>
 </li>
@@ -1559,9 +1591,11 @@
 </li>
       <li><a href="docs/cpp/problems/null.html#_CPPv2NK5pagmo12null_problem7get_nicEv">pagmo::null_problem::get_nic (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/problems/null.html#_CPPv2NK5pagmo12null_problem7get_nixEv">pagmo::null_problem::get_nix (C++ function)</a>
+</li>
       <li><a href="docs/cpp/problems/null.html#_CPPv2NK5pagmo12null_problem8get_nobjEv">pagmo::null_problem::get_nobj (C++ function)</a>
 </li>
-      <li><a href="docs/cpp/problems/null.html#_CPPv2N5pagmo12null_problem12null_problemEN13vector_double9size_typeEN13vector_double9size_typeEN13vector_double9size_typeE">pagmo::null_problem::null_problem (C++ function)</a>
+      <li><a href="docs/cpp/problems/null.html#_CPPv2N5pagmo12null_problem12null_problemEN13vector_double9size_typeEN13vector_double9size_typeEN13vector_double9size_typeEN13vector_double9size_typeE">pagmo::null_problem::null_problem (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problems/null.html#_CPPv2N5pagmo12null_problem9serializeER7Archive">pagmo::null_problem::serialize (C++ function)</a>
 </li>
@@ -1659,11 +1693,15 @@
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem6get_ncEv">pagmo::problem::get_nc (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem7get_ncxEv">pagmo::problem::get_ncx (C++ function)</a>
+</li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem7get_necEv">pagmo::problem::get_nec (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem6get_nfEv">pagmo::problem::get_nf (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem7get_nicEv">pagmo::problem::get_nic (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem7get_nixEv">pagmo::problem::get_nix (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem8get_nobjEv">pagmo::problem::get_nobj (C++ function)</a>
 </li>
@@ -1731,7 +1769,7 @@
 </li>
       <li><a href="docs/cpp/algorithms/pso.html#_CPPv2N5pagmo3pso13set_verbosityEj">pagmo::pso::set_verbosity (C++ function)</a>
 </li>
-      <li><a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo22random_decision_vectorERK13vector_doubleRK13vector_doubleRN6detail18random_engine_typeE">pagmo::random_decision_vector (C++ function)</a>, <a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo22random_decision_vectorERKNSt4pairI13vector_double13vector_doubleEERN6detail18random_engine_typeE">[1]</a>
+      <li><a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo22random_decision_vectorERK13vector_doubleRK13vector_doubleRN6detail18random_engine_typeEN13vector_double9size_typeE">pagmo::random_decision_vector (C++ function)</a>, <a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo22random_decision_vectorERKNSt4pairI13vector_double13vector_doubleEERN6detail18random_engine_typeEN13vector_double9size_typeE">[1]</a>
 </li>
       <li><a href="docs/cpp/problems/rastrigin.html#_CPPv2N5pagmo9rastriginE">pagmo::rastrigin (C++ class)</a>
 </li>
@@ -1871,7 +1909,7 @@
 </li>
       <li><a href="docs/cpp/algorithms/sga.html#_CPPv2N5pagmo3sga13set_verbosityEj">pagmo::sga::set_verbosity (C++ function)</a>
 </li>
-      <li><a href="docs/cpp/algorithms/sga.html#_CPPv2N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEN13vector_double9size_typeEj">pagmo::sga::sga (C++ function)</a>
+      <li><a href="docs/cpp/algorithms/sga.html#_CPPv2N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj">pagmo::sga::sga (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/simulated_annealing.html#_CPPv2N5pagmo19simulated_annealingE">pagmo::simulated_annealing (C++ class)</a>
 </li>
@@ -2005,6 +2043,8 @@
 </li>
       <li><a href="docs/cpp/problems/zdt.html#_CPPv2NK5pagmo3zdt8get_nameEv">pagmo::zdt::get_name (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/problems/zdt.html#_CPPv2NK5pagmo3zdt7get_nixEv">pagmo::zdt::get_nix (C++ function)</a>
+</li>
       <li><a href="docs/cpp/problems/zdt.html#_CPPv2NK5pagmo3zdt8get_nobjEv">pagmo::zdt::get_nobj (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problems/zdt.html#_CPPv2NK5pagmo3zdt10p_distanceERK13vector_double">pagmo::zdt::p_distance (C++ function)</a>, <a href="docs/cpp/problems/zdt.html#_CPPv2NK5pagmo3zdt10p_distanceERKN5pagmo10populationE">[1]</a>
@@ -2041,8 +2081,12 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_population.html#pygmo.population.random_decision_vector">random_decision_vector() (pygmo.population method)</a>
+      <li><a href="docs/python/utils/py_generic_utils.html#pygmo.random_decision_vector">random_decision_vector() (in module pygmo)</a>
+
+      <ul>
+        <li><a href="docs/python/py_population.html#pygmo.population.random_decision_vector">(pygmo.population method)</a>
 </li>
+      </ul></li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.rastrigin">rastrigin (class in pygmo)</a>
 </li>
       <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.refpoint">refpoint() (pygmo.hypervolume method)</a>
@@ -2101,7 +2145,7 @@
       </ul></li>
       <li><a href="docs/python/py_island.html#pygmo.island.set_algorithm">set_algorithm() (pygmo.island method)</a>
 </li>
-      <li><a href="docs/python/py_misc.html#pygmo.set_global_rng_seed">set_global_rng_seed() (in module pygmo)</a>
+      <li><a href="docs/python/utils/py_generic_utils.html#pygmo.set_global_rng_seed">set_global_rng_seed() (in module pygmo)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_integer_option">set_integer_option() (pygmo.ipopt method)</a>
 </li>

@@ -368,6 +368,32 @@ type conversion errors, mismatched function signatures, etc.)</li>
 
 <hr class="docutils" />
 <dl class="class">
+<dt id="pygmo.minlp_rastrigin">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">minlp_rastrigin</code><span class="sig-paren">(</span><em>dim_c = 1</em>, <em>dim_i = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.minlp_rastrigin" title="Permalink to this definition">¶</a></dt>
+<dd><p>The scalable MINLP Rastrigin problem.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dim_c</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; MINLP continuous dimension</li>
+<li><strong>dim_i</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; MINLP integer dimension</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>dim_c</em> / <em>dim_i</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>dim_c</em> + <em>dim_i</em> is less than 1</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/minlp_rastrigin.html#_CPPv2N5pagmo15minlp_rastriginE" title="pagmo::minlp_rastrigin"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::minlp_rastrigin</span></code></a>.</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
 <dt id="pygmo.schwefel">
 <em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">schwefel</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.schwefel" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Schwefel problem.</p>

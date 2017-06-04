@@ -200,7 +200,7 @@ purpose of this tutorial. Its mathematical definition is:</p>
                      &amp; \sum_i x_i \ge 0 \\
 \end{array}\end{split}\]</div>
 <p>and the optimal value for the objective function is 0. We can write the above problem as a pygmo UDP (see:
-<a class="reference internal" href="coding_udp_simple.html#py-tutorial-coding-udp-simple"><span class="std std-ref">Coding a simple User Defined Problem</span></a> and <a class="reference internal" href="coding_udp_constrained.html#py-tutorial-coding-udp-constrained"><span class="std std-ref">Coding a User Defined Problem with constraints</span></a> to learn how UDPs are
+<a class="reference internal" href="coding_udp_simple.html#py-tutorial-coding-udp-simple"><span class="std std-ref">Coding a simple User Defined Problem</span></a> and <a class="reference internal" href="coding_udp_constrained.html#py-tutorial-coding-udp-constrained"><span class="std std-ref">Coding a User Defined Problem with constraints (NLP)</span></a> to learn how UDPs are
 defined from Python)</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">toy_problem</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
@@ -277,7 +277,7 @@ dependent and such choice is described in the docs of the <a class="reference in
 <span class="go">array([  4.07802374, -23.82020921,  -4.07802374]),</span>
 <span class="go">array([  1.71396489, -25.90794514,  -1.71396489]),</span>
 <span class="go">...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">archi</span><span class="p">)</span> 
 <span class="go">Number of islands: 32</span>
 <span class="go">Status: busy</span>
@@ -343,7 +343,7 @@ here we will overlap with part of that tutorial, exploring exceptions thrown in 
 </div>
 <p>Let us now instantiate and run a <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">archipelago</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">simulated_annealing</span><span class="p">(</span><span class="n">Ts</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">Tf</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">n_T_adj</span>  <span class="o">=</span> <span class="mi">40</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">raise_exception</span><span class="p">(),</span> <span class="n">pop_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">archi</span><span class="p">)</span> 
 <span class="go">Number of islands: 5</span>

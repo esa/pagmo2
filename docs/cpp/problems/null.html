@@ -187,15 +187,16 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo12null_problem12null_problemEN13vector_double9size_typeEN13vector_double9size_typeEN13vector_double9size_typeE">
-<span id="pagmo::null_problem::null_problem__vector_double::size_type.vector_double::size_type.vector_double::size_type"></span><span class="target" id="pagmostructpagmo_1_1null__problem_1a3f2e94b9d34fdc31ba904864f2b827e3"></span><code class="descname">null_problem</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nobj</em> = 1, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nec</em> = 0, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nic</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo12null_problem12null_problemEN13vector_double9size_typeEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2N5pagmo12null_problem12null_problemEN13vector_double9size_typeEN13vector_double9size_typeEN13vector_double9size_typeEN13vector_double9size_typeE">
+<span id="pagmo::null_problem::null_problem__vector_double::size_type.vector_double::size_type.vector_double::size_type.vector_double::size_type"></span><span class="target" id="pagmostructpagmo_1_1null__problem_1a0439d5cc4ca1c6b5c5398f8ae2bae3de"></span><code class="descname">null_problem</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nobj</em> = 1u, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nec</em> = 0u, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nic</em> = 0u, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nix</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo12null_problem12null_problemEN13vector_double9size_typeEN13vector_double9size_typeEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from number of objectives. </p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">nobj</span></code>: the desired number of objectives. </li>
 <li><code class="docutils literal"><span class="pre">nec</span></code>: the desired number of equality constraints. </li>
-<li><code class="docutils literal"><span class="pre">nic</span></code>: the desired number of inequality constraints.</li>
+<li><code class="docutils literal"><span class="pre">nic</span></code>: the desired number of inequality constraints. </li>
+<li><code class="docutils literal"><span class="pre">nix</span></code>: the problem integer dimension.</li>
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt>
@@ -258,6 +259,17 @@
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the number of inequality constraints of the problem (as specified upon construction). </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo12null_problem7get_nixEv">
+<span id="pagmo::null_problem::get_nixC"></span><span class="target" id="pagmostructpagmo_1_1null__problem_1aea148e5bbc6cbe705cd7a29fc240b621"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo12null_problem7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Size of the integer part. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the size of the integer part (as specified upon construction). </dd>
 </dl>
 </p>
 </dd></dl>

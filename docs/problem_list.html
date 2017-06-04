@@ -187,7 +187,7 @@
 <p>This is the list of user defined problems (UDPs) currently provided with pagmo/pygmo. These are classes that
 can be used to construct a <a class="reference internal" href="cpp/problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a>, or <a class="reference internal" href="python/py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> which will then provide a unified
 interface to acces their functionalities.</p>
-<p>Each problem can be can be of type S = Single, M = Multi-objective, C = Constrained, U = Unconstrained, sto = stochastic</p>
+<p>Each problem can be can be of type S = Single, M = Multi-objective, I = has an integer part, C = Constrained, U = Unconstrained, sto = stochastic</p>
 <div class="section" id="scalable-problems">
 <h2>Scalable problems<a class="headerlink" href="#scalable-problems" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
@@ -235,12 +235,17 @@ interface to acces their functionalities.</p>
 <td><a class="reference internal" href="python/problems/py_problems.html#pygmo.rastrigin" title="pygmo.rastrigin"><code class="xref py py-class docutils literal"><span class="pre">pygmo.rastrigin</span></code></a></td>
 <td>S-U</td>
 </tr>
-<tr class="row-even"><td>Rosenbrock</td>
+<tr class="row-even"><td>MINLP Rastrigin</td>
+<td><a class="reference internal" href="cpp/problems/minlp_rastrigin.html#_CPPv2N5pagmo15minlp_rastriginE" title="pagmo::minlp_rastrigin"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::minlp_rastrigin</span></code></a></td>
+<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.minlp_rastrigin" title="pygmo.minlp_rastrigin"><code class="xref py py-class docutils literal"><span class="pre">pygmo.minlp_rastrigin</span></code></a></td>
+<td>S-U-I</td>
+</tr>
+<tr class="row-odd"><td>Rosenbrock</td>
 <td><a class="reference internal" href="cpp/problems/rosenbrock.html#_CPPv2N5pagmo10rosenbrockE" title="pagmo::rosenbrock"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::rosenbrock</span></code></a></td>
 <td><a class="reference internal" href="python/problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">pygmo.rosenbrock</span></code></a></td>
 <td>S-U</td>
 </tr>
-<tr class="row-odd"><td>Schwefel</td>
+<tr class="row-even"><td>Schwefel</td>
 <td><a class="reference internal" href="cpp/problems/schwefel.html#_CPPv2N5pagmo8schwefelE" title="pagmo::schwefel"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::schwefel</span></code></a></td>
 <td><a class="reference internal" href="python/problems/py_problems.html#pygmo.schwefel" title="pygmo.schwefel"><code class="xref py py-class docutils literal"><span class="pre">pygmo.schwefel</span></code></a></td>
 <td>S-U</td>

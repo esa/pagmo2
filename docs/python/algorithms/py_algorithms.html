@@ -707,7 +707,7 @@ A verbosity equal to 1 will produce a log woth one entry at each improvement of 
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.sga">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">sga</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cr = .90</em>, <em>eta_c = 1.</em>, <em>m = 0.02</em>, <em>param_m = 1.</em>, <em>param_s = 2</em>, <em>crossover = &quot;exponential&quot;</em>, <em>mutation = &quot;polynomial&quot;</em>, <em>selection = &quot;tournament&quot;</em>, <em>int_dim = 0</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sga" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">sga</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cr = .90</em>, <em>eta_c = 1.</em>, <em>m = 0.02</em>, <em>param_m = 1.</em>, <em>param_s = 2</em>, <em>crossover = &quot;exponential&quot;</em>, <em>mutation = &quot;polynomial&quot;</em>, <em>selection = &quot;tournament&quot;</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sga" title="Permalink to this definition">¶</a></dt>
 <dd><p>A Simple Genetic Algorithm</p>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 2.2.</span></p>
@@ -768,13 +768,12 @@ The various mutation and crossover strategies will do different things on an int
 <li><strong>crossover</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the crossover strategy. One of <code class="docutils literal"><span class="pre">exponential</span></code>, <code class="docutils literal"><span class="pre">binomial</span></code>, <code class="docutils literal"><span class="pre">single</span></code> or <code class="docutils literal"><span class="pre">sbx</span></code></li>
 <li><strong>mutation</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the mutation strategy. One of <code class="docutils literal"><span class="pre">gaussian</span></code>, <code class="docutils literal"><span class="pre">polynomial</span></code> or <code class="docutils literal"><span class="pre">uniform</span></code>.</li>
 <li><strong>selection</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the selection strategy. One of <code class="docutils literal"><span class="pre">tournament</span></code>, &#8220;truncated&#8221;.</li>
-<li><strong>int_dim</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the number of element in the chromosome to be treated as integers.</li>
 <li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em> or <em>seed</em> or <em>int_dim</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>cr</em> is not in [0,1], if <em>eta_c</em> is not in [1,100], if <em>m</em> is not in [0,1], input_f <em>mutation</em>
 is not one of <code class="docutils literal"><span class="pre">gaussian</span></code>, <code class="docutils literal"><span class="pre">uniform</span></code> or <code class="docutils literal"><span class="pre">polynomial</span></code>, if <em>selection</em> not one of &#8220;roulette&#8221;,
 &#8220;truncated&#8221; or <em>crossover</em> is not one of <code class="docutils literal"><span class="pre">exponential</span></code>, <code class="docutils literal"><span class="pre">binomial</span></code>, <code class="docutils literal"><span class="pre">sbx</span></code>, <code class="docutils literal"><span class="pre">single</span></code>, if <em>param_m</em> is
@@ -1879,7 +1878,7 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.nsga2">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">nsga2</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cr = 0.95</em>, <em>eta_c = 10</em>, <em>m = 0.01</em>, <em>eta_m = 10</em>, <em>int_dim = 0</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nsga2" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">nsga2</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cr = 0.95</em>, <em>eta_c = 10</em>, <em>m = 0.01</em>, <em>eta_m = 10</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nsga2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Non dominated Sorting Genetic Algorithm (NSGA-II).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1891,7 +1890,6 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <li><strong>eta_c</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; distribution index for crossover</li>
 <li><strong>m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; mutation probability</li>
 <li><strong>eta_m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; distribution index for mutation</li>
-<li><strong>int_dim</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the dimension of the decision vector to be considered as integer (the last int_dim entries will be treated as integers when mutation and crossover are applied)</li>
 <li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
