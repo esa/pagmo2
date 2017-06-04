@@ -338,14 +338,17 @@ This class represents a generic *mathematical programming* or *evolutionary opti
                      & \mathbf {c}_i(\mathbf x, s) \le 0
    \end{array}
 
-where :math:`\mathbf x \in \mathbb R^{n_x}` is called *decision vector* or
-*chromosome*, :math:`\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_x}` are the *box-bounds*,
-:math:`\mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}` define the *objectives*,
-:math:`\mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}` are non linear *equality constraints*,
-and :math:`\mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}` are non linear *inequality constraints*.
-Note that the objectives and constraints may also depend from an added value :math:`s` seeding the
+where :math:`\mathbf x \in \mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}` is called *decision vector* or
+*chromosome*, and is made of :math:`n_{cx}` real numbers and :math:`n_{ix}` integers. The total problem dimension is then
+indicated with :math:`n_x = n_{cx} + n_{ix}`. :math:`\mathbf{lb}, \mathbf{ub} \in
+\mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}` are the *box-bounds*, :math:`\mathbf f: \mathbb R^{n_x} \rightarrow
+\mathbb R^{n_{obj}}` define the
+*objectives*, :math:`\mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}` are non linear *equality
+constraints*, and :math:`\mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}` are non linear *inequality
+constraints*. Note that the objectives and constraints may also depend from an added value :math:`s` seeding the
 values of any number of stochastic variables. This allows also for stochastic programming
-tasks to be represented by this class.
+tasks to be represented by this class. The tolerance considered for the verification of the constraints is set
+by default to zero and it can be modified via the :attr:`~pygmo.problem.c_tol` attribute.
 
 In order to define an optimizaztion problem in pygmo, the user must first define a class
 whose methods describe the properties of the problem and allow to compute
@@ -363,7 +366,8 @@ Every UDP must implement at least the following two methods:
    def get_bounds(self):
      ...
 
-The ``fitness()`` method is expected to return the fitness of the input decision vector, while
+The ``fitness()`` method is expected to return the fitness of the input decision vector (
+* concatenating the objectives, the equality and the inequality constraints), while
 ``get_bounds()`` is expected to return the box bounds of the problem,
 :math:`(\mathbf{lb}, \mathbf{ub})`, which also implicitly define the dimension of the problem.
 The ``fitness()`` and ``get_bounds()`` methods of the UDP are accessible from the corresponding
@@ -530,6 +534,34 @@ the bounds returned by :func:`~pygmo.problem.get_bounds()`.
 
 Returns:
     ``int``: the dimension of the problem
+
+)";
+}
+
+std::string problem_get_nix_docstring()
+{
+    return R"(get_nix()
+
+Integer dimension of the problem.
+
+This method will return :math:`n_{ix}`, the integer dimension of the problem.
+
+Returns:
+    ``int``: the integer dimension of the problem
+
+)";
+}
+
+std::string problem_get_ncx_docstring()
+{
+    return R"(get_ncx()
+
+Conrinuous dimension of the problem.
+
+This method will return :math:`n_{cx}`, the continuous dimension of the problem.
+
+Returns:
+    ``int``: the continuous dimension of the problem
 
 )";
 }
@@ -1707,6 +1739,25 @@ See also the docs of the C++ class :cpp:class:`pagmo::rosenbrock`.
 )";
 }
 
+std::string minlp_rastrigin_docstring()
+{
+    return R"(__init__(dim_c = 1, dim_i = 1)
+
+The scalable MINLP Rastrigin problem.
+
+Args:
+    dim_c (``int``): MINLP continuous dimension
+    dim_i (``int``): MINLP integer dimension
+
+Raises:
+    OverflowError: if *dim_c* / *dim_i* is negative or greater than an implementation-defined value
+    ValueError: if *dim_c* + *dim_i* is less than 1
+
+See also the docs of the C++ class :cpp:class:`pagmo::minlp_rastrigin`.
+
+)";
+}
+
 std::string zdt_p_distance_docstring()
 {
     return R"(p_distance(point)
@@ -2187,7 +2238,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log()`.
 
 std::string nsga2_docstring()
 {
-    return R"(__init__(gen = 1, cr = 0.95, eta_c = 10, m = 0.01, eta_m = 10, int_dim = 0, seed = random)
+    return R"(__init__(gen = 1, cr = 0.95, eta_c = 10, m = 0.01, eta_m = 10, seed = random)
 
 Non dominated Sorting Genetic Algorithm (NSGA-II).
 
@@ -2197,7 +2248,6 @@ Args:
     eta_c (``float``): distribution index for crossover
     m (``float``): mutation probability
     eta_m (``float``): distribution index for mutation
-    int_dim (``int``): the dimension of the decision vector to be considered as integer (the last int_dim entries will be treated as integers when mutation and crossover are applied)
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
@@ -2655,6 +2705,32 @@ Examples:
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_annealing::get_log()`.
 
+)";
+}
+
+std::string random_decision_vector_docstring()
+{
+    return R"(random_decision_vector_docstring(lb, ub, nix = 0)
+
+Creates a random decision vector within some bounds using pygmo's global rng. If
+both the lower and upper bounds are finite numbers, then the :math:`i`-th
+component of the randomly generated pagmo::vector_double will be such that
+:math:`lb_i \le x_i < ub_i`. If :math:`lb_i == ub_i` then :math:`lb_i` is
+returned. If an integer part *nix* is specified then the last *nix* components
+are guaranteed to be integers within the specified (integer) bounds.
+
+Args:
+    lb (array-like object): the lower bounds
+    ub (array-like object): the upper bounds
+    nix (``int``): the integer size
+
+Raises:
+    ValueError: if *nix* is negative or greater than an implementation-defined value
+    ValueError: if *lb* and *ub* are malformed (unequal lenght, zero size, *nix* larger than ``len(lb)`` or bounds are not integers in their last *nix* components)
+    TypeError: if *lb* or *ub* cannot be converted to a vector of floats
+
+Returns:
+    1D NumPy float array: the random decision vector
 )";
 }
 
@@ -4599,7 +4675,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sea::get_log()`.
 
 std::string sga_docstring()
 {
-    return R"(__init__(gen = 1, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2, crossover = "exponential", mutation = "polynomial", selection = "tournament", int_dim = 0, seed = random)
+    return R"(__init__(gen = 1, cr = .90, eta_c = 1., m = 0.02, param_m = 1., param_s = 2, crossover = "exponential", mutation = "polynomial", selection = "tournament", seed = random)
 
 A Simple Genetic Algorithm
 
@@ -4672,11 +4748,10 @@ Args:
     crossover (``str``): the crossover strategy. One of ``exponential``, ``binomial``, ``single`` or ``sbx``
     mutation (``str``): the mutation strategy. One of ``gaussian``, ``polynomial`` or ``uniform``.
     selection (``str``): the selection strategy. One of ``tournament``, "truncated".
-    int_dim (``int``): the number of element in the chromosome to be treated as integers.
     seed (``int``): seed used by the internal random number generator
 
 Raises:
-    OverflowError: if *gen* or *seed* or *int_dim* are negative or greater than an implementation-defined value
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
     ValueError: if *cr* is not in [0,1], if *eta_c* is not in [1,100], if *m* is not in [0,1], input_f *mutation* 
       is not one of ``gaussian``, ``uniform`` or ``polynomial``, if *selection* not one of "roulette", 
       "truncated" or *crossover* is not one of ``exponential``, ``binomial``, ``sbx``, ``single``, if *param_m* is

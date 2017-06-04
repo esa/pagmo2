@@ -405,9 +405,9 @@ class sga_test_case(_ut.TestCase):
         from .core import sga
         uda = sga()
         uda = sga(gen=1, cr=.90, eta_c=1., m=0.02, param_m=1., param_s=2, crossover="exponential",
-                  mutation="polynomial", selection="tournament", int_dim=0)
+                  mutation="polynomial", selection="tournament")
         uda = sga(gen=1, cr=.90, eta_c=1., m=0.02, param_m=1., param_s=2, crossover="exponential",
-                  mutation="polynomial", selection="tournament", int_dim=0, seed=32)
+                  mutation="polynomial", selection="tournament", seed=32)
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 
@@ -420,7 +420,7 @@ class nsga2_test_case(_ut.TestCase):
     def runTest(self):
         from .core import nsga2
         uda = nsga2()
-        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01, eta_m=10, int_dim=0)
+        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01, eta_m=10)
         uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01,
                     eta_m=10, int_dim=0, seed=32)
         self.assertEqual(uda.get_seed(), 32)
@@ -842,6 +842,56 @@ class dtlz_test_case(_ut.TestCase):
         udp = dtlz(prob_id=3, dim=9, fdim=3, alpha=5)
         udp.p_distance([0.2] * 9)
         udp.p_distance(population(udp, 20))
+
+
+class minlp_rastrigin_test_case(_ut.TestCase):
+    """Test case for the MINLP Rastrigin
+
+    """
+
+    def runTest(self):
+        from .core import minlp_rastrigin, problem, population
+        udp = minlp_rastrigin(dim_c=2, dim_i=3)
+        prob = problem(udp)
+        self.assertTrue(prob.get_nx() == 5)
+        self.assertTrue(prob.get_nix() == 3)
+        self.assertTrue(prob.get_ncx() == 2)
+        pop = population(udp, 1)
+        self.assertTrue(int(pop.get_x()[0][-1]) == pop.get_x()[0][-1])
+        self.assertTrue(int(pop.get_x()[0][-2]) == pop.get_x()[0][-2])
+        self.assertTrue(int(pop.get_x()[0][-3]) == pop.get_x()[0][-3])
+        self.assertTrue(int(pop.get_x()[0][0]) != pop.get_x()[0][0])
+        self.assertTrue(int(pop.get_x()[0][1]) != pop.get_x()[0][1])
+
+
+class random_decision_vector_test_case(_ut.TestCase):
+    """Test case for random_decision_vector
+
+    """
+
+    def runTest(self):
+        from .core import random_decision_vector, set_global_rng_seed
+        set_global_rng_seed(42)
+        x = random_decision_vector(lb = [1.1,2.1,-3], ub = [2.1, 3.4,5], nix = 1)
+        self.assertTrue(int(x[-1]) == x[-1])
+        self.assertTrue(int(x[1]) != x[1])
+        set_global_rng_seed(42)
+        y = random_decision_vector(lb = [1.1,2.1,-3], ub = [2.1, 3.4,5], nix = 1)
+        self.assertTrue((x == y).all())
+        nan = float("nan")
+        inf = float("inf")
+        self.assertRaises(ValueError, lambda : random_decision_vector([1, 2], [0, 3]))
+        self.assertRaises(ValueError, lambda : random_decision_vector([1, -inf], [0, 32]))
+        self.assertRaises(ValueError, lambda : random_decision_vector([1, 2, 3], [0, 3]))
+        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, 3], [1, 4, nan]))
+        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, nan], [1, 4, 4]))
+        self.assertRaises(ValueError, lambda : random_decision_vector([0, nan, 3], [1, nan, 4]))
+        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, 3], [1, 4, 5], 4))
+        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, 3.1], [1, 4, 5], 1))
+        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, 3], [1, 4, 5.2], 1))
+        self.assertRaises(ValueError, lambda : random_decision_vector([0, -1.1, 3], [1, 2, 5], 2))
+        self.assertRaises(ValueError, lambda : random_decision_vector([0, -1.1, -inf], [1, 2, inf], 2))
+        self.assertRaises(ValueError, lambda : random_decision_vector([0, -1.1, inf], [1, 2, inf], 2))
 
 
 class luksan_vlcek1_test_case(_ut.TestCase):
@@ -1554,6 +1604,7 @@ def run_test_suite(level=0):
     suite.addTest(global_rng_test_case())
     suite.addTest(estimate_sparsity_test_case())
     suite.addTest(estimate_gradient_test_case())
+    suite.addTest(random_decision_vector_test_case())
     try:
         from .core import cmaes
         suite.addTest(cmaes_test_case())
@@ -1564,6 +1615,7 @@ def run_test_suite(level=0):
     suite.addTest(cec2009_test_case())
     suite.addTest(cec2013_test_case())
     suite.addTest(luksan_vlcek1_test_case())
+    suite.addTest(minlp_rastrigin_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
     suite.addTest(unconstrain_test_case())

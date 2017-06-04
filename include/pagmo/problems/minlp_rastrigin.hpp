@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_PROBLEM_RASTRIGIN_HPP
-#define PAGMO_PROBLEM_RASTRIGIN_HPP
+#ifndef PAGMO_PROBLEM_MINLP_RASTRIGIN_HPP
+#define PAGMO_PROBLEM_MINLP_RASTRIGIN_HPP
 
 #include <iostream>
 #include <stdexcept>
@@ -44,19 +44,22 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// The Rastrigin problem.
+/// A MINLP version of the Rastrigin problem
 /**
  *
  * \image html rastrigin.png "Two-dimensional Rastrigin function." width=3cm
  *
- * This is a scalable box-constrained continuous single-objective problem.
+ * This is a scalable, box-constrained, mixed integer nonlinear programmng (MINLP) problem.
  * The objective function is the generalised n-dimensional Rastrigin function:
  * \f[
- * 	F\left(x_1,\ldots,x_n\right) = 10 \cdot n + \sum_{i=1}^n x_i^2 - 10\cdot\cos\left( 2\pi \cdot x_i \right), \quad x_i
- * \in \left[ -5.12,5.12 \right].
+ * 	F\left(x_1,\ldots,x_n\right) = 10 \cdot n + \sum_{i=1}^n x_i^2 - 10\cdot\cos\left( 2\pi \cdot x_i \right)
  * \f]
  *
- * Gradients (dense) are also provided as:
+ * where we constraint the last \f$m\f$ components of the decision vector to be integers. The variables are
+ * box bounded as follows: \f$\quad x_i \in [-5.12,5.12], \forall i = 1 .. n-m\f$, \f$\quad x_i \in [-10,-5], \forall
+ * i = m+1 .. n\f$
+ *
+ * Gradients (dense) are also provided (also for the integer part) as:
  * \f[
  * 	G_i\left(x_1,\ldots,x_n\right) = 2 x_i + 10 \cdot 2\pi \cdot\sin\left( 2\pi \cdot x_i \right)
  * \f]
@@ -64,27 +67,27 @@ namespace pagmo
  * \f[
  * 	H_{ii}\left(x_1,\ldots,x_n\right) = 2 + 10 \cdot 4\pi^2 \cdot\cos\left( 2\pi \cdot x_i \right)
  * \f]
- * The global minimum is in the origin, where \f$ F\left( 0,\ldots,0 \right) = 0 \f$.
  */
-struct rastrigin {
-    /// Constructor from dimension
+struct minlp_rastrigin {
+    /// Constructor from continuous and integer dimension
     /**
-     * Constructs a Rastrigin problem
+     * Constructs a MINLP Rastrigin problem.
      *
-     * @param dim the problem dimensions.
+     * @param dim_c the problem continuous dimension.
+     * @param dim_i the problem continuous dimension.
      *
-     * @throw std::invalid_argument if \p dim is < 1
+     * @throw std::invalid_argument if \p dim_c+ \p dim_i is < 1
      */
-    rastrigin(unsigned int dim = 1u) : m_dim(dim)
+    minlp_rastrigin(unsigned dim_c = 1u, unsigned dim_i = 1u) : m_dim_c(dim_c), m_dim_i(dim_i)
     {
-        if (dim < 1u) {
-            pagmo_throw(std::invalid_argument,
-                        "Rastrigin Function must have minimum 1 dimension, " + std::to_string(dim) + " requested");
+        if (dim_c + dim_i < 1u) {
+            pagmo_throw(std::invalid_argument, "Minlp Rastrigin Function must have minimum 1 dimension, "
+                                                   + std::to_string(dim_c + dim_i) + " requested");
         }
     };
     /// Fitness computation
     /**
-     * Computes the fitness for this UDP
+     * Computes the fitness for this UDP.
      *
      * @param x the decision vector.
      *
@@ -110,11 +113,25 @@ struct rastrigin {
      */
     std::pair<vector_double, vector_double> get_bounds() const
     {
-        vector_double lb(m_dim, -5.12);
-        vector_double ub(m_dim, 5.12);
+        vector_double lb(m_dim_c + m_dim_i, -5.12);
+        vector_double ub(m_dim_c + m_dim_i, 5.12);
+        for (decltype(m_dim_i) i = m_dim_c; i < m_dim_i + m_dim_c; ++i) {
+            lb[i] = -10;
+            ub[i] = -5;
+        }
         return {lb, ub};
     }
 
+    /// Integer dimension
+    /**
+     * It returns the integer dimension of the problem.
+     *
+     * @return the integer dimension of the problem.
+     */
+    vector_double::size_type get_nix() const
+    {
+        return m_dim_i;
+    }
     /// Gradients
     /**
      * It returns the fitness gradient for this UDP.
@@ -171,7 +188,7 @@ struct rastrigin {
     std::vector<sparsity_pattern> hessians_sparsity() const
     {
         sparsity_pattern hs;
-        auto n = m_dim;
+        auto n = m_dim_c + m_dim_i;
         for (decltype(n) i = 0u; i < n; ++i) {
             hs.push_back({i, i});
         }
@@ -183,15 +200,18 @@ struct rastrigin {
      */
     std::string get_name() const
     {
-        return "Rastrigin Function";
+        return "MINLP Rastrigin Function";
     }
-    /// Optimal solution
+    /// Extra informations
     /**
-     * @return the decision vector corresponding to the best solution for this problem.
+     * @return a string containing extra informations on the problem
      */
-    vector_double best_known() const
+    std::string get_extra_info() const
     {
-        return vector_double(m_dim, 0.);
+        std::ostringstream ss;
+        ss << "\tMINLP continuous dimension: " << std::to_string(m_dim_c) << "\n";
+        ss << "\tMINLP integer dimension: " << std::to_string(m_dim_i) << "\n";
+        return ss.str();
     }
     /// Object serialization
     /**
@@ -204,14 +224,17 @@ struct rastrigin {
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_dim);
+        ar(m_dim_c, m_dim_i);
     }
+
+private:
     /// Problem dimensions
-    unsigned int m_dim;
+    unsigned int m_dim_c;
+    unsigned int m_dim_i;
 };
 
 } // namespace pagmo
 
-PAGMO_REGISTER_PROBLEM(pagmo::rastrigin)
+PAGMO_REGISTER_PROBLEM(pagmo::minlp_rastrigin)
 
 #endif

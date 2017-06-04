@@ -537,6 +537,8 @@ BOOST_PYTHON_MODULE(core)
              pygmo::problem_has_hessians_sparsity_docstring().c_str())
         .def("get_nobj", &problem::get_nobj, pygmo::problem_get_nobj_docstring().c_str())
         .def("get_nx", &problem::get_nx, pygmo::problem_get_nx_docstring().c_str())
+        .def("get_nix", &problem::get_nix, pygmo::problem_get_nix_docstring().c_str())
+        .def("get_ncx", &problem::get_ncx, pygmo::problem_get_ncx_docstring().c_str())
         .def("get_nf", &problem::get_nf, pygmo::problem_get_nf_docstring().c_str())
         .def("get_nec", &problem::get_nec, pygmo::problem_get_nec_docstring().c_str())
         .def("get_nic", &problem::get_nic, pygmo::problem_get_nic_docstring().c_str())
@@ -732,6 +734,16 @@ BOOST_PYTHON_MODULE(core)
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
     bp::def("ideal", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); }),
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
+    // Generic utilities
+    bp::def("random_decision_vector",
+            lcast([](const bp::object &lb, const bp::object &ub, vector_double::size_type nix) -> bp::object {
+                using reng_t = pagmo::detail::random_engine_type;
+                reng_t tmp_rng(static_cast<reng_t::result_type>(pagmo::random_device::next()));
+                auto retval = random_decision_vector(pygmo::to_vd(lb), pygmo::to_vd(ub), tmp_rng, nix);
+                return pygmo::v_to_a(retval);
+            }),
+            pygmo::random_decision_vector_docstring().c_str(), (bp::arg("lb"), bp::arg("ub"), bp::arg("nix") = 0u));
+
     // Gradient and Hessians utilities
     bp::def("estimate_sparsity", lcast([](const bp::object &func, const bp::object &x, double dx) -> bp::object {
                 auto f = [&func](const vector_double &x_) { return pygmo::to_vd(func(pygmo::v_to_a(x_))); };

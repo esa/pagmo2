@@ -109,7 +109,7 @@ After inspection, let us now run the evolution.
     array([  4.07802374, -23.82020921,  -4.07802374]),
     array([  1.71396489, -25.90794514,  -1.71396489]),
     ...]
-    >>> archi.evolve()
+    >>> archi.evolve() #doctest: +SKIP
     >>> print(archi) #doctest: +SKIP
     Number of islands: 32
     Status: busy
@@ -179,7 +179,7 @@ To show how pygmo handles these situations we use the fake problem below throwin
 Let us now instantiate and run a :class:`~pygmo.archipelago`:
 
     >>> archi = pg.archipelago(n = 5, algo = pg.simulated_annealing(Ts = 10, Tf = 0.1, n_T_adj  = 40), prob = raise_exception(), pop_size = 20)
-    >>> archi.evolve()
+    >>> archi.evolve() #doctest: +SKIP
     >>> archi.wait()
     >>> print(archi) #doctest: +SKIP
     Number of islands: 5

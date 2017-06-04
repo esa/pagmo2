@@ -190,6 +190,35 @@ BOOST_AUTO_TEST_CASE(has_i_constraints_test)
     BOOST_CHECK((has_i_constraints<c_07>::value));
 }
 
+struct i_00 {
+};
+
+// The good one.
+struct i_01 {
+    vector_double::size_type get_nix() const;
+};
+
+struct i_02 {
+    vector_double::size_type get_nix();
+};
+
+struct i_03 {
+    void get_nix() const;
+};
+
+struct i_04 {
+    vector_double::size_type get_nixx() const;
+};
+
+BOOST_AUTO_TEST_CASE(has_integer_part_test)
+{
+    BOOST_CHECK((!has_integer_part<i_00>::value));
+    BOOST_CHECK((has_integer_part<i_01>::value));
+    BOOST_CHECK((!has_integer_part<i_02>::value));
+    BOOST_CHECK((!has_integer_part<i_03>::value));
+    BOOST_CHECK((!has_integer_part<i_04>::value));
+}
+
 struct n_00 {
 };
 

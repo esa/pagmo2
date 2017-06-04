@@ -25,6 +25,9 @@ Type traits and enums used in PaGMO
 .. doxygenclass:: pagmo::has_i_constraints
    :members:
 
+.. doxygenclass:: pagmo::has_integer_part
+   :members:
+
 .. doxygenclass:: pagmo::has_name
    :members:
 

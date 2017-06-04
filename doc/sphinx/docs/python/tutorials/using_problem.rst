@@ -28,6 +28,7 @@ Let us start:
     >>> print(prob) #doctest: +NORMALIZE_WHITESPACE
     Problem name: Multidimensional Rosenbrock Function
     	Global dimension:			5
+    	Integer dimension:			0
     	Fitness dimension:			1
     	Number of objectives:			1
     	Equality constraints dimension:		0

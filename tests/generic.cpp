@@ -67,20 +67,41 @@ BOOST_AUTO_TEST_CASE(random_decision_vector_test)
 
     // Test the throws
     BOOST_CHECK_THROW(random_decision_vector({{1, 2}, {0, 3}}, r_engine), std::invalid_argument);
-    BOOST_CHECK_THROW(random_decision_vector({{1, -big}, {0, big}}, r_engine), std::invalid_argument);
-    BOOST_CHECK_THROW(random_decision_vector({{1, -inf}, {0, 32}}, r_engine), std::invalid_argument);
-    BOOST_CHECK_THROW(random_decision_vector({{1, 2, 3}, {0, 3}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{1, -big}, {2, big}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{1, -inf}, {2, 32}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{1, 2, 3}, {2, 3}}, r_engine), std::invalid_argument);
     BOOST_CHECK_THROW(random_decision_vector({{0, 2, 3}, {1, 4, nan}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, 2, nan}, {1, 4, 4}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, nan, 3}, {1, nan, 4}}, r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, 2, 3}, {1, 4, 5}}, r_engine, 4u), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, 2, 3.1}, {1, 4, 5}}, r_engine, 1u), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, 2, 3}, {1, 4, 5.2}}, r_engine, 1u), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, -1.1, 3}, {1, 2, 5}}, r_engine, 2u), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, -1.1, big}, {1, 2, big}}, r_engine, 2u), std::invalid_argument);
+    BOOST_CHECK_NO_THROW(random_decision_vector({{0, -1.1, big}, {1, 2, big}}, r_engine));
+    BOOST_CHECK_THROW(random_decision_vector({{0, -1.1, -inf}, {1, 2, inf}}, r_engine, 2u), std::invalid_argument);
+    BOOST_CHECK_THROW(random_decision_vector({{0, -1.1, inf}, {1, 2, inf}}, r_engine, 2u), std::invalid_argument);
 
     // Test the results
     BOOST_CHECK((random_decision_vector({{3, 4}, {3, 4}}, r_engine) == vector_double{3, 4}));
     BOOST_CHECK(random_decision_vector({{0, 0}, {1, 1}}, r_engine)[0] >= 0);
     BOOST_CHECK(random_decision_vector({{0, 0}, {1, 1}}, r_engine)[1] < 1);
+    BOOST_CHECK(random_decision_vector({{0, 0}, {1, 0}}, r_engine, 1u)[1] == 0);
+    for (auto i = 0u; i < 100; ++i) {
+        auto res = random_decision_vector({{0, -20}, {1, 20}}, r_engine, 1u);
+        BOOST_CHECK(res[1] == std::floor(res[1]));
+    }
 
     // Test the overload
     BOOST_CHECK((random_decision_vector({3, 4}, {3, 4}, r_engine) == vector_double{3, 4}));
     BOOST_CHECK(random_decision_vector({0, 0}, {1, 1}, r_engine)[0] >= 0);
     BOOST_CHECK(random_decision_vector({0, 0}, {1, 1}, r_engine)[1] < 1);
+    BOOST_CHECK(random_decision_vector({0, 0}, {1, 0}, r_engine, 1u)[1] == 0);
+
+    for (auto i = 0u; i < 100; ++i) {
+        auto res = random_decision_vector({0, -20}, {1, 20}, r_engine, 1u);
+        BOOST_CHECK(res[1] == std::floor(res[1]));
+    }
 }
 
 BOOST_AUTO_TEST_CASE(force_bounds_test)

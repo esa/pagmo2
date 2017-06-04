@@ -1,7 +1,7 @@
 .. _py_tutorial_coding_udp_constrained:
 
-Coding a User Defined Problem with constraints
-----------------------------------------------
+Coding a User Defined Problem with constraints (NLP)
+----------------------------------------------------
 
 We here show how to code a non-trivial user defined problem (UDP) with a single objective, equality and inequality constraints.
 We assume that the mathematical formulation of problem is the following:
@@ -23,16 +23,21 @@ which is a modified instance of the problem 5.9 in Luksan, L., and Jan Vlcek. "S
 for unconstrained and equality constrained optimization." (1999). The modification is in the last two constraints that are,
 for the purpose of this tutorial, considered as inequalities rather than equality constraints.
 
-The problem at hand has box bounds, 4 equality constraints, two inequalities (note the different form of these) and one objective. Neglecting
-for the time being the fitness, the basic structure for the UDP to have pygmo understand the problem type will be:
+The problem at hand has box bounds, 4 equality constraints, two inequalities (note the different form of these) and one objective and,
+in the taxonomy of optimization problems, can be categorized as a non linear programming (NLP) problem.
+
+
+Neglecting for the time being the fitness, the basic structure for the UDP to have pygmo understand the problem type will be:
 
 .. doctest::
 
     >>> class my_constrained_udp:
     ...     def get_bounds(self):
     ...         return ([-5]*6,[5]*6)
+    ...     # Inequality Constraints
     ...     def get_nic(self):
     ...         return 2 
+    ...     # Equality Constraints
     ...     def get_nec(self):
     ...         return 4
 
@@ -68,7 +73,7 @@ are in the form :math:`g(x) = 0`, while inequalities :math:`g(x) <= 0` as docume
     ...     def gradient(self, x):
     ...         return pg.estimate_gradient_h(lambda x: self.fitness(x), x)
 
-In order to check that the UDP above is wll formed for pygmo we try to construct a :class:`pygmo.problem` from it and inspect it:
+In order to check that the UDP above is well formed for pygmo we try to construct a :class:`pygmo.problem` from it and inspect it:
 
 .. doctest::
 
@@ -77,6 +82,7 @@ In order to check that the UDP above is wll formed for pygmo we try to construct
     >>> print(prob) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     Problem name: ...
     	Global dimension:			6
+    	Integer dimension:			0
     	Fitness dimension:			7
     	Number of objectives:			1
     	Equality constraints dimension:		4
