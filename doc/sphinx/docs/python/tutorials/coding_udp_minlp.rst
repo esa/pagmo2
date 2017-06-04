@@ -162,6 +162,6 @@ possible cases we thus fix the box bounds on the last two variables. In case :ma
 We found a feasible solution!
 
 .. note::
-   The solution strategy above is, in general, flawed in assuming the best solution of the relaxed problem is colse to the 
-   the full MINLP problem solution. More sophisticated techniques would instead search the combinatorial part more exhaustvely.
+   The solution strategy above is, in general, flawed in assuming the best solution of the relaxed problem is close to the 
+   the full MINLP problem solution. More sophisticated techniques would instead search the combinatorial part more exhaustively.
    We used here this approach only to show how to define and solve the relaxed problem and to then feedback the optimal decision vector into a MINLP solution strategy. 
