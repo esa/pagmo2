@@ -320,16 +320,15 @@ void expose_algorithms()
     sea_.def("get_seed", &sea::get_seed, generic_uda_get_seed_docstring().c_str());
     // SGA
     auto sga_ = expose_algorithm_pygmo<sga>("sga", sga_docstring().c_str());
+    sga_.def(bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string>(
+        (bp::arg("gen") = 1u, bp::arg("cr") = 0.9, bp::arg("eta_c") = 1., bp::arg("m") = 0.02, bp::arg("param_m") = 1.,
+         bp::arg("param_s") = 2u, bp::arg("crossover") = "exponential", bp::arg("mutation") = "polynomial",
+         bp::arg("selection") = "tournament")));
     sga_.def(
         bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string, unsigned>(
             (bp::arg("gen") = 1u, bp::arg("cr") = 0.9, bp::arg("eta_c") = 1., bp::arg("m") = 0.02,
              bp::arg("param_m") = 1., bp::arg("param_s") = 2u, bp::arg("crossover") = "exponential",
-             bp::arg("mutation") = "polynomial", bp::arg("selection") = "tournament", bp::arg("int_dim") = 0u)));
-    sga_.def(bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string,
-                      unsigned, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("cr") = 0.9, bp::arg("eta_c") = 1., bp::arg("m") = 0.02, bp::arg("param_m") = 1.,
-         bp::arg("param_s") = 2u, bp::arg("crossover") = "exponential", bp::arg("mutation") = "polynomial",
-         bp::arg("selection") = "tournament", bp::arg("int_dim") = 0u, bp::arg("seed"))));
+             bp::arg("mutation") = "polynomial", bp::arg("selection") = "tournament", bp::arg("seed"))));
     expose_algo_log(sga_, sga_get_log_docstring().c_str());
     sga_.def("get_seed", &sga::get_seed, generic_uda_get_seed_docstring().c_str());
     // SIMULATED ANNEALING
@@ -424,12 +423,12 @@ void expose_algorithms()
     moead_.def("get_seed", &moead::get_seed, generic_uda_get_seed_docstring().c_str());
     // NSGA2
     auto nsga2_ = expose_algorithm_pygmo<nsga2>("nsga2", nsga2_docstring().c_str());
+    nsga2_.def(bp::init<unsigned, double, double, double, double>((bp::arg("gen") = 1u, bp::arg("cr") = 0.95,
+                                                                   bp::arg("eta_c") = 10., bp::arg("m") = 0.01,
+                                                                   bp::arg("eta_m") = 10.)));
     nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
         (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
-         bp::arg("int_dim") = 0u)));
-    nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
-         bp::arg("int_dim") = 0u, bp::arg("seed"))));
+         bp::arg("seed"))));
     // nsga2 needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
     nsga2_.def("get_log", lcast([](const nsga2 &a) -> bp::list {
                    bp::list retval;

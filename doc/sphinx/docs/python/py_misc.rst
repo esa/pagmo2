@@ -9,7 +9,3 @@ Miscellanea
 .. autoclass:: pygmo.evolve_status
    :members:
    :member-order: bysource
-
---------------------------------------
-
-.. autofunction:: pygmo.set_global_rng_seed

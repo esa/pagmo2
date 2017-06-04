@@ -339,3 +339,36 @@ BOOST_AUTO_TEST_CASE(population_serialization_test)
     auto after = boost::lexical_cast<std::string>(pop);
     BOOST_CHECK_EQUAL(before, after);
 }
+
+struct minlp {
+    minlp(vector_double::size_type nix = 0u)
+    {
+        m_nix = nix;
+    }
+    vector_double fitness(const vector_double &x) const
+    {
+        return {std::sin(x[0] * x[1] * x[2]), x[0] + x[1] + x[2], x[0] * x[1] + x[1] * x[2] - x[0] * x[2]};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 3u;
+    }
+    vector_double::size_type get_nix() const
+    {
+        return m_nix;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{1, -1, 1}, {2, 1, 2}};
+    }
+    vector_double::size_type m_nix;
+};
+
+BOOST_AUTO_TEST_CASE(population_minlp_test)
+{
+    population pop{problem{minlp{2}}, 30, 1234u};
+    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+        BOOST_CHECK(pop.get_x()[i][2] == std::floor(pop.get_x()[i][2]));
+        BOOST_CHECK(pop.get_x()[i][1] == std::floor(pop.get_x()[i][1]));
+    }
+}
