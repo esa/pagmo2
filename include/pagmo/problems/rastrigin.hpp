@@ -104,7 +104,6 @@ struct rastrigin {
 
     /// Box-bounds
     /**
-     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -118,7 +117,6 @@ struct rastrigin {
 
     /// Gradients
     /**
-     *
      * It returns the fitness gradient for this UDP.
      *
      * The gradient is represented in a sparse form as required by
@@ -141,7 +139,6 @@ struct rastrigin {
 
     /// Hessians
     /**
-     *
      * It returns the hessians for this UDP.
      *
      * The hessians are represented in a sparse form as required by
@@ -164,7 +161,6 @@ struct rastrigin {
 
     /// Hessians sparsity (only the diagonal elements are non zero)
     /**
-     *
      * It returns the hessian sparisty structure for this UDP.
      *
      * The hessian sparisty is represented in the form required by
@@ -183,8 +179,6 @@ struct rastrigin {
     }
     /// Problem name
     /**
-     *
-     *
      * @return a string containing the problem name
      */
     std::string get_name() const

@@ -71,7 +71,7 @@ namespace pagmo
 struct minlp_rastrigin {
     /// Constructor from continuous and integer dimension
     /**
-     * Constructs a MINLP Rastrigin problem
+     * Constructs a MINLP Rastrigin problem.
      *
      * @param dim_c the problem continuous dimension.
      * @param dim_i the problem continuous dimension.
@@ -81,14 +81,13 @@ struct minlp_rastrigin {
     minlp_rastrigin(unsigned dim_c = 1u, unsigned dim_i = 1u) : m_dim_c(dim_c), m_dim_i(dim_i)
     {
         if (dim_c + dim_i < 1u) {
-            pagmo_throw(std::invalid_argument,
-                        "Minlp Rastrigin Function must have minimum 1 dimension, " + std::to_string(dim_c + dim_i)
-                            + " requested");
+            pagmo_throw(std::invalid_argument, "Minlp Rastrigin Function must have minimum 1 dimension, "
+                                                   + std::to_string(dim_c + dim_i) + " requested");
         }
     };
     /// Fitness computation
     /**
-     * Computes the fitness for this UDP
+     * Computes the fitness for this UDP.
      *
      * @param x the decision vector.
      *
@@ -108,7 +107,6 @@ struct minlp_rastrigin {
 
     /// Box-bounds
     /**
-     *
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
@@ -136,7 +134,6 @@ struct minlp_rastrigin {
     }
     /// Gradients
     /**
-     *
      * It returns the fitness gradient for this UDP.
      *
      * The gradient is represented in a sparse form as required by
@@ -159,7 +156,6 @@ struct minlp_rastrigin {
 
     /// Hessians
     /**
-     *
      * It returns the hessians for this UDP.
      *
      * The hessians are represented in a sparse form as required by
@@ -182,7 +178,6 @@ struct minlp_rastrigin {
 
     /// Hessians sparsity (only the diagonal elements are non zero)
     /**
-     *
      * It returns the hessian sparisty structure for this UDP.
      *
      * The hessian sparisty is represented in the form required by
@@ -201,8 +196,6 @@ struct minlp_rastrigin {
     }
     /// Problem name
     /**
-     *
-     *
      * @return a string containing the problem name
      */
     std::string get_name() const
@@ -211,7 +204,6 @@ struct minlp_rastrigin {
     }
     /// Extra informations
     /**
-     *
      * @return a string containing extra informations on the problem
      */
     std::string get_extra_info() const

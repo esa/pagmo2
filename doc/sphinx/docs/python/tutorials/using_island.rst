@@ -37,7 +37,7 @@ on the opened thread.
 
 .. doctest::
 
-    >>> isl.evolve() 
+    >>> isl.evolve()
 
 With this simple command, we run the evolution, and since the task is offloaded to a different thread our current python session or script
 is not affected so that we can run other things in the meantime. 
