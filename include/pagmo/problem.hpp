@@ -614,11 +614,11 @@ inline void check_problem_bounds(const std::pair<vector_double, vector_double> &
         }
         const auto ncx = nx - nix;
         for (auto i = ncx; i < nx; ++i) {
-            if (lb[i] != std::trunc(lb[i])) {
+            if (std::isfinite(lb[i]) && lb[i] != std::trunc(lb[i])) {
                 pagmo_throw(std::invalid_argument, "A lower bound of the integer part of the decision vector is: "
                                                        + std::to_string(lb[i]) + " and is not an integer.");
             }
-            if (ub[i] != std::trunc(ub[i])) {
+            if (std::isfinite(ub[i]) && ub[i] != std::trunc(ub[i])) {
                 pagmo_throw(std::invalid_argument, "An upper bound of the integer part of the decision vector is: "
                                                        + std::to_string(ub[i]) + " and is not an integer.");
             }

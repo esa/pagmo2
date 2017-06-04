@@ -157,11 +157,18 @@ inline vector_double random_decision_vector(const std::pair<vector_double, vecto
     if (nix > 0u) {
         for (decltype(nx) i = ncx; i < nx; ++i) {
             // To ensure a uniform int distribution from a uniform float distribution we floor the result
-            // adding 1 tot he upper bound so that e.g.
+            // adding 1 tot he upper bound (and excluding the corner case of ::max() so that e.g.
             // [0,1] -> draw a float from [0,2] and floor it (that is 0. or 1. with 50%)
             // [3,3] -> draw a float from [3,4] and floor it (that is always 3.)
-            auto tmp = uniform_real_from_range(bounds.first[i], bounds.second[i] + 1, r_engine);
-            retval[i] = std::floor(tmp);
+            for (auto i = ncx; i < nx; ++i) {
+                double lb = bounds.first[i], ub = bounds.second[i];
+                if (ub >= std::numeric_limits<double>::max()) {
+                    pagmo_throw(std::invalid_argument, "The upper bound for the integer variable at index "
+                                                           + std::to_string(i) + " is too large.");
+                }
+                retval[i] = std::trunc(
+                    uniform_real_from_range(lb, std::nextafter(ub, std::numeric_limits<double>::max()), r_engine));
+            }
         }
     }
     return retval;
