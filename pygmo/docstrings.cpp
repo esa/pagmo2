@@ -2726,7 +2726,7 @@ Args:
 
 Raises:
     ValueError: if *nix* is negative or greater than an implementation-defined value
-    ValueError: if *lb* and *ub* are malformed (unequal lenght, zero size, *nix* larger than len(lb) or bounds are not integers in their last *nix* components)
+    ValueError: if *lb* and *ub* are malformed (unequal lenght, zero size, *nix* larger than ``len(lb)`` or bounds are not integers in their last *nix* components)
     TypeError: if *lb* or *ub* cannot be converted to a vector of floats
 
 Returns:
