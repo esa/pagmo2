@@ -1,3 +1,4 @@
+import uda_basic
 import udp_basic
 import pygmo
 import pickle
@@ -5,7 +6,7 @@ import pickle
 ub = pygmo.problem(udp_basic.udp_basic())
 assert pickle.dumps(pickle.loads(pickle.dumps(ub))) == pickle.dumps(ub)
 
-isl = pygmo.island(algo=pygmo.de(), prob=ub, size=20)
+isl = pygmo.island(algo=uda_basic.uda_basic(), prob=ub, size=20)
 risl = repr(isl)
 assert "Thread" in risl
 isl.evolve()

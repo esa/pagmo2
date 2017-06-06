@@ -93,6 +93,14 @@ test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] python test1.py
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cd udp_basic
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] mkdir build
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cd build
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DCMAKE_BUILD_TYPE=Release ..
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cmake --build . --config Release --target install
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] python test2.py
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] start /b ipcluster start
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] timeout 20
@@ -110,6 +118,14 @@ test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] python test1.py
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cd udp_basic
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] mkdir build
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cd build
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DCMAKE_BUILD_TYPE=Release ..
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cmake --build . --config Release --target install
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cd ..
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cd ..
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] python test2.py
 
 artifacts:
   - path: build\wheel\dist

@@ -75,6 +75,14 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     cd ../../;
     python test1.py
 
+    cd udp_basic;
+    mkdir build;
+    cd build;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+    make install VERBOSE=1;
+    cd ../../;
+    python test2.py
+
     # Documentation.
     cd ../build
     # At the moment conda has these packages only for Python 3.4. Install via pip instead.
@@ -170,6 +178,14 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     make install VERBOSE=1;
     cd ../../;
     python test1.py
+
+    cd udp_basic;
+    mkdir build;
+    cd build;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+    make install VERBOSE=1;
+    cd ../../;
+    python test2.py
 elif [[ "${PAGMO_BUILD}" == manylinux* ]]; then
     cd ..;
     docker pull ${DOCKER_IMAGE};
