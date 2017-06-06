@@ -132,17 +132,21 @@ system-wide, which is in general a good idea, you can do:
 
 Installation from source
 ^^^^^^^^^^^^^^^^^^^^^^^^
-For the installation from source, pygmo has two extra mandatory dependencies with respect to the
-:ref:`C++ installation <cpp_install>`:
+For an installation from source, pygmo has the following dependencies:
 
+* pagmo (i.e., the C++ headers of the pagmo library need to be installed before attempting
+  to compile pygmo),
 * `Boost.Python <http://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html>`_
 * `NumPy <http://www.numpy.org/>`_ (note that NumPy's development headers must be installed as well).
 
-To build the module from source you need to activate the cmake ``PAGMO_BUILD_PYGMO`` option. Check carefully what Python
-version is detected and what libraries are linked to. In particular, select the correct Boost.Python
-version according to the Python version (2 or 3) you want to compile the module for.
+Note that, at the present time, the versions of pygmo and pagmo must be exactly identical for the compilation of pygmo
+to be successful, otherwise the build process will error out. If you are updating pagmo/pygmo to a later version,
+make sure to install the new pagmo version before compiling the new pygmo version.
 
-The ``CMAKE_INSTALL_PREFIX`` will be used to construct the final location of headers and Python module after install.
+To build the module from source you need to **activate** the ``PAGMO_BUILD_PYGMO`` cmake option and **deactivate** the ``PAGMO_BUILD_PAGMO`` option.
+Check carefully what Python version and what libraries/include paths are detected (in particular, on systems with multiple Python versions
+it can happen that CMake detects the headers from a Python version and the Python library from another version).
+The ``CMAKE_INSTALL_PREFIX`` variable will be used to construct the final location of headers and Python module after install.
 
 When done, type (in your build directory):
 

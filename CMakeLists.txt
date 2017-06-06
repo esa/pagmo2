@@ -125,10 +125,12 @@ if(PAGMO_BUILD_PYGMO)
         message(FATAL_ERROR "Minimum supported Python version is 2.7.")
     endif()
 
+    # NOTE: for the time being, require that pagmo/pygmo versions are matching exactly.
     find_package(Pagmo ${PAGMO_PROJECT_VERSION} EXACT REQUIRED)
 
     find_package(NumPy REQUIRED)
 
+    # Internal variable that will be used to tell PagmoFindBoost to locate Boost.Python.
     set(_PAGMO_FIND_BOOST_PYTHON TRUE)
 endif()
 

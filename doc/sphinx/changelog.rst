@@ -7,10 +7,12 @@ Changelog
 New
 ~~~
 
-- Provide a CMake config-file package as part of the install process for the C++ library.
+- Improve support for integer and mixed integer optimization (`#115 <https://github.com/esa/pagmo2/pull/115>`_).
 
 Fix
 ~~~
+
+- Fix a bug in the plotting submodule (`#118 <https://github.com/esa/pagmo2/pull/118>`_).
 
 - Various documentation fixes and improvements.
 
