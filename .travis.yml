@@ -133,8 +133,8 @@ matrix:
 script:
     - mkdir build
     - cd build
-    - sh ../tools/install_deps.sh
-    - sh ../tools/install_travis.sh
+    - bash ../tools/install_deps.sh
+    - bash ../tools/install_travis.sh
 
 notifications:
   email: false
