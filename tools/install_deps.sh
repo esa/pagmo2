@@ -3,6 +3,9 @@
 # Echo each command
 set -x
 
+# Exit on error.
+set -e
+
 if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
         wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -O miniconda.sh;

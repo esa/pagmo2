@@ -29,10 +29,11 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_ALGORITHM_HPP
 #define PYGMO_ALGORITHM_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/extract.hpp>
+#include <boost/python/list.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/tuple.hpp>
 #include <memory>
@@ -46,9 +47,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 
-#include "common_base.hpp"
-#include "common_utils.hpp"
-#include "object_serialization.hpp"
+#include <pygmo/common_base.hpp>
+#include <pygmo/common_utils.hpp>
+#include <pygmo/object_serialization.hpp>
 
 namespace pagmo
 {
@@ -181,19 +182,25 @@ struct algorithm_pickle_suite : bp::pickle_suite {
             oarchive(a);
         }
         auto s = oss.str();
-        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+        // Store the cerealized algorithm plus the list of currently-loaded APs.
+        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())), get_ap_list());
     }
     static void setstate(pagmo::algorithm &a, const bp::tuple &state)
     {
         // Similarly, first we extract a bytes object from the Python state,
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
-        if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, ("the state tuple passed for algorithm deserialization "
-                                           "must have a single element, but instead it has "
-                                           + std::to_string(len(state)) + " elements")
-                                              .c_str());
+        if (len(state) != 2) {
+            pygmo_throw(PyExc_ValueError,
+                        ("the state tuple passed for algorithm deserialization "
+                         "must have 2 elements, but instead it has "
+                         + std::to_string(len(state)) + " elements")
+                            .c_str());
         }
+
+        // Make sure we import all the aps specified in the archive.
+        import_aps(bp::list(state[1]));
+
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
             pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize an algorithm");

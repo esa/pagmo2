@@ -3,7 +3,7 @@ from setuptools.dist import Distribution
 import sys
 
 NAME = 'pygmo'
-VERSION = '@pagmo_VERSION@'
+VERSION = '@pygmo_VERSION@'
 DESCRIPTION = 'Parallel optimisation for C++ / Python'
 LONG_DESCRIPTION = 'A platform to perform parallel computations of optimisation tasks (global and local) via the asynchronous generalized island model.'
 URL = 'https://github.com/esa/pagmo2'

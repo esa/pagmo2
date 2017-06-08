@@ -35,13 +35,13 @@ see https://www.gnu.org/licenses/. */
 
 #endif
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 // See: https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
 // In every cpp file We need to make sure this is included before everything else,
 // with the correct #defines.
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
-#include "numpy.hpp"
+#include <pygmo/numpy.hpp>
 
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
@@ -65,11 +65,13 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
 #include <boost/shared_ptr.hpp>
+#include <cstdint>
 #include <limits>
 #include <memory>
 #include <sstream>
 #include <string>
 #include <tuple>
+#include <unordered_set>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
@@ -89,33 +91,18 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/hv_algos/hv_hv3d.hpp>
 #include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
 #include <pagmo/utils/hypervolume.hpp>
+#include <pagmo/utils/multi_objective.hpp>
 
-#include "algorithm.hpp"
-#include "algorithm_exposition_suite.hpp"
-#include "common_utils.hpp"
-#include "docstrings.hpp"
-#include "expose_algorithms.hpp"
-#include "expose_problems.hpp"
-#include "island.hpp"
-#include "island_exposition_suite.hpp"
-#include "object_serialization.hpp"
-#include "problem.hpp"
-#include "pygmo_classes.hpp"
-
-// This is necessary because the NumPy macro import_array() has different return values
-// depending on the Python version.
-#if PY_MAJOR_VERSION < 3
-static inline void wrap_import_array()
-{
-    import_array();
-}
-#else
-static inline void *wrap_import_array()
-{
-    import_array();
-    return nullptr;
-}
-#endif
+#include <pygmo/algorithm.hpp>
+#include <pygmo/common_utils.hpp>
+#include <pygmo/docstrings.hpp>
+#include <pygmo/expose_algorithms.hpp>
+#include <pygmo/expose_islands.hpp>
+#include <pygmo/expose_problems.hpp>
+#include <pygmo/island.hpp>
+#include <pygmo/object_serialization.hpp>
+#include <pygmo/problem.hpp>
+#include <pygmo/pygmo_classes.hpp>
 
 namespace bp = boost::python;
 using namespace pagmo;
@@ -141,18 +128,17 @@ static inline bp::object test_object_serialization(const bp::object &o)
     return retval;
 }
 
-// Instances of the classes in pygmo_classes.hpp.
 namespace pygmo
 {
 
-// Problem and meta-problem classes.
-std::unique_ptr<bp::class_<problem>> problem_ptr{};
+// Exposed pagmo::problem.
+std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
 
-// Algorithm and meta-algorithm classes.
-std::unique_ptr<bp::class_<algorithm>> algorithm_ptr{};
+// Exposed pagmo::algorithm.
+std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
 
-// Island.
-std::unique_ptr<bp::class_<island>> island_ptr{};
+// Exposed pagmo::island.
+std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
 }
 
 // The cleanup function.
@@ -173,10 +159,6 @@ static inline void cleanup()
 
 // Serialization support for the population class.
 struct population_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const population &)
-    {
-        return bp::make_tuple();
-    }
     static bp::tuple getstate(const population &pop)
     {
         std::ostringstream oss;
@@ -185,13 +167,22 @@ struct population_pickle_suite : bp::pickle_suite {
             oarchive(pop);
         }
         auto s = oss.str();
-        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())),
+                              pygmo::get_ap_list());
     }
     static void setstate(population &pop, bp::tuple state)
     {
-        if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
+        if (len(state) != 2) {
+            pygmo_throw(PyExc_ValueError,
+                        ("the state tuple passed for population deserialization "
+                         "must have 2 elements, but instead it has "
+                         + std::to_string(len(state)) + " elements")
+                            .c_str());
         }
+
+        // Make sure we import all the aps specified in the archive.
+        pygmo::import_aps(bp::list(state[1]));
+
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
             pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize a population");
@@ -209,10 +200,6 @@ struct population_pickle_suite : bp::pickle_suite {
 
 // Serialization support for the archi class.
 struct archipelago_pickle_suite : bp::pickle_suite {
-    static bp::tuple getinitargs(const archipelago &)
-    {
-        return bp::make_tuple();
-    }
     static bp::tuple getstate(const archipelago &archi)
     {
         std::ostringstream oss;
@@ -221,13 +208,22 @@ struct archipelago_pickle_suite : bp::pickle_suite {
             oarchive(archi);
         }
         auto s = oss.str();
-        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())),
+                              pygmo::get_ap_list());
     }
     static void setstate(archipelago &archi, bp::tuple state)
     {
-        if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, "the state tuple must have a single element");
+        if (len(state) != 2) {
+            pygmo_throw(PyExc_ValueError,
+                        ("the state tuple passed for archipelago deserialization "
+                         "must have 2 elements, but instead it has "
+                         + std::to_string(len(state)) + " elements")
+                            .c_str());
         }
+
+        // Make sure we import all the aps specified in the archive.
+        pygmo::import_aps(bp::list(state[1]));
+
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
             pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize an archipelago");
@@ -296,6 +292,9 @@ static inline constexpr unsigned max_unsigned()
     return std::numeric_limits<unsigned>::max();
 }
 
+// The set containing the list of registered APs.
+static std::unordered_set<std::string> ap_set;
+
 BOOST_PYTHON_MODULE(core)
 {
     using pygmo::lcast;
@@ -307,7 +306,7 @@ BOOST_PYTHON_MODULE(core)
     // Init numpy.
     // NOTE: only the second import is strictly necessary. We run a first import from BP
     // because that is the easiest way to detect whether numpy is installed or not (rather
-    // than trying to figure out a way to detect it from wrap_import_array()).
+    // than trying to figure out a way to detect it from import_array()).
     try {
         bp::import("numpy.core.multiarray");
     } catch (...) {
@@ -316,7 +315,7 @@ BOOST_PYTHON_MODULE(core)
             u8"Please make sure that NumPy has been correctly installed.\n====ERROR====\033[0m");
         pygmo_throw(PyExc_ImportError, "");
     }
-    wrap_import_array();
+    pygmo::numpy_import_array();
 
     // Check that cloudpickle is available.
     try {
@@ -419,6 +418,30 @@ BOOST_PYTHON_MODULE(core)
     auto islands_module = bp::object(bp::handle<>(bp::borrowed(islands_module_ptr)));
     bp::scope().attr("islands") = islands_module;
 
+    // Store the pointers to the classes that can be extended by APs.
+    bp::scope().attr("_problem_address") = reinterpret_cast<std::uintptr_t>(&pygmo::problem_ptr);
+    bp::scope().attr("_algorithm_address") = reinterpret_cast<std::uintptr_t>(&pygmo::algorithm_ptr);
+    bp::scope().attr("_island_address") = reinterpret_cast<std::uintptr_t>(&pygmo::island_ptr);
+
+    // Fetch and store addresses to the internal cereal global objects that contain the
+    // info for the serialization of polymorphic types.
+    // NOTE: this is a hack heavily dependent on cereal's implementation-details. We'll have
+    // to triple-check this if/when we update the bundled cereal.
+    // NOTE: at the moment we are just using the portable binary archives for pygmo's serialization
+    // machinery. If we ever make the archive type configurable, we'll probably have to add bits here.
+    // See also the merge_s11n_data_for_ap() function in common_utils.hpp.
+    bp::scope().attr("_s11n_in_address") = reinterpret_cast<std::uintptr_t>(
+        &cereal::detail::StaticObject<cereal::detail::InputBindingMap<cereal::PortableBinaryInputArchive>>::
+             getInstance()
+                 .map);
+    bp::scope().attr("_s11n_out_address") = reinterpret_cast<std::uintptr_t>(
+        &cereal::detail::StaticObject<cereal::detail::OutputBindingMap<cereal::PortableBinaryOutputArchive>>::
+             getInstance()
+                 .map);
+
+    // Store the address to the list of registered APs.
+    bp::scope().attr("_ap_set_address") = reinterpret_cast<std::uintptr_t>(&ap_set);
+
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
     // Ctors from problem.
@@ -486,7 +509,7 @@ BOOST_PYTHON_MODULE(core)
     // Problem class.
     pygmo::problem_ptr
         = detail::make_unique<bp::class_<problem>>("problem", pygmo::problem_docstring().c_str(), bp::init<>());
-    auto &problem_class = *pygmo::problem_ptr;
+    auto &problem_class = pygmo::get_problem_class();
     problem_class.def(bp::init<const bp::object &>((bp::arg("udp"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::problem_pickle_suite())
@@ -567,7 +590,7 @@ BOOST_PYTHON_MODULE(core)
     // Algorithm class.
     pygmo::algorithm_ptr
         = detail::make_unique<bp::class_<algorithm>>("algorithm", pygmo::algorithm_docstring().c_str(), bp::init<>());
-    auto &algorithm_class = *pygmo::algorithm_ptr;
+    auto &algorithm_class = pygmo::get_algorithm_class();
     algorithm_class.def(bp::init<const bp::object &>((bp::arg("uda"))))
         .def(repr(bp::self))
         .def_pickle(pygmo::algorithm_pickle_suite())
@@ -780,7 +803,7 @@ BOOST_PYTHON_MODULE(core)
     // Island.
     pygmo::island_ptr
         = detail::make_unique<bp::class_<island>>("island", pygmo::island_docstring().c_str(), bp::init<>());
-    auto &island_class = *pygmo::island_ptr;
+    auto &island_class = pygmo::get_island_class();
     island_class.def(bp::init<const algorithm &, const population &>())
         .def(bp::init<const bp::object &, const algorithm &, const population &>())
         .def(repr(bp::self))
@@ -806,8 +829,8 @@ BOOST_PYTHON_MODULE(core)
         .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
     pygmo::add_property(island_class, "status", &island::status, pygmo::island_status_docstring().c_str());
 
-    // Thread island.
-    auto ti = pygmo::expose_island<thread_island>("thread_island", pygmo::thread_island_docstring().c_str());
+    // Expose islands.
+    pygmo::expose_islands();
 
     // Archi.
     bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(), bp::init<>());

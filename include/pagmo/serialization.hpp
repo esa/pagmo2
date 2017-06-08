@@ -40,9 +40,7 @@ see https://www.gnu.org/licenses/. */
 // http://uscilab.github.io/cereal/thread_safety.html
 #define CEREAL_THREAD_SAFE 1
 
-#include <pagmo/external/cereal/archives/binary.hpp>
-#include <pagmo/external/cereal/archives/json.hpp>
-#include <pagmo/external/cereal/archives/portable_binary.hpp>
+// Types first.
 #include <pagmo/external/cereal/types/base_class.hpp>
 #include <pagmo/external/cereal/types/common.hpp>
 #include <pagmo/external/cereal/types/map.hpp>
@@ -51,6 +49,11 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/external/cereal/types/tuple.hpp>
 #include <pagmo/external/cereal/types/utility.hpp>
 #include <pagmo/external/cereal/types/vector.hpp>
+
+// Then the archives.
+#include <pagmo/external/cereal/archives/binary.hpp>
+#include <pagmo/external/cereal/archives/json.hpp>
+#include <pagmo/external/cereal/archives/portable_binary.hpp>
 
 #undef CEREAL_THREAD_SAFE
 

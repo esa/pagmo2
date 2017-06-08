@@ -1,6 +1,32 @@
 Changelog
 =========
 
+2.4 (unreleased)
+----------------
+
+New
+~~~
+
+- Initial release of the pagmo/pygmo C++ software-development kit (SDK). The purpose of the SDK is to make the process
+  of writing C++ extensions for pagmo/pygmo as easy as possible. The SDK is a beta-quality feature at this time,
+  and it is lightly documented - no tutorials are available yet. Please come to the gitter channel and ask there if you are interested
+  in it (`#110 <https://github.com/esa/pagmo2/pull/110>`_).
+
+- Improve support for integer and mixed integer optimization (`#115 <https://github.com/esa/pagmo2/pull/115>`_).
+
+Fix
+~~~
+
+- Fix a bug in the plotting submodule (`#118 <https://github.com/esa/pagmo2/pull/118>`_).
+
+- Various documentation fixes and improvements.
+
+Changes
+~~~~~~~
+
+- pygmo now depends on pagmo, and it is now effectively a separate package. That is, in order to compile and install pygmo from
+  source, you will need first to install the pagmo C++ headers. Users of pip/conda are **not** affected by this change.
+
 2.3 (2017-05-19)
 ----------------
 
