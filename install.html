@@ -130,8 +130,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">2.4 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id4">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id11">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -187,28 +188,12 @@
     <div class="col-md-12 content">
       
   <div class="section" id="installation-guide">
-<span id="install"></span><h1><a class="toc-backref" href="#id5">Installation guide</a><a class="headerlink" href="#installation-guide" title="Permalink to this headline">¶</a></h1>
-<div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
-<ul class="simple">
-<li><a class="reference internal" href="#installation-guide" id="id5">Installation guide</a><ul>
-<li><a class="reference internal" href="#c" id="id6">C++</a></li>
-<li><a class="reference internal" href="#python" id="id7">Python</a><ul>
-<li><a class="reference internal" href="#installation-with-conda" id="id8">Installation with conda</a></li>
-<li><a class="reference internal" href="#installation-with-pip" id="id9">Installation with pip</a></li>
-<li><a class="reference internal" href="#installation-from-source" id="id10">Installation from source</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
+<span id="install"></span><h1>Installation guide<a class="headerlink" href="#installation-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="c">
-<h2><a class="toc-backref" href="#id6">C++</a><a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
-<p>pagmo is a header-only library which has the following third party dependencies:</p>
+<span id="cpp-install"></span><h2>C++<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
+<p>pagmo is a header-only library which has the following third-party dependencies:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://www.boost.org/">Boost</a>, <strong>mandatory</strong>, header-only (needs the libraries only if you
-intend to compile the python bindings)</li>
+<li><a class="reference external" href="http://www.boost.org/">Boost</a>, <strong>mandatory</strong>, header-only</li>
 <li><a class="reference external" href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a>, optional, header-only
 (enabled via the <code class="docutils literal"><span class="pre">PAGMO_WITH_EIGEN3</span></code> CMake option)</li>
 <li><a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a>, optional, requires linking
@@ -242,12 +227,17 @@ conda install pagmo
 your conda installation.</p>
 </div>
 <div class="section" id="python">
-<h2><a class="toc-backref" href="#id7">Python</a><a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
-<p>The python module corresponding to pagmo is called pygmo. There are various options for the installation
-of pygmo:</p>
+<span id="py-install"></span><h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
+<p>The Python module corresponding to pagmo is called pygmo. pygmo has two mandatory runtime Python dependencies:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://conda.io/docs/">conda</a>,</li>
-<li><a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a>,</li>
+<li><a class="reference external" href="http://www.numpy.org/">NumPy</a>, the standard Python array library</li>
+<li><a class="reference external" href="https://github.com/cloudpipe/cloudpickle">cloudpickle</a>, a package that extends Python&#8217;s serialization
+capabilities.</li>
+</ul>
+<p>There are various options for the installation of pygmo:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://conda.io/docs/">conda</a></li>
+<li><a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a></li>
 <li>installation from source.</li>
 </ul>
 <p>The following table summarizes the pros and cons of the various installation methods:</p>
@@ -299,7 +289,7 @@ of pygmo:</p>
 </tbody>
 </table>
 <p>In general, we recommend the use of <a class="reference external" href="https://conda.io/docs/">conda</a>: in addition to making the installation
-of pygmo easy, it also provides user-friendly access to a wealth of packages from the scientific python
+of pygmo easy, it also provides user-friendly access to a wealth of packages from the scientific Python
 ecosystem. Conda is a good default choice in Linux and OSX.</p>
 <p>In Windows, the situation is a bit more complicated. The first issue is that the compiler used by conda
 for Python 2.7 is too old to compile pygmo, and thus we cannot provide conda packages for Python 2.7
@@ -318,39 +308,49 @@ also the least user-friendly.</p>
 <p class="last">As a general policy, we are committed to providing packages for Python 2.7 and for the latest two versions of Python 3.x.</p>
 </div>
 <div class="section" id="installation-with-conda">
-<h3><a class="toc-backref" href="#id8">Installation with conda</a><a class="headerlink" href="#installation-with-conda" title="Permalink to this headline">¶</a></h3>
+<h3>Installation with conda<a class="headerlink" href="#installation-with-conda" title="Permalink to this headline">¶</a></h3>
 <p>The installation of pygmo with conda is straightforward. We just need to add <code class="docutils literal"><span class="pre">conda-forge</span></code> to the channels,
 and then we can immediately install pygmo:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>conda config --add channels conda-forge
 conda install pygmo
 </pre></div>
 </div>
-<p>Please refer to the <a class="reference external" href="https://conda.io/docs/">conda documentation</a> for instructions on how to setup and manage
-your conda installation.</p>
+<p>conda will automatically install all of pygmo&#8217;s dependencies for you. Please refer to the <a class="reference external" href="https://conda.io/docs/">conda documentation</a>
+for instructions on how to setup and manage your conda installation.</p>
 </div>
 <div class="section" id="installation-with-pip">
-<h3><a class="toc-backref" href="#id9">Installation with pip</a><a class="headerlink" href="#installation-with-pip" title="Permalink to this headline">¶</a></h3>
+<h3>Installation with pip<a class="headerlink" href="#installation-with-pip" title="Permalink to this headline">¶</a></h3>
 <p>The installation of pygmo with pip is also straightforward:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>pip install pygmo
 </pre></div>
 </div>
-<p>If you want to install pygmo for a single user instead of system-wide, which is in general a good idea, you can do:</p>
+<p>Like conda, also pip will automatically install all of pygmo&#8217;s dependencies for you. If you want to install pygmo for a single user instead of
+system-wide, which is in general a good idea, you can do:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>pip install --user pygmo
 </pre></div>
 </div>
 </div>
 <div class="section" id="installation-from-source">
-<h3><a class="toc-backref" href="#id10">Installation from source</a><a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h3>
-<p>To build the module from source you need to have the Boost.Python libraries installed and to activate the cmake
-<code class="docutils literal"><span class="pre">PAGMO_BUILD_PYGMO</span></code> option.</p>
-<p>Check carefully what python version is detected and what libraries are linked to. In particular, select the correct Boost.Python
-version according to the python version (2 or 3) you want to compile the module for.</p>
-<p>The <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> will be used to construct the final location of headers and Python module after install.</p>
+<h3>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h3>
+<p>For an installation from source, pygmo has the following dependencies:</p>
+<ul class="simple">
+<li>pagmo (i.e., the C++ headers of the pagmo library need to be installed before attempting
+to compile pygmo),</li>
+<li><a class="reference external" href="http://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html">Boost.Python</a></li>
+<li><a class="reference external" href="http://www.numpy.org/">NumPy</a> (note that NumPy&#8217;s development headers must be installed as well).</li>
+</ul>
+<p>Note that, at the present time, the versions of pygmo and pagmo must be exactly identical for the compilation of pygmo
+to be successful, otherwise the build process will error out. If you are updating pagmo/pygmo to a later version,
+make sure to install the new pagmo version before compiling the new pygmo version.</p>
+<p>To build the module from source you need to <strong>activate</strong> the <code class="docutils literal"><span class="pre">PAGMO_BUILD_PYGMO</span></code> cmake option and <strong>deactivate</strong> the <code class="docutils literal"><span class="pre">PAGMO_BUILD_PAGMO</span></code> option.
+Check carefully what Python version and what libraries/include paths are detected (in particular, on systems with multiple Python versions
+it can happen that CMake detects the headers from a Python version and the Python library from another version).
+The <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> variable will be used to construct the final location of headers and Python module after install.</p>
 <p>When done, type (in your build directory):</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>make install
 </pre></div>
 </div>
-<p>To check that all went well fire-up your python console and try the example in <a class="reference internal" href="quickstart.html#getting-started-py"><span class="std std-ref">quick-start example</span></a>.</p>
+<p>To check that all went well fire-up your Python console and try the example in <a class="reference internal" href="quickstart.html#getting-started-py"><span class="std std-ref">quick-start example</span></a>.</p>
 </div>
 </div>
 </div>
