@@ -7,6 +7,8 @@ set -x
 set -e
 
 if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
+    export deps_dir=$HOME/local
+    export PATH="$HOME/miniconda/bin:$PATH"
     export PATH="$deps_dir/bin:$PATH"
 fi
 
