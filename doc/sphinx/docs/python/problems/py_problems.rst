@@ -36,6 +36,11 @@ Problems exposed from C++
 
 -------------------------------------------------------------
 
+.. autoclass:: pygmo.minlp_rastrigin
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.schwefel
    :members:
 

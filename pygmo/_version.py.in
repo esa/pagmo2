@@ -28,4 +28,4 @@
 # GNU Lesser General Public License along with the PaGMO library.  If not,
 # see https://www.gnu.org/licenses/.
 
-__version__ = "@pagmo_VERSION@"
+__version__ = "@pygmo_VERSION@"

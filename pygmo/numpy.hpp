@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_NUMPY_HPP
 #define PYGMO_NUMPY_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 
@@ -45,5 +45,30 @@ see https://www.gnu.org/licenses/. */
 #endif
 
 #undef NPY_NO_DEPRECATED_API
+
+// NOTE: if the NO_IMPORT_ARRAY definition is active,
+// the import_array() macro is not defined.
+#if !defined(NO_IMPORT_ARRAY)
+
+namespace pygmo
+{
+
+// This is necessary because the NumPy macro import_array() has different return values
+// depending on the Python version.
+#if PY_MAJOR_VERSION < 3
+inline void numpy_import_array()
+{
+    import_array();
+}
+#else
+inline void *numpy_import_array()
+{
+    import_array();
+    return nullptr;
+}
+#endif
+}
+
+#endif
 
 #endif

@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_OBJECT_SERIALIZATION_HPP
 #define PYGMO_OBJECT_SERIALIZATION_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/import.hpp>
@@ -38,7 +38,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/serialization.hpp>
 
-#include "common_utils.hpp"
+#include <pygmo/common_utils.hpp>
 
 namespace cereal
 {

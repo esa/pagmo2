@@ -86,14 +86,19 @@ struct null_problem {
      * @param nobj the desired number of objectives.
      * @param nec the desired number of equality constraints.
      * @param nic the desired number of inequality constraints.
+     * @param nix the problem integer dimension.
      *
      * @throws std::invalid_argument if \p nobj is zero.
      */
-    null_problem(vector_double::size_type nobj = 1, vector_double::size_type nec = 0, vector_double::size_type nic = 0)
-        : m_nobj(nobj), m_nec(nec), m_nic(nic)
+    null_problem(vector_double::size_type nobj = 1u, vector_double::size_type nec = 0u,
+                 vector_double::size_type nic = 0u, vector_double::size_type nix = 0u)
+        : m_nobj(nobj), m_nec(nec), m_nic(nic), m_nix(nix)
     {
         if (!nobj) {
             pagmo_throw(std::invalid_argument, "The null problem must have a non-zero number of objectives");
+        }
+        if (nix > 1u) {
+            pagmo_throw(std::invalid_argument, "The null problem must have an integer part strictly smaller than 2");
         }
     }
     /// Fitness.
@@ -136,6 +141,14 @@ struct null_problem {
     {
         return m_nic;
     }
+    /// Size of the integer part.
+    /**
+     * @return the size of the integer part (as specified upon construction).
+     */
+    vector_double::size_type get_nix() const
+    {
+        return m_nix;
+    }
     /// Problem name.
     /**
      * @return <tt>"Null problem"</tt>.
@@ -151,13 +164,14 @@ struct null_problem {
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_nobj, m_nec, m_nic);
+        ar(m_nobj, m_nec, m_nic, m_nix);
     }
 
 private:
     vector_double::size_type m_nobj;
     vector_double::size_type m_nec;
     vector_double::size_type m_nic;
+    vector_double::size_type m_nix;
 };
 }
 
@@ -289,6 +303,31 @@ public:
 
 template <typename T>
 const bool has_i_constraints<T>::value;
+
+/// Detect \p get_nix() method.
+/**
+ * This type trait will be \p true if \p T provides a method with
+ * the following signature:
+ * @code{.unparsed}
+ * vector_double::size_type get_nix() const;
+ * @endcode
+ * The \p get_nix() method is part of the interface for the definition of a problem
+ * (see pagmo::problem).
+ */
+template <typename T>
+class has_integer_part
+{
+    template <typename U>
+    using get_nix_t = decltype(std::declval<const U &>().get_nix());
+    static const bool implementation_defined = std::is_same<vector_double::size_type, detected_t<get_nix_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_integer_part<T>::value;
 
 /// Detect \p gradient() method.
 /**
@@ -538,7 +577,10 @@ namespace detail
 // - inconsistent lengths of the vectors,
 // - nans in the bounds,
 // - lower bounds greater than upper bounds.
-inline void check_problem_bounds(const std::pair<vector_double, vector_double> &bounds)
+// - integer part larger than bounds size
+// - integer bounds not integers
+inline void check_problem_bounds(const std::pair<vector_double, vector_double> &bounds,
+                                 vector_double::size_type nix = 0u)
 {
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
@@ -562,6 +604,24 @@ inline void check_problem_bounds(const std::pair<vector_double, vector_double> &
             pagmo_throw(std::invalid_argument,
                         "The lower bound at position " + std::to_string(i) + " is " + std::to_string(lb[i])
                             + " while the upper bound has the smaller value " + std::to_string(ub[i]));
+        }
+    }
+    // 3 - checks the integer part
+    if (nix) {
+        const auto nx = lb.size();
+        if (nix > nx) {
+            pagmo_throw(std::invalid_argument, "The integer part cannot be larger than the bounds size");
+        }
+        const auto ncx = nx - nix;
+        for (auto i = ncx; i < nx; ++i) {
+            if (std::isfinite(lb[i]) && lb[i] != std::trunc(lb[i])) {
+                pagmo_throw(std::invalid_argument, "A lower bound of the integer part of the decision vector is: "
+                                                       + std::to_string(lb[i]) + " and is not an integer.");
+            }
+            if (std::isfinite(ub[i]) && ub[i] != std::trunc(ub[i])) {
+                pagmo_throw(std::invalid_argument, "An upper bound of the integer part of the decision vector is: "
+                                                       + std::to_string(ub[i]) + " and is not an integer.");
+            }
         }
     }
 }
@@ -616,6 +676,7 @@ struct prob_inner_base {
     virtual std::pair<vector_double, vector_double> get_bounds() const = 0;
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
+    virtual vector_double::size_type get_nix() const = 0;
     virtual void set_seed(unsigned int) = 0;
     virtual bool has_set_seed() const = 0;
     virtual std::string get_name() const = 0;
@@ -700,6 +761,10 @@ struct prob_inner final : prob_inner_base {
     virtual vector_double::size_type get_nic() const override final
     {
         return get_nic_impl(m_value);
+    }
+    virtual vector_double::size_type get_nix() const override final
+    {
+        return get_nix_impl(m_value);
     }
     virtual void set_seed(unsigned int seed) override final
     {
@@ -870,6 +935,16 @@ struct prob_inner final : prob_inner_base {
     {
         return 0u;
     }
+    template <typename U, enable_if_t<has_integer_part<U>::value, int> = 0>
+    static vector_double::size_type get_nix_impl(const U &value)
+    {
+        return value.get_nix();
+    }
+    template <typename U, enable_if_t<!has_integer_part<U>::value, int> = 0>
+    static vector_double::size_type get_nix_impl(const U &)
+    {
+        return 0u;
+    }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
     static void set_seed_impl(U &value, unsigned int seed)
     {
@@ -951,15 +1026,17 @@ struct prob_inner final : prob_inner_base {
  * \end{array}
  * \f]
  *
- * where \f$\mathbf x \in \mathbb R^{n_x}\f$ is called *decision vector* or
- * *chromosome*, \f$\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_x}\f$ are the *box-bounds*,
- * \f$ \mathbf f: \mathbb R^{n_x} \rightarrow \mathbb R^{n_{obj}}\f$ define the *objectives*,
- * \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality constraints*,
- * and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality constraints*.
- * Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
+ * where \f$\mathbf x \in \mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}\f$ is called *decision vector* or
+ * *chromosome*, and is made of \f$n_{cx}\f$ real numbers and \f$n_{ix}\f$ integers. The total problem dimension is then
+ * indicated with \f$n_x = n_{cx} + n_{ix}\f$. \f$\mathbf{lb}, \mathbf{ub} \in
+ * \mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}\f$ are the *box-bounds*, \f$ \mathbf f: \mathbb R^{n_x} \rightarrow
+ * \mathbb R^{n_{obj}}\f$ define the
+ * *objectives*, \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality
+ * constraints*, and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality
+ * constraints*. Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
  * values of any number of stochastic variables. This allows also for stochastic programming
- * tasks to be represented by this class. A tolerance is considered for the verification of the constraints and is set
- * by default to zero, but it can be modified via the problem::set_c_tol() method.
+ * tasks to be represented by this class. The tolerance considered for the verification of the constraints is set
+ * by default to zero and it can be modified via the problem::set_c_tol() method.
  *
  * In order to define an optimizaztion problem in pagmo, the user must first define a class
  * (or a struct) whose methods describe the properties of the problem and allow to compute
@@ -974,20 +1051,22 @@ struct prob_inner final : prob_inner_base {
  * std::pair<vector_double, vector_double> get_bounds() const;
  * @endcode
  *
- * The <tt>%fitness()</tt> method is expected to return the fitness of the input decision vector, while
+ * The <tt>%fitness()</tt> method is expected to return the fitness of the input decision vector (
+ * concatenating the objectives, the equality and the inequality constraints), while
  * <tt>%get_bounds()</tt> is expected to return the box bounds of the problem,
  * \f$(\mathbf{lb}, \mathbf{ub})\f$, which also implicitly define the dimension of the problem.
  * The <tt>%fitness()</tt> and <tt>%get_bounds()</tt> methods of the UDP are accessible from the corresponding
  * problem::fitness() and problem::get_bounds() methods (see their documentation for details).
  * In addition to providing the above methods, a UDP must also be default, copy and move constructible.
  *
- * The two mandatory methods above allow to define a single objective, deterministic, derivative-free, unconstrained
- * optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following
- * methods:
+ * The two mandatory methods above allow to define a continuous, single objective, deterministic, derivative-free,
+ * unconstrained optimization problem. In order to consider more complex cases, the UDP may implement one or more of the
+ * following methods:
  * @code{.unparsed}
  * vector_double::size_type get_nobj() const;
  * vector_double::size_type get_nec() const;
  * vector_double::size_type get_nic() const;
+ * vector_double::size_type get_nix() const;
  * bool has_gradient() const;
  * vector_double gradient(const vector_double &) const;
  * bool has_gradient_sparsity() const;
@@ -1011,16 +1090,6 @@ struct prob_inner final : prob_inner_base {
  *
  *    A moved-from :cpp:class:`pagmo::problem` is destructible and assignable. Any other operation will result
  *    in undefined behaviour.
- *
- * .. note::
- *
- *    This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_NLOPT`` option
- *    enabled (see the :ref:`installation instructions <install>`).
- *
- * .. seealso::
- *
- *    The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed description
- *    of each supported solver.
  *
  * \endverbatim
  */
@@ -1064,10 +1133,12 @@ public:
      * - the number of objectives of the UDP is zero,
      * - the number of objectives, equality or inequality constraints is larger than an implementation-defined value,
      * - the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
-     *   different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
+     *   different from the dimensionality of the upper bounds, the bounds relative to the integer part are not
+     *   integers, etc. - note that infinite bounds are allowed),
      * - the <tt>%gradient_sparsity()</tt> and <tt>%hessians_sparsity()</tt> methods of the UDP fail basic sanity checks
      *   (e.g., they return vectors with repeated indices, they contain indices exceeding the problem's dimensions,
      *   etc.).
+     * - the integer part of the problem is larger than the problem size.
      * @throws unspecified any exception thrown by methods of the UDP invoked during construction or by memory errors
      * in strings and standard containers.
      */
@@ -1076,9 +1147,17 @@ public:
         : m_ptr(detail::make_unique<detail::prob_inner<uncvref_t<T>>>(std::forward<T>(x))), m_fevals(0u), m_gevals(0u),
           m_hevals(0u)
     {
+        // 0 - Integer part
+        const auto tmp_size = ptr()->get_bounds().first.size();
+        m_nix = ptr()->get_nix();
+        if (m_nix > tmp_size) {
+            pagmo_throw(std::invalid_argument, "The integer part of the problem (" + std::to_string(m_nix)
+                                                   + ") is larger than its dimension (" + std::to_string(tmp_size)
+                                                   + ")");
+        }
         // 1 - Bounds.
         auto bounds = ptr()->get_bounds();
-        detail::check_problem_bounds(bounds);
+        detail::check_problem_bounds(bounds, m_nix);
         m_lb = std::move(bounds.first);
         m_ub = std::move(bounds.second);
         // 2 - Number of objectives.
@@ -1166,7 +1245,7 @@ public:
     problem(const problem &other)
         : m_ptr(other.ptr()->clone()), m_fevals(other.m_fevals), m_gevals(other.m_gevals), m_hevals(other.m_hevals),
           m_lb(other.m_lb), m_ub(other.m_ub), m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic),
-          m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
+          m_nix(other.m_nix), m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
           m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
           m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
           m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
@@ -1181,11 +1260,11 @@ public:
     problem(problem &&other) noexcept
         : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals), m_gevals(other.m_gevals), m_hevals(other.m_hevals),
           m_lb(std::move(other.m_lb)), m_ub(std::move(other.m_ub)), m_nobj(other.m_nobj), m_nec(other.m_nec),
-          m_nic(other.m_nic), m_c_tol(std::move(other.m_c_tol)), m_has_gradient(other.m_has_gradient),
-          m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
-          m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
-          m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim), m_hs_dim(std::move(other.m_hs_dim)),
-          m_thread_safety(std::move(other.m_thread_safety))
+          m_nic(other.m_nic), m_nix(other.m_nix), m_c_tol(std::move(other.m_c_tol)),
+          m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
+          m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
+          m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
+          m_hs_dim(other.m_hs_dim), m_thread_safety(std::move(other.m_thread_safety))
     {
     }
 
@@ -1207,6 +1286,7 @@ public:
             m_nobj = other.m_nobj;
             m_nec = other.m_nec;
             m_nic = other.m_nic;
+            m_nix = other.m_nix;
             m_c_tol = std::move(other.m_c_tol);
             m_has_gradient = other.m_has_gradient;
             m_has_gradient_sparsity = other.m_has_gradient_sparsity;
@@ -1622,6 +1702,31 @@ public:
         return m_lb.size();
     }
 
+    /// Integer Dimension.
+    /**
+     * This method will return \f$ n_{ix} \f$, the dimension of the integer part of the problem.
+     * If the UDP satisfies pagmo::has_integer_part, then the output of
+     * its <tt>%get_nix()</tt> method will be returned. Otherwise, this method will return 0.
+     *
+     * @return \f$ n_{ix}\f$, the integer dimension of the problem.
+     */
+    vector_double::size_type get_nix() const
+    {
+        return m_nix;
+    }
+
+    /// Continuous Dimension.
+    /**
+     * @return \f$ n_{cx}\f$, the continuous dimension of the problem as established
+     * by the relation \f$n_{cx} = n_{x} - n_{ix} \f$.
+     *
+     * @return \f$ n_{cx}\f$, the continuous dimension of the problem.
+     */
+    vector_double::size_type get_ncx() const
+    {
+        return get_nx() - m_nix;
+    }
+
     /// Fitness dimension.
     /**
      * @return \f$ n_{f}\f$, the dimension of the fitness, which is the
@@ -1913,6 +2018,7 @@ public:
             stream(os, " [stochastic]");
         }
         os << "\n\tGlobal dimension:\t\t\t" << p.get_nx() << '\n';
+        os << "\tInteger dimension:\t\t\t" << p.get_nix() << '\n';
         os << "\tFitness dimension:\t\t\t" << p.get_nf() << '\n';
         os << "\tNumber of objectives:\t\t\t" << p.get_nobj() << '\n';
         os << "\tEquality constraints dimension:\t\t" << p.get_nec() << '\n';
@@ -1961,7 +2067,7 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_ptr, m_fevals, m_gevals, m_hevals, m_lb, m_ub, m_nobj, m_nec, m_nic, m_c_tol, m_has_gradient,
+        ar(m_ptr, m_fevals, m_gevals, m_hevals, m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol, m_has_gradient,
            m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim,
            m_thread_safety);
     }
@@ -1980,7 +2086,7 @@ public:
         // Deserialize in a separate object and move it in later, for exception safety.
         problem tmp_prob;
         ar(tmp_prob.m_ptr, tmp_prob.m_fevals, tmp_prob.m_gevals, tmp_prob.m_hevals, tmp_prob.m_lb, tmp_prob.m_ub,
-           tmp_prob.m_nobj, tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_c_tol, tmp_prob.m_has_gradient,
+           tmp_prob.m_nobj, tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol, tmp_prob.m_has_gradient,
            tmp_prob.m_has_gradient_sparsity, tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity,
            tmp_prob.m_has_set_seed, tmp_prob.m_name, tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
         *this = std::move(tmp_prob);
@@ -2136,6 +2242,7 @@ private:
     vector_double::size_type m_nobj;
     vector_double::size_type m_nec;
     vector_double::size_type m_nic;
+    vector_double::size_type m_nix;
     vector_double m_c_tol;
     bool m_has_gradient;
     bool m_has_gradient_sparsity;

@@ -24,6 +24,7 @@ as usual, we can quickly inspect the :class:`~pygmo.problem` printing it to scre
     >>> print(prob) #doctest: +NORMALIZE_WHITESPACE
     Problem name: CEC2013 - f24(cf04)
     	Global dimension:			10
+    	Integer dimension:			0
     	Fitness dimension:			1
     	Number of objectives:			1
     	Equality constraints dimension:		0

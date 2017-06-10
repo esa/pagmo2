@@ -45,7 +45,7 @@ is not affected so that we can run other things in the meantime.
 Consider the following script, for example:
 
     >>> islands = [pg.island(algo = pg.de(gen = 1000, F=effe, CR=cross), prob = pg.rosenbrock(10), size=20, seed=32) for effe in [0.3,0.5,0.7,0.9] for cross in [0.3,0.5,0.7,0.9]]
-    >>> _ = [isl.evolve() for isl in islands]
+    >>> _ = [isl.evolve() for isl in islands] #doctest: +SKIP
     >>> _ = [isl.wait() for isl in islands]
 
 .. image:: ../../images/ros_10_on_16_isl.png
@@ -71,7 +71,7 @@ Repeating the same computation a hundreds times we can obtain the boxplot on the
     >>> res = []
     >>> for i in range(100):
     ...      islands = [pg.island(algo = pg.de(gen = 1000, F=effe, CR=cross), prob = pg.rosenbrock(10), size=20, seed=32) for effe in [0.3,0.5,0.7,0.9] for cross in [0.3,0.5,0.7,0.9]]
-    ...      _ = [isl.evolve() for isl in islands]
+    ...      _ = [isl.evolve() for isl in islands] #doctest: +SKIP
     ...      _ = [isl.wait() for isl in islands]
     ...      res.append([isl.get_population().champion_f[0] for isl in islands])
     >>> import seaborn as sns # doctest: +SKIP
@@ -95,11 +95,10 @@ following UDP:
     ...     def __init__(self):
     ...         self.counter=0;
     ...     def fitness(self,dv):
-    ...         import random
     ...         if self.counter == 300:
     ...             raise ValueError("Ops!")
     ...         self.counter += 1
-    ...         return [random.random()]
+    ...         return [self.counter]
     ...     def get_bounds(self):
     ...         return ([0],[1])
     ...     def get_name(self):
@@ -107,62 +106,60 @@ following UDP:
 
 We construct an island:
 
-    >>> isl = pg.island(algo = pg.de(100), prob = raise_exception(), size=20)
+    >>> isl = pg.island(algo = pg.de(100), prob = raise_exception(), size=20, udi=pg.ipyparallel_island())
 
 .. note::
-   Since we have not explicitly passed the *udi* argument to the island constructor the island type is selected by
-   the internal heuristic. In this case, since the UDP is written in python and thus marked without basic thread
-   safety, and since our architecture in linux and py36, a multiprocessing island is selected. See the documentation
-   of the :class:`~pygmo.island` to know more on what island is selcted by default accordign to the architecture, the 
-   problem and the algorithm
+   We have explicitly passed the *udi* argument to the island constructor and selected an ipyparallel island.
+   This requires that a cluster is started typing, for example, the command ``ipcluster start``.
 
 This construction will trigger :math:`20` function evaluations and thus will not throw. Let us now run an evolution:
 
     >>> isl.evolve()
     >>> isl.wait()
 
-Everything looks fine as in our thread nothing really happened nor threw. But if we, for example inspect the island we get:
+Everything looks fine: in our thread nothing really happened nor threw. But if we, for example inspect the island we get:
 
-    >>> print(isl) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
-    Island name: Multiprocessing island
-        Status: idle - **error occurred**
+    >>> print(isl) # doctest: +SKIP
+    Island name: Ipyparallel island
+    	Status: idle - **error occurred**
     <BLANKLINE>
     Extra info:
-        Number of processes in the pool: ...
+    	Queue status:
+    <BLANKLINE>
+    	(unassigned, 0)
+    	(0, {'queue': 0, 'completed': ..., 'tasks': 0})
+    	(1, {'queue': 0, 'completed': ..., 'tasks': 0})
+    	(2, {'queue': 0, 'completed': ..., 'tasks': 0})
+    	(3, {'queue': 0, 'completed': ..., 'tasks': 0})
+    	(4, {'queue': 0, 'completed': ..., 'tasks': 0})
+    	(5, {'queue': 0, 'completed': ..., 'tasks': 0})
+    	(6, {'queue': 0, 'completed': ..., 'tasks': 0})
+    	(7, {'queue': 0, 'completed': ..., 'tasks': 0})
     <BLANKLINE>
     Algorithm: Differential Evolution
     <BLANKLINE>
     Problem: A throwing UDP
     <BLANKLINE>
     Population size: 20
-        Champion decision vector: [...
-        Champion fitness: [...
+    	Champion decision vector: ...
+    	Champion fitness: ...
     <BLANKLINE>
 
-What has happened? I need to retreive that message!
+What has happened? I need to retrieve that message!
 
-    >>> isl.wait_check() # doctest: +SKIP
-    RuntimeError                              Traceback (most recent call last)
-    <ipython-input-8-ad6ea7297291> in <module>()
-    ----> 1 isl.wait_check()
-    <BLANKLINE>
-    RuntimeError: The asynchronous evolution of a Pythonic island of type 'Multiprocessing island' raised an error:
-    multiprocessing.pool.RemoteTraceback: 
-    """
+    >>> isl.wait_check()
     Traceback (most recent call last):
-    File "/usr/lib/python3.6/multiprocessing/pool.py", line 119, in worker
-        result = (True, func(*args, **kwds))
-    File "/home/dario/.local/lib/python3.6/site-packages/pygmo/_py_islands.py", line 40, in _evolve_func
-        return algo.evolve(pop)
-    File "<ipython-input-2-cb4b75dd704c>", line 7, in fitness
-    ValueError: Ops!
-    """
-    <BLANKLINE>
-    The above exception was the direct cause of the following exception:
-    <BLANKLINE>
+      File "/Users/darioizzo/miniconda3/envs/pagmo/lib/python3.6/doctest.py", line 1330, in __run
+        compileflags, 1), test.globs)
+      File "<doctest default[0]>", line 1, in <module>
+        isl.wait_check()
+    RuntimeError: The asynchronous evolution of a Pythonic island of type 'Ipyparallel island' raised an error:
     Traceback (most recent call last):
-    File "/home/dario/.local/lib/python3.6/site-packages/pygmo/_py_islands.py", line 128, in run_evolve
-        return res.get()
-    File "/usr/lib/python3.6/multiprocessing/pool.py", line 608, in get
-        raise self._value
-    ValueError: Ops!
+      File "/Users/darioizzo/.local/lib/python3.6/site-packages/pygmo/_py_islands.py", line 403, in run_evolve
+        return ret.get()
+      File "/Users/darioizzo/miniconda3/envs/pagmo/lib/python3.6/site-packages/ipyparallel/client/asyncresult.py", line 167, in get
+        raise self.exception()
+      File "/Users/darioizzo/miniconda3/envs/pagmo/lib/python3.6/site-packages/ipyparallel/client/asyncresult.py", line 224, in _resolve_result
+        raise r
+    ipyparallel.error.RemoteError: ValueError(Ops!)
+

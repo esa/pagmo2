@@ -29,46 +29,42 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_ISLAND_EXPOSITION_SUITE_HPP
 #define PYGMO_ISLAND_EXPOSITION_SUITE_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <boost/python/class.hpp>
+#include <boost/python/extract.hpp>
+#include <boost/python/import.hpp>
 #include <boost/python/init.hpp>
-#include <boost/python/scope.hpp>
-#include <cassert>
+#include <cstdint>
+#include <memory>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 
-#include "pygmo_classes.hpp"
+#include <pygmo/common_utils.hpp>
 
 namespace pygmo
 {
 
 namespace bp = boost::python;
 
-// Expose an island ctor from a C++ UDI.
-template <typename Isl>
-inline void island_expose_init_cpp_udi()
-{
-    assert(island_ptr.get() != nullptr);
-    auto &isl_class = *island_ptr;
-    isl_class.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
-}
-
-// Main island exposition function.
+// Main island exposition function for use by APs.
 template <typename Isl>
 inline bp::class_<Isl> expose_island(const char *name, const char *descr)
 {
     // We require all islands to be def-ctible at the bare minimum.
     bp::class_<Isl> c(name, descr, bp::init<>());
+
     // Mark it as a C++ island.
     c.attr("_pygmo_cpp_island") = true;
 
-    // Expose the island constructor from Isl.
-    island_expose_init_cpp_udi<Isl>();
+    // Get the island class from the pygmo module.
+    auto &isl = **reinterpret_cast<std::unique_ptr<bp::class_<pagmo::island>> *>(
+        bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_island_address"))());
 
-    // Add the island to the islands submodule.
-    bp::scope().attr("islands").attr(name) = c;
+    // Expose the island constructor from Isl.
+    isl.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
 
     return c;
 }

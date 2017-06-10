@@ -91,7 +91,7 @@ if(NOT _YACMACompilerLinkerSettingsRun)
     endif()
 
     # Configuration bits specific for clang.
-    if(YACMA_COMPILER_IS_CLANGXX)
+    if(YACMA_COMPILER_IS_CLANGXX AND NOT YACMA_COMPILER_IS_MSVC)
         # For now it seems like -Wshadow from clang behaves better than GCC's, just enable it here
         # for the time being.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wshadow)
@@ -100,7 +100,7 @@ if(NOT _YACMACompilerLinkerSettingsRun)
     endif()
 
     # Common configuration for GCC, clang and Intel.
-    if (YACMA_COMPILER_IS_CLANGXX OR YACMA_COMPILER_IS_INTELXX OR YACMA_COMPILER_IS_GNUCXX)
+    if ((YACMA_COMPILER_IS_CLANGXX AND NOT YACMA_COMPILER_IS_MSVC) OR YACMA_COMPILER_IS_INTELXX OR YACMA_COMPILER_IS_GNUCXX)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wall)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wextra)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnon-virtual-dtor)
@@ -127,6 +127,14 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wodr)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-final-types)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-final-methods)
+        # From GCC 6.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wshift-negative-value)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wshift-overflow=2)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wduplicated-cond)
+        # From GCC 7.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wduplicated-branches)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wrestrict)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Waligned-new)
     endif()
 
     # MSVC setup.

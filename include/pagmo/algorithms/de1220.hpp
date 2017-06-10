@@ -173,7 +173,7 @@ public:
         }
         if (variant_adptv < 1u || variant_adptv > 2u) {
             pagmo_throw(std::invalid_argument,
-                        "The variant for self-adaptation mus be in [1,2], while a value of "
+                        "The variant for self-adaptation must be in [1,2], while a value of "
                             + std::to_string(variant_adptv) + " was detected.");
         }
     }

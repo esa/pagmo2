@@ -1009,13 +1009,17 @@ BOOST_AUTO_TEST_CASE(null_problem_test)
     BOOST_CHECK(null_problem{2}.get_nobj() == 2u);
     BOOST_CHECK(null_problem{2}.get_nec() == 0u);
     BOOST_CHECK(null_problem{2}.get_nic() == 0u);
-    BOOST_CHECK((null_problem{2, 3, 4}.get_nobj() == 2u));
-    BOOST_CHECK((null_problem{2, 3, 4}.get_nec() == 3u));
-    BOOST_CHECK((null_problem{2, 3, 4}.get_nic() == 4u));
+    BOOST_CHECK(null_problem{2}.get_nix() == 0u);
+    BOOST_CHECK((null_problem{2, 3, 4, 1}.get_nobj() == 2u));
+    BOOST_CHECK((null_problem{2, 3, 4, 1}.get_nec() == 3u));
+    BOOST_CHECK((null_problem{2, 3, 4, 1}.get_nic() == 4u));
+    BOOST_CHECK((null_problem{2, 3, 4, 1}.get_nix() == 1u));
+    BOOST_CHECK((null_problem{2, 3, 4, 0}.get_nix() == 0u));
     BOOST_CHECK(p.get_nobj() == 2u);
     BOOST_CHECK((p.fitness(x1) == vector_double{0, 0}));
     BOOST_CHECK((p.fitness(x2) == vector_double{0, 0}));
     BOOST_CHECK_THROW(p = problem{null_problem{0}}, std::invalid_argument);
+    BOOST_CHECK_THROW((p = problem{null_problem{2, 3, 4, 2}}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
@@ -1270,4 +1274,54 @@ BOOST_AUTO_TEST_CASE(broken_hessian)
     // Test a hessians method that returns a number of vectors different from get_nf().
     problem p{hess1{}};
     BOOST_CHECK_THROW(p.hessians({1, 1, 1, 1, 1, 1}), std::invalid_argument);
+}
+
+struct minlp {
+    minlp(vector_double::size_type nix = 0u)
+    {
+        m_nix = nix;
+    }
+    vector_double fitness(const vector_double &x) const
+    {
+        return {std::sin(x[0] * x[1] * x[2]), x[0] + x[1] + x[2], x[0] * x[1] + x[1] * x[2] - x[0] * x[2]};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nec() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nic() const
+    {
+        return 1u;
+    }
+    vector_double::size_type get_nix() const
+    {
+        return m_nix;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{1, 1, 1}, {2, 2, 2}};
+    }
+    std::string get_name() const
+    {
+        return "A minlp problem";
+    }
+    vector_double::size_type m_nix;
+};
+
+BOOST_AUTO_TEST_CASE(minlp_test)
+{
+    BOOST_CHECK((problem{minlp{1u}}.get_nix() == 1u));
+    BOOST_CHECK((problem{minlp{1u}}.get_ncx() == 2u));
+    BOOST_CHECK((problem{minlp{1u}}.get_nx() == 3u));
+    BOOST_CHECK((problem{minlp{2u}}.get_nix() == 2u));
+    BOOST_CHECK((problem{minlp{2u}}.get_ncx() == 1u));
+    BOOST_CHECK((problem{minlp{2u}}.get_nx() == 3u));
+    BOOST_CHECK((problem{minlp{3u}}.get_nix() == 3u));
+    BOOST_CHECK((problem{minlp{3u}}.get_ncx() == 0u));
+    BOOST_CHECK((problem{minlp{3u}}.get_nx() == 3u));
+    BOOST_CHECK_THROW(problem{minlp{5u}}, std::invalid_argument);
 }
