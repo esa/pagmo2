@@ -14,18 +14,18 @@ New
 
 - Improve support for integer and mixed integer optimization (`#115 <https://github.com/esa/pagmo2/pull/115>`_).
 
+Changes
+~~~~~~~
+
+- pygmo now depends on pagmo, and it is now effectively a separate package. That is, in order to compile and install pygmo from
+  source, you will need first to install the pagmo C++ headers. Users of pip/conda are **not** affected by this change.
+
 Fix
 ~~~
 
 - Fix a bug in the plotting submodule (`#118 <https://github.com/esa/pagmo2/pull/118>`_).
 
 - Various documentation fixes and improvements.
-
-Changes
-~~~~~~~
-
-- pygmo now depends on pagmo, and it is now effectively a separate package. That is, in order to compile and install pygmo from
-  source, you will need first to install the pagmo C++ headers. Users of pip/conda are **not** affected by this change.
 
 2.3 (2017-05-19)
 ----------------
