@@ -1617,28 +1617,29 @@ objective function. Using the above definitions the overall pseudo code can be s
 
 :class:`pygmo.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
-.. note:
+.. note::
 
-Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
-for decision vectors already evaluated. This makes the final counter of fitness evaluations somewhat unpredictable.
+   Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+   for decision vectors already evaluated. This makes the final counter of fitness evaluations somewhat unpredictable.
+   The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
+   internal cache is reset at each iteration, but its size will grow unlimited during each call to
+   the inner UDA evolve method.
 
-The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
-internal cache is reset at each iteration, but its size will grow unlimited during each call to
-the inner UDA evolve method.
+.. note::
 
-.. note:
+   Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+   corner cases and with any UDAs. Most notably, a violation to the :math:`j`-th  constraint is ignored if all
+   the decision vectors in the population satisfy that particular constraint (i.e. if :math:`c_{j_{max}} = 0`).
 
-Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
-corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  constraint is ignored if all
-the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
+.. note::
 
-.. note:
+   The performances of :class:`~pygmo.cstrs_self_adaptive` are highly dependent on the particular inner
+   algorithm employed and in particular to its parameters (generations / iterations).
 
-The performances of :class:`~pygmo.cstrs_self_adaptive` are highly dependent on the particular inner
-algorithm employed and in particular to its parameters (generations / iterations).
+.. seealso::
 
-See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
-Transactions on Evolutionary Computation 7.5 (2003): 445-455.
+   Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
+   Transactions on Evolutionary Computation 7.5 (2003): 445-455.
 
 See also the docs of the C++ class :cpp:class:`pagmo::cstrs_self_adaptive`.
 

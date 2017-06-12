@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.5 (unreleased)
+----------------
+
+Fix
+~~~
+
+- Various documentation fixes and improvements.
+
 2.4 (2017-06-09)
 ----------------
 
