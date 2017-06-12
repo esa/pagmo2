@@ -132,7 +132,7 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wshift-overflow=2)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wduplicated-cond)
         # From GCC 7.
-        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wduplicated-branches)
+        #_YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wduplicated-branches)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wrestrict)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Waligned-new)
     endif()

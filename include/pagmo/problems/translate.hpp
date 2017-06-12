@@ -75,7 +75,7 @@ public:
      * Wraps a user-defined problem so that its fitness , bounds, etc. will be shifted by a
      * translation vector.
      *
-     * @param p a user-defined problem.
+     * @param p a pagmo::problem or a user-defined problem (UDP).
      * @param translation an <tt>std::vector</tt> containing the translation to apply.
      *
      * @throws std::invalid_argument if the length of \p translation is
@@ -87,9 +87,9 @@ public:
         : m_problem(std::forward<T>(p)), m_translation(translation)
     {
         if (translation.size() != m_problem.get_nx()) {
-            pagmo_throw(std::invalid_argument, "Length of shift vector is: " + std::to_string(translation.size())
-                                                   + " while the problem dimension is: "
-                                                   + std::to_string(m_problem.get_nx()));
+            pagmo_throw(std::invalid_argument,
+                        "Length of shift vector is: " + std::to_string(translation.size())
+                            + " while the problem dimension is: " + std::to_string(m_problem.get_nx()));
         }
     }
 

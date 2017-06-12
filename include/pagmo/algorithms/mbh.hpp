@@ -136,8 +136,9 @@ public:
         : m_algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
     {
         if (perturb > 1. || perturb <= 0. || std::isnan(perturb)) {
-            pagmo_throw(std::invalid_argument, "The scalar perturbation must be in (0, 1], while a value of "
-                                                   + std::to_string(perturb) + " was detected.");
+            pagmo_throw(std::invalid_argument,
+                        "The scalar perturbation must be in (0, 1], while a value of " + std::to_string(perturb)
+                            + " was detected.");
         }
     }
     /// Constructor (vector perturbation).
@@ -152,7 +153,7 @@ public:
      *
      * This constructor will construct a monotonic basin hopping algorithm using a vector perturbation.
      *
-     * @param a a user-defined algorithm (UDA) that will be used to construct the inner algorithm.
+     * @param a a user-defined algorithm (UDA) or a pagmo::algorithm that will be used to construct the inner algorithm.
      * @param stop consecutive runs of the inner algorithm that need to
      * result in no improvement for pagmo::mbh to stop.
      * @param perturb a pagmo::vector_double with the perturbations to be applied to each component
@@ -202,12 +203,14 @@ public:
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
         if (prob.get_nobj() != 1u) {
-            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob.is_stochastic()) {
-            pagmo_throw(std::invalid_argument, "The input problem " + prob.get_name() + " appears to be stochastic, "
-                                                   + get_name() + " cannot deal with it");
+            pagmo_throw(std::invalid_argument,
+                        "The input problem " + prob.get_name() + " appears to be stochastic, " + get_name()
+                            + " cannot deal with it");
         }
         // Get out if there is nothing to do.
         if (m_stop == 0u) {
@@ -222,9 +225,10 @@ public:
         }
         // Check that the perturbation vector size equals the size of the problem
         if (m_perturb.size() != dim) {
-            pagmo_throw(std::invalid_argument, "The perturbation vector size is: " + std::to_string(m_perturb.size())
-                                                   + ", while the problem dimension is: " + std::to_string(dim)
-                                                   + ". They need to be equal for MBH to work.");
+            pagmo_throw(std::invalid_argument,
+                        "The perturbation vector size is: " + std::to_string(m_perturb.size())
+                            + ", while the problem dimension is: " + std::to_string(dim)
+                            + ". They need to be equal for MBH to work.");
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -261,8 +265,8 @@ public:
                 // Prints a log line after each call to the inner algorithm
                 // 1 - Every 50 lines print the column names
                 if (count % 50u == 1u) {
-                    print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Violated:",
-                          std::setw(15), "Viol. Norm:", std::setw(15), "Trial:", '\n');
+                    print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15),
+                          "Violated:", std::setw(15), "Viol. Norm:", std::setw(15), "Trial:", '\n');
                 }
                 // 2 - Print
                 auto cur_best_f = pop.get_f()[pop.best_idx()];

@@ -262,7 +262,7 @@ With a bit more elbow grease, we can further improve performance:
 
 Much better, right?
 
-.. note:: For more information on using Numba to speed up your python code see the `Numba documentation pages <http://numba.pydata.org/>`_.
+.. note:: For more information on using Numba to speed up your python code see the `Numba documentation pages <http://numba.pydata.org/>`__.
           In particular, note that only a limited part of NumPy and the python language in general is supported by this use.
 
 

@@ -178,27 +178,32 @@ public:
         // PREAMBLE--------------------------------------------------
         // Checks on the problem type
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob_f_dimension != 1u) {
-            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (lam < 5u) {
-            pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
-                                                   + std::to_string(lam) + " detected");
+            pagmo_throw(std::invalid_argument,
+                        get_name() + " needs at least 5 individuals in the population, " + std::to_string(lam)
+                            + " detected");
         }
         for (auto num : lb) {
             if (!std::isfinite(num)) {
-                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the lower bounds, "
-                                                       + this->get_name() + " cannot deal with it.");
+                pagmo_throw(std::invalid_argument,
+                            "A " + std::to_string(num) + " is detected in the lower bounds, " + this->get_name()
+                                + " cannot deal with it.");
             }
         }
         for (auto num : ub) {
             if (!std::isfinite(num)) {
-                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the upper bounds, "
-                                                       + this->get_name() + " cannot deal with it.");
+                pagmo_throw(std::invalid_argument,
+                            "A " + std::to_string(num) + " is detected in the upper bounds, " + this->get_name()
+                                + " cannot deal with it.");
             }
         }
         // Get out if there is nothing to do.
@@ -340,8 +345,8 @@ public:
                     auto df = std::abs(pop.get_f()[idx_b][0] - pop.get_f()[idx_w][0]);
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
-                              std::setw(15), "dx:", std::setw(15), "df:", std::setw(15), "sigma:", '\n');
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                              "Best:", std::setw(15), "dx:", std::setw(15), "df:", std::setw(15), "sigma:", '\n');
                     }
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), best_f[0],
                           std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
