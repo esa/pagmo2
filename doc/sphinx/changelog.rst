@@ -7,7 +7,7 @@ Changelog
 Fix
 ~~~
 
-- Various documentation fixes and improvements.
+- Various documentation fixes and improvements (`#121 <https://github.com/esa/pagmo2/pull/121>`__).
 
 2.4 (2017-06-09)
 ----------------
@@ -17,8 +17,8 @@ New
 
 - Initial release of the pagmo/pygmo C++ software-development kit (SDK). The purpose of the SDK is to make the process
   of writing C++ extensions for pagmo/pygmo as easy as possible. The SDK is a beta-quality feature at this time,
-  and it is lightly documented - no tutorials are available yet. Please come to the gitter channel and ask there if you are interested
-  in it (`#110 <https://github.com/esa/pagmo2/pull/110>`__).
+  and it is lightly documented - no tutorials are available yet. Please come to the `gitter channel <https://gitter.im/pagmo2/Lobby>`__
+  and ask there if you are interested in it (`#110 <https://github.com/esa/pagmo2/pull/110>`__).
 
 - Improve support for integer and mixed integer optimization (`#115 <https://github.com/esa/pagmo2/pull/115>`__).
 
@@ -26,7 +26,12 @@ Changes
 ~~~~~~~
 
 - pygmo now depends on pagmo, and it is now effectively a separate package. That is, in order to compile and install pygmo from
-  source, you will need first to install the pagmo C++ headers. Users of pip/conda are **not** affected by this change.
+  source, you will need first to install the pagmo C++ headers. Users of pip/conda are **not** affected by this change (as
+  pip and conda manage dependencies automatically).
+
+- **BREAKING**: as a consequence of the overhaul of (mixed) integer programming support in pagmo, the problem's integer part is no
+  longer available as an argument when constructing algorithms such as :cpp:class:`pagmo::sga` and :cpp:class:`pagmo::nsga2`, it
+  must instead be specified in the definition of the UDP via the optional ``get_nix()`` method.
 
 Fix
 ~~~
