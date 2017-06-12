@@ -53,11 +53,11 @@ namespace pagmo
  * \image html moead.png "Solving by decomposition" width=3cm
  *
  * MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of
- * problem decomposition, it leverages on evolutionary operators to combine good solutions of neighbouring problems thus
- * allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particual algorithm
+ * problem decomposition, it leverages evolutionary operators to combine good solutions of neighbouring problems thus
+ * allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particular algorithm
  * implemented in pagmo with the name pagmo::moead uses the rand/2/exp Differential Evolution operator followed by a
- * polynomial mutation to create offsprings, and the Tchebycheff, wieghted or boundary intersection decomposition method
- * decomposition method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is
+ * polynomial mutation to create offsprings, and the Tchebycheff, weighted or boundary intersection decomposition
+ * method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is
  * also implemented.
  *
  * \verbatim embed:rst:leading-asterisk

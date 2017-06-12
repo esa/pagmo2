@@ -140,9 +140,9 @@ returning a population with decision vectors that violate the integer constraint
     >>> best_isl_idx = [(el == a2).all() for el in a].index(True)
     >>> x_best = archi.get_champions_x()[best_isl_idx]
     >>> f_best = archi.get_champions_f()[best_isl_idx]
-    >>> print("Best relaxed solution, x: ", x_best) # doctest: +ELLIPSIS
+    >>> print("Best relaxed solution, x: {}".format(x_best)) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     Best relaxed solution, x:  [...  
-    >>> print("Best relaxed solution, f: ", f_best) # doctest: +ELLIPSIS
+    >>> print("Best relaxed solution, f: {}".format(f_best)) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     Best relaxed solution, f:  [...  
 
 The relaxed version of the problem has a global optimal solution with :math:`x_5 = 0.75822315`, :math:`x_6 = 0.91463117`, which

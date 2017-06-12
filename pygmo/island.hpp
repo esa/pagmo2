@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_ISLAND_HPP
 #define PYGMO_ISLAND_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/class.hpp>
@@ -53,8 +53,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 
-#include "common_base.hpp"
-#include "common_utils.hpp"
+#include <pygmo/common_base.hpp>
+#include <pygmo/common_utils.hpp>
 
 namespace pagmo
 {
@@ -221,20 +221,24 @@ struct island_pickle_suite : bp::pickle_suite {
             oarchive(isl);
         }
         auto s = oss.str();
-        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())), get_ap_list());
     }
     static void setstate(pagmo::island &isl, const bp::tuple &state)
     {
         // Similarly, first we extract a bytes object from the Python state,
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
-        if (len(state) != 1) {
+        if (len(state) != 2) {
             pygmo_throw(PyExc_ValueError,
                         ("the state tuple passed for island deserialization "
-                         "must have a single element, but instead it has "
+                         "must have 2 elements, but instead it has "
                          + std::to_string(len(state)) + " elements")
                             .c_str());
         }
+
+        // Make sure we import all the aps specified in the archive.
+        import_aps(bp::list(state[1]));
+
         // NOTE: PyBytes_AsString is a macro.
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {

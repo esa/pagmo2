@@ -3,6 +3,9 @@
 # Echo each command
 set -x
 
+# Exit on error.
+set -e
+
 CMAKE_VERSION="3.8.0"
 EIGEN3_VERSION="3.3.3"
 BOOST_VERSION="1.63.0"
@@ -66,8 +69,9 @@ sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
 cd ..
 
 # NLopt
-wget http://ab-initio.mit.edu/nlopt/nlopt-${NLOPT_VERSION}.tar.gz --no-verbose
-tar xzf nlopt-${NLOPT_VERSION}.tar.gz
+# NOTE: use alternative mirror as the one from the original webpage is faulty.
+wget http://pkgs.fedoraproject.org/repo/pkgs/NLopt/NLopt-${NLOPT_VERSION}.tar.gz/d0b8f139a4acf29b76dbae69ade8ac54/NLopt-${NLOPT_VERSION}.tar.gz --no-verbose
+tar xzf NLopt-${NLOPT_VERSION}.tar.gz
 cd nlopt-${NLOPT_VERSION}
 ./configure --enable-shared --disable-static > /dev/null
 make -j2 install > /dev/null
@@ -78,9 +82,14 @@ cd ..
 /opt/python/${PYTHON_DIR}/bin/ipcluster start --daemonize=True
 sleep 20
 
-# pagmo
-cd /pagmo2/build
-cmake ../ -DPAGMO_INSTALL_HEADERS=no -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_PYGMO=yes -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python
+# pagmo & pygmo
+cd /pagmo2
+mkdir build_pagmo
+cd build_pagmo
+cmake ../ -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DCMAKE_BUILD_TYPE=Release
+make install
+cd ../build
+cmake -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
 make -j2 install
 cd wheel
 # Copy the installed pygmo files, wherever they might be in /usr/local,

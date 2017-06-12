@@ -29,23 +29,21 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_PYGMO_CLASSES_HPP
 #define PYGMO_PYGMO_CLASSES_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <boost/python/class.hpp>
+#include <cstdlib>
+#include <iostream>
 #include <memory>
-#include <tuple>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/island.hpp>
-#include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/decompose.hpp>
-#include <pagmo/problems/translate.hpp>
-#include <pagmo/problems/unconstrain.hpp>
 
 namespace pygmo
 {
+
+namespace bp = boost::python;
 
 // pagmo::problem.
 extern std::unique_ptr<bp::class_<pagmo::problem>> problem_ptr;
@@ -55,6 +53,34 @@ extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
 
 // pagmo::island.
 extern std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
+
+// Getters for the objects above.
+inline bp::class_<pagmo::problem> &get_problem_class()
+{
+    if (!problem_ptr) {
+        std::cerr << "Null problem class pointer." << std::endl;
+        std::abort();
+    }
+    return *problem_ptr;
+}
+
+inline bp::class_<pagmo::algorithm> &get_algorithm_class()
+{
+    if (!algorithm_ptr) {
+        std::cerr << "Null algorithm class pointer." << std::endl;
+        std::abort();
+    }
+    return *algorithm_ptr;
+}
+
+inline bp::class_<pagmo::island> &get_island_class()
+{
+    if (!island_ptr) {
+        std::cerr << "Null island class pointer." << std::endl;
+        std::abort();
+    }
+    return *island_ptr;
+}
 }
 
 #endif

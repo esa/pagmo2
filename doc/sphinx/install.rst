@@ -3,25 +3,23 @@
 Installation guide
 ==================
 
-.. contents::
-
+.. _cpp_install:
 
 C++
 ---
 
-pagmo is a header-only library which has the following third party dependencies:
+pagmo is a header-only library which has the following third-party dependencies:
 
-* `Boost <http://www.boost.org/>`_, **mandatory**, header-only (needs the libraries only if you
-  intend to compile the python bindings)
-* `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`_, optional, header-only
+* `Boost <http://www.boost.org/>`__, **mandatory**, header-only
+* `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`__, optional, header-only
   (enabled via the ``PAGMO_WITH_EIGEN3`` CMake option)
-* `NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`_, optional, requires linking
+* `NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`__, optional, requires linking
   (enabled via the ``PAGMO_WITH_NLOPT`` CMake option)
-* `Ipopt <https://projects.coin-or.org/Ipopt>`_, optional, requires linking
+* `Ipopt <https://projects.coin-or.org/Ipopt>`__, optional, requires linking
   (enabled via the ``PAGMO_WITH_IPOPT`` CMake option)
 
 After making sure the dependencies above are installed in your system, you can download the
-pagmo source code from the `GitHub release page <https://github.com/esa/pagmo2/releases>`_. Alternatively,
+pagmo source code from the `GitHub release page <https://github.com/esa/pagmo2/releases>`__. Alternatively,
 and if you like living on the bleeding edge, you can get the very latest version of pagmo via the ``git``
 command:
 
@@ -40,7 +38,7 @@ you can install pagmo via the command
 The headers will be installed in the ``CMAKE_INSTALL_PREFIX/include`` directory. To check that all went well
 compile the :ref:`quick-start example <getting_started_c++>`.
 
-pagmo is also available via the `conda <https://conda.io/docs/>`_ package manager for Linux, OSX and Windows.
+pagmo is also available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows.
 In order to install pagmo via conda, you just need to add ``conda-forge`` to the channels,
 and then we can immediately install pagmo:
 
@@ -49,17 +47,24 @@ and then we can immediately install pagmo:
    conda config --add channels conda-forge
    conda install pagmo
 
-Please refer to the `conda documentation <https://conda.io/docs/>`_ for instructions on how to setup and manage
+Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
 your conda installation.
+
+.. _py_install:
 
 Python
 ------
 
-The python module corresponding to pagmo is called pygmo. There are various options for the installation
-of pygmo:
+The Python module corresponding to pagmo is called pygmo. pygmo has two mandatory runtime Python dependencies:
 
-* `conda <https://conda.io/docs/>`_,
-* `pip <https://pip.pypa.io/en/stable/>`_,
+* `NumPy <http://www.numpy.org/>`__, the standard Python array library
+* `cloudpickle <https://github.com/cloudpipe/cloudpickle>`__, a package that extends Python's serialization
+  capabilities.
+
+There are various options for the installation of pygmo:
+
+* `conda <https://conda.io/docs/>`__
+* `pip <https://pip.pypa.io/en/stable/>`__
 * installation from source.
 
 The following table summarizes the pros and cons of the various installation methods:
@@ -72,8 +77,8 @@ pip       64bit        64bit        ✘          ✘          64bit (MinGW)    6
 source    32/64bit     32/64bit     32/64bit   32/64bit   32/64bit (MinGW) 32/64bit
 ========= ============ ============ ========== ========== ================ ==========
 
-In general, we recommend the use of `conda <https://conda.io/docs/>`_: in addition to making the installation
-of pygmo easy, it also provides user-friendly access to a wealth of packages from the scientific python
+In general, we recommend the use of `conda <https://conda.io/docs/>`__: in addition to making the installation
+of pygmo easy, it also provides user-friendly access to a wealth of packages from the scientific Python
 ecosystem. Conda is a good default choice in Linux and OSX.
 
 In Windows, the situation is a bit more complicated. The first issue is that the compiler used by conda
@@ -83,8 +88,8 @@ lacks a free Fortran compiler that can interoperate with Visual C++ (the compile
 Thus, the pygmo packages for conda on Windows might lack some Fortran-based features available on Linux and OSX
 (e.g., the wrapper for the Ipopt solver).
 
-Thus, in order to provide a better experience to our Windows users, we publish `pip <https://pip.pypa.io/en/stable/>`_
-packages for pygmo built with `MinGW <https://mingw-w64.org/doku.php>`_. These packages allow us both to support Python 2.7
+Thus, in order to provide a better experience to our Windows users, we publish `pip <https://pip.pypa.io/en/stable/>`__
+packages for pygmo built with `MinGW <https://mingw-w64.org/doku.php>`__. These packages allow us both to support Python 2.7
 and to provide a full-featured pygmo on Windows, thanks to the ``gfortran`` compiler. The pip packages are also available on
 Linux for those users who might prefer pip to conda, but they are **not** available on OSX.
 
@@ -105,8 +110,8 @@ and then we can immediately install pygmo:
    conda config --add channels conda-forge
    conda install pygmo
 
-Please refer to the `conda documentation <https://conda.io/docs/>`_ for instructions on how to setup and manage
-your conda installation.
+conda will automatically install all of pygmo's dependencies for you. Please refer to the `conda documentation <https://conda.io/docs/>`__
+for instructions on how to setup and manage your conda installation.
 
 
 Installation with pip
@@ -117,7 +122,8 @@ The installation of pygmo with pip is also straightforward:
 
    pip install pygmo
 
-If you want to install pygmo for a single user instead of system-wide, which is in general a good idea, you can do:
+Like conda, also pip will automatically install all of pygmo's dependencies for you. If you want to install pygmo for a single user instead of
+system-wide, which is in general a good idea, you can do:
 
 .. code-block:: bash
 
@@ -126,13 +132,21 @@ If you want to install pygmo for a single user instead of system-wide, which is 
 
 Installation from source
 ^^^^^^^^^^^^^^^^^^^^^^^^
-To build the module from source you need to have the Boost.Python libraries installed and to activate the cmake
-``PAGMO_BUILD_PYGMO`` option.
+For an installation from source, pygmo has the following dependencies:
 
-Check carefully what python version is detected and what libraries are linked to. In particular, select the correct Boost.Python
-version according to the python version (2 or 3) you want to compile the module for.
+* pagmo (i.e., the C++ headers of the pagmo library need to be installed before attempting
+  to compile pygmo),
+* `Boost.Python <http://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html>`__
+* `NumPy <http://www.numpy.org/>`__ (note that NumPy's development headers must be installed as well).
 
-The ``CMAKE_INSTALL_PREFIX`` will be used to construct the final location of headers and Python module after install.
+Note that, at the present time, the versions of pygmo and pagmo must be exactly identical for the compilation of pygmo
+to be successful, otherwise the build process will error out. If you are updating pagmo/pygmo to a later version,
+make sure to install the new pagmo version before compiling the new pygmo version.
+
+To build the module from source you need to **activate** the ``PAGMO_BUILD_PYGMO`` cmake option and **deactivate** the ``PAGMO_BUILD_PAGMO`` option.
+Check carefully what Python version and what libraries/include paths are detected (in particular, on systems with multiple Python versions
+it can happen that CMake detects the headers from a Python version and the Python library from another version).
+The ``CMAKE_INSTALL_PREFIX`` variable will be used to construct the final location of headers and Python module after install.
 
 When done, type (in your build directory):
 
@@ -140,4 +154,4 @@ When done, type (in your build directory):
 
    make install
 
-To check that all went well fire-up your python console and try the example in :ref:`quick-start example <getting_started_py>`.
+To check that all went well fire-up your Python console and try the example in :ref:`quick-start example <getting_started_py>`.

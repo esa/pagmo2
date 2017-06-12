@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_PROBLEM_HPP
 #define PYGMO_PROBLEM_HPP
 
-#include "python_includes.hpp"
+#include <pygmo/python_includes.hpp>
 
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
@@ -52,9 +52,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
-#include "common_base.hpp"
-#include "common_utils.hpp"
-#include "object_serialization.hpp"
+#include <pygmo/common_base.hpp>
+#include <pygmo/common_utils.hpp>
+#include <pygmo/object_serialization.hpp>
 
 namespace pagmo
 {
@@ -113,10 +113,11 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         bp::tuple tup = bp::extract<bp::tuple>(m_value.attr("get_bounds")());
         // Check the tuple size.
         if (len(tup) != 2) {
-            pygmo_throw(PyExc_ValueError, ("the bounds of the problem must be returned as a tuple of 2 elements, but "
-                                           "the detected tuple size is "
-                                           + std::to_string(len(tup)))
-                                              .c_str());
+            pygmo_throw(PyExc_ValueError,
+                        ("the bounds of the problem must be returned as a tuple of 2 elements, but "
+                         "the detected tuple size is "
+                         + std::to_string(len(tup)))
+                            .c_str());
         }
         // Finally, we build the pair from the tuple elements.
         return std::make_pair(pygmo::to_vd(tup[0]), pygmo::to_vd(tup[1]));
@@ -346,19 +347,24 @@ struct problem_pickle_suite : bp::pickle_suite {
             oarchive(p);
         }
         auto s = oss.str();
-        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())));
+        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())), get_ap_list());
     }
     static void setstate(pagmo::problem &p, const bp::tuple &state)
     {
         // Similarly, first we extract a bytes object from the Python state,
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
-        if (len(state) != 1) {
-            pygmo_throw(PyExc_ValueError, ("the state tuple passed for problem deserialization "
-                                           "must have a single element, but instead it has "
-                                           + std::to_string(len(state)) + " elements")
-                                              .c_str());
+        if (len(state) != 2) {
+            pygmo_throw(PyExc_ValueError,
+                        ("the state tuple passed for problem deserialization "
+                         "must have 2 elements, but instead it has "
+                         + std::to_string(len(state)) + " elements")
+                            .c_str());
         }
+
+        // Make sure we import all the aps specified in the archive.
+        import_aps(bp::list(state[1]));
+
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
             pygmo_throw(PyExc_TypeError, "a bytes object is needed to deserialize a problem");

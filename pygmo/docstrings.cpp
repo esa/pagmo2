@@ -28,7 +28,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <string>
 
-#include "docstrings.hpp"
+#include <pygmo/docstrings.hpp>
 
 namespace pygmo
 {
@@ -1617,28 +1617,29 @@ objective function. Using the above definitions the overall pseudo code can be s
 
 :class:`pygmo.cstrs_self_adaptive` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
-.. note:
+.. note::
 
-Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
-for decision vectors already evaluated. This makes the final counter of fitness evaluations somewhat unpredictable.
+   Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+   for decision vectors already evaluated. This makes the final counter of fitness evaluations somewhat unpredictable.
+   The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
+   internal cache is reset at each iteration, but its size will grow unlimited during each call to
+   the inner UDA evolve method.
 
-The number of function evaluation will be bounded to *iters* times the fevals made by one call to the inner UDA. The
-internal cache is reset at each iteration, but its size will grow unlimited during each call to
-the inner UDA evolve method.
+.. note::
 
-.. note:
+   Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+   corner cases and with any UDAs. Most notably, a violation to the :math:`j`-th  constraint is ignored if all
+   the decision vectors in the population satisfy that particular constraint (i.e. if :math:`c_{j_{max}} = 0`).
 
-Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
-corner cases and with any UDAs. Most notably, a violation to the \f$j\f$-th  constraint is ignored if all
-the decision vectors in the population satisfy that particular constraint (i.e. if \f$c_{j_{max}} = 0\f$).
+.. note::
 
-.. note:
+   The performances of :class:`~pygmo.cstrs_self_adaptive` are highly dependent on the particular inner
+   algorithm employed and in particular to its parameters (generations / iterations).
 
-The performances of :class:`~pygmo.cstrs_self_adaptive` are highly dependent on the particular inner
-algorithm employed and in particular to its parameters (generations / iterations).
+.. seealso::
 
-See: Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
-Transactions on Evolutionary Computation 7.5 (2003): 445-455.
+   Farmani, Raziyeh, and Jonathan A. Wright. "Self-adaptive fitness formulation for constrained optimization." IEEE
+   Transactions on Evolutionary Computation 7.5 (2003): 445-455.
 
 See also the docs of the C++ class :cpp:class:`pagmo::cstrs_self_adaptive`.
 
@@ -4164,7 +4165,7 @@ std::string nlopt_docstring()
 NLopt algorithms.
 
 This user-defined algorithm wraps a selection of solvers from the
-`NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`_ library, focusing on
+`NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`__ library, focusing on
 local optimisation (both gradient-based and derivative-free). The complete list of supported
 NLopt algorithms is:
 
@@ -4205,7 +4206,7 @@ and :attr:`~pygmo.nlopt.replacement` attributes.
 
 .. seealso::
 
-   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed description
+   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`__ contains a detailed description
    of each supported solver.
 
 This constructor will initialise an :class:`~pygmo.nlopt` object which will use the NLopt algorithm specified by
@@ -4243,7 +4244,7 @@ See also the docs of the C++ class :cpp:class:`pagmo::nlopt`.
 
 .. seealso::
 
-   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed
+   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`__ contains a detailed
    description of each supported solver.
 
 Args:
@@ -4837,13 +4838,13 @@ are divided into three categories:
 * *integer* options (i.e., the type of the option is ``int``),
 * *numeric* options (i.e., the type of the option is ``float``).
 
-The full list of options is available on the `Ipopt website <https://www.coin-or.org/Ipopt/documentation/node40.html>`_.
+The full list of options is available on the `Ipopt website <https://www.coin-or.org/Ipopt/documentation/node40.html>`__.
 :class:`pygmo.ipopt` allows to configure any Ipopt option via methods such as :func:`~pygmo.ipopt.set_string_options()`,
 :func:`~pygmo.ipopt.set_string_option()`, :func:`~pygmo.ipopt.set_integer_options()`, etc., which need to be used before
 invoking the ``evolve()`` method.
 
 If the user does not set any option, :class:`pygmo.ipopt` use Ipopt's default values for the options (see the
-`documentation <https://www.coin-or.org/Ipopt/documentation/node40.html>`_), with the following
+`documentation <https://www.coin-or.org/Ipopt/documentation/node40.html>`__), with the following
 modifications:
 
 * if the ``"print_level"`` integer option is **not** set by the user, it will be set to 0 by :class:`pygmo.ipopt` (this will
