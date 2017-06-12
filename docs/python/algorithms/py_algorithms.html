@@ -130,9 +130,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.5 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -2005,8 +2006,8 @@ cluster optimization.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>algo</strong> &#8211; a user-defined algorithm (either C++ or Python - note that <em>algo</em> will be deep-copied
-and stored inside the <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> instance)</li>
+<li><strong>algo</strong> &#8211; an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm (either C++ or Python - note that
+<em>algo</em> will be deep-copied and stored inside the <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> instance)</li>
 <li><strong>stop</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; consecutive runs of the inner algorithm that need to result in no improvement for
 <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> to stop</li>
 <li><strong>perturb</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) &#8211; perturb the perturbation to be applied to each component</li>
@@ -2188,18 +2189,30 @@ objective function. Using the above definitions the overall pseudo code can be s
 </pre></div>
 </div>
 <p><a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cstrs_self_adaptive</span></code></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> objects.</p>
-<p>Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
-for decision vectors already evaluated. This makes the final counter of fitness evaluations somewhat unpredictable.</p>
-<p>The number of function evaluation will be bounded to <em>iters</em> times the fevals made by one call to the inner UDA. The
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
+for decision vectors already evaluated. This makes the final counter of fitness evaluations somewhat unpredictable.
+The number of function evaluation will be bounded to <em>iters</em> times the fevals made by one call to the inner UDA. The
 internal cache is reset at each iteration, but its size will grow unlimited during each call to
 the inner UDA evolve method.</p>
-<p>Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
-corner cases and with any UDAs. Most notably, a violation to the f$jf$-th  constraint is ignored if all
-the decision vectors in the population satisfy that particular constraint (i.e. if f$c_{j_{max}} = 0f$).</p>
-<p>The performances of <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> are highly dependent on the particular inner
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+corner cases and with any UDAs. Most notably, a violation to the <span class="math">\(j\)</span>-th  constraint is ignored if all
+the decision vectors in the population satisfy that particular constraint (i.e. if <span class="math">\(c_{j_{max}} = 0\)</span>).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The performances of <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> are highly dependent on the particular inner
 algorithm employed and in particular to its parameters (generations / iterations).</p>
-<p>See: Farmani, Raziyeh, and Jonathan A. Wright. &#8220;Self-adaptive fitness formulation for constrained optimization.&#8221; IEEE
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Farmani, Raziyeh, and Jonathan A. Wright. &#8220;Self-adaptive fitness formulation for constrained optimization.&#8221; IEEE
 Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
+</div>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/cstrs_self_adaptive.html#_CPPv2N5pagmo19cstrs_self_adaptiveE" title="pagmo::cstrs_self_adaptive"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cstrs_self_adaptive</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2207,8 +2220,8 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>iter</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of iterations (i.e. calls to the innel algorithm evolve)</li>
-<li><strong>algo</strong> &#8211; a user-defined algorithm (either C++ or Python - note that <em>algo</em> will be deep-copied
-and stored inside the <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> instance)</li>
+<li><strong>algo</strong> &#8211; an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm (either C++ or Python - note that <em>algo</em>
+will be deep-copied and stored inside the <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> instance)</li>
 <li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
 </ul>
 </td>

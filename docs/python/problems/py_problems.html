@@ -130,9 +130,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.5 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -676,10 +677,13 @@ are user-defined problems that can be used in the construction of a <a class="re
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the length of <em>translation</em> is not equal to the dimension of <em>prob</em></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:</li>
-<li>* the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>,</li>
-<li>* the constructor of the underlying C++ class,</li>
-<li><em>* failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function</em> &#8211; signatures, etc.)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li>the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>,</li>
+<li>the constructor of the underlying C++ class,</li>
+<li>failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+signatures, etc.)</li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>
@@ -776,17 +780,22 @@ to be the ideal point</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either:</li>
-<li>* <em>prob</em> is single objective or constrained,</li>
-<li>* <em>method</em> is not one of [<code class="docutils literal"><span class="pre">'weighted'</span></code>, <code class="docutils literal"><span class="pre">'tchebycheff'</span></code>, <code class="docutils literal"><span class="pre">'bi'</span></code>],</li>
-<li>* <em>weight</em> is not of size <span class="math">\(n\)</span>,</li>
-<li>* <em>z</em> is not of size <span class="math">\(n\)</span></li>
-<li>* <em>weight</em> is not such that <span class="math">\(\lambda_i &gt; 0, \forall i=1..n\)</span>,</li>
-<li>* <em>weight</em> is not such that <span class="math">\(\sum_i \lambda_i = 1\)</span></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:</li>
-<li>* the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>,</li>
-<li>* the constructor of the underlying C++ class,</li>
-<li><em>* failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function</em> &#8211; signatures, etc.)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either:<ul>
+<li><em>prob</em> is single objective or constrained,</li>
+<li><em>method</em> is not one of [<code class="docutils literal"><span class="pre">'weighted'</span></code>, <code class="docutils literal"><span class="pre">'tchebycheff'</span></code>, <code class="docutils literal"><span class="pre">'bi'</span></code>],</li>
+<li><em>weight</em> is not of size <span class="math">\(n\)</span>,</li>
+<li><em>z</em> is not of size <span class="math">\(n\)</span></li>
+<li><em>weight</em> is not such that <span class="math">\(\lambda_i &gt; 0, \forall i=1..n\)</span>,</li>
+<li><em>weight</em> is not such that <span class="math">\(\sum_i \lambda_i = 1\)</span></li>
+</ul>
+</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li>the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>,</li>
+<li>the constructor of the underlying C++ class,</li>
+<li>failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+signatures, etc.)</li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>
@@ -881,7 +890,7 @@ Proceedings 6th European Congress on Intelligent Techniques &amp; Soft Computing
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>prob</strong> &#8211; a user-defined problem (either C++ or Python - note that <em>udp</em> will be deep-copied
+<li><strong>prob</strong> &#8211; a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> or a user-defined problem (either C++ or Python - note that <em>udp</em> will be deep-copied
 and stored inside the <code class="xref py py-class docutils literal"><span class="pre">unconstrained</span></code> instance)</li>
 <li><strong>method</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; a string containing the unconstrain method chosen, one of [<code class="docutils literal"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal"><span class="pre">'kuri'</span></code>, <code class="docutils literal"><span class="pre">'weighted'</span></code>, <code class="docutils literal"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal"><span class="pre">'ignore_o'</span></code>]</li>
 <li><strong>weights</strong> (<em>array-like object</em>) &#8211; the vector of weights to be used if the method chosen is &#8220;weighted&#8221;</li>
@@ -889,14 +898,19 @@ and stored inside the <code class="xref py py-class docutils literal"><span clas
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either:</li>
-<li>* <em>prob</em> is unconstrained,</li>
-<li>* <em>method</em> is not one of [<code class="docutils literal"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal"><span class="pre">'kuri'</span></code>, <code class="docutils literal"><span class="pre">'weighted'</span></code>, <code class="docutils literal"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal"><span class="pre">'ignore_o'</span></code>],</li>
-<li>* <em>weight</em> is not of the same size as the problem constraints (if the method <code class="docutils literal"><span class="pre">'weighted'</span></code> is selcted), or not empty otherwise.</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:</li>
-<li>* the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>,</li>
-<li>* the constructor of the underlying C++ class,</li>
-<li><em>* failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function</em> &#8211; signatures, etc.)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either:<ul>
+<li><em>prob</em> is unconstrained,</li>
+<li><em>method</em> is not one of [<code class="docutils literal"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal"><span class="pre">'kuri'</span></code>, <code class="docutils literal"><span class="pre">'weighted'</span></code>, <code class="docutils literal"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal"><span class="pre">'ignore_o'</span></code>],</li>
+<li><em>weight</em> is not of the same size as the problem constraints (if the method <code class="docutils literal"><span class="pre">'weighted'</span></code> is selcted), or not empty otherwise.</li>
+</ul>
+</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li>the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>,</li>
+<li>the constructor of the underlying C++ class,</li>
+<li>failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+signatures, etc.)</li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>

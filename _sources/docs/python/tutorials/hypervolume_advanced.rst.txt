@@ -22,7 +22,7 @@ the algorithm as parameter of the corresponding method:
     >>> hv.compute([5,5,5], hv_algo=pg.hvwfg())
     114.0
   
-The code above will compute the hypervolume indicator using the  `Walking Fish Group <http://www.wfg.csse.uwa.edu.au/hypervolume/>`_
+The code above will compute the hypervolume indicator using the  `Walking Fish Group <http://www.wfg.csse.uwa.edu.au/hypervolume/>`__
 algorithm, whereas
 
 .. doctest::

@@ -130,9 +130,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.5 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -287,7 +288,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algor
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">a</span></code>: a user-defined algorithm (UDA) that will be used to construct the inner algorithm. </li>
+<li><code class="docutils literal"><span class="pre">a</span></code>: a user-defined algorithm (UDA) or a <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> that will be used to construct the inner algorithm. </li>
 <li><code class="docutils literal"><span class="pre">stop</span></code>: consecutive runs of the inner algorithm that need to result in no improvement for <a class="reference internal" href="#pagmoclasspagmo_1_1mbh"><span class="std std-ref">pagmo::mbh</span></a> to stop. </li>
 <li><code class="docutils literal"><span class="pre">perturb</span></code>: a <a class="reference internal" href="../types.html#pagmonamespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> with the perturbations to be applied to each component of the decision vector of the best population found when generating a new starting point. These are defined relative to the corresponding bounds. </li>
 <li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random).</li>
