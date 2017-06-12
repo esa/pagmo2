@@ -4164,7 +4164,7 @@ std::string nlopt_docstring()
 NLopt algorithms.
 
 This user-defined algorithm wraps a selection of solvers from the
-`NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`_ library, focusing on
+`NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`__ library, focusing on
 local optimisation (both gradient-based and derivative-free). The complete list of supported
 NLopt algorithms is:
 
@@ -4205,7 +4205,7 @@ and :attr:`~pygmo.nlopt.replacement` attributes.
 
 .. seealso::
 
-   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed description
+   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`__ contains a detailed description
    of each supported solver.
 
 This constructor will initialise an :class:`~pygmo.nlopt` object which will use the NLopt algorithm specified by
@@ -4243,7 +4243,7 @@ See also the docs of the C++ class :cpp:class:`pagmo::nlopt`.
 
 .. seealso::
 
-   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`_ contains a detailed
+   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`__ contains a detailed
    description of each supported solver.
 
 Args:
@@ -4837,13 +4837,13 @@ are divided into three categories:
 * *integer* options (i.e., the type of the option is ``int``),
 * *numeric* options (i.e., the type of the option is ``float``).
 
-The full list of options is available on the `Ipopt website <https://www.coin-or.org/Ipopt/documentation/node40.html>`_.
+The full list of options is available on the `Ipopt website <https://www.coin-or.org/Ipopt/documentation/node40.html>`__.
 :class:`pygmo.ipopt` allows to configure any Ipopt option via methods such as :func:`~pygmo.ipopt.set_string_options()`,
 :func:`~pygmo.ipopt.set_string_option()`, :func:`~pygmo.ipopt.set_integer_options()`, etc., which need to be used before
 invoking the ``evolve()`` method.
 
 If the user does not set any option, :class:`pygmo.ipopt` use Ipopt's default values for the options (see the
-`documentation <https://www.coin-or.org/Ipopt/documentation/node40.html>`_), with the following
+`documentation <https://www.coin-or.org/Ipopt/documentation/node40.html>`__), with the following
 modifications:
 
 * if the ``"print_level"`` integer option is **not** set by the user, it will be set to 0 by :class:`pygmo.ipopt` (this will
