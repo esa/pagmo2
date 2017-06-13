@@ -194,17 +194,17 @@
 \mbox{subject to:} &amp; \mathbf {c}_e(\mathbf x, s) = 0 \\
                   &amp; \mathbf {c}_i(\mathbf x, s) \le 0
 \end{array}\end{split}\]</div>
-<p>where <span class="math">\(\mathbf x \in \mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}\)</span> is called <em>decision vector</em> or
-<em>chromosome</em>, and is made of <span class="math">\(n_{cx}\)</span> real numbers and <span class="math">\(n_{ix}\)</span> integers. The total problem dimension is then
-indicated with <span class="math">\(n_x = n_{cx} + n_{ix}\)</span>. <span class="math">\(\mathbf{lb}, \mathbf{ub} \in
-\mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}\)</span> are the <em>box-bounds</em>, <span class="math">\(\mathbf f: \mathbb R^{n_x} \rightarrow
-\mathbb R^{n_{obj}}\)</span> define the
-<em>objectives</em>, <span class="math">\(\mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\)</span> are non linear <em>equality
-constraints</em>, and <span class="math">\(\mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\)</span> are non linear <em>inequality
+<p>where <span class="math">\(\mathbf x \in \mathbb R^{n_{cx}} \times  \mathbb Z^{n_{ix}}\)</span> is called <em>decision vector</em> or
+<em>chromosome</em>, and is made of <span class="math">\(n_{cx}\)</span> real numbers and <span class="math">\(n_{ix}\)</span> integers (all represented as doubles). The
+total problem dimension is then indicated with <span class="math">\(n_x = n_{cx} + n_{ix}\)</span>. <span class="math">\(\mathbf{lb}, \mathbf{ub} \in
+\mathbb R^{n_{cx}} \times  \mathbb Z^{n_{ix}}\)</span> are the <em>box-bounds</em>, <span class="math">\(\mathbf f: \mathbb R^{n_{cx}} \times
+\mathbb Z^{n_{ix}} \rightarrow \mathbb R^{n_{obj}}\)</span> define the <em>objectives</em>, <span class="math">\(\mathbf c_e:  \mathbb R^{n_{cx}}
+\times  \mathbb Z^{n_{ix}} \rightarrow \mathbb R^{n_{ec}}\)</span> are non linear <em>equality constraints</em>, and <span class="math">\(\mathbf
+c_i:  \mathbb R^{n_{cx}} \times  \mathbb Z^{n_{ix}} \rightarrow \mathbb R^{n_{ic}}\)</span> are non linear <em>inequality
 constraints</em>. Note that the objectives and constraints may also depend from an added value <span class="math">\(s\)</span> seeding the
-values of any number of stochastic variables. This allows also for stochastic programming
-tasks to be represented by this class. The tolerance considered for the verification of the constraints is set
-by default to zero and it can be modified via the <a class="reference internal" href="#pygmo.problem.c_tol" title="pygmo.problem.c_tol"><code class="xref py py-attr docutils literal"><span class="pre">c_tol</span></code></a> attribute.</p>
+values of any number of stochastic variables. This allows also for stochastic programming tasks to be represented by
+this class. A tolerance is also considered for all constraints and set, by default, to zero. It can be modified
+via the <a class="reference internal" href="#pygmo.problem.c_tol" title="pygmo.problem.c_tol"><code class="xref py py-attr docutils literal"><span class="pre">c_tol</span></code></a> attribute.</p>
 <p>In order to define an optimizaztion problem in pygmo, the user must first define a class
 whose methods describe the properties of the problem and allow to compute
 the objective function, the gradient, the constraints, etc. In pygmo, we refer to such

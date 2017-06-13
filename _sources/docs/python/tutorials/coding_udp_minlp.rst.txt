@@ -3,8 +3,9 @@
 Coding a User Defined Problem with an integer part (MINLP)
 -----------------------------------------------------------
 
-We here show how to code a non-trivial user defined problem (UDP) with a single objective, equality and inequality constraints and 
-an integer part. We assume that the mathematical formulation of problem is the following:
+In this pygmo tutorial we show how to code a non-trivial user defined problem (UDP) with a single objective,
+inequality constraints (no equality constraints in this case) and an integer part. We assume that
+the mathematical formulation of problem is the following:
 
 .. math::
 
@@ -40,14 +41,15 @@ Neglecting, for the time being the fitness, the basic structure for the UDP to h
     ...     def get_nix(self):
     ...         return 2
 
-Note how we need to specify explicitly the number of equality constraints, the number of inequality constraints and the integer problem
-dimension (as pygmo otherwise by default assumes 0 for all). There is no need to specify the number of objectives as by default pygmo assumes
-single objective optimization. The full documenation on the UDP optional methods can be found in the :class:`pygmo.problem` docs.
+Note how we need to specify explicitly the number of inequality constraints and the integer problem
+dimension (as pygmo otherwise by default assumes 0 for both). Note also that the bounds (for the integer part)
+must be integers, otherwise pygmo will complain. There is no need, for this case, to also specify explicitly the number of objectives
+as by default pygmo assumes single objective optimization. The full documenation on the UDP optional methods can be
+found in the :class:`pygmo.problem` docs.
 
-We still have to write the fitness function as that is a mandatory method (together with ``get_bounds()``) for all UDPs. Constructing a :class:`~pygmo.problem` with
-an incomplete UDP will fail. In pygmo the fitness includes both the objectives and the constraints according to the described order [obj,ec,ic]. 
-All inequality constraints are in the form :math:`g(x) = 0` as documented in :func:`pygmo.problem.fitness()`. Note that in this particular
-case we do not have equality constraints.
+We still have to write the fitness function, as that is a mandatory method (together with ``get_bounds()``) for all UDPs. Constructing a :class:`~pygmo.problem` with
+an incomplete UDP will fail. In pygmo the fitness encapsulates both the objectives and the constraints in the mandatory order
+[obj,ec,ic]. All inequality constraints are in the form :math:`g(x) <= 0` as documented in :func:`pygmo.problem.fitness()`. 
 
 .. doctest::
 
@@ -71,7 +73,7 @@ case we do not have equality constraints.
     ...     def get_nix(self):
     ...         return 2
 
-In order to check that the UDP above is well formed for pygmo we try to construct a :class:`pygmo.problem` from it and inspect it:
+In order to check that the UDP above is well formed we try to construct a :class:`pygmo.problem` from it and inspect it:
 
 .. doctest::
 
@@ -121,10 +123,13 @@ and constraints. So we add them:
     >>> prob = pg.problem(my_minlp())
     >>> prob.c_tol = [1e-8]*6
 
+Note that, in this UDP, taking the gradient with respect to the integer part of the decision vector makes sense as it contains
+relevant information, but that is not always the case. Whenever the gradient of your UDP does not contain any information,
+relaxation techniques are not really an option and some global heuristic approach (e.g. evolutionary) may be the only way to go.
 
-Pygmo support for MINLP problems is built around the idea of making integer relaxation very easy. So we can just
-call an NLP solver on our MINLP and the relaxed version of the problem will be solved returning a population
-with decision vectors that violate the integer constraints.
+Pygmo's support for MINLP problems is built around the idea of making integer relaxation very easy. So we can
+call an NLP solver (or any other suitable algorithm) on our MINLP and the relaxed version of the problem will be solved
+returning a population with decision vectors that violate the integer constraints.
 
     >>> # We run 20 instances of the optimization in parallel via a default archipelago setup
     >>> archi = pg.archipelago(n = 20, algo = pg.ipopt(), prob = my_minlp(), pop_size=1)
@@ -162,7 +167,7 @@ possible cases we thus fix the box bounds on the last two variables. In case :ma
     >>> print("Best decision vector: ", pop.champion_x) # doctest: +SKIP
     Best decision vector:  [ 0.4378605   0.33368365 -0.75844494 -1.          0.          0.        ]
 
-We found a feasible solution!
+We found a feasible solution! Note that in the other 3 cases no feasible solution exists.
 
 .. note::
    The solution strategy above is, in general, flawed in assuming the best solution of the relaxed problem is colse to the 
