@@ -43,7 +43,7 @@ Neglecting, for the time being the fitness, the basic structure for the UDP to h
 
 Note how we need to specify explicitly the number of inequality constraints and the integer problem
 dimension (as pygmo otherwise by default assumes 0 for both). Note also that the bounds (for the integer part)
-must be integers, otherwise pygmo will complain. There is no need, foir this case, to also specify explicitly the number of objectives
+must be integers, otherwise pygmo will complain. There is no need, for this case, to also specify explicitly the number of objectives
 as by default pygmo assumes single objective optimization. The full documenation on the UDP optional methods can be
 found in the :class:`pygmo.problem` docs.
 
@@ -127,7 +127,7 @@ Note that, in this UDP, taking the gradient with respect to the integer part of 
 relevant information, but that is not always the case. Whenever the gradient of your UDP does not contain any information,
 relaxation techniques are not really an option and some global heuristic approach (e.g. evolutionary) may be the only way to go.
 
-Pygmo support for MINLP problems is built around the idea of making integer relaxation very easy. So we can
+Pygmo's support for MINLP problems is built around the idea of making integer relaxation very easy. So we can
 call an NLP solver (or any other suitable algorithm) on our MINLP and the relaxed version of the problem will be solved
 returning a population with decision vectors that violate the integer constraints.
 
