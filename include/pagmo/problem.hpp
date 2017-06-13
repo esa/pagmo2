@@ -1026,17 +1026,17 @@ struct prob_inner final : prob_inner_base {
  * \end{array}
  * \f]
  *
- * where \f$\mathbf x \in \mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}\f$ is called *decision vector* or
- * *chromosome*, and is made of \f$n_{cx}\f$ real numbers and \f$n_{ix}\f$ integers. The total problem dimension is then
- * indicated with \f$n_x = n_{cx} + n_{ix}\f$. \f$\mathbf{lb}, \mathbf{ub} \in
- * \mathbb R^{n_{cx}} \times  \mathbb R^{n_{ix}}\f$ are the *box-bounds*, \f$ \mathbf f: \mathbb R^{n_x} \rightarrow
- * \mathbb R^{n_{obj}}\f$ define the
- * *objectives*, \f$ \mathbf c_e:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality
- * constraints*, and \f$ \mathbf c_i:  \mathbb R^{n_x} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality
+ * where \f$\mathbf x \in \mathbb R^{n_{cx}} \times  \mathbb Z^{n_{ix}}\f$ is called *decision vector* or
+ * *chromosome*, and is made of \f$n_{cx}\f$ real numbers and \f$n_{ix}\f$ integers (all represented as doubles). The
+ * total problem dimension is then indicated with \f$n_x = n_{cx} + n_{ix}\f$. \f$\mathbf{lb}, \mathbf{ub} \in
+ * \mathbb R^{n_{cx}} \times  \mathbb Z^{n_{ix}}\f$ are the *box-bounds*, \f$ \mathbf f: \mathbb R^{n_{cx}} \times
+ * \mathbb Z^{n_{ix}} \rightarrow \mathbb R^{n_{obj}}\f$ define the *objectives*, \f$ \mathbf c_e:  \mathbb R^{n_{cx}}
+ * \times  \mathbb Z^{n_{ix}} \rightarrow \mathbb R^{n_{ec}}\f$ are non linear *equality constraints*, and \f$ \mathbf
+ * c_i:  \mathbb R^{n_{cx}} \times  \mathbb Z^{n_{ix}} \rightarrow \mathbb R^{n_{ic}}\f$ are non linear *inequality
  * constraints*. Note that the objectives and constraints may also depend from an added value \f$s\f$ seeding the
- * values of any number of stochastic variables. This allows also for stochastic programming
- * tasks to be represented by this class. The tolerance considered for the verification of the constraints is set
- * by default to zero and it can be modified via the problem::set_c_tol() method.
+ * values of any number of stochastic variables. This allows also for stochastic programming tasks to be represented by
+ * this class. A tolerance is also considered for all constraints and set, by default, to zero. It can be modified
+ * via the problem::set_c_tol() method.
  *
  * In order to define an optimizaztion problem in pagmo, the user must first define a class
  * (or a struct) whose methods describe the properties of the problem and allow to compute
