@@ -10,16 +10,16 @@ C++
 
 pagmo is a header-only library which has the following third-party dependencies:
 
-* `Boost <http://www.boost.org/>`_, **mandatory**, header-only
-* `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`_, optional, header-only
+* `Boost <http://www.boost.org/>`__, **mandatory**, header-only
+* `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`__, optional, header-only
   (enabled via the ``PAGMO_WITH_EIGEN3`` CMake option)
-* `NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`_, optional, requires linking
+* `NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`__, optional, requires linking
   (enabled via the ``PAGMO_WITH_NLOPT`` CMake option)
-* `Ipopt <https://projects.coin-or.org/Ipopt>`_, optional, requires linking
+* `Ipopt <https://projects.coin-or.org/Ipopt>`__, optional, requires linking
   (enabled via the ``PAGMO_WITH_IPOPT`` CMake option)
 
 After making sure the dependencies above are installed in your system, you can download the
-pagmo source code from the `GitHub release page <https://github.com/esa/pagmo2/releases>`_. Alternatively,
+pagmo source code from the `GitHub release page <https://github.com/esa/pagmo2/releases>`__. Alternatively,
 and if you like living on the bleeding edge, you can get the very latest version of pagmo via the ``git``
 command:
 
@@ -38,7 +38,7 @@ you can install pagmo via the command
 The headers will be installed in the ``CMAKE_INSTALL_PREFIX/include`` directory. To check that all went well
 compile the :ref:`quick-start example <getting_started_c++>`.
 
-pagmo is also available via the `conda <https://conda.io/docs/>`_ package manager for Linux, OSX and Windows.
+pagmo is also available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows.
 In order to install pagmo via conda, you just need to add ``conda-forge`` to the channels,
 and then we can immediately install pagmo:
 
@@ -47,7 +47,7 @@ and then we can immediately install pagmo:
    conda config --add channels conda-forge
    conda install pagmo
 
-Please refer to the `conda documentation <https://conda.io/docs/>`_ for instructions on how to setup and manage
+Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
 your conda installation.
 
 .. _py_install:
@@ -57,14 +57,14 @@ Python
 
 The Python module corresponding to pagmo is called pygmo. pygmo has two mandatory runtime Python dependencies:
 
-* `NumPy <http://www.numpy.org/>`_, the standard Python array library
-* `cloudpickle <https://github.com/cloudpipe/cloudpickle>`_, a package that extends Python's serialization
+* `NumPy <http://www.numpy.org/>`__, the standard Python array library
+* `cloudpickle <https://github.com/cloudpipe/cloudpickle>`__, a package that extends Python's serialization
   capabilities.
 
 There are various options for the installation of pygmo:
 
-* `conda <https://conda.io/docs/>`_
-* `pip <https://pip.pypa.io/en/stable/>`_
+* `conda <https://conda.io/docs/>`__
+* `pip <https://pip.pypa.io/en/stable/>`__
 * installation from source.
 
 The following table summarizes the pros and cons of the various installation methods:
@@ -77,7 +77,7 @@ pip       64bit        64bit        ✘          ✘          64bit (MinGW)    6
 source    32/64bit     32/64bit     32/64bit   32/64bit   32/64bit (MinGW) 32/64bit
 ========= ============ ============ ========== ========== ================ ==========
 
-In general, we recommend the use of `conda <https://conda.io/docs/>`_: in addition to making the installation
+In general, we recommend the use of `conda <https://conda.io/docs/>`__: in addition to making the installation
 of pygmo easy, it also provides user-friendly access to a wealth of packages from the scientific Python
 ecosystem. Conda is a good default choice in Linux and OSX.
 
@@ -88,8 +88,8 @@ lacks a free Fortran compiler that can interoperate with Visual C++ (the compile
 Thus, the pygmo packages for conda on Windows might lack some Fortran-based features available on Linux and OSX
 (e.g., the wrapper for the Ipopt solver).
 
-Thus, in order to provide a better experience to our Windows users, we publish `pip <https://pip.pypa.io/en/stable/>`_
-packages for pygmo built with `MinGW <https://mingw-w64.org/doku.php>`_. These packages allow us both to support Python 2.7
+Thus, in order to provide a better experience to our Windows users, we publish `pip <https://pip.pypa.io/en/stable/>`__
+packages for pygmo built with `MinGW <https://mingw-w64.org/doku.php>`__. These packages allow us both to support Python 2.7
 and to provide a full-featured pygmo on Windows, thanks to the ``gfortran`` compiler. The pip packages are also available on
 Linux for those users who might prefer pip to conda, but they are **not** available on OSX.
 
@@ -110,7 +110,7 @@ and then we can immediately install pygmo:
    conda config --add channels conda-forge
    conda install pygmo
 
-conda will automatically install all of pygmo's dependencies for you. Please refer to the `conda documentation <https://conda.io/docs/>`_
+conda will automatically install all of pygmo's dependencies for you. Please refer to the `conda documentation <https://conda.io/docs/>`__
 for instructions on how to setup and manage your conda installation.
 
 
@@ -136,8 +136,8 @@ For an installation from source, pygmo has the following dependencies:
 
 * pagmo (i.e., the C++ headers of the pagmo library need to be installed before attempting
   to compile pygmo),
-* `Boost.Python <http://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html>`_
-* `NumPy <http://www.numpy.org/>`_ (note that NumPy's development headers must be installed as well).
+* `Boost.Python <http://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html>`__
+* `NumPy <http://www.numpy.org/>`__ (note that NumPy's development headers must be installed as well).
 
 Note that, at the present time, the versions of pygmo and pagmo must be exactly identical for the compilation of pygmo
 to be successful, otherwise the build process will error out. If you are updating pagmo/pygmo to a later version,
