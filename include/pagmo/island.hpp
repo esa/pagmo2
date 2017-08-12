@@ -1266,7 +1266,7 @@ public:
             push_back(*iptr);
         }
         // Set the topology.
-        set_topology(other.get_topology());
+        m_topo = other.get_topology();
     }
     /// Move constructor.
     /**
@@ -1288,8 +1288,6 @@ public:
             iptr->m_ptr->archi_ptr = this;
         }
         // Move over the topology.
-        // NOTE: no need to protect here as any async operation
-        // on other has finished as we waited above.
         m_topo = std::move(other.m_topo);
     }
 
@@ -1412,8 +1410,6 @@ public:
                 iptr->m_ptr->archi_ptr = this;
             }
             // Move over the topology.
-            // NOTE: no need to protect, we waited above for async operations
-            // to finish.
             m_topo = std::move(other.m_topo);
         }
         return *this;
@@ -1520,23 +1516,17 @@ public:
     template <typename... Args, push_back_enabler<Args...> = 0>
     void push_back(Args &&... args)
     {
-        // Fetch the topology and add a new element to it.
-        // NOTE: we do it first for exception safety.
-        auto topo = get_topology();
-        topo.push_back();
-
         // Add the new island. This will either succeed or throw without modifying m_islands.
         m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
         // This is noexcept.
         m_islands.back()->m_ptr->archi_ptr = this;
 
         // NOTE: at this point, the new island has been added but it is not yet connected
-        // and thus it will not participate yet in migration. We'll try to set the new
-        // topology now.
+        // and thus it will not participate yet in migration. We'll try to connect now.
         try {
-            set_topology(std::move(topo));
+            m_topo.push_back();
         } catch (...) {
-            // In case of any error setting the topology, remove the added
+            // In case of any error connecting the island, remove the added
             // island before re-throwing.
             m_islands.pop_back();
             throw;
@@ -1744,7 +1734,8 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const archipelago &archi)
     {
         stream(os, "Number of islands: ", archi.size(), "\n");
-        stream(os, "Topology: ", archi.get_topology().get_name(), "\n");
+        // NOTE: this is required to be thread-safe.
+        stream(os, "Topology: ", archi.m_topo.get_name(), "\n");
         stream(os, "Status: ", archi.status(), "\n\n");
         stream(os, "Islands summaries:\n\n");
         detail::table t({"#", "Type", "Algo", "Prob", "Size", "Status"}, "\t");
@@ -1788,19 +1779,15 @@ public:
     }
     topology get_topology() const
     {
-        // NOTE: get/set topology follow the same reasoning as in get/set algorithm
-        // for island. Not gonna repeat it here.
-        std::unique_lock<std::mutex> lock(m_topo_mutex);
-        auto new_topo_ptr = m_topo;
-        lock.unlock();
-        assert(new_topo_ptr);
-        return *new_topo_ptr;
+        return m_topo;
     }
     void set_topology(topology topo)
     {
-        auto new_topo_ptr = std::make_shared<topology>(std::move(topo));
-        std::lock_guard<std::mutex> lock(m_topo_mutex);
-        m_topo = new_topo_ptr;
+        // NOTE: make sure we finish any ongoing evolution before setting the topology.
+        // The assignment will trigger the destructor of the UDT, so we need to make
+        // sure there's no interaction with the UDT happening.
+        wait_check_ignore();
+        m_topo = std::move(topo);
     }
     /// Save to archive.
     /**
@@ -1829,14 +1816,13 @@ public:
     {
         archipelago tmp;
         // NOTE: no need to lock anything, tmp is idle.
-        ar(tmp.m_islands, *tmp.m_topo);
+        ar(tmp.m_islands, tmp.m_topo);
         *this = std::move(tmp);
     }
 
 private:
     container_t m_islands;
-    mutable std::mutex m_topo_mutex;
-    std::shared_ptr<topology> m_topo = std::make_shared<topology>(unconnected{});
+    topology m_topo = topology{unconnected{}};
 };
 }
 
