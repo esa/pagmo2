@@ -49,7 +49,7 @@ namespace pagmo
 /// Base BGL topology.
 /**
  * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.3
+ * .. versionadded:: 2.5
  * \endverbatim
  *
  *

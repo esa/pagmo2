@@ -1239,12 +1239,9 @@ public:
     using const_iterator = const_iterator_implementation;
     /// Default constructor.
     /**
-     * The default constructor will initialise an empty archipelago with an \link pagmo::unconnected unconnected\endlink
-     * topology.
+     * The default constructor will initialise an empty archipelago with a pagmo::unconnected topology.
      */
-    archipelago()
-    {
-    }
+    archipelago() = default;
     /// Copy constructor.
     /**
      * The copy constructor will perform a deep copy of \p other.
@@ -1254,7 +1251,7 @@ public:
      * @throws unspecified any exception thrown by:
      * - archipelago::push_back(),
      * - archipelago::get_topology(),
-     * - archipelago::set_topology().
+     * - archipelago::get_emigrants().
      */
     archipelago(const archipelago &other)
     {
@@ -1267,6 +1264,8 @@ public:
         }
         // Set the topology.
         m_topo = other.get_topology();
+        // Set the emigrants.
+        m_emigrants = other.get_emigrants();
     }
     /// Move constructor.
     /**
@@ -1289,6 +1288,8 @@ public:
         }
         // Move over the topology.
         m_topo = std::move(other.m_topo);
+        // Move over the emigrants.
+        m_emigrants = std::move(other.m_emigrants);
     }
 
 private:
@@ -1347,7 +1348,7 @@ public:
      *
      * \endverbatim
      *
-     * This constructor will first initialize an empty archipelago with unconnected topology, and it will then
+     * This constructor will first initialize an empty archipelago with pagmo::unconnected topology, and it will then
      * forward \p n times the input arguments \p args to the push_back() method, thus creating an archipelago
      * with \p n islands.
      *
@@ -1411,6 +1412,8 @@ public:
             }
             // Move over the topology.
             m_topo = std::move(other.m_topo);
+            // Move over the emigrants.
+            m_emigrants = std::move(other.m_emigrants);
         }
         return *this;
     }
@@ -1506,12 +1509,16 @@ public:
      *
      * This method will construct an island from the supplied arguments and add it to the archipelago.
      * Islands are added at the end of the archipelago (that is, the new island will have an index
-     * equal to the value of size() before the call to this method).
+     * equal to the value of size() before the call to this method). pagmo::topology::push_back()
+     * will also be called on the pagmo::topology associated with this archipelago.
      *
      * @param args the arguments that will be used for the construction of the island.
      *
-     * @throws unspecified any exception thrown by memory allocation errors or by the invoked constructor
-     * of pagmo::island.
+     * @throws unspecified any exception thrown by:
+     * - memory allocation errors,
+     * - threading primitives,
+     * - pagmo::topology::push_back(),
+     * - the invoked constructor of pagmo::island.
      */
     template <typename... Args, push_back_enabler<Args...> = 0>
     void push_back(Args &&... args)
@@ -1523,11 +1530,27 @@ public:
 
         // NOTE: at this point, the new island has been added but it is not yet connected
         // and thus it will not participate yet in migration. We'll try to connect now.
+        // NOTE: push_back() is required to be thread-safe, no need for locking.
         try {
             m_topo.push_back();
         } catch (...) {
             // In case of any error connecting the island, remove the added
             // island before re-throwing.
+            m_islands.pop_back();
+            throw;
+        }
+
+        // Add an empty entry to the emigrants vector. Needs to be protected
+        // as evolution might be ongoing.
+        try {
+            std::lock_guard<std::mutex> lock(m_emigrants_mutex);
+            m_emigrants.emplace_back();
+        } catch (...) {
+            // NOTE: if the emplace_back()/lock throws, we will erase the recently-added island,
+            // so that the emigrants vector size is consistent with the number of island. But we
+            // don't do anything about the topology: we cannot roll back the addition of an element
+            // and in any case we can always set bogus topologies via set_topology(). For the topology,
+            // we must never assume it makes sense.
             m_islands.pop_back();
             throw;
         }
@@ -1777,10 +1800,22 @@ public:
         }
         return retval;
     }
+    /// Get a copy of the topology.
+    /**
+     * @return a copy of the pagmo::topology associated to this archipelago.
+     */
     topology get_topology() const
     {
+        // NOTE: the copy ctor of topology is required to be thread-safe.
         return m_topo;
     }
+    /// Set the topology.
+    /**
+     * This method will set the archipelago's topology to \p topo. The method will
+     * wait for any ongoing evolution to stop before setting the topology.
+     *
+     * @param topo the pagmo::topology that will be set for this archipelago.
+     */
     void set_topology(topology topo)
     {
         // NOTE: make sure we finish any ongoing evolution before setting the topology.
@@ -1789,18 +1824,25 @@ public:
         wait_check_ignore();
         m_topo = std::move(topo);
     }
+    /// Get the current emigrants.
+    std::vector<std::vector<vector_double>> get_emigrants() const
+    {
+        std::lock_guard<std::mutex> lock(m_emigrants_mutex);
+        return m_emigrants;
+    }
     /// Save to archive.
     /**
      * This method will save to \p ar the islands of the archipelago.
      *
      * @param ar the output archive.
      *
-     * @throws unspecified any exception thrown by the serialization of pagmo::island.
+     * @throws unspecified any exception thrown by the serialization of pagmo::island, pagmo::topology
+     * or primitive types.
      */
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_islands, get_topology());
+        ar(m_islands, get_topology(), get_emigrants());
     }
     /// Load from archive.
     /**
@@ -1809,20 +1851,26 @@ public:
      *
      * @param ar the input archive.
      *
-     * @throws unspecified any exception thrown by the deserialization of pagmo::island.
+     * @throws unspecified any exception thrown by the deserialization of pagmo::island, pagmo::topology
+     * or primitive types.
      */
     template <typename Archive>
     void load(Archive &ar)
     {
         archipelago tmp;
         // NOTE: no need to lock anything, tmp is idle.
-        ar(tmp.m_islands, tmp.m_topo);
+        ar(tmp.m_islands, tmp.m_topo, tmp.m_emigrants);
         *this = std::move(tmp);
     }
 
 private:
+    // The islands.
     container_t m_islands;
+    // The topology.
     topology m_topo = topology{unconnected{}};
+    // The emigrants container.
+    mutable std::mutex m_emigrants_mutex;
+    std::vector<std::vector<vector_double>> m_emigrants;
 };
 }
 

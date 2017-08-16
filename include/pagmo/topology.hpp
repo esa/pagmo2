@@ -74,7 +74,7 @@ namespace pagmo
 /// Detect \p get_connections() method.
 /**
  * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.3
+ * .. versionadded:: 2.5
  * \endverbatim
  *
  * This type trait will be \p true if \p T provides a method with
@@ -104,7 +104,7 @@ const bool has_get_connections<T>::value;
 /// Detect \p push_back() method.
 /**
  * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.3
+ * .. versionadded:: 2.5
  * \endverbatim
  *
  * This type trait will be \p true if \p T provides a method with
@@ -145,7 +145,7 @@ struct disable_udt_checks : std::false_type {
 /// Detect user-defined topologies (UDT).
 /**
  * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.3
+ * .. versionadded:: 2.5
  * \endverbatim
  *
  * This type trait will be \p true if \p T is not cv/reference qualified, it is destructible, default, copy and move
@@ -260,7 +260,7 @@ struct topo_inner final : topo_inner_base {
 /// Unconnected topology.
 /**
  * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.3
+ * .. versionadded:: 2.5
  * \endverbatim
  *
  * This user-defined topology (UDT) represents an unconnected graph.
@@ -306,7 +306,7 @@ struct unconnected {
  * \image html migration_no_text.png
  *
  * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.3
+ * .. versionadded:: 2.5
  * \endverbatim
  *
  * In the jargon of pagmo, a topology is an object that represents connections among \link pagmo::island islands\endlink
