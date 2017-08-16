@@ -413,7 +413,7 @@ public:
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit topology(T &&x) : m_ptr(detail::make_unique<detail::topo_inner<uncvref_t<T>>>(std::forward<T>(x)))
     {
-        // We store at construction the value returned from the user implemented get_name
+        // We store at construction the value returned from the user implemented get_name().
         m_name = ptr()->get_name();
     }
     /// Copy constructor

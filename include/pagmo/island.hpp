@@ -1734,7 +1734,7 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const archipelago &archi)
     {
         stream(os, "Number of islands: ", archi.size(), "\n");
-        // NOTE: this is required to be thread-safe.
+        // NOTE: this is thread-safe (topology stores a copy of the name upon construction).
         stream(os, "Topology: ", archi.m_topo.get_name(), "\n");
         stream(os, "Status: ", archi.status(), "\n\n");
         stream(os, "Islands summaries:\n\n");
